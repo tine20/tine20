@@ -7,7 +7,7 @@ $options = new Zend_Config_Ini('../../config.ini', 'database');
 $db = Zend_Db::factory('PDO_MYSQL', $options->toArray());
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
-//$egwAPISession = new Zend_Session_Namespace('egwapi');
+$egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 
 $application	= $_REQUEST['application'];
 $function	= $_REQUEST['func'];

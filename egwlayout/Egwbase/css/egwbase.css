@@ -1,0 +1,57 @@
+		html, body {
+			font:normal 12px verdana;
+			margin:0;
+			padding:0;
+			border:0 none;
+			overflow:hidden;
+			height:100%;
+		}
+		
+		#header{
+			background: url(images/header-bar.gif) repeat-x bottom;
+			border-bottom: 1px solid #083772;
+			padding:5px 4px;
+		}
+		
+		#footer{
+			background: url(images/header-bar.gif) repeat-x bottom;
+			border-top: 1px solid #083772;
+			padding:2px 4px;
+			color:white;
+			font:normal 8pt arial,helvetica;
+		}
+		
+		#nnav {
+			background-color:#c3daf9;
+		}
+		
+		#nnav, #content {
+			padding:10px;
+		}
+		
+		#content p {
+			margin:5px;
+		}
+		
+		#tree {
+			overflow:auto;
+		}
+		
+		#nnav li {
+			padding:2px;
+			padding-left:10px;
+			background-image:url(images/bullet.gif);
+			background-position: -3px 6px;
+			background-repeat: no-repeat;
+			font-size:8pt;
+			display: block;
+		}
+		
+		.treemain {
+			bbackground-color:#aaaaaa;
+			background-image:url(../../ext-1.1-rc1/resources/images/default/layout/panel-title-light-bg.gif);
+		}
+		
+		.x-layout-panel{
+			border:0px none;
+		}
