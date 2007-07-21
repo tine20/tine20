@@ -1,0 +1,173 @@
+<html><head><title>BoxComponent.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>BoxComponent.js</h1><pre class="highlighted"><code>Ext.BoxComponent = <b>function</b>(config){
+    Ext.BoxComponent.superclass.constructor.call(<b>this</b>, config);
+    <b>this</b>.addEvents({
+        resize : true,
+        move : true
+    });
+};
+
+Ext.extend(Ext.BoxComponent, Ext.Component, {
+    boxReady : false,
+    <i>// private, used to defer height settings to subclasses</i>
+    deferHeight: false,
+
+    setSize : <b>function</b>(w, h){
+        <i>// support <b>for</b> standard size objects</i>
+        <b>if</b>(typeof w == 'object'){
+            h = w.height;
+            w = w.width;
+        }
+        <i>// not rendered</i>
+        <b>if</b>(!<b>this</b>.boxReady){
+            <b>this</b>.width = w;
+            <b>this</b>.height = h;
+            <b>return</b> this;
+        }
+
+        <i>// prevent recalcs when not needed</i>
+        <b>if</b>(this.lastSize &amp;&amp; <b>this</b>.lastSize.width == w &amp;&amp; <b>this</b>.lastSize.height == h){
+            <b>return</b> this;
+        }
+        <b>this</b>.lastSize = {width: w, height: h};
+
+        <b>var</b> adj = <b>this</b>.adjustSize(w, h);
+        <b>var</b> aw = adj.width, ah = adj.height;
+        <b>if</b>(aw !== undefined || ah !== undefined){ <i>// <b>this</b> code is nasty but performs better <b>with</b> floaters</i>
+            <b>var</b> rz = <b>this</b>.getResizeEl();
+            <b>if</b>(!<b>this</b>.deferHeight &amp;&amp; aw !== undefined &amp;&amp; ah !== undefined){
+                rz.setSize(aw, ah);
+            }<b>else</b> if(!<b>this</b>.deferHeight &amp;&amp; ah !== undefined){
+                rz.setHeight(ah);
+            }<b>else</b> if(aw !== undefined){
+                rz.setWidth(aw);
+            }
+            <b>this</b>.onResize(aw, ah, w, h);
+            <b>this</b>.fireEvent('resize', <b>this</b>, aw, ah, w, h);
+        }
+        <b>return</b> this;
+    },
+
+    getSize : <b>function</b>(){
+        <b>return</b> this.el.getSize();
+    },
+
+    getPosition : <b>function</b>(local){
+        <b>if</b>(local === true){
+            <b>return</b> [<b>this</b>.el.getLeft(true), <b>this</b>.el.getTop(true)];
+        }
+        <b>return</b> this.xy || <b>this</b>.el.getXY();
+    },
+
+    getBox : <b>function</b>(local){
+        <b>var</b> s = <b>this</b>.el.getSize();
+        <b>if</b>(local){
+            s.x = <b>this</b>.el.getLeft(true);
+            s.y = <b>this</b>.el.getTop(true);
+        }<b>else</b>{
+            <b>var</b> xy = <b>this</b>.xy || <b>this</b>.el.getXY();
+            s.x = xy[0];
+            s.y = xy[1];
+        }
+        <b>return</b> s;
+    },
+
+    updateBox : <b>function</b>(box){
+        <b>this</b>.setSize(box.width, box.height);
+        <b>this</b>.setPagePosition(box.x, box.y);
+    },
+
+    getResizeEl : <b>function</b>(){
+        <b>return</b> this.resizeEl || <b>this</b>.el;
+    },
+
+    getPositionEl : <b>function</b>(){
+        <b>return</b> this.positionEl || <b>this</b>.el;
+    },
+
+    setPosition : <b>function</b>(x, y){
+        <b>this</b>.x = x;
+        <b>this</b>.y = y;
+        <b>if</b>(!<b>this</b>.boxReady){
+            <b>return</b> this;
+        }
+        <b>var</b> adj = <b>this</b>.adjustPosition(x, y);
+        <b>var</b> ax = adj.x, ay = adj.y;
+
+        <b>var</b> el = <b>this</b>.getPositionEl();
+        <b>if</b>(ax !== undefined || ay !== undefined){
+            <b>if</b>(ax !== undefined &amp;&amp; ay !== undefined){
+                el.setLeftTop(ax, ay);
+            }<b>else</b> if(ax !== undefined){
+                el.setLeft(ax);
+            }<b>else</b> if(ay !== undefined){
+                el.setTop(ay);
+            }
+            <b>this</b>.onPosition(ax, ay);
+            <b>this</b>.fireEvent('move', <b>this</b>, ax, ay);
+        }
+        <b>return</b> this;
+    },
+
+    setPagePosition : <b>function</b>(x, y){
+        <b>this</b>.pageX = x;
+        <b>this</b>.pageY = y;
+        <b>if</b>(!<b>this</b>.boxReady){
+            <b>return</b>;
+        }
+        <b>if</b>(x === undefined || y === undefined){ <i>// cannot translate undefined points</i>
+            <b>return</b>;
+        }
+        <b>var</b> p = <b>this</b>.el.translatePoints(x, y);
+        <b>this</b>.setPosition(p.left, p.top);
+        <b>return</b> this;
+    },
+
+    onRender : <b>function</b>(ct, position){
+        Ext.BoxComponent.superclass.onRender.call(<b>this</b>, ct, position);
+        <b>if</b>(this.resizeEl){
+            <b>this</b>.resizeEl = Ext.get(<b>this</b>.resizeEl);
+        }
+        <b>if</b>(this.positionEl){
+            <b>this</b>.positionEl = Ext.get(<b>this</b>.positionEl);
+        }
+    },
+
+    afterRender : <b>function</b>(){
+        Ext.BoxComponent.superclass.afterRender.call(<b>this</b>);
+        <b>this</b>.boxReady = true;
+        <b>this</b>.setSize(<b>this</b>.width, <b>this</b>.height);
+        <b>if</b>(this.x || <b>this</b>.y){
+            <b>this</b>.setPosition(<b>this</b>.x, <b>this</b>.y);
+        }
+        <b>if</b>(this.pageX || <b>this</b>.pageY){
+            <b>this</b>.setPagePosition(<b>this</b>.pageX, <b>this</b>.pageY);
+        }
+    },
+
+    syncSize : <b>function</b>(){
+        <b>this</b>.setSize(<b>this</b>.el.getWidth(), <b>this</b>.el.getHeight());
+    },
+
+    onResize : <b>function</b>(adjWidth, adjHeight, rawWidth, rawHeight){
+
+    },
+
+    onPosition : <b>function</b>(x, y){
+
+    },
+
+    adjustSize : <b>function</b>(w, h){
+        <b>if</b>(this.autoWidth){
+            w = 'auto';
+        }
+        <b>if</b>(this.autoHeight){
+            h = 'auto';
+        }
+        <b>return</b> {width : w, height: h};
+    },
+
+    adjustPosition : <b>function</b>(x, y){
+        <b>return</b> {x : x, y: y};
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">Ext - Copyright &copy; 2006-2007 Ext JS, LLC<br />All rights reserved.</div>
+    </body></html>
