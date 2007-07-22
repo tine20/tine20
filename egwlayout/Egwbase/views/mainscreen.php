@@ -1,27 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 
 <head>
-	<title>eGW Test Layout</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title><?php echo $this->escape($this->title) ?></title>
+	<!-- EXT JS -->
 	<link rel="stylesheet" type="text/css" href="ext-1.1-rc1/resources/css/ext-all.css"/>
-	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-
-	<!-- GC --> <!-- LIBS -->     
 	<script type="text/javascript" src="ext-1.1-rc1/adapter/yui/yui-utilities.js"></script>     
 	<script type="text/javascript" src="ext-1.1-rc1/adapter/yui/ext-yui-adapter.js"></script>     
-	<!-- ENDLIBS -->
 	<script type="text/javascript" src="ext-1.1-rc1/ext-all.js"></script>
+
+	<!-- eGW -->
+	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
 	<script type="text/javascript" language="javascript" src="Egwbase/Js/Egwbase.js"></script>
 	<?php 
-		foreach ($this->applications as $val) {
-			echo '<script type="text/javascript" language="javascript" src="'. $val .'/Js/'. $val .'.js"></script>"';
+		foreach ($this->jsInlucdeFiles as $name) {
+			echo '<script type="text/javascript" language="javascript" src="'. $name .'/Js/'. $name .'.js"></script>';
 		}
 	?>
+	<script type="text/javascript" language="javascript">
+		var applications = <?php echo Zend_Json::encode($this->applications) ?>;
+	</script>
 </head>
 <body>
-	
-
-	<!-- <img id="logo" src="/egwlayout/logo.png" alt="" style="margin: 0 78 0 0px;" /> -->
-
 <div id="searchdiv">
 	<input type="text" name="searchinput" id="searchinput"/>
 </div> 

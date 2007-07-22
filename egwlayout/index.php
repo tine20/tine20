@@ -11,6 +11,12 @@ Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
 $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 
+#date_default_timezone_set('America/Los_Angeles');
+#date_default_timezone_set('Europe/Berlin');
+
+#echo new Zend_Date('2006', Zend_Date::YEAR);
+#exit;
+
 #echo $egwBaseNamespace->numberOfPageRequests++;
 
 #$application	= $_REQUEST['application'];
@@ -23,9 +29,16 @@ $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 $view = new Zend_View();
 $view->setScriptPath('Egwbase/views');
 
-$view->applications = array(
-	'Felamimail', 'Addressbook', 'Asterisk'
-);
+foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
+	$className = "{$applicationName}_Json";
+	$application = new $className;
+	$applications[] = $application->getMainTree();
+	$jsInlucdeFiles[] = $applicationName;
+}
+
+$view->jsInlucdeFiles = $jsInlucdeFiles;
+$view->applications = $applications;
+$view->title="eGW Test Layout";
 
 echo $view->render('mainscreen.php');
 

@@ -8,16 +8,14 @@
 		}
 		
 		#header{
-			background: url(images/header-bar.gif) repeat-x bottom;
 			border-bottom: 1px solid #083772;
 			padding:5px 4px;
 		}
 		
 		#footer{
-			background: url(images/header-bar.gif) repeat-x bottom;
 			border-top: 1px solid #083772;
 			padding:2px 4px;
-			color:white;
+			color:black;
 			font:normal 8pt arial,helvetica;
 		}
 		

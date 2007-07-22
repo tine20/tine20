@@ -12,8 +12,6 @@ var grid, ds;
 Ext.onReady(function(){
 	Ext.BLANK_IMAGE_URL = "ext-1.1-rc1/resources/images/default/s.gif";
 	Ext.QuickTips.init();
-
-	
 	
 	//============================================
 	//============== create HTML Code =============
@@ -439,7 +437,7 @@ Ext.onReady(function(){
 	treeLoader = new Tree.TreeLoader({dataUrl:'jsonrpc.php', baseParams:{func:'getTree'}});
 	treeLoader.baseParams.func = 'getTree';
 	treeLoader.on("beforeload", function(loader, node) {
-		loader.baseParams.application = node.attributes.application;
+		loader.baseParams.application = node.attributes.application + '_Json';
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {
@@ -495,20 +493,14 @@ Ext.onReady(function(){
 
 	tree.on('click', function(node) {
 		//apply panels depending on application type
-		switch(node.attributes.application) {
-			case 'addressbook': 			
-				layout.beginUpdate();
-				EGWNameSpace.AddressBook.show(layout);
-				layout.endUpdate();
-		
-				break;
-		
-			case 'Asterisk_Json': 	
-				layout.beginUpdate();
-				EGWNameSpace.Asterisk.show(layout, node);
-				layout.endUpdate();
-		
-				break;
+		var applicationName = getAppByNode(node);
+		//console.log('checking for application ' + applicationName);
+		//console.log(typeof(EGWNameSpace[applicationName]));
+		if(typeof(EGWNameSpace[applicationName]) == 'object') {
+			//console.log('application ' + applicationName + ' exists');
+			layout.beginUpdate();
+			EGWNameSpace[applicationName].show(layout, node);
+			layout.endUpdate();
 		}
  	});
  	
@@ -531,93 +523,10 @@ Ext.onReady(function(){
 		leaf:true
 	});
 	root.appendChild(overview);
-	
-	var addressbook = new Tree.AsyncTreeNode({
-		text:'Addressbook', 
-		cls:'treemain', 
-		allowDrag:true, 
-		allowDrop:true,		
-		id:'addressbook',
-		icon:'images/oxygen/16x16/apps/kaddressbook.png',
-		children: [
-			{text:'my addressbook', cls:'file', allowDrag:true, id:'myaddressbook', leaf:true},
-			{text:'internal addressbook', cls:'file', allowDrag:true, id:'internaladdressbook', leaf:true},
-			{text:'fellows addressbooks', cls:'folder', allowDrag:true, id:'fellowsaddressbooks'},
-			{text:'team addressbooks', cls:'folder', allowDrag:true, id:'teamaddressbooks'}
-		]
-	});
-	
-	root.appendChild(addressbook);
 
-	var asterisk = new Tree.AsyncTreeNode({
-		text:'Asterisk', 
-		cls:'treemain', 
-		allowDrag:false, 
-		allowDrop:true,		
-		id:'asterisk',
-		icon:'images/oxygen/16x16/apps/kcall.png',
-		application:'Asterisk_Json',
-		datatype:'overview',
-		children: [
-			{text:'phones', cls:'folder', allowDrag:true, id:'phones', leaf:true, application:'Asterisk_Json', datatype:'phones'},
-			{text:'lines', cls:'folder', allowDrag:true, id:'lines', leaf:true, application:'Asterisk_Json', datatype:'lines'},
-			{text:'classes', cls:'folder', allowDrag:true, id:'classes', leaf:true, application:'Asterisk_Json', datatype:'classes'},
-			{text:'config', cls:'folder', allowDrag:true, id:'config', leaf:true, application:'Asterisk_Json', datatype:'config'},
-			{text:'settings', cls:'folder', allowDrag:true, id:'settings', leaf:true, application:'Asterisk_Json', datatype:'settings'},
-			{text:'software', cls:'folder', allowDrag:true, id:'software', leaf:true, application:'Asterisk_Json', datatype:'software'}
-		]
-	});
-	
-	root.appendChild(asterisk);
-
-	var calendar = new Tree.AsyncTreeNode({
-		text:'Calendar', 
-		cls:'treemain', 
-		allowDrag:true,
-		allowDrop:true,		
-		id:'calendar',
-		icon:'images/oxygen/16x16/apps/korganizer.png',
-		children: [
-			{text:'my calendar', cls:'file', allowDrag:true, id:'mycalendar', leaf:true},
-			{text:'fellows calendar', cls:'folder', allowDrag:true, id:'fellowscalendar'},
-			{text:'team calendar', cls:'folder', allowDrag:true, id:'teamcalendar'}
-		]
-	});
-	
-	root.appendChild(calendar);
-
-	var email = new Tree.AsyncTreeNode({
-		text:'Email', 
-		cls:'treemain', 
-		allowDrag:true, 
-		allowDrop:true,		
-		leaf:false,
-		id:'email',
-		application:'Felamimail_Json',
-		icon:'images/oxygen/16x16/apps/kmail.png',
-		children: [
-			{text:'l.kneschke@officespot.net', cls:'folder', allowDrag:true, id:'mailbox1', leaf:false, application:'Felamimail_Json'},
-			{text:'lars@kneschke.de', cls:'folder', allowDrag:true, id:'mailbox2', leaf:false, application:'Felamimail_Json'}
-		]
-	});
-	
-	root.appendChild(email);
-
-	var tasks = new Tree.AsyncTreeNode({
-		text:'Tasks', 
-		cls:'treemain', 
-		allowDrag:true, 
-		allowDrop:true,		
-		id:'tasks',
-		icon:'images/oxygen/16x16/apps/todolist.png',
-		children: [
-			{text:'my tasks', cls:'file', allowDrag:true, id:'mytasks', leaf:true},
-			{text:'fellows tasks', cls:'folder', allowDrag:true, id:'fellowstasks'},
-			{text:'team tasks', cls:'folder', allowDrag:true, id:'teamtasks'}
-		]
-	});
-	
-	root.appendChild(tasks);
+	for(var i = 0; i < applications.length; i++) {
+		root.appendChild(new Tree.AsyncTreeNode(applications[i]));
+	}
 
 	// render the tree
 	tree.render();
@@ -716,7 +625,7 @@ function getAppByNode(node) {
 		curNode = curNode.parentNode;
 	}
 
-	return new String(curNode.id);
+	return curNode.attributes.application;
 }
 	
 
@@ -725,161 +634,5 @@ function getAppByNode(node) {
 
 
 
-/*
-
- 	tree.on('click', function(node) {
-	
-	
- 		if(node.isLeaf() == true) {
-			var appDataType = 'default';
-
-			if(typeof node.attributes.datatype != "undefined") {
-				appDataType = node.attributes.datatype;
-			}
-			if(currentAppDataType != appDataType) {
-				switch(appDataType) {
-					case 'phones':
-						ds = new Ext.data.JsonStore({
-							url: 'jsonrpc.php',
-							baseParams: {function:'getData'},
-							root: 'results',
-							totalProperty: 'totalcount',
-							id: 'phone_id',
-							fields: [
-								{name: 'phone_id'},
-								{name: 'macaddress'},
-								{name: 'phonemodel'},
-								{name: 'phoneswversion'},
-								{name: 'phoneipaddress'},
-								{name: 'lastmodify'},
-								{name: 'class_id'},
-								{name: 'description'}
-							],
-							// turn on remote sorting
-							remoteSort: true
-						});
-			
-						ds.setDefaultSort('macaddress', 'desc');
-
-		//define grid appearance
-		var ccm = new Ext.grid.ColumnModel([{
-			resizable: true,
-			id: 'phone_id', // id assigned so we can apply custom css (e.g. .x-grid-col-topic b { color:#333 })
-			header: "ID",
-			dataIndex: 'phone_id',
-			width: 30
-		},{
-			resizable: true,
-			id: 'macaddress',
-			header: "macaddress",
-			dataIndex: 'macaddress',
-			//width: 250,
-			//renderer: renderLastNamePlain
-		},{
-			resizable: true,
-			header: 'description',
-			dataIndex: 'description',
-			//width: 150
-		},{
-			resizable: true,
-			id: 'phonemodel',
-			header: 'phonemodel',
-			dataIndex: 'phonemodel',
-			//width: 250,
-			//renderer: renderLastNamePlain,
-			hidden: true
-		},{
-			resizable: true,
-			header: 'phoneswversion',
-			dataIndex: 'phoneswversion',
-			//width: 150
-		},{
-			resizable: true,
-			id: 'phoneipaddress',
-			header: 'phoneipaddress',
-			dataIndex: 'phoneipaddress',
-			//width: 150
-			//renderer: renderCityPlain
-		},{
-			resizable: true,
-			header: 'lastmodify',
-			dataIndex: 'lastmodify',
-			//width: 100
-		},{
-			resizable: true,
-			id: 'class_id',
-			header: 'classid',
-			dataIndex: 'class_id',
-			//width: 450,
-			//renderer: renderLastNamePlain,
-		}]);
-	
-		cm.defaultSortable = true; // by default columns are sortable
-		
-		grid.destroy();
-	
-	// create the editor grid
-	grid = new Ext.grid.Grid('grid', {
-		ds: ds,
-		cm: cm,
-		autoSizeColumns: false,
-		selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
-		enableColLock:false,
-		//monitorWindowResize: true,
-		loadMask: true,
-		autoExpandColumn: 'description'
-	});
-
-	
-	//reacts on doubleclick in line area from grid
-	grid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
-		var record = gridPar.getDataSource().getAt(rowIndexPar);
-		//alert('id: ' + record.data.userid);
-		try {
-			window.open('popup.php?userid='+record.data.userid,'popupname','width=400,height=400,directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=no,dependent=no');
-		}
-		catch(e) {
-			//alert(e);
-		}
-	});
-	
-	// displays the context menu
- 	grid.on('cellcontextmenu', function(gridP, rowIndexP, cellIndexP, eventP) {
- 		eventP.stopEvent();
- 		ctxMenu.showAt(eventP.getXY());
- 	});
-
-	// update the active menu buttons
- 	grid.on('rowclick', function(gridP, rowIndexP, eventP) {
-		var rowCount = grid.getSelectionModel().getCount();
-		if(rowCount < 1) {
-			btns.edit.disable();
-			btns.delete.disable();
-		} else if(rowCount == 1) {
-			btns.edit.enable();
-			btns.delete.enable();
-		} else {
-			btns.edit.disable();
-			btns.delete.enable();
-		}
- 	});
-
-	grid.render();				
-						break;
-				}
-			}
-			currentAppDataType = appDataType;
-//	 		ds.load({params:{start:0, limit:50, nodeid:node.id, application:node.attributes.application, datatype:appDataType}});
-// 			grid.getView().refresh();
-//			alert(3);
- 		}
- 	});
- 	
- 	tree.on('contextmenu', function(node, eventP) {
- 		eventP.stopEvent();
- 		eval(node.attributes.contextMenuClass).showAt(eventP.getXY());
- 	});
-
-*/
 
 
