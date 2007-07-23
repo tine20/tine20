@@ -1,6 +1,3 @@
-// namespace object
-var EGWNameSpace = EGWNameSpace || {};
-
 EGWNameSpace.Felamimail = function() {
 
 	//var grid;

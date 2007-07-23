@@ -27,19 +27,25 @@ $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 #$jsonApp->$function();
 
 $view = new Zend_View();
-$view->setScriptPath('Egwbase/views');
 
-foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
-	$className = "{$applicationName}_Json";
-	$application = new $className;
-	$applications[] = $application->getMainTree();
-	$jsInlucdeFiles[] = $applicationName;
+if($_REQUEST['application'] == 'addressbook') {
+	$view->setScriptPath('Addressbook/views');
+	
+	echo $view->render('editcontact.php');
+} else {
+	$view->setScriptPath('Egwbase/views');
+
+	foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
+		$className = "{$applicationName}_Json";
+		$application = new $className;
+		$applications[] = $application->getMainTree();
+		$jsInlucdeFiles[] = $applicationName;
+	}
+
+	$view->jsInlucdeFiles = $jsInlucdeFiles;
+	$view->applications = $applications;
+	$view->title="eGW Test Layout";
+	echo $view->render('mainscreen.php');
 }
-
-$view->jsInlucdeFiles = $jsInlucdeFiles;
-$view->applications = $applications;
-$view->title="eGW Test Layout";
-
-echo $view->render('mainscreen.php');
 
 ?>

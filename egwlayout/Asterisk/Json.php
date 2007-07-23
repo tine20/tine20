@@ -4,7 +4,7 @@ class Asterisk_Json
 	const SORTDESC = 'DESC';
 	const SORTASC = 'ASC';
 	                
-	function getData() 
+	public function getData() 
 	{
 		$offset		= $_REQUEST['start'];
 		$sort		= $_REQUEST['sort'];
@@ -47,7 +47,7 @@ class Asterisk_Json
 		echo Zend_Json::encode($result);
 	}
 	
-	function getTree() 
+	public function getTree() 
 	{
 		$nodes = array();
 		$nodeID = $_REQUEST['node'];

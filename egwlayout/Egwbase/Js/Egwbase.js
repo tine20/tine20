@@ -7,7 +7,10 @@
  */
 
  
-var grid, ds;
+//var grid, ds;
+
+var EGWNameSpace = EGWNameSpace || {};
+var testor;
  
 Ext.onReady(function(){
 	Ext.BLANK_IMAGE_URL = "ext-1.1-rc1/resources/images/default/s.gif";
@@ -25,16 +28,16 @@ Ext.onReady(function(){
 	navDivTag		= containerDivTag.createChild({tag: 'div',id: 'nav',cls: 'x-layout-inactive-content'});
 		
 	contentDivTag		= containerDivTag.createChild({tag: 'div',id: 'content',cls: 'x-layout-inactive-content'});
-	toolbardivDivTag	= contentDivTag.createChild({tag: 'div',id: 'toolbardiv',cls: 'x-layout-inactive-content'});
-	gridDivTag		= contentDivTag.createChild({tag: 'div',id: 'grid',cls: 'x-layout-inactive-content'});
+	//toolbardivDivTag	= contentDivTag.createChild({tag: 'div',id: 'toolbardiv',cls: 'x-layout-inactive-content'});
+	//gridDivTag		= contentDivTag.createChild({tag: 'div',id: 'grid',cls: 'x-layout-inactive-content'});
 				
 	footerDivTag		= containerDivTag.createChild({tag: 'div',id: 'footer',cls: 'x-layout-inactive-content',style: 'padding: 0px 0px 0px 0px'});
 
 	searchdivDivTag		= bodyTag.createChild({tag: 'div',id: 'searchdiv',cls: 'x-layout-inactive-content',style: 'padding: 0px 0px 0px 0px',text:'test'});
 	searchinputInputTag 	= searchdivDivTag.createChild({type: 'text' ,tag: 'input',id: 'searchinput', name:'searchinput',cls: 'x-layout-inactive-content'});
 	
-	addressbookArea		= bodyTag.createChild({tag: 'div'});
-	calendarArea		= bodyTag.createChild({tag: 'div'});
+	//addressbookArea		= bodyTag.createChild({tag: 'div'});
+	//calendarArea		= bodyTag.createChild({tag: 'div'});
 	
 	
 	//============================================
@@ -46,82 +49,6 @@ Ext.onReady(function(){
 	//============================================
 	//==================== grid ===================
 	//============================================
-	
-	// create the Data Store
-	ds = new Ext.data.JsonStore({
-		url: 'jsonrpc.php',
-		baseParams: {func: 'getData'},
-		root: 'results',
-		totalProperty: 'totalcount',
-		id: 'userid',
-		fields: [
-			{name: 'userid'},
-			{name: 'lastname'},
-			{name: 'firstname'},
-			{name: 'street'},
-			{name: 'zip'},
-			{name: 'city'},
-			{name: 'birthday'},
-			{name: 'addressbook'}
-		],
-		// turn on remote sorting
-		remoteSort: true
-	});
-	
-	ds.setDefaultSort('lastpost', 'desc');
-	//ds.load({params:{method:'Felamimail_Json::getData', start:0, limit:50}}); // initial data store load with 5 datasets
-	// deliver some data preload with the javascript file already
-	ds.loadData({"totalcount":165,"results":[{"userid":0,"lastname":"lastname 0","firstname":"firstname 0","street":"street0","zip":"01234","city":"havanna","birthday":"13.08.1926","addressbook":"personal"},{"userid":1,"lastname":"lastname 1","firstname":"firstname 1","street":"street 1","zip":"01234","city":"havanna","birthday":"13.08.1926","addressbook":"personal"}]});
-
-	//define grid appearance
-	var cm = new Ext.grid.ColumnModel([{
-		resizable: true,
-		id: 'userid', // id assigned so we can apply custom css (e.g. .x-grid-col-topic b { color:#333 })
-		header: "ID",
-		dataIndex: 'userid',
-		width: 30
-	},{
-		resizable: true,
-		id: 'lastname',
-		header: "lastname",
-		dataIndex: 'lastname',
-		//width: 250,
-		renderer: renderLastNamePlain
-	},{
-		resizable: true,
-		id: 'firstname',
-		header: "firstname",
-		dataIndex: 'firstname',
-		//width: 250,
-		renderer: renderLastNamePlain,
-		hidden: true
-	},{
-		resizable: true,
-		header: "street",
-		dataIndex: 'street'
-		//width: 150
-	},{
-		resizable: true,
-		id: 'city',
-		header: "zip/city",
-		dataIndex: 'city',
-		//width: 150
-		renderer: renderCityPlain
-	},{
-		resizable: true,
-		header: "birthday",
-		dataIndex: 'birthday'
-		//width: 100
-	},{
-		resizable: true,
-		id: 'addressbook',
-		header: "addressbook",
-		dataIndex: 'addressbook',
-		//width: 450,
-		renderer: renderLastNamePlain
-	}]);
-	
-	cm.defaultSortable = true; // by default columns are sortable
 	
 	//render grid content fields in a certain way
 	function renderLastName(value, p, record){
@@ -140,21 +67,7 @@ Ext.onReady(function(){
 		return String.format('<b><i>{0}</i></b>', value);
 	}
 
-	// create the editor grid
-	grid = new Ext.grid.Grid(gridDivTag, {
-		ds: ds,
-		cm: cm,
-		autoSizeColumns: false,
-		selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
-		enableColLock:false,
-		//monitorWindowResize: true,
-		loadMask: true,
-		enableDragDrop:true,
-		ddGroup: 'TreeDD',
-		autoExpandColumn: 'lastname'
-	});
-	
-	//reacts on doubleclick in line area from grid
+/*	//reacts on doubleclick in line area from grid
 	grid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
 		var record = gridPar.getDataSource().getAt(rowIndexPar);
 		//alert('id: ' + record.data.userid);
@@ -190,7 +103,7 @@ Ext.onReady(function(){
 
 	grid.render();					
 	
-
+*/
 	//var el = Ext.get("popup");
 	//el.setStyle('background-color:#C3DAF9');
 	//============================================
@@ -209,15 +122,10 @@ Ext.onReady(function(){
 	//======================================
 	//==========  toolbar definition ============
 	//======================================
+	var tblk = new Ext.Toolbar('header');
 
-	var tblk = headerTb;
-
-	tblk.add({
-		id: 'add',
-		cls:'x-btn-icon show',
-		icon:'images/oxygen/16x16/actions/edit-add.png',
-		tooltip: 'add new entry'
-	},{
+/*	tblk.add(
+	{
 		id: 'edit',
 		cls:'x-btn-icon edit',
 		icon:'images/oxygen/16x16/actions/edit.png',
@@ -245,13 +153,13 @@ Ext.onReady(function(){
 		cls: 'x-btn-icon details',
 		toggleHandler: toggleDetails,
 		tooltip: 'view details'
-	},'-');
+	},'-');*/
 
 	//----------------------------------------------------------------
 	//--------------------------- Combobox -----------------------
 	//----------------------------------------------------------------
 	
-	var store = new Ext.data.SimpleStore({
+/*	var store = new Ext.data.SimpleStore({
 		fields: ['id', 'state'],
 		data : [
 	        	['all', 'Alle Stati'],
@@ -274,8 +182,8 @@ Ext.onReady(function(){
 		width:135
 	});	
 	
-	tblk.addField(combo);	
-	tblk.add('->');
+	tblk.addField(combo);	*/
+	tblk.addFill();
 
 	//======================================
 	//==========  toolbar definition ============
@@ -290,7 +198,7 @@ Ext.onReady(function(){
 	);
 	
 	//combobox to enter search pattern / selecting contact address
-	var searchCombo = new Ext.form.ComboBox({
+/*	var searchCombo = new Ext.form.ComboBox({
 		store: ds,
 		displayField:'searchresults',
 		typeAhead: true,
@@ -312,11 +220,11 @@ Ext.onReady(function(){
 	
 	// apply it to the exsting input element
 	searchCombo.applyTo('searchinput');
-	tblk.addElement('searchdiv');
+	tblk.addElement('searchdiv');*/
 
 	tblk.add('-');
 
-	headerTb.add(new Ext.Toolbar.Button({
+	tblk.add(new Ext.Toolbar.Button({
 		//text: 'Logout',
 		handler: onLogoutButtonClick,
 		tooltip: {text:'This buttons logs you out form eGroupWare.', title:'Logout'},
@@ -377,12 +285,11 @@ Ext.onReady(function(){
 	layout.beginUpdate();
 	layout.add('north', new Ext.ContentPanel(headerDivTag, {fitToFrame:true}));
 	layout.add('south', new Ext.ContentPanel(footerDivTag, {fitToFrame:true}));
-	//layout.add('west', new Ext.ContentPanel(navDivTag, {fitToFrame:true, title:'eGroupWare', resizeEl: 'tree'}));
 	layout.add('west', new Ext.ContentPanel(navDivTag, {fitToFrame:true}));
 
-	var curGridPanel = new Ext.GridPanel(grid);
+	//var curGridPanel = new Ext.GridPanel(grid);
 
-	layout.add('center', curGridPanel);
+	//layout.add('center', curGridPanel);
 	layout.endUpdate();
 
 	//============================================
@@ -435,9 +342,10 @@ Ext.onReady(function(){
 	var Tree = Ext.tree;
 
 	treeLoader = new Tree.TreeLoader({dataUrl:'jsonrpc.php', baseParams:{func:'getTree'}});
-	treeLoader.baseParams.func = 'getTree';
+	//treeLoader.baseParams.func = 'getTree';
 	treeLoader.on("beforeload", function(loader, node) {
 		loader.baseParams.application = node.attributes.application + '_Json';
+		loader.baseParams.id = node.id;
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {
@@ -514,7 +422,7 @@ Ext.onReady(function(){
 	tree.setRootNode(root);
 
 	var overview = new Tree.AsyncTreeNode({
-		text:'Information', 
+		text:'Today', 
 		cls:'treemain', 
 		allowDrag:true,
 		allowDrop:true,		
@@ -557,36 +465,6 @@ Ext.onReady(function(){
 	//---------------------------- toolbar --------------------------
 	//----------------------------------------------------------------
 	
-	var gridHeader = grid.getView().getHeaderPanel(true);
-	//var gridFooter = grid.getView().getFooterPanel(true); // page navi was originally placed in footer area of table grid
-	
-	// add a paging toolbar to the grid's header
-	//var pagingHeader = new Ext.Toolbar(gridHeader);
-	
-	// add a paging toolbar to the grid's footer
-	var pagingHeader = new Ext.PagingToolbar(gridHeader, ds, {
-		pageSize: 50,
-		displayInfo: true,
-		displayMsg: 'Displaying topics {0} - {1} of {2}',
-		emptyMsg: "No topics to display"
-	});
-	
-	pagingHeader.add(
-		new Ext.Toolbar.Spacer(),
-		new Ext.Toolbar.Spacer(),
-		new Ext.Toolbar.Spacer(),
-		new Ext.Toolbar.Spacer(),
-		new Ext.Toolbar.Spacer(),
-		new Ext.Toolbar.Spacer(),
-		new Ext.Toolbar.Spacer()
-	);
-	
-	pagingHeader.addItem(new Ext.Toolbar.Separator());
-	//pagingHeader.addElement('search');	//div search combo box
-	//pagingHeader.addField(combo);	//div search combo box
-
-
-	
 	//------------------------ toolbar functions ------------------------
 	
 	function toggleDetails(btn, pressed) {
@@ -627,12 +505,3 @@ function getAppByNode(node) {
 
 	return curNode.attributes.application;
 }
-	
-
-
-
-
-
-
-
-

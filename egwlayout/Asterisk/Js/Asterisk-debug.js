@@ -1,6 +1,3 @@
-// namespace object
-var EGWNameSpace = EGWNameSpace || {};
-
 EGWNameSpace.Asterisk = function() {
 
 	//var grid;
@@ -16,7 +13,7 @@ EGWNameSpace.Asterisk = function() {
 		// create the Data Store
 		var ds = new Ext.data.JsonStore({
 			url: 'jsonrpc.php',
-			baseParams: {application:'Asterisk_Json', func:'getData'},
+			baseParams: {application:'Asterisk_Json', datatype:'classes', func:'getData'},
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'class_id',
@@ -26,7 +23,7 @@ EGWNameSpace.Asterisk = function() {
 				{name: 'description'},
 				{name: 'config_id'},
 				{name: 'setting_id'},
-				{name: 'software_id'},
+				{name: 'software_id'}
 			],
 			// turn on remote sorting
 			remoteSort: true
@@ -89,7 +86,6 @@ EGWNameSpace.Asterisk = function() {
 			autoSizeColumns: false,
 			selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
 			enableColLock:false,
-			//monitorWindowResize: true,
 			loadMask: true,
 			enableDragDrop:true,
 			ddGroup: 'TreeDD',
