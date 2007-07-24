@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="Addressbook/Js/Addressbook.js"></script>
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function(){
+			<?php if(isset($this->id)) echo "editContactID=".$this->id .";"?>
 			EGWNameSpace.Addressbook.alertme();
 		});
 	</script>

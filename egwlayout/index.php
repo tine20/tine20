@@ -30,7 +30,10 @@ $view = new Zend_View();
 
 if($_REQUEST['application'] == 'addressbook') {
 	$view->setScriptPath('Addressbook/views');
-	
+
+	if(isset($_REQUEST['id'])) {
+		$view->id = $_REQUEST['id'];
+	}
 	echo $view->render('editcontact.php');
 } else {
 	$view->setScriptPath('Egwbase/views');

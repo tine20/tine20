@@ -2,10 +2,21 @@
 class Addressbook_Json
 {
 	protected $userEditableFields = array(
-		'n_given','n_family','org_name','contact_email'
+		'n_prefix','n_given','n_middle','n_family','n_suffix','contact_title','contact_role','contact_room','contact_email','contact_email_home','contact_url','contact_url_home','org_name','org_unit','adr_one_street','adr_one_street2','adr_one_postalcode','adr_one_locality','adr_one_region','adr_one_countryname','adr_two_street','adr_two_street2','adr_two_postalcode','adr_two_locality','adr_two_region','adr_two_countryname','contact_bday','tel_work','tel_cell','tel_fax','tel_car','tel_pager','contact_assistent','tel_assistent','tel_home','tel_cell_private','tel_fax_home'
 	);
 	
-	public function editAddress() 
+	public function readAddress() 
+	{
+		$id = $_REQUEST['id'];
+		$addresses = new Addressbook_Addresses();
+		if($rows = $addresses->find($id)) {
+			$result['results'] = $rows->toArray();
+		}
+		
+		echo Zend_Json::encode($result);
+	}
+	
+	public function saveAddress() 
 	{
 		$address = new Addressbook_Addresses();
 		
