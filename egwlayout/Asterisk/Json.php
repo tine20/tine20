@@ -44,6 +44,7 @@ class Asterisk_Json
 				break;
 		}
 		
+		return $result;
 		echo Zend_Json::encode($result);
 	}
 	
@@ -96,6 +97,7 @@ class Asterisk_Json
 			error_log('ERROR: '. $e->getMessage());
 		}
 		
+		return $nodes;
 		echo Zend_Json::encode($nodes);
 	}
 

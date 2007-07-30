@@ -1,73 +1,101 @@
 <?php
 class Addressbook_Json
 {
-	protected $userEditableFields = array(
-		'n_prefix','n_given','n_middle','n_family','n_suffix','contact_title','contact_role','contact_room','contact_email','contact_email_home','contact_url','contact_url_home','org_name','org_unit','adr_one_street','adr_one_street2','adr_one_postalcode','adr_one_locality','adr_one_region','adr_one_countryname','adr_two_street','adr_two_street2','adr_two_postalcode','adr_two_locality','adr_two_region','adr_two_countryname','contact_bday','tel_work','tel_cell','tel_fax','tel_car','tel_pager','contact_assistent','tel_assistent','tel_home','tel_cell_private','tel_fax_home'
-	);
+    public function deleteAddress($_contactIDs)
+    {
+        $contactIDs = Zend_Json::decode($_contactIDs);
+        if(is_array($contactIDs)) {
+            $addresses = new Addressbook_Addresses();
+            $addresses->delete($contactIDs);
+            $result = array('success'   => TRUE);
+        } else {
+            $result = array('success'   => FALSE);
+        }
+        
+        return $result;
+    }
+    
+    public function readAddress($_contactID)
+    {
+        $addresses = new Addressbook_Addresses();
+        if($rows = $addresses->find($_contactID)) {
+            $result['results'] = $rows->toArray();
+        }
+        
+        return $result;
+    }
 	
-	public function readAddress() 
-	{
-		$id = $_REQUEST['id'];
-		$addresses = new Addressbook_Addresses();
-		if($rows = $addresses->find($id)) {
-			$result['results'] = $rows->toArray();
-		}
-		
-		echo Zend_Json::encode($result);
-	}
-	
-	public function saveAddress() 
-	{
-		$address = new Addressbook_Addresses();
-		
-		foreach($this->userEditableFields as $fieldName) {
-			$data[$fieldName]	= $_REQUEST[$fieldName];
-		}
-		
-		if(isset($_REQUEST['id'])) {
-		} else {
-			try {
-				$address->insert($data);
-				$result = array(
-					'success'	=> true,
-					'welcomeMessage' => 'Entry saved'
-				);
-			} catch (Exception $e) {
-				$result = array(
-					'success'	=> false,
-					'errorMessage'	=> $e->getMessage()
-				);
-			}
-		}
-		
-		
-		echo Zend_Json::encode($result);
-	}
-	
-	public function getData() 
-	{
-		$offset		= $_REQUEST['start'];
-		$sort		= $_REQUEST['sort'];
-		$order		= $_REQUEST['dir'];
-		$count		= $_REQUEST['limit'];
-		$datatype	= $_REQUEST['datatype'];
-		error_log("OFFSET: $offset SORT: $sort ORDER: $order COUNT: $count DATATYPE: $datatype");
-
-		$result = array();
-
-		switch($datatype) {
-			case 'address':
-				$snomClasses = new Addressbook_Addresses();
-				if($rows = $snomClasses->fetchAll(NULL, "$sort $order", $count, $offset)) {
-					$result['results'] = $rows->toArray();
-					$result['totalcount'] = $snomClasses->getTotalCount();
-				}
-				
-				break;
-		}
-		
-		echo Zend_Json::encode($result);
-	}
+    public function saveAddress($_contactID = NULL)
+    {
+        $input = new Zend_Filter_Input(Addressbook_Addresses::getFilter(), Addressbook_Addresses::getValidator(), $_POST);
+        
+        if ($input->isValid()) {
+            $address = new Addressbook_Addresses();
+            
+            $data = $input->getUnescaped();
+            if(isset($data['contact_bday'])) {
+                $locale = Zend_Registry::get('locale');
+                $dateFormat = $locale->getTranslationList('Dateformat');
+                // convert bday back to yyyy-mm-dd
+                try {
+                    $date = new Zend_Date($data['contact_bday'], $dateFormat['long'], 'en');
+                    $data['contact_bday'] = $date->toString('yyyy-MM-dd');
+                } catch (Exception $e) {
+                    unset($data['contact_bday']);
+                }
+            }
+            
+            if($_contactID > 0) {
+                try {
+                    $where = $address->getAdapter()->quoteInto('contact_id = ?', (int)$_contactID);
+                    $address->update($data, $where);
+                    $result = array('success'           => true,
+                                    'welcomeMessage'    => 'Entry updated');
+                } catch (Exception $e) {
+                    $result = array('success'           => false,
+                                    'errorMessage'      => $e->getMessage());
+                }
+            } else {
+                try {
+                    $address->insert($data);
+                    $result = array('success'           => true,
+                                    'welcomeMessage'    => 'Entry saved');
+                } catch (Exception $e) {
+                    $result = array('success'           => false,
+                                    'errorMessage'      => $e->getMessage());
+                }
+            }
+        } else {
+            foreach($input->getMessages() as $fieldName => $errorMessages) {
+                $errors[] = array('id'  => $fieldName,
+                                  'msg' => $errorMessages[0]);
+            }
+            
+            $result = array('success'           => false,
+                            'errors'            => $errors,
+                            'errorMessage'      => 'filter NOT ok');
+        }
+        
+        return $result;
+    }
+    
+    public function getData($_datatype, $start, $sort, $dir, $limit)
+    {
+        $result = array();
+        
+        switch($_datatype) {
+            case 'address':
+                $snomClasses = new Addressbook_Addresses();
+                if($rows = $snomClasses->fetchAll(NULL, "$sort $dir", $limit, $start)) {
+                    $result['results'] = $rows->toArray();
+                    $result['totalcount'] = $snomClasses->getTotalCount();
+                }
+                
+                break;
+        }
+        
+        return $result;
+    }
 	
 	public function getMainTree() 
 	{

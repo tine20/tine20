@@ -1,34 +1,98 @@
 <?php
-class Egwapi_Json
+class Egwbase_Json
 {
-	function getTree() 
+	function getCountryList()
 	{
-error_log('NODE: '. $_REQUEST['node']);
-switch($_REQUEST['node']) {
-	case 'fellowsaddressbooks':
-	case 'fellowscalendar':
-	case 'fellowsinbox':
-	case 'fellowstasks':
-		$nodes = array();
-		$nodes[] = array('text'=>'Lars Kneschke', id=>'personal_lk', leaf=>true/*, qtip=>$qtip, qtipTitle=>$f */, cls=>'file', contextMenuClass=>'ctxMenuTreeFellow');
-		$nodes[] = array('text'=>'Thomas Wadewitz', id=>'personal_tw', leaf=>true/*, qtip=>$qtip, qtipTitle=>$f */, cls=>'file', contextMenuClass=>'ctxMenuTreeFellow');
-		$nodes[] = array('text'=>'Christof Mueller', id=>'personal_cm', leaf=>true/*, qtip=>$qtip, qtipTitle=>$f */, cls=>'file', contextMenuClass=>'ctxMenuTreeFellow');
+		$locale = Zend_Registry::get('locale');
 		
-		break;
+                $countries = $locale->getCountryTranslationList();
+                asort($countries);
+		foreach($countries as $shortName => $translatedName) {
+			$results[] = array(
+				'shortName'		=> $shortName, 
+				'translatedName' 	=> $translatedName
+			);
+		}
 
-	case 'teamaddressbooks':
-	case 'teamcalendar':
-	case 'teamfolder':
-	case 'teamtasks':
-		$nodes = array();
-		$nodes[] = array('text'=>'Sales Team', id=>'team_sales', leaf=>true/*, qtip=>$qtip, qtipTitle=>$f */, cls=>'file', contextMenuClass=>'ctxMenuTreeTeam');
-		$nodes[] = array('text'=>'Support Team', id=>'team_support', leaf=>true/*, qtip=>$qtip, qtipTitle=>$f */, cls=>'file', contextMenuClass=>'ctxMenuTreeTeam');
-		$nodes[] = array('text'=>'OfficeSpot Team', id=>'team_officespot', leaf=>true/*, qtip=>$qtip, qtipTitle=>$f */, cls=>'file', contextMenuClass=>'ctxMenuTreeTeam');
+		$result = array(
+			'results'	=> $results
+		);
 		
-		break;
+		return $result;
+	}
+	
+	function login() 
+	{
+		$username = $_REQUEST['username'];
+		$password = $_REQUEST['password'];
+		
+		$egwBaseNamespace = new Zend_Session_Namespace('egwbase');
+		
+		$auth = new Egwbase_Auth_Sql();
+		
+		$auth->setIdentity($username)
+			->setCredential($password);
+			
+		$result = $auth->authenticate();
 
-}
-echo json_encode($nodes);
+		if ($result->isValid()) {
+			$egwBaseNamespace->isAutenticated = TRUE;
+			$egwBaseNamespace->currentAccount = $auth->getResultRowObject(NULL, array('account_pwd'));
+		
+			$response = array(
+				'success'=> TRUE,
+				'welcomeMessage' => "Some welcome message!"
+			);
+			
+			$data = array(
+				'sessionid'	=> session_id(),
+				'loginid'	=> $egwBaseNamespace->currentAccount->account_lid,
+				'ip'		=> $_SERVER['REMOTE_ADDR'],
+				'account_id'	=> $egwBaseNamespace->currentAccount->account_id,
+				'li'		=> time(),
+				'result'	=> $result->getCode()
+			);
+			
+			$accesslog = new Egwbase_Auth_Accesslog();
+			$accesslog->insert($data);
+			
+		} else {
+			$egwBaseNamespace->isAutenticated = FALSE;
+
+			$response = array(
+				'success'=> FALSE,
+				'errorMessage' => "Wrong username or passord!"
+			);
+	
+			$now = time();
+			$data = array(
+				'sessionid'	=> session_id(),
+				'loginid'	=> $egwBaseNamespace->currentAccount->account_lid,
+				'ip'		=> $_SERVER['REMOTE_ADDR'],
+				'account_id'	=> $egwBaseNamespace->currentAccount->account_id,
+				'li'		=> $now,
+				'lo'		=> $now,
+				'result'	=> $result->getCode()
+			);
+			
+			$accesslog = new Egwbase_Auth_Accesslog();
+			$accesslog->insert($data);
+			sleep(2);
+		}
+		
+		
+		return $response;
+	}
+
+	function logout() 
+	{
+		Zend_Session::destroy();
+		
+		$result = array(
+			'success'=> true,
+		);
+		
+		return $result;
 	}
 }
 ?>

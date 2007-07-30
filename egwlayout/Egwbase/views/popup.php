@@ -15,15 +15,22 @@
 	<script type="text/javascript" src="Addressbook/Js/Addressbook.js"></script>
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function(){
-			<?php if(isset($this->contactId)) echo "editContactID=" . $this->contactId . ";"?>
-			EGWNameSpace.Addressbook.alertme();
+			<?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";" ?>
+			<?php if(isset($this->jsExecute)) echo "$this->jsExecute" ?>
 			window.focus();
-			window.open();
 		});
 	</script>
+	
+	<style type="text/css">
+	    .x-layout-panel {
+	        background:#EEEEEE;
+	    }
+	</style>
 </head>
 <body>
-<div id="content">
+<div id ="container">
+<div id="header" class="x-layout-inactive-content" style="padding:0px;"></div>
+<div id="content" class="x-layout-inactive-content" style="padding:3px; bbackground:#EEEEEE;"></div>
 </div> 
 </body>
 </html>

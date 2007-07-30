@@ -4,249 +4,7 @@ EGWNameSpace.Addressbook = function() {
 
 	var ds;
 
-	Ext.namespace('Ext.exampledata');
-
-Ext.exampledata.states = [
-['AF', 'AFGHANISTAN'],
-['AL', 'ALBANIA'],
-['DZ', 'ALGERIA'],
-['AS', 'AMERICANSAMOA'],
-['AD', 'ANDORRA'],
-['AO', 'ANGOLA'],
-['AI', 'ANGUILLA'],
-['AQ', 'ANTARCTICA'],
-['AG', 'ANTIGUAANDBARBUDA'],
-['AR', 'ARGENTINA'],
-['AM', 'ARMENIA'],
-['AW', 'ARUBA'],
-['AU', 'AUSTRALIA'],
-['AT', 'AUSTRIA'],
-['AZ', 'AZERBAIJAN'],
-['BS', 'BAHAMAS'],
-['BH', 'BAHRAIN'],
-['BD', 'BANGLADESH'],
-['BB', 'BARBADOS'],
-['BY', 'BELARUS'],
-['BE', 'BELGIUM'],
-['BZ', 'BELIZE'],
-['BJ', 'BENIN'],
-['BM', 'BERMUDA'],
-['BT', 'BHUTAN'],
-['BO', 'BOLIVIA'],
-['BA', 'BOSNIAANDHERZEGOVINA'],
-['BW', 'BOTSWANA'],
-['BV', 'BOUVETISLAND'],
-['BR', 'BRAZIL'],
-['IO', 'BRITISHINDIANOCEANTERRITORY'],
-['BN', 'BRUNEIDARUSSALAM'],
-['BG', 'BULGARIA'],
-['BF', 'BURKINAFASO'],
-['BI', 'BURUNDI'],
-['KH', 'CAMBODIA'],
-['CM', 'CAMEROON'],
-['CA', 'CANADA'],
-['CV', 'CAPEVERDE'],
-['KY', 'CAYMANISLANDS'],
-['CF', 'CENTRALAFRICANREPUBLIC'],
-['TD', 'CHAD'],
-['CL', 'CHILE'],
-['CN', 'CHINA'],
-['CX', 'CHRISTMASISLAND'],
-['CC', 'COCOS(KEELING)ISLANDS'],
-['CO', 'COLOMBIA'],
-['KM', 'COMOROS'],
-['CG', 'CONGO'],
-['CD', 'CONGO,THEDEMOCRATICREPUBLICOFTHE'],
-['CK', 'COOKISLANDS'],
-['CR', 'COSTARICA'],
-['CI', 'COTEDIVOIRE'],
-['HR', 'CROATIA'],
-['CU', 'CUBA'],
-['CY', 'CYPRUS'],
-['CZ', 'CZECHREPUBLIC'],
-['DK', 'DENMARK'],
-['DJ', 'DJIBOUTI'],
-['DM', 'DOMINICA'],
-['DO', 'DOMINICANREPUBLIC'],
-['TP', 'EASTTIMOR'],
-['EC', 'ECUADOR'],
-['EG', 'EGYPT'],
-['SV', 'ELSALVADOR'],
-['GQ', 'EQUATORIALGUINEA'],
-['ER', 'ERITREA'],
-['EE', 'ESTONIA'],
-['ET', 'ETHIOPIA'],
-['FK', 'FALKLANDISLANDS(MALVINAS)'],
-['FO', 'FAROEISLANDS'],
-['FJ', 'FIJI'],
-['FI', 'FINLAND'],
-['FR', 'FRANCE'],
-['GF', 'FRENCHGUIANA'],
-['PF', 'FRENCHPOLYNESIA'],
-['TF', 'FRENCHSOUTHERNTERRITORIES'],
-['GA', 'GABON'],
-['GM', 'GAMBIA'],
-['GE', 'GEORGIA'],
-['DE', 'GERMANY'],
-['GH', 'GHANA'],
-['GI', 'GIBRALTAR'],
-['GR', 'GREECE'],
-['GL', 'GREENLAND'],
-['GD', 'GRENADA'],
-['GP', 'GUADELOUPE'],
-['GU', 'GUAM'],
-['GT', 'GUATEMALA'],
-['GN', 'GUINEA'],
-['GW', 'GUINEA-BISSAU'],
-['GY', 'GUYANA'],
-['HT', 'HAITI'],
-['HM', 'HEARDISLANDANDMCDONALDISLANDS'],
-['VA', 'HOLYSEE(VATICANCITYSTATE)'],
-['HN', 'HONDURAS'],
-['HK', 'HONGKONG'],
-['HU', 'HUNGARY'],
-['IS', 'ICELAND'],
-['IN', 'INDIA'],
-['ID', 'INDONESIA'],
-['IR', 'IRAN,ISLAMICREPUBLICOF'],
-['IQ', 'IRAQ'],
-['IE', 'IRELAND'],
-['IL', 'ISRAEL'],
-['IT', 'ITALY'],
-['JM', 'JAMAICA'],
-['JP', 'JAPAN'],
-['JO', 'JORDAN'],
-['KZ', 'KAZAKSTAN'],
-['KE', 'KENYA'],
-['KI', 'KIRIBATI'],
-['KP', 'KOREADEMOCRATICPEOPLESREPUBLICOF'],
-['KR', 'KOREAREPUBLICOF'],
-['KW', 'KUWAIT'],
-['KG', 'KYRGYZSTAN'],
-['LA', 'LAOPEOPLESDEMOCRATICREPUBLIC'],
-['LV', 'LATVIA'],
-['LB', 'LEBANON'],
-['LS', 'LESOTHO'],
-['LR', 'LIBERIA'],
-['LY', 'LIBYANARABJAMAHIRIYA'],
-['LI', 'LIECHTENSTEIN'],
-['LT', 'LITHUANIA'],
-['LU', 'LUXEMBOURG'],
-['MO', 'MACAU'],
-['MK', 'MACEDONIA,THEFORMERYUGOSLAVREPUBLICOF'],
-['MG', 'MADAGASCAR'],
-['MW', 'MALAWI'],
-['MY', 'MALAYSIA'],
-['MV', 'MALDIVES'],
-['ML', 'MALI'],
-['MT', 'MALTA'],
-['MH', 'MARSHALLISLANDS'],
-['MQ', 'MARTINIQUE'],
-['MR', 'MAURITANIA'],
-['MU', 'MAURITIUS'],
-['YT', 'MAYOTTE'],
-['MX', 'MEXICO'],
-['FM', 'MICRONESIA,FEDERATEDSTATESOF'],
-['MD', 'MOLDOVA,REPUBLICOF'],
-['MC', 'MONACO'],
-['MN', 'MONGOLIA'],
-['MS', 'MONTSERRAT'],
-['MA', 'MOROCCO'],
-['MZ', 'MOZAMBIQUE'],
-['MM', 'MYANMAR'],
-['NA', 'NAMIBIA'],
-['NR', 'NAURU'],
-['NP', 'NEPAL'],
-['NL', 'NETHERLANDS'],
-['AN', 'NETHERLANDSANTILLES'],
-['NC', 'NEWCALEDONIA'],
-['NZ', 'NEWZEALAND'],
-['NI', 'NICARAGUA'],
-['NE', 'NIGER'],
-['NG', 'NIGERIA'],
-['NU', 'NIUE'],
-['NF', 'NORFOLKISLAND'],
-['MP', 'NORTHERNMARIANAISLANDS'],
-['NO', 'NORWAY'],
-['OM', 'OMAN'],
-['PK', 'PAKISTAN'],
-['PW', 'PALAU'],
-['PS', 'PALESTINIANTERRITORY,OCCUPIED'],
-['PA', 'PANAMA'],
-['PG', 'PAPUANEWGUINEA'],
-['PY', 'PARAGUAY'],
-['PE', 'PERU'],
-['PH', 'PHILIPPINES'],
-['PN', 'PITCAIRN'],
-['PL', 'POLAND'],
-['PT', 'PORTUGAL'],
-['PR', 'PUERTORICO'],
-['QA', 'QATAR'],
-['RE', 'REUNION'],
-['RO', 'ROMANIA'],
-['RU', 'RUSSIANFEDERATION'],
-['RW', 'RWANDA'],
-['SH', 'SAINTHELENA'],
-['KN', 'SAINTKITTSANDNEVIS'],
-['LC', 'SAINTLUCIA'],
-['PM', 'SAINTPIERREANDMIQUELON'],
-['VC', 'SAINTVINCENTANDTHEGRENADINES'],
-['WS', 'SAMOA'],
-['SM', 'SANMARINO'],
-['ST', 'SAOTOMEANDPRINCIPE'],
-['SA', 'SAUDIARABIA'],
-['SN', 'SENEGAL'],
-['SC', 'SEYCHELLES'],
-['SL', 'SIERRALEONE'],
-['SG', 'SINGAPORE'],
-['SK', 'SLOVAKIA'],
-['SI', 'SLOVENIA'],
-['SB', 'SOLOMONISLANDS'],
-['SO', 'SOMALIA'],
-['ZA', 'SOUTHAFRICA'],
-['GS', 'SOUTHGEORGIAANDTHESOUTHSANDWICHISLANDS'],
-['ES', 'SPAIN'],
-['LK', 'SRILANKA'],
-['SD', 'SUDAN'],
-['SR', 'SURINAME'],
-['SJ', 'SVALBARDANDJANMAYEN'],
-['SZ', 'SWAZILAND'],
-['SE', 'SWEDEN'],
-['CH', 'SWITZERLAND'],
-['SY', 'SYRIANARABREPUBLIC'],
-['TW', 'TAIWAN'],
-['TJ', 'TAJIKISTAN'],
-['TZ', 'TANZANIA,UNITEDREPUBLICOF'],
-['TH', 'THAILAND'],
-['TG', 'TOGO'],
-['TK', 'TOKELAU'],
-['TO', 'TONGA'],
-['TT', 'TRINIDADANDTOBAGO'],
-['TN', 'TUNISIA'],
-['TR', 'TURKEY'],
-['TM', 'TURKMENISTAN'],
-['TC', 'TURKSANDCAICOSISLANDS'],
-['TV', 'TUVALU'],
-['UG', 'UGANDA'],
-['UA', 'UKRAINE'],
-['AE', 'UNITEDARABEMIRATES'],
-['GB', 'UNITEDKINGDOM'],
-['US', 'UNITEDSTATES'],
-['UM', 'UNITEDSTATESMINOROUTLYINGISLANDS'],
-['UY', 'URUGUAY'],
-['UZ', 'UZBEKISTAN'],
-['VU', 'VANUATU'],
-['VE', 'VENEZUELA'],
-['VN', 'VIETNAM'],
-['VG', 'VIRGINISLANDS,BRITISH'],
-['VI', 'VIRGINISLANDS,U.S.'],
-['WF', 'WALLISANDFUTUNA'],
-['EH', 'WESTERNSAHARA'],
-['YE', 'YEMEN'],
-['YU', 'YUGOSLAVIA'],
-['ZM', 'ZAMBIA'],
-['ZW', 'ZIMBABWE']
-    ];
+	//Ext.namespace('Ext.exampledata');
 
 	// private function
 	var _showAddressGrid = function(_layout) {
@@ -262,8 +20,8 @@ Ext.exampledata.states = [
 
 		// create the Data Store
 		ds = new Ext.data.JsonStore({
-			url: 'jsonrpc.php',
-			baseParams: {application:'Addressbook_Json', datatype:'address', func:'getData'},
+			url: 'index.php',
+			baseParams: {method:'Addressbook.getData', _datatype:'address'},
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'contact_id',
@@ -334,7 +92,7 @@ Ext.exampledata.states = [
 
 		ds.setDefaultSort('contact_id', 'desc');
 
-		ds.load();
+		ds.load({params:{start:0, limit:50}});
 
 		var cm = new Ext.grid.ColumnModel([{
 				resizable: true,
@@ -435,7 +193,9 @@ Ext.exampledata.states = [
 			cls:'x-btn-icon',
 			icon:'images/oxygen/16x16/actions/edit-add.png',
 			tooltip: 'add new contact',
-			onClick: _openDialog
+			onClick: function() {
+				_openDialog();
+			}
 		});
 
 		pagingHeader.insertButton(1, {
@@ -444,7 +204,9 @@ Ext.exampledata.states = [
 			icon:'images/oxygen/16x16/actions/edit.png',
 			tooltip: 'edit current contact',
 			disabled: true,
-			onClick: _openDialog
+			onClick: function() {
+				_openDialog();
+			}
 		});
 
 		pagingHeader.insertButton(2, {
@@ -453,10 +215,27 @@ Ext.exampledata.states = [
 			icon:'images/oxygen/16x16/actions/edit-delete.png',
 			tooltip: 'delete selected contacts',
 			disabled: true,
+			onClick: function() {
+			    var deletedRows = Array();
+			    var selectedRows = grid.getSelectionModel().getSelections();
+			    for (var i = 0; i < selectedRows.length; ++i) {
+			        deletedRows.push(selectedRows[i].id);
+			    }
+			    _deleteContact(deletedRows);
+			    ds.reload();
+			}
+		});
+
+		pagingHeader.insertButton(3, {
+			id: 'exportbtn',
+			cls:'x-btn-icon',
+			icon:'images/oxygen/16x16/actions/file-export.png',
+			tooltip: 'export selected contacts',
+			disabled: false,
 			onClick: _openDialog
 		});
 
-		pagingHeader.insertButton(3, new Ext.Toolbar.Separator());
+		pagingHeader.insertButton(4, new Ext.Toolbar.Separator());
 
 		center.add(new Ext.GridPanel(grid));
 		
@@ -479,26 +258,215 @@ Ext.exampledata.states = [
 
 		grid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
 			var record = gridPar.getDataSource().getAt(rowIndexPar);
-			console.log('id: ' + record.data.contact_id);
+			//console.log('id: ' + record.data.contact_id);
 			try {
 				_openDialog(record.data.contact_id);
 			} catch(e) {
 			//	alert(e);
 			}
 		});
+		
+		grid.on('rowcontextmenu', function(grid, rowIndex, eventObject) {
+			eventObject.stopEvent();
+			ctxMenuAddress.showAt(eventObject.getXY());
+		});
 	}
+	
+	var ctxMenuAddress = new Ext.menu.Menu({
+                id:'ctxMenuAddress', items: [{
+                        id:'edit',
+                        text:'edit contact',
+                        icon:'images/oxygen/16x16/actions/edit.png'
+                },{
+                        id:'delete',
+                        text:'delete contact',
+                        icon:'images/oxygen/16x16/actions/edit-delete.png'
+                },'-',{
+                	id:'new',
+                	text:'new contact',
+                	icon:'images/oxygen/16x16/actions/edit-add.png'
+                }]
+        });
+
 
 	var _openDialog = function(_id) {
+		if(_id) {
+			var url = 'index.php?getpopup=addressbook.editcontact&contactid=' + _id;
+		} else {
+			var url = 'index.php?getpopup=addressbook.editcontact';
+		}
+		//console.log(url);
 		appId = 'addressbook';
-		var popup = window.open('index.php?application=addressbook&id=' + _id,'popupname','width=900,height=600,directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=no,dependent=no');
+		var popup = window.open(url, 'popupname','width=950,height=600,directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=no,dependent=no');
 
 		return;
 	}
 	
-	var _showEditDialog = function() {
+	var _reloadMainWindow = function(closeCurrentWindow) {
+	    var closeCurrentWindow = (closeCurrentWindow == null) ? false : closeCurrentWindow;
+	    
+	    window.opener.EGWNameSpace.Addressbook.reload();
+	    if(closeCurrentWindow == true) {
+                window.setTimeout("window.close()", 400);
+	    }
+	}
+	
+	var _deleteContact = function(_contactIDs) {
+            var contactIDs = Ext.util.JSON.encode(_contactIDs);
+            new Ext.data.Connection().request({
+                url: 'index.php',
+                method: 'post',
+                scope: this,
+                params: {method:'Addressbook.deleteAddress', _contactIDs:contactIDs},
+                success: function(response, options) {
+                    //window.location.reload();
+                    //console.log(response);
+                    var decodedResponse;
+                    try{
+                        decodedResponse = Ext.util.JSON.decode(response.responseText);
+                        if(decodedResponse.success) {
+                            //Ext.MessageBox.alert('Success!', 'Deleted contact!');
+                            _reloadMainWindow(true);
+                        } else {
+                            Ext.MessageBox.alert('Failure!', 'Deleting contact failed!');
+                        }
+                        //console.log(decodedResponse);
+                    } catch(e){
+                        Ext.MessageBox.alert('Failure!', 'Can not decode JSon response!');
+                    }
+                },
+                failure: function(response, options) {
+                }
+            });
+	}
+	
+	var _exportContact = function(_btn, _event) {
+	    Ext.MessageBox.alert('Export', 'Not yet implemented.');
+	}
+	
+	var _displayContactDialog = function() {
+		Ext.QuickTips.init();
+
+		// turn on validation errors beside the field globally
+		Ext.form.Field.prototype.msgTarget = 'side';
+		
+		var layout = new Ext.BorderLayout(document.body, {
+		    north: {split:false, initialSize:28},
+		    center: {autoScroll: true}
+		});
+		layout.beginUpdate();
+		layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
+		layout.add('center', new Ext.ContentPanel('content'));
+		layout.endUpdate();
+
+                var disableButtons = true;
+                if(formData.values) {
+                    disableButtons = false;
+                }		
+                var tb = new Ext.Toolbar('header');
+                tb.add({
+                    id: 'savebtn',
+                    cls:'x-btn-text-icon',
+                    text: 'Save and Close',
+                    icon:'images/oxygen/16x16/actions/document-save.png',
+                    tooltip: 'save this contact and close window',
+                    onClick: function (){
+                            if (addressedit.isValid()) {
+                                var additionalData = {};
+                                if(formData.values) {
+                                    additionalData._contactID = formData.values.contact_id;
+                                } else {
+                                    additionalData._contactID = 0;
+                                }
+                                
+                                addressedit.submit({
+                                    waitTitle:'Please wait!',
+                                    waitMsg:'saving contact...',
+                                    params:additionalData,
+                                    success:function(form, action, o) {
+                                        //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
+                                        window.opener.EGWNameSpace.Addressbook.reload();
+                                        window.setTimeout("window.close()", 400);
+                                    },
+                                    failure:function(form, action) {
+                                        //Ext.MessageBox.alert("Error",action.result.errorMessage);
+                                    }
+                                });
+                            } else {
+                                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                            }
+                    }                    
+                },{
+                    id: 'savebtn',
+                    cls:'x-btn-icon',
+                    icon:'images/oxygen/16x16/actions/save-all.png',
+                    tooltip: 'apply changes for this contact',
+                    onClick: function (){
+                            if (addressedit.isValid()) {
+                                var additionalData = {};
+                                if(formData.values) {
+                                    additionalData._contactID = formData.values.contact_id;
+                                } else {
+                                    additionalData._contactID = 0;
+                                }
+                                
+                                addressedit.submit({
+                                    waitTitle:'Please wait!',
+                                    waitMsg:'saving contact...',
+                                    params:additionalData,
+                                    success:function(form, action, o) {
+                                        //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
+                                        window.opener.EGWNameSpace.Addressbook.reload();
+                                    },
+                                    failure:function(form, action) {
+                                        //Ext.MessageBox.alert("Error",action.result.errorMessage);
+                                    }
+                                });
+                            } else {
+                                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                            }
+                    }                    
+                },{
+                    id: 'deletebtn',
+                    cls:'x-btn-icon',
+                    icon:'images/oxygen/16x16/actions/edit-delete.png',
+                    tooltip: 'delete this contact',
+                    disabled: disableButtons,
+                    handler: function(_btn, _event) {
+                        if(formData.values.contact_id) {
+                            Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
+                            //console.log('calling _deleteContact');
+                            _deleteContact([formData.values.contact_id]);
+                        }
+                    }
+                },{
+                    id: 'exportbtn',
+                    cls:'x-btn-icon',
+                    icon:'images/oxygen/16x16/actions/file-export.png',
+                    tooltip: 'export this contact',
+                    disabled: disableButtons,
+                    handler: _exportContact
+		});
+		
+		var ds_country = new Ext.data.JsonStore({
+			url: 'index.php',
+			baseParams: {method:'Egwbase.getCountryList'},
+			root: 'results',
+			id: 'shortName',
+			fields: ['shortName', 'translatedName'],
+			remoteSort: false
+		});
+
+		// add a div, which will bneehe parent element for the grid
+		var contentTag = Ext.Element.get('content');
+		//var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv', class:'x-box-mc'});
+		//var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv'});
+		//outerDivTag.addClass('x-box-mc');
+		//var formDivTag = outerDivTag.createChild({tag:'div', id:'formdiv'});
+		
 		var addressedit = new Ext.form.Form({
 			labelWidth: 75, // label settings here cascade unless overridden
-			url:'jsonrpc.php?application=Addressbook_Json&func=saveAddress',
+			url:'index.php?method=Addressbook.saveAddress',
 			reader : new Ext.data.JsonReader({root: 'results'}, [
 				{name: 'contact_id'},
 				{name: 'contact_tid'},
@@ -562,304 +530,141 @@ Ext.exampledata.states = [
 			])
 		});
 		
-		addressedit.column({width:280, labelWidth:75});
-		
-		addressedit.fieldset(
-			{legend:'Contact information'},
-			new Ext.form.TextField({
-				fieldLabel: 'Prefix',
-				name: 'n_prefix',
-				width:175
-			}),
-			new Ext.form.TextField({
-					fieldLabel: 'First Name',
-					name: 'n_given',
-					vtype: 'alphanum',
-					width:175
-	        }),
-			new Ext.form.TextField({
-					fieldLabel: 'Middle Name',
-					name: 'n_middle',
-					vtype: 'alphanum',
-					width:175,
-					allowBlank:false
-			}),			
+        addressedit.fieldset({legend:'Contact information'});
 
-			new Ext.form.TextField({
-					fieldLabel: 'Last Name',
-					name: 'n_family',
-					vtype: 'alphanum',
-					width:175,
-					allowBlank:false
-			}),
-	        new Ext.form.TextField({
-					fieldLabel: 'Suffix',
-					name: 'n_suffix',
-					width:175
-	        }),
-	        new Ext.form.TextField({
-					fieldLabel: 'Title',
-					name: 'contact_title',
-					width:175
-	        }),			
-	        new Ext.form.TextField({
-					fieldLabel: 'Role',
-					name: 'contact_role',
-					width:175
-	        }),
-	        new Ext.form.TextField({
-					fieldLabel: 'Room',
-					name: 'contact_room',
-					width:175
-	        })
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'First Name', name:'n_given', width:175}),
+                new Ext.form.TextField({fieldLabel:'Middle Name', name:'n_middle', width:175}),
+                new Ext.form.TextField({fieldLabel:'Last Name', name:'n_family', width:175, allowBlank:false})
+            );
 
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'Prefix', name:'n_prefix', width:175}),
+                new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175})
+            );
+/*        
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175})
+            );
+*/
+        addressedit.end();
 
+        addressedit.fieldset({legend:'Business information'});
 
- 			
-		);
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'Company', name:'org_name', width:175}),
+                new Ext.form.TextField({fieldLabel:'Street', name:'adr_one_street', width:175}),
+                new Ext.form.TextField({fieldLabel:'Street 2', name:'adr_one_street2', width:175}),
+                new Ext.form.TextField({fieldLabel:'Postalcode', name:'adr_one_postalcode', width:175}),
+                new Ext.form.TextField({fieldLabel:'City', name:'adr_one_locality', width:175}),
+                new Ext.form.TextField({fieldLabel:'Region', name:'adr_one_region', width:175}),
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Country',
+                    name: 'adr_one_countryname',
+                    hiddenName:'adr_one_countryname',
+                    store: ds_country,
+                    displayField:'translatedName',
+                    valueField:'shortName',
+                    typeAhead: true,
+                    mode: 'remote',
+                    triggerAction: 'all',
+                    emptyText:'Select a state...',
+                    selectOnFocus:true,
+                    width:175
+                })
+            );
 
-		addressedit.fieldset(
-        {legend:'Internet'},		
-			new Ext.form.TextField({
-				fieldLabel: 'Email',
-				name: 'contact_email',
-				vtype:'email',
-				width:175
-			}),
-			
-			new Ext.form.TextField({
-				fieldLabel: 'Email private',
-				name: 'contact_email_home',
-				vtype:'email',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'URL',
-				name: 'contact_url',
-				vtype:'url',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'URL private',
-				name: 'contact_url_home',
-				vtype:'url',
-				width:175
-			})
-		);		
-		
-		
-	addressedit.end();
-		
-	addressedit.column({width:280, style:'margin-left:10px', labelWidth:75});	
-		
-		addressedit.fieldset(
-        {legend:'Business address'},		
-			new Ext.form.TextField({
-				fieldLabel: 'Firm',
-				name: 'org_name',
-				width:175
-			}),
-			
-			new Ext.form.TextField({
-				fieldLabel: 'Unit',
-				name: 'org_unit',
-				width:175
-			}),			
-			new Ext.form.TextField({
-				fieldLabel: 'Street',
-				name: 'adr_one_street',
-				width:175
-			}),			
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'Phone', name:'tel_work', width:175}),
+                new Ext.form.TextField({fieldLabel:'Cellphone', name:'tel_cell', width:175}),
+                new Ext.form.TextField({fieldLabel:'Fax', name:'tel_fax', width:175}),
+                new Ext.form.TextField({fieldLabel:'Car phone', name:'tel_car', width:175}),
+                new Ext.form.TextField({fieldLabel:'Pager', name:'tel_pager', width:175}),
+                new Ext.form.TextField({fieldLabel:'Email', name:'contact_email', vtype:'email', width:175}),
+                new Ext.form.TextField({fieldLabel:'URL', name:'contact_url', vtype:'url', width:175})
+            );
 
-			new Ext.form.TextField({
-				fieldLabel: 'Street 2',
-				name: 'adr_one_street2',
-				width:175
-			}),			
-			new Ext.form.TextField({
-				fieldLabel: 'Postalcode',
-				name: 'adr_one_postalcode',
-				width:175
-			}),						
-			new Ext.form.TextField({
-				fieldLabel: 'City',
-				name: 'adr_one_locality',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Region',
-				name: 'adr_one_region',
-				width:175
-			}),				
-			new Ext.form.ComboBox({
-				fieldLabel: 'Country',
-				name: 'adr_one_countryname',
-				hiddenName:'countryname',
-	            store: new Ext.data.SimpleStore({
-	            fields: ['abbr', 'state'],
-	            data : Ext.exampledata.states // from states.js
-	            }),
-	            displayField:'state',
-	            typeAhead: true,
-	            mode: 'local',
-	            triggerAction: 'all',
-	            emptyText:'Select a state...',
-	            selectOnFocus:true,
-					width:175
-			})			
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'Unit', name:'org_unit', width:175}),			
+	        new Ext.form.TextField({fieldLabel:'Role', name:'contact_role', width:175}),
+                new Ext.form.TextField({fieldLabel:'Title', name:'contact_title', width:175}),
+	        new Ext.form.TextField({fieldLabel:'Room', name:'contact_room', width:175}),
+	        new Ext.form.TextField({fieldLabel:'Name Assistent', name:'contact_assistent', width:175}),
+	        new Ext.form.TextField({fieldLabel:'Phone Assistent', name:'tel_assistent', width:175})
+            );
 
-		);
-		
-		addressedit.fieldset(
-        {legend:'Privat address'},		
-			new Ext.form.TextField({
-				fieldLabel: 'Street',
-				name: 'adr_two_street',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Street2',
-				name: 'adr_two_street2',
-				width:175
-			}),					
-			new Ext.form.TextField({
-				fieldLabel: 'Postalcode',
-				name: 'adr_two_postalcode',
-				width:175
-			}),			
-			new Ext.form.TextField({
-				fieldLabel: 'City',
-				name: 'adr_two_locality',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Region',
-				name: 'adr_two_region',
-				width:175
-			}),			
-			new Ext.form.ComboBox({
-				fieldLabel: 'Country',
-				name: 'adr_two_countryname',
-				hiddenName:'countryname',
-	            store: new Ext.data.SimpleStore({
-	            fields: ['abbr', 'state'],
-				data : Ext.exampledata.states // from states.js
-	            }),
-	            displayField:'state',
-	            typeAhead: true,
-	            mode: 'local',
-	            triggerAction: 'all',
-	            emptyText:'Select a state...',
-	            selectOnFocus:true,
-					width:175
-			}),						
-			new Ext.form.DateField({
-				fieldLabel: 'Birthday',
-				name: 'contact_bday',
-				width:175
-			})
-		);
-		
-	addressedit.end();		
-	
-	addressedit.column({width:280, style:'margin-left:10px', labelWidth:75});	
-		
-		addressedit.fieldset(
-        {legend:'Business Phone Numbers'},		
-			new Ext.form.TextField({
-				fieldLabel: 'Phone',
-				name: 'tel_work',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Cellphone',
-				name: 'tel_cell',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'FAX',
-				name: 'tel_fax',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Car phone',
-				name: 'tel_car',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Pager',
-				name: 'tel_pager',
-				width:175
-			})	
-		);
+        addressedit.end();
 
-		addressedit.fieldset(
-        {legend:'Assistent Phone Number'},		
-			new Ext.form.TextField({
-				fieldLabel: 'Name Assistent',
-				name: 'contact_assistent',
-				width:175
-			}),		
-			new Ext.form.TextField({
-				fieldLabel: 'Phone',
-				name: 'tel_assistent',
-				width:175
-			})
-		);		
-		
-		addressedit.fieldset(
-        {legend:'Privat Phone Numbers'},		
-			new Ext.form.TextField({
-				fieldLabel: 'Phone',
-				name: 'tel_home',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'Cellphone',
-				name: 'tel_cell_private',
-				width:175
-			}),
-			new Ext.form.TextField({
-				fieldLabel: 'FAX',
-				name: 'tel_fax_home',
-				width:175
-			})			
-		);				
-		
-		
-		
-	addressedit.end();		
-		
-		
-		addressedit.addButton('Save', function (){
-			if (addressedit.isValid()) {
-				addressedit.submit({
-					waitMsg:'submitting, please wait...',
-					success:function(form, action, o) {
-						//Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-						window.opener.EGWNameSpace.Addressbook.reload();
-						window.close();
-					},
-					failure:function(form, action) {
-						Ext.MessageBox.alert("Error",action.result.errorMessage);
-					}
-				});
-			}else{
-				Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+        addressedit.fieldset({legend:'Private information'});
+
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.TextField({fieldLabel:'Street', name:'adr_two_street', width:175}),
+                new Ext.form.TextField({fieldLabel:'Street2', name:'adr_two_street2', width:175}),
+                new Ext.form.TextField({fieldLabel:'Postalcode', name:'adr_two_postalcode', width:175}),
+                new Ext.form.TextField({fieldLabel:'City', name:'adr_two_locality', width:175}),
+                new Ext.form.TextField({fieldLabel:'Region', name:'adr_two_region', width:175}),
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Country',
+                    name: 'adr_two_countryname',
+                    hiddenName:'adr_two_countryname',
+                    store: ds_country,
+                    displayField:'translatedName',
+                    valueField:'shortName',
+                    typeAhead: true,
+                    mode: 'remote',
+                    triggerAction: 'all',
+                    emptyText:'Select a state...',
+                    selectOnFocus:true,
+                    width:175
+                })
+            );
+            
+            addressedit.column(
+                {width:'33%', labelWidth:90, labelSeparator:''},
+                new Ext.form.DateField({fieldLabel:'Birthday', name:'contact_bday', format:formData.config.dateFormat, altFormats:'Y-m-d', width:175}),
+                new Ext.form.TextField({fieldLabel:'Phone', name:'tel_home', width:175}),
+                new Ext.form.TextField({fieldLabel:'Cellphone', name:'tel_cell_private', width:175}),
+                new Ext.form.TextField({fieldLabel:'Fax', name:'tel_fax_home', width:175}),
+                new Ext.form.TextField({fieldLabel:'Email', name:'contact_email_home', vtype:'email', width:175}),
+                new Ext.form.TextField({fieldLabel:'URL', name:'contact_url_home', vtype:'url', width:175})
+            );
+            
+            addressedit.column(
+                {width:'33%', labelSeparator:'', hideLabels:true},
+                new Ext.form.TextArea({
+                    //fieldLabel: 'Address',
+                    name: 'contact_note',
+                    grow: false,
+                    preventScrollbars:false,
+                    width:'95%',
+                    maxLength:255,
+                    height:150
+                })
+            );
+            
+        addressedit.end();
+        
+        addressedit.render('content');
+        
+        return addressedit;
+    }
+
+	var _setContactDialogValues = function(_dialog, _formData) {
+		for (var fieldName in _formData) {
+			var field = _dialog.findField(fieldName);
+			if(field) {
+				//console.log(fieldName + ' => ' + _formData[fieldName]);
+				field.setValue(_formData[fieldName]);
 			}
-		}, addressedit);
-		
-		addressedit.addButton('Cancel', function (){
-			window.close()
-		});
-		
-		addressedit.render('content');	
-		
-		if(editContactID) {
-			addressedit.load({url:'jsonrpc.php?application=Addressbook_Json&func=readAddress&id=' + editContactID});
 		}
-			
-	};
+	}
 
 	// public stuff
 	return {
@@ -869,7 +674,7 @@ Ext.exampledata.states = [
 		},
 		
 		reload: function() {
-			ds.load();
+			ds.reload();
 		},
 		
 		handleDragDrop: function(e) {
@@ -879,9 +684,12 @@ Ext.exampledata.states = [
 		openDialog: function() {
 			_openDialog();
 		},
-
-		alertme: function() {
-			_showEditDialog();
+		
+		displayContactDialog: function() {
+			var dialog = _displayContactDialog();
+			if(formData.values) {
+				_setContactDialogValues(dialog, formData.values);
+			}
 		}
 	}
 	

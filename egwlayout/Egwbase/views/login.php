@@ -12,18 +12,28 @@
 
 	<!-- eGW -->
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-	<script type="text/javascript" src="Addressbook/Js/Addressbook.js"></script>
+	<script type="text/javascript" language="javascript" src="Egwbase/Js/Login.js"></script>
 	<script type="text/javascript" language="javascript">
-		Ext.onReady(function(){
-			<?php if(isset($this->contactId)) echo "editContactID=" . $this->contactId . ";"?>
-			EGWNameSpace.Addressbook.alertme();
-			window.focus();
-			window.open();
+		Ext.onReady(function() {
+			EGWNameSpace.Login.showLoginDialog();
 		});
 	</script>
 </head>
 <body>
-<div id="content">
-</div> 
+<div id="loginMainDiv" style="width:255px;">
+    <div id="loginForm"></div>
+</div>
+<!-- phpmyvisites -->
+<script type="text/javascript">
+<!--
+var a_vars = Array();
+var pagename='';
+
+var phpmyvisitesSite = 1;
+var phpmyvisitesURL = "http://lars.kneschke.de/phpmv2/phpmyvisites.php";
+//-->
+</script>
+<script language="javascript" src="http://lars.kneschke.de/phpmv2/phpmyvisites.js" type="text/javascript"></script>
+<!-- /phpmyvisites --> 
 </body>
 </html>

@@ -6,11 +6,7 @@
  * http://www.extjs.com/license
  */
 
- 
-//var grid, ds;
-
 var EGWNameSpace = EGWNameSpace || {};
-var testor;
  
 Ext.onReady(function(){
 	Ext.BLANK_IMAGE_URL = "ext-1.1-rc1/resources/images/default/s.gif";
@@ -67,43 +63,6 @@ Ext.onReady(function(){
 		return String.format('<b><i>{0}</i></b>', value);
 	}
 
-/*	//reacts on doubleclick in line area from grid
-	grid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
-		var record = gridPar.getDataSource().getAt(rowIndexPar);
-		//alert('id: ' + record.data.userid);
-		try {
-			appId = 'addressbook';
-			window.open('popup.php?itemid='+record.data.userid+'&app='+appId,'popupname','width=400,height=400,directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=no,dependent=no');
-		}
-		catch(e) {
-			//alert(e);
-		}
-	});
-	
-	// displays the context menu
- 	grid.on('cellcontextmenu', function(gridP, rowIndexP, cellIndexP, eventP) {
- 		eventP.stopEvent();
- 		ctxMenu.showAt(eventP.getXY());
- 	});
-
-	// update the active menu buttons
- 	grid.on('rowclick', function(gridP, rowIndexP, eventP) {
-		var rowCount = grid.getSelectionModel().getCount();
-		if(rowCount < 1) {
-			btns.edit.disable();
-			btns.del.disable();
-		} else if(rowCount == 1) {
-			btns.edit.enable();
-			btns.del.enable();
-		} else {
-			btns.edit.disable();
-			btns.del.enable();
-		}
- 	});
-
-	grid.render();					
-	
-*/
 	//var el = Ext.get("popup");
 	//el.setStyle('background-color:#C3DAF9');
 	//============================================
@@ -126,12 +85,6 @@ Ext.onReady(function(){
 
 /*	tblk.add(
 	{
-		id: 'edit',
-		cls:'x-btn-icon edit',
-		icon:'images/oxygen/16x16/actions/edit.png',
-		disabled: true,
-		tooltip: 'edit entry'
-	},{
 		id: 'del',
 		cls:'x-btn-icon delete',
 		icon:'images/oxygen/16x16/actions/edit-delete.png',
@@ -238,7 +191,16 @@ Ext.onReady(function(){
 		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to logout?', function(btn, text){
 			//alert(btn);
 			if (btn == 'yes'){
-				// log out from eGW
+				Ext.MessageBox.wait('Loging you out...', 'Please wait!');
+				new Ext.data.Connection().request({
+					url: 'index.php',
+					method: 'post',
+					scope: this,
+					params: {method:'Egwbase.logout', logout:true},
+					callback: function(options, bSuccess, response) {
+						window.location.reload();
+					}
+				});
 			}
 		});
 	}
@@ -341,10 +303,10 @@ Ext.onReady(function(){
 
 	var Tree = Ext.tree;
 
-	treeLoader = new Tree.TreeLoader({dataUrl:'jsonrpc.php', baseParams:{func:'getTree'}});
+	treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
 	//treeLoader.baseParams.func = 'getTree';
 	treeLoader.on("beforeload", function(loader, node) {
-		loader.baseParams.application = node.attributes.application + '_Json';
+		loader.baseParams.method = node.attributes.application + '.getTree';
 		loader.baseParams.id = node.id;
 	}, this);
 	            

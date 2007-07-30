@@ -21,6 +21,8 @@ class Egwbase_Ext_Treenode
 	
 	public $leaf;
 	
+	public $contextMenuClass;
+	
 	public function __construct($_application, $_datatype, $_id, $_text, $_isLeaf) 
 	{
 		$this->application = $_application;

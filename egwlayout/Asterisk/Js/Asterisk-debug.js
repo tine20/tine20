@@ -12,8 +12,8 @@ EGWNameSpace.Asterisk = function() {
 		
 		// create the Data Store
 		var ds = new Ext.data.JsonStore({
-			url: 'jsonrpc.php',
-			baseParams: {application:'Asterisk_Json', datatype:'classes', func:'getData'},
+			url: 'index.php',
+			baseParams: {method:'Asterisk.getData', datatype:'classes'},
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'class_id',
@@ -119,8 +119,8 @@ EGWNameSpace.Asterisk = function() {
 		
 		// create the Data Store
 		var ds = new Ext.data.JsonStore({
-			url: 'jsonrpc.php',
-			baseParams: {application:'Asterisk_Json', datatype:'phones', func:'getData'},
+			url: 'index.php',
+			baseParams: {method:'Asterisk.getData', datatype:'phones'},
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'phone_id',
@@ -239,8 +239,8 @@ EGWNameSpace.Asterisk = function() {
 		
 		// create the Data Store
 		var ds = new Ext.data.JsonStore({
-			url: 'jsonrpc.php',
-			baseParams: {application:'Asterisk_Json', func:'getData', datatype:'software'},
+			url: 'index.php',
+			baseParams: {method:'Asterisk.getData', datatype:'software'},
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'software_id',
