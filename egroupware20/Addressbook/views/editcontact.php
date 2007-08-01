@@ -5,10 +5,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><?php echo $this->escape($this->title) ?></title>
 	<!-- EXT JS -->
-	<link rel="stylesheet" type="text/css" href="ext-1.1-rc1/resources/css/ext-all.css"/>
-	<script type="text/javascript" src="ext-1.1-rc1/adapter/yui/yui-utilities.js"></script>     
-	<script type="text/javascript" src="ext-1.1-rc1/adapter/yui/ext-yui-adapter.js"></script>     
-	<script type="text/javascript" src="ext-1.1-rc1/ext-all.js"></script>
+	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css"/>
+	<script type="text/javascript" src="extjs/adapter/yui/yui-utilities.js"></script>     
+	<script type="text/javascript" src="extjs/adapter/yui/ext-yui-adapter.js"></script>     
+	<script type="text/javascript" src="extjs/ext-all.js"></script>
 
 	<!-- eGW -->
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>

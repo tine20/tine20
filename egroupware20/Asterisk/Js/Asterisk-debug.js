@@ -44,13 +44,13 @@ EGWNameSpace.Asterisk = function() {
 			id: 'model',
 			header: "model",
 			dataIndex: 'model',
-			width: 250,
+			width: 250
 			//renderer: renderLastNamePlain
 		},{
 			resizable: true,
 			id: 'description',
 			header: 'description',
-			dataIndex: 'description',
+			dataIndex: 'description'
 			//width: 150
 		},{
 			resizable: true,

@@ -7,7 +7,7 @@ EGWNameSpace.Addressbook = function() {
 	//Ext.namespace('Ext.exampledata');
 
 	// private function
-	var _showAddressGrid = function(_layout) {
+	var _showAddressGrid = function(_layout, _node) {
 
 		var center = _layout.getRegion('center', false);
 
@@ -21,7 +21,7 @@ EGWNameSpace.Addressbook = function() {
 		// create the Data Store
 		ds = new Ext.data.JsonStore({
 			url: 'index.php',
-			baseParams: {method:'Addressbook.getData', _datatype:'address'},
+			baseParams: {method:'Addressbook.getData', _datatype:'address', nodeid:_node.attributes.id},
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'contact_id',
@@ -89,6 +89,11 @@ EGWNameSpace.Addressbook = function() {
 			// turn on remote sorting
 			remoteSort: true
 		});
+		
+		//ds.on("beforeload", function() {
+    		    //console.log('before load');
+                //});
+		                                                
 
 		ds.setDefaultSort('contact_id', 'desc');
 
@@ -221,7 +226,7 @@ EGWNameSpace.Addressbook = function() {
 			    for (var i = 0; i < selectedRows.length; ++i) {
 			        deletedRows.push(selectedRows[i].id);
 			    }
-			    _deleteContact(deletedRows);
+			    _deleteContact(deletedRows, function() {EGWNameSpace.Addressbook.reload();});
 			    ds.reload();
 			}
 		});
@@ -311,7 +316,7 @@ EGWNameSpace.Addressbook = function() {
 	    }
 	}
 	
-	var _deleteContact = function(_contactIDs) {
+	var _deleteContact = function(_contactIDs, _onSuccess, _onError) {
             var contactIDs = Ext.util.JSON.encode(_contactIDs);
             new Ext.data.Connection().request({
                 url: 'index.php',
@@ -326,13 +331,15 @@ EGWNameSpace.Addressbook = function() {
                         decodedResponse = Ext.util.JSON.decode(response.responseText);
                         if(decodedResponse.success) {
                             //Ext.MessageBox.alert('Success!', 'Deleted contact!');
-                            _reloadMainWindow(true);
+                            if(typeof _onSuccess == 'function') {
+                                _onSuccess;
+                            }
                         } else {
                             Ext.MessageBox.alert('Failure!', 'Deleting contact failed!');
                         }
                         //console.log(decodedResponse);
                     } catch(e){
-                        Ext.MessageBox.alert('Failure!', 'Can not decode JSon response!');
+                        Ext.MessageBox.alert('Failure!', e.message);
                     }
                 },
                 failure: function(response, options) {
@@ -435,8 +442,8 @@ EGWNameSpace.Addressbook = function() {
                     handler: function(_btn, _event) {
                         if(formData.values.contact_id) {
                             Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
-                            //console.log('calling _deleteContact');
                             _deleteContact([formData.values.contact_id]);
+                            _reloadMainWindow(true);
                         }
                     }
                 },{
@@ -669,8 +676,8 @@ EGWNameSpace.Addressbook = function() {
 	// public stuff
 	return {
 		// public functions
-		show: function(_layout) {
-			_showAddressGrid(_layout);
+		show: function(_layout, _node) {
+			_showAddressGrid(_layout, _node);
 		},
 		
 		reload: function() {

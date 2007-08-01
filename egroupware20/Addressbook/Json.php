@@ -5,9 +5,10 @@ class Addressbook_Json
     {
         $contactIDs = Zend_Json::decode($_contactIDs);
         if(is_array($contactIDs)) {
-            $addresses = new Addressbook_Addresses();
-            $addresses->delete($contactIDs);
-            $result = array('success'   => TRUE);
+            $contacts = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
+            $contacts->deletePersonalContacts($contactIDs);
+
+            $result = array('success'   => TRUE, 'ids' => $contactIDs);
         } else {
             $result = array('success'   => FALSE);
         }
@@ -79,16 +80,35 @@ class Addressbook_Json
         return $result;
     }
     
-    public function getData($_datatype, $start, $sort, $dir, $limit)
+    public function getData($nodeid, $_datatype, $start, $sort, $dir, $limit)
     {
         $result = array();
-        
-        switch($_datatype) {
-            case 'address':
-                $snomClasses = new Addressbook_Addresses();
-                if($rows = $snomClasses->fetchAll(NULL, "$sort $dir", $limit, $start)) {
+
+        switch($nodeid) {
+            case 'internaladdresses':
+                //$contacts = new Addressbook_Addresses();
+                $contacts = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
+                if($rows = $contacts->getInternalContacts(NULL, $sort, $dir, $limit, $start)) {
                     $result['results'] = $rows->toArray();
-                    $result['totalcount'] = $snomClasses->getTotalCount();
+                    $result['totalcount'] = $contacts->getInternalCount();
+                }
+                
+                break;
+
+            case 'myaddresses':
+                $contacts = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
+                if($rows = $contacts->getPersonalContacts(NULL, $sort, $dir, $limit, $start)) {
+                    $result['results'] = $rows->toArray();
+                    $result['totalcount'] = $contacts->getPersonalCount();
+                }
+                
+                break;
+
+            default:
+                $contacts = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
+                if($rows = $contacts->fetchAll(NULL, "$sort $dir", $limit, $start)) {
+                    $result['results'] = $rows->toArray();
+                    $result['totalcount'] = $contacts->getTotalCount();
                 }
                 
                 break;
@@ -96,26 +116,26 @@ class Addressbook_Json
         
         return $result;
     }
-	
-	public function getMainTree() 
-	{
-		$treeNode = new Egwbase_Ext_Treenode('Addressbook', 'overview', 'addressbook', 'Addressbook', FALSE);
-		$treeNode->setIcon('apps/kaddressbook.png');
-		$treeNode->cls = 'treemain';
-
-		$childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'myaddresses', 'My Addresses', TRUE);
-		$treeNode->addChildren($childNode);
-
-		$childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'internaladdresses', 'My Fellows', TRUE);
-		$treeNode->addChildren($childNode);
-
-		$childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'fellowsaddresses', 'Fellows Addresses', FALSE);
-		$treeNode->addChildren($childNode);
-
-		$childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'sharedaddresses', 'Shared Addresses', FALSE);
-		$treeNode->addChildren($childNode);
-
-		return $treeNode;
-	}
+    
+    public function getMainTree()
+    {
+        $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'overview', 'addressbook', 'Addressbook', FALSE);
+        $treeNode->setIcon('apps/kaddressbook.png');
+        $treeNode->cls = 'treemain';
+        
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'myaddresses', 'My Addresses', TRUE);
+        $treeNode->addChildren($childNode);
+        
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'internaladdresses', 'My Fellows', TRUE);
+        $treeNode->addChildren($childNode);
+        
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'fellowsaddresses', 'Fellows Addresses', FALSE);
+        $treeNode->addChildren($childNode);
+        
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'address', 'sharedaddresses', 'Shared Addresses', FALSE);
+        $treeNode->addChildren($childNode);
+        
+        return $treeNode;
+    }
 }
 ?>

@@ -44,7 +44,7 @@ EGWNameSpace.Felamimail = function() {
 				resizable: true,
 				id: 'lastname',
 				header: "lastname",
-				dataIndex: 'lastname',
+				dataIndex: 'lastname'
 			},
 			{
 				resizable: true,
@@ -56,24 +56,24 @@ EGWNameSpace.Felamimail = function() {
 			{
 				resizable: true,
 				header: "street",
-				dataIndex: 'street',
+				dataIndex: 'street'
 			},
 			{
 				resizable: true,
 				id: 'city',
 				header: "zip/city",
-				dataIndex: 'city',
+				dataIndex: 'city'
 			},
 			{
 				resizable: true,
 				header: "birthday",
-				dataIndex: 'birthday',
+				dataIndex: 'birthday'
 			},
 			{
 				resizable: true,
 				id: 'addressbook',
 				header: "addressbook",
-				dataIndex: 'addressbook',
+				dataIndex: 'addressbook'
 		}]);
 		
 		cm.defaultSortable = true; // by default columns are sortable

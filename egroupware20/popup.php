@@ -2,12 +2,12 @@
 <html>
 <head>
 	<title>EDIT POPUP</title>
-	<link rel="stylesheet" type="text/css" href="ext-1.1-rc1/resources/css/ext-all.css"/>
+	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css"/>
 	<!-- GC --> <!-- LIBS -->     
-	<script type="text/javascript" src="ext-1.1-rc1/adapter/yui/yui-utilities.js"></script>     
-	<script type="text/javascript" src="ext-1.1-rc1/adapter/yui/ext-yui-adapter.js"></script>     
+	<script type="text/javascript" src="extjs/adapter/yui/yui-utilities.js"></script>     
+	<script type="text/javascript" src="extjs/adapter/yui/ext-yui-adapter.js"></script>     
 	<!-- ENDLIBS -->
-	<script type="text/javascript" src="ext-1.1-rc1/ext-all.js"></script>
+	<script type="text/javascript" src="extjs/ext-all.js"></script>
 	
 	<script>
 		<?  

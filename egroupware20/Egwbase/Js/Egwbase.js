@@ -9,7 +9,7 @@
 var EGWNameSpace = EGWNameSpace || {};
  
 Ext.onReady(function(){
-	Ext.BLANK_IMAGE_URL = "ext-1.1-rc1/resources/images/default/s.gif";
+	Ext.BLANK_IMAGE_URL = "extjs/resources/images/default/s.gif";
 	Ext.QuickTips.init();
 	
 	//============================================
@@ -307,7 +307,7 @@ Ext.onReady(function(){
 	//treeLoader.baseParams.func = 'getTree';
 	treeLoader.on("beforeload", function(loader, node) {
 		loader.baseParams.method = node.attributes.application + '.getTree';
-		loader.baseParams.id = node.id;
+		loader.baseParams.nodeid = node.id;
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {

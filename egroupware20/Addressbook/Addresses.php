@@ -3,7 +3,6 @@
 class Addressbook_Addresses extends Zend_Db_Table_Abstract
 {
     protected $_name = 'egw_addressbook';
-    #protected $_primary = 'contact_id';
     protected $_owner = 'contact_owner';
     
     protected static $filters = array(
@@ -127,6 +126,47 @@ class Addressbook_Addresses extends Zend_Db_Table_Abstract
         
         return parent::update($_data, $where);
     }
+    
+    public function getPersonalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL)
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+            
+        if($_where !== NULL) {
+            $where = $_where . ' AND ';
+        }
+        $where .=  $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
+        
+        $result = parent::fetchAll($where, "$sort $dir", $limit, $start);
+        
+        return $result;
+    }
+
+    public function getPersonalCount()
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        return $this->getAdapter()->fetchOne('SELECT count(*) FROM '. $this->_name . ' WHERE ' . $this->_owner . ' = ' . $currentAccount->account_id);
+    }
+    
+    public function getInternalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL)
+    {
+        if($_where !== NULL) {
+            $where = $_where . ' AND ';
+        }
+        $where .=  'account_id IS NOT NULL';
+        
+        $result = parent::fetchAll($where, "$sort $dir", $limit, $start);
+        
+        return $result;
+    }
+
+    public function getInternalCount()
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        return $this->getAdapter()->fetchOne('SELECT count(*) FROM '. $this->_name . ' WHERE account_id IS NOT NULL');
+    }
+    
 }
 
 ?>

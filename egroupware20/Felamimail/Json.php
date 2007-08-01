@@ -1,10 +1,10 @@
 <?php
 class Felamimail_Json
 {
-	public function getTree() 
+	public function getTree($nodeid) 
 	{
 		$nodes = array();
-		$nodeID = $_REQUEST['node'];
+		$nodeID = $nodeid;
 		$config = new Zend_Config_Ini('../../config.ini', 'felamimail');
 
 		error_log("reading folder for $nodeID");
