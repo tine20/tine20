@@ -1,6 +1,20 @@
 <?php
+/**
+ * backend class for Zend_Json_Server
+ * 
+ * This class handles all Json requests for the addressbook application
+ * 
+ * @package Addressbook
+ *
+ */
 class Addressbook_Json
 {
+    /**
+     * delete a array of contacts
+     *
+     * @param array $_contactIDs
+     * @return array
+     */
     public function deleteAddress($_contactIDs)
     {
         $contactIDs = Zend_Json::decode($_contactIDs);
@@ -16,6 +30,12 @@ class Addressbook_Json
         return $result;
     }
     
+    /**
+     * read one contact
+     *
+     * @param int $_contactID
+     * @return array
+     */
     public function readAddress($_contactID)
     {
         $addresses = new Addressbook_Addresses();
@@ -26,6 +46,14 @@ class Addressbook_Json
         return $result;
     }
 	
+    /**
+     * save one contact
+     * 
+     * if $_contactID is NULL the contact gets added, otherwise it gets updated
+     *
+     * @param int $_contactID
+     * @return array
+     */
     public function saveAddress($_contactID = NULL)
     {
         $input = new Zend_Filter_Input(Addressbook_Addresses::getFilter(), Addressbook_Addresses::getValidator(), $_POST);
@@ -80,6 +108,19 @@ class Addressbook_Json
         return $result;
     }
     
+    /**
+     * get data for overview
+     * 
+     * returns the data to be displayed in a ExtJS grid
+     *
+     * @param string $nodeid
+     * @param string $_datatype
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return array
+     */
     public function getData($nodeid, $_datatype, $start, $sort, $dir, $limit)
     {
         $result = array();
@@ -116,6 +157,14 @@ class Addressbook_Json
         return $result;
     }
     
+    /**
+     * Returns the structure of the initial tree for this application.
+     * 
+     * This function returns the needed structure, to display the initial tree, after the the logoin.
+     * Additional tree items get loaded on demand.
+     *
+     * @return array
+     */
     public function getMainTree()
     {
         $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'overview', 'addressbook', 'Addressbook', FALSE);

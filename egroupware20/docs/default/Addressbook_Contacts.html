@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class Addressbook_Contacts</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+						<script src="../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../media/images/plus.png";
+				imgMinus.src = "../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class Addressbook_Contacts</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+		<p class="notes">
+			Located in <a class="field" href="_Addressbook_Contacts_php.html">/Addressbook/Contacts.php</a> (line <span class="field"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a3">3</a></span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#LDAP" title="details" class="const-name">LDAP</a> = 					<span class="var-type"> 'Ldap'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#SQL" title="details" class="const-name">SQL</a> = 					<span class="var-type"> 'Sql'</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+								<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$filters" title="details" class="var-name">$filters</a>
+				</div>
+								<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$validators" title="details" class="var-name">$validators</a>
+				</div>
+							</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+								
+				<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#factory" title="details" class="method-name">factory</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$type</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#getFilter" title="details" class="method-name">getFilter</a>
+										()
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#getValidator" title="details" class="method-name">getValidator</a>
+										()
+									</div>
+							</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="var$filters" id="$filters"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$filters</span>
+			 = <span class="var-default">array(<br />        '*'                     =&gt; 'StringTrim',<br />        'contact_email'         =&gt; array('StringTrim', 'StringToLower'),'contact_email_home'=&gt;array('StringTrim','StringToLower'),'contact_url'=&gt;array('StringTrim','StringToLower'),'contact_url_home'=&gt;array('StringTrim','StringToLower'),)</span>			(line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a5">5</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">static:</span> </li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$validators" id="$validators"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$validators</span>
+			 = <span class="var-default">array(<br />        'adr_one_countryname'   =&gt; array(Zend_Filter_Input::ALLOW_EMPTY =&gt; true),'adr_one_locality'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_one_postalcode'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_one_region'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_one_street'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_one_street2'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_two_countryname'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_two_locality'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_two_postalcode'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_two_region'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_two_street'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'adr_two_street2'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_assistent'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_bday'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_email'=&gt;array('EmailAddress',Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_email_home'=&gt;array('EmailAddress',Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_note'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_role'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_room'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_title'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_url'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'contact_url_home'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'n_family'=&gt;array(),'n_given'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'n_middle'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'n_prefix'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'n_suffix'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'org_name'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'org_unit'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_assistent'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_car'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_cell'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_cell_private'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_fax'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_fax_home'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_home'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_pager'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true),'tel_work'=&gt;array(Zend_Filter_Input::ALLOW_EMPTY=&gt;true))</span>			(line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a13">13</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">static:</span> </li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																			<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodfactory" id="factory"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">factory</span> (line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a57">57</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+				<li><span class="field">static:</span> </li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			factory
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$type</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodgetFilter" id="getFilter"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">getFilter</span> (line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a73">73</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+				<li><span class="field">static:</span> </li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getFilter
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+<a name="methodgetValidator" id="getValidator"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">getValidator</span> (line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a78">78</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+				<li><span class="field">static:</span> </li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getValidator
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+						
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+														| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constLDAP" id="LDAP"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">LDAP</span>
+			 = <span class="const-default"> 'Ldap'</span>
+			(line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a55">55</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+<a name="constSQL" id="SQL"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">SQL</span>
+			 = <span class="const-default"> 'Sql'</span>
+			(line <span class="line-number"><a href="..//__filesource/fsource_default__AddressbookContacts.php.html#a54">54</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+						
+		</div>
+	</div>
+
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 02 Aug 2007 08:58:42 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.3.0RC3</a>
+	</p>
+	</div></body>
+</html>

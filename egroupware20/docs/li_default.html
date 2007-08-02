@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title></title>
+			<link rel="stylesheet" href="media/stylesheet.css" />
+						<script src="media/lib/classTree.js"></script>
+									<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+									<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "media/images/plus.png";
+				imgMinus.src = "media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+						<h3 class="package-title">default</h3>
+<div class="tree">
+<script language="Javascript">
+if (document.getElementById) {
+			var tree = new WebFXTree('<span class="package">default</span>');
+		tree.setBehavior('classic');
+	
+		
+		var class_trees = new WebFXTreeItem('Class trees', 'classtrees_default.html');
+		tree.add(class_trees);
+
+		var elements = new WebFXTreeItem('Index of elements', 'elementindex_default.html');		
+		tree.add(elements);
+
+		var parent_node;
+
+			
+					var tree_classe = new WebFXTreeItem('Class(es)', '');
+			
+							var classe = new WebFXTreeItem('Addressbook_Contacts_Interface', 'default/Addressbook_Contacts_Interface.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Addressbook_Contacts_Sql', 'default/Addressbook_Contacts_Sql.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Asterisk_Json', 'default/Asterisk_Json.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Asterisk_Snom', 'default/Asterisk_Snom.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Asterisk_Snomclasses', 'default/Asterisk_Snomclasses.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Asterisk_Snomlines', 'default/Asterisk_Snomlines.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Asterisk_Snomphones', 'default/Asterisk_Snomphones.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Asterisk_Snomsoftware', 'default/Asterisk_Snomsoftware.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Egwbase_Auth', 'default/Egwbase_Auth.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Egwbase_Auth_Accesslog', 'default/Egwbase_Auth_Accesslog.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Egwbase_Auth_Sql', 'default/Egwbase_Auth_Sql.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Egwbase_Ext_Treenode', 'default/Egwbase_Ext_Treenode.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Egwbase_Json', 'default/Egwbase_Json.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Felamimail_Json', 'default/Felamimail_Json.html');
+				tree_classe.add(classe);
+				
+			tree.add(tree_classe);
+		
+					var tree_function = new WebFXTreeItem('Function(s)', '');
+			
+							var fic = new WebFXTreeItem('deletePersonalContacts', 'default/_Addressbook_Contacts_Sql_php.html#functiondeletePersonalContacts');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('fetchAll', 'default/_Addressbook_Contacts_Sql_php.html#functionfetchAll');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('find', 'default/_Addressbook_Contacts_Sql_php.html#functionfind');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('formatBytes', 'default/_extjs_examples_tree_get-nodes_php.html#functionformatBytes');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getInternalContacts', 'default/_Addressbook_Contacts_Sql_php.html#functiongetInternalContacts');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getInternalCount', 'default/_Addressbook_Contacts_Sql_php.html#functiongetInternalCount');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getPersonalContacts', 'default/_Addressbook_Contacts_Sql_php.html#functiongetPersonalContacts');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getPersonalCount', 'default/_Addressbook_Contacts_Sql_php.html#functiongetPersonalCount');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getTotalCount', 'default/_Addressbook_Contacts_Sql_php.html#functiongetTotalCount');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('insert', 'default/_Addressbook_Contacts_Sql_php.html#functioninsert');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('update', 'default/_Addressbook_Contacts_Sql_php.html#functionupdate');
+				tree_function.add(fic);
+					
+			tree.add(tree_function);
+			
+					var tree_file = new WebFXTreeItem('File(s)', '');
+	
+							var file = new WebFXTreeItem('Accesslog.php', 'default/_Egwbase_Auth_Accesslog_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Auth.php', 'default/_Egwbase_Auth_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('dependency.php', 'default/_extjs_examples_tree_dependency_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('editcontact.php', 'default/_Addressbook_views_editcontact_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('feed-proxy.php', 'default/_extjs_examples_layout_feed-proxy_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('get-images.php', 'default/_extjs_examples_view_get-images_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('get-nodes.php', 'default/_extjs_examples_tree_get-nodes_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('imaptest.php', 'default/_imaptest_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('index.php', 'default/_index_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Interface.php', 'default/_Addressbook_Contacts_Interface_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Json.php', 'default/_Felamimail_Json_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Json.php', 'default/_Egwbase_Json_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Json.php', 'default/_Asterisk_Json_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('login.php', 'default/_Egwbase_views_login_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('mainscreen.php', 'default/_Egwbase_views_mainscreen_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('popup.php', 'default/_Egwbase_views_popup_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('popup.php', 'default/_popup_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('post.php', 'default/_extjs_examples_dialog_post_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('save-dep.php', 'default/_extjs_examples_tree_save-dep_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Snom.php', 'default/_Asterisk_Snom_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Snomclasses.php', 'default/_Asterisk_Snomclasses_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Snomlines.php', 'default/_Asterisk_Snomlines_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Snomphones.php', 'default/_Asterisk_Snomphones_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Snomsoftware.php', 'default/_Asterisk_Snomsoftware_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Sql.php', 'default/_Egwbase_Auth_Sql_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Sql.php', 'default/_Addressbook_Contacts_Sql_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Treenode.php', 'default/_Egwbase_Ext_Treenode_php.html');
+				tree_file.add(file);
+				
+			tree.add(tree_file);
+		
+	
+document.write(tree);
+}
+</script>
+</div>
+<p class="notes">
+	Generated by 
+	<a href="http://www.phpdoc.org" target="_blank">phpDocumentor <span class="field">1.3.0RC3</span></a>
+</p>
+</body>
+</html>

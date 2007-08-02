@@ -1,7 +1,23 @@
 <?php
-
+/**
+ * factory class for the addressbook
+ * 
+ * a instance of the addressbook backendclass should be created using this class
+ * 
+ * $contacts = Addressbook_Contacts::factory($nameOfTheBackendClass);
+ * 
+ * @package Addressbook
+ *
+ */
 class Addressbook_Contacts
 {
+    /**
+     * list of zend inputfilter
+     * 
+     * this filter get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
     protected static $filters = array(
         '*'                     => 'StringTrim',
         'contact_email'         => array('StringTrim', 'StringToLower'),
@@ -10,6 +26,13 @@ class Addressbook_Contacts
         'contact_url_home'      => array('StringTrim', 'StringToLower'),
     );
     
+    /**
+     * list of zend validator
+     * 
+     * this validators get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
     protected static $validators = array(
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -51,9 +74,24 @@ class Addressbook_Contacts
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
+    /**
+     * constant for Sql contacts backend class
+     *
+     */
     const SQL = 'Sql';
+    
+    /**
+     * constant for LDAP contacts backend class
+     *
+     */
     const LDAP = 'Ldap';
     
+    /**
+     * factory function to return a selected contacts backend class
+     *
+     * @param string $type
+     * @return object
+     */
     static public function factory($type)
     {
         switch($type) {
@@ -70,15 +108,23 @@ class Addressbook_Contacts
         return $instance;
     }
     
+    /**
+     * returns list of input filter for contacts
+     *
+     * @return array
+     */
     static public function getFilter()
     {
         return self::$filters;
     }
 
+    /**
+     * returns list of input validator for contacts
+     *
+     * @return array
+     */
     static public function getValidator()
     {
         return self::$validators;
     }
 }    
-        
-        
