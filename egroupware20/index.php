@@ -65,19 +65,20 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
 	$server->handle();
 
 } elseif(isset($_REQUEST['getpopup']) && $egwBaseNamespace->isAutenticated) {
-	$view->setScriptPath('Egwbase/views');
-	$view->formData = array();
-		
-	$list = $locale->getTranslationList('Dateformat');
-	$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
-
-	$addresses = new Addressbook_Addresses();
-	if(isset($_REQUEST['contactid']) && $rows = $addresses->find($_REQUEST['contactid'])) {
-		$view->formData['values'] = $rows->current()->toArray();
-	}
-	$view->jsExecute = 'EGWNameSpace.Addressbook.displayContactDialog();';
-		
-	echo $view->render('popup.php');
+    // this does not really belong to here
+    $view->setScriptPath('Egwbase/views');
+    $view->formData = array();
+    
+    $list = $locale->getTranslationList('Dateformat');
+    $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
+    
+    $addresses = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
+    if(isset($_REQUEST['contactid']) && $rows = $addresses->find($_REQUEST['contactid'])) {
+        $view->formData['values'] = $rows->current()->toArray();
+    }
+    $view->jsExecute = 'EGWNameSpace.Addressbook.displayContactDialog();';
+    
+    echo $view->render('popup.php');
 } else {
 	$view->setScriptPath('Egwbase/views');
 	if(!$egwBaseNamespace->isAutenticated) {

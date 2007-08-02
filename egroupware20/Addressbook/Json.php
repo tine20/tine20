@@ -86,7 +86,6 @@ class Addressbook_Json
 
         switch($nodeid) {
             case 'internaladdresses':
-                //$contacts = new Addressbook_Addresses();
                 $contacts = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
                 if($rows = $contacts->getInternalContacts(NULL, $sort, $dir, $limit, $start)) {
                     $result['results'] = $rows->toArray();

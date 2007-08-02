@@ -658,6 +658,30 @@ EGWNameSpace.Addressbook = function() {
             
         addressedit.end();
         
+        var categoriesTrigger = new Ext.form.TriggerField({fieldLabel:'Categories', name:'categories', width:320, readOnly:true});
+        categoriesTrigger.onTriggerClick = function(){
+            Ext.MessageBox.alert('Todo', 'Not yet implemented!');
+        }
+        
+        addressedit.column(
+            {width:'45%', labelWidth:80, labelSeparator:' ', labelAlign:'right'},
+            categoriesTrigger
+        );
+        
+        var listsTrigger = new Ext.form.TriggerField({fieldLabel:'Lists', name:'lists', width:320, readOnly:true});
+        listsTrigger.onTriggerClick = function(){
+            Ext.MessageBox.alert('Todo', 'Not yet implemented!');
+        }
+        
+        addressedit.column(
+            {width:'45%', labelWidth:80, labelSeparator:' ', labelAlign:'right'},
+            listsTrigger
+        );
+        
+        addressedit.column(
+            {width:'10%', labelWidth:50, labelSeparator:' ', labelAlign:'right'},
+            new Ext.form.Checkbox({fieldLabel:'Private', name:'categories', width:10})
+        );
         addressedit.render('content');
         
         return addressedit;

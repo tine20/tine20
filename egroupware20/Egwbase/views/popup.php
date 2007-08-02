@@ -6,6 +6,7 @@
 	<title><?php echo $this->escape($this->title) ?></title>
 	<!-- EXT JS -->
 	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css"/>
+	<link rel="stylesheet" type="text/css" href="extjs/resources/css/xtheme-gray.css"/>
 	<script type="text/javascript" src="extjs/adapter/yui/yui-utilities.js"></script>     
 	<script type="text/javascript" src="extjs/adapter/yui/ext-yui-adapter.js"></script>     
 	<script type="text/javascript" src="extjs/ext-all.js"></script>
