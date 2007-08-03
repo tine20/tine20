@@ -660,7 +660,97 @@ EGWNameSpace.Addressbook = function() {
         
         var categoriesTrigger = new Ext.form.TriggerField({fieldLabel:'Categories', name:'categories', width:320, readOnly:true});
         categoriesTrigger.onTriggerClick = function(){
-            Ext.MessageBox.alert('Todo', 'Not yet implemented!');
+            			var containerTag 	= Ext.Element.get('container');
+						var iWindowTag 		= containerTag.createChild({tag: 'div',id: 'iWindowTag'});
+						var iWindowContTag 	= containerTag.createChild({tag: 'div',id: 'iWindowContTag'});
+
+						var	ds_category = new Ext.data.SimpleStore({
+									fields: ['category_id', 'category_realname'],
+									data: [
+									        ['1', 'erste Kategorie'],
+									        ['2', 'zweite Kategorie'],
+											['3', 'dritte Kategorie'],
+											['4', 'vierte Kategorie'],
+											['5', 'fuenfte Kategorie'],
+											['6', 'sechste Kategorie'],
+											['7', 'siebte Kategorie'],
+											['8', 'achte Kategorie']
+										]
+										});
+						ds_category.load();
+
+						ds_checked = new Ext.data.SimpleStore({
+									fields: ['category_id', 'category_realname'],
+									data: [
+									        ['2', 'zweite Kategorie'],
+											['5', 'fuenfte Kategorie'],
+											['6', 'sechste Kategorie'],
+											['8', 'achte Kategorie']
+										]
+										});
+						ds_checked.load();		
+		
+						var categoryedit = new Ext.form.Form({
+							labelWidth: 75, // label settings here cascade unless overridden
+							url:'index.php?method=Addressbook.saveAdditionalData',
+							reader : new Ext.data.JsonReader({root: 'results'}, [
+								{name: 'category_id'},
+								{name: 'category_realname'},					
+							])
+						});		
+								
+						var i= 1;									
+						var checked = new Array();
+						
+						ds_checked.each( function(record){
+							checked[record.data.category_id] = record.data.category_realname;						
+						});
+									
+						ds_category.each( function(fields){
+						if( (i % 12) == 1) categoryedit.column({width:'33%', labelWidth:50, labelSeparator:''});
+								
+						if(checked[fields.data.category_id]) categoryedit.add(new Ext.form.Checkbox({boxLabel: fields.data.category_realname, name: fields.data.category_realname, checked: true}));
+						else categoryedit.add(new Ext.form.Checkbox({boxLabel: fields.data.category_realname, name: fields.data.category_realname}));
+						if( (i % 12) == 0) categoryedit.end();
+				
+						i = i + 1;			
+						});
+						
+						categoryedit.render('iWindowContTag');	
+							
+						if(!dialog){											
+							var dialog = new Ext.LayoutDialog('iWindowTag', {
+								modal: true,
+								width:700,
+								height:400,
+								shadow:true,
+								minWidth:700,
+								minHeight:400,
+								autoTabs:true,
+								proxyDrag:true,
+								// layout config merges with the dialog config
+								center:{
+											autoScroll:true,
+											tabPosition: 'top',
+											closeOnTab: true,
+											alwaysShowTabs: true
+								}
+							});
+									
+							dialog.addKeyListener(27, this.hide);
+							dialog.addButton("save", function() {
+								 Ext.MessageBox.alert('Todo', 'Not yet implemented!');}, dialog);
+								
+							dialog.addButton("cancel", function() {
+								window.location.reload(); dialog.hide}, dialog);						
+
+							var layout = dialog.getLayout();
+							layout.beginUpdate();
+							layout.add("center", new Ext.ContentPanel('iWindowContTag', {
+									autoCreate:true, title: 'Category'}));
+							layout.endUpdate();									
+							}
+						dialog.show();
         }
         
         addressedit.column(
@@ -670,7 +760,97 @@ EGWNameSpace.Addressbook = function() {
         
         var listsTrigger = new Ext.form.TriggerField({fieldLabel:'Lists', name:'lists', width:320, readOnly:true});
         listsTrigger.onTriggerClick = function(){
-            Ext.MessageBox.alert('Todo', 'Not yet implemented!');
+                   		var containerTag 	= Ext.Element.get('container');
+						var iWindowTag 		= containerTag.createChild({tag: 'div',id: 'iWindowTag'});
+						var iWindowContTag 	= containerTag.createChild({tag: 'div',id: 'iWindowContTag'});
+
+						var	ds_lists = new Ext.data.SimpleStore({
+									fields: ['list_id', 'list_realname'],
+									data: [
+									        ['1', 'Liste A'],
+									        ['2', 'Liste B'],
+											['3', 'Liste C'],
+											['4', 'Liste D'],
+											['5', 'Liste E'],
+											['6', 'Liste F'],
+											['7', 'Liste G'],
+											['8', 'Liste H']
+										]
+										});
+						ds_lists.load();
+
+						ds_checked = new Ext.data.SimpleStore({
+									fields: ['list_id', 'list_realname'],
+									data: [
+									        ['2', 'Liste B'],
+											['5', 'Liste E'],
+											['6', 'Liste F'],
+											['8', 'Liste H']
+										]
+										});
+						ds_checked.load();		
+		
+						var listsedit = new Ext.form.Form({
+							labelWidth: 75, // label settings here cascade unless overridden
+							url:'index.php?method=Addressbook.saveAdditionalData',
+							reader : new Ext.data.JsonReader({root: 'results'}, [
+								{name: 'list_id'},
+								{name: 'list_realname'},					
+							])
+						});		
+								
+						var i= 1;									
+						var checked = new Array();
+						
+						ds_checked.each( function(record){
+							checked[record.data.list_id] = record.data.list_realname;						
+						});
+									
+						ds_lists.each( function(fields){
+						if( (i % 12) == 1) listsedit.column({width:'33%', labelWidth:50, labelSeparator:''});
+								
+						if(checked[fields.data.list_id]) listsedit.add(new Ext.form.Checkbox({boxLabel: fields.data.list_realname, name: fields.data.list_realname, checked: true}));
+						else listsedit.add(new Ext.form.Checkbox({boxLabel: fields.data.list_realname, name: fields.data.list_realname}));
+						if( (i % 12) == 0) listsedit.end();
+				
+						i = i + 1;			
+						});
+						
+						listsedit.render('iWindowContTag');	
+							
+						if(!dialog){											
+							var dialog = new Ext.LayoutDialog('iWindowTag', {
+								modal: true,
+								width:700,
+								height:400,
+								shadow:true,
+								minWidth:700,
+								minHeight:400,
+								autoTabs:true,
+								proxyDrag:true,
+								// layout config merges with the dialog config
+								center:{
+											autoScroll:true,
+											tabPosition: 'top',
+											closeOnTab: true,
+											alwaysShowTabs: true
+								}
+							});
+									
+							dialog.addKeyListener(27, this.hide);
+							dialog.addButton("save", function() {
+								 Ext.MessageBox.alert('Todo', 'Not yet implemented!');}, dialog);
+								
+							dialog.addButton("cancel", function() {
+								window.location.reload(); dialog.hide}, dialog);						
+
+							var layout = dialog.getLayout();
+							layout.beginUpdate();
+							layout.add("center", new Ext.ContentPanel('iWindowContTag', {
+									autoCreate:true, title: 'Lists'}));
+							layout.endUpdate();									
+							}
+						dialog.show();
         }
         
         addressedit.column(
