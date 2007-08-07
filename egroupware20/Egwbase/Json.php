@@ -1,16 +1,28 @@
 <?php
+/**
+ * Json interface to Egwbase
+ * 
+ * @author Lars Kneschke <l.kneschke@metaways.de>
+ * @package Egwbase
+ *
+ */
 class Egwbase_Json
 {
+	/**
+	 * get list of translated country names
+	 *
+	 * @return array list of countrys
+	 */
 	function getCountryList()
 	{
-		$locale = Zend_Registry::get('locale');
-		
-                $countries = $locale->getCountryTranslationList();
-                asort($countries);
+        $locale = Zend_Registry::get('locale');
+        
+        $countries = $locale->getCountryTranslationList();
+        asort($countries);
 		foreach($countries as $shortName => $translatedName) {
 			$results[] = array(
-				'shortName'		=> $shortName, 
-				'translatedName' 	=> $translatedName
+				'shortName'         => $shortName, 
+				'translatedName'    => $translatedName
 			);
 		}
 
@@ -21,19 +33,29 @@ class Egwbase_Json
 		return $result;
 	}
 	
-	function login() 
+	/**
+	 * authenticate user by username and password
+	 *
+	 * @param string $username the username
+	 * @param string $password the password
+	 * @return array 
+	 */
+	function login($username, $password) 
 	{
-		$username = $_REQUEST['username'];
-		$password = $_REQUEST['password'];
+		//$username = $_REQUEST['username'];
+		//$password = $_REQUEST['password'];
 		
 		$egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 		
-		$auth = new Egwbase_Auth_Sql();
+		$auth = Zend_Auth::getInstance();
 		
-		$auth->setIdentity($username)
+		$authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
+		//$auth = new Egwbase_Auth_Sql();
+		
+		$authAdapter->setIdentity($username)
 			->setCredential($password);
 			
-		$result = $auth->authenticate();
+		$result = $auth->authenticate($authAdapter);
 
 		if ($result->isValid()) {
 			$egwBaseNamespace->isAutenticated = TRUE;
@@ -84,6 +106,11 @@ class Egwbase_Json
 		return $response;
 	}
 
+	/**
+	 * destroy session
+	 *
+	 * @return array 
+	 */
 	function logout() 
 	{
 		Zend_Session::destroy();

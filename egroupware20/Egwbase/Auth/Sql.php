@@ -1,7 +1,14 @@
 <?php
+/**
+ * SQL authentication backend
+ * 
+ * @author Lars Kneschke <l.kneschke@metaways.de>
+ * @package Egwbase
+ *
+ */
 class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 {
-	function __construct()
+	public function __construct()
 	{
 		#$dbOptions = Zend_Registry::get('dbConfig');
 		

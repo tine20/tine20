@@ -92,6 +92,8 @@ if (document.getElementById) {
 			var tree = new WebFXTree('<span class="package">Addressbook</span>');
 		tree.setBehavior('classic');
 	
+					var todos = new WebFXTreeItem('To-do List', 'todolist.html');
+			tree.add(todos);
 		
 		var class_trees = new WebFXTreeItem('Class trees', 'classtrees_Addressbook.html');
 		tree.add(class_trees);
