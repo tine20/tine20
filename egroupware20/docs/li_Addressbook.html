@@ -108,17 +108,49 @@ if (document.getElementById) {
 			
 							var classe = new WebFXTreeItem('Addressbook_Contacts', 'Addressbook/Addressbook_Contacts.html');
 				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Addressbook_Contacts_Interface', 'Addressbook/Addressbook_Contacts_Interface.html');
+				tree_classe.add(classe);
+							var classe = new WebFXTreeItem('Addressbook_Contacts_Sql', 'Addressbook/Addressbook_Contacts_Sql.html');
+				tree_classe.add(classe);
 							var classe = new WebFXTreeItem('Addressbook_Json', 'Addressbook/Addressbook_Json.html');
 				tree_classe.add(classe);
 				
 			tree.add(tree_classe);
 		
+					var tree_function = new WebFXTreeItem('Function(s)', '');
+			
+							var fic = new WebFXTreeItem('deletePersonalContacts', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functiondeletePersonalContacts');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('fetchAll', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functionfetchAll');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('find', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functionfind');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getInternalContacts', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functiongetInternalContacts');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getInternalCount', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functiongetInternalCount');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getPersonalContacts', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functiongetPersonalContacts');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getPersonalCount', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functiongetPersonalCount');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('getTotalCount', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functiongetTotalCount');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('insert', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functioninsert');
+				tree_function.add(fic);
+							var fic = new WebFXTreeItem('update', 'Addressbook/_Addressbook_Contacts_Sql_php.html#functionupdate');
+				tree_function.add(fic);
+					
+			tree.add(tree_function);
 			
 					var tree_file = new WebFXTreeItem('File(s)', '');
 	
 							var file = new WebFXTreeItem('Contacts.php', 'Addressbook/_Addressbook_Contacts_php.html');
 				tree_file.add(file);
+							var file = new WebFXTreeItem('Interface.php', 'Addressbook/_Addressbook_Contacts_Interface_php.html');
+				tree_file.add(file);
 							var file = new WebFXTreeItem('Json.php', 'Addressbook/_Addressbook_Json_php.html');
+				tree_file.add(file);
+							var file = new WebFXTreeItem('Sql.php', 'Addressbook/_Addressbook_Contacts_Sql_php.html');
 				tree_file.add(file);
 				
 			tree.add(tree_file);

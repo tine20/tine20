@@ -2,8 +2,11 @@
 /**
  * main authentication class
  * 
- * @author Lars Kneschke <l.kneschke@metaways.de>
- * @package Egwbase
+ * @package	Egwbase
+ * @license     http://www.gnu.org/license/gpl GPL
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: DbTable.php 4246 2007-03-27 22:35:56Z ralph $
  *
  */
 class Egwbase_Auth
@@ -28,7 +31,7 @@ class Egwbase_Auth
      */
     static public function factory($type)
     {
-        $className = Addressbook_Contacts_.$type;
+        $className = Egwbase_Auth_.$type;
         $instance = new $className();
         
         //throw new Exception('unknown type');
