@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: DbTable.php 4246 2007-03-27 22:35:56Z ralph $
+ * @version     $Id$
  *
  */
 class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
