@@ -5,6 +5,7 @@
  * This class handles all Json requests for the addressbook application
  * 
  * @package Addressbook
+ * @version $id$
  *
  */
 class Addressbook_Json
