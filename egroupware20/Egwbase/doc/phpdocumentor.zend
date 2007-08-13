@@ -1,0 +1,19 @@
+;Configuration File made by Zend Studio PHPDocumentor Wizard, Mon Aug 13 15:16:27 CEST 2007
+pear=off
+
+output=HTML:frames:DOM/phphtmllib
+
+defaultpackagename=Egwbase
+
+parseprivate=off
+
+directory=/home/lkneschke/Documents/officespot-cs/trunk/egroupware20
+
+target=/home/lkneschke/Documents/officespot-cs/trunk/phpdoc
+
+title=eGroupWare 2.0
+
+sourcecode=on
+
+javadocdesc=off
+
