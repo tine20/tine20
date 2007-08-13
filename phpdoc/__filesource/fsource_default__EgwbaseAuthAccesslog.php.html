@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>File Source for Accesslog.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>Source for file Accesslog.php</h1>
+<p>Documentation is available at <a href="../default/_Egwbase_Auth_Accesslog_php.html">Accesslog.php</a></p>
+<div class="src-code">
+<pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a>&nbsp;</li>
+<li><a name="a3"></a><span class="src-key">class </span><a href="../default/Egwbase_Auth_Accesslog.html">Egwbase_Auth_Accesslog</a> <span class="src-key">extends </span><span class="src-id">Zend_Db_Table_Abstract</span></li>
+<li><a name="a4"></a><span class="src-sym">{</span></li>
+<li><a name="a5"></a>    <span class="src-key">protected </span><a href="../default/Egwbase_Auth_Accesslog.html#var$_name">$_name</a> = <span class="src-str">'egw_access_log'</span><span class="src-sym">;</span></li>
+<li><a name="a6"></a>    <span class="src-key">protected </span><a href="../default/Egwbase_Auth_Accesslog.html#var$_primary">$_primary</a> = <span class="src-str">'log_id'</span><span class="src-sym">;</span></li>
+<li><a name="a7"></a>&nbsp;</li>
+<li><a name="a8"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../default/Egwbase_Auth_Accesslog.html#methodgetTotalCount">getTotalCount</a><span class="src-sym">(</span><span class="src-sym">)</span></li>
+<li><a name="a9"></a>    <span class="src-sym">{</span></li>
+<li><a name="a10"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getAdapter</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">fetchOne</span><span class="src-sym">(</span><span class="src-str">'SELECT count(*) FROM '</span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../default/Egwbase_Auth_Accesslog.html#var$_name">_name</a><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a11"></a>    <span class="src-sym">}</span></li>
+<li><a name="a12"></a><span class="src-sym">}</span></li>
+<li><a name="a13"></a>&nbsp;</li>
+<li><a name="a14"></a><span class="src-php">?&gt;</span></li>
+</ol></pre>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Mon, 13 Aug 2007 19:35:23 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.3.0RC3</a>
+	</p>
+	</body>
+</html>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * interface for contacs class
+ * contacts ldap backend (not yet implemented)
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/license/gpl GPL
@@ -10,15 +10,6 @@
  * @version     $Id$
  *
  */
-interface Addressbook_Backend_Interface
+class Addressbook_Backend_Ldap implements Addressbook_Backend_Interface
 {
-    public function deletePersonalContacts(array $contacts);
-
-    public function getPersonalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL);
-
-    public function getPersonalCount();
-    
-    public function getInternalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL);
-
-    public function getInternalCount();
 }

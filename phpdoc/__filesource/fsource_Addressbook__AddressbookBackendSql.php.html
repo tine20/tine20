@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>File Source for Sql.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>Source for file Sql.php</h1>
+<p>Documentation is available at <a href="../Addressbook/_Addressbook_Backend_Sql_php.html">Sql.php</a></p>
+<div class="src-code">
+<pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a>&nbsp;</li>
+<li><a name="a3"></a><span class="src-doc">/**</span></li>
+<li><a name="a4"></a><span class="src-doc"> * contacts sql backend</span></li>
+<li><a name="a5"></a><span class="src-doc"> * </span></li>
+<li><a name="a6"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc">     Addressbook</span></li>
+<li><a name="a7"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc">     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</span></li>
+<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc">      Lars Kneschke &lt;l.kneschke@metaways.de&gt;</span></li>
+<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc">   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)</span></li>
+<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc">     $Id: Sql.php 39 2007-08-13 13:02:32Z lkneschke $</span></li>
+<li><a name="a11"></a><span class="src-doc"> *</span></li>
+<li><a name="a12"></a><span class="src-doc"> */</span></li>
+<li><a name="a13"></a><span class="src-key">class </span><a href="../Addressbook/Addressbook_Backend_Sql.html">Addressbook_Backend_Sql</a> <span class="src-key">implements </span><span class="src-id">Addressbook_Backend_Interface</span></li>
+<li><a name="a14"></a><span class="src-sym">{</span></li>
+<li><a name="a15"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/Addressbook_Backend_Sql.html#methoddeletePersonalContacts">deletePersonalContacts</a><span class="src-sym">(</span><span class="src-key">array </span><span class="src-var">$contacts</span><span class="src-sym">)</span></li>
+<li><a name="a16"></a>    <span class="src-sym">{</span></li>
+<li><a name="a17"></a>        <span class="src-var">$currentAccount </span>= <span class="src-id">Zend_Registry</span><span class="src-sym">::</span><span class="src-id">get</span><span class="src-sym">(</span><span class="src-str">'currentAccount'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a18"></a>        </li>
+<li><a name="a19"></a>        <span class="src-var">$where  </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getAdapter</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">quoteInto</span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">_primary</span><span class="src-sym">[</span><span class="src-num">1</span><span class="src-sym">] </span>. <span class="src-str">' IN (?)'</span><span class="src-sym">, </span><span class="src-var">$contacts</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a20"></a>        <span class="src-var">$where </span>.= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getAdapter</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">quoteInto</span><span class="src-sym">(</span><span class="src-str">' AND ' </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">_owner </span>. <span class="src-str">' = ?'</span><span class="src-sym">, </span><span class="src-var">$currentAccount</span><span class="src-sym">-&gt;</span><span class="src-id">account_id</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a21"></a>&nbsp;</li>
+<li><a name="a22"></a>        <span class="src-comm">//error_log($where);</span></li>
+<li><a name="a23"></a>        </li>
+<li><a name="a22"></a>        </li>
+<li><a name="a23"></a>        </li>
+<li><a name="a24"></a>        <span class="src-var">$result </span>= <span class="src-id">parent</span><span class="src-sym">::</span><span class="src-id">delete</span><span class="src-sym">(</span><span class="src-var">$where</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a25"></a>        </li>
+<li><a name="a26"></a>        <span class="src-key">return </span><span class="src-var">$result</span><span class="src-sym">;</span></li>
+<li><a name="a27"></a>    </li>
+<li><a name="a28"></a>    </li>
+<li><a name="a29"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/_Addressbook_Backend_Sql_php.html#functiongetPersonalContacts">getPersonalContacts</a><span class="src-sym">(</span><span class="src-var">$filter</span><span class="src-sym">, </span><span class="src-var">$sort</span><span class="src-sym">, </span><span class="src-var">$dir</span><span class="src-sym">, </span><span class="src-var">$limit </span>= <span class="src-id">NULL</span><span class="src-sym">, </span><span class="src-var">$start </span>= <span class="src-id">NULL</span><span class="src-sym">)</span></li>
+<li><a name="a30"></a>    <span class="src-sym">{</span></li>
+<li><a name="a31"></a>        <span class="src-var">$contacts </span>= <span class="src-key">new </span><span class="src-id"><a href="../Addressbook/Addressbook_Backend_Sql_Contacts.html">Addressbook_Backend_Sql_Contacts</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a32"></a>            </li>
+<li><a name="a33"></a>        <span class="src-var">$result </span>= <span class="src-var">$contacts</span><span class="src-sym">-&gt;</span><span class="src-id">fetchAll</span><span class="src-sym">(</span><span class="src-id">NULL</span><span class="src-sym">, </span><span class="src-str">&quot;</span><span class="src-str"><span class="src-var">$sort</span> <span class="src-var">$dir</span></span><span class="src-str">&quot;</span><span class="src-sym">, </span><span class="src-var">$limit</span><span class="src-sym">, </span><span class="src-var">$start</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a34"></a>        </li>
+<li><a name="a35"></a>        <span class="src-key">return </span><span class="src-var">$result</span><span class="src-sym">;</span></li>
+<li><a name="a36"></a>    <span class="src-sym">}</span></li>
+<li><a name="a37"></a>&nbsp;</li>
+<li><a name="a38"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/_Addressbook_Backend_Sql_Contacts_php.html#functiongetPersonalCount">getPersonalCount</a><span class="src-sym">(</span><span class="src-sym">)</span></li>
+<li><a name="a39"></a>    <span class="src-sym">{</span></li>
+<li><a name="a40"></a>        <span class="src-var">$contacts </span>= <span class="src-key">new </span><span class="src-id"><a href="../Addressbook/Addressbook_Backend_Sql_Contacts.html">Addressbook_Backend_Sql_Contacts</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a41"></a>        </li>
+<li><a name="a42"></a>        <span class="src-var">$result </span>= <span class="src-var">$contacts</span><span class="src-sym">-&gt;</span><span class="src-id">getPersonalCount</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a43"></a>&nbsp;</li>
+<li><a name="a44"></a>        <span class="src-key">return </span><span class="src-var">$result</span><span class="src-sym">;</span></li>
+<li><a name="a45"></a>    <span class="src-sym">}</span></li>
+<li><a name="a46"></a>    </li>
+<li><a name="a47"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/_Addressbook_Backend_Sql_php.html#functiongetPersonalList">getPersonalList</a><span class="src-sym">(</span><span class="src-var">$list</span><span class="src-sym">, </span><span class="src-var">$filter</span><span class="src-sym">, </span><span class="src-var">$sort</span><span class="src-sym">, </span><span class="src-var">$dir</span><span class="src-sym">, </span><span class="src-var">$limit </span>= <span class="src-id">NULL</span><span class="src-sym">, </span><span class="src-var">$start </span>= <span class="src-id">NULL</span><span class="src-sym">)</span></li>
+<li><a name="a48"></a>    <span class="src-sym">{</span></li>
+<li><a name="a49"></a>        <span class="src-var">$db </span>= <span class="src-id">Zend_Registry</span><span class="src-sym">::</span><span class="src-id">get</span><span class="src-sym">(</span><span class="src-str">'dbAdapter'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a50"></a>        </li>
+<li><a name="a51"></a>        <span class="src-var">$select </span>= <span class="src-var">$db</span><span class="src-sym">-&gt;</span><span class="src-id">select</span><span class="src-sym">(</span><span class="src-sym">)</span></li>
+<li><a name="a52"></a>            <span class="src-sym">-&gt;</span><span class="src-id">from</span><span class="src-sym">(</span><span class="src-str">'egw_addressbook2list'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">))</span></li>
+<li><a name="a53"></a>            <span class="src-sym">-&gt;</span><span class="src-id">order</span><span class="src-sym">(</span><span class="src-var">$sort </span>. <span class="src-str">' ' </span>. <span class="src-var">$dir</span><span class="src-sym">)</span></li>
+<li><a name="a54"></a>            <span class="src-sym">-&gt;</span><span class="src-id">join</span><span class="src-sym">(</span><span class="src-str">'egw_addressbook'</span><span class="src-sym">,</span><span class="src-str">'egw_addressbook.contact_id = egw_addressbook2list.contact_id'</span><span class="src-sym">)</span></li>
+<li><a name="a55"></a>            <span class="src-sym">-&gt;</span><span class="src-id">where</span><span class="src-sym">(</span><span class="src-str">'egw_addressbook2list.list_id = ?'</span><span class="src-sym">, </span><span class="src-var">$list</span><span class="src-sym">)</span></li>
+<li><a name="a56"></a>            <span class="src-sym">-&gt;</span><span class="src-id">limit</span><span class="src-sym">(</span><span class="src-var">$limit</span><span class="src-sym">, </span><span class="src-var">$start</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a57"></a>        </li>
+<li><a name="a58"></a>        <span class="src-var">$stmt </span>= <span class="src-var">$db</span><span class="src-sym">-&gt;</span><span class="src-id">query</span><span class="src-sym">(</span><span class="src-var">$select</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a59"></a>        </li>
+<li><a name="a60"></a>        <span class="src-var">$config </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a61"></a>            <span class="src-str">'table'     </span>=&gt; <span class="src-str">'egw_addressbook'</span><span class="src-sym">,</span></li>
+<li><a name="a62"></a>            <span class="src-str">'data'      </span>=&gt; <span class="src-var">$stmt</span><span class="src-sym">-&gt;</span><span class="src-id">fetchAll</span><span class="src-sym">(</span><span class="src-id">Zend_Db</span><span class="src-sym">::</span><span class="src-id">FETCH_ASSOC</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
+<li><a name="a63"></a>            <span class="src-str">'rowClass'  </span>=&gt; <span class="src-str">'Zend_Db_Table_Row'</span><span class="src-sym">,</span></li>
+<li><a name="a64"></a>            <span class="src-str">'stored'    </span>=&gt; <span class="src-id">true</span></li>
+<li><a name="a65"></a>        <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a66"></a>        </li>
+<li><a name="a67"></a>        <span class="src-var">$rowset </span>= <span class="src-key">new </span><span class="src-id">Zend_Db_Table_Rowset</span><span class="src-sym">(</span><span class="src-var">$config</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a68"></a>        </li>
+<li><a name="a69"></a>        <span class="src-key">return </span><span class="src-var">$rowset</span><span class="src-sym">;</span></li>
+<li><a name="a70"></a>        <span class="src-comm">/*</span></li>
+<li><a name="a71"></a><span class="src-comm">         * you could also use this piece of code, to fetch the joined data, but this way you can NOT define</span></li>
+<li><a name="a72"></a><span class="src-comm">         * any limit, where or order statements</span></li>
+<li><a name="a73"></a><span class="src-comm">        $lists = new Addressbook_Backend_Sql_Lists();</span></li>
+<li><a name="a74"></a>        </li>
+<li><a name="a75"></a><span class="src-comm">        $listRowset = $lists-&gt;find($list);</span></li>
+<li><a name="a76"></a>        </li>
+<li><a name="a77"></a><span class="src-comm">        $currentList = $listRowset-&gt;current();</span></li>
+<li><a name="a78"></a>        </li>
+<li><a name="a79"></a><span class="src-comm">        $result = $currentList-&gt;findManyToManyRowset('Addressbook_Backend_Sql_Contacts', 'Addressbook_Backend_Sql_ListMapping');</span></li>
+<li><a name="a80"></a>        </li>
+<li><a name="a81"></a><span class="src-comm">        return $result;</span></li>
+<li><a name="a82"></a>        </li>
+<li><a name="a83"></a><span class="src-comm">        */</span></li>
+<li><a name="a84"></a>    <span class="src-sym">}</span></li>
+<li><a name="a85"></a>    </li>
+<li><a name="a86"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/_Addressbook_Backend_Sql_php.html#functiongetPersonalLists">getPersonalLists</a><span class="src-sym">(</span><span class="src-sym">)</span></li>
+<li><a name="a87"></a>    <span class="src-sym">{</span></li>
+<li><a name="a88"></a>        <span class="src-var">$lists </span>= <span class="src-key">new </span><span class="src-id"><a href="../Addressbook/Addressbook_Backend_Sql_Lists.html">Addressbook_Backend_Sql_Lists</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a89"></a>        </li>
+<li><a name="a90"></a>        <span class="src-var">$result </span>= <span class="src-var">$lists</span><span class="src-sym">-&gt;</span><span class="src-id">getPersonalLists</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a91"></a>        </li>
+<li><a name="a92"></a>        <span class="src-key">return </span><span class="src-var">$result</span><span class="src-sym">;</span></li>
+<li><a name="a93"></a>    <span class="src-sym">}</span></li>
+<li><a name="a94"></a>&nbsp;</li>
+<li><a name="a95"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/_Addressbook_Backend_Sql_php.html#functiongetInternalContacts">getInternalContacts</a><span class="src-sym">(</span><span class="src-var">$filter</span><span class="src-sym">, </span><span class="src-var">$sort</span><span class="src-sym">, </span><span class="src-var">$dir</span><span class="src-sym">, </span><span class="src-var">$limit </span>= <span class="src-id">NULL</span><span class="src-sym">, </span><span class="src-var">$start </span>= <span class="src-id">NULL</span><span class="src-sym">)</span></li>
+<li><a name="a96"></a>    <span class="src-sym">{</span></li>
+<li><a name="a97"></a>        <span class="src-var">$where </span>= <span class="src-str">'account_id IS NOT NULL'</span><span class="src-sym">;</span></li>
+<li><a name="a98"></a>        </li>
+<li><a name="a99"></a>        <span class="src-var">$contacts </span>= <span class="src-key">new </span><span class="src-id"><a href="../Addressbook/Addressbook_Backend_Sql_Contacts.html">Addressbook_Backend_Sql_Contacts</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a100"></a>        </li>
+<li><a name="a101"></a>        <span class="src-var">$result </span>= <span class="src-var">$contacts</span><span class="src-sym">-&gt;</span><span class="src-id">fetchAll</span><span class="src-sym">(</span><span class="src-var">$where</span><span class="src-sym">, </span><span class="src-str">&quot;</span><span class="src-str"><span class="src-var">$sort</span> <span class="src-var">$dir</span></span><span class="src-str">&quot;</span><span class="src-sym">, </span><span class="src-var">$limit</span><span class="src-sym">, </span><span class="src-var">$start</span><span class="src-sym">, </span><span class="src-id">TRUE</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a102"></a>        </li>
+<li><a name="a103"></a>        <span class="src-key">return </span><span class="src-var">$result</span><span class="src-sym">;</span></li>
+<li><a name="a104"></a>    <span class="src-sym">}</span></li>
+<li><a name="a105"></a>&nbsp;</li>
+<li><a name="a106"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../Addressbook/_Addressbook_Backend_Sql_Contacts_php.html#functiongetInternalCount">getInternalCount</a><span class="src-sym">(</span><span class="src-sym">)</span></li>
+<li><a name="a107"></a>    <span class="src-sym">{</span></li>
+<li><a name="a108"></a>        <span class="src-var">$contacts </span>= <span class="src-key">new </span><span class="src-id"><a href="../Addressbook/Addressbook_Backend_Sql_Contacts.html">Addressbook_Backend_Sql_Contacts</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a109"></a>        </li>
+<li><a name="a110"></a>        <span class="src-var">$result </span>= <span class="src-var">$contacts</span><span class="src-sym">-&gt;</span><span class="src-id">getInternalCount</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a111"></a>&nbsp;</li>
+<li><a name="a112"></a>        <span class="src-key">return </span><span class="src-var">$result</span><span class="src-sym">;</span></li>
+<li><a name="a113"></a>    <span class="src-sym">}</span></li>
+<li><a name="a114"></a>&nbsp;</li>
+<li><a name="a115"></a><span class="src-sym">}</span></li>
+</ol></pre>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Mon, 13 Aug 2007 19:35:39 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.3.0RC3</a>
+	</p>
+	</body>
+</html>

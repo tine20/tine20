@@ -200,6 +200,13 @@ class Addressbook_Json
         return $treeNode;
     }
     
+    /**
+     * returns the nodes for the dynamic tree
+     *
+     * @param string $node which node got selected in the UI
+     * @param string $datatype what kind of data to search
+     * @return string json encoded array
+     */
     public function getTree($node, $datatype)
     {
         $nodes = array();
@@ -228,4 +235,3 @@ class Addressbook_Json
         exit;
     }
 }
-?>

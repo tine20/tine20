@@ -1,7 +1,7 @@
 <?php
 
 /**
- * interface for contacs class
+ * contacts sql backend
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html

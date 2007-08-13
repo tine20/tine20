@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SQL backend class to access contacts
+ * this classes provides access to the sql table egw_addressbook
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
