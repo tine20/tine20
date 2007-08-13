@@ -18,6 +18,10 @@ interface Addressbook_Backend_Interface
 
     public function getPersonalCount();
     
+    public function getPersonalList($list, $filter, $sort, $dir, $limit = NULL, $start = NULL);
+    
+    public function getPersonalLists();
+    
     public function getInternalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL);
 
     public function getInternalCount();

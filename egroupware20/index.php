@@ -21,6 +21,7 @@ $locale = new Zend_Locale();
 Zend_Registry::set('locale', $locale);
 
 $db = Zend_Db::factory('PDO_MYSQL', $options->toArray());
+Zend_Registry::set('dbAdapter', $db);
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
 if(isset($egwBaseNamespace->currentAccount)) {
@@ -40,6 +41,7 @@ if(isset($_POST['jsonKey'])) {
 	$sendJsonKey = $_GET['jsonKey'];
 }
 
+$auth = Zend_Auth::getInstance();
 if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
 	//json request
 	if(isset($_POST['jsonKey'])) {
@@ -55,8 +57,8 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
 	$server = new Zend_Json_Server();
 		
 	$server->setClass('Egwbase_Json', 'Egwbase');
-
-	if($egwBaseNamespace->isAutenticated) {
+	
+	if($auth->hasIdentity()) {
 		$server->setClass('Addressbook_Json', 'Addressbook');
 		$server->setClass('Asterisk_Json', 'Asterisk');
 		$server->setClass('Felamimail_Json', 'Felamimail');
@@ -64,7 +66,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
 
 	$server->handle();
 
-} elseif(isset($_REQUEST['getpopup']) && $egwBaseNamespace->isAutenticated) {
+} elseif(isset($_REQUEST['getpopup']) && $auth->hasIdentity()) {
     // this does not really belong to here
     $view->setScriptPath('Egwbase/views');
     $view->formData = array();
@@ -80,22 +82,23 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     
     echo $view->render('popup.php');
 } else {
-	$view->setScriptPath('Egwbase/views');
-	if(!$egwBaseNamespace->isAutenticated) {
-		echo $view->render('login.php');
-	} else {
-		foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
-			$className = "{$applicationName}_Json";
-			$application = new $className;
-			$applications[] = $application->getMainTree();
-			$jsInlucdeFiles[] = $applicationName;
-		}
-		
-		$view->jsInlucdeFiles = $jsInlucdeFiles;
-		$view->applications = $applications;
-		$view->title="eGW Test Layout";
-		echo $view->render('mainscreen.php');
-	}
+    $view->setScriptPath('Egwbase/views');
+
+    if($auth->hasIdentity()) {
+    	foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
+    	    $className = "{$applicationName}_Json";
+    	    $application = new $className;
+    	    $applications[] = $application->getMainTree();
+    	    $jsInlucdeFiles[] = $applicationName;
+        }
+        
+        $view->jsInlucdeFiles = $jsInlucdeFiles;
+        $view->applications = $applications;
+        $view->title="eGW Test Layout";
+        echo $view->render('mainscreen.php');
+    } else {
+        echo $view->render('login.php');
+    }
 }
 
 ?>
