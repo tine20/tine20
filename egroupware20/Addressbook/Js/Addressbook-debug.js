@@ -1,6 +1,8 @@
-var EGWNameSpace = EGWNameSpace || {};
+Ext.namespace('Egw');
 
-EGWNameSpace.Addressbook = function() {
+var EGWNameSpace = Egw;
+
+Egw.Addressbook = function() {
 
     var ds;
     
@@ -919,9 +921,7 @@ EGWNameSpace.Addressbook = function() {
     // public stuff
     return {
         // public functions
-        show: function(_layout, _node) {
-            _showAddressGrid(_layout, _node);
-        },
+        show: _showAddressGrid,
         
         reload: function() {
             ds.reload();
