@@ -85,8 +85,8 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     $list = $locale->getTranslationList('Dateformat');
     $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
     
-    $addresses = Addressbook_Contacts::factory(Addressbook_Contacts::SQL);
-    if(isset($_REQUEST['contactid']) && $rows = $addresses->find($_REQUEST['contactid'])) {
+    $addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+    if(isset($_REQUEST['contactid']) && $rows = $addresses->getContact($_REQUEST['contactid'])) {
         $view->formData['values'] = $rows->current()->toArray();
     }
     $view->jsExecute = 'EGWNameSpace.Addressbook.displayContactDialog();';
