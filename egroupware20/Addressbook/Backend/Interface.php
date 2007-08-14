@@ -18,7 +18,9 @@ interface Addressbook_Backend_Interface
      * @param array $contacts list of contactids
      */
     public function deletePersonalContacts(array $contacts);
-
+    
+    public function getContact($contactID);
+    
     /**
      * get list of personal contacts
      *

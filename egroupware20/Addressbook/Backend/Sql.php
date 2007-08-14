@@ -1,7 +1,7 @@
 <?php
 
 /**
- * contacts sql backend
+ * interface for contacs class
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -22,6 +22,15 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         //error_log($where);
         
         $result = parent::delete($where);
+        
+        return $result;
+    }
+    
+    public function getContact($contactID)
+    {
+        $contacts = new Addressbook_Backend_Sql_Contacts();
+        
+        $result = $contacts->find($contactID);
         
         return $result;
     }
