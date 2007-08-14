@@ -307,7 +307,8 @@ Ext.onReady(function(){
 	//treeLoader.baseParams.func = 'getTree';
 	treeLoader.on("beforeload", function(loader, node) {
 		loader.baseParams.method = node.attributes.application + '.getTree';
-		loader.baseParams.nodeid = node.id;
+		loader.baseParams.node = node.id;
+                loader.baseParams.datatype = node.attributes.datatype;
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {
@@ -323,7 +324,12 @@ Ext.onReady(function(){
 
 	//handle drag and drop
 	tree.on('beforenodedrop', function(e) {
-
+            //console.log(e);
+            //console.log(e.data);
+            
+            e.cancel = true;
+            
+            return;
 			sourceAppId = getAppByNode(e.dropNode);
 			targetAppId = getAppByNode(e.target);
 	
