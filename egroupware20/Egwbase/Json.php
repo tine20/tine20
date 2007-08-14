@@ -59,7 +59,7 @@ class Egwbase_Json
 
 		if ($result->isValid()) {
 			$egwBaseNamespace->isAutenticated = TRUE;
-			$egwBaseNamespace->currentAccount = $auth->getResultRowObject(NULL, array('account_pwd'));
+			$egwBaseNamespace->currentAccount = $authAdapter->getResultRowObject(NULL, array('account_pwd'));
 		
 			$response = array(
 				'success'=> TRUE,
