@@ -19,17 +19,13 @@ interface Addressbook_Backend_Interface
      */
     public function deletePersonalContacts(array $contacts);
     
-    /**
-     * Enter description here...
-     *
-     * @param int $contactID the id of the contact to read
-     */
     public function getContact($contactID);
     
     /**
      * get list of personal contacts
      *
      * @param string $filter string to search for in contacts
+     * @param array $contactType array of contacttypes to search for
      * @param string $sort fieldname to sort by
      * @param string $dir sort ascending or descending (ASC | DESC)
      * @param int $limit how many contacts to display
@@ -37,7 +33,7 @@ interface Addressbook_Backend_Interface
      * 
      * @return array
      */
-    public function getPersonalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL);
+    public function getPersonalContacts($filter, array $contactType, $sort, $dir, $limit = NULL, $start = NULL);
 
     /**
      * returns total number of personal contacts

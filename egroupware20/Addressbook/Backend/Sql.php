@@ -35,7 +35,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
-    public function getPersonalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL)
+    public function getPersonalContacts($filter, array $contactType, $sort, $dir, $limit = NULL, $start = NULL)
     {
         $contacts = new Addressbook_Backend_Sql_Contacts();
             

@@ -123,9 +123,10 @@ class Addressbook_Json
      * @param int $sort
      * @param string $dir
      * @param int $limit
+     * @param string $contacttype json encoded array of contacttypes to search for, only used when $_datatype = myaddresses
      * @return array
      */
-    public function getData($nodeid, $_datatype, $start, $sort, $dir, $limit)
+    public function getData($nodeid, $_datatype, $start, $sort, $dir, $limit, $contacttype = NULL)
     {
         $result = array();
         list($nodeid, $subid) = explode('-', $nodeid);
@@ -141,8 +142,9 @@ class Addressbook_Json
                 break;
 
             case 'myaddresses':
+                $contactType = Zend_Json::decode($contacttype);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                if($rows = $backend->getPersonalContacts(NULL, $sort, $dir, $limit, $start)) {
+                if($rows = $backend->getPersonalContacts(NULL, $contactType, $sort, $dir, $limit, $start)) {
                     $result['results'] = $rows->toArray();
                     $result['totalcount'] = $backend->getPersonalCount();
                 }
