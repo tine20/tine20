@@ -19,6 +19,11 @@ interface Addressbook_Backend_Interface
      */
     public function deletePersonalContacts(array $contacts);
     
+    /**
+     * Enter description here...
+     *
+     * @param int $contactID the id of the contact to read
+     */
     public function getContact($contactID);
     
     /**
