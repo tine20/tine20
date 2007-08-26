@@ -132,7 +132,7 @@ class Addressbook_Json
     {
         $result = array();
         switch($datatype) {
-            case 'internaladdresses':
+            case 'accounts':
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
                 if($rows = $backend->getInternalContacts(NULL, $sort, $dir, $limit, $start)) {
                     $result['results'] = $rows->toArray();
