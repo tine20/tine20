@@ -25,14 +25,36 @@ Egw.Addressbook = function() {
         // remove the first contentpanel from center region
         center.remove(0);
 		
-        // add a div, which will bneehe parent element for the grid
+        // add a div, which will beneth parent element for the grid
         var contentTag = Ext.Element.get('content');
         var outerDivTag = contentTag.createChild({tag: 'div',id: 'outergriddiv'});
+
+        console.log(_node.attributes.datatype);
+        switch(_node.attributes.datatype) {
+            case 'mylist':
+                var options = Ext.encode({
+                    listId: _node.attributes.listId
+                });
+                
+                break;
+            
+            default:
+                var options = "{}";
+                
+                break;
+        }
 
         // create the Data Store
         contactDS = new Ext.data.JsonStore({
             url: 'index.php',
-            baseParams: {method:'Addressbook.getData', _datatype:'address', nodeid:_node.attributes.id},
+            baseParams: {
+            	method:    'Addressbook.getContacts', 
+            	datatype:  _node.attributes.datatype, 
+            	nodeid:    _node.attributes.id, 
+            	displayContacts:true, 
+            	displayLists:true,
+            	options:   options,
+            },
             root: 'results',
             totalProperty: 'totalcount',
             id: 'contact_id',
@@ -107,17 +129,13 @@ Egw.Addressbook = function() {
 
         contactDS.setDefaultSort('contact_id', 'desc');
 
-        contactDS.load({params:{contacttype:"{}", start:0, limit:50}});
+        contactDS.load({params:{start:0, limit:50}});
         
         contactDS.on('beforeload', function(_loader, _node) {
-            _loader.baseParams.contacttype = Ext.util.JSON.encode({
-                displayContacts:    filterContactsButton.pressed,
-                displayLists:       filterListsButton.pressed
-            });
+        	_loader.baseParams.displayContacts	= filterContactsButton.pressed;
+        	_loader.baseParams.displayLists		= filterListsButton.pressed;
         });
 
-        
-        
         var cm = new Ext.grid.ColumnModel([{
                 resizable: true, id: 'contact_id', header: 'Id', dataIndex: 'contact_id', width: 30
             },{
