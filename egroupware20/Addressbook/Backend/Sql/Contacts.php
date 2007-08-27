@@ -35,7 +35,7 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
             $currentAccount = Zend_Registry::get('currentAccount');
             
             if($_where !== NULL) {
-                $where = $_where . ' AND ';
+                $where = '(' . $_where . ') AND ';
             }
             $where .=  $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
         } else {
@@ -67,7 +67,7 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
     {
         if(isset($this->_owner)) {
             $currentAccount = Zend_Registry::get('currentAccount');
-            $where = $_where . ' AND ' . $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
+            $where = '(' . $_where . ') AND ' . $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
         } else {
             $where = $_where;
         }
