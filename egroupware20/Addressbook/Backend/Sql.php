@@ -38,8 +38,19 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     public function getPersonalContacts($filter, array $contactType, $sort, $dir, $limit = NULL, $start = NULL)
     {
         $contacts = new Addressbook_Backend_Sql_Contacts();
-            
-        $result = $contacts->fetchAll(NULL, "$sort $dir", $limit, $start);
+
+        $where = NULL;
+        $requestedContactType = array();
+        
+        if($contactType['displayContacts'] == TRUE) {
+            $requestedContactTypes[]  = 'n';
+        }
+        if($contactType['displayLists'] == TRUE) {
+            $requestedContactTypes[]  = 'l';
+        }
+        $where  = $contacts->getAdapter()->quoteInto('contact_tid IN (?)', $requestedContactTypes);
+        
+        $result = $contacts->fetchAll($where, "$sort $dir", $limit, $start);
         
         return $result;
     }

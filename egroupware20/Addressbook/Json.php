@@ -123,19 +123,17 @@ class Addressbook_Json
      * @param int $sort
      * @param string $dir
      * @param int $limit
-     * @param bool $displayContacts
-     * @param bool $displayLists
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getContacts($nodeid, $datatype, $start, $sort, $dir, $limit, $displayContacts = TRUE, $displayLists = TRUE, $options = NULL)
+    public function getContacts($nodeid, $datatype, $start, $sort, $dir, $limit, $options = NULL)
     {
         $result = array();
         switch($datatype) {
             case 'accounts':
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
                 if($rows = $backend->getInternalContacts(NULL, $sort, $dir, $limit, $start)) {
-                    $result['results'] = $rows->toArray();
+                    $result['results']    = $rows->toArray();
                     $result['totalcount'] = $backend->getInternalCount();
                 }
                 
@@ -145,7 +143,7 @@ class Addressbook_Json
                 $options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
                 if($rows = $backend->getPersonalContacts(NULL, $options, $sort, $dir, $limit, $start)) {
-                    $result['results'] = $rows->toArray();
+                    $result['results']    = $rows->toArray();
                     $result['totalcount'] = $backend->getPersonalCount();
                 }
                 
@@ -155,7 +153,7 @@ class Addressbook_Json
             	$options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
                 if($rows = $backend->getPersonalList($options['listId'], NULL, $sort, $dir, $limit, $start)) {
-                    $result['results'] = $rows->toArray();
+                    $result['results']    = $rows->toArray();
                     $result['totalcount'] = $backend->getPersonalCount();
                 }
                 

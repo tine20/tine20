@@ -29,17 +29,19 @@ Egw.Addressbook = function() {
         var contentTag = Ext.Element.get('content');
         var outerDivTag = contentTag.createChild({tag: 'div',id: 'outergriddiv'});
 
-        console.log(_node.attributes.datatype);
         switch(_node.attributes.datatype) {
             case 'mylist':
-                var options = Ext.encode({
+                var options = {
                     listId: _node.attributes.listId
-                });
+                };
                 
                 break;
             
-            default:
-                var options = "{}";
+            case 'mycontacts':
+                var options = {
+                    displayContacts:    true,
+                    displayLists:       true
+                };
                 
                 break;
         }
@@ -51,9 +53,7 @@ Egw.Addressbook = function() {
             	method:    'Addressbook.getContacts', 
             	datatype:  _node.attributes.datatype, 
             	nodeid:    _node.attributes.id, 
-            	displayContacts:true, 
-            	displayLists:true,
-            	options:   options,
+            	options:   Ext.encode(options),
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -132,8 +132,10 @@ Egw.Addressbook = function() {
         contactDS.load({params:{start:0, limit:50}});
         
         contactDS.on('beforeload', function(_loader, _node) {
-        	_loader.baseParams.displayContacts	= filterContactsButton.pressed;
-        	_loader.baseParams.displayLists		= filterListsButton.pressed;
+            _loader.baseParams.options = Ext.encode({
+        	   displayContacts:    filterContactsButton.pressed,
+        	   displayLists:       filterListsButton.pressed
+            });
         });
 
         var cm = new Ext.grid.ColumnModel([{
