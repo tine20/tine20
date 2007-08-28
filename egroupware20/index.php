@@ -7,6 +7,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * @todo	implement json key check
  *
  */
 
@@ -62,7 +63,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
 	}
 	
 	if($sendJsonKey != $egwBaseNamespace->jsonKey) {
-		error_log('wrong JSON Key sent!!!');
+		#error_log('wrong JSON Key sent!!!');
 		#die('wrong JSON Key sent!!!');
 	}
 	$server = new Zend_Json_Server();
