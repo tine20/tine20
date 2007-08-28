@@ -24,7 +24,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @todo the group info do not belong into the ACL table, there should be a separate group table
      * @return array list of group ids
      */
-    public function getGroupMemberships($accountId)
+    public function getAccountGroupMemberships($accountId)
     {
         $aclTable = new Egwbase_Acl_Sql();
         $memberShips = array();
