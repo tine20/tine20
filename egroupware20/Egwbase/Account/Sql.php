@@ -37,7 +37,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $rowSet = $aclTable->fetchAll($where);
         
         foreach($rowSet as $row) {
-            $memberShips[$row->acl_location] = 'Group '.$row->acl_location;
+            //$memberShips[$row->acl_location] = 'Group '.$row->acl_location;
+            $memberShips[] = $row->acl_location;
         }
         
         return $memberShips;
@@ -63,7 +64,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $rowSet = $aclTable->fetchAll($where);
         
         foreach($rowSet as $row) {
-            $members[$row->acl_account] = 'Account '.$row->acl_account;
+            $members[] = $row->acl_account;
         }
         
         return $members;
