@@ -62,27 +62,28 @@ class Egwbase_Acl
      */
     public function __construct($accountId = NULL)
     {
-        if($accountId === NULL) {
-            $currentAccount = Zend_Registry::get('currentAccount');
-            
-            $this->accountId = $currentAccount->account_id;
-        } else {
-            $this->accountId = $accountId;
-        }
+//        if($accountId === NULL) {
+//            $currentAccount = Zend_Registry::get('currentAccount');
+//            
+//            $this->accountId = $currentAccount->account_id;
+//        } else {
+//            $this->accountId = $accountId;
+//        }
     }
     
     /**
-     * get the grants for the currently set accountId for a spefic application
+     * get the grants for the user identified by $accountId for a specific application
      *
+     * @param int $accountId the accountid of the user
      * @param string $appName the name of the application to return the rights for
      * @param bool $enumerateGroupAcls if TRUE the acl for the groupmembers gets returned too
      * @return array the grants
      */
-    public function getGrants($appName, $enumerateGroupAcls = TRUE)
+    public function getApplicationGrants($accountId, $appName, $enumerateGroupAcls = TRUE)
     {
         $accounts = new Egwbase_Account_Sql();
-        $groupMemberships = $accounts->getAccountGroupMemberships($this->accountId);
-        $groupMemberships[] = $this->accountId;
+        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
         
         $aclTable = new Egwbase_Acl_Sql();
         $where = array(
@@ -103,12 +104,11 @@ class Egwbase_Acl
             }
             $grants[$grantedBy] |= $grantedRights;
 
-            // if it is a group(negative Id) fetch the group members acl too
+            // if it is a group(negative id) fetch the group members acl too
             if ($grantedBy < 0 && $enumerateGroupAcls === TRUE) {
                 $groupMembers = $accounts->getGroupMembers($grantedBy);
                 
-                foreach($groupMembers as $accountId) {
-                    $grantedBy        = $accountId;
+                foreach($groupMembers as $grantedBy) {
                     // Don't allow to override private with group ACL's!
                     $grantedRights    &= ~Egwbase_Acl::PERSONAL;
                     
@@ -120,8 +120,64 @@ class Egwbase_Acl
                 }
             }
         }
+        
         // the user has always access to his own data
-        $grants[$this->accountId] = Egwbase_Acl::FULL;
+        $grants[$accountId] = Egwbase_Acl::FULL;
+            
+        return $grants;
+    }
+    /**
+     * get the grants for the currently set accountId for a spefic application
+     *
+     * @param array $groupId list of group ids
+     * @param string $appName the name of the application to return the rights for
+     * @param int $requiredRight which rights needs to be set, to get the group returned
+     * @return array the grants
+     */
+    public function getGroupGrants(array $groupId, $appName, $requiredRight)
+    {
+        $accounts = new Egwbase_Account_Sql();
+        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+        
+        $aclTable = new Egwbase_Acl_Sql();
+        $where = array(
+            $aclTable->getAdapter()->quoteInto('acl_appname = ?', $appName),
+            $aclTable->getAdapter()->quoteInto('acl_location IN (?)', $groupMemberships)
+        );
+        $rowSet = $aclTable->fetchAll($where);
+
+        $grants = array();
+        
+        foreach($rowSet as $row) {
+            $grantedBy        = $row->acl_account;
+            $grantedRights    = $row->acl_rights;
+            
+            // initialize grants to Egwbase_Acl::NONE
+            if(!isset($grants[$grantedBy])) {
+                $grants[$grantedBy] = Egwbase_Acl::NONE;
+            }
+            $grants[$grantedBy] |= $grantedRights;
+
+            // if it is a group(negative id) fetch the group members acl too
+            if ($grantedBy < 0 && $enumerateGroupAcls === TRUE) {
+                $groupMembers = $accounts->getGroupMembers($grantedBy);
+                
+                foreach($groupMembers as $grantedBy) {
+                    // Don't allow to override private with group ACL's!
+                    $grantedRights    &= ~Egwbase_Acl::PERSONAL;
+                    
+                    if(!isset($grants[$grantedBy])) {
+                        $grants[$grantedBy] = Egwbase_Acl::NONE;
+                    }
+                    
+                    $grants[$grantedBy] |= $grantedRights;
+                }
+            }
+        }
+        
+        // the user has always access to his own data
+        $grants[$accountId] = Egwbase_Acl::FULL;
             
         return $grants;
     }
