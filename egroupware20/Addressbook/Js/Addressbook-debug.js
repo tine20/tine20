@@ -27,20 +27,20 @@ Egw.Addressbook = function() {
 		
         // add a div, which will beneth parent element for the grid
         var contentTag = Ext.Element.get('content');
-        var outerDivTag = contentTag.createChild({tag: 'div',id: 'outergriddiv'});
+        var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
 
         switch(_node.attributes.datatype) {
-            case 'mylist':
+            case 'list':
                 var options = {
                     listId: _node.attributes.listId
                 };
                 
                 break;
             
-            case 'mycontacts':
+            case 'contacts':
                 var options = {
-                    displayContacts:    true,
-                    displayLists:       true
+                    displayContacts: true,
+                    displayLists:    true
                 };
                 
                 break;
@@ -50,10 +50,11 @@ Egw.Addressbook = function() {
         contactDS = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-            	method:    'Addressbook.getContacts', 
-            	datatype:  _node.attributes.datatype, 
-            	nodeid:    _node.attributes.id, 
-            	options:   Ext.encode(options),
+            	method:   'Addressbook.getContacts', 
+            	datatype: _node.attributes.datatype,
+                owner:    _node.attributes.owner, 
+            	nodeid:   _node.attributes.id, 
+            	options:  Ext.encode(options),
             },
             root: 'results',
             totalProperty: 'totalcount',

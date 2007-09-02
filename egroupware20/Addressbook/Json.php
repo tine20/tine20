@@ -117,6 +117,7 @@ class Addressbook_Json
      * 
      * returns the data to be displayed in a ExtJS grid
      *
+     * @todo implement correc total count for lists
      * @param string $nodeid
      * @param string $_datatype
      * @param int $start
@@ -126,47 +127,41 @@ class Addressbook_Json
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getContacts($nodeid, $datatype, $start, $sort, $dir, $limit, $options = NULL)
+    public function getContacts($nodeid, $datatype, $owner, $start, $sort, $dir, $limit, $options = NULL)
     {
         $result = array();
         switch($datatype) {
             case 'accounts':
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                if($rows = $backend->getInternalContacts(NULL, $sort, $dir, $limit, $start)) {
+                if($rows = $backend->getAccounts(NULL, $sort, $dir, $limit, $start)) {
                     $result['results']    = $rows->toArray();
-                    $result['totalcount'] = $backend->getInternalCount();
+                    $result['totalcount'] = $backend->getCountOfAccounts();
                 }
                 
                 break;
 
-            case 'mycontacts':
+            case 'contacts':
                 $options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                if($rows = $backend->getPersonalContacts(NULL, $options, $sort, $dir, $limit, $start)) {
+                if($rows = $backend->getContactsByOwner($owner, NULL, $options, $sort, $dir, $limit, $start)) {
                     $result['results']    = $rows->toArray();
-                    $result['totalcount'] = $backend->getPersonalCount();
+                    $result['totalcount'] = $backend->getCountByOwner($owner);
                 }
                 
                 break;
 
-            case 'mylist':
+            case 'list':
             	$options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                if($rows = $backend->getPersonalList($options['listId'], NULL, $sort, $dir, $limit, $start)) {
+                $listId = $options['listId'];
+                error_log("$listId, $owner, NULL, $sort, $dir, $limit, $start");
+                if($rows = $backend->getContactsByList($options['listId'], $owner, NULL, $sort, $dir, $limit, $start)) {
                     $result['results']    = $rows->toArray();
-                    $result['totalcount'] = $backend->getPersonalCount();
+                    $result['totalcount'] = $backend->getCountByOwner($owner);
                 }
                 
                 break;
 
-            default:
-                $contacts = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                if($rows = $contacts->fetchAll(NULL, "$sort $dir", $limit, $start)) {
-                    $result['results'] = $rows->toArray();
-                    $result['totalcount'] = $contacts->getTotalCount();
-                }
-                
-                break;
         }
         
         return $result;
@@ -182,20 +177,26 @@ class Addressbook_Json
      */
     public function getMainTree()
     {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
         $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'overview', 'addressbook', 'Addressbook', FALSE);
         $treeNode->setIcon('apps/kaddressbook.png');
         $treeNode->cls = 'treemain';
 
-        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'mycontacts', 'mycontacts', 'My Contacts', FALSE);
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', FALSE);
+        $childNode->owner = $currentAccount->account_id; 
         $treeNode->addChildren($childNode);
         
         $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
+        $childNode->owner = 0; 
         $treeNode->addChildren($childNode);
         
         $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherpeople', 'otherpeople', 'Other Users Contacts', FALSE);
+        $childNode->owner = 0; 
         $treeNode->addChildren($childNode);
         
         $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
+        $childNode->owner = 0; 
         $treeNode->addChildren($childNode);
         
         return $treeNode;
@@ -208,27 +209,64 @@ class Addressbook_Json
      * @param string $datatype what kind of data to search
      * @return string json encoded array
      */
-    public function getTree($node, $datatype)
+    public function getTree($node, $owner, $datatype)
     {
         $nodes = array();
         
-        switch($node) {
-            case 'mycontacts':
+        switch($datatype) {
+            case 'contacts':
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                $personalLists = $backend->getPersonalLists();
-                foreach($personalLists as $listObject) {
+                $lists = $backend->getListsByOwner($owner);
+                foreach($lists as $listObject) {
                     $treeNode = new Egwbase_Ext_Treenode(
                         'Addressbook',
-                        'mylist',
-                        'mylist-'. $listObject->list_id, 
+                        'list',
+                        'list-'. $listObject->list_id, 
                         $listObject->list_name,
                         TRUE
                     );
-                    $treeNode->contextMenuClass = 'ctxMenuMyList';
+                    $treeNode->contextMenuClass = 'ctxMenuList';
                     $treeNode->listId = $listObject->list_id;
+                    $treeNode->owner  = $owner;
                     $nodes[] = $treeNode;
                 }
 		
+                break;
+                
+            case 'otherpeople':
+                $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+                $lists = $backend->getOtherAddressbooks();
+                foreach($lists as $listObject) {
+                    $treeNode = new Egwbase_Ext_Treenode(
+                        'Addressbook',
+                        'contacts',
+                        'other_'. $listObject->id, 
+                        $listObject->title,
+                        FALSE
+                    );
+                    $treeNode->contextMenuClass = 'ctxMenuContacts';
+                    $treeNode->owner  = $listObject->id;
+                    $nodes[] = $treeNode;
+                }
+                
+                break;
+
+            case 'sharedaddressbooks':
+                $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+                $lists = $backend->getSharedAddressbooks();
+                foreach($lists as $listObject) {
+                    $treeNode = new Egwbase_Ext_Treenode(
+                        'Addressbook',
+                        'contacts',
+                        'shared_'. $listObject->id, 
+                        $listObject->title,
+                        FALSE
+                    );
+                    $treeNode->contextMenuClass = 'ctxMenuContacts';
+                    $treeNode->owner  = $listObject->id;
+                    $nodes[] = $treeNode;
+                }
+                
                 break;
         }
         echo Zend_Json::encode($nodes); 
