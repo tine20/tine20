@@ -180,8 +180,10 @@ class Egwbase_Acl
 
         }
         
-        // the user has always access to his own data
-        $grants[$accountId] = Egwbase_Acl::ANY;
+        if($grantType == Egwbase_Acl::ANY_GRANTS) {
+            // the user has always access to his own data
+            $grants[$accountId] = Egwbase_Acl::ANY;
+        }
             
         return $grants;
     }

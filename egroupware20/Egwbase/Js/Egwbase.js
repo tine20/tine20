@@ -306,9 +306,10 @@ Ext.onReady(function(){
 	treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
 	//treeLoader.baseParams.func = 'getTree';
 	treeLoader.on("beforeload", function(loader, node) {
-		loader.baseParams.method = node.attributes.application + '.getTree';
-		loader.baseParams.node = node.id;
-                loader.baseParams.datatype = node.attributes.datatype;
+		loader.baseParams.method   = node.attributes.application + '.getTree';
+		loader.baseParams.node     = node.id;
+        loader.baseParams.datatype = node.attributes.datatype;
+        loader.baseParams.owner    = node.attributes.owner;
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {
