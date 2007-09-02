@@ -15,13 +15,52 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
     protected $_name = 'egw_addressbook';
     protected $_owner = 'contact_owner';
     
-    public function delete(array $_key)
+    private static $instance = NULL;
+    
+    public static function getInstance() 
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        if (self::$instance === NULL) {
+            self::$instance = new Addressbook_Backend_Sql_Contacts;
+        }
         
-        $where  = $this->getAdapter()->quoteInto($this->_primary[1] . ' IN (?)', $_key);
-        $where .= $this->getAdapter()->quoteInto(' AND ' . $this->_owner . ' = ?', $currentAccount->account_id);
+        return self::$instance;
+    }
+
+    /**
+     * create sql statement to filter by acl; handles emtpy where string and empty acl 
+     *
+     * @param string $_where where filter
+     * @param array $_acl list of acl to match owner against; can be NULL
+     * @return string sql where filter
+     */
+    protected function getACLStatement($_where, $_acl)
+    {
+        if(isset($this->_owner) && is_array($_acl)) {
+            if($_where !== NULL) {
+                $where = '(' . $_where . ') AND ';
+            }
+            $where .=  $this->getAdapter()->quoteInto($this->_owner . ' IN (?)', $_acl);
+        } else {
+            $where = $_where;
+        }
         
+        return $where;
+    }
+    
+    /**
+     * delete a list of rows(identified by primary key)
+     *
+     * @param array $_key primary key of the row to be deleted
+     * @param array $_deleteACL delete ACL; delete rows only if owner is in in_array; can be NULL to disable ACL check
+     * @return unknown
+     */
+    public function delete(array $_key, $_deleteACL = NULL)
+    {
+        //$currentAccount = Zend_Registry::get('currentAccount');
+        
+        $deleteSql = $this->getAdapter()->quoteInto($this->_primary[1] . ' IN (?)', $_key); 
+        $where = $this->getACLStatement($deleteSql, $_deleteACL); 
+
         //error_log($where);
         
         $result = parent::delete($where);
@@ -29,67 +68,67 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
         return $result;
     }
     
-    public function fetchAll($_where = null, $_order = null, $_count = null, $_offset = null, $_disableACL = FALSE)
+    /**
+     * fetch all entries matching where parameter.
+     *
+     * @param string/array $_where where filter
+     * @param string $_order order by 
+     * @param int $_count maximum rows to return
+     * @param int $_offset how many rows to skio
+     * @param array $_readACL read ACL; return row only if owner is in in_array; can be NULL to disable ACL check
+     * @return unknown
+     */
+    public function fetchAll($_where = NULL, $_order = NULL, $_dir = NULL, $_count = NULL, $_offset = NULL, $_readACL = NULL)
     {
-        if(isset($this->_owner) && !$_disableACL) {
-            $currentAccount = Zend_Registry::get('currentAccount');
-            
-            if($_where !== NULL) {
-                $where = '(' . $_where . ') AND ';
-            }
-            $where .=  $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
-        } else {
-            $where = $_where;
+        if($_dir !== NULL && ($_dir != 'ASC' && $_dir != 'DESC')) {
+            throw new Exception('$_dir can be only ASC or DESC');
         }
+        $where = $this->getACLStatement($_where, $_readACL);
         
-        $result = parent::fetchAll($where, $_order, $_count, $_offset);
+        $result = parent::fetchAll($where, "$_order $_dir", $_count, $_offset);
         
         return $result;
     }
     
-    public function find($_key)
+    /**
+     * find row identified by primary key
+     *
+     * @param string $_key value of the primary key
+     * @param array $_readACL read ACL; return row only if owner is in in_array; can be NULL to disable ACL check
+     * @return unknown
+     */
+    public function find($_key, $_readACL)
     {
         $where = $this->getAdapter()->quoteInto($this->_primary[1] . ' = ?', $_key);
-        return parent::fetchAll($where);
+        return parent::fetchAll($where, NULL, NULL, NULL, $_readACL);
     }
     
-    public function insert($_data)
+    /**
+     * update row identified by primary key
+     *
+     * @param array $_data the row data
+     * @param string $_where update filter
+     * @param array $_editACL edit ACL; update row only if owner is in in_array; can be NULL to disable ACL check
+     * @return unknown
+     */
+    public function update(array $_data, $_where, $_editACL)
     {
-        if(isset($this->_owner)) {
-            $currentAccount = Zend_Registry::get('currentAccount');
-            $_data[$this->_owner] = $currentAccount->account_id;
-        }
-    
-        return parent::insert($_data);
-    }
-    
-    public function update(array $_data, $_where)
-    {
-        if(isset($this->_owner)) {
-            $currentAccount = Zend_Registry::get('currentAccount');
-            $where = '(' . $_where . ') AND ' . $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
-        } else {
-            $where = $_where;
-        }
+        $where = $this->getACLStatement($_where, $_editACL);
         
         return parent::update($_data, $where);
     }
-    
-    public function getPersonalCount()
-    {
-        $currentAccount = Zend_Registry::get('currentAccount');
         
-        return $this->getAdapter()->fetchOne('SELECT count(*) FROM '. $this->_name . ' WHERE ' . $this->_owner . ' = ' . $currentAccount->account_id);
-    }
-    
-    public function getInternalCount()
+    /**
+     * get total count of rows matching acl
+     *
+     * @param array $_readACL read ACL; count only rows machting owner in array
+     * @return int number of rows matching acl
+     */
+    public function getCountByAcl($_readACL)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $where = $this->getAdapter()->quoteInto($this->_owner . ' IN (?)', $_readACL);
         
-        return $this->getAdapter()->fetchOne('SELECT count(*) FROM '. $this->_name . ' WHERE account_id IS NOT NULL');
+        return $this->getAdapter()->fetchOne('SELECT count(*) FROM '. $this->_name . ' WHERE ' . $where);
     }
 }
-
-?>
-        
-        
+       

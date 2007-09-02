@@ -17,53 +17,56 @@ interface Addressbook_Backend_Interface
      *
      * @param array $contacts list of contactids
      */
-    public function deletePersonalContacts(array $contacts);
+    public function deleteContactsById(array $contacts);
     
-    public function getContact($contactID);
+    public function getContactsById(array $contacts);
     
     /**
      * get list of personal contacts
      *
-     * @param string $filter string to search for in contacts
-     * @param array $contactType array of contacttypes to search for
-     * @param string $sort fieldname to sort by
-     * @param string $dir sort ascending or descending (ASC | DESC)
-     * @param int $limit how many contacts to display
-     * @param int $start how many contaxts to skip
+     * @param int $_owner id of the addressbook to read the contacts from
+     * @param string $_filter string to search for in contacts
+     * @param string $_sort fieldname to sort by
+     * @param string $_dir sort ascending or descending (ASC | DESC)
+     * @param int $_limit how many contacts to display
+     * @param int $_start how many contaxts to skip
      * 
      * @return array
      */
-    public function getPersonalContacts($filter, array $contactType, $sort, $dir, $limit = NULL, $start = NULL);
+    public function getContactsByOwner($_owner, $_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL);
 
     /**
-     * returns total number of personal contacts
+     * returns total number of contacts
      * 
+     * @param int $_owner owner of the addressbook
      * @return int total number of personal contacts
      *
      */
-    public function getPersonalCount();
+    public function getCountByOwner($_owner);
     
     /**
      * Enter description here...
      *
-     * @param int $list id of the personal contact list
-     * @param string $filter string to search for in contacts
-     * @param string $sort fieldname to sort by
-     * @param string $dir sort ascending or descending (ASC | DESC)
-     * @param int $limit how many contacts to display
-     * @param int $start how many contaxts to skip
+     * @param int $_list id of the personal contact list
+     * @param int $_owner 
+     * @param string $_filter string to search for in contacts
+     * @param string $_sort fieldname to sort by
+     * @param string $_dir sort ascending or descending (ASC | DESC)
+     * @param int $_limit how many contacts to display
+     * @param int $_start how many contaxts to skip
      * 
      * @return array list of contacts from contact list identified by $list
      */
-    public function getPersonalList($list, $filter, $sort, $dir, $limit = NULL, $start = NULL);
+    public function getContactsByList($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
     
     /**
      * returns list of all personal contact lists
      * 
+     * @param int $_owner owner of the addressbook
      * @return array list of all personal contact lists
      *
      */
-    public function getPersonalLists();
+    public function getListsByOwner($_owner);
     
     /**
      * return list of internal conacts (aka accounts)
@@ -76,7 +79,7 @@ interface Addressbook_Backend_Interface
      * 
      * @return array list of internal contacts
     */
-    public function getInternalContacts($filter, $sort, $dir, $limit = NULL, $start = NULL);
+    public function getAccounts($filter, $sort, $dir, $limit = NULL, $start = NULL);
 
     /**
      * returns total number of internal contacts
@@ -84,5 +87,5 @@ interface Addressbook_Backend_Interface
      * @return int total number of internal contacts
      *
      */    
-    public function getInternalCount();
+    public function getCountOfAccounts();
 }

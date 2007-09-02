@@ -15,6 +15,17 @@ class Addressbook_Backend_Sql_Lists extends Zend_Db_Table_Abstract
     protected $_name = 'egw_addressbook_lists';
     protected $_owner = 'list_owner';
     
+    private static $instance = NULL;
+    
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Addressbook_Backend_Sql_Lists;
+        }
+        
+        return self::$instance;
+    }
+
     public function getPersonalLists()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
