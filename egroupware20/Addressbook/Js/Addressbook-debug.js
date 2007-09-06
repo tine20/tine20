@@ -42,8 +42,16 @@ Egw.Addressbook = function() {
                     displayContacts: true,
                     displayLists:    true
                 };
-                
+				
                 break;
+				
+			case 'otherpeople':
+				var options = {
+	                    displayContacts: true,
+	                    displayLists:    true,
+	            };
+				
+				break;
         }
 
         // create the Data Store
