@@ -166,26 +166,19 @@ class Addressbook_Json
 				$options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 				
-//				$nodes = json_decode($this->getTree('otherpeople', $owner, 'otherpeople'));
-				$nodes = array('0' => array('owner' => '7'), '1' => array('owner' => '-5'));
-
-				foreach($nodes as $node)
-				{		
-	                if($rows = $backend->getContactsByOwner($node['owner'], NULL, $options, $sort, $dir, $limit, $start)) {
-	                    $result['results']    .= $rows->toArray();
-	                    $result['totalcount'] = $result['totalcount'] + $backend->getCountByOwner($options['ownerId']);
-	                }
+                if($rows = $backend->getAllOtherPeopleContacts(NULL, $options, $sort, $dir, $limit, $start)) {
+                    $result['results']    = $rows->toArray();
+                    $result['totalcount'] = $backend->getCountOfAllOtherPeopleContacts();
                 }
+
                 break;
 		
             case 'sharedaddressbooks':
-            	$options = Zend_Json::decode($options);
+				$options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                $listId = $options['listId'];
-                error_log("$listId, $owner, NULL, $sort, $dir, $limit, $start");
-                if($rows = $backend->getContactsByList($options['listId'], $owner, NULL, $sort, $dir, $limit, $start)) {
+                if($rows = $backend->getAllSharedContacts(NULL, $options, $sort, $dir, $limit, $start)) {
                     $result['results']    = $rows->toArray();
-                    $result['totalcount'] = $backend->getCountByOwner($owner);
+                    $result['totalcount'] = $backend->getCountOfAllSharedContacts();
                 }
                 
                 break;				

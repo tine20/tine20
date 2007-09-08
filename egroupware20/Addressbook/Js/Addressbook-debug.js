@@ -52,6 +52,14 @@ Egw.Addressbook = function() {
 	            };
 				
 				break;
+
+            case 'sharedaddressbooks':
+                var options = {
+                        displayContacts: true,
+                        displayLists:    true,
+                };
+                
+                break;
         }
 
         // create the Data Store

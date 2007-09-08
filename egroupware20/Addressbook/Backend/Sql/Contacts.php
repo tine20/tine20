@@ -15,17 +15,6 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
     protected $_name = 'egw_addressbook';
     protected $_owner = 'contact_owner';
     
-    private static $instance = NULL;
-    
-    public static function getInstance() 
-    {
-        if (self::$instance === NULL) {
-            self::$instance = new Addressbook_Backend_Sql_Contacts;
-        }
-        
-        return self::$instance;
-    }
-
     /**
      * create sql statement to filter by acl; handles emtpy where string and empty acl 
      *
