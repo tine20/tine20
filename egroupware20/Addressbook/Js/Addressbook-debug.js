@@ -238,6 +238,7 @@ Egw.Addressbook = function() {
         // add a paging toolbar to the grid's footer
         var pagingHeader = new Ext.PagingToolbar(gridHeader, contactDS, {
             pageSize: 50,
+			cls:'x-btn-icon-22',
             displayInfo: true,
             displayMsg: 'Displaying contacts {0} - {1} of {2}',
             emptyMsg: "No contacts to display"
@@ -245,16 +246,16 @@ Egw.Addressbook = function() {
 
         pagingHeader.insertButton(0, {
             id: 'addbtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/add-user.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/add-user.png',
             tooltip: 'add new contact',
             handler: _addBtnHandler
         });
 
         pagingHeader.insertButton(1, {
             id: 'editbtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/edit-user.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/edit-user.png',
             tooltip: 'edit current contact',
             disabled: true,
             handler: _editBtnHandler
@@ -262,39 +263,67 @@ Egw.Addressbook = function() {
 
         pagingHeader.insertButton(2, {
             id: 'deletebtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/delete-user.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/delete-user.png',
             tooltip: 'delete selected contacts',
             disabled: true,
             handler: _deleteBtnHandler
         });
 
         pagingHeader.insertButton(3, new Ext.Toolbar.Separator());
+		
+       pagingHeader.insertButton(4, {
+            id: 'addlstbtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/add-users.png',
+            tooltip: 'add new list',
+            handler: _addListBtnHandler
+        });
 
-        filterContactsButton = pagingHeader.insertButton(4, {
+        pagingHeader.insertButton(5, {
+            id: 'editlstbtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/edit-users.png',
+            tooltip: 'edit current list',
+            disabled: true,
+            handler: _editListBtnHandler
+        });
+
+        pagingHeader.insertButton(6, {
+            id: 'deletelstbtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/delete-users.png',
+            tooltip: 'delete selected lists',
+            disabled: true,
+            handler: _deleteListBtnHandler
+        });
+
+        pagingHeader.insertButton(7, new Ext.Toolbar.Separator());		
+
+        filterContactsButton = pagingHeader.insertButton(8, {
             id: 'filtercontactsbtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/user.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/user.png',
             tooltip: 'display contacts',
             enableToggle: true,
             pressed: true,
             handler: _filterUserBtnHandler
         });
         
-        filterListsButton = pagingHeader.insertButton(5, {
+        filterListsButton = pagingHeader.insertButton(9, {
             id: 'filterlistsbtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/users.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/users.png',
             tooltip: 'display lists',
             enableToggle: true,
             pressed: true,
             handler: _filterListsBtnHandler
         });
         
-        pagingHeader.insertButton(6, {
+        pagingHeader.insertButton(10, {
             id: 'exportbtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/file-export.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/file-export.png',
             tooltip: 'export selected contacts',
             disabled: false,
             onClick: _exportBtnHandler
@@ -351,6 +380,34 @@ Egw.Addressbook = function() {
         _openDialog();
     }
     
+	
+    /**
+     * onclick handler for deleteLstBtn
+     *
+     */
+    var _deleteListBtnHandler = function() {
+		
+    }
+
+    /**
+     * onclick handler for editLstBtn
+     *
+     */
+    var _editListBtnHandler = function() {
+		
+    }
+    
+    /**
+     * onclick handler for addLstBtn
+     *
+     */
+    var _addListBtnHandler = function(_button, _event) {
+        _openDialog('list');
+    }	
+	
+	
+	
+	
     /**
      * contextmenu for contact grid
      *
@@ -360,17 +417,17 @@ Egw.Addressbook = function() {
         items: [{
             id:'edit',
             text:'edit contact',
-            icon:'images/oxygen/16x16/actions/edit-user.png',
+            icon:'images/oxygen/22x22/actions/edit-user.png',
             handler: _editBtnHandler
         },{
             id:'delete',
             text:'delete contact',
-            icon:'images/oxygen/16x16/actions/delete-user.png',
+            icon:'images/oxygen/22x22/actions/delete-user.png',
             handler: _deleteBtnHandler
         },'-',{
             id:'new',
             text:'new contact',
-            icon:'images/oxygen/16x16/actions/add-user.png',
+            icon:'images/oxygen/22x22/actions/add-user.png',
             handler: _addBtnHandler
         }]
     });
@@ -386,7 +443,8 @@ Egw.Addressbook = function() {
         var url;
         var w = 1024, h = 786;
         var popW = 950, popH = 600;
-        
+        	
+		
         if (document.all) {
             /* the following is only available after onLoad */
             w = document.body.clientWidth;
@@ -401,9 +459,13 @@ Egw.Addressbook = function() {
         }
         var leftPos = ((w-popW)/2)+y, topPos = ((h-popH)/2)+x;
         
-        if(_id) {
+        if(_id == 'list') {
+            url = 'index.php?getpopup=addressbook.editlist';
+        }
+		if(_id){
             url = 'index.php?getpopup=addressbook.editcontact&contactid=' + _id;
-        } else {
+        }
+		else {
             url = 'index.php?getpopup=addressbook.editcontact';
         }
         //console.log(url);
@@ -469,6 +531,10 @@ Egw.Addressbook = function() {
         Ext.MessageBox.alert('Export', 'Not yet implemented.');
     }
 	
+	
+	    var _displayListDialog = function() {
+		}
+	
     var _displayContactDialog = function() {
         Ext.QuickTips.init();
 
@@ -493,7 +559,7 @@ Egw.Addressbook = function() {
             id: 'savebtn',
             cls:'x-btn-text-icon',
             text: 'Save and Close',
-            icon:'images/oxygen/16x16/actions/document-save.png',
+            icon:'images/oxygen/22x22/actions/document-save.png',
             tooltip: 'save this contact and close window',
             onClick: function (){
                 if (addressedit.isValid()) {
@@ -523,8 +589,8 @@ Egw.Addressbook = function() {
             }
         },{
             id: 'savebtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/save-all.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/save-all.png',
             tooltip: 'apply changes for this contact',
             onClick: function (){
                 if (addressedit.isValid()) {
@@ -553,8 +619,8 @@ Egw.Addressbook = function() {
             }
         },{
             id: 'deletebtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/edit-delete.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/edit-delete.png',
             tooltip: 'delete this contact',
             disabled: disableButtons,
             handler: function(_btn, _event) {
@@ -566,8 +632,8 @@ Egw.Addressbook = function() {
             }
         },{
             id: 'exportbtn',
-            cls:'x-btn-icon',
-            icon:'images/oxygen/16x16/actions/file-export.png',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/file-export.png',
             tooltip: 'export this contact',
             disabled: disableButtons,
             handler: _exportContact
@@ -1030,6 +1096,154 @@ Egw.Addressbook = function() {
         
         return addressedit;
     }
+	
+	
+   var _displayListDialog = function() {
+        Ext.QuickTips.init();
+
+        // turn on validation errors beside the field globally
+        Ext.form.Field.prototype.msgTarget = 'side';
+		
+        var layout = new Ext.BorderLayout(document.body, {
+            north: {split:false, initialSize:28},
+            center: {autoScroll: true}
+        });
+        layout.beginUpdate();
+        layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
+        layout.add('center', new Ext.ContentPanel('content'));
+        layout.endUpdate();
+
+        var disableButtons = true;
+        if(formData.values) {
+            disableButtons = false;
+        }		
+        var tb = new Ext.Toolbar('header');
+        tb.add({
+            id: 'savebtn',
+            cls:'x-btn-text-icon',
+            text: 'Save and Close',
+            icon:'images/oxygen/22x22/actions/document-save.png',
+            tooltip: 'save this contact and close window',
+            onClick: function (){
+                if (listedit.isValid()) {
+                    var additionalData = {};
+                    if(formData.values) {
+                        additionalData._contactID = formData.values.contact_id;
+                    } else {
+                        additionalData._contactID = 0;
+                    }
+                    
+                    listedit.submit({
+                        waitTitle:'Please wait!',
+                        waitMsg:'saving contact...',
+                        params:additionalData,
+                        success:function(form, action, o) {
+                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
+                            window.opener.EGWNameSpace.Addressbook.reload();
+                            window.setTimeout("window.close()", 400);
+                        },
+                        failure:function(form, action) {
+                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
+                        }
+                    });
+                } else {
+                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                }
+            }
+        },{
+            id: 'savebtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/save-all.png',
+            tooltip: 'apply changes for this contact',
+            onClick: function (){
+                if (listedit.isValid()) {
+                    var additionalData = {};
+                    if(formData.values) {
+                        additionalData._contactID = formData.values.contact_id;
+                    } else {
+                        additionalData._contactID = 0;
+                    }
+                    
+                    listedit.submit({
+                        waitTitle:'Please wait!',
+                        waitMsg:'saving contact...',
+                        params:additionalData,
+                        success:function(form, action, o) {
+                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
+                            window.opener.EGWNameSpace.Addressbook.reload();
+                        },
+                        failure:function(form, action) {
+                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
+                        }
+                    });
+                } else {
+                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                }
+            }
+        },{
+            id: 'deletebtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/edit-delete.png',
+            tooltip: 'delete this contact',
+            disabled: disableButtons,
+            handler: function(_btn, _event) {
+                if(formData.values.contact_id) {
+                    Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
+                    _deleteContact([formData.values.contact_id]);
+                    _reloadMainWindow(true);
+                }
+            }
+        },{
+            id: 'exportbtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/file-export.png',
+            tooltip: 'export this contact',
+            disabled: disableButtons,
+            handler: _exportContact
+        });
+		
+        var ds_country = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {method:'Egwbase.getCountryList'},
+            root: 'results',
+            id: 'shortName',
+            fields: ['shortName', 'translatedName'],
+            remoteSort: false
+        });
+
+        // add a div, which will bneehe parent element for the grid
+        var contentTag = Ext.Element.get('content');
+        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv', class:'x-box-mc'});
+        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv'});
+        //outerDivTag.addClass('x-box-mc');
+        //var formDivTag = outerDivTag.createChild({tag:'div', id:'formdiv'});
+        
+        var listedit = new Ext.form.Form({
+            labelWidth: 75, // label settings here cascade unless overridden
+            url:'index.php?method=Addressbook.saveList',
+            reader : new Ext.data.JsonReader({root: 'results'}, [
+                {name: 'list_id'},
+                {name: 'list_name'},
+				{name: 'list_owner'},
+				{name: 'list_created'},
+				{name: 'list_creator'}
+            ])
+        });
+        
+        listedit.fieldset({legend:'List information'});
+        
+        listedit.column(
+            {width:'33%', labelWidth:90, labelSeparator:''},
+            new Ext.form.TextField({fieldLabel:'List Name', name:'list_name', width:175}),
+            new Ext.form.TextField({fieldLabel:'List Owner', name:'list_owner', width:175})
+        );
+
+        listedit.end();
+		
+		listedit.render('content');
+        
+        return listedit;
+    }	
 
     var _setContactDialogValues = function(_dialog, _formData) {
         for (var fieldName in _formData) {
@@ -1040,6 +1254,7 @@ Egw.Addressbook = function() {
             }
         }
     }
+	
 
     // public functions and variables
     return {
@@ -1060,6 +1275,13 @@ Egw.Addressbook = function() {
         
         displayContactDialog: function() {
             var dialog = _displayContactDialog();
+            if(formData.values) {
+                _setContactDialogValues(dialog, formData.values);
+            }
+        },
+		
+		displayListDialog: function() {
+            var dialog = _displayListDialog();
             if(formData.values) {
                 _setContactDialogValues(dialog, formData.values);
             }
