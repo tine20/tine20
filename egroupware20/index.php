@@ -90,7 +90,14 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     if(isset($_REQUEST['contactid']) && $rows = $addresses->getContact($_REQUEST['contactid'])) {
         $view->formData['values'] = $rows->current()->toArray();
     }
-    $view->jsExecute = 'EGWNameSpace.Addressbook.displayContactDialog();';
+	if($_REQUEST['getpopup'] == 'addressbook.editcontact')
+	{
+		$view->jsExecute = 'EGWNameSpace.Addressbook.displayContactDialog();';
+	}
+	elseif($_REQUEST['getpopup'] == 'addressbook.editlist')
+	{
+		$view->jsExecute = 'EGWNameSpace.Addressbook.displayListDialog();';
+	}
     
     echo $view->render('popup.php');
 } else {
