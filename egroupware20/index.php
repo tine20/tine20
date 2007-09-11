@@ -87,8 +87,8 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
     
     $addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-    if(isset($_REQUEST['contactid']) && $rows = $addresses->getContact($_REQUEST['contactid'])) {
-        $view->formData['values'] = $rows->current()->toArray();
+    if(isset($_REQUEST['contactid']) && $contact = $addresses->getContactById($_REQUEST['contactid'])) {
+        $view->formData['values'] = $contact->toArray();
     }
 	if($_REQUEST['getpopup'] == 'addressbook.editcontact')
 	{
