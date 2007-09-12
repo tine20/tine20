@@ -502,7 +502,7 @@ Egw.Addressbook = function() {
             url: 'index.php',
             method: 'post',
             scope: this,
-            params: {method:'Addressbook.deleteAddress', _contactIDs:contactIDs},
+            params: {method:'Addressbook.deleteContacts', _contactIDs:contactIDs},
             success: function(response, options) {
                 //window.location.reload();
                 //console.log(response);

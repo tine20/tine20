@@ -92,11 +92,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         // delete the requested contact_id only if the contact_owner matches the current users acl
         $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_contacts),
+            $this->contactsTable->getAdapter()->quoteInto('contact_id IN (?)', $_contacts),
             $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
         );
        
-        $result = parent::delete($where);
+        $result = $this->contactsTable->delete($where);
         
         return $result;
     }
