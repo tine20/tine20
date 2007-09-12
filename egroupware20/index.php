@@ -86,16 +86,22 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     $list = $locale->getTranslationList('Dateformat');
     $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
     
+    $currentAccount = Zend_Registry::get('currentAccount');
+    $egwbaseAcl = Egwbase_Acl::getInstance();
+    
+    $acl = $egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
+    
+    foreach($acl as $key => $value) {
+    	$view->formData['config']['addressbooks'][] = array($key, $key);
+    }
+        
     $addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
     if(isset($_REQUEST['contactid']) && $contact = $addresses->getContactById($_REQUEST['contactid'])) {
         $view->formData['values'] = $contact->toArray();
     }
-	if($_REQUEST['getpopup'] == 'addressbook.editcontact')
-	{
+	if($_REQUEST['getpopup'] == 'addressbook.editcontact') {
 		$view->jsExecute = 'EGWNameSpace.Addressbook.displayContactDialog();';
-	}
-	elseif($_REQUEST['getpopup'] == 'addressbook.editlist')
-	{
+	} elseif($_REQUEST['getpopup'] == 'addressbook.editlist') {
 		$view->jsExecute = 'EGWNameSpace.Addressbook.displayListDialog();';
 	}
     
