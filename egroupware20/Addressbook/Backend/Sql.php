@@ -322,6 +322,23 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         return $result;
     }
+	
+    public function getNewListsByOwner($_owner)
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        if($_owner == $currentAccount->account_id || $this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
+            $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $_owner);
+        } else {
+            throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
+        }
+
+	//	 $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'l');
+		 
+        $result = $this->contactsTable->fetchAll($wwhere, 'n_family', 'ASC');
+        
+        return $result;
+    }	
 
     public function getAccounts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {

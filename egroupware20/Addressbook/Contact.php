@@ -34,6 +34,7 @@ class Addressbook_Contact
      * @var array
      */
     protected $_validators = array(
+		'contact_tid'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -105,7 +106,7 @@ class Addressbook_Contact
     	
     	if ($inputFilter->isValid()) {
     		$contactData = $inputFilter->getUnescaped();
-    		foreach($contactData as $key => $value) {
+    		foreach($contactData as $key => $value) {	
     			$this->$key = $value;
     		}
     	} else {

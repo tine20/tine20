@@ -50,7 +50,7 @@ class Addressbook_Json
 //        return $result;
 //    }
 	
-    /**
+  /**
      * save one contact
      * 
      * if $_contactID is NULL the contact gets added, otherwise it gets updated
@@ -71,7 +71,13 @@ class Addressbook_Json
             	unset($_POST['contact_bday']);
             }
         }
-    		
+		
+		// set correct contact type for lists
+		if($_POST['_addressType'] == "l") {
+			$_POST['contact_tid'] = "l";
+		}
+		
+		
     	try {
             $contact = new Addressbook_Contact();
             $contact->setFromUserData($_POST);
@@ -226,6 +232,10 @@ class Addressbook_Json
             case 'contacts':
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
                 $lists = $backend->getListsByOwner($owner);
+			//	$lists = $backend->getNewListsByOwner($owner);
+				
+			//	$lists = array_merge($lists, $newlists);
+				
                 foreach($lists as $listObject) {
                     $treeNode = new Egwbase_Ext_Treenode(
                         'Addressbook',
