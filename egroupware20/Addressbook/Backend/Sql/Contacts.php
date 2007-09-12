@@ -13,6 +13,7 @@
 class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
 {
     protected $_name = 'egw_addressbook';
+    protected $_owner = 'contact_owner';
     
     /**
      * fetch all entries matching where parameter.
@@ -30,7 +31,7 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
             throw new Exception('$_dir can be only ASC or DESC');
         }
         
-        $result = parent::fetchAll($where, "$_order $_dir", $_count, $_offset);
+        $result = parent::fetchAll($_where, "$_order $_dir", $_count, $_offset);
         
         return $result;
     }
