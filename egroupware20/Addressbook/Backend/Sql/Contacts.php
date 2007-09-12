@@ -100,12 +100,12 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
      * @param array $_editACL edit ACL; update row only if owner is in in_array; can be NULL to disable ACL check
      * @return unknown
      */
-    public function update(array $_data, $_where, $_editACL)
-    {
-        $where = $this->getACLStatement($_where, $_editACL);
-        
-        return parent::update($_data, $where);
-    }
+//    public function update(array $_data, $_where, $_editACL)
+//    {
+//        $where = $this->getACLStatement($_where, $_editACL);
+//        
+//        return parent::update($_data, $where);
+//    }
         
     /**
      * get total count of rows matching acl

@@ -40,15 +40,15 @@ class Addressbook_Json
      * @param int $_contactID
      * @return array
      */
-    public function readAddress($_contactID)
-    {
-        $addresses = new Addressbook_Addresses();
-        if($rows = $addresses->find($_contactID)) {
-            $result['results'] = $rows->toArray();
-        }
-        
-        return $result;
-    }
+//    public function readAddress($_contactID)
+//    {
+//        $addresses = new Addressbook_Addresses();
+//        if($rows = $addresses->find($_contactID)) {
+//            $result['results'] = $rows->toArray();
+//        }
+//        
+//        return $result;
+//    }
 	
     /**
      * save one contact
@@ -58,58 +58,46 @@ class Addressbook_Json
      * @param int $_contactID
      * @return array
      */
-    public function saveAddress($_contactID = NULL)
+    public function saveAddress($_contactId, $_contactOwner)
     {
-        $input = new Zend_Filter_Input(Addressbook_Addresses::getFilter(), Addressbook_Addresses::getValidator(), $_POST);
-        
-        if ($input->isValid()) {
-            $address = new Addressbook_Addresses();
-            
-            $data = $input->getUnescaped();
-            if(isset($data['contact_bday'])) {
-                $locale = Zend_Registry::get('locale');
-                $dateFormat = $locale->getTranslationList('Dateformat');
-                // convert bday back to yyyy-mm-dd
-                try {
-                    $date = new Zend_Date($data['contact_bday'], $dateFormat['long'], 'en');
-                    $data['contact_bday'] = $date->toString('yyyy-MM-dd');
-                } catch (Exception $e) {
-                    unset($data['contact_bday']);
-                }
+        // convert birthday back to yyyy-mm-dd
+    	if(isset($_POST['contact_bday'])) {
+        	$locale = Zend_Registry::get('locale');
+            $dateFormat = $locale->getTranslationList('Dateformat');
+            try {
+            	$date = new Zend_Date($_POST['contact_bday'], $dateFormat['long'], 'en');
+                $_POST['contact_bday'] = $date->toString('yyyy-MM-dd');
+            } catch (Exception $e) {
+            	unset($_POST['contact_bday']);
             }
-            
-            if($_contactID > 0) {
-                try {
-                    $where = $address->getAdapter()->quoteInto('contact_id = ?', (int)$_contactID);
-                    $address->update($data, $where);
-                    $result = array('success'           => true,
-                                    'welcomeMessage'    => 'Entry updated');
-                } catch (Exception $e) {
-                    $result = array('success'           => false,
-                                    'errorMessage'      => $e->getMessage());
-                }
-            } else {
-                try {
-                    $address->insert($data);
-                    $result = array('success'           => true,
-                                    'welcomeMessage'    => 'Entry saved');
-                } catch (Exception $e) {
-                    $result = array('success'           => false,
-                                    'errorMessage'      => $e->getMessage());
-                }
-            }
-        } else {
-            foreach($input->getMessages() as $fieldName => $errorMessages) {
-                $errors[] = array('id'  => $fieldName,
-                                  'msg' => $errorMessages[0]);
-            }
-            
+        }
+    		
+    	try {
+            $contact = new Addressbook_Contact();
+            $contact->setFromUserData($_POST);
+    	} catch (Exception $e) {
+    		// invalid data in some fields sent from client
             $result = array('success'           => false,
-                            'errors'            => $errors,
+                            'errors'            => $contact->getValidationErrors(),
                             'errorMessage'      => 'filter NOT ok');
+                            
+            return $result;
+    	}
+            
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+    	$contactId = ($_contactId > 0 ? $_contactId : NULL);
+    	
+        try {
+        	$backend->saveContact($_contactOwner, $contact, $contactId);
+            $result = array('success'           => true,
+                            'welcomeMessage'    => 'Entry updated');
+        } catch (Exception $e) {
+        	$result = array('success'           => false,
+        					'errorMessage'      => $e->getMessage());
         }
         
-        return $result;
+    	return $result;
+    	
     }
     
     /**

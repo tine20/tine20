@@ -19,7 +19,7 @@ interface Addressbook_Backend_Interface
      */
     public function deleteContactsById(array $contacts);
     
-    public function getContactsById(array $contacts);
+    public function getContactById($_contactId);
     
     /**
      * get list of personal contacts

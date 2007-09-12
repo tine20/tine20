@@ -13,7 +13,7 @@
 class Addressbook_Backend_Sql_Lists extends Zend_Db_Table_Abstract
 {
     protected $_name = 'egw_addressbook_lists';
-    protected $_owner = 'list_owner';
+//    protected $_owner = 'list_owner';
     
     private static $instance = NULL;
     
@@ -26,15 +26,15 @@ class Addressbook_Backend_Sql_Lists extends Zend_Db_Table_Abstract
         return self::$instance;
     }
 
-    public function getPersonalLists()
-    {
-        $currentAccount = Zend_Registry::get('currentAccount');
-        
-        $where = $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
-        
-        $result = parent::fetchAll($where, "list_name ASC");
-        
-        return $result;
-    }
+//    public function getPersonalLists()
+//    {
+//        $currentAccount = Zend_Registry::get('currentAccount');
+//        
+//        $where = $this->getAdapter()->quoteInto($this->_owner . ' = ?', $currentAccount->account_id);
+//        
+//        $result = parent::fetchAll($where, "list_name ASC");
+//        
+//        return $result;
+//    }
 
 }

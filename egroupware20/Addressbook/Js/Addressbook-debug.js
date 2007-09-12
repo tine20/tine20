@@ -647,6 +647,11 @@ Egw.Addressbook = function() {
             fields: ['shortName', 'translatedName'],
             remoteSort: false
         });
+        
+        var ds_addressbooks = new Ext.data.SimpleStore({
+            fields: ['id', 'addressbooks'],
+            data: formData.config.addressbooks
+        }); 
 
         // add a div, which will bneehe parent element for the grid
         var contentTag = Ext.Element.get('content');
@@ -721,6 +726,17 @@ Egw.Addressbook = function() {
             ])
         });
         
+        addressedit.on('beforeaction',function(_form, _action) {
+            _form.baseParams = {};
+            _form.baseParams._contactOwner = _form.getValues().contact_owner;
+            if(formData.values && formData.values.contact_id) {
+                _form.baseParams._contactID = formData.values.contact_id;
+            } else {
+                _form.baseParams._contactID = 0;
+            }
+            console.log(_form.baseParams);
+        });
+        
         addressedit.fieldset({legend:'Contact information'});
         
         addressedit.column(
@@ -733,7 +749,21 @@ Egw.Addressbook = function() {
         addressedit.column(
             {width:'33%', labelWidth:90, labelSeparator:''},
             new Ext.form.TextField({fieldLabel:'Prefix', name:'n_prefix', width:175}),
-            new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175})
+            new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175}),
+            new Ext.form.ComboBox({
+                fieldLabel: 'Addressbook',
+                name: 'contact_owner',
+                hiddenName:'contact_owner',
+                store: ds_addressbooks,
+                displayField:'addressbooks',
+                valueField:'id',
+                typeAhead: true,
+                mode: 'remote',
+                triggerAction: 'all',
+                emptyText:'Select a addressbook...',
+                selectOnFocus:true,
+                width:175
+            })
         );
 /*        
         addressedit.column(
@@ -1126,12 +1156,6 @@ Egw.Addressbook = function() {
             tooltip: 'save this contact and close window',
             onClick: function (){
                 if (listedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData._contactID = formData.values.contact_id;
-                    } else {
-                        additionalData._contactID = 0;
-                    }
                     
                     listedit.submit({
                         waitTitle:'Please wait!',
