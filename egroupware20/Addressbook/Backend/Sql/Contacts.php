@@ -13,49 +13,6 @@
 class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
 {
     protected $_name = 'egw_addressbook';
-    protected $_owner = 'contact_owner';
-    
-    /**
-     * create sql statement to filter by acl; handles emtpy where string and empty acl 
-     *
-     * @param string $_where where filter
-     * @param array $_acl list of acl to match owner against; can be NULL
-     * @return string sql where filter
-     */
-    protected function getACLStatement($_where, $_acl)
-    {
-        if(isset($this->_owner) && is_array($_acl)) {
-            if($_where !== NULL) {
-                $where = '(' . $_where . ') AND ';
-            }
-            $where .=  $this->getAdapter()->quoteInto($this->_owner . ' IN (?)', $_acl);
-        } else {
-            $where = $_where;
-        }
-        
-        return $where;
-    }
-    
-    /**
-     * delete a list of rows(identified by primary key)
-     *
-     * @param array $_key primary key of the row to be deleted
-     * @param array $_deleteACL delete ACL; delete rows only if owner is in in_array; can be NULL to disable ACL check
-     * @return unknown
-     */
-    public function delete(array $_key, $_deleteACL = NULL)
-    {
-        //$currentAccount = Zend_Registry::get('currentAccount');
-        
-        $deleteSql = $this->getAdapter()->quoteInto($this->_primary[1] . ' IN (?)', $_key); 
-        $where = $this->getACLStatement($deleteSql, $_deleteACL); 
-
-        //error_log($where);
-        
-        $result = parent::delete($where);
-        
-        return $result;
-    }
     
     /**
      * fetch all entries matching where parameter.
@@ -72,41 +29,12 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
         if($_dir !== NULL && ($_dir != 'ASC' && $_dir != 'DESC')) {
             throw new Exception('$_dir can be only ASC or DESC');
         }
-        $where = $this->getACLStatement($_where, $_readACL);
         
         $result = parent::fetchAll($where, "$_order $_dir", $_count, $_offset);
         
         return $result;
     }
     
-    /**
-     * find row identified by primary key
-     *
-     * @param string $_key value of the primary key
-     * @param array $_readACL read ACL; return row only if owner is in in_array; can be NULL to disable ACL check
-     * @return unknown
-     */
-    public function find($_key, $_readACL)
-    {
-        $where = $this->getAdapter()->quoteInto($this->_primary[1] . ' = ?', $_key);
-        return parent::fetchAll($where, NULL, NULL, NULL, $_readACL);
-    }
-    
-    /**
-     * update row identified by primary key
-     *
-     * @param array $_data the row data
-     * @param string $_where update filter
-     * @param array $_editACL edit ACL; update row only if owner is in in_array; can be NULL to disable ACL check
-     * @return unknown
-     */
-//    public function update(array $_data, $_where, $_editACL)
-//    {
-//        $where = $this->getACLStatement($_where, $_editACL);
-//        
-//        return parent::update($_data, $where);
-//    }
-        
     /**
      * get total count of rows matching acl
      *
