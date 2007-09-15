@@ -47,17 +47,17 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 	/**
 	 * add or updates a contact
 	 *
+	 * @param int $_contactOwner the owner of the addressbook entry
 	 * @param Addressbook_Contact $_contactData the contactdata
-	 * @param int $_contactId
+	 * @param int $_contactId the contact to update, if NULL the contact gets added
 	 * @todo check acl when adding contact
 	 * @return unknown
 	 */
 	public function saveContact($_contactOwner, Addressbook_Contact $_contactData, $_contactId = NULL)
 	{
-		unset($_contactData->contact_id);
-		
 		$contactData = $_contactData->toArray();
 		$contactData['contact_owner'] = $_contactOwner;
+		$contactData['contact_tid'] = 'n';
 		
 		if($_contactId === NULL) {
 			$result = $this->contactsTable->insert($contactData);
@@ -77,7 +77,41 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 		
 		return $result;
 	}
+	
+	/**
+	 * add or updates a list
+	 *
+	 * @param int $_listOwner the owner of the addressbook entry
+	 * @param Addressbook_List $_listData the listdata
+	 * @param int $_listId the list to update, if NULL the list gets added
+	 * @todo check acl when adding list
+	 * @return unknown
+	 */
+	public function saveList($_listOwner, Addressbook_List $_listData, $_listId = NULL)
+	{
+		$listData = $_listData->toArray();
+		$listData['contact_owner'] = $_listOwner;
+		$listData['contact_tid'] = 'l';
 		
+		if($_listId === NULL) {
+			$result = $this->contactsTable->insert($listData);
+		} else {
+			$currentAccount = Zend_Registry::get('currentAccount');
+        
+			$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::EDIT);
+        
+			// update the requested contact_id only if the contact_owner matches the current users acl
+			$where  = array(
+				$this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_listId),
+				$this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+			);
+        		
+			$result = $this->contactsTable->update($listData, $where);
+		}
+		
+		return $result;
+	}
+	
     /**
      * delete contacts identified by contact id
      *
