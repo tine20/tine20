@@ -133,12 +133,27 @@ class Egwbase_Acl
     }
     
     /**
+     * return the user/groups who granted $accountId the $requiredRight for given $appName
+     *
+     * @param int $accountId the accountid of the user
+     * @param string $appName the name of the application to return the rights for
+     * @param int $requiredRight which rights needs to be set, to get the group returned
+     * @param int $grantType which type of grants to return (Egwbase_Acl::ANY_GRANTS, Egwbase_Acl::GROUP_GRANTS or Egwbase_Acl::ACCOUNT_GRANTS)
+     * @return array the grants
+     */
+    public function getGrantors($accountId, $appName, $requiredRight, $grantType = Egwbase_Acl::ANY_GRANTS)
+    {
+    	$result = $this->getGrants($accountId, $appName, $requiredRight, $grantType);
+    	
+    	return array_keys($result);
+	}
+    /**
      * get the grants for the currently set accountId for a spefic application
      *
      * @param int $accountId the accountid of the user
      * @param string $appName the name of the application to return the rights for
      * @param int $requiredRight which rights needs to be set, to get the group returned
-     * @param int $grantType which type of grants to return (Egwbase_Acl::ANY_GRANTS, Egwbase_Acl::GROUP_GRANTS, Egwbase_Acl::ACCOUNT_GRANTS)
+     * @param int $grantType which type of grants to return (Egwbase_Acl::ANY_GRANTS, Egwbase_Acl::GROUP_GRANTS or Egwbase_Acl::ACCOUNT_GRANTS)
      * @return array the grants
      */
     public function getGrants($accountId, $appName, $requiredRight, $grantType = Egwbase_Acl::ANY_GRANTS)

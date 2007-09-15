@@ -89,10 +89,10 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     $currentAccount = Zend_Registry::get('currentAccount');
     $egwbaseAcl = Egwbase_Acl::getInstance();
     
-    $acl = $egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
+    $acl = $egwbaseAcl->getGrantors($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
     
-    foreach($acl as $key => $value) {
-    	$view->formData['config']['addressbooks'][] = array($key, $key);
+    foreach($acl as $value) {
+    	$view->formData['config']['addressbooks'][] = array($value, $value);
     }
         
     $addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
