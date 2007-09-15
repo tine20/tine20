@@ -50,12 +50,13 @@ class Addressbook_Json
 //        return $result;
 //    }
 	
-  /**
+  	/**
      * save one contact
      * 
-     * if $_contactID is NULL the contact gets added, otherwise it gets updated
+     * if $_contactId is 0 the contact gets added, otherwise it gets updated
      *
-     * @param int $_contactID
+     * @param int $_contactId the id of the contact to update, set to 0 for new contacts
+     * @param int $_contactOwner the id the contact owner
      * @return array
      */
     public function saveAddress($_contactId, $_contactOwner)
@@ -71,15 +72,9 @@ class Addressbook_Json
             	unset($_POST['contact_bday']);
             }
         }
-		
-		// set correct contact type for lists
-		if($_POST['_addressType'] == "l") {
-			$_POST['contact_tid'] = "l";
-		}
-		
-		
-    	try {
-            $contact = new Addressbook_Contact();
+        
+        $contact = new Addressbook_Contact();
+        try {
             $contact->setFromUserData($_POST);
     	} catch (Exception $e) {
     		// invalid data in some fields sent from client
@@ -104,6 +99,49 @@ class Addressbook_Json
         
     	return $result;
     	
+    }
+    
+  	/**
+     * save one list
+     * 
+     * if $_listID is NULL the contact gets added, otherwise it gets updated
+     *
+     * @param int $_listId the id of the list to update, set to 0 for new lists
+     * @param int $_listOwner the id the list owner
+     * @return array
+     */
+    public function saveList($_listId, $_listOwner)
+    {
+		// set correct contact type for lists
+		if($_POST['_addressType'] == "l") {
+			$_POST['contact_tid'] = "l";
+		}
+		
+        $list = new Addressbook_List();
+		try {
+            $list->setFromUserData($_POST);
+    	} catch (Exception $e) {
+    		// invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $list->getValidationErrors(),
+                            'errorMessage'      => 'filter NOT ok');
+                            
+            return $result;
+    	}
+            
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+    	$listId = ($_listId > 0 ? $_listId : NULL);
+    	
+        try {
+        	$backend->saveList($_listOwner, $list, $listId);
+            $result = array('success'           => true,
+                            'welcomeMessage'    => 'Entry updated');
+        } catch (Exception $e) {
+        	$result = array('success'           => false,
+        					'errorMessage'      => $e->getMessage());
+        }
+        
+    	return $result;
     }
     
     /**
