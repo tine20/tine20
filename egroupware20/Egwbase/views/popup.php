@@ -31,7 +31,8 @@
 <body>
 <div id ="container">
 <div id="header" class="x-layout-inactive-content" style="padding:0px;"></div>
-<div id="content" class="x-layout-inactive-content" style="padding:3px; bbackground:#EEEEEE;"></div>
+<div id="content" class="x-layout-inactive-content" style="padding:3px;"></div>
+<div id="south" class="x-layout-inactive-content" style="padding:3px;"></div>
 </div> 
 </body>
 </html>
