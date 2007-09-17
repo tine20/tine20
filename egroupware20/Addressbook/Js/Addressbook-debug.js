@@ -154,6 +154,7 @@ Egw.Addressbook = function() {
         	   displayLists:       filterListsButton.pressed
             });
         });
+        
 
         var cm = new Ext.grid.ColumnModel([{
                 resizable: true, id: 'contact_id', header: 'Id', dataIndex: 'contact_id', width: 30
@@ -558,187 +559,6 @@ Egw.Addressbook = function() {
         Ext.MessageBox.alert('Export', 'Not yet implemented.');
     }
 	
-	
-    var _displayListDialog = function() {
-     Ext.QuickTips.init();
-
-        // turn on validation errors beside the field globally
-        Ext.form.Field.prototype.msgTarget = 'side';
-		
-        var layout = new Ext.BorderLayout(document.body, {
-            north: {split:false, initialSize:28},
-            center: {autoScroll: true}
-        });
-        layout.beginUpdate();
-        layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
-        layout.add('center', new Ext.ContentPanel('content'));
-        layout.endUpdate();
-
-        var disableButtons = true;
-        if(formData.values) {
-            disableButtons = false;
-        }		
-        var tb = new Ext.Toolbar('header');
-        tb.add({
-            id: 'savebtn',
-            cls:'x-btn-text-icon',
-            text: 'Save and Close',
-            icon:'images/oxygen/22x22/actions/document-save.png',
-            tooltip: 'save this list and close window',
-            onClick: function (){
-                if (listedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData._contactID = formData.values.contact_id;
-                    } else {
-                        additionalData._contactID = 0;
-                    }
-                    
-                    listedit.submit({
-                        waitTitle:'Please wait!',
-                        waitMsg:'saving contact...',
-                        params:additionalData,
-                        success:function(form, action, o) {
-                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.EGWNameSpace.Addressbook.reload();
-                            window.setTimeout("window.close()", 400);
-                        },
-                        failure:function(form, action) {
-                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-                }
-            }
-        },{
-            id: 'savebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/save-all.png',
-            tooltip: 'apply changes for this list',
-            onClick: function (){
-                if (listedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData._contactID = formData.values.contact_id;
-                    } else {
-                        additionalData._contactID = 0;
-                    }
-                    
-                    listedit.submit({
-                        waitTitle:'Please wait!',
-                        waitMsg:'saving contact...',
-                        params:additionalData,
-                        success:function(form, action, o) {
-                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.EGWNameSpace.Addressbook.reload();
-                        },
-                        failure:function(form, action) {
-                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-                }
-            }
-        },{
-            id: 'deletebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/edit-delete.png',
-            tooltip: 'delete this contact',
-            disabled: disableButtons,
-            handler: function(_btn, _event) {
-                if(formData.values.contact_id) {
-                    Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
-                    _deleteContact([formData.values.contact_id]);
-                    _reloadMainWindow(true);
-                }
-            }
-        },{
-            id: 'exportbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/file-export.png',
-            tooltip: 'export this contact',
-            disabled: disableButtons,
-            handler: _exportContact
-        });
-		
-        var ds_addressbooks = new Ext.data.SimpleStore({
-            fields: ['id', 'addressbooks'],
-            data: formData.config.addressbooks
-        });
-
-        // add a div, which will bneehe parent element for the grid
-        var contentTag = Ext.Element.get('content');
-        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv', class:'x-box-mc'});
-        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv'});
-        //outerDivTag.addClass('x-box-mc');
-        //var formDivTag = outerDivTag.createChild({tag:'div', id:'formdiv'});
-        
-        var listedit = new Ext.form.Form({
-            labelWidth: 75, // label settings here cascade unless overridden
-            url:'index.php?method=Addressbook.saveAddress',
-            reader : new Ext.data.JsonReader({root: 'results'}, [
-                {name: 'contact_id'},
-                {name: 'contact_tid'},
-				{name: 'contact_owner'},				
-				{name: 'n_given'},
-				{name: 'n_middle'},
-				{name: 'n_fileas'},
-				{name: 'contact_created'},
-				{name: 'contact_creator'},
-				{name: 'account_id'}
-            ])
-        });
-		
-		listedit.on('beforeaction',function(_form, _action) {
-            _form.baseParams = {};
-            _form.baseParams._contactOwner = _form.getValues().contact_owner;
-			_form.baseParams._addressType = 'l';
-            if(formData.values && formData.values.contact_id) {
-                _form.baseParams._contactID = formData.values.contact_id;
-            } else {
-                _form.baseParams._contactID = 0;
-            }
-            console.log(_form.baseParams);
-        });
-        
-        listedit.fieldset({legend:'List information'});
-        
-        listedit.column(
-            {width:'50%', labelWidth:90, labelSeparator:''},
-			 new Ext.form.ComboBox({
-                fieldLabel: 'Addressbook',
-                name: 'contact_owner',
-                hiddenName:'contact_owner',
-                store: ds_addressbooks,
-                displayField:'addressbooks',
-                valueField:'id',
-                allowBlank: false,
-                editable: false,
-                mode: 'remote',
-                triggerAction: 'all',
-                emptyText:'Select a addressbook...',
-                selectOnFocus:true,
-                width:175
-            }),
-            new Ext.form.TextField({fieldLabel:'List Name', name:'n_family', width:175}),
-            new Ext.form.TextField({fieldLabel:'List Nickname', name:'n_given', width:175}),
-			new Ext.form.TextField({fieldLabel:'List Description', name:'org_name', width:175})
-        );
-/*
-        listedit.column(
-            {width:'50%', labelWidth:90, labelSeparator:''},
-            new Ext.form.TextArea({fieldLabel:'List Members', name:'n_given', width:175})
-            
-        );		
-*/		
-        listedit.end();
-		
-		listedit.render('content');
-        
-        return listedit;
-	}
 	
     var _displayContactDialog = function() {
         Ext.QuickTips.init();
@@ -1370,13 +1190,270 @@ Egw.Addressbook = function() {
             }
         },
 		
-		displayListDialog: function() {
-            var dialog = _displayListDialog();
-            if(formData.values) {
-                _setContactDialogValues(dialog, formData.values);
-            }
-        }
     }
 	
 }(); // end of application
+
+
+Egw.Addressbook.ListEditDialog = function() {
+    var _displayListDialog = function() {
+        Ext.QuickTips.init();
+
+        // turn on validation errors beside the field globally
+        Ext.form.Field.prototype.msgTarget = 'side';
+
+        // add a div, which will beneth parent element for the grid
+        var contentTag = Ext.Element.get('south');
+        var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
+        
+        var cm_listMembers = new Ext.grid.ColumnModel([{
+                resizable: true, id: 'contact_id', header: 'Id', dataIndex: 'contact_id', width: 30
+            },{
+                resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
+            },{
+                resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given'
+            },{
+                resizable: true, header: 'Full name', dataIndex: 'n_fn', hidden: true
+            },{
+                resizable: true, header: 'Organisation', dataIndex: 'org_name'
+            },{
+                resizable: true, header: 'Unit', dataIndex: 'org_unit'
+        }]);
+        
+        cm_listMembers.defaultSortable = true; // by default columns are sortable
+        
+
+        var ds_listMembers = new Ext.data.SimpleStore({
+            fields: ['contact_id', 'n_family'],
+            data: [
+                ['1', 'Kneschke'],
+                ['2', 'Hemmerling']
+            ]
+        });
+            
+        ds_listMembers.load();
+
+        var grid_listMembers = new Ext.grid.Grid(outerDivTag, {
+            ds: ds_listMembers,
+            cm: cm_listMembers,
+            autoSizeColumns: false,
+            selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
+            enableColLock:false,
+            loadMask: true,
+            autoExpandColumn: 'n_family'
+        });
+
+        grid_listMembers.render();
+        
+        
+        var layout = new Ext.BorderLayout(document.body, {
+            north: {split:false, initialSize:28},
+            center: {autoScroll: true},
+            south: {split:false, initialSize:128}
+        });
+        
+        layout.beginUpdate();
+        layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
+        layout.add('center', new Ext.ContentPanel('content'));
+        layout.add('south', new Ext.GridPanel(grid_listMembers));
+        layout.endUpdate();
+
+        var disableButtons = true;
+        if(formData.values) {
+            disableButtons = false;
+        }       
+        var tb = new Ext.Toolbar('header');
+        tb.add({
+            id: 'savebtn',
+            cls:'x-btn-text-icon',
+            text: 'Save and Close',
+            icon:'images/oxygen/22x22/actions/document-save.png',
+            tooltip: 'save this list and close window',
+            onClick: function (){
+                if (listedit.isValid()) {
+                    var additionalData = {};
+                    if(formData.values) {
+                        additionalData._contactID = formData.values.contact_id;
+                    } else {
+                        additionalData._contactID = 0;
+                    }
+                    
+                    listedit.submit({
+                        waitTitle:'Please wait!',
+                        waitMsg:'saving contact...',
+                        params:additionalData,
+                        success:function(form, action, o) {
+                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
+                            window.opener.EGWNameSpace.Addressbook.reload();
+                            window.setTimeout("window.close()", 400);
+                        },
+                        failure:function(form, action) {
+                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
+                        }
+                    });
+                } else {
+                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                }
+            }
+        },{
+            id: 'savebtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/save-all.png',
+            tooltip: 'apply changes for this list',
+            onClick: function (){
+                if (listedit.isValid()) {
+                    var additionalData = {};
+                    if(formData.values) {
+                        additionalData._contactID = formData.values.contact_id;
+                    } else {
+                        additionalData._contactID = 0;
+                    }
+                    
+                    listedit.submit({
+                        waitTitle:'Please wait!',
+                        waitMsg:'saving contact...',
+                        params:additionalData,
+                        success:function(form, action, o) {
+                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
+                            window.opener.EGWNameSpace.Addressbook.reload();
+                        },
+                        failure:function(form, action) {
+                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
+                        }
+                    });
+                } else {
+                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+                }
+            }
+        },{
+            id: 'deletebtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/edit-delete.png',
+            tooltip: 'delete this contact',
+            disabled: disableButtons,
+            handler: function(_btn, _event) {
+                if(formData.values.contact_id) {
+                    Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
+                    _deleteContact([formData.values.contact_id]);
+                    _reloadMainWindow(true);
+                }
+            }
+        },{
+            id: 'exportbtn',
+            cls:'x-btn-icon-22',
+            icon:'images/oxygen/22x22/actions/file-export.png',
+            tooltip: 'export this contact',
+            disabled: disableButtons,
+            //handler: _exportContact
+        });
+        
+        var ds_addressbooks = new Ext.data.SimpleStore({
+            fields: ['id', 'addressbooks'],
+            data: formData.config.addressbooks
+        });
+
+        // add a div, which will bneehe parent element for the grid
+        var contentTag = Ext.Element.get('content');
+        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv', class:'x-box-mc'});
+        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv'});
+        //outerDivTag.addClass('x-box-mc');
+        //var formDivTag = outerDivTag.createChild({tag:'div', id:'formdiv'});
+        
+        var listedit = new Ext.form.Form({
+            labelWidth: 75, // label settings here cascade unless overridden
+            url:'index.php?method=Addressbook.saveAddress',
+            reader : new Ext.data.JsonReader({root: 'results'}, [
+                {name: 'contact_id'},
+                {name: 'contact_tid'},
+                {name: 'contact_owner'},                
+                {name: 'n_given'},
+                {name: 'n_middle'},
+                {name: 'n_fileas'},
+                {name: 'contact_created'},
+                {name: 'contact_creator'},
+                {name: 'account_id'}
+            ])
+        });
+        
+        listedit.on('beforeaction',function(_form, _action) {
+            _form.baseParams = {};
+            _form.baseParams._contactOwner = _form.getValues().contact_owner;
+            _form.baseParams._addressType = 'l';
+            if(formData.values && formData.values.contact_id) {
+                _form.baseParams._contactID = formData.values.contact_id;
+            } else {
+                _form.baseParams._contactID = 0;
+            }
+            console.log(_form.baseParams);
+        });
+        
+        listedit.fieldset({legend:'List information'});
+        
+        listedit.column(
+            {width:'100%', labelWidth:90, labelSeparator:''},
+             new Ext.form.ComboBox({
+                fieldLabel: 'Addressbook',
+                name: 'contact_owner',
+                hiddenName:'contact_owner',
+                store: ds_addressbooks,
+                displayField:'addressbooks',
+                valueField:'id',
+                allowBlank: false,
+                editable: false,
+                mode: 'remote',
+                triggerAction: 'all',
+                emptyText:'Select a addressbook...',
+                selectOnFocus:true,
+                width:300
+            }),
+            new Ext.form.TextField({fieldLabel:'List Name', name:'n_family', width:300}),
+            new Ext.form.TextField({fieldLabel:'List Nickname', name:'n_given', width:300}),
+            new Ext.form.TextField({fieldLabel:'List Description', name:'org_name', width:300})
+        );
+
+        // fieldset end
+        listedit.end();
+        
+        listedit.fieldset({legend:'List members'});
+        
+        listedit.column(
+            {width:'100%', labelWidth:90, labelSeparator:''},
+             new Ext.form.ComboBox({
+                fieldLabel: 'add member',
+                name: 'new_member',
+                hiddenName:'new_member',
+                store: ds_addressbooks,
+                displayField:'n_fn',
+                valueField:'id',
+                mode: 'remote',
+                emptyText:'enter new list member...',
+                selectOnFocus:true,
+                hideTrigger:true,
+                width:300
+            }),
+            new Ext.form.TextArea({fieldLabel:'List Members', name:'n_given', width:300})
+            
+        );      
+        
+        // fieldset end
+        listedit.end();
+
+        listedit.render('content');
+        
+        return listedit;
+    }
+    
+
+    // public functions and variables
+    return {
+        display: function() {
+            var dialogDialog = _displayListDialog();
+            if(formData.values) {
+                _setContactDialogValues(dialog, formData.values);
+            }
+        },
+        displayDialog: _displayListDialog
+    }
+    
+}(); // end of ListEditDialog application
 
