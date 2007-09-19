@@ -368,11 +368,20 @@ Egw.Addressbook = function() {
 		                           allowBlank:false
 							});
 
+		textF1.on('specialkey', function(_this, _e) {        
+                            if(_e.getKey() == _e.ENTER || _e.getKey() == e.RETURN ){
+                                 contactDS.removeAll();
+                                 contactDS.load({params:{
+                                                    start:0, 
+                                                    limit:50,
+                                                    filter1:textF1.getValue()
+                                  }});         
+                             }
+        });
+		
+		generalToolbar.add(new Ext.Toolbar.Fill());
 
-
-       generalToolbar.addField(	
-					textF1
-							);
+       generalToolbar.addField(textF1);
 	   
        generalToolbar.add(	{
 								id: 'clearsearchbtn',
@@ -724,7 +733,7 @@ Egw.Addressbook = function() {
                         success:function(form, action, o) {
                             //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
                             window.opener.EGWNameSpace.Addressbook.reload();
-                            window.setTimeout("window.close()", 400);
+                            //window.setTimeout("window.close()", 400);
                         },
                         failure:function(form, action) {
                             //Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -1073,7 +1082,7 @@ Egw.Addressbook = function() {
                         success:function(form, action, o) {
                             //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
                             window.opener.EGWNameSpace.Addressbook.reload();
-                            window.setTimeout("window.close()", 400);
+                            //window.setTimeout("window.close()", 400);
                         },
                         failure:function(form, action) {
                             //Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -1344,7 +1353,7 @@ Egw.Addressbook = function() {
                     width:175
                 })
             );
-            
+            			
             addressedit.column(
                 {width:'33%', labelWidth:90, labelSeparator:''},
                 new Ext.form.DateField({fieldLabel:'Birthday', name:'contact_bday', format:formData.config.dateFormat, altFormats:'Y-m-d', width:175}),
