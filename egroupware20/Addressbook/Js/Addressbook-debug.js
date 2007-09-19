@@ -39,361 +39,373 @@ Egw.Addressbook = function() {
     }
    
     /**
-     * creates the address grid
-     *
-     */
-    var _showAddressGrid = function(_layout, _node) {
+    * creates the address grid
+    *
+    */
+   var _showAddressGrid = function(_layout, _node) {
 
-        var center = _layout.getRegion('center', false);
+       var center = _layout.getRegion('center', false);
 
-        // remove the first contentpanel from center region
-        center.remove(0);
-		
-        // add a div, which will beneth parent element for the grid
-        var contentTag = Ext.Element.get('content');
-        var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
+       // remove the first contentpanel from center region
+       center.remove(0);
+        
+       // add a div, which will beneth parent element for the grid
+       var contentTag = Ext.Element.get('content');
+       var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
 
-        switch(_node.attributes.datatype) {
-            case 'list':
-                var options = {
-                    listId: _node.attributes.listId
-                };
+       switch(_node.attributes.datatype) {
+           case 'list':
+               var options = {
+                   listId: _node.attributes.listId
+               };
+               
+               break;
+           
+           case 'contacts':
+               var options = {
+                   displayContacts: true,
+                   displayLists:    true
+               };
                 
-                break;
-            
-            case 'contacts':
-                var options = {
-                    displayContacts: true,
-                    displayLists:    true
-                };
-				
-                break;
-				
-			case 'otherpeople':
-				var options = {
-	                    displayContacts: true,
-	                    displayLists:    true,
-	            };
-				
-				break;
-
-            case 'sharedaddressbooks':
+               break;
+                
+            case 'otherpeople':
                 var options = {
                         displayContacts: true,
                         displayLists:    true,
                 };
                 
                 break;
-        }
 
-        // create the Data Store
-        contactDS = new Ext.data.JsonStore({
-            url: 'index.php',
-            baseParams: {
-            	method:   'Addressbook.getContacts', 
-            	datatype: _node.attributes.datatype,
-                owner:    _node.attributes.owner, 
-            	nodeid:   _node.attributes.id, 
-            	options:  Ext.encode(options),
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'contact_id',
-            fields: [
-                {name: 'contact_id'},
-                {name: 'contact_tid'},
-                {name: 'contact_owner'},
-                {name: 'contact_private'},
-                {name: 'cat_id'},
-                {name: 'n_family'},
-                {name: 'n_given'},
-                {name: 'n_middle'},
-                {name: 'n_prefix'},
-                {name: 'n_suffix'},
-                {name: 'n_fn'},
-                {name: 'n_fileas'},
-                {name: 'contact_bday'},
-                {name: 'org_name'},
-                {name: 'org_unit'},
-                {name: 'contact_title'},
-                {name: 'contact_role'},
-                {name: 'contact_assistent'},
-                {name: 'contact_room'},
-                {name: 'adr_one_street'},
-                {name: 'adr_one_street2'},
-                {name: 'adr_one_locality'},
-                {name: 'adr_one_region'},
-                {name: 'adr_one_postalcode'},
-                {name: 'adr_one_countryname'},
-                {name: 'contact_label'},
-                {name: 'adr_two_street'},
-                {name: 'adr_two_street2'},
-                {name: 'adr_two_locality'},
-                {name: 'adr_two_region'},
-                {name: 'adr_two_postalcode'},
-                {name: 'adr_two_countryname'},
-                {name: 'tel_work'},
-                {name: 'tel_cell'},
-                {name: 'tel_fax'},
-                {name: 'tel_assistent'},
-                {name: 'tel_car'},
-                {name: 'tel_pager'},
-                {name: 'tel_home'},
-                {name: 'tel_fax_home'},
-                {name: 'tel_cell_private'},
-                {name: 'tel_other'},
-                {name: 'tel_prefer'},
-                {name: 'contact_email'},
-                {name: 'contact_email_home'},
-                {name: 'contact_url'},
-                {name: 'contact_url_home'},
-                {name: 'contact_freebusy_uri'},
-                {name: 'contact_calendar_uri'},
-                {name: 'contact_note'},
-                {name: 'contact_tz'},
-                {name: 'contact_geo'},
-                {name: 'contact_pubkey'},
-                {name: 'contact_created'},
-                {name: 'contact_creator'},
-                {name: 'contact_modified'},
-                {name: 'contact_modifier'},
-                {name: 'contact_jpegphoto'},
-                {name: 'account_id'}
-            ],
-            // turn on remote sorting
-            remoteSort: true
-        });
-		
-        //contactDS.on("beforeload", function() {
-        //  console.log('before load');
-        //});
+           case 'sharedaddressbooks':
+               var options = {
+                       displayContacts: true,
+                       displayLists:    true,
+               };
+               
+               break;
+       }
 
-        contactDS.setDefaultSort('contact_id', 'desc');
-
-        contactDS.load({params:{start:0, limit:50}});
+       // create the Data Store
+       contactDS = new Ext.data.JsonStore({
+           url: 'index.php',
+           baseParams: {
+               method:   'Addressbook.getContacts', 
+               datatype: _node.attributes.datatype,
+               owner:    _node.attributes.owner, 
+               nodeid:   _node.attributes.id, 
+               options:  Ext.encode(options),
+           },
+           root: 'results',
+           totalProperty: 'totalcount',
+           id: 'contact_id',
+           fields: [
+               {name: 'contact_id'},
+               {name: 'contact_tid'},
+               {name: 'contact_owner'},
+               {name: 'contact_private'},
+               {name: 'cat_id'},
+               {name: 'n_family'},
+               {name: 'n_given'},
+               {name: 'n_middle'},
+               {name: 'n_prefix'},
+               {name: 'n_suffix'},
+               {name: 'n_fn'},
+               {name: 'n_fileas'},
+               {name: 'contact_bday'},
+               {name: 'org_name'},
+               {name: 'org_unit'},
+               {name: 'contact_title'},
+               {name: 'contact_role'},
+               {name: 'contact_assistent'},
+               {name: 'contact_room'},
+               {name: 'adr_one_street'},
+               {name: 'adr_one_street2'},
+               {name: 'adr_one_locality'},
+               {name: 'adr_one_region'},
+               {name: 'adr_one_postalcode'},
+               {name: 'adr_one_countryname'},
+               {name: 'contact_label'},
+               {name: 'adr_two_street'},
+               {name: 'adr_two_street2'},
+               {name: 'adr_two_locality'},
+               {name: 'adr_two_region'},
+               {name: 'adr_two_postalcode'},
+               {name: 'adr_two_countryname'},
+               {name: 'tel_work'},
+               {name: 'tel_cell'},
+               {name: 'tel_fax'},
+               {name: 'tel_assistent'},
+               {name: 'tel_car'},
+               {name: 'tel_pager'},
+               {name: 'tel_home'},
+               {name: 'tel_fax_home'},
+               {name: 'tel_cell_private'},
+               {name: 'tel_other'},
+               {name: 'tel_prefer'},
+               {name: 'contact_email'},
+               {name: 'contact_email_home'},
+               {name: 'contact_url'},
+               {name: 'contact_url_home'},
+               {name: 'contact_freebusy_uri'},
+               {name: 'contact_calendar_uri'},
+               {name: 'contact_note'},
+               {name: 'contact_tz'},
+               {name: 'contact_geo'},
+               {name: 'contact_pubkey'},
+               {name: 'contact_created'},
+               {name: 'contact_creator'},
+               {name: 'contact_modified'},
+               {name: 'contact_modifier'},
+               {name: 'contact_jpegphoto'},
+               {name: 'account_id'}
+           ],
+           // turn on remote sorting
+           remoteSort: true
+       });
         
-        contactDS.on('beforeload', function(_loader, _node) {
-            _loader.baseParams.options = Ext.encode({
-        	   displayContacts:    filterContactsButton.pressed,
-        	   displayLists:       filterListsButton.pressed
-            });
-        });
+       //contactDS.on("beforeload", function() {
+       //  console.log('before load');
+       //});
 
-        var cm = new Ext.grid.ColumnModel([{
-                resizable: true, id: 'contact_id', header: 'Id', dataIndex: 'contact_id', width: 30
-            },{
-                resizable: true, id: 'contact_tid', dataIndex: 'contact_tid', width: 30, renderer: _renderContactTid
-            },{
-                resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
-            },{
-                resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given'
-            },{
-                resizable: true, header: 'Middle name', dataIndex: 'n_middle', hidden: true
-            },{
-                resizable: true, id: 'n_prefix', header: 'Prefix', dataIndex: 'n_prefix', hidden: true
-            },{
-                resizable: true, header: 'Suffix', dataIndex: 'n_suffix', hidden: true
-            },{
-                resizable: true, header: 'Full name', dataIndex: 'n_fn', hidden: true
-            },{
-                resizable: true, header: 'Birthday', dataIndex: 'contact_bday', hidden: true
-            },{
-                resizable: true, header: 'Organisation', dataIndex: 'org_name'
-            },{
-                resizable: true, header: 'Unit', dataIndex: 'org_unit'
-            },{
-                resizable: true, header: 'Title', dataIndex: 'contact_title',
-            },{
-                resizable: true, header: 'Role', dataIndex: 'contact_role',
-            },{
-                resizable: true, id: 'addressbook', header: 'addressbook', dataIndex: 'addressbook', hidden: true
-        }]);
-		
-        cm.defaultSortable = true; // by default columns are sortable
+       contactDS.setDefaultSort('contact_id', 'desc');
 
-        contactGrid = new Ext.grid.Grid(outerDivTag, {
-            ds: contactDS,
-            cm: cm,
-            autoSizeColumns: false,
-            selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
-            enableColLock:false,
-            loadMask: true,
-            enableDragDrop:true,
-            ddGroup: 'TreeDD',
-            autoExpandColumn: 'n_given'
-        });
+       contactDS.load({params:{start:0, limit:50}});
+       
+       contactDS.on('beforeload', function(_loader, _node) {
+           _loader.baseParams.options = Ext.encode({
+              displayContacts:    filterContactsButton.pressed,
+              displayLists:       filterListsButton.pressed
+           });
+       });
 
-        contactGrid.render();
+       var cm = new Ext.grid.ColumnModel([{
+               resizable: true, id: 'contact_id', header: 'Id', dataIndex: 'contact_id', width: 30
+           },{
+               resizable: true, id: 'contact_tid', dataIndex: 'contact_tid', width: 30, renderer: _renderContactTid
+           },{
+               resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
+           },{
+               resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given'
+           },{
+               resizable: true, header: 'Middle name', dataIndex: 'n_middle', hidden: true
+           },{
+               resizable: true, id: 'n_prefix', header: 'Prefix', dataIndex: 'n_prefix', hidden: true
+           },{
+               resizable: true, header: 'Suffix', dataIndex: 'n_suffix', hidden: true
+           },{
+               resizable: true, header: 'Full name', dataIndex: 'n_fn', hidden: true
+           },{
+               resizable: true, header: 'Birthday', dataIndex: 'contact_bday', hidden: true
+           },{
+               resizable: true, header: 'Organisation', dataIndex: 'org_name'
+           },{
+               resizable: true, header: 'Unit', dataIndex: 'org_unit'
+           },{
+               resizable: true, header: 'Title', dataIndex: 'contact_title',
+           },{
+               resizable: true, header: 'Role', dataIndex: 'contact_role',
+           },{
+               resizable: true, id: 'addressbook', header: 'addressbook', dataIndex: 'addressbook', hidden: true
+       }]);
         
-        contactGrid.on('rowclick', function(gridP, rowIndexP, eventP) {
-            var rowCount = contactGrid.getSelectionModel().getCount();
-			
-            var btns = pagingHeader.items.map;
-			
-            if(rowCount < 1) {
-                btns.editbtn.disable();
-                btns.deletebtn.disable();
-            } else if(rowCount == 1) {
-                btns.editbtn.enable();
-                btns.deletebtn.enable();
-            } else {
-                btns.editbtn.disable();
-                btns.deletebtn.enable();
-            }
-        });
+       cm.defaultSortable = true; // by default columns are sortable
 
-        contactGrid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
-            var record = gridPar.getDataSource().getAt(rowIndexPar);
-			//console.log('id: ' + record.data.contact_id);
-			if(record.data.contact_tid == 'l')
-			{
-				try {
-	                _openDialog(record.data.contact_id,'list');
-	            } catch(e) {
-	            //	alert(e);
-	            }
-			}
-			else
+       contactGrid = new Ext.grid.Grid(outerDivTag, {
+           ds: contactDS,
+           cm: cm,
+           autoSizeColumns: false,
+           selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
+           enableColLock:false,
+           loadMask: true,
+           enableDragDrop:true,
+           ddGroup: 'TreeDD',
+           autoExpandColumn: 'n_given'
+       });
+
+       contactGrid.render();
+       
+       contactGrid.on('rowclick', function(gridP, rowIndexP, eventP) {
+           var rowCount = contactGrid.getSelectionModel().getCount();
+            
+           var btns = generalToolbar.items.map;
+            
+           if(rowCount < 1) {
+               btns.editbtn.disable();
+               btns.deletebtn.disable();
+           } else if(rowCount == 1) {
+               btns.editbtn.enable();
+               btns.deletebtn.enable();
+           } else {
+               btns.editbtn.disable();
+               btns.deletebtn.enable();
+           }
+       });
+
+       contactGrid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
+           var record = gridPar.getDataSource().getAt(rowIndexPar);
+            //console.log('id: ' + record.data.contact_id);
+            if(record.data.contact_tid == 'l')
             {
-	            try {
-	                _openDialog(record.data.contact_id);
-	            } catch(e) {
-	            	// alert(e);
-	            }
-			}
-        });
-		
-        contactGrid.on('rowcontextmenu', function(grid, rowIndex, eventObject) {
-            eventObject.stopEvent();
-			var record = grid.getDataSource().getAt(rowIndex);
-			if(record.data.contact_tid == 'l') {
-				ctxMenuList.showAt(eventObject.getXY());
-			}
-			else {
-				ctxMenuAddress.showAt(eventObject.getXY());
-			}
-        });
+                try {
+                    _openDialog(record.data.contact_id,'list');
+                } catch(e) {
+                //  alert(e);
+                }
+            }
+            else
+           {
+                try {
+                    _openDialog(record.data.contact_id);
+                } catch(e) {
+                    // alert(e);
+                }
+            }
+       });
         
-        var gridHeader = contactGrid.getView().getHeaderPanel(true);
+       contactGrid.on('rowcontextmenu', function(grid, rowIndex, eventObject) {
+           eventObject.stopEvent();
+            var record = grid.getDataSource().getAt(rowIndex);
+            if(record.data.contact_tid == 'l') {
+                ctxMenuList.showAt(eventObject.getXY());
+            }
+            else {
+                ctxMenuAddress.showAt(eventObject.getXY());
+            }
+       });
+       
 		
-        // add a paging toolbar to the grid's footer
-        var pagingHeader = new Ext.PagingToolbar(gridHeader, contactDS, {
-            pageSize: 50,
-			cls:'x-btn-icon-22',
-            displayInfo: true,
-            displayMsg: 'Displaying contacts {0} - {1} of {2}',
-            emptyMsg: "No contacts to display"
-        });
-		
-		
-     var textF1 =    new Ext.form.TextField({
-                            height: 22,
-                            width:200,
-                            emptyText:'Suchparameter ...', 
-                            allowBlank:false
-                        });
+              
+
+       var gridHeader = contactGrid.getView().getHeaderPanel(true);
         
+	   
+       //adding one more toolbar to grid
+       var generalToolbar = new Ext.Toolbar(gridHeader);
+	   
+	   var pagingHeader = Ext.DomHelper.append(generalToolbar.el,{tag:'div',id:Ext.id()},true);
+       // add a paging toolbar to the grid's footer
+       var pagingToolbar = new Ext.PagingToolbar(pagingHeader, contactDS, {
+           pageSize: 50,
+            cls:'x-btn-icon-22',
+           displayInfo: true,
+           displayMsg: 'Displaying contacts {0} - {1} of {2}',
+           emptyMsg: "No contacts to display"
+       });
+	   
+	   
+	   
+       generalToolbar.addButton({
+           id: 'addbtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/add-user.png',
+           tooltip: 'add new contact',
+           handler: _addBtnHandler
+       });
         
-        var searchButton =  new Ext.Toolbar.Button({
-                                    cls:'x-btn-icon',
-                                    icon:'images/oxygen/22x22/actions/mail-find.png',
-                                    tooltip: 'Suche Adresse/Adressliste',
-                                    disabled: false,
-                                    onClick: function () {
-                                        // contactDS.baseParams.searchParam1 = textF1.getValue();
-                                        contactDS.removeAll();
-                                        contactDS.load({params:{
-                                                            start:0, 
-                                                            limit:50,
-                                                            searchParam1:textF1.getValue()
-                                                        }});    
-                                    }
-                                });
+       generalToolbar.addButton({
+           id: 'addlstbtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/add-users.png',
+           tooltip: 'add new list',
+           handler: _addLstBtnHandler
+       });     
 
-        var clearButton =   new Ext.Toolbar.Button({
-                                    icon:'images/oxygen/22x22/actions/clear-left.png',
-                                    tooltip: 'Lösche bestehende Sucheingabe',
-                                    disabled: false,
-                                    onClick: function () {                                          
-                                            textF1.setValue(''); 
-                                    }
-                                });
-                                
-        //adding one more toolbar to grid
-        var secondHeader = Ext.DomHelper.append(pagingHeader.el,{tag:'div',id:Ext.id()},true);
-        var secondToolbar = new Ext.Toolbar(secondHeader);
-        secondToolbar.addField(textF1);
-        secondToolbar.add(clearButton);
-        secondToolbar.add(searchButton);		
+       generalToolbar.addButton({
+           id: 'editbtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/edit.png',
+           tooltip: 'edit current item',
+           disabled: true,
+           handler: _editBtnHandler
+       });
 
-        pagingHeader.insertButton(0, {
-            id: 'addbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/add-user.png',
-            tooltip: 'add new contact',
-            handler: _addBtnHandler
-        });
-		
-        pagingHeader.insertButton(1, {
-            id: 'addlstbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/add-users.png',
-            tooltip: 'add new list',
-            handler: _addLstBtnHandler
-        });		
+       generalToolbar.addButton({
+           id: 'deletebtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/edit-delete.png',
+           tooltip: 'delete selected items',
+           disabled: true,
+           handler: _deleteBtnHandler
+       });
 
-        pagingHeader.insertButton(2, {
-            id: 'editbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/edit.png',
-            tooltip: 'edit current item',
-            disabled: true,
-            handler: _editBtnHandler
-        });
+       generalToolbar.insertButton(4, new Ext.Toolbar.Separator());
+    
+       filterContactsButton = generalToolbar.addButton({
+           id: 'filtercontactsbtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/user.png',
+           tooltip: 'display contacts',
+           enableToggle: true,
+           pressed: true,
+           handler: _filterUserBtnHandler
+       });
+       
+       filterListsButton = generalToolbar.addButton({
+           id: 'filterlistsbtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/users.png',
+           tooltip: 'display lists',
+           enableToggle: true,
+           pressed: true,
+           handler: _filterListsBtnHandler
+       });
+       
+       generalToolbar.addButton({
+           id: 'exportbtn',
+           cls:'x-btn-icon-22',
+           icon:'images/oxygen/22x22/actions/file-export.png',
+           tooltip: 'export selected contacts',
+           disabled: false,
+           onClick: _exportBtnHandler
+       }); 
 
-        pagingHeader.insertButton(3, {
-            id: 'deletebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/edit-delete.png',
-            tooltip: 'delete selected items',
-            disabled: true,
-            handler: _deleteBtnHandler
-        });
+	var textF1 =	new Ext.form.TextField(
+							{
+		                          height: 22,
+		                          width: 200,
+		                          emptyText:'Suchparameter ...', 
+		                           allowBlank:false
+							});
 
-        pagingHeader.insertButton(4, new Ext.Toolbar.Separator());
-	
-        filterContactsButton = pagingHeader.insertButton(5, {
-            id: 'filtercontactsbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/user.png',
-            tooltip: 'display contacts',
-            enableToggle: true,
-            pressed: true,
-            handler: _filterUserBtnHandler
-        });
+
+
+       generalToolbar.addField(	
+					textF1
+							);
+	   
+       generalToolbar.add(	{
+								id: 'clearsearchbtn',
+								cls:'x-btn-icon-22',
+								icon:'images/oxygen/22x22/actions/clear-left.png',
+								tooltip: 'Lösche bestehende Sucheingabe',
+								disabled: false,
+								onClick: 	function () {                                          
+												textF1.setValue(''); 
+											}
+							});
+							
+       generalToolbar.add(	{
+								id: 'searchbtn',
+								cls:'x-btn-icon-22',	   
+								icon:'images/oxygen/22x22/actions/mail-find.png',
+								tooltip: 'Suche Adresse/Adressliste',
+								disabled: false,
+								onClick: function () {
+										   // contactDS.baseParams.searchParam1 = textF1.getValue();
+										   contactDS.removeAll();
+										   contactDS.load({params:{
+															   start:0, 
+															   limit:50,
+															   searchParam1:textF1.getValue()
+														   }});    
+										}
+							}); 
+	   
+	   
+       center.add(new Ext.GridPanel(contactGrid));
         
-        filterListsButton = pagingHeader.insertButton(6, {
-            id: 'filterlistsbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/users.png',
-            tooltip: 'display lists',
-            enableToggle: true,
-            pressed: true,
-            handler: _filterListsBtnHandler
-        });
-        
-        pagingHeader.insertButton(7, {
-            id: 'exportbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/file-export.png',
-            tooltip: 'export selected contacts',
-            disabled: false,
-            onClick: _exportBtnHandler
-        });
-
-        center.add(new Ext.GridPanel(contactGrid));
-		
-    }
+   }
     
     var _renderContactTid = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
         switch(_data) {
