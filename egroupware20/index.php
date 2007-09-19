@@ -29,6 +29,7 @@ Zend_Registry::set('dbConfig', $options);
 
 date_default_timezone_set('Europe/Berlin');
 
+//$locale = new Zend_Locale('fr_BE');
 $locale = new Zend_Locale();
 Zend_Registry::set('locale', $locale);
 
@@ -86,6 +87,8 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     $list = $locale->getTranslationList('Dateformat');
     $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
     
+	$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'-min.js');
+	
     $currentAccount = Zend_Registry::get('currentAccount');
     $egwbaseAcl = Egwbase_Acl::getInstance();
     
@@ -114,10 +117,11 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
     	    $className = "{$applicationName}_Json";
     	    $application = new $className;
     	    $applications[] = $application->getMainTree();
-    	    $jsInlucdeFiles[] = $applicationName;
+    	    $jsIncludeFiles[] = $applicationName .'/Js/'. $applicationName .'.js';
         }
         
-        $view->jsInlucdeFiles = $jsInlucdeFiles;
+		
+        $view->jsIncludeFiles = $jsIncludeFiles;
         $view->applications = $applications;
         $view->title="eGW Test Layout";
         echo $view->render('mainscreen.php');
