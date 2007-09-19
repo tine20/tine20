@@ -53,3 +53,23 @@
 		.x-layout-panel{
 			border:0px none;
 		}
+		
+		.x-btn-icon-22 .x-btn-center .x-btn-text{
+			background-position: center;
+			background-repeat: no-repeat;
+			height: 24px;
+			width: 24px;
+			cursor:pointer;
+			white-space: nowrap;
+			padding:0;
+		}
+		
+		.x-btn-icon-32 .x-btn-center .x-btn-text{
+			background-position: center;
+			background-repeat: no-repeat;
+			height: 34px;
+			width: 34px;
+			cursor:pointer;
+			white-space: nowrap;
+			padding:0;
+		}		
