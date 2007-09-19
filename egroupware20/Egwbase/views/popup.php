@@ -22,6 +22,15 @@
 		});
 	</script>
 	
+	<?php 
+		error_log(print_r($this->jsIncludeFiles,true));
+	
+		foreach ($this->jsIncludeFiles as $name) {
+			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
+		}
+	?>
+	
+	
 	<style type="text/css">
 	    .x-layout-panel {
 	        background:#EEEEEE;
