@@ -15,10 +15,12 @@
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
 	<script type="text/javascript" language="javascript" src="Egwbase/Js/Egwbase.js"></script>
 	<?php 
-		foreach ($this->jsInlucdeFiles as $name) {
-			echo '<script type="text/javascript" language="javascript" src="'. $name .'/Js/'. $name .'.js"></script>';
+		
+		foreach ($this->jsIncludeFiles as $name) {
+			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
 		}
 	?>
+
 	<script type="text/javascript" language="javascript">
 		var applications = <?php echo Zend_Json::encode($this->applications) ?>;
 	</script>
