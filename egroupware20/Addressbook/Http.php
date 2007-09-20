@@ -43,6 +43,7 @@ class Addressbook_Http
 		
 		$view->jsExecute = 'Egw.Addressbook.displayContactDialog();';
 
+		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');
 	}
 
@@ -73,6 +74,7 @@ class Addressbook_Http
 		
 		$view->jsExecute = 'Egw.Addressbook.ListEditDialog.display();';
 
+		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');
 	}
 }
