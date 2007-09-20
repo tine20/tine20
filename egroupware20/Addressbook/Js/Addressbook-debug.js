@@ -36,7 +36,7 @@ Egw.Addressbook = function() {
         return Ext.util.JSON.encode(jsonData);
     }
    
-    /**
+ /**
     * creates the address grid
     *
     */
@@ -81,7 +81,7 @@ Egw.Addressbook = function() {
                        displayLists:    true,
                };
                
-               break;
+               break;   
        }
 
        // create the Data Store
@@ -166,7 +166,7 @@ Egw.Addressbook = function() {
        //  console.log('before load');
        //});
 
-       contactDS.setDefaultSort('contact_id', 'desc');
+       contactDS.setDefaultSort('n_family', 'asc');
 
        contactDS.load({params:{start:0, limit:50}});
        
@@ -177,35 +177,64 @@ Egw.Addressbook = function() {
            });
        });
 
-       var cm = new Ext.grid.ColumnModel([{
-               resizable: true, id: 'contact_id', header: 'Id', dataIndex: 'contact_id', width: 30
-           },{
-               resizable: true, id: 'contact_tid', dataIndex: 'contact_tid', width: 30, renderer: _renderContactTid
-           },{
-               resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
-           },{
-               resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given'
-           },{
-               resizable: true, header: 'Middle name', dataIndex: 'n_middle', hidden: true
-           },{
-               resizable: true, id: 'n_prefix', header: 'Prefix', dataIndex: 'n_prefix', hidden: true
-           },{
-               resizable: true, header: 'Suffix', dataIndex: 'n_suffix', hidden: true
-           },{
-               resizable: true, header: 'Full name', dataIndex: 'n_fn', hidden: true
-           },{
-               resizable: true, header: 'Birthday', dataIndex: 'contact_bday', hidden: true
-           },{
-               resizable: true, header: 'Organisation', dataIndex: 'org_name'
-           },{
-               resizable: true, header: 'Unit', dataIndex: 'org_unit'
-           },{
-               resizable: true, header: 'Title', dataIndex: 'contact_title',
-           },{
-               resizable: true, header: 'Role', dataIndex: 'contact_role',
-           },{
-               resizable: true, id: 'addressbook', header: 'addressbook', dataIndex: 'addressbook', hidden: true
-       }]);
+       var cm = new Ext.grid.ColumnModel([
+		{ resizable: true, id: 'contact_tid', dataIndex: 'contact_tid', width: 30, renderer: _renderContactTid },
+		{ resizable: true, id: 'contact_private', header: 'private?', dataIndex: 'contact_private', hidden: true },
+		{ resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family' },
+		{ resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given' },
+		{ resizable: true, id: 'n_middle', header: 'Middle name', dataIndex: 'n_middle', hidden: true },
+		{ resizable: true, id: 'n_prefix', header: 'Prefix', dataIndex: 'n_prefix', hidden: true },
+		{ resizable: true, id: 'n_suffix', header: 'Suffix', dataIndex: 'n_suffix', hidden: true },
+		{ resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
+		{ resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true },
+		{ resizable: true, id: 'contact_bday', header: 'Birthday', dataIndex: 'contact_bday', hidden: true },
+		{ resizable: true, id: 'org_name', header: 'Organisation', dataIndex: 'org_name' },
+		{ resizable: true, id: 'org_unit', header: 'Unit', dataIndex: 'org_unit' },
+		{ resizable: true, id: 'contact_title', header: 'Title', dataIndex: 'contact_title' },
+		{ resizable: true, id: 'contact_role', header: 'Role', dataIndex: 'contact_role' },
+		{ resizable: true, id: 'contact_assistent', header: 'Assistent', dataIndex: 'contact_assistent', hidden: true },
+		{ resizable: true, id: 'contact_room', header: 'Room', dataIndex: 'contact_room', hidden: true },
+		{ resizable: true, id: 'adr_one_street', header: 'Street', dataIndex: 'adr_one_street', hidden: true },
+		{ resizable: true, id: 'adr_one_street2', header: 'Street 2', dataIndex: 'adr_one_street2', hidden: true },
+		{ resizable: true, id: 'adr_one_locality', header: 'Locality', dataIndex: 'adr_one_locality', hidden: true },
+		{ resizable: true, id: 'adr_one_region', header: 'Region', dataIndex: 'adr_one_region', hidden: true },
+		{ resizable: true, id: 'adr_one_postalcode', header: 'Postalcode', dataIndex: 'adr_one_postalcode', hidden: true },
+		{ resizable: true, id: 'adr_one_countryname', header: 'Country', dataIndex: 'adr_one_countryname', hidden: true },
+		{ resizable: true, id: 'contact_label', header: 'Label', dataIndex: 'contact_label', hidden: true },
+		{ resizable: true, id: 'adr_two_street', header: 'Street (private)', dataIndex: 'adr_two_street', hidden: true },
+		{ resizable: true, id: 'adr_two_street2', header: 'Street 2 (private)', dataIndex: 'adr_two_street2', hidden: true },
+		{ resizable: true, id: 'adr_two_locality', header: 'Locality (private)', dataIndex: 'adr_two_locality', hidden: true },
+		{ resizable: true, id: 'adr_two_region', header: 'Region (private)', dataIndex: 'adr_two_region', hidden: true },
+		{ resizable: true, id: 'adr_two_postalcode', header: 'Postalcode (private)', dataIndex: 'adr_two_postalcode', hidden: true },
+		{ resizable: true, id: 'adr_two_countryname', header: 'Country (private)', dataIndex: 'adr_two_countryname', hidden: true },
+		{ resizable: true, id: 'tel_work', header: 'Phone', dataIndex: 'tel_work', hidden: true },
+		{ resizable: true, id: 'tel_cell', header: 'Cellphone', dataIndex: 'tel_cell', hidden: true },
+		{ resizable: true, id: 'tel_fax', header: 'Fax', dataIndex: 'tel_fax', hidden: true },
+		{ resizable: true, id: 'tel_assistent', header: 'Assistent phone', dataIndex: 'tel_assistent', hidden: true },
+		{ resizable: true, id: 'tel_car', header: 'Car phone', dataIndex: 'tel_car', hidden: true },
+		{ resizable: true, id: 'tel_pager', header: 'Pager', dataIndex: 'tel_pager', hidden: true },
+		{ resizable: true, id: 'tel_home', header: 'Phone (private)', dataIndex: 'tel_home', hidden: true },
+		{ resizable: true, id: 'tel_fax_home', header: 'Fax (private)', dataIndex: 'tel_fax_home', hidden: true },
+		{ resizable: true, id: 'tel_cell_private', header: 'Cellphone (private)', dataIndex: 'tel_cell_private', hidden: true },
+		{ resizable: true, id: 'tel_other', header: 'Phone other', dataIndex: 'tel_other', hidden: true },
+		{ resizable: true, id: 'tel_prefer', header: 'Phone prefer', dataIndex: 'tel_prefer', hidden: true },
+		{ resizable: true, id: 'contact_email', header: 'eMail', dataIndex: 'contact_email', hidden: true },
+		{ resizable: true, id: 'contact_email_home', header: 'eMail (private)', dataIndex: 'contact_email_home', hidden: true },
+		{ resizable: true, id: 'contact_url', header: 'URL', dataIndex: 'contact_url', hidden: true },
+		{ resizable: true, id: 'contact_url_home', header: 'URL (private)', dataIndex: 'contact_url_home', hidden: true },
+		{ resizable: true, id: 'contact_freebusy_uri', header: 'Freebusy URI', dataIndex: 'contact_freebusy_uri', hidden: true },
+		{ resizable: true, id: 'contact_calendar_uri', header: 'Calendar URI', dataIndex: 'contact_calendar_uri', hidden: true },
+		{ resizable: true, id: 'contact_note', header: 'Note', dataIndex: 'contact_note', hidden: true },
+		{ resizable: true, id: 'contact_tz', header: 'Timezone', dataIndex: 'contact_tz', hidden: true },
+		{ resizable: true, id: 'contact_geo', header: 'Geo', dataIndex: 'contact_geo', hidden: true },
+		{ resizable: true, id: 'contact_pubkey', header: 'Public Key', dataIndex: 'contact_pubkey', hidden: true },
+		{ resizable: true, id: 'contact_created', header: 'Creation Date', dataIndex: 'contact_created', hidden: true },
+		{ resizable: true, id: 'contact_creator', header: 'Creator', dataIndex: 'contact_creator', hidden: true },
+		{ resizable: true, id: 'contact_modified', header: 'Modification Date', dataIndex: 'contact_modified', hidden: true },
+		{ resizable: true, id: 'contact_modifier', header: 'Modifier', dataIndex: 'contact_modifier', hidden: true },
+		{ resizable: true, id: 'contact_jpegphoto', header: 'Photo', dataIndex: 'contact_jpegphoto', hidden: true },
+		{ resizable: true, id: 'addressbook', header: 'addressbook', dataIndex: 'addressbook', hidden: true }
+		]);
         
        cm.defaultSortable = true; // by default columns are sortable
 
@@ -522,10 +551,15 @@ Egw.Addressbook = function() {
             icon:'images/oxygen/16x16/actions/edit-delete.png',
             handler: _deleteBtnHandler
         },'-',{
-            id:'new',
+            id:'new contact',
             text:'new contact',
             icon:'images/oxygen/16x16/actions/add-user.png',
             handler: _addBtnHandler
+        },{
+            id:'new list',
+            text:'new list',
+            icon:'images/oxygen/16x16/actions/add-users.png',
+            handler: _addLstBtnHandler
         }]
     });
 	
@@ -542,7 +576,12 @@ Egw.Addressbook = function() {
             icon:'images/oxygen/16x16/actions/edit-delete.png',
             handler: _deleteLstBtnHandler
         },'-',{
-            id:'new',
+            id:'new contact',
+            text:'new contact',
+            icon:'images/oxygen/16x16/actions/add-user.png',
+            handler: _addBtnHandler
+        },{
+            id:'new list',
             text:'new list',
             icon:'images/oxygen/16x16/actions/add-users.png',
             handler: _addLstBtnHandler
@@ -1340,13 +1379,13 @@ Egw.Addressbook.ListEditDialog = function() {
         
         var layout = new Ext.BorderLayout(document.body, {
             north: {split:false, initialSize:28},
-            center: {autoScroll: true},
-            south: {split:false, initialSize:256}
+            center: {split:false, initialSize:70},
+            south: {split:false, initialSize:360, autoScroll: true}
         });
         layout.beginUpdate();
         layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
-        layout.add('center', new Ext.ContentPanel('content'));
-        layout.add('south', new Ext.ContentPanel('south'));
+        layout.add('center', new Ext.ContentPanel('content', {fitToFrame:true}));
+        layout.add('south', new Ext.ContentPanel('south', {fitToFrame:true}));
         layout.endUpdate();
 
                 
@@ -1486,7 +1525,7 @@ Egw.Addressbook.ListEditDialog = function() {
             console.log(_form.baseParams); 
         });
         
-        listedit.fieldset({legend:'List information'});
+        listedit.fieldset({legend:'list information'});
                 
         listedit.column(
             {width:'100%', labelWidth:90, labelSeparator:''},
@@ -1510,13 +1549,21 @@ Egw.Addressbook.ListEditDialog = function() {
             new Ext.form.TextField({fieldLabel:'List Description', name:'org_name', width:325})
         );          
         listedit.end();
-                                
+               
+		if(formData.values) {
+				var c_owner = formData.values.contact_owner;
+				var c_id 	= formData.values.contact_id;
+		} else {
+				var c_owner = -1;
+				var c_id 	= -1;
+		}
+			   
         searchDS = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
                 method:   'Addressbook.getContacts', 
                 datatype: 'contacts',
-                owner:    formData.values.contact_owner, 
+                owner:    c_owner, 
                 nodeid:   'mycontacts', 
                 options:  '{"displayContacts":true,"displayLists":false}',  
             },
@@ -1556,7 +1603,7 @@ Egw.Addressbook.ListEditDialog = function() {
             displayField:'n_family',
             typeAhead: false,
             loadingText: 'Searching...',
-            width: 325,
+            width: 415,
             pageSize:10,
             hideTrigger:true,
             tpl: resultTpl,
@@ -1575,9 +1622,9 @@ Egw.Addressbook.ListEditDialog = function() {
         });
     
         
-        listedit.fieldset({legend:'Select new List members'});
+        listedit.fieldset({legend:'select new list members'});
         listedit.column(
-            {width:'100%', labelWidth:90, labelSeparator:''},               
+           {width:'100%', labelWidth:0, labelSeparator:''},               
             list_search         
         );          
         listedit.end();     
@@ -1594,9 +1641,9 @@ Egw.Addressbook.ListEditDialog = function() {
             baseParams: {
             	method:   'Addressbook.getContacts', 
                 datatype: 'list',
-                owner:    formData.values.contact_owner, 
+                owner:    c_owner, 
                 //nodeid:   'mycontacts', 
-                options:  '{"listID":"'+formData.values.contact_id+'"}',  
+                options:  '{"listID":"'+c_id+'"}',  
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -1624,7 +1671,7 @@ Egw.Addressbook.ListEditDialog = function() {
             autoSizeColumns: true,
             monitorWindowResize: false,
             trackMouseOver: true,
-            contextMenu: 'ctxMenuPicAssignTree',   
+            contextMenu: 'ctxListMenu',   
             autoExpandColumn: 'contact_email'
         }); 
     
@@ -1684,7 +1731,7 @@ Egw.Addressbook.ListEditDialog = function() {
         display: function() {
             var dialog = _displayDialog();
             if(formData.values) {
-                _setDialogValues(listedit, formData.values);
+                _setDialogValues(dialog, formData.values);
             }
         }
     }
