@@ -373,10 +373,10 @@ Ext.onReady(function(){
 		var applicationName = getAppByNode(node);
 		//console.log('checking for application ' + applicationName);
 		//console.log(typeof(EGWNameSpace[applicationName]));
-		if(typeof(EGWNameSpace[applicationName]) == 'object') {
+		if(typeof(Egw[applicationName]) == 'object') {
 			//console.log('application ' + applicationName + ' exists');
 			layout.beginUpdate();
-			EGWNameSpace[applicationName].show(layout, node);
+			Egw[applicationName].show(layout, node);
 			layout.endUpdate();
 		}
  	});
