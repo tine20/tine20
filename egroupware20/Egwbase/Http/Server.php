@@ -218,7 +218,7 @@ class Egwbase_Http_Server extends Zend_Server_Abstract implements Zend_Server_In
 		}
 		
 		if (!headers_sent()) {
-			header("Content-Type: application/json");
+			header('Content-Type: text/html; charset=utf-8');
 			if (is_null($code)) {
 				header("HTTP/1.0 400 Bad Request");
 			} else {
@@ -229,10 +229,9 @@ class Egwbase_Http_Server extends Zend_Server_Abstract implements Zend_Server_In
 				}
 			}
 		}
-		$json = Zend_Json::encode($error);
-		
-		
-		echo $json;
+		echo "<pre>";
+		var_dump($error);
+		echo "</pre>";
 	}
 	
 	/**
