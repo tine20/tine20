@@ -292,9 +292,88 @@ Ext.onReady(function(){
 		}]
 	});
 	
+   	var ctxTreeMenu = new Ext.menu.Menu({
+		id:'addCtx', 
+		items: [{
+			id:'add contact',
+			text:'add new contact',
+			icon:'images/oxygen/16x16/actions/add-user.png',
+			handler: function () {
+			
+				var curSelNode = tree.getSelectionModel().getSelectedNode();
+				var RootNode   = tree.getRootNode();
+			//	alert(curSelNode+', root: '+RootNode);
+				_openDialog();
+			}	
+		},'',{
+            id:'add list',
+            text:'add new list',
+            icon:'images/oxygen/16x16/actions/add-users.png',
+            handler: function () {
+				_openDialog('','list');
+			}
+        }]
+	});	
 	//============================================
 	//============== end Context Menu =============
 	//============================================
+	
+	
+	
+	
+	
+	//============================================
+	//============== open dialog ===================
+	//============================================	
+    var _openDialog = function(_id,_dtype) {
+        var url;
+        var w = 1024, h = 786;
+        var popW = 950, popH = 600;
+        
+		if(_dtype == 'list') {
+			popW = 450, popH = 600;		
+		}
+	
+        if (document.all) {
+            /* the following is only available after onLoad */
+            w = document.body.clientWidth;
+            h = document.body.clientHeight;
+            x = window.screenTop;
+            y = window.screenLeft;
+        } else if (window.innerWidth) {
+            w = window.innerWidth;
+            h = window.innerHeight;
+            x = window.screenX;
+            y = window.screenY;
+        }
+        var leftPos = ((w-popW)/2)+y, topPos = ((h-popH)/2)+x;
+        
+        if(_dtype == 'list' && !_id) {
+            url = 'index.php?method=Addressbook.editList';
+        }
+		else if(_dtype == 'list' && _id){
+           url = 'index.php?method=Addressbook.editList&contactid=' + _id;
+        }
+		else if(_dtype != 'list' && _id){
+           url = 'index.php?method=Addressbook.editContact&contactid=' + _id;
+        }
+		else {
+            url = 'index.php?method=Addressbook.editContact';
+        }
+        //console.log(url);
+        appId = 'addressbook';
+        var popup = window.open(
+            url, 
+            'popupname',
+            'width='+popW+',height='+popH+',top='+topPos+',left='+leftPos+',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=no,dependent=no'
+        );
+        
+        return;
+    }
+	//============================================
+	//============== end open dialog ===============
+	//============================================	
+	
 	
 
 	//============================================
@@ -320,9 +399,17 @@ Ext.onReady(function(){
 		ddGroup: 'TreeDD',
 		enableDrop: true,			
 		containerScroll: true,
-		rootVisible:false
+		rootVisible:false,
+		contextmenu: ctxTreeMenu
 	});
 
+	
+	// handle right mouse click
+	tree.on('contextmenu', function(_node, _event) {
+		 		_event.stopEvent();
+		 		ctxTreeMenu.showAt(_event.getXY());
+		 	});	
+	
 	//handle drag and drop
 	tree.on('beforenodedrop', function(e) {
             //console.log(e);
