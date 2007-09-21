@@ -190,6 +190,53 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
+    public function getAllContacts($_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
+
+        $groupIds = array_keys($acl);
+        
+        $where[] = $this->contactsTable->getAdapter()->quoteInto('(contact_owner IN (?) OR account_id IS NOT NULL)', $groupIds);
+
+        $result = $this->_getContactsFromTable($where, $_filter, $_contactType, $_sort, $_dir, $_limit, $_start);
+        
+        return $result;
+    }
+
+    /**
+     * get total count of all contacts from shared addressbooks
+     *
+     * @todo return the correct count (the accounts are missing)
+     * 
+     * @return int count of all other users contacts
+     */
+    public function getCountOfAllContacts()
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
+
+        $groupIds = array_keys($acl);
+        
+        $result = $this->contactsTable->getCountByAcl($groupIds);
+
+        return $result;
+    }
+    
+    
+    /**
+     * get list of contacts from all shared addressbooks the current user has access to
+     *
+     * @param string $_filter string to search for in contacts
+     * @param array $_contactType filter by type (list or contact currently)
+     * @param unknown_type $_sort fieldname to sort by
+     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
+     * @param unknown_type $_limit how many contacts to display
+     * @param unknown_type $_start how many contaxts to skip
+     * @return unknown The row results per the Zend_Db_Adapter fetch mode.
+     */
     public function getAllSharedContacts($_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
@@ -443,6 +490,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         
         $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_tid IN (?)', $requestedContactTypes);
+        if($_filter !== NULL) {
+        	$where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . $_filter . '%');
+        }
 
         $result = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
     	

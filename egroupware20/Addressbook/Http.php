@@ -61,12 +61,14 @@ class Addressbook_Http
 		$currentAccount = Zend_Registry::get('currentAccount');
 		$egwbaseAcl = Egwbase_Acl::getInstance();
 
+		// the list of available addressbooks
 		$acl = $egwbaseAcl->getGrantors($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
 
 		foreach($acl as $value) {
 			$view->formData['config']['addressbooks'][] = array($value, $value);
 		}
 		
+		// get the contact
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 		if(isset($_REQUEST['contactid']) && $contact = $addresses->getContactById($_REQUEST['contactid'])) {
 			$view->formData['values'] = $contact->toArray();
