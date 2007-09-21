@@ -49,7 +49,12 @@ Egw.Addressbook = function() {
         
        // add a div, which will beneth parent element for the grid
        var contentTag = Ext.Element.get('content');
-       var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
+	   var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
+	   
+	   var toolbarTag = Ext.Element.get('toolbardiv');
+	   var toolbarDivTag = toolbarTag.createChild({tag: 'div', id: 'toolbardiv'});
+	   
+	   
 console.log(_node.attributes.datatype);
        switch(_node.attributes.datatype) {
            case 'list':
@@ -324,6 +329,7 @@ console.log(_node.attributes.datatype);
 	   
        //adding one more toolbar to grid
        var generalToolbar = new Ext.Toolbar(gridHeader);
+		
 	   
 	   var pagingHeader = Ext.DomHelper.append(generalToolbar.el,{tag:'div',id:Ext.id()},true);
        // add a paging toolbar to the grid's footer
@@ -1378,6 +1384,24 @@ console.log(_node.attributes.datatype);
 
 Egw.Addressbook.ListEditDialog = function() {
 
+
+    var _getJSONDsRecs = function(_dataSrc) {
+            
+        if(Ext.isEmpty(_dataSrc)) {
+            return false;
+        }
+
+            
+        var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array();            
+        for(i=0; i < dataLen; i++) {
+            var curRecData = data.itemAt(i).data;
+            jsonData.push(curRecData);
+        }   
+
+        return Ext.util.JSON.encode(jsonData);
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
     // distributionlist dialog
     ////////////////////////////////////////////////////////////////////////////
@@ -1390,7 +1414,7 @@ Egw.Addressbook.ListEditDialog = function() {
         var layout = new Ext.BorderLayout(document.body, {
             north: {split:false, initialSize:28},
             center: {split:false, initialSize:70},
-            south: {split:false, initialSize:360, autoScroll: true}
+            south: {split:false, initialSize:350, autoScroll: true}
         });
         layout.beginUpdate();
         layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
@@ -1518,7 +1542,8 @@ Egw.Addressbook.ListEditDialog = function() {
                 {name: 'n_fileas'},
                 {name: 'contact_created'},
                 {name: 'contact_creator'},
-                {name: 'account_id'}
+                {name: 'account_id'},
+				{name: 'contact_note'}
             ])
         });
         
@@ -1556,8 +1581,7 @@ Egw.Addressbook.ListEditDialog = function() {
                 width:325
             }),
             new Ext.form.TextField({fieldLabel:'List Name', name:'n_family', width:325}),
-            new Ext.form.TextField({fieldLabel:'List Nickname', name:'n_given', width:325}),
-            new Ext.form.TextField({fieldLabel:'List Description', name:'org_name', width:325})
+            new Ext.form.TextArea({fieldLabel:'List Description', name:'contact_note', width:325, grow: false })
         );          
         listedit.end();
                
