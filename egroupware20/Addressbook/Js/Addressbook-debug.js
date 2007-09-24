@@ -48,11 +48,9 @@ Egw.Addressbook = function() {
        center.remove(0);
         
        // add a div, which will beneth parent element for the grid
-       var contentTag = Ext.Element.get('content');
-	   var outerDivTag = contentTag.createChild({tag: 'div', id: 'outergriddiv'});
-	   
-	   var toolbarTag = Ext.Element.get('toolbardiv');
-	   var toolbarDivTag = toolbarTag.createChild({tag: 'div', id: 'toolbardiv'});
+       var contentTag 		= Ext.Element.get('content');
+	   var toolbarDivTag	= contentTag.createChild({tag: 'div', id: 'toolbargriddiv'});
+	   var outerDivTag 		= contentTag.createChild({tag: 'div', id: 'outergriddiv'});
 	   
 	   
 console.log(_node.attributes.datatype);
@@ -324,13 +322,17 @@ console.log(_node.attributes.datatype);
 		
               
 
-       var gridHeader = contactGrid.getView().getHeaderPanel(true);
+      var gridHeader = contactGrid.getView().getHeaderPanel(true);
         
 	   
        //adding one more toolbar to grid
-       var generalToolbar = new Ext.Toolbar(gridHeader);
+//		var generalToolbar = new Ext.Toolbar(gridHeader);
 		
+		var generalToolbar = new Ext.Toolbar(toolbarDivTag);
 	   
+	        
+		
+
 	   var pagingHeader = Ext.DomHelper.append(generalToolbar.el,{tag:'div',id:Ext.id()},true);
        // add a paging toolbar to the grid's footer
        var pagingToolbar = new Ext.PagingToolbar(pagingHeader, contactDS, {
@@ -340,7 +342,7 @@ console.log(_node.attributes.datatype);
            displayMsg: 'Displaying contacts {0} - {1} of {2}',
            emptyMsg: "No contacts to display"
        });
-	   
+
 	   
 	   
        generalToolbar.addButton({
@@ -454,8 +456,7 @@ console.log(_node.attributes.datatype);
             }
         }); 
 	   
-	   
-       center.add(new Ext.GridPanel(contactGrid));
+	   center.add(new Ext.GridPanel(contactGrid,{toolbar: generalToolbar}));
         
    }
     
