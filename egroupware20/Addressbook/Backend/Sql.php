@@ -1,4 +1,19 @@
 <?php
+/**
+ * the class needed to access the contacts table
+ * 
+ * @see Addressbook_Backend_Sql_Contacts
+ */
+require_once 'Addressbook/Backend/Sql/Contacts.php';
+
+/**
+ * the class needed to access the lists table
+ * 
+ * @see Addressbook_Backend_Sql_Lists
+ */
+require_once 'Addressbook/Backend/Sql/Lists.php';
+
+
 
 /**
  * interface for contacs class
@@ -289,6 +304,42 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         );
         
         $result = $this->contactsTable->fetchRow($where);
+        
+        return $result;
+    }
+    
+    /**
+     * fetch one contact identified by contactid
+     *
+     * @param array $_contacts
+     * @return The row results per the Zend_Db_Adapter fetch mode, or null if no row found.
+     */
+    public function getListById($_listId)
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
+        
+        // return the requested list_id only if the contact_owner matches the current users acl
+        $where  = array(
+            $this->contactsTable->getAdapter()->quoteInto('list_id = ?', $_listId),
+            $this->contactsTable->getAdapter()->quoteInto('list_owner IN (?)', array_keys($acl))
+        );
+        
+        $listData = $this->listsTable->fetchRow($where);
+        $listMembers = $this->getContactsByList($_listId, $currentAccount->account_id, NULL, 'n_family', 'ASC');
+        //$result = $this->contactsTable->fetchRow($where);
+        //error_log(print_r($listData, true));
+        //error_log(print_r($listMembers, true));
+        $result = new Addressbook_List();
+        
+        $result->list_name = 'blabla';
+        $result->list_description = 'description';
+        $result->list_members[] = array(
+        	'contact_id'	=> '1', 
+        	'n_family'		=> 'Kneschke', 
+        	'contact_email' => 'lars@kneschke.de'
+        );
         
         return $result;
     }

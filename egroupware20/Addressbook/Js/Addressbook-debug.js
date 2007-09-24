@@ -15,32 +15,11 @@ Egw.Addressbook = function() {
     // private functions and variables
    
 
-  /*  gets datastore elements and json encodes them 
+    /**
+     * creates the address grid
      *
-     * @param 
-     * @return 
-     */ 
-    var _getJSONDsRecs = function(_dataSrc) {
-            
-        if(Ext.isEmpty(_dataSrc)) {
-            return false;
-        }
-
-            
-        var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array();            
-        for(i=0; i < dataLen; i++) {
-            var curRecData = data.itemAt(i).data;
-            jsonData.push(curRecData);
-        }   
-
-        return Ext.util.JSON.encode(jsonData);
-    }
-   
- /**
-    * creates the address grid
-    *
-    */
-   var _showAddressGrid = function(_layout, _node) {
+     */
+    var _showAddressGrid = function(_layout, _node) {
 
        var center = _layout.getRegion('center', false);
 
@@ -53,7 +32,6 @@ Egw.Addressbook = function() {
 	   var outerDivTag 		= contentTag.createChild({tag: 'div', id: 'outergriddiv'});
 	   
 	   
-console.log(_node.attributes.datatype);
        switch(_node.attributes.datatype) {
            case 'list':
                var options = {
@@ -1519,14 +1497,6 @@ Egw.Addressbook.ListEditDialog = function() {
             data: formData.config.addressbooks
         });
 
-        // main data for the current list
-   
-/*      var ds_contacts = new Ext.data.JsonReader({root: 'results'}, [
-            {name: 'contact_id'},
-            {name: 'contact_owner'},
-            {name: 'n_family'}
-        ]); */     
-          
         // add a div, which will bneehe parent element for the grid
         var contentTag = Ext.Element.get('content');
         
@@ -1552,12 +1522,12 @@ Egw.Addressbook.ListEditDialog = function() {
             _form.baseParams = {};
             _form.baseParams._contactOwner = _form.getValues().contact_owner;
             _form.baseParams._addressType = 'l';
-            _form.baseParams._listmembers = _getJSONDsRecs(listMembersDS);
+            _form.baseParams._listmembers = Ext.util.JSON.encode(ds_listMembers.getRange());
                         
-            if(formData.values && formData.values.contact_id) {
-                _form.baseParams._contactID = formData.values.contact_id;
+            if(formData.values && formData.values.list_id) {
+                _form.baseParams._listId = formData.values.list_id;
             } else {
-                _form.baseParams._contactID = 0;
+                _form.baseParams._listId = 0;
             }
             console.log(_form.baseParams); 
         });
@@ -1568,8 +1538,8 @@ Egw.Addressbook.ListEditDialog = function() {
             {width:'100%', labelWidth:90, labelSeparator:''},
             new Ext.form.ComboBox({
                 fieldLabel: 'Addressbook',
-                name: 'contact_owner',
-                hiddenName:'contact_owner',
+                name: 'list_owner',
+                hiddenName:'list_owner',
                 store: ds_addressbooks,
                 displayField:'addressbooks',
                 valueField:'id',
@@ -1581,14 +1551,14 @@ Egw.Addressbook.ListEditDialog = function() {
                 selectOnFocus:true,
                 width:325
             }),
-            new Ext.form.TextField({fieldLabel:'List Name', name:'n_family', width:325}),
-            new Ext.form.TextArea({fieldLabel:'List Description', name:'contact_note', width:325, grow: false })
+            new Ext.form.TextField({fieldLabel:'List Name', name:'list_name', width:325}),
+            new Ext.form.TextArea({fieldLabel:'List Description', name:'list_description', width:325, grow: false })
         );          
         listedit.end();
                
 		if(formData.values) {
-				var c_owner = formData.values.contact_owner;
-				var c_id 	= formData.values.contact_id;
+				var c_owner = formData.values.list_owner;
+				var c_id 	= formData.values.list_id;
 		} else {
 				var c_owner = -1;
 				var c_id 	= -1;
@@ -1627,7 +1597,7 @@ Egw.Addressbook.ListEditDialog = function() {
         // Custom rendering Template
         var resultTpl = new Ext.Template(
             '<div class="search-item">',
-                '{contact_email} - {n_family}, {n_given}',
+                '{n_family}, {n_given} {contact_email}',
             '</div>'
         );
     
@@ -1647,7 +1617,7 @@ Egw.Addressbook.ListEditDialog = function() {
                     n_family: record.data.n_family,
                     contact_email: record.data.contact_email
                 });
-                listMembersDS.insert(0, tmpText);
+                ds_listMembers.insert(0, tmpText);
                 searchDS.remove(record);
                 list_search.reset();
                 list_search.collapse();
@@ -1669,38 +1639,24 @@ Egw.Addressbook.ListEditDialog = function() {
             {name: 'n_family', type: 'string'},                            
             {name: 'contact_email', type: 'string'}  
         ]);
-        
-        var listMembersDS = new Ext.data.JsonStore({
-        	url: 'index.php',
-            baseParams: {
-            	method:   'Addressbook.getContacts', 
-                datatype: 'list',
-                owner:    c_owner, 
-                //nodeid:   'mycontacts', 
-                options:  '{"listID":"'+c_id+'"}',  
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'contact_id',
-            fields: [
-            	{name: 'contact_id'},
-                {name: 'n_family'},
-                {name: 'contact_email'}
-            ],
-            // turn on remote sorting
-            remoteSort: true
+
+        // data store for listmember grid
+        var ds_listMembers = new Ext.data.SimpleStore({
+            fields: ['contact_id', 'n_family', 'contact_email'],
+            data: formData.values.list_members
         });
-        
-        var lcm = new Ext.grid.ColumnModel([{
-        	resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
+console.log(formData.values.list_members);
+        // columnmodel for listmember grid
+        var cm_listMembers = new Ext.grid.ColumnModel([{
+            resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
         },{
-        	resizable: true, id: 'contact_email', header: 'eMal address', dataIndex: 'contact_email'
+            resizable: true, id: 'contact_email', header: 'eMail address', dataIndex: 'contact_email'
         }]);
+        cm_listMembers.defaultSortable = true; // by default columns are sortable
         
-        lcm.defaultSortable = true; // by default columns are sortable
         var listGrid = new Ext.grid.Grid("south", {
-            ds: listMembersDS,
-            cm: lcm,
+            ds: ds_listMembers,
+            cm: cm_listMembers,
             selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
             autoSizeColumns: true,
             monitorWindowResize: false,
@@ -1751,15 +1707,10 @@ Egw.Addressbook.ListEditDialog = function() {
     // set the dialog field to their initial value
     ////////////////////////////////////////////////////////////////////////////
     var _setDialogValues = function(_dialog, _formData) {
-        for (var fieldName in _formData) {
-            var field = _dialog.findField(fieldName);
-            if(field) {
-                //console.log(fieldName + ' => ' + _formData[fieldName]);
-                field.setValue(_formData[fieldName]);
-            }
-        }
+        _dialog.findField('list_name').setValue(_formData['list_name']);
+        _dialog.findField('list_description').setValue(_formData['list_description']);
     }
-
+    
     // public functions and variables
     return {
         display: function() {

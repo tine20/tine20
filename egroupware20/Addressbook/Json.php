@@ -244,7 +244,7 @@ class Addressbook_Json
     }
 
     /**
-     * get data for overview
+     * get data for the overview
      * 
      * returns the data to be displayed in a ExtJS grid
      *
@@ -258,13 +258,14 @@ class Addressbook_Json
      */
     public function getOverview($query, $start, $sort, $dir, $limit, $options = NULL)
     {
-        $result = array();
         if(empty($query)) { 
         	$query = NULL; 
         }
         
 		$options = Zend_Json::decode($options);
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+
+        $result = array();
         if($rows = $backend->getAllContacts($query, $options, $sort, $dir, $limit, $start)) {
         	$result['results']    = $rows->toArray();
             $result['totalcount'] = $backend->getCountOfAllContacts();
