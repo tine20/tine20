@@ -24,7 +24,7 @@ Ext.onReady(function(){
 	navDivTag		= containerDivTag.createChild({tag: 'div',id: 'nav',cls: 'x-layout-inactive-content'});
 		
 	contentDivTag		= containerDivTag.createChild({tag: 'div',id: 'content',cls: 'x-layout-inactive-content'});
-	//toolbardivDivTag	= contentDivTag.createChild({tag: 'div',id: 'toolbardiv',cls: 'x-layout-inactive-content'});
+	toolbardivDivTag	= contentDivTag.createChild({tag: 'div',id: 'toolbardiv',cls: 'x-layout-inactive-content'});
 	//gridDivTag		= contentDivTag.createChild({tag: 'div',id: 'grid',cls: 'x-layout-inactive-content'});
 				
 	footerDivTag		= containerDivTag.createChild({tag: 'div',id: 'footer',cls: 'x-layout-inactive-content',style: 'padding: 0px 0px 0px 0px'});
