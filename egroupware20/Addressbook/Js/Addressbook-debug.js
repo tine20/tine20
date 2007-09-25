@@ -1502,27 +1502,15 @@ Egw.Addressbook.ListEditDialog = function() {
         
         var listedit = new Ext.form.Form({
             labelWidth: 75, // label settings here cascade unless overridden
-            url:'index.php?method=Addressbook.saveList',
-            reader : new Ext.data.JsonReader({root: 'results'}, [
-                {name: 'contact_id'},
-                {name: 'contact_tid'},
-                {name: 'contact_owner'},                
-                {name: 'contact_email'},                
-                {name: 'n_given'},
-                {name: 'n_middle'},
-                {name: 'n_fileas'},
-                {name: 'contact_created'},
-                {name: 'contact_creator'},
-                {name: 'account_id'},
-				{name: 'contact_note'}
-            ])
+            url:'index.php',
+            baseParams: {method: 'Addressbook.saveList'}
         });
         
         listedit.on('beforeaction',function(_form, _action) {
-            _form.baseParams = {};
             _form.baseParams._contactOwner = _form.getValues().contact_owner;
-            _form.baseParams._addressType = 'l';
-            _form.baseParams._listmembers = Ext.util.JSON.encode(ds_listMembers.getRange());
+            //console.log(ds_listMembers.getRange(0));
+            //_form.baseParams._listmembers = Ext.util.JSON.encode(ds_listMembers.getRange());
+            _form.baseParams._listmembers = _encodeDataSourceEntries(ds_listMembers);
                         
             if(formData.values && formData.values.list_id) {
                 _form.baseParams._listId = formData.values.list_id;
@@ -1611,17 +1599,18 @@ Egw.Addressbook.ListEditDialog = function() {
             pageSize:10,
             hideTrigger:true,
             tpl: resultTpl,
-            onSelect: function(record){ // override default onSelect to do redirect
-            	var tmpText = new Text({
-                	contact_id: record.data.contact_id,
-                    n_family: record.data.n_family,
-                    contact_email: record.data.contact_email
+            onSelect: function(_record){ // override default onSelect to do redirect
+            	var record = new listMemberRecord({
+                	contact_id: _record.data.contact_id,
+                    n_family: _record.data.n_family,
+                    contact_email: _record.data.contact_email
                 });
-                ds_listMembers.insert(0, tmpText);
-                searchDS.remove(record);
+                
+                ds_listMembers.add(record);
+                ds_listMembers.sort('n_family');
+                
                 list_search.reset();
                 list_search.collapse();
-                searchDS.removeAll();
             }
         });
     
@@ -1634,7 +1623,7 @@ Egw.Addressbook.ListEditDialog = function() {
         listedit.end();     
         listedit.render('content');
 
-        var Text = Ext.data.Record.create([        
+        var listMemberRecord = Ext.data.Record.create([        
         	{name: 'contact_id', type: 'int'},
             {name: 'n_family', type: 'string'},                            
             {name: 'contact_email', type: 'string'}  
@@ -1645,7 +1634,8 @@ Egw.Addressbook.ListEditDialog = function() {
             fields: ['contact_id', 'n_family', 'contact_email'],
             data: formData.values.list_members
         });
-console.log(formData.values.list_members);
+        ds_listMembers.sort('n_family', 'ASC');
+
         // columnmodel for listmember grid
         var cm_listMembers = new Ext.grid.ColumnModel([{
             resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
@@ -1709,6 +1699,16 @@ console.log(formData.values.list_members);
     var _setDialogValues = function(_dialog, _formData) {
         _dialog.findField('list_name').setValue(_formData['list_name']);
         _dialog.findField('list_description').setValue(_formData['list_description']);
+    }
+    
+    var _encodeDataSourceEntries = function(_dataSource) {
+        var jsonData = new Array();
+        
+        _dataSource.each(function(_record){
+            jsonData.push(_record.data);
+        }, this);
+        
+        return Ext.util.JSON.encode(jsonData);
     }
     
     // public functions and variables
