@@ -94,7 +94,7 @@ class Addressbook_Json
      * @param int $_listOwner the id the list owner
      * @return array
      */
-    public function saveList($_listId, $_listOwner)
+    public function saveList($_listId, $_listOwner, $_listMembers, $list_description, $list_name)
     {
 		// set correct contact type for lists
 		if($_POST['_addressType'] == "l") {
@@ -117,7 +117,7 @@ class Addressbook_Json
     	$listId = ($_listId > 0 ? $_listId : NULL);
     	
         try {
-        	$backend->saveList($_listOwner, $list, $listId);
+        	//$backend->saveList($_listOwner, $list, $listId);
             $result = array('success'           => true,
                             'welcomeMessage'    => 'Entry updated');
         } catch (Exception $e) {

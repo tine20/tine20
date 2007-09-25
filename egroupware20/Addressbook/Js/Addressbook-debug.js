@@ -464,7 +464,7 @@ Egw.Addressbook = function() {
         for (var i = 0; i < selectedRows.length; ++i) {
             contactIDs.push(selectedRows[i].id);
         }
-        _deleteContact(contactIDs, function() {EGWNameSpace.Addressbook.reload();});
+        _deleteContact(contactIDs, function() {Egw.Addressbook.reload();});
         contactDS.reload();
     }
 
@@ -512,7 +512,7 @@ Egw.Addressbook = function() {
         for (var i = 0; i < selectedRows.length; ++i) {
             contactIDs.push(selectedRows[i].id);
         }
-        _deleteContact(contactIDs, function() {EGWNameSpace.Addressbook.reload();});
+        _deleteContact(contactIDs, function() {Egw.Addressbook.reload();});
         contactDS.reload();
     }
 
@@ -644,7 +644,7 @@ Egw.Addressbook = function() {
     var _reloadMainWindow = function(closeCurrentWindow) {
         closeCurrentWindow = (closeCurrentWindow == null) ? false : closeCurrentWindow;
         
-        window.opener.EGWNameSpace.Addressbook.reload();
+        window.opener.Egw.Addressbook.reload();
         if(closeCurrentWindow == true) {
             window.setTimeout("window.close()", 400);
         }
@@ -692,7 +692,7 @@ Egw.Addressbook = function() {
 	            // params: {method:'Addressbook.deleteLists', _contactIDs:contactIDs},
 	            // success: function(response, options) {
 	                window.location.reload();
-	                console.log(response);
+	                //console.log(response);
 	                // var decodedResponse;
 	                // try{
 	                    // decodedResponse = Ext.util.JSON.decode(response.responseText);
@@ -704,7 +704,7 @@ Egw.Addressbook = function() {
 	                    // } else {
 	                        // Ext.MessageBox.alert('Failure!', 'Deleting contact failed!');
 	                    // }
-	                    console.log(decodedResponse);
+	                    //console.log(decodedResponse);
 	                // } catch(e){
 	                    // Ext.MessageBox.alert('Failure!', e.message);
 	                // }
@@ -762,7 +762,7 @@ Egw.Addressbook = function() {
                         params:additionalData,
                         success:function(form, action, o) {
                             //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.EGWNameSpace.Addressbook.reload();
+                            window.opener.Egw.Addressbook.reload();
                             //window.setTimeout("window.close()", 400);
                         },
                         failure:function(form, action) {
@@ -793,7 +793,7 @@ Egw.Addressbook = function() {
                         params:additionalData,
                         success:function(form, action, o) {
                             //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.EGWNameSpace.Addressbook.reload();
+                            window.opener.Egw.Addressbook.reload();
                         },
                         failure:function(form, action) {
                             //Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -920,7 +920,6 @@ Egw.Addressbook = function() {
             } else {
                 _form.baseParams._contactID = 0;
             }
-            console.log(_form.baseParams);
         });
         
         addressedit.fieldset({legend:'Contact information'});
@@ -1428,7 +1427,7 @@ Egw.Addressbook.ListEditDialog = function() {
                         params:additionalData,
                         success:function(form, action, o) {
                             //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.EGWNameSpace.Addressbook.reload();
+                            window.opener.Egw.Addressbook.reload();
                             //window.setTimeout("window.close()", 400);
                         },
                         failure:function(form, action) {
@@ -1459,7 +1458,7 @@ Egw.Addressbook.ListEditDialog = function() {
                         params:additionalData,
                         success:function(form, action, o) {
                             //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.EGWNameSpace.Addressbook.reload();
+                            window.opener.Egw.Addressbook.reload();
                         },
                         failure:function(form, action) {
                             //Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -1507,7 +1506,7 @@ Egw.Addressbook.ListEditDialog = function() {
         });
         
         listedit.on('beforeaction',function(_form, _action) {
-            _form.baseParams._contactOwner = _form.getValues().contact_owner;
+            _form.baseParams._listOwner = _form.getValues().list_owner;
             //console.log(ds_listMembers.getRange(0));
             //_form.baseParams._listmembers = Ext.util.JSON.encode(ds_listMembers.getRange());
             _form.baseParams._listmembers = _encodeDataSourceEntries(ds_listMembers);
@@ -1517,7 +1516,7 @@ Egw.Addressbook.ListEditDialog = function() {
             } else {
                 _form.baseParams._listId = 0;
             }
-            console.log(_form.baseParams); 
+            //console.log(_form.baseParams); 
         });
         
         listedit.fieldset({legend:'list information'});
