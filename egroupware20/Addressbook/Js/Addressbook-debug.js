@@ -304,9 +304,7 @@ Egw.Addressbook = function() {
         
 	   
        //adding one more toolbar to grid
-//		var generalToolbar = new Ext.Toolbar(gridHeader);
-		
-		var generalToolbar = new Ext.Toolbar(toolbarDivTag);
+    	var generalToolbar = new Ext.Toolbar(toolbarDivTag);
 	   
 	        
 		
@@ -931,25 +929,124 @@ Egw.Addressbook = function() {
             new Ext.form.TextField({fieldLabel:'Last Name', name:'n_family', width:175, allowBlank:false})
         );
 
+
+       var addressbookTrigger = new Ext.form.TriggerField({
+            fieldLabel:'Addressbook', 
+            name:'contact_owner', 
+            width:175, 
+            readOnly:true
+        });
+
+        addressbookTrigger.onTriggerClick = function(){			
+		
+			test = Ext.Element.get('iWindowContAdrTag');
+			
+			if(test != null) {
+				test.remove();
+			}
+			
+			var bodyTag			= Ext.Element.get(document.body);
+            var containerTag	= bodyTag.createChild({tag: 'div',id: 'adrContainer'});
+            var iWindowTag	= containerTag.createChild({tag: 'div',id: 'iWindowAdrTag'});
+            var iWindowContTag  = containerTag.createChild({tag: 'div',id: 'iWindowContAdrTag'});
+
+			if(!addressBookDialog) {
+                var addressBookDialog = new Ext.LayoutDialog('iWindowAdrTag', {
+                    modal: true,
+                    width:700,
+                    height:400,
+                    shadow:true,
+                    minWidth:700,
+                    minHeight:400,
+                    autoTabs:true,
+                    proxyDrag:true,
+                    // layout config merges with the dialog config
+                    center:{
+                        autoScroll:true,
+                        tabPosition: 'top',
+                        closeOnTab: true,
+                        alwaysShowTabs: true
+                    }
+                });
+
+
+
+
+				//################## Listenansicht #################
+
+				var Tree = Ext.tree;
+				
+				treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
+				treeLoader.on("beforeload", function(loader, node) {
+					alert(node);
+					loader.baseParams.method   = node.attributes.application + '.getTree';
+					loader.baseParams.node     = node.id;
+			        loader.baseParams.datatype = node.attributes.datatype;
+			        loader.baseParams.owner    = node.attributes.owner;
+				}, this);
+				            
+				var tree = new Tree.TreePanel('iWindowContAdrTag', {
+					animate:true,
+					loader: treeLoader,
+					enableDD:true,
+					//lines: false,
+					ddGroup: 'TreeDD',
+					enableDrop: true,			
+					containerScroll: true,
+					rootVisible:false
+				});
+
+				
+				// set the root node
+				var root = new Tree.TreeNode({
+					text: 'root',
+					draggable:false,
+					allowDrop:false,
+					id:'root'
+				});
+				tree.setRootNode(root);				
+				
+				//application received globally
+				root.appendChild(new Tree.AsyncTreeNode(application));
+
+				// render the tree
+				tree.render();
+				root.expand(); 
+				
+
+				//###############Listenansichtende #################
+     
+                addressBookDialog.addKeyListener(27, this.hide);
+                addressBookDialog.addButton("save", function() {
+                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
+                    addressBookDialog.hide;
+                }, addressBookDialog);
+				
+                addressBookDialog.addButton("cancel", function() {
+                    //window.location.reload();
+                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
+                    addressBookDialog.hide;
+                }, addressBookDialog);
+					
+                var layout = addressBookDialog.getLayout();
+                layout.beginUpdate();
+                layout.add("center", new Ext.ContentPanel('iWindowContAdrTag', {	
+                    autoCreate:true, 
+                    title: 'Addressbook'
+                }));
+                layout.endUpdate();									
+            }
+            
+            addressBookDialog.show();		
+		}
+
+		
+		
         addressedit.column(
             {width:'33%', labelWidth:90, labelSeparator:''},
             new Ext.form.TextField({fieldLabel:'Prefix', name:'n_prefix', width:175}),
             new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175}),
-            new Ext.form.ComboBox({
-                fieldLabel: 'Addressbook',
-                name: 'contact_owner',
-                hiddenName:'contact_owner',
-                store: ds_addressbooks,
-                displayField:'addressbooks',
-                valueField:'id',
-                allowBlank: false,
-                editable: false,
-                mode: 'remote',
-                triggerAction: 'all',
-                emptyText:'Select a addressbook...',
-                selectOnFocus:true,
-                width:175
-            })
+            addressbookTrigger
         );
 /*        
         addressedit.column(
@@ -1605,7 +1702,7 @@ Egw.Addressbook.ListEditDialog = function() {
                     contact_email: _record.data.contact_email
                 });
                 
-                ds_listMembers.add(record);
+				ds_listMembers.add(record);
                 ds_listMembers.sort('n_family');
                 
                 list_search.reset();
@@ -1613,7 +1710,41 @@ Egw.Addressbook.ListEditDialog = function() {
             }
         });
     
-        
+        list_search.on('collapse', function(_record){
+			if(searchDS.getCount() == 0) {
+				var regExp  = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum)$/;
+				var regExp2 = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum) ([\w ])*$/;
+				var aussage = regExp.exec(list_search.getValue());
+				var aussage2 = regExp2.exec(list_search.getValue());
+				
+				if(aussage) {
+					var record = new listMemberRecord({
+						contact_id: '-1',
+						n_family: '',
+						contact_email: list_search.getValue()
+					});
+				}
+				if(aussage2) {
+				    var contact = list_search.getValue();
+					var contact_elemente = contact.split(" ");
+					var email = contact_elemente[0];
+					var name = contact_elemente[1];
+					
+					var record = new listMemberRecord({
+						contact_id: '-1',
+						n_family: name,
+						contact_email: email
+					});
+				}
+				if(aussage || aussage2) {
+					ds_listMembers.add(record);
+					ds_listMembers.sort('n_family');
+					list_search.reset();
+				}
+				
+			}
+ 		});
+		
         listedit.fieldset({legend:'select new list members'});
         listedit.column(
            {width:'100%', labelWidth:0, labelSeparator:''},               
@@ -1675,7 +1806,7 @@ Egw.Addressbook.ListEditDialog = function() {
             var contactIDs = Array();
             var selectedRows = listGrid.getSelectionModel().getSelections();
             for (var i = 0; i < selectedRows.length; ++i) {
-                listMembersDS.remove(selectedRows[i]);
+                ds_listMembers.remove(selectedRows[i]);
             }
         }
         
