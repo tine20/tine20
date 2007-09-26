@@ -389,6 +389,7 @@ Ext.onReady(function(){
 		loader.baseParams.node     = node.id;
         loader.baseParams.datatype = node.attributes.datatype;
         loader.baseParams.owner    = node.attributes.owner;
+		loader.baseParams.modul    = 'mainscreen';
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {
