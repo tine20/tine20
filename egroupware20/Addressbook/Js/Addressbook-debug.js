@@ -936,6 +936,8 @@ Egw.Addressbook = function() {
             width:175, 
             readOnly:true
         });
+		
+	
 
         addressbookTrigger.onTriggerClick = function(){			
 		
@@ -969,20 +971,17 @@ Egw.Addressbook = function() {
                     }
                 });
 
-
-
-
 				//################## Listenansicht #################
 
 				var Tree = Ext.tree;
 				
 				treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
 				treeLoader.on("beforeload", function(loader, node) {
-					alert(node);
 					loader.baseParams.method   = node.attributes.application + '.getTree';
 					loader.baseParams.node     = node.id;
 			        loader.baseParams.datatype = node.attributes.datatype;
 			        loader.baseParams.owner    = node.attributes.owner;
+					loader.baseParams.modul    = 'contactedit';
 				}, this);
 				            
 				var tree = new Tree.TreePanel('iWindowContAdrTag', {
@@ -1015,18 +1014,29 @@ Egw.Addressbook = function() {
 				
 
 				//###############Listenansichtende #################
-     
-                addressBookDialog.addKeyListener(27, this.hide);
+
+				addressBookDialog.addKeyListener(27, this.hide);
                 addressBookDialog.addButton("save", function() {
-                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
-                    addressBookDialog.hide;
+						if(tree.getSelectionModel().getSelectedNode()) {				
+							var cnode = tree.getSelectionModel().getSelectedNode().id;
+							
+							var addressbook_id = tree.getNodeById(cnode).attributes.owner;	
+						//	var addressbook_id = parseInt(tree.getNodeById(cnode).attributes.owner);	
+							
+							//alert(typeof addressbook_id);
+							if( (addressbook_id > 0) || (addressbook_id < 0) ) {
+								addressedit.setValues([{id:'contact_owner', value:addressbook_id}]);
+								addressBookDialog.hide();
+							} else {
+							  Ext.MessageBox.alert('wrong selection','please select a valid addressbook');
+							}
+						} else {
+							 Ext.MessageBox.alert('no selection','please select an addressbook');
+						}
+					    
                 }, addressBookDialog);
 				
-                addressBookDialog.addButton("cancel", function() {
-                    //window.location.reload();
-                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
-                    addressBookDialog.hide;
-                }, addressBookDialog);
+                addressBookDialog.addButton("cancel", addressBookDialog.hide, addressBookDialog);
 					
                 var layout = addressBookDialog.getLayout();
                 layout.beginUpdate();
@@ -1037,10 +1047,9 @@ Egw.Addressbook = function() {
                 layout.endUpdate();									
             }
             
-            addressBookDialog.show();		
+            addressBookDialog.show();	
+			
 		}
-
-		
 		
         addressedit.column(
             {width:'33%', labelWidth:90, labelSeparator:''},
@@ -1615,26 +1624,136 @@ Egw.Addressbook.ListEditDialog = function() {
             }
             //console.log(_form.baseParams); 
         });
-        
+     
+
+      var addressbookTrigger = new Ext.form.TriggerField({
+            fieldLabel:'Addressbook', 
+            name:'contact_owner', 
+            width:325, 
+            readOnly:true
+        });
+		
+	
+
+        addressbookTrigger.onTriggerClick = function(){			
+		
+			test = Ext.Element.get('iWindowContAdrTag');
+			
+			if(test != null) {
+				test.remove();
+			}
+			
+			var bodyTag			= Ext.Element.get(document.body);
+            var containerTag	= bodyTag.createChild({tag: 'div',id: 'adrContainer'});
+            var iWindowTag	= containerTag.createChild({tag: 'div',id: 'iWindowAdrTag'});
+            var iWindowContTag  = containerTag.createChild({tag: 'div',id: 'iWindowContAdrTag'});
+
+			if(!addressBookDialog) {
+                var addressBookDialog = new Ext.LayoutDialog('iWindowAdrTag', {
+                    modal: true,
+                    width:375,
+                    height:400,
+                    shadow:true,
+                    minWidth:375,
+                    minHeight:400,
+                    autoTabs:true,
+                    proxyDrag:true,
+                    // layout config merges with the dialog config
+                    center:{
+                        autoScroll:true,
+                        tabPosition: 'top',
+                        closeOnTab: true,
+                        alwaysShowTabs: true
+                    }
+                });
+
+				//################## Listenansicht #################
+
+				var Tree = Ext.tree;
+				
+				treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
+				treeLoader.on("beforeload", function(loader, node) {
+					loader.baseParams.method   = node.attributes.application + '.getTree';
+					loader.baseParams.node     = node.id;
+			        loader.baseParams.datatype = node.attributes.datatype;
+			        loader.baseParams.owner    = node.attributes.owner;
+					loader.baseParams.modul    = 'contactedit';
+				}, this);
+				            
+				var tree = new Tree.TreePanel('iWindowContAdrTag', {
+					animate:true,
+					loader: treeLoader,
+					enableDD:true,
+					//lines: false,
+					ddGroup: 'TreeDD',
+					enableDrop: true,			
+					containerScroll: true,
+					rootVisible:false
+				});
+
+				
+				// set the root node
+				var root = new Tree.TreeNode({
+					text: 'root',
+					draggable:false,
+					allowDrop:false,
+					id:'root'
+				});
+				tree.setRootNode(root);				
+				
+				//application received globally
+				root.appendChild(new Tree.AsyncTreeNode(application));
+
+				// render the tree
+				tree.render();
+				root.expand(); 
+				
+
+				//###############Listenansichtende #################
+
+	 
+				addressBookDialog.addKeyListener(27, this.hide);
+                addressBookDialog.addButton("save", function() {
+						if(tree.getSelectionModel().getSelectedNode()) {				
+							var cnode = tree.getSelectionModel().getSelectedNode().id;
+							
+							var addressbook_id = tree.getNodeById(cnode).attributes.owner;	
+						//	var addressbook_id = parseInt(tree.getNodeById(cnode).attributes.owner);	
+							
+							//alert(typeof addressbook_id);
+							if( (addressbook_id > 0) || (addressbook_id < 0) ) {
+								addressedit.setValues([{id:'contact_owner', value:addressbook_id}]);
+								addressBookDialog.hide();
+							} else {
+							  Ext.MessageBox.alert('wrong selection','please select a valid addressbook');
+							}
+						} else {
+							 Ext.MessageBox.alert('no selection','please select an addressbook');
+						}
+					    
+                }, addressBookDialog);
+				
+                addressBookDialog.addButton("cancel", addressBookDialog.hide, addressBookDialog);
+					
+                var layout = addressBookDialog.getLayout();
+                layout.beginUpdate();
+                layout.add("center", new Ext.ContentPanel('iWindowContAdrTag', {	
+                    autoCreate:true, 
+                    title: 'Addressbook'
+                }));
+                layout.endUpdate();									
+            }
+            
+            addressBookDialog.show();	
+			
+		}
+
+	 
         listedit.fieldset({legend:'list information'});
                 
         listedit.column(
             {width:'100%', labelWidth:90, labelSeparator:''},
-            new Ext.form.ComboBox({
-                fieldLabel: 'Addressbook',
-                name: 'list_owner',
-                hiddenName:'list_owner',
-                store: ds_addressbooks,
-                displayField:'addressbooks',
-                valueField:'id',
-                allowBlank: false,
-                editable: false,
-                mode: 'remote',
-                triggerAction: 'all',
-                emptyText:'Select a addressbook...',
-                selectOnFocus:true,
-                width:325
-            }),
+   		    addressbookTrigger,
             new Ext.form.TextField({fieldLabel:'List Name', name:'list_name', width:325}),
             new Ext.form.TextArea({fieldLabel:'List Description', name:'list_description', width:325, grow: false })
         );          
@@ -1710,40 +1829,25 @@ Egw.Addressbook.ListEditDialog = function() {
             }
         });
     
-        list_search.on('collapse', function(_record){
+        list_search.on('specialkey', function(_this, _e){
 			if(searchDS.getCount() == 0) {
 				var regExp  = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum)$/;
-				var regExp2 = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum) ([\w ])*$/;
-				var aussage = regExp.exec(list_search.getValue());
-				var aussage2 = regExp2.exec(list_search.getValue());
 				
-				if(aussage) {
+				var aussage = regExp.exec(list_search.getValue());
+				
+				if(aussage && (_e.getKey() == _e.ENTER || _e.getKey() == e.RETURN ) ) {
 					var record = new listMemberRecord({
 						contact_id: '-1',
 						n_family: '',
 						contact_email: list_search.getValue()
 					});
-				}
-				if(aussage2) {
-				    var contact = list_search.getValue();
-					var contact_elemente = contact.split(" ");
-					var email = contact_elemente[0];
-					var name = contact_elemente[1];
-					
-					var record = new listMemberRecord({
-						contact_id: '-1',
-						n_family: name,
-						contact_email: email
-					});
-				}
-				if(aussage || aussage2) {
 					ds_listMembers.add(record);
 					ds_listMembers.sort('n_family');
 					list_search.reset();
 				}
-				
 			}
  		});
+	
 		
         listedit.fieldset({legend:'select new list members'});
         listedit.column(
@@ -1760,9 +1864,12 @@ Egw.Addressbook.ListEditDialog = function() {
         ]);
 
         // data store for listmember grid
+		if(formData.values) var listmembers = formData.values.list_members;
+		else							 var listmembers = '';
+		
         var ds_listMembers = new Ext.data.SimpleStore({
             fields: ['contact_id', 'n_family', 'contact_email'],
-            data: formData.values.list_members
+            data: listmembers
         });
         ds_listMembers.sort('n_family', 'ASC');
 
