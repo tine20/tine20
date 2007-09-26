@@ -74,7 +74,7 @@ class Addressbook_Http
 			$view->formData['values']['list_name'] = $list->list_name;
 			$view->formData['values']['list_description'] = $list->list_description;
 			foreach($list->list_members as $member) {
-				$view->formData['values']['list_members'][] = array($member['contact_id'], $member['n_family'], $member['contact_email']);
+				$view->formData['values']['list_members'][] = array($member->contact_id, $member->n_family, $member->contact_email);
 			} 
 		}
 		

@@ -34,7 +34,6 @@ class Addressbook_Contact
      * @var array
      */
     protected $_validators = array(
-		'contact_tid'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -52,8 +51,8 @@ class Addressbook_Contact
         'contact_email'		=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_email_home'	=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_note'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_role'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_room'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_owner'		=> array(),
+    	'contact_role'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_title'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_url'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_url_home'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -80,7 +79,11 @@ class Addressbook_Contact
     public function __construct($_contactData = NULL)
     {
     	if(is_array($_contactData)) {
-    		$this->setFromUserData($_contactData);
+    		foreach($_contactData as $key => $value) {
+    			if(isset($this->_validators[$key])) {
+    				$this->$key = $value;
+    			}
+    		}
     	}
     }
     

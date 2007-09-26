@@ -329,18 +329,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $listData = $this->contactsTable->fetchRow($where);
         $listMembers = $this->getContactsByList($_listId, $currentAccount->account_id, NULL, 'n_family', 'ASC');
         //$result = $this->contactsTable->fetchRow($where);
-        error_log(print_r($listData, true));
+        //error_log(print_r($listData, true));
         //error_log(print_r($listMembers, true));
         $result = new Addressbook_List();
         
         $result->list_name = $listData->n_family;
         $result->list_description = $listData->contact_note;
         $result->list_owner = $listData->contact_owner;
-        $result->list_members[] = array(
-        	'contact_id'	=> '1', 
-        	'n_family'		=> 'Kneschke', 
-        	'contact_email' => 'lars@kneschke.de'
-        );
+        $result->list_members = new Addressbook_ContactSet($listMembers->toArray());
         
         return $result;
     }
