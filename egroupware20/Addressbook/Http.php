@@ -62,6 +62,10 @@ class Addressbook_Http
 		
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'-min.js');
 		
+		$className = "Addressbook_Json";			
+		$application = new $className;		
+		$view->application = $application->getMainTree();
+		
 		$currentAccount = Zend_Registry::get('currentAccount');
 		$egwbaseAcl = Egwbase_Acl::getInstance();
 
