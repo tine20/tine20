@@ -30,6 +30,9 @@
 		}
 	?>
 	
+	<script type="text/javascript" language="javascript">
+		var application = <?php echo Zend_Json::encode($this->application) ?>;
+	</script>
 	
 	<style type="text/css">
 	    .x-layout-panel {
