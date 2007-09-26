@@ -322,19 +322,20 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         // return the requested list_id only if the contact_owner matches the current users acl
         $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('list_id = ?', $_listId),
-            $this->contactsTable->getAdapter()->quoteInto('list_owner IN (?)', array_keys($acl))
+            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_listId),
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
         );
         
-        $listData = $this->listsTable->fetchRow($where);
+        $listData = $this->contactsTable->fetchRow($where);
         $listMembers = $this->getContactsByList($_listId, $currentAccount->account_id, NULL, 'n_family', 'ASC');
         //$result = $this->contactsTable->fetchRow($where);
-        //error_log(print_r($listData, true));
+        error_log(print_r($listData, true));
         //error_log(print_r($listMembers, true));
         $result = new Addressbook_List();
         
-        $result->list_name = 'blabla';
-        $result->list_description = 'description';
+        $result->list_name = $listData->n_family;
+        $result->list_description = $listData->contact_note;
+        $result->list_owner = $listData->contact_owner;
         $result->list_members[] = array(
         	'contact_id'	=> '1', 
         	'n_family'		=> 'Kneschke', 
