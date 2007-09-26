@@ -1021,9 +1021,7 @@ Egw.Addressbook = function() {
 							var cnode = tree.getSelectionModel().getSelectedNode().id;
 							
 							var addressbook_id = tree.getNodeById(cnode).attributes.owner;	
-						//	var addressbook_id = parseInt(tree.getNodeById(cnode).attributes.owner);	
-							
-							//alert(typeof addressbook_id);
+						
 							if( (addressbook_id > 0) || (addressbook_id < 0) ) {
 								addressedit.setValues([{id:'contact_owner', value:addressbook_id}]);
 								addressBookDialog.hide();
@@ -1628,7 +1626,7 @@ Egw.Addressbook.ListEditDialog = function() {
 
       var addressbookTrigger = new Ext.form.TriggerField({
             fieldLabel:'Addressbook', 
-            name:'contact_owner', 
+            name:'list_owner', 
             width:325, 
             readOnly:true
         });
@@ -1718,11 +1716,9 @@ Egw.Addressbook.ListEditDialog = function() {
 							var cnode = tree.getSelectionModel().getSelectedNode().id;
 							
 							var addressbook_id = tree.getNodeById(cnode).attributes.owner;	
-						//	var addressbook_id = parseInt(tree.getNodeById(cnode).attributes.owner);	
-							
-							//alert(typeof addressbook_id);
+												
 							if( (addressbook_id > 0) || (addressbook_id < 0) ) {
-								addressedit.setValues([{id:'contact_owner', value:addressbook_id}]);
+								listedit.setValues([{id:'list_owner', value:addressbook_id}]);
 								addressBookDialog.hide();
 							} else {
 							  Ext.MessageBox.alert('wrong selection','please select a valid addressbook');
@@ -1865,7 +1861,7 @@ Egw.Addressbook.ListEditDialog = function() {
 
         // data store for listmember grid
 		if(formData.values) var listmembers = formData.values.list_members;
-		else							 var listmembers = '';
+	
 		
         var ds_listMembers = new Ext.data.SimpleStore({
             fields: ['contact_id', 'n_family', 'contact_email'],
