@@ -955,22 +955,26 @@ Egw.Addressbook = function() {
 			if(!addressBookDialog) {
                 var addressBookDialog = new Ext.LayoutDialog('iWindowAdrTag', {
                     modal: true,
-                    width:700,
+                    width:375,
                     height:400,
                     shadow:true,
-                    minWidth:700,
+                    minWidth:375,
+					title: 'please select addressbook',
                     minHeight:400,
-                    autoTabs:true,
+					collapsible: false,
+                    autoTabs:false,
                     proxyDrag:true,
                     // layout config merges with the dialog config
                     center:{
                         autoScroll:true,
                         tabPosition: 'top',
                         closeOnTab: true,
-                        alwaysShowTabs: true
+                        alwaysShowTabs: false
                     }
                 });
 
+				addressBookDialog.addKeyListener(27, addressBookDialog.hide, addressBookDialog);
+				
 				//################## Listenansicht #################
 
 				var Tree = Ext.tree;
@@ -1010,13 +1014,8 @@ Egw.Addressbook = function() {
 
 				// render the tree
 				tree.render();
-				root.expand(); 
-				
-
-				//###############Listenansichtende #################
-
-				addressBookDialog.addKeyListener(27, this.hide);
-                addressBookDialog.addButton("save", function() {
+				tree.expandPath('/root/addressbook/');
+				tree.on('click', function() {
 						if(tree.getSelectionModel().getSelectedNode()) {				
 							var cnode = tree.getSelectionModel().getSelectedNode().id;
 							
@@ -1032,15 +1031,17 @@ Egw.Addressbook = function() {
 							 Ext.MessageBox.alert('no selection','please select an addressbook');
 						}
 					    
-                }, addressBookDialog);
-				
-                addressBookDialog.addButton("cancel", addressBookDialog.hide, addressBookDialog);
+                });
+							
+
+				//###############Listenansichtende #################
+            
 					
                 var layout = addressBookDialog.getLayout();
                 layout.beginUpdate();
                 layout.add("center", new Ext.ContentPanel('iWindowContAdrTag', {	
-                    autoCreate:true, 
-                    title: 'Addressbook'
+                    autoCreate:true,
+					fitContainer: true
                 }));
                 layout.endUpdate();									
             }
@@ -1652,18 +1653,22 @@ Egw.Addressbook.ListEditDialog = function() {
                     width:375,
                     height:400,
                     shadow:true,
+					title: 'please select addressbook',
                     minWidth:375,
+					collapsible: false,
                     minHeight:400,
-                    autoTabs:true,
+                    autoTabs:false,
                     proxyDrag:true,
                     // layout config merges with the dialog config
                     center:{
                         autoScroll:true,
                         tabPosition: 'top',
                         closeOnTab: true,
-                        alwaysShowTabs: true
+                        alwaysShowTabs: false
                     }
                 });
+				
+				addressBookDialog.addKeyListener(27, addressBookDialog.hide, addressBookDialog);
 
 				//################## Listenansicht #################
 
@@ -1704,19 +1709,14 @@ Egw.Addressbook.ListEditDialog = function() {
 
 				// render the tree
 				tree.render();
-				root.expand(); 
+				tree.expandPath('/root/addressbook/');
 				
-
-				//###############Listenansichtende #################
-
-	 
-				addressBookDialog.addKeyListener(27, this.hide);
-                addressBookDialog.addButton("save", function() {
+				tree.on('click', function() {
 						if(tree.getSelectionModel().getSelectedNode()) {				
 							var cnode = tree.getSelectionModel().getSelectedNode().id;
 							
 							var addressbook_id = tree.getNodeById(cnode).attributes.owner;	
-												
+						
 							if( (addressbook_id > 0) || (addressbook_id < 0) ) {
 								listedit.setValues([{id:'list_owner', value:addressbook_id}]);
 								addressBookDialog.hide();
@@ -1727,15 +1727,17 @@ Egw.Addressbook.ListEditDialog = function() {
 							 Ext.MessageBox.alert('no selection','please select an addressbook');
 						}
 					    
-                }, addressBookDialog);
+                });
 				
-                addressBookDialog.addButton("cancel", addressBookDialog.hide, addressBookDialog);
+
+				//###############Listenansichtende #################
+
 					
                 var layout = addressBookDialog.getLayout();
                 layout.beginUpdate();
                 layout.add("center", new Ext.ContentPanel('iWindowContAdrTag', {	
-                    autoCreate:true, 
-                    title: 'Addressbook'
+                    autoCreate:true,
+					fitContainer: true
                 }));
                 layout.endUpdate();									
             }
