@@ -78,12 +78,16 @@ class Addressbook_Http
 		
 		// get the list
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-		if(isset($_REQUEST['contactid']) && $list = $addresses->getListById($_REQUEST['contactid'])) {
+		if(isset($_REQUEST['contactid']) && $list = $addresses->getListById((int)$_REQUEST['contactid'])) {
+			$view->formData['values']['list_id'] = $_REQUEST['contactid'];
 			$view->formData['values']['list_name'] = $list->list_name;
 			$view->formData['values']['list_description'] = $list->list_description;
+			$view->formData['values']['list_owner'] = $list->list_owner;
 			foreach($list->list_members as $member) {
 				$view->formData['values']['list_members'][] = array($member->contact_id, $member->n_family, $member->contact_email);
 			} 
+		} else {
+			$view->formData['values']['list_owner'] = $currentAccount->account_id;
 		}
 		
 		$view->jsExecute = 'Egw.Addressbook.ListEditDialog.display();';

@@ -39,11 +39,9 @@ class Addressbook_Json
      * 
      * if $_contactId is 0 the contact gets added, otherwise it gets updated
      *
-     * @param int $_contactId the id of the contact to update, set to 0 for new contacts
-     * @param int $_contactOwner the id the contact owner
      * @return array
      */
-    public function saveAddress($_contactId, $_contactOwner)
+    public function saveContact()
     {
         // convert birthday back to yyyy-mm-dd
     	if(isset($_POST['contact_bday'])) {
@@ -55,6 +53,10 @@ class Addressbook_Json
             } catch (Exception $e) {
             	unset($_POST['contact_bday']);
             }
+        }
+        
+        if(empty($_POST['contact_id'])) {
+        	unset($_POST['contact_id']);
         }
         
         $contact = new Addressbook_Contact();
@@ -70,10 +72,9 @@ class Addressbook_Json
     	}
             
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-    	$contactId = ($_contactId > 0 ? $_contactId : NULL);
     	
         try {
-        	$backend->saveContact($_contactOwner, $contact, $contactId);
+        	$backend->saveContact($contact);
             $result = array('success'           => true,
                             'welcomeMessage'    => 'Entry updated');
         } catch (Exception $e) {
@@ -96,14 +97,18 @@ class Addressbook_Json
      */
     public function saveList($_listId, $_listOwner, $_listMembers, $list_description, $list_name)
     {
-		// set correct contact type for lists
-		if($_POST['_addressType'] == "l") {
-			$_POST['contact_tid'] = "l";
-		}
-		
         $list = new Addressbook_List();
 		try {
-            $list->setFromUserData($_POST);
+			$userData['list_owner'] = $_listOwner;
+			$userData['list_members'] = Zend_Json::decode($_listMembers);
+			$userData['list_description'] = $list_description;
+			$userData['list_name'] = $list_name;
+			if(!empty($_listId)) {
+				$userData['list_id'] = $_listId;
+			}
+			
+            $list->setFromUserData($userData);
+            
     	} catch (Exception $e) {
     		// invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -114,11 +119,11 @@ class Addressbook_Json
     	}
             
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-    	$listId = ($_listId > 0 ? $_listId : NULL);
-    	
+
         try {
-        	//$backend->saveList($_listOwner, $list, $listId);
+        	$backend->saveList($list);
             $result = array('success'           => true,
+            				'listId'			=> $list->list_id,
                             'welcomeMessage'    => 'Entry updated');
         } catch (Exception $e) {
         	$result = array('success'           => false,
@@ -170,18 +175,6 @@ class Addressbook_Json
                 
                 break;
 
-            case 'list':
-            	$options = Zend_Json::decode($options);
-                $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                $listId = $options['listId'];
-                error_log("$listId, $owner, NULL, $sort, $dir, $limit, $start");
-                if($rows = $backend->getContactsByList($options['listId'], $owner, $query, $sort, $dir, $limit, $start)) {
-                    $result['results']    = $rows->toArray();
-                    $result['totalcount'] = $backend->getCountByOwner($owner);
-                }
-                
-                break;
-
             case 'otherpeople':
 				$options = Zend_Json::decode($options);
                 $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
@@ -205,6 +198,24 @@ class Addressbook_Json
 
         }
         
+        return $result;
+    }
+    
+    public function getList($query, $owner, $start, $sort, $dir, $limit, $options = NULL)
+    {
+        $result = array();
+        if(empty($query)) { 
+        	$query = NULL; 
+        }
+    	
+        $options = Zend_Json::decode($options);
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $listId = $options['listId'];
+        if($rows = $backend->getContactsByList($options['listId'], $owner, $query, $sort, $dir, $limit, $start)) {
+        	$result['results']    = $rows->toArray();
+        	$result['totalcount'] = $backend->getCountByOwner($owner);
+        }
+    	
         return $result;
     }
     
@@ -298,12 +309,12 @@ class Addressbook_Json
                     $treeNode = new Egwbase_Ext_Treenode(
                         'Addressbook',
                         'list',
-                        'list-'. $listObject->list_id, 
-                        $listObject->list_name,
+                        'list-'. $listObject->contact_id, 
+                        $listObject->n_family,
                         TRUE
                     );
                     $treeNode->contextMenuClass = 'ctxMenuList';
-                    $treeNode->listId = $listObject->list_id;
+                    $treeNode->listId = $listObject->contact_id;
                     $treeNode->owner  = $owner;
                     $nodes[] = $treeNode;
                 }

@@ -48,10 +48,11 @@ class Addressbook_Contact
         'adr_two_street2'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_assistent'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_bday'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_email'		=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
+    	'contact_email'		=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_email_home'	=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_note'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_owner'		=> array(),
+        'contact_id'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    	'contact_note'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'contact_role'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_title'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_url'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -109,7 +110,7 @@ class Addressbook_Contact
     	
     	if ($inputFilter->isValid()) {
     		$contactData = $inputFilter->getUnescaped();
-    		foreach($contactData as $key => $value) {	
+    		foreach($contactData as $key => $value) {
     			$this->$key = $value;
     		}
     	} else {

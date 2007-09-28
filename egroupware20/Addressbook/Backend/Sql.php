@@ -56,6 +56,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 	{
 		$this->contactsTable = new Addressbook_Backend_Sql_Contacts();
 		$this->listsTable = new Addressbook_Backend_Sql_Lists();
+		$this->listsMapping = new Addressbook_Backend_Sql_ListMapping();
 		$this->egwbaseAcl = Egwbase_Acl::getInstance();
 	}
 	
@@ -68,29 +69,33 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 	 * @todo check acl when adding contact
 	 * @return unknown
 	 */
-	public function saveContact($_contactOwner, Addressbook_Contact $_contactData, $_contactId = NULL)
+	public function saveContact(Addressbook_Contact $_contactData)
 	{
-		$contactData = $_contactData->toArray();
-		$contactData['contact_owner'] = $_contactOwner;
-		$contactData['contact_tid'] = 'n';
+		$currentAccount = Zend_Registry::get('currentAccount');
 		
-		if($_contactId === NULL) {
+		$contactData = $_contactData->toArray();
+		$contactData['contact_tid'] = 'n';
+		unset($contactData['contact_id']);
+		if(empty($contactData['contact_owner'])) {
+			$contactData['contact_owner'] = $currentAccount->account_id;
+		}
+		
+		if($_contactData->contact_id === NULL) {
 			$result = $this->contactsTable->insert($contactData);
+			$_contactData->contact_id = $this->contactsTable->getAdapter()->lastInsertId();
 		} else {
-			$currentAccount = Zend_Registry::get('currentAccount');
-        
 			$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::EDIT);
         
 			// update the requested contact_id only if the contact_owner matches the current users acl
 			$where  = array(
-				$this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_contactId),
+				$this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_contactData->contact_id),
 				$this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
 			);
         		
 			$result = $this->contactsTable->update($contactData, $where);
 		}
 		
-		return $result;
+		return $_contactData;
 	}
 	
 	/**
@@ -102,29 +107,55 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 	 * @todo check acl when adding list
 	 * @return unknown
 	 */
-	public function saveList($_listOwner, Addressbook_List $_listData, $_listId = NULL)
+	public function saveList(Addressbook_List $_listData)
 	{
-		$listData = $_listData->toArray();
-		$listData['contact_owner'] = $_listOwner;
-		$listData['contact_tid'] = 'l';
+		$currentAccount = Zend_Registry::get('currentAccount');
 		
-		if($_listId === NULL) {
+		$listData = array();
+        $listData['n_family']		= $_listData->list_name;
+        $listData['contact_note']	= $_listData->list_description;
+        $listData['contact_owner']	= $_listData->list_owner;
+        $listData['contact_tid']	= 'l';
+        
+		if($_listData->list_id === NULL) {
 			$result = $this->contactsTable->insert($listData);
+			$_listData->list_id = $this->contactsTable->getAdapter()->lastInsertId();
 		} else {
-			$currentAccount = Zend_Registry::get('currentAccount');
         
 			$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::EDIT);
         
 			// update the requested contact_id only if the contact_owner matches the current users acl
 			$where  = array(
-				$this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_listId),
+				$this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_listData->list_id),
 				$this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
 			);
         		
 			$result = $this->contactsTable->update($listData, $where);
 		}
 		
-		return $result;
+		$where = $this->listsMapping->getAdapter()->quoteInto('list_id = ?', $_listData->list_id);
+		$this->listsMapping->delete($where);
+		
+		//error_log(print_r($_listData->list_members, true));
+		$listMembers = array();
+		foreach($_listData->list_members as $contact) {
+			if(!isset($contact->contact_id)) {
+				$contact->contact_owner = $_listData->list_owner;
+				$contact = $this->saveContact($contact);
+			}
+			$listMembers[$contact->contact_id] = $contact->contact_id;
+		}
+		
+		foreach($listMembers as $listMember) {
+			$listMemberData = array();
+			$listMemberData['list_id']			= $_listData->list_id;
+			$listMemberData['contact_id']		= $listMember;
+			$listMemberData['list_added_by']	= $currentAccount->account_id;
+			
+			$this->listsMapping->insert($listMemberData);
+		}
+		
+		return $_listData;
 	}
 	
     /**
@@ -323,21 +354,20 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         // return the requested list_id only if the contact_owner matches the current users acl
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_listId),
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl)),
+            "contact_tid = 'l'"
         );
         
         $listData = $this->contactsTable->fetchRow($where);
         $listMembers = $this->getContactsByList($_listId, $currentAccount->account_id, NULL, 'n_family', 'ASC');
-        //$result = $this->contactsTable->fetchRow($where);
-        //error_log(print_r($listData, true));
-        //error_log(print_r($listMembers, true));
+
         $result = new Addressbook_List();
         
         $result->list_name = $listData->n_family;
         $result->list_description = $listData->contact_note;
         $result->list_owner = $listData->contact_owner;
-        $result->list_members = new Addressbook_ContactSet($listMembers->toArray());
-        
+        $result->list_members = $listMembers;
+
         return $result;
     }
     
@@ -382,7 +412,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param unknown_type $_dir
      * @param unknown_type $_limit
      * @param unknown_type $_start
-     * @return unknown
+     * @return Addressbook_ContactSet
      */
     public function getContactsByList($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
@@ -396,45 +426,33 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $db = Zend_Registry::get('dbAdapter');
         
+//        $select = $db->select()
+//            ->from('egw_addressbook2list', array())
+//            ->order($_sort . ' ' . $_dir)
+//            ->join('egw_addressbook','egw_addressbook.contact_id = egw_addressbook2list.contact_id')
+//            ->join('egw_addressbook_lists','egw_addressbook_lists.list_id = egw_addressbook2list.list_id')
+//            ->where('egw_addressbook2list.list_id = ?', $_list)
+//            ->where('egw_addressbook_lists.list_owner = ?', $_owner)
+//            ->where('egw_addressbook.contact_owner IN (?)', array_keys($acl))
+//            ->limit($limit, $start);
+        
         $select = $db->select()
             ->from('egw_addressbook2list', array())
             ->order($_sort . ' ' . $_dir)
-            ->join('egw_addressbook','egw_addressbook.contact_id = egw_addressbook2list.contact_id')
-            ->join('egw_addressbook_lists','egw_addressbook_lists.list_id = egw_addressbook2list.list_id')
-            ->where('egw_addressbook2list.list_id = ?', $_list)
-            ->where('egw_addressbook_lists.list_owner = ?', $_owner)
-            ->where('egw_addressbook.contact_owner IN (?)', array_keys($acl))
+            ->join(array('contact_data' => 'egw_addressbook'),'contact_data.contact_id = egw_addressbook2list.contact_id')
+            ->join(array('list_data' => 'egw_addressbook'),'list_data.contact_id = egw_addressbook2list.list_id', array())
+            ->where('list_data.contact_id = ?', $_list)
+            ->where('list_data.contact_owner IN (?)', array_keys($acl))
+            ->where('contact_data.contact_owner IN (?)', array_keys($acl))
             ->limit($limit, $start);
-        
-        //error_log($select->__toString());
+
+        //error_log("getContactsByListQuery:: " . $select->__toString());
             
         $stmt = $db->query($select);
         
-        $config = array(
-            'table'     => 'egw_addressbook',
-            'data'      => $stmt->fetchAll(Zend_Db::FETCH_ASSOC),
-            'rowClass'  => 'Zend_Db_Table_Row',
-            'stored'    => true
-        );
+        $result = new Addressbook_ContactSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
-        $rowset = new Zend_Db_Table_Rowset($config);
-        
-        return $rowset;
-        
-        /*
-         * you could also use this piece of code, to fetch the joined data, but this way you can NOT define
-         * any limit, where or order statements
-        $lists = new Addressbook_Backend_Sql_Lists();
-        
-        $listRowset = $lists->find($list);
-        
-        $currentList = $listRowset->current();
-        
-        $result = $currentList->findManyToManyRowset('Addressbook_Backend_Sql_Contacts', 'Addressbook_Backend_Sql_ListMapping');
-        
-        return $result;
-        
-        */
+        return $result;        
     }
     
     public function getListsByOwner($_owner)
@@ -442,12 +460,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $currentAccount = Zend_Registry::get('currentAccount');
         
         if($_owner == $currentAccount->account_id || $this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
-            $where[] = $this->listsTable->getAdapter()->quoteInto('list_owner = ?', $_owner);
+            //$where[] = $this->listsTable->getAdapter()->quoteInto('list_owner = ?', $_owner);
+        	$where  = array(
+        		$this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $_owner),
+            	"contact_tid = 'l'"
+        	);
         } else {
             throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
         }
         
-        $result = $this->listsTable->fetchAll($where, 'list_name', 'ASC');
+        $result = $this->contactsTable->fetchAll($where, 'n_family', 'ASC');
         
         return $result;
     }

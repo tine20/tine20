@@ -30,7 +30,8 @@ class Addressbook_List
      * @var array
      */
     protected $_validators = array(
-        'list_name'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'list_id'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    	'list_name'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'list_description'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'list_owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'list_members'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true)
@@ -61,14 +62,36 @@ class Addressbook_List
      * @param array $_contactData
      * @throws Execption when content contains invalid or missing data
      */
-    public function setFromUserData(array $_contactData)
+    public function setFromUserData(array $_listData)
     {
-    	$inputFilter = new Zend_Filter_Input($this->_filters, $this->_validators, $_contactData);
+    	if(isset($_listData['list_members'])) {
+    		$listMembers = (array)$_listData['list_members'];
+    		unset($_listData['list_members']);
+    	}
+    	
+    	$inputFilter = new Zend_Filter_Input($this->_filters, $this->_validators, $_listData);
     	
     	if ($inputFilter->isValid()) {
     		$contactData = $inputFilter->getUnescaped();
     		foreach($contactData as $key => $value) {	
     			$this->$key = $value;
+    		}
+    		if(is_array($listMembers)) {
+    			$contactSet = new Addressbook_ContactSet();
+    			foreach($listMembers as $listMember) {
+    				try {
+    					$contact = new Addressbook_Contact();
+    					if($listMember['contact_id'] == -1) {
+    						// add as new contact
+    						unset($listMember['contact_id']);
+    					}
+    					$contact->setFromUserData($listMember);
+    					$contactSet->addContact($contact);
+    				} catch (Exception $e) {
+    					// just skip the entry for now
+    				}
+    			}
+    			$this->list_members = $contactSet;
     		}
     	} else {
             foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
