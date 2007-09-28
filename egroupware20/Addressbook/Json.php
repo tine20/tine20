@@ -148,7 +148,7 @@ class Addressbook_Json
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getContacts($query, $nodeid, $datatype, $owner, $start, $sort, $dir, $limit, $options = NULL)
+    public function getContacts($query, $datatype, $owner, $start, $sort, $dir, $limit, $options)
     {
         $result = array();
         if(empty($query)) { 
@@ -201,17 +201,15 @@ class Addressbook_Json
         return $result;
     }
     
-    public function getList($query, $owner, $start, $sort, $dir, $limit, $options = NULL)
+    public function getList($listId, $query, $owner, $start, $sort, $dir, $limit)
     {
         $result = array();
         if(empty($query)) { 
         	$query = NULL; 
         }
     	
-        $options = Zend_Json::decode($options);
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        $listId = $options['listId'];
-        if($rows = $backend->getContactsByList($options['listId'], $owner, $query, $sort, $dir, $limit, $start)) {
+        if($rows = $backend->getContactsByList($listId, $owner, $query, $sort, $dir, $limit, $start)) {
         	$result['results']    = $rows->toArray();
         	$result['totalcount'] = $backend->getCountByOwner($owner);
         }
@@ -267,7 +265,7 @@ class Addressbook_Json
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOverview($query, $start, $sort, $dir, $limit, $options = NULL)
+    public function getOverview($query, $start, $sort, $dir, $limit, $options)
     {
         if(empty($query)) { 
         	$query = NULL; 

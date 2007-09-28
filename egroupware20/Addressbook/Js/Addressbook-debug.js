@@ -10,16 +10,66 @@ Egw.Addressbook = function() {
     
     var dialog;
     
-    var filterContactsButton, filterListsButton;
+    var filterContactsButton, filterListsButton, textF1;
+    
+    var currentTreeNode;
 
     // private functions and variables
-   
 
+    var _setParameter = function(_dataSource)
+    {
+        if(filterContactsButton) {
+            var displayContacts = filterContactsButton.pressed;
+        } else {
+            var displayContacts = true;
+        }
+
+        if(filterListsButton) {
+            var displayLists = filterListsButton.pressed;
+        } else {
+            var displayLists = true;
+        }
+        
+        switch(currentTreeNode.attributes.datatype) {
+            case 'list':
+                _dataSource.baseParams.listId = currentTreeNode.attributes.listId;
+                _dataSource.baseParams.method = 'Addressbook.getList';
+               
+                break;
+                
+            case 'contacts':
+            case 'otherpeople':
+            case 'sharedaddressbooks':
+                _dataSource.baseParams.method = 'Addressbook.getContacts';
+                _dataSource.baseParams.options = Ext.encode({
+                    displayContacts: displayContacts,
+                    displayLists:    displayLists
+                });
+                
+                break;
+
+            case 'overview':
+                _dataSource.baseParams.method = 'Addressbook.getOverview';
+                _dataSource.baseParams.options = Ext.encode({
+                    displayContacts: displayContacts,
+                    displayLists:    displayLists
+                });
+                
+                break;
+        }
+
+        if(textF1) {
+           _dataSource.baseParams.query = textF1.getValue();
+        }
+    }
+    
     /**
      * creates the address grid
      *
      */
-    var _showAddressGrid = function(_layout, _node) {
+    var _showAddressGrid = function(_layout, _node) 
+    {
+        currentTreeNode = _node;
 
        var center = _layout.getRegion('center', false);
 
@@ -31,62 +81,12 @@ Egw.Addressbook = function() {
 	   var toolbarDivTag	= contentTag.createChild({tag: 'div', id: 'toolbargriddiv'});
 	   var outerDivTag 		= contentTag.createChild({tag: 'div', id: 'outergriddiv'});
 	   
-	   
-       switch(_node.attributes.datatype) {
-           case 'list':
-               var options = {
-                   listId: _node.attributes.listId
-               };
-               var method = 'Addressbook.getList';
-               
-               break;
-           
-           case 'contacts':
-               var options = {
-                   displayContacts: true,
-                   displayLists:    true
-               };
-               var method = 'Addressbook.getContacts';
-                
-               break;
-                
-            case 'otherpeople':
-                var options = {
-                        displayContacts: true,
-                        displayLists:    true,
-                };
-               var method = 'Addressbook.getContacts';
-                
-                break;
-
-           case 'sharedaddressbooks':
-               var options = {
-                       displayContacts: true,
-                       displayLists:    true,
-               };
-               var method = 'Addressbook.getContacts';
-               
-               break;   
-
-           case 'overview':
-               var options = {
-                       displayContacts: true,
-                       displayLists:    true,
-               };
-               var method = 'Addressbook.getOverview';
-               
-               break;   
-       }
-
        // create the Data Store
        contactDS = new Ext.data.JsonStore({
            url: 'index.php',
            baseParams: {
-               method:   method, 
-               datatype: _node.attributes.datatype,
-               owner:    _node.attributes.owner, 
-               nodeid:   _node.attributes.id, 
-               options:  Ext.encode(options),
+               datatype: currentTreeNode.attributes.datatype,
+               owner:    currentTreeNode.attributes.owner, 
                query:   ''
            },
            root: 'results',
@@ -160,18 +160,13 @@ Egw.Addressbook = function() {
        //contactDS.on("beforeload", function() {
        //  console.log('before load');
        //});
+        _setParameter(contactDS);
 
        contactDS.setDefaultSort('n_family', 'asc');
 
        contactDS.load({params:{start:0, limit:50}});
        
-       contactDS.on('beforeload', function(_loader, _node) {
-           _loader.baseParams.options = Ext.encode({
-              displayContacts:    filterContactsButton.pressed,
-              displayLists:       filterListsButton.pressed
-           });
-           _loader.baseParams.query = textF1.getValue();
-       });
+       contactDS.on('beforeload', _setParameter);
 
        var cm = new Ext.grid.ColumnModel([
 		{ resizable: true, id: 'contact_tid', header: 'Type', dataIndex: 'contact_tid', width: 30, renderer: _renderContactTid },
@@ -386,7 +381,7 @@ Egw.Addressbook = function() {
            onClick: _exportBtnHandler
        }); 
        
-        var textF1 = new Ext.form.TextField({
+        textF1 = new Ext.form.TextField({
             height: 22,
 		    width: 200,
 		    emptyText:'Suchparameter ...', 
