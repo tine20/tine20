@@ -679,35 +679,6 @@ Egw.Addressbook = function() {
             }
         });
 		
-		// if() {
-			// new Ext.data.Connection().request({
-	            // url: 'index.php',
-	            // method: 'post',
-	            // scope: this,
-	            // params: {method:'Addressbook.deleteLists', _contactIDs:contactIDs},
-	            // success: function(response, options) {
-	            //    window.location.reload();
-	                //console.log(response);
-	                // var decodedResponse;
-	                // try{
-	                    // decodedResponse = Ext.util.JSON.decode(response.responseText);
-	                    // if(decodedResponse.success) {
-	            //            Ext.MessageBox.alert('Success!', 'Deleted contact!');
-	                        // if(typeof _onSuccess == 'function') {
-	                            // _onSuccess;
-	                        // }
-	                    // } else {
-	                        // Ext.MessageBox.alert('Failure!', 'Deleting contact failed!');
-	                    // }
-	                    //console.log(decodedResponse);
-	                // } catch(e){
-	                    // Ext.MessageBox.alert('Failure!', e.message);
-	                // }
-	            // },
-	            // failure: function(response, options) {
-	            // }
-	        // });
-		// }
     }
 	
     var _exportContact = function(_btn, _event) {
@@ -737,7 +708,7 @@ Egw.Addressbook = function() {
         }		
         var tb = new Ext.Toolbar('header');
         tb.add({
-            id: 'savebtn',
+            id: 'savebtn',  
             cls:'x-btn-text-icon',
             text: 'Save and Close',
             icon:'images/oxygen/22x22/actions/document-save.png',
@@ -972,11 +943,11 @@ Egw.Addressbook = function() {
 				
 				treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
 				treeLoader.on("beforeload", function(loader, node) {
-					loader.baseParams.method   = node.attributes.application + '.getTree';
-					loader.baseParams.node     = node.id;
-			        loader.baseParams.datatype = node.attributes.datatype;
-			        loader.baseParams.owner    = node.attributes.owner;
-					loader.baseParams.modul    = 'contactedit';
+					loader.baseParams.method       = 'Addressbook.getSubTree';
+					loader.baseParams._node        = node.id;
+			        loader.baseParams._datatype    = node.attributes.datatype;
+			        loader.baseParams._owner       = node.attributes.owner;
+					loader.baseParams._location    = 'selectFolder';
 				}, this);
 				            
 				var tree = new Tree.TreePanel('iWindowContAdrTag', {
@@ -1000,12 +971,12 @@ Egw.Addressbook = function() {
 				});
 				tree.setRootNode(root);				
 				
-				//application received globally
-				root.appendChild(new Tree.AsyncTreeNode(application));
+                Ext.each(application, function(_treeNode) {
+                    root.appendChild(new Tree.AsyncTreeNode(_treeNode));                    
+                });
 
 				// render the tree
 				tree.render();
-				tree.expandPath('/root/addressbook/');
 				tree.on('click', function() {
 						if(tree.getSelectionModel().getSelectedNode()) {				
 							var cnode = tree.getSelectionModel().getSelectedNode().id;

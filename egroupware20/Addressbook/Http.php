@@ -29,7 +29,7 @@ class Addressbook_Http
 		
 		$className = "Addressbook_Json";			
 		$application = new $className;		
-		$view->application = $application->getMainTree();
+		$view->application = $application->getInitialTree('selectFolder');
 
 		$currentAccount = Zend_Registry::get('currentAccount');
 		$egwbaseAcl = Egwbase_Acl::getInstance();
@@ -64,7 +64,7 @@ class Addressbook_Http
 		
 		$className = "Addressbook_Json";			
 		$application = new $className;		
-		$view->application = $application->getMainTree();
+		$view->application = $application->getIntialTree('selectFolder');
 		
 		$currentAccount = Zend_Registry::get('currentAccount');
 		$egwbaseAcl = Egwbase_Acl::getInstance();
