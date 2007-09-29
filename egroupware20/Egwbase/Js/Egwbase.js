@@ -385,7 +385,7 @@ Ext.onReady(function(){
 	treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
 	//treeLoader.baseParams.func = 'getSubTree';
 	treeLoader.on("beforeload", function(loader, node) {
-		loader.baseParams.method   = node.attributes.application + '.getTree';
+		loader.baseParams.method   = node.attributes.application + '.getSubTree';
 		loader.baseParams._node     = node.id;
         loader.baseParams._datatype = node.attributes.datatype;
         loader.baseParams._owner    = node.attributes.owner;
