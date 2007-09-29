@@ -383,13 +383,13 @@ Ext.onReady(function(){
 	var Tree = Ext.tree;
 
 	treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
-	//treeLoader.baseParams.func = 'getTree';
+	//treeLoader.baseParams.func = 'getSubTree';
 	treeLoader.on("beforeload", function(loader, node) {
 		loader.baseParams.method   = node.attributes.application + '.getTree';
-		loader.baseParams.node     = node.id;
-        loader.baseParams.datatype = node.attributes.datatype;
-        loader.baseParams.owner    = node.attributes.owner;
-		loader.baseParams.modul    = 'mainscreen';
+		loader.baseParams._node     = node.id;
+        loader.baseParams._datatype = node.attributes.datatype;
+        loader.baseParams._owner    = node.attributes.owner;
+		loader.baseParams._location = 'mainTree';
 	}, this);
 	            
 	var tree = new Tree.TreePanel('nav', {

@@ -30,10 +30,10 @@ class Egwbase_Ext_Treenode
 		$this->text	= $_text;
 		$this->id	= $_id;
 		//$this->leaf	= $_isLeaf;
-                if($_isLeaf) {
-                $this->children = array();
-                $this->expanded = TRUE;
-                }
+		if($_isLeaf) {
+		    $this->children = array();
+		    $this->expanded = TRUE;
+        }
 	}
 	
 	public function addChildren(Egwbase_Ext_Treenode $_children)

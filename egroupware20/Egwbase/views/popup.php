@@ -23,7 +23,7 @@
 	</script>
 	
 	<?php 
-		error_log(print_r($this->jsIncludeFiles,true));
+		//error_log(print_r($this->jsIncludeFiles,true));
 	
 		foreach ($this->jsIncludeFiles as $name) {
 			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';

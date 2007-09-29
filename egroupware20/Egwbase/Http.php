@@ -35,7 +35,7 @@ class Egwbase_Http
 				
 			$application = new $className;
 				
-			$applications[] = $application->getMainTree();
+			$applications[] = $application->getInitalTree('mainTree');
 				
 			$jsIncludeFiles[] = $applicationName . '/Js/' . $applicationName . '.js';
 		}
