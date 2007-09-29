@@ -45,7 +45,7 @@ class Addressbook_Http
 			$view->formData['values'] = $contact->toArray();
 		}
 		
-		$view->jsExecute = 'Egw.Addressbook.displayContactDialog();';
+		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display();';
 
 		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');

@@ -262,10 +262,6 @@ class Addressbook_Json
                 $childNode->owner = $currentAccount->account_id;
                 $treeNode[] = $childNode;
 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
-                $childNode->owner = 0;
-                $treeNode[] = $childNode;
-                 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherpeople', 'otherpeople', 'Other Users Contacts', FALSE);
                 $childNode->owner = 0;
                 $treeNode[] = $childNode;
@@ -329,7 +325,7 @@ class Addressbook_Json
                 switch($_datatype) {
                     case 'contacts':
                         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                        $lists = $backend->getListsByOwner($owner);
+                        $lists = $backend->getListsByOwner($_owner);
 
                         foreach($lists as $listObject) {
                             $treeNode = new Egwbase_Ext_Treenode(
@@ -341,7 +337,7 @@ class Addressbook_Json
                             );
                             $treeNode->contextMenuClass = 'ctxMenuList';
                             $treeNode->listId = $listObject->contact_id;
-                            $treeNode->owner  = $owner;
+                            $treeNode->owner  = $_owner;
                             $nodes[] = $treeNode;
                         }
 
