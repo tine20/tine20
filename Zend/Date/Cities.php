@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Date
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: DateObject.php 2511 2006-12-26 22:54:37Z bkarwin $
+ * @version    $Id$
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 

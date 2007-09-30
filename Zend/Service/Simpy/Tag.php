@@ -18,7 +18,7 @@
  * @subpackage Simpy
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Tag.php 3794 2007-03-07 17:11:25Z darby $
+ * @version    $Id$
  */
 
 

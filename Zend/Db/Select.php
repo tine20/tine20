@@ -18,7 +18,7 @@
  * @subpackage Select
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Select.php 5802 2007-07-20 23:41:18Z bkarwin $
+ * @version    $Id$
  */
 
 
@@ -718,7 +718,7 @@ class Zend_Db_Select
                     continue;
                 }
                 $direction = 'ASC';
-                if (preg_match('/(.*)\s+(ASC|DESC)\s*$/i', $val, $matches)) {
+                if (preg_match('/(.*\W)(ASC|DESC)\b/si', $val, $matches)) {
                     $val = trim($matches[1]);
                     $direction = $matches[2];
                 }

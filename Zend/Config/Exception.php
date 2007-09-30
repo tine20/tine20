@@ -27,7 +27,7 @@ require_once 'Zend/Exception.php';
  * @category   Zend
  * @package    Zend_Config
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    Zend Framework License version 1.0
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Config_Exception extends Zend_Exception {}
 

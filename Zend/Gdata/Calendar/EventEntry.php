@@ -20,7 +20,7 @@
  */
 
 /**
- * @see Zend_Gdata_EntryAtom
+ * @see Zend_Gdata_Entry
  */
 require_once 'Zend/Gdata/Entry.php';
 

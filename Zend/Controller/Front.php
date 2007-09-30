@@ -532,6 +532,10 @@ class Zend_Controller_Front
 
         $this->_baseUrl = $base;
 
+        if ((null !== ($request = $this->getRequest())) && (method_exists($request, 'setBaseUrl'))) {
+            $request->setBaseUrl($base);
+        }
+
         return $this;
     }
 
@@ -542,6 +546,11 @@ class Zend_Controller_Front
      */
     public function getBaseUrl()
     {
+        $request = $this->getRequest();
+        if ((null !== $request) && method_exists($request, 'getBaseUrl')) {
+            return $request->getBaseUrl();
+        }
+
         return $this->_baseUrl;
     }
 
@@ -825,8 +834,8 @@ class Zend_Controller_Front
          * Set base URL of request object, if available
          */
         if (is_callable(array($this->_request, 'setBaseUrl'))) {
-            if (null !== ($baseUrl = $this->getBaseUrl())) {
-                $this->_request->setBaseUrl($baseUrl);
+            if (null !== $this->_baseUrl) {
+                $this->_request->setBaseUrl($this->_baseUrl);
             }
         }
 

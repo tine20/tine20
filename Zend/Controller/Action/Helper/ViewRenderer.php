@@ -802,7 +802,8 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
             return;
         }
 
-        if (!$this->_noRender
+        if (!$this->_neverRender
+            && !$this->_noRender
             && (null !== $this->_actionController)
             && $this->getRequest()->isDispatched()
             && !$this->getResponse()->isRedirect())

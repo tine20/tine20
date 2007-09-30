@@ -18,7 +18,7 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Yahoo.php 4462 2007-04-11 04:10:16Z darby $
+ * @version    $Id$
  */
 
 

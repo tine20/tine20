@@ -351,11 +351,11 @@ class Zend_Gdata_App
      */
     public function get($uri)
     {
-        $client->setConfig(array('maxredirects' => self::getMaxRedirects()));
-        $client->resetParameters();
-        $client->setHeaders('x-http-method-override', null);
-        $client->setUri($uri);
-        $response = $client->request('GET');
+        $this->_httpClient->setConfig(array('maxredirects' => self::getMaxRedirects()));
+        $this->_httpClient->resetParameters();
+        $this->_httpClient->setHeaders('x-http-method-override', null);
+        $this->_httpClient->setUri($uri);
+        $response = $this->_httpClient->request('GET');
         if ($response->getStatus() !== 200) {
             require_once 'Zend/Gdata/App/HttpException.php';
             $exception = new Zend_Gdata_App_HttpException('Expected response code 200, got ' . $response->getStatus());

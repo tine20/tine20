@@ -39,7 +39,7 @@ require_once 'Zend/Server/Reflection/Exception.php';
  * @subpackage Reflection
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version $Id: Class.php 5756 2007-07-18 21:07:42Z thomas $
+ * @version $Id$
  */
 class Zend_Server_Reflection_Class
 {

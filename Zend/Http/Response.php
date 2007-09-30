@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Response
- * @version    $Id: Response.php 5771 2007-07-18 22:06:24Z thomas $
+ * @version    $Id$
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -479,7 +479,14 @@ class Zend_Http_Response
     public static function extractHeaders($response_str)
     {
         $headers = array();
-        $lines = explode("\n", $response_str);
+        
+        // First, split body and headers
+        $parts = preg_split('|(?:\r?\n){2}|m', $response_str, 2);
+        if (! $parts[0]) return $headers;
+        
+        // Split headers part to lines
+        $lines = explode("\n", $parts[0]);
+        unset($parts);
         $last_header = null;
 
         foreach($lines as $line) {
@@ -523,10 +530,12 @@ class Zend_Http_Response
      */
     public static function extractBody($response_str)
     {
-        list(, $body) = preg_split('/^\r?$/m', $response_str, 2);
-        $body = ltrim($body);
-
-        return $body;
+        $parts = preg_split('|(?:\r?\n){2}|m', $response_str, 2);
+        if (isset($parts[1])) { 
+        	return $parts[1];
+        } else {
+        	return '';
+        }
     }
 
     /**

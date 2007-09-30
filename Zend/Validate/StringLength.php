@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringLength.php 4974 2007-05-25 21:11:56Z bkarwin $
+ * @version    $Id$
  */
 
 
@@ -146,7 +146,7 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
     {
         $valueString = (string) $value;
         $this->_setValue($valueString);
-        $length = strlen($valueString);
+        $length = iconv_strlen($valueString);
         if ($length < $this->_min) {
             $this->_error(self::TOO_SHORT);
         }

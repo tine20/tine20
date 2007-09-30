@@ -45,7 +45,7 @@ class Zend_Gdata_Extension_AttendeeStatus extends Zend_Gdata_Extension
     public function __construct($value = null)
     {
         parent::__construct();
-    $this->_value = $value;
+        $this->_value = $value;
     }
 
     /**
@@ -61,7 +61,7 @@ class Zend_Gdata_Extension_AttendeeStatus extends Zend_Gdata_Extension
     public function getDOM($doc = null)
     {
         $element = parent::getDOM($doc);
-        if ($this->_value != null) {
+        if ($this->_value !== null) {
             $element->setAttribute('value', $this->_value);
         }
         return $element;

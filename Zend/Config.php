@@ -185,6 +185,21 @@ class Zend_Config implements Countable, Iterator
     {
         return isset($this->_data[$name]);
     }
+    
+    /**
+     * Support unset() overloading on PHP 5.1
+     *
+     * @param string $name
+     */
+    protected function __unset($name)
+    {
+        if ($this->_allowModifications) {
+            unset($this->_data[$name]);    
+        } else {
+            throw new Zend_Config_Exception('Zend_Config is read only');
+        }
+        
+    }    
 
     /**
      * Defined by Countable interface
@@ -265,7 +280,33 @@ class Zend_Config implements Countable, Iterator
     {
         return $this->_loadedSection === null;
     }
-
+    
+    
+    /**
+     * Merge another Zend_Config with this one. The items
+     * in $merge will override the same named items in
+     * the current config.
+     *
+     * @param Zend_Config $merge
+     * @return Zend_Config
+     */
+    public function merge(Zend_Config $merge)
+    {
+        foreach($merge as $key => $item) {
+            if(array_key_exists($key, $this->_data)) {
+                if($item instanceof Zend_Config && $this->$key instanceof Zend_Config) {
+                    $this->$key = $this->$key->merge($item);
+                } else {
+                    $this->$key = $item;
+                }
+            } else {
+                $this->$key = $item;
+            }
+        }
+        
+        return $this;
+    }
+    
     /**
      * Throws an exception if $extendingSection may not extend $extendedSection,
      * and tracks the section extension if it is valid.

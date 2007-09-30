@@ -39,7 +39,7 @@ class Zend_Pdf_Element_Dictionary extends Zend_Pdf_Element
      *
      * @var array
      */
-    public $_items = array();
+    private $_items = array();
 
 
     /**

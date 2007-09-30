@@ -24,7 +24,7 @@
  */
 require_once 'Zend/Gdata/App/Extension.php';
 
-/*
+/**
  * Represents the atom:email element
  *
  * @category   Zend

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Measure
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Acceleration.php 3224 2007-02-05 22:08:48Z gavin $
+ * @version    $Id$
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 

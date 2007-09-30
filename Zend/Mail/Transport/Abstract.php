@@ -239,12 +239,12 @@ abstract class Zend_Mail_Transport_Abstract {
             $body = $boundaryLine
                   . $text->getHeaders($this->EOL)
                   . $this->EOL
-                  . $text->getContent()
+                  . $text->getContent($this->EOL)
                   . $this->EOL
                   . $boundaryLine
                   . $html->getHeaders($this->EOL)
                   . $this->EOL
-                  . $html->getContent()
+                  . $html->getContent($this->EOL)
                   . $this->EOL
                   . $boundaryEnd;
 

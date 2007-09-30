@@ -18,7 +18,7 @@
  * @subpackage Statement
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Mysqli.php 5906 2007-07-28 02:58:20Z bkarwin $
+ * @version    $Id$
  */
 
 

@@ -18,7 +18,7 @@
  * @subpackage Delicious
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Exception.php 3772 2007-03-06 20:53:52Z darby $
+ * @version    $Id$
  */
 
 

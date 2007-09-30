@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Translate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Date.php 2498 2006-12-23 22:13:38Z thomas $
+ * @version    $Id$
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -269,6 +269,21 @@ abstract class Zend_Translate_Adapter {
 
         // no translation found, return original
         return $messageId;
+    }
+
+
+    /**
+     * Translates the given string
+     * returns the translation
+     *
+     * @param  string              $messageId  Translation string
+     * @param  string|Zend_Locale  $locale     OPTIONAL Locale/Language to use, identical with locale identifier,
+     *                                         see Zend_Locale for more information
+     * @return string
+     */
+    public function _($messageId, $locale = null)
+    {
+        return $this->translate($messageId, $locale);
     }
 
 

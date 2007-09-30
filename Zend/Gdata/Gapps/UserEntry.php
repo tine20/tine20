@@ -226,11 +226,7 @@ class Zend_Gdata_Gapps_UserEntry extends Zend_Gdata_Entry
     }
 
     /**
-     * Get the value of the quota
-     * @throws Zend_Gdata_App_HttpException
-     * @throws Zend_Gdata_Gapps_ServiceException
-     * @return Zend_Gdata_App_Feed
- property for this object.
+     * Get the value of the quota property for this object.
      *
      * @see setQuota
      * @return Zend_Gdata_Gapps_Extension_Quota The requested object.

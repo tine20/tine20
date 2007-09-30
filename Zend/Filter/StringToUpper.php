@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringToUpper.php 5127 2007-06-05 20:26:59Z andries $
+ * @version    $Id$
  */
 
 

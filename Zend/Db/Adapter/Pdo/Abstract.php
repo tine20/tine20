@@ -18,7 +18,7 @@
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 5906 2007-07-28 02:58:20Z bkarwin $
+ * @version    $Id$
  */
 
 
@@ -92,7 +92,7 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
              * @see Zend_Db_Adapter_Exception
              */
             require_once 'Zend/Db/Adapter/Exception.php';
-            throw new Zend_Db_Adapter_Exception('The PDO extension is required for this adapter but not loaded');
+            throw new Zend_Db_Adapter_Exception('The PDO extension is required for this adapter but the extension is not loaded');
         }
 
         // check the PDO driver is available

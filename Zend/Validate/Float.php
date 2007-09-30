@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Float.php 5229 2007-06-11 20:19:01Z darby $
+ * @version    $Id$
  */
 
 

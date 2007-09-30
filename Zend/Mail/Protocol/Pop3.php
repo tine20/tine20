@@ -5,16 +5,16 @@
  * LICENSE
  *
  * This source file is subject to version 1.0 of the Zend Framework
- * license, that is bundled with this package in the file LICENSE, and
+ * license, that is bundled with this package in the file LICENSE.txt, and
  * is available through the world-wide-web at the following URL:
- * http://www.zend.com/license/framework/1_0.txt. If you did not receive
+ * http://framework.zend.com/license/new-bsd. If you did not receive
  * a copy of the Zend Framework license and are unable to obtain it
  * through the world-wide-web, please send a note to license@zend.com
  * so we can mail you a copy immediately.
  *
  * @package    Zend_Mail
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
 /**
@@ -26,7 +26,7 @@ require_once 'Zend/Mail/Protocol/Exception.php';
 /**
  * @package    Zend_Mail
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Mail_Protocol_Pop3
 {
@@ -129,7 +129,7 @@ class Zend_Mail_Protocol_Pop3
      */
     public function sendRequest($request)
     {
-        $result = @fputs($this->_socket, $request."\n");
+        $result = @fputs($this->_socket, $request . "\r\n");
         if (!$result) {
             throw new Zend_Mail_Protocol_Exception('send failed - connection closed?');
         }
@@ -349,7 +349,7 @@ class Zend_Mail_Protocol_Pop3
     {
         if ($this->hasTop === false) {
             if ($fallback) {
-                return $this->retrive($msgno);
+                return $this->retrieve($msgno);
             } else {
                 throw new Zend_Mail_Protocol_Exception('top not supported and no fallback wanted');
             }
@@ -363,7 +363,7 @@ class Zend_Mail_Protocol_Pop3
         } catch (Zend_Mail_Protocol_Exception $e) {
             $this->hasTop = false;
             if ($fallback) {
-                $result = $this->retrive($msgno);
+                $result = $this->retrieve($msgno);
             } else {
                 throw $e;
             }
@@ -376,11 +376,24 @@ class Zend_Mail_Protocol_Pop3
     /**
      * Make a RETR call for retrieving a full message with headers and body
      *
+     * @deprecated since 1.0.2; this method has a typo - please use retrieve()
      * @param  int $msgno  message number
      * @return string message
      * @throws Zend_Mail_Protocol_Exception
      */
     public function retrive($msgno)
+    {
+        return $this->retrieve($msgno);
+    }
+
+    /**
+     * Make a RETR call for retrieving a full message with headers and body
+     *
+     * @param  int $msgno  message number
+     * @return string message
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function retrieve($msgno)
     {
         $result = $this->request("RETR $msgno", true);
         return $result;

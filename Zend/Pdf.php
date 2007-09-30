@@ -123,9 +123,28 @@ class Zend_Pdf
     /**
      * Document properties
      *
+     * It's an associative array with PDF meta information, values may
+     * be string, boolean or float.
+     * Returned array could be used directly to access, add, modify or remove
+     * document properties.
+     *
+     * Standard document properties: Title (must be set for PDF/X documents), Author,
+     * Subject, Keywords (comma separated list), Creator (the name of the application,
+     * that created document, if it was converted from other format), Trapped (must be
+     * true, false or null, can not be null for PDF/X documents)
+     *
      * @var array
      */
-    private $_properties = array();
+    public $properties = array();
+
+    /**
+     * Original properties set.
+     *
+     * Used for tracking properties changes
+     *
+     * @var array
+     */
+    private $_originalProperties = array();
 
     /**
      * Document level javascript
@@ -273,6 +292,35 @@ class Zend_Pdf
                 $this->rollback($revision);
             } else {
                 $this->_loadPages($this->_trailer->Root->Pages);
+            }
+
+            if ($this->_trailer->Info !== null) {
+                foreach ($this->_trailer->Info->getKeys() as $key) {
+                    $this->properties[$key] = $this->_trailer->Info->$key->value;
+                }
+
+                if (isset($this->properties['Trapped'])) {
+                    switch ($this->properties['Trapped']) {
+                        case 'True':
+                            $this->properties['Trapped'] = true;
+                            break;
+
+                        case 'False':
+                            $this->properties['Trapped'] = false;
+                            break;
+
+                        case 'Unknown':
+                            $this->properties['Trapped'] = null;
+                            break;
+
+                        default:
+                            // Wrong property value
+                            // Do nothing
+                            break;
+                    }
+                }
+
+                $this->_originalProperties = $this->properties;
             }
         } else {
             $trailerDictionary = new Zend_Pdf_Element_Dictionary();
@@ -469,25 +517,34 @@ class Zend_Pdf
     }
 
     /**
-     * Return return the an associative array with PDF meta information, values may
-     * be string, boolean or float.
-     * Returned array could be used directly to access, add, modify or remove
-     * document properties.
+     * Return the document-level Metadata
+     * or null Metadata stream is not presented
      *
-     * Standard document properties: Title (must be set for PDF/X documents), Author,
-     * Subject, Keywords (comma separated list), Creator (the name of the application,
-     * that created document, if it was converted from other format), Trapped (must be
-     * true, false or null, can not be null for PDF/X documents)
-     *
-     * @todo implementation
-     *
-     * @return array
+     * @return string
      */
-    public function properties()
+    public function getMetadata()
     {
-        return $this->_properties;
+        if ($this->_trailer->Root->Metadata !== null) {
+            return $this->_trailer->Root->Metadata->value;
+        } else {
+            return null;
+        }
     }
 
+    /**
+     * Sets the document-level Metadata (mast be valid XMP document)
+     *
+     * @param string $metadata
+     */
+    public function setMetadata($metadata)
+    {
+        $metadataObject = $this->_objFactory->newStreamObject($metadata);
+        $metadataObject->dictionary->Type    = new Zend_Pdf_Element_Name('Metadata');
+        $metadataObject->dictionary->Subtype = new Zend_Pdf_Element_Name('XML');
+
+        $this->_trailer->Root->Metadata = $metadataObject;
+        $this->_trailer->Root->touch();
+    }
 
     /**
      * Return the document-level JavaScript
@@ -521,9 +578,66 @@ class Zend_Pdf
      * @param boolean $newSegmentOnly
      * @param resource $outputStream
      * @return string
+     * @throws Zend_Pdf_Exception
      */
     public function render($newSegmentOnly = false, $outputStream = null)
     {
+        // Save document properties if necessary
+        if ($this->properties != $this->_originalProperties) {
+            $docInfo = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
+
+            foreach ($this->properties as $key => $value) {
+                switch ($key) {
+                    case 'Trapped':
+                        switch ($value) {
+                            case true:
+                                $docInfo->$key = new Zend_Pdf_Element_Name('True');
+                                break;
+
+                            case false:
+                                $docInfo->$key = new Zend_Pdf_Element_Name('False');
+                                break;
+
+                            case null:
+                                $docInfo->$key = new Zend_Pdf_Element_Name('Unknown');
+                                break;
+
+                            default:
+                                throw new Zend_Pdf_Exception('Wrong Trapped document property vale: \'' . $value . '\'. Only true, false and null values are allowed.');
+                                break;
+                        }
+
+                    case 'CreationDate':
+                        // break intentionally omitted
+                    case 'ModDate':
+                        $docInfo->$key = new Zend_Pdf_Element_String((string)$value);
+                        break;
+
+                    case 'Title':
+                        // break intentionally omitted
+                    case 'Author':
+                        // break intentionally omitted
+                    case 'Subject':
+                        // break intentionally omitted
+                    case 'Keywords':
+                        // break intentionally omitted
+                    case 'Creator':
+                        // break intentionally omitted
+                    case 'Producer':
+                        // break intentionally omitted
+                    default:
+                        $docInfo->$key = new Zend_Pdf_Element_String((string)$value);
+                        break;
+                }
+            }
+            $docPages->Type  = new Zend_Pdf_Element_Name('Pages');
+            $docPages->Kids  = new Zend_Pdf_Element_Array();
+            $docPages->Count = new Zend_Pdf_Element_Numeric(0);
+            $docCatalog->Pages = $docPages;
+
+            $this->_trailer->Info = $docInfo;
+        }
+
         $this->_dumpPages();
 
         // Check, that PDF file was modified

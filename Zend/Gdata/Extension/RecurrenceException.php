@@ -50,7 +50,7 @@ class Zend_Gdata_Extension_RecurrenceException extends Zend_Gdata_Extension
             $originalEvent = null)
     {
         parent::__construct();
-    $this->_specialized = $specialized;
+        $this->_specialized = $specialized;
         $this->_entryLink = $entryLink;
         $this->_originalEvent = $originalEvent;
     }
@@ -95,7 +95,7 @@ class Zend_Gdata_Extension_RecurrenceException extends Zend_Gdata_Extension
                 $this->_specialized = true;
             }
             else if ($attribute->nodeValue == "false") {
-                $this->_specialzied = false;
+                $this->_specialized = false;
             }
             else {
                 throw new Zend_Gdata_App_InvalidArgumentException("Expected 'true' or 'false' for gCal:selected#value.");

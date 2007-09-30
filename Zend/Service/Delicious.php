@@ -18,7 +18,7 @@
  * @subpackage Delicious
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Delicious.php 5791 2007-07-19 20:07:45Z ghacek $
+ * @version    $Id$
  */
 
 

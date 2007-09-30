@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: LessThan.php 5152 2007-06-07 14:19:06Z darby $
+ * @version    $Id$
  */
 
 

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Date
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Exception.php 4196 2007-03-23 00:57:04Z gavin $
+ * @version    $Id$
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 

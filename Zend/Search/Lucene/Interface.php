@@ -87,6 +87,24 @@ interface Zend_Search_Lucene_Interface
     public static function getDefaultSearchField();
 
     /**
+     * Set result set limit.
+     *
+     * 0 (default) means no limit
+     *
+     * @param integer $limit
+     */
+    public static function setResultSetLimit($limit);
+
+    /**
+     * Set result set limit.
+     *
+     * 0 means no limit
+     *
+     * @return integer
+     */
+    public static function getResultSetLimit();
+
+    /**
      * Retrieve index maxBufferedDocs option
      *
      * maxBufferedDocs is a minimal number of documents required before
