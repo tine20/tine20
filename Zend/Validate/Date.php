@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Date.php 5134 2007-06-06 17:54:16Z darby $
  */
 
 
@@ -69,7 +69,7 @@ class Zend_Validate_Date extends Zend_Validate_Abstract
 
         $this->_setValue($valueString);
 
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $valueString)) {
+        if (!preg_match('/\d{4}-\d{2}-\d{2}/', $valueString)) {
             $this->_error(self::NOT_YYYY_MM_DD);
             return false;
         }

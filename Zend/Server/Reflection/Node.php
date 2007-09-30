@@ -24,7 +24,7 @@
  * @category   Zend
  * @package    Zend_Server
  * @subpackage Reflection
- * @version $Id$
+ * @version $Id: Node.php 5756 2007-07-18 21:07:42Z thomas $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */

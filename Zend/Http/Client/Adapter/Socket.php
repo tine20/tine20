@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client_Adapter
- * @version    $Id$
+ * @version    $Id: Socket.php 5771 2007-07-18 22:06:24Z thomas $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -26,7 +26,7 @@ require_once 'Zend/Http/Client/Adapter/Interface.php';
 require_once 'Zend/Http/Client/Adapter/Exception.php';
 
 /**
- * A sockets based (stream_socket_client) adapter class for Zend_Http_Client. Can be used
+ * A sockets based (fsockopen) adapter class for Zend_Http_Client. Can be used
  * on almost every PHP environment, and does not require any special extensions.
  *
  * @category   Zend
@@ -57,9 +57,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      * @var array
      */
     protected $config = array(
-        'ssltransport'  => 'ssl',
-        'sslcert'       => null,
-        'sslpassphrase' => null
+        'ssltransport' => 'ssl'
     );
 
     /**
@@ -104,7 +102,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
     public function connect($host, $port = 80, $secure = false)
     {
         // If the URI should be accessed via SSL, prepend the Hostname with ssl://
-        $host = ($secure ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
+        $host = ($secure ? $this->config['ssltransport'] . '://' . $host : $host);
 
         // If we are connected to the wrong host, disconnect first
         if (($this->connected_to[0] != $host || $this->connected_to[1] != $port)) {
@@ -113,28 +111,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
 
         // Now, if we are not connected, connect
         if (! is_resource($this->socket) || ! $this->config['keepalive']) {
-            $context = stream_context_create();
-            if ($secure) {
-                if ($this->config['sslcert'] !== null) {
-                    if (! stream_context_set_option($context, 'ssl', 'local_cert',
-                                                    $this->config['sslcert'])) {
-                        throw new Zend_Http_Client_Adapter_Exception('Unable to set sslcert option');
-                    }
-                }
-                if ($this->config['sslpassphrase'] !== null) {
-                    if (! stream_context_set_option($context, 'ssl', 'passphrase',
-                                                    $this->config['sslpassphrase'])) {
-                        throw new Zend_Http_Client_Adapter_Exception('Unable to set sslpassphrase option');
-                    }
-                }
-            }
-
-            $this->socket = @stream_socket_client($host . ':' . $port,
-                                                  $errno,
-                                                  $errstr,
-                                                  (int) $this->config['timeout'],
-                                                  STREAM_CLIENT_CONNECT,
-                                                  $context);
+            $this->socket = @fsockopen($host, $port, $errno, $errstr, (int) $this->config['timeout']);
             if (! $this->socket) {
                 $this->close();
                 throw new Zend_Http_Client_Adapter_Exception(
@@ -168,7 +145,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
             throw new Zend_Http_Client_Adapter_Exception('Trying to write but we are not connected');
 
         $host = $uri->getHost();
-        $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
+            $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] . '://' . $host : $host);
         if ($this->connected_to[0] != $host || $this->connected_to[1] != $uri->getPort())
             throw new Zend_Http_Client_Adapter_Exception('Trying to write but we are connected to the wrong host');
 

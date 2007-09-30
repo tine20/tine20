@@ -145,30 +145,6 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     }
 
     /**
-     * Set result set limit.
-     *
-     * 0 (default) means no limit
-     *
-     * @param integer $limit
-     */
-    public static function setResultSetLimit($limit)
-    {
-        Zend_Search_Lucene::setResultSetLimit($limit);
-    }
-
-    /**
-     * Set result set limit.
-     *
-     * 0 means no limit
-     *
-     * @return integer
-     */
-    public static function getResultSetLimit()
-    {
-        return Zend_Search_Lucene::getResultSetLimit();
-    }
-
-    /**
      * Retrieve index maxBufferedDocs option
      *
      * maxBufferedDocs is a minimal number of documents required before

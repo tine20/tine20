@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Locale
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id$
+ * @version    $Id: Exception.php 2883 2007-01-18 05:56:31Z gavin $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 

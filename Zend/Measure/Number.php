@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Measure
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id$
+ * @version    $Id: Number.php 5777 2007-07-18 22:22:40Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -344,7 +344,7 @@ class Zend_Measure_Number extends Zend_Measure_Abstract
             throw new Zend_Measure_Exception('Unknown type of number:' . $type);
         }
 
-        $value = $this->toDecimal($this->getValue(-1), $this->getType(-1));
+        $value = $this->toDecimal($this->getValue(), $this->getType());
         $value = $this->fromDecimal($value, $type);
 
         $this->_value = $value;

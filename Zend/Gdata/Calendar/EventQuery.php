@@ -52,16 +52,11 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
     protected $_event = null;
 
     /**
-     * Create Gdata_Calendar_EventQuery object.  If a URL is provided,
-     * it becomes the base URL, and additional URL components may be
-     * appended.  For instance, if $url is 'http://www.foo.com', the
-     * default URL constructed will be 'http://www.foo.com/default/public/full'
-     *
-     * @param string $url The URL to use as the base path for requests
+     * Create Gdata_Calendar_EventQuery object
      */
-    public function __construct($url = null)
+    public function __construct()
     {
-        parent::__construct($url);
+        parent::__construct();
     }
 
     /**
@@ -411,9 +406,7 @@ class Zend_Gdata_Calendar_EventQuery extends Zend_Gdata_Query
      */
     public function getQueryUrl()
     {
-        if (isset($this->_url)) {
-            $uri = $this->_url;
-        } else {
+        if (!isset($uri)) {
             $uri = $this->_defaultFeedUri;
         }
         if ($this->getUser() != null) {

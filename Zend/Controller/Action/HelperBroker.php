@@ -305,8 +305,7 @@ class Zend_Controller_Action_HelperBroker
     {
         $file = $name . '.php';
 
-        $paths = array_reverse(self::$_paths);
-        foreach ($paths as $info) {
+        foreach (self::$_paths as $info) {
             $dir    = $info['dir'];
             $prefix = $info['prefix'];
 

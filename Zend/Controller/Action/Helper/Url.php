@@ -5,9 +5,9 @@
  * LICENSE
  *
  * This source file is subject to version 1.0 of the Zend Framework
- * license, that is bundled with this package in the file LICENSE.txt, and
+ * license, that is bundled with this package in the file LICENSE, and
  * is available through the world-wide-web at the following URL:
- * http://framework.zend.com/license/new-bsd. If you did not receive
+ * http://www.zend.com/license/framework/1_0.txt. If you did not receive
  * a copy of the Zend Framework license and are unable to obtain it
  * through the world-wide-web, please send a note to license@zend.com
  * so we can mail you a copy immediately.
@@ -16,8 +16,8 @@
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id$
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Url.php 5768 2007-07-18 22:01:35Z thomas $
+ * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
 /** Zend_Controller_Action_Helper_Abstract */
@@ -34,7 +34,7 @@ require_once 'Zend/Controller/Front.php';
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 class Zend_Controller_Action_Helper_Url extends Zend_Controller_Action_Helper_Abstract
 {

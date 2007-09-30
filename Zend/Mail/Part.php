@@ -5,16 +5,16 @@
  * LICENSE
  *
  * This source file is subject to version 1.0 of the Zend Framework
- * license, that is bundled with this package in the file LICENSE.txt, and
+ * license, that is bundled with this package in the file LICENSE, and
  * is available through the world-wide-web at the following URL:
- * http://framework.zend.com/license/new-bsd. If you did not receive
+ * http://www.zend.com/license/framework/1_0.txt. If you did not receive
  * a copy of the Zend Framework license and are unable to obtain it
  * through the world-wide-web, please send a note to license@zend.com
  * so we can mail you a copy immediately.
  *
  * @package    Zend_Mail
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
 
@@ -31,7 +31,7 @@ require_once 'Zend/Mail/Exception.php';
 /**
  * @package    Zend_Mail
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 class Zend_Mail_Part implements RecursiveIterator
 {
@@ -136,7 +136,7 @@ class Zend_Mail_Part implements RecursiveIterator
     public function isMultipart()
     {
         try {
-            return stripos($this->contentType, 'multipart/') === 0;
+            return strpos($this->contentType, 'multipart/') === 0;
         } catch(Zend_Mail_Exception $e) {
             return false;
         }
@@ -182,7 +182,7 @@ class Zend_Mail_Part implements RecursiveIterator
         }
 
         // split content in parts
-        $boundary = $this->getHeaderField('content-type', 'boundary');
+        $boundary = Zend_Mime_Decode::splitContentType($this->contentType, 'boundary');
         if (!$boundary) {
             throw new Zend_Mail_Exception('no boundary found in content type to split message');
         }
@@ -317,25 +317,7 @@ class Zend_Mail_Part implements RecursiveIterator
 
         return $header;
     }
-     
-    /**
-     * Get a specific field from a header like content type or all fields as array
-     *
-     * If the header occurs more than once, only the value from the first header
-     * is returned.
-     *
-     * Throws a Zend_Mail_Exception if the requested header does not exist. If
-     * the specific header field does not exist, returns null.
-     *
-     * @param  string $name       name of header, like in getHeader()
-     * @param  string $wantedPart the wanted part, default is first, if null an array with all parts is returned
-     * @param  string $firstName  key name for the first part
-     * @return string|array wanted part or all parts as array($firstName => firstPart, partname => value)
-     * @throws Zend_Exception, Zend_Mail_Exception
-     */
-    public function getHeaderField($name, $wantedPart = 0, $firstName = 0) {
-        return Zend_Mime_Decode::splitHeaderField(current($this->getHeader($name, 'array')), $wantedPart, $firstName);
-    }
+
 
     /**
      * Getter for mail headers - name is matched in lowercase

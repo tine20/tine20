@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Mail
  * @subpackage Transport
- * @version    $Id$
+ * @version    $Id: Smtp.php 5763 2007-07-18 21:58:13Z thomas $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -52,13 +52,6 @@ require_once 'Zend/Mail/Transport/Abstract.php';
  */
 class Zend_Mail_Transport_Smtp extends Zend_Mail_Transport_Abstract
 {
-    /**
-     * EOL character string used by transport
-     * @var string
-     * @access public
-     */
-    public $EOL = "\n";
-
     /**
      * Remote smtp hostname or i.p.
      *

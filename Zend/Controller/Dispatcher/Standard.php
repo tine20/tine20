@@ -159,7 +159,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
     {
         $className = $this->getControllerClass($request);
         if (!$className) {
-            return false;
+            return true;
         }
 
         $fileSpec    = $this->classToFilename($className);
@@ -188,8 +188,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
          * Get controller class
          */
         if (!$this->isDispatchable($request)) {
-            $controller = $request->getControllerName();
-            if (!$this->getParam('useDefaultControllerAlways') && !empty($controller)) {
+            if (!$this->getParam('useDefaultControllerAlways')) {
                 require_once 'Zend/Controller/Dispatcher/Exception.php';
                 throw new Zend_Controller_Dispatcher_Exception('Invalid controller specified (' . $request->getControllerName() . ')');
             }
@@ -309,11 +308,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
     {
         $controllerName = $request->getControllerName();
         if (empty($controllerName)) {
-            if (!$this->getParam('useDefaultControllerAlways')) {
-                return false;
-            }
-            $controllerName = $this->getDefaultControllerName();
-            $request->setControllerName($controllerName);
+            return false;
         }
 
         $className = $this->formatControllerName($controllerName);
@@ -325,8 +320,6 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
         if ($this->isValidModule($module)) {
             $this->_curModule    = $module;
             $this->_curDirectory = $controllerDirs[$module];
-        } else {
-            $request->setModuleName($this->_curModule);
         }
 
         return $className;

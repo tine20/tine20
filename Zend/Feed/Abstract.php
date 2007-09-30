@@ -17,7 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Abstract.php 3941 2007-03-14 21:36:13Z darby $
  */
 
 
@@ -78,9 +78,7 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
             $client->setUri($uri);
             $response = $client->request('GET');
             if ($response->getStatus() !== 200) {
-                /** @see Zend_Feed_Exception */
-                require_once 'Zend/Feed/Exception.php';
-            	throw new Zend_Feed_Exception('Feed failed to load, got response code ' . $response->getStatus());
+                throw new Zend_Feed_Exception('Feed failed to load, got response code ' . $response->getStatus());
             }
             $this->_element = $response->getBody();
             $this->__wakeup();

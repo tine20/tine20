@@ -17,7 +17,7 @@
  * @subpackage Writer
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Stream.php 5764 2007-07-18 21:59:22Z thomas $
  */
 
 /** Zend_Log_Writer_Abstract */
@@ -32,7 +32,7 @@ require_once 'Zend/Log/Formatter/Simple.php';
  * @subpackage Writer
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Stream.php 5764 2007-07-18 21:59:22Z thomas $
  */
 class Zend_Log_Writer_Stream extends Zend_Log_Writer_Abstract
 {
@@ -92,7 +92,7 @@ class Zend_Log_Writer_Stream extends Zend_Log_Writer_Abstract
     {
         $line = $this->_formatter->format($event);
 
-        if (false === @fwrite($this->_stream, $line)) {
+        if (! @fwrite($this->_stream, $line)) {
             throw new Zend_Log_Exception("Unable to write to stream");
         }
     }

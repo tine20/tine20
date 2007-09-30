@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Hostname.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
@@ -74,7 +74,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         self::UNDECIPHERABLE_TLD      => "'%value%' appears to be a DNS hostname but cannot extract TLD part",
         self::INVALID_HOSTNAME        => "'%value%' does not match the expected structure for a DNS hostname",
         self::INVALID_LOCAL_NAME      => "'%value%' does not appear to be a valid local network name",
-        self::LOCAL_NAME_NOT_ALLOWED  => "'%value%' appears to be a local network name but local network names are not allowed"
+        self::LOCAL_NAME_NOT_ALLOWED  => "'%value%' appears to be a local network name but but local network names are not allowed"
     );
 
     /**

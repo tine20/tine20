@@ -232,35 +232,9 @@ class Zend_Pdf_Page
             return;
 
         } else if ($param1 instanceof Zend_Pdf_Page && $param2 === null && $param3 === null) {
-            // Clone existing page.
-            // Let already existing content and resources to be shared between pages
-            // We don't give existing content modification functionality, so we don't need "deep copy"
-            $this->_objFactory = $param1->_objFactory;
-            $this->_attached = &$param1->_attached;
+            /** @todo implementation */
+            throw new Zend_Pdf_Exception('Not implemented yet.');
 
-            $this->_pageDictionary = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
-
-            foreach ($param1->_pageDictionary->getKeys() as $key) {
-                if ($key == 'Contents') {
-                    // Clone Contents property
-
-                    $this->_pageDictionary->Contents = new Zend_Pdf_Element_Array();
-
-                    if ($param1->_pageDictionary->Contents->getType() != Zend_Pdf_Element::TYPE_ARRAY) {
-                        // Prepare array of content streams and add existing stream
-                        $this->_pageDictionary->Contents->items[] = $param1->_pageDictionary->Contents;
-                    } else {
-                        // Clone array of the content streams
-                        foreach ($param1->_pageDictionary->Contents->items as $srcContentStream) {
-                            $this->_pageDictionary->Contents->items[] = $srcContentStream;
-                        }
-                    }
-                } else {
-                    $this->_pageDictionary->$key = $param1->_pageDictionary->$key;
-                }
-            }
-
-            return;
         } else if (is_string($param1) &&
                    ($param2 === null || $param2 instanceof Zend_Pdf_ElementFactory_Interface) &&
                    $param3 === null) {
@@ -322,16 +296,6 @@ class Zend_Pdf_Page
         $this->_pageDictionary->Contents     = new Zend_Pdf_Element_Array();
     }
 
-
-    /**
-     * Clone operator
-     *
-     * @throws Zend_Pdf_Exception
-     */
-    public function __clone()
-    {
-        throw new Zend_Pdf_Exception('Cloning Zend_Pdf_Page object using \'clone\' keyword is not supported. Use \'new Zend_Pdf_Page($srcPage)\' syntax');
-    }
 
     /**
      * Attach resource to the page

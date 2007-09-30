@@ -35,6 +35,7 @@ require_once 'Zend/Controller/Action.php';
  */
 abstract class Zend_Controller_Action_Helper_Abstract
 {
+
     /**
      * $_actionController
      *
@@ -43,9 +44,18 @@ abstract class Zend_Controller_Action_Helper_Abstract
     protected $_actionController = null;
 
     /**
-     * @var mixed
+     * Request object
+     *
+     * @var Zend_Controller_Request_Abstract
      */
-    protected $_frontController = null;
+    protected $_request;
+
+    /**
+     * Response object
+     *
+     * @var Zend_Controller_Response_Abstract
+     */
+    protected $_response;
 
     /**
      * setActionController()
@@ -53,7 +63,7 @@ abstract class Zend_Controller_Action_Helper_Abstract
      * @param Zend_Controller_Action $actionController
      * @return Zend_Controller_ActionHelper_Abstract
      */
-    public function setActionController(Zend_Controller_Action $actionController = null)
+    public function setActionController(Zend_Controller_Action $actionController)
     {
         $this->_actionController = $actionController;
         return $this;
@@ -67,20 +77,6 @@ abstract class Zend_Controller_Action_Helper_Abstract
     public function getActionController()
     {
         return $this->_actionController;
-    }
-
-    /**
-     * Retrieve front controller instance
-     * 
-     * @return Zend_Controller_Front
-     */
-    public function getFrontController()
-    {
-        if (null === $this->_frontController) {
-            $this->_frontController = Zend_Controller_Front::getInstance();
-        }
-
-        return $this->_frontController;
     }
 
     /**
@@ -117,12 +113,11 @@ abstract class Zend_Controller_Action_Helper_Abstract
      */
     public function getRequest()
     {
-        $controller = $this->getActionController();
-        if (null === $controller) {
-            $controller = $this->getFrontController();
+        if (null === $this->_request) {
+            $this->_request = $this->_actionController->getRequest();
         }
 
-        return $controller->getRequest();
+        return $this->_request;
     }
 
     /**
@@ -132,12 +127,11 @@ abstract class Zend_Controller_Action_Helper_Abstract
      */
     public function getResponse()
     {
-        $controller = $this->getActionController();
-        if (null === $controller) {
-            $controller = $this->getFrontController();
+        if (null === $this->_response) {
+            $this->_response = $this->_actionController->getResponse();
         }
 
-        return $controller->getResponse();
+        return $this->_response;
     }
 
     /**

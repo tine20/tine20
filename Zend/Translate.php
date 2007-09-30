@@ -15,11 +15,12 @@
  * @category   Zend
  * @package    Zend_Translate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id$
+ * @version    $Id: Date.php 2498 2006-12-23 22:13:38Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/Loader.php';
+/** Zend_Translate_Exception */
+require_once 'Zend/Translate/Exception.php';
 
 
 /**
@@ -75,30 +76,43 @@ class Zend_Translate {
     {
         switch (strtolower($adapter)) {
             case 'array':
-                $adapter = 'Zend_Translate_Adapter_Array';
+                /** Zend_Translate_Adapter_Array */
+                require_once('Zend/Translate/Adapter/Array.php');
+                $this->_adapter = new Zend_Translate_Adapter_Array($data, $locale, $options);
                 break;
             case 'csv':
-                $adapter = 'Zend_Translate_Adapter_Csv';
+                /** Zend_Translate_Adapter_Csv */
+                require_once('Zend/Translate/Adapter/Csv.php');
+                $this->_adapter = new Zend_Translate_Adapter_Csv($data, $locale, $options);
                 break;
             case 'gettext':
-                $adapter = 'Zend_Translate_Adapter_Gettext';
+                /** Zend_Translate_Adapter_Gettext */
+                require_once('Zend/Translate/Adapter/Gettext.php');
+                $this->_adapter = new Zend_Translate_Adapter_Gettext($data, $locale, $options);
                 break;
             case 'qt':
-                $adapter = 'Zend_Translate_Adapter_Qt';
+                /** Zend_Translate_Adapter_Qt */
+                require_once('Zend/Translate/Adapter/Qt.php');
+                $this->_adapter = new Zend_Translate_Adapter_Qt($data, $locale, $options);
                 break;
             case 'tmx':
-                $adapter = 'Zend_Translate_Adapter_Tmx';
+                /** Zend_Translate_Adapter_Tmx */
+                require_once('Zend/Translate/Adapter/Tmx.php');
+                $this->_adapter = new Zend_Translate_Adapter_Tmx($data, $locale, $options);
                 break;
             case 'xliff':
-                $adapter = 'Zend_Translate_Adapter_Xliff';
+                /** Zend_Translate_Adapter_Xliff */
+                require_once('Zend/Translate/Adapter/Xliff.php');
+                $this->_adapter = new Zend_Translate_Adapter_Xliff($data, $locale, $options);
                 break;
-        }
-
-        Zend_Loader::loadClass($adapter);
-        $this->_adapter = new $adapter($data, $locale, $options);
-        if (!$this->_adapter instanceof Zend_Translate_Adapter) {
-            require_once 'Zend/Translate/Exception.php';
-            throw new Zend_Translate_Exception("Adapter " . $adapter . " does not extend Zend_Translate_Adapter'");
+            case 'sql':
+            case 'tbx':
+            case 'xmltm':
+                throw new Zend_Translate_Exception("adapter '$adapter' is not supported for now");
+                break;
+            default:
+                throw new Zend_Translate_Exception('no adapter selected');
+                break;
         }
     }
 

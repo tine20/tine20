@@ -17,7 +17,7 @@
  * @package    Zend_Uri
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Http.php 5051 2007-05-29 19:31:09Z darby $
  */
 
 
@@ -448,6 +448,9 @@ class Zend_Uri_Http extends Zend_Uri
         $status = @preg_match($pattern, $path);
         if ($status === false) {
             throw new Zend_Uri_Exception('Internal error: path validation failed');
+        }
+        if (!$status) {
+            echo "'$path' does not match pattern '$pattern'\n";
         }
         return (boolean) $status;
     }

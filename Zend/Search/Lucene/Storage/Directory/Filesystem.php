@@ -43,7 +43,7 @@ class Zend_Search_Lucene_Storage_Directory_Filesystem extends Zend_Search_Lucene
      *
      * @var string
      */
-    protected $_dirPath = null;
+    private $_dirPath = null;
 
     /**
      * Cache for Zend_Search_Lucene_Storage_File_Filesystem objects
@@ -52,35 +52,7 @@ class Zend_Search_Lucene_Storage_Directory_Filesystem extends Zend_Search_Lucene
      * @var array
      * @throws Zend_Search_Lucene_Exception
      */
-    protected $_fileHandlers;
-
-    /**
-     * Default file permissions
-     *
-     * @var integer
-     */
-    protected static $_defaultFilePermissions = 0666;
-
-
-    /**
-     * Get default file permissions
-     *
-     * @return integer
-     */
-    public static function getDefaultFilePermissions()
-    {
-        return self::$_defaultFilePermissions;
-    }
-
-    /**
-     * Set default file permissions
-     *
-     * @param integer $mode
-     */
-    public static function setDefaultFilePermissions($mode)
-    {
-        self::$_defaultFilePermissions = $mode;
-    }
+    private $_fileHandlers;
 
 
     /**
@@ -180,15 +152,6 @@ class Zend_Search_Lucene_Storage_Directory_Filesystem extends Zend_Search_Lucene
         }
         unset($this->_fileHandlers[$filename]);
         $this->_fileHandlers[$filename] = new Zend_Search_Lucene_Storage_File_Filesystem($this->_dirPath . '/' . $filename, 'w+b');
-
-        global $php_errormsg;
-        $trackErrors = ini_get('track_errors'); ini_set('track_errors', '1');
-        if (!@chmod($this->_dirPath . '/' . $filename, self::$_defaultFilePermissions)) {
-            ini_set('track_errors', $trackErrors);
-            throw new Zend_Search_Lucene_Exception($php_errormsg);
-        }
-        ini_set('track_errors', $trackErrors);
-
         return $this->_fileHandlers[$filename];
     }
 

@@ -17,7 +17,6 @@
  * @package    Zend_Gdata
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- */
 
 /**
  * Zend_Http_Client
@@ -70,18 +69,13 @@ class Zend_Gdata_ClientLogin
      * @param string $service
      * @param Zend_Http_Client $client
      * @param string $source
-     * @param string $loginToken The token identifier as provided by the server.
-     * @param string $loginCaptcha The user's response to the CAPTCHA challenge.
      * @return Zend_Http_Client
      * @throws Zend_Gdata_App_AuthException
      * @throws Zend_Gdata_App_HttpException
-     * @throws Zend_Gdata_App_CaptchaRequiredException
      */
     public static function getHttpClient($email, $password, $service = 'xapi',
         $client = null,
-        $source = self::DEFAULT_SOURCE,
-        $loginToken = null,
-        $loginCaptcha = null)
+        $source = self::DEFAULT_SOURCE)
     {
         if (! ($email && $password)) {
             require_once 'Zend/Gdata/App/AuthException.php';
@@ -110,17 +104,6 @@ class Zend_Gdata_ClientLogin
         $client->setParameterPost('Passwd', (string) $password);
         $client->setParameterPost('service', (string) $service);
         $client->setParameterPost('source', (string) $source);
-        if ($loginToken || $loginCaptcha) {
-            if($loginToken && $loginCaptcha) {
-                $client->setParameterPost('logintoken', (string) $loginToken);
-                $client->setParameterPost('logincaptcha', (string) $loginCaptcha);
-            }
-            else {
-                require_once 'Zend/Gdata/App/AuthException.php';
-                throw new Zend_Gdata_App_AuthException(
-                    'Please provide both a token ID and a user\'s response to the CAPTCHA challenge.');
-            }
-        }
 
         // Send the authentication request
         // For some reason Google's server causes an SSL error. We use the
@@ -157,20 +140,10 @@ class Zend_Gdata_ClientLogin
             return $client;
 
         } elseif ($response->getStatus() == 403) {
-            // Check if the server asked for a CAPTCHA
-            if (array_key_exists('Error', $goog_resp) &&
-                $goog_resp['Error'] == 'CaptchaRequired') {
-                require_once 'Zend/Gdata/App/CaptchaRequiredException.php';
-                throw new Zend_Gdata_App_CaptchaRequiredException(
-                    $goog_resp['CaptchaToken'], $goog_resp['CaptchaUrl']);
-            }
-            else {
-                require_once 'Zend/Gdata/App/AuthException.php';
-                throw new Zend_Gdata_App_AuthException('Authentication with Google failed. Reason: ' .
-                    (isset($goog_resp['Error']) ? $goog_resp['Error'] : 'Unspecified.'));
-            }
+            require_once 'Zend/Gdata/App/AuthException.php';
+            throw new Zend_Gdata_App_AuthException('Authentication with Google failed. Reason: ' .
+                (isset($goog_resp['Error']) ? $goog_resp['Error'] : 'Unspecified.'));
         }
     }
 
 }
-

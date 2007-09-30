@@ -15,7 +15,7 @@
  * @category     Zend
  * @package        Zend_Gdata
  * @copyright    Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @license        http://framework.zend.com/license/new-bsd         New BSD License
  */
 
 /**
@@ -86,7 +86,7 @@ require_once('Zend/Gdata/Spreadsheets/CellQuery.php');
  * @category     Zend
  * @package        Zend_Gdata
  * @copyright    Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @license        http://framework.zend.com/license/new-bsd         New BSD License
  */
 class Zend_Gdata_Spreadsheets extends Zend_Gdata
 {
@@ -304,8 +304,9 @@ class Zend_Gdata_Spreadsheets extends Zend_Gdata
         {
             $newCustom = new Zend_Gdata_Spreadsheets_Extension_Custom();
             $newCustom->setText($v)->setColumnName($k);
-            $newEntry->addCustom($newCustom);
+            $newCustomArr[] = $newCustom;
         }
+        $newEntry->setCustom($newCustomArr);
 
         $query = new Zend_Gdata_Spreadsheets_ListQuery();
         $query->setSpreadsheetKey($key);

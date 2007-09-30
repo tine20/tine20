@@ -222,9 +222,7 @@ class Zend_Mail extends Zend_Mime_Message
      */
     public function setMimeBoundary($boundary)
     {
-        $this->_mimeBoundary = $boundary;
-
-        return $this;
+      $this->_mimeBoundary = $boundary;
     }
 
     /**
@@ -612,8 +610,6 @@ class Zend_Mail extends Zend_Mime_Message
         $value = strtr($value,"\r\n\t",'???');
         $value = $this->_encodeHeader($value);
         $this->_storeHeader($name, $value, $append);
-
-        return $this;
     }
 
     /**

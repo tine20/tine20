@@ -18,7 +18,7 @@
  * @subpackage Audioscrobbler
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Audioscrobbler.php 4892 2007-05-22 20:01:40Z darby $
  */
 
 

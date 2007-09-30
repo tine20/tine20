@@ -99,7 +99,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
              * @see Zend_Db_Adapter_Oracle_Exception
              */
             require_once 'Zend/Db/Adapter/Oracle/Exception.php';
-            throw new Zend_DB_Adapter_Oracle_Exception('The OCI8 extension is required for this adapter but the extension is not loaded');
+            throw new Zend_DB_Adapter_Oracle_Exception('The OCI8 extension is required for this adapter but not loaded');
         }
 
         if (isset($this->_config['dbname'])) {

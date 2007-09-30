@@ -237,12 +237,11 @@ class Zend_Loader
      * Register {@link autoload()} with spl_autoload()
      *
      * @param string OPTIONAL $class
-     * @param boolean OPTIONAL $enabled
      * @return void
      * @throws Zend_Exception if spl_autoload() is not found
      * or if the specified class does not have an autoload() method.
      */
-    public static function registerAutoload($class = 'Zend_Loader', $enabled = true)
+    public static function registerAutoload($class = 'Zend_Loader')
     {
         if (!function_exists('spl_autoload_register')) {
             require_once 'Zend/Exception.php';
@@ -256,10 +255,6 @@ class Zend_Loader
             throw new Zend_Exception("The class \"$class\" does not have an autoload() method");
         }
 
-        if ($enabled === true) {
-            spl_autoload_register(array($class, 'autoload'));
-        } else {
-            spl_autoload_unregister(array($class, 'autoload'));
-        }
+        spl_autoload_register(array($class, 'autoload'));
     }
 }

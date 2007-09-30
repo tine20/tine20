@@ -15,8 +15,8 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id$
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Module.php 5768 2007-07-18 22:01:35Z thomas $
+ * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
 /** Zend_Controller_Router_Exception */
@@ -33,7 +33,7 @@ require_once 'Zend/Controller/Router/Route/Interface.php';
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  * @see        http://manuals.rubyonrails.com/read/chapter/65
  */
 class Zend_Controller_Router_Route_Module implements Zend_Controller_Router_Route_Interface

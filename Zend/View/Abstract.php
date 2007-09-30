@@ -492,7 +492,6 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
      */
     public function getHelper($name)
     {
-        $name = ucfirst($name);
         if (!isset($this->_helper[$name])) {
             $class = $this->_loadClass('helper', $name);
             $this->_helper[$name] = new $class();
