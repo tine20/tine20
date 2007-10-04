@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+.action_addContact {
+	background-image:url(../../images/oxygen/16x16/actions/add-user.png) !important;
+}
+
+.action_addList {
+	background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
+}
+
+.action_edit {
+	background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
+}
+
+.action_delete {
+	background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+}
+
+.action_displayContacts {
+	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+}
+
+.action_displayLists {
+	background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+}
+
+.action_saveAndClose {
+	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+}
+
+.action_applyChanges {
+	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
