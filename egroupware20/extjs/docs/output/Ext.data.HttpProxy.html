@@ -1,0 +1,113 @@
+        <div class="body-wrap">
+        <div class="top-tools">
+            <a class="inner-link" href="#Ext.data.HttpProxy-props"><img src="../resources/images/default/s.gif" class="item-icon icon-prop">Properties</a>
+            <a class="inner-link" href="#Ext.data.HttpProxy-methods"><img src="../resources/images/default/s.gif" class="item-icon icon-method">Methods</a>
+            <a class="inner-link" href="#Ext.data.HttpProxy-events"><img src="../resources/images/default/s.gif" class="item-icon icon-event">Events</a>
+                        <a class="bookmark" href="../docs/?class=Ext.data.HttpProxy"><img src="../resources/images/default/s.gif" class="item-icon icon-fav">Direct Link</a>
+        </div>
+                <h1>Class Ext.data.HttpProxy</h1>
+        <table cellspacing="0">
+            <tr><td class="label">Package:</td><td class="hd-info">Ext.data</td></tr>
+            <tr><td class="label">Defined In:</td><td class="hd-info"><a href="../src/HttpProxy.js" target="_blank">HttpProxy.js</a></td></tr>
+            <tr><td class="label">Class:</td><td class="hd-info">HttpProxy</td></tr>
+                                    <tr><td class="label">Extends:</td><td class="hd-info">Object</td></tr>
+                    </table>
+        <div class="description">
+            An implementation of <a ext:cls="Ext.data.DataProxy" href="output/Ext.data.DataProxy.html">Ext.data.DataProxy</a> that reads a data object from an <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Ext.data.Connection</a> object
+configured to reference a certain URL.<br><br>
+<p>
+<em>Note that this class cannot be used to retrieve data from a domain other than the domain
+from which the running page was served.<br><br>
+<p>
+For cross-domain access to remote data, use an <a ext:cls="Ext.data.ScriptTagProxy" href="output/Ext.data.ScriptTagProxy.html">Ext.data.ScriptTagProxy</a>.</em><br><br>
+<p>
+Be aware that to enable the browser to parse an XML document, the server must set
+the Content-Type header in the HTTP response to "text/xml".        </div>
+        
+        <div class="hr"></div>
+                <a id="Ext.data.HttpProxy-props"></a>
+        <h2>Public Properties</h2>
+        <div class="no-members">This class has no public properties.</div>        <a id="Ext.data.HttpProxy-methods"></a>
+        <h2>Public Methods</h2>
+                <table cellspacing="0" class="member-table">
+            <tr>
+                <th class="sig-header" colspan="2">Method</th>
+                <th class="msource-header">Defined By</th>
+            </tr>
+                <tr class="method-row expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.data.HttpProxy-HttpProxy"></a>
+            <b>HttpProxy</b>(&nbsp;<code>Object conn</code>&nbsp;)            <div class="mdesc">
+                        <div class="short"></div>
+            <div class="long">
+                    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>conn</code> : Object<div class="sub-desc">Connection config options to add to each request (e.g. {url: 'foo.php'} or
+an <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Ext.data.Connection</a> object. If a Connection config is passed, the singleton <a ext:cls="Ext.Ajax" href="output/Ext.Ajax.html">Ext.Ajax</a> object
+will be used to make the request.</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code></code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">HttpProxy</td>
+    </tr>
+        <tr class="method-row alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.data.HttpProxy-getConnection"></a>
+            <b>getConnection</b>() : Connection            <div class="mdesc">
+                        <div class="short">Return the <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Ext.data.Connection</a> object being used by this Proxy.</div>
+            <div class="long">
+                Return the <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Ext.data.Connection</a> object being used by this Proxy.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Connection</code><div class="sub-desc">The Connection object. This object may be used to subscribe to events on a finer-grained basis than the DataProxy events.</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">HttpProxy</td>
+    </tr>
+        <tr class="method-row expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.data.HttpProxy-load"></a>
+            <b>load</b>(&nbsp;<code>Object params</code>, <code>Ext.data.DataReader reader</code>, <code>Function callback</code>, <code>Object scope</code>, <code>Object arg</code>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Load data from the configured Ext.data.Connection, read the data object into
+a block of Ext.data.Records using the pa...</div>
+            <div class="long">
+                Load data from the configured <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Ext.data.Connection</a>, read the data object into
+a block of Ext.data.Records using the passed <a ext:cls="Ext.data.DataReader" href="output/Ext.data.DataReader.html">Ext.data.DataReader</a> implementation, and
+process that block using the passed callback.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>params</code> : Object<div class="sub-desc">An object containing properties which are to be used as HTTP parameters
+for the request to the remote server.</div></li><li><code>reader</code> : Ext.data.DataReader<div class="sub-desc">The Reader object which converts the data
+object into a block of Ext.data.Records.</div></li><li><code>callback</code> : Function<div class="sub-desc">The function into which to pass the block of Ext.data.Records.
+The function must be passed <ul>
+<li>The Record block object</li>
+<li>The "arg" argument from the load function</li>
+<li>A boolean success indicator</li>
+</ul></div></li><li><code>scope</code> : Object<div class="sub-desc">The scope in which to call the callback</div></li><li><code>arg</code> : Object<div class="sub-desc">An optional argument which is passed to the callback as its second parameter.</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">HttpProxy</td>
+    </tr>
+            </table>
+                <a id="Ext.data.HttpProxy-events"></a>
+        <h2>Public Events</h2>
+        <div class="no-members">This class has no public events.</div>
+        </div>
