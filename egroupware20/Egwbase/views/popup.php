@@ -5,15 +5,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><?php echo $this->escape($this->title) ?></title>
 	<!-- EXT JS -->
-	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css"/>
-	<link rel="stylesheet" type="text/css" href="extjs/resources/css/xtheme-gray.css"/>
-	<script type="text/javascript" src="extjs/adapter/yui/yui-utilities.js"></script>     
-	<script type="text/javascript" src="extjs/adapter/yui/ext-yui-adapter.js"></script>     
-	<script type="text/javascript" src="extjs/ext-all.js"></script>
+	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="extjs/resources/css/xtheme-gray.css" />
+	
+	<script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
+	<script type="text/javascript" src="extjs/ext-all-debug.js"></script>
 
 	<!-- eGW -->
-	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-	<script type="text/javascript" src="Addressbook/Js/Addressbook.js"></script>
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function(){
 			<?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";" ?>
@@ -22,11 +20,13 @@
 		});
 	</script>
 	
+	<script type="text/javascript" language="javascript" src="Egwbase/Js/Egwbase.js"></script>
 	<?php 
-		//error_log(print_r($this->jsIncludeFiles,true));
-	
 		foreach ($this->jsIncludeFiles as $name) {
 			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
+		}
+		foreach ($this->cssIncludeFiles as $name) {
+			echo '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
 		}
 	?>
 	
@@ -41,10 +41,5 @@
 	</style>
 </head>
 <body>
-<div id ="container">
-<div id="header" class="x-layout-inactive-content" style="padding:0px;"></div>
-<div id="content" class="x-layout-inactive-content" style="padding:3px;"></div>
-<div id="south" class="x-layout-inactive-content" style="padding:3px;"></div>
-</div> 
 </body>
 </html>

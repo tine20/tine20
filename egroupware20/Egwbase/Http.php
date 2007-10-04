@@ -31,17 +31,22 @@ class Egwbase_Http
 
 		//foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
 		foreach($userApplications as $applicationName) {
-			$className = "{$applicationName}_Json";
+			//$className = "{$applicationName}_Json";
 				
-			$application = new $className;
+			//$application = new $className;
 				
-			$applications[] = $application->getInitialTree('mainTree');
+			//$applications[] = $application->getInitialTree('mainTree');
 				
 			$jsIncludeFiles[] = $applicationName . '/Js/' . $applicationName . '.js';
+			$cssIncludeFiles[] = $applicationName . '/css/' . $applicationName . '.css';
 		}
 
 		$view->jsIncludeFiles = $jsIncludeFiles;
-		$view->applications = $applications;
+		$view->cssIncludeFiles = $cssIncludeFiles;
+				
+		$addressbook = new Addressbook_Json;
+		$view->initialTree = $addressbook->getInitialTree('mainTree');
+		
 		$view->title="eGroupWare 2.0";
 
 		header('Content-Type: text/html; charset=utf-8');

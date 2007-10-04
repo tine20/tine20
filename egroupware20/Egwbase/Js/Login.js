@@ -1,4 +1,4 @@
-/*
+    /*
  * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
@@ -9,38 +9,57 @@
 var EGWNameSpace = EGWNameSpace || {};
 
 EGWNameSpace.Login = function() {
-
+    // turn on validation errors beside the field globally
+    Ext.form.Field.prototype.msgTarget = 'side';
+    
 	// private functions
 	var _createLoginDialog = function(_layout) {
-		var loginDialog = new Ext.form.Form({
-			labelAlign: 'top',
-			url:'index.php?method=Egwbase.login'
+		var loginDialog = new Ext.FormPanel({
+            id: 'loginDialog',
+            labelWidth: 75,
+			url:'index.php',
+            baseParams:{method: 'Egwbase.login'},
+            frame:true,
+            title: 'Please enter your login data',
+            bodyStyle:'padding:5px 5px 0',
+            width: 350,
+            defaults: {width: 230},
+            defaultType: 'textfield',
+            items: [{
+                fieldLabel: 'Username',
+                name: 'username',
+                name: 'username',
+                value:'egwdemo',
+                width:225
+            }, {
+                inputType: 'password',
+                fieldLabel: 'Password',
+                name: 'password',
+                allowBlank:false,
+                value:'demo',
+                width:225
+            }],
+            buttons: [{
+                text: 'Login',
+                handler: function(){
+                    if (loginDialog.form.isValid()) {
+                        loginDialog.form.submit({
+                            waitTitle: 'Please wait!', 
+                            waitMsg:'Saving Data...',
+                            success:function(form, action, o) {
+                                Ext.MessageBox.wait('Login successful. Loading eGroupWare...', 'Please wait!');
+                                window.location.reload();
+                            },
+                            failure:function(form, action) {
+                                Ext.MessageBox.alert("Error", 'Login failed');
+                            }
+                        });
+                    };
+                }
+            }]
 		});
 		
-		loginDialog.column(
-			{width:250},
-			new Ext.form.TextField({
-				fieldLabel: 'Username',
-				name: 'username',
-				allowBlank:false,
-				value:'egwdemo',
-				width:225
-			})
-		);
-		loginDialog.column(
-			{width:250},
-			new Ext.form.TextField({
-				inputType: 'password',
-				fieldLabel: 'Password',
-				name: 'password',
-				allowBlank:false,
-				value:'demo',
-				width:225
-			})
-		);
-		
-		loginDialog.addButton('Login', function (){
-			if (loginDialog.isValid()) {
+/*		loginDialog.addButton('Login', function (){
 				loginDialog.submit({
 					waitTitle: 'Please wait!',
 					waitMsg:'Logging you in...',
@@ -53,22 +72,19 @@ EGWNameSpace.Login = function() {
 						Ext.MessageBox.alert("Error",action.result.errorMessage);
 					}
 				});
-			}
 		}, loginDialog);
-		
-		loginDialog.render('loginForm');
+	*/	
+		loginDialog.render(document.body);
 
-                //Ext.Element.get('loginMainDiv').fitToParent();
-		Ext.Element.get('loginMainDiv').center();
-		Ext.Element.get('loginForm').boxWrap();
+        //Ext.Element.get('loginMainDiv').fitToParent();
+		Ext.Element.get('loginDialog').center();
+		//Ext.Element.get('loginForm').boxWrap();
 		//Ext.Element.get('loginMainDiv').animate();
 	}
 	
 	// public functions
 	return {
 		// public functions
-		showLoginDialog: function() {
-			_createLoginDialog();
-		}
+		showLoginDialog: _createLoginDialog
 	}
 }();
