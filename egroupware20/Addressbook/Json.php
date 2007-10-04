@@ -235,21 +235,23 @@ class Addressbook_Json
                 $treeNode->setIcon('apps/kaddressbook.png');
                 $treeNode->cls = 'treemain';
 
+                $treeNode = array();
+                
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', FALSE);
                 $childNode->owner = $currentAccount->account_id;
-                $treeNode->addChildren($childNode);
+                $treeNode[] = $childNode;
 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
                 $childNode->owner = 0;
-                $treeNode->addChildren($childNode);
+                $treeNode[] = $childNode;
 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherpeople', 'otherpeople', 'Other Users Contacts', FALSE);
                 $childNode->owner = 0;
-                $treeNode->addChildren($childNode);
+                $treeNode[] = $childNode;
                  
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
                 $childNode->owner = 0;
-                $treeNode->addChildren($childNode);
+                $treeNode[] = $childNode;
 
                 return $treeNode;
                  

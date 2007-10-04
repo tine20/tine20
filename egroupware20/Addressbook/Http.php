@@ -26,6 +26,7 @@ class Addressbook_Http
 		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 		
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'-min.js');
+		$view->cssIncludeFiles = array();
 		
 		$className = "Addressbook_Json";			
 		$application = new $className;		
@@ -45,13 +46,15 @@ class Addressbook_Http
 			$view->formData['values'] = $contact->toArray();
 		}
 		
+		$view->jsIncludeFiles[] = 'Addressbook/Js/Addressbook.js';
+		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
 		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display();';
 
 		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');
 	}
 
-	public function editList()
+	public function editList($_listId)
 	{
 		$locale = Zend_Registry::get('locale');
 		
@@ -61,10 +64,11 @@ class Addressbook_Http
 		$view->formData = array();
 		
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'-min.js');
+		$view->cssIncludeFiles = array();
 		
 		$className = "Addressbook_Json";			
 		$application = new $className;		
-		$view->application = $application->getIntialTree('selectFolder');
+		$view->application = $application->getInitialTree('selectFolder');
 		
 		$currentAccount = Zend_Registry::get('currentAccount');
 		$egwbaseAcl = Egwbase_Acl::getInstance();
@@ -90,6 +94,8 @@ class Addressbook_Http
 			$view->formData['values']['list_owner'] = $currentAccount->account_id;
 		}
 		
+		$view->jsIncludeFiles[] = 'Addressbook/Js/Addressbook.js';
+		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
 		$view->jsExecute = 'Egw.Addressbook.ListEditDialog.display();';
 
 		header('Content-Type: text/html; charset=utf-8');
