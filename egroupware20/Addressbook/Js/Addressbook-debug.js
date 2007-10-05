@@ -1152,7 +1152,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		});        
 
 		
-		var photo = Ext.get('photo');
+/*		var photo = Ext.get('photo');
 
 		var c = photo.createChild({
 			tag:'center', 
@@ -1167,7 +1167,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 			text: 'Change Photo'
 		});
 		
-                
+*/                
         var ds_country = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {method:'Egwbase.getCountryList'},
