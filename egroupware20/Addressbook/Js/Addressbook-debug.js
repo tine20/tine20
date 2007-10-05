@@ -321,8 +321,8 @@ Egw.Addressbook = function() {
 
         ds_contacts.loadData({"results":[],"totalcount":"0","status":"success"});
 
-        ds_contacts.on('beforeload', _setParameter);
-
+		ds_contacts.on('beforeload', _setParameter);
+		
         ds_contacts.load({params:{start:0, limit:50}});
 
         var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
@@ -732,7 +732,9 @@ Egw.Addressbook.ContactEditDialog = function() {
     
     var handler_applyChanges = function(_button, _event) 
     {
+		
     	var contactForm = Ext.getCmp('contactDialog').getForm();
+		contactForm.render();
     	
     	if(contactForm.isValid()) {
 			var additionalData = {};
@@ -759,6 +761,7 @@ Egw.Addressbook.ContactEditDialog = function() {
     var handler_saveAndClose = function(_button, _event) 
     {
     	var contactForm = Ext.getCmp('contactDialog').getForm();
+		contactForm.render();
     	
     	if(contactForm.isValid()) {
 			var additionalData = {};
@@ -871,7 +874,85 @@ Egw.Addressbook.ContactEditDialog = function() {
         addressbookTrigger.onTriggerClick = function() {
             Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
         }
+		
+		var _setParameter = function(_dataSource)
+		{
+                _dataSource.baseParams.method = 'Addressbook.getContacts';
+                _dataSource.baseParams.options = Ext.encode({
+                    displayContacts: false,
+                    displayLists:    true
+                });
+        }
+        
+		
+		var lists_store =  new Ext.data.JsonStore({
+           url: 'index.php',
+           baseParams: {
+               datatype: 'contacts',
+               owner:    '0,9', 
+               sort: 'n_family',
+               dir: 'ASC',
+               query:   ''
+           },
+           root: 'results',
+           totalProperty: 'totalcount',
+           id: 'contact_id',
+           fields: [
+               {name: 'contact_id'},
+               {name: 'contact_tid'},
+               {name: 'contact_owner'},
+               {name: 'contact_private'},
+               {name: 'n_family'},
+               {name: 'n_given'},
+               {name: 'org_name'},
+               {name: 'contact_note'}
+           ],
+           // turn on remote sorting
+           remoteSort: true
+        });
+		
+		lists_store.setDefaultSort('n_family', 'asc');
 
+		lists_store.on('beforeload', _setParameter);
+		
+		lists_store.load();
+		
+    	
+		  var view = new Ext.DataView({
+		        style:'overflow:auto',
+		        multiSelect: true,
+				itemSelector: 'div.thumb-wrap',
+		      //  plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+		        store: lists_store,
+		        tpl: new Ext.XTemplate(
+		            '<tpl for=".">',
+		            '<div class="thumb-wrap" id="{shortName}">',
+		            '<span>{shortName}</span></div>',
+		            '</tpl>'
+		        )
+		    });
+/*
+		view.on({'dblclick', function(){
+					// TODO....remove item from source store und add to destination store
+		});	
+	*/		
+		    var list_source_box = new Ext.Panel({
+		        id:'list_source',
+		        title:'available lists',
+		        region:'center',
+		        margins: '5 5 5 0',
+		        layout:'fit',
+		        items: view
+		    });
+
+			var list_selected_box = new Ext.Panel({
+		        id:'list_selected',
+		        title:'chosen lists',
+		        region:'center',
+		        margins: '5 5 5 0',
+		        layout:'fit'//,
+		        //items: view
+		    });
 
 		var addressedit = new Ext.FormPanel({
 				url:'index.php',
@@ -879,6 +960,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 			    labelAlign: 'top',
 				bodyStyle:'padding:5px',
 				anchor:'100%',
+				deferredRender:false,
 				region: 'center',
 	            id: 'contactDialog',
 				tbar: contactToolbar, 
@@ -1162,8 +1244,30 @@ Egw.Addressbook.ContactEditDialog = function() {
 		                title:'Lists',
 		                layout:'column',
 						border:false,
-		                items: [{
-						}]
+						items: [{
+							columnWidth:.5,
+							layout: 'form',
+							border:false,
+							items: [ new Ext.Panel({
+										layout: 'fit',
+										id: 'source',
+								        width:250,
+								        height:350,
+										items: [ list_source_box ]
+							    })
+							]}, {
+							columnWidth:.5,
+							layout: 'form',
+							border:false,
+							items: [ new Ext.Panel({
+										layout: 'fit',
+										id: 'destination',
+								        width:250,
+								        height:350,
+										items: [ list_selected_box ]		
+							    })
+							]}
+						]
 		            },{
 		                title:'Categories',
 		                layout:'column',
@@ -1174,8 +1278,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		        }]
 			});
 	
-
-
+		
 
 		var viewport = new Ext.Viewport({
 			layout: 'border',
