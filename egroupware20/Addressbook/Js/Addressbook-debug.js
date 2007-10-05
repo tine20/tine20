@@ -598,61 +598,9 @@ Egw.Addressbook = function() {
                    
             //################## listView #################
 
-            var Tree = Ext.tree;
-                
-            treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
-            treeLoader.on("beforeload", function(_loader, _node) {
-                _loader.baseParams.method       = 'Addressbook.getSubTree';
-                _loader.baseParams._node        = _node.id;
-                _loader.baseParams._datatype    = _node.attributes.datatype;
-                _loader.baseParams._owner       = _node.attributes.owner;
-                _loader.baseParams._location    = 'selectFolder';
-            }, this);
-                            
-            var tree = new Tree.TreePanel('iWindowContAdrTag', {
-                animate:true,
-                loader: treeLoader,
-                containerScroll: true,
-                rootVisible:false
-            });
-            
-            // set the root node
-            var root = new Tree.TreeNode({
-                text: 'root',
-                draggable:false,
-                allowDrop:false,
-                id:'root'
-            });
-            tree.setRootNode(root);             
-            
-            // add the initial tree nodes    
-            Ext.each(application, function(_treeNode) {
-                root.appendChild(new Tree.AsyncTreeNode(_treeNode));                    
-            });
-
-            // render the tree
-            tree.render();
-            tree.on('click', function() {
-                if(tree.getSelectionModel().getSelectedNode()) {                
-                    var cnode = tree.getSelectionModel().getSelectedNode().id;
-                    var addressbook_id = tree.getNodeById(cnode).attributes.owner;  
-                        
-                    if( (addressbook_id > 0) || (addressbook_id < 0) ) {
-                        _onClickCallback(addressbook_id, addressbook_id);
-                        //addressedit.setValues([{id:'contact_owner', value:addressbook_id}]);
-                        addressBookDialog.hide();
-                    } else {
-                        Ext.MessageBox.alert('wrong selection','please select a valid addressbook');
-                    }
-                } else {
-                    Ext.MessageBox.alert('no selection','please select an addressbook');
-                }
-            });
-
-            
-
         var addressBookDialog = new Ext.Window({
 					title: 'please select addressbook',
+					modal: true,
 			        width: 375,
 			        height: 400,
 			        minWidth: 375,
@@ -676,22 +624,74 @@ Egw.Addressbook = function() {
                     closeOnTab: true,
                     alwaysShowTabs: false
                 }  */
+            });			
+			
+						
+            var Tree = Ext.tree;
+                
+            treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
+            treeLoader.on("beforeload", function(_loader, _node) {
+                _loader.baseParams.method       = 'Addressbook.getSubTree';
+                _loader.baseParams._node        = _node.id;
+                _loader.baseParams._datatype    = _node.attributes.datatype;
+                _loader.baseParams._owner       = _node.attributes.owner;
+                _loader.baseParams._location    = 'selectFolder';
+            }, this);
+                            
+            var tree = new Tree.TreePanel({
+                animate:true,
+				id: 'addressbookTree',
+                loader: treeLoader,
+                containerScroll: true,
+                rootVisible:false
             });
+            
+            // set the root node
+            var root = new Tree.TreeNode({
+                text: 'root',
+                draggable:false,
+                allowDrop:false,
+                id:'root'
+            });
+            tree.setRootNode(root);             
+            
+            // add the initial tree nodes    
+            Ext.each(application, function(_treeNode) {
+                root.appendChild(new Tree.AsyncTreeNode(_treeNode));                    
+            });
+
+          
+          
+            tree.on('click', function(_node) {
+			     _node.select();
+                if(tree.getSelectionModel().getSelectedNode()) {                
+                    var cnode = tree.getSelectionModel().getSelectedNode().id;
+                    var addressbook_id = tree.getNodeById(cnode).attributes.owner;  
+                
+                    if( (addressbook_id > 0) || (addressbook_id < 0) ) {
+                   //     _onClickCallback(addressbook_id, addressbook_id);
+						var addressbook_ = Ext.getCmp('addressbook_');
+						addressbook_.setValue(addressbook_id);
+                        //addressedit.setValues([{id:'contact_owner', value:addressbook_id}]);
+                        addressBookDialog.hide();
+                    } else {
+                        Ext.MessageBox.alert('wrong selection','please select a valid addressbook');
+                    }
+                } else {
+                    Ext.MessageBox.alert('no selection','please select an addressbook');
+                }
+            });
+
+            
+		addressBookDialog.add(tree);
+//		activeItem: 'addressbookTree', 
+		addressBookDialog.show();   
 
       //      addressBookDialog.addKeyListener(27, addressBookDialog.hide, addressBookDialog);			
 			
-		/*	
-			
-            var layout = addressBookDialog.getLayout();
-            layout.beginUpdate();
-            layout.add("center", new Ext.ContentPanel('iWindowContAdrTag', {    
-                autoCreate:true,
-                fitContainer: true
-            }));
-            layout.endUpdate();                                 */
-        }
-        addressBookDialog.show();   
-            
+	
+		}
+                
     }
     
 	
@@ -863,6 +863,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		var addressbookTrigger = new Ext.form.TriggerField({
             fieldLabel:'Addressbook', 
             name:'contact_owner', 
+			id: 'addressbook_',
             anchor:'95%',
             readOnly:true
         });
@@ -1227,7 +1228,10 @@ Egw.Addressbook.ContactEditDialog = function() {
     }
     
     var _onAddressSelect = function(_addressbooName, _addressbookId) {
-        addressedit.setValues([{id:'contact_owner', value:_addressbookId}]);
+        
+		var addressbook_ = Ext.getCmp('addressbook_');
+		addressbook_.setValue(_addressbookId);
+		// addressedit.setValues([{id:'contact_owner', value:_addressbookId}]);
     }
 
     /**
