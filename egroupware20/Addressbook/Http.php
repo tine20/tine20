@@ -13,9 +13,13 @@
  */
 class Addressbook_Http
 {
-	public function editContact()
+	public function editContact($_contactId)
 	{
-		$locale = Zend_Registry::get('locale');
+        if(empty($_contactId)) {
+            $_contactId = NULL;
+        }
+	    error_log("CONTACTID:: $_contactId");
+	    $locale = Zend_Registry::get('locale');
 		
 		$view = new Zend_View();
 		 
@@ -42,7 +46,7 @@ class Addressbook_Http
 		}
 
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-		if(isset($_REQUEST['contactid']) && $contact = $addresses->getContactById($_REQUEST['contactid'])) {
+		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 			$view->formData['values'] = $contact->toArray();
 		}
 		
@@ -56,7 +60,11 @@ class Addressbook_Http
 
 	public function editList($_listId)
 	{
-		$locale = Zend_Registry::get('locale');
+        if(empty($_listId)) {
+            $_listId = NULL;
+        }
+        
+	    $locale = Zend_Registry::get('locale');
 		
 		$view = new Zend_View();
 		 
@@ -82,7 +90,7 @@ class Addressbook_Http
 		
 		// get the list
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-		if(isset($_REQUEST['contactid']) && $list = $addresses->getListById((int)$_REQUEST['contactid'])) {
+		if($_listId && $list = $addresses->getListById((int)$_listId)) {
 			$view->formData['values']['list_id'] = $_REQUEST['contactid'];
 			$view->formData['values']['list_name'] = $list->list_name;
 			$view->formData['values']['list_description'] = $list->list_description;

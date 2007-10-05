@@ -81,14 +81,14 @@ Egw.Addressbook = function() {
      * onclick handler for addBtn
      */
     var _addBtnHandler = function(_button, _event) {
-        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&contactId=', 850, 600);
+        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
     }
 	
 	/**
 	 * onclick handler for addLstBtn
 	 */
     var _addLstBtnHandler = function(_button, _event) {
-        openWindow('listWindow', 'index.php?method=Addressbook.editList&listId=', 450, 600);
+        openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 450, 600);
     }	
 	
     /**
@@ -101,7 +101,7 @@ Egw.Addressbook = function() {
             contactIDs.push(selectedRows[i].id);
         }
         _deleteContact(contactIDs, function() {contactDS.reload();});*/
-        contactDS.reload();
+        //contactDS.reload();
     }
 	
     /**
@@ -112,10 +112,10 @@ Egw.Addressbook = function() {
         var contactId = selectedRows[0].id;
 		
 		if(selectedRows[0].data.contact_tid == 'l') {
-    	    openWindow('listWindow', 'index.php?method=Addressbook.editList&listId=' + contactId, 450, 600);
+    	    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 450, 600);
 		}
 		else {
-	        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&contactId=' + contactId, 850, 600);
+	        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
 		}
     }
     
@@ -409,18 +409,18 @@ Egw.Addressbook = function() {
 			ctxMenuGrid.showAt(eventObject.getXY());
 		});
 		
-		contactGrid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
-			var record = gridPar.getStore().getAt(rowIndexPar);
+		contactGrid.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+			var record = _gridPar.getStore().getAt(_rowIndexPar);
 			//console.log('id: ' + record.data.contact_id);
 			if(record.data.contact_tid == 'l') {
                 try {
-                    _openDialog(record.data.contact_id,'list');
+                    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.contact_id, 450, 600);
                 } catch(e) {
                 //  alert(e);
                 }
 			} else {
 				try {
-					_openDialog(record.data.contact_id);
+					openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
 				} catch(e) {
 					// alert(e);
 				}
@@ -438,7 +438,7 @@ Egw.Addressbook = function() {
 
 		textF1.on('specialkey', function(_this, _e) {        
             if(_e.getKey() == _e.ENTER || _e.getKey() == e.RETURN ){
-                contactDS.reload();
+                //contactDS.reload();
                 //contactDS.removeAll();
                 //contactDS.load({params:{
                 //	start:0, 
@@ -477,7 +477,7 @@ Egw.Addressbook = function() {
             contactIDs.push(selectedRows[i].id);
         }
         _deleteContact(contactIDs, function() {Egw.Addressbook.reload();});
-        contactDS.reload();
+        //contactDS.reload();
     }
 
     /**
@@ -755,7 +755,7 @@ Egw.Addressbook = function() {
         displayAddressbookSelectDialog: _displayAddressbookSelectDialog,
         
         reload: function() {
-            contactDS.reload();
+            ds_contacts.reload();
         }
     }
 	
@@ -769,10 +769,6 @@ Egw.Addressbook = function() {
 
 Egw.Addressbook.ContactEditDialog = function() {
 
-    var contactDS;
-    
-    var contactGrid;
-    
     var listGrid;
     
     var dialog;
@@ -783,16 +779,70 @@ Egw.Addressbook.ContactEditDialog = function() {
     var addressedit;
     
     // private functions and variables
+    
+    var handler_applyChanges = function(_button, _event) 
+    {
+    	var contactForm = Ext.getCmp('contactDialog').getForm();
+    	
+    	if(contactForm.isValid()) {
+			var additionalData = {};
+			if(formData.values) {
+				additionalData.contact_id = formData.values.contact_id;
+			}
+			    		
+			contactForm.submit({
+    			waitTitle:'Please wait!',
+    			waitMsg:'saving contact...',
+    			params:additionalData,
+    			success:function(form, action, o) {
+    				window.opener.Egw.Addressbook.reload();
+    			},
+    			failure:function(form, action) {
+    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    			}
+    		});
+    	} else {
+    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+    	}
+    }
+
+    var handler_saveAndClose = function(_button, _event) 
+    {
+    	var contactForm = Ext.getCmp('contactDialog').getForm();
+    	
+    	if(contactForm.isValid()) {
+			var additionalData = {};
+			if(formData.values) {
+				additionalData.contact_id = formData.values.contact_id;
+			}
+			    		
+			contactForm.submit({
+    			waitTitle:'Please wait!',
+    			waitMsg:'saving contact...',
+    			params:additionalData,
+    			success:function(form, action, o) {
+    				window.opener.Egw.Addressbook.reload();
+    				//window.close();
+    				window.setTimeout("window.close()", 400);
+    			},
+    			failure:function(form, action) {
+    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    			}
+    		});
+    	} else {
+    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+    	}
+    }
 
    	var action_saveAndClose = new Ext.Action({
 		text: 'save and close',
-		/*'handler: _addBtnHandler,*/
+		handler: handler_saveAndClose,
 		iconCls: 'action_saveAndClose'
 	});
 
    	var action_applyChanges = new Ext.Action({
 		text: 'apply changes',
-		/*'handler: _addBtnHandler,*/
+		handler: handler_applyChanges,
 		iconCls: 'action_applyChanges'
 	});
 
@@ -829,6 +879,14 @@ Egw.Addressbook.ContactEditDialog = function() {
 			]
 		});
 
+        var ds_country = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {method:'Egwbase.getCountryList'},
+            root: 'results',
+            id: 'shortName',
+            fields: ['shortName', 'translatedName'],
+            remoteSort: false
+        });
 
 		var addressbookTrigger = new Ext.form.TriggerField({
             fieldLabel:'Addressbook', 
@@ -1168,14 +1226,6 @@ Egw.Addressbook.ContactEditDialog = function() {
 		});
 		
 */                
-        var ds_country = new Ext.data.JsonStore({
-            url: 'index.php',
-            baseParams: {method:'Egwbase.getCountryList'},
-            root: 'results',
-            id: 'shortName',
-            fields: ['shortName', 'translatedName'],
-            remoteSort: false
-        });
         
         var ds_addressbooks = new Ext.data.SimpleStore({
             fields: ['id', 'addressbooks'],
@@ -1187,14 +1237,17 @@ Egw.Addressbook.ContactEditDialog = function() {
       //  return addressedit;
     }
 
-    var _setContactDialogValues = function(_dialog, _formData) {
+    var _setContactDialogValues = function(__dialog, _formData) {
+    	var _dialog = Ext.getCmp('contactDialog').getForm();
         for (var fieldName in _formData) {
+        	console.log('set ' + fieldName + ' to ' + _formData[fieldName]);
             var field = _dialog.findField(fieldName);
             if(field) {
                 //console.log(fieldName + ' => ' + _formData[fieldName]);
                 field.setValue(_formData[fieldName]);
             }
         }
+        console.log('done');
     }
 
     var _exportContact = function(_btn, _event) {
