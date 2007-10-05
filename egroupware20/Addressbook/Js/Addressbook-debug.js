@@ -95,13 +95,28 @@ Egw.Addressbook = function() {
      * onclick handler for deleteBtn
      */
     var _deleteBtnHandler = function(_button, _event) {
-/*        var contactIDs = Array();
+        var contactIds = Array();
         var selectedRows = contactGrid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
-            contactIDs.push(selectedRows[i].id);
+            contactIds.push(selectedRows[i].id);
         }
-        _deleteContact(contactIDs, function() {contactDS.reload();});*/
-        //contactDS.reload();
+		
+		contactIds = Ext.util.JSON.encode(contactIds);
+		
+		Ext.Ajax.request({
+			url: 'index.php',
+			params: {
+				method: 'Addressbook.deleteContacts', 
+				_contactIds: contactIds
+			},
+			text: 'Deleting contact...',
+			success: function(_result, _request) {
+  				ds_contacts.reload();
+			},
+			failure: function ( result, request) { 
+				Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+			} 
+		});
     }
 	
     /**
@@ -143,7 +158,6 @@ Egw.Addressbook = function() {
 		text: 'delete',
 		disabled: true,
 		handler: _deleteBtnHandler,
-		enableToggle: true,
 		iconCls: 'action_delete'
 	});
 
@@ -468,32 +482,6 @@ Egw.Addressbook = function() {
     }
 	
     /**
-     * onclick handler for deleteLstBtn
-     */
-    var _deleteLstBtnHandler = function(_button, _event) {
-        var contactIDs = Array();
-        var selectedRows = contactGrid.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            contactIDs.push(selectedRows[i].id);
-        }
-        _deleteContact(contactIDs, function() {Egw.Addressbook.reload();});
-        //contactDS.reload();
-    }
-
-    /**
-     * onclick handler for editLstBtn
-     *
-     */
-    var _editLstBtnHandler = function(_button, _event) {
-        var selectedRows = contactGrid.getSelectionModel().getSelections();
-        var contactID = selectedRows[0].id;
-        
-        _openDialog(contactID, 'list');
-    }
-	
-	
-	
-    /**
      * contextmenu for contact grid
      *
      */
@@ -600,44 +588,6 @@ Egw.Addressbook = function() {
         }
     }
 	
-    /**
-     * delete a contact on the server
-     *
-     */
-    var _deleteContact = function(_contactIDs, _onSuccess, _onError) {
-        var contactIDs = Ext.util.JSON.encode(_contactIDs);
-        new Ext.data.Connection().request({
-            url: 'index.php',
-            method: 'post',
-            scope: this,
-            params: {method:'Addressbook.deleteContacts', _contactIDs:contactIDs},
-            success: function(response, options) {
-                //console.log('success function called');
-                //window.location.reload();
-                //console.log(response);
-                var decodedResponse;
-                try{
-                    decodedResponse = Ext.util.JSON.decode(response.responseText);
-                    if(decodedResponse.success == true) {
-                        //Ext.MessageBox.alert('Success!', 'Deleted contact!');
-                        if(typeof _onSuccess == 'function') {
-                            _onSuccess;
-                        }
-                    } else {
-                        Ext.MessageBox.alert('Failure!', 'Deleting contact failed!');
-                    }
-                    //console.log(decodedResponse);
-                } catch(e){
-                    Ext.MessageBox.alert('Failure!', e.message);
-                }
-            },
-            failure: function(response, options) {
-                console.log('failure function called');
-            }
-        });
-		
-    }
-
     /**
      * displays the addressbook select dialog
      * shared between contact and list edit dialog
