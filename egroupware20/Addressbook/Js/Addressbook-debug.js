@@ -822,7 +822,6 @@ Egw.Addressbook.ContactEditDialog = function() {
     			params:additionalData,
     			success:function(form, action, o) {
     				window.opener.Egw.Addressbook.reload();
-    				//window.close();
     				window.setTimeout("window.close()", 400);
     			},
     			failure:function(form, action) {
@@ -833,6 +832,29 @@ Egw.Addressbook.ContactEditDialog = function() {
     		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
     	}
     }
+
+    var handler_deleteContact = function(_button, _event) 
+    {
+		var contactIds = Ext.util.JSON.encode([formData.values.contact_id]);
+			
+		Ext.Ajax.request({
+			url: 'index.php',
+			params: {
+				method: 'Addressbook.deleteContacts', 
+				_contactIds: contactIds
+			},
+			text: 'Deleting contact...',
+			success: function(_result, _request) {
+  				window.opener.Egw.Addressbook.reload();
+   				window.setTimeout("window.close()", 400);
+			},
+			failure: function ( result, request) { 
+				Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+			} 
+		});
+        			    		
+    }
+
 
    	var action_saveAndClose = new Ext.Action({
 		text: 'save and close',
@@ -848,7 +870,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 
    	var action_deleteContact = new Ext.Action({
 		text: 'delete contact',
-		/*'handler: _addBtnHandler,*/
+		handler: handler_deleteContact,
 		iconCls: 'action_delete'
 	});
 

@@ -19,14 +19,14 @@ class Addressbook_Json
      * @param array $_contactIDs
      * @return array
      */
-    public function deleteContacts($_contactIDs)
+    public function deleteContacts($_contactIds)
     {
-        $contactIDs = Zend_Json::decode($_contactIDs);
-        if(is_array($contactIDs)) {
+        $contactIds = Zend_Json::decode($_contactIds);
+        if(is_array($contactIds)) {
             $contacts = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-            $contacts->deleteContactsById($contactIDs);
+            $contacts->deleteContactsById($contactIds);
 
-            $result = array('success'   => TRUE, 'ids' => $contactIDs);
+            $result = array('success'   => TRUE, 'ids' => $contactIds);
         } else {
             $result = array('success'   => FALSE);
         }
