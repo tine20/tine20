@@ -81,7 +81,7 @@ Egw.Addressbook = function() {
      * onclick handler for addBtn
      */
     var _addBtnHandler = function(_button, _event) {
-        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&contactId=', 950, 600);
+        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&contactId=', 850, 600);
     }
 	
 	/**
@@ -115,7 +115,7 @@ Egw.Addressbook = function() {
     	    openWindow('listWindow', 'index.php?method=Addressbook.editList&listId=' + contactId, 450, 600);
 		}
 		else {
-	        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&contactId=' + contactId, 950, 600);
+	        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&contactId=' + contactId, 850, 600);
 		}
     }
     
@@ -544,7 +544,7 @@ Egw.Addressbook = function() {
     var _openDialog = function(_id,_dtype) {
         var url;
         var w = 1024, h = 786;
-        var popW = 950, popH = 600;
+        var popW = 850, popH = 600;
         
 		if(_dtype == 'list') {
 			popW = 450, popH = 600;		
@@ -643,40 +643,9 @@ Egw.Addressbook = function() {
      * shared between contact and list edit dialog
      */
     var _displayAddressbookSelectDialog = function(_onClickCallback){         
-        var test = Ext.Element.get('iWindowContAdrTag');
-            
-        if(test != null) {
-            test.remove();
-        }
-            
-        var bodyTag         = Ext.Element.get(document.body);
-        var containerTag    = bodyTag.createChild({tag: 'div',id: 'adrContainer'});
-        var iWindowTag      = containerTag.createChild({tag: 'div',id: 'iWindowAdrTag'});
-        var iWindowContTag  = containerTag.createChild({tag: 'div',id: 'iWindowContAdrTag'});
-
-        if(!addressBookDialog) {
-            var addressBookDialog = new Ext.LayoutDialog('iWindowAdrTag', {
-                modal: true,
-                width:375,
-                height:400,
-                shadow:true,
-                minWidth:375,
-                title: 'please select addressbook',
-                minHeight:400,
-                collapsible: false,
-                autoTabs:false,
-                proxyDrag:true,
-                // layout config merges with the dialog config
-                center:{
-                    autoScroll:true,
-                    tabPosition: 'top',
-                    closeOnTab: true,
-                    alwaysShowTabs: false
-                }
-            });
-
-            addressBookDialog.addKeyListener(27, addressBookDialog.hide, addressBookDialog);
                 
+		if(!addressBookDialog) {
+                   
             //################## listView #################
 
             var Tree = Ext.tree;
@@ -730,15 +699,46 @@ Egw.Addressbook = function() {
                 }
             });
 
-            //###############Listenansichtende #################
+            
 
+        var addressBookDialog = new Ext.Window({
+					title: 'please select addressbook',
+			        width: 375,
+			        height: 400,
+			        minWidth: 375,
+			        minHeight: 400,
+			        layout: 'fit',
+			        plain:true,
+			        bodyStyle:'padding:5px;',
+			        buttonAlign:'center'//,
+			//        items: 
+			
+			/*
+                modal: true,
+                shadow:true,
+                collapsible: false,
+                autoTabs:false,
+                proxyDrag:true,
+                // layout config merges with the dialog config
+                center:{
+                    autoScroll:true,
+                    tabPosition: 'top',
+                    closeOnTab: true,
+                    alwaysShowTabs: false
+                }  */
+            });
+
+      //      addressBookDialog.addKeyListener(27, addressBookDialog.hide, addressBookDialog);			
+			
+		/*	
+			
             var layout = addressBookDialog.getLayout();
             layout.beginUpdate();
             layout.add("center", new Ext.ContentPanel('iWindowContAdrTag', {    
                 autoCreate:true,
                 fitContainer: true
             }));
-            layout.endUpdate();                                 
+            layout.endUpdate();                                 */
         }
         addressBookDialog.show();   
             
@@ -828,157 +828,346 @@ Egw.Addressbook.ContactEditDialog = function() {
 				action_deleteContact
 			]
 		});
-/*
-        var tb = new Ext.Toolbar();
-        tb.add({
-            id: 'savebtn',  
-            cls:'x-btn-text-icon',
-            text: 'Save and Close',
-            icon:'images/oxygen/22x22/actions/document-save.png',
-            tooltip: 'save this contact and close window',
-            onClick: function (){
-                if (addressedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData.contact_id = formData.values.contact_id;
-                    }
-                    
-                    addressedit.submit({
-                        waitTitle:'Please wait!',
-                        waitMsg:'saving contact...',
-                        params:additionalData,
-                        success:function(form, action, o) {
-                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.Egw.Addressbook.reload();
-                            window.setTimeout("window.close()", 400);
-                        },
-                        failure:function(form, action) {
-                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-                }
-            }
-        },{
-            id: 'savebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/save-all.png',
-            tooltip: 'apply changes for this contact',
-            onClick: function (){
-                if (addressedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData.contact_id = formData.values.contact_id;
-                    }
-                    
-                    addressedit.submit({
-                        waitTitle:'Please wait!',
-                        waitMsg:'saving contact...',
-                        params:additionalData,
-                        success:function(form, action, o) {
-                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.Egw.Addressbook.reload();
-                        },
-                        failure:function(form, action) {
-                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-                }
-            }
-        },{
-            id: 'deletebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/edit-delete.png',
-            tooltip: 'delete this contact',
-            disabled: disableButtons,
-            handler: function(_btn, _event) {
-                if(formData.values.contact_id) {
-                    Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
-                    _deleteContact([formData.values.contact_id]);
-                    _reloadMainWindow(true);
-                }
-            }
-        },{
-            id: 'exportbtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/file-export.png',
-            tooltip: 'export this contact',
-            disabled: disableButtons,
-            handler: _exportContact
-        });
-*/
 
-		var loginDialog = new Ext.FormPanel({
-			url:'index.php',
-			baseParams: {method :'Addressbook.saveContact'},
-			labelAlign: 'top',
-			bodyStyle:'padding:5px',
-			region: 'center',
-			/* layout: 'fit', */
-            id: 'contactDialog',
-            /* labelWidth: 75,
-            frame: false,
-            defaults: {width: 230},
-            defaultType: 'textfield', */
-            tbar: contactToolbar,
-            items: [{
-	            layout:'column',
-	            border:false,
-	            items:[{
-	                columnWidth:.5,
-	                layout: 'form',
-	                border:false,
-	                items: [{
-	                    xtype:'textfield',
-	                    fieldLabel: 'First Name',
-	                    name: 'first',
-	                    anchor:'95%'
-	                }, {
-	                    xtype:'textfield',
-	                    fieldLabel: 'Company',
-	                    name: 'company',
-	                    anchor:'95%'
-	                }]
-	            },{
-	                columnWidth:.5,
-	                layout: 'form',
-	                border:false,
-	                items: [{
-	                    xtype:'textfield',
-	                    fieldLabel: 'Last Name',
-	                    name: 'last',
-	                    anchor:'95%'
-	                },{
-	                    xtype:'textfield',
-	                    fieldLabel: 'Email',
-	                    name: 'email',
-	                    vtype:'email',
-	                    anchor:'95%'
-	                }]
-	            }]
-	        }]
-		});
+
+		var addressbookTrigger = new Ext.form.TriggerField({
+            fieldLabel:'Addressbook', 
+            name:'contact_owner', 
+            anchor:'95%',
+            readOnly:true
+        });
+
+        addressbookTrigger.onTriggerClick = function() {
+            Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
+        }
+
+
+		var addressedit = new Ext.FormPanel({
+				url:'index.php',
+				baseParams: {method :'Addressbook.saveContact'},
+			    labelAlign: 'top',
+				bodyStyle:'padding:5px',
+				anchor:'100%',
+				region: 'center',
+	            id: 'contactDialog',
+				tbar: contactToolbar, 
+                items: [{
+		            layout:'column',
+		            border:false,
+					anchor:'100%',
+		            items:[{
+		                columnWidth:.4,
+		                layout: 'form',
+		                border:false,
+		                items: [{
+		                    xtype:'textfield',
+		                    fieldLabel:'First Name', 
+							name:'n_given',
+		                    anchor:'95%'
+		                }, {
+		                    xtype:'textfield',
+		                    fieldLabel:'Middle Name', 
+							name:'n_middle',
+		                    anchor:'95%'
+		                }, {
+							xtype:'textfield',
+		                    fieldLabel:'Last Name', 
+							name:'n_family', 
+							allowBlank:false,
+		                    anchor:'95%'
+						}]
+		            },{
+		                columnWidth:.2,
+		                layout: 'form',
+		                border:false,
+		                items: [{
+		                    xtype:'textfield',
+							fieldLabel:'Prefix', 
+							name:'n_prefix',
+		                    anchor:'95%'
+		                },{
+		                    xtype:'textfield',
+							fieldLabel:'Suffix', 
+							name:'n_suffix',
+		                    anchor:'95%'
+		                }, addressbookTrigger ]
+		            }, {
+		                columnWidth:.4,
+		                layout: 'form',
+		                border:false,
+		                items: [{
+		                    xtype:'textarea',
+							name: 'contact_note',
+							fieldLabel: 'Notes',
+							grow: false,
+							preventScrollbars:false,
+							anchor:'95% 85%'
+		                }]
+		            }]
+		        },{
+		            xtype:'tabpanel',
+		            plain:true,
+		            activeTab: 0,
+		            anchor:'100% 70%',
+		            defaults:{bodyStyle:'padding:10px'},
+		            items:[{
+		                title:'Business information',
+		                layout:'column',
+						border:false,
+						items:[{
+							columnWidth:.333,
+							layout: 'form',
+							border:false,
+							items: [{
+								xtype:'textfield',
+								fieldLabel:'Company', 
+								name:'org_name',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Street', 
+								name:'adr_one_street',  
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Street 2', 
+								name:'adr_one_street2',  
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Postalcode', 
+								name:'adr_one_postalcode',  
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'City', 
+								name:'adr_one_locality',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Region', 
+								name:'adr_one_region',
+								anchor:'95%'
+							},  
+							new Ext.form.ComboBox({
+								fieldLabel: 'Country',
+								name: 'adr_one_countryname',
+								hiddenName:'adr_one_countryname',
+								store: ds_country,
+								displayField:'translatedName',
+								valueField:'shortName',
+								typeAhead: true,
+								mode: 'remote',
+								triggerAction: 'all',
+								emptyText:'Select a state...',
+								selectOnFocus:true,
+								anchor:'95%'
+								})]
+							},{
+							columnWidth:.333,
+							layout: 'form',
+							border:false,
+							items: [{
+								xtype:'textfield',
+								fieldLabel:'Phone', 
+								name:'tel_work',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Cellphone', 
+								name:'tel_cell',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Fax', 
+								name:'tel_fax',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Car phone', 
+								name:'tel_car',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Pager', 
+								name:'tel_pager',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Email', 
+								name:'contact_email', 
+								vtype:'email',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'URL', 
+								name:'contact_url', 
+								vtype:'url',
+								anchor:'95%'
+							},]
+						},{
+							columnWidth:.333,
+							layout: 'form',
+							border:false,
+							items: [{
+								xtype:'textfield',
+								fieldLabel:'Unit', 
+								name:'org_unit',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Role', 
+								name:'contact_role',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Title', 
+								name:'contact_title',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Room', 
+								name:'contact_room',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Name Assistent', 
+								name:'contact_assistent',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Phone Assistent', 
+								name:'tel_assistent',
+								anchor:'95%'
+							},]
+						}]								
+					},{
+		                title:'Private information',
+		                layout:'column',
+						border:false,
+						items:[{
+							columnWidth:.333,
+							layout: 'form',
+							border:false,
+							items: [{
+								xtype:'textfield',
+								fieldLabel:'Street', name:'adr_two_street',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Street2', name:'adr_two_street2',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Postalcode', name:'adr_two_postalcode',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'City', name:'adr_two_locality',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Region', name:'adr_two_region',
+								anchor:'95%'
+							}, 
+							 new Ext.form.ComboBox({
+								fieldLabel: 'Country',
+								name: 'adr_two_countryname',
+								hiddenName:'adr_two_countryname',
+								store: ds_country,
+								displayField:'translatedName',
+								valueField:'shortName',
+								typeAhead: true,
+								mode: 'remote',
+								triggerAction: 'all',
+								emptyText:'Select a state...',
+								selectOnFocus:true,
+								anchor:'95%'
+							})]
+							},{
+							columnWidth:.333,
+							layout: 'form',
+							border:false,
+							items: [
+								new Ext.form.DateField({
+										fieldLabel:'Birthday', 
+										name:'contact_bday', 
+										format:formData.config.dateFormat, 
+										altFormats:'Y-m-d',
+										anchor: '95%'
+							}), {
+								xtype:'textfield',
+								fieldLabel:'Phone', name:'tel_home',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Cellphone', name:'tel_cell_private',
+								anchor:'95%'
+							}, {
+								xtype:'textfield',
+								fieldLabel:'Fax', name:'tel_fax_home',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'Email', name:'contact_email_home', vtype:'email',
+								anchor:'95%'
+							},{
+								xtype:'textfield',
+								fieldLabel:'URL', name:'contact_url_home', vtype:'url',
+								anchor:'95%'
+							}]
+						},{
+							columnWidth:.333,
+							layout: 'form',
+							border:false,
+							items: [
+								new Ext.form.FieldSet({
+									id:'photo', 
+									legend:'Photo'
+							})]						
+						}]
+												
+					},{
+		                title:'Lists',
+		                layout:'column',
+						border:false,
+		                items: [{
+						}]
+		            },{
+		                title:'Categories',
+		                layout:'column',
+						border:false,
+		                items: [{
+						}]
+		            }]
+		        }]
+			});
+	
+
+
 
 		var viewport = new Ext.Viewport({
 			layout: 'border',
-			items: loginDialog
+			items: addressedit
 		});        
 
-        return;
-        
-        var layout = new Ext.BorderLayout(document.body, {
-            north: {split:false, initialSize:28},
-            center: {autoScroll: true}
-        });
-        layout.beginUpdate();
-        layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
-        layout.add('center', new Ext.ContentPanel('content'));
-        layout.endUpdate();
+		
+		var photo = Ext.get('photo');
 
-        
+		var c = photo.createChild({
+			tag:'center', 
+			cn: {
+				tag:'img',
+				src: 'http://extjs.com/forum/image.php?u=2&dateline=1175747336',
+				style:'margin-bottom:5px;'
+			}
+		});
+    
+		new Ext.Button(c, {
+			text: 'Change Photo'
+		});
+		
+                
         var ds_country = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {method:'Egwbase.getCountryList'},
@@ -993,252 +1182,9 @@ Egw.Addressbook.ContactEditDialog = function() {
             data: formData.config.addressbooks
         }); 
 
-        // add a div, which will bneehe parent element for the grid
-        var contentTag = Ext.Element.get('content');
-        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv', class:'x-box-mc'});
-        //var outerDivTag = contentTag.createChild({tag:'div', id:'outergriddiv'});
-        //outerDivTag.addClass('x-box-mc');
-        //var formDivTag = outerDivTag.createChild({tag:'div', id:'formdiv'});
+		return;
         
-        addressedit = new Ext.form.Form({
-            labelWidth: 75, // label settings here cascade unless overridden
-            url:'index.php?method=Addressbook.saveContact',
-            reader : new Ext.data.JsonReader({root: 'results'}, [
-                {name: 'contact_id'},
-                {name: 'contact_tid'},
-                {name: 'contact_owner'},
-                {name: 'contact_private'},
-                {name: 'cat_id'},
-                {name: 'n_family'},
-                {name: 'n_given'},
-                {name: 'n_middle'},
-                {name: 'n_prefix'},
-                {name: 'n_suffix'},
-                {name: 'n_fn'},
-                {name: 'n_fileas'},
-                {name: 'contact_bday'},
-                {name: 'org_name'},
-                {name: 'org_unit'},
-                {name: 'contact_title'},
-                {name: 'contact_role'},
-                {name: 'contact_assistent'},
-                {name: 'contact_room'},
-                {name: 'adr_one_street'},
-                {name: 'adr_one_street2'},
-                {name: 'adr_one_locality'},
-                {name: 'adr_one_region'},
-                {name: 'adr_one_postalcode'},
-                {name: 'adr_one_countryname'},
-                {name: 'contact_label'},
-                {name: 'adr_two_street'},
-                {name: 'adr_two_street2'},
-                {name: 'adr_two_locality'},
-                {name: 'adr_two_region'},
-                {name: 'adr_two_postalcode'},
-                {name: 'adr_two_countryname'},
-                {name: 'tel_work'},
-                {name: 'tel_cell'},
-                {name: 'tel_fax'},
-                {name: 'tel_assistent'},
-                {name: 'tel_car'},
-                {name: 'tel_pager'},
-                {name: 'tel_home'},
-                {name: 'tel_fax_home'},
-                {name: 'tel_cell_private'},
-                {name: 'tel_other'},
-                {name: 'tel_prefer'},
-                {name: 'contact_email'},
-                {name: 'contact_email_home'},
-                {name: 'contact_url'},
-                {name: 'contact_url_home'},
-                {name: 'contact_freebusy_uri'},
-                {name: 'contact_calendar_uri'},
-                {name: 'contact_note'},
-                {name: 'contact_tz'},
-                {name: 'contact_geo'},
-                {name: 'contact_pubkey'},
-                {name: 'contact_created'},
-                {name: 'contact_creator'},
-                {name: 'contact_modified'},
-                {name: 'contact_modifier'},
-                {name: 'contact_jpegphoto'},
-                {name: 'account_id'}
-            ])
-        });
-        
-        addressedit.on('beforeaction',function(_form, _action) {
-            _form.baseParams = {};
-            _form.baseParams._contactOwner = _form.getValues().contact_owner;
-            if(formData.values && formData.values.contact_id) {
-                _form.baseParams.contact_id = formData.values.contact_id;
-            }
-        });
-        
-        addressedit.fieldset({legend:'Contact information'});
-        
-        addressedit.column(
-            {width:'33%', labelWidth:90, labelSeparator:''},
-            new Ext.form.TextField({fieldLabel:'First Name', name:'n_given', width:175}),
-            new Ext.form.TextField({fieldLabel:'Middle Name', name:'n_middle', width:175}),
-            new Ext.form.TextField({fieldLabel:'Last Name', name:'n_family', width:175, allowBlank:false})
-        );
-
-
-       var addressbookTrigger = new Ext.form.TriggerField({
-            fieldLabel:'Addressbook', 
-            name:'contact_owner', 
-            width:175, 
-            readOnly:true
-        });
-
-        addressbookTrigger.onTriggerClick = function() {
-            Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
-        }
-        
-        addressedit.column(
-            {width:'33%', labelWidth:90, labelSeparator:''},
-            new Ext.form.TextField({fieldLabel:'Prefix', name:'n_prefix', width:175}),
-            new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175}),
-            addressbookTrigger
-        );
-/*        
-        addressedit.column(
-            {width:'33%', labelWidth:90, labelSeparator:''},
-            new Ext.form.TextField({fieldLabel:'Suffix', name:'n_suffix', width:175})
-        );
-*/
-        addressedit.end();
-
-        addressedit.fieldset({legend:'Business information'});
-
-            addressedit.column(
-                {width:'33%', labelWidth:90, labelSeparator:''},
-                new Ext.form.TextField({fieldLabel:'Company', name:'org_name', width:175}),
-                new Ext.form.TextField({fieldLabel:'Street', name:'adr_one_street', width:175}),
-                new Ext.form.TextField({fieldLabel:'Street 2', name:'adr_one_street2', width:175}),
-                new Ext.form.TextField({fieldLabel:'Postalcode', name:'adr_one_postalcode', width:175}),
-                new Ext.form.TextField({fieldLabel:'City', name:'adr_one_locality', width:175}),
-                new Ext.form.TextField({fieldLabel:'Region', name:'adr_one_region', width:175}),
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Country',
-                    name: 'adr_one_countryname',
-                    hiddenName:'adr_one_countryname',
-                    store: ds_country,
-                    displayField:'translatedName',
-                    valueField:'shortName',
-                    typeAhead: true,
-                    mode: 'remote',
-                    triggerAction: 'all',
-                    emptyText:'Select a state...',
-                    selectOnFocus:true,
-                    width:175
-                })
-            );
-
-            addressedit.column(
-                {width:'33%', labelWidth:90, labelSeparator:''},
-                new Ext.form.TextField({fieldLabel:'Phone', name:'tel_work', width:175}),
-                new Ext.form.TextField({fieldLabel:'Cellphone', name:'tel_cell', width:175}),
-                new Ext.form.TextField({fieldLabel:'Fax', name:'tel_fax', width:175}),
-                new Ext.form.TextField({fieldLabel:'Car phone', name:'tel_car', width:175}),
-                new Ext.form.TextField({fieldLabel:'Pager', name:'tel_pager', width:175}),
-                new Ext.form.TextField({fieldLabel:'Email', name:'contact_email', vtype:'email', width:175}),
-                new Ext.form.TextField({fieldLabel:'URL', name:'contact_url', vtype:'url', width:175})
-            );
-
-            addressedit.column(
-                {width:'33%', labelWidth:90, labelSeparator:''},
-                new Ext.form.TextField({fieldLabel:'Unit', name:'org_unit', width:175}),            
-                new Ext.form.TextField({fieldLabel:'Role', name:'contact_role', width:175}),
-                new Ext.form.TextField({fieldLabel:'Title', name:'contact_title', width:175}),
-                new Ext.form.TextField({fieldLabel:'Room', name:'contact_room', width:175}),
-                new Ext.form.TextField({fieldLabel:'Name Assistent', name:'contact_assistent', width:175}),
-                new Ext.form.TextField({fieldLabel:'Phone Assistent', name:'tel_assistent', width:175})
-            );
-
-        // fieldset end
-        addressedit.end();
-
-        addressedit.fieldset({legend:'Private information'});
-
-            addressedit.column(
-                {width:'33%', labelWidth:90, labelSeparator:''},
-                new Ext.form.TextField({fieldLabel:'Street', name:'adr_two_street', width:175}),
-                new Ext.form.TextField({fieldLabel:'Street2', name:'adr_two_street2', width:175}),
-                new Ext.form.TextField({fieldLabel:'Postalcode', name:'adr_two_postalcode', width:175}),
-                new Ext.form.TextField({fieldLabel:'City', name:'adr_two_locality', width:175}),
-                new Ext.form.TextField({fieldLabel:'Region', name:'adr_two_region', width:175}),
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Country',
-                    name: 'adr_two_countryname',
-                    hiddenName:'adr_two_countryname',
-                    store: ds_country,
-                    displayField:'translatedName',
-                    valueField:'shortName',
-                    typeAhead: true,
-                    mode: 'remote',
-                    triggerAction: 'all',
-                    emptyText:'Select a state...',
-                    selectOnFocus:true,
-                    width:175
-                })
-            );
-                        
-            addressedit.column(
-                {width:'33%', labelWidth:90, labelSeparator:''},
-                new Ext.form.DateField({fieldLabel:'Birthday', name:'contact_bday', format:formData.config.dateFormat, altFormats:'Y-m-d', width:175}),
-                new Ext.form.TextField({fieldLabel:'Phone', name:'tel_home', width:175}),
-                new Ext.form.TextField({fieldLabel:'Cellphone', name:'tel_cell_private', width:175}),
-                new Ext.form.TextField({fieldLabel:'Fax', name:'tel_fax_home', width:175}),
-                new Ext.form.TextField({fieldLabel:'Email', name:'contact_email_home', vtype:'email', width:175}),
-                new Ext.form.TextField({fieldLabel:'URL', name:'contact_url_home', vtype:'url', width:175})
-            );
-            
-            addressedit.column(
-                {width:'33%', labelSeparator:'', hideLabels:true},
-                new Ext.form.TextArea({
-                    //fieldLabel: 'Address',
-                    name: 'contact_note',
-                    grow: false,
-                    preventScrollbars:false,
-                    width:'95%',
-                    maxLength:255,
-                    height:150
-                })
-            );
-            
-        //fieldset end
-        addressedit.end();
-        
-        var categoriesTrigger = new Ext.form.TriggerField({
-            fieldLabel:'Categories', 
-            name:'categories', 
-            width:320, 
-            readOnly:true
-        });
-        categoriesTrigger.onTriggerClick = _displayCategorySelectDialog; 
-        
-        addressedit.column(
-            {width:'45%', labelWidth:80, labelSeparator:' ', labelAlign:'right'},
-            categoriesTrigger
-        );
-        
-        var listsTrigger = new Ext.form.TriggerField({fieldLabel:'Lists', name:'lists', width:320, readOnly:true});
-        
-        listsTrigger.onTriggerClick = _displayListSelectDialog;
-        
-        addressedit.column(
-            {width:'45%', labelWidth:80, labelSeparator:' ', labelAlign:'right'},
-            listsTrigger
-        );
-        
-        addressedit.column(
-            {width:'10%', labelWidth:50, labelSeparator:' ', labelAlign:'right'},
-            new Ext.form.Checkbox({fieldLabel:'Private', name:'categories', width:10})
-        );
-        addressedit.render('content');
-        
-        return addressedit;
+      //  return addressedit;
     }
 
     var _setContactDialogValues = function(_dialog, _formData) {
@@ -1510,10 +1456,33 @@ Egw.Addressbook.ContactEditDialog = function() {
 
 Egw.Addressbook.ListEditDialog = function() {
 
-    /**
+  /**
      * the form to edit the list data
      */
     var listedit;
+	
+	
+   
+    // private functions and variables
+
+   	var action_saveAndClose = new Ext.Action({
+		text: 'save and close',
+		/*'handler: _addBtnHandler,*/
+		iconCls: 'action_saveAndClose'
+	});
+
+   	var action_applyChanges = new Ext.Action({
+		text: 'apply changes',
+		/*'handler: _addBtnHandler,*/
+		iconCls: 'action_applyChanges'
+	});
+
+   	var action_deleteContact = new Ext.Action({
+		text: 'delete contact',
+		/*'handler: _addBtnHandler,*/
+		iconCls: 'action_delete'
+	});	
+	
     ////////////////////////////////////////////////////////////////////////////
     // distributionlist dialog
     ////////////////////////////////////////////////////////////////////////////
@@ -1522,108 +1491,24 @@ Egw.Addressbook.ListEditDialog = function() {
 
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
-        
-        var layout = new Ext.BorderLayout(document.body, {
-            north: {split:false, initialSize:28},
-            center: {split:false, initialSize:70},
-            south: {split:false, initialSize:350, autoScroll: true}
-        });
-        layout.beginUpdate();
-        layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
-        layout.add('center', new Ext.ContentPanel('content', {fitToFrame:true}));
-        layout.add('south', new Ext.ContentPanel('south', {fitToFrame:true}));
-        layout.endUpdate();
 
-                
         var disableButtons = true;
         if(formData.values) {
             disableButtons = false;
         }       
         
-        var tb = new Ext.Toolbar('header');
-        tb.add({
-            id: 'savebtn',
-            cls:'x-btn-text-icon',
-            text: 'Save and Close',
-            icon:'images/oxygen/22x22/actions/document-save.png',
-            tooltip: 'save this list and close window',
-            onClick: function (){
-                if (listedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData.contact_id = formData.values.contact_id;
-                    }
-                    
-                    listedit.submit({
-                        waitTitle:'Please wait!',
-                        waitMsg:'saving contact...',
-                        params:additionalData,
-                        success:function(form, action, o) {
-                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.Egw.Addressbook.reload();
-                            window.setTimeout("window.close()", 400);
-                        },
-                        failure:function(form, action) {
-                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-                }
-            }
-        },{
-            id: 'savebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/save-all.png',
-            tooltip: 'apply changes for this list',
-            onClick: function (){
-                if (listedit.isValid()) {
-                    var additionalData = {};
-                    if(formData.values) {
-                        additionalData.contact_id = formData.values.contact_id;
-                    }
-                    
-                    listedit.submit({
-                        waitTitle:'Please wait!',
-                        waitMsg:'saving contact...',
-                        params:additionalData,
-                        success:function(form, action, o) {
-                            //Ext.MessageBox.alert("Information",action.result.welcomeMessage);
-                            window.opener.Egw.Addressbook.reload();
-                            // todo
-                            //if(action.result.listId) {
-                            //    formData.values.contact_id = action.result.listId;
-                            //}
-                        },
-                        failure:function(form, action) {
-                            //Ext.MessageBox.alert("Error",action.result.errorMessage);
-                        }
-                    });
-                } else {
-                    Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-                }
-            }
-        },{
-            id: 'deletebtn',
-            cls:'x-btn-icon-22',
-            icon:'images/oxygen/22x22/actions/edit-delete.png',
-            tooltip: 'delete this contact',
-            disabled: disableButtons,
-            handler: function(_btn, _event) {
-                if(formData.values.contact_id) {
-                    Ext.MessageBox.wait('Deleting contact...', 'Please wait!');
-                    _deleteContact([formData.values.contact_id]);
-                    _reloadMainWindow(true);
-                }
-            }
-        //},{
-        //    id: 'exportbtn',
-        //    cls:'x-btn-icon-22',
-        //    icon:'images/oxygen/22x22/actions/file-export.png',
-        //    tooltip: 'export this contact',
-        //    disabled: disableButtons,
-        //    handler: _exportContact
-        });
+        var contactToolbar = new Ext.Toolbar({
+        	region: 'south',
+          	id: 'applicationToolbar',
+			split: false,
+			height: 26,
+			items: [
+				action_saveAndClose,
+				action_applyChanges,
+				action_deleteContact
+			]
+		});
+
         
         // list all available addressbooks - to asign list to
         var ds_addressbooks = new Ext.data.SimpleStore({
@@ -1631,14 +1516,51 @@ Egw.Addressbook.ListEditDialog = function() {
             data: formData.config.addressbooks
         });
 
-        // add a div, which will bneehe parent element for the grid
-        var contentTag = Ext.Element.get('content');
-        
-        listedit = new Ext.form.Form({
-            labelWidth: 75, // label settings here cascade unless overridden
-            url:'index.php',
-            baseParams: {method: 'Addressbook.saveList'}
+		
+		var addressbookTrigger = new Ext.form.TriggerField({
+            fieldLabel:'Addressbook', 
+            name:'list_owner', 
+            anchor:'95%',
+            readOnly:true
         });
+        
+        addressbookTrigger.onTriggerClick = function() {
+            Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
+        }		
+
+		var listedit = new Ext.FormPanel({
+			url:'index.php',
+			baseParams: {method :'Addressbook.saveList'},
+			labelAlign: 'top',
+			bodyStyle:'padding:5px',
+			anchor:'100%',
+			region: 'center',
+			id: 'listDialog',
+			tbar: contactToolbar, 
+			items: [{
+				layout: 'form',
+				title: 'list information',
+				border:false,
+				anchor:'100%',
+				items:[ addressbookTrigger
+				
+					,{
+						xtype:'textfield',
+						fieldLabel:'List Name', 
+						name:'list_name',
+						anchor:'95%'
+					}, {
+						xtype:'textarea',
+						fieldLabel:'List Description', 
+						name:'list_description', 
+						grow: false,
+						anchor:'95%'
+				}]
+ 			  }]
+			});
+		
+		                        
+		
         
         listedit.on('beforeaction',function(_form, _action) {
             _form.baseParams._listOwner = _form.getValues().list_owner;
@@ -1653,28 +1575,7 @@ Egw.Addressbook.ListEditDialog = function() {
             }
             //console.log(_form.baseParams); 
         });
-     
 
-        var addressbookTrigger = new Ext.form.TriggerField({
-            fieldLabel:'Addressbook', 
-            name:'list_owner', 
-            width:325, 
-            readOnly:true
-        });
-        
-        addressbookTrigger.onTriggerClick = function() {
-            Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
-        }
-
-        listedit.fieldset({legend:'list information'});
-                
-        listedit.column(
-            {width:'100%', labelWidth:90, labelSeparator:''},
-   		    addressbookTrigger,
-            new Ext.form.TextField({fieldLabel:'List Name', name:'list_name', width:325}),
-            new Ext.form.TextArea({fieldLabel:'List Description', name:'list_description', width:325, grow: false })
-        );          
-        listedit.end();
                
 		if(formData.values) {
 				var c_owner = formData.values.list_owner;
@@ -1712,8 +1613,8 @@ Egw.Addressbook.ListEditDialog = function() {
 
         searchDS.setDefaultSort('n_family', 'asc');
         //searchDS.load({params:{start:0, limit:50}});
-         
-                    
+		
+		            
         // Custom rendering Template
         var resultTpl = new Ext.Template(
             '<div class="search-item">',
@@ -1723,6 +1624,7 @@ Egw.Addressbook.ListEditDialog = function() {
     
         // search for contacts to add to current list
         var list_search = new Ext.form.ComboBox({
+			title: 'select new list members',
         	store: searchDS,
             displayField:'n_family',
             typeAhead: false,
@@ -1772,16 +1674,15 @@ Egw.Addressbook.ListEditDialog = function() {
 			}
  		});
 	
+	
+		listedit.add(list_search);
 		
-        listedit.fieldset({legend:'select new list members'});
-        listedit.column(
-           {width:'100%', labelWidth:0, labelSeparator:''},               
-            list_search         
-        );          
-        listedit.end();     
-        listedit.render('content');
+		var viewport = new Ext.Viewport({
+			layout: 'border',
+			items: listedit
+		});        
 
-        var listMemberRecord = Ext.data.Record.create([        
+		var listMemberRecord = Ext.data.Record.create([        
         	{name: 'contact_id', type: 'int'},
             {name: 'n_family', type: 'string'},                            
             {name: 'contact_email', type: 'string'}  
@@ -1815,14 +1716,14 @@ Egw.Addressbook.ListEditDialog = function() {
             }]
         });
 
-        var listGrid = new Ext.grid.Grid("south", {
-            ds: ds_listMembers,
-            cm: cm_listMembers,
-            selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
-            autoSizeColumns: true,
+        var listGrid = new Ext.grid.GridPanel({
+            store: ds_listMembers,
+            columns: cm_listMembers,
+            sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+         //   autoSizeColumns: true,
             monitorWindowResize: false,
             trackMouseOver: true,
-            contextMenu: 'ctxListMenu',   
+         //   contextMenu: 'ctxListMenu',   
             autoExpandColumn: 'contact_email'
         }); 
     
@@ -1836,10 +1737,11 @@ Egw.Addressbook.ListEditDialog = function() {
             }
         });
         
-        // set any options
-        listGrid.render('south');  
-             
-        return listedit;
+		viewport.add(listGrid);
+
+		return; 
+	  
+	//	return listedit;
     } 
     
     var _onAddressSelect = function(_addressbooName, _addressbookId) {
@@ -1862,7 +1764,7 @@ Egw.Addressbook.ListEditDialog = function() {
     ////////////////////////////////////////////////////////////////////////////
     // set the dialog field to their initial value
     ////////////////////////////////////////////////////////////////////////////
-    var _setDialogValues = function(_dialog, _formData) {
+     var _setDialogValues = function(_dialog, _formData) {
         _dialog.findField('list_name').setValue(_formData['list_name']);
         _dialog.findField('list_description').setValue(_formData['list_description']);
         _dialog.findField('list_owner').setValue(_formData['list_owner']);
@@ -1883,7 +1785,7 @@ Egw.Addressbook.ListEditDialog = function() {
         display: function() {
             var dialog = _displayDialog();
             if(formData.values) {
-                _setDialogValues(dialog, formData.values);
+      //          _setDialogValues(dialog, formData.values);
             }
         }
     }
