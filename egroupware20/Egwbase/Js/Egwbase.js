@@ -146,12 +146,13 @@ Egw.Egwbase = function() {
 			]
 		});
 
-        for(var i = 0; i < initialTree.length; i++) {
+        //for(var i = 0; i < initialTree.length; i++) {
             //console.log(initialTree[i]);
-            root.appendChild(new Ext.tree.AsyncTreeNode(initialTree[i]));
-        }
+            root.appendChild(new Ext.tree.AsyncTreeNode(initialTree));
+            //root.appendChild(new Ext.tree.AsyncTreeNode(initialTree[i]));
+        //}
 
-        root.expand();
+        root.expand('root/addressbook');
 
         egwMenu.add({
             text: 'eGroupWare',
@@ -206,6 +207,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.on('specialkey', function(f, e){
             if(e.getKey() == e.ENTER){
                 this.onTrigger2Click();
+                this.fireEvent('change', this, this.getRawValue(), this.startValue);
             }
         }, this);
     },
@@ -221,10 +223,8 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 
     onTrigger1Click : function(){
         if(this.hasSearch){
-            var o = {start: 0};
-            o[this.paramName] = '';
-            this.store.reload({params:o});
             this.el.dom.value = '';
+        	this.fireEvent('change', this, this.getRawValue(), this.startValue);
             this.triggers[0].hide();
             this.hasSearch = false;
         }
@@ -236,9 +236,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             this.onTrigger1Click();
             return;
         }
-        var o = {start: 0};
-        o[this.paramName] = v;
-        this.store.reload({params:o});
+        this.fireEvent('change', this, this.getRawValue(), this.startValue);
         this.hasSearch = true;
         this.triggers[0].show();
     }
