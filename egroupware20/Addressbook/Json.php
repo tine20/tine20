@@ -150,7 +150,10 @@ class Addressbook_Json
      */
     public function getContacts($query, $datatype, $owner, $start, $sort, $dir, $limit, $options)
     {
-        $result = array();
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
         if(empty($query)) {
             $query = NULL;
         }
@@ -231,28 +234,26 @@ class Addressbook_Json
          
         switch($_location) {
             case 'mainTree':
-                $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'overview', 'addressbook', 'Addressbook', FALSE);
+                $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'overview', 'addressbook', 'All Contacts', FALSE);
                 $treeNode->setIcon('apps/kaddressbook.png');
                 $treeNode->cls = 'treemain';
 
-                $treeNode = array();
-                
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', FALSE);
                 $childNode->owner = $currentAccount->account_id;
-                $treeNode[] = $childNode;
+                $treeNode->addChildren($childNode);
 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
                 $childNode->owner = 0;
-                $treeNode[] = $childNode;
-
+                $treeNode->addChildren($childNode);
+                
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherpeople', 'otherpeople', 'Other Users Contacts', FALSE);
                 $childNode->owner = 0;
-                $treeNode[] = $childNode;
-                 
+                $treeNode->addChildren($childNode);
+                                 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
                 $childNode->owner = 0;
-                $treeNode[] = $childNode;
-
+                $treeNode->addChildren($childNode);
+                
                 return $treeNode;
                  
                 break;

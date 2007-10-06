@@ -197,6 +197,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $currentAccount = Zend_Registry::get('currentAccount');
         
         $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
+        
+        if(empty($acl)) {
+            return false;
+        }
 
         $groupIds = array_keys($acl);
         
@@ -218,6 +222,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
 
+        if(empty($acl)) {
+            return false;
+        }
+        
         $groupIds = array_keys($acl);
         
         $result = $this->contactsTable->getCountByAcl($groupIds);
@@ -289,6 +297,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
 
+        if(empty($acl)) {
+            return false;
+        }
+        
         $groupIds = array_keys($acl);
         
         $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds);
@@ -309,6 +321,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
 
+        if(empty($acl)) {
+            return false;
+        }
+        
         $groupIds = array_keys($acl);
         
         $result = $this->contactsTable->getCountByAcl($groupIds);

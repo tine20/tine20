@@ -18,7 +18,7 @@ class Addressbook_Http
         if(empty($_contactId)) {
             $_contactId = NULL;
         }
-	    error_log("CONTACTID:: $_contactId");
+	    
 	    $locale = Zend_Registry::get('locale');
 		
 		$view = new Zend_View();
@@ -29,7 +29,7 @@ class Addressbook_Http
 		$list = $locale->getTranslationList('Dateformat');
 		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 		
-		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'-min.js');
+		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
 		$className = "Addressbook_Json";			
@@ -71,7 +71,7 @@ class Addressbook_Http
 		$view->setScriptPath('Egwbase/views');
 		$view->formData = array();
 		
-		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'-min.js');
+		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
 		$className = "Addressbook_Json";			

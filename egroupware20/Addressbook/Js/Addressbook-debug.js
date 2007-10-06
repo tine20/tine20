@@ -22,7 +22,7 @@ Egw.Addressbook = function() {
 	 * the datastore for contacts and lists
 	 */
     var ds_contacts;
-    
+
     /**
      * state of the filterUser button
      */
@@ -73,8 +73,8 @@ Egw.Addressbook = function() {
                 
                 break;
         }
-        _dataSource.baseParams.query = '';
-
+        
+        _dataSource.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
     }
     
     /**
@@ -134,6 +134,9 @@ Egw.Addressbook = function() {
 		}
     }
     
+    var searchFieldHandler = function(_textField, _value) {
+		ds_contacts.reload();
+    }
     
    	var action_addContact = new Ext.Action({
 		text: 'add contact',
@@ -160,7 +163,7 @@ Egw.Addressbook = function() {
 		handler: _deleteBtnHandler,
 		iconCls: 'action_delete'
 	});
-
+	
     var _showContactToolbar = function()
     {
     	var northPanel = Ext.getCmp('north-panel');
@@ -181,6 +184,13 @@ Egw.Addressbook = function() {
 			pressed: displayListsButtonState,
 			iconCls: 'x-btn-icon action_displayLists'
 		});
+		
+		var quickSearchField = new Ext.app.SearchField({
+			id: 'quickSearchField',
+			width:240,
+			emptyText: 'enter searchfilter'
+		}); 
+		quickSearchField.on('change', searchFieldHandler);
 		
         var contactToolbar = new Ext.Toolbar({
         	region: 'south',
@@ -209,11 +219,7 @@ Egw.Addressbook = function() {
 			      displayField: 'text'
 			    }), */
 				' ',
-				new Ext.app.SearchField({
-					width:240,
-					//store: this.searchStore,
-					paramName: 'q'
-				})
+				quickSearchField
 			]
 		});
 
@@ -239,83 +245,85 @@ Egw.Addressbook = function() {
             }  
         }
 
-        // create the Data Store
-        ds_contacts = new Ext.data.JsonStore({
-           url: 'index.php',
-           baseParams: {
-               datatype: currentTreeNode.attributes.datatype,
-               owner:    currentTreeNode.attributes.owner, 
-               sort: 'contact_id',
-               dir: 'ASC',
-               query:   ''
-           },
-           root: 'results',
-           totalProperty: 'totalcount',
-           id: 'contact_id',
-           fields: [
-               {name: 'contact_id'},
-               {name: 'contact_tid'},
-               {name: 'contact_owner'},
-               {name: 'contact_private'},
-               {name: 'cat_id'},
-               {name: 'n_family'},
-               {name: 'n_given'},
-               {name: 'n_middle'},
-               {name: 'n_prefix'},
-               {name: 'n_suffix'},
-               {name: 'n_fn'},
-               {name: 'n_fileas'},
-               {name: 'contact_bday'},
-               {name: 'org_name'},
-               {name: 'org_unit'},
-               {name: 'contact_title'},
-               {name: 'contact_role'},
-               {name: 'contact_assistent'},
-               {name: 'contact_room'},
-               {name: 'adr_one_street'},
-               {name: 'adr_one_street2'},
-               {name: 'adr_one_locality'},
-               {name: 'adr_one_region'},
-               {name: 'adr_one_postalcode'},
-               {name: 'adr_one_countryname'},
-               {name: 'contact_label'},
-               {name: 'adr_two_street'},
-               {name: 'adr_two_street2'},
-               {name: 'adr_two_locality'},
-               {name: 'adr_two_region'},
-               {name: 'adr_two_postalcode'},
-               {name: 'adr_two_countryname'},
-               {name: 'tel_work'},
-               {name: 'tel_cell'},
-               {name: 'tel_fax'},
-               {name: 'tel_assistent'},
-               {name: 'tel_car'},
-               {name: 'tel_pager'},
-               {name: 'tel_home'},
-               {name: 'tel_fax_home'},
-               {name: 'tel_cell_private'},
-               {name: 'tel_other'},
-               {name: 'tel_prefer'},
-               {name: 'contact_email'},
-               {name: 'contact_email_home'},
-               {name: 'contact_url'},
-               {name: 'contact_url_home'},
-               {name: 'contact_freebusy_uri'},
-               {name: 'contact_calendar_uri'},
-               {name: 'contact_note'},
-               {name: 'contact_tz'},
-               {name: 'contact_geo'},
-               {name: 'contact_pubkey'},
-               {name: 'contact_created'},
-               {name: 'contact_creator'},
-               {name: 'contact_modified'},
-               {name: 'contact_modifier'},
-               {name: 'contact_jpegphoto'},
-               {name: 'account_id'}
-           ],
-           // turn on remote sorting
-           remoteSort: true
-        });
+		/**
+		 * the datastore for contacts and lists
+		 */
+	    ds_contacts = new Ext.data.JsonStore({
+	        url: 'index.php',
+	        baseParams: {
+	            datatype: currentTreeNode.attributes.datatype,
+	            owner:    currentTreeNode.attributes.owner, 
+	            sort: 'contact_id',
+	            dir: 'ASC',
+	            query:   ''
+	        },
+	        root: 'results',
+	        totalProperty: 'totalcount',
+	        id: 'contact_id',
+	        fields: [
+	            {name: 'contact_id'},
+	            {name: 'contact_tid'},
+	            {name: 'contact_owner'},
+	            {name: 'contact_private'},
+	            {name: 'cat_id'},
+	            {name: 'n_family'},
+	            {name: 'n_given'},
+	            {name: 'n_middle'},
+	            {name: 'n_prefix'},
+	            {name: 'n_suffix'},
+	            {name: 'n_fn'},
+	            {name: 'n_fileas'},
+	            {name: 'contact_bday'},
+	            {name: 'org_name'},
+	            {name: 'org_unit'},
+	            {name: 'contact_title'},
+	            {name: 'contact_role'},
+	            {name: 'contact_assistent'},
+	            {name: 'contact_room'},
+	            {name: 'adr_one_street'},
+	            {name: 'adr_one_street2'},
+	            {name: 'adr_one_locality'},
+	            {name: 'adr_one_region'},
+	            {name: 'adr_one_postalcode'},
+	            {name: 'adr_one_countryname'},
+	            {name: 'contact_label'},
+	            {name: 'adr_two_street'},
+	            {name: 'adr_two_street2'},
+	            {name: 'adr_two_locality'},
+	            {name: 'adr_two_region'},
+	            {name: 'adr_two_postalcode'},
+	            {name: 'adr_two_countryname'},
+	            {name: 'tel_work'},
+	            {name: 'tel_cell'},
+	            {name: 'tel_fax'},
+	            {name: 'tel_assistent'},
+	            {name: 'tel_car'},
+	            {name: 'tel_pager'},
+	            {name: 'tel_home'},
+	            {name: 'tel_fax_home'},
+	            {name: 'tel_cell_private'},
+	            {name: 'tel_other'},
+	            {name: 'tel_prefer'},
+	            {name: 'contact_email'},
+	            {name: 'contact_email_home'},
+	            {name: 'contact_url'},
+	            {name: 'contact_url_home'},
+	            {name: 'contact_freebusy_uri'},
+	            {name: 'contact_calendar_uri'},
+	            {name: 'contact_note'},
+	            {name: 'contact_tz'},
+	            {name: 'contact_geo'},
+	            {name: 'contact_pubkey'},
+	            {name: 'contact_created'},
+	            {name: 'contact_creator'},
+	            {name: 'contact_modified'},
+	            {name: 'contact_modifier'},
+	            {name: 'contact_jpegphoto'},
+	            {name: 'account_id'}
+	        ],
+	        // turn on remote sorting
+	        remoteSort: true
+	    });
         
         ds_contacts.setDefaultSort('n_family', 'asc');
 
@@ -964,6 +972,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 				region: 'center',
 	            id: 'contactDialog',
 				tbar: contactToolbar, 
+				deferredRender: false,
                 items: [{
 		            layout:'column',
 		            border:false,
@@ -1316,14 +1325,14 @@ Egw.Addressbook.ContactEditDialog = function() {
     var _setContactDialogValues = function(__dialog, _formData) {
     	var _dialog = Ext.getCmp('contactDialog').getForm();
         for (var fieldName in _formData) {
-        	console.log('set ' + fieldName + ' to ' + _formData[fieldName]);
+        	//console.log('set ' + fieldName + ' to ' + _formData[fieldName]);
             var field = _dialog.findField(fieldName);
             if(field) {
                 //console.log(fieldName + ' => ' + _formData[fieldName]);
                 field.setValue(_formData[fieldName]);
             }
         }
-        console.log('done');
+        //console.log('done');
     }
 
     var _exportContact = function(_btn, _event) {
