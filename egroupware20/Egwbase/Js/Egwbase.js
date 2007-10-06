@@ -152,7 +152,8 @@ Egw.Egwbase = function() {
             //root.appendChild(new Ext.tree.AsyncTreeNode(initialTree[i]));
         //}
 
-        root.expand('root/addressbook');
+		//console.log(tree.getNodeById('addressbook').getPath());
+        tree.expandPath('/root/addressbook');
 
         egwMenu.add({
             text: 'eGroupWare',
