@@ -46,6 +46,13 @@ Egw.Addressbook = function() {
     // private functions and variables
     var _setParameter = function(_dataSource)
     {
+    	if(!currentTreeNode) {
+    		currentTreeNode = Ext.getCmp('contact-tree').getSelectionModel().getSelectedNode();
+    	}
+    	
+    	_dataSource.baseParams.datatype = currentTreeNode.attributes.datatype;
+    	_dataSource.baseParams.owner = currentTreeNode.attributes.owner;
+    	
         switch(currentTreeNode.attributes.datatype) {
             case 'list':
                 _dataSource.baseParams.listId = currentTreeNode.attributes.listId;
@@ -228,15 +235,116 @@ Egw.Addressbook = function() {
 		
 		return;
     }
+
+
+
+
+
+
+
+
+    /**
+     * creates the address grid
+     *
+     */
+    var _showContactTree = function() 
+    {
+        //get container to which component will be added
+        var westPanel = Ext.getCmp('west');
+        if(westPanel.items) {
+            for (var i=0; i<westPanel.items.length; i++){
+                westPanel.remove(westPanel.items.get(i));
+            }  
+        }
+
+		var treeLoader = new Ext.tree.TreeLoader({
+            dataUrl:'index.php'
+        });
+        treeLoader.on("beforeload", function(_loader, _node) {
+            _loader.baseParams.method    = 'Addressbook.getSubTree';
+            _loader.baseParams._node     = _node.id;
+            _loader.baseParams._datatype = _node.attributes.datatype;
+            _loader.baseParams._owner    = _node.attributes.owner;
+            _loader.baseParams._location = 'mainTree';
+        }, this);
+    
+        var treePanel = new Ext.tree.TreePanel({
+            id: 'contact-tree',
+            loader: treeLoader,
+            rootVisible: false,
+            border: false
+        });
+        
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        treePanel.setRootNode(treeRoot);
+
+        treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree));
+        
+        treePanel.on('click', function(_node, _event) {
+        	currentTreeNode = _node;
+        	ds_contacts.reload();
+        }, this);
+
+        westPanel.add(treePanel);
+        westPanel.show();
+        westPanel.doLayout();
+
+        treePanel.expandPath('/root/addressbook');
+        treePanel.selectPath('/root/addressbook');
+        
+        //westPanel.hide();
+
+		return;
+/*        
+        // handle right mouse click
+        tree.on('contextmenu', function(_node, _event) {
+            _event.stopEvent();
+            ctxTreeMenu.showAt(_event.getXY());
+        });
+*/
+
+        
+		var treeRoot = treePanel.getRootNode();
+		var oldNodes = Array();
+		treeRoot.eachChild(function (_node) {
+			oldNodes.push(_node);
+		}, this);
+
+/*        var root2 = new Ext.tree.TreeNode({
+            text: 'root2',
+            draggable:false,
+            allowDrop:false,
+            id:'root2'
+        });*/
+        //treeRoot.appendChild(root2);
+		
+		//treePanel.render();
+		//treeRoot.expand();
+        treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree));
+        treePanel.expandPath('/root/addressbook');
+        treePanel.selectPath('/root/addressbook');
+        
+        treePanel.on('click', function(node) {
+        	ds_contacts.reload();
+        });
+        
+        //Ext.each(oldNodes, function(_node){_node.remove();}, this);
+        
+        //treePanel.expandPath('/root/root2');
+    }
     
     /**
      * creates the address grid
      *
      */
-    var _showContactGrid = function(_node) 
+    var _showContactGrid = function() 
     {
-        currentTreeNode = _node;
-
         //get container to which component will be added
         var container = Ext.getCmp('center-panel');
         if(container.items) {
@@ -250,13 +358,6 @@ Egw.Addressbook = function() {
 		 */
 	    ds_contacts = new Ext.data.JsonStore({
 	        url: 'index.php',
-	        baseParams: {
-	            datatype: currentTreeNode.attributes.datatype,
-	            owner:    currentTreeNode.attributes.owner, 
-	            sort: 'contact_id',
-	            dir: 'ASC',
-	            query:   ''
-	        },
 	        root: 'results',
 	        totalProperty: 'totalcount',
 	        id: 'contact_id',
@@ -327,6 +428,8 @@ Egw.Addressbook = function() {
         
         ds_contacts.setDefaultSort('n_family', 'asc');
 
+		// work around for bug 
+		// loading data by json is not working if loadData is not done before
         ds_contacts.loadData({"results":[],"totalcount":"0","status":"success"});
 
 		ds_contacts.on('beforeload', _setParameter);
@@ -339,21 +442,12 @@ Egw.Addressbook = function() {
             displayInfo: true,
 			displayMsg: 'Displaying contacts {0} - {1} of {2}',
 			emptyMsg: "No contacts to display"
-            /*items:[
-                '-', {
-                    pressed: true,
-                    enableToggle:true,
-                    text: 'Show Preview',
-                    cls: 'x-btn-text-icon details',
-                    toggleHandler: function(){}
-                }
-            ]*/
         }); 
         
         var cm_contacts = new Ext.grid.ColumnModel([
             { resizable: true, id: 'contact_tid', header: 'Type', dataIndex: 'contact_tid', width: 30, renderer: _renderContactTid },
             { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family' },
-            { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given' },
+            { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80 },
             { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
             { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true },
             { resizable: true, id: 'contact_email', header: 'eMail', dataIndex: 'contact_email', width: 150, hidden: false },
@@ -364,7 +458,7 @@ Egw.Addressbook = function() {
             { resizable: true, id: 'contact_role', header: 'Role', dataIndex: 'contact_role', hidden: true },
             { resizable: true, id: 'contact_room', header: 'Room', dataIndex: 'contact_room', hidden: true },
             { resizable: true, id: 'adr_one_street', header: 'Street', dataIndex: 'adr_one_street', hidden: true },
-            { resizable: true, id: 'adr_one_locality', header: 'Locality', dataIndex: 'adr_one_locality', hidden: false },
+            { resizable: true, id: 'adr_one_locality', header: 'Locality', dataIndex: 'adr_one_locality', width: 80, hidden: false },
             { resizable: true, id: 'adr_one_region', header: 'Region', dataIndex: 'adr_one_region', hidden: true },
             { resizable: true, id: 'adr_one_postalcode', header: 'Postalcode', dataIndex: 'adr_one_postalcode', hidden: true },
             { resizable: true, id: 'adr_one_countryname', header: 'Country', dataIndex: 'adr_one_countryname', hidden: true },
@@ -391,9 +485,6 @@ Egw.Addressbook = function() {
         
         cm_contacts.defaultSortable = true; // by default columns are sortable
         
-        //ds_contacts.load({params:{start:0, limit:50}});
-        //ds.load({params:{start:0, limit:1}});
-
         contactGrid = new Ext.grid.GridPanel({
             store: ds_contacts,
             cm: cm_contacts,
@@ -708,6 +799,7 @@ Egw.Addressbook = function() {
         // public functions
         show: function(_node) {
         	_showContactToolbar();
+        	_showContactTree();
         	_showContactGrid(_node);
         },
         displayAddressbookSelectDialog: _displayAddressbookSelectDialog,

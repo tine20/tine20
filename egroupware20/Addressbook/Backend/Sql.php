@@ -509,7 +509,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
     public function getAccounts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        $where = 'account_id IS NOT NULL';
+        $where[] = 'account_id IS NOT NULL';
+        if($_filter !== NULL) {
+        	$where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . $_filter . '%');
+        }
+        
         
         $result = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
         
