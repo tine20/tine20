@@ -984,7 +984,24 @@ Egw.Addressbook.ContactEditDialog = function() {
                 });
         }
         
-		
+		var states = [
+			['AL', 'Alabama'],
+			['AK', 'Alaska'],
+			['AZ', 'Arizona'],
+			['WV', 'West Virginia'],
+			['WI', 'Wisconsin'],
+			['WY', 'Wyoming']
+		];
+
+		var lists_store = new Ext.data.SimpleStore({
+			fields: ['contact_id', 'contact_tid'],
+			data : states
+		});
+
+		var lists_store2 = new Ext.data.SimpleStore({
+			fields: ['contact_id', 'contact_tid'],
+		});
+/*
 		var lists_store =  new Ext.data.JsonStore({
            url: 'index.php',
            baseParams: {
@@ -1016,43 +1033,69 @@ Egw.Addressbook.ContactEditDialog = function() {
 		lists_store.on('beforeload', _setParameter);
 		
 		lists_store.load();
-		
+*/	
     	
-		  var view = new Ext.DataView({
-		        style:'overflow:auto',
-		        multiSelect: true,
-				itemSelector: 'div.thumb-wrap',
-		      //  plugins: new Ext.DataView.DragSelector({dragSafe:true}),
-		        store: lists_store,
-		        tpl: new Ext.XTemplate(
+		var view = new Ext.DataView({
+			style:'overflow:auto',
+		    singleSelect: true,
+			itemSelector: 'div.thumb-wrap',
+		    //  plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+		    store: lists_store,
+		    tpl: new Ext.XTemplate(
 		            '<tpl for=".">',
-		            '<div class="thumb-wrap" id="{shortName}">',
-		            '<span>{shortName}</span></div>',
+		            '<div class="thumb-wrap" id="{contact_id}">',
+		            '<span>{contact_tid}</span></div>',
 		            '</tpl>'
-		        )
-		    });
-/*
-		view.on({'dblclick', function(){
-					// TODO....remove item from source store und add to destination store
-		});	
-	*/		
-		    var list_source_box = new Ext.Panel({
-		        id:'list_source',
-		        title:'available lists',
-		        region:'center',
-		        margins: '5 5 5 0',
-		        layout:'fit',
-		        items: view
-		    });
+		    )
+		});
 
-			var list_selected_box = new Ext.Panel({
-		        id:'list_selected',
-		        title:'chosen lists',
-		        region:'center',
-		        margins: '5 5 5 0',
-		        layout:'fit'//,
-		        //items: view
-		    });
+		view.on('dblclick', function(_dataview, _index, _htmlNode, _event){
+			//console.log(_index);
+			var record = lists_store.getAt(_index);
+			lists_store.remove(record);
+			lists_store2.add(record);
+			lists_store2.sort('contact_tid', 'ASC');
+		});	
+
+		var view2 = new Ext.DataView({
+			style:'overflow:auto',
+		    singleSelect: true,
+			itemSelector: 'div.thumb-wrap',
+		    //  plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+		    store: lists_store2,
+		    tpl: new Ext.XTemplate(
+		            '<tpl for=".">',
+		            '<div class="thumb-wrap" id="{contact_id}">',
+		            '<span>{contact_tid}</span></div>',
+		            '</tpl>'
+		    )
+		});
+
+		view2.on('dblclick', function(_dataview, _index, _htmlNode, _event){
+			//console.log(_index);
+			var record = lists_store2.getAt(_index);
+			lists_store2.remove(record);
+			lists_store.add(record);
+			lists_store.sort('contact_tid', 'ASC');
+		});	
+			
+		var list_source_box = new Ext.Panel({
+			id:'list_source',
+		    title:'available lists',
+		    region:'center',
+		    margins: '5 5 5 0',
+		    layout:'fit',
+		    items: view
+		});
+
+		var list_selected_box = new Ext.Panel({
+		    id:'list_selected',
+		    title:'chosen lists',
+		    region:'center',
+		    margins: '5 5 5 0',
+		    layout:'fit',
+		    items: view2
+		});
 
 		var addressedit = new Ext.FormPanel({
 				url:'index.php',
