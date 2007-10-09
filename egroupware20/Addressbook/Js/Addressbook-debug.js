@@ -2,22 +2,6 @@ Ext.namespace('Egw.Addressbook');
 
 Egw.Addressbook = function() {
 
-	////////////////////////
-	// old stuff, still needed???
-	////////////////////////
-/*    
-    var contactGrid;
-	
-	var listGrid;
-    
-    var dialog;
-    
-    var filterContactsButton, filterListsButton, textF1;
-    
-    var currentTreeNode;
-*/  
-    ///////////////////////////
-
 	/**
 	 * the datastore for contacts and lists
 	 */
@@ -284,7 +268,9 @@ Egw.Addressbook = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree));
+        for(i=0; i<initialTree.length; i++) {
+        	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree[i]));
+        }
         
         treePanel.on('click', function(_node, _event) {
         	currentTreeNode = _node;
@@ -295,7 +281,7 @@ Egw.Addressbook = function() {
         westPanel.show();
         westPanel.doLayout();
 
-        treePanel.expandPath('/root/addressbook');
+        treePanel.expandPath('/root/alllists');
         treePanel.selectPath('/root/addressbook');
         
         //westPanel.hide();
