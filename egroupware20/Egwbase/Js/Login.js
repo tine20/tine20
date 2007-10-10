@@ -45,7 +45,7 @@ EGWNameSpace.Login = function() {
                     if (loginDialog.form.isValid()) {
                         loginDialog.form.submit({
                             waitTitle: 'Please wait!', 
-                            waitMsg:'Saving Data...',
+                            waitMsg:'Loging you in...',
                             success:function(form, action, o) {
                                 Ext.MessageBox.wait('Login successful. Loading eGroupWare...', 'Please wait!');
                                 window.location.reload();

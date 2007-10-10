@@ -18,7 +18,7 @@ Egw.Egwbase = function() {
 			}, '-', {
 				text: 'Logout',
 	            handler: _logoutButtonHandler,
-				icon: 'images/oxygen/16x16/actions/system-log-out.png',
+				icon: 'images/oxygen/16x16/actions/system-log-out.png'
 			}]
 		});
 
@@ -45,7 +45,7 @@ Egw.Egwbase = function() {
 		
         var tb2 = new Ext.Toolbar({
 			id: 'applicationToolbar',
-			height: 26,
+			height: 26
 		});
 
 		var viewport = new Ext.Viewport({
