@@ -693,7 +693,7 @@ Egw.Addressbook = function() {
 			        layout: 'fit',
 			        plain:true,
 			        bodyStyle:'padding:5px;',
-			        buttonAlign:'center'//,
+			        buttonAlign:'center'
 			//        items: 
 			
 			/*
@@ -985,7 +985,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		});
 
 		var lists_store2 = new Ext.data.SimpleStore({
-			fields: ['contact_id', 'contact_tid'],
+			fields: ['contact_id', 'contact_tid']
 		});
 /*
 		var lists_store =  new Ext.data.JsonStore({
@@ -1025,7 +1025,8 @@ Egw.Addressbook.ContactEditDialog = function() {
 			style:'overflow:auto',
 		    multiSelect: true,
 			id: 'list_source_',
-			selectedClass: 'x-grid3-row-selected',
+			cls: 'x-list-small',			
+			selectedClass: 'x-list-selected',
 			itemSelector: 'div.x-view',
 		    //  plugins: new Ext.DataView.DragSelector({dragSafe:true}),
 		    store: lists_store,
@@ -1037,33 +1038,69 @@ Egw.Addressbook.ContactEditDialog = function() {
 		    )
 		});
 
+		function Numsort (a, b) {
+				return a - b;
+		}
+		
 		
 		var add_list = function(_dataview, _index, _htmlNode, _event){
 			//console.log(_index);
 				var _index = Ext.getCmp('list_source_');
-				var _listitems = _index.getSelectedIndexes();
-
-				if(_index.getSelectionCount() > '1')
-				 {
+				var _listitems = String(_index.getSelectedIndexes());
+				var _selected_items = _index.getSelectionCount();
+				
+				if(_index.getSelectionCount() > '1')  {
 					var _litems = _listitems.split(",");
+				 } else if(_index.getSelectionCount() == '1')  {
+					var _litems = new Array(_listitems);
 				 }
+
+					_litems.sort(Numsort);
+					_litems.reverse();
+				 
+				for(i=0; i<_selected_items; i++)
+				{	
+					var record = lists_store.getAt(_litems[i]);
+					lists_store2.add(record);	
+				}
+					lists_store2.sort('contact_tid', 'ASC');
+					
 										
-										
-				for(i=0; i<_index.getSelectionCount(); i++)
+				for(i=0; i<_selected_items; i++)
 				{	
 					var record = lists_store.getAt(_litems[i]);
 					lists_store.remove(record);
-					lists_store2.add(record);
-					lists_store2.sort('contact_tid', 'ASC');
-				 }
+				}
+					lists_store.sort('contact_tid', 'ASC');					
 		};
 		
 		var remove_list = function(_dataview, _index, _htmlNode, _event){
 			//console.log(_index);
-			var record = lists_store2.getAt(_index);
-			lists_store2.remove(record);
-			lists_store.add(record);
-			lists_store.sort('contact_tid', 'ASC');
+				var _index = Ext.getCmp('list_selected_');
+				var _listitems = String(_index.getSelectedIndexes());
+				var _selected_items = _index.getSelectionCount();
+				
+				if(_index.getSelectionCount() > '1')  {
+					var _litems = _listitems.split(",");
+				 } else if(_index.getSelectionCount() == '1')  {
+					var _litems = new Array(_listitems);
+				 }
+					_litems.sort(Numsort);
+					_litems.reverse();				 
+				
+				for(i=0; i<_selected_items; i++)
+				{	
+					var record = lists_store2.getAt(_litems[i]);
+					lists_store.add(record);	
+				}
+					lists_store.sort('contact_tid', 'ASC');
+					
+				for(i=0; i<_selected_items; i++)
+				{	
+					var record = lists_store2.getAt(_litems[i]);
+					lists_store2.remove(record);
+				}
+					lists_store2.sort('contact_tid', 'ASC');					
 		};
 		
 		view.on('dblclick', add_list);	
@@ -1071,8 +1108,9 @@ Egw.Addressbook.ContactEditDialog = function() {
 		var view2 = new Ext.DataView({
 			style:'overflow:auto',
 		    multiSelect: true,
-			id: 'list_selected',
-			selectedClass: 'x-grid3-row-selected',
+			id: 'list_selected_',
+			cls: 'x-list-small',			
+			selectedClass: 'x-list-selected',
 			itemSelector: 'div.x-view',
 		    //  plugins: new Ext.DataView.DragSelector({dragSafe:true}),
 		    store: lists_store2,
@@ -1117,6 +1155,7 @@ Egw.Addressbook.ContactEditDialog = function() {
                 items: [{
 		            layout:'column',
 		            border:false,
+					deferredRender:false,
 					anchor:'100%',
 		            items:[{
 		                columnWidth:.4,
@@ -1171,11 +1210,13 @@ Egw.Addressbook.ContactEditDialog = function() {
 		            xtype:'tabpanel',
 		            plain:true,
 		            activeTab: 0,
+					deferredRender:false,
 		            anchor:'100% 70%',
 		            defaults:{bodyStyle:'padding:10px'},
 		            items:[{
 		                title:'Business information',
 		                layout:'column',
+						deferredRender:false,
 						border:false,
 						items:[{
 							columnWidth:.333,
@@ -1267,7 +1308,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 								name:'contact_url', 
 								vtype:'url',
 								anchor:'95%'
-							},]
+							}]
 						},{
 							columnWidth:.333,
 							layout: 'form',
@@ -1302,11 +1343,12 @@ Egw.Addressbook.ContactEditDialog = function() {
 								fieldLabel:'Phone Assistent', 
 								name:'tel_assistent',
 								anchor:'95%'
-							},]
+							}]
 						}]								
 					},{
 		                title:'Private information',
 		                layout:'column',
+						deferredRender:false,
 						border:false,
 						items:[{
 							columnWidth:.333,
@@ -1393,6 +1435,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 					},{
 		                title:'Lists',
 		                layout:'column',
+						deferredRender:false,
 						border:false,
 						items: [{
 							columnWidth:.333,
@@ -1409,14 +1452,17 @@ Egw.Addressbook.ContactEditDialog = function() {
 							columnWidth:.333,
 							layout: 'form',
 							border:false,
+							extraCls: 'list-butons',
 							items: [ new Ext.Button({
 								        text: 'add',
 										iconCls: 'blist',
+										minWidth: 80,
 								        handler: add_list,
 										icon: 'images/oxygen/16x16/actions/arrow-right-double.png'
 								    }), new Ext.Button({
 								        text: 'remove',
 										iconCls: 'blist', 
+										minWidth: 80,
 								        handler: remove_list,
 										icon: 'images/oxygen/16x16/actions/arrow-left-double.png'
 								    })
@@ -1436,6 +1482,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		            },{
 		                title:'Categories',
 		                layout:'column',
+						deferredRender:false,
 						border:false,
 		                items: [{
 						}]
@@ -1544,7 +1591,7 @@ Egw.Addressbook.ContactEditDialog = function() {
                 url:'index.php?method=Addressbook.saveAdditionalData',
                 reader : new Ext.data.JsonReader({root: 'results'}, [
                     {name: 'category_id'},
-                    {name: 'category_realname'},
+                    {name: 'category_realname'}
                 ])
         });
             
@@ -1664,7 +1711,7 @@ Egw.Addressbook.ContactEditDialog = function() {
                     {root: 'results'}, 
                     [
                         {name: 'list_id'},
-                        {name: 'list_realname'},                    
+                        {name: 'list_realname'}                    
                     ]
                 )
             });     
@@ -1890,7 +1937,7 @@ Egw.Addressbook.ListEditDialog = function() {
             baseParams: {
                 method:   'Addressbook.getOverview', 
                 owner:    c_owner, 
-                options:  '{"displayContacts":true,"displayLists":false}',  
+                options:  '{"displayContacts":true,"displayLists":false}' 
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -1974,10 +2021,7 @@ Egw.Addressbook.ListEditDialog = function() {
 			}
  		});
 	
-	
 		listedit.add(list_search);
-		
-    
 
 		var listMemberRecord = Ext.data.Record.create([        
         	{name: 'contact_id', type: 'int'},
@@ -1986,16 +2030,16 @@ Egw.Addressbook.ListEditDialog = function() {
         ]);
 
         // data store for listmember grid
-		if(formData.values) var listmembers = formData.values.list_members;
-		
-	
-		
-        var ds_listMembers = new Ext.data.SimpleStore({
-            fields: ['contact_id', 'n_family', 'contact_email'],		
-            data: listmembers
-        });
-        ds_listMembers.sort('n_family', 'asc');
-
+		if(formData.values) 
+		{
+			var listmembers = formData.values.list_members;
+			var ds_listMembers = new Ext.data.SimpleStore({
+				id: 'list_Members',
+	            fields: ['contact_id', 'n_family', 'contact_email'],		
+	            data: listmembers
+	        });
+	        ds_listMembers.sort('n_family', 'asc');
+		}
         // columnmodel for listmember grid
         var cm_listMembers = new Ext.grid.ColumnModel([{
             resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
@@ -2017,6 +2061,7 @@ Egw.Addressbook.ListEditDialog = function() {
         var listGrid = new Ext.grid.GridPanel({
             store: ds_listMembers,
             cm: cm_listMembers,
+			id: 'listGrid',
             selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
             autoSizeColumns: true,
             monitorWindowResize: false,
@@ -2027,10 +2072,11 @@ Egw.Addressbook.ListEditDialog = function() {
             autoExpandColumn: 'contact_email'
         }); 
     	
-	
+		
         listGrid.on('rowcontextmenu', function(grid, rowIndex, eventObject) {
             eventObject.stopEvent();
-            var record = grid.getDataSource().getAt(rowIndex);
+            // var record = grid.getDataSource().getAt(rowIndex);
+			var record = grid.getStore().getAt(rowIndex);
             if(record.data.contact_tid == 'l') {
                 ctxListMenu.showAt(eventObject.getXY());
             } else {
@@ -2061,10 +2107,14 @@ Egw.Addressbook.ListEditDialog = function() {
      *
      */
     var _deleteLstItemHandler = function(_button, _event) {
-        var contactIDs = Array();
-        var selectedRows = listGrid.getSelectionModel().getSelections();
+        var contactIDs = Array();		
+		var l_grid = Ext.getCmp('listGrid');
+		var l_members = Ext.getCmp('list_Members');
+		
+        
+		var selectedRows = l_grid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
-            ds_listMembers.remove(selectedRows[i]);
+            l_members.remove(selectedRows[i]);
         }
     }
         
@@ -2072,12 +2122,12 @@ Egw.Addressbook.ListEditDialog = function() {
     ////////////////////////////////////////////////////////////////////////////
     // set the dialog field to their initial value
     ////////////////////////////////////////////////////////////////////////////
-     var _setDialogValues = function(__dialog, _formData) {
-//	var _setDialogValues = function(_formData) {
-//		var _dialog = Ext.getCmp('listDialog').getForm();
-//		alert(_formData);
-//		alert(_formData['contact_note']);
-		_dialog.findField('list_name').setValue(_formData['n_family']);
+     var _setDialogValues = function(_dialog, _formData) {
+/* 	var _setDialogValues = function(_formData) {
+		var _dialog = Ext.getCmp('listDialog').getForm();
+	alert(_formData);
+		alert(_formData['contact_note']);
+ */		_dialog.findField('list_name').setValue(_formData['n_family']);
         _dialog.findField('list_description').setValue(_formData['contact_note']);
         _dialog.findField('list_owner').setValue(_formData['contact_owner']);
     }
