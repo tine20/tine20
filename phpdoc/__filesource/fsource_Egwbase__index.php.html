@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>File Source for index.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>Source for file index.php</h1>
+<p>Documentation is available at <a href="../Egwbase/_index.php.html">index.php</a></p>
+<div class="src-code">
+<div class="src-code"><ol><li><div class="src-line"><a name="a1"></a><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line"><a name="a2"></a><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><a name="a3"></a><span class="src-doc">&nbsp;*&nbsp;this&nbsp;is&nbsp;the&nbsp;general&nbsp;file&nbsp;any&nbsp;request&nbsp;should&nbsp;be&nbsp;routed&nbsp;trough</span></div></li>
+<li><div class="src-line"><a name="a4"></a><span class="src-doc">&nbsp;*</span></div></li>
+<li><div class="src-line"><a name="a5"></a><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@package</span><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Egwbase</span></div></li>
+<li><div class="src-line"><a name="a6"></a><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@license</span><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</span></div></li>
+<li><div class="src-line"><a name="a7"></a><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@author</span><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lars&nbsp;Kneschke&nbsp;&lt;l.kneschke@metaways.de&gt;</span></div></li>
+<li><div class="src-line"><a name="a8"></a><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@copyright</span><span class="src-doc">&nbsp;&nbsp;&nbsp;Copyright&nbsp;(c)&nbsp;2007-2007&nbsp;Metaways&nbsp;Infosystems&nbsp;GmbH&nbsp;(http://www.metaways.de)</span></div></li>
+<li><div class="src-line"><a name="a9"></a><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@version</span><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$Id$</span></div></li>
+<li><div class="src-line"><a name="a10"></a><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@todo</span><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;implement&nbsp;json&nbsp;key&nbsp;check</span></div></li>
+<li><div class="src-line"><a name="a11"></a><span class="src-doc">&nbsp;*</span></div></li>
+<li><div class="src-line"><a name="a12"></a><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line"><a name="a13"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a14"></a><span class="src-inc">require_once&nbsp;</span><span class="src-str">'Zend/Loader.php'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a15"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a16"></a><span class="src-id">Zend_Loader</span><span class="src-sym">::</span><span class="src-id">registerAutoload</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a17"></a><span class="src-id">Zend_Session</span><span class="src-sym">::</span><span class="src-id">start</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a18"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a19"></a><span class="src-var">$egwBaseNamespace&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">Zend_Session_Namespace</span><span class="src-sym">(</span><span class="src-str">'egwbase'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a20"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a21"></a><span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span>isset<span class="src-sym">(</span><span class="src-var">$egwBaseNamespace</span><span class="src-sym">-&gt;</span><span class="src-id">jsonKey</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a22"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$egwBaseNamespace</span><span class="src-sym">-&gt;</span><span class="src-id">jsonKey&nbsp;</span>=&nbsp;<a href="http://www.php.net/md5">md5</a><span class="src-sym">(</span><a href="http://www.php.net/mktime">mktime</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a23"></a><span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a24"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a25"></a><span class="src-var">$options&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">Zend_Config_Ini</span><span class="src-sym">(</span><span class="src-str">'../../config.ini'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'database'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a26"></a><span class="src-id">Zend_Registry</span><span class="src-sym">::</span><span class="src-id">set</span><span class="src-sym">(</span><span class="src-str">'dbConfig'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a27"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a28"></a><a href="http://www.php.net/date_default_timezone_set">date_default_timezone_set</a><span class="src-sym">(</span><span class="src-str">'Europe/Berlin'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a29"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a30"></a><span class="src-var">$locale&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">Zend_Locale</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a31"></a><span class="src-id">Zend_Registry</span><span class="src-sym">::</span><span class="src-id">set</span><span class="src-sym">(</span><span class="src-str">'locale'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$locale</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a32"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a33"></a><span class="src-var">$db&nbsp;</span>=&nbsp;<span class="src-id">Zend_Db</span><span class="src-sym">::</span><span class="src-id">factory</span><span class="src-sym">(</span><span class="src-str">'PDO_MYSQL'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$options</span><span class="src-sym">-&gt;</span><span class="src-id">toArray</span><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a34"></a><span class="src-id">Zend_Registry</span><span class="src-sym">::</span><span class="src-id">set</span><span class="src-sym">(</span><span class="src-str">'dbAdapter'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$db</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a35"></a><span class="src-id">Zend_Db_Table_Abstract</span><span class="src-sym">::</span><span class="src-id">setDefaultAdapter</span><span class="src-sym">(</span><span class="src-var">$db</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a36"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a37"></a><span class="src-key">if</span><span class="src-sym">(</span>isset<span class="src-sym">(</span><span class="src-var">$egwBaseNamespace</span><span class="src-sym">-&gt;</span><span class="src-id">currentAccount</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a38"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">Zend_Registry</span><span class="src-sym">::</span><span class="src-id">set</span><span class="src-sym">(</span><span class="src-str">'currentAccount'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$egwBaseNamespace</span><span class="src-sym">-&gt;</span><span class="src-id">currentAccount</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a39"></a><span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a40"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a41"></a><span class="src-comm">#date_default_timezone_set('America/Los_Angeles');</span></div></li>
+<li><div class="src-line"><a name="a42"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a43"></a><span class="src-comm">#echo&nbsp;new&nbsp;Zend_Date('2006',&nbsp;Zend_Date::YEAR);</span></div></li>
+<li><div class="src-line"><a name="a44"></a><span class="src-comm">#exit;</span></div></li>
+<li><div class="src-line"><a name="a45"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a46"></a><span class="src-var">$auth&nbsp;</span>=&nbsp;<span class="src-id">Zend_Auth</span><span class="src-sym">::</span><span class="src-id">getInstance</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a47"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a48"></a><span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'HTTP_X_REQUESTED_WITH'</span><span class="src-sym">]&nbsp;</span>===&nbsp;<span class="src-str">'XMLHttpRequest'&nbsp;</span>&amp;&amp;&nbsp;<span class="src-sym">!</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$_REQUEST</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a49"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//Json&nbsp;request&nbsp;from&nbsp;ExtJS</span></div></li>
+<li><div class="src-line"><a name="a50"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a51"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//&nbsp;is&nbsp;it&nbsp;save&nbsp;to&nbsp;use&nbsp;the&nbsp;jsonKey&nbsp;from&nbsp;$_GET&nbsp;too???</span></div></li>
+<li><div class="src-line"><a name="a52"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//&nbsp;can&nbsp;we&nbsp;move&nbsp;this&nbsp;to&nbsp;the&nbsp;Zend_Json_Server???</span></div></li>
+<li><div class="src-line"><a name="a53"></a><span class="src-comm">//&nbsp;&nbsp;&nbsp;&nbsp;if($_POST['jsonKey']&nbsp;!=&nbsp;$egwBaseNamespace-&gt;jsonKey)&nbsp;{</span></div></li>
+<li><div class="src-line"><a name="a54"></a><span class="src-comm">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_log('wrong&nbsp;JSON&nbsp;Key&nbsp;sent!!!');</span></div></li>
+<li><div class="src-line"><a name="a55"></a><span class="src-comm">//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die('wrong&nbsp;JSON&nbsp;Key&nbsp;sent!!!');</span></div></li>
+<li><div class="src-line"><a name="a56"></a><span class="src-comm">//&nbsp;&nbsp;&nbsp;&nbsp;}</span></div></li>
+<li><div class="src-line"><a name="a57"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a58"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">Zend_Json_Server</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a59"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a60"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server</span><span class="src-sym">-&gt;</span><span class="src-id">setClass</span><span class="src-sym">(</span><span class="src-str">'Egwbase_Json'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'Egwbase'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a61"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a62"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$auth</span><span class="src-sym">-&gt;</span><span class="src-id">hasIdentity</span><span class="src-sym">(</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a63"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server</span><span class="src-sym">-&gt;</span><span class="src-id">setClass</span><span class="src-sym">(</span><span class="src-str">'Addressbook_Json'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'Addressbook'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a64"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//$server-&gt;setClass('Asterisk_Json',&nbsp;'Asterisk');</span></div></li>
+<li><div class="src-line"><a name="a65"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//$server-&gt;setClass('Felamimail_Json',&nbsp;'Felamimail');</span></div></li>
+<li><div class="src-line"><a name="a66"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a67"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a68"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server</span><span class="src-sym">-&gt;</span><span class="src-id">handle</span><span class="src-sym">(</span><span class="src-var">$_REQUEST</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a69"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a70"></a><span class="src-sym">}&nbsp;</span><span class="src-key">else&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a71"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//&nbsp;HTTP&nbsp;request</span></div></li>
+<li><div class="src-line"><a name="a72"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a73"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../Zend_Json/Server/Egwbase_Http_Server.html">Egwbase_Http_Server</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a74"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a75"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server</span><span class="src-sym">-&gt;</span><span class="src-id">setClass</span><span class="src-sym">(</span><span class="src-str">'Egwbase_Http'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'Egwbase'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a76"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a77"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$auth</span><span class="src-sym">-&gt;</span><span class="src-id">hasIdentity</span><span class="src-sym">(</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a78"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server</span><span class="src-sym">-&gt;</span><span class="src-id">setClass</span><span class="src-sym">(</span><span class="src-str">'Addressbook_Http'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'Addressbook'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a79"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}&nbsp;</span></div></li>
+<li><div class="src-line"><a name="a80"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a81"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if</span><span class="src-sym">(</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$_REQUEST</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a82"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$auth</span><span class="src-sym">-&gt;</span><span class="src-id">hasIdentity</span><span class="src-sym">(</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a83"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$_REQUEST</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-str">'Egwbase.mainScreen'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a84"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}&nbsp;</span><span class="src-key">else&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a85"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$_REQUEST</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-str">'Egwbase.login'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a86"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a87"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a88"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a89"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$server</span><span class="src-sym">-&gt;</span><span class="src-id">handle</span><span class="src-sym">(</span><span class="src-var">$_REQUEST</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a90"></a>&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a91"></a><span class="src-sym">}</span></div></li>
+</ol></div>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 11 Oct 2007 00:39:10 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.0</a>
+	</p>
+	</body>
+</html>

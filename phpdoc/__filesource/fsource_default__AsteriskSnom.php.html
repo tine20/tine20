@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>File Source for Snom.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>Source for file Snom.php</h1>
+<p>Documentation is available at <a href="../default/_Asterisk---Snom.php.html">Snom.php</a></p>
+<div class="src-code">
+<div class="src-code"><ol><li><div class="src-line"><a name="a1"></a><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line"><a name="a2"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a3"></a><span class="src-key">class&nbsp;</span><a href="../default/Asterisk_Snom.html">Asterisk_Snom</a></div></li>
+<li><div class="src-line"><a name="a4"></a><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a5"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">const&nbsp;</span><span class="src-id">SORTDESC&nbsp;</span>=&nbsp;<span class="src-str">'DESC'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a6"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">const&nbsp;</span><span class="src-id">SORTASC&nbsp;</span>=&nbsp;<span class="src-str">'ASC'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a7"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a8"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><a href="../default/Asterisk_Snom.html#methodgetPhones">getPhones</a><span class="src-sym">(</span><span class="src-var">$_quickFilter&nbsp;</span>=&nbsp;<span class="src-id">NULL</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_order&nbsp;</span>=&nbsp;<span class="src-id">NULL</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_sort&nbsp;</span>=&nbsp;<span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">SORTASC</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_count&nbsp;</span>=&nbsp;<span class="src-id">NULL</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_offset&nbsp;</span>=&nbsp;<span class="src-id">NULL</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a9"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$table&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../default/Asterisk_Snomphones.html">Asterisk_Snomphones</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a10"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a11"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$rows&nbsp;</span>=&nbsp;<span class="src-var">$table</span><span class="src-sym">-&gt;</span><span class="src-id">fetchAll</span><span class="src-sym">(</span><span class="src-id">NULL</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_order</span>.<span class="src-str">'&nbsp;'</span>.<span class="src-var">$_sort</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_count</span><span class="src-sym">,&nbsp;</span><span class="src-var">$_offset</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a12"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$rows&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$row</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line"><a name="a13"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;<span class="src-str">&quot;</span>{<span class="src-var">$row</span><span class="src-sym">-&gt;</span><span class="src-id">description<span class="src-str"></span><span class="src-sym">}</span>&lt;<span class="src-id">br</span>&gt;</span><span class="src-str">&quot;</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><a name="a14"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a15"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a16"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><a name="a17"></a><span class="src-sym">}</span></div></li>
+</ol></div>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 11 Oct 2007 00:39:16 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.0</a>
+	</p>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>File Source for login.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>Source for file login.php</h1>
+<p>Documentation is available at <a href="../default/_Egwbase---views---login.php.html">login.php</a></p>
+<div class="src-code">
+<div class="src-code"><ol><li><div class="src-line"><a name="a1"></a>&lt;!DOCTYPE&nbsp;html&nbsp;PUBLIC&nbsp;&quot;-//W3C//DTD&nbsp;XHTML&nbsp;1.0&nbsp;Strict//EN&quot;&nbsp;&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;</div></li>
+<li><div class="src-line"><a name="a2"></a>&lt;html&gt;</div></li>
+<li><div class="src-line"><a name="a3"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a4"></a>&lt;head&gt;</div></li>
+<li><div class="src-line"><a name="a5"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta&nbsp;http-equiv=&quot;Content-Type&quot;&nbsp;content=&quot;text/html;&nbsp;charset=utf-8&quot;&nbsp;/&gt;</div></li>
+<li><div class="src-line"><a name="a6"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;<span class="src-php">&lt;?php&nbsp;</span>echo&nbsp;<span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">escape</span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">title</span><span class="src-sym">)&nbsp;</span><span class="src-php">?&gt;</span>&lt;/title&gt;</div></li>
+<li><div class="src-line"><a name="a7"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;EXT&nbsp;JS&nbsp;--&gt;</div></li>
+<li><div class="src-line"><a name="a8"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;link&nbsp;rel=&quot;stylesheet&quot;&nbsp;type=&quot;text/css&quot;&nbsp;href=&quot;extjs/resources/css/ext-all.css&quot;/&gt;</div></li>
+<li><div class="src-line"><a name="a9"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;link&nbsp;rel=&quot;stylesheet&quot;&nbsp;type=&quot;text/css&quot;&nbsp;href=&quot;extjs/resources/css/xtheme-gray.css&quot;/&gt;</div></li>
+<li><div class="src-line"><a name="a10"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script&nbsp;type=&quot;text/javascript&quot;&nbsp;src=&quot;extjs/adapter/yui/yui-utilities.js&quot;&gt;&lt;/script&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a11"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script&nbsp;type=&quot;text/javascript&quot;&nbsp;src=&quot;extjs/adapter/yui/ext-yui-adapter.js&quot;&gt;&lt;/script&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></li>
+<li><div class="src-line"><a name="a12"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script&nbsp;type=&quot;text/javascript&quot;&nbsp;src=&quot;extjs/ext-all.js&quot;&gt;&lt;/script&gt;</div></li>
+<li><div class="src-line"><a name="a13"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a14"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;eGW&nbsp;--&gt;</div></li>
+<li><div class="src-line"><a name="a15"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;link&nbsp;rel=&quot;stylesheet&quot;&nbsp;type=&quot;text/css&quot;&nbsp;href=&quot;Egwbase/css/egwbase.css&quot;/&gt;</div></li>
+<li><div class="src-line"><a name="a16"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script&nbsp;type=&quot;text/javascript&quot;&nbsp;language=&quot;javascript&quot;&nbsp;src=&quot;Egwbase/Js/Login.js&quot;&gt;&lt;/script&gt;</div></li>
+<li><div class="src-line"><a name="a17"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script&nbsp;type=&quot;text/javascript&quot;&nbsp;language=&quot;javascript&quot;&gt;</div></li>
+<li><div class="src-line"><a name="a18"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ext.onReady(function()&nbsp;{</div></li>
+<li><div class="src-line"><a name="a19"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EGWNameSpace.Login.showLoginDialog();</div></li>
+<li><div class="src-line"><a name="a20"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});</div></li>
+<li><div class="src-line"><a name="a21"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/script&gt;</div></li>
+<li><div class="src-line"><a name="a22"></a>&lt;/head&gt;</div></li>
+<li><div class="src-line"><a name="a23"></a>&lt;body&gt;</div></li>
+<li><div class="src-line"><a name="a24"></a>&lt;div&nbsp;id=&quot;loginMainDiv&quot;&nbsp;style=&quot;width:255px;&quot;&gt;</div></li>
+<li><div class="src-line"><a name="a25"></a>&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;id=&quot;loginForm&quot;&gt;&lt;/div&gt;</div></li>
+<li><div class="src-line"><a name="a26"></a>&lt;/div&gt;</div></li>
+<li><div class="src-line"><a name="a27"></a>&lt;!--&nbsp;phpmyvisites&nbsp;--&gt;</div></li>
+<li><div class="src-line"><a name="a28"></a>&lt;script&nbsp;type=&quot;text/javascript&quot;&gt;</div></li>
+<li><div class="src-line"><a name="a29"></a>&lt;!--</div></li>
+<li><div class="src-line"><a name="a30"></a>var&nbsp;a_vars&nbsp;=&nbsp;Array();</div></li>
+<li><div class="src-line"><a name="a31"></a>var&nbsp;pagename='';</div></li>
+<li><div class="src-line"><a name="a32"></a>&nbsp;</div></li>
+<li><div class="src-line"><a name="a33"></a>var&nbsp;phpmyvisitesSite&nbsp;=&nbsp;1;</div></li>
+<li><div class="src-line"><a name="a34"></a>var&nbsp;phpmyvisitesURL&nbsp;=&nbsp;&quot;http://lars.kneschke.de/phpmv2/phpmyvisites.php&quot;;</div></li>
+<li><div class="src-line"><a name="a35"></a>//--&gt;</div></li>
+<li><div class="src-line"><a name="a36"></a>&lt;/script&gt;</div></li>
+<li><div class="src-line"><a name="a37"></a>&lt;script&nbsp;language=&quot;javascript&quot;&nbsp;src=&quot;http://lars.kneschke.de/phpmv2/phpmyvisites.js&quot;&nbsp;type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</div></li>
+<li><div class="src-line"><a name="a38"></a>&lt;!--&nbsp;/phpmyvisites&nbsp;--&gt;&nbsp;</div></li>
+<li><div class="src-line"><a name="a39"></a>&lt;/body&gt;</div></li>
+<li><div class="src-line"><a name="a40"></a>&lt;/html&gt;</div></li>
+</ol></div>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 11 Oct 2007 00:39:14 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.0</a>
+	</p>
+	</body>
+</html>

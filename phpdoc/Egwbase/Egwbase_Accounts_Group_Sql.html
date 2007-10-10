@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class Egwbase_Accounts_Group_Sql</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> Egwbase_Accounts_Group_Sql</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+                <p class="implements">
+            Implements interfaces:
+            <ul>
+                <li><a href="../Egwbase/Egwbase_Accounts_Group_Interface.html">Egwbase_Accounts_Group_Interface</a></li>            </ul>
+        </p>
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">sql implementation of the eGW SQL groups interface</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Lars Kneschke &lt;<a href="mailto:l.kneschke@metaways.de">l.kneschke@metaways.de</a>&gt;</li>
+				<li><span class="field">version:</span> $Id: Sql.php 61 2007-08-28 20:27:18Z lkneschke $</li>
+				<li><span class="field">copyright:</span> Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)</li>
+				<li><span class="field">license:</span> <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Egwbase---Accounts---Group---Sql.php.html">/Egwbase/Accounts/Group/Sql.php</a> (line <span class="field"><a href="../__filesource/fsource_Egwbase__EgwbaseAccountsGroupSql.php.html#a13">13</a></span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getGroupsByUserId" title="details" class="method-name">getGroupsByUserId</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$_userId</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#getMembersByGroupId" title="details" class="method-name">getMembersByGroupId</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$_groupId</span>)
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+													<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodgetGroupsByUserId" id="getGroupsByUserId"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getGroupsByUserId</span> (line <span class="line-number"><a href="../__filesource/fsource_Egwbase__EgwbaseAccountsGroupSql.php.html#a22">22</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">return the group ids a account is member of</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> list of group ids</li>
+				<li><span class="field">todo:</span> the group info do not belong into the ACL table, there should be a separate group table</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getGroupsByUserId
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$_userId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$_userId</span><span class="var-description">: the accountid of a account</span>			</li>
+				</ul>
+		
+				<hr class="separator" />
+		<div class="notes">Implementation of:</div>
+			<dl>
+			<dt><a href="../Egwbase/Egwbase_Accounts_Group_Interface.html#methodgetGroupsByUserId">Egwbase_Accounts_Group_Interface::getGroupsByUserId()</a></dt>
+						<dd>return the group ids a account is member of</dd>
+					</dl>
+			
+	</div>
+<a name="methodgetMembersByGroupId" id="getMembersByGroupId"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getMembersByGroupId</span> (line <span class="line-number"><a href="../__filesource/fsource_Egwbase__EgwbaseAccountsGroupSql.php.html#a49">49</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">return a list of group members</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> list of group members</li>
+				<li><span class="field">todo:</span> the group info do not belong into the ACL table, there should be a separate group table</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			getMembersByGroupId
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$_groupId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$_groupId</span><span class="var-description">: the id of the group</span>			</li>
+				</ul>
+		
+				<hr class="separator" />
+		<div class="notes">Implementation of:</div>
+			<dl>
+			<dt><a href="../Egwbase/Egwbase_Accounts_Group_Interface.html#methodgetMembersByGroupId">Egwbase_Accounts_Group_Interface::getMembersByGroupId()</a></dt>
+						<dd>return a list of group members</dd>
+					</dl>
+			
+	</div>
+						
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 11 Oct 2007 00:39:19 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.0</a>
+	</p>
+	</div></body>
+</html>
