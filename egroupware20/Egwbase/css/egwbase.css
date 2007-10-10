@@ -176,3 +176,28 @@
 			white-space: nowrap;
 			padding:0;
 		}		
+		
+.x-list-selected {
+	background:#DFE8F6 none repeat scroll 0%;
+	border:1px dotted #A3BAE9;
+}
+
+.x-list-small {
+	font-family:tahoma,arial,helvetica,sans-serif;
+	font-size:11px;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:150%;
+	padding: 3px;
+}		
+
+.x-view {
+  border:1px solid #FFFFFF;
+}
+
+.list-butons {
+   border: 2px dotted #B413F0;
+}
