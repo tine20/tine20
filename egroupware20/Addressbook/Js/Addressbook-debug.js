@@ -31,11 +31,8 @@ Egw.Addressbook = function() {
     var _setParameter = function(_dataSource)
     {
     	if(!currentTreeNode) {
-    		currentTreeNode = Ext.getCmp('contact-tree').getSelectionModel().getSelectedNode();
+    		currentTreeNode = Ext.getCmp('contacts-tree').getSelectionModel().getSelectedNode();
     	}
-    	
-    	_dataSource.baseParams.datatype = currentTreeNode.attributes.datatype;
-    	_dataSource.baseParams.owner = currentTreeNode.attributes.owner;
     	
         switch(currentTreeNode.attributes.datatype) {
             case 'list':
@@ -48,23 +45,17 @@ Egw.Addressbook = function() {
             case 'otherpeople':
             case 'sharedaddressbooks':
                 _dataSource.baseParams.method = 'Addressbook.getContacts';
-                _dataSource.baseParams.options = Ext.encode({
-                    displayContacts: displayContactsButtonState,
-                    displayLists:    displayListsButtonState
-                });
                 
                 break;
 
             case 'overview':
                 _dataSource.baseParams.method = 'Addressbook.getOverview';
-                _dataSource.baseParams.options = Ext.encode({
-                    displayContacts: displayContactsButtonState,
-                    displayLists:    displayListsButtonState
-                });
                 
                 break;
         }
         
+    	_dataSource.baseParams.datatype = currentTreeNode.attributes.datatype;
+    	_dataSource.baseParams.owner = currentTreeNode.attributes.owner;    	
         _dataSource.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
     }
     
@@ -162,20 +153,6 @@ Egw.Addressbook = function() {
     	
     	northPanel.remove(toolbarPanel);
 
-	   	var action_displayContacts = new Ext.Action({
-			handler: _displayContactsBtnHandler,
-			enableToggle: true,
-			pressed: displayContactsButtonState,
-			iconCls: 'x-btn-icon action_displayContacts'
-		});
-		
-	   	var action_displayLists = new Ext.Action({
-			handler:_displayListsBtnHandler,
-			enableToggle: true,
-			pressed: displayListsButtonState,
-			iconCls: 'x-btn-icon action_displayLists'
-		});
-		
 		var quickSearchField = new Ext.app.SearchField({
 			id: 'quickSearchField',
 			width:240,
@@ -193,9 +170,6 @@ Egw.Addressbook = function() {
 				action_addList,
 				action_edit,
 				action_delete,
-				'-', 'Display', ': ',
-				action_displayContacts,
-				action_displayLists,
 				'->', 'Search:', ' ',
 /*    			new Ext.ux.SelectBox({
 			      listClass:'x-combo-list-small',
@@ -221,6 +195,60 @@ Egw.Addressbook = function() {
     }
 
 
+    /**
+     * creates the address grid
+     *
+     */
+    var _getContactTree = function() 
+    {
+		var treeLoader = new Ext.tree.TreeLoader({
+            dataUrl:'index.php'
+        });
+        treeLoader.on("beforeload", function(_loader, _node) {
+            _loader.baseParams.method    = 'Addressbook.getSubTree';
+            _loader.baseParams._node     = _node.id;
+            _loader.baseParams._datatype = _node.attributes.datatype;
+            _loader.baseParams._owner    = _node.attributes.owner;
+            _loader.baseParams._location = 'mainTree';
+        }, this);
+    
+        var treePanel = new Ext.tree.TreePanel({
+        	title: 'Contacts',
+            id: 'contacts-tree',
+            loader: treeLoader,
+            rootVisible: false,
+            border: false
+        });
+        
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        treePanel.setRootNode(treeRoot);
+
+        for(i=0; i<initialTree.length; i++) {
+        	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree[i]));
+        }
+        
+        treePanel.on('click', function(_node, _event) {
+        	currentTreeNode = _node;
+        	ds_contacts.reload();
+        }, this);
+        
+        treePanel.on('expand', function(_panel) {
+        	if(_panel.getSelectionModel().getSelectedNode() == null) {
+        		_panel.expandPath('/root/alllists');
+				_panel.selectPath('/root/addressbook');
+        	}
+			_showContactToolbar();
+			_showContactGrid(_panel.getSelectionModel().getSelectedNode());
+        }, this);
+
+		return treePanel;
+    }
 
 
 
@@ -790,6 +818,8 @@ Egw.Addressbook = function() {
         },
         displayAddressbookSelectDialog: _displayAddressbookSelectDialog,
         
+        getPanel: _getContactTree,
+        
         reload: function() {
             ds_contacts.reload();
         }
@@ -1032,8 +1062,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		    store: lists_store,
 		    tpl: new Ext.XTemplate(
 		            '<tpl for=".">',
-		            '<div class="x-view" id="{contact_id}">',
-		            '<span>{contact_tid}</span></div>',
+		            '<div class="x-view" id="{contact_id}">{contact_tid}</div>',
 		            '</tpl>'
 		    )
 		});
@@ -1116,8 +1145,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		    store: lists_store2,
 		    tpl: new Ext.XTemplate(
 		            '<tpl for=".">',
-		            '<div class="x-view" id="{contact_id}">',
-		            '<span>{contact_tid}</span></div>',
+		            '<div class="x-view" id="{contact_id}">{contact_tid}</div>',
 		            '</tpl>'
 		    )
 		});

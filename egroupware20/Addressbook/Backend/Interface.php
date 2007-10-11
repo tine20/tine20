@@ -33,7 +33,7 @@ interface Addressbook_Backend_Interface
      * 
      * @return array
      */
-    public function getContactsByOwner($_owner, $_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
 
     /**
      * returns total number of contacts

@@ -185,14 +185,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * get list of contacts from all other people the current user has access to
      *
      * @param string $_filter string to search for in contacts
-     * @param array $_contactType filter by type (list or contact currently)
      * @param unknown_type $_sort fieldname to sort by
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many contacts to display
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllOtherPeopleContacts($_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getAllOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
         
@@ -204,9 +203,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $groupIds = array_keys($acl);
         
-        $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds);
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+        );
         
-        $result = $this->_getContactsFromTable($where, $_filter, $_contactType, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
         
         return $result;
     }
@@ -244,7 +246,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllContacts($_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
         
@@ -252,9 +254,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $groupIds = array_keys($acl);
         
-        $where[] = $this->contactsTable->getAdapter()->quoteInto('(contact_owner IN (?) OR account_id IS NOT NULL)', $groupIds);
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('(contact_owner IN (?) OR account_id IS NOT NULL)', $groupIds),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+        );
 
-        $result = $this->_getContactsFromTable($where, $_filter, $_contactType, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
         
         return $result;
     }
@@ -284,14 +289,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * get list of contacts from all shared addressbooks the current user has access to
      *
      * @param string $_filter string to search for in contacts
-     * @param array $_contactType filter by type (list or contact currently)
      * @param unknown_type $_sort fieldname to sort by
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many contacts to display
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllSharedContacts($_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getAllSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
         
@@ -303,9 +307,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         $groupIds = array_keys($acl);
         
-        $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds);
-
-        $result = $this->_getContactsFromTable($where, $_filter, $_contactType, $_sort, $_dir, $_limit, $_start);
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+        );
+        
+        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
         
         return $result;
     }
@@ -347,6 +354,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         // return the requested contact_id only if the contact_owner matches the current users acl
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactId),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n'),
             $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
         );
         
@@ -387,18 +395,22 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
-    public function getContactsByOwner($_owner, $_filter, array $_contactType, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
         $where = array();
         
         if($_owner == $currentAccount->account_id || $this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
-            $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $_owner);
+            $where = array(
+                $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $_owner),
+                $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+            );
+                
         } else {
             throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
         }
         
-        $result = $this->_getContactsFromTable($where, $_filter, $_contactType, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
         	        
         return $result;
     }
@@ -567,20 +579,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
-    protected function _getContactsFromTable(array $_where, $_filter, $_contactType, $_sort, $_dir, $_limit, $_start)
+    protected function _getContactsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start)
     {
     	$where = $_where;
-        $requestedContactType = array();
-        
-        if($_contactType['displayContacts'] == TRUE) {
-            $requestedContactTypes[]  = 'n';
-        }
-        if($_contactType['displayLists'] == TRUE) {
-            $requestedContactTypes[]  = 'l';
-        }
-        
-        $where[] = $this->contactsTable->getAdapter()->quoteInto('contact_tid IN (?)', $requestedContactTypes);
-        if($_filter !== NULL) {
+
+    	if($_filter !== NULL) {
         	$where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . $_filter . '%');
         }
 
