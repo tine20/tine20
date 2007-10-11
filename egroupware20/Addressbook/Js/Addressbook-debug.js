@@ -45,7 +45,7 @@ Egw.Addressbook = function() {
             case 'otherpeople':
             case 'sharedaddressbooks':
                 _dataSource.baseParams.method = 'Addressbook.getContacts';
-                
+                 
                 break;
 
             case 'overview':
@@ -145,6 +145,8 @@ Egw.Addressbook = function() {
 		handler: _deleteBtnHandler,
 		iconCls: 'action_delete'
 	});
+	
+	
 	
     var _showContactToolbar = function()
     {
@@ -722,21 +724,6 @@ Egw.Addressbook = function() {
 			        plain:true,
 			        bodyStyle:'padding:5px;',
 			        buttonAlign:'center'
-			//        items: 
-			
-			/*
-                modal: true,
-                shadow:true,
-                collapsible: false,
-                autoTabs:false,
-                proxyDrag:true,
-                // layout config merges with the dialog config
-                center:{
-                    autoScroll:true,
-                    tabPosition: 'top',
-                    closeOnTab: true,
-                    alwaysShowTabs: false
-                }  */
             });			
 			
 						
@@ -797,10 +784,8 @@ Egw.Addressbook = function() {
 
             
 		addressBookDialog.add(tree);
-//		activeItem: 'addressbookTree', 
-		addressBookDialog.show();   
 
-      //      addressBookDialog.addKeyListener(27, addressBookDialog.hide, addressBookDialog);			
+		addressBookDialog.show();   			
 			
 	
 		}
@@ -1549,8 +1534,7 @@ Egw.Addressbook.ContactEditDialog = function() {
         }); 
 
 		return;
-        
-      //  return addressedit;
+
     }
 
     var _setContactDialogValues = function(__dialog, _formData) {
@@ -1576,236 +1560,6 @@ Egw.Addressbook.ContactEditDialog = function() {
 		addressbook_.setValue(_addressbookId);
 		// addressedit.setValues([{id:'contact_owner', value:_addressbookId}]);
     }
-
-    /**
-     * displays the addressbook select dialog
-     *
-     */
-    var _displayCategorySelectDialog = function(){
-        var containerTag    = Ext.Element.get('container');
-        var iWindowTag  = containerTag.createChild({tag: 'div',id: 'iWindowTag'});
-        var iWindowContTag  = containerTag.createChild({tag: 'div',id: 'iWindowContTag'});
-            
-        var ds_category = new Ext.data.SimpleStore({
-                fields: ['category_id', 'category_realname'],
-                data: [
-                    ['1', 'erste Kategorie'],
-                    ['2', 'zweite Kategorie'],
-                    ['3', 'dritte Kategorie'],
-                    ['4', 'vierte Kategorie'],
-                    ['5', 'fuenfte Kategorie'],
-                    ['6', 'sechste Kategorie'],
-                    ['7', 'siebte Kategorie'],
-                    ['8', 'achte Kategorie']
-                ]
-        });
-            
-        ds_category.load();
-            
-        ds_checked = new Ext.data.SimpleStore({
-                fields: ['category_id', 'category_realname'],
-                data: [
-                    ['2', 'zweite Kategorie'],
-                    ['5', 'fuenfte Kategorie'],
-                    ['6', 'sechste Kategorie'],
-                    ['8', 'achte Kategorie']
-                ]
-        });
-            
-        ds_checked.load();
-            
-        var categoryedit = new Ext.form.Form({
-                labelWidth: 75, // label settings here cascade unless overridden
-                url:'index.php?method=Addressbook.saveAdditionalData',
-                reader : new Ext.data.JsonReader({root: 'results'}, [
-                    {name: 'category_id'},
-                    {name: 'category_realname'}
-                ])
-        });
-            
-        var i= 1;
-        var checked = new Array();
-        
-        ds_checked.each( function(record){
-            checked[record.data.category_id] = record.data.category_realname;
-        });
-        
-        ds_category.each( function(fields){
-                if( (i % 12) == 1) {
-                    categoryedit.column({width:'33%', labelWidth:50, labelSeparator:''});
-                }
-                
-                if(checked[fields.data.category_id]) {
-                    categoryedit.add(new Ext.form.Checkbox({
-                        boxLabel: fields.data.category_realname, 
-                        name: fields.data.category_realname, 
-                        checked: true
-                    }));
-                } else {
-                    categoryedit.add(new Ext.form.Checkbox({
-                        boxLabel: fields.data.category_realname, 
-                        name: fields.data.category_realname
-                    }));
-                }
-                
-                if( (i % 12) == 0) {
-                    categoryedit.end();
-                }
-                
-                i = i + 1;
-        });
-            
-        categoryedit.render('iWindowContTag');
-            
-        if(!dialog) {
-                var dialog = new Ext.LayoutDialog('iWindowTag', {
-                    modal: true,
-                    width:700,
-                    height:400,
-                    shadow:true,
-                    minWidth:700,
-                    minHeight:400,
-                    autoTabs:true,
-                    proxyDrag:true,
-                    // layout config merges with the dialog config
-                    center:{
-                        autoScroll:true,
-                        tabPosition: 'top',
-                        closeOnTab: true,
-                        alwaysShowTabs: true
-                    }
-                });
-                
-                dialog.addKeyListener(27, this.hide);
-                dialog.addButton("save", function() {
-                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
-                    dialog.hide;
-                }, dialog);
-                
-                dialog.addButton("cancel", function() {
-                    //window.location.reload();
-                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
-                    dialog.hide;
-                }, dialog);
-                    
-                var layout = dialog.getLayout();
-                layout.beginUpdate();
-                layout.add("center", new Ext.ContentPanel('iWindowContTag', {   
-                    autoCreate:true, 
-                    title: 'Category'
-                }));
-                layout.endUpdate();                                 
-        }
-            
-        dialog.show();
-    }
-
-    var _displayListSelectDialog = function(){
-            var containerTag    = Ext.Element.get('container');
-            var iWindowTag      = containerTag.createChild({tag: 'div',id: 'iWindowTag'});
-            var iWindowContTag  = containerTag.createChild({tag: 'div',id: 'iWindowContTag'});
-
-            var ds_lists = new Ext.data.SimpleStore({
-                fields: ['list_id', 'list_realname'],
-                data: [
-                    ['1', 'Liste A'],
-                    ['2', 'Liste B'],
-                    ['3', 'Liste C'],
-                    ['4', 'Liste D'],
-                    ['5', 'Liste E'],
-                    ['6', 'Liste F'],
-                    ['7', 'Liste G'],
-                    ['8', 'Liste H']
-                ]
-            });
-            
-            ds_lists.load();
-
-            ds_checked = new Ext.data.SimpleStore({
-                fields: ['list_id', 'list_realname'],
-                data: [
-                    ['2', 'Liste B'],
-                    ['5', 'Liste E'],
-                    ['6', 'Liste F'],
-                    ['8', 'Liste H']
-                ]
-            });
-            ds_checked.load();
-            
-            var listsedit = new Ext.form.Form({
-                labelWidth: 75, // label settings here cascade unless overridden
-                url:'index.php?method=Addressbook.saveAdditionalData',
-                reader : new Ext.data.JsonReader(
-                    {root: 'results'}, 
-                    [
-                        {name: 'list_id'},
-                        {name: 'list_realname'}                    
-                    ]
-                )
-            });     
-            
-            var i= 1;
-            var checked = new Array();
-            
-            ds_checked.each( function(record){
-                checked[record.data.list_id] = record.data.list_realname;                       
-            });
-                                    
-            ds_lists.each( function(fields){
-                if( (i % 12) == 1) listsedit.column({width:'33%', labelWidth:50, labelSeparator:''});
-                                
-                if(checked[fields.data.list_id]) {
-                    listsedit.add(new Ext.form.Checkbox({boxLabel: fields.data.list_realname, name: fields.data.list_realname, checked: true}));
-                } else {
-                    listsedit.add(new Ext.form.Checkbox({boxLabel: fields.data.list_realname, name: fields.data.list_realname}));
-                }
-                
-                if( (i % 12) == 0) {
-                    listsedit.end();
-                }
-                
-                i = i + 1;          
-            });
-                        
-            listsedit.render('iWindowContTag'); 
-                            
-            if(!dialog){                                            
-                var dialog = new Ext.LayoutDialog('iWindowTag', {
-                    modal: true,
-                    width:700,
-                    height:400,
-                    shadow:true,
-                    minWidth:700,
-                    minHeight:400,
-                    autoTabs:true,
-                    proxyDrag:true,
-                    // layout config merges with the dialog config
-                    center:{
-                        autoScroll:true,
-                        tabPosition: 'top',
-                        closeOnTab: true,
-                        alwaysShowTabs: true
-                    }
-                });
-                
-                dialog.addKeyListener(27, this.hide);
-                dialog.addButton("save", function() {
-                    Ext.MessageBox.alert('Todo', 'Not yet implemented!');
-                }, dialog);
-                                
-                dialog.addButton("cancel", function() {
-                    window.location.reload(); dialog.hide
-                }, dialog);                     
-
-                var layout = dialog.getLayout();
-                layout.beginUpdate();
-                layout.add("center", new Ext.ContentPanel('iWindowContTag', {
-                    autoCreate:true, title: 'Lists'
-                }));
-                layout.endUpdate();                                 
-            }
-            dialog.show();
-        }
 
     // public functions and variables
     return {
@@ -1835,22 +1589,102 @@ Egw.Addressbook.ListEditDialog = function() {
 
    
     // private functions and variables
+	// handler for save, apply and delete functions
+	
+	var handler_applyChanges = function(_button, _event) 
+    {	
+    	var contactForm = Ext.getCmp('listDialog').getForm();
+		contactForm.render();
+    	
+    	if(contactForm.isValid()) {
+			var additionalData = {};
+			if(formData.values) {
+				additionalData.contact_id = formData.values.contact_id;
+			}
+			    		
+			contactForm.submit({
+    			waitTitle:'Please wait!',
+    			waitMsg:'saving contact...',
+    			params:additionalData,
+    			success:function(form, action, o) {
+    				window.opener.Egw.Addressbook.reload();
+    			},
+    			failure:function(form, action) {
+    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    			}
+    		});
+    	} else {
+    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+    	}
+    }
 
+    var handler_saveAndClose = function(_button, _event) 
+    {
+    	var contactForm = Ext.getCmp('listDialog').getForm();
+		contactForm.render();
+    	
+    	if(contactForm.isValid()) {
+			var additionalData = {};
+			if(formData.values) {
+				additionalData.contact_id = formData.values.contact_id;
+			}
+			    		
+			contactForm.submit({
+    			waitTitle:'Please wait!',
+    			waitMsg:'saving contact...',
+    			params:additionalData,
+    			success:function(form, action, o) {
+    				window.opener.Egw.Addressbook.reload();
+    				window.setTimeout("window.close()", 400);
+    			},
+    			failure:function(form, action) {
+    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    			}
+    		});
+    	} else {
+    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+    	}
+    }
+
+    var handler_deleteContact = function(_button, _event) 
+    {
+		var contactIds = Ext.util.JSON.encode([formData.values.contact_id]);
+			
+		Ext.Ajax.request({
+			url: 'index.php',
+			params: {
+				method: 'Addressbook.deleteLists', 
+				_contactIds: contactIds
+			},
+			text: 'Deleting contact...',
+			success: function(_result, _request) {
+  				window.opener.Egw.Addressbook.reload();
+   				window.setTimeout("window.close()", 400);
+			},
+			failure: function ( result, request) { 
+				Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+			} 
+		});
+        			    		
+    }
+	
+	
    	var action_saveAndClose = new Ext.Action({
 		text: 'save and close',
-		/*'handler: _addBtnHandler,*/
+		handler: handler_saveAndClose,
 		iconCls: 'action_saveAndClose'
 	});
 
    	var action_applyChanges = new Ext.Action({
 		text: 'apply changes',
-		/*'handler: _addBtnHandler,*/
+		handler: handler_applyChanges,
 		iconCls: 'action_applyChanges'
 	});
 
    	var action_deleteContact = new Ext.Action({
-		text: 'delete contact',
-		/*'handler: _addBtnHandler,*/
+		text: 'delete list',
+		text: 'delete list',
+		handler: handler_deleteContact,
 		iconCls: 'action_delete'
 	});	
 	
@@ -1899,6 +1733,94 @@ Egw.Addressbook.ListEditDialog = function() {
         addressbookTrigger.onTriggerClick = function() {
             Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
         }		
+		
+		searchDS = new Ext.data.JsonStore({
+				url: 'index.php',
+				baseParams: {
+                method:   'Addressbook.getOverview', 
+                options:  '{"displayContacts":true,"displayLists":false}' 
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'contact_id',
+            fields: [
+                {name: 'contact_id'},
+                {name: 'n_family'},
+                {name: 'n_given'},
+                {name: 'contact_email'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
+       //     success: function(response, options) {},
+        //    failure: function(response, options) {}
+        });
+        
+        //contactDS.on("beforeload", function() {
+        //  console.log('before load');
+        //});
+
+        searchDS.setDefaultSort('n_family', 'asc');
+        //searchDS.load({params:{start:0, limit:50}});
+		
+		            
+
+    
+        // search for contacts to add to current list
+        var list_search = new Ext.form.ComboBox({
+        	store: searchDS,
+			fieldLabel: 'Search for new list members',
+            displayField:'n_family',
+            typeAhead: false,
+            loadingText: 'Searching...',
+			anchor:'100%',
+            pageSize:10,
+            hideTrigger:true,
+			itemSelector: 'div.search-item',
+            tpl: new Ext.XTemplate(
+		            '<tpl for=".">',
+		            '<div class="search-item">{n_family}, {n_given} {contact_email}</div>',
+		            '</tpl>')
+        });
+    
+	    list_search.on('select', function(combo,record,index){ // override default onSelect to do redirect
+		    	var _record = new listMemberRecord({
+                	contact_id: record.data.contact_id,
+                    n_family: record.data.n_family,
+                    contact_email: record.data.contact_email
+                });
+                
+				ds_listMembers.add(_record);
+                ds_listMembers.sort('n_family');
+                
+                list_search.reset();
+                list_search.collapse();
+            });
+	
+        list_search.on('specialkey', function(_this, _e){
+			if(searchDS.getCount() == 0) {
+				var regExp  = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum)$/;
+				
+				var aussage = regExp.exec(list_search.getValue());
+				
+				if(aussage && (_e.getKey() == _e.ENTER || _e.getKey() == e.RETURN ) ) {
+                    var contactEmail = list_search.getValue();
+                    var position = contactEmail.indexOf('@');
+                    if(position != -1) {
+                        var familyName = Ext.util.Format.capitalize(contactEmail.substr(0, position));
+                    } else {
+                        var familyName = contactEmail;
+                    }
+					var record = new listMemberRecord({
+						contact_id:       '-1',
+						n_family:         familyName,
+						contact_email:    contactEmail
+					});
+					ds_listMembers.add(record);
+					ds_listMembers.sort('n_family');
+					list_search.reset();
+				}
+			}
+ 		});
 
 		var listedit = new Ext.FormPanel({
 			url:'index.php',
@@ -1928,129 +1850,12 @@ Egw.Addressbook.ListEditDialog = function() {
 						name:'list_description', 
 						grow: false,
 						anchor:'100%'
-				}]
+				}, list_search
+				
+				]
  			  }]
 			});
-		
-		                        
-		
-        
-        listedit.on('beforeaction',function(_form, _action) {
-            _form.baseParams._listOwner = _form.getValues().list_owner;
-            //console.log(ds_listMembers.getRange(0));
-            //_form.baseParams._listmembers = Ext.util.JSON.encode(ds_listMembers.getRange());
-            _form.baseParams._listmembers = _encodeDataSourceEntries(ds_listMembers);
-
-			
-			
-            if(formData.values && formData.values.list_id) {
-                _form.baseParams._listId = formData.values.list_id;
-            } else {
-                _form.baseParams._listId = '';
-            }
-            //console.log(_form.baseParams); 
-        });
-
-               
-		if(formData.values) {
-				var c_owner = formData.values.list_owner;
-				var c_id 	= formData.values.list_id;
-		} else {
-				var c_owner = -1;
-				var c_id 	= -1;
-		}
-			   
-        searchDS = new Ext.data.JsonStore({
-            url: 'index.php',
-            baseParams: {
-                method:   'Addressbook.getOverview', 
-                owner:    c_owner, 
-                options:  '{"displayContacts":true,"displayLists":false}' 
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'contact_id',
-            fields: [
-                {name: 'contact_id'},
-                {name: 'n_family'},
-                {name: 'n_given'},
-                {name: 'contact_email'}
-            ],
-            // turn on remote sorting
-            remoteSort: true,
-            success: function(response, options) {},
-            failure: function(response, options) {}
-        });
-        
-        //contactDS.on("beforeload", function() {
-        //  console.log('before load');
-        //});
-
-        searchDS.setDefaultSort('n_family', 'asc');
-        //searchDS.load({params:{start:0, limit:50}});
-		
-		            
-        // Custom rendering Template
-        var resultTpl = new Ext.Template(
-            '<div class="search-item">',
-                '{n_family}, {n_given} {contact_email}',
-            '</div>'
-        );
-    
-        // search for contacts to add to current list
-        var list_search = new Ext.form.ComboBox({
-			title: 'select new list members',
-        	store: searchDS,
-            displayField:'n_family',
-            typeAhead: false,
-            loadingText: 'Searching...',
-			anchor:'100%',
-            pageSize:10,
-            hideTrigger:true,
-            tpl: resultTpl,
-            onSelect: function(_record){ // override default onSelect to do redirect
-            	var record = new listMemberRecord({
-                	contact_id: _record.data.contact_id,
-                    n_family: _record.data.n_family,
-                    contact_email: _record.data.contact_email
-                });
-                
-				ds_listMembers.add(record);
-                ds_listMembers.sort('n_family');
-                
-                list_search.reset();
-                list_search.collapse();
-            }
-        });
-    
-        list_search.on('specialkey', function(_this, _e){
-			if(searchDS.getCount() == 0) {
-				var regExp  = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum)$/;
-				
-				var aussage = regExp.exec(list_search.getValue());
-				
-				if(aussage && (_e.getKey() == _e.ENTER || _e.getKey() == e.RETURN ) ) {
-                    var contactEmail = list_search.getValue();
-                    var position = contactEmail.indexOf('@');
-                    if(position != -1) {
-                        var familyName = Ext.util.Format.capitalize(contactEmail.substr(0, position));
-                    } else {
-                        var familyName = contactEmail;
-                    }
-					var record = new listMemberRecord({
-						contact_id:       '-1',
-						n_family:         familyName,
-						contact_email:    contactEmail
-					});
-					ds_listMembers.add(record);
-					ds_listMembers.sort('n_family');
-					list_search.reset();
-				}
-			}
- 		});
 	
-		listedit.add(list_search);
-
 		var listMemberRecord = Ext.data.Record.create([        
         	{name: 'contact_id', type: 'int'},
             {name: 'n_family', type: 'string'},                            
@@ -2058,16 +1863,19 @@ Egw.Addressbook.ListEditDialog = function() {
         ]);
 
         // data store for listmember grid
-		if(formData.values) 
-		{
+		if(formData.values.list_members) {
 			var listmembers = formData.values.list_members;
-			var ds_listMembers = new Ext.data.SimpleStore({
-				id: 'list_Members',
-	            fields: ['contact_id', 'n_family', 'contact_email'],		
-	            data: listmembers
-	        });
-	        ds_listMembers.sort('n_family', 'asc');
+		} else {
+			var listmembers = [];
 		}
+		
+		var ds_listMembers = new Ext.data.SimpleStore({
+			id: 'list_Members',
+			fields: ['contact_id', 'n_family', 'contact_email'],		
+			data: listmembers
+		});
+		ds_listMembers.sort('n_family', 'asc');
+		
         // columnmodel for listmember grid
         var cm_listMembers = new Ext.grid.ColumnModel([{
             resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family'
@@ -2118,12 +1926,9 @@ Egw.Addressbook.ListEditDialog = function() {
 			items: [listedit, listGrid]
 		});   
 		
-	//	viewport.add(listGrid);
-
-
 		return; 
 	  
-	//	return listedit;
+
     } 
     
     var _onAddressSelect = function(_addressbooName, _addressbookId) {
@@ -2150,14 +1955,18 @@ Egw.Addressbook.ListEditDialog = function() {
     ////////////////////////////////////////////////////////////////////////////
     // set the dialog field to their initial value
     ////////////////////////////////////////////////////////////////////////////
-     var _setDialogValues = function(_dialog, _formData) {
-/* 	var _setDialogValues = function(_formData) {
+	
+     var _setDialogValues = function(__dialog, _formData) {
 		var _dialog = Ext.getCmp('listDialog').getForm();
-	alert(_formData);
-		alert(_formData['contact_note']);
- */		_dialog.findField('list_name').setValue(_formData['n_family']);
-        _dialog.findField('list_description').setValue(_formData['contact_note']);
-        _dialog.findField('list_owner').setValue(_formData['contact_owner']);
+        for (var fieldName in _formData) {
+        	//console.log('set ' + fieldName + ' to ' + _formData[fieldName]);
+            var field = _dialog.findField(fieldName);
+            if(field) {
+                //console.log(fieldName + ' => ' + _formData[fieldName]);
+                field.setValue(_formData[fieldName]);
+            }
+        }
+        //console.log('done');
     }
     
     var _encodeDataSourceEntries = function(_dataSource) {
@@ -2172,12 +1981,12 @@ Egw.Addressbook.ListEditDialog = function() {
     
     // public functions and variables
      return {
-        display: function(__dialog, _formData) {
+        display: function() {
 			var dialog = _displayDialog();
 		//	var dialog = Ext.getCmp('listDialog');
 		
             if(formData.values) {
-                _setDialogValues(formData.values);
+                _setDialogValues(dialog, formData.values);
             }
         }
     }
