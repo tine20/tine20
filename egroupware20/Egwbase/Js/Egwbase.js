@@ -22,21 +22,13 @@ Egw.Egwbase = function() {
 			}]
 		});
 
-		var allAppsMenu = new Ext.menu.Menu({
-			items: [{
-				text: 'Addressbook',
-				icon: 'images/oxygen/16x16/apps/kaddressbook.png',
-				handler: Egw.Addressbook.show
-			}]
-		});
-
-		var appMenu = new Ext.menu.Menu({
+/*		var appMenu = new Ext.menu.Menu({
 			items: [{
 				text: 'Manager folder'
 			}, {
 				text: 'Empty trash'
 			}]
-		});
+		}); */
 
 		var egwMenu = new Ext.Toolbar({
 			id: 'egwMenu',
@@ -93,21 +85,36 @@ Egw.Egwbase = function() {
 	            collapsible:true,
 	            containerScroll: true,
 	            collapseMode: 'mini',
-	            layout: 'fit'
+	            layout: 'fit',
+				layout:'accordion',
+				defaults: {
+					// applied to each contained panel
+					// bodyStyle: 'padding:15px'
+				},
+				layoutConfig: {
+					// layout-specific configs go here
+					titleCollapse: true,
+					animate: false,
+					activeOnTop: false,
+					hideCollapseTool: true
+				},
+			    items: [{
+			        title: 'Home',
+			        id: 'home-panel',
+					border: false
+			    },
+			    Egw.Addressbook.getPanel(),
+			    {
+			        title: 'Asterisk',
+			        id: 'asterisk-panel',
+					border: false
+			    }]
 			}]
 		});
 
         egwMenu.add({
             text: 'eGroupWare',
             menu: systemMenu
-        }, {
-            text: 'Applications',
-            menu: allAppsMenu
-        }, {
-            text: 'Addressbook',
-            iconCls: 'bmenu',
-            icon: 'images/oxygen/16x16/apps/kaddressbook.png',
-            menu: appMenu
         }, '->', {
             icon: 'images/oxygen/16x16/actions/system-log-out.png',
             cls: 'x-btn-icon',
