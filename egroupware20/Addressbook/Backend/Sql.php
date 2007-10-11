@@ -539,6 +539,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
+    /**
+     * get all shared addressbooks
+     *
+     * @return unknown
+     */
     public function getSharedAddressbooks()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
