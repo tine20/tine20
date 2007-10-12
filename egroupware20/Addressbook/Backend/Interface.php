@@ -57,9 +57,24 @@ interface Addressbook_Backend_Interface
      * 
      * @return array list of contacts from contact list identified by $list
      */
-    public function getContactsByList($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    public function getContactsByListId($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
     
     /**
+     * Enter description here...
+     *
+     * @param int $_list id of the personal contact list
+     * @param int $_owner 
+     * @param string $_filter string to search for in contacts
+     * @param string $_sort fieldname to sort by
+     * @param string $_dir sort ascending or descending (ASC | DESC)
+     * @param int $_limit how many contacts to display
+     * @param int $_start how many contaxts to skip
+     * 
+     * @return array list of contacts from contact list identified by $list
+     */
+    public function getContactsByListOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    
+	/**
      * returns list of all personal contact lists
      * 
      * @param int $_owner owner of the addressbook

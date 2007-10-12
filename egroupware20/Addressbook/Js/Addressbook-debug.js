@@ -33,14 +33,24 @@ Egw.Addressbook = function() {
     	if(!currentTreeNode) {
     		currentTreeNode = Ext.getCmp('contacts-tree').getSelectionModel().getSelectedNode();
     	}
-    	
-        switch(currentTreeNode.attributes.datatype) {
-            case 'list':
+
+    	switch(currentTreeNode.attributes.datatype) {
+        	// list handling
+            case 'listmember':
                 _dataSource.baseParams.listId = currentTreeNode.attributes.listId;
-                _dataSource.baseParams.method = 'Addressbook.getList';
+                _dataSource.baseParams.method = 'Addressbook.getListMemberById';
+               
+                break;
+
+            case 'lists':
+            case 'sharedlists':
+            case 'otherlists':
+            case 'alllists':
+                _dataSource.baseParams.method = 'Addressbook.getListMemberByOwner';
                
                 break;
                 
+            // contact handling
             case 'contacts':
             case 'otherpeople':
             case 'sharedaddressbooks':
@@ -1594,12 +1604,16 @@ Egw.Addressbook.ListEditDialog = function() {
 	var handler_applyChanges = function(_button, _event) 
     {	
     	var contactForm = Ext.getCmp('listDialog').getForm();
-		contactForm.render();
+		//contactForm.render();
     	
     	if(contactForm.isValid()) {
-			var additionalData = {};
-			if(formData.values) {
-				additionalData.contact_id = formData.values.contact_id;
+			var additionalData = {
+				listId: '',
+				listMembers: '',
+				
+			};
+			if(formData.values && formData.values.list_id) {
+				additionalData.listId = formData.values.list_id;
 			}
 			    		
 			contactForm.submit({
@@ -1621,7 +1635,7 @@ Egw.Addressbook.ListEditDialog = function() {
     var handler_saveAndClose = function(_button, _event) 
     {
     	var contactForm = Ext.getCmp('listDialog').getForm();
-		contactForm.render();
+		//contactForm.render();
     	
     	if(contactForm.isValid()) {
 			var additionalData = {};
