@@ -94,7 +94,7 @@ Egw.Egwbase = function() {
 				layoutConfig: {
 					// layout-specific configs go here
 					titleCollapse: true,
-					animate: false,
+					animate: true,
 					activeOnTop: false,
 					hideCollapseTool: true
 				},
