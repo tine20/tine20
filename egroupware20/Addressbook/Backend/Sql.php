@@ -399,17 +399,39 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
-        $where = array();
 
-        if($_owner == $currentAccount->account_id || $this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
-            $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $_owner),
-            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
-            );
+        if($_owner == 'allcontacts' || $_owner == 'sharedaddressbooks' || $_owner == 'otheraddressbooks') {
+            switch($_owner) {
+                case 'allcontacts':
+                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
+                    break;
+    
+                case 'sharedaddressbooks':
+                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
+                    break;
+    
+                case 'otheraddressbooks':
+                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
+                    break;
+            }
+            
+            if(empty($acl)) {
+                return false;
+            }
+
+            $contactOwner = array_keys($acl);
 
         } else {
-            throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
+            if($_owner != $currentAccount->account_id && !$this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
+                throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
+            }
+
+            $contactOwner = $_owner;
         }
+        
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $contactOwner)
+        );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
          
@@ -453,6 +475,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
 
+        if(empty($acl)) {
+            return false;
+        }
+        
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
@@ -576,20 +602,63 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
-    public function getListsByOwner($_owner)
+    public function getListsByOwner($_owner, $_filter, $_sort, $_dir, $_limit, $_start)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
-        if($_owner == $currentAccount->account_id || $this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
-            //$where[] = $this->listsTable->getAdapter()->quoteInto('list_owner = ?', $_owner);
-            $where  = array(
-            $this->listsTable->getAdapter()->quoteInto('list_owner = ?', $_owner)
-            );
-        } else {
-            throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
+        switch($_owner) {
+            case 'alllists':
+                $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
+
+                if(empty($acl)) {
+                    return false;
+                }
+
+                $listOwner = array_keys($acl);
+
+                break;
+
+            case 'sharedlists':
+                $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
+
+                if(empty($acl)) {
+                    return false;
+                }
+
+                $listOwner = array_keys($acl);
+
+                break;
+
+            case 'otherlists':
+                $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
+
+                if(empty($acl)) {
+                    return false;
+                }
+
+                $listOwner = array_keys($acl);
+
+                break;
+
+            default:
+                if($_owner != $currentAccount->account_id && !$this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
+                    throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
+                }
+
+                $listOwner = $_owner;
+
+                break;
+        }
+        
+        $where  = array(
+            $this->listsTable->getAdapter()->quoteInto('list_owner IN (?)', $listOwner)
+        );
+        
+        if($_filter !== NULL) {
+            $where[] = $this->listsTable->getAdapter()->quoteInto('(list_name LIKE ?)', '%' . $_filter . '%');
         }
 
-        $result = $this->listsTable->fetchAll($where, 'list_name', 'ASC');
+        $result = $this->listsTable->fetchAll($where, "$_sort $_dir", $_limit, $_start);
 
         return $result;
     }

@@ -81,7 +81,7 @@ interface Addressbook_Backend_Interface
      * @return array list of all personal contact lists
      *
      */
-    public function getListsByOwner($_owner);
+    public function getListsByOwner($owner, $filter, $sort, $dir, $limit, $start);
     
     /**
      * return list of internal conacts (aka accounts)
