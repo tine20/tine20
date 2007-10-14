@@ -12,18 +12,7 @@
 	<script type="text/javascript" src="extjs/ext-all-debug.js"></script>
 
 	<!-- eGW -->
-	<!-- <link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/> -->
-	<style type="text/css">
-      html, body {
-        font:normal 12px verdana;
-        margin:0;
-        padding:0;
-        border:0 none;
-        overflow:hidden;
-        height:100%;
-      }
-    </style>
-	
+	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
 	<script type="text/javascript" language="javascript" src="Egwbase/Js/Egwbase.js"></script>
 	<?php 
 		foreach ($this->jsIncludeFiles as $name) {
@@ -32,7 +21,7 @@
 		foreach ($this->cssIncludeFiles as $name) {
 			echo '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
 		}
-		?>
+	?>
 	<script type="text/javascript" language="javascript">
 		var initialTree = <?php echo Zend_Json::encode($this->initialTree) ?>;
 		Ext.onReady(function(){

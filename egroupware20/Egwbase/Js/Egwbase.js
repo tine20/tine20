@@ -22,14 +22,6 @@ Egw.Egwbase = function() {
 			}]
 		});
 
-/*		var appMenu = new Ext.menu.Menu({
-			items: [{
-				text: 'Manager folder'
-			}, {
-				text: 'Empty trash'
-			}]
-		}); */
-
 		var egwMenu = new Ext.Toolbar({
 			id: 'egwMenu',
 			height: 26
