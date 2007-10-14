@@ -291,6 +291,7 @@ class Addressbook_Json
                 $childNode->owner = $currentAccount->account_id;
                 $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
                 $childNode->dataPanelType = 'contacts';
+                $childNode->contextMenuClass = 'ctxMenuContactsTree';
                 $treeNode->addChildren($childNode);
 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
@@ -347,16 +348,23 @@ class Addressbook_Json
 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', TRUE);
                 $childNode->owner = $currentAccount->account_id;
+                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+                $childNode->dataPanelType = 'contacts';
+                $childNode->contextMenuClass = 'ctxMenuContactsTree';
                 $treeNode[] = $childNode;
-
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherpeople', 'otherpeople', 'Other Users Contacts', FALSE);
-                $childNode->owner = 0;
+                
+                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otheraddressbooks', 'otheraddressbooks', 'Other Users Contacts', FALSE);
+                $childNode->owner = 'otheraddressbooks';
+                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+                $childNode->dataPanelType = 'contacts';
                 $treeNode[] = $childNode;
-
+                                 
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
-                $childNode->owner = 0;
+                $childNode->owner = 'sharedaddressbooks';
+                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+                $childNode->dataPanelType = 'contacts';
                 $treeNode[] = $childNode;
-                 
+                                                 
                 return $treeNode;
                  
                 break;
@@ -483,7 +491,7 @@ class Addressbook_Json
                                 $addressbook->title,
                                 TRUE
                             );
-                            $treeNode->contextMenuClass = 'ctxMenuContacts';
+                            //$treeNode->contextMenuClass = 'ctxMenuContactsTree';
                             $treeNode->owner  = $addressbook->id;
                             $treeNode->jsonMethod = 'Addressbook.getContactsByOwner';
                             $treeNode->dataPanelType = 'contacts';
@@ -503,7 +511,7 @@ class Addressbook_Json
                                 $addressbook->title,
                                 TRUE
                             );
-                            $treeNode->contextMenuClass = 'ctxMenuContacts';
+                            //$treeNode->contextMenuClass = 'ctxMenuContactsTree';
                             $treeNode->owner  = $addressbook->id;
                             $treeNode->jsonMethod = 'Addressbook.getContactsByOwner';
                             $treeNode->dataPanelType = 'contacts';
@@ -516,46 +524,50 @@ class Addressbook_Json
 
                 break;
 
-                    case 'selectFolder':
-                        switch($datatype) {
-                            case 'otherpeople':
-                                $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                                $lists = $backend->getOtherAddressbooks();
-                                foreach($lists as $listObject) {
-                                    $treeNode = new Egwbase_Ext_Treenode(
+            case 'selectFolder':
+                switch($datatype) {
+                    case 'otheraddressbooks':
+                        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+                        $otherAddressbooks = $backend->getOtherAddressbooks();
+                        foreach($otherAddressbooks as $addressbook) {
+                            $treeNode = new Egwbase_Ext_Treenode(
                         		'Addressbook',
                         		'contacts',
-                        		'other_'. $listObject->id, 
-                                    $listObject->title,
-                                    TRUE
-                                    );
-                                    $treeNode->contextMenuClass = 'ctxMenuContacts';
-                                    $treeNode->owner  = $listObject->id;
-                                    $nodes[] = $treeNode;
-                                }
-
-                                break;
-
-                            case 'sharedaddressbooks':
-                                $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-                                $lists = $backend->getSharedAddressbooks();
-                                foreach($lists as $listObject) {
-                                    $treeNode = new Egwbase_Ext_Treenode(
-                        		'Addressbook',
-                        		'contacts',
-                        		'shared_'. $listObject->id, 
-                                    $listObject->title,
-                                    TRUE
-                                    );
-                                    $treeNode->contextMenuClass = 'ctxMenuContacts';
-                                    $treeNode->owner  = $listObject->id;
-                                    $nodes[] = $treeNode;
-                                }
-
-                                break;
+                        		'other_'. $addressbook->id, 
+                                $addressbook->title,
+                                TRUE
+                            );
+                            //$treeNode->contextMenuClass = 'ctxMenuContactsTree';
+                            $treeNode->owner  = $addressbook->id;
+                            $treeNode->jsonMethod = 'Addressbook.getContactsByOwner';
+                            $treeNode->dataPanelType = 'contacts';
+                            $nodes[] = $treeNode;
                         }
 
                         break;
+
+                    case 'sharedaddressbooks':
+                        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+                        $sharedAddressbooks = $backend->getSharedAddressbooks();
+                        foreach($sharedAddressbooks as $addressbook) {
+                            $treeNode = new Egwbase_Ext_Treenode(
+                        		'Addressbook',
+                        		'contacts',
+                        		'shared_'. $addressbook->id, 
+                                $addressbook->title,
+                                TRUE
+                            );
+                            //$treeNode->contextMenuClass = 'ctxMenuContactsTree';
+                            $treeNode->owner  = $addressbook->id;
+                            $treeNode->jsonMethod = 'Addressbook.getContactsByOwner';
+                            $treeNode->dataPanelType = 'contacts';
+                            $nodes[] = $treeNode;
+                        }
+
+                        break;
+                }
+
+                break;
 
         }
 

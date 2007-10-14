@@ -28,26 +28,31 @@ class Addressbook_Http
 
 		$list = $locale->getTranslationList('Dateformat');
 		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
-		
+
+		$addressbookJson = new Addressbook_Json;		
+		$view->formData['config']['initialTree'] = $addressbookJson->getInitialTree('selectFolder');
+
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
-		$className = "Addressbook_Json";			
-		$application = new $className;		
-		$view->application = $application->getInitialTree('selectFolder');
-
 		$currentAccount = Zend_Registry::get('currentAccount');
-		$egwbaseAcl = Egwbase_Acl::getInstance();
-
-		$acl = $egwbaseAcl->getGrantors($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
-
-		foreach($acl as $value) {
-			$view->formData['config']['addressbooks'][] = array($value, $value);
-		}
+		//$egwbaseAcl = Egwbase_Acl::getInstance();
 
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 			$view->formData['values'] = $contact->toArray();
+			if($contact->contact_owner == $currentAccount->account_id) {
+			    $view->formData['config']['addressbookName'] = 'My Contacts';
+			} else {
+			    if($contact->contact_owner > 0) {
+			        $view->formData['config']['addressbookName'] = 'Account ' . $contact->contact_owner;
+			    } else {
+			        $view->formData['config']['addressbookName'] = 'Group ' . $contact->contact_owner;
+			    }
+			}
+		} else {
+		    $view->formData['values'] = array('contact_owner' => $currentAccount->account_id);
+		    $view->formData['config']['addressbookName'] = 'My Contacts';
 		}
 		
 		$view->jsIncludeFiles[] = 'Addressbook/Js/Addressbook.js';
