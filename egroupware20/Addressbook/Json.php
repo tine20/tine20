@@ -467,7 +467,7 @@ class Addressbook_Json
                             $treeNode = new Egwbase_Ext_Treenode(
                         		'Addressbook',
                         		'lists',
-                        		'shared_'. $addressbook->id, 
+                        		'sharedlist_'. $addressbook->id, 
                                 $addressbook->title,
                                 FALSE
                             );
@@ -487,7 +487,7 @@ class Addressbook_Json
                             $treeNode = new Egwbase_Ext_Treenode(
                         		'Addressbook',
                         		'contacts',
-                        		'other_'. $addressbook->id, 
+                        		'otheraddressbook_'. $addressbook->id, 
                                 $addressbook->title,
                                 TRUE
                             );

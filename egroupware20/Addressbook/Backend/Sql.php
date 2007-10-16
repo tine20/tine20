@@ -372,28 +372,31 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getListById($_listId)
     {
+        $listId = (int)$_listId;
+        if($listId < 1) {
+            throw new Exception('$_listId must be integer and greater than 0');
+        }
         $currentAccount = Zend_Registry::get('currentAccount');
 
         $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
 
         // return the requested list_id only if the contact_owner matches the current users acl
         $where  = array(
-        $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_listId),
-        $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl)),
-            "contact_tid = 'l'"
-            );
+            $this->listsTable->getAdapter()->quoteInto('list_id = ?', $listId),
+            $this->listsTable->getAdapter()->quoteInto('list_owner IN (?)', array_keys($acl))
+        );
 
-            $listData = $this->contactsTable->fetchRow($where);
-            $listMembers = $this->getContactsByList($_listId, $currentAccount->account_id, NULL, 'n_family', 'ASC');
+        $listData = $this->listsTable->fetchRow($where);
+        $listMembers = $this->getContactsByListId($listId, $currentAccount->account_id, NULL, 'n_family', 'ASC');
 
-            $result = new Addressbook_List();
+        $result = new Addressbook_List();
 
-            $result->list_name = $listData->n_family;
-            $result->list_description = $listData->contact_note;
-            $result->list_owner = $listData->contact_owner;
-            $result->list_members = $listMembers;
+        $result->list_name = $listData->list_name;
+        //$result->list_description = $listData->list_description;
+        $result->list_owner = $listData->list_owner;
+        $result->list_members = $listMembers;
 
-            return $result;
+        return $result;
     }
 
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)

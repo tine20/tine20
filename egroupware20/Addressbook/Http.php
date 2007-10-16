@@ -20,7 +20,8 @@ class Addressbook_Http
         }
 	    
 	    $locale = Zend_Registry::get('locale');
-		
+		$currentAccount = Zend_Registry::get('currentAccount');
+	    
 		$view = new Zend_View();
 		 
 		$view->setScriptPath('Egwbase/views');
@@ -35,9 +36,6 @@ class Addressbook_Http
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
-		$currentAccount = Zend_Registry::get('currentAccount');
-		//$egwbaseAcl = Egwbase_Acl::getInstance();
-
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 			$view->formData['values'] = $contact->toArray();
@@ -51,7 +49,6 @@ class Addressbook_Http
 			    }
 			}
 
-			$locale = Zend_Registry::get('locale');
 			if(!empty($contact->adr_one_countryname)) {
 			    $view->formData['config']['oneCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
 			}
@@ -78,7 +75,8 @@ class Addressbook_Http
         }
         
 	    $locale = Zend_Registry::get('locale');
-		
+		$currentAccount = Zend_Registry::get('currentAccount');
+	    
 		$view = new Zend_View();
 		 
 		$view->setScriptPath('Egwbase/views');
@@ -91,20 +89,10 @@ class Addressbook_Http
 		$application = new $className;		
 		$view->application = $application->getInitialTree('selectFolder');
 		
-		$currentAccount = Zend_Registry::get('currentAccount');
-		$egwbaseAcl = Egwbase_Acl::getInstance();
-
-		// the list of available addressbooks
-		$acl = $egwbaseAcl->getGrantors($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
-
-		foreach($acl as $value) {
-			$view->formData['config']['addressbooks'][] = array($value, $value);
-		}
-		
 		// get the list
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-		if($_listId && $list = $addresses->getListById((int)$_listId)) {
-			$view->formData['values']['list_id'] = $_REQUEST['contactid'];
+		if($_listId && $list = $addresses->getListById($_listId)) {
+			$view->formData['values']['list_id'] = $list->list_id;
 			$view->formData['values']['list_name'] = $list->list_name;
 			$view->formData['values']['list_description'] = $list->list_description;
 			$view->formData['values']['list_owner'] = $list->list_owner;

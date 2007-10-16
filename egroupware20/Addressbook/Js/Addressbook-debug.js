@@ -483,19 +483,11 @@ Egw.Addressbook = function() {
 		contactGrid.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
 			var record = _gridPar.getStore().getAt(_rowIndexPar);
 			//console.log('id: ' + record.data.contact_id);
-			if(record.data.contact_tid == 'l') {
-                try {
-                    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.contact_id, 450, 600);
-                } catch(e) {
-                //  alert(e);
-                }
-			} else {
-				try {
-					openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
-				} catch(e) {
-					// alert(e);
-				}
-			}
+            try {
+                openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 450, 600);
+            } catch(e) {
+            //  alert(e);
+            }
 		});
         
         return;
@@ -1753,14 +1745,6 @@ Egw.Addressbook.ListEditDialog = function() {
 			]
 		});
 
-        
-        // list all available addressbooks - to asign list to
-        var ds_addressbooks = new Ext.data.SimpleStore({
-            fields: ['id', 'addressbooks'],
-            data: formData.config.addressbooks
-        });
-
-		
 		var addressbookTrigger = new Ext.form.TriggerField({
             fieldLabel:'Addressbook', 
 			id: 'addressbook_',
