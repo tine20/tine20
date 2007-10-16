@@ -1580,6 +1580,16 @@ Egw.Addressbook.ContactEditDialog = function() {
     	form.setValues(_formData);
     	
     	form.findField('contact_owner_name').setRawValue(formData.config.addressbookName);
+    	
+    	if(formData.config.oneCountryName) {
+    		//console.log('set adr_one_countryname to ' + formData.config.oneCountryName);
+	    	form.findField('adr_one_countryname').setRawValue(formData.config.oneCountryName);
+    	}
+
+    	if(formData.config.twoCountryName) {
+    		//console.log('set adr_two_countryname to ' + formData.config.twoCountryName);
+	    	form.findField('adr_two_countryname').setRawValue(formData.config.twoCountryName);
+    	}
     }
 
     var _exportContact = function(_btn, _event) {

@@ -20,7 +20,9 @@ class Addressbook_Contact
      */
     protected $_filters = array(
         '*'                     => 'StringTrim',
-        'contact_email'         => array('StringTrim', 'StringToLower'),
+        'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
+        'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
+    	'contact_email'         => array('StringTrim', 'StringToLower'),
         'contact_email_home'    => array('StringTrim', 'StringToLower'),
         'contact_url'           => array('StringTrim', 'StringToLower'),
         'contact_url_home'      => array('StringTrim', 'StringToLower'),

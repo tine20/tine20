@@ -50,6 +50,14 @@ class Addressbook_Http
 			        $view->formData['config']['addressbookName'] = 'Group ' . $contact->contact_owner;
 			    }
 			}
+
+			$locale = Zend_Registry::get('locale');
+			if(!empty($contact->adr_one_countryname)) {
+			    $view->formData['config']['oneCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
+			}
+			if(!empty($contact->adr_two_countryname)) {
+			    $view->formData['config']['twoCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
+			}
 		} else {
 		    $view->formData['values'] = array('contact_owner' => $currentAccount->account_id);
 		    $view->formData['config']['addressbookName'] = 'My Contacts';
