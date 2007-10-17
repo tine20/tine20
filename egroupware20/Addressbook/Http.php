@@ -85,9 +85,8 @@ class Addressbook_Http
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
-		$className = "Addressbook_Json";			
-		$application = new $className;		
-		$view->application = $application->getInitialTree('selectFolder');
+		$addressbookJson = new Addressbook_Json;		
+		$view->formData['config']['initialTree'] = $addressbookJson->getInitialTree('selectFolder');
 		
 		// get the list
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
@@ -99,8 +98,19 @@ class Addressbook_Http
 			foreach($list->list_members as $member) {
 				$view->formData['values']['list_members'][] = array($member->contact_id, $member->n_family, $member->contact_email);
 			} 
+
+			if($list->list_owner == $currentAccount->account_id) {
+			    $view->formData['config']['addressbookName'] = 'My Lists';
+			} else {
+			    if($list->list_owner > 0) {
+			        $view->formData['config']['addressbookName'] = 'Account ' . $list->list_owner;
+			    } else {
+			        $view->formData['config']['addressbookName'] = 'Group ' . $list->list_owner;
+			    }
+			}
 		} else {
-			$view->formData['values']['list_owner'] = $currentAccount->account_id;
+		    $view->formData['values'] = array('list_owner' => $currentAccount->account_id);
+		    $view->formData['config']['addressbookName'] = 'My Lists';
 		}
 		
 		$view->jsIncludeFiles[] = 'Addressbook/Js/Addressbook.js';

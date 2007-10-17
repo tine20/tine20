@@ -1621,18 +1621,13 @@ Egw.Addressbook.ListEditDialog = function() {
 	var handler_applyChanges = function(_button, _event) 
     {	
     	var contactForm = Ext.getCmp('listDialog').getForm();
-		//contactForm.render();
     	
     	if(contactForm.isValid()) {
 			var additionalData = {
-				listId: '',
 				listMembers: '',
 				
 			};
-			if(formData.values && formData.values.list_id) {
-				additionalData.listId = formData.values.list_id;
-			}
-			    		
+
 			contactForm.submit({
     			waitTitle:'Please wait!',
     			waitMsg:'saving contact...',
@@ -1656,9 +1651,6 @@ Egw.Addressbook.ListEditDialog = function() {
     	
     	if(contactForm.isValid()) {
 			var additionalData = {};
-			if(formData.values) {
-				additionalData.contact_id = formData.values.contact_id;
-			}
 			    		
 			contactForm.submit({
     			waitTitle:'Please wait!',
@@ -1747,14 +1739,14 @@ Egw.Addressbook.ListEditDialog = function() {
 
 		var addressbookTrigger = new Ext.form.TriggerField({
             fieldLabel:'Addressbook', 
-			id: 'addressbook_',
-            name:'list_owner', 
+			id: 'list_owner_name',
             anchor:'100%',
+            allowBlank: false,
             readOnly:true
         });
         
         addressbookTrigger.onTriggerClick = function() {
-            Egw.Addressbook.displayAddressbookSelectDialog(_onAddressSelect);
+            Egw.Addressbook.displayAddressbookSelectDialog("list_owner");
         }		
 		
 		searchDS = new Ext.data.JsonStore({
@@ -1861,23 +1853,27 @@ Egw.Addressbook.ListEditDialog = function() {
 				border:false,
 				anchor:'100%',
 				items:[ addressbookTrigger
-				
 					,{
 						xtype:'textfield',
 						fieldLabel:'List Name', 
-						name:'list_name',
+						id:'list_name',
 						anchor:'100%'
 					}, {
 						xtype:'textarea',
 						fieldLabel:'List Description', 
-						name:'list_description', 
+						id:'list_description', 
 						grow: false,
 						anchor:'100%'
-				}, list_search
-				
+					}, list_search, {
+						xtype: 'hidden',
+						id: 'list_owner'
+					}, {
+						xtype: 'hidden',
+						id: 'list_id'
+					}
 				]
- 			  }]
-			});
+ 			}]
+		});
 	
 		var listMemberRecord = Ext.data.Record.create([        
         	{name: 'contact_id', type: 'int'},
@@ -1978,20 +1974,13 @@ Egw.Addressbook.ListEditDialog = function() {
     ////////////////////////////////////////////////////////////////////////////
     // set the dialog field to their initial value
     ////////////////////////////////////////////////////////////////////////////
-	
-    var _setDialogValues = function(__dialog, _formData) {
-		var _dialog = Ext.getCmp('listDialog').getForm();
-/*      for (var fieldName in _formData) {
-        	//console.log('set ' + fieldName + ' to ' + _formData[fieldName]);
-            var field = _dialog.findField(fieldName);
-            if(field) {
-                //console.log(fieldName + ' => ' + _formData[fieldName]);
-                field.setValue(_formData[fieldName]);
-            }
+
+    var _setDialogValues = function(_formData) {
+		var form = Ext.getCmp('listDialog').getForm();
+
+		form.setValues(_formData);
 		
-        }*/
-		_dialog.setValues(_formData);
-        //console.log('done');
+		form.findField('list_owner_name').setRawValue(formData.config.addressbookName);
     }
     
     var _encodeDataSourceEntries = function(_dataSource) {
@@ -2011,7 +2000,7 @@ Egw.Addressbook.ListEditDialog = function() {
 		//	var dialog = Ext.getCmp('listDialog');
 		
             if(formData.values) {
-                _setDialogValues(dialog, formData.values);
+                _setDialogValues(formData.values);
             }
         }
     }

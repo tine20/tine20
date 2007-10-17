@@ -391,6 +391,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $result = new Addressbook_List();
 
+        $result->list_id = $listData->list_id;
         $result->list_name = $listData->list_name;
         //$result->list_description = $listData->list_description;
         $result->list_owner = $listData->list_owner;

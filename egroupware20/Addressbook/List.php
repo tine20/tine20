@@ -31,9 +31,9 @@ class Addressbook_List
      */
     protected $_validators = array(
         'list_id'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-    	'list_name'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    	'list_name'			=> array(),
     	'list_description'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    	'list_owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    	'list_owner'		=> array(),
     	'list_members'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     

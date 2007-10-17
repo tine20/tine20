@@ -95,7 +95,7 @@ class Addressbook_Json
      * @param int $_listOwner the id the list owner
      * @return array
      */
-    public function saveList($listId, $list_owner, $listMembers, $list_description, $list_name)
+    public function saveList($list_id, $list_owner, $listMembers, $list_description, $list_name)
     {
         $list = new Addressbook_List();
         try {
@@ -103,8 +103,8 @@ class Addressbook_Json
             $userData['list_members'] = Zend_Json::decode($_listMembers);
             $userData['list_description'] = $list_description;
             $userData['list_name'] = $list_name;
-            if(!empty($listId)) {
-                $userData['list_id'] = $listId;
+            if(!empty($list_id)) {
+                $userData['list_id'] = $list_id;
             }
              
             $list->setFromUserData($userData);
@@ -121,7 +121,7 @@ class Addressbook_Json
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 
         try {
-            $backend->saveList($list);
+            //$backend->saveList($list);
             $result = array('success'           => true,
             				'listId'			=> $list->list_id,
                             'welcomeMessage'    => 'Entry updated');
