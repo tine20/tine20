@@ -35,6 +35,27 @@ class Addressbook_Json
     }
      
     /**
+     * delete a array of lists
+     *
+     * @param array $listIDs
+     * @return array
+     */
+    public function deleteLists($listIds)
+    {
+        $listIds = Zend_Json::decode($listIds);
+        if(is_array($listIds)) {
+            $contacts = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+            $contacts->deleteListsById($listIds);
+
+            $result = array('success'   => TRUE, 'ids' => $listIds);
+        } else {
+            $result = array('success'   => FALSE);
+        }
+
+        return $result;
+    }
+     
+    /**
      * save one contact
      *
      * if $_contactId is 0 the contact gets added, otherwise it gets updated
@@ -97,14 +118,18 @@ class Addressbook_Json
      */
     public function saveList($list_id, $list_owner, $listMembers, $list_description, $list_name)
     {
+        $listMembers = Zend_Json::decode($listMembers);
+        
         $list = new Addressbook_List();
         try {
             $userData['list_owner'] = $list_owner;
-            $userData['list_members'] = Zend_Json::decode($_listMembers);
             $userData['list_description'] = $list_description;
             $userData['list_name'] = $list_name;
             if(!empty($list_id)) {
                 $userData['list_id'] = $list_id;
+            }
+            if(is_array($listMembers)) {
+                $userData['list_members'] = $listMembers;
             }
              
             $list->setFromUserData($userData);
@@ -121,7 +146,7 @@ class Addressbook_Json
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 
         try {
-            //$backend->saveList($list);
+            $backend->saveList($list);
             $result = array('success'           => true,
             				'listId'			=> $list->list_id,
                             'welcomeMessage'    => 'Entry updated');

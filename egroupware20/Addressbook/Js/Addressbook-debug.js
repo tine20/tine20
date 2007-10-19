@@ -34,46 +34,74 @@ Egw.Addressbook = function() {
 	 * onclick handler for addLstBtn
 	 */
     var _addLstBtnHandler = function(_button, _event) {
-        openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 450, 600);
+        openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
     }	
 	
     /**
      * onclick handler for deleteBtn
      */
     var _deleteBtnHandler = function(_button, _event) {
-        var contactIds = Array();
-        var selectedRows = contactGrid.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            contactIds.push(selectedRows[i].id);
-        }
-		
-		contactIds = Ext.util.JSON.encode(contactIds);
-		
-		Ext.Ajax.request({
-			url: 'index.php',
-			params: {
-				method: 'Addressbook.deleteContacts', 
-				_contactIds: contactIds
-			},
-			text: 'Deleting contact...',
-			success: function(_result, _request) {
-  				ds_contacts.reload();
-			},
-			failure: function ( result, request) { 
-				Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
-			} 
-		});
+    	var selectedNode = Ext.getCmp('contacts-tree').getSelectionModel().getSelectedNode();
+    	
+    	if(selectedNode.attributes.dataPanelType == 'lists') {
+	        var listIds = Array();
+	        var selectedRows = contactGrid.getSelectionModel().getSelections();
+	        for (var i = 0; i < selectedRows.length; ++i) {
+	            listIds.push(selectedRows[i].id);
+	        }
+			
+			listIds = Ext.util.JSON.encode(listIds);
+			
+			Ext.Ajax.request({
+				url: 'index.php',
+				params: {
+					method: 'Addressbook.deleteLists', 
+					listIds: listIds
+				},
+				text: 'Deleting list...',
+				success: function(_result, _request) {
+	  				ds_contacts.reload();
+				},
+				failure: function ( result, request) { 
+					Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the list.'); 
+				} 
+			});
+    	} else {
+	        var contactIds = Array();
+	        var selectedRows = contactGrid.getSelectionModel().getSelections();
+	        for (var i = 0; i < selectedRows.length; ++i) {
+	            contactIds.push(selectedRows[i].id);
+	        }
+			
+			contactIds = Ext.util.JSON.encode(contactIds);
+			
+			Ext.Ajax.request({
+				url: 'index.php',
+				params: {
+					method: 'Addressbook.deleteContacts', 
+					_contactIds: contactIds
+				},
+				text: 'Deleting contact...',
+				success: function(_result, _request) {
+	  				ds_contacts.reload();
+				},
+				failure: function ( result, request) { 
+					Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+				} 
+			});
+		}
     }
 	
     /**
      * onclick handler for editBtn
      */
     var _editBtnHandler = function(_button, _event) {
+    	var selectedNode = Ext.getCmp('contacts-tree').getSelectionModel().getSelectedNode();
         var selectedRows = contactGrid.getSelectionModel().getSelections();
         var contactId = selectedRows[0].id;
 		
-		if(selectedRows[0].data.contact_tid == 'l') {
-    	    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 450, 600);
+		if(selectedNode.attributes.dataPanelType == 'lists') {
+    	    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 800, 450);
 		}
 		else {
 	        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
@@ -484,7 +512,7 @@ Egw.Addressbook = function() {
 			var record = _gridPar.getStore().getAt(_rowIndexPar);
 			//console.log('id: ' + record.data.contact_id);
             try {
-                openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 450, 600);
+                openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
             } catch(e) {
             //  alert(e);
             }
@@ -604,7 +632,7 @@ Egw.Addressbook = function() {
 			//console.log('id: ' + record.data.contact_id);
 			if(record.data.contact_tid == 'l') {
                 try {
-                    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.contact_id, 450, 600);
+                    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.contact_id, 800, 450);
                 } catch(e) {
                 //  alert(e);
                 }
@@ -1621,11 +1649,15 @@ Egw.Addressbook.ListEditDialog = function() {
 	var handler_applyChanges = function(_button, _event) 
     {	
     	var contactForm = Ext.getCmp('listDialog').getForm();
-    	
+		var ds_listMembers = Ext.getCmp('listGrid').getStore();
+		var listMembers = new Array();
+		ds_listMembers.each(function(_record) {
+			listMembers.push(_record.data);
+		});
+		
     	if(contactForm.isValid()) {
 			var additionalData = {
-				listMembers: '',
-				
+				listMembers: Ext.util.JSON.encode(listMembers),
 			};
 
 			contactForm.submit({
@@ -1647,10 +1679,16 @@ Egw.Addressbook.ListEditDialog = function() {
     var handler_saveAndClose = function(_button, _event) 
     {
     	var contactForm = Ext.getCmp('listDialog').getForm();
-		//contactForm.render();
-    	
+		var ds_listMembers = Ext.getCmp('listGrid').getStore();
+		var listMembers = new Array();
+		ds_listMembers.each(function(_record) {
+			listMembers.push(_record.data);
+		});
+		
     	if(contactForm.isValid()) {
-			var additionalData = {};
+			var additionalData = {
+				listMembers: Ext.util.JSON.encode(listMembers),
+			};
 			    		
 			contactForm.submit({
     			waitTitle:'Please wait!',
@@ -1669,17 +1707,17 @@ Egw.Addressbook.ListEditDialog = function() {
     	}
     }
 
-    var handler_deleteContact = function(_button, _event) 
+    var handler_deleteList = function(_button, _event) 
     {
-		var contactIds = Ext.util.JSON.encode([formData.values.contact_id]);
+		var listIds = Ext.util.JSON.encode([formData.values.list_id]);
 			
 		Ext.Ajax.request({
 			url: 'index.php',
 			params: {
 				method: 'Addressbook.deleteLists', 
-				_contactIds: contactIds
+				listIds: listIds
 			},
-			text: 'Deleting contact...',
+			text: 'Deleting list...',
 			success: function(_result, _request) {
   				window.opener.Egw.Addressbook.reload();
    				window.setTimeout("window.close()", 400);
@@ -1690,7 +1728,19 @@ Egw.Addressbook.ListEditDialog = function() {
 		});
         			    		
     }
-	
+
+    var handler_removeListMember = function(_button, _event)
+    {
+		var listGrid = Ext.getCmp('listGrid');
+		var listStore = listGrid.getStore();
+        
+		var selectedRows = listGrid.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            listStore.remove(selectedRows[i]);
+        }    	
+        
+        action_removeListMember.setDisabled(true);
+    }
 	
    	var action_saveAndClose = new Ext.Action({
 		text: 'save and close',
@@ -1704,10 +1754,16 @@ Egw.Addressbook.ListEditDialog = function() {
 		iconCls: 'action_applyChanges'
 	});
 
-   	var action_deleteContact = new Ext.Action({
+   	var action_deleteList = new Ext.Action({
 		text: 'delete list',
-		text: 'delete list',
-		handler: handler_deleteContact,
+		handler: handler_deleteList,
+		iconCls: 'action_delete'
+	});	
+
+	var action_removeListMember = new Ext.Action({
+		text: 'remove list member',
+		disabled: true,
+		handler: handler_removeListMember,
 		iconCls: 'action_delete'
 	});	
 	
@@ -1733,7 +1789,9 @@ Egw.Addressbook.ListEditDialog = function() {
 			items: [
 				action_saveAndClose,
 				action_applyChanges,
-				action_deleteContact
+				action_deleteList,
+				'-',
+				action_removeListMember
 			]
 		});
 
@@ -1783,7 +1841,7 @@ Egw.Addressbook.ListEditDialog = function() {
         // search for contacts to add to current list
         var list_search = new Ext.form.ComboBox({
         	store: searchDS,
-			fieldLabel: 'Search for new list members',
+			fieldLabel: 'Add new list members',
             displayField:'n_family',
             typeAhead: false,
             loadingText: 'Searching...',
@@ -1809,15 +1867,19 @@ Egw.Addressbook.ListEditDialog = function() {
                 
                 list_search.reset();
                 list_search.collapse();
-            });
-	
+        });
+
+        list_search.on('change', function(_this, _newValue, _oldValue){
+        	console.log(_newValue + ' ' + _oldValue);
+        });
+
         list_search.on('specialkey', function(_this, _e){
 			if(searchDS.getCount() == 0) {
 				var regExp  = /^[a-z0-9_-]+(\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+([a-z]{2,4}|museum)$/;
 				
 				var aussage = regExp.exec(list_search.getValue());
 				
-				if(aussage && (_e.getKey() == _e.ENTER || _e.getKey() == e.RETURN ) ) {
+				if(aussage && (_e.getKey() == _e.ENTER || _e.getKey() == _e.RETURN ) ) {
                     var contactEmail = list_search.getValue();
                     var position = contactEmail.indexOf('@');
                     if(position != -1) {
@@ -1826,7 +1888,7 @@ Egw.Addressbook.ListEditDialog = function() {
                         var familyName = contactEmail;
                     }
 					var record = new listMemberRecord({
-						contact_id:       '-1',
+						contact_id:       null,
 						n_family:         familyName,
 						contact_email:    contactEmail
 					});
@@ -1843,13 +1905,11 @@ Egw.Addressbook.ListEditDialog = function() {
 			labelAlign: 'top',
 			bodyStyle:'padding:5px',
 			width: 450,
-			region: 'center',
 			deferredRender:false,
 			id: 'listDialog',
-			tbar: contactToolbar, 
+			width: 300,
 			items: [{
 				layout: 'form',
-				title: 'list information',
 				border:false,
 				anchor:'100%',
 				items:[ addressbookTrigger
@@ -1861,7 +1921,8 @@ Egw.Addressbook.ListEditDialog = function() {
 					}, {
 						xtype:'textarea',
 						fieldLabel:'List Description', 
-						id:'list_description', 
+						id:'list_description',
+						height: 100,
 						grow: false,
 						anchor:'100%'
 					}, list_search, {
@@ -1905,71 +1966,88 @@ Egw.Addressbook.ListEditDialog = function() {
         
         var ctxListMenu = new Ext.menu.Menu({
             id:'ctxListMenu', 
-            items: [{
-                id:'delete',
-                text:'delete entry',
-                icon:'images/oxygen/16x16/actions/edit-delete.png',
-                handler: _deleteLstItemHandler
-            }]
+            items: [action_removeListMember]
         });
 
         var listGrid = new Ext.grid.GridPanel({
             store: ds_listMembers,
             cm: cm_listMembers,
 			id: 'listGrid',
+			layout: 'fit',
             selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
             autoSizeColumns: true,
-            monitorWindowResize: false,
+            /*monitorWindowResize: false,*/
             trackMouseOver: true,
-			autoWidth: true,
-			height: 300,
+			/*autoWidth: true,*/
+			/*height: 300,*/
             contextMenu: 'ctxListMenu',   
             autoExpandColumn: 'contact_email'
         }); 
+		
+		listGrid.on('rowclick', function(_gridPanel, _rowIndex, _eventObject) {
+			var rowCount = _gridPanel.getSelectionModel().getCount();
+            
+			if(rowCount < 1) {
+				action_removeListMember.setDisabled(true);
+			} else {
+				action_removeListMember.setDisabled(false);
+			}
+		});
     	
 		
-        listGrid.on('rowcontextmenu', function(grid, rowIndex, eventObject) {
-            eventObject.stopEvent();
-            // var record = grid.getDataSource().getAt(rowIndex);
-			var record = grid.getStore().getAt(rowIndex);
-            if(record.data.contact_tid == 'l') {
-                ctxListMenu.showAt(eventObject.getXY());
-            } else {
-                ctxListMenu.showAt(eventObject.getXY());
-            }
+        listGrid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+        	_eventObject.stopEvent();
+			if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+				_grid.getSelectionModel().selectRow(_rowIndex);
+
+				action_removeListMember.setDisabled(false);
+			}
+            ctxListMenu.showAt(_eventObject.getXY());
         });
         
 		
 		var viewport = new Ext.Viewport({
-			layout: 'column',
-			items: [listedit, listGrid]
+			layout: 'border',
+			items: [{
+				region: 'north',
+				id: 'north-panel',
+				split: false,
+				border:false,
+				tbar: contactToolbar
+			},{
+				region: 'west',
+				id: 'west-panel',
+				useShim:true,
+				layout: 'fit',
+				width: 300,
+				split: false,
+				border:false,
+				items: [listedit]
+			},{
+				region: 'center',
+				id: 'center-panel',
+				useShim:true,
+				layout: 'fit',
+				split: false,
+				border:false,
+				items: [listGrid]
+			}]
 		});   
 		
-		return; 
-	  
-
+/*		Ext.EventManager.on(window, 'beforeunload', function() {
+			Ext.Msg.confirm('Name', 'Please enter your name:', function(_btn){
+				console.log(_btn);
+    			if (btn == 'ok'){
+        			// process text value and close...
+    			}
+			});
+        	return false;
+    	});*/  
     } 
     
     var _onAddressSelect = function(_addressbooName, _addressbookId) {
         listedit.setValues([{id:'list_owner', value:_addressbookId}]);
     }
-    
-    /**
-     * onclick handler for deleteListItem
-     *
-     */
-    var _deleteLstItemHandler = function(_button, _event) {
-        var contactIDs = Array();		
-		var l_grid = Ext.getCmp('listGrid');
-		var l_members = Ext.getCmp('list_Members');
-		
-        
-		var selectedRows = l_grid.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            l_members.remove(selectedRows[i]);
-        }
-    }
-        
     
     ////////////////////////////////////////////////////////////////////////////
     // set the dialog field to their initial value

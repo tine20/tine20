@@ -80,11 +80,10 @@ class Addressbook_List
     			$contactSet = new Addressbook_ContactSet();
     			foreach($listMembers as $listMember) {
     				try {
+    				    if(empty($listMember['contact_id'])) {
+    				        unset($listMember['contact_id']);
+    				    }
     					$contact = new Addressbook_Contact();
-    					if($listMember['contact_id'] == -1) {
-    						// add as new contact
-    						unset($listMember['contact_id']);
-    					}
     					$contact->setFromUserData($listMember);
     					$contactSet->addContact($contact);
     				} catch (Exception $e) {

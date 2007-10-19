@@ -132,14 +132,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $result = $this->listsTable->update($listData, $where);
         }
 
-/*
+
         $where = $this->listsMapping->getAdapter()->quoteInto('list_id = ?', $_listData->list_id);
         $this->listsMapping->delete($where);
 
         //error_log(print_r($_listData->list_members, true));
         $listMembers = array();
         foreach($_listData->list_members as $contact) {
-            if(!isset($contact->contact_id)) {
+            if($contact->contact_id === NULL) {
                 $contact->contact_owner = $_listData->list_owner;
                 $contact = $this->saveContact($contact);
             }
@@ -154,7 +154,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
              
             $this->listsMapping->insert($listMemberData);
         }
-*/
         
         return $_listData;
     }
@@ -173,8 +172,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         // delete the requested contact_id only if the contact_owner matches the current users acl
         $where  = array(
-        $this->contactsTable->getAdapter()->quoteInto('contact_id IN (?)', $_contacts),
-        $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+            $this->contactsTable->getAdapter()->quoteInto('contact_id IN (?)', $_contacts),
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
         );
          
         $result = $this->contactsTable->delete($where);
@@ -182,6 +181,47 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
+    /**
+     * delete lists identified by list id
+     *
+     * @param array $_lists list of list ids
+     * @return int the number of rows deleted
+     */
+    public function deleteListsById(array $_lists)
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::DELETE);
+
+        if(empty($acl)) {
+            return false;
+        }
+        
+        foreach($_lists as $listId) {
+            if((int)$listId === 0) {
+                throw new Exception('$listId must be a integer and bigger 0');
+            }
+            // delete the requested list_id only if the list_owner matches the current users acl
+            $where  = array(
+                $this->listsTable->getAdapter()->quoteInto('list_id = ?', $listId),
+                $this->listsTable->getAdapter()->quoteInto('list_owner IN (?)', array_keys($acl))
+            );
+             
+            $result = $this->listsTable->delete($where);
+            
+            // delete was successfull, now also delete the listmembers
+            if($result === 1) {
+                $where  = array(
+                    $this->listsTable->getAdapter()->quoteInto('list_id = ?', $listId)
+                );
+                
+                $this->listsMapping->delete($where);
+            }
+        }
+
+        return $result;
+    }
+    
     /**
      * get list of contacts from all other people the current user has access to
      *
@@ -205,8 +245,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $groupIds = array_keys($acl);
 
         $where = array(
-        $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
-        $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -256,8 +296,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $groupIds = array_keys($acl);
 
         $where = array(
-        $this->contactsTable->getAdapter()->quoteInto('(contact_owner IN (?) OR account_id IS NOT NULL)', $groupIds),
-        $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+            $this->contactsTable->getAdapter()->quoteInto('(contact_owner IN (?) OR account_id IS NOT NULL)', $groupIds),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -309,8 +349,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $groupIds = array_keys($acl);
 
         $where = array(
-        $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
-        $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -354,9 +394,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         // return the requested contact_id only if the contact_owner matches the current users acl
         $where  = array(
-        $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactId),
-        $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n'),
-        $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactId),
+            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n'),
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
         );
 
         $result = $this->contactsTable->fetchRow($where);
