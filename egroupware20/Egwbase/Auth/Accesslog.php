@@ -11,10 +11,9 @@ class Egwbase_Auth_Accesslog
 		}
 	}
 	
-	public function __call( $_functionname, $_arguments );
+	public function __call( $_functionname, $_arguments )
 	{
-		if ( $this->_accesslogger instanceof _Egwbase_Auth_Accesslog )
-		{
+		if ( $this->_accesslogger instanceof _Egwbase_Auth_Accesslog ) {
 			return call_user_func_array( array( $this->_accesslogger, $_functionname ), $_arguments );
 		}
 	}
