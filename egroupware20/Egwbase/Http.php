@@ -8,48 +8,42 @@
  */
 class Egwbase_Http
 {
-	/**
-	 * displays the login dialog
-	 *
-	 */
-	public function login()
-	{
-		$view = new Zend_View();
+    /**
+     * displays the login dialog
+     *
+     */
+    public function login()
+    {
+        $view = new Zend_View();
 
-		$view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Egwbase/views');
 
-		header('Content-Type: text/html; charset=utf-8');
-		echo $view->render('login.php');
-	}
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('login.php');
+    }
 
-	public function mainScreen()
-	{
-		$userApplications = array('Addressbook');
-		$view = new Zend_View();
+    public function mainScreen()
+    {
+        $userApplications = array('Addressbook', 'Admin');
+        $view = new Zend_View();
 
-		$view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Egwbase/views');
 
-		//foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
-		foreach($userApplications as $applicationName) {
-			//$className = "{$applicationName}_Json";
-				
-			//$application = new $className;
-				
-			//$applications[] = $application->getInitialTree('mainTree');
-				
-			$jsIncludeFiles[] = $applicationName . '/Js/' . $applicationName . '.js';
-			$cssIncludeFiles[] = $applicationName . '/css/' . $applicationName . '.css';
-		}
+        //foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
+        $view->jsIncludeFiles = array();
+        $view->cssIncludeFiles = array();
+        $view->initialTree = array();
+        foreach($userApplications as $applicationName) {
+            $view->jsIncludeFiles[] = $applicationName . '/Js/' . $applicationName . '.js';
+            $view->cssIncludeFiles[] = $applicationName . '/css/' . $applicationName . '.css';
+            $jsonAppName = $applicationName . '_Json';
+            $application = new $jsonAppName;
+            $view->initialTree[$applicationName] =  $application->getInitialTree('mainTree');
+        }
+        
+        $view->title="eGroupWare 2.0";
 
-		$view->jsIncludeFiles = $jsIncludeFiles;
-		$view->cssIncludeFiles = $cssIncludeFiles;
-				
-		$addressbook = new Addressbook_Json;
-		$view->initialTree = $addressbook->getInitialTree('mainTree');
-		
-		$view->title="eGroupWare 2.0";
-
-		header('Content-Type: text/html; charset=utf-8');
-		echo $view->render('mainscreen.php');
-	}
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
 }

@@ -25,34 +25,27 @@ class Egwbase_Application
      */
     public function __construct()
     {
-        $this->applicationTable = new Zend_Db_Table_Abstract(array('name' => 'egw_applications'));
+        $this->applicationTable = new Egwbase_Db_Table(array('name' => 'egw_applications'));
     }
     
     /**
      * get list of installed applications
      *
-     * @param string $_sort the column name to sort by
-     * @param string $_dir the sort direction can be ASC or DESC only
+     * @param string $_sort optional the column name to sort by
+     * @param string $_dir optional the sort direction can be ASC or DESC only
      * @param string $_filter optional search parameter
-     * @param int $_limit how many applications to return
-     * @param int $_start offset for applications
-     * @throws Exception if $_dir is not ASC or DESC
+     * @param int $_limit optional how many applications to return
+     * @param int $_start optional offset for applications
      * @return Egwbase_RecordSet_Application
      */
     public function getApplications($_sort = 'app_id', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
     {
-        if($_dir != 'ASC' && $_dir != 'DESC') {
-            throw new Exception('$_dir can be only ASC or DESC');
-        }
-
-        $sort = $this->applicationTable->getAdapter()->quoteInto("? $_dir", $_sort);
-
         $where = NULL;
         if($_filter !== NULL) {
-            // $where = ...
+            // $where = array(...);
         }
         
-        $rowSet = $this->applicationTable->fetchAll($where, $sort, $_limit, $_start);
+        $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
         
         $result = new Egwbase_RecordSet_Application($rowSet->toArray());
         
