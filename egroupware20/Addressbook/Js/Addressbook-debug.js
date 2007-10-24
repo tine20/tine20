@@ -223,8 +223,8 @@ Egw.Addressbook = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(i=0; i<initialTree.length; i++) {
-        	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree[i]));
+        for(i=0; i<initialTree.Addressbook.length; i++) {
+        	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Addressbook[i]));
         }
         
         treePanel.on('click', function(_node, _event) {
