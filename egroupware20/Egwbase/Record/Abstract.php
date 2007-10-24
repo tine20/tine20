@@ -10,7 +10,7 @@
  *
  */
 
-abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
+abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, ArrayAccess, IteratorAggregate
 {
     public $bypassFilter = false;
     
@@ -160,6 +160,46 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
            $this->_Zend_Filter = new Zend_Filter( $this->_filters, $this->_validators);
         }
         return $this->_Zend_Filter;
+    }
+    
+    /**
+     * required by ArrayAccess interface
+     */
+    public function offsetExists($_offset)
+    {
+        return isset($this->_properties[$offset]);
+    }
+    
+    /**
+     * required by ArrayAccess interface
+     */
+    public function offsetGet($_offset)
+    {
+        return $this->_properties[$_offset];
+    }
+    
+    /**
+     * required by ArrayAccess interface
+     */
+    public function offsetSet($_offset, $_value)
+    {
+        return $this->__set($_offset, $_value);
+    }
+    
+    /**
+     * required by ArrayAccess interface
+     */
+    public function offsetUnset($_offset)
+    {
+        throw new Egwbase_Record_Exception('Unsetting of properties is not allowed');
+    }
+    
+    /**
+     * required by IteratorAggregate interface
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_properties);    
     }
     
 }
