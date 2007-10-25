@@ -22,9 +22,12 @@ class Admin_Json
         return $application->toArray();
     }
     
-    //public function getApplications($filter, $sort, $dir, $limit, $start)
-    public function getApplications($sort, $dir, $limit, $start)
+    public function getApplications($filter, $sort, $dir, $limit, $start)
     {
+        if(empty($filter)) {
+            $filter = NULL;
+        }
+        
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
@@ -32,13 +35,31 @@ class Admin_Json
         
         $egwApplications = new Egwbase_Application();
         
-        $applicationSet = $egwApplications->getApplications($sort, $dir, NULL, $limit, $start);
+        $applicationSet = $egwApplications->getApplications($sort, $dir, $filter, $limit, $start);
 
         $result['results']    = $applicationSet->toArray();
         $result['totalcount'] = $egwApplications->getTotalApplicationCount();
         
         return $result;
     }
+
+    public function getAccessLog($filter, $sort, $dir, $limit, $start)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $egwAccessLog = new Egwbase_AccessLog();
+
+        $accessLogSet = $egwAccessLog->getAccessLog($sort, $dir, $filter, $limit, $start);
+        
+        $result['results']    = $accessLogSet->toArray();
+        $result['totalcount'] = $egwAccessLog->getTotalCount();
+        
+        return $result;
+    }
+    
     
     /**
      * Returns the structure of the initial tree for this application.
@@ -61,13 +82,12 @@ class Admin_Json
                 $treeNode->dataPanelType = 'applications';
                 $treeNodes[] = $treeNode;
 
-//                $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'alllists', 'alllists', 'All Lists', FALSE);
-//                $treeNode->setIcon('apps/kaddressbook.png');
-//                $treeNode->cls = 'treemain';
-//                $treeNode->owner = 'alllists';
-//                $treeNode->jsonMethod = 'Addressbook.getListsByOwner';
-//                $treeNode->dataPanelType = 'lists';
-//                $treeNodes[] = $treeNode;
+                $treeNode = new Egwbase_Ext_Treenode('Admin', 'accesslog', 'accesslog', 'Access Log', TRUE);
+                //$treeNode->setIcon('apps/kaddressbook.png');
+                $treeNode->cls = 'treemain';
+                $treeNode->jsonMethod = 'Admin.getAccessLog';
+                $treeNode->dataPanelType = 'accesslog';
+                $treeNodes[] = $treeNode;
 
                 return $treeNodes;
                  
