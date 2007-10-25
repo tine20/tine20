@@ -29,6 +29,16 @@ class Egwbase_Application
     }
     
     /**
+     * returns one application identified by app_id
+     *
+     * @param unknown_type $_applicationId
+     */
+    public function getApplicationById($_applicationId)
+    {
+        
+    }
+    
+    /**
      * get list of installed applications
      *
      * @param string $_sort optional the column name to sort by
@@ -46,9 +56,21 @@ class Egwbase_Application
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
-        
-        $result = new Egwbase_RecordSet_Application($rowSet->toArray());
-        
+
+        $result = new Egwbase_RecordSet_Application($rowSet->toArray(), 'Egwbase_Record_Application');
+
         return $result;
+    }    
+    
+    /**
+     * return the total number of applications installed
+     *
+     * @return int
+     */
+    public function getTotalApplicationCount()
+    {
+        $count = $this->applicationTable->getTotalCount();
+        
+        return $count;
     }
 }
