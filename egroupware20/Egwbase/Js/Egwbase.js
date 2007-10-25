@@ -32,17 +32,38 @@ Egw.Egwbase = function() {
 			height: 26
 		});
 
+        
 		var viewport = new Ext.Viewport({
 			layout: 'border',
 			items: [{
 				region: 'north',
-				id: 'north-panel',
-				split: false,
+				id:     'north-panel',
+				split:  false,
 				height: 52,
-				items: [
-					egwMenu,
-					tb2
-				]
+                border: false,
+				layout:'border',
+				items: [{
+                    //title:  'North Panel 1',
+                    region: 'north',
+                    height: 26,
+                    border: false,
+                    id:     'north-panel-1',
+                    items: [
+                        egwMenu
+                    ]
+                },{
+                    region: 'center',
+                    height: 26,
+                    border: false,
+                    id:     'north-panel-2',
+                    items: [
+                        tb2
+                    ]
+                }]
+				/*items: [
+				    egwMenu,
+				    tb2
+				]*/
 			}, {
 				region: 'south',
 				id: 'south',
@@ -66,6 +87,7 @@ Egw.Egwbase = function() {
 				id: 'center-panel',
 				animate: true,
 				useShim:true,
+                border: false,
 				layout: 'fit'
 			}, {
 				region: 'west',
@@ -74,10 +96,11 @@ Egw.Egwbase = function() {
 	            width: 200,
 	            minSize: 100,
 	            maxSize: 300,
+                border: false,
 	            collapsible:true,
 	            containerScroll: true,
 	            collapseMode: 'mini',
-	            layout: 'fit',
+	            //layout: 'fit',
 				layout:'accordion',
 				defaults: {
 					// applied to each contained panel
@@ -90,7 +113,8 @@ Egw.Egwbase = function() {
 					activeOnTop: false,
 					hideCollapseTool: true
 				},
-			    items: [{
+				items: _getPanels()
+/*			    items: [{
 			        title: 'Home',
 			        id: 'home-panel',
 					border: false
@@ -100,9 +124,14 @@ Egw.Egwbase = function() {
 			        title: 'Asterisk',
 			        id: 'asterisk-panel',
 					border: false
-			    }]
+			    }]*/
 			}]
 		});
+
+		/*var centerPanel = Ext.getCmp('north-panel-1');
+        centerPanel.add(egwMenu);
+        centerPanel.show();
+        centerPanel.doLayout();*/
 
         egwMenu.add({
             text: 'eGroupWare',
@@ -113,6 +142,27 @@ Egw.Egwbase = function() {
             tooltip: {text:'Click this button to logout from eGroupWare'},
             handler: _logoutButtonHandler
         });
+    }
+    
+    /**
+     * returns array of panels to display in south region
+     */
+    var _getPanels = function() {
+    	var panels = [{
+            title: 'Home',
+            id: 'home-panel',
+            border: false
+        }];
+        
+        for(_application in Egw) {
+        	try{
+        	   panels.push(Egw[_application].getPanel());
+        	} catch(e) {
+        		//console.log('error');
+        	}
+        };
+        
+        return panels;
     }
     
     /**
@@ -137,9 +187,79 @@ Egw.Egwbase = function() {
 
     }
     
+    var _setActiveContentPanel = function(_panel)
+    {
+        //get container to which component will be added
+        var centerPanel = Ext.getCmp('center-panel');
+        if(centerPanel.items) {
+            for (var i=0; i<centerPanel.items.length; i++){
+                centerPanel.remove(centerPanel.items.get(i));
+            }  
+        }
+
+        centerPanel.add(_panel);
+        centerPanel.doLayout();
+    }
+    
+    var _getActiveToolbar = function()
+    {
+    	var northPanel = Ext.getCmp('north-panel-2');
+    	
+    	if(northPanel.items) {
+    		return northPanel.items.get(0);
+    	} else {
+    		return false;
+    	}
+    }
+    
+    var _setActiveToolbar = function(_toolbar)
+    {
+        var northPanel = Ext.getCmp('north-panel-2');
+        if(northPanel.items) {
+            for (var i=0; i<northPanel.items.length; i++){
+                northPanel.remove(northPanel.items.get(i));
+            }  
+        }
+        //var toolbarPanel = Ext.getCmp('applicationToolbar');
+        
+        northPanel.add(_toolbar);
+        northPanel.doLayout();
+    }
+
+    var _openWindow = function(_windowName, _url, _width, _height) 
+    {
+        if (document.all) {
+            w = document.body.clientWidth;
+            h = document.body.clientHeight;
+            x = window.screenTop;
+            y = window.screenLeft;
+        } else if (window.innerWidth) {
+            w = window.innerWidth;
+            h = window.innerHeight;
+            x = window.screenX;
+            y = window.screenY;
+        }
+        var leftPos = ((w - _width)/2)+y; 
+        var topPos = ((h - _height)/2)+x;
+
+        var popup = window.open(
+            _url, 
+            _windowName,
+            'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
+            ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no'
+        );
+        
+        return popup;
+    }
+
+    
     // public functions and variables
     return {
-        display: _displayMainScreen
+        display:               _displayMainScreen,
+        openWindow:            _openWindow,
+        getActiveToolbar:      _getActiveToolbar,
+        setActiveToolbar:      _setActiveToolbar,
+        setActiveContentPanel: _setActiveContentPanel
     }
 }();
 
