@@ -36,7 +36,7 @@
         <td class="sig">
         <a id="Ext.util.ClickRepeater-accelerate"></a>
             <b>accelerate</b> : Boolean            <div class="mdesc">
-                            True if autorepeating should start slowly and accelerate. "interval" and "delay" are ignored. "immediate" is honored.                        </div>
+                            True if autorepeating should start slowly and accelerate. "interval" and "delay" are ignored.                        </div>
         </td>
         <td class="msource">ClickRepeater</td>
     </tr>
@@ -63,7 +63,7 @@
         <td class="sig">
         <a id="Ext.util.ClickRepeater-interval"></a>
             <b>interval</b> : Number            <div class="mdesc">
-                            The interval between firings of the "click" event. Default 10 ms.                        </div>
+                            The interval between firings of the "click" event. Default 20 ms.                        </div>
         </td>
         <td class="msource">ClickRepeater</td>
     </tr>
@@ -167,8 +167,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -178,7 +178,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -195,7 +195,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut

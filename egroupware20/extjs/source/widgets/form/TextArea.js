@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -15,20 +15,7 @@
  * Creates a new TextArea
  * @param {Object} config Configuration options
  */
-Ext.form.TextArea = function(config){
-    Ext.form.TextArea.superclass.constructor.call(this, config);
-    // these are provided exchanges for backwards compat
-    // minHeight/maxHeight were replaced by growMin/growMax to be
-    // compatible with TextField growing config values
-    if(this.minHeight !== undefined){
-        this.growMin = this.minHeight;
-    }
-    if(this.maxHeight !== undefined){
-        this.growMax = this.maxHeight;
-    }
-};
-
-Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
+Ext.form.TextArea = Ext.extend(Ext.form.TextField,  {
     /**
      * @cfg {Number} growMin The minimum height to allow when grow = true (defaults to 60)
      */
@@ -75,7 +62,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
 
     onDestroy : function(){
         if(this.textSizeEl){
-            this.textSizeEl.parentNode.removeChild(this.textSizeEl);
+            Ext.removeNode(this.textSizeEl);
         }
         Ext.form.TextArea.superclass.onDestroy.call(this);
     },

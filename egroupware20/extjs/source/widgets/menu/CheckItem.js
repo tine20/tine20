@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -32,6 +32,13 @@ Ext.menu.CheckItem = function(config){
          */
         "checkchange" : true
     });
+    /**
+     * A function that handles the checkchange event.  The function is undefined by default, but if an implementation
+     * is provided, it will be called automatically when the checkchange event fires.
+     * @param {Ext.menu.CheckItem} this
+     * @param {Boolean} checked The checked value that was set
+     * @method checkHandler
+     */
     if(this.checkHandler){
         this.on('checkchange', this.checkHandler, this.scope);
     }

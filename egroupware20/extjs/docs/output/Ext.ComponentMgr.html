@@ -13,7 +13,12 @@
                                     <tr><td class="label">Extends:</td><td class="hd-info">Object</td></tr>
                     </table>
         <div class="description">
-            Provides a common registry of all components on a page so that they can be easily accessed by component id (see <a ext:cls="Ext.getCmp" href="output/Ext.getCmp.html">Ext.getCmp</a>).<br><br><i>This class is a singleton and cannot be created directly.</i>        </div>
+            <p>Provides a common registry of all components (specifically subclasses of <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a>) on a page so
+that they can be easily accessed by component id (see <a ext:cls="Ext.getCmp" href="output/Ext.getCmp.html">Ext.getCmp</a>).</p>
+<p>Every component class also gets registered in ComponentMgr by its 'xtype' property, which is its Ext-specific
+type name (e.g., Ext.form.TextField's xtype is 'textfield'). This allows you to check the xtype of specific
+object instances (see <a ext:cls="Ext.Component" ext:member="getXType" href="output/Ext.Component.html#getXType">Ext.Component.getXType</a> and <a ext:cls="Ext.Component" ext:member="isXType" href="output/Ext.Component.html#isXType">Ext.Component.isXType</a>). For a list of all
+available xtypes, see <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a>.</p><br><br><i>This class is a singleton and cannot be created directly.</i>        </div>
         
         <div class="hr"></div>
                 <a id="Ext.ComponentMgr-props"></a>

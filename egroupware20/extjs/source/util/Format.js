@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -182,6 +182,17 @@ Ext.util.Format = function(){
          */
         stripTags : function(v){
             return !v ? v : String(v).replace(this.stripTagsRE, "");
+        },
+
+        stripScriptsRe : /(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)/ig,
+
+        /**
+         * Strips all script tags
+         * @param {Mixed} value The text from which to strip script tags
+         * @return {String} The stripped text
+         */
+        stripScripts : function(v){
+            return !v ? v : String(v).replace(this.stripScriptsRe, "");
         },
 
         /**

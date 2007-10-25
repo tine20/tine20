@@ -1,3 +1,5 @@
+Ext.BLANK_IMAGE_URL = 'resources/s.gif';
+
 Docs = {};
 
 ApiPanel = function() {
@@ -616,4 +618,10 @@ Ext.extend(Ext.ux.SelectBox, Ext.form.ComboBox, {
 		}
 	}
 
+});
+
+Ext.Ajax.on('requestcomplete', function(ajax, xhr, o){
+    if(typeof urchinTracker == 'function' && o && o.url){
+        urchinTracker(o.url);
+    }
 });

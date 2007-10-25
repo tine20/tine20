@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -78,7 +78,13 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
         var size = target.getViewSize();
         if(size.width < 20 || size.height < 20){ // display none?
+            if(collapsed){
+                this.restoreCollapsed = collapsed;
+            }
             return;
+        }else if(this.restoreCollapsed){
+            collapsed = this.restoreCollapsed;
+            delete this.restoreCollapsed;
         }
 
         var w = size.width, h = size.height;
@@ -150,8 +156,10 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
             target.repaint();
         }
     }
+    
     /**
-     * @cfg {Mixed} activeItem @hide
+     * @property activeItem
+     * @hide
      */
 });
 
@@ -325,7 +333,7 @@ Ext.layout.BorderLayout.Region.prototype = {
         if(!this.collapsedEl){
             if(!this.toolTemplate){
                 var tt = new Ext.Template(
-                     '<div class="x-tool x-tool-{id}">&#160</div>'
+                     '<div class="x-tool x-tool-{id}">&#160;</div>'
                 );
                 tt.disableFormats = true;
                 tt.compile();
@@ -469,7 +477,7 @@ Ext.layout.BorderLayout.Region.prototype = {
      * right: (right margin), bottom: (bottom margin)}
      */
     getMargins : function(){
-        return this.isCollapsed ? this.cmargins : this.margins;
+        return this.isCollapsed && this.cmargins ? this.cmargins : this.margins;
     },
 
     /**
@@ -507,13 +515,14 @@ Ext.layout.BorderLayout.Region.prototype = {
 
     // private
     applyLayoutCollapsed : function(box){
-        this.collapsedEl.setLeftTop(box.x, box.y);
-        this.collapsedEl.setSize(box.width, box.height);
+        var ce = this.getCollapsedEl();
+        ce.setLeftTop(box.x, box.y);
+        ce.setSize(box.width, box.height);
     },
 
     // private
     applyLayout : function(box){
-        if(this.collapsed){
+        if(this.isCollapsed){
             this.applyLayoutCollapsed(box);
         }else{
             this.panel.setPosition(box.x, box.y);

@@ -258,8 +258,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -269,7 +269,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -286,7 +286,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut

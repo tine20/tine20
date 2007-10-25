@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,23 +14,7 @@
 * Create a new DateField
 * @param {Object} config
  */
-Ext.form.DateField = function(config){
-    Ext.form.DateField.superclass.constructor.call(this, config);
-    if(typeof this.minValue == "string") this.minValue = this.parseDate(this.minValue);
-    if(typeof this.maxValue == "string") this.maxValue = this.parseDate(this.maxValue);
-    this.ddMatch = null;
-    if(this.disabledDates){
-        var dd = this.disabledDates;
-        var re = "(?:";
-        for(var i = 0; i < dd.length; i++){
-            re += dd[i];
-            if(i != dd.length-1) re += "|";
-        }
-        this.ddMatch = new RegExp(re + ")");
-    }
-};
-
-Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
+Ext.form.DateField = Ext.extend(Ext.form.TriggerField,  {
     /**
      * @cfg {String} format
      * The default date format string which can be overriden for localization support.  The format must be
@@ -42,7 +26,7 @@ Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
      * Multiple date formats separated by "|" to try when parsing a user input value and it doesn't match the defined
      * format (defaults to 'm/d/Y|m-d-y|m-d-Y|m/d|m-d|d').
      */
-    altFormats : "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d",
+    altFormats : "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d",
     /**
      * @cfg {Array} disabledDays
      * An array of days to disable, 0 based. For example, [0, 6] disables Sunday and Saturday (defaults to null).
@@ -118,6 +102,26 @@ Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
 
     // private
     defaultAutoCreate : {tag: "input", type: "text", size: "10", autocomplete: "off"},
+
+    initComponent : function(){
+        Ext.form.DateField.superclass.initComponent.call(this);
+        if(typeof this.minValue == "string"){
+            this.minValue = this.parseDate(this.minValue);
+        }
+        if(typeof this.maxValue == "string"){
+            this.maxValue = this.parseDate(this.maxValue);
+        }
+        this.ddMatch = null;
+        if(this.disabledDates){
+            var dd = this.disabledDates;
+            var re = "(?:";
+            for(var i = 0; i < dd.length; i++){
+                re += dd[i];
+                if(i != dd.length-1) re += "|";
+            }
+            this.ddMatch = new RegExp(re + ")");
+        }
+    },
 
     // private
     validateValue : function(value){
@@ -273,9 +277,15 @@ dateField.setValue('2006-5-4');
         }
     }
 
-    /** @cfg {Boolean} grow @hide */
-    /** @cfg {Number} growMin @hide */
-    /** @cfg {Number} growMax @hide */
+    /** 
+     * @cfg {Boolean} grow @hide
+     */
+    /**
+     * @cfg {Number} growMin @hide
+     */
+    /**
+     * @cfg {Number} growMax @hide
+     */
     /**
      * @hide
      * @method autoSize

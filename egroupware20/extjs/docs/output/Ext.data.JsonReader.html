@@ -7,13 +7,14 @@
                         <a class="bookmark" href="../docs/?class=Ext.data.JsonReader"><img src="../resources/images/default/s.gif" class="item-icon icon-fav">Direct Link</a>
         </div>
                 <div class="inheritance res-block">
-<pre class="res-block-inner">JsonReader</pre></div>
+<pre class="res-block-inner"><a ext:cls="Ext.data.DataReader" ext:member="" href="output/Ext.data.DataReader.html">DataReader</a>
+  <img src="resources/elbow-end.gif"/>JsonReader</pre></div>
                 <h1>Class Ext.data.JsonReader</h1>
         <table cellspacing="0">
             <tr><td class="label">Package:</td><td class="hd-info">Ext.data</td></tr>
             <tr><td class="label">Defined In:</td><td class="hd-info"><a href="../src/JsonReader.js" target="_blank">JsonReader.js</a></td></tr>
             <tr><td class="label">Class:</td><td class="hd-info">JsonReader</td></tr>
-                                    <tr><td class="label">Extends:</td><td class="hd-info">Ext.data.DataReader</td></tr>
+                                    <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.data.DataReader" ext:member="" href="output/Ext.data.DataReader.html">DataReader</a></td></tr>
                     </table>
         <div class="description">
             Data reader class to create an Array of Ext.data.Record objects from a JSON response
@@ -91,12 +92,17 @@ This would consume a JSON file like this:
                 <th class="sig-header" colspan="2">Property</th>
                 <th class="msource-header">Defined By</th>
             </tr>
-                <tr class="property-row">
+                <tr class="property-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.data.JsonReader-jsonData"></a>
             <b>jsonData</b> : Object            <div class="mdesc">
-                            After any data loads, the raw JSON data is available for further custom processing.                        </div>
+                        <div class="short">After any data loads, the raw JSON data is available for further custom processing.  If no data is
+loaded or there is...</div>
+            <div class="long">
+                After any data loads, the raw JSON data is available for further custom processing.  If no data is
+loaded or there is a load exception this property will be undefined.            </div>
+                        </div>
         </td>
         <td class="msource">JsonReader</td>
     </tr>

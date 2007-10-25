@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -19,17 +19,17 @@
  @cfg {Mixed} el The element to act as a button.
  @cfg {Number} delay The initial delay before the repeating event begins firing.
  Similar to an autorepeat key delay.
- @cfg {Number} interval The interval between firings of the "click" event. Default 10 ms.
+ @cfg {Number} interval The interval between firings of the "click" event. Default 20 ms.
  @cfg {String} pressClass A CSS class name to be applied to the element while pressed.
  @cfg {Boolean} accelerate True if autorepeating should start slowly and accelerate.
-           "interval" and "delay" are ignored. "immediate" is honored.
+           "interval" and "delay" are ignored.
  @cfg {Boolean} preventDefault True to prevent the default click event
  @cfg {Boolean} stopDefault True to stop the default click event
 
  @history
     2007-02-02 jvs Original code contributed by Nige "Animal" White
     2007-02-02 jvs Renamed to ClickRepeater
-    2007-02-03 jvs Modifications for FF Mac and Safari 
+    2007-02-03 jvs Modifications for FF Mac and Safari
 
  @constructor
  @param {Mixed} el The element to listen on
@@ -104,39 +104,27 @@ Ext.extend(Ext.util.ClickRepeater, Ext.util.Observable, {
 
         this.fireEvent("mousedown", this);
         this.fireEvent("click", this);
-        
+
+//      Do not honor delay or interval if acceleration wanted.
+        if (this.accelerate) {
+            this.delay = 400;
+	    }
         this.timer = this.click.defer(this.delay || this.interval, this);
     },
 
     // private
     click : function(){
         this.fireEvent("click", this);
-        this.timer = this.click.defer(this.getInterval(), this);
+        this.timer = this.click.defer(this.accelerate ?
+            this.easeOutExpo(this.mousedownTime.getElapsed(),
+                400,
+                -390,
+                12000) :
+            this.interval, this);
     },
 
-    // private
-    getInterval: function(){
-        if(!this.accelerate){
-            return this.interval;
-        }
-        var pressTime = this.mousedownTime.getElapsed();
-        if(pressTime < 500){
-            return 400;
-        }else if(pressTime < 1700){
-            return 320;
-        }else if(pressTime < 2600){
-            return 250;
-        }else if(pressTime < 3500){
-            return 180;
-        }else if(pressTime < 4400){
-            return 140;
-        }else if(pressTime < 5300){
-            return 80;
-        }else if(pressTime < 6200){
-            return 50;
-        }else{
-            return 10;
-        }
+    easeOutExpo : function (t, b, c, d) {
+        return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
     },
 
     // private

@@ -16,12 +16,12 @@
         <div class="description">
             The subclasses of this class provide actions to perform upon <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">Ext.form.BasicForm</a>s.
 <br><br>
-Instances of this class are only created by am <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">Ext.form.BasicForm</a> when 
+Instances of this class are only created by an <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">Ext.form.BasicForm</a> when 
 the Form needs to perform an action such as submit or load.
 <br><br>
 The instance of Action which performed the action is passed to the success
-and failure callbacks of the Form's action methods ({@link Ext.form.BasicForm.submit submit},
-{@link Ext.form.BasicForm.load load} and {@link Ext.form.BasicForm.doAction doAction}),
+and failure callbacks of the Form's action methods ({@link Ext.form.BasicForm#submit submit},
+{@link Ext.form.BasicForm#load load} and {@link Ext.form.BasicForm#doAction doAction}),
 and to the <a ext:cls="Ext.form.BasicForm" ext:member="actioncomplete" href="output/Ext.form.BasicForm.html#actioncomplete">Ext.form.BasicForm.actioncomplete</a> and
 <a ext:cls="Ext.form.BasicForm" ext:member="actionfailed" href="output/Ext.form.BasicForm.html#actionfailed">Ext.form.BasicForm.actionfailed</a> event handlers.        </div>
         
@@ -146,7 +146,7 @@ to send a request to the remote server.            </div>
         <a id="Ext.form.Action-Action.LOAD_FAILURE"></a>
             <b>Action.LOAD_FAILURE</b> : String            <div class="mdesc">
                             &lt;static&gt; Failure type returned when no field values are returned in the response's
-<tt style="font-weight:bold>data</tt> property.                        </div>
+<tt style="font-weight:bold">data</tt> property.                        </div>
         </td>
         <td class="msource">Action</td>
     </tr>
@@ -160,7 +160,7 @@ indicating that field-specific err...</div>
             <div class="long">
                 &lt;static&gt; Failure type returned when server side validation of the Form fails
 indicating that field-specific error messages have been returned in the
-response's <tt style="font-weight:bold>errors</tt> property.            </div>
+response's <tt style="font-weight:bold">errors</tt> property.            </div>
                         </div>
         </td>
         <td class="msource">Action</td>
@@ -191,7 +191,7 @@ The XMLHttpRequest object used to perform the action.                        </d
         <a id="Ext.form.Action-result"></a>
             <b>result</b> : Object            <div class="mdesc">
                             
-The decoded response object containing a boolean <tt style="font-weight:bold>success</tt> property and
+The decoded response object containing a boolean <tt style="font-weight:bold">success</tt> property and
 other, action-specific properties.                        </div>
         </td>
         <td class="msource">Action</td>

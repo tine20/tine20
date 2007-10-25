@@ -18,10 +18,21 @@
                     </table>
         <div class="description">
             A TreeLoader provides for lazy loading of an <a ext:cls="Ext.tree.TreeNode" href="output/Ext.tree.TreeNode.html">Ext.tree.TreeNode</a>'s child
-nodes from a specified URL. The response must be a javascript Array definition
-who's elements are node definition objects. eg:
-<pre><code>[{ <em>'id'</em>: 1, <em>'text'</em>: <em>'A folder Node'</em>, <em>'leaf'</em>: false },
-    { <em>'id'</em>: 2, <em>'text'</em>: <em>'A leaf Node'</em>, <em>'leaf'</em>: true }]</code></pre>
+nodes from a specified URL. The response must be a JavaScript Array definition
+whose elements are node definition objects. eg:
+<pre><code>[{
+        id: 1,
+        text: <em>'A leaf Node'</em>,
+        leaf: true
+    },{
+        id: 2,
+        text: <em>'A folder Node'</em>,
+        children: [{
+            id: 3,
+            text: <em>'A child Node'</em>,
+            leaf: true
+        }]
+   }]</code></pre>
 <br><br>
 A server request is sent, and child nodes are loaded only when a node is expanded.
 The loading node's id is passed to the server under the parameter name "node" to
@@ -78,9 +89,9 @@ the value of the Node's "category" attribute.        </div>
         <td class="sig">
         <a id="Ext.tree.TreeLoader-dataUrl"></a>
             <b>dataUrl</b> : String            <div class="mdesc">
-                        <div class="short">The URL from which to request a Json string which specifies an array of node definition object representing the child...</div>
+                        <div class="short">The URL from which to request a Json string which specifies an array of node definition objects representing the chil...</div>
             <div class="long">
-                The URL from which to request a Json string which specifies an array of node definition object representing the child nodes to be loaded.            </div>
+                The URL from which to request a Json string which specifies an array of node definition objects representing the child nodes to be loaded.            </div>
                         </div>
         </td>
         <td class="msource">TreeLoader</td>
@@ -188,8 +199,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -199,7 +210,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -216,7 +227,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut

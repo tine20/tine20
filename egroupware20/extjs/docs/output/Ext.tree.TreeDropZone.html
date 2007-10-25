@@ -155,7 +155,7 @@ passed to any nodedragover event handler (defaults to {})            </div>
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-groups"></a>
-            <b>groups</b> : string:            <div class="mdesc">
+            <b>groups</b> : object            <div class="mdesc">
                         <div class="short">The group defines a logical collection of DragDrop objects that are
 related.  Instances only get events when interact...</div>
             <div class="long">
@@ -228,7 +228,17 @@ if clicked.                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#invalidHandleTypes" href="output/Ext.dd.DragDrop.html#invalidHandleTypes">DragDrop</a></td>
     </tr>
-        <tr class="property-row inherited alt expandable">
+        <tr class="property-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreeDropZone-isTarget"></a>
+            <b>isTarget</b> : boolean            <div class="mdesc">
+                            By default, all insances can be a drop target.  This can be disabled by
+setting isTarget to false.                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#isTarget" href="output/Ext.dd.DragDrop.html#isTarget">DragDrop</a></td>
+    </tr>
+        <tr class="property-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-maintainOffset"></a>
@@ -242,6 +252,16 @@ when the page changes            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#maintainOffset" href="output/Ext.dd.DragDrop.html#maintainOffset">DragDrop</a></td>
+    </tr>
+        <tr class="property-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreeDropZone-padding"></a>
+            <b>padding</b> : int[]            <div class="mdesc">
+                            The padding configured for this drag and drop object for calculating
+the drop zone intersection with this object.                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#padding" href="output/Ext.dd.DragDrop.html#padding">DragDrop</a></td>
     </tr>
         <tr class="property-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -636,28 +656,6 @@ get a mousedown handler.    <div class="mdetail-params">
         <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.tree.TreeDropZone-isTarget"></a>
-            <b>isTarget</b>() : void            <div class="mdesc">
-                        <div class="short">By default, all insances can be a drop target.  This can be disabled by
-setting isTarget to false.</div>
-            <div class="long">
-                By default, all insances can be a drop target.  This can be disabled by
-setting isTarget to false.    <div class="mdetail-params">
-        <strong>Parameters:</strong>
-        <ul><li>None.</li>        </ul>
-        <strong>Returns:</strong>
-        <ul>
-            <li><code>void</code></li>
-        </ul>
-    </div>
-                </div>
-                        </div>
-        </td>
-        <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#isTarget" href="output/Ext.dd.DragDrop.html#isTarget">DragDrop</a></td>
-    </tr>
-        <tr class="method-row inherited expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
         <a id="Ext.tree.TreeDropZone-isValidHandleChild"></a>
             <b>isValidHandleChild</b>(&nbsp;<code>HTMLElement node</code>&nbsp;) : boolean            <div class="mdesc">
                         <div class="short">Checks the tag exclusion list to see if this click should be ignored</div>
@@ -675,7 +673,7 @@ setting isTarget to false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#isValidHandleChild" href="output/Ext.dd.DragDrop.html#isValidHandleChild">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-lock"></a>
@@ -695,7 +693,7 @@ setting isTarget to false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#lock" href="output/Ext.dd.DragDrop.html#lock">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-notifyDrop"></a>
@@ -719,7 +717,7 @@ repair action does not run.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropTarget" ext:member="#notifyDrop" href="output/Ext.dd.DropTarget.html#notifyDrop">DropTarget</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-notifyEnter"></a>
@@ -742,7 +740,7 @@ and returns the dropAllowed config value.  This method should be overridden if d
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropTarget" ext:member="#notifyEnter" href="output/Ext.dd.DropTarget.html#notifyEnter">DropTarget</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-notifyOut"></a>
@@ -765,7 +763,7 @@ overClass (if any) from the drop element.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropTarget" ext:member="#notifyOut" href="output/Ext.dd.DropTarget.html#notifyOut">DropTarget</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-notifyOver"></a>
@@ -788,7 +786,7 @@ This default implementation simply returns the dropAllowed config value.    <div
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropTarget" ext:member="#notifyOver" href="output/Ext.dd.DropTarget.html#notifyOver">DropTarget</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onAvailable"></a>
@@ -810,7 +808,7 @@ position was determined.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onAvailable" href="output/Ext.dd.DragDrop.html#onAvailable">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onContainerDrop"></a>
@@ -834,7 +832,7 @@ be able to accept drops.  It should return true when valid so that the drag sour
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropZone" ext:member="#onContainerDrop" href="output/Ext.dd.DropZone.html#onContainerDrop">DropZone</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onContainerOver"></a>
@@ -857,7 +855,7 @@ it should be overridden to provide the proper feedback if necessary.    <div cla
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropZone" ext:member="#onContainerOver" href="output/Ext.dd.DropZone.html#onContainerOver">DropZone</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onDrag"></a>
@@ -879,7 +877,7 @@ object.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onDrag" href="output/Ext.dd.DragDrop.html#onDrag">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onDragDrop"></a>
@@ -903,7 +901,7 @@ was dropped on.</div></li>        </ul>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onDragDrop" href="output/Ext.dd.DragDrop.html#onDragDrop">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onDragEnter"></a>
@@ -927,7 +925,7 @@ dragdrop items being hovered over.</div></li>        </ul>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onDragEnter" href="output/Ext.dd.DragDrop.html#onDragEnter">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onDragOut"></a>
@@ -949,7 +947,7 @@ that the mouse is no longer over.</div></li>        </ul>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onDragOut" href="output/Ext.dd.DragDrop.html#onDragOut">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onDragOver"></a>
@@ -973,7 +971,7 @@ being hovered over.</div></li>        </ul>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onDragOver" href="output/Ext.dd.DragDrop.html#onDragOver">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onInvalidDrop"></a>
@@ -995,7 +993,7 @@ drop target    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onInvalidDrop" href="output/Ext.dd.DragDrop.html#onInvalidDrop">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onMouseDown"></a>
@@ -1015,7 +1013,7 @@ drop target    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onMouseDown" href="output/Ext.dd.DragDrop.html#onMouseDown">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onMouseUp"></a>
@@ -1035,7 +1033,7 @@ drop target    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#onMouseUp" href="output/Ext.dd.DragDrop.html#onMouseUp">DragDrop</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onNodeDrop"></a>
@@ -1059,7 +1057,7 @@ appropriate processing of the drop event and return true so that the drag source
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropZone" ext:member="#onNodeDrop" href="output/Ext.dd.DropZone.html#onNodeDrop">DropZone</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onNodeEnter"></a>
@@ -1083,7 +1081,7 @@ node-specific processing if necessary.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropZone" ext:member="#onNodeEnter" href="output/Ext.dd.DropZone.html#onNodeEnter">DropZone</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onNodeOut"></a>
@@ -1107,7 +1105,7 @@ node-specific processing if necessary.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropZone" ext:member="#onNodeOut" href="output/Ext.dd.DropZone.html#onNodeOut">DropZone</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeDropZone-onNodeOver"></a>
@@ -1130,28 +1128,6 @@ overridden to provide the proper feedback.    <div class="mdetail-params">
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.dd.DropZone" ext:member="#onNodeOver" href="output/Ext.dd.DropZone.html#onNodeOver">DropZone</a></td>
-    </tr>
-        <tr class="method-row inherited alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.tree.TreeDropZone-padding"></a>
-            <b>padding</b>() : void            <div class="mdesc">
-                        <div class="short">The padding configured for this drag and drop object for calculating
-the drop zone intersection with this object.</div>
-            <div class="long">
-                The padding configured for this drag and drop object for calculating
-the drop zone intersection with this object.    <div class="mdetail-params">
-        <strong>Parameters:</strong>
-        <ul><li>None.</li>        </ul>
-        <strong>Returns:</strong>
-        <ul>
-            <li><code>void</code></li>
-        </ul>
-    </div>
-                </div>
-                        </div>
-        </td>
-        <td class="msource"><a ext:cls="Ext.dd.DragDrop" ext:member="#padding" href="output/Ext.dd.DragDrop.html#padding">DragDrop</a></td>
     </tr>
         <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>

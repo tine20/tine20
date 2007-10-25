@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -86,13 +86,13 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
         Ext.PagingToolbar.superclass.onRender.call(this, ct, position);
         this.first = this.addButton({
             tooltip: this.firstText,
-            cls: "x-btn-icon x-grid-page-first",
+            iconCls: "x-tbar-page-first",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["first"])
         });
         this.prev = this.addButton({
             tooltip: this.prevText,
-            cls: "x-btn-icon x-grid-page-prev",
+            iconCls: "x-tbar-page-prev",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["prev"])
         });
@@ -103,7 +103,7 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
            type: "text",
            size: "3",
            value: "1",
-           cls: "x-grid-page-number"
+           cls: "x-tbar-page-number"
         }).el);
         this.field.on("keydown", this.onPagingKeydown, this);
         this.field.on("focus", function(){this.dom.select();});
@@ -112,20 +112,20 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
         this.addSeparator();
         this.next = this.addButton({
             tooltip: this.nextText,
-            cls: "x-btn-icon x-grid-page-next",
+            iconCls: "x-tbar-page-next",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["next"])
         });
         this.last = this.addButton({
             tooltip: this.lastText,
-            cls: "x-btn-icon x-grid-page-last",
+            iconCls: "x-tbar-page-last",
             disabled: true,
             handler: this.onClick.createDelegate(this, ["last"])
         });
         this.addSeparator();
         this.loading = this.addButton({
             tooltip: this.refreshText,
-            cls: "x-btn-icon x-grid-loading",
+            iconCls: "x-tbar-loading",
             handler: this.onClick.createDelegate(this, ["refresh"])
         });
 

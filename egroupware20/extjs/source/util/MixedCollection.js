@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -300,7 +300,8 @@ mc.add(otherEl);
     },
    
 /**
- * Returns the item associated with the passed key OR index. Key has priority over index.
+ * Returns the item associated with the passed key OR index. Key has priority over index.  This is the equivalent
+ * of calling {@link #key} first, then if nothing matched calling {@link #itemAt}.
  * @param {String/Number} key The key or index of the item.
  * @return {Object} The item associated with the passed key.
  */
@@ -499,7 +500,7 @@ mc.add(otherEl);
             return -1;
         }
         value = this.createValueMatcher(value, anyMatch, caseSensitive);
-        return this.findBy(function(o){
+        return this.findIndexBy(function(o){
             return o && value.test(o[property]);
         }, null, start);
 	},

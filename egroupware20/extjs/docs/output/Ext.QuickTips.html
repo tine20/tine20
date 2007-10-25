@@ -1,173 +1,24 @@
         <div class="body-wrap">
         <div class="top-tools">
-        
+            <a class="inner-link" href="#Ext.QuickTips-props"><img src="../resources/images/default/s.gif" class="item-icon icon-prop">Properties</a>
+            <a class="inner-link" href="#Ext.QuickTips-methods"><img src="../resources/images/default/s.gif" class="item-icon icon-method">Methods</a>
+            <a class="inner-link" href="#Ext.QuickTips-events"><img src="../resources/images/default/s.gif" class="item-icon icon-event">Events</a>
+                        <a class="bookmark" href="../docs/?class=Ext.QuickTips"><img src="../resources/images/default/s.gif" class="item-icon icon-fav">Direct Link</a>
         </div>
                 <h1>Class Ext.QuickTips</h1>
         <table cellspacing="0">
             <tr><td class="label">Package:</td><td class="hd-info">Ext</td></tr>
-            <tr><td class="label">Defined In:</td><td class="hd-info"><a href="QuickTips.jss.html" target="_blank">QuickTips.js</a></td></tr>
+            <tr><td class="label">Defined In:</td><td class="hd-info"><a href="../src/QuickTips.js" target="_blank">QuickTips.js</a></td></tr>
             <tr><td class="label">Class:</td><td class="hd-info">QuickTips</td></tr>
                                     <tr><td class="label">Extends:</td><td class="hd-info">Object</td></tr>
                     </table>
         <div class="description">
-            Provides attractive and customizable tooltips for any element.<br><br><i>This class is a singleton and cannot be created directly.</i>        </div>
+            The global QuickTips instance that reads quick tip configs from existing markup and manages quick tips.<br><br><i>This class is a singleton and cannot be created directly.</i>        </div>
         
         <div class="hr"></div>
-                <a name="configs"></a>
-        <h2>Config Options</h2>
-        <table cellspacing="0" class="member-table">
-            <tr>
-                <th class="sig-header" colspan="2">Config Options</th>
-                <th class="msource-header">Defined By</th>
-            </tr>
-                <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-animate"></a>
-            <b>animate</b> : Boolean            <div class="mdesc">
-                            True to turn on fade animation. Defaults to false (ClearType/scrollbar flicker issues in IE7).                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-autoDismiss"></a>
-            <b>autoDismiss</b> : Boolean            <div class="mdesc">
-                        <div class="short">True to automatically hide the quick tip after a set period of time, regardless of the user's actions (defaults to tr...</div>
-            <div class="long">
-                True to automatically hide the quick tip after a set period of time, regardless of the user's actions (defaults to true). Used in conjunction with autoDismissDelay.            </div>
-                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-autoDismissDelay"></a>
-            <b>autoDismissDelay</b> : Number            <div class="mdesc">
-                            Delay in milliseconds before the quick tip hides when autoDismiss = true (defaults to 5000)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-autoHide"></a>
-            <b>autoHide</b> : Boolean            <div class="mdesc">
-                        <div class="short">True to automatically hide the quick tip after the mouse exits the target element (defaults to true). Used in conjunc...</div>
-            <div class="long">
-                True to automatically hide the quick tip after the mouse exits the target element (defaults to true). Used in conjunction with hideDelay.            </div>
-                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-cls"></a>
-            <b>cls</b> : String            <div class="mdesc">
-                            A CSS class to apply to the base quick tip element (defaults to '').                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-hideDelay"></a>
-            <b>hideDelay</b> : Number            <div class="mdesc">
-                            Delay in milliseconds before the quick tip hides when autoHide = true (defaults to 200)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-hideOnClick"></a>
-            <b>hideOnClick</b> : Boolean            <div class="mdesc">
-                            True to hide the quick tip if the user clicks anywhere in the document (defaults to true)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-interceptTitles"></a>
-            <b>interceptTitles</b> : Boolean            <div class="mdesc">
-                            True to automatically use the element's DOM title value if available (defaults to false)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-maxWidth"></a>
-            <b>maxWidth</b> : Number            <div class="mdesc">
-                            The maximum width of the quick tip (defaults to 300)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-minWidth"></a>
-            <b>minWidth</b> : Number            <div class="mdesc">
-                            The minimum width of the quick tip (defaults to 40)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-showDelay"></a>
-            <b>showDelay</b> : Number            <div class="mdesc">
-                            Delay in milliseconds before the quick tip displays after the mouse enters the target element (defaults to 500)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-text"></a>
-            <b>text</b> : String            <div class="mdesc">
-                            Body text to display (defaults to ''). This can be any valid HTML markup.                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-title"></a>
-            <b>title</b> : String            <div class="mdesc">
-                            Title text to display (defaults to ''). This can be any valid HTML markup.                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-trackMouse"></a>
-            <b>trackMouse</b> : Boolean            <div class="mdesc">
-                            True to have the quick tip follow the mouse as it moves over the target element (defaults to false)                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="config-row expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-width"></a>
-            <b>width</b> : Number            <div class="mdesc">
-                        <div class="short">Width in pixels of the quick tip (defaults to auto). Width will be ignored if it exceeds the bounds of minWidth or ma...</div>
-            <div class="long">
-                Width in pixels of the quick tip (defaults to auto). Width will be ignored if it exceeds the bounds of minWidth or maxWidth.            </div>
-                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-            </table>
-                <a name="properties"></a>
+                <a id="Ext.QuickTips-props"></a>
         <h2>Public Properties</h2>
-        <div class="no-members">This class has no public properties.</div>        <a name="methods"></a>
+        <div class="no-members">This class has no public properties.</div>        <a id="Ext.QuickTips-methods"></a>
         <h2>Public Methods</h2>
                 <table cellspacing="0" class="member-table">
             <tr>
@@ -179,9 +30,9 @@
         <td class="sig">
         <a id="Ext.QuickTips-disable"></a>
             <b>disable</b>() : void            <div class="mdesc">
-                        <div class="short">Disable this quick tip.</div>
+                        <div class="short">Disable quick tips globally.</div>
             <div class="long">
-                Disable this quick tip.    <div class="mdetail-params">
+                Disable quick tips globally.    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
@@ -199,9 +50,9 @@
         <td class="sig">
         <a id="Ext.QuickTips-enable"></a>
             <b>enable</b>() : void            <div class="mdesc">
-                        <div class="short">Enable this quick tip.</div>
+                        <div class="short">Enable quick tips globally.</div>
             <div class="long">
-                Enable this quick tip.    <div class="mdetail-params">
+                Enable quick tips globally.    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
@@ -219,13 +70,9 @@
         <td class="sig">
         <a id="Ext.QuickTips-init"></a>
             <b>init</b>() : void            <div class="mdesc">
-                        <div class="short">
-Initialize and enable QuickTips for first use.  This should be called once before the first attempt to access
-or dis...</div>
+                        <div class="short">Initialize the global QuickTips instance and prepare any quick tips.</div>
             <div class="long">
-                
-Initialize and enable QuickTips for first use.  This should be called once before the first attempt to access
-or display QuickTips in a page.    <div class="mdetail-params">
+                Initialize the global QuickTips instance and prepare any quick tips.    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
@@ -242,63 +89,15 @@ or display QuickTips in a page.    <div class="mdetail-params">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.QuickTips-isEnabled"></a>
-            <b>isEnabled</b>() : void            <div class="mdesc">
-                        <div class="short">Returns true if the quick tip is enabled, else false.</div>
+            <b>isEnabled</b>() : Boolean            <div class="mdesc">
+                        <div class="short">Returns true if quick tips are enabled, else false.</div>
             <div class="long">
-                Returns true if the quick tip is enabled, else false.    <div class="mdetail-params">
+                Returns true if quick tips are enabled, else false.    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
         <ul>
-            <li><code>void</code></li>
-        </ul>
-    </div>
-                </div>
-                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="method-row expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-register"></a>
-            <b>register</b>(&nbsp;<code>Object config</code>&nbsp;) : void            <div class="mdesc">
-                        <div class="short">Configures a new quick tip instance and assigns it to a target element.  The following config options
-are supported:
-...</div>
-            <div class="long">
-                Configures a new quick tip instance and assigns it to a target element.  The following config options
-are supported:
-<pre>
-Property    Type                   Description
-----------  ---------------------  ------------------------------------------------------------------------
-target      Element/String/Array   An Element, id or array of ids that this quick tip should be tied to
-</ul>    <div class="mdetail-params">
-        <strong>Parameters:</strong>
-        <ul><li><code>config</code> : Object<div class="sub-desc">The config object</div></li>        </ul>
-        <strong>Returns:</strong>
-        <ul>
-            <li><code>void</code></li>
-        </ul>
-    </div>
-                </div>
-                        </div>
-        </td>
-        <td class="msource">QuickTips</td>
-    </tr>
-        <tr class="method-row alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.QuickTips-unregister"></a>
-            <b>unregister</b>(&nbsp;<code>String/HTMLElement/Element el</code>&nbsp;) : void            <div class="mdesc">
-                        <div class="short">Removes this quick tip from its element and destroys it.</div>
-            <div class="long">
-                Removes this quick tip from its element and destroys it.    <div class="mdetail-params">
-        <strong>Parameters:</strong>
-        <ul><li><code>el</code> : String/HTMLElement/Element<div class="sub-desc">The element from which the quick tip is to be removed.</div></li>        </ul>
-        <strong>Returns:</strong>
-        <ul>
-            <li><code>void</code></li>
+            <li><code>Boolean</code></li>
         </ul>
     </div>
                 </div>
@@ -307,7 +106,7 @@ target      Element/String/Array   An Element, id or array of ids that this quic
         <td class="msource">QuickTips</td>
     </tr>
             </table>
-                <a name="events"></a>
+                <a id="Ext.QuickTips-events"></a>
         <h2>Public Events</h2>
         <div class="no-members">This class has no public events.</div>
         </div>

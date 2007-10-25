@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -24,11 +24,11 @@ FeedWindow = function() {
             invalid: this.syncShadow,
             scope: this
         },
-        tpl: new Ext.Template(
-                '<div class="x-combo-list-item">',
+        tpl: new Ext.XTemplate(
+                '<tpl for="."><div class="x-combo-list-item">',
                 '<em>{url}</em><strong>{text}</strong>',
                 '<div class="x-clear"></div>',
-                '</div>'),
+                '</div></tpl>'),
         store: new Ext.data.SimpleStore({
             fields: ['url', 'text'],
             data : this.defaultFeeds

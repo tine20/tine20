@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,20 +14,7 @@
  * Creates a new Checkbox
  * @param {Object} config Configuration options
  */
-Ext.form.Checkbox = function(config){
-    Ext.form.Checkbox.superclass.constructor.call(this, config);
-    this.addEvents({
-        /**
-         * @event check
-         * Fires when the checkbox is checked or unchecked.
-	     * @param {Ext.form.Checkbox} this This checkbox
-	     * @param {Boolean} checked The new checked value
-	     */
-        check : true
-    });
-};
-
-Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
+Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
     /**
      * @cfg {String} focusClass The CSS class to use when the checkbox receives focus (defaults to undefined)
      */
@@ -51,7 +38,21 @@ Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
     /**
      * @cfg {String} inputValue The value that should go into the generated input element's value attribute
      */
-    //
+
+
+    initComponent : function(){
+        Ext.form.Checkbox.superclass.initComponent.call(this);
+        this.addEvents({
+            /**
+             * @event check
+             * Fires when the checkbox is checked or unchecked.
+             * @param {Ext.form.Checkbox} this This checkbox
+             * @param {Boolean} checked The new checked value
+             */
+            check : true
+        });
+    },
+
     onResize : function(){
         Ext.form.Checkbox.superclass.onResize.apply(this, arguments);
         if(!this.boxLabel){

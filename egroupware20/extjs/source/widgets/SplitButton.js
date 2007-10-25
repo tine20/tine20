@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -123,7 +123,7 @@ Ext.SplitButton = Ext.extend(Ext.Button, {
 
     onDisable : function(){
         if(this.el){
-            if(!Ext.isIE || Ext.isIE7){
+            if(!Ext.isIE6){
                 this.el.addClass("x-item-disabled");
             }
             this.el.select('button').set('disabled', true);
@@ -133,7 +133,7 @@ Ext.SplitButton = Ext.extend(Ext.Button, {
 
     onEnable : function(){
         if(this.el){
-            if(!Ext.isIE || Ext.isIE7){
+            if(!Ext.isIE6){
                 this.el.removeClass("x-item-disabled");
             }
             this.el.select('button').set('disabled', false);

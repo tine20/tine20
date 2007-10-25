@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -230,6 +230,7 @@
     width:200px;
 }
 
+
 .x-form-label-right label {
    text-align:right;
 }
@@ -242,13 +243,17 @@
     margin-bottom:4px;
     position:static;
 }
+
 .x-form-label-top .x-form-element {
     padding-left:0;
     padding-top:4px;
 }
+
 .x-form-label-top .x-form-item {
     padding-bottom:4px;
 }
+
+
 .x-form fieldset {
     border:1px solid #B5B8C8;
     padding:10px;
@@ -423,7 +428,9 @@ fieldset.x-panel-collapsed .x-fieldset-bwrap {
     left:-1000px;
     top:-1000px;
 }
-
+.ext-ie .x-fieldset-bwrap {
+    zoom:1;
+}
 .ext-ie td .x-form-text {
     position:relative;
     top:-1px;

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -357,6 +357,7 @@ Ext.Window = Ext.extend(Ext.Panel, {
             this.y = this.y === undefined? pos.top : this.y;
         }
         this.el.setLeftTop(this.x, this.y);
+
         if(this.expandOnShow){
             this.expand(false);
         }
@@ -410,10 +411,10 @@ Ext.Window = Ext.extend(Ext.Panel, {
             this.fitContainer();
         }
 
-        if(this.monitorResize && (this.constrain || this.constrainHeader)){
+        if(this.monitorResize || this.modal || this.constrain || this.constrainHeader){
             Ext.EventManager.onWindowResize(this.onWindowResize, this);
-            this.doConstrain();
         }
+        this.doConstrain();
         if(this.layout){
             this.doLayout();
         }
@@ -470,7 +471,7 @@ Ext.Window = Ext.extend(Ext.Panel, {
     // private
     afterHide : function(){
         this.proxy.hide();
-        if(this.monitorResize && (this.constrain || this.constrainHeader)){
+        if(this.monitorResize || this.modal || this.constrain || this.constrainHeader){
             Ext.EventManager.removeResizeListener(this.onWindowResize, this);
         }
         if(this.modal){
@@ -504,6 +505,11 @@ Ext.Window = Ext.extend(Ext.Panel, {
     onWindowResize : function(){
         if(this.maximized){
             this.fitContainer();
+        }
+        if(this.modal){
+            this.mask.setSize('100%', '100%');
+            var force = this.mask.dom.offsetHeight;
+            this.mask.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
         }
         this.doConstrain();
     },
@@ -690,7 +696,7 @@ Ext.Window = Ext.extend(Ext.Panel, {
      * is a number, it is used as the buffer delay (defaults to 50ms).
      * @return {Ext.Window} this
      */
-    anchorTo : function(el, alignment, offsets, monitorScroll){
+    anchorTo : function(el, alignment, offsets, monitorScroll, _pname){
         var action = function(){
             this.alignTo(el, alignment, offsets);
         };
@@ -701,6 +707,7 @@ Ext.Window = Ext.extend(Ext.Panel, {
                 {buffer: tm == 'number' ? monitorScroll : 50});
         }
         action.call(this);
+        this[_pname] = action;
         return this;
     },
 

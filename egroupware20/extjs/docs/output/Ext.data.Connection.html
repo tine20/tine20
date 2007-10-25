@@ -207,8 +207,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -218,7 +218,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -235,7 +235,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut
@@ -516,7 +516,8 @@ params for the post data. Any params will be appended to the URL.</li>
                 Fires if the request was successfully completed.    <div class="mdetail-params">
         <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
         <ul><li><code>conn</code> : Connection<div class="sub-desc">This Connection object.</div></li><li><code>response</code> : Object<div class="sub-desc">The XHR object containing the response data.
-See {@link http://www.w3.org/TR/XMLHttpRequest/} for details.</div></li><li><code>options</code> : Object<div class="sub-desc">The options config object passed to the <a ext:cls="Ext.data.Connection" ext:member="request" href="output/Ext.data.Connection.html#request">request</a> method.</div></li>        </ul>
+See <a href="http://www.w3.org/TR/XMLHttpRequest/">The XMLHttpRequest Object</a>
+for details.</div></li><li><code>options</code> : Object<div class="sub-desc">The options config object passed to the <a ext:cls="Ext.data.Connection" ext:member="request" href="output/Ext.data.Connection.html#request">request</a> method.</div></li>        </ul>
     </div>
                 </div>
                         </div>
@@ -529,13 +530,16 @@ See {@link http://www.w3.org/TR/XMLHttpRequest/} for details.</div></li><li><cod
         <a id="Ext.data.Connection-requestexception"></a>
             <b>requestexception</b> : (&nbsp;<code>Connection conn</code>, <code>Object response</code>, <code>Object options</code>&nbsp;)            <div class="mdesc">
                         <div class="short">Fires if an error HTTP status was returned from the server.
-See {@link http://www.w3.org/Protocols/rfc2616/rfc2616-se...</div>
+See HTTP Status Code Definitions
+for details of HTTP stat...</div>
             <div class="long">
                 Fires if an error HTTP status was returned from the server.
-See {@link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html} for details of HTTP status codes.    <div class="mdetail-params">
+See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html>HTTP Status Code Definitions</a>
+for details of HTTP status codes.    <div class="mdetail-params">
         <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
         <ul><li><code>conn</code> : Connection<div class="sub-desc">This Connection object.</div></li><li><code>response</code> : Object<div class="sub-desc">The XHR object containing the response data.
-See {@link http://www.w3.org/TR/XMLHttpRequest/} for details.</div></li><li><code>options</code> : Object<div class="sub-desc">The options config object passed to the <a ext:cls="Ext.data.Connection" ext:member="request" href="output/Ext.data.Connection.html#request">request</a> method.</div></li>        </ul>
+See <a href="http://www.w3.org/TR/XMLHttpRequest/">The XMLHttpRequest Object</a>
+for details.</div></li><li><code>options</code> : Object<div class="sub-desc">The options config object passed to the <a ext:cls="Ext.data.Connection" ext:member="request" href="output/Ext.data.Connection.html#request">request</a> method.</div></li>        </ul>
     </div>
                 </div>
                         </div>

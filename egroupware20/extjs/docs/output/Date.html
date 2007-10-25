@@ -17,40 +17,41 @@
 <a href="http://www.php.net/date">PHP's date() function</a>, and the formats that are
 supported will provide results equivalent to their PHP versions.
 Following is the list of all currently supported formats:
-<pre>Sample date:
-'Wed Jan 10 2007 15:05:01 GMT-0600 (Central Standard Time)'
-
-Format  Output      Description
-------  ----------  --------------------------------------------------------------
-  d      10         Day of the month, 2 digits with leading zeros
-  D      Wed        A textual representation of a day, three letters
-  j      10         Day of the month without leading zeros
-  l      Wednesday  A full textual representation of the day of the week
-  S      th         English ordinal day of month suffix, 2 chars (use with j)
-  w      3          Numeric representation of the day of the week
-  z      9          The julian date, or day of the year (0-365)
-  W      01         ISO-8601 2-digit week number of year, weeks starting on Monday (00-52)
-  F      January    A full textual representation of the month
-  m      01         Numeric representation of a month, with leading zeros
-  M      Jan        Month name abbreviation, three letters
-  n      1          Numeric representation of a month, without leading zeros
-  t      31         Number of days in the given month
-  L      0          Whether it's a leap year (1 if it is a leap year, else 0)
-  Y      2007       A full numeric representation of a year, 4 digits
-  y      07         A two digit representation of a year
-  a      pm         Lowercase Ante meridiem and Post meridiem
-  A      PM         Uppercase Ante meridiem and Post meridiem
-  g      3          12-hour format of an hour without leading zeros
-  G      15         24-hour format of an hour without leading zeros
-  h      03         12-hour format of an hour with leading zeros
-  H      15         24-hour format of an hour with leading zeros
-  i      05         Minutes with leading zeros
-  s      01         Seconds, with leading zeros
-  O      -0600      Difference to Greenwich time (GMT) in hours
-  T      CST        Timezone setting of the machine running the code
-  Z      -21600     Timezone offset in seconds (negative if west of UTC, positive if east)</pre>
+<pre>Format  Description                                                             Example returned values
+------  ----------------------------------------------------------------------  -----------------------
+  d     Day of the month, 2 digits with leading zeros                           01 to 31
+  D     A textual representation of a day, three letters                        Mon to Sun
+  j     Day of the month without leading zeros                                  1 to 31
+  l     A full textual representation of the day of the week                    Sunday to Saturday
+  S     English ordinal suffix for the day of the month, 2 characters           st, nd, rd or th. Works well with j
+  w     Numeric representation of the day of the week                           0 (for Sunday) to 6 (for Saturday)
+  z     The day of the year (starting from 0)                                   0 to 364 (365 in leap years)
+  W     ISO-8601 week number of year, weeks starting on Monday                  1 to 53
+  F     A full textual representation of a month, such as January or March      January to December
+  m     Numeric representation of a month, with leading zeros                   01 to 12
+  M     A short textual representation of a month, three letters                Jan to Dec
+  n     Numeric representation of a month, without leading zeros                1 to 12
+  t     Number of days in the given month                                       28 to 31
+  L     Whether it's a leap year                                                1 if it is a leap year, 0 otherwise.
+  Y     A full numeric representation of a year, 4 digits                       Examples: 1999 or 2003
+  y     A two digit representation of a year                                    Examples: 99 or 03
+  a     Lowercase Ante meridiem and Post meridiem                               am or pm
+  A     Uppercase Ante meridiem and Post meridiem                               AM or PM
+  g     12-hour format of an hour without leading zeros                         1 to 12
+  G     24-hour format of an hour without leading zeros                         0 to 23
+  h     12-hour format of an hour with leading zeros                            01 to 12
+  H     24-hour format of an hour with leading zeros                            00 to 23
+  i     Minutes, with leading zeros                                             00 to 59
+  s     Seconds, with leading zeros                                             00 to 59
+  u     Milliseconds, with leading zeros                                        001 to 999
+  O     Difference to Greenwich time (GMT) in hours                             Example: +0200
+  T     Timezone abbreviation of the machine running the code                   Examples: EST, MDT ...
+  Z     Timezone offset in seconds (negative if west of UTC, positive if east)  -43200 to 50400</pre>
 Example usage (note that you must escape format specifiers with '\\' to render them as character literals):
-<pre><code>var dt = <b>new</b> Date(<em>'1/10/2007 03:05:01 PM GMT-0600'</em>);
+<pre><code><i>// Sample date:</i>
+<i>// <em>'Wed Jan 10 2007 15:05:01 GMT-0600 (Central Standard Time)'</em></i>
+
+<b>var</b> dt = <b>new</b> Date(<em>'1/10/2007 03:05:01 PM GMT-0600'</em>);
 document.write(dt.format(<em>'Y-m-d'</em>));                         <i>//2007-01-10</i>
 document.write(dt.format(<em>'F j, Y, g:i a'</em>));                 <i>//January 10, 2007, 3:05 pm</i>
 document.write(dt.format(<em>'l, \\t\\he dS of F Y h:i:s A'</em>));  //Wednesday, the 10th of January 2007 03:05:01 PM</code></pre>
@@ -206,10 +207,10 @@ Example Usage:
 dt = Date.parseDate(<em>"2006"</em>, <em>"Y"</em>);
 
 <i>//dt = Sun Jan 15 2006 (all date parts specified)</i>
-dt = Date.parseDate(<em>"2006-1-15"</em>, <em>"Y-m-d"</em>);
+dt = Date.parseDate(<em>"2006-01-15"</em>, <em>"Y-m-d"</em>);
 
 <i>//dt = Sun Jan 15 2006 15:20:01 GMT-0600 (CST)</i>
-dt = Date.parseDate(<em>"2006-1-15 3:20:01 PM"</em>, <em>"Y-m-d h:i:s A"</em> );</code></pre>    <div class="mdetail-params">
+dt = Date.parseDate(<em>"2006-01-15 3:20:01 PM"</em>, <em>"Y-m-d h:i:s A"</em> );</code></pre>    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li><code>input</code> : String<div class="sub-desc">The unparsed date as a string</div></li><li><code>format</code> : String<div class="sub-desc">The format the date is in</div></li>        </ul>
         <strong>Returns:</strong>
@@ -260,6 +261,26 @@ document.write(dt3); //returns <em>'Fri Oct 06 2006 07:30:00'</em></code></pre> 
         <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Date-between"></a>
+            <b>between</b>(&nbsp;<code>Date start</code>, <code>Date end</code>&nbsp;) : Boolean            <div class="mdesc">
+                        <div class="short">Checks if this date falls on or between the given start and end dates</div>
+            <div class="long">
+                Checks if this date falls on or between the given start and end dates    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>start</code> : Date<div class="sub-desc">Start date</div></li><li><code>end</code> : Date<div class="sub-desc">End date</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Boolean</code><div class="sub-desc">true if this date falls on or between the given start and end dates</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">Date</td>
+    </tr>
+        <tr class="method-row alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Date-clearTime"></a>
             <b>clearTime</b>(&nbsp;<code>Boolean clone</code>&nbsp;) : Date            <div class="mdesc">
                         <div class="short">Clears any time information from this date</div>
@@ -277,7 +298,7 @@ document.write(dt3); //returns <em>'Fri Oct 06 2006 07:30:00'</em></code></pre> 
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-clone"></a>
@@ -313,7 +334,7 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-format"></a>
@@ -333,7 +354,7 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getDayOfYear"></a>
@@ -345,7 +366,7 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
         <ul>
-            <li><code>Number</code><div class="sub-desc">0 through 364 (365 in leap years)</div></li>
+            <li><code>Number</code><div class="sub-desc">0 to 364 (365 in leap years)</div></li>
         </ul>
     </div>
                 </div>
@@ -353,7 +374,7 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getDaysInMonth"></a>
@@ -373,7 +394,7 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getElapsed"></a>
@@ -393,14 +414,14 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getFirstDateOfMonth"></a>
             <b>getFirstDateOfMonth</b>() : Date            <div class="mdesc">
-                        <div class="short">Get the first date of this date's month</div>
+                        <div class="short">Get the date of the first day of the month in which this date resides</div>
             <div class="long">
-                Get the first date of this date's month    <div class="mdetail-params">
+                Get the date of the first day of the month in which this date resides    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
@@ -413,7 +434,7 @@ document.write(orig);  //returns <em>'Thu Oct 01 2006'</em></code></pre>    <div
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getFirstDayOfMonth"></a>
@@ -439,7 +460,7 @@ document.write(Date.dayNames[dt.getFirstDayOfMonth()]); //output: <em>'Monday'</
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getGMTOffset"></a>
@@ -459,14 +480,14 @@ document.write(Date.dayNames[dt.getFirstDayOfMonth()]); //output: <em>'Monday'</
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getLastDateOfMonth"></a>
             <b>getLastDateOfMonth</b>() : Date            <div class="mdesc">
-                        <div class="short">Get the last date of this date's month</div>
+                        <div class="short">Get the date of the last day of the month in which this date resides</div>
             <div class="long">
-                Get the last date of this date's month    <div class="mdetail-params">
+                Get the date of the last day of the month in which this date resides    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
@@ -479,7 +500,7 @@ document.write(Date.dayNames[dt.getFirstDayOfMonth()]); //output: <em>'Monday'</
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getLastDayOfMonth"></a>
@@ -505,7 +526,7 @@ document.write(Date.dayNames[dt.getLastDayOfMonth()]); //output: <em>'Wednesday'
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getSuffix"></a>
@@ -525,7 +546,7 @@ document.write(Date.dayNames[dt.getLastDayOfMonth()]); //output: <em>'Wednesday'
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getTimezone"></a>
@@ -545,21 +566,21 @@ document.write(Date.dayNames[dt.getLastDayOfMonth()]); //output: <em>'Wednesday'
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-getWeekOfYear"></a>
-            <b>getWeekOfYear</b>() : String            <div class="mdesc">
-                        <div class="short">Get the string representation of the numeric week number of the year
+            <b>getWeekOfYear</b>() : Number            <div class="mdesc">
+                        <div class="short">Get the numeric ISO-8601 week number of the year
 (equivalent to the format specifier 'W').</div>
             <div class="long">
-                Get the string representation of the numeric week number of the year
+                Get the numeric ISO-8601 week number of the year
 (equivalent to the format specifier 'W').    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
         <ul>
-            <li><code>String</code><div class="sub-desc">'00' through '52'</div></li>
+            <li><code>Number</code><div class="sub-desc">1 to 53</div></li>
         </ul>
     </div>
                 </div>
@@ -567,7 +588,7 @@ document.write(Date.dayNames[dt.getLastDayOfMonth()]); //output: <em>'Wednesday'
         </td>
         <td class="msource">Date</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Date-isLeapYear"></a>

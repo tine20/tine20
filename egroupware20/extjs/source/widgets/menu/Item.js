@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -24,16 +24,21 @@ Ext.menu.Item = function(config){
 };
 Ext.extend(Ext.menu.Item, Ext.menu.BaseItem, {
     /**
-     * @cfg {String} icon
-     * The path to an icon to display in this menu item (defaults to Ext.BLANK_IMAGE_URL)
+     * @cfg {String} icon The path to an icon to display in this item (defaults to Ext.BLANK_IMAGE_URL).  If
+     * icon is specified {@link #iconCls} should not be.
      */
     /**
-     * @cfg {String} text
-     * The text to display for this item (defaults to '')
+     * @cfg {String} iconCls A CSS class that specifies a background image that will be used as the icon for
+     * this item (defaults to '').  If iconCls is specified {@link #icon} should not be.
      */
     /**
-     * @cfg {String} iconCls
-     * A CSS class which sets a background image to be used as the icon for this item (defaults to '')
+     * @cfg {String} text The text to display in this item (defaults to '').
+     */
+    /**
+     * @cfg {String} href The href attribute to use for the underlying anchor link (defaults to '#').
+     */
+    /**
+     * @cfg {String} hrefTarget The target attribute to use for the underlying anchor link (defaults to '').
      */
     /**
      * @cfg {String} itemCls The default CSS class to use for menu items (defaults to 'x-menu-item')

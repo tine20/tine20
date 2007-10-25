@@ -14,15 +14,15 @@
                     </table>
         <div class="description">
             A class which handles loading of data from a server into the Fields of
-an <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">Ext.form.BasicForm</a>s. 
+an <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">Ext.form.BasicForm</a>. 
 <br><br>
-Instances of this class are only created by am <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">Ext.form.BasicForm</a> when 
+Instances of this class are only created by a {@link Ext.form.BasicForm Form} when 
 submitting.
 <br><br>
-A response packet <b>must<b> contain a boolean <tt style="font-weight:bold>success</tt> property, and
-an <tt style="font-weight:bold>data</tt> property. The <tt style="font-weight:bold>data</tt> property contains the
+A response packet <b>must</b> contain a boolean <tt style="font-weight:bold">success</tt> property, and
+an <tt style="font-weight:bold">data</tt> property. The <tt style="font-weight:bold">data</tt> property contains the
 values of Fields to load. The individual value object for each Field
-is passed to the Field's <a ext:cls="Ext.form.Field" ext:member="setValue" href="output/Ext.form.Field.html#setValue">Ext.form.Field.setValue</a> method.
+is passed to the Field's {@link Ext.form.Field#setValue setValue} method.
 <br><br>
 By default, response packets are assumed to be JSON, so a typical response
 packet may look like this:
@@ -35,7 +35,7 @@ packet may look like this:
     }
 }</code></pre>
 <br><br>
-Other data may be placed into the response for processing the the {Ext.form.BasicForm}'s callback
+Other data may be placed into the response for processing the the {@link Ext.form.BasicForm Form}'s callback
 or event handler methods.        </div>
         
         <div class="hr"></div>

@@ -10,7 +10,7 @@
             <tr><td class="label">Package:</td><td class="hd-info">Ext.util</td></tr>
             <tr><td class="label">Defined In:</td><td class="hd-info"><a href="../src/Observable.js" target="_blank">Observable.js</a></td></tr>
             <tr><td class="label">Class:</td><td class="hd-info">Observable</td></tr>
-                        <tr><td class="label">Subclasses:</td><td class="hd-info"><a ext:cls="Ext.Component" href="output/Ext.Component.html">Component</a>, <a ext:cls="Ext.Resizable" href="output/Ext.Resizable.html">Resizable</a>, <a ext:cls="Ext.SplitBar" href="output/Ext.SplitBar.html">SplitBar</a>, <a ext:cls="Ext.Updater" href="output/Ext.Updater.html">Updater</a>, <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Connection</a>, <a ext:cls="Ext.data.Node" href="output/Ext.data.Node.html">Node</a>, <a ext:cls="Ext.data.Store" href="output/Ext.data.Store.html">Store</a>, <a ext:cls="Ext.data.Tree" href="output/Ext.data.Tree.html">Tree</a>, <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">BasicForm</a>, <a ext:cls="Ext.grid.AbstractSelectionModel" href="output/Ext.grid.AbstractSelectionModel.html">AbstractSelectionModel</a>, <a ext:cls="Ext.grid.ColumnModel" href="output/Ext.grid.ColumnModel.html">ColumnModel</a>, <a ext:cls="Ext.grid.GridView" href="output/Ext.grid.GridView.html">GridView</a>, <a ext:cls="Ext.menu.Menu" href="output/Ext.menu.Menu.html">Menu</a>, <a ext:cls="Ext.tree.DefaultSelectionModel" href="output/Ext.tree.DefaultSelectionModel.html">DefaultSelectionModel</a>, <a ext:cls="Ext.tree.MultiSelectionModel" href="output/Ext.tree.MultiSelectionModel.html">MultiSelectionModel</a>, <a ext:cls="Ext.tree.TreeLoader" href="output/Ext.tree.TreeLoader.html">TreeLoader</a>, <a ext:cls="Ext.util.ClickRepeater" href="output/Ext.util.ClickRepeater.html">ClickRepeater</a>, <a ext:cls="Ext.util.MixedCollection" href="output/Ext.util.MixedCollection.html">MixedCollection</a></td></tr>
+                        <tr><td class="label">Subclasses:</td><td class="hd-info"><a ext:cls="Ext.Component" href="output/Ext.Component.html">Component</a>, <a ext:cls="Ext.Resizable" href="output/Ext.Resizable.html">Resizable</a>, <a ext:cls="Ext.SplitBar" href="output/Ext.SplitBar.html">SplitBar</a>, <a ext:cls="Ext.Updater" href="output/Ext.Updater.html">Updater</a>, <a ext:cls="Ext.data.Connection" href="output/Ext.data.Connection.html">Connection</a>, <a ext:cls="Ext.data.Node" href="output/Ext.data.Node.html">Node</a>, <a ext:cls="Ext.data.Store" href="output/Ext.data.Store.html">Store</a>, <a ext:cls="Ext.data.Tree" href="output/Ext.data.Tree.html">Tree</a>, <a ext:cls="Ext.form.BasicForm" href="output/Ext.form.BasicForm.html">BasicForm</a>, <a ext:cls="Ext.grid.AbstractSelectionModel" href="output/Ext.grid.AbstractSelectionModel.html">AbstractSelectionModel</a>, <a ext:cls="Ext.grid.ColumnModel" href="output/Ext.grid.ColumnModel.html">ColumnModel</a>, <a ext:cls="Ext.grid.GridView" href="output/Ext.grid.GridView.html">GridView</a>, <a ext:cls="Ext.grid.PropertyStore" href="output/Ext.grid.PropertyStore.html">PropertyStore</a>, <a ext:cls="Ext.menu.Menu" href="output/Ext.menu.Menu.html">Menu</a>, <a ext:cls="Ext.tree.DefaultSelectionModel" href="output/Ext.tree.DefaultSelectionModel.html">DefaultSelectionModel</a>, <a ext:cls="Ext.tree.MultiSelectionModel" href="output/Ext.tree.MultiSelectionModel.html">MultiSelectionModel</a>, <a ext:cls="Ext.tree.TreeLoader" href="output/Ext.tree.TreeLoader.html">TreeLoader</a>, <a ext:cls="Ext.util.ClickRepeater" href="output/Ext.util.ClickRepeater.html">ClickRepeater</a>, <a ext:cls="Ext.util.MixedCollection" href="output/Ext.util.MixedCollection.html">MixedCollection</a></td></tr>
                                     <tr><td class="label">Extends:</td><td class="hd-info">Object</td></tr>
                     </table>
         <div class="description">
@@ -123,8 +123,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -134,7 +134,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -151,7 +151,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut

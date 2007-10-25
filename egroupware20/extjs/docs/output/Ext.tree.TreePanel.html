@@ -78,9 +78,9 @@
         <td class="sig">
         <a id="Ext.tree.TreePanel-applyTo"></a>
             <b>applyTo</b> : Mixed            <div class="mdesc">
-                        <div class="short">The id of the node, a DOM node or an existing Element corresponding to an existing element present in the DOM to rend...</div>
+                        <div class="short">The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in the document ...</div>
             <div class="long">
-                The id of the node, a DOM node or an existing Element corresponding to an existing element present in the DOM to render this component to. Using this config, a call to render() is not required.            </div>
+                The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in the document that specifies some structural markup for this component. When applyTo is used, constituent parts of the component can also be specified by id or CSS class name within the main element, and the component being created may attempt to create its subcomponents from that markup if applicable. Using this config, a call to render() is not required. If applyTo is specified, any value passed for <a ext:cls="Ext.Component" ext:member="renderTo" href="output/Ext.Component.html#renderTo">renderTo</a> will be ignored and the target element's parent node will automatically be used as the component's container.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#applyTo" href="output/Ext.Component.html#applyTo">Component</a></td>
@@ -113,7 +113,7 @@
             <b>autoLoad</b> : Object/String/Function            <div class="mdesc">
                         <div class="short">A valid url spec according to the Updater Ext.Updater.update method. If autoLoad is not null, the panel will attempt ...</div>
             <div class="long">
-                A valid url spec according to the Updater <a ext:cls="Ext.Updater" ext:member="update" href="output/Ext.Updater.html#update">Ext.Updater.update</a> method. If autoLoad is not null, the panel will attempt to laod its contents immediately upon render.            </div>
+                A valid url spec according to the Updater <a ext:cls="Ext.Updater" ext:member="update" href="output/Ext.Updater.html#update">Ext.Updater.update</a> method. If autoLoad is not null, the panel will attempt to load its contents immediately upon render.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#autoLoad" href="output/Ext.Panel.html#autoLoad">Panel</a></td>
@@ -208,7 +208,19 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#border" href="output/Ext.Panel.html#border">Panel</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-bufferResize"></a>
+            <b>bufferResize</b> : Boolean/Number            <div class="mdesc">
+                        <div class="short">When set to true (100 milliseconds) or a number of milliseconds, the layout assigned for this container will buffer t...</div>
+            <div class="long">
+                When set to true (100 milliseconds) or a number of milliseconds, the layout assigned for this container will buffer the frequency it calculates and does a re-layout of components. This is useful for heavy containers or containers with a large amount of sub components that frequent calls to layout are expensive.            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#bufferResize" href="output/Ext.Container.html#bufferResize">Container</a></td>
+    </tr>
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-buttonAlign"></a>
@@ -217,7 +229,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#buttonAlign" href="output/Ext.Panel.html#buttonAlign">Panel</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-buttons"></a>
@@ -226,7 +238,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#buttons" href="output/Ext.Panel.html#buttons">Panel</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-cls"></a>
@@ -238,7 +250,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#cls" href="output/Ext.Component.html#cls">Component</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-collapseFirst"></a>
@@ -250,7 +262,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#collapseFirst" href="output/Ext.Panel.html#collapseFirst">Panel</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-collapsed"></a>
@@ -259,7 +271,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#collapsed" href="output/Ext.Panel.html#collapsed">Panel</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-collapsedCls"></a>
@@ -268,7 +280,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#collapsedCls" href="output/Ext.Panel.html#collapsedCls">Panel</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-collapsible"></a>
@@ -280,7 +292,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#collapsible" href="output/Ext.Panel.html#collapsible">Panel</a></td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-containerScroll"></a>
@@ -289,7 +301,7 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-contentEl"></a>
@@ -298,7 +310,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#contentEl" href="output/Ext.Panel.html#contentEl">Panel</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-ctCls"></a>
@@ -310,7 +322,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#ctCls" href="output/Ext.Component.html#ctCls">Component</a></td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-ddAppendOnly"></a>
@@ -319,7 +331,7 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-ddGroup"></a>
@@ -328,7 +340,7 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-ddScroll"></a>
@@ -337,7 +349,7 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-defaultType"></a>
@@ -346,7 +358,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Container" ext:member="#defaultType" href="output/Ext.Container.html#defaultType">Container</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-defaults"></a>
@@ -358,26 +370,14 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Container" ext:member="#defaults" href="output/Ext.Container.html#defaults">Container</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.tree.TreePanel-deferHeight"></a>
-            <b>deferHeight</b> : Boolean            <div class="mdesc">
-                        <div class="short">True to defer height calculations to an external component, false to allow this component to set its own height (defa...</div>
-            <div class="long">
-                True to defer height calculations to an external component, false to allow this component to set its own height (defaults to false).            </div>
-                        </div>
-        </td>
-        <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#deferHeight" href="output/Ext.BoxComponent.html#deferHeight">BoxComponent</a></td>
-    </tr>
         <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.tree.TreePanel-disableClass"></a>
-            <b>disableClass</b> : String            <div class="mdesc">
+        <a id="Ext.tree.TreePanel-disabledClass"></a>
+            <b>disabledClass</b> : String            <div class="mdesc">
                             CSS class added to the component when it is disabled (defaults to "x-item-disabled").                        </div>
         </td>
-        <td class="msource"><a ext:cls="Ext.Component" ext:member="#disableClass" href="output/Ext.Component.html#disableClass">Component</a></td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#disabledClass" href="output/Ext.Component.html#disabledClass">Component</a></td>
     </tr>
         <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -562,12 +562,15 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-html"></a>
-            <b>html</b> : String            <div class="mdesc">
-                            An arbitrary HTML fragment to use as the panel's body content (defaults to '').                        </div>
+            <b>html</b> : String/Object            <div class="mdesc">
+                        <div class="short">An HTML fragment, or a {@link Ext.DomHelper DomHelper} specification to use as the panel's body content (defaults to ...</div>
+            <div class="long">
+                An HTML fragment, or a {@link Ext.DomHelper DomHelper} specification to use as the panel's body content (defaults to '').            </div>
+                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#html" href="output/Ext.Panel.html#html">Panel</a></td>
     </tr>
@@ -606,9 +609,9 @@
         <td class="sig">
         <a id="Ext.tree.TreePanel-keys"></a>
             <b>keys</b> : Object/Array            <div class="mdesc">
-                        <div class="short">A KeyMap config object (in the format expected by {@link Ext.KeyMap#addBinding) used to assign custom key handling to...</div>
+                        <div class="short">A KeyMap config object (in the format expected by Ext.KeyMap.addBinding used to assign custom key handling to this pa...</div>
             <div class="long">
-                A KeyMap config object (in the format expected by {@link Ext.KeyMap#addBinding) used to assign custom key handling to this panel (defaults to null).            </div>
+                A KeyMap config object (in the format expected by <a ext:cls="Ext.KeyMap" ext:member="addBinding" href="output/Ext.KeyMap.html#addBinding">Ext.KeyMap.addBinding</a> used to assign custom key handling to this panel (defaults to null).            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#keys" href="output/Ext.Panel.html#keys">Panel</a></td>
@@ -650,8 +653,8 @@
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-loader"></a>
-            <b>loader</b> : Boolean            <div class="mdesc">
-                            A TreeLoader for use with this TreePanel                        </div>
+            <b>loader</b> : Ext.tree.TreeLoader            <div class="mdesc">
+                            A <a ext:cls="Ext.tree.TreeLoader" href="output/Ext.tree.TreeLoader.html">Ext.tree.TreeLoader</a> for use with this TreePanel                        </div>
         </td>
         <td class="msource">TreePanel</td>
     </tr>
@@ -714,9 +717,9 @@
         <td class="sig">
         <a id="Ext.tree.TreePanel-renderTo"></a>
             <b>renderTo</b> : Mixed            <div class="mdesc">
-                        <div class="short">The id of the node, a DOM node or an existing Element to render this component into. Using this config, a call to ren...</div>
+                        <div class="short">The id of the node, a DOM node or an existing Element that will be the container to render this component into. Using...</div>
             <div class="long">
-                The id of the node, a DOM node or an existing Element to render this component into. Using this config, a call to render() is not required.            </div>
+                The id of the node, a DOM node or an existing Element that will be the container to render this component into. Using this config, a call to render() is not required.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#renderTo" href="output/Ext.Component.html#renderTo">Component</a></td>
@@ -746,7 +749,7 @@
             <b>shadow</b> : Boolean/String            <div class="mdesc">
                         <div class="short">True (or a valid Ext.Shadow Ext.Shadow.mode value) to display a shadow behind the panel, false to display no shadow (...</div>
             <div class="long">
-                True (or a valid Ext.Shadow <a ext:cls="Ext.Shadow" ext:member="mode" href="output/Ext.Shadow.html#mode">Ext.Shadow.mode</a> value) to display a shadow behind the panel, false to display no shadow (defaults to 'sides'). Note that this option opnly applies when floating = true.            </div>
+                True (or a valid Ext.Shadow <a ext:cls="Ext.Shadow" ext:member="mode" href="output/Ext.Shadow.html#mode">Ext.Shadow.mode</a> value) to display a shadow behind the panel, false to display no shadow (defaults to 'sides'). Note that this option only applies when floating = true.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#shadow" href="output/Ext.Panel.html#shadow">Panel</a></td>
@@ -771,6 +774,27 @@
                             true if only 1 node per branch may be expanded                        </div>
         </td>
         <td class="msource">TreePanel</td>
+    </tr>
+        <tr class="config-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-stateEvents"></a>
+            <b>stateEvents</b> : Array            <div class="mdesc">
+                        <div class="short">An array of events that, when fired, should trigger this component to save its state (defaults to none). These can be...</div>
+            <div class="long">
+                An array of events that, when fired, should trigger this component to save its state (defaults to none). These can be any types of events supported by this component, including browser or custom events (e.g., ['click', 'customerchange']).            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#stateEvents" href="output/Ext.Component.html#stateEvents">Component</a></td>
+    </tr>
+        <tr class="config-row inherited">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-stateId"></a>
+            <b>stateId</b> : String            <div class="mdesc">
+                            The unique id for this component to use for state management purposes (defaults to the component id).                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#stateId" href="output/Ext.Component.html#stateId">Component</a></td>
     </tr>
         <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -835,7 +859,7 @@
             <i>// refresh logic</i>
         }
     }
-}]</code></pre> A valid tool id should correspond to the CSS classes 'x-tool-{id}' (normal) and 'x-tool-{id}-over' (mouseover). By default, the following tools are provided: toggle (default when collapsible = true), close, minimize, maximize, restore, gear, pin, unpin, right, left, up, down, refresh, minus, plus, search and save. Note that these tool classes only provide the visual button -- any required functionality must be provided by adding event handlers that implement the necessary behavior.            </div>
+}]</code></pre> A valid tool id should correspond to the CSS classes 'x-tool-{id}' (normal) and 'x-tool-{id}-over' (mouseover). By default, the following tools are provided: toggle (default when collapsible = true), close, minimize, maximize, restore, gear, pin, unpin, right, left, up, down, refresh, minus, plus, help, search and save. Note that these tool classes only provide the visual button -- any required functionality must be provided by adding event handlers that implement the necessary behavior.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#tools" href="output/Ext.Panel.html#tools">Panel</a></td>
@@ -857,7 +881,23 @@
                 <th class="sig-header" colspan="2">Property</th>
                 <th class="msource-header">Defined By</th>
             </tr>
-                <tr class="property-row inherited">
+                <tr class="property-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-body"></a>
+            <b>body</b> : Ext.Element            <div class="mdesc">
+                        <div class="short">
+The Panel's body {@link Ext.Element Element} which may be used either to contain HTML content,
+or to house a Layout....</div>
+            <div class="long">
+                
+The Panel's body {@link Ext.Element Element} which may be used either to contain HTML content,
+or to house a Layout. Read-only.            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Panel" ext:member="#body" href="output/Ext.Panel.html#body">Panel</a></td>
+    </tr>
+        <tr class="property-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-disabled"></a>
@@ -866,7 +906,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#disabled" href="output/Ext.Component.html#disabled">Component</a></td>
     </tr>
-        <tr class="property-row alt">
+        <tr class="property-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-dragZone"></a>
@@ -875,7 +915,7 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="property-row">
+        <tr class="property-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-dropZone"></a>
@@ -884,7 +924,26 @@
         </td>
         <td class="msource">TreePanel</td>
     </tr>
+        <tr class="property-row inherited">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-footer"></a>
+            <b>footer</b> : Ext.Element            <div class="mdesc">
+                            
+The Panel's footer {@link Ext.Element Element}. Read-only.                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Panel" ext:member="#footer" href="output/Ext.Panel.html#footer">Panel</a></td>
+    </tr>
         <tr class="property-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-header"></a>
+            <b>header</b> : Ext.Element            <div class="mdesc">
+                            The Panel's header {@link Ext.Element Element}. Read-only.                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Panel" ext:member="#header" href="output/Ext.Panel.html#header">Panel</a></td>
+    </tr>
+        <tr class="property-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-hidden"></a>
@@ -893,6 +952,15 @@
 True if this component is hidden. Read-only.                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#hidden" href="output/Ext.Component.html#hidden">Component</a></td>
+    </tr>
+        <tr class="property-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-items"></a>
+            <b>items</b> : MixedCollection            <div class="mdesc">
+                            The collection of components in this container as a <a ext:cls="Ext.util.MixedCollection" href="output/Ext.util.MixedCollection.html">Ext.util.MixedCollection</a>                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#items" href="output/Ext.Container.html#items">Container</a></td>
     </tr>
         <tr class="property-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -1062,8 +1130,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -1073,7 +1141,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -1090,7 +1158,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut
@@ -1107,6 +1175,73 @@ Code:<pre><code>foo.on({
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#addListener" href="output/Ext.util.Observable.html#addListener">Observable</a></td>
     </tr>
         <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-applyToMarkup"></a>
+            <b>applyToMarkup</b>(&nbsp;<code>String/HTMLElement el</code>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Apply this component to existing markup that is valid. With this function, no call to render() is required.</div>
+            <div class="long">
+                Apply this component to existing markup that is valid. With this function, no call to render() is required.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#applyToMarkup" href="output/Ext.Component.html#applyToMarkup">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-bubble"></a>
+            <b>bubble</b>(&nbsp;<code>Function fn</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>Array args</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Bubbles up the component/container heirarchy, calling the specified function with each component. The scope (this) of...</div>
+            <div class="long">
+                Bubbles up the component/container heirarchy, calling the specified function with each component. The scope (<i>this</i>) of
+function call will be the scope provided or the current component. The arguments to the function
+will be the args provided or the current component. If the function returns false at any point,
+the bubble is stopped.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>fn</code> : Function<div class="sub-desc">The function to call</div></li><li><code>scope</code> : Object<div class="sub-desc">(optional) The scope of the function (defaults to current node)</div></li><li><code>args</code> : Array<div class="sub-desc">(optional) The args to call the function with (default to passing the current component)</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#bubble" href="output/Ext.Container.html#bubble">Container</a></td>
+    </tr>
+        <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-cascade"></a>
+            <b>cascade</b>(&nbsp;<code>Function fn</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>Array args</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Cascades down the component/container heirarchy from this component (called first), calling the specified function wi...</div>
+            <div class="long">
+                Cascades down the component/container heirarchy from this component (called first), calling the specified function with
+each component. The scope (<i>this</i>) of
+function call will be the scope provided or the current component. The arguments to the function
+will be the args provided or the current component. If the function returns false at any point,
+the cascade is stopped on that branch.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>fn</code> : Function<div class="sub-desc">The function to call</div></li><li><code>scope</code> : Object<div class="sub-desc">(optional) The scope of the function (defaults to current component)</div></li><li><code>args</code> : Array<div class="sub-desc">(optional) The args to call the function with (defaults to passing the current component)</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#cascade" href="output/Ext.Container.html#cascade">Container</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-cloneConfig"></a>
@@ -1127,7 +1262,7 @@ An id property can be passed on this object, otherwise one will be generated to 
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#cloneConfig" href="output/Ext.Component.html#cloneConfig">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-collapse"></a>
@@ -1150,7 +1285,7 @@ cancel the collapse action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#collapse" href="output/Ext.Panel.html#collapse">Panel</a></td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-collapseAll"></a>
@@ -1170,7 +1305,7 @@ cancel the collapse action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-destroy"></a>
@@ -1194,7 +1329,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#destroy" href="output/Ext.Component.html#destroy">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-disable"></a>
@@ -1214,7 +1349,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#disable" href="output/Ext.Component.html#disable">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-doLayout"></a>
@@ -1237,7 +1372,7 @@ doLayout methods are also called recursively.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Container" ext:member="#doLayout" href="output/Ext.Container.html#doLayout">Container</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-enable"></a>
@@ -1257,7 +1392,7 @@ doLayout methods are also called recursively.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#enable" href="output/Ext.Component.html#enable">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-expand"></a>
@@ -1280,7 +1415,7 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#expand" href="output/Ext.Panel.html#expand">Panel</a></td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-expandAll"></a>
@@ -1300,7 +1435,7 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-expandPath"></a>
@@ -1321,7 +1456,89 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource">TreePanel</td>
     </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-find"></a>
+            <b>find</b>(&nbsp;<code>String xtype</code>&nbsp;) : Array            <div class="mdesc">
+                        <div class="short">Find a component under this container at any level by property</div>
+            <div class="long">
+                Find a component under this container at any level by property    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>xtype</code> : String<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Array</code><div class="sub-desc">Array of Ext.Components</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#find" href="output/Ext.Container.html#find">Container</a></td>
+    </tr>
         <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-findBy"></a>
+            <b>findBy</b>(&nbsp;<code>String xtype</code>&nbsp;) : Array            <div class="mdesc">
+                        <div class="short">Find a component under this container at any level by a custom function. If the passed function returns
+true, the com...</div>
+            <div class="long">
+                Find a component under this container at any level by a custom function. If the passed function returns
+true, the component will be included in the results. The passed function is called with the arguments (component, this container).    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>xtype</code> : String<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Array</code><div class="sub-desc">Array of Ext.Components</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#findBy" href="output/Ext.Container.html#findBy">Container</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-findById"></a>
+            <b>findById</b>(&nbsp;<code>String id</code>&nbsp;) : Ext.Component            <div class="mdesc">
+                        <div class="short">Find a component under this container at any level by id</div>
+            <div class="long">
+                Find a component under this container at any level by id    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>id</code> : String<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Ext.Component</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#findById" href="output/Ext.Container.html#findById">Container</a></td>
+    </tr>
+        <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-findByType"></a>
+            <b>findByType</b>(&nbsp;<code>String/Class xtype</code>&nbsp;) : Array            <div class="mdesc">
+                        <div class="short">Find a component under this container at any level by xtype or class</div>
+            <div class="long">
+                Find a component under this container at any level by xtype or class    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>xtype</code> : String/Class<div class="sub-desc">The xtype string for a component, or the class of the component directly</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Array</code><div class="sub-desc">Array of Ext.Components</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#findByType" href="output/Ext.Container.html#findByType">Container</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-fireEvent"></a>
@@ -1341,7 +1558,7 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#fireEvent" href="output/Ext.util.Observable.html#fireEvent">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-focus"></a>
@@ -1361,7 +1578,7 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#focus" href="output/Ext.Component.html#focus">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-getBottomToolbar"></a>
@@ -1381,7 +1598,7 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#getBottomToolbar" href="output/Ext.Panel.html#getBottomToolbar">Panel</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-getBox"></a>
@@ -1401,7 +1618,7 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getBox" href="output/Ext.BoxComponent.html#getBox">BoxComponent</a></td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-getChecked"></a>
@@ -1420,6 +1637,26 @@ cancel the expand action if it returns false.    <div class="mdetail-params">
                         </div>
         </td>
         <td class="msource">TreePanel</td>
+    </tr>
+        <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-getComponent"></a>
+            <b>getComponent</b>(&nbsp;<code>String id</code>&nbsp;) : Ext.Component            <div class="mdesc">
+                        <div class="short">Gets a direct child component by id</div>
+            <div class="long">
+                Gets a direct child component by id    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>id</code> : String<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Ext.Component</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Container" ext:member="#getComponent" href="output/Ext.Container.html#getComponent">Container</a></td>
     </tr>
         <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -1575,15 +1812,15 @@ set, a default <a ext:cls="Ext.layout.ContainerLayout" href="output/Ext.layout.C
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-getLoader"></a>
-            <b>getLoader</b>() : TreeLoader            <div class="mdesc">
-                        <div class="short">Returns the default TreeLoader for this TreePanel.</div>
+            <b>getLoader</b>() : Ext.tree.TreeLoader            <div class="mdesc">
+                        <div class="short">Returns the default <a ext:cls="Ext.tree.TreeLoader" href="output/Ext.tree.TreeLoader.html">Ext.tree.TreeLoader</a> for this TreePanel.</div>
             <div class="long">
-                Returns the default TreeLoader for this TreePanel.    <div class="mdetail-params">
+                Returns the default <a ext:cls="Ext.tree.TreeLoader" href="output/Ext.tree.TreeLoader.html">Ext.tree.TreeLoader</a> for this TreePanel.    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li>None.</li>        </ul>
         <strong>Returns:</strong>
         <ul>
-            <li><code>TreeLoader</code><div class="sub-desc">The TreeLoader for this TreePanel.</div></li>
+            <li><code>Ext.tree.TreeLoader</code><div class="sub-desc">The TreeLoader for this TreePanel.</div></li>
         </ul>
     </div>
                 </div>
@@ -1711,7 +1948,27 @@ set, a default <a ext:cls="Ext.layout.ContainerLayout" href="output/Ext.layout.C
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#getTopToolbar" href="output/Ext.Panel.html#getTopToolbar">Panel</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-getTreeEl"></a>
+            <b>getTreeEl</b>() : Ext.Element            <div class="mdesc">
+                        <div class="short">Returns the underlying Element for this tree</div>
+            <div class="long">
+                Returns the underlying Element for this tree    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Ext.Element</code><div class="sub-desc">The Element</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">TreePanel</td>
+    </tr>
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-getUpdater"></a>
@@ -1731,7 +1988,56 @@ set, a default <a ext:cls="Ext.layout.ContainerLayout" href="output/Ext.layout.C
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#getUpdater" href="output/Ext.Panel.html#getUpdater">Panel</a></td>
     </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-getXType"></a>
+            <b>getXType</b>() : String            <div class="mdesc">
+                        <div class="short">Gets the xtype for this component as registered with Ext.ComponentMgr. For a list of all
+available xtypes, see the Ex...</div>
+            <div class="long">
+                Gets the xtype for this component as registered with <a ext:cls="Ext.ComponentMgr" href="output/Ext.ComponentMgr.html">Ext.ComponentMgr</a>. For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>var t = <b>new</b> Ext.form.TextField();
+alert(t.getXType());  // alerts <em>'textfield'</em></code></pre>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>String</code><div class="sub-desc">The xtype</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#getXType" href="output/Ext.Component.html#getXType">Component</a></td>
+    </tr>
         <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-getXTypes"></a>
+            <b>getXTypes</b>() : String            <div class="mdesc">
+                        <div class="short">Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+available xtypes, see the Ext...</div>
+            <div class="long">
+                Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>
+var t = new Ext.form.TextField();
+alert(t.getXTypes());  // alerts 'component/box/field/textfield'</pre></code>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>String</code><div class="sub-desc">The xtype hierarchy string</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#getXTypes" href="output/Ext.Component.html#getXTypes">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-hasListener"></a>
@@ -1751,7 +2057,7 @@ set, a default <a ext:cls="Ext.layout.ContainerLayout" href="output/Ext.layout.C
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#hasListener" href="output/Ext.util.Observable.html#hasListener">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-hide"></a>
@@ -1770,6 +2076,26 @@ set, a default <a ext:cls="Ext.layout.ContainerLayout" href="output/Ext.layout.C
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#hide" href="output/Ext.Component.html#hide">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreePanel-initComponent"></a>
+            <b>initComponent</b>() : void            <div class="mdesc">
+                        <div class="short"></div>
+            <div class="long">
+                    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#initComponent" href="output/Ext.BoxComponent.html#initComponent">BoxComponent</a></td>
     </tr>
         <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -1816,6 +2142,34 @@ then fires the add event after the component has been inserted.    <div class="m
         <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Ext.tree.TreePanel-isXType"></a>
+            <b>isXType</b>(&nbsp;<code>String xtype</code>, <span class="optional" title="Optional">[<code>Boolean shallow</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+from th...</div>
+            <div class="long">
+                Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+from the xtype (default) or whether it is directly of the xtype specified (shallow = true). For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>var t = <b>new</b> Ext.form.TextField();
+<b>var</b> isText = t.isXType(<em>'textfield'</em>);        <i>// true</i>
+<b>var</b> isBoxSubclass = t.isXType(<em>'box'</em>);       <i>// true, descended from BoxComponent</i>
+<b>var</b> isBoxInstance = t.isXType(<em>'box'</em>, true); // false, not a direct BoxComponent instance</code></pre>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>xtype</code> : String<div class="sub-desc">The xtype to check for this component</div></li><li><code>shallow</code> : Boolean<div class="sub-desc">(optional) False to check whether this component is descended from the xtype (this is
+the default), or true to check whether this component is directly of the specified xtype.</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#isXType" href="output/Ext.Component.html#isXType">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Ext.tree.TreePanel-load"></a>
             <b>load</b>(&nbsp;<code>Object/String/Function config</code>&nbsp;) : Ext.Panel            <div class="mdesc">
                         <div class="short">Loads this content panel immediately with content returned from an XHR call.</div>
@@ -1847,7 +2201,7 @@ associated property on this panel Updater instance.</div></li>        </ul>
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#load" href="output/Ext.Panel.html#load">Panel</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-on"></a>
@@ -1868,7 +2222,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#on" href="output/Ext.util.Observable.html#on">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-purgeListeners"></a>
@@ -1888,18 +2242,18 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#purgeListeners" href="output/Ext.util.Observable.html#purgeListeners">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-remove"></a>
-            <b>remove</b>(&nbsp;<code>Component/String component</code>, <code>Boolean autoDestroy</code>&nbsp;) : void            <div class="mdesc">
+            <b>remove</b>(&nbsp;<code>Component/String component</code>, <span class="optional" title="Optional">[<code>Boolean autoDestroy</code>]</span>&nbsp;) : void            <div class="mdesc">
                         <div class="short">Removes a component from this container.  Fires the beforeremove event before removing, then fires
 the remove event a...</div>
             <div class="long">
                 Removes a component from this container.  Fires the beforeremove event before removing, then fires
 the remove event after the component has been removed.    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>component</code> : Component/String<div class="sub-desc">The component reference or id to remove</div></li><li><code>autoDestroy</code> : Boolean<div class="sub-desc">True to automatically invoke the component's <a ext:cls="Ext.Component" ext:member="destroy" href="output/Ext.Component.html#destroy">Ext.Component.destroy</a> function</div></li>        </ul>
+        <ul><li><code>component</code> : Component/String<div class="sub-desc">The component reference or id to remove</div></li><li><code>autoDestroy</code> : Boolean<div class="sub-desc">(optional) True to automatically invoke the component's <a ext:cls="Ext.Component" ext:member="destroy" href="output/Ext.Component.html#destroy">Ext.Component.destroy</a> function</div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
             <li><code>void</code></li>
@@ -1910,7 +2264,7 @@ the remove event after the component has been removed.    <div class="mdetail-pa
         </td>
         <td class="msource"><a ext:cls="Ext.Container" ext:member="#remove" href="output/Ext.Container.html#remove">Container</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-removeClass"></a>
@@ -1930,7 +2284,7 @@ the remove event after the component has been removed.    <div class="mdetail-pa
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#removeClass" href="output/Ext.Component.html#removeClass">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-removeListener"></a>
@@ -1950,7 +2304,7 @@ the remove event after the component has been removed.    <div class="mdetail-pa
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#removeListener" href="output/Ext.util.Observable.html#removeListener">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-render"></a>
@@ -1972,7 +2326,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#render" href="output/Ext.Component.html#render">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-resumeEvents"></a>
@@ -1992,7 +2346,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#resumeEvents" href="output/Ext.util.Observable.html#resumeEvents">Observable</a></td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-selectPath"></a>
@@ -2013,7 +2367,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setDisabled"></a>
@@ -2033,7 +2387,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#setDisabled" href="output/Ext.Component.html#setDisabled">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setHeight"></a>
@@ -2053,7 +2407,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setHeight" href="output/Ext.BoxComponent.html#setHeight">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setIconClass"></a>
@@ -2075,7 +2429,7 @@ icon class if one has already been set.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#setIconClass" href="output/Ext.Panel.html#setIconClass">Panel</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setPagePosition"></a>
@@ -2097,7 +2451,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setPagePosition" href="output/Ext.BoxComponent.html#setPagePosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setPosition"></a>
@@ -2119,7 +2473,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setPosition" href="output/Ext.BoxComponent.html#setPosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setRootNode"></a>
@@ -2139,7 +2493,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource">TreePanel</td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setSize"></a>
@@ -2161,7 +2515,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setSize" href="output/Ext.BoxComponent.html#setSize">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setTitle"></a>
@@ -2181,7 +2535,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#setTitle" href="output/Ext.Panel.html#setTitle">Panel</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setVisible"></a>
@@ -2201,7 +2555,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#setVisible" href="output/Ext.Component.html#setVisible">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-setWidth"></a>
@@ -2221,7 +2575,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setWidth" href="output/Ext.BoxComponent.html#setWidth">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-show"></a>
@@ -2241,7 +2595,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#show" href="output/Ext.Component.html#show">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-suspendEvents"></a>
@@ -2261,7 +2615,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#suspendEvents" href="output/Ext.util.Observable.html#suspendEvents">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-syncSize"></a>
@@ -2281,7 +2635,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#syncSize" href="output/Ext.BoxComponent.html#syncSize">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-toggleCollapse"></a>
@@ -2302,7 +2656,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.Panel" ext:member="#toggleCollapse" href="output/Ext.Panel.html#toggleCollapse">Panel</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-un"></a>
@@ -2322,7 +2676,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#un" href="output/Ext.util.Observable.html#un">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreePanel-updateBox"></a>

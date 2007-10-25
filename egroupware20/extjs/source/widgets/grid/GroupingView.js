@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -119,7 +119,7 @@ Ext.grid.GroupingView = Ext.extend(Ext.grid.GridView, {
         Ext.grid.GroupingView.superclass.onRemove.apply(this, arguments);
         var g = document.getElementById(record._groupId);
         if(g && g.childNodes[1].childNodes.length < 1){
-            g.parentNode.removeChild(g);
+            Ext.removeNode(g);
         }
         this.applyEmptyText();
     },
@@ -136,8 +136,14 @@ Ext.grid.GroupingView = Ext.extend(Ext.grid.GridView, {
 
     beforeMenuShow : function(){
         var field = this.getGroupField();
-        this.hmenu.items.get('groupBy').setDisabled(this.cm.config[this.hdCtxIndex].groupable === false);
-        this.hmenu.items.get('showGroups').setChecked(!!field);
+        var g = this.hmenu.items.get('groupBy');
+        if(g){
+            g.setDisabled(this.cm.config[this.hdCtxIndex].groupable === false);
+        }
+        var s = this.hmenu.items.get('showGroups');
+        if(s){
+            s.setChecked(!!field);
+        }
     },
 
     renderUI : function(){

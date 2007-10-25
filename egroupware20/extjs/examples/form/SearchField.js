@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -27,10 +27,11 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 
     onTrigger1Click : function(){
         if(this.hasSearch){
-            var o = {start: 0};
-            o[this.paramName] = '';
-            this.store.reload({params:o});
             this.el.dom.value = '';
+            var o = {start: 0};
+            this.store.baseParams = this.store.baseParams || {};
+            this.store.baseParams[this.paramName] = '';
+            this.store.reload({params:o});
             this.triggers[0].hide();
             this.hasSearch = false;
         }
@@ -43,7 +44,8 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             return;
         }
         var o = {start: 0};
-        o[this.paramName] = v;
+        this.store.baseParams = this.store.baseParams || {};
+        this.store.baseParams[this.paramName] = v;
         this.store.reload({params:o});
         this.hasSearch = true;
         this.triggers[0].show();

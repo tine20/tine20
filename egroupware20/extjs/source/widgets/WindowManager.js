@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -177,7 +177,7 @@ Ext.WindowGroup = function(){
 
 
 /**
- * @class Ext.WindowManager
+ * @class Ext.WindowMgr
  * @extends Ext.WindowGroup
  * The default global window group that is available automatically.  To have more than one group of windows
  * with separate z-order stacks, create additional instances of {@link Ext.WindowGroup} as needed.

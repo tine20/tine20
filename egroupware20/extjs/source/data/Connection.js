@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -42,17 +42,20 @@ Ext.data.Connection = function(config){
          * Fires if the request was successfully completed.
          * @param {Connection} conn This Connection object.
          * @param {Object} response The XHR object containing the response data.
-         * See {@link http://www.w3.org/TR/XMLHttpRequest/} for details.
+         * See <a href="http://www.w3.org/TR/XMLHttpRequest/">The XMLHttpRequest Object</a>
+         * for details.
          * @param {Object} options The options config object passed to the {@link #request} method.
          */
         "requestcomplete" : true,
         /**
          * @event requestexception
          * Fires if an error HTTP status was returned from the server.
-         * See {@link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html} for details of HTTP status codes.
+         * See <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html>HTTP Status Code Definitions</a>
+         * for details of HTTP status codes.
          * @param {Connection} conn This Connection object.
          * @param {Object} response The XHR object containing the response data.
-         * See {@link http://www.w3.org/TR/XMLHttpRequest/} for details.
+         * See <a href="http://www.w3.org/TR/XMLHttpRequest/">The XMLHttpRequest Object</a>
+         * for details.
          * @param {Object} options The options config object passed to the {@link #request} method.
          */
         "requestexception" : true
@@ -317,7 +320,7 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
             Ext.callback(o.success, o.scope, [r, o]);
             Ext.callback(o.callback, o.scope, [o, true, r]);
 
-            setTimeout(function(){document.body.removeChild(frame);}, 100);
+            setTimeout(function(){Ext.removeNode(frame);}, 100);
         }
 
         Ext.EventManager.on(frame, 'load', cb, this);
@@ -325,7 +328,7 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
 
         if(hiddens){ // remove dynamic params
             for(var i = 0, len = hiddens.length; i < len; i++){
-                form.removeChild(hiddens[i]);
+                Ext.removeNode(hiddens[i]);
             }
         }
     }
@@ -334,8 +337,33 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
 /**
  * @class Ext.Ajax
  * @extends Ext.data.Connection
- * Global Ajax request class.
- *
+ * Global Ajax request class.  Provides a simple way to make Ajax requests with maximum flexibility.  Example usage:
+ * <pre><code>
+// Basic request
+Ext.Ajax.request({
+   url: 'foo.php',
+   success: someFn,
+   failure: otherFn,
+   headers: {
+       'my-header': 'foo'
+   },
+   params: { foo: 'bar' }
+});
+
+// Simple ajax form submission
+Ext.Ajax.request({
+    form: 'some-form',
+    params: 'foo=bar'
+});
+
+// Default headers to pass in every request
+Ext.Ajax.defaultHeaders = {
+    'Powered-By': 'Ext'
+};
+
+// Global Ajax events can be handled on every request!
+Ext.Ajax.on('beforerequest', this.showSpinner, this);
+</code></pre>
  * @singleton
  */
 Ext.Ajax = new Ext.data.Connection({

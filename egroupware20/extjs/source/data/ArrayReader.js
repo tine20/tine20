@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -31,7 +31,7 @@ var myReader = new Ext.data.ArrayReader({
   </code></pre>
  * @cfg {String} id (optional) The subscript within row Array that provides an ID for the Record
  * @constructor
- * Create a new JsonReader
+ * Create a new ArrayReader
  * @param {Object} meta Metadata configuration options.
  * @param {Object} recordType Either an Array of field definition objects
  * as specified to {@link Ext.data.Record#create},

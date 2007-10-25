@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -44,10 +44,10 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
      * @param {Object} rowParams A config object that is passed to the row template during rendering that allows
      * customization of various aspects of a body row, if applicable.  Note that this object will only be applied if
      * {@link #enableRowBody} = true, otherwise it will be ignored. The object may contain any of these properties:<ul>
-     * <li><b>body</b> {String} An HTML fragment to be rendered as the cell's body content (defaults to '').</li>
-     * <li><b>bodyStyle</b> {String} A CSS style string that will be applied to the row's TR style attribute (defaults to '').</li>
-     * <li><b>cols</b> {Number} The column count to apply to the body row's TD colspan attribute (defaults to the current
-     * column count of the grid).</li>
+     * <li><code>body</code> : String <div class="sub-desc">An HTML fragment to be rendered as the cell's body content (defaults to '').</div></li>
+     * <li><code>bodyStyle</code> : String <div class="sub-desc">A CSS style string that will be applied to the row's TR style attribute (defaults to '').</div></li>
+     * <li><code>cols</code> : Number <div class="sub-desc">The column count to apply to the body row's TD colspan attribute (defaults to the current
+     * column count of the grid).</div></li>
      * </ul>
      * @param {Store} ds The {@link Ext.data.Store} this grid is bound to
      * @method getRowClass
@@ -70,7 +70,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
      */
     forceFit: false,
     /**
-     * The css css classes applied to a header when it is sorted. (defaults to ["sort-asc", "sort-desc"])
+     * The CSS classes applied to a header when it is sorted. (defaults to ["sort-asc", "sort-desc"])
      * @type Array
      */
     sortClasses : ["sort-asc", "sort-desc"],
@@ -105,6 +105,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
                             '<div class="x-grid3-header"><div class="x-grid3-header-inner"><div class="x-grid3-header-offset">{header}</div></div><div class="x-clear"></div></div>',
                             '<div class="x-grid3-scroller"><div class="x-grid3-body">{body}</div><a href="#" class="x-grid3-focus" tabIndex="-1"></a></div>',
                         "</div>",
+                        '<div class="x-grid3-resize-marker">&#160;</div>',
                         '<div class="x-grid3-resize-proxy">&#160;</div>',
                     "</div>"
                     );
@@ -199,7 +200,8 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
 	    this.focusEl = new E(this.scroller.dom.childNodes[1]);
         this.focusEl.swallowEvent("click", true);
 
-        this.resizeProxy = new E(cs[1]);
+        this.resizeMarker = new E(cs[1]);
+        this.resizeProxy = new E(cs[2]);
     },
 
     // private
@@ -265,36 +267,36 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
     // getter methods for fetching elements dynamically in the grid
 
 /**
- * Return the &ltTR> HtmlElement which represents a Grid row for the specified index.
+ * Return the &lt;TR> HtmlElement which represents a Grid row for the specified index.
  * @param {Number} index The row index
- * @return {HtmlElement} The &ltTR> element.
+ * @return {HtmlElement} The &lt;TR> element.
  */
     getRow : function(row){
         return this.getRows()[row];
     },
 
 /**
- * Returns the grid's table cell element at the specified coordinates.
+ * Returns the grid's &lt;TD> HtmlElement at the specified coordinates.
  * @param {Number} row The row index in which to find the cell.
  * @param {Number} col The column index of the cell.
- * @return The &ltTD> HtmlElement at the specified coordinates.
+ * @return {HtmlElement} The &lt;TD> at the specified coordinates.
  */
     getCell : function(row, col){
         return this.getRow(row).getElementsByTagName('td')[col];
 	},
 
 /**
- * Return the &ltTD> HtmlElement which represents the Grid's header for the specified column index.
+ * Return the &lt;TD> HtmlElement which represents the Grid's header cell for the specified column index.
  * @param {Number} index The column index
- * @return {HtmlElement} The &ltTD> element.
+ * @return {HtmlElement} The &lt;TD> element.
  */
     getHeaderCell : function(index){
 	    return this.mainHd.dom.getElementsByTagName('td')[index];
 	},
 
-
     // manipulating elements
 
+    // private - use getRowClass to apply custom row classes
     addRowClass : function(row, cls){
         var r = this.getRow(row);
         if(r){
@@ -302,6 +304,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
         }
     },
 
+    // private
     removeRowClass : function(row, cls){
         var r = this.getRow(row);
         if(r){
@@ -311,17 +314,14 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
 
     // private
     removeRow : function(row){
-        var r = this.getRow(row);
-        if(r){
-            r.parentNode.removeChild(r);
-        }
+        Ext.removeNode(this.getRow(row));
     },
 
     // private
     removeRows : function(firstRow, lastRow){
         var bd = this.mainBody.dom;
         for(var rowIndex = firstRow; rowIndex <= lastRow; rowIndex++){
-            bd.removeChild(bd.childNodes[firstRow]);
+            Ext.removeNode(bd.childNodes[firstRow]);
         }
     },
 
@@ -584,7 +584,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
         var csize = c.getSize(true);
         var vw = csize.width;
 
-        if(!vw || !csize.height){ // display: none?
+        if(vw < 20 || csize.height < 20){ // display: none?
             return;
         }
 
@@ -597,7 +597,9 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
             var vh = csize.height - (hdHeight);
 
             this.scroller.setSize(vw, vh);
-            this.innerHd.style.width = (vw)+'px';
+            if(this.innerHd){
+                this.innerHd.style.width = (vw)+'px';
+            }
         }
         if(this.forceFit){
             if(this.lastViewWidth != vw){
@@ -1169,7 +1171,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
 
     // private
     onHeaderChange : function(cm, col, text){
-        this.updateHeaderText(col, text);
+        this.updateHeaders();
     },
 
     // private
@@ -1315,7 +1317,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
         var cm = this.cm,  colCount = cm.getColumnCount();
         this.colMenu.removeAll();
         for(var i = 0; i < colCount; i++){
-            if(cm.config[i].fixed !== true){
+            if(cm.config[i].fixed !== true && cm.config[i].hideable !== false){
                 this.colMenu.add(new Ext.menu.CheckItem({
                     id: "col-"+cm.getColumnId(i),
                     text: cm.getColumnHeader(i),
@@ -1402,6 +1404,11 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
     hasRows : function(){
         var fc = this.mainBody.dom.firstChild;
         return fc && fc.className != 'x-grid-empty';
+    },
+
+    // back compat
+    bind : function(d, c){
+        this.initData(d, c);
     }
 });
 
@@ -1411,6 +1418,7 @@ Ext.extend(Ext.grid.GridView, Ext.util.Observable, {
 Ext.grid.GridView.SplitDragZone = function(grid, hd){
     this.grid = grid;
     this.view = grid.getView();
+    this.marker = this.view.resizeMarker;
     this.proxy = this.view.resizeProxy;
     Ext.grid.GridView.SplitDragZone.superclass.constructor.call(this, hd,
         "gridSplitters" + this.grid.getGridEl().id, {
@@ -1423,7 +1431,11 @@ Ext.extend(Ext.grid.GridView.SplitDragZone, Ext.dd.DDProxy, {
 
     b4StartDrag : function(x, y){
         this.view.headersDisabled = true;
-        this.proxy.setHeight(this.view.mainWrap.getHeight());
+        var h = this.view.mainWrap.getHeight();
+        this.marker.setHeight(h);
+        this.marker.show();
+        this.marker.alignTo(this.view.getHeaderCell(this.cellIndex), 'tl-tl', [-2, 0]);
+        this.proxy.setHeight(h);
         var w = this.cm.getColumnWidth(this.cellIndex);
         var minw = Math.max(w-this.grid.minColumnWidth, 0);
         this.resetConstraints();
@@ -1470,6 +1482,7 @@ Ext.extend(Ext.grid.GridView.SplitDragZone, Ext.dd.DDProxy, {
     },
 
     endDrag : function(e){
+        this.marker.hide();
         var v = this.view;
         var endX = Math.max(this.minX, e.getPageX());
         var diff = endX - this.startPos;
@@ -1481,10 +1494,5 @@ Ext.extend(Ext.grid.GridView.SplitDragZone, Ext.dd.DDProxy, {
 
     autoOffset : function(){
         this.setDelta(0,0);
-    },
-
-    // back compat
-    bind : function(d, c){
-        this.initData(d, c);
     }
 });

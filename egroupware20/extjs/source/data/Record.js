@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -85,10 +85,7 @@ myStore.add(myNewRecord);
  * @static
  */
 Ext.data.Record.create = function(o){
-    var f = function(){
-        f.superclass.constructor.apply(this, arguments);
-    };
-    Ext.extend(f, Ext.data.Record);
+    var f = Ext.extend(Ext.data.Record, {});
     var p = f.prototype;
     p.fields = new Ext.util.MixedCollection(false, function(field){
         return field.name;
@@ -108,6 +105,16 @@ Ext.data.Record.REJECT = 'reject';
 Ext.data.Record.COMMIT = 'commit';
 
 Ext.data.Record.prototype = {
+	/**
+	 * The data for this record an object hash.
+	 * @property data
+	 * @type {Object}
+	 */
+    /**
+	 * The unique ID of the record as specified at construction time.
+	 * @property id
+	 * @type {Object}
+	 */
     /**
      * Readonly flag - true if this record has been modified.
      * @type Boolean
@@ -115,6 +122,11 @@ Ext.data.Record.prototype = {
     dirty : false,
     editing : false,
     error: null,
+    /**
+	 * This object contains a key and value storing the original values of all modified fields or is null if no fields have been modified.
+	 * @property modified
+	 * @type {Object}
+	 */
     modified: null,
 
     // private
@@ -153,19 +165,25 @@ Ext.data.Record.prototype = {
         return this.data[name]; 
     },
 
-    // private
+    /**
+     * Begin an edit. While in edit mode, no events are relayed to the containing store.
+     */
     beginEdit : function(){
         this.editing = true;
         this.modified = {}; 
     },
 
-    // private
+    /**
+     * Cancels all changes made in the current edit operation.
+     */
     cancelEdit : function(){
         this.editing = false;
         delete this.modified;
     },
 
-    // private
+    /**
+     * End an edit. If any data was modified, the containing store is notified.
+     */
     endEdit : function(){
         this.editing = false;
         if(this.dirty && this.store){
@@ -214,6 +232,10 @@ Ext.data.Record.prototype = {
         }
     },
 
+    /**
+     * Gets a hash of only the fields that have been modified since this record was created or commited.
+     * @return Object
+     */
     getChanges : function(){
         var m = this.modified, cs = {};
         for(var n in m){

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -8,16 +8,20 @@
 
 /**
  * @class Ext.MessageBox
- * Utility class for generating different styles of message boxes.  The alias Ext.Msg can also be used.
- * Example usage:
+ * <p>Utility class for generating different styles of message boxes.  The alias Ext.Msg can also be used.<p/>
+ * <p>Note that the MessageBox is asynchronous.  Unlike a regular JavaScript <code>alert</code> (which will halt
+ * browser execution), showing a MessageBox will not cause the code to stop.  For this reason, if you have code
+ * that should only run <em>after</em> some user feedback from the MessageBox, you must use a callback function
+ * (see the <code>function</code> parameter for {@link #show} for more details).</p>
+ * <p>Example usage:</p>
  *<pre><code>
 // Basic alert:
 Ext.Msg.alert('Status', 'Changes saved successfully.');
 
-// Prompt for user data:
+// Prompt for user data and process the result using a callback:
 Ext.Msg.prompt('Name', 'Please enter your name:', function(btn, text){
     if (btn == 'ok'){
-        // process text value...
+        // process text value and close...
     }
 });
 

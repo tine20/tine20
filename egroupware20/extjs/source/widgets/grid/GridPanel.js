@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -23,6 +23,9 @@
         {header: "% Change", width: 120, sortable: true, dataIndex: 'pctChange'},
         {header: "Last Updated", width: 135, sortable: true, renderer: Ext.util.Format.dateRenderer('m/d/Y'), dataIndex: 'lastChange'}
     ],
+    viewConfig: {
+        forceFit: true
+    },
     sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
     width:600,
     height:300,
@@ -32,136 +35,126 @@
 });</code></pre>
  * <b>Note:</b> Although this class inherits many configuration options from base classes, some of them 
  * (such as autoScroll, layout, items, etc) won't function as they do with the base Panel class.
+ * @constructor
+ * @param {Object} config The config object
  */
-
 Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
     elements:'body',
 
     /**
      * @cfg {Array} columns An array of columns to auto create a ColumnModel
      */
-
     /**
-     * @cfg {Store} store The Ext.data.Store the grid should use as it's data source
+     * @cfg {Ext.data.Store} store The Ext.data.Store the grid should use as it's data source (required).
      */
-
     /**
-     * @cfg {Store} cm An Ext.grid.ColumnModel for this grid
+     * @cfg {Object} cm Shorthand for {@link #colModel}.
      */
-
     /**
-     * @cfg {Object} sm The SelectionModel the grid should use to handle selections (shortcut of selModel)
+     * @cfg {Object} colModel The {@link Ext.grid.ColumnModel} to use when rendering the grid (required).
      */
-
     /**
-     * @cfg {Object} selModel The SelectionModel the grid should use to handle selections
+     * @cfg {Object} sm Shorthand for {@link #selModel}.
      */
-
     /**
-     * @cfg {Array} columns An array of columns to auto create a ColumnModel
+     * @cfg {Object} selModel Any subclass of AbstractSelectionModel that will provide the selection model for
+     * the grid (defaults to {@link Ext.grid.RowSelectionModel} if not specified).
      */
-
     /**
      * @cfg {Array} columns An array of columns to auto create a ColumnModel
      */
+    /**
+    * @cfg {Number} maxHeight Sets the maximum height of the grid - ignored if autoHeight is not on.
+    */
+    /**
+     * @cfg {Boolean} disableSelection True to disable selections in the grid (defaults to false).
+	 */
+    /**
+     * @cfg {Boolean} enableColumnMove False to turn off column reordering via drag drop (defaults to true).
+     */
+    /**
+     * @cfg {Boolean} enableColumnResize False to turn off column resizing for the whole grid (defaults to true).
+     */
+    /**
+     * @cfg {Object} viewConfig A config object that will be applied to the grid's UI view.  Any of
+     * the config options available for {@link Ext.grid.GridView} can be specified here.
+     */
 
+    /**
+     * Configures the text in the drag proxy (defaults to "{0} selected row(s)").
+     * {0} is replaced with the number of selected rows.
+     * @type String
+     */
+    ddText : "{0} selected row{1}",
     /**
      * @cfg {Number} minColumnWidth The minimum width a column can be resized to. Defaults to 25.
 	 */
 	minColumnWidth : 25,
-
     /**
 	 * @cfg {Boolean} monitorWindowResize True to autoSize the grid when the window resizes. Defaults to true.
 	 */
 	monitorWindowResize : true,
-
 	/**
 	 * @cfg {Boolean} maxRowsToMeasure If autoSizeColumns is on, maxRowsToMeasure can be used to limit the number of
 	 * rows measured to get a columns size - defaults to 0 (all rows).
 	 */
 	maxRowsToMeasure : 0,
-
 	/**
 	 * @cfg {Boolean} trackMouseOver True to highlight rows when the mouse is over. Default is false.
 	 */
 	trackMouseOver : true,
-
 	/**
 	 * @cfg {Boolean} enableDragDrop True to enable drag and drop of rows.
 	 */
 	enableDragDrop : false,
-
 	/**
 	 * @cfg {Boolean} enableColumnMove True to enable drag and drop reorder of columns.
 	 */
 	enableColumnMove : true,
-
 	/**
 	 * @cfg {Boolean} enableColumnHide True to enable hiding of columns with the header context menu.
 	 */
 	enableColumnHide : true,
-
 	/**
 	 * @cfg {Boolean} enableHdMenu True to enable the drop down button for menu in the headers.
 	 */
 	enableHdMenu : true,
-
     /**
 	 * @cfg {Boolean} enableRowHeightSync True to manually sync row heights across locked and not locked rows.
 	 */
 	enableRowHeightSync : false,
-
 	/**
 	 * @cfg {Boolean} stripeRows True to stripe the rows. Default is true.
 	 */
 	stripeRows : true,
-
 	/**
      * @cfg {String} autoExpandColumn The id of a column in this grid that should expand to fill unused space. This id can not be 0.
      */
     autoExpandColumn : false,
-
     /**
     * @cfg {Number} autoExpandMin The minimum width the autoExpandColumn can have (if enabled).
     * defaults to 50.
     */
     autoExpandMin : 50,
-
     /**
     * @cfg {Number} autoExpandMax The maximum width the autoExpandColumn can have (if enabled). Defaults to 1000.
     */
     autoExpandMax : 1000,
-
     /**
 	 * @cfg {Object} view The {@link Ext.grid.GridView} used by the grid. This can be set before a call to render().
 	 */
 	view : null,
-
 	/**
      * @cfg {Object} loadMask An {@link Ext.LoadMask} config or true to mask the grid while loading (defaults to false).
 	 */
 	loadMask : false,
 
-    /**
-     * @cfg {Boolean} disableSelection (defaults to false).
-	 */
-
     // private
     rendered : false,
     // private
     viewReady: false,
-
+    // private
     stateEvents: ["columnmove", "columnresize", "sortchange"],
-    /**
-    * @cfg {Number} maxHeight Sets the maximum height of the grid - ignored if autoHeight is not on.
-    */
-
-    /**
-     * Configures the text is the drag proxy (defaults to "{0} selected row(s)").
-     * {0} is replaced with the number of selected rows.
-     * @type String
-     */
-    ddText : "{0} selected row{1}",
 
     // private
     initComponent : function(){
@@ -465,8 +458,8 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
 	/**
 	 * Reconfigures the grid to use a different Store and Column Model.
 	 * The View will be bound to the new objects and refreshed.
-	 * @param {Ext.data.Store} dataSource The new {@link Ext.data.Store} object
-	 * @param {Ext.grid.ColumnModel} The new {@link Ext.grid.ColumnModel} object
+	 * @param {Ext.data.Store} store The new {@link Ext.data.Store} object
+	 * @param {Ext.grid.ColumnModel} colModel The new {@link Ext.grid.ColumnModel} object
 	 */
     reconfigure : function(store, colModel){
         if(this.loadMask){
@@ -489,10 +482,10 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
 
     // private
     onDestroy : function(){
-        if(this.loadMask){
-            this.loadMask.destroy();
-        }
         if(this.rendered){
+            if(this.loadMask){
+                this.loadMask.destroy();
+            }
             var c = this.body;
             c.removeAllListeners();
             this.view.destroy();
@@ -612,7 +605,7 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
 
     /**
      * Returns the grid's SelectionModel.
-     * @return {SelectionModel}
+     * @return {SelectionModel} The selection model
      */
     getSelectionModel : function(){
         if(!this.selModel){
@@ -623,8 +616,8 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
     },
 
     /**
-     * Returns the grid's DataSource.
-     * @return {DataSource}
+     * Returns the grid's data store.
+     * @return {DataSource} The store
      */
     getStore : function(){
         return this.store;
@@ -632,7 +625,7 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
 
     /**
      * Returns the grid's ColumnModel.
-     * @return {ColumnModel}
+     * @return {ColumnModel} The column model
      */
     getColumnModel : function(){
         return this.colModel;
@@ -640,7 +633,7 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
 
     /**
      * Returns the grid's GridView object.
-     * @return {GridView}
+     * @return {GridView} The grid view
      */
     getView : function(){
         if(!this.view){
@@ -650,7 +643,7 @@ Ext.grid.GridPanel = Ext.extend(Ext.Panel, {
     },
     /**
      * Called to get grid's drag proxy text, by default returns this.ddText.
-     * @return {String}
+     * @return {String} The text
      */
     getDragDropText : function(){
         var count = this.selModel.getCount();

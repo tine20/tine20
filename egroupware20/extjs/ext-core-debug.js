@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -292,7 +292,7 @@ Ext.DomHelper = function(){
 
     
     insertFirst : function(el, o, returnElement){
-        return this.doInsert(el, o, returnElement, "afterBegin");
+        return this.doInsert(el, o, returnElement, "afterBegin", "firstChild");
     },
 
     
@@ -301,7 +301,7 @@ Ext.DomHelper = function(){
         var newNode;
         if(this.useDom){
             newNode = createDom(o, null);
-            el.parentNode.insertBefore(newNode, sibling ? el[sibling] : el);
+            (sibling === "firstChild" ? el : el.parentNode).insertBefore(newNode, sibling ? el[sibling] : el);
         }else{
             var html = createHtml(o);
             newNode = this.insertHtml(pos, el, html);
@@ -1669,7 +1669,7 @@ Ext.EventManager = function(){
     var propRe = /^(?:scope|delay|buffer|single|stopEvent|preventDefault|stopPropagation|normalized|args|delegate)$/;
     var pub = {
 
-         
+    
         addListener : function(element, eventName, fn, scope, options){
             if(typeof eventName == "object"){
                 var o = eventName;
@@ -1716,15 +1716,20 @@ Ext.EventManager = function(){
                 resizeTask = new Ext.util.DelayedTask(function(){
                     resizeEvent.fire(D.getViewWidth(), D.getViewHeight());
                 });
-                E.on(window, "resize", function(){
-                    if(Ext.isIE){
-                        resizeTask.delay(50);
-                    }else{
-                        resizeEvent.fire(D.getViewWidth(), D.getViewHeight());
-                    }
-                });
+                E.on(window, "resize", this.fireWindowResize, this);
             }
             resizeEvent.addListener(fn, scope, options);
+        },
+
+        
+        fireWindowResize : function(){
+            if(resizeEvent){
+                if((Ext.isIE||Ext.isAir) && resizeTask){
+                    resizeTask.delay(50);
+                }else{
+                    resizeEvent.fire(D.getViewWidth(), D.getViewHeight());
+                }
+            }
         },
 
         
@@ -1765,6 +1770,7 @@ Ext.EventManager = function(){
     };
      
     pub.on = pub.addListener;
+    
     pub.un = pub.removeListener;
 
     pub.stoppedMouseDownEvent = new Ext.util.Event();
@@ -1778,7 +1784,7 @@ Ext.onReady(function(){
     if(!bd){ return; }
 
     var cls = [
-            Ext.isIE ? "ext-ie"
+            Ext.isIE ? "ext-ie " + (Ext.isIE6 ? 'ext-ie6' : 'ext-ie7')
             : Ext.isGecko ? "ext-gecko"
             : Ext.isOpera ? "ext-opera"
             : Ext.isSafari ? "ext-safari" : ""];
@@ -2621,13 +2627,15 @@ El.prototype = {
     
     getHeight : function(contentHeight){
         var h = this.dom.offsetHeight || 0;
-        return contentHeight !== true ? h : h-this.getBorderWidth("tb")-this.getPadding("tb");
+        h = contentHeight !== true ? h : h-this.getBorderWidth("tb")-this.getPadding("tb");
+        return h < 0 ? 0 : h;
     },
 
     
     getWidth : function(contentWidth){
         var w = this.dom.offsetWidth || 0;
-        return contentWidth !== true ? w : w-this.getBorderWidth("lr")-this.getPadding("lr");
+        w = contentWidth !== true ? w : w-this.getBorderWidth("lr")-this.getPadding("lr");
+        return w < 0 ? 0 : w;
     },
 
     
@@ -2794,6 +2802,7 @@ El.prototype = {
         return this;
     },
 
+    
     relayEvent : function(eventName, observable){
         this.on(eventName, function(e){
             observable.fireEvent(eventName, e);
@@ -3297,7 +3306,7 @@ El.prototype = {
                 }
             }
             var el = document.getElementById(id);
-            if(el){el.parentNode.removeChild(el);}
+            if(el){Ext.removeNode(el);}
             if(typeof callback == "function"){
                 callback();
             }
@@ -3504,9 +3513,7 @@ El.prototype = {
 
     
     remove : function(){
-        if(this.dom.parentNode){
-            this.dom.parentNode.removeChild(this.dom);
-        }
+        Ext.removeNode(this.dom);
         delete El.cache[this.dom.id];
     },
 
@@ -4915,7 +4922,7 @@ Ext.CompositeElement.prototype = {
                 if(d.dom){
                     d.remove();
                 }else{
-                    d.parentNode.removeChild(d);
+                    Ext.removeNode(d);
                 }
             }
             this.elements.splice(index, 1);
@@ -5027,7 +5034,7 @@ Ext.extend(Ext.CompositeElementLite, Ext.CompositeElement, {
             if(domReplace){
                 var d = this.elements[index];
                 d.parentNode.insertBefore(replacement, d);
-                d.parentNode.removeChild(d);
+                Ext.removeNode(d);
             }
             this.elements.splice(index, 1, replacement);
         }
@@ -5268,7 +5275,7 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
             Ext.callback(o.success, o.scope, [r, o]);
             Ext.callback(o.callback, o.scope, [o, true, r]);
 
-            setTimeout(function(){document.body.removeChild(frame);}, 100);
+            setTimeout(function(){Ext.removeNode(frame);}, 100);
         }
 
         Ext.EventManager.on(frame, 'load', cb, this);
@@ -5276,7 +5283,7 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
 
         if(hiddens){ 
             for(var i = 0, len = hiddens.length; i < len; i++){
-                form.removeChild(hiddens[i]);
+                Ext.removeNode(hiddens[i]);
             }
         }
     }

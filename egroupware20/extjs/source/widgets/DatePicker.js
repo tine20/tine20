@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,38 +14,7 @@
  * Create a new DatePicker
  * @param {Object} config The config object
  */
-Ext.DatePicker = function(config){
-    Ext.DatePicker.superclass.constructor.call(this, config);
-
-    this.value = config && config.value ?
-                 config.value.clearTime() : new Date().clearTime();
-
-    this.addEvents({
-        /**
-	     * @event select
-	     * Fires when a date is selected
-	     * @param {DatePicker} this
-	     * @param {Date} date The selected date
-	     */
-        select: true
-    });
-
-    if(this.handler){
-        this.on("select", this.handler,  this.scope || this);
-    }
-    // build the disabledDatesRE
-    if(!this.disabledDatesRE && this.disabledDates){
-        var dd = this.disabledDates;
-        var re = "(?:";
-        for(var i = 0; i < dd.length; i++){
-            re += dd[i];
-            if(i != dd.length-1) re += "|";
-        }
-        this.disabledDatesRE = new RegExp(re + ")");
-    }
-};
-
-Ext.extend(Ext.DatePicker, Ext.Component, {
+Ext.DatePicker = Ext.extend(Ext.Component, {
     /**
      * @cfg {String} todayText
      * The text to display on the button that selects the current date (defaults to "Today")
@@ -147,6 +116,42 @@ Ext.extend(Ext.DatePicker, Ext.Component, {
      * Day index at which the week should begin, 0-based (defaults to 0, which is Sunday)
      */
     startDay : 0,
+
+    initComponent : function(){
+        Ext.DatePicker.superclass.initComponent.call(this);
+
+        this.value = this.value ?
+                 this.value.clearTime() : new Date().clearTime();
+
+        this.addEvents({
+            /**
+             * @event select
+             * Fires when a date is selected
+             * @param {DatePicker} this
+             * @param {Date} date The selected date
+             */
+            select: true
+        });
+
+        if(this.handler){
+            this.on("select", this.handler,  this.scope || this);
+        }
+
+        this.initDisabledDays();
+    },
+
+    // private
+    initDisabledDays : function(){
+        if(!this.disabledDatesRE && this.disabledDates){
+            var dd = this.disabledDates;
+            var re = "(?:";
+            for(var i = 0; i < dd.length; i++){
+                re += dd[i];
+                if(i != dd.length-1) re += "|";
+            }
+            this.disabledDatesRE = new RegExp(re + ")");
+        }
+    },
 
     /**
      * Sets the value of the date field

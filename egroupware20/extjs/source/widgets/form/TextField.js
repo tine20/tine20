@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -15,22 +15,11 @@
  * Creates a new TextField
  * @param {Object} config Configuration options
  */
-Ext.form.TextField = function(config){
-    Ext.form.TextField.superclass.constructor.call(this, config);
-    this.addEvents({
-        /**
-         * @event autosize
-         * Fires when the autosize function is triggered.  The field may or may not have actually changed size
-         * according to the default logic, but this event provides a hook for the developer to apply additional
-         * logic at runtime to resize the field if needed.
-	     * @param {Ext.form.Field} this This text field
-	     * @param {Number} width The new field width
-	     */
-        autosize : true
-    });
-};
-
-Ext.extend(Ext.form.TextField, Ext.form.Field,  {
+Ext.form.TextField = Ext.extend(Ext.form.Field,  {
+    /**
+     * @cfg {String} vtypeText A custom error message to display in place of the default message provided
+     * for the {@link #vtype} currently set for this field (defaults to '').  Only applies if vtype is set, else ignored.
+     */
     /**
      * @cfg {Boolean} grow True if this field should automatically grow and shrink to its content
      */
@@ -48,7 +37,8 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
      */
     vtype : null,
     /**
-     * @cfg {String} maskRe An input mask regular expression that will be used to filter keystrokes that don't match (defaults to null)
+     * @cfg {RegExp} maskRe An input mask regular expression that will be used to filter keystrokes that don't match
+     * (defaults to null)
      */
     maskRe : null,
     /**
@@ -68,15 +58,18 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
      */
     maxLength : Number.MAX_VALUE,
     /**
-     * @cfg {String} minLengthText Error text to display if the minimum length validation fails (defaults to "The minimum length for this field is {minLength}")
+     * @cfg {String} minLengthText Error text to display if the minimum length validation fails (defaults to
+     * "The minimum length for this field is {minLength}")
      */
     minLengthText : "The minimum length for this field is {0}",
     /**
-     * @cfg {String} maxLengthText Error text to display if the maximum length validation fails (defaults to "The maximum length for this field is {maxLength}")
+     * @cfg {String} maxLengthText Error text to display if the maximum length validation fails (defaults to
+     * "The maximum length for this field is {maxLength}")
      */
     maxLengthText : "The maximum length for this field is {0}",
     /**
-     * @cfg {Boolean} selectOnFocus True to automatically select any existing field text when the field receives input focus (defaults to false)
+     * @cfg {Boolean} selectOnFocus True to automatically select any existing field text when the field receives
+     * input focus (defaults to false)
      */
     selectOnFocus : false,
     /**
@@ -96,7 +89,8 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
      */
     regex : null,
     /**
-     * @cfg {String} regexText The error text to display if {@link #regex} is used and the test fails during validation (defaults to "")
+     * @cfg {String} regexText The error text to display if {@link #regex} is used and the test fails during
+     * validation (defaults to "")
      */
     regexText : "",
     /**
@@ -108,6 +102,21 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
      * 'x-form-empty-field').  This class is automatically added and removed as needed depending on the current field value.
      */
     emptyClass : 'x-form-empty-field',
+
+    initComponent : function(){
+        Ext.form.TextField.superclass.initComponent.call(this);
+        this.addEvents({
+            /**
+             * @event autosize
+             * Fires when the autosize function is triggered.  The field may or may not have actually changed size
+             * according to the default logic, but this event provides a hook for the developer to apply additional
+             * logic at runtime to resize the field if needed.
+             * @param {Ext.form.Field} this This text field
+             * @param {Number} width The new field width
+             */
+            autosize : true
+        });
+    },
 
     // private
     initEvents : function(){

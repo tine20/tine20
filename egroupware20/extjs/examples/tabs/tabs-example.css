@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -32,5 +32,5 @@ pre {
 
 
 .tabs {
-    background-image:url(../window/images/tabs.gif) !important;
+    background-image:url( ../desktop/images/tabs.gif ) !important;
 }

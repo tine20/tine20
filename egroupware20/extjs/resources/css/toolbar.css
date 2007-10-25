@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -121,39 +121,39 @@
 
 /* Paging Toolbar */
 
-.x-grid-page-number{
+.x-tbar-page-number{
 	width:24px;
 	height:14px;
 }
-.x-grid-page-first .x-btn-text{
-	background-image: url(../images/default/grid/page-first.gif);
+.x-tbar-page-first{
+	background-image: url(../images/default/grid/page-first.gif) !important;
 }
-.x-grid-loading .x-btn-text{
-	background-image: url(../images/default/grid/done.gif);
+.x-tbar-loading{
+	background-image: url(../images/default/grid/done.gif) !important;
 }
-.x-grid-page-last .x-btn-text{
-	background-image: url(../images/default/grid/page-last.gif);
+.x-tbar-page-last{
+	background-image: url(../images/default/grid/page-last.gif) !important;
 }
-.x-grid-page-next .x-btn-text{
-	background-image: url(../images/default/grid/page-next.gif);
+.x-tbar-page-next{
+	background-image: url(../images/default/grid/page-next.gif) !important;
 }
-.x-grid-page-prev .x-btn-text{
-	background-image: url(../images/default/grid/page-prev.gif);
+.x-tbar-page-prev{
+	background-image: url(../images/default/grid/page-prev.gif) !important;
 }
-.x-item-disabled .x-grid-loading .x-btn-text{
-	background-image: url(../images/default/grid/loading.gif);
+.x-item-disabled .x-tbar-loading{
+	background-image: url(../images/default/grid/loading.gif) !important;
 }
-.x-item-disabled .x-grid-page-first .x-btn-text{
-	background-image: url(../images/default/grid/page-first-disabled.gif);
+.x-item-disabled .x-tbar-page-first{
+	background-image: url(../images/default/grid/page-first-disabled.gif) !important;
 }
-.x-item-disabled .x-grid-page-last .x-btn-text{
-	background-image: url(../images/default/grid/page-last-disabled.gif);
+.x-item-disabled .x-tbar-page-last{
+	background-image: url(../images/default/grid/page-last-disabled.gif) !important;
 }
-.x-item-disabled .x-grid-page-next .x-btn-text{
-	background-image: url(../images/default/grid/page-next-disabled.gif);
+.x-item-disabled .x-tbar-page-next{
+	background-image: url(../images/default/grid/page-next-disabled.gif) !important;
 }
-.x-item-disabled .x-grid-page-prev .x-btn-text{
-	background-image: url(../images/default/grid/page-prev-disabled.gif);
+.x-item-disabled .x-tbar-page-prev{
+	background-image: url(../images/default/grid/page-prev-disabled.gif) !important;
 }
 .x-paging-info {
     position:absolute;

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -47,6 +47,7 @@ Ext.dd.PanelProxy.prototype = {
     show : function(){
         if(!this.ghost){
             this.ghost = this.panel.createGhost(undefined, undefined, Ext.getBody());
+            this.ghost.setXY(this.panel.el.getXY())
             if(this.insertProxy){
                 this.proxy = this.panel.el.insertSibling({cls:'x-panel-dd-spacer'});
                 this.proxy.setSize(this.panel.getSize());

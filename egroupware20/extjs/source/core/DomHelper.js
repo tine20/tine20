@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -345,7 +345,7 @@ Ext.DomHelper = function(){
      * @return {HTMLElement/Ext.Element} The new node
      */
     insertFirst : function(el, o, returnElement){
-        return this.doInsert(el, o, returnElement, "afterBegin");
+        return this.doInsert(el, o, returnElement, "afterBegin", "firstChild");
     },
 
     // private
@@ -354,7 +354,7 @@ Ext.DomHelper = function(){
         var newNode;
         if(this.useDom){
             newNode = createDom(o, null);
-            el.parentNode.insertBefore(newNode, sibling ? el[sibling] : el);
+            (sibling === "firstChild" ? el : el.parentNode).insertBefore(newNode, sibling ? el[sibling] : el);
         }else{
             var html = createHtml(o);
             newNode = this.insertHtml(pos, el, html);

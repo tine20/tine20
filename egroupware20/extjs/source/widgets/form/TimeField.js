@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -127,9 +127,15 @@ Ext.form.TimeField = Ext.extend(Ext.form.ComboBox, {
         }
     }
 
-    /** @cfg {Boolean} grow @hide */
-    /** @cfg {Number} growMin @hide */
-    /** @cfg {Number} growMax @hide */
+    /**
+     * @cfg {Boolean} grow @hide
+     */
+    /**
+     * @cfg {Number} growMin @hide
+     */
+    /**
+     * @cfg {Number} growMax @hide
+     */
     /**
      * @hide
      * @method autoSize

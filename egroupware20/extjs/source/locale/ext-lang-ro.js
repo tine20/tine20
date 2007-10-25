@@ -1,3 +1,11 @@
+/*
+ * Ext JS Library 2.0 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://extjs.com/license
+ */
+
 /**
  * Translation by Lucian Lature 04-24-2007
  * Romanian Translations

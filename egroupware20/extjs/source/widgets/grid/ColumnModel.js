@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -65,7 +65,7 @@ Ext.grid.ColumnModel = function(config){
 	     * Fires when the text of a header changes.
 	     * @param {ColumnModel} this
 	     * @param {Number} columnIndex The column index
-	     * @param {Number} newText The new header text
+	     * @param {String} newText The new header text
 	     */
 	    "headerchange": true,
         /**
@@ -84,13 +84,7 @@ Ext.grid.ColumnModel = function(config){
          * @param {Number} newIndex
          */
         "columnmoved" : true,
-        /**
-         * @event columlockchange
-         * Fires when a column's locked state is changed
-         * @param {ColumnModel} this
-         * @param {Number} colIndex
-         * @param {Boolean} locked true if locked
-         */
+        // deprecated - to be removed
         "columnlockchange" : true,
         /**
          * @event configchanged
@@ -104,9 +98,12 @@ Ext.grid.ColumnModel = function(config){
 Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
     /**
      * @cfg {String} id (Optional) Defaults to the column's initial ordinal position.
-     * A name which identifies this column. The id is used to create a CSS class which
-     * is applied to all table cells in that column of the form <pre>x-grid-td-<b>id<b></pre>
+     * A name which identifies this column. The id is used to create a CSS class name which
+     * is applied to all table cells (including headers) in that column. The class name
+     * takes the form of <pre>x-grid-td-<b>id<b></pre>
      * <br><br>
+     * Header cells will also recieve this class name, but will also have the class x-grid-hd,
+     * so to target header cells, use CSS selectors such as:<pre>.x-grid-hd.x-grid-td-<b>id</b></pre>
      * The {@link Ext.grid.Grid#autoExpandColumn} grid config option references the column
      * via this identifier.
      */
@@ -126,9 +123,6 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
      * @cfg {Boolean} sortable (Optional) True if sorting is to be allowed on this column.
      * Defaults to the value of the {@link #defaultSortable} property.
      * Whether local/remote sorting is used is specified in {@link Ext.data.Store#remoteSort}.
-     */
-    /**
-     * @cfg {Boolean} locked (Optional) True to lock the column in place while scrolling the Grid.  Defaults to false.
      */
     /**
      * @cfg {Boolean} fixed (Optional) True if the column width cannot be changed.  Defaults to false.
@@ -215,6 +209,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         return -1;
     },
 
+    // private
     moveColumn : function(oldIndex, newIndex){
         var c = this.config[oldIndex];
         this.config.splice(oldIndex, 1);
@@ -223,10 +218,12 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         this.fireEvent("columnmoved", this, oldIndex, newIndex);
     },
 
+    // deprecated - to be removed
     isLocked : function(colIndex){
         return this.config[colIndex].locked === true;
     },
 
+    // deprecated - to be removed
     setLocked : function(colIndex, value, suppressEvent){
         if(this.isLocked(colIndex) == value){
             return;
@@ -237,6 +234,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         }
     },
 
+    // deprecated - to be removed
     getTotalLockedWidth : function(){
         var totalWidth = 0;
         for(var i = 0; i < this.config.length; i++){
@@ -247,6 +245,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         return totalWidth;
     },
 
+    // deprecated - to be removed
     getLockedCount : function(){
         for(var i = 0, len = this.config.length; i < len; i++){
             if(!this.isLocked(i)){
@@ -321,8 +320,9 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
      * the following parameters:<ul>
      * <li>Data value.</li>
      * <li>Cell metadata. An object in which you may set the following attributes:<ul>
-     * <li>css A CSS style string to apply to the table cell.</li>
-     * <li>attr An HTML attribute definition string to apply to the data container element <i>within</i> the table cell.</li></ul>
+     * <li>css A CSS class name to add to the cell's TD element.</li>
+     * <li>attr An HTML attribute definition string to apply to the data container element <i>within</i> the table cell
+     * (e.g. 'style="color:red;"').</li></ul>
      * <li>The {@link Ext.data.Record} from which the data was extracted.</li>
      * <li>Row index</li>
      * <li>Column index</li>
@@ -513,6 +513,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
     }
 });
 
+// private
 Ext.grid.ColumnModel.defaultRenderer = function(value){
 	if(typeof value == "string" && value.length < 1){
 	    return "&#160;";

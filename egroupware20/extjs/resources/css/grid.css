@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -106,10 +106,23 @@
 }
 
 .x-grid3-resize-proxy {
-	width:3px;
-	background-color:#cccccc;
+	width:1px;
+    left:0;
+    background-color:#777;
 	cursor: e-resize;
 	cursor: col-resize;
+	position:absolute;
+	top:0;
+	height:100px;
+	overflow:hidden;
+	visibility:hidden;
+	border:0 none;
+	z-index:7;
+}
+.x-grid3-resize-marker {
+	width:1px;
+	left:0;
+    background-color:#777;
 	position:absolute;
 	top:0;
 	height:100px;
@@ -349,6 +362,10 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 
 .x-dd-drag-ghost .x-grid3-dd-wrap {
     padding:1px 3px 3px 1px;
+}
+
+.x-grid3-hd {
+    -moz-user-select:none;
 }
 
 .x-grid3-hd-btn {

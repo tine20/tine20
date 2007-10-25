@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -26,7 +26,7 @@
  * @cfg {Boolean} animate true to enable animated expand/collapse (defaults to the value of Ext.enableFx)
  * @cfg {Boolean} singleExpand true if only 1 node per branch may be expanded
  * @cfg {Boolean} selModel A tree selection model to use with this TreePanel (defaults to a {@link Ext.tree.DefaultSelectionModel})
- * @cfg {Boolean} loader A TreeLoader for use with this TreePanel
+ * @cfg {Ext.tree.TreeLoader} loader A {@link Ext.tree.TreeLoader} for use with this TreePanel
  * @cfg {String} pathSeparator The token used to separate sub-paths in path strings (defaults to '/')
  * @constructor
  * @param {Object} config
@@ -305,7 +305,7 @@ Ext.tree.TreePanel = Ext.extend(Ext.Panel, {
             "nodedragover" : true
         });
         if(this.singleExpand){
-            this.on("beforeexpand", this.restrictExpand, this);
+            this.on("beforeexpandnode", this.restrictExpand, this);
         }
     },
 
@@ -405,8 +405,8 @@ Ext.tree.TreePanel = Ext.extend(Ext.Panel, {
     },
 
     /**
-     * Returns the default TreeLoader for this TreePanel.
-     * @return {TreeLoader} The TreeLoader for this TreePanel.
+     * Returns the default {@link Ext.tree.TreeLoader} for this TreePanel.
+     * @return {Ext.tree.TreeLoader} The TreeLoader for this TreePanel.
      */
     getLoader : function(){
         return this.loader;
@@ -513,10 +513,15 @@ Ext.tree.TreePanel = Ext.extend(Ext.Panel, {
         }
     },
 
+    /**
+     * Returns the underlying Element for this tree
+     * @return {Ext.Element} The Element
+     */
     getTreeEl : function(){
         return this.body;
     },
 
+    // private
     onRender : function(ct, position){
         Ext.tree.TreePanel.superclass.onRender.call(this, ct, position);
         this.el.addClass('x-tree');
@@ -525,6 +530,7 @@ Ext.tree.TreePanel = Ext.extend(Ext.Panel, {
                (this.lines ? "x-tree-lines" : "x-tree-no-lines")});
     },
 
+    // private
     initEvents : function(){
         Ext.tree.TreePanel.superclass.initEvents.call(this);
 
@@ -553,12 +559,29 @@ Ext.tree.TreePanel = Ext.extend(Ext.Panel, {
         this.getSelectionModel().init(this);
     },
 
+    // private
     afterRender : function(){
         Ext.tree.TreePanel.superclass.afterRender.call(this);
         this.root.render();
         if(!this.rootVisible){
             this.root.renderChildren();
         }
+    },
+
+    onDestroy : function(){
+        if(this.rendered){
+            this.body.removeAllListeners();
+            Ext.dd.ScrollManager.unregister(this.body);
+            if(this.dropZone){
+                this.dropZone.unreg();
+            }
+            if(this.dragZone){
+               this.dragZone.unreg();
+            }
+        }
+        this.root.destroy();
+        this.nodeHash = null;
+        Ext.tree.TreePanel.superclass.onDestroy.call(this);
     }
 });
 Ext.reg('treepanel', Ext.tree.TreePanel);

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -50,7 +50,7 @@ Ext.EventManager.on(window, 'load', function(){
             icon: 'organizer.gif'
         },{
             text: 'Web Desktop',
-            url: 'window/desktop.html',
+            url: 'desktop/desktop.html',
             icon: 'desktop.gif'
         }]
     },{
@@ -67,6 +67,10 @@ Ext.EventManager.on(window, 'load', function(){
             text: 'XML Grid',
             url: 'grid/xml-grid.html',
             icon: 'grid-xml.gif'
+        },{
+            text: 'Paging',
+            url: 'grid/paging.html',
+            icon: 'grid-paging.gif'
         },{
             text: 'Grouping',
             url: 'grid/grouping.html',
@@ -101,6 +105,10 @@ Ext.EventManager.on(window, 'load', function(){
             text: 'MessageBox',
             url: 'message-box/msg-box.html',
             icon: 'msg-box.gif'
+        },{
+            text: 'Layout Window',
+            url: 'window/layout.html',
+            icon: 'window-layout.gif'
         }]
     },{
         title: 'Trees',
@@ -129,7 +137,7 @@ Ext.EventManager.on(window, 'load', function(){
             icon: 'anchor.gif'
         },{
             text: 'Customizing: Portals',
-            url: 'layout/portal.html',
+            url: 'portal/portal.html',
             icon: 'portal.gif'
         }]
     },{

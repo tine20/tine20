@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -9,12 +9,65 @@
 /**
  * @class Ext.Component
  * @extends Ext.util.Observable
- * Base class for all major Ext components.  All subclasses of Component can automatically participate in the standard
+ * <p>Base class for all Ext components.  All subclasses of Component can automatically participate in the standard
  * Ext component lifecycle of creation, rendering and destruction.  They also have automatic support for basic hide/show
  * and enable/disable behavior.  Component allows any subclass to be lazy-rendered into any {@link Ext.Container} and
  * to be automatically registered with the {@link Ext.ComponentMgr} so that it can be referenced at any time via
  * {@link Ext#getCmp}.  All visual widgets that require rendering into a layout should subclass Component (or
- * {@link Ext.BoxComponent} if managed box model handling is required).
+ * {@link Ext.BoxComponent} if managed box model handling is required).</p>
+ * <p>Every component has a specific xtype, which is its Ext-specific type name, along with methods for checking the
+ * xtype like {@link #getXType} and {@link #isXType}. This is the list of all valid xtypes:</p>
+ * <pre>
+xtype            Class
+-------------    ------------------
+box              Ext.BoxComponent
+button           Ext.Button
+colorpalette     Ext.ColorPalette
+component        Ext.Component
+container        Ext.Container
+cycle            Ext.CycleButton
+dataview         Ext.DataView
+datepicker       Ext.DatePicker
+editor           Ext.Editor
+editorgrid       Ext.grid.EditorGridPanel
+grid             Ext.grid.GridPanel
+paging           Ext.PagingToolbar
+panel            Ext.Panel
+progress         Ext.ProgressBar
+splitbutton      Ext.SplitButton
+tabpanel         Ext.TabPanel
+treepanel        Ext.tree.TreePanel
+viewport         Ext.ViewPort
+window           Ext.Window
+
+Toolbar components
+---------------------------------------
+toolbar          Ext.Toolbar
+tbitem           Ext.Toolbar.Item
+tbseparator      Ext.Toolbar.Separator
+tbspacer         Ext.Toolbar.Spacer
+tbfill           Ext.Toolbar.Fill
+tbtext           Ext.Toolbar.TextItem
+tbbutton         Ext.Toolbar.Button
+tbsplit          Ext.Toolbar.SplitButton
+
+Form components
+---------------------------------------
+checkbox         Ext.form.Checkbox
+combo            Ext.form.ComboBox
+datefield        Ext.form.DateField
+field            Ext.form.Field
+fieldset         Ext.form.FieldSet
+form             Ext.FormPanel
+hidden           Ext.form.Hidden
+htmleditor       Ext.form.HtmlEditor
+numberfield      Ext.form.NumberField
+radio            Ext.form.Radio
+textarea         Ext.form.TextArea
+textfield        Ext.form.TextField
+timefield        Ext.form.TimeField
+trigger          Ext.form.TriggerField
+</pre>
  * @constructor
  * @param {Ext.Element/String/Object} config The configuration options.  If an element is passed, it is set as the internal
  * element and its id used as the component id.  If a string is passed, it is assumed to be the id of an existing element
@@ -162,17 +215,32 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
      */
     /**
      * @cfg {Mixed} applyTo
-     * The id of the node, a DOM node or an existing Element corresponding to an existing element present
-     * in the DOM to render this component to. Using this config, a call to render() is not required.
+     * The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in
+     * the document that specifies some structural markup for this component.  When applyTo is used, constituent parts of
+     * the component can also be specified by id or CSS class name within the main element, and the component being created
+     * may attempt to create its subcomponents from that markup if applicable. Using this config, a call to render() is
+     * not required.  If applyTo is specified, any value passed for {@link #renderTo} will be ignored and the target
+     * element's parent node will automatically be used as the component's container.
      */
     /**
      * @cfg {Mixed} renderTo
-     * The id of the node, a DOM node or an existing Element to render this component into. Using this config,
-     * a call to render() is not required.
+     * The id of the node, a DOM node or an existing Element that will be the container to render this component into.
+     * Using this config, a call to render() is not required.
+     */
+
+    /* //internal - to be set by subclasses
+     * @cfg {String} stateId
+     * The unique id for this component to use for state management purposes (defaults to the component id).
+     */
+    /* //internal - to be set by subclasses
+     * @cfg {Array} stateEvents
+     * An array of events that, when fired, should trigger this component to save its state (defaults to none).
+     * These can be any types of events supported by this component, including browser or custom events (e.g.,
+     * ['click', 'customerchange']).
      */
 
     /**
-     * @cfg {String} disableClass
+     * @cfg {String} disabledClass
      * CSS class added to the component when it is disabled (defaults to "x-item-disabled").
      */
     disabledClass : "x-item-disabled",
@@ -320,6 +388,7 @@ Ext.Foo = Ext.extend(Ext.Bar, {
         return this;
     },
 
+    // private
     initState : function(config){
         if(Ext.state.Manager){
             var state = Ext.state.Manager.get(this.stateId || this.id);
@@ -329,6 +398,7 @@ Ext.Foo = Ext.extend(Ext.Bar, {
         }
     },
 
+    // private
     initStateEvents : function(){
         if(this.stateEvents){
             for(var i = 0, e; e = this.stateEvents[i]; i++){
@@ -337,23 +407,29 @@ Ext.Foo = Ext.extend(Ext.Bar, {
         }
     },
 
+    // private
     applyState : function(state, config){
         if(state){
             Ext.apply(this, state);
         }
     },
 
+    // private
     getState : function(){
         return null;
     },
 
+    // private
     saveState : function(){
         if(Ext.state.Manager){
             Ext.state.Manager.set(this.stateId || this.id, this.getState());
         }
     },
 
-    // private
+    /**
+     * Apply this component to existing markup that is valid. With this function, no call to render() is required.
+     * @param {String/HTMLElement} el 
+     */
     applyToMarkup : function(el){
         this.allowDomMove = false;
         this.el = Ext.get(el);
@@ -387,6 +463,15 @@ Ext.Foo = Ext.extend(Ext.Bar, {
     // private
     // default function is not really useful
     onRender : function(ct, position){
+        if(this.autoEl){
+            if(typeof this.autoEl == 'string'){
+                this.el = document.createElement(this.autoEl);
+            }else{
+                var div = document.createElement('div');
+                Ext.DomHelper.overwrite(div, this.autoEl);
+                this.el = div.firstChild;
+            }
+        }
         if(this.el){
             this.el = Ext.get(this.el);
             if(this.allowDomMove !== false){
@@ -596,7 +681,7 @@ Ext.Foo = Ext.extend(Ext.Bar, {
      * Returns true if this component is visible.
      */
     isVisible : function(){
-        return this.getActionEl().isVisible();
+        return this.rendered && this.getActionEl().isVisible();
     },
 
     /**
@@ -611,6 +696,62 @@ Ext.Foo = Ext.extend(Ext.Bar, {
         var cfg = Ext.applyIf(overrides, this.initialConfig);
         cfg.id = id; // prevent dup id
         return new this.constructor(cfg);
+    },
+
+    /**
+     * Gets the xtype for this component as registered with {@link Ext.ComponentMgr}. For a list of all
+     * available xtypes, see the {@link Ext.Component} header. Example usage:
+     * <pre><code>
+var t = new Ext.form.TextField();
+alert(t.getXType());  // alerts 'textfield'
+</code></pre>
+     * @return {String} The xtype
+     */
+    getXType : function(){
+        return this.constructor.xtype;
+    },
+
+    /**
+     * Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+     * from the xtype (default) or whether it is directly of the xtype specified (shallow = true). For a list of all
+     * available xtypes, see the {@link Ext.Component} header. Example usage:
+     * <pre><code>
+var t = new Ext.form.TextField();
+var isText = t.isXType('textfield');        // true
+var isBoxSubclass = t.isXType('box');       // true, descended from BoxComponent
+var isBoxInstance = t.isXType('box', true); // false, not a direct BoxComponent instance
+</code></pre>
+     * @param {String} xtype The xtype to check for this component
+     * @param {Boolean} shallow (optional) False to check whether this component is descended from the xtype (this is
+     * the default), or true to check whether this component is directly of the specified xtype.
+     */
+    isXType : function(xtype, shallow){
+        return !shallow ?
+               ('/' + this.getXTypes() + '/').indexOf('/' + xtype + '/') != -1 :
+                this.constructor.xtype == xtype;
+    },
+
+    /**
+     * Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+     * available xtypes, see the {@link Ext.Component} header. Example usage:
+     * <pre><code>
+var t = new Ext.form.TextField();
+alert(t.getXTypes());  // alerts 'component/box/field/textfield'
+</pre></code>
+     * @return {String} The xtype hierarchy string
+     */
+    getXTypes : function(){
+        var tc = this.constructor;
+        if(!tc.xtypes){
+            var c = [], sc = this;
+            while(sc && sc.constructor.xtype){
+                c.unshift(sc.constructor.xtype);
+                sc = sc.constructor.superclass;
+            }
+            tc.xtypeChain = c;
+            tc.xtypes = c.join('/');
+        }
+        return tc.xtypes;
     }
 });
 

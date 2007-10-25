@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -23,7 +23,8 @@ var el = Ext.get(myDivElement);
  * each call instead of constructing a new one.<br><br>
  * <b>Animations</b><br />
  * Many of the functions for manipulating an element have an optional "animate" parameter. The animate parameter
- * should either be a boolean (true) or an object literal with animation options. The animation options are:
+ * should either be a boolean (true) or an object literal with animation options. Note that the supported Element animation
+ * options are a subset of the {@link Ext.Fx} animation options specific to Fx effects.  The Element animation options are:
 <pre>
 Option    Default   Description
 --------- --------  ---------------------------------------------
@@ -912,7 +913,8 @@ El.prototype = {
      */
     getHeight : function(contentHeight){
         var h = this.dom.offsetHeight || 0;
-        return contentHeight !== true ? h : h-this.getBorderWidth("tb")-this.getPadding("tb");
+        h = contentHeight !== true ? h : h-this.getBorderWidth("tb")-this.getPadding("tb");
+        return h < 0 ? 0 : h;
     },
 
     /**
@@ -922,7 +924,8 @@ El.prototype = {
      */
     getWidth : function(contentWidth){
         var w = this.dom.offsetWidth || 0;
-        return contentWidth !== true ? w : w-this.getBorderWidth("lr")-this.getPadding("lr");
+        w = contentWidth !== true ? w : w-this.getBorderWidth("lr")-this.getPadding("lr");
+        return w < 0 ? 0 : w;
     },
 
     /**
@@ -1123,19 +1126,80 @@ El.prototype = {
     },
 
     /**
-     * Appends an event handler
-     *
-     * @param {String}   eventName     The type of event to append
-     * @param {Function} fn        The method the event invokes
-     * @param {Object} scope       (optional) The scope (this object) of the fn
-     * @param {Object}   options   (optional)An object with standard {@link Ext.EventManager#addListener} options
+     * Appends an event handler to this element.  The shorthand version {@link #on} is equivalent.
+     * @param {String} eventName The type of event to handle
+     * @param {Function} fn The handler function the event invokes
+     * @param {Object} scope (optional) The scope (this element) of the handler function
+     * @param {Object} options (optional) An object containing handler configuration properties.
+     * This may contain any of the following properties:<ul>
+     * <li>scope {Object} : The scope in which to execute the handler function. The handler function's "this" context.</li>
+     * <li>delegate {String} : A simple selector to filter the target or look for a descendant of the target</li>
+     * <li>stopEvent {Boolean} : True to stop the event. That is stop propagation, and prevent the default action.</li>
+     * <li>preventDefault {Boolean} : True to prevent the default action</li>
+     * <li>stopPropagation {Boolean} : True to prevent event propagation</li>
+     * <li>normalized {Boolean} : False to pass a browser event to the handler function instead of an Ext.EventObject</li>
+     * <li>delay {Number} : The number of milliseconds to delay the invocation of the handler after te event fires.</li>
+     * <li>single {Boolean} : True to add a handler to handle just the next firing of the event, and then remove itself.</li>
+     * <li>buffer {Number} : Causes the handler to be scheduled to run in an {@link Ext.util.DelayedTask} delayed
+     * by the specified number of milliseconds. If the event fires again within that time, the original
+     * handler is <em>not</em> invoked, but the new handler is scheduled in its place.</li>
+     * </ul><br>
+     * <p>
+     * <b>Combining Options</b><br>
+     * In the following examples, the shorthand form {@link #on} is used rather than the more verbose
+     * addListener.  The two are equivalent.  Using the options argument, it is possible to combine different
+     * types of listeners:<br>
+     * <br>
+     * A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
+     * Code:<pre><code>
+el.on('click', this.onClick, this, {
+    single: true,
+    delay: 100,
+    stopEvent : true,
+    forumId: 4
+});</code></pre>
+     * <p>
+     * <b>Attaching multiple handlers in 1 call</b><br>
+      * The method also allows for a single argument to be passed which is a config object containing properties
+     * which specify multiple handlers.
+     * <p>
+     * Code:<pre><code>
+el.on({
+    'click' : {
+        fn: this.onClick
+        scope: this,
+        delay: 100
+    },
+    'mouseover' : {
+        fn: this.onMouseOver
+        scope: this
+    },
+    'mouseout' : {
+        fn: this.onMouseOut
+        scope: this
+    }
+});</code></pre>
+     * <p>
+     * Or a shorthand syntax:<br>
+     * Code:<pre><code>
+el.on({
+    'click' : this.onClick,
+    'mouseover' : this.onMouseOver,
+    'mouseout' : this.onMouseOut
+    scope: this
+});</code></pre>
      */
     addListener : function(eventName, fn, scope, options){
         Ext.EventManager.on(this.dom,  eventName, fn, scope || this, options);
     },
 
     /**
-     * Removes an event handler from this element
+     * Removes an event handler from this element.  The shorthand version {@link #un} is equivalent.  Example:
+     * <pre><code>
+el.removeListener('click', this.handlerFn);
+// or
+el.un('click', this.handlerFn);
+</code></pre>
      * @param {String} eventName the type of event to remove
      * @param {Function} fn the method the event invokes
      * @return {Ext.Element} this
@@ -1154,6 +1218,13 @@ El.prototype = {
         return this;
     },
 
+    /**
+     * Create an event handler on this element such that when the event fires and is handled by this element,
+     * it will be relayed to another object (i.e., fired again as if it originated from that object instead).
+     * @param {String} eventName The type of event to relay
+     * @param {Object} object Any object that extends {@link Ext.util.Observable} that will provide the context
+     * for firing the relayed event
+     */
     relayEvent : function(eventName, observable){
         this.on(eventName, function(e){
             observable.fireEvent(eventName, e);
@@ -1817,7 +1888,7 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
                 }
             }
             var el = document.getElementById(id);
-            if(el){el.parentNode.removeChild(el);}
+            if(el){Ext.removeNode(el);}
             if(typeof callback == "function"){
                 callback();
             }
@@ -2094,9 +2165,7 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
      * Removes this element from the DOM and deletes it from the cache
      */
     remove : function(){
-        if(this.dom.parentNode){
-            this.dom.parentNode.removeChild(this.dom);
-        }
+        Ext.removeNode(this.dom);
         delete El.cache[this.dom.id];
     },
 
@@ -2656,7 +2725,16 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
 
     /**
      * Wraps the specified element with a special markup/CSS block that renders by default as a gray container with a
-     * gradient background, rounded corners and a 4-way shadow.
+     * gradient background, rounded corners and a 4-way shadow.  Example usage:
+     * <pre><code>
+// Basic box wrap
+Ext.get("foo").boxWrap();
+
+// You can also add a custom class and use CSS inheritance rules to customize the box look.
+// 'x-box-blue' is a built-in alternative -- look at the related CSS definitions as an example
+// for how to create a custom box wrap style.
+Ext.get("foo").boxWrap().addClass("x-box-blue");
+</pre></code>
      * @param {String} class (optional) A base CSS class to apply to the containing wrapper element (defaults to 'x-box').
      * Note that there are a number of CSS rules that are dependent on this name to make the overall effect work,
      * so if you supply an alternate base class, make sure you also supply all of the necessary rules.
@@ -2695,12 +2773,13 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
 var ep = El.prototype;
 
 /**
- * Appends an event handler (Shorthand for addListener)
- * @param {String}   eventName     The type of event to append
- * @param {Function} fn        The method the event invokes
- * @param {Object} scope       (optional) The scope (this object) of the fn
- * @param {Object}   options   (optional)An object with standard {@link Ext.EventManager#addListener} options
- * @method
+ * Appends an event handler (shorthand for {@link #addListener}).
+ * @param {String} eventName The type of event to handle
+ * @param {Function} fn The handler function the event invokes
+ * @param {Object} scope (optional) The scope (this element) of the handler function
+ * @param {Object} options (optional) An object containing standard {@link #addListener} options
+ * @member Ext.Element
+ * @method on
  */
 ep.on = ep.addListener;
     // backwards compat
@@ -2709,11 +2788,12 @@ ep.mon = ep.addListener;
 ep.getUpdateManager = ep.getUpdater;
 
 /**
- * Removes an event handler from this element (shorthand for removeListener)
+ * Removes an event handler from this element (shorthand for {@link #removeListener}).
  * @param {String} eventName the type of event to remove
  * @param {Function} fn the method the event invokes
  * @return {Ext.Element} this
- * @method
+ * @member Ext.Element
+ * @method un
  */
 ep.un = ep.removeListener;
 
@@ -2771,7 +2851,7 @@ var docEl;
  * Static method to retrieve Element objects. Uses simple caching to consistently return the same object.
  * Automatically fixes if an object was recreated with the same id via AJAX or DOM.
  * @param {Mixed} el The id of the node, a DOM Node or an existing Element.
- * @return {Element} The Element object
+ * @return {Element} The Element object (or null if no matching element was found)
  * @static
  */
 El.get = function(el){
@@ -2887,7 +2967,7 @@ El._flyweights = {};
  * @param {String} named (optional) Allows for creation of named reusable flyweights to
  *                                  prevent conflicts (e.g. internally Ext uses "_internal")
  * @static
- * @return {Element} The shared Element object
+ * @return {Element} The shared Element object (or null if no matching element was found)
  */
 El.fly = function(el, named){
     named = named || '_global';

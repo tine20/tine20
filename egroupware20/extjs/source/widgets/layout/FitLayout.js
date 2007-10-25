@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -34,14 +34,14 @@ Ext.layout.FitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     // private
     onLayout : function(ct, target){
         Ext.layout.FitLayout.superclass.onLayout.call(this, ct, target);
-        this.setItemSize(
-            this.activeItem || ct.items.itemAt(0), target.getStyleSize()
-        );
+        if(!this.container.collapsed){
+            this.setItemSize(this.activeItem || ct.items.itemAt(0), target.getStyleSize());
+        }
     },
 
     // private
     setItemSize : function(item, size){
-        if(item){
+        if(item && size.height > 0){ // display none?
             item.setSize(size);
         }
     }

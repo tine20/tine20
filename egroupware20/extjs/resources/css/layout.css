@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -110,7 +110,7 @@
     left:-10000px;
     top:-10000px;
     visibility:hidden;
-    background-color:#c3daf9;
+    background-color:#d2e0f2;
     width:20px;
     height:20px;
     overflow:hidden;
@@ -254,4 +254,10 @@
     border: 0 none;
     overflow: hidden;
     height: 100%;
+}
+
+.x-abs-layout-item {
+    position:absolute;
+    left:0;
+    top:0;
 }

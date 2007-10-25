@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -15,42 +15,43 @@
  *
  * Following is the list of all currently supported formats:
  *<pre>
-Sample date:
-'Wed Jan 10 2007 15:05:01 GMT-0600 (Central Standard Time)'
-
-Format  Output      Description
-------  ----------  --------------------------------------------------------------
-  d      10         Day of the month, 2 digits with leading zeros
-  D      Wed        A textual representation of a day, three letters
-  j      10         Day of the month without leading zeros
-  l      Wednesday  A full textual representation of the day of the week
-  S      th         English ordinal day of month suffix, 2 chars (use with j)
-  w      3          Numeric representation of the day of the week
-  z      9          The julian date, or day of the year (0-365)
-  W      01         ISO-8601 2-digit week number of year, weeks starting on Monday (00-52)
-  F      January    A full textual representation of the month
-  m      01         Numeric representation of a month, with leading zeros
-  M      Jan        Month name abbreviation, three letters
-  n      1          Numeric representation of a month, without leading zeros
-  t      31         Number of days in the given month
-  L      0          Whether it's a leap year (1 if it is a leap year, else 0)
-  Y      2007       A full numeric representation of a year, 4 digits
-  y      07         A two digit representation of a year
-  a      pm         Lowercase Ante meridiem and Post meridiem
-  A      PM         Uppercase Ante meridiem and Post meridiem
-  g      3          12-hour format of an hour without leading zeros
-  G      15         24-hour format of an hour without leading zeros
-  h      03         12-hour format of an hour with leading zeros
-  H      15         24-hour format of an hour with leading zeros
-  i      05         Minutes with leading zeros
-  s      01         Seconds, with leading zeros
-  O      -0600      Difference to Greenwich time (GMT) in hours
-  T      CST        Timezone setting of the machine running the code
-  Z      -21600     Timezone offset in seconds (negative if west of UTC, positive if east)
+Format  Description                                                             Example returned values
+------  ----------------------------------------------------------------------  -----------------------
+  d     Day of the month, 2 digits with leading zeros                           01 to 31
+  D     A textual representation of a day, three letters                        Mon to Sun
+  j     Day of the month without leading zeros                                  1 to 31
+  l     A full textual representation of the day of the week                    Sunday to Saturday
+  S     English ordinal suffix for the day of the month, 2 characters           st, nd, rd or th. Works well with j
+  w     Numeric representation of the day of the week                           0 (for Sunday) to 6 (for Saturday)
+  z     The day of the year (starting from 0)                                   0 to 364 (365 in leap years)
+  W     ISO-8601 week number of year, weeks starting on Monday                  1 to 53
+  F     A full textual representation of a month, such as January or March      January to December
+  m     Numeric representation of a month, with leading zeros                   01 to 12
+  M     A short textual representation of a month, three letters                Jan to Dec
+  n     Numeric representation of a month, without leading zeros                1 to 12
+  t     Number of days in the given month                                       28 to 31
+  L     Whether it's a leap year                                                1 if it is a leap year, 0 otherwise.
+  Y     A full numeric representation of a year, 4 digits                       Examples: 1999 or 2003
+  y     A two digit representation of a year                                    Examples: 99 or 03
+  a     Lowercase Ante meridiem and Post meridiem                               am or pm
+  A     Uppercase Ante meridiem and Post meridiem                               AM or PM
+  g     12-hour format of an hour without leading zeros                         1 to 12
+  G     24-hour format of an hour without leading zeros                         0 to 23
+  h     12-hour format of an hour with leading zeros                            01 to 12
+  H     24-hour format of an hour with leading zeros                            00 to 23
+  i     Minutes, with leading zeros                                             00 to 59
+  s     Seconds, with leading zeros                                             00 to 59
+  u     Milliseconds, with leading zeros                                        001 to 999
+  O     Difference to Greenwich time (GMT) in hours                             Example: +0200
+  T     Timezone abbreviation of the machine running the code                   Examples: EST, MDT ...
+  Z     Timezone offset in seconds (negative if west of UTC, positive if east)  -43200 to 50400
 </pre>
  *
  * Example usage (note that you must escape format specifiers with '\\' to render them as character literals):
  * <pre><code>
+// Sample date:
+// 'Wed Jan 10 2007 15:05:01 GMT-0600 (Central Standard Time)'
+
 var dt = new Date('1/10/2007 03:05:01 PM GMT-0600');
 document.write(dt.format('Y-m-d'));                         //2007-01-10
 document.write(dt.format('F j, Y, g:i a'));                 //January 10, 2007, 3:05 pm
@@ -194,6 +195,8 @@ Date.getFormatCode = function(character) {
         return "String.leftPad(this.getMinutes(), 2, '0') + ";
     case "s":
         return "String.leftPad(this.getSeconds(), 2, '0') + ";
+    case "u":
+        return "String.leftPad(this.getMilliseconds(), 3, '0') + ";
     case "O":
         return "this.getGMTOffset() + ";
     case "T":
@@ -220,10 +223,10 @@ var dt = new Date();
 dt = Date.parseDate("2006", "Y");
 
 //dt = Sun Jan 15 2006 (all date parts specified)
-dt = Date.parseDate("2006-1-15", "Y-m-d");
+dt = Date.parseDate("2006-01-15", "Y-m-d");
 
 //dt = Sun Jan 15 2006 15:20:01 GMT-0600 (CST)
-dt = Date.parseDate("2006-1-15 3:20:01 PM", "Y-m-d h:i:s A" );
+dt = Date.parseDate("2006-01-15 3:20:01 PM", "Y-m-d h:i:s A" );
 </code></pre>
  * @param {String} input The unparsed date as a string
  * @param {String} format The format the date is in
@@ -246,7 +249,7 @@ Date.createParser = function(format) {
     Date.parseFunctions[format] = funcName;
 
     var code = "Date." + funcName + " = function(input){\n"
-        + "var y = -1, m = -1, d = -1, h = -1, i = -1, s = -1, o, z, v;\n"
+        + "var y = -1, m = -1, d = -1, h = -1, i = -1, s = -1, ms = -1, o, z, v;\n"
         + "var d = new Date();\n"
         + "y = d.getFullYear();\n"
         + "m = d.getMonth();\n"
@@ -276,7 +279,9 @@ Date.createParser = function(format) {
         }
     }
 
-    code += "if (y >= 0 && m >= 0 && d > 0 && h >= 0 && i >= 0 && s >= 0)\n"
+    code += "if (y >= 0 && m >= 0 && d > 0 && h >= 0 && i >= 0 && s >= 0 && ms >= 0)\n"
+        + "{v = new Date(y, m, d, h, i, s, ms);}\n"
+        + "else if (y >= 0 && m >= 0 && d > 0 && h >= 0 && i >= 0 && s >= 0)\n"
         + "{v = new Date(y, m, d, h, i, s);}\n"
         + "else if (y >= 0 && m >= 0 && d > 0 && h >= 0 && i >= 0)\n"
         + "{v = new Date(y, m, d, h, i);}\n"
@@ -299,6 +304,12 @@ Date.createParser = function(format) {
 
 // private
 Date.formatCodeToRegex = function(character, currentGroup) {
+    /*
+     * currentGroup = position in regex result array
+     * g = calculation group (0 or 1. only group 1 contributes to date calculations.)
+     * c = calculation method (required for group 1. null for group 0.)
+     * s = regex string
+     */
     switch (character) {
     case "D":
         return {g:0,
@@ -331,7 +342,7 @@ Date.formatCodeToRegex = function(character, currentGroup) {
     case "W":
         return {g:0,
             c:null,
-            s:"(?:\\d{2})"};
+            s:"(?:\\d{1,2})"};
     case "F":
         return {g:1,
             c:"m = parseInt(Date.monthNumbers[results[" + currentGroup + "].substring(0, 1).toUpperCase() + results[" + currentGroup + "].substring(1, 3).toLowerCase()], 10);\n",
@@ -395,6 +406,10 @@ Date.formatCodeToRegex = function(character, currentGroup) {
         return {g:1,
             c:"s = parseInt(results[" + currentGroup + "], 10);\n",
             s:"(\\d{2})"};
+    case "u":
+        return {g:1,
+            c:"ms = parseInt(results[" + currentGroup + "], 10);\n",
+            s:"(\\d{3})"};
     case "O":
         return {g:1,
             c:[
@@ -412,8 +427,8 @@ Date.formatCodeToRegex = function(character, currentGroup) {
             s:"[A-Z]{1,4}"}; // timezone abbrev. may be between 1 - 4 chars
     case "Z":
         return {g:1,
-            c:"z = results[" + currentGroup + "];\n" // -43200 <= UTC offset <= 50400
-                  + "z = (-43200 <= z*1 && z*1 <= 50400)? z : null;\n",
+            c:"z = results[" + currentGroup + "] * 1;\n" // -43200 <= UTC offset <= 50400
+                  + "z = (-43200 <= z && z <= 50400)? z : null;\n",
             s:"([+\-]?\\d{1,5})"}; // leading '+' sign is optional for UTC offset
     default:
         return {g:0,
@@ -442,7 +457,7 @@ Date.prototype.getGMTOffset = function() {
 
 /**
  * Get the numeric day number of the year, adjusted for leap year.
- * @return {Number} 0 through 364 (365 in leap years)
+ * @return {Number} 0 to 364 (365 in leap years)
  */
 Date.prototype.getDayOfYear = function() {
     var num = 0;
@@ -454,17 +469,34 @@ Date.prototype.getDayOfYear = function() {
 };
 
 /**
- * Get the string representation of the numeric week number of the year
+ * Get the numeric ISO-8601 week number of the year
  * (equivalent to the format specifier 'W').
- * @return {String} '00' through '52'
+ * @return {Number} 1 to 53
  */
 Date.prototype.getWeekOfYear = function() {
-    // Skip to Thursday of this week
-    var now = this.getDayOfYear() + (4 - this.getDay());
-    // Find the first Thursday of the year
-    var jan1 = new Date(this.getFullYear(), 0, 1);
-    var then = (7 - jan1.getDay() + 4);
-    return String.leftPad(((now - then) / 7) + 1, 2, "0");
+  /*
+    original getWeek() function developed by Nick Baicoianu
+    at MeanFreePath: http://www.meanfreepath.com
+  */
+  var jan1 = new Date(this.getFullYear(), 0, 1);
+  var day = jan1.getDay() - 1; // the day of week the year begins on
+  day = (day >= 0 ? day : day + 7);
+  var daynum = Math.floor((this.getTime() - jan1.getTime() - (this.getTimezoneOffset()-jan1.getTimezoneOffset())*60000)/86400000) + 1;
+  var weeknum;
+  // if the year starts before the middle of a week
+  if (day < 4) {
+    weeknum = Math.floor((daynum + day - 1) / 7) + 1;
+    if (weeknum > 52) {
+      jan1 = new Date(this.getFullYear() + 1, 0, 1);
+      day = jan1.getDay() - 1;
+      day = (day >= 0 ? day : day + 7);
+      // if the next year starts before the middle of the week, it is week #1 of that year
+      weeknum = day < 4 ? 1 : 53;
+    }
+  } else {
+    weeknum = Math.floor((daynum + day - 1) / 7) || 52;
+  }
+  return weeknum;
 };
 
 /**
@@ -510,7 +542,7 @@ Date.prototype.getLastDayOfMonth = function() {
 
 
 /**
- * Get the first date of this date's month
+ * Get the date of the first day of the month in which this date resides
  * @return {Date}
  */
 Date.prototype.getFirstDateOfMonth = function() {
@@ -518,7 +550,7 @@ Date.prototype.getFirstDateOfMonth = function() {
 };
 
 /**
- * Get the last date of this date's month
+ * Get the date of the last day of the month in which this date resides
  * @return {Date}
  */
 Date.prototype.getLastDateOfMonth = function() {
@@ -634,7 +666,7 @@ document.write(orig);  //returns 'Thu Oct 01 2006'
  * @return {Date} The new Date instance
  */
 Date.prototype.clone = function() {
-	return new Date(this.getTime());
+  return new Date(this.getTime());
 };
 
 /**
@@ -657,17 +689,17 @@ Date.prototype.clearTime = function(clone){
 // safari setMonth is broken
 if(Ext.isSafari){
     Date.brokenSetMonth = Date.prototype.setMonth;
-	Date.prototype.setMonth = function(num){
-		if(num <= -1){
-			var n = Math.ceil(-num);
-			var back_year = Math.ceil(n/12);
-			var month = (n % 12) ? 12 - n % 12 : 0 ;
-			this.setFullYear(this.getFullYear() - back_year);
-			return Date.brokenSetMonth.call(this, month);
-		} else {
-			return Date.brokenSetMonth.apply(this, arguments);
-		}
-	};
+  Date.prototype.setMonth = function(num){
+    if(num <= -1){
+      var n = Math.ceil(-num);
+      var back_year = Math.ceil(n/12);
+      var month = (n % 12) ? 12 - n % 12 : 0 ;
+      this.setFullYear(this.getFullYear() - back_year);
+      return Date.brokenSetMonth.call(this, month);
+    } else {
+      return Date.brokenSetMonth.apply(this, arguments);
+    }
+  };
 }
 
 /** Date interval constant @static @type String */
@@ -743,7 +775,13 @@ Date.prototype.add = function(interval, value){
   return d;
 };
 
+/**
+ * Checks if this date falls on or between the given start and end dates
+ * @param {Date} start Start date
+ * @param {Date} end End date
+ * @return {Boolean} true if this date falls on or between the given start and end dates
+ */
 Date.prototype.between = function(start, end){
     var t = this.getTime();
-    return t >= start.getTime() && t <= end.getTime();
+    return start.getTime() <= t && t <= end.getTime();
 }

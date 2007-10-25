@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -181,10 +181,11 @@
    filter: alpha(opacity=50);
    background-color:#CCC;
 }
-body.x-body-masked select {
+
+body.ext-ie6.x-body-masked select {
 	visibility:hidden;
 }
-body.x-body-masked .x-window select {
+body.ext-ie6.x-body-masked .x-window select {
 	visibility:visible;
 }
 

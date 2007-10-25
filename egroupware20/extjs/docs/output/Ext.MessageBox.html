@@ -13,15 +13,19 @@
                                     <tr><td class="label">Extends:</td><td class="hd-info">Object</td></tr>
                     </table>
         <div class="description">
-            Utility class for generating different styles of message boxes.  The alias Ext.Msg can also be used.
-Example usage:
+            <p>Utility class for generating different styles of message boxes.  The alias Ext.Msg can also be used.<p/>
+<p>Note that the MessageBox is asynchronous.  Unlike a regular JavaScript <code>alert</code> (which will halt
+browser execution), showing a MessageBox will not cause the code to stop.  For this reason, if you have code
+that should only run <em>after</em> some user feedback from the MessageBox, you must use a callback function
+(see the <code>function</code> parameter for <a ext:cls="Ext.MessageBox" ext:member="show" href="output/Ext.MessageBox.html#show">show</a> for more details).</p>
+<p>Example usage:</p>
 <pre><code><i>// Basic alert:</i>
 Ext.Msg.alert(<em>'Status'</em>, <em>'Changes saved successfully.'</em>);
 
-<i>// Prompt <b>for</b> user data:</i>
+<i>// Prompt <b>for</b> user data and process the result using a callback:</i>
 Ext.Msg.prompt(<em>'Name'</em>, <em>'Please enter your name:'</em>, <b>function</b>(btn, text){
     <b>if</b> (btn == <em>'ok'</em>){
-        <i>// process text value...</i>
+        <i>// process text value and close...</i>
     }
 });
 

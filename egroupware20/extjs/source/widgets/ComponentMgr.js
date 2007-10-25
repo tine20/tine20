@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -8,7 +8,12 @@
 
 /**
  * @class Ext.ComponentMgr
- * Provides a common registry of all components on a page so that they can be easily accessed by component id (see {@link Ext.getCmp}).
+ * <p>Provides a common registry of all components (specifically subclasses of {@link Ext.Component}) on a page so
+ * that they can be easily accessed by component id (see {@link Ext.getCmp}).</p>
+ * <p>Every component class also gets registered in ComponentMgr by its 'xtype' property, which is its Ext-specific
+ * type name (e.g., Ext.form.TextField's xtype is 'textfield'). This allows you to check the xtype of specific
+ * object instances (see {@link Ext.Component#getXType} and {@link Ext.Component#isXType}). For a list of all
+ * available xtypes, see {@link Ext.Component}.</p>
  * @singleton
  */
 Ext.ComponentMgr = function(){
@@ -65,6 +70,7 @@ Ext.ComponentMgr = function(){
         // private
         registerType : function(xtype, cls){
             types[xtype] = cls;
+            cls.xtype = xtype;
         },
 
         // private

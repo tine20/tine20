@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -155,7 +155,7 @@ Ext.dd.DragDrop.prototype = {
      * DragDrop object in the same group.  This lets us define multiple
      * groups using a single DragDrop subclass if we want.
      * @property groups
-     * @type {string: string}
+     * @type object An object in the format {'group1':true, 'group2':true}
      */
     groups: null,
 
@@ -183,7 +183,7 @@ Ext.dd.DragDrop.prototype = {
     /**
      * By default, all insances can be a drop target.  This can be disabled by
      * setting isTarget to false.
-     * @method isTarget
+     * @property isTarget
      * @type boolean
      */
     isTarget: true,
@@ -191,8 +191,8 @@ Ext.dd.DragDrop.prototype = {
     /**
      * The padding configured for this drag and drop object for calculating
      * the drop zone intersection with this object.
-     * @method padding
-     * @type int[]
+     * @property padding
+     * @type int[] An array containing the 4 padding values: [top, right, bottom, left]
      */
     padding: null,
 

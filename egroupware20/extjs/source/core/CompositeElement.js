@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -181,7 +181,7 @@ Ext.CompositeElement.prototype = {
                 if(d.dom){
                     d.remove();
                 }else{
-                    d.parentNode.removeChild(d);
+                    Ext.removeNode(d);
                 }
             }
             this.elements.splice(index, 1);
@@ -330,7 +330,7 @@ Ext.extend(Ext.CompositeElementLite, Ext.CompositeElement, {
             if(domReplace){
                 var d = this.elements[index];
                 d.parentNode.insertBefore(replacement, d);
-                d.parentNode.removeChild(d);
+                Ext.removeNode(d);
             }
             this.elements.splice(index, 1, replacement);
         }

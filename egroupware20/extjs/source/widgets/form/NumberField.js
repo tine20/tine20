@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,11 +14,7 @@
  * Creates a new NumberField
  * @param {Object} config Configuration options
  */
-Ext.form.NumberField = function(config){
-    Ext.form.NumberField.superclass.constructor.call(this, config);
-};
-
-Ext.extend(Ext.form.NumberField, Ext.form.TextField,  {
+Ext.form.NumberField = Ext.extend(Ext.form.TextField,  {
     /**
      * @cfg {String} fieldClass The default CSS class for the field (defaults to "x-form-field x-form-num-field")
      */
@@ -60,11 +56,15 @@ Ext.extend(Ext.form.NumberField, Ext.form.TextField,  {
      * if a valid character like '.' or '-' is left in the field with no number (defaults to "{value} is not a valid number")
      */
     nanText : "{0} is not a valid number",
+    /**
+     * @cfg {String} baseChars The base set of characters to evaluate as valid numbers (defaults to '0123456789').
+     */
+    baseChars : "0123456789",
 
     // private
     initEvents : function(){
         Ext.form.NumberField.superclass.initEvents.call(this);
-        var allowed = "0123456789";
+        var allowed = this.baseChars+'';
         if(this.allowDecimals){
             allowed += this.decimalSeparator;
         }

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -71,20 +71,22 @@ Ext.grid.TableGrid = function(table, config) {
 
     if(config.width || config.height){
         ct.setSize(config.width || 'auto', config.height || 'auto');
+    } else {
+        ct.setWidth(table.getWidth());
     }
+
     if(config.remove !== false){
         table.remove();
     }
 
-    Ext.grid.TableGrid.superclass.constructor.call(this, ct,
-        Ext.applyIf(config, {
-            'ds': ds,
-            'cm': cm,
-            'sm': new Ext.grid.RowSelectionModel(),
-            autoHeight:true,
-            autoWidth:true
-        }
-    ));
+    Ext.applyIf(this, {
+        'ds': ds,
+        'cm': cm,
+        'sm': new Ext.grid.RowSelectionModel(),
+        autoHeight:true,
+        autoWidth:false
+    });
+    Ext.grid.TableGrid.superclass.constructor.call(this, ct, {});
 };
 
-Ext.extend(Ext.grid.TableGrid, Ext.grid.Grid);
+Ext.extend(Ext.grid.TableGrid, Ext.grid.GridPanel);

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -10,11 +10,22 @@
  * @class Ext.tree.TreeLoader
  * @extends Ext.util.Observable
  * A TreeLoader provides for lazy loading of an {@link Ext.tree.TreeNode}'s child
- * nodes from a specified URL. The response must be a javascript Array definition
- * who's elements are node definition objects. eg:
+ * nodes from a specified URL. The response must be a JavaScript Array definition
+ * whose elements are node definition objects. eg:
  * <pre><code>
-   [{ 'id': 1, 'text': 'A folder Node', 'leaf': false },
-    { 'id': 2, 'text': 'A leaf Node', 'leaf': true }]
+    [{
+        id: 1,
+        text: 'A leaf Node',
+        leaf: true
+    },{
+        id: 2,
+        text: 'A folder Node',
+        children: [{
+            id: 3,
+            text: 'A child Node',
+            leaf: true
+        }]
+   }]
 </code></pre>
  * <br><br>
  * A server request is sent, and child nodes are loaded only when a node is expanded.
@@ -72,7 +83,7 @@ Ext.tree.TreeLoader = function(config){
 Ext.extend(Ext.tree.TreeLoader, Ext.util.Observable, {
     /**
     * @cfg {String} dataUrl The URL from which to request a Json string which
-    * specifies an array of node definition object representing the child nodes
+    * specifies an array of node definition objects representing the child nodes
     * to be loaded.
     */
     /**

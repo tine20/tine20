@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -95,7 +95,7 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
         var size = target.getViewSize();
 
-        if(size.width < 20 || size.height < 20){ // display none?
+        if(size.width < 1 && size.height < 1){ // display none?
             return;
         }
 
@@ -104,7 +104,7 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
             pw = w;
 
         this.innerCt.setWidth(w);
-
+        
         // some columns can be percentages while others are fixed
         // so we need to make 2 passes
 
@@ -124,9 +124,10 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
             }
         }
     }
-
+    
     /**
-     * @cfg {Mixed} activeItem @hide
+     * @property activeItem
+     * @hide
      */
 });
 

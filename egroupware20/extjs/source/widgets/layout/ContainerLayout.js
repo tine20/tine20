@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -84,9 +84,9 @@ Ext.layout.ContainerLayout.prototype = {
                 c.addClass(this.extraCls);
             }
             if(typeof position == 'number'){
-                position = target.dom.childNodes[position] || null;
+                position = target.dom.childNodes[position];
             }
-            target.dom.insertBefore(c.getEl().dom, position);
+            target.dom.insertBefore(c.getEl().dom, position || null);
             if (this.renderHidden && c != this.activeItem) {
                 c.hide();
             }

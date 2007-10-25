@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -436,7 +436,11 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             this.el.dom.setAttribute('tabIndex', -1);
             this.deferFocus();
         }
-        this.setSize(this.wrap.getSize());
+        var lastSize = this.lastSize;
+        if(lastSize){
+            delete this.lastSize;
+            this.setSize(lastSize);
+        }
         this.fireEvent('editmodechange', this, this.sourceEditMode);
     },
 

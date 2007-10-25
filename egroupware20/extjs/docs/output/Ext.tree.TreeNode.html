@@ -32,22 +32,31 @@
                 <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.tree.TreeNode-allowDrag"></a>
-            <b>allowDrag</b> : Boolean            <div class="mdesc">
-                            false to make this node undraggable if DD is on (defaults to true)                        </div>
+        <a id="Ext.tree.TreeNode-allowChildren"></a>
+            <b>allowChildren</b> : Boolean            <div class="mdesc">
+                            False to not allow this node to have child nodes (defaults to true)                        </div>
         </td>
         <td class="msource">TreeNode</td>
     </tr>
         <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.tree.TreeNode-allowDrop"></a>
-            <b>allowDrop</b> : Boolean            <div class="mdesc">
-                            false if this node cannot be drop on                        </div>
+        <a id="Ext.tree.TreeNode-allowDrag"></a>
+            <b>allowDrag</b> : Boolean            <div class="mdesc">
+                            False to make this node undraggable if <a ext:cls="Ext.tree.TreeNode" ext:member="draggable" href="output/Ext.tree.TreeNode.html#draggable">draggable</a> = true (defaults to true)                        </div>
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row expandable">
+        <tr class="config-row">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreeNode-allowDrop"></a>
+            <b>allowDrop</b> : Boolean            <div class="mdesc">
+                            False if this node cannot have child nodes dropped on it (defaults to true)                        </div>
+        </td>
+        <td class="msource">TreeNode</td>
+    </tr>
+        <tr class="config-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-checked"></a>
@@ -59,7 +68,7 @@
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-cls"></a>
@@ -68,12 +77,21 @@
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-disabled"></a>
             <b>disabled</b> : Boolean            <div class="mdesc">
                             true to start the node disabled                        </div>
+        </td>
+        <td class="msource">TreeNode</td>
+    </tr>
+        <tr class="config-row">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreeNode-draggable"></a>
+            <b>draggable</b> : Boolean            <div class="mdesc">
+                            True to make this node draggable (defaults to false)                        </div>
         </td>
         <td class="msource">TreeNode</td>
     </tr>
@@ -143,7 +161,16 @@
         </td>
         <td class="msource"><a ext:cls="Ext.data.Node" ext:member="#id" href="output/Ext.data.Node.html#id">Node</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.tree.TreeNode-isTarget"></a>
+            <b>isTarget</b> : Boolean            <div class="mdesc">
+                            False to not allow this node to act as a drop target (defaults to true)                        </div>
+        </td>
+        <td class="msource">TreeNode</td>
+    </tr>
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-leaf"></a>
@@ -152,7 +179,7 @@
         </td>
         <td class="msource"><a ext:cls="Ext.data.Node" ext:member="#leaf" href="output/Ext.data.Node.html#leaf">Node</a></td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-qtip"></a>
@@ -161,7 +188,7 @@
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-qtipCfg"></a>
@@ -170,7 +197,7 @@
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-singleClickExpand"></a>
@@ -179,7 +206,7 @@
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-text"></a>
@@ -188,7 +215,7 @@
         </td>
         <td class="msource">TreeNode</td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.tree.TreeNode-uiProvider"></a>
@@ -375,8 +402,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -386,7 +413,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -403,7 +430,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut

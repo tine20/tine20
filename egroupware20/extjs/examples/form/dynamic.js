@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -64,7 +64,7 @@ Ext.onReady(function(){
 
     
     /*
-     * ================  Form ?  =======================
+     * ================  Form 2  =======================
      */
     bd.createChild({tag: 'h2', html: 'Form 2 - Adding fieldsets'});
 
@@ -134,9 +134,9 @@ Ext.onReady(function(){
     fsf.render(document.body);
 
     /*
-     * ================  Form 2  =======================
+     * ================  Form 3  =======================
      */
-    bd.createChild({tag: 'h2', html: 'Form 2 - A little more complex'});
+    bd.createChild({tag: 'h2', html: 'Form 3 - A little more complex'});
 
 
     var top = new Ext.FormPanel({
@@ -196,9 +196,9 @@ Ext.onReady(function(){
 
 
     /*
-     * ================  Form 3  =======================
+     * ================  Form 4  =======================
      */
-    bd.createChild({tag: 'h2', html: 'Form 3 - Forms can be a TabPanel...'});
+    bd.createChild({tag: 'h2', html: 'Form 4 - Forms can be a TabPanel...'});
 
 
 
@@ -270,9 +270,9 @@ Ext.onReady(function(){
 
 
     /*
-     * ================  Form 4  =======================
+     * ================  Form 5  =======================
      */
-    bd.createChild({tag: 'h2', html: 'Form 3 - ... and forms can contain TabPanel(s)'});
+    bd.createChild({tag: 'h2', html: 'Form 5 - ... and forms can contain TabPanel(s)'});
 
     var tab2 = new Ext.FormPanel({
         labelAlign: 'top',
@@ -370,7 +370,7 @@ Ext.onReady(function(){
                 layout:'fit',
                 items: {
                     xtype:'htmleditor',
-                    id:'bio',
+                    id:'bio2',
                     fieldLabel:'Biography'
                 }
             }]

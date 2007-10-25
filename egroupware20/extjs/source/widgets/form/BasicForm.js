@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -438,8 +438,7 @@ clientValidation  Boolean          Applies to submit only.  Pass true to call fo
     render : function(){
         this.items.each(function(f){
             if(f.isFormField && !f.rendered && document.getElementById(f.id)){ // if the element exists
-                f.applyTo = f.id;
-                f.render();
+                f.applyToMarkup(f.id);
             }
         });
         return this;

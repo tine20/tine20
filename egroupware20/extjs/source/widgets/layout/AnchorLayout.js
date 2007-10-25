@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -139,9 +139,10 @@ Ext.layout.AnchorLayout = Ext.extend(Ext.layout.ContainerLayout, {
     adjustHeightAnchor : function(value, comp){
         return value;
     }
-
+    
     /**
-     * @cfg {Mixed} activeItem @hide
+     * @property activeItem
+     * @hide
      */
 });
 Ext.Container.LAYOUTS['anchor'] = Ext.layout.AnchorLayout;

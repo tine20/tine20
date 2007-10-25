@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -11,10 +11,12 @@ FeedViewer = {};
 Ext.onReady(function(){
     Ext.QuickTips.init();
 
+    Ext.state.Manager.setProvider(new Ext.state.SessionProvider({state: Ext.appState}));
+
     var tpl = Ext.Template.from('preview-tpl', {
         compiled:true,
         getBody : function(v, all){
-            return v || all.description;
+            return Ext.util.Format.stripScripts(v || all.description);
         }
     });
     FeedViewer.getTemplate = function(){
@@ -43,8 +45,8 @@ Ext.onReady(function(){
 
     // add some default feeds
     feeds.addFeed({
-        url:'http://extjs.com/news/archive/feed',
-        text: 'ExtJS.com News'
+        url:'http://feeds.feedburner.com/extblog',
+        text: 'ExtJS.com Blog'
     }, false, true);
 
     feeds.addFeed({

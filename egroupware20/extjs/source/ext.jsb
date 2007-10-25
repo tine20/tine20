@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project path="" name="Ext - JS Lib" author="Ext JS, LLC" version="2.0 Alpha 1" copyright="Ext JS Library $version&#xD;&#xA;Copyright(c) 2006-2007, $author.&#xD;&#xA;licensing@extjs.com&#xD;&#xA;&#xD;&#xA;http://extjs.com/license" output="C:\apps\www\deploy\ext-2.0-alpha1\" source="True" source-dir="$output\source" minify="True" min-dir="$output\build" doc="False" doc-dir="$output\docs" min-dair="$output\build">
+<project path="" name="Ext - JS Lib" author="Ext JS, LLC" version="2.0 Beta 1" copyright="Ext JS Library $version&#xD;&#xA;Copyright(c) 2006-2007, $author.&#xD;&#xA;licensing@extjs.com&#xD;&#xA;&#xD;&#xA;http://extjs.com/license" output="C:\apps\www\deploy\ext-2.0-beta1\" source="True" source-dir="$output\source" minify="True" min-dir="$output\build" doc="False" doc-dir="$output\docs" min-dair="$output\build">
   <directory name="" />
   <target name="Core" file="$output\ext-core.js" debug="True" shorthand="False" shorthand-list="YAHOO.util.Dom.setStyle&#xD;&#xA;YAHOO.util.Dom.getStyle&#xD;&#xA;YAHOO.util.Dom.getRegion&#xD;&#xA;YAHOO.util.Dom.getViewportHeight&#xD;&#xA;YAHOO.util.Dom.getViewportWidth&#xD;&#xA;YAHOO.util.Dom.get&#xD;&#xA;YAHOO.util.Dom.getXY&#xD;&#xA;YAHOO.util.Dom.setXY&#xD;&#xA;YAHOO.util.CustomEvent&#xD;&#xA;YAHOO.util.Event.addListener&#xD;&#xA;YAHOO.util.Event.getEvent&#xD;&#xA;YAHOO.util.Event.getTarget&#xD;&#xA;YAHOO.util.Event.preventDefault&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Event.stopPropagation&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Anim&#xD;&#xA;YAHOO.util.Motion&#xD;&#xA;YAHOO.util.Connect.asyncRequest&#xD;&#xA;YAHOO.util.Connect.setForm&#xD;&#xA;YAHOO.util.Dom&#xD;&#xA;YAHOO.util.Event">
     <include name="core\DomHelper.js" />
@@ -77,9 +77,10 @@
     <include name="widgets\layout\AnchorLayout.js" />
     <include name="widgets\layout\ColumnLayout.js" />
     <include name="widgets\layout\BorderLayout.js" />
-    <include name="widgets\layout\AccordianLayout.js" />
     <include name="widgets\layout\FormLayout.js" />
+    <include name="widgets\layout\AccordionLayout.js" />
     <include name="widgets\layout\TableLayout.js" />
+    <include name="widgets\layout\AbsoluteLayout.js" />
     <include name="widgets\Viewport.js" />
     <include name="widgets\Panel.js" />
     <include name="widgets\Window.js" />
@@ -511,6 +512,8 @@
   <file name="locale\ext-lang-pt_br.js" path="locale" />
   <file name="locale\ext-lang-sv_se.js" path="locale" />
   <file name="state\State.js" path="state" />
+  <file name="widgets\layout\AccordianLayout.js" path="widgets\layout" />
+  <file name="widgets\QuickTips.js" path="widgets" />
   <file name="adapter\ext-base.js" path="adapter" />
   <file name="adapter\jquery-bridge.js" path="adapter" />
   <file name="adapter\prototype-bridge.js" path="adapter" />
@@ -645,7 +648,8 @@
   <file name="widgets\grid\PropertyGrid.js" path="widgets\grid" />
   <file name="widgets\grid\RowNumberer.js" path="widgets\grid" />
   <file name="widgets\grid\RowSelectionModel.js" path="widgets\grid" />
-  <file name="widgets\layout\AccordianLayout.js" path="widgets\layout" />
+  <file name="widgets\layout\AbsoluteLayout.js" path="widgets\layout" />
+  <file name="widgets\layout\AccordionLayout.js" path="widgets\layout" />
   <file name="widgets\layout\AnchorLayout.js" path="widgets\layout" />
   <file name="widgets\layout\BorderLayout.js" path="widgets\layout" />
   <file name="widgets\layout\CardLayout.js" path="widgets\layout" />
@@ -698,8 +702,8 @@
   <file name="widgets\MessageBox.js" path="widgets" />
   <file name="widgets\PagingToolbar.js" path="widgets" />
   <file name="widgets\Panel.js" path="widgets" />
+  <file name="widgets\PanelDD.js" path="widgets" />
   <file name="widgets\ProgressBar.js" path="widgets" />
-  <file name="widgets\QuickTips.js" path="widgets" />
   <file name="widgets\Resizable.js" path="widgets" />
   <file name="widgets\Shadow.js" path="widgets" />
   <file name="widgets\SplitBar.js" path="widgets" />
@@ -715,5 +719,4 @@
   <file name="yui\event.js" path="yui" />
   <file name="yui\yahoo.js" path="yui" />
   <file name="debug.js" path="" />
-  <file name="widgets\PanelDD.js" path="widgets" />
 </project>

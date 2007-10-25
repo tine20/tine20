@@ -55,9 +55,9 @@ support for auto-sizing.        </div>
         <td class="sig">
         <a id="Ext.form.TextArea-applyTo"></a>
             <b>applyTo</b> : Mixed            <div class="mdesc">
-                        <div class="short">The id of the node, a DOM node or an existing Element corresponding to an existing element present in the DOM to rend...</div>
+                        <div class="short">The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in the document ...</div>
             <div class="long">
-                The id of the node, a DOM node or an existing Element corresponding to an existing element present in the DOM to render this component to. Using this config, a call to render() is not required.            </div>
+                The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in the document that specifies some structural markup for this component. When applyTo is used, constituent parts of the component can also be specified by id or CSS class name within the main element, and the component being created may attempt to create its subcomponents from that markup if applicable. Using this config, a call to render() is not required. If applyTo is specified, any value passed for <a ext:cls="Ext.Component" ext:member="renderTo" href="output/Ext.Component.html#renderTo">renderTo</a> will be ignored and the target element's parent node will automatically be used as the component's container.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#applyTo" href="output/Ext.Component.html#applyTo">Component</a></td>
@@ -113,7 +113,16 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#blankText" href="output/Ext.form.TextField.html#blankText">TextField</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-clearCls"></a>
+            <b>clearCls</b> : String            <div class="mdesc">
+                            The CSS class used to provide field clearing (defaults to 'x-form-clear-left')                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#clearCls" href="output/Ext.form.Field.html#clearCls">Field</a></td>
+    </tr>
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-cls"></a>
@@ -125,7 +134,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#cls" href="output/Ext.Component.html#cls">Component</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-ctCls"></a>
@@ -137,28 +146,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#ctCls" href="output/Ext.Component.html#ctCls">Component</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.form.TextArea-deferHeight"></a>
-            <b>deferHeight</b> : Boolean            <div class="mdesc">
-                        <div class="short">True to defer height calculations to an external component, false to allow this component to set its own height (defa...</div>
-            <div class="long">
-                True to defer height calculations to an external component, false to allow this component to set its own height (defaults to false).            </div>
-                        </div>
-        </td>
-        <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#deferHeight" href="output/Ext.BoxComponent.html#deferHeight">BoxComponent</a></td>
-    </tr>
         <tr class="config-row inherited alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.form.TextArea-disableClass"></a>
-            <b>disableClass</b> : String            <div class="mdesc">
-                            CSS class added to the component when it is disabled (defaults to "x-item-disabled").                        </div>
-        </td>
-        <td class="msource"><a ext:cls="Ext.Component" ext:member="#disableClass" href="output/Ext.Component.html#disableClass">Component</a></td>
-    </tr>
-        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-disableKeyFilter"></a>
@@ -167,7 +155,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#disableKeyFilter" href="output/Ext.form.TextField.html#disableKeyFilter">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-disabled"></a>
@@ -175,6 +163,15 @@ support for auto-sizing.        </div>
                             True to disable the field (defaults to false).                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#disabled" href="output/Ext.form.Field.html#disabled">Field</a></td>
+    </tr>
+        <tr class="config-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-disabledClass"></a>
+            <b>disabledClass</b> : String            <div class="mdesc">
+                            CSS class added to the component when it is disabled (defaults to "x-item-disabled").                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#disabledClass" href="output/Ext.Component.html#disabledClass">Component</a></td>
     </tr>
         <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -209,13 +206,22 @@ support for auto-sizing.        </div>
         <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Ext.form.TextArea-fieldLabel"></a>
+            <b>fieldLabel</b> : String            <div class="mdesc">
+                            The label text to display next to this field (defaults to '')                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#fieldLabel" href="output/Ext.form.Field.html#fieldLabel">Field</a></td>
+    </tr>
+        <tr class="config-row inherited">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Ext.form.TextArea-focusClass"></a>
             <b>focusClass</b> : String            <div class="mdesc">
                             The CSS class to use when the field receives focus (defaults to "x-form-focus")                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#focusClass" href="output/Ext.form.Field.html#focusClass">Field</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-grow"></a>
@@ -224,7 +230,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#grow" href="output/Ext.form.TextField.html#grow">TextField</a></td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-growMax"></a>
@@ -233,7 +239,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource">TextArea</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-growMin"></a>
@@ -242,7 +248,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource">TextArea</td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-height"></a>
@@ -250,6 +256,15 @@ support for auto-sizing.        </div>
                             The height of this component in pixels (defaults to auto).                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#height" href="output/Ext.BoxComponent.html#height">BoxComponent</a></td>
+    </tr>
+        <tr class="config-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-hideLabel"></a>
+            <b>hideLabel</b> : Boolean            <div class="mdesc">
+                            True to completely hide the label element (defaults to false)                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#hideLabel" href="output/Ext.form.Field.html#hideLabel">Field</a></td>
     </tr>
         <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -317,13 +332,46 @@ support for auto-sizing.        </div>
         <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Ext.form.TextArea-itemCls"></a>
+            <b>itemCls</b> : String            <div class="mdesc">
+                            An additional CSS class to apply to this field (defaults to the container's itemCls value if set, or '')                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#itemCls" href="output/Ext.form.Field.html#itemCls">Field</a></td>
+    </tr>
+        <tr class="config-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-labelSeparator"></a>
+            <b>labelSeparator</b> : String            <div class="mdesc">
+                        <div class="short">The standard separator to display after the text of each form label (defaults to the value of Ext.layout.FormLayout.l...</div>
+            <div class="long">
+                The standard separator to display after the text of each form label (defaults to the value of <a ext:cls="Ext.layout.FormLayout" ext:member="labelSeparator" href="output/Ext.layout.FormLayout.html#labelSeparator">Ext.layout.FormLayout.labelSeparator</a>, which is a colon ':' by default). To display no separator for this field's label specify empty string ''.            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#labelSeparator" href="output/Ext.form.Field.html#labelSeparator">Field</a></td>
+    </tr>
+        <tr class="config-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-labelStyle"></a>
+            <b>labelStyle</b> : String            <div class="mdesc">
+                        <div class="short">A CSS style specification to apply directly to this field's label (defaults to the container's labelStyle value if se...</div>
+            <div class="long">
+                A CSS style specification to apply directly to this field's label (defaults to the container's labelStyle value if set, or ''). For example, <code>labelStyle: 'font-weight:bold;'</code>.            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#labelStyle" href="output/Ext.form.Field.html#labelStyle">Field</a></td>
+    </tr>
+        <tr class="config-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Ext.form.TextArea-maskRe"></a>
-            <b>maskRe</b> : String            <div class="mdesc">
+            <b>maskRe</b> : RegExp            <div class="mdesc">
                             An input mask regular expression that will be used to filter keystrokes that don't match (defaults to null)                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#maskRe" href="output/Ext.form.TextField.html#maskRe">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-maxLength"></a>
@@ -332,7 +380,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#maxLength" href="output/Ext.form.TextField.html#maxLength">TextField</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-maxLengthText"></a>
@@ -344,7 +392,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#maxLengthText" href="output/Ext.form.TextField.html#maxLengthText">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-minLength"></a>
@@ -353,7 +401,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#minLength" href="output/Ext.form.TextField.html#minLength">TextField</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-minLengthText"></a>
@@ -365,7 +413,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#minLengthText" href="output/Ext.form.TextField.html#minLengthText">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-msgFx"></a>
@@ -374,7 +422,7 @@ support for auto-sizing.        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#msgFx" href="output/Ext.form.Field.html#msgFx">Field</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-msgTarget"></a>
@@ -392,7 +440,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#msgTarget" href="output/Ext.form.Field.html#msgTarget">Field</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-name"></a>
@@ -401,7 +449,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#name" href="output/Ext.form.Field.html#name">Field</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-plugins"></a>
@@ -413,7 +461,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#plugins" href="output/Ext.Component.html#plugins">Component</a></td>
     </tr>
-        <tr class="config-row alt expandable">
+        <tr class="config-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-preventScrollbars"></a>
@@ -425,7 +473,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource">TextArea</td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-readOnly"></a>
@@ -437,7 +485,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#readOnly" href="output/Ext.form.Field.html#readOnly">Field</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-regex"></a>
@@ -449,7 +497,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#regex" href="output/Ext.form.TextField.html#regex">TextField</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-regexText"></a>
@@ -458,19 +506,19 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#regexText" href="output/Ext.form.TextField.html#regexText">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-renderTo"></a>
             <b>renderTo</b> : Mixed            <div class="mdesc">
-                        <div class="short">The id of the node, a DOM node or an existing Element to render this component into. Using this config, a call to ren...</div>
+                        <div class="short">The id of the node, a DOM node or an existing Element that will be the container to render this component into. Using...</div>
             <div class="long">
-                The id of the node, a DOM node or an existing Element to render this component into. Using this config, a call to render() is not required.            </div>
+                The id of the node, a DOM node or an existing Element that will be the container to render this component into. Using this config, a call to render() is not required.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#renderTo" href="output/Ext.Component.html#renderTo">Component</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-selectOnFocus"></a>
@@ -479,7 +527,28 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#selectOnFocus" href="output/Ext.form.TextField.html#selectOnFocus">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-stateEvents"></a>
+            <b>stateEvents</b> : Array            <div class="mdesc">
+                        <div class="short">An array of events that, when fired, should trigger this component to save its state (defaults to none). These can be...</div>
+            <div class="long">
+                An array of events that, when fired, should trigger this component to save its state (defaults to none). These can be any types of events supported by this component, including browser or custom events (e.g., ['click', 'customerchange']).            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#stateEvents" href="output/Ext.Component.html#stateEvents">Component</a></td>
+    </tr>
+        <tr class="config-row inherited alt">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-stateId"></a>
+            <b>stateId</b> : String            <div class="mdesc">
+                            The unique id for this component to use for state management purposes (defaults to the component id).                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#stateId" href="output/Ext.Component.html#stateId">Component</a></td>
+    </tr>
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-style"></a>
@@ -491,7 +560,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#style" href="output/Ext.Component.html#style">Component</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-tabIndex"></a>
@@ -503,7 +572,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#tabIndex" href="output/Ext.form.Field.html#tabIndex">Field</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-validateOnBlur"></a>
@@ -512,7 +581,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#validateOnBlur" href="output/Ext.form.Field.html#validateOnBlur">Field</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-validationDelay"></a>
@@ -521,7 +590,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#validationDelay" href="output/Ext.form.Field.html#validationDelay">Field</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-validationEvent"></a>
@@ -530,7 +599,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#validationEvent" href="output/Ext.form.Field.html#validationEvent">Field</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-validator"></a>
@@ -542,7 +611,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#validator" href="output/Ext.form.TextField.html#validator">TextField</a></td>
     </tr>
-        <tr class="config-row inherited alt">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-value"></a>
@@ -551,7 +620,7 @@ side          Add an error icon to the right of the field with a popup on hover
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#value" href="output/Ext.form.Field.html#value">Field</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-vtype"></a>
@@ -559,6 +628,18 @@ side          Add an error icon to the right of the field with a popup on hover
                             A validation type name as defined in <a ext:cls="Ext.form.VTypes" href="output/Ext.form.VTypes.html">Ext.form.VTypes</a> (defaults to null)                        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#vtype" href="output/Ext.form.TextField.html#vtype">TextField</a></td>
+    </tr>
+        <tr class="config-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-vtypeText"></a>
+            <b>vtypeText</b> : String            <div class="mdesc">
+                        <div class="short">A custom error message to display in place of the default message provided for the vtype currently set for this field...</div>
+            <div class="long">
+                A custom error message to display in place of the default message provided for the <a ext:cls="Ext.form.TextField" ext:member="vtype" href="output/Ext.form.TextField.html#vtype">vtype</a> currently set for this field (defaults to ''). Only applies if vtype is set, else ignored.            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#vtypeText" href="output/Ext.form.TextField.html#vtypeText">TextField</a></td>
     </tr>
         <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -710,8 +791,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -721,7 +802,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -738,7 +819,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut
@@ -754,7 +835,27 @@ Code:<pre><code>foo.on({
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#addListener" href="output/Ext.util.Observable.html#addListener">Observable</a></td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-applyToMarkup"></a>
+            <b>applyToMarkup</b>(&nbsp;<code>String/HTMLElement el</code>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Apply this component to existing markup that is valid. With this function, no call to render() is required.</div>
+            <div class="long">
+                Apply this component to existing markup that is valid. With this function, no call to render() is required.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#applyToMarkup" href="output/Ext.Component.html#applyToMarkup">Component</a></td>
+    </tr>
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-autoSize"></a>
@@ -776,7 +877,7 @@ This only takes effect if grow = true, and fires the autosize event if the heigh
         </td>
         <td class="msource">TextArea</td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-clearInvalid"></a>
@@ -796,7 +897,7 @@ This only takes effect if grow = true, and fires the autosize event if the heigh
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#clearInvalid" href="output/Ext.form.Field.html#clearInvalid">Field</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-cloneConfig"></a>
@@ -817,7 +918,7 @@ An id property can be passed on this object, otherwise one will be generated to 
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#cloneConfig" href="output/Ext.Component.html#cloneConfig">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-destroy"></a>
@@ -841,7 +942,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#destroy" href="output/Ext.Component.html#destroy">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-disable"></a>
@@ -861,7 +962,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#disable" href="output/Ext.Component.html#disable">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-enable"></a>
@@ -881,7 +982,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#enable" href="output/Ext.Component.html#enable">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-fireEvent"></a>
@@ -901,7 +1002,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#fireEvent" href="output/Ext.util.Observable.html#fireEvent">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-focus"></a>
@@ -921,7 +1022,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#focus" href="output/Ext.Component.html#focus">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getBox"></a>
@@ -941,7 +1042,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getBox" href="output/Ext.BoxComponent.html#getBox">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getEl"></a>
@@ -961,7 +1062,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#getEl" href="output/Ext.Component.html#getEl">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getId"></a>
@@ -981,7 +1082,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#getId" href="output/Ext.Component.html#getId">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getName"></a>
@@ -1001,7 +1102,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#getName" href="output/Ext.form.Field.html#getName">Field</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getPosition"></a>
@@ -1021,7 +1122,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getPosition" href="output/Ext.BoxComponent.html#getPosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getRawValue"></a>
@@ -1041,7 +1142,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#getRawValue" href="output/Ext.form.Field.html#getRawValue">Field</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getSize"></a>
@@ -1061,7 +1162,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getSize" href="output/Ext.BoxComponent.html#getSize">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-getValue"></a>
@@ -1081,7 +1182,56 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#getValue" href="output/Ext.form.Field.html#getValue">Field</a></td>
     </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-getXType"></a>
+            <b>getXType</b>() : String            <div class="mdesc">
+                        <div class="short">Gets the xtype for this component as registered with Ext.ComponentMgr. For a list of all
+available xtypes, see the Ex...</div>
+            <div class="long">
+                Gets the xtype for this component as registered with <a ext:cls="Ext.ComponentMgr" href="output/Ext.ComponentMgr.html">Ext.ComponentMgr</a>. For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>var t = <b>new</b> Ext.form.TextField();
+alert(t.getXType());  // alerts <em>'textfield'</em></code></pre>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>String</code><div class="sub-desc">The xtype</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#getXType" href="output/Ext.Component.html#getXType">Component</a></td>
+    </tr>
         <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-getXTypes"></a>
+            <b>getXTypes</b>() : String            <div class="mdesc">
+                        <div class="short">Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+available xtypes, see the Ext...</div>
+            <div class="long">
+                Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>
+var t = new Ext.form.TextField();
+alert(t.getXTypes());  // alerts 'component/box/field/textfield'</pre></code>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>String</code><div class="sub-desc">The xtype hierarchy string</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#getXTypes" href="output/Ext.Component.html#getXTypes">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-hasListener"></a>
@@ -1101,7 +1251,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#hasListener" href="output/Ext.util.Observable.html#hasListener">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-hide"></a>
@@ -1120,6 +1270,26 @@ should usually not need to be called directly.    <div class="mdetail-params">
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#hide" href="output/Ext.Component.html#hide">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.form.TextArea-initComponent"></a>
+            <b>initComponent</b>() : void            <div class="mdesc">
+                        <div class="short"></div>
+            <div class="long">
+                    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#initComponent" href="output/Ext.BoxComponent.html#initComponent">BoxComponent</a></td>
     </tr>
         <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -1184,6 +1354,34 @@ should usually not need to be called directly.    <div class="mdetail-params">
         <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Ext.form.TextArea-isXType"></a>
+            <b>isXType</b>(&nbsp;<code>String xtype</code>, <span class="optional" title="Optional">[<code>Boolean shallow</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+from th...</div>
+            <div class="long">
+                Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+from the xtype (default) or whether it is directly of the xtype specified (shallow = true). For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>var t = <b>new</b> Ext.form.TextField();
+<b>var</b> isText = t.isXType(<em>'textfield'</em>);        <i>// true</i>
+<b>var</b> isBoxSubclass = t.isXType(<em>'box'</em>);       <i>// true, descended from BoxComponent</i>
+<b>var</b> isBoxInstance = t.isXType(<em>'box'</em>, true); // false, not a direct BoxComponent instance</code></pre>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>xtype</code> : String<div class="sub-desc">The xtype to check for this component</div></li><li><code>shallow</code> : Boolean<div class="sub-desc">(optional) False to check whether this component is descended from the xtype (this is
+the default), or true to check whether this component is directly of the specified xtype.</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#isXType" href="output/Ext.Component.html#isXType">Component</a></td>
+    </tr>
+        <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Ext.form.TextArea-markInvalid"></a>
             <b>markInvalid</b>(&nbsp;<code>String msg</code>&nbsp;) : void            <div class="mdesc">
                         <div class="short">Mark this field as invalid</div>
@@ -1201,7 +1399,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#markInvalid" href="output/Ext.form.Field.html#markInvalid">Field</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-on"></a>
@@ -1222,7 +1420,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#on" href="output/Ext.util.Observable.html#on">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-purgeListeners"></a>
@@ -1242,7 +1440,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#purgeListeners" href="output/Ext.util.Observable.html#purgeListeners">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-removeClass"></a>
@@ -1262,7 +1460,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#removeClass" href="output/Ext.Component.html#removeClass">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-removeListener"></a>
@@ -1282,7 +1480,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#removeListener" href="output/Ext.util.Observable.html#removeListener">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-render"></a>
@@ -1304,7 +1502,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#render" href="output/Ext.Component.html#render">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-reset"></a>
@@ -1324,7 +1522,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#reset" href="output/Ext.form.Field.html#reset">Field</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-resumeEvents"></a>
@@ -1344,7 +1542,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#resumeEvents" href="output/Ext.util.Observable.html#resumeEvents">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-selectText"></a>
@@ -1364,7 +1562,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.form.TextField" ext:member="#selectText" href="output/Ext.form.TextField.html#selectText">TextField</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setDisabled"></a>
@@ -1384,7 +1582,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#setDisabled" href="output/Ext.Component.html#setDisabled">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setHeight"></a>
@@ -1404,7 +1602,7 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setHeight" href="output/Ext.BoxComponent.html#setHeight">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setPagePosition"></a>
@@ -1426,7 +1624,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setPagePosition" href="output/Ext.BoxComponent.html#setPagePosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setPosition"></a>
@@ -1448,7 +1646,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setPosition" href="output/Ext.BoxComponent.html#setPosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setRawValue"></a>
@@ -1468,7 +1666,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#setRawValue" href="output/Ext.form.Field.html#setRawValue">Field</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setSize"></a>
@@ -1490,7 +1688,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setSize" href="output/Ext.BoxComponent.html#setSize">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setValue"></a>
@@ -1510,7 +1708,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#setValue" href="output/Ext.form.Field.html#setValue">Field</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setVisible"></a>
@@ -1530,7 +1728,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#setVisible" href="output/Ext.Component.html#setVisible">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-setWidth"></a>
@@ -1550,7 +1748,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setWidth" href="output/Ext.BoxComponent.html#setWidth">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-show"></a>
@@ -1570,7 +1768,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#show" href="output/Ext.Component.html#show">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-suspendEvents"></a>
@@ -1590,7 +1788,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#suspendEvents" href="output/Ext.util.Observable.html#suspendEvents">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-syncSize"></a>
@@ -1610,7 +1808,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#syncSize" href="output/Ext.BoxComponent.html#syncSize">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-un"></a>
@@ -1630,7 +1828,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#un" href="output/Ext.util.Observable.html#un">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-updateBox"></a>
@@ -1650,7 +1848,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#updateBox" href="output/Ext.BoxComponent.html#updateBox">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-validate"></a>
@@ -1670,7 +1868,7 @@ either width and height as separate numeric arguments, or you can pass a size ob
         </td>
         <td class="msource"><a ext:cls="Ext.form.Field" ext:member="#validate" href="output/Ext.form.Field.html#validate">Field</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.form.TextArea-validateValue"></a>

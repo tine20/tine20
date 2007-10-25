@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -271,7 +271,7 @@ Ext.extend(Ext.SplitBar, Ext.util.Observable, {
             this.shim.remove();
         }
         this.dd.unreg();
-        this.proxy.parentNode.removeChild(this.proxy);
+        Ext.removeNode(this.proxy);
         if(removeEl){
             this.el.remove();
         }

@@ -1,4 +1,12 @@
 /*
+ * Ext JS Library 2.0 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://extjs.com/license
+ */
+
+/*
  * German translation
  * By schmidetzki and humpdi
  * 04-07-2007

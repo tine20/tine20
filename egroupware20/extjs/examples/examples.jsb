@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project path="" name="Ext Examples" author="Ext JS, LLC" version="2.0 Alpha 1" copyright="Ext JS Library $version&#xD;&#xA;Copyright(c) 2006-2007, $author.&#xD;&#xA;licensing@extjs.com&#xD;&#xA;&#xD;&#xA;This code has not yet been licensed for use." output="C:\apps\www\deploy\ext-2.0-alpha1\examples" source="True" source-dir="$output" minify="False" min-dir="$output\build" doc="False" doc-dir="$output\docs" master="true" master-file="$output\yui-ext.js" zip="true" zip-file="$output\yuo-ext.$version.zip">
-  <directory name="" />
+<project path="" name="Ext Examples" author="Ext JS, LLC" version="2.0 Beta 1" copyright="Ext JS Library $version&#xD;&#xA;Copyright(c) 2006-2007, $author.&#xD;&#xA;licensing@extjs.com&#xD;&#xA;&#xD;&#xA;http://extjs.com/license" output="C:\apps\www\deploy\ext-2.0-beta1\examples" source="True" source-dir="$output" minify="False" min-dir="$output\build" doc="False" doc-dir="$output\docs" master="true" master-file="$output\yui-ext.js" zip="true" zip-file="$output\yuo-ext.$version.zip">
   <file name="dialog\blog.html" path="dialog" />
   <file name="dialog\comments.txt" path="dialog" />
   <file name="dialog\hello.html" path="dialog" />
@@ -234,51 +233,32 @@
   <file name="form\forms.js" path="form" />
   <file name="tree\dependency.js" path="tree" />
   <file name="tree\organizer.js" path="tree" />
-  <file name="index.html" path="" />
-  <file name="shared\icons\fam\add.gif" path="shared\icons\fam" />
-  <file name="shared\icons\fam\application_go.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\application_view_list.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\cog.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\cog_edit.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\connect.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\cross.gif" path="shared\icons\fam" />
-  <file name="shared\icons\fam\delete.gif" path="shared\icons\fam" />
-  <file name="shared\icons\fam\feed_add.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\feed_delete.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\feed_error.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\folder_go.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\folder_wrench.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\grid.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\plugin.gif" path="shared\icons\fam" />
-  <file name="shared\icons\fam\plugin_add.gif" path="shared\icons\fam" />
-  <file name="shared\icons\fam\rss_go.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\SILK.txt" path="shared\icons\fam" />
-  <file name="shared\icons\fam\table_refresh.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_add.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_comment.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_delete.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_edit.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_female.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_gray.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_green.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_orange.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_red.png" path="shared\icons\fam" />
-  <file name="shared\icons\fam\user_suit.png" path="shared\icons\fam" />
-  <file name="shared\icons\arrow-down.gif" path="shared\icons" />
-  <file name="shared\icons\arrow-up.gif" path="shared\icons" />
-  <file name="shared\icons\save.gif" path="shared\icons" />
-  <file name="shared\screens\air.gif" path="shared\screens" />
-  <file name="shared\screens\desktop.gif" path="shared\screens" />
-  <file name="shared\screens\feeds.gif" path="shared\screens" />
-  <file name="shared\screens\organizer.gif" path="shared\screens" />
-  <file name="shared\screens\tasks.gif" path="shared\screens" />
-  <file name="shared\screens\grid-array.gif" path="shared\screens" />
-  <file name="shared\screens\grid-edit.gif" path="shared\screens" />
-  <file name="shared\screens\grid-grouping.gif" path="shared\screens" />
-  <file name="shared\screens\grid-paging.gif" path="shared\screens" />
-  <file name="shared\screens\grid-xml.gif" path="shared\screens" />
-  <file name="shared\screens\grid-plugins.gif" path="shared\screens" />
+  <file name="window\css\windows.css" path="window\css" />
+  <file name="window\images\accordian.gif" path="window\images" />
+  <file name="window\images\bogus.png" path="window\images" />
+  <file name="window\images\desktop.gif" path="window\images" />
+  <file name="window\images\desktop3.jpg" path="window\images" />
+  <file name="window\images\hd-bg.gif" path="window\images" />
+  <file name="window\images\hd-tb-bg.gif" path="window\images" />
+  <file name="window\images\launcher-bg.gif" path="window\images" />
+  <file name="window\images\launcher-btn.gif" path="window\images" />
+  <file name="window\images\tabs.gif" path="window\images" />
+  <file name="window\images\winbar-bg.gif" path="window\images" />
+  <file name="window\images\winbar-btn.gif" path="window\images" />
+  <file name="window\images\windows-bg.gif" path="window\images" />
+  <file name="window\desktop.html" path="window" />
+  <file name="window\Desktop.js" path="window" />
+  <file name="window\windows.js" path="window" />
+  <file name="layout\portal.html" path="layout" />
+  <file name="layout\Portal.js" path="layout" />
+  <file name="feed-viewer\images\hd-bg.gif" path="feed-viewer\images" />
+  <file name="desktop\js\cookies.js" path="desktop\js" />
+  <file name="desktop\plugins\layout-window\js\plugin.js" path="desktop\plugins\layout-window\js" />
+  <file name="desktop\wallpapers\qwikioffice.jpg" path="desktop\wallpapers" />
+  <file name="desktop\default.html" path="desktop" />
+  <file name="desktop\Desktop.js" path="desktop" />
+  <file name="desktop\windows.js" path="desktop" />
+  <directory name="" />
   <file name="core\templates.html" path="core" />
   <file name="debug\debug-console.html" path="debug" />
   <file name="debug\inspector.gif" path="debug" />
@@ -286,6 +266,56 @@
   <file name="dependency\dependency.css" path="dependency" />
   <file name="dependency\dependency.html" path="dependency" />
   <file name="dependency\dependency.php" path="dependency" />
+  <file name="desktop\css\desktop.css" path="desktop\css" />
+  <file name="desktop\images\taskbar\black\item-over.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\scroll-left.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\scroll-right.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\start-menu-left-corners.png" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\start-menu-left-right.png" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\start-menu-right-corners.png" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\start-menu-right.png" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\start-menu-top-bottom.png" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\startbutton-icon.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\startbutton.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\taskbar-split-h.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\taskbar-start-panel-bg.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\taskbutton.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\black\taskbuttons-panel-bg.gif" path="desktop\images\taskbar\black" />
+  <file name="desktop\images\taskbar\blue\scroll-left.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\scroll-right.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\start-menu-left-corners.png" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\start-menu-left-right.png" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\start-menu-right-corners.png" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\start-menu-right.png" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\start-menu-top-bottom.png" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\startbar-bg.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\taskbar-split-h.png" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\taskbuttons-panel-bg.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\accordian.gif" path="desktop\images" />
+  <file name="desktop\images\bogus.png" path="desktop\images" />
+  <file name="desktop\images\desktop.gif" path="desktop\images" />
+  <file name="desktop\images\desktop3.jpg" path="desktop\images" />
+  <file name="desktop\images\gears.png" path="desktop\images" />
+  <file name="desktop\images\grid.png" path="desktop\images" />
+  <file name="desktop\images\hd-bg.gif" path="desktop\images" />
+  <file name="desktop\images\hd-tb-bg.gif" path="desktop\images" />
+  <file name="desktop\images\icons-bg.png" path="desktop\images" />
+  <file name="desktop\images\icon_padlock.png" path="desktop\images" />
+  <file name="desktop\images\launcher-bg.gif" path="desktop\images" />
+  <file name="desktop\images\launcher-btn.gif" path="desktop\images" />
+  <file name="desktop\images\logout.png" path="desktop\images" />
+  <file name="desktop\images\member.png" path="desktop\images" />
+  <file name="desktop\images\powered.png" path="desktop\images" />
+  <file name="desktop\images\tabs.gif" path="desktop\images" />
+  <file name="desktop\images\winbar-bg.gif" path="desktop\images" />
+  <file name="desktop\images\winbar-btn.gif" path="desktop\images" />
+  <file name="desktop\images\windows-bg.gif" path="desktop\images" />
+  <file name="desktop\wallpapers\blue.jpg" path="desktop\wallpapers" />
+  <file name="desktop\wallpapers\ext.gif" path="desktop\wallpapers" />
+  <file name="desktop\wallpapers\shiny.gif" path="desktop\wallpapers" />
+  <file name="desktop\wallpapers\sky.jpg" path="desktop\wallpapers" />
+  <file name="desktop\credits.txt" path="desktop" />
+  <file name="desktop\desktop.html" path="desktop" />
   <file name="feed-viewer\images\article.gif" path="feed-viewer\images" />
   <file name="feed-viewer\images\bg.gif" path="feed-viewer\images" />
   <file name="feed-viewer\images\bullet.gif" path="feed-viewer\images" />
@@ -329,6 +359,7 @@
   <file name="feed-viewer\feed-proxy.php" path="feed-viewer" />
   <file name="feed-viewer\feed-viewer.css" path="feed-viewer" />
   <file name="feed-viewer\view.html" path="feed-viewer" />
+  <file name="form\anchoring.html" path="form" />
   <file name="form\combos.css" path="form" />
   <file name="form\combos.html" path="form" />
   <file name="form\custom.html" path="form" />
@@ -411,14 +442,89 @@
   <file name="organizer\organizer.css" path="organizer" />
   <file name="organizer\organizer.html" path="organizer" />
   <file name="panel\panels.html" path="panel" />
+  <file name="portal\portal.css" path="portal" />
+  <file name="portal\portal.html" path="portal" />
+  <file name="portal\sample.css" path="portal" />
   <file name="resizable\basic.css" path="resizable" />
   <file name="resizable\basic.html" path="resizable" />
   <file name="resizable\sara.jpg" path="resizable" />
   <file name="resizable\sara_and_zack.jpg" path="resizable" />
   <file name="resizable\zack.jpg" path="resizable" />
+  <file name="shared\icons\fam\add.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\application_go.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\application_view_list.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\cog.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\cog_edit.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\connect.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\cross.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\delete.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\feed_add.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\feed_delete.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\feed_error.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\folder_go.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\folder_wrench.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\grid.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\plugin.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\plugin_add.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\rss_go.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\SILK.txt" path="shared\icons\fam" />
+  <file name="shared\icons\fam\table_refresh.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_add.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_comment.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_delete.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_edit.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_female.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_gray.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_green.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_orange.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_red.png" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_suit.png" path="shared\icons\fam" />
+  <file name="shared\icons\arrow-down.gif" path="shared\icons" />
+  <file name="shared\icons\arrow-up.gif" path="shared\icons" />
+  <file name="shared\icons\save.gif" path="shared\icons" />
+  <file name="shared\screens\air.gif" path="shared\screens" />
+  <file name="shared\screens\anchor.gif" path="shared\screens" />
+  <file name="shared\screens\border-layout.gif" path="shared\screens" />
+  <file name="shared\screens\combo-custom.gif" path="shared\screens" />
+  <file name="shared\screens\combo.gif" path="shared\screens" />
+  <file name="shared\screens\data-view.gif" path="shared\screens" />
+  <file name="shared\screens\desktop.gif" path="shared\screens" />
+  <file name="shared\screens\feeds.gif" path="shared\screens" />
+  <file name="shared\screens\form-custom.gif" path="shared\screens" />
+  <file name="shared\screens\form-dynamic.gif" path="shared\screens" />
+  <file name="shared\screens\form-xml.gif" path="shared\screens" />
+  <file name="shared\screens\grid-array.gif" path="shared\screens" />
+  <file name="shared\screens\grid-edit.gif" path="shared\screens" />
+  <file name="shared\screens\grid-grouping.gif" path="shared\screens" />
+  <file name="shared\screens\grid-paging.gif" path="shared\screens" />
+  <file name="shared\screens\grid-plugins.gif" path="shared\screens" />
+  <file name="shared\screens\grid-summary.gif" path="shared\screens" />
+  <file name="shared\screens\grid-xml.gif" path="shared\screens" />
+  <file name="shared\screens\msg-box.gif" path="shared\screens" />
+  <file name="shared\screens\organizer.gif" path="shared\screens" />
+  <file name="shared\screens\panel.gif" path="shared\screens" />
+  <file name="shared\screens\portal.gif" path="shared\screens" />
+  <file name="shared\screens\progress.gif" path="shared\screens" />
+  <file name="shared\screens\resizable.gif" path="shared\screens" />
+  <file name="shared\screens\tabs-adv.gif" path="shared\screens" />
+  <file name="shared\screens\tabs.gif" path="shared\screens" />
+  <file name="shared\screens\tasks.gif" path="shared\screens" />
+  <file name="shared\screens\templates.gif" path="shared\screens" />
+  <file name="shared\screens\toolbar-actions.gif" path="shared\screens" />
+  <file name="shared\screens\toolbar.gif" path="shared\screens" />
+  <file name="shared\screens\tree-columns.gif" path="shared\screens" />
+  <file name="shared\screens\tree-reorder.gif" path="shared\screens" />
+  <file name="shared\screens\tree-two.gif" path="shared\screens" />
+  <file name="shared\screens\window.gif" path="shared\screens" />
   <file name="simple-widgets\images\custom-bar.gif" path="simple-widgets\images" />
   <file name="simple-widgets\progress-bar.css" path="simple-widgets" />
   <file name="simple-widgets\progress-bar.html" path="simple-widgets" />
+  <file name="simple-widgets\qtips.css" path="simple-widgets" />
+  <file name="simple-widgets\qtips.html" path="simple-widgets" />
+  <file name="state\get-state.php" path="state" />
+  <file name="state\README.txt" path="state" />
+  <file name="state\save-state.php" path="state" />
   <file name="tabs\ajax1.htm" path="tabs" />
   <file name="tabs\ajax2.htm" path="tabs" />
   <file name="tabs\tabs-adv.html" path="tabs" />
@@ -483,56 +589,27 @@
   <file name="view\data-view.css" path="view" />
   <file name="view\data-view.html" path="view" />
   <file name="view\get-images.php" path="view" />
-  <file name="window\css\windows.css" path="window\css" />
-  <file name="window\images\accordian.gif" path="window\images" />
-  <file name="window\images\bogus.png" path="window\images" />
-  <file name="window\images\desktop.gif" path="window\images" />
-  <file name="window\images\desktop3.jpg" path="window\images" />
-  <file name="window\images\hd-bg.gif" path="window\images" />
-  <file name="window\images\hd-tb-bg.gif" path="window\images" />
-  <file name="window\images\launcher-bg.gif" path="window\images" />
-  <file name="window\images\launcher-btn.gif" path="window\images" />
-  <file name="window\images\tabs.gif" path="window\images" />
-  <file name="window\images\winbar-bg.gif" path="window\images" />
-  <file name="window\images\winbar-btn.gif" path="window\images" />
-  <file name="window\images\windows-bg.gif" path="window\images" />
-  <file name="window\desktop.html" path="window" />
   <file name="window\hello.html" path="window" />
   <file name="window\layout.html" path="window" />
   <file name="examples.css" path="" />
   <file name="examples.jsb" path="" />
+  <file name="index.html" path="" />
   <file name="info-bg.gif" path="" />
   <file name="lib.css" path="" />
   <file name="README.txt" path="" />
-  <file name="shared\screens\tabs-adv.gif" path="shared\screens" />
-  <file name="shared\screens\tabs.gif" path="shared\screens" />
-  <file name="shared\screens\msg-box.gif" path="shared\screens" />
-  <file name="shared\screens\window.gif" path="shared\screens" />
-  <file name="shared\screens\tree-columns.gif" path="shared\screens" />
-  <file name="shared\screens\tree-reorder.gif" path="shared\screens" />
-  <file name="shared\screens\tree-two.gif" path="shared\screens" />
-  <file name="shared\screens\combo-custom.gif" path="shared\screens" />
-  <file name="shared\screens\combo.gif" path="shared\screens" />
-  <file name="shared\screens\form-custom.gif" path="shared\screens" />
-  <file name="shared\screens\form-dynamic.gif" path="shared\screens" />
-  <file name="shared\screens\form-xml.gif" path="shared\screens" />
-  <file name="shared\screens\toolbar-actions.gif" path="shared\screens" />
-  <file name="shared\screens\toolbar.gif" path="shared\screens" />
-  <file name="shared\screens\data-view.gif" path="shared\screens" />
-  <file name="shared\screens\panel.gif" path="shared\screens" />
-  <file name="shared\screens\progress.gif" path="shared\screens" />
-  <file name="shared\screens\resizable.gif" path="shared\screens" />
-  <file name="shared\screens\templates.gif" path="shared\screens" />
-  <file name="shared\screens\grid-summary.gif" path="shared\screens" />
-  <file name="shared\screens\border-layout.gif" path="shared\screens" />
-  <file name="form\anchoring.html" path="form" />
-  <file name="shared\screens\anchor.gif" path="shared\screens" />
-  <file name="state\get-state.php" path="state" />
-  <file name="state\README.txt" path="state" />
-  <file name="state\save-state.php" path="state" />
   <file name="core\Spotlight.js" path="core" />
   <file name="core\templates.js" path="core" />
   <file name="dependency\dependency.js" path="dependency" />
+  <file name="desktop\images\taskbar\blue\item-over.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\startbutton-icon.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\startbutton.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\taskbar-split-h.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\taskbar-start-panel-bg.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\images\taskbar\blue\taskbutton.gif" path="desktop\images\taskbar\blue" />
+  <file name="desktop\js\desktop.js" path="desktop\js" />
+  <file name="desktop\js\plugins.js" path="desktop\js" />
+  <file name="desktop\js\StartMenu.js" path="desktop\js" />
+  <file name="desktop\js\TaskBar.js" path="desktop\js" />
   <file name="feed-viewer\FeedGrid.js" path="feed-viewer" />
   <file name="feed-viewer\FeedPanel.js" path="feed-viewer" />
   <file name="feed-viewer\FeedViewer.js" path="feed-viewer" />
@@ -571,10 +648,13 @@
   <file name="message-box\msg-box.js" path="message-box" />
   <file name="organizer\organizer.js" path="organizer" />
   <file name="panel\panels.js" path="panel" />
+  <file name="portal\Portal.js" path="portal" />
+  <file name="portal\PortalColumn.js" path="portal" />
+  <file name="portal\Portlet.js" path="portal" />
+  <file name="portal\sample-grid.js" path="portal" />
+  <file name="portal\sample.js" path="portal" />
   <file name="resizable\basic.js" path="resizable" />
   <file name="simple-widgets\progress-bar.js" path="simple-widgets" />
-  <file name="simple-widgets\qtips.css" path="simple-widgets" />
-  <file name="simple-widgets\qtips.html" path="simple-widgets" />
   <file name="simple-widgets\qtips.js" path="simple-widgets" />
   <file name="state\SessionProvider.js" path="state" />
   <file name="tabs\TabCloseMenu.js" path="tabs" />
@@ -594,12 +674,37 @@
   <file name="view\chooser.js" path="view" />
   <file name="view\data-view-plugins.js" path="view" />
   <file name="view\data-view.js" path="view" />
-  <file name="window\Desktop.js" path="window" />
   <file name="window\hello.js" path="window" />
   <file name="window\layout.js" path="window" />
-  <file name="window\windows.js" path="window" />
   <file name="examples.js" path="" />
   <file name="samples.js" path="" />
-  <file name="layout\portal.html" path="layout" />
-  <file name="layout\Portal.js" path="layout" />
+  <file name="desktop\images\powered.gif" path="desktop\images" />
+  <file name="desktop\images\gears.gif" path="desktop\images" />
+  <file name="desktop\images\logout.gif" path="desktop\images" />
+  <file name="desktop\images\member.gif" path="desktop\images" />
+  <file name="shared\site\extjs.css" path="shared\site" />
+  <file name="shared\site\extjs2.css" path="shared\site" />
+  <file name="desktop\images\hatch.gif" path="desktop\images" />
+  <file name="desktop\wallpapers\desk.jpg" path="desktop\wallpapers" />
+  <file name="desktop\wallpapers\desktop.jpg" path="desktop\wallpapers" />
+  <file name="desktop\wallpapers\desktop2.jpg" path="desktop\wallpapers" />
+  <file name="desktop\js\App.js" path="desktop\js" />
+  <file name="desktop\js\Desktop.js" path="desktop\js" />
+  <file name="desktop\js\Module.js" path="desktop\js" />
+  <file name="desktop\sample.js" path="desktop" />
+  <file name="shared\icons\fam\user.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_female.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_green.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_suit.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\connect.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_add.gif" path="shared\icons\fam" />
+  <file name="shared\icons\fam\user_delete.gif" path="shared\icons\fam" />
+  <file name="desktop\images\grid32x32.gif" path="desktop\images" />
+  <file name="desktop\images\grid48x48.gif" path="desktop\images" />
+  <file name="desktop\images\im32x32.gif" path="desktop\images" />
+  <file name="desktop\images\im48x48.gif" path="desktop\images" />
+  <file name="desktop\images\grid48x48.png" path="desktop\images" />
+  <file name="desktop\images\im48x48.png" path="desktop\images" />
+  <file name="desktop\images\s.gif" path="desktop\images" />
+  <file name="shared\screens\window-layout.gif" path="shared\screens" />
 </project>

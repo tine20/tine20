@@ -1,12 +1,27 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
  * http://extjs.com/license
  */
 
+/**
+ * @class Ext.QuickTip
+ * @extends Ext.ToolTip
+ * A specialized tooltip class for tooltips that can be specified in markup and automatically managed by the global
+ * {@link Ext.QuickTips} instance.
+ * @constructor
+ * Create a new Tip
+ * @param {Object} config The configuration options
+ */
 Ext.QuickTip = Ext.extend(Ext.ToolTip, {
+    /**
+     * @cfg {Mixed} target The target HTMLElement, Ext.Element or id to associate with this quicktip (defaults to the document).
+     */
+    /**
+     * @cfg {Boolean} interceptTitles True to automatically use the element's DOM title value if available (defaults to false).
+     */
     interceptTitles : false,
 
     // private
@@ -21,6 +36,7 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
         align : "qalign"
     },
 
+    // private
     initComponent : function(){
         this.target = this.target || Ext.getDoc();
         this.targets = this.targets || {};
@@ -31,10 +47,10 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
      * Configures a new quick tip instance and assigns it to a target element.  The following config options
      * are supported:
      * <pre>
-     Property    Type                   Description
-     ----------  ---------------------  ------------------------------------------------------------------------
-     target      Element/String/Array   An Element, id or array of ids that this quick tip should be tied to
-     * </ul>
+Property    Type                   Description
+----------  ---------------------  ------------------------------------------------------------------------
+target      Element/String/Array   An Element, id or array of ids that this quick tip should be tied to
+</pre>
      * @param {Object} config The config object
      */
     register : function(config){
@@ -62,6 +78,7 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
         delete this.targets[Ext.id(el)];
     },
 
+    // private
     onTargetOver : function(e){
         if(this.disabled){
             return;
@@ -107,6 +124,7 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
         }
     },
 
+    // private
     onTargetOut : function(e){
         this.clearTimer('show');
         if(this.autoHide !== false){
@@ -114,6 +132,7 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
         }
     },
 
+    // inherit docs
     showAt : function(xy){
         var t = this.activeTarget;
         if(t){
@@ -129,6 +148,8 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
             this.setTitle(t.title || '');
             this.body.update(t.text);
             this.autoHide = t.autoHide;
+            this.autoDismiss = Ext.value(t.autoDismiss, true, false);
+            this.dismissDelay = t.dismissDelay || this.dismissDelay;
             this.autoDismiss = Ext.value(t.autoDismiss, true, false);
             if(t.cls){
                 if(this.lastCls){
@@ -147,6 +168,7 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
         Ext.QuickTip.superclass.showAt.call(this, xy);
     },
 
+    // inherit docs
     hide: function(){
         delete this.activeTarget;
         Ext.QuickTip.superclass.hide.call(this);

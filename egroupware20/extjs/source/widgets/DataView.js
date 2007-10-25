@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -12,7 +12,51 @@
  * A mechanism for displaying data using custom layout templates and formatting.  A DataView is bound to an {@link Ext.data.Store}
  * so that as the data in the store changes the view is automatically updated to reflect the changes.  The view also
  * provides built-in behavior for many common events that can occur for its contained items including click, doubleclick,
- * mouseover, mouseout, etc. as well as a built-in selection model.
+ * mouseover, mouseout, etc. as well as a built-in selection model. <b>In order to use these features, an itemSelector config must be provided
+  * for the DataView to determine what nodes it will be working with. </b>
+  *
+  * <p>The example below binds a DataView to a {@link Ext.data.Store} and renders it into an {@link Ext.Panel}.</p>
+  * <pre><code>var store = new Ext.data.JsonStore({
+    url: 'get-images.php',
+    root: 'images',
+    fields: [
+        'name', 'url',
+        {name:'size', type: 'float'},
+        {name:'lastmod', type:'date', dateFormat:'timestamp'}
+    ]
+});
+store.load();
+
+var tpl = new Ext.XTemplate(
+    '&lt;tpl for="."&gt;',
+        '&lt;div class="thumb-wrap" id="{name}"&gt;',
+        '&lt;div class="thumb"&gt;&lt;img src="{url}" title="{name}"&gt;&lt;/div&gt;',
+        '&lt;span class="x-editable"&gt;{shortName}&lt;/span&gt;&lt;/div&gt;',
+    '&lt;/tpl&gt;',
+    '&lt;div class="x-clear"&gt;&lt;/div&gt;'
+);
+
+var panel = new Ext.Panel({
+    id:'images-view',
+    frame:true,
+    width:535,
+    autoHeight:true,
+    collapsible:true,
+    layout:'fit',
+    title:'Simple DataView',
+
+    items: new Ext.DataView({
+        store: store,
+        tpl: tpl,
+        autoHeight:true,
+        multiSelect: true,
+        overClass:'x-view-over',
+        itemSelector:'div.thumb-wrap',
+        emptyText: 'No images to display'
+    })
+});
+panel.render(document.body);
+</code></pre>
  * @constructor
  * Create a new DataView
  * @param {Object} config The config object
@@ -29,8 +73,7 @@ Ext.DataView = Ext.extend(Ext.BoxComponent, {
      */
     /**
      * @cfg {String} itemSelector
-     * A CSS selector in any format supported by {@link Ext.DomQuery} that will be used to filter the data loaded
-     * from the store (defaults to '').
+     * A CSS selector in any format supported by {@link Ext.DomQuery} that will be used to determine what nodes this DataView will be working with. <b>This is a required setting</b>.  (defaults to undefined).
      */
     /**
      * @cfg {Boolean} multiSelect

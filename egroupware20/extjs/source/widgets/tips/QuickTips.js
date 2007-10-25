@@ -1,14 +1,22 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
  * http://extjs.com/license
  */
 
+/**
+ * @class Ext.QuickTips
+ * The global QuickTips instance that reads quick tip configs from existing markup and manages quick tips. 
+ * @singleton
+ */
 Ext.QuickTips = function(){
     var tip, locks = [];
     return {
+        /**
+         * Initialize the global QuickTips instance and prepare any quick tips.
+         */
         init : function(){
             if(!tip){
                 tip = new Ext.QuickTip({elements:'header,body'});
@@ -16,7 +24,7 @@ Ext.QuickTips = function(){
         },
 
         /**
-         * Enable this quick tip.
+         * Enable quick tips globally.
          */
         enable : function(){
             if(tip){
@@ -28,7 +36,7 @@ Ext.QuickTips = function(){
         },
 
         /**
-         * Disable this quick tip.
+         * Disable quick tips globally.
          */
         disable : function(){
             if(tip){
@@ -38,7 +46,8 @@ Ext.QuickTips = function(){
         },
 
         /**
-         * Returns true if the quick tip is enabled, else false.
+         * Returns true if quick tips are enabled, else false.
+         * @return {Boolean}
          */
         isEnabled : function(){
             return tip && !tip.disabled;

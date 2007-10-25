@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,17 +14,37 @@
  * Creates a new Field
  * @param {Object} config Configuration options
  */
-Ext.form.Field = function(config){
-    Ext.form.Field.superclass.constructor.call(this, config);
-};
+Ext.form.Field = Ext.extend(Ext.BoxComponent,  {
+    /**
+     * @cfg {String} fieldLabel The label text to display next to this field (defaults to '')
+     */
+    /**
+     * @cfg {String} labelStyle A CSS style specification to apply directly to this field's label (defaults to the
+     * container's labelStyle value if set, or ''). For example, <code>labelStyle: 'font-weight:bold;'</code>.
+     */
+    /**
+     * @cfg {String} labelSeparator The standard separator to display after the text of each form label (defaults
+     * to the value of {@link Ext.layout.FormLayout#labelSeparator}, which is a colon ':' by default).  To display
+     * no separator for this field's label specify empty string ''.
+     */
+    /**
+     * @cfg {Boolean} hideLabel True to completely hide the label element (defaults to false)
+     */
+    /**
+     * @cfg {String} clearCls The CSS class used to provide field clearing (defaults to 'x-form-clear-left')
+     */
+    /**
+     * @cfg {String} itemCls An additional CSS class to apply to this field (defaults to the container's itemCls
+     * value if set, or '')
+     */
 
-Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
     /**
      * @cfg {String} invalidClass The CSS class to use when marking a field invalid (defaults to "x-form-invalid")
      */
     invalidClass : "x-form-invalid",
     /**
-     * @cfg {String} invalidText The error text to use when marking a field invalid and no message is provided (defaults to "The value in this field is invalid")
+     * @cfg {String} invalidText The error text to use when marking a field invalid and no message is provided
+     * (defaults to "The value in this field is invalid")
      */
     invalidText : "The value in this field is invalid",
     /**
@@ -41,7 +61,8 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
      */
     validateOnBlur : true,
     /**
-     * @cfg {Number} validationDelay The length of time in milliseconds after user input begins until validation is initiated (defaults to 250)
+     * @cfg {Number} validationDelay The length of time in milliseconds after user input begins until validation
+     * is initiated (defaults to 250)
      */
     validationDelay : 250,
     /**
@@ -54,7 +75,8 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
      */
     fieldClass : "x-form-field",
     /**
-     * @cfg {String} msgTarget The location where error text should display.  Should be one of the following values (defaults to 'qtip'):
+     * @cfg {String} msgTarget The location where error text should display.  Should be one of the following values
+     * (defaults to 'qtip'):
      *<pre>
 Value         Description
 -----------   ----------------------------------------------------------------------
@@ -67,12 +89,14 @@ side          Add an error icon to the right of the field with a popup on hover
      */
     msgTarget : 'qtip',
     /**
-     * @cfg {String} msgFx <b>Experimental</b> The effect used when displaying a validation message under the field (defaults to 'normal').
+     * @cfg {String} msgFx <b>Experimental</b> The effect used when displaying a validation message under the field
+     * (defaults to 'normal').
      */
     msgFx : 'normal',
     
     /**
-     * @cfg {Boolean} readOnly True to mark the field as readOnly in HTML (defaults to false) -- Note: this only sets the element's readOnly DOM attribute.
+     * @cfg {Boolean} readOnly True to mark the field as readOnly in HTML (defaults to false) -- Note: this only
+     * sets the element's readOnly DOM attribute.
      */
     readOnly : false,
 
@@ -86,7 +110,8 @@ side          Add an error icon to the right of the field with a popup on hover
      */
 
     /**
-     * @cfg {Number} tabIndex The tabIndex for this field. Note this only applies to fields that are rendered, not those which are built via applyTo (defaults to undefined).
+     * @cfg {Number} tabIndex The tabIndex for this field. Note this only applies to fields that are rendered,
+     * not those which are built via applyTo (defaults to undefined).
 	 */
 
     // private
@@ -464,7 +489,7 @@ side          Add an error icon to the right of the field with a popup on hover
                     return w - 3;
                 }
                 if(tag == 'input' && Ext.isStrict){
-                    return w - 1;
+                    return w - (Ext.isIE6 ? 4 : 1);
                 }
                 if(tag = 'textarea' && Ext.isStrict){
                     return w-2;

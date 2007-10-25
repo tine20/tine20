@@ -14,6 +14,7 @@
             <tr><td class="label">Package:</td><td class="hd-info">Ext.grid</td></tr>
             <tr><td class="label">Defined In:</td><td class="hd-info"><a href="../src/ColumnModel.js" target="_blank">ColumnModel.js</a></td></tr>
             <tr><td class="label">Class:</td><td class="hd-info">ColumnModel</td></tr>
+                        <tr><td class="label">Subclasses:</td><td class="hd-info"><a ext:cls="Ext.grid.PropertyColumnModel" href="output/Ext.grid.PropertyColumnModel.html">PropertyColumnModel</a></td></tr>
                                     <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.util.Observable" ext:member="" href="output/Ext.util.Observable.html">Observable</a></td></tr>
                     </table>
         <div class="description">
@@ -99,21 +100,12 @@ individual column definition.        </div>
             <b>id</b> : String            <div class="mdesc">
                         <div class="short">(Optional) Defaults to the column's initial ordinal position. A name which identifies this column. The id is used to ...</div>
             <div class="long">
-                (Optional) Defaults to the column's initial ordinal position. A name which identifies this column. The id is used to create a CSS class which is applied to all table cells in that column of the form <pre>x-grid-td-<b>id<b></pre> <br><br> The <a ext:cls="Ext.grid.Grid" ext:member="autoExpandColumn" href="output/Ext.grid.Grid.html#autoExpandColumn">Ext.grid.Grid.autoExpandColumn</a> grid config option references the column via this identifier.            </div>
+                (Optional) Defaults to the column's initial ordinal position. A name which identifies this column. The id is used to create a CSS class name which is applied to all table cells (including headers) in that column. The class name takes the form of <pre>x-grid-td-<b>id<b></pre> <br><br> Header cells will also recieve this class name, but will also have the class x-grid-hd, so to target header cells, use CSS selectors such as:<pre>.x-grid-hd.x-grid-td-<b>id</b></pre> The <a ext:cls="Ext.grid.Grid" ext:member="autoExpandColumn" href="output/Ext.grid.Grid.html#autoExpandColumn">Ext.grid.Grid.autoExpandColumn</a> grid config option references the column via this identifier.            </div>
                         </div>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="config-row">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.grid.ColumnModel-locked"></a>
-            <b>locked</b> : Boolean            <div class="mdesc">
-                            (Optional) True to lock the column in place while scrolling the Grid. Defaults to false.                        </div>
-        </td>
-        <td class="msource">ColumnModel</td>
-    </tr>
-        <tr class="config-row alt expandable">
+        <tr class="config-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-renderer"></a>
@@ -125,7 +117,7 @@ individual column definition.        </div>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-resizable"></a>
@@ -134,7 +126,7 @@ individual column definition.        </div>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="config-row alt expandable">
+        <tr class="config-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-sortable"></a>
@@ -146,7 +138,7 @@ individual column definition.        </div>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="config-row expandable">
+        <tr class="config-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-width"></a>
@@ -265,8 +257,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -276,7 +268,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -293,7 +285,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut
@@ -946,8 +938,9 @@ to return HTML markup for the grid view. The render function is called with
 the following parameters:<ul>
 <li>Data value.</li>
 <li>Cell metadata. An object in which you may set the following attributes:<ul>
-<li>css A CSS style string to apply to the table cell.</li>
-<li>attr An HTML attribute definition string to apply to the data container element <i>within</i> the table cell.</li></ul>
+<li>css A CSS class name to add to the cell's TD element.</li>
+<li>attr An HTML attribute definition string to apply to the data container element <i>within</i> the table cell
+(e.g. 'style="color:red;"').</li></ul>
 <li>The <a ext:cls="Ext.data.Record" href="output/Ext.data.Record.html">Ext.data.Record</a> from which the data was extracted.</li>
 <li>Row index</li>
 <li>Column index</li>
@@ -1013,22 +1006,6 @@ the following parameters:<ul>
                 <tr class="event-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.grid.ColumnModel-columlockchange"></a>
-            <b>columlockchange</b> : (&nbsp;<code>ColumnModel this</code>, <code>Number colIndex</code>, <code>Boolean locked</code>&nbsp;)            <div class="mdesc">
-                        <div class="short">Fires when a column's locked state is changed</div>
-            <div class="long">
-                Fires when a column's locked state is changed    <div class="mdetail-params">
-        <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
-        <ul><li><code>this</code> : ColumnModel<div class="sub-desc"></div></li><li><code>colIndex</code> : Number<div class="sub-desc"></div></li><li><code>locked</code> : Boolean<div class="sub-desc">true if locked</div></li>        </ul>
-    </div>
-                </div>
-                        </div>
-        </td>
-        <td class="msource">ColumnModel</td>
-    </tr>
-        <tr class="event-row alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
         <a id="Ext.grid.ColumnModel-columnmoved"></a>
             <b>columnmoved</b> : (&nbsp;<code>ColumnModel this</code>, <code>Number oldIndex</code>, <code>Number newIndex</code>&nbsp;)            <div class="mdesc">
                         <div class="short">Fires when a column is moved.</div>
@@ -1042,7 +1019,7 @@ the following parameters:<ul>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="event-row expandable">
+        <tr class="event-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-configchanged"></a>
@@ -1058,23 +1035,23 @@ the following parameters:<ul>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="event-row alt expandable">
+        <tr class="event-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-headerchange"></a>
-            <b>headerchange</b> : (&nbsp;<code>ColumnModel this</code>, <code>Number columnIndex</code>, <code>Number newText</code>&nbsp;)            <div class="mdesc">
+            <b>headerchange</b> : (&nbsp;<code>ColumnModel this</code>, <code>Number columnIndex</code>, <code>String newText</code>&nbsp;)            <div class="mdesc">
                         <div class="short">Fires when the text of a header changes.</div>
             <div class="long">
                 Fires when the text of a header changes.    <div class="mdetail-params">
         <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
-        <ul><li><code>this</code> : ColumnModel<div class="sub-desc"></div></li><li><code>columnIndex</code> : Number<div class="sub-desc">The column index</div></li><li><code>newText</code> : Number<div class="sub-desc">The new header text</div></li>        </ul>
+        <ul><li><code>this</code> : ColumnModel<div class="sub-desc"></div></li><li><code>columnIndex</code> : Number<div class="sub-desc">The column index</div></li><li><code>newText</code> : String<div class="sub-desc">The new header text</div></li>        </ul>
     </div>
                 </div>
                         </div>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="event-row expandable">
+        <tr class="event-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-hiddenchange"></a>
@@ -1090,7 +1067,7 @@ the following parameters:<ul>
         </td>
         <td class="msource">ColumnModel</td>
     </tr>
-        <tr class="event-row alt expandable">
+        <tr class="event-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.grid.ColumnModel-widthchange"></a>

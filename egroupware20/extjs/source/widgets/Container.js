@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -33,6 +33,12 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
      * {@link Ext.layout.Accordion}, {@link Ext.layout.AnchorLayout}, {@link Ext.layout.BorderLayout},
      * {@link Ext.layout.CardLayout}, {@link Ext.layout.ColumnLayout}, {@link Ext.layout.FitLayout},
      * {@link Ext.layout.FormLayout} and {@link Ext.layout.TableLayout}.
+     */
+    /**
+     * @cfg {Boolean/Number} bufferResize
+     * When set to true (100 milliseconds) or a number of milliseconds, the layout assigned for this container will buffer
+     * the frequency it calculates and does a re-layout of components. This is useful for heavy containers or containers
+     * with a large amount of sub components that frequent calls to layout are expensive.
      */
     /**
      * @cfg {String/Number} activeItem
@@ -112,6 +118,11 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
             'remove':true
         });
 
+        /**
+         * The collection of components in this container as a {@link Ext.util.MixedCollection}
+         * @type MixedCollection
+         * @property items
+         */
         var items = this.items;
         if(items){
             delete this.items;
@@ -157,7 +168,9 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
                 return;
             }
         }
-        this.doLayout();
+        if(!this.ownerCt){
+            this.doLayout();
+        }
         if(this.monitorResize === true){
             Ext.EventManager.onWindowResize(this.doLayout, this);
         }
@@ -219,6 +232,11 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
             return;
         }
         var c = this.lookupComponent(this.applyDefaults(comp));
+
+        if(c.ownerCt == this && this.items.indexOf(c) < index){
+            --index;
+        }
+
         if(this.fireEvent('beforeadd', this, c, index) !== false && this.onBeforeAdd(c) !== false){
             this.items.insert(index, c);
             c.ownerCt = this;
@@ -247,18 +265,22 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
         if(item.ownerCt){
             item.ownerCt.remove(item, false);
         }
+        if(this.hideBorders === true){
+            item.border = (item.border === true);
+        }
     },
 
     /**
      * Removes a component from this container.  Fires the beforeremove event before removing, then fires
      * the remove event after the component has been removed.
      * @param {Component/String} component The component reference or id to remove
-     * @param {Boolean} autoDestroy True to automatically invoke the component's {@link Ext.Component#destroy} function
+     * @param {Boolean} autoDestroy (optional) True to automatically invoke the component's {@link Ext.Component#destroy} function
      */
     remove : function(comp, autoDestroy){
         var c = this.getComponent(comp);
         if(c && this.fireEvent('beforeremove', this, c) !== false){
             this.items.remove(c);
+            delete c.ownerCt;
             if(autoDestroy === true || (autoDestroy !== false && this.autoDestroy)){
                 c.destroy();
             }
@@ -270,7 +292,11 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
         return c;
     },
 
-    // private
+    /**
+     * Gets a direct child component by id
+     * @param {String} id
+     * @return Ext.Component
+     */
     getComponent : function(comp){
         if(typeof comp == 'object'){
             return comp;
@@ -284,9 +310,6 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
             return Ext.ComponentMgr.get(comp);
         }else if(!comp.events){
             return this.createComponent(comp);
-        }
-        if(this.hideBorders === true){
-            comp.border = (comp.border === true);
         }
         return comp;
     },
@@ -343,7 +366,15 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
         Ext.Container.superclass.onDestroy.call(this);
     },
 
-    // private - container bubbling
+    /**
+     * Bubbles up the component/container heirarchy, calling the specified function with each component. The scope (<i>this</i>) of
+     * function call will be the scope provided or the current component. The arguments to the function
+     * will be the args provided or the current component. If the function returns false at any point,
+     * the bubble is stopped.
+     * @param {Function} fn The function to call
+     * @param {Object} scope (optional) The scope of the function (defaults to current node)
+     * @param {Array} args (optional) The args to call the function with (default to passing the current component)
+     */
     bubble : function(fn, scope, args){
         var p = this;
         while(p){
@@ -354,7 +385,16 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
         }
     },
 
-    // private - item cascading
+    /**
+     * Cascades down the component/container heirarchy from this component (called first), calling the specified function with
+     * each component. The scope (<i>this</i>) of
+     * function call will be the scope provided or the current component. The arguments to the function
+     * will be the args provided or the current component. If the function returns false at any point,
+     * the cascade is stopped on that branch.
+     * @param {Function} fn The function to call
+     * @param {Object} scope (optional) The scope of the function (defaults to current component)
+     * @param {Array} args (optional) The args to call the function with (defaults to passing the current component)
+     */
     cascade : function(fn, scope, args){
         if(fn.call(scope || this, args || this) !== false){
             if(this.items){
@@ -366,7 +406,66 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
                 }
             }
         }
+    },
+
+    /**
+     * Find a component under this container at any level by id
+     * @param {String} id
+     * @return Ext.Component
+     */
+    findById : function(id){
+        var m, ct = this;
+        this.cascade(function(c){
+            if(ct != c && c.id === id){
+                m = c;
+                return false;
+            }
+        });
+        return m || null;
+    },
+
+    /**
+     * Find a component under this container at any level by xtype or class
+     * @param {String/Class} xtype The xtype string for a component, or the class of the component directly
+     * @return {Array} Array of Ext.Components
+     */
+    findByType : function(xtype){
+        return typeof xtype == 'function' ?
+            this.findBy(function(c){
+                return c.constructor === xtype;
+            }) :
+            this.findBy(function(c){
+                return c.constructor.xtype === xtype;
+            });
+    },
+
+    /**
+     * Find a component under this container at any level by property
+     * @param {String} xtype
+     * @return {Array} Array of Ext.Components
+     */
+    find : function(prop, value){
+        return this.findBy(function(c){
+            return c[prop] === value;
+        });
+    },
+
+    /**
+     * Find a component under this container at any level by a custom function. If the passed function returns
+     * true, the component will be included in the results. The passed function is called with the arguments (component, this container).
+     * @param {String} xtype
+     * @return {Array} Array of Ext.Components
+     */
+    findBy : function(fn, scope){
+        var m = [], ct = this;
+        this.cascade(function(c){
+            if(ct != c && fn.call(scope || c, c, ct) === true){
+                m.push(c);
+            }
+        });
+        return m;
     }
 });
 
 Ext.Container.LAYOUTS = {};
+Ext.reg('container', Ext.Container);

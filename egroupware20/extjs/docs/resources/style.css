@@ -239,18 +239,21 @@
 	margin-top:10px;
 }
 .mdetail-params strong{
-	font-weight:bold;
 	display: block;
 	margin-bottom:3px;
+    font-size:11px;
+    font-weight:bold;
+    color:#555;
 }
+
 .mdetail-params ul{
 	list-style: inside;
-	list-style-type: disc;
-	margin-left:12px;
+	list-style-type: circle;
+	margin:12px;
 }
 .mdetail-params li{
 	list-style: inside;
-	list-style-type: disc;
+	list-style-type: circle;
 }
 pre code{
 	font-size:12px !important;
@@ -349,4 +352,9 @@ div.hr {
     margin: 5px 0;
     overflow:hidden;
     line-height:1px;
+}
+
+
+.expanded .mdesc .long {
+    line-height:18px;
 }

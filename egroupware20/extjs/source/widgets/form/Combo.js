@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,97 +14,7 @@
  * Create a new ComboBox.
  * @param {Object} config Configuration options
  */
-Ext.form.ComboBox = function(config){
-    Ext.form.ComboBox.superclass.constructor.call(this, config);
-    this.addEvents({
-        /**
-         * @event expand
-         * Fires when the dropdown list is expanded
-	     * @param {Ext.form.ComboBox} combo This combo box
-	     */
-        'expand' : true,
-        /**
-         * @event collapse
-         * Fires when the dropdown list is collapsed
-	     * @param {Ext.form.ComboBox} combo This combo box
-	     */
-        'collapse' : true,
-        /**
-         * @event beforeselect
-         * Fires before a list item is selected. Return false to cancel the selection.
-	     * @param {Ext.form.ComboBox} combo This combo box
-	     * @param {Ext.data.Record} record The data record returned from the underlying store
-	     * @param {Number} index The index of the selected item in the dropdown list
-	     */
-        'beforeselect' : true,
-        /**
-         * @event select
-         * Fires when a list item is selected
-	     * @param {Ext.form.ComboBox} combo This combo box
-	     * @param {Ext.data.Record} record The data record returned from the underlying store
-	     * @param {Number} index The index of the selected item in the dropdown list
-	     */
-        'select' : true,
-        /**
-         * @event beforequery
-         * Fires before all queries are processed. Return false to cancel the query or set cancel to true.
-         * The event object passed has these properties:
-	     * @param {Ext.form.ComboBox} combo This combo box
-	     * @param {String} query The query
-	     * @param {Boolean} forceAll true to force "all" query
-	     * @param {Boolean} cancel true to cancel the query
-	     * @param {Object} e The query event object
-	     */
-        'beforequery': true
-    });
-    if(this.transform){
-        this.allowDomMove = false;
-        var s = Ext.getDom(this.transform);
-        if(!this.hiddenName){
-            this.hiddenName = s.name;
-        }
-        if(!this.store){
-            this.mode = 'local';
-            var d = [], opts = s.options;
-            for(var i = 0, len = opts.length;i < len; i++){
-                var o = opts[i];
-                var value = (Ext.isIE ? o.getAttributeNode('value').specified : o.hasAttribute('value')) ? o.value : o.text;
-                if(o.selected) {
-                    this.value = value;
-                }
-                d.push([value, o.text]);
-            }
-            this.store = new Ext.data.SimpleStore({
-                'id': 0,
-                fields: ['value', 'text'],
-                data : d
-            });
-            this.valueField = 'value';
-            this.displayField = 'text';
-        }
-        s.name = Ext.id(); // wipe out the name in case somewhere else they have a reference
-        if(!this.lazyRender){
-            this.target = true;
-            this.el = Ext.DomHelper.insertBefore(s, this.autoCreate || this.defaultAutoCreate);
-            s.parentNode.removeChild(s); // remove it
-            this.render(this.el.parentNode);
-        }else{
-            s.parentNode.removeChild(s); // remove it
-        }
-
-    }
-    this.selectedIndex = -1;
-    if(this.mode == 'local'){
-        if(config.queryDelay === undefined){
-            this.queryDelay = 10;
-        }
-        if(config.minChars === undefined){
-            this.minChars = 0;
-        }
-    }
-};
-
-Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
+Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
     /**
      * @cfg {Mixed} transform The id, DOM node or element of an existing select to convert to a ComboBox
      */
@@ -140,7 +50,8 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
      */
     /**
      * @cfg {String} hiddenName If specified, a hidden form field with this name is dynamically generated to store the
-     * field's data value (defaults to the underlying DOM element's name)
+     * field's data value (defaults to the underlying DOM element's name). Required for the combo's value to automatically
+     * post during a form submission.
      */
     /**
      * @cfg {String} listClass CSS class to apply to the dropdown list element (defaults to '')
@@ -176,7 +87,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
     triggerAction: 'query',
     /**
      * @cfg {Number} minChars The minimum number of characters the user must type before autocomplete and typeahead activate
-     * (defaults to 4, does not apply if editable = false)
+     * (defaults to 4 if remote or 0 if local, does not apply if editable = false)
      */
     minChars : 4,
     /**
@@ -254,6 +165,97 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
      */
     lazyInit : true,
 
+    initComponent : function(){
+        Ext.form.ComboBox.superclass.initComponent.call(this);
+        this.addEvents({
+            /**
+             * @event expand
+             * Fires when the dropdown list is expanded
+             * @param {Ext.form.ComboBox} combo This combo box
+             */
+            'expand' : true,
+            /**
+             * @event collapse
+             * Fires when the dropdown list is collapsed
+             * @param {Ext.form.ComboBox} combo This combo box
+             */
+            'collapse' : true,
+            /**
+             * @event beforeselect
+             * Fires before a list item is selected. Return false to cancel the selection.
+             * @param {Ext.form.ComboBox} combo This combo box
+             * @param {Ext.data.Record} record The data record returned from the underlying store
+             * @param {Number} index The index of the selected item in the dropdown list
+             */
+            'beforeselect' : true,
+            /**
+             * @event select
+             * Fires when a list item is selected
+             * @param {Ext.form.ComboBox} combo This combo box
+             * @param {Ext.data.Record} record The data record returned from the underlying store
+             * @param {Number} index The index of the selected item in the dropdown list
+             */
+            'select' : true,
+            /**
+             * @event beforequery
+             * Fires before all queries are processed. Return false to cancel the query or set the queryEvent's
+             * cancel property to true.
+             * @param {Object} queryEvent An object that has these properties:<ul>
+             * <li><code>combo</code> : Ext.form.ComboBox <div class="sub-desc">This combo box</div></li>
+             * <li><code>query</code> : String <div class="sub-desc">The query</div></li>
+             * <li><code>forceAll</code> : Boolean <div class="sub-desc">True to force "all" query</div></li>
+             * <li><code>cancel</code> : Boolean <div class="sub-desc">Set to true to cancel the query</div></li>
+             * </ul>
+             */
+            'beforequery': true
+        });
+        if(this.transform){
+            this.allowDomMove = false;
+            var s = Ext.getDom(this.transform);
+            if(!this.hiddenName){
+                this.hiddenName = s.name;
+            }
+            if(!this.store){
+                this.mode = 'local';
+                var d = [], opts = s.options;
+                for(var i = 0, len = opts.length;i < len; i++){
+                    var o = opts[i];
+                    var value = (Ext.isIE ? o.getAttributeNode('value').specified : o.hasAttribute('value')) ? o.value : o.text;
+                    if(o.selected) {
+                        this.value = value;
+                    }
+                    d.push([value, o.text]);
+                }
+                this.store = new Ext.data.SimpleStore({
+                    'id': 0,
+                    fields: ['value', 'text'],
+                    data : d
+                });
+                this.valueField = 'value';
+                this.displayField = 'text';
+            }
+            s.name = Ext.id(); // wipe out the name in case somewhere else they have a reference
+            if(!this.lazyRender){
+                this.target = true;
+                this.el = Ext.DomHelper.insertBefore(s, this.autoCreate || this.defaultAutoCreate);
+                Ext.removeNode(s); // remove it
+                this.render(this.el.parentNode);
+            }else{
+                Ext.removeNode(s); // remove it
+            }
+
+        }
+        this.selectedIndex = -1;
+        if(this.mode == 'local'){
+            if(this.initialConfig.queryDelay === undefined){
+                this.queryDelay = 10;
+            }
+            if(this.initialConfig.minChars === undefined){
+                this.minChars = 0;
+            }
+        }
+    },
+
     // private
     onRender : function(ct, position){
         Ext.form.ComboBox.superclass.onRender.call(this, ct, position);
@@ -320,6 +322,10 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
                 this.tpl = '<tpl for="."><div class="'+cls+'-item">{' + this.displayField + '}</div></tpl>';
             }
 
+		    /**
+		    * The {@link Ext.DataView DataView} used to display the ComboBox's options.
+		    * @type Ext.DataView
+		    */
             this.view = new Ext.DataView({
                 applyTo: this.innerList,
                 tpl: this.tpl,
@@ -459,6 +465,14 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
             var lw = Math.max(w, this.minListWidth);
             this.list.setWidth(lw);
             this.innerList.setWidth(lw - this.list.getFrameWidth('lr'));
+        }
+    },
+
+    // private
+    onDisable: function(){
+        Ext.form.ComboBox.superclass.onDisable.apply(this, arguments);
+        if(this.hiddenField){
+            this.hiddenField.disabled = this.disabled;
         }
     },
 
@@ -867,9 +881,15 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
      * @hide
      * @method autoSize
      */
-    /** @cfg {Boolean} grow @hide */
-    /** @cfg {Number} growMin @hide */
-    /** @cfg {Number} growMax @hide */
+    /**
+     * @cfg {Boolean} grow @hide
+     */
+    /**
+     * @cfg {Number} growMin @hide
+     */
+    /**
+     * @cfg {Number} growMax @hide
+     */
 
 });
 Ext.reg('combo', Ext.form.ComboBox);

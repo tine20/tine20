@@ -1,0 +1,148 @@
+//=====================================
+// Ext JS Release Notes
+//=====================================
+// Release Date: October 11, 2007
+// Current Version: 2.0-beta-1a (rev 1177)
+// Previous Version: 2.0-alpha-1 (rev 1032)
+//=====================================
+
+===== Added =====
+src/widgets/layout/
+    AbsoluteLayout - New layout type for absolute XY positioning of contained items
+    AccordionLayout - Renamed from AccordianLayout, no code changes
+
+===== Removed =====
+src/widgets/layout/
+    AccordianLayout - Renamed to AccordionLayout
+
+===== Modified =====
+src/core/
+    CompositeElement - Refactored node removal in removeElement() and replaceElement()
+    DomHelper - Refactored insertFirst
+    Element - Fixes in getHeight()/getWidth() to return 0 for negative values, doc updates
+    EventManager - Refactored onWindowResize(), added body CSS classes for "ie6" and "ie7", doc updates
+    Ext - Added removeNode() for generic DOM node removal, added isIE6 property
+    
+src/locale/
+    ext-lang-en - Added Date.monthNumbers and several DatePicker strings
+
+src/util/
+    ClickRepeater - Changes to handle repeat acceleration
+    Date - Added 'u' format for milliseconds w/ leading zeroes, refactored getWeekOfYear(), doc updates
+    Format - Added stripScripts()
+    MixedCollection - Fix in findIndex, doc updates
+    
+src/widgets/
+    BoxComponent - Fix in setPosition()/setPagePosition() to check for null x value
+    Button - Fix in afterRender() for IE6 check to defer autoWidth call
+    Component 
+        - Change in onRender() to handle auto element creation
+        - Fix in isVisible() to return false if not rendered
+        - New XType methods getXType, isXType, getXTypes
+        - Doc updates
+    Container 
+        - Fix in render to do layout only when there is no owning container
+        - Change to remove item borders on add if hideBorders = true
+        - New functions find, findBy, findById, findByType to retrieve child components
+        - Doc updates
+    DatePicker - Added logic to init disabled days on picker init
+    Layer - Refactored destroy()
+    PagingToolbar - Changed various internal CSS class prefixes to "x-tbar"
+    Panel - Fix in createGhost() to add 'px' to ghost width, doc updates
+    PanelDD - Fix in show() to position the ghost element correctly on show
+    Resizable - Fix to append the proxy element to the document body
+    SplitBar - Refactored destroy()
+    SplitButton - Fix in onEnable()/onDisable() for IE6 check when adding/removing x-item-disabled class
+    Window - Various fixes for modal dialog mask resizing on window resize
+
+src/widgets/form/
+    BasicForm - Fix in render() to apply to existing markup correctly
+    Checkbox - Replaced constructor with initComponent
+    Combo - Replaced constructor with initComponent, doc updates
+    DateField - Added logic to init disabled days on picker init, doc updates
+    Field - Fix for input width for IE6 with strict doc type, doc updates
+    Form - Added onEnable()/onDisable() with logic to cascade to fields
+    HtmlEditor - Fix in toggleEditSource() to preserve the editor size when toggling
+    NumberField - Added baseChars config
+    Radio - Replaced constructor with initComponent
+    TextArea - Removed previously-deprecated minHeight and maxHeight configs (replace with growMin and growMax), refactored onDestroy
+    TextField - Replaced constructor with initComponent, doc updates
+    TriggerField - Fix to resize the wrapping element on resize, mimic blur fixes, doc updates
+    
+src/widgets/grid/
+    GridPanel - Change in onDestroy() to destroy the load mask even when the grid is not rendered, doc updates
+    GridView - Added resize marker, various minor fixes and doc updates
+    GroupingView - Refactored logic for showing groups in beforeMenuShow()
+    
+src/widgets/layout/
+    BorderLayout - Change in onLayout() to restore previous collapsed state, doc updates
+    BorderLayout.Region - Fix in tool template to add the semicolon to &#160;, fix in applyLayout() for incorrect check of current collapsed state
+    ColumnLayout - Fixes in onLayout() for column sizing, doc update
+    ContainerLayout - Fix in renderItem() for case when position is not specified
+    FitLayout - Fixes to check that the container is not collapsed before resizing
+    
+src/widgets/tips/
+    QuickTips - Fix in showAt() to set dismiss properties correctly, doc updates
+    Tip - Fix to add header element when closable with no title, doc updates
+
+src/widgets/tree/
+    TreeNode - Fix in removeChild() for case where tree has a hidden root node
+    TreeNodeUI - Added destroy(), doc updates
+    TreePanel - Fix to set internal beforeexpandnode event handler correctly, added onDestroy(), doc updates
+
+===== Doc updates only =====
+src/core/
+    DomQuery
+
+src/data/
+    ArrayReader
+    Connection
+    DataReader
+    JsonReader
+    Record
+    
+src/dd/
+    DDCore
+
+src/util/
+    Observable
+    TaskMgr
+    XTemplate
+    
+src/widgets/
+    ComponentMgr
+    DataView
+    MessageBox
+    ProgressBar
+    TabPanel
+    WindowMgr
+
+src/widgets/form/
+    Action
+    TimeField
+    
+src/widgets/grid/
+    CellSelectionModel
+    ColumnModel
+    PropertyGrid
+
+src/widgets/layout/
+    AnchorLayout
+    FormLayout
+    TableLayout
+    
+src/widgets/menu/
+    Adapter
+    CheckItem
+    Item
+    MenuMgr
+    
+src/widgets/tips/
+    QuickTips
+    ToolTip
+    
+src/widgets/tree/
+    TreeDragZone
+    TreeDropZone
+    TreeEditor
+    TreeLoader

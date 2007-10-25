@@ -55,65 +55,29 @@ See <a ext:cls="Ext.EventObject" href="output/Ext.EventObject.html">Ext.EventObj
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.EventManager-addListener"></a>
-            <b>addListener</b>(&nbsp;<code>String/HTMLElement element</code>, <code>String eventName</code>, <code>Function handler</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>Object options</code>]</span>&nbsp;) : void            <div class="mdesc">
-                        <div class="short">Appends an event handler to an element (shorthand for addListener)</div>
+            <b>addListener</b>(&nbsp;<code>String/HTMLElement el</code>, <code>String eventName</code>, <code>Function handler</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>Object options</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Appends an event handler to an element.  The shorthand version on is equivalent.  Typically you will
+use Ext.Element....</div>
             <div class="long">
-                Appends an event handler to an element (shorthand for addListener)    <div class="mdetail-params">
+                Appends an event handler to an element.  The shorthand version <a ext:cls="Ext.EventManager" ext:member="on" href="output/Ext.EventManager.html#on">on</a> is equivalent.  Typically you will
+use <a ext:cls="Ext.Element" ext:member="addListener" href="output/Ext.Element.html#addListener">Ext.Element.addListener</a> directly on an Element in favor of calling this version.    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>element</code> : String/HTMLElement<div class="sub-desc">The html element or id to assign the</div></li><li><code>eventName</code> : String<div class="sub-desc">The type of event to listen for</div></li><li><code>handler</code> : Function<div class="sub-desc">The method the event invokes</div></li><li><code>scope</code> : Object<div class="sub-desc">(optional) The scope in which to execute the handler
-function. The handler function's "this" context.</div></li><li><code>options</code> : Object<div class="sub-desc">(optional) An object containing handler configuration
-properties. This may contain any of the following properties:<ul>
-<li>scope {Object} The scope in which to execute the handler function. The handler function's "this" context.</li>
-<li>delegate {String} A simple selector to filter the target or look for a descendant of the target</li>
-<li>stopEvent {Boolean} True to stop the event. That is stop propagation, and prevent the default action.</li>
-<li>preventDefault {Boolean} True to prevent the default action</li>
-<li>stopPropagation {Boolean} True to prevent event propagation</li>
-<li>normalized {Boolean} False to pass a browser event to the handler function instead of an Ext.EventObject</li>
-<li>delay {Number} The number of milliseconds to delay the invocation of the handler after te event fires.</li>
-<li>single {Boolean} True to add a handler to handle just the next firing of the event, and then remove itself.</li>
-<li>buffer {Number} Causes the handler to be scheduled to run in an <a ext:cls="Ext.util.DelayedTask" href="output/Ext.util.DelayedTask.html">Ext.util.DelayedTask</a> delayed
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc">The html element or id to assign the event handler to</div></li><li><code>eventName</code> : String<div class="sub-desc">The type of event to listen for</div></li><li><code>handler</code> : Function<div class="sub-desc">The handler function the event invokes</div></li><li><code>scope</code> : Object<div class="sub-desc">(optional) The scope in which to execute the handler
+function (the handler function's "this" context)</div></li><li><code>options</code> : Object<div class="sub-desc">(optional) An object containing handler configuration properties.
+This may contain any of the following properties:<ul>
+<li>scope {Object} : The scope in which to execute the handler function. The handler function's "this" context.</li>
+<li>delegate {String} : A simple selector to filter the target or look for a descendant of the target</li>
+<li>stopEvent {Boolean} : True to stop the event. That is stop propagation, and prevent the default action.</li>
+<li>preventDefault {Boolean} : True to prevent the default action</li>
+<li>stopPropagation {Boolean} : True to prevent event propagation</li>
+<li>normalized {Boolean} : False to pass a browser event to the handler function instead of an Ext.EventObject</li>
+<li>delay {Number} : The number of milliseconds to delay the invocation of the handler after te event fires.</li>
+<li>single {Boolean} : True to add a handler to handle just the next firing of the event, and then remove itself.</li>
+<li>buffer {Number} : Causes the handler to be scheduled to run in an <a ext:cls="Ext.util.DelayedTask" href="output/Ext.util.DelayedTask.html">Ext.util.DelayedTask</a> delayed
 by the specified number of milliseconds. If the event fires again within that time, the original
 handler is <em>not</em> invoked, but the new handler is scheduled in its place.</li>
 </ul><br>
-<p>
-<b>Combining Options</b><br>
-Using the options argument, it is possible to combine different types of listeners:<br>
-<br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
-    single: true,
-    delay: 100,
-    stopEvent : true,
-    forumId: 4
-});</code></pre>
-<p>
-<b>Attaching multiple handlers in 1 call</b><br>
-The method also allows for a single argument to be passed which is a config object containing properties
-which specify multiple handlers.
-<p>
-Code:<pre><code>el.on({
-    <em>'click'</em> : {
-        fn: <b>this</b>.onClick
-        scope: <b>this</b>,
-        delay: 100
-    },
-    <em>'mouseover'</em> : {
-        fn: <b>this</b>.onMouseOver
-        scope: <b>this</b>
-    },
-    <em>'mouseout'</em> : {
-        fn: <b>this</b>.onMouseOut
-        scope: <b>this</b>
-    }
-});</code></pre>
-<p>
-Or a shorthand syntax:<br>
-Code:<pre><code>el.on({
-    <em>'click'</em> : <b>this</b>.onClick,
-    <em>'mouseover'</em> : <b>this</b>.onMouseOver,
-    <em>'mouseout'</em> : <b>this</b>.onMouseOut
-    scope: <b>this</b>
-});</code></pre></div></li>        </ul>
+<p>See <a ext:cls="Ext.Element" ext:member="addListener" href="output/Ext.Element.html#addListener">Ext.Element.addListener</a> for examples of how to use these options.</p></div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
             <li><code>void</code></li>
@@ -127,15 +91,14 @@ Code:<pre><code>el.on({
         <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.EventManager-onDocumentReady"></a>
-            <b>onDocumentReady</b>(&nbsp;<code>Function fn</code>, <code>Object scope</code>, <code>boolean options</code>&nbsp;) : void            <div class="mdesc">
-                        <div class="short">Fires when the document is ready (before onload and before images are loaded). Can be
-accessed shorthanded Ext.onRead...</div>
+        <a id="Ext.EventManager-on"></a>
+            <b>on</b>(&nbsp;<code>String/HTMLElement el</code>, <code>String eventName</code>, <code>Function handler</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>Object options</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Appends an event handler to an element.  Shorthand for <a ext:cls="Ext.EventManager" ext:member="addListener" href="output/Ext.EventManager.html#addListener">addListener</a>.</div>
             <div class="long">
-                Fires when the document is ready (before onload and before images are loaded). Can be
-accessed shorthanded Ext.onReady().    <div class="mdetail-params">
+                Appends an event handler to an element.  Shorthand for <a ext:cls="Ext.EventManager" ext:member="addListener" href="output/Ext.EventManager.html#addListener">addListener</a>.    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>fn</code> : Function<div class="sub-desc">The method the event invokes</div></li><li><code>scope</code> : Object<div class="sub-desc">An object that becomes the scope of the handler</div></li><li><code>options</code> : boolean<div class="sub-desc"></div></li>        </ul>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc">The html element or id to assign the event handler to</div></li><li><code>eventName</code> : String<div class="sub-desc">The type of event to listen for</div></li><li><code>handler</code> : Function<div class="sub-desc">The handler function the event invokes</div></li><li><code>scope</code> : Object<div class="sub-desc">(optional) The scope in which to execute the handler
+function (the handler function's "this" context)</div></li><li><code>options</code> : Object<div class="sub-desc">(optional) An object containing standard <a ext:cls="Ext.EventManager" ext:member="addListener" href="output/Ext.EventManager.html#addListener">addListener</a> options</div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
             <li><code>void</code></li>
@@ -147,6 +110,28 @@ accessed shorthanded Ext.onReady().    <div class="mdetail-params">
         <td class="msource">EventManager</td>
     </tr>
         <tr class="method-row expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.EventManager-onDocumentReady"></a>
+            <b>onDocumentReady</b>(&nbsp;<code>Function fn</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>boolean options</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Fires when the document is ready (before onload and before images are loaded). Can be
+accessed shorthanded as Ext.onR...</div>
+            <div class="long">
+                Fires when the document is ready (before onload and before images are loaded). Can be
+accessed shorthanded as Ext.onReady().    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>fn</code> : Function<div class="sub-desc">The method the event invokes</div></li><li><code>scope</code> : Object<div class="sub-desc">(optional) An object that becomes the scope of the handler</div></li><li><code>options</code> : boolean<div class="sub-desc">(optional) An object containing standard <a ext:cls="Ext.EventManager" ext:member="addListener" href="output/Ext.EventManager.html#addListener">addListener</a> options</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">EventManager</td>
+    </tr>
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.EventManager-onTextResize"></a>
@@ -166,7 +151,7 @@ accessed shorthanded Ext.onReady().    <div class="mdetail-params">
         </td>
         <td class="msource">EventManager</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.EventManager-onWindowResize"></a>
@@ -186,20 +171,21 @@ accessed shorthanded Ext.onReady().    <div class="mdetail-params">
         </td>
         <td class="msource">EventManager</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.EventManager-removeListener"></a>
-            <b>removeListener</b>(&nbsp;<code>String/HTMLElement element</code>, <code>String eventName</code>, <code>Function fn</code>&nbsp;) : Boolean            <div class="mdesc">
-                        <div class="short">Removes an event handler</div>
+            <b>removeListener</b>(&nbsp;<code>String/HTMLElement el</code>, <code>String eventName</code>, <code>Function fn</code>&nbsp;) : Boolean            <div class="mdesc">
+                        <div class="short">Removes an event handler from an element.  The shorthand version un is equivalent.  Typically
+you will use Ext.Elemen...</div>
             <div class="long">
-                Removes an event handler    <div class="mdetail-params">
+                Removes an event handler from an element.  The shorthand version <a ext:cls="Ext.EventManager" ext:member="un" href="output/Ext.EventManager.html#un">un</a> is equivalent.  Typically
+you will use <a ext:cls="Ext.Element" ext:member="removeListener" href="output/Ext.Element.html#removeListener">Ext.Element.removeListener</a> directly on an Element in favor of calling this version.    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>element</code> : String/HTMLElement<div class="sub-desc">The id or html element to remove the
-event from</div></li><li><code>eventName</code> : String<div class="sub-desc">The type of event</div></li><li><code>fn</code> : Function<div class="sub-desc"></div></li>        </ul>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc">The id or html element from which to remove the event</div></li><li><code>eventName</code> : String<div class="sub-desc">The type of event</div></li><li><code>fn</code> : Function<div class="sub-desc">The handler function to remove</div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
-            <li><code>Boolean</code><div class="sub-desc">True if a listener was actually removed</div></li>
+            <li><code>Boolean</code><div class="sub-desc">True if a listener was actually removed, else false</div></li>
         </ul>
     </div>
                 </div>
@@ -207,7 +193,7 @@ event from</div></li><li><code>eventName</code> : String<div class="sub-desc">Th
         </td>
         <td class="msource">EventManager</td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.EventManager-removeResizeListener"></a>
@@ -220,6 +206,26 @@ event from</div></li><li><code>eventName</code> : String<div class="sub-desc">Th
         <strong>Returns:</strong>
         <ul>
             <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">EventManager</td>
+    </tr>
+        <tr class="method-row alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.EventManager-un"></a>
+            <b>un</b>(&nbsp;<code>String/HTMLElement el</code>, <code>String eventName</code>, <code>Function fn</code>&nbsp;) : Boolean            <div class="mdesc">
+                        <div class="short">Removes an event handler from an element.  Shorthand for <a ext:cls="Ext.EventManager" ext:member="removeListener" href="output/Ext.EventManager.html#removeListener">removeListener</a>.</div>
+            <div class="long">
+                Removes an event handler from an element.  Shorthand for <a ext:cls="Ext.EventManager" ext:member="removeListener" href="output/Ext.EventManager.html#removeListener">removeListener</a>.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc">The id or html element from which to remove the event</div></li><li><code>eventName</code> : String<div class="sub-desc">The type of event</div></li><li><code>fn</code> : Function<div class="sub-desc">The handler function to remove</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Boolean</code><div class="sub-desc">True if a listener was actually removed, else false</div></li>
         </ul>
     </div>
                 </div>

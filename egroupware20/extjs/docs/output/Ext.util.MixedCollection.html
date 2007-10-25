@@ -137,8 +137,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -148,7 +148,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -165,7 +165,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut
@@ -646,9 +646,11 @@ mc.add(otherEl);</code></pre>    <div class="mdetail-params">
         <td class="sig">
         <a id="Ext.util.MixedCollection-item"></a>
             <b>item</b>(&nbsp;<code>String/Number key</code>&nbsp;) : Object            <div class="mdesc">
-                        <div class="short">Returns the item associated with the passed key OR index. Key has priority over index.</div>
+                        <div class="short">Returns the item associated with the passed key OR index. Key has priority over index.  This is the equivalent
+of cal...</div>
             <div class="long">
-                Returns the item associated with the passed key OR index. Key has priority over index.    <div class="mdetail-params">
+                Returns the item associated with the passed key OR index. Key has priority over index.  This is the equivalent
+of calling <a ext:cls="Ext.util.MixedCollection" ext:member="key" href="output/Ext.util.MixedCollection.html#key">key</a> first, then if nothing matched calling <a ext:cls="Ext.util.MixedCollection" ext:member="itemAt" href="output/Ext.util.MixedCollection.html#itemAt">itemAt</a>.    <div class="mdetail-params">
         <strong>Parameters:</strong>
         <ul><li><code>key</code> : String/Number<div class="sub-desc">The key or index of the item.</div></li>        </ul>
         <strong>Returns:</strong>

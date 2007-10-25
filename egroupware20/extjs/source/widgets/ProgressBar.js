@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -104,8 +104,8 @@ Ext.ProgressBar = Ext.extend(Ext.BoxComponent, {
      * any existing text value will be unchanged.  To blank out existing text, pass ''.  Note that even
      * if the progress bar value exceeds 1, it will never automatically reset -- you are responsible for
      * determining when the progress is complete and calling {@link #reset} to clear and/or hide the control.
-     * @param {Float} value A floating point value between 0 and 1 (e.g., .5)
-     * @param {String} text The string to display in the progress text element (defaults to null)
+     * @param {Float} value (optional) A floating point value between 0 and 1 (e.g., .5, defaults to 0)
+     * @param {String} text (optional) The string to display in the progress text element (defaults to '')
      * @return {Ext.ProgressBar} this
      */
     updateProgress : function(value, text){
@@ -173,7 +173,7 @@ myAction.on('complete', function(){
     Ext.fly('status').update('Done!');
 });
 </code></pre>
-     * @param {Object} config Configuration options
+     * @param {Object} config (optional) Configuration options
      * @return {Ext.ProgressBar} this
      */
     wait : function(o){
@@ -210,7 +210,7 @@ myAction.on('complete', function(){
     /**
      * Updates the progress bar text.  If specified, textEl will be updated, otherwise the progress
      * bar itself will display the updated text.
-     * @param {String} text The string to display in the progress text element (defaults to '')
+     * @param {String} text (optional) The string to display in the progress text element (defaults to '')
      * @return {Ext.ProgressBar} this
      */
     updateText : function(text){
@@ -235,9 +235,9 @@ myAction.on('complete', function(){
     },
 
     /**
-     * Resets the progress bar value to 0 and text to empty string.  If hide == true, the progress
-     * bar will also be hidden (using the hideMode property internally).
-     * @param {Boolean} hide True to hide the progress bar (defaults to false)
+     * Resets the progress bar value to 0 and text to empty string.  If hide = true, the progress
+     * bar will also be hidden (using the {@link #hideMode} property internally).
+     * @param {Boolean} hide (optional) True to hide the progress bar (defaults to false)
      * @return {Ext.ProgressBar} this
      */
     reset : function(hide){

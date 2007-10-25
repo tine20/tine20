@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -7,7 +7,7 @@
  */
 
 
-Ext = {version: '2.0-alpha1'};
+Ext = {version: '2.0-beta1'};
 
 // for old browsers
 window["undefined"] = window["undefined"];
@@ -466,6 +466,21 @@ Company.data.CustomStore = function(config) { ... }
             }
         },
 
+        removeNode : isIE ? function(){
+            var d;
+            return function(n){
+                if(n){
+                    d = d || document.createElement('div');
+                    d.appendChild(n);
+                    d.innerHTML = '';
+                }
+            }
+        }() : function(n){
+            if(n && n.parentNode){
+                n.parentNode.removeChild(n);
+            }
+        },
+
         // inpired by a similar function in mootools library
         /**
          * Returns the type of object that is passed in. If the object passed in is null or undefined it
@@ -530,6 +545,8 @@ Company.data.CustomStore = function(config) { ... }
         isSafari : isSafari,
         /** @type Boolean */
         isIE : isIE,
+        /** @type Boolean */
+        isIE6 : isIE && !isIE7,
         /** @type Boolean */
         isIE7 : isIE7,
         /** @type Boolean */

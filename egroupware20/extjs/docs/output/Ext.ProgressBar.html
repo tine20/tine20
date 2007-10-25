@@ -50,9 +50,9 @@ which you have no need for indicating intermediate progress.</p>        </div>
         <td class="sig">
         <a id="Ext.ProgressBar-applyTo"></a>
             <b>applyTo</b> : Mixed            <div class="mdesc">
-                        <div class="short">The id of the node, a DOM node or an existing Element corresponding to an existing element present in the DOM to rend...</div>
+                        <div class="short">The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in the document ...</div>
             <div class="long">
-                The id of the node, a DOM node or an existing Element corresponding to an existing element present in the DOM to render this component to. Using this config, a call to render() is not required.            </div>
+                The id of the node, a DOM node or an existing Element corresponding to a DIV that is already present in the document that specifies some structural markup for this component. When applyTo is used, constituent parts of the component can also be specified by id or CSS class name within the main element, and the component being created may attempt to create its subcomponents from that markup if applicable. Using this config, a call to render() is not required. If applyTo is specified, any value passed for <a ext:cls="Ext.Component" ext:member="renderTo" href="output/Ext.Component.html#renderTo">renderTo</a> will be ignored and the target element's parent node will automatically be used as the component's container.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#applyTo" href="output/Ext.Component.html#applyTo">Component</a></td>
@@ -120,28 +120,16 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#ctCls" href="output/Ext.Component.html#ctCls">Component</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.ProgressBar-deferHeight"></a>
-            <b>deferHeight</b> : Boolean            <div class="mdesc">
-                        <div class="short">True to defer height calculations to an external component, false to allow this component to set its own height (defa...</div>
-            <div class="long">
-                True to defer height calculations to an external component, false to allow this component to set its own height (defaults to false).            </div>
-                        </div>
-        </td>
-        <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#deferHeight" href="output/Ext.BoxComponent.html#deferHeight">BoxComponent</a></td>
-    </tr>
-        <tr class="config-row inherited alt">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
-        <a id="Ext.ProgressBar-disableClass"></a>
-            <b>disableClass</b> : String            <div class="mdesc">
+        <a id="Ext.ProgressBar-disabledClass"></a>
+            <b>disabledClass</b> : String            <div class="mdesc">
                             CSS class added to the component when it is disabled (defaults to "x-item-disabled").                        </div>
         </td>
-        <td class="msource"><a ext:cls="Ext.Component" ext:member="#disableClass" href="output/Ext.Component.html#disableClass">Component</a></td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#disabledClass" href="output/Ext.Component.html#disabledClass">Component</a></td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-height"></a>
@@ -150,7 +138,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#height" href="output/Ext.BoxComponent.html#height">BoxComponent</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-hideMode"></a>
@@ -162,7 +150,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#hideMode" href="output/Ext.Component.html#hideMode">Component</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-hideParent"></a>
@@ -174,7 +162,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#hideParent" href="output/Ext.Component.html#hideParent">Component</a></td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-id"></a>
@@ -183,7 +171,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource">ProgressBar</td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-plugins"></a>
@@ -195,19 +183,40 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#plugins" href="output/Ext.Component.html#plugins">Component</a></td>
     </tr>
-        <tr class="config-row inherited alt expandable">
+        <tr class="config-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-renderTo"></a>
             <b>renderTo</b> : Mixed            <div class="mdesc">
-                        <div class="short">The id of the node, a DOM node or an existing Element to render this component into. Using this config, a call to ren...</div>
+                        <div class="short">The id of the node, a DOM node or an existing Element that will be the container to render this component into. Using...</div>
             <div class="long">
-                The id of the node, a DOM node or an existing Element to render this component into. Using this config, a call to render() is not required.            </div>
+                The id of the node, a DOM node or an existing Element that will be the container to render this component into. Using this config, a call to render() is not required.            </div>
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#renderTo" href="output/Ext.Component.html#renderTo">Component</a></td>
     </tr>
-        <tr class="config-row inherited expandable">
+        <tr class="config-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-stateEvents"></a>
+            <b>stateEvents</b> : Array            <div class="mdesc">
+                        <div class="short">An array of events that, when fired, should trigger this component to save its state (defaults to none). These can be...</div>
+            <div class="long">
+                An array of events that, when fired, should trigger this component to save its state (defaults to none). These can be any types of events supported by this component, including browser or custom events (e.g., ['click', 'customerchange']).            </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#stateEvents" href="output/Ext.Component.html#stateEvents">Component</a></td>
+    </tr>
+        <tr class="config-row inherited">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-stateId"></a>
+            <b>stateId</b> : String            <div class="mdesc">
+                            The unique id for this component to use for state management purposes (defaults to the component id).                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#stateId" href="output/Ext.Component.html#stateId">Component</a></td>
+    </tr>
+        <tr class="config-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-style"></a>
@@ -219,7 +228,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#style" href="output/Ext.Component.html#style">Component</a></td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-text"></a>
@@ -228,7 +237,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource">ProgressBar</td>
     </tr>
-        <tr class="config-row">
+        <tr class="config-row alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-textEl"></a>
@@ -237,7 +246,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource">ProgressBar</td>
     </tr>
-        <tr class="config-row alt">
+        <tr class="config-row">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-value"></a>
@@ -246,7 +255,7 @@ which you have no need for indicating intermediate progress.</p>        </div>
         </td>
         <td class="msource">ProgressBar</td>
     </tr>
-        <tr class="config-row inherited">
+        <tr class="config-row inherited alt">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-width"></a>
@@ -376,8 +385,8 @@ handler is <em>not</em> invoked, but the new handler is scheduled in its place.<
 <b>Combining Options</b><br>
 Using the options argument, it is possible to combine different types of listeners:<br>
 <br>
-A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)<div style="margin: 5px 20px 20px;">
-Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
+A normalized, delayed, one-time listener that auto stops the event and passes a custom argument (forumId)
+<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
     single: true,
     delay: 100,
     forumId: 4
@@ -387,7 +396,7 @@ Code:<pre><code>el.on(<em>'click'</em>, <b>this</b>.onClick, <b>this</b>, {
 The method also allows for a single argument to be passed which is a config object containing properties
 which specify multiple handlers.
 <p>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : {
         fn: <b>this</b>.onClick
         scope: <b>this</b>,
@@ -404,7 +413,7 @@ Code:<pre><code>foo.on({
 });</code></pre>
 <p>
 Or a shorthand syntax:<br>
-Code:<pre><code>foo.on({
+<pre><code>foo.on({
     <em>'click'</em> : <b>this</b>.onClick,
     <em>'mouseover'</em> : <b>this</b>.onMouseOver,
     <em>'mouseout'</em> : <b>this</b>.onMouseOut
@@ -421,6 +430,26 @@ Code:<pre><code>foo.on({
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#addListener" href="output/Ext.util.Observable.html#addListener">Observable</a></td>
     </tr>
         <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-applyToMarkup"></a>
+            <b>applyToMarkup</b>(&nbsp;<code>String/HTMLElement el</code>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Apply this component to existing markup that is valid. With this function, no call to render() is required.</div>
+            <div class="long">
+                Apply this component to existing markup that is valid. With this function, no call to render() is required.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc"></div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#applyToMarkup" href="output/Ext.Component.html#applyToMarkup">Component</a></td>
+    </tr>
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-cloneConfig"></a>
@@ -441,7 +470,7 @@ An id property can be passed on this object, otherwise one will be generated to 
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#cloneConfig" href="output/Ext.Component.html#cloneConfig">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-destroy"></a>
@@ -465,7 +494,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#destroy" href="output/Ext.Component.html#destroy">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-disable"></a>
@@ -485,7 +514,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#disable" href="output/Ext.Component.html#disable">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-enable"></a>
@@ -505,7 +534,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#enable" href="output/Ext.Component.html#enable">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-fireEvent"></a>
@@ -525,7 +554,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#fireEvent" href="output/Ext.util.Observable.html#fireEvent">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-focus"></a>
@@ -545,7 +574,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#focus" href="output/Ext.Component.html#focus">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-getBox"></a>
@@ -565,7 +594,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getBox" href="output/Ext.BoxComponent.html#getBox">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-getEl"></a>
@@ -585,7 +614,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#getEl" href="output/Ext.Component.html#getEl">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-getId"></a>
@@ -605,7 +634,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#getId" href="output/Ext.Component.html#getId">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-getPosition"></a>
@@ -625,7 +654,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getPosition" href="output/Ext.BoxComponent.html#getPosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-getSize"></a>
@@ -645,7 +674,56 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#getSize" href="output/Ext.BoxComponent.html#getSize">BoxComponent</a></td>
     </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-getXType"></a>
+            <b>getXType</b>() : String            <div class="mdesc">
+                        <div class="short">Gets the xtype for this component as registered with Ext.ComponentMgr. For a list of all
+available xtypes, see the Ex...</div>
+            <div class="long">
+                Gets the xtype for this component as registered with <a ext:cls="Ext.ComponentMgr" href="output/Ext.ComponentMgr.html">Ext.ComponentMgr</a>. For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>var t = <b>new</b> Ext.form.TextField();
+alert(t.getXType());  // alerts <em>'textfield'</em></code></pre>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>String</code><div class="sub-desc">The xtype</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#getXType" href="output/Ext.Component.html#getXType">Component</a></td>
+    </tr>
         <tr class="method-row inherited expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-getXTypes"></a>
+            <b>getXTypes</b>() : String            <div class="mdesc">
+                        <div class="short">Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+available xtypes, see the Ext...</div>
+            <div class="long">
+                Returns this component's xtype hierarchy as a slash-delimited string. For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>
+var t = new Ext.form.TextField();
+alert(t.getXTypes());  // alerts 'component/box/field/textfield'</pre></code>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>String</code><div class="sub-desc">The xtype hierarchy string</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#getXTypes" href="output/Ext.Component.html#getXTypes">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-hasListener"></a>
@@ -665,7 +743,7 @@ should usually not need to be called directly.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#hasListener" href="output/Ext.util.Observable.html#hasListener">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-hide"></a>
@@ -684,6 +762,26 @@ should usually not need to be called directly.    <div class="mdetail-params">
                         </div>
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#hide" href="output/Ext.Component.html#hide">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-initComponent"></a>
+            <b>initComponent</b>() : void            <div class="mdesc">
+                        <div class="short"></div>
+            <div class="long">
+                    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#initComponent" href="output/Ext.BoxComponent.html#initComponent">BoxComponent</a></td>
     </tr>
         <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -728,6 +826,34 @@ should usually not need to be called directly.    <div class="mdetail-params">
         <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Ext.ProgressBar-isXType"></a>
+            <b>isXType</b>(&nbsp;<code>String xtype</code>, <span class="optional" title="Optional">[<code>Boolean shallow</code>]</span>&nbsp;) : void            <div class="mdesc">
+                        <div class="short">Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+from th...</div>
+            <div class="long">
+                Tests whether or not this component is of a specific xtype. This can test whether this component is descended
+from the xtype (default) or whether it is directly of the xtype specified (shallow = true). For a list of all
+available xtypes, see the <a ext:cls="Ext.Component" href="output/Ext.Component.html">Ext.Component</a> header. Example usage:
+<pre><code>var t = <b>new</b> Ext.form.TextField();
+<b>var</b> isText = t.isXType(<em>'textfield'</em>);        <i>// true</i>
+<b>var</b> isBoxSubclass = t.isXType(<em>'box'</em>);       <i>// true, descended from BoxComponent</i>
+<b>var</b> isBoxInstance = t.isXType(<em>'box'</em>, true); // false, not a direct BoxComponent instance</code></pre>    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>xtype</code> : String<div class="sub-desc">The xtype to check for this component</div></li><li><code>shallow</code> : Boolean<div class="sub-desc">(optional) False to check whether this component is descended from the xtype (this is
+the default), or true to check whether this component is directly of the specified xtype.</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>void</code></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource"><a ext:cls="Ext.Component" ext:member="#isXType" href="output/Ext.Component.html#isXType">Component</a></td>
+    </tr>
+        <tr class="method-row inherited alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Ext.ProgressBar-on"></a>
             <b>on</b>(&nbsp;<code>String eventName</code>, <code>Function handler</code>, <span class="optional" title="Optional">[<code>Object scope</code>]</span>, <span class="optional" title="Optional">[<code>Object options</code>]</span>&nbsp;) : void            <div class="mdesc">
                         <div class="short">Appends an event handler to this element (shorthand for addListener)</div>
@@ -746,7 +872,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#on" href="output/Ext.util.Observable.html#on">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-purgeListeners"></a>
@@ -766,7 +892,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#purgeListeners" href="output/Ext.util.Observable.html#purgeListeners">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-removeClass"></a>
@@ -786,7 +912,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#removeClass" href="output/Ext.Component.html#removeClass">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-removeListener"></a>
@@ -806,7 +932,7 @@ function. The handler function's "this" context.</div></li><li><code>options</co
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#removeListener" href="output/Ext.util.Observable.html#removeListener">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-render"></a>
@@ -828,18 +954,18 @@ which this component will be inserted (defaults to appending to the end of the c
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#render" href="output/Ext.Component.html#render">Component</a></td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-reset"></a>
-            <b>reset</b>(&nbsp;<code>Boolean hide</code>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
-                        <div class="short">Resets the progress bar value to 0 and text to empty string.  If hide == true, the progress
-bar will also be hidden (...</div>
+            <b>reset</b>(&nbsp;<span class="optional" title="Optional">[<code>Boolean hide</code>]</span>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
+                        <div class="short">Resets the progress bar value to 0 and text to empty string.  If hide = true, the progress
+bar will also be hidden (u...</div>
             <div class="long">
-                Resets the progress bar value to 0 and text to empty string.  If hide == true, the progress
-bar will also be hidden (using the hideMode property internally).    <div class="mdetail-params">
+                Resets the progress bar value to 0 and text to empty string.  If hide = true, the progress
+bar will also be hidden (using the <a ext:cls="Ext.ProgressBar" ext:member="hideMode" href="output/Ext.ProgressBar.html#hideMode">hideMode</a> property internally).    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>hide</code> : Boolean<div class="sub-desc">True to hide the progress bar (defaults to false)</div></li>        </ul>
+        <ul><li><code>hide</code> : Boolean<div class="sub-desc">(optional) True to hide the progress bar (defaults to false)</div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
             <li><code>Ext.ProgressBar</code><div class="sub-desc">this</div></li>
@@ -850,7 +976,7 @@ bar will also be hidden (using the hideMode property internally).    <div class=
         </td>
         <td class="msource">ProgressBar</td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-resumeEvents"></a>
@@ -870,7 +996,7 @@ bar will also be hidden (using the hideMode property internally).    <div class=
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#resumeEvents" href="output/Ext.util.Observable.html#resumeEvents">Observable</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setDisabled"></a>
@@ -890,7 +1016,7 @@ bar will also be hidden (using the hideMode property internally).    <div class=
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#setDisabled" href="output/Ext.Component.html#setDisabled">Component</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setHeight"></a>
@@ -910,7 +1036,7 @@ bar will also be hidden (using the hideMode property internally).    <div class=
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setHeight" href="output/Ext.BoxComponent.html#setHeight">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setPagePosition"></a>
@@ -932,7 +1058,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setPagePosition" href="output/Ext.BoxComponent.html#setPagePosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setPosition"></a>
@@ -954,7 +1080,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setPosition" href="output/Ext.BoxComponent.html#setPosition">BoxComponent</a></td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setSize"></a>
@@ -974,7 +1100,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource">ProgressBar</td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setVisible"></a>
@@ -994,7 +1120,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#setVisible" href="output/Ext.Component.html#setVisible">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-setWidth"></a>
@@ -1014,7 +1140,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#setWidth" href="output/Ext.BoxComponent.html#setWidth">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-show"></a>
@@ -1034,7 +1160,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.Component" ext:member="#show" href="output/Ext.Component.html#show">Component</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-suspendEvents"></a>
@@ -1054,7 +1180,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#suspendEvents" href="output/Ext.util.Observable.html#suspendEvents">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-syncSize"></a>
@@ -1074,7 +1200,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#syncSize" href="output/Ext.BoxComponent.html#syncSize">BoxComponent</a></td>
     </tr>
-        <tr class="method-row inherited alt expandable">
+        <tr class="method-row inherited expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-un"></a>
@@ -1094,7 +1220,7 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.util.Observable" ext:member="#un" href="output/Ext.util.Observable.html#un">Observable</a></td>
     </tr>
-        <tr class="method-row inherited expandable">
+        <tr class="method-row inherited alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-updateBox"></a>
@@ -1114,11 +1240,11 @@ This method fires the move event.    <div class="mdetail-params">
         </td>
         <td class="msource"><a ext:cls="Ext.BoxComponent" ext:member="#updateBox" href="output/Ext.BoxComponent.html#updateBox">BoxComponent</a></td>
     </tr>
-        <tr class="method-row alt expandable">
+        <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.ProgressBar-updateProgress"></a>
-            <b>updateProgress</b>(&nbsp;<code>Float value</code>, <code>String text</code>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
+            <b>updateProgress</b>(&nbsp;<span class="optional" title="Optional">[<code>Float value</code>]</span>, <span class="optional" title="Optional">[<code>String text</code>]</span>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
                         <div class="short">Updates the progress bar value, and optionally its text.  If the text argument is not specified,
 any existing text va...</div>
             <div class="long">
@@ -1127,7 +1253,29 @@ any existing text value will be unchanged.  To blank out existing text, pass ''.
 if the progress bar value exceeds 1, it will never automatically reset -- you are responsible for
 determining when the progress is complete and calling <a ext:cls="Ext.ProgressBar" ext:member="reset" href="output/Ext.ProgressBar.html#reset">reset</a> to clear and/or hide the control.    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>value</code> : Float<div class="sub-desc">A floating point value between 0 and 1 (e.g., .5)</div></li><li><code>text</code> : String<div class="sub-desc">The string to display in the progress text element (defaults to null)</div></li>        </ul>
+        <ul><li><code>value</code> : Float<div class="sub-desc">(optional) A floating point value between 0 and 1 (e.g., .5, defaults to 0)</div></li><li><code>text</code> : String<div class="sub-desc">(optional) The string to display in the progress text element (defaults to '')</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Ext.ProgressBar</code><div class="sub-desc">this</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">ProgressBar</td>
+    </tr>
+        <tr class="method-row alt expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.ProgressBar-updateText"></a>
+            <b>updateText</b>(&nbsp;<span class="optional" title="Optional">[<code>String text</code>]</span>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
+                        <div class="short">Updates the progress bar text.  If specified, textEl will be updated, otherwise the progress
+bar itself will display ...</div>
+            <div class="long">
+                Updates the progress bar text.  If specified, textEl will be updated, otherwise the progress
+bar itself will display the updated text.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>text</code> : String<div class="sub-desc">(optional) The string to display in the progress text element (defaults to '')</div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
             <li><code>Ext.ProgressBar</code><div class="sub-desc">this</div></li>
@@ -1141,30 +1289,8 @@ determining when the progress is complete and calling <a ext:cls="Ext.ProgressBa
         <tr class="method-row expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
-        <a id="Ext.ProgressBar-updateText"></a>
-            <b>updateText</b>(&nbsp;<code>String text</code>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
-                        <div class="short">Updates the progress bar text.  If specified, textEl will be updated, otherwise the progress
-bar itself will display ...</div>
-            <div class="long">
-                Updates the progress bar text.  If specified, textEl will be updated, otherwise the progress
-bar itself will display the updated text.    <div class="mdetail-params">
-        <strong>Parameters:</strong>
-        <ul><li><code>text</code> : String<div class="sub-desc">The string to display in the progress text element (defaults to '')</div></li>        </ul>
-        <strong>Returns:</strong>
-        <ul>
-            <li><code>Ext.ProgressBar</code><div class="sub-desc">this</div></li>
-        </ul>
-    </div>
-                </div>
-                        </div>
-        </td>
-        <td class="msource">ProgressBar</td>
-    </tr>
-        <tr class="method-row alt expandable">
-        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-        <td class="sig">
         <a id="Ext.ProgressBar-wait"></a>
-            <b>wait</b>(&nbsp;<code>Object config</code>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
+            <b>wait</b>(&nbsp;<span class="optional" title="Optional">[<code>Object config</code>]</span>&nbsp;) : Ext.ProgressBar            <div class="mdesc">
                         <div class="short">Initiates an auto-updating progress bar.  A duration can be specified, in which case the progress
 bar will automatica...</div>
             <div class="long">
@@ -1213,7 +1339,7 @@ myAction.on(<em>'complete'</em>, <b>function</b>(){
     Ext.fly(<em>'status'</em>).update(<em>'Done!'</em>);
 });</code></pre>    <div class="mdetail-params">
         <strong>Parameters:</strong>
-        <ul><li><code>config</code> : Object<div class="sub-desc">Configuration options</div></li>        </ul>
+        <ul><li><code>config</code> : Object<div class="sub-desc">(optional) Configuration options</div></li>        </ul>
         <strong>Returns:</strong>
         <ul>
             <li><code>Ext.ProgressBar</code><div class="sub-desc">this</div></li>

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -266,7 +266,7 @@ Ext.Button = Ext.extend(Ext.Component, {
 
     afterRender : function(){
         Ext.Button.superclass.afterRender.call(this);
-        if(Ext.isIE && !Ext.isIE7){
+        if(Ext.isIE6){
             this.autoWidth.defer(1, this);
         }else{
             this.autoWidth();
@@ -366,7 +366,7 @@ Ext.Button = Ext.extend(Ext.Component, {
     
     onDisable : function(){
         if(this.el){
-            if(!Ext.isIE || Ext.isIE7){
+            if(!Ext.isIE6){
                 this.el.addClass("x-item-disabled");
             }
             this.el.dom.disabled = true;
@@ -376,7 +376,7 @@ Ext.Button = Ext.extend(Ext.Component, {
 
     onEnable : function(){
         if(this.el){
-            if(!Ext.isIE || Ext.isIE7){
+            if(!Ext.isIE6){
                 this.el.removeClass("x-item-disabled");
             }
             this.el.dom.disabled = false;

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -15,10 +15,7 @@
  * Creates a new Radio
  * @param {Object} config Configuration options
  */
-Ext.form.Radio = function(){
-    Ext.form.Radio.superclass.constructor.apply(this, arguments);
-};
-Ext.extend(Ext.form.Radio, Ext.form.Checkbox, {
+Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
     inputType: 'radio',
 
     /**

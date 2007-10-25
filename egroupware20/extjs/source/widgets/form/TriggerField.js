@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -28,12 +28,7 @@ trigger.applyTo('my-field');
  * @param {Object} config Configuration options (valid {@Ext.form.TextField} config options will also be applied
  * to the base TextField)
  */
-Ext.form.TriggerField = function(config){
-    this.mimicing = false;
-    Ext.form.TriggerField.superclass.constructor.call(this, config);
-};
-
-Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
+Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
     /**
      * @cfg {String} triggerClass A CSS class to apply to the trigger
      */
@@ -47,10 +42,6 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
      */
     hideTrigger:false,
 
-    /** @cfg {Boolean} grow @hide */
-    /** @cfg {Number} growMin @hide */
-    /** @cfg {Number} growMax @hide */
-
     /**
      * @hide 
      * @method autoSize
@@ -60,13 +51,16 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
     monitorTab : true,
     // private
     deferHeight : true,
+    // private
+    mimicing : false,
 
     // private
     onResize : function(w, h){
-        Ext.form.TriggerField.superclass.onResize.apply(this, arguments);
+        Ext.form.TriggerField.superclass.onResize.call(this, w, h);
         if(typeof w == 'number'){
             this.el.setWidth(this.adjustWidth('input', w - this.trigger.getWidth()));
         }
+        this.wrap.setWidth(this.el.getWidth()+this.trigger.getWidth());
     },
 
     // private
@@ -148,7 +142,7 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
 
     // private
     mimicBlur : function(e){
-        if(!this.wrap.contains(e.target) && this.validateBlur()){
+        if(!this.wrap.contains(e.target) && this.validateBlur(e)){
             this.triggerBlur();
         }
     },
@@ -169,7 +163,7 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
 
     // private
     // This should be overriden by any subclass that needs to check whether or not the field can be blurred.
-    validateBlur : function(e, t){
+    validateBlur : function(e){
         return true;
     },
 
@@ -210,6 +204,16 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
      * @param {EventObject} e
      */
     onTriggerClick : Ext.emptyFn
+
+    /**
+     * @cfg {Boolean} grow @hide
+     */
+    /**
+     * @cfg {Number} growMin @hide
+     */
+    /**
+     * @cfg {Number} growMax @hide
+     */
 });
 
 // TwinTriggerField is not a public class to be used directly.  It is meant as an abstract base class

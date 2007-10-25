@@ -94,9 +94,12 @@ a#help-forums{
 	z-index:20001;
     height:auto;
 }
+#loading img {
+    margin-bottom:5px;
+}
 #loading .loading-indicator{
 	background:white;
-	color:#444;
+	color:#555;
 	font:bold 13px tahoma,arial,helvetica;
 	padding:10px;
 	margin:0;

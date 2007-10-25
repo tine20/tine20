@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -13,9 +13,9 @@
  * <p><b>Although they are not listed, this class also accepts all the config options required to configure its internal {@link Ext.form.BasicForm}</b></p>
  * <br><br>
  * By default, Ext Forms are submitted through Ajax, using {@link Ext.form.Action}.
- * To enable normal browser submission of an Ext Form, override the Form's onSubmit,
- * and submit methods:<br><br><pre><code>
-    var myForm = new Ext.form.Form({
+ * To enable normal browser submission of the Ext Form contained in this FormPanel,
+ * override the Form's onSubmit, and submit methods:<br><br><pre><code>
+    var myForm = new Ext.form.FormPanel({
         onSubmit: Ext.emptyFn,
         submit: function() {
             this.getEl().dom.submit();
@@ -81,6 +81,7 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
     },
 
     createForm: function(){
+        delete this.initialConfig.listeners;
         return new Ext.form.BasicForm(null, this.initialConfig);
     },
 
@@ -159,6 +160,24 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
 
     load : function(){
         this.form.load.apply(this.form, arguments);  
+    },
+
+    onDisable : function(){
+        Ext.FormPanel.superclass.onDisable.call(this);
+        if(this.form){
+            this.form.items.each(function(){
+                 this.disable();
+            });
+        }
+    },
+
+    onEnable : function(){
+        Ext.FormPanel.superclass.onEnable.call(this);
+        if(this.form){
+            this.form.items.each(function(){
+                 this.enable();
+            });
+        }
     },
 
     // private

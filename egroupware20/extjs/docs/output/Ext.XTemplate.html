@@ -50,6 +50,26 @@ inline code execution and more.        </div>
         <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
+        <a id="Ext.XTemplate-XTemplate.from"></a>
+            <b>XTemplate.from</b>(&nbsp;<code>String/HTMLElement el</code>&nbsp;) : s            <div class="mdesc">
+                        <div class="short">&lt;static&gt; Creates a template from the passed element's value (<i>display:none</i> textarea, preferred) or innerHTML.</div>
+            <div class="long">
+                &lt;static&gt; Creates a template from the passed element's value (<i>display:none</i> textarea, preferred) or innerHTML.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li><code>el</code> : String/HTMLElement<div class="sub-desc">A DOM element or its id</div></li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>s</code><div class="sub-desc">{Ext.Template} The created template</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">XTemplate</td>
+    </tr>
+        <tr class="method-row expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
         <a id="Ext.XTemplate-apply"></a>
             <b>apply</b>() : void            <div class="mdesc">
                         <div class="short">Alias of <a ext:cls="Ext.XTemplate" ext:member="applyTemplate" href="output/Ext.XTemplate.html#applyTemplate">applyTemplate</a>.</div>
@@ -67,7 +87,7 @@ inline code execution and more.        </div>
         </td>
         <td class="msource">XTemplate</td>
     </tr>
-        <tr class="method-row expandable">
+        <tr class="method-row alt expandable">
         <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
         <td class="sig">
         <a id="Ext.XTemplate-applyTemplate"></a>
@@ -80,6 +100,26 @@ inline code execution and more.        </div>
         <strong>Returns:</strong>
         <ul>
             <li><code>String</code><div class="sub-desc">The HTML fragment</div></li>
+        </ul>
+    </div>
+                </div>
+                        </div>
+        </td>
+        <td class="msource">XTemplate</td>
+    </tr>
+        <tr class="method-row expandable">
+        <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+        <td class="sig">
+        <a id="Ext.XTemplate-compile"></a>
+            <b>compile</b>() : Function            <div class="mdesc">
+                        <div class="short">Compile the template to a function for optimized performance.  Recommended if the template will be used frequently.</div>
+            <div class="long">
+                Compile the template to a function for optimized performance.  Recommended if the template will be used frequently.    <div class="mdetail-params">
+        <strong>Parameters:</strong>
+        <ul><li>None.</li>        </ul>
+        <strong>Returns:</strong>
+        <ul>
+            <li><code>Function</code><div class="sub-desc">The compiled function</div></li>
         </ul>
     </div>
                 </div>

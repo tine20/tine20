@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -98,13 +98,9 @@
     zoom:1;
 }
 .x-panel-bc .x-panel-footer {
-    padding-bottom:1px;
     zoom:1;
 }
 
-.x-panel-nofooter .x-panel-bc {
-	height:1px;
-}
 .x-panel-bl {
 	background: transparent url(../images/default/panel/corners-sprite.gif) no-repeat 0 bottom;
 	padding-left:6px;
@@ -180,6 +176,7 @@
 
 .x-plain-bwrap {
     overflow:hidden;
+    zoom:1;
 }
 
 .x-plain {

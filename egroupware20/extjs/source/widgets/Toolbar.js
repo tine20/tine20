@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -264,11 +264,14 @@ Ext.extend(T, Ext.BoxComponent, {
     },
 
     // private
-    destroy : function(){
-        if(this.items){ // rendered?
-            Ext.destroy.apply(Ext, this.items.items);
+    onDestroy : function(){
+        Ext.Toolbar.superclass.onDestroy.call(this);
+        if(this.rendered){
+            if(this.items){ // rendered?
+                Ext.destroy.apply(Ext, this.items.items);
+            }
+            Ext.Element.uncache(this.tr);
         }
-        Ext.Element.uncache(this.el, this.tr);
     },
 
     // private
@@ -343,7 +346,9 @@ T.Item.prototype = {
      * Removes and destroys this item.
      */
     destroy : function(){
-        this.td.parentNode.removeChild(this.td);
+        if(this.td && this.td.parentNode){
+            this.td.parentNode.removeChild(this.td);
+        }
     },
     
     /**

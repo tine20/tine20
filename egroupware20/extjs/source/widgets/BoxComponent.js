@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -16,31 +16,7 @@
  * @constructor
  * @param {Ext.Element/String/Object} config The configuration options.
  */
-Ext.BoxComponent = function(config){
-    Ext.BoxComponent.superclass.constructor.call(this, config);
-    this.addEvents({
-        /**
-         * @event resize
-         * Fires after the component is resized.
-	     * @param {Ext.Component} this
-	     * @param {Number} adjWidth The box-adjusted width that was set
-	     * @param {Number} adjHeight The box-adjusted height that was set
-	     * @param {Number} rawWidth The width that was originally specified
-	     * @param {Number} rawHeight The height that was originally specified
-	     */
-        resize : true,
-        /**
-         * @event move
-         * Fires after the component is moved.
-	     * @param {Ext.Component} this
-	     * @param {Number} x The new x position
-	     * @param {Number} y The new y position
-	     */
-        move : true
-    });
-};
-
-Ext.extend(Ext.BoxComponent, Ext.Component, {
+Ext.BoxComponent = Ext.extend(Ext.Component, {
     /**
      * @cfg {Number} height
      * The height of this component in pixels (defaults to auto).
@@ -62,6 +38,30 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
      * True to defer height calculations to an external component, false to allow this component to set its own
      * height (defaults to false).
      */
+
+    initComponent : function(){
+        Ext.BoxComponent.superclass.initComponent.call(this);
+        this.addEvents({
+            /**
+             * @event resize
+             * Fires after the component is resized.
+             * @param {Ext.Component} this
+             * @param {Number} adjWidth The box-adjusted width that was set
+             * @param {Number} adjHeight The box-adjusted height that was set
+             * @param {Number} rawWidth The width that was originally specified
+             * @param {Number} rawHeight The height that was originally specified
+             */
+            resize : true,
+            /**
+             * @event move
+             * Fires after the component is moved.
+             * @param {Ext.Component} this
+             * @param {Number} x The new x position
+             * @param {Number} y The new y position
+             */
+            move : true
+        });
+    },
 
     // private, set in afterRender to signify that the component has been rendered
     boxReady : false,
@@ -195,7 +195,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
      * @return {Ext.BoxComponent} this
      */
     setPosition : function(x, y){
-        if(typeof x[1] == 'number'){
+        if(x && typeof x[1] == 'number'){
             y = x[1];
             x = x[0];
         }
@@ -230,7 +230,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
      * @return {Ext.BoxComponent} this
      */
     setPagePosition : function(x, y){
-        if(typeof x[1] == 'number'){
+        if(x && typeof x[1] == 'number'){
             y = x[1];
             x = x[0];
         }

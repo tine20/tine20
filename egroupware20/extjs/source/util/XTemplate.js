@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -167,10 +167,19 @@ Ext.extend(Ext.XTemplate, Ext.Template, {
         return this.master.compiled.call(this, values, {}, 1, 1);
     },
 
-    // private
+    /**
+     * Compile the template to a function for optimized performance.  Recommended if the template will be used frequently.
+     * @return {Function} The compiled function
+     */
     compile : function(){return this;}
 });
 
+/**
+ * Creates a template from the passed element's value (<i>display:none</i> textarea, preferred) or innerHTML.
+ * @param {String/HTMLElement} el A DOM element or its id
+ * @returns {Ext.Template} The created template
+ * @static
+ */
 Ext.XTemplate.from = function(el){
     el = Ext.getDom(el);
     return new Ext.XTemplate(el.value || el.innerHTML);

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -102,7 +102,8 @@ Ext.layout.FormLayout = Ext.extend(Ext.layout.AnchorLayout, {
     /**
      * @cfg {String} labelSeparator
      * The standard separator to display after the text of each form label (defaults to a colon ':').  To turn off
-     * separators completely specify empty string ''.
+     * separators for all fields in this layout by default specify empty string '' (if the labelSeparator value is
+     * explicitly set at the field level, those will still be displayed).
      */
     labelSeparator : ':',
 
@@ -189,7 +190,8 @@ Ext.layout.FormLayout = Ext.extend(Ext.layout.AnchorLayout, {
     }
 
     /**
-     * @cfg {Mixed} activeItem @hide
+     * @property activeItem
+     * @hide
      */
 });
 

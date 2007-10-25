@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -172,10 +172,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
             this.shadow.hide();
         }
         this.removeAllListeners();
-        var pn = this.dom.parentNode;
-        if(pn){
-            pn.removeChild(this.dom);
-        }
+        Ext.removeNode(this.dom);
         Ext.Element.uncache(this.id);
     },
 

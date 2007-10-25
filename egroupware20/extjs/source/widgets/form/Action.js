@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 2.0 Alpha 1
+ * Ext JS Library 2.0 Beta 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -10,13 +10,14 @@
  * @class Ext.form.Action
  * The subclasses of this class provide actions to perform upon {@link Ext.form.BasicForm}s.
  * <br><br>
- * Instances of this class are only created by am {@link Ext.form.BasicForm} when 
+ * Instances of this class are only created by an {@link Ext.form.BasicForm} when 
  * the Form needs to perform an action such as submit or load.
  * <br><br>
  * The instance of Action which performed the action is passed to the success
- * and failure callbacks of the Form's action methods, and to the
- * {@link Ext.form.BasicForm#actioncomplete} and {@link Ext.form.BasicForm#actionfailed}
- * event handlers.
+ * and failure callbacks of the Form's action methods ({@link Ext.form.BasicForm#submit submit},
+ * {@link Ext.form.BasicForm#load load} and {@link Ext.form.BasicForm#doAction doAction}),
+ * and to the {@link Ext.form.BasicForm#actioncomplete} and
+ * {@link Ext.form.BasicForm#actionfailed} event handlers.
  */
 Ext.form.Action = function(form, options){
     this.form = form;
@@ -33,7 +34,7 @@ Ext.form.Action.CLIENT_INVALID = 'client';
 /**
  * Failure type returned when server side validation of the Form fails
  * indicating that field-specific error messages have been returned in the
- * response's <pre>errors</pre> property.
+ * response's <tt style="font-weight:bold">errors</tt> property.
  * @type {String}
  * @static
  */
@@ -47,7 +48,7 @@ Ext.form.Action.SERVER_INVALID = 'server';
 Ext.form.Action.CONNECT_FAILURE = 'connect';
 /**
  * Failure type returned when no field values are returned in the response's
- * <pre>data</pre> property.
+ * <tt style="font-weight:bold">data</tt> property.
  * @type {String}
  * @static
  */
@@ -113,7 +114,7 @@ Ext.form.Action.prototype = {
  * @type {Object}
  */
 /**
- * The decoded response object containing a boolean <pre>success</pre> property and
+ * The decoded response object containing a boolean <tt style="font-weight:bold">success</tt> property and
  * other, action-specific properties.
  * @property result
  * @type {Object}
@@ -141,6 +142,7 @@ Ext.form.Action.prototype = {
         this.form.afterAction(this, false);
     },
 
+    // private
     processResponse : function(response){
         this.response = response;
         if(!response.responseText){
@@ -162,10 +164,12 @@ Ext.form.Action.prototype = {
         return url;
     },
 
+    // private
     getMethod : function(){
         return (this.options.method || this.form.method || this.form.el.dom.method || 'POST').toUpperCase();
     },
 
+    // private
     getParams : function(){
         var bp = this.form.baseParams;
         var p = this.options.params;
@@ -181,6 +185,7 @@ Ext.form.Action.prototype = {
         return p;
     },
 
+    // private
     createCallback : function(){
         return {
             success: this.success,
@@ -194,14 +199,14 @@ Ext.form.Action.prototype = {
 
 /**
  * @class Ext.form.Action.Submit
- * A class which handles submission of data from {@link Ext.form.BasicForm}s
+ * A class which handles submission of data from {@link Ext.form.BasicForm Form}s
  * and processes the returned response. 
  * <br><br>
- * Instances of this class are only created by am {@link Ext.form.BasicForm} when 
+ * Instances of this class are only created by a {@link Ext.form.BasicForm Form} when 
  * submitting.
  * <br><br>
- * A response packet must contain a boolean <pre>success</pre> property, and, optionally
- * an <pre>errors</pre> property. The <pre>errors</pre> property contains error
+ * A response packet must contain a boolean <tt style="font-weight:bold">success</tt> property, and, optionally
+ * an <tt style="font-weight:bold">errors</tt> property. The <tt style="font-weight:bold">errors</tt> property contains error
  * messages for invalid fields.
  * <br><br>
  * By default, response packets are assumed to be JSON, so a typical response
@@ -215,7 +220,7 @@ Ext.form.Action.prototype = {
     }
 }</code></pre>
  * <br><br>
- * Other data may be placed into the response for processing the the {Ext.form.BasicForm}'s callback
+ * Other data may be placed into the response for processing the the {@link Ext.form.BasicForm}'s callback
  * or event handler methods.
  */
 Ext.form.Action.Submit = function(form, options){
@@ -229,6 +234,7 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
     */
     type : 'submit',
 
+    // private
     run : function(){
         var o = this.options;
         var method = this.getMethod();
@@ -248,6 +254,7 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
         }
     },
 
+    // private
     success : function(response){
         var result = this.processResponse(response);
         if(result === true || result.success){
@@ -261,6 +268,7 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
         this.form.afterAction(this, false);
     },
 
+    // private
     handleResponse : function(response){
         if(this.form.errorReader){
             var rs = this.form.errorReader.read(response);
@@ -285,17 +293,17 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
 
 
 /**
- * @class Ext.form.Action.Submit
+ * @class Ext.form.Action.Load
  * A class which handles loading of data from a server into the Fields of
- * an {@link Ext.form.BasicForm}s. 
+ * an {@link Ext.form.BasicForm}. 
  * <br><br>
- * Instances of this class are only created by am {@link Ext.form.BasicForm} when 
+ * Instances of this class are only created by a {@link Ext.form.BasicForm Form} when 
  * submitting.
  * <br><br>
- * A response packet <b>must<b> contain a boolean <pre>success</pre> property, and
- * an <pre>data</pre> property. The <pre>data</pre> property contains the
+ * A response packet <b>must</b> contain a boolean <tt style="font-weight:bold">success</tt> property, and
+ * an <tt style="font-weight:bold">data</tt> property. The <tt style="font-weight:bold">data</tt> property contains the
  * values of Fields to load. The individual value object for each Field
- * is passed to the Field's {@link Ext.form.Field#setValue} method.
+ * is passed to the Field's {@link Ext.form.Field#setValue setValue} method.
  * <br><br>
  * By default, response packets are assumed to be JSON, so a typical response
  * packet may look like this:
@@ -309,7 +317,7 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
     }
 }</code></pre>
  * <br><br>
- * Other data may be placed into the response for processing the the {Ext.form.BasicForm}'s callback
+ * Other data may be placed into the response for processing the the {@link Ext.form.BasicForm Form}'s callback
  * or event handler methods.
  */
 Ext.form.Action.Load = function(form, options){
@@ -318,8 +326,10 @@ Ext.form.Action.Load = function(form, options){
 };
 
 Ext.extend(Ext.form.Action.Load, Ext.form.Action, {
+    // private
     type : 'load',
 
+    // private
     run : function(){
         Ext.Ajax.request(Ext.apply(
                 this.createCallback(), {
@@ -329,6 +339,7 @@ Ext.extend(Ext.form.Action.Load, Ext.form.Action, {
         }));
     },
 
+    // private
     success : function(response){
         var result = this.processResponse(response);
         if(result === true || !result.success || !result.data){
@@ -341,6 +352,7 @@ Ext.extend(Ext.form.Action.Load, Ext.form.Action, {
         this.form.afterAction(this, true);
     },
 
+    // private
     handleResponse : function(response){
         if(this.form.reader){
             var rs = this.form.reader.read(response);
