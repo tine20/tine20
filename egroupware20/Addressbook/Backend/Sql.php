@@ -88,8 +88,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
             // update the requested contact_id only if the contact_owner matches the current users acl
             $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_contactData->contact_id),
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+                $this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_contactData->contact_id),
+                $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
             );
 
             $result = $this->contactsTable->update($contactData, $where);
