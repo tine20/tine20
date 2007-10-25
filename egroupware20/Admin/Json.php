@@ -13,7 +13,34 @@
  */
 class Admin_Json
 {
-        /**
+    public function getApplication($applicationId)
+    {
+        $egwApplications = new Egwbase_Application();
+        
+        $application = $egwApplications->getApplicationById($applicationId);
+        
+        return $application->toArray();
+    }
+    
+    //public function getApplications($filter, $sort, $dir, $limit, $start)
+    public function getApplications($sort, $dir, $limit, $start)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $egwApplications = new Egwbase_Application();
+        
+        $applicationSet = $egwApplications->getApplications($sort, $dir, NULL, $limit, $start);
+
+        $result['results']    = $applicationSet->toArray();
+        $result['totalcount'] = $egwApplications->getTotalApplicationCount();
+        
+        return $result;
+    }
+    
+    /**
      * Returns the structure of the initial tree for this application.
      *
      * This function returns the needed structure, to display the initial tree, after the the logoin.
