@@ -62,7 +62,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     {
         if ($_bypassFilters) {
             foreach ($_data as $key => $value) {
-                if (array_key_exists ($key, $this->_properties)) {
+                if (array_key_exists ($key, $this->_validators)) {
                     $this->_properties[$key] = $value;
                 }
             }
