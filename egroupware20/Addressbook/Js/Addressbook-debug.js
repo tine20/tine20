@@ -27,14 +27,14 @@ Egw.Addressbook = function() {
      * onclick handler for addBtn
      */
     var _addBtnHandler = function(_button, _event) {
-        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+        Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
     }
 	
 	/**
 	 * onclick handler for addLstBtn
 	 */
     var _addLstBtnHandler = function(_button, _event) {
-        openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
+        Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
     }	
 	
     /**
@@ -101,10 +101,10 @@ Egw.Addressbook = function() {
         var contactId = selectedRows[0].id;
 		
 		if(selectedNode.attributes.dataPanelType == 'lists') {
-    	    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 800, 450);
+    	    Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 800, 450);
 		}
 		else {
-	        openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
+	        Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
 		}
     }
     
@@ -142,11 +142,6 @@ Egw.Addressbook = function() {
 	
     var _showContactToolbar = function()
     {
-    	var northPanel = Ext.getCmp('north-panel');
-    	var toolbarPanel = Ext.getCmp('applicationToolbar');
-    	
-    	northPanel.remove(toolbarPanel);
-
 		var quickSearchField = new Ext.app.SearchField({
 			id: 'quickSearchField',
 			width:240,
@@ -182,10 +177,7 @@ Egw.Addressbook = function() {
 			]
 		});
 
-		northPanel.add(contactToolbar);
-        northPanel.doLayout();
-		
-		return;
+		Egw.Egwbase.setActiveToolbar(contactToolbar);
     }
 
 
@@ -512,7 +504,7 @@ Egw.Addressbook = function() {
 			var record = _gridPar.getStore().getAt(_rowIndexPar);
 			//console.log('id: ' + record.data.contact_id);
             try {
-                openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+                Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
             } catch(e) {
             //  alert(e);
             }
@@ -632,13 +624,13 @@ Egw.Addressbook = function() {
 			//console.log('id: ' + record.data.contact_id);
 			if(record.data.contact_tid == 'l') {
                 try {
-                    openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.contact_id, 800, 450);
+                    Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.contact_id, 800, 450);
                 } catch(e) {
                 //  alert(e);
                 }
 			} else {
 				try {
-					openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
+					Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
 				} catch(e) {
 					// alert(e);
 				}
@@ -688,19 +680,19 @@ Egw.Addressbook = function() {
 		]
     });
     
-    var openWindow = function(_windowName, _url, _width, _height) 
+/*    var openWindow = function(_windowName, _url, _width, _height) 
     {
         if (document.all) {
-            w = document.body.clientWidth;
-            h = document.body.clientHeight;
-            x = window.screenTop;
-            y = window.screenLeft;
-        } else if (window.innerWidth) {
-            w = window.innerWidth;
-            h = window.innerHeight;
-            x = window.screenX;
-            y = window.screenY;
-        }
+			w = document.body.clientWidth;
+			h = document.body.clientHeight;
+			x = window.screenTop;
+			y = window.screenLeft;
+		} else if (window.innerWidth) {
+			w = window.innerWidth;
+			h = window.innerHeight;
+			x = window.screenX;
+			y = window.screenY;
+		}
         var leftPos = ((w - _width)/2)+y; 
         var topPos = ((h - _height)/2)+x;
 
@@ -712,7 +704,7 @@ Egw.Addressbook = function() {
         );
         
         return popup;
-    }
+    } */
 
     /**
      * opens up a new window to add/edit a contact
