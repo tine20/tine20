@@ -7,6 +7,18 @@ Ext.namespace('Egw.Egwbase');
 Egw.Egwbase = function() {
     var _displayMainScreen = function() {
 
+    	// logout when the window gets closed
+    	Ext.EventManager.on(window, 'beforeunload', function() {
+            new Ext.data.Connection().request( {
+				url:    'index.php',
+				method: 'post',
+				scope:   this,
+				params: {
+					method : 'Egwbase.logout'
+				}
+			});
+        })
+
 		var systemMenu = new Ext.menu.Menu({
 			items: [{
 				text: 'Home',
@@ -127,7 +139,7 @@ Egw.Egwbase = function() {
 			    }]*/
 			}]
 		});
-
+		
 		/*var centerPanel = Ext.getCmp('north-panel-1');
         centerPanel.add(egwMenu);
         centerPanel.show();
@@ -177,7 +189,7 @@ Egw.Egwbase = function() {
                                         url: 'index.php',
                                         method: 'post',
                                         scope: this,
-                                        params: {method:'Egwbase.logout', logout:true},
+                                        params: {method:'Egwbase.logout'},
                                         callback: function(options, bSuccess, response) {
                                                 window.location.reload();
                                         }

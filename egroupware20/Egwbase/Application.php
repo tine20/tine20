@@ -50,9 +50,11 @@ class Egwbase_Application
      */
     public function getApplications($_sort = 'app_id', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
     {
-        $where = NULL;
-        if($_filter !== NULL) {
+        if(empty($_filter)) {
+            $where = NULL;
+        } elseif($_filter !== NULL) {
             // $where = array(...);
+            $where = NULL;
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
