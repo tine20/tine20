@@ -38,4 +38,18 @@ class Egwbase_Db_Table extends Zend_Db_Table_Abstract
         
         return $rowSet;
     }
+    
+    /**
+     * get total count of rows
+     *
+     */
+    public function getTotalCount()
+    {
+        $tableInfo = $this->info();
+        
+        $result = $this->getAdapter()->fetchOne('SELECT count(*) FROM ' . $tableInfo['name']);
+        
+        return $result;
+    }
+    
 }
