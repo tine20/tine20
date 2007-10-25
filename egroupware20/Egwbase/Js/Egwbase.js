@@ -5,19 +5,21 @@ Ext.QuickTips.init();
 Ext.namespace('Egw.Egwbase');
 
 Egw.Egwbase = function() {
+	var _logoutFunction = function() {
+        new Ext.data.Connection().request( {
+            url:    'index.php',
+            method: 'post',
+            scope:   this,
+            params: {
+                method : 'Egwbase.logout'
+            }
+        });
+    };
+        
     var _displayMainScreen = function() {
 
     	// logout when the window gets closed
-    	Ext.EventManager.on(window, 'beforeunload', function() {
-            new Ext.data.Connection().request( {
-				url:    'index.php',
-				method: 'post',
-				scope:   this,
-				params: {
-					method : 'Egwbase.logout'
-				}
-			});
-        })
+    	Ext.EventManager.on(window, 'beforeunload', _logoutFunction);
 
 		var systemMenu = new Ext.menu.Menu({
 			items: [{
@@ -181,27 +183,30 @@ Egw.Egwbase = function() {
      * the logout button handler function
      */
     var _logoutButtonHandler = function(_event) {
-                Ext.MessageBox.confirm('Confirm', 'Are you sure you want to logout?', function(btn, text){
-                        //alert(btn);
-                        if (btn == 'yes'){
-                                Ext.MessageBox.wait('Loging you out...', 'Please wait!');
-                                new Ext.data.Connection().request({
-                                        url: 'index.php',
-                                        method: 'post',
-                                        scope: this,
-                                        params: {method:'Egwbase.logout'},
-                                        callback: function(options, bSuccess, response) {
-                                                window.location.reload();
-                                        }
-                                });
-                        }
-                });
-
-    }
+		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to logout?', function(btn, text) {
+			if (btn == 'yes') {
+				Ext.MessageBox.wait('Loging you out...', 'Please wait!');
+				new Ext.data.Connection().request( {
+					url : 'index.php',
+					method : 'post',
+					scope : this,
+					params : {
+						method : 'Egwbase.logout'
+					},
+					callback : function(options, bSuccess, response) {
+						// remove the event handler
+						// the reload() trigers the unload event
+						Ext.EventManager.un(window, 'beforeunload', _logoutFunction);
+						window.location.reload();
+					}
+				});
+			}
+        });
+	}
     
     var _setActiveContentPanel = function(_panel)
     {
-        //get container to which component will be added
+        // get container to which component will be added
         var centerPanel = Ext.getCmp('center-panel');
         if(centerPanel.items) {
             for (var i=0; i<centerPanel.items.length; i++){

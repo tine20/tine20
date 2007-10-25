@@ -103,14 +103,16 @@ class Egwbase_Json
      */
     function logout()
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
-
-        $accesslog = new Egwbase_AccessLog();
-        $accesslog->addLogoutEntry(
-            session_id(),
-            $_SERVER['REMOTE_ADDR'],
-            $currentAccount->account_id
-        );
+        if (Zend_Registry::isRegistered('currentAccount')) {
+            $currentAccount = Zend_Registry::get('currentAccount');
+    
+            $accesslog = new Egwbase_AccessLog();
+            $accesslog->addLogoutEntry(
+                session_id(),
+                $_SERVER['REMOTE_ADDR'],
+                $currentAccount->account_id
+            );
+        }
         
         Zend_Session::destroy();
 
