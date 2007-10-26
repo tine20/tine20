@@ -268,10 +268,16 @@ Egw.Egwbase = function() {
         
         return popup;
     }
+    
+    var _dateTimeRenderer = function($_iso8601)
+    {
+    	return Ext.util.Format.date($_iso8601, 'd.m.Y');
+    }
 
     
     // public functions and variables
     return {
+    	dateTimeRenderer:     _dateTimeRenderer,
         display:               _displayMainScreen,
         openWindow:            _openWindow,
         getActiveToolbar:      _getActiveToolbar,

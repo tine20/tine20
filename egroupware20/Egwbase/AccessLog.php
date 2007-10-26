@@ -81,8 +81,20 @@ class Egwbase_AccessLog
         }
 
         $rowSet = $this->accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
+        
+        $arrayRowSet = $rowSet->toArray();
+        
+        foreach($arrayRowSet as $rowId => $row) {
+            if($row['lo'] > $row['li']) {
+                $row['lo'] = new Zend_Date($row['lo'], Zend_Date::TIMESTAMP);
+            } else {
+                $row['lo'] = NULL;
+            }
+            $row['li'] = new Zend_Date($row['li'], Zend_Date::TIMESTAMP);
+            $arrayRowSet[$rowId] = $row;
+        }
 
-        $result = new Egwbase_RecordSet_AccessLog($rowSet->toArray(), 'Egwbase_Record_AccessLog');
+        $result = new Egwbase_RecordSet_AccessLog($arrayRowSet, 'Egwbase_Record_AccessLog');
 
         return $result;
     }

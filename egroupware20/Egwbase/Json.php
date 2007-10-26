@@ -49,7 +49,7 @@ class Egwbase_Json
         $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
 
         $authAdapter->setIdentity($username)
-        ->setCredential($password);
+            ->setCredential($password);
         	
         $result = $auth->authenticate($authAdapter);
 
@@ -89,6 +89,14 @@ class Egwbase_Json
     			$egwBaseNamespace->currentAccount->account_id,
     			$result->getCode()
 			);
+            $accesslog->addLogoutEntry(
+                session_id(),
+                $_SERVER['REMOTE_ADDR'],
+                $egwBaseNamespace->currentAccount->account_id
+            );
+            
+            Zend_Session::destroy();
+            
 			sleep(2);
         }
 
