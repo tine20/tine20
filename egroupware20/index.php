@@ -25,8 +25,7 @@ if(!isset($egwBaseNamespace->jsonKey)) {
 $options = new Zend_Config_Ini('../../config.ini', 'database');
 Zend_Registry::set('dbConfig', $options);
 
-date_default_timezone_set('Europe/Berlin');
-
+// set the locale to browsers locale
 $locale = new Zend_Locale();
 Zend_Registry::set('locale', $locale);
 
@@ -61,6 +60,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
 
 	if($auth->hasIdentity()) {
 		$server->setClass('Addressbook_Json', 'Addressbook');
+        $server->setClass('Admin_Json', 'Admin');
 		//$server->setClass('Asterisk_Json', 'Asterisk');
 		//$server->setClass('Felamimail_Json', 'Felamimail');
 	}
@@ -76,6 +76,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['m
 
 	if($auth->hasIdentity()) {
 		$server->setClass('Addressbook_Http', 'Addressbook');
+        $server->setClass('Admin_Http', 'Admin');
 	} 
 
 	if(empty($_REQUEST['method'])) {
