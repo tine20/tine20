@@ -54,7 +54,22 @@ class Admin_Json
 
         $accessLogSet = $egwAccessLog->getAccessLog($sort, $dir, $filter, $limit, $start);
         
-        $result['results']    = $accessLogSet->toArray();
+        $arrayAccessLogRowSet = $accessLogSet->toArray();
+        
+        $dateFormat = Zend_Registry::get('locale')->getTranslationList('Dateformat');
+        $timeFormat = Zend_Registry::get('locale')->getTranslationList('Timeformat');
+        
+        foreach($arrayAccessLogRowSet as $id => $row) {
+            $row['li'] = $row['li']->get($dateFormat['default'] . ' ' . $timeFormat['default'], Zend_Registry::get('locale'));
+            if($row['lo'] instanceof Zend_Date) {
+                $row['lo'] = $row['lo']->get($dateFormat['default'] . ' ' . $timeFormat['default'], Zend_Registry::get('locale'));
+            //} else {
+            //    $row['lo'] = '';
+            }
+            $arrayAccessLogRowSet[$id] = $row;
+        }
+        
+        $result['results']    = $arrayAccessLogRowSet;
         $result['totalcount'] = $egwAccessLog->getTotalCount();
         
         return $result;

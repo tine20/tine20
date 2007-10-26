@@ -246,7 +246,7 @@ Egw.Admin.AccessLog = function() {
             autoSizeColumns: false,
             selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
             enableColLock:false,
-            /*loadMask: true,*/
+            loadMask: true,
             autoExpandColumn: 'loginid',
             border: false
         });
@@ -453,7 +453,7 @@ Egw.Admin.Applications = function() {
             autoSizeColumns: false,
             selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
             enableColLock:false,
-            /*loadMask: true,*/
+            loadMask: true,
             autoExpandColumn: 'app_name',
             border: false
         });
