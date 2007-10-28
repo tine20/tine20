@@ -25,6 +25,7 @@
 	<script type="text/javascript" language="javascript">
 		var initialTree = <?php echo Zend_Json::encode($this->initialTree) ?>;
 		Ext.onReady(function(){
+            <?php if(isset($this->configData)) echo "configData=" . Zend_Json::encode($this->configData) . ";" ?>
 			Egw.Egwbase.display();
 			window.focus();
 		});

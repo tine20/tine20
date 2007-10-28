@@ -13,6 +13,26 @@
  */
 class Admin_Json
 {
+    public function deleteAccessLogEntries($logIds)
+    {
+        try {
+            $logIds = Zend_Json::decode($logIds);
+
+            $egwAccessLog = new Egwbase_AccessLog();
+            $egwAccessLog->deleteEntries($logIds);
+
+            $result = array(
+                'success' => TRUE
+            );
+        } catch (Exception $e) {
+            $result = array(
+                'success' => FALSE 
+            );
+        }
+        
+        return $result;
+    }
+    
     public function getApplication($applicationId)
     {
         $egwApplications = new Egwbase_Application();
@@ -43,16 +63,26 @@ class Admin_Json
         return $result;
     }
 
-    public function getAccessLog($filter, $sort, $dir, $limit, $start)
+    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
     {
+        if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
+            throw new Exception('invalid date specified for $from');
+        }
+        if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
+            throw new Exception('invalid date specified for $to');
+        }
+        
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
+        $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
+        $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
+        
         $egwAccessLog = new Egwbase_AccessLog();
 
-        $accessLogSet = $egwAccessLog->getAccessLog($sort, $dir, $filter, $limit, $start);
+        $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $sort, $dir, $filter, $limit, $start);
         
         $arrayAccessLogRowSet = $accessLogSet->toArray();
         

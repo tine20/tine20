@@ -66,12 +66,11 @@ class Egwbase_Json
             
 			$accesslog->addLoginEntry(
     			session_id(),
-    			$egwBaseNamespace->currentAccount->account_lid,
+    			$username,
     			$_SERVER['REMOTE_ADDR'],
-    			$egwBaseNamespace->currentAccount->account_id,
-    			$result->getCode()
-			);
-
+    			$result->getCode(),
+                $egwBaseNamespace->currentAccount->account_id
+    		);
         } else {
             $egwBaseNamespace->isAutenticated = FALSE;
 
@@ -82,17 +81,14 @@ class Egwbase_Json
 
 			$accesslog = new Egwbase_AccessLog();
 			$accesslog->addLoginEntry(
-    			Egwbase_AccessLog::LOGIN,
     			session_id(),
-    			$egwBaseNamespace->currentAccount->account_lid,
+    			$username,
     			$_SERVER['REMOTE_ADDR'],
-    			$egwBaseNamespace->currentAccount->account_id,
     			$result->getCode()
 			);
             $accesslog->addLogoutEntry(
                 session_id(),
-                $_SERVER['REMOTE_ADDR'],
-                $egwBaseNamespace->currentAccount->account_id
+                $_SERVER['REMOTE_ADDR']
             );
             
             Zend_Session::destroy();

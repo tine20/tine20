@@ -5,30 +5,12 @@ Ext.QuickTips.init();
 Ext.namespace('Egw.Egwbase');
 
 Egw.Egwbase = function() {
-	var _logoutFunction = function() {
-        new Ext.data.Connection().request( {
-            url:    'index.php',
-            method: 'post',
-            scope:   this,
-            params: {
-                method : 'Egwbase.logout'
-            }
-        });
-    };
-        
     var _displayMainScreen = function() {
-
-    	// logout when the window gets closed
-    	Ext.EventManager.on(window, 'beforeunload', _logoutFunction);
 
 		var systemMenu = new Ext.menu.Menu({
 			items: [{
-				text: 'Home',
-				icon: 'images/oxygen/16x16/actions/favorites.png'
-			}, {
-				text: 'Preferences'
-			}, {
-				text: 'Change password'
+				text: 'Change password',
+				disabled: true
 			}, '-', {
 				text: 'Logout',
 	            handler: _logoutButtonHandler,
@@ -38,10 +20,31 @@ Egw.Egwbase = function() {
 
 		var egwMenu = new Ext.Toolbar({
 			id: 'egwMenu',
-			height: 26
+			height: 26,
+            items:[{
+                text: 'eGroupWare',
+                menu: systemMenu
+            }]
+
 		});
-		
-        var tb2 = new Ext.Toolbar({
+
+        var egwFooter = new Ext.Toolbar({
+            id: 'egwFooter',
+            height: 26,
+            items:[
+                'Current timezone: ' + configData.timeZone.translatedName, 
+                '->', 
+                {
+                    icon:    'images/oxygen/16x16/actions/system-log-out.png',
+                    cls:     'x-btn-icon',
+                    tooltip: {text:'Click this button to logout from eGroupWare'},
+                    handler: _logoutButtonHandler
+                }
+            ]
+
+        });
+
+        var applicationToolbar = new Ext.Toolbar({
 			id: 'applicationToolbar',
 			height: 26
 		});
@@ -71,19 +74,19 @@ Egw.Egwbase = function() {
                     border: false,
                     id:     'north-panel-2',
                     items: [
-                        tb2
+                        applicationToolbar
                     ]
                 }]
-				/*items: [
-				    egwMenu,
-				    tb2
-				]*/
 			}, {
 				region: 'south',
 				id: 'south',
+                border: false,
 				split: false,
-				height: 20,
-				initialSize: 20
+				height: 26,
+				initialSize: 26,
+				items:[
+				    egwFooter
+				]
 /*			}, {
  				region: 'east',
 				id: 'east',
@@ -147,7 +150,7 @@ Egw.Egwbase = function() {
         centerPanel.show();
         centerPanel.doLayout();*/
 
-        egwMenu.add({
+/*        egwMenu.add({
             text: 'eGroupWare',
             menu: systemMenu
         }, '->', {
@@ -155,7 +158,7 @@ Egw.Egwbase = function() {
             cls: 'x-btn-icon',
             tooltip: {text:'Click this button to logout from eGroupWare'},
             handler: _logoutButtonHandler
-        });
+        }); */
     }
     
     /**
@@ -196,7 +199,6 @@ Egw.Egwbase = function() {
 					callback : function(options, bSuccess, response) {
 						// remove the event handler
 						// the reload() trigers the unload event
-						Ext.EventManager.un(window, 'beforeunload', _logoutFunction);
 						window.location.reload();
 					}
 				});

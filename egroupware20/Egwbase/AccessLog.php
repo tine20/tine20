@@ -28,16 +28,18 @@ class Egwbase_AccessLog
         $this->accessLogTable = new Egwbase_Db_Table(array('name' => 'egw_access_log'));
     }
 
-    public function addLoginEntry($_sessionId, $_loginId, $_ipAddress, $_accountId, $_result)
+    public function addLoginEntry($_sessionId, $_loginId, $_ipAddress, $_result, $_accountId = NULL)
     {
         $data = array(
             'sessionid'  => $_sessionId,
             'loginid'    => $_loginId,
             'ip'         => $_ipAddress,
             'li'         => time(),
-            'account_id' => $_accountId,
             'result'     => $_result
         );
+        if($_accountId !== NULL) {
+            $data['account_id'] = $_accountId;
+        }
         
         if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
             unset($data['result']);
@@ -46,7 +48,7 @@ class Egwbase_AccessLog
         $this->accessLogTable->insert($data);
     }
 
-    public function addLogoutEntry($_sessionId, $_ipAddress, $_accountId)
+    public function addLogoutEntry($_sessionId, $_ipAddress)
     {
         $data = array(
             'lo' => time()
@@ -54,13 +56,23 @@ class Egwbase_AccessLog
         
         $where = array(
             $this->accessLogTable->getAdapter()->quoteInto('sessionid = ?', $_sessionId),
-            $this->accessLogTable->getAdapter()->quoteInto('ip = ?', $_ipAddress),
-            $this->accessLogTable->getAdapter()->quoteInto('account_id = ?', $_accountId)
+            $this->accessLogTable->getAdapter()->quoteInto('ip = ?', $_ipAddress)
         );
         
         $this->accessLogTable->update($data, $where);
     }
+    
+    public function deleteEntries(array $_logIds)
+    {
+        $where  = array(
+            $this->accessLogTable->getAdapter()->quoteInto('log_id IN (?)', $_logIds, 'INTEGER')
+        );
+         
+        $result = $this->accessLogTable->delete($where);
 
+        return $result;
+    }
+    
     /**
      * get list of installed applications
      *
@@ -71,13 +83,13 @@ class Egwbase_AccessLog
      * @param int $_start optional offset for applications
      * @return Egwbase_RecordSet_Application
      */
-    public function getAccessLog($_sort = 'li', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
+    public function getEntries(Zend_Date $_from, Zend_Date $_to, $_sort = 'li', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
     {
-        if(empty($_filter)) {
-            $where = NULL;
-        } elseif($_filter !== NULL) {
-            // $where = array(...);
-            $where = NULL;
+        $where = array(
+            'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()
+        );
+        if(!empty($_filter)) {
+            $where[] = $this->accessLogTable->getAdapter()->quoteInto('loginid LIKE ?', '%' . $_filter . '%');
         }
 
         $rowSet = $this->accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -85,7 +97,7 @@ class Egwbase_AccessLog
         $arrayRowSet = $rowSet->toArray();
         
         foreach($arrayRowSet as $rowId => $row) {
-            if($row['lo'] > $row['li']) {
+            if($row['lo'] >= $row['li']) {
                 $row['lo'] = new Zend_Date($row['lo'], Zend_Date::TIMESTAMP);
             } else {
                 $row['lo'] = NULL;

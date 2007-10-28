@@ -42,8 +42,8 @@ EGWNameSpace.Login = function() {
             buttons: [{
                 text: 'Login',
                 handler: function(){
-                    if (loginDialog.form.isValid()) {
-                        loginDialog.form.submit({
+                    if (loginDialog.getForm().isValid()) {
+                        loginDialog.getForm().submit({
                             waitTitle: 'Please wait!', 
                             waitMsg:'Loging you in...',
                             success:function(form, action, o) {
@@ -51,7 +51,13 @@ EGWNameSpace.Login = function() {
                                 window.location.reload();
                             },
                             failure:function(form, action) {
-                                Ext.MessageBox.alert("Error", 'Login failed');
+                                Ext.MessageBox.show({
+                                    title: 'Login failure',
+                                    msg: 'You username and/or your password are wrong!!!',
+                                    buttons: Ext.MessageBox.OK,
+                                    icon: Ext.MessageBox.ERROR /*,
+                                    fn: function() {} */
+                                });
                             }
                         });
                     };
@@ -59,32 +65,13 @@ EGWNameSpace.Login = function() {
             }]
 		});
 		
-/*		loginDialog.addButton('Login', function (){
-				loginDialog.submit({
-					waitTitle: 'Please wait!',
-					waitMsg:'Logging you in...',
-					method: 'post',
-					success:function(form, action, o) {
-						Ext.MessageBox.wait('Login successful. Loading eGroupWare...', 'Please wait!');
-						window.location.reload();
-					},
-					failure:function(form, action) {
-						Ext.MessageBox.alert("Error",action.result.errorMessage);
-					}
-				});
-		}, loginDialog);
-	*/	
 		loginDialog.render(document.body);
 
-        //Ext.Element.get('loginMainDiv').fitToParent();
 		Ext.Element.get('loginDialog').center();
-		//Ext.Element.get('loginForm').boxWrap();
-		//Ext.Element.get('loginMainDiv').animate();
 	}
 	
 	// public functions
 	return {
-		// public functions
 		showLoginDialog: _createLoginDialog
 	}
 }();

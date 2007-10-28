@@ -29,10 +29,11 @@ class Egwbase_Http
 
         $view->setScriptPath('Egwbase/views');
 
-        //foreach(array('Felamimail', 'Addressbook', 'Asterisk') as $applicationName) {
+        //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
         $view->jsIncludeFiles = array();
         $view->cssIncludeFiles = array();
         $view->initialTree = array();
+        
         foreach($userApplications as $applicationName) {
             $view->jsIncludeFiles[] = $applicationName . '/Js/' . $applicationName . '.js';
             $view->cssIncludeFiles[] = $applicationName . '/css/' . $applicationName . '.css';
@@ -40,6 +41,18 @@ class Egwbase_Http
             $application = new $jsonAppName;
             $view->initialTree[$applicationName] =  $application->getInitialTree('mainTree');
         }
+        
+        $translatedTimeZones = Zend_Registry::get('locale')->getTranslationList('timezone');
+        
+        $timeZoneData = array(
+            'name'           => Zend_Registry::get('userTimeZone'),
+            'translatedName' => $translatedTimeZones[Zend_Registry::get('userTimeZone')]
+        );
+        
+        $view->configData = array(
+            'timeZone' => $timeZoneData
+        );
+        
         
         $view->title="eGroupWare 2.0";
 
