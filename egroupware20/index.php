@@ -37,10 +37,9 @@ if(isset($egwBaseNamespace->currentAccount)) {
 	Zend_Registry::set('currentAccount', $egwBaseNamespace->currentAccount);
 }
 
-#date_default_timezone_set('America/Los_Angeles');
+Zend_Registry::set('userTimeZone', 'Europe/Berlin');
 
-#echo new Zend_Date('2006', Zend_Date::YEAR);
-#exit;
+#date_default_timezone_set('UTC');
 
 $auth = Zend_Auth::getInstance();
 
