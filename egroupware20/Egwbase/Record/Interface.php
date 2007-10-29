@@ -26,24 +26,28 @@ interface Egwbase_Record_Interface
      * Constructs an object and sets its record related properties.
      *
      * @param mixed $_contactData
+     * @param bool $_bypassFilters Bypass filters at object creation with data
+     * this is usefull when datas are for shure valid, e.g. after database query
+     * 
      * @return void
      * @throws Egwbase_Record_Exception
      */
     public function __construct($_data = NULL, $_bypassFilters = false);
     
     /**
-     * returns array of fields with validation errors 
-     *
-     * @return array
+     * sets identifier of record
+     * 
+     * @string identifier
+     * @bool bypass Filter
      */
-    public function getValidationErrors();
+    public function setId($_id, $_bypassFilter = false);
     
     /**
-     * returns array with record related properties 
-     *
-     * @return array
+     * gets identifier of record
+     * 
+     * @return string identifier
      */
-    public function toArray();
+    public function getId();
     
     /**
      * sets record related properties
@@ -60,5 +64,21 @@ interface Egwbase_Record_Interface
      * @return mixed value of property
      */
     public function __get($_name);
+    
+    /**
+     * returns array of fields with validation errors 
+     *
+     * @return array
+     */
+    public function getValidationErrors();
+    
+    /**
+     * returns array with record related properties 
+     *
+     * @return array
+     */
+    public function toArray();
+    
+
     
 }

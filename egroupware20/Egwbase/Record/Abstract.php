@@ -12,12 +12,19 @@
 
 abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, ArrayAccess, IteratorAggregate
 {
-    public $bypassFilter = false;
+
+    /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */
+    protected $_identifier = NULL;
     
     /**
-     * defintion of record related properties with filters and validators
+     * holds properties of record
      * 
-     * @var array record related properties: nameOfProperty => DefaultValue
+     * @var array 
      */
     protected $_properties = array();
     
@@ -29,7 +36,8 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     protected $_filters = array();
     
     /**
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Defintion of properties. All properties of record _must_ be declared here!
+     * This validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array list of zend validator
      */
@@ -52,7 +60,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     /**
      * Default constructor
      * Constructs an object and sets its record related properties.
-     *
+     * 
+     * @todo what happens if not all properties in the datas are set?
+     * The default values must also be set, even if no filtering is done!
+     * 
      * @param mixed $_data
      * @param bool $_bypassFilters
      * @return void
@@ -72,8 +83,41 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     }
     
     /**
+     * sets identifier of record
+     * 
+     * @string identifier
+     */
+    public function setId($_id, $_bypassFilter = false)
+    {
+        if (!$this->_identifier) {
+            throw new Egwbase_Record_Exception('Identifier is not declared');
+        }
+        
+        if ($_bypassFilters) {
+            $this->_properties[$this->_identifier] = $_id;
+        } else {
+            $this->setFromUserData( array(
+                $this->_identifier => $_id
+            ));
+        }
+    }
+    
+    /**
+     * gets identifier of record
+     * 
+     * @return string identifier
+     */
+    public function getId()
+    {
+        if (!$this->_identifier) {
+            throw new Egwbase_Record_Exception('Identifier is not declared');
+        }
+        return $this->_properties[$this->_identifier];
+    }
+    
+    /**
      * sets the record related properties from user generated input.
-     * Input-filtering and validation is to be done here e.g. by Zend_Filter_Input
+     * Input-filtering and validation is here by Zend_Filter_Input
      *
      * @param array $_data
      * @throws Egwbase_Record_Exception when content contains invalid or missing data
@@ -125,7 +169,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
      */
     public function __set($_name, $_value)
     {
-        if (array_key_exists ($_name, $this->_properties)) {
+        if (array_key_exists ($_name, $this->_validators)) {
             if (!$this->bypassFilter) {
                 return $this->setFromUserData(array($_name => $_value));
             }
@@ -142,7 +186,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
      */
     public function __get($_name)
     {
-        if (array_key_exists ($_name, $this->_properties)) {
+        if (array_key_exists ($_name, $this->_validators)) {
             return $this->_properties[$_name];
         }
         throw new Egwbase_Record_Exception($_name . ' is no property of $this->_properties');

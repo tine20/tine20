@@ -9,13 +9,11 @@
  * @version     $Id: ContactSet.php 138 2007-09-28 05:18:53Z lkneschke $
  *
  */
-abstract class Egwbase_RecordSet_Abstract implements Iterator, Countable
+abstract class Egwbase_RecordSet_Abstract implements IteratorAggregate, Countable, ArrayAccess
 {
-    protected $_position = 0;
-
     protected $_listOfRecords = array();
+    protected $_recordClass = NULL;
 
-    protected $_count = 0;
 
     /**
      * Enter description here...
@@ -23,15 +21,24 @@ abstract class Egwbase_RecordSet_Abstract implements Iterator, Countable
      * @param array $_records array of record objects
      * @param strin $_className the required classType
      */
-    public function __construct(array $_records, $_className)
+    public function __construct(array $_records = array())
     {
+        if (!$this->_recordClass){
+            $classname = substr(get_class($this), 0, -3);
+            if (class_exists($classname)) {
+                $this->_recordClass = $classname;
+            } else {
+                throw new Egwbase_Record_Exception('Class of records not set!');
+            }
+        }
+        
         foreach($_records as $record) {
+            if (is_array($record)) {
+                $record = new $_className($record, true);
+            }
+            
             if($record instanceof $_className) {
-                $this->_listOfRecords[$this->_count] = $record;
-                $this->_count++;
-            } elseif (is_array($record) ) {
-                $this->_listOfRecords[$this->_count] = new $_className($record, true);
-                $this->_count++;
+                $this->_listOfRecords[$record->getId] = $record;
             } else {
                 throw new Exception('invalid datatype for Egwbase_RecordSet_Abstract');
             }
@@ -39,18 +46,33 @@ abstract class Egwbase_RecordSet_Abstract implements Iterator, Countable
     }
 
     /**
-     * add Egwbase_Record_Interface like object to internal list
+     * add Egwbase_Record_Interface like object to internal list, if an record
+     * with the records identifier allready exists, this record will be replaeced
      *
      * @param Egwbase_Record_Interface $_record
      */
     public function addRecord(Egwbase_Record_Interface $_record)
     {
-        $this->_listOfRecords[$this->_count] = $_record;
-        $this->_count++;
+        $this->_listOfRecords[$_record->getId()] = $_record;
     }
 
     /**
-     * Returns the number of elements in the collection.
+     * converts RecordSet to array
+     * 
+     * @return array identifier => recordarray
+     */
+    public function toArray()
+    {
+        $resultArray = array();
+        foreach($this->_listOfRecords as $id => $record) {
+            $resultArray[$id] = $record->toArray();
+        }
+         
+        return $resultArray;
+    }
+    
+    /**
+     * Returns the number of elements in the recordSet.
      *
      * required by interface Countable
      *
@@ -58,83 +80,56 @@ abstract class Egwbase_RecordSet_Abstract implements Iterator, Countable
      */
     public function count()
     {
-        return $this->_count;
+        return count($this->_listOfRecords);
     }
 
-    /**
-     * get the current element.
-     *
-     * required by interface Iterator.
-     *
-     * @return Egwbase_Record_Interface current element from the collection
+	/**
+     * required by IteratorAggregate interface
+     * 
+     * @return iterator
      */
-    public function current()
+    public function getIterator()
     {
-        if ($this->valid() === FALSE) {
-            return null;
+        return new ArrayIterator($this->_listOfRecords);    
+    }
+
+	/**
+     * required by ArrayAccess interface
+     */
+    public function offsetExists($_offset)
+    {
+        return isset($this->_listOfRecords[$_offset]);
+    }
+    
+    /**
+     * required by ArrayAccess interface
+     */
+    public function offsetGet($_offset)
+    {
+        return $this->_listOfRecords[$_offset];
+    }
+    
+    /**
+     * required by ArrayAccess interface
+     */
+    public function offsetSet($_offset, $_value)
+    {
+        if (! $_value instanceof $this->_recordClass) {
+            throw new Egwbase_Record_Exception('Attempt to add/set record of wrong record class');
+        } elseif ($_offset !== $_value->getID()) {
+            throw new Egwbase_Record_Exception('Attempt to add/set record with wrong identifier');
         }
-
-        // return the Egwbase_Accounts_User_UserData object
-        return $this->_listOfRecords[$this->_position];
+        return $this->addRecord($_value);
     }
-
+    
     /**
-     * return the identifying key of the current element.
-     *
-     * required by interface Iterator.
-     *
-     * @return int
+     * required by ArrayAccess interface
      */
-    public function key()
+    public function offsetUnset($_offset)
     {
-        return $this->_position;
-    }
-
-    /**
-     * move forward to next element.
-     *
-     * required by interface Iterator.
-     *
-     * @return void
-     */
-    public function next()
-    {
-        ++$this->_position;
-    }
-
-    /**
-     * rewind the iterator to the first element.
-     *
-     * required by interface Iterator.
-     *
-     * @return void
-     */
-    public function rewind()
-    {
-        $this->_position = 0;
-    }
-
-    /**
-     * check if there is a current element after calls to rewind() or next().
-     * used to check if we've iterated to the end of the collection.
-     *
-     * required by interface Iterator.
-     *
-     * @return bool False if there's nothing more to iterate over
-     */
-    public function valid()
-    {
-        return $this->_position < $this->_count;
-    }
-
-    public function toArray()
-    {
-        $resultArray = array();
-        foreach($this->_listOfRecords as $record) {
-            $resultArray[] = $record->toArray();
+        if (array_key_exists($_offset, $this->_listOfRecords)){
+            unset($this->_listOfRecords[$_offset]);
         }
-         
-        return $resultArray;
     }
 
 }
