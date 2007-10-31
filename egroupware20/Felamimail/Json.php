@@ -1,21 +1,42 @@
 <?php
+/**
+ * json frontend for Felamimail
+ *
+ * This class handles all Json requests for the FeLaMiMail application
+ *
+ * @package     FeLaMiMail
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
 class Felamimail_Json
 {
-	public function getTree($nodeid) 
+	/**
+	 * get subfolders for specified folder
+	 *
+	 * @param unknown_type $accountId
+	 * @param unknown_type $location
+	 * @param unknown_type $folderName
+	 */
+	public function getSubTree($accountId, $location, $folderName) 
 	{
 		$nodes = array();
-		$nodeID = $nodeid;
-		$config = new Zend_Config_Ini('../../config.ini', 'felamimail');
+		$nodeID = $nodeId;
 
+		$controller = new Felamimail_Controller();
+		$accounts = $controller->getListOfAccounts();
+		
 		error_log("reading folder for $nodeID");
 
 		try {
-			$mail = new Zend_Mail_Storage_Imap($config->toArray());
+			$mail = new Zend_Mail_Storage_Imap($accounts[$accountId]->toArray());
 			
-			if($nodeID == 'mailbox1' || $nodeID == 'mailbox2') {
+			if(empty($folderName)) {
 				$folder = $mail->getFolders('', '%');
 			} else {
-				$folder = $mail->getFolders($nodeID.'/', '%');
+				$folder = $mail->getFolders($folderName.'/', '%');
 			}
 			
 			//error_log(print_r($folder, true));
@@ -30,24 +51,12 @@ class Felamimail_Json
 					!$folderObject->hasChildren()
 				);
 				$treeNode->contextMenuClass = 'ctxMenuTreeFellow';
+                $treeNode->accountId = $accountId;
+                $treeNode->folderName = $folderObject->getGlobalName();
 				$nodes[] = $treeNode;
 				
 			}
 			
-		#	$nameSpaces = $mail->getNameSpace();
-		#	
-		#	foreach($nameSpaces as $nameSpace) {
-		#	
-		#		$basePath = (empty($nameSpace['path']) ? $nameSpace['path'] : $nameSpace['path'] . $nameSpace['delimiter']);
-		#	
-		#		try {
-		#			$topfolder = $mail->getFolders($basePath, '%');
-		#			foreach($topfolder as $folder) {
-		#				//print $folder."<br>";
-		#			}
-		#		} catch (Exception $e) {
-		#		}
-		#	}
 		} catch (Exception $e) {
 			error_log('ERROR: '. $e->getMessage());
 		}
@@ -58,19 +67,28 @@ class Felamimail_Json
 		exit;
 	}
 	
-	public function getMainTree() 
-	{
-		$treeNode = new Egwbase_Ext_Treenode('Felamimail', 'overview', 'email', 'Email', FALSE);
-		$treeNode->setIcon('apps/kmail.png');
-		$treeNode->cls = 'treemain';
+    /**
+     * Returns the structure of the initial tree for this application.
+     *
+     * This function returns the needed structure, to display the initial tree, after the the logoin.
+     * Additional tree items get loaded on demand.
+     *
+     * @return array
+     */
+    public function getInitialTree($_location)
+    {
+        $controller = new Felamimail_Controller();
+        $accounts = $controller->getListOfAccounts();        
+        
+        $treeNodes = array();
+        
+        foreach($accounts as $id => $accountData) {
+            $treeNode = new Egwbase_Ext_Treenode('Felamimail', 'email', $id, $accountData->name, FALSE);
+            $treeNode->accountId = $id;
+            $treeNode->folderName = '';
+            $treeNodes[] = $treeNode;
+        }
 
-		$childNode = new Egwbase_Ext_Treenode('Felamimail', 'email', 'mailbox1', 'l.kneschke@officespot.net', FALSE);
-		$treeNode->addChildren($childNode);
-
-		$childNode = new Egwbase_Ext_Treenode('Felamimail', 'email', 'mailbox2', 'lars@kneschke.de', FALSE);
-		$treeNode->addChildren($childNode);
-
-		return $treeNode;
+		return $treeNodes;
 	}
 }
-?>
