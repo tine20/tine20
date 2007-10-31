@@ -1,0 +1,139 @@
+@CHARSET "UTF-8";
+
+.TimeView-sheetDescription {
+	padding:10px 0px 0px 0px;
+}
+
+.x-horizontalTimeView-header {
+	border-bottom: 1px dotted #15428B;
+}
+.x-horizontalTimeView-header-hourly {
+	padding:0px 0px 0px 0px;
+	margin: 0 0 0 0;
+	text-align: center;
+	vertical-align: text-bottom;
+	color:#15428B;
+	font-family:tahoma,arial,verdana,sans-serif;
+	font-size:11px;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:bold;
+}
+
+.x-horizontalTimeView-header-hourly-on {
+	background:#DFECFB;
+}
+
+.x-horizontalTimeView-header-hourly-off {
+}
+
+.x-horizontalTimeView-event2 {
+	font-family:tahoma,arial,verdana,sans-serif;
+	font-size:11px;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	color:#15428B;
+	background:#DFECFB;
+	margin:0px 0px 0px 0px;
+}
+
+body {
+	font-family: Tahoma,Arial,Helvetica,sans-serif;
+	font-size:12px;
+	color:#333;
+	padding: 20px;
+}
+h1 {
+	font-family: Georgia,"Times New Roman",Times,serif;
+	font-size:26px;
+	color:#083772;
+	letter-spacing:-1px;
+	font-weight:normal;
+}
+h2 {
+	font-size: 18px;
+	line-height:18px;
+	color:#083772;
+	margin-bottom:15px;
+	font-weight:normal;
+}
+p {
+	margin:8px 20px;
+	line-height:18px;
+}
+input {
+	margin: 8px 20px;
+}
+#myDiv {
+	border:2px solid #1F3E75;
+	background:#DFECFB;
+	margin:20px 50px;
+	padding:10px 20px;
+	width:200px;
+	text-align:center;
+}
+.red {
+	color: red;
+}
+
+
+
+.action_prev {
+	background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
+}
+
+.action_next {
+	background-image:url(../../images/oxygen/16x16/actions/arrow-right.png) !important;
+}
+
+.action_1dayview {
+	background-image:url(../../images/oxygen/16x16/actions/1day.png) !important;
+}
+
+.action_5daysview {
+	background-image:url(../../images/oxygen/16x16/actions/5days.png) !important;
+}
+
+.action_7daysview {
+	background-image:url(../../images/oxygen/16x16/actions/7days.png) !important;
+}
+
+.action_monthview {
+	background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
+}
+
+
+
+.action_addEvent {
+	background-image:url(../../images/oxygen/16x16/actions/add-user.png) !important;
+}
+
+.action_edit {
+	background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
+}
+
+.action_delete {
+	background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+}
+
+.action_displayEvents {
+	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+}
+
+.action_saveAndClose {
+	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+}
+
+.action_applyChanges {
+	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
+
+.repeat_action {
+	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
+}
+
+
