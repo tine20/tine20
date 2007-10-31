@@ -90,7 +90,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
      * 
      * @string identifier
      */
-    public function setId($_id, $_bypassFilter = false)
+    public function setId($_id, $_bypassFilters = false)
     {
         if (!$this->_identifier) {
             throw new Egwbase_Record_Exception('Identifier is not declared');
