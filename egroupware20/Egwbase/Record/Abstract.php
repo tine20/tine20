@@ -50,6 +50,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
      */
     protected $_validationErrors = array();
     
+    
+    protected $_bypassFilters = false;
+    
     /**
      * holds instance of Zend_Filter
      * 
@@ -125,12 +128,12 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     public function setFromUserData(array $_data)
     {
         $inputFilter = $this->getFilter();
-        $inputFilter->setData(data);
+        $inputFilter->setData($_data);
     	
     	if ($inputFilter->isValid()) {
     		$data = $inputFilter->getUnescaped();
     		foreach($data as $key => $value) {
-    			$this->$_prperties['key'] = $value;
+    			$this->_properties[$key] = $value;
     		}
     	} else {
             foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
@@ -170,8 +173,12 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     public function __set($_name, $_value)
     {
         if (array_key_exists ($_name, $this->_validators)) {
-            if (!$this->bypassFilter) {
-                return $this->setFromUserData(array($_name => $_value));
+            if (!$this->_bypassFilters) {
+                $inputFilter = $this->getFilter();
+                $inputFilter->setData(array($_name => $_value));
+                if($inputFilter->isValid() && array_key_exists($_name, $inputFilter->getUnescaped())){
+                    return $this->_properties[$_name] = $_value;
+                }
             }
             return $this->_properties[$_name] = $_value;
         }
@@ -201,7 +208,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     protected function getFilter()
     {
         if ($this->_Zend_Filter == NULL) {
-           $this->_Zend_Filter = new Zend_Filter( $this->_filters, $this->_validators);
+           $this->_Zend_Filter = new Zend_Filter_Input( $this->_filters, $this->_validators);
         }
         return $this->_Zend_Filter;
     }
