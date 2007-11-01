@@ -1,6 +1,6 @@
 <?php
 /**
- * the class provides functions to handle the accesslog
+ * this class provides functions to get, add and remove entries from/to the access log
  *
  * @package     Egwbase
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -28,6 +28,15 @@ class Egwbase_AccessLog
         $this->accessLogTable = new Egwbase_Db_Table(array('name' => 'egw_access_log'));
     }
 
+    /**
+     * add login entry to the access log
+     *
+     * @param string $_sessionId the session id
+     * @param string $_loginId the loginname as provided by the user
+     * @param string $_ipAddress the ip address the user connects from
+     * @param int $_result the result of the login
+     * @param int $_accountId OPTIONAL the accountId of the user, if the login was successfull
+     */
     public function addLoginEntry($_sessionId, $_loginId, $_ipAddress, $_result, $_accountId = NULL)
     {
         $data = array(
@@ -48,6 +57,13 @@ class Egwbase_AccessLog
         $this->accessLogTable->insert($data);
     }
 
+    /**
+     * add logout entry to the access log
+     *
+     * @param string $_sessionId the session id
+     * @param string $_ipAddress the ip address the user connects from
+     *      
+     */
     public function addLogoutEntry($_sessionId, $_ipAddress)
     {
         $data = array(
@@ -62,6 +78,13 @@ class Egwbase_AccessLog
         $this->accessLogTable->update($data, $where);
     }
     
+    /**
+     * delete entries from the access log
+     *
+     * @param array $_logIds the id of the rows which should get deleted
+     * 
+     * @return int the number of deleted rows
+     */
     public function deleteEntries(array $_logIds)
     {
         $where  = array(
@@ -74,14 +97,17 @@ class Egwbase_AccessLog
     }
     
     /**
-     * get list of installed applications
+     * Enter description here...
      *
-     * @param string $_sort optional the column name to sort by
-     * @param string $_dir optional the sort direction can be ASC or DESC only
-     * @param string $_filter optional search parameter
-     * @param int $_limit optional how many applications to return
-     * @param int $_start optional offset for applications
-     * @return Egwbase_RecordSet_Application
+     * @param Zend_Date $_from the date from which to fetch the access log entries from
+     * @param Zend_Date $_to the date to which to fetch the access log entries to
+     * @param string $_sort OPTIONAL the column name to sort by
+     * @param string $_dir OPTIONAL the sort direction can be ASC or DESC only
+     * @param string $_filter OPTIONAL search parameter
+     * @param int $_limit OPTIONAL how many applications to return
+     * @param int $_start OPTIONAL offset for applications
+     * 
+     * @return Egwbase_RecordSet_AccessLog set of matching access log entries
      */
     public function getEntries(Zend_Date $_from, Zend_Date $_to, $_sort = 'li', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
     {
@@ -112,7 +138,7 @@ class Egwbase_AccessLog
     }
 
     /**
-     * return the total number of accesslog entries
+     * get the total number of accesslog entries
      *
      * @return int
      */

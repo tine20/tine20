@@ -131,17 +131,6 @@ Egw.Egwbase = function() {
 					hideCollapseTool: true
 				},
 				items: _getPanels()
-/*			    items: [{
-			        title: 'Home',
-			        id: 'home-panel',
-					border: false
-			    },
-			    Egw.Addressbook.getPanel(),
-			    {
-			        title: 'Asterisk',
-			        id: 'asterisk-panel',
-					border: false
-			    }]*/
 			}]
 		});
 		
@@ -275,11 +264,10 @@ Egw.Egwbase = function() {
     {
     	return Ext.util.Format.date($_iso8601, 'd.m.Y');
     }
-
     
     // public functions and variables
     return {
-    	dateTimeRenderer:     _dateTimeRenderer,
+    	dateTimeRenderer:      _dateTimeRenderer,
         display:               _displayMainScreen,
         openWindow:            _openWindow,
         getActiveToolbar:      _getActiveToolbar,

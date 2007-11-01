@@ -24,7 +24,7 @@ class Egwbase_Http
 
     public function mainScreen()
     {
-        $userApplications = array('Addressbook', 'Admin');
+        $userApplications = array('Addressbook', 'Felamimail', 'Admin');
         $view = new Zend_View();
 
         $view->setScriptPath('Egwbase/views');

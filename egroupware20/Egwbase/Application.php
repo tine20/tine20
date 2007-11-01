@@ -31,11 +31,23 @@ class Egwbase_Application
     /**
      * returns one application identified by app_id
      *
-     * @param unknown_type $_applicationId
+     * @param int $_applicationId the id of the application
+     * @todo code still needs some testing
+     * @throws Exception if $_applicationId is not integer and not greater 0
+     * @return Egwbase_Record_Application the information about the application
      */
     public function getApplicationById($_applicationId)
     {
+        $applicationId = (int)$_applicationId;
+        if($applicationId < 1) {
+            throw new Exception('$_applicationId must be integer and greater 0');
+        }
         
+        $row = $this->applicationTable->fetchRow('app_id = ' . $applicationId);
+        
+        $result = new Egwbase_Record_Application($row->toArray());
+        
+        return $result;
     }
     
     /**
