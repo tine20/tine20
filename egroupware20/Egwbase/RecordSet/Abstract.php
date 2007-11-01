@@ -34,11 +34,11 @@ abstract class Egwbase_RecordSet_Abstract implements IteratorAggregate, Countabl
         
         foreach($_records as $record) {
             if (is_array($record)) {
-                $record = new $_className($record, true);
+                $record = new $this->_recordClass($record, true);
             }
             
-            if($record instanceof $_className) {
-                $this->_listOfRecords[$record->getId] = $record;
+            if($record instanceof $this->_recordClass) {
+                $this->_listOfRecords[$record->getId()] = $record;
             } else {
                 throw new Exception('invalid datatype for Egwbase_RecordSet_Abstract');
             }
