@@ -105,8 +105,31 @@ class Egwbase_Controller
     
     protected function setupLogger()
     {
-        $writer = new Zend_Log_Writer_Stream('php://stderr');
-        Zend_Registry::set('logger', new Zend_Log($writer));
+        $logger = new Zend_Log();
+        
+        try {
+            $loggerConfig = new Zend_Config_Ini('../../config.ini', 'logger');
+            
+            $filename = $loggerConfig->filename;
+            $priority = (int)$loggerConfig->priority;
+
+            $writer = new Zend_Log_Writer_Stream($filename);
+            $logger->addWriter($writer);
+
+            $filter = new Zend_Log_Filter_Priority($priority);
+            $logger->addFilter($filter);
+
+        } catch (Exception $e) {
+            $writer = new Zend_Log_Writer_Null;
+            $logger->addWriter($writer);
+        }
+
+        
+
+        //
+        Zend_Registry::set('logger', $logger);
+
+        Zend_Registry::get('logger')->debug('logger initialized');
     }
     
     protected function setupDatabaseConnection()
