@@ -4,9 +4,9 @@
  *
  * @package     Egwbase
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: ContactSet.php 138 2007-09-28 05:18:53Z lkneschke $
+ * @version     $Id: $
  *
  */
 abstract class Egwbase_RecordSet_Abstract implements IteratorAggregate, Countable, ArrayAccess
