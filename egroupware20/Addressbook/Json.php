@@ -11,8 +11,10 @@
  * @version     $Id$
  *
  */
-class Addressbook_Json
+class Addressbook_Json extends Egwbase_Application_Json_Abstract
 {
+    protected $_appname = 'Addressbook';
+    
     /**
      * delete a array of contacts
      *
@@ -297,104 +299,99 @@ class Addressbook_Json
      *
      * @return array
      */
-    public function getInitialTree($_location)
+    public function getInitialTree()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
          
-        switch($_location) {
-            case 'mainTree':
-                $treeNodes = array();
+        $treeNodes = array();
 
-                $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'allcontacts', 'allcontacts', 'All Contacts', FALSE);
-                $treeNode->setIcon('apps/kaddressbook.png');
-                $treeNode->cls = 'treemain';
-                $treeNode->owner = 'allcontacts';
-                $treeNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $treeNode->dataPanelType = 'contacts';
-                
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', TRUE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $childNode->dataPanelType = 'contacts';
-                $childNode->contextMenuClass = 'ctxMenuContactsTree';
-                $treeNode->addChildren($childNode);
+        $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'allcontacts', 'allcontacts', 'All Contacts', FALSE);
+        $treeNode->setIcon('apps/kaddressbook.png');
+        $treeNode->cls = 'treemain';
+        $treeNode->owner = 'allcontacts';
+        $treeNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $treeNode->dataPanelType = 'contacts';
+        
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', TRUE);
+        $childNode->owner = $currentAccount->account_id;
+        $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $childNode->dataPanelType = 'contacts';
+        $childNode->contextMenuClass = 'ctxMenuContactsTree';
+        $treeNode->addChildren($childNode);
 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
-                $childNode->owner = 0;
-                $treeNode->addChildren($childNode);
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'accounts', 'accounts', 'All Users', TRUE);
+        $childNode->owner = 0;
+        $treeNode->addChildren($childNode);
 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otheraddressbooks', 'otheraddressbooks', 'Other Users Contacts', FALSE);
-                $childNode->owner = 'otheraddressbooks';
-                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $childNode->dataPanelType = 'contacts';
-                $treeNode->addChildren($childNode);
-                 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
-                $childNode->owner = 'sharedaddressbooks';
-                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $childNode->dataPanelType = 'contacts';
-                $treeNode->addChildren($childNode);
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otheraddressbooks', 'otheraddressbooks', 'Other Users Contacts', FALSE);
+        $childNode->owner = 'otheraddressbooks';
+        $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $childNode->dataPanelType = 'contacts';
+        $treeNode->addChildren($childNode);
+         
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
+        $childNode->owner = 'sharedaddressbooks';
+        $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $childNode->dataPanelType = 'contacts';
+        $treeNode->addChildren($childNode);
 
-                $treeNodes[] = $treeNode;
+        $treeNodes[] = $treeNode;
 
-                $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'alllists', 'alllists', 'All Lists', FALSE);
-                $treeNode->setIcon('apps/kaddressbook.png');
-                $treeNode->cls = 'treemain';
-                $treeNode->owner = 'alllists';
-                $treeNode->jsonMethod = 'Addressbook.getListsByOwner';
-                $treeNode->dataPanelType = 'lists';
+        $treeNode = new Egwbase_Ext_Treenode('Addressbook', 'alllists', 'alllists', 'All Lists', FALSE);
+        $treeNode->setIcon('apps/kaddressbook.png');
+        $treeNode->cls = 'treemain';
+        $treeNode->owner = 'alllists';
+        $treeNode->jsonMethod = 'Addressbook.getListsByOwner';
+        $treeNode->dataPanelType = 'lists';
 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'lists', 'mylists', 'My Lists', FALSE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Addressbook.getListsByOwner';
-                $childNode->dataPanelType = 'lists';
-                $treeNode->addChildren($childNode);
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'lists', 'mylists', 'My Lists', FALSE);
+        $childNode->owner = $currentAccount->account_id;
+        $childNode->jsonMethod = 'Addressbook.getListsByOwner';
+        $childNode->dataPanelType = 'lists';
+        $treeNode->addChildren($childNode);
 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherlists', 'otherlists', 'Other Users Lists', FALSE);
-                $childNode->owner = 'otherlists';
-                $childNode->jsonMethod = 'Addressbook.getListsByOwner';
-                $childNode->dataPanelType = 'lists';
-                $treeNode->addChildren($childNode);
-                 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedlists', 'sharedlists', 'Shared Lists', FALSE);
-                $childNode->owner = 'sharedlists';
-                $childNode->jsonMethod = 'Addressbook.getListsByOwner';
-                $childNode->dataPanelType = 'lists';
-                $treeNode->addChildren($childNode);
-                
-                $treeNodes[] = $treeNode;
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otherlists', 'otherlists', 'Other Users Lists', FALSE);
+        $childNode->owner = 'otherlists';
+        $childNode->jsonMethod = 'Addressbook.getListsByOwner';
+        $childNode->dataPanelType = 'lists';
+        $treeNode->addChildren($childNode);
+         
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedlists', 'sharedlists', 'Shared Lists', FALSE);
+        $childNode->owner = 'sharedlists';
+        $childNode->jsonMethod = 'Addressbook.getListsByOwner';
+        $childNode->dataPanelType = 'lists';
+        $treeNode->addChildren($childNode);
+        
+        $treeNodes[] = $treeNode;
 
-                return $treeNodes;
-                 
-                break;
-                 
-            case 'selectFolder':
-                $treeNode = array();
+        return $treeNodes;
+    }
+    
+    public function getSelectFolderTree()
+    {
+        $currentAccount = Zend_Registry::get('currentAccount');
+        $treeNode = array();
 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', TRUE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $childNode->dataPanelType = 'contacts';
-                $childNode->contextMenuClass = 'ctxMenuContactsTree';
-                $treeNode[] = $childNode;
-                
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otheraddressbooks', 'otheraddressbooks', 'Other Users Contacts', FALSE);
-                $childNode->owner = 'otheraddressbooks';
-                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $childNode->dataPanelType = 'contacts';
-                $treeNode[] = $childNode;
-                                 
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
-                $childNode->owner = 'sharedaddressbooks';
-                $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
-                $childNode->dataPanelType = 'contacts';
-                $treeNode[] = $childNode;
-                                                 
-                return $treeNode;
-                 
-                break;
-        }
-
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'mycontacts', 'My Contacts', TRUE);
+        $childNode->owner = $currentAccount->account_id;
+        $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $childNode->dataPanelType = 'contacts';
+        $childNode->contextMenuClass = 'ctxMenuContactsTree';
+        $treeNode[] = $childNode;
+        
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'otheraddressbooks', 'otheraddressbooks', 'Other Users Contacts', FALSE);
+        $childNode->owner = 'otheraddressbooks';
+        $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $childNode->dataPanelType = 'contacts';
+        $treeNode[] = $childNode;
+                         
+        $childNode = new Egwbase_Ext_Treenode('Addressbook', 'sharedaddressbooks', 'sharedaddressbooks', 'Shared Contacts', FALSE);
+        $childNode->owner = 'sharedaddressbooks';
+        $childNode->jsonMethod = 'Addressbook.getContactsByOwner';
+        $childNode->dataPanelType = 'contacts';
+        $treeNode[] = $childNode;
+                                         
+        return $treeNode;
     }
 
     /**

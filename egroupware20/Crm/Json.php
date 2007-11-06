@@ -11,9 +11,11 @@
  * @version     $Id: Json.php 199 2007-10-15 16:30:00Z twadewitz $
  *
  */
-class Crm_Json
+class Crm_Json extends Egwbase_Application_Json_Abstract
 {
 
+    protected $_appname = 'Crm';
+    
   /**
      * Returns the structure of the initial tree for this application.
      *
@@ -22,42 +24,37 @@ class Crm_Json
      *
      * @return array
      */
-    public function getInitialTree($_location)
+    public function getInitialTree()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
          
-        switch($_location) {
-            case 'mainTree':
-                $treeNodes = array();
-                
-                $treeNode = new Egwbase_Ext_Treenode('Crm', 'projekte', 'projekte', 'Projekte', FALSE);
-                $treeNode->setIcon('apps/package-multimedia.png');
-                $treeNode->cls = 'treemain';
-                $treeNode->contextMenuClass = 'ctxMenuProject';
-                $treeNode->owner = 'allprojects';
-                $treeNode->jsonMethod = 'Crm.getProjectsByOwner';
-                $treeNode->dataPanelType = 'projects';
+        $treeNodes = array();
+        
+        $treeNode = new Egwbase_Ext_Treenode('Crm', 'projekte', 'projekte', 'Projekte', FALSE);
+        $treeNode->setIcon('apps/package-multimedia.png');
+        $treeNode->cls = 'treemain';
+        $treeNode->contextMenuClass = 'ctxMenuProject';
+        $treeNode->owner = 'allprojects';
+        $treeNode->jsonMethod = 'Crm.getProjectsByOwner';
+        $treeNode->dataPanelType = 'projects';
 
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'leads', 'Leads', TRUE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Crm.getLeadsByOwner';
-                $childNode->dataPanelType = 'leads';
-                $childNode->contextMenuClass = 'ctxMenuLeadsTree';
-                $treeNode->addChildren($childNode);
-                
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'partner', 'partner', 'Partner', TRUE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Crm.getPartnerByOwner';
-                $childNode->dataPanelType = 'partner';
-                $childNode->contextMenuClass = 'ctxMenuPartnerTree';
-                $treeNode->addChildren($childNode);
-                
-                $treeNodes[] = $treeNode;
+        $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'leads', 'Leads', TRUE);
+        $childNode->owner = $currentAccount->account_id;
+        $childNode->jsonMethod = 'Crm.getLeadsByOwner';
+        $childNode->dataPanelType = 'leads';
+        $childNode->contextMenuClass = 'ctxMenuLeadsTree';
+        $treeNode->addChildren($childNode);
+        
+        $childNode = new Egwbase_Ext_Treenode('Crm', 'partner', 'partner', 'Partner', TRUE);
+        $childNode->owner = $currentAccount->account_id;
+        $childNode->jsonMethod = 'Crm.getPartnerByOwner';
+        $childNode->dataPanelType = 'partner';
+        $childNode->contextMenuClass = 'ctxMenuPartnerTree';
+        $treeNode->addChildren($childNode);
+        
+        $treeNodes[] = $treeNode;
 
-                return $treeNodes;
-                 
-                break;
-        }
+        return $treeNodes;
     }   
   
     

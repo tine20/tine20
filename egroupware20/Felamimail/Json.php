@@ -11,8 +11,10 @@
  * @version     $Id$
  *
  */
-class Felamimail_Json
+class Felamimail_Json extends Egwbase_Application_Json_Abstract
 {
+    protected $_appname = 'Felamimail';
+    
 	/**
 	 * get subfolders for specified folder
 	 *
@@ -75,7 +77,7 @@ class Felamimail_Json
      *
      * @return array
      */
-    public function getInitialTree($_location)
+    public function getInitialTree()
     {
         $controller = new Felamimail_Controller();
         $accounts = $controller->getListOfAccounts();        

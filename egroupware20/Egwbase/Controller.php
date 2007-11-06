@@ -70,7 +70,8 @@ class Egwbase_Controller
                 $server->setClass('Addressbook_Json', 'Addressbook');
                 $server->setClass('Admin_Json', 'Admin');
                 //$server->setClass('Asterisk_Json', 'Asterisk');
-                $server->setClass('Felamimail_Json', 'Felamimail');
+                //$server->setClass('Felamimail_Json', 'Felamimail');
+                $server->setClass('Calendar_Json', 'Calendar');
             }
 
             $server->handle($_REQUEST);

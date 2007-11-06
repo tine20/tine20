@@ -11,8 +11,10 @@
  * @version     $Id$
  *
  */
-class Admin_Json
+class Admin_Json extends Egwbase_Application_Json_Abstract
 {
+    protected $_appname = 'Admin';
+    
     public function deleteAccessLogEntries($logIds)
     {
         try {
@@ -114,29 +116,24 @@ class Admin_Json
      *
      * @return array
      */
-    public function getInitialTree($_location)
+    public function getInitialTree()
     {
-        switch($_location) {
-            case 'mainTree':
-                $treeNodes = array();
+        $treeNodes = array();
 
-                $treeNode = new Egwbase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
-                //$treeNode->setIcon('apps/kaddressbook.png');
-                $treeNode->cls = 'treemain';
-                $treeNode->jsonMethod = 'Admin.getApplications';
-                $treeNode->dataPanelType = 'applications';
-                $treeNodes[] = $treeNode;
+        $treeNode = new Egwbase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
+        //$treeNode->setIcon('apps/kaddressbook.png');
+        $treeNode->cls = 'treemain';
+        $treeNode->jsonMethod = 'Admin.getApplications';
+        $treeNode->dataPanelType = 'applications';
+        $treeNodes[] = $treeNode;
 
-                $treeNode = new Egwbase_Ext_Treenode('Admin', 'accesslog', 'accesslog', 'Access Log', TRUE);
-                //$treeNode->setIcon('apps/kaddressbook.png');
-                $treeNode->cls = 'treemain';
-                $treeNode->jsonMethod = 'Admin.getAccessLog';
-                $treeNode->dataPanelType = 'accesslog';
-                $treeNodes[] = $treeNode;
+        $treeNode = new Egwbase_Ext_Treenode('Admin', 'accesslog', 'accesslog', 'Access Log', TRUE);
+        //$treeNode->setIcon('apps/kaddressbook.png');
+        $treeNode->cls = 'treemain';
+        $treeNode->jsonMethod = 'Admin.getAccessLog';
+        $treeNode->dataPanelType = 'accesslog';
+        $treeNodes[] = $treeNode;
 
-                return $treeNodes;
-                 
-                break;
-        }
+        return $treeNodes;
     }
 }

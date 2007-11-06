@@ -31,7 +31,7 @@ class Addressbook_Http
 		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 
 		$addressbookJson = new Addressbook_Json;		
-		$view->formData['config']['initialTree'] = $addressbookJson->getInitialTree('selectFolder');
+		$view->formData['config']['initialTree'] = $addressbookJson->getSelectFolderTree();
 
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
@@ -86,7 +86,7 @@ class Addressbook_Http
 		$view->cssIncludeFiles = array();
 		
 		$addressbookJson = new Addressbook_Json;		
-		$view->formData['config']['initialTree'] = $addressbookJson->getInitialTree('selectFolder');
+		$view->formData['config']['initialTree'] = $addressbookJson->getSelectFolderTree();
 		
 		// get the list
 		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
