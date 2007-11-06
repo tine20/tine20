@@ -9,7 +9,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 abstract class Egwbase_Application_Json_Abstract extends Egwbase_Application_Abstract
