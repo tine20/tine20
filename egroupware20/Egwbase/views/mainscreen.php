@@ -13,7 +13,7 @@
 
 	<!-- eGW -->
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-	<script type="text/javascript" language="javascript" src="Egwbase/Js/Egwbase.js"></script>
+	<script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
 	<?php 
 		foreach ($this->jsIncludeFiles as $name) {
 			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';

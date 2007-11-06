@@ -13,7 +13,7 @@
 
 	<!-- eGW -->
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-	<script type="text/javascript" language="javascript" src="Egwbase/Js/Login.js"></script>
+	<script type="text/javascript" language="javascript" src="Egwbase/js/Login.js"></script>
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function() {
 			EGWNameSpace.Login.showLoginDialog();
