@@ -215,7 +215,7 @@ Egw.Addressbook = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(i=0; i<initialTree.Addressbook.length; i++) {
+        for(var i=0; i<initialTree.Addressbook.length; i++) {
         	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Addressbook[i]));
         }
         
@@ -712,7 +712,7 @@ Egw.Addressbook = function() {
      */
     var _openDialog = function(_id,_dtype) {
         var url;
-        var w = 1024, h = 786;
+        var w = 1024, h = 786, x, y;
         var popW = 850, popH = 600;
         
 		if(_dtype == 'list') {
@@ -746,7 +746,7 @@ Egw.Addressbook = function() {
             url = 'index.php?method=Addressbook.editContact';
         }
         //console.log(url);
-        appId = 'addressbook';
+        var appId = 'addressbook';
         var popup = window.open(
             url, 
             'popupname',
@@ -794,7 +794,7 @@ Egw.Addressbook = function() {
 			
             var Tree = Ext.tree;
                 
-            treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
+            var treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
             treeLoader.on("beforeload", function(_loader, _node) {
                 _loader.baseParams.method       = 'Addressbook.getSubTree';
                 _loader.baseParams.node        = _node.id;
@@ -1120,7 +1120,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 					_litems.sort(Numsort);
 					_litems.reverse();
 				 
-				for(i=0; i<_selected_items; i++)
+				for(var i=0; i<_selected_items; i++)
 				{	
 					var record = lists_store.getAt(_litems[i]);
 					lists_store2.add(record);	
@@ -1150,14 +1150,14 @@ Egw.Addressbook.ContactEditDialog = function() {
 					_litems.sort(Numsort);
 					_litems.reverse();				 
 				
-				for(i=0; i<_selected_items; i++)
+				for(var i=0; i<_selected_items; i++)
 				{	
 					var record = lists_store2.getAt(_litems[i]);
 					lists_store.add(record);	
 				}
 					lists_store.sort('contact_tid', 'ASC');
 					
-				for(i=0; i<_selected_items; i++)
+				for(var i=0; i<_selected_items; i++)
 				{	
 					var record = lists_store2.getAt(_litems[i]);
 					lists_store2.remove(record);
@@ -1799,7 +1799,7 @@ Egw.Addressbook.ListEditDialog = function() {
             Egw.Addressbook.displayAddressbookSelectDialog("list_owner");
         }		
 		
-		searchDS = new Ext.data.JsonStore({
+		var searchDS = new Ext.data.JsonStore({
 				url: 'index.php',
 				baseParams: {
                 method:   'Addressbook.getOverview', 
