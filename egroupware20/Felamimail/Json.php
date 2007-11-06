@@ -15,6 +15,17 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Felamimail';
     
+    public function getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
+    {
+        $controller = new Felamimail_Controller();
+
+        $result = array(
+            'results'   => $controller->getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
+        );
+        
+        return $result;
+    }
+    
 	/**
 	 * get subfolders for specified folder
 	 *
@@ -25,13 +36,10 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 	public function getSubTree($accountId, $location, $folderName) 
 	{
 		$nodes = array();
-		$nodeID = $nodeId;
 
 		$controller = new Felamimail_Controller();
 		$accounts = $controller->getListOfAccounts();
 		
-		error_log("reading folder for $nodeID");
-
 		try {
 			$mail = new Zend_Mail_Storage_Imap($accounts[$accountId]->toArray());
 			
@@ -44,7 +52,6 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 			//error_log(print_r($folder, true));
 			
 			foreach($folder as $folderObject) {
-				#error_log("{$folderObject->getLocalName()} - {$folderObject->getGlobalName()} - {$folderObject->isLeaf()} - {$folderObject->hasChildren()}");
 				$treeNode = new Egwbase_Ext_Treenode(
 					'Felamimail', 
 					'email', 
@@ -53,7 +60,7 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 					!$folderObject->hasChildren()
 				);
 				$treeNode->contextMenuClass = 'ctxMenuTreeFellow';
-                $treeNode->accountId = $accountId;
+                $treeNode->accountId  = $accountId;
                 $treeNode->folderName = $folderObject->getGlobalName();
 				$nodes[] = $treeNode;
 				
