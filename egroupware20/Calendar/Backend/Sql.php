@@ -163,6 +163,24 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
             ->where('dates.cal_start >= ?', $_start->getTimestamp() )
             ->where('dates.cal_end <= ?' ,  $_end->getTimestamp() );
             
+        foreach ( (array)$_users as $user ) {
+            if ( is_int($user) ) {
+                $type = 'u';
+                $id   = $user;
+            } else {
+                $type = substr($user, 0, 1);
+                $id   = substr($user, 1);
+                // ids may also be strings for different calendar user apps!
+                $id = (int)$id > 0 ? (int)$id : $id;
+            }
+            $users[$type][] = $id;
+        }
+        foreach ($users as $type => $ids) {
+            $whereUsers[] = " ( ". $this->_db->quoteInto('cal_user_type = ?', $type) . " AND " .
+                                   $this->_db->quoteInto('cal_user_id IN ( ? )', $ids ) . " ) ";
+        }
+        $select->where( implode(' OR ', $whereUsers) );
+        
         $stmt = $this->_db->query($select);
         $events = new Calendar_EventSet();
         while ($event = $stmt->fetch()) {
@@ -256,6 +274,7 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
      * modifiy_alarms methods! All other changes are exceptions!
      *
      * @todo replace somemagicnumber for uid!
+     * @todo rewrite this in a new update class!
      * @param event $_event
      * @return string uid of saved event
      * @throws saveEntryFailed
@@ -308,50 +327,82 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
         	    throw new Exception('TODO: Find out whats wrong!');
         	}
     	}
-        
-        $repetionData = array(
+       
+    	if (isset($oldEvent)) {
+    	    // updateing events is a hard business, lets keep this simple 
+    	    // in this early stage!
+            
+    	    // important change! We delte the old recurances first
+            if ( $_event->cal_recur_type     != $oldEvent->cal_recur_type ||
+                 $_event->cal_recur_interval != $oldEvent->cal_recur_interval ||
+                 $_event->cal_recur_data     != $oldEvent->cal_recur_data ||
+                 ( $_evnet->cal_recur_type > 0 && (
+                     $_event->cal_start->compare( $oldEvent->cal_start ) != 0 ||
+                     $_event->cal_end->compare( $oldEvent->cal_end ) !=0
+                 )))
+            {
+                $dates_table->delete( $this->_db->quoteInto('cal_id = (?)', $_event->getId() ));
+                $user_table->delete( $this->_db->quoteInto('cal_id = (?)', $_event->getId() ));
+                $repeats_table->delete( $this->_db->quoteInto('cal_id = (?)', $_event->getId() ));
+            } 
+            
+            // change of date for not recuring event.
+    	    elseif ( $_evnet->cal_recur_type == 0 && (
+                     $_event->cal_start->compare( $oldEvent->cal_start ) != 0 ||
+                     $_event->cal_end->compare( $oldEvent->cal_end ) !=0
+                 )) 
+            {
+                $dates_table->update( array(
+                    'cal_start' => $_event->cal_start->getTimestamp(),
+                    'cal_end'   => $_event->cal_end->getTimestamp()
+                ), $this->_db->quoteInto('cal_id = (?)', $_event->getId() ) );
+                return;
+            }
+            
+            // endate of recuring event changed
+            elseif ( 
+                $_event->cal_recur_enddate->compare( $oldEvent->cal_recur_enddate ) != 0 )
+            {
+                throw new Exception('NOT IMPLEMETED YET');
+            }
+    	}
+    	
+	    $repetionData = array(
 	        'recur_type'      => $_event->cal_recur_type,
 	        'recur_enddate'   => $_event->cal_recur_enddate->getTimestamp(),
 	        'recur_interval'  => $_event->cal_recur_interval,
 	        'recur_data'      => $_event->cal_recur_data,
         );
-       
-    	if (isset($oldEvent)) {
-    	    // argh! verry complicated!!!!!!!!!!!!!!!!!!!!!
-    	    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    	    
-    	} else {
-            // we start an new event. This is the easy case :-)
-    	    $repitions = $this->_computeRepitions( $_event );
-    	    $repitions->addRecord($_event);
-    	    
-    	    if ($_event->cal_recur_type > 0) {
-    	        $repetionData['cal_id'] = $_event->getId();
-        	    $repeats_table->insert($repetionData);
-        	}
-    	    
-    	    foreach ($repitions as $repition) {
-    	        $repitionStartTs = $repition->cal_start->getTimestamp();
-    	        $repitionStopTs = $repition->cal_stop->getTimestamp();
-
-    	        $dates_table->insert( array(
-    	            'cal_id' => $_event->getId(),
-    	            'cal_start' => $repitionStartTs,
-    	            'cal_end' => $repitionStopTs,
-    	        ));
-    	        
-    	        $repitionBaseData = array(
-    	          	'cal_id'         => $repition->getId(),
-    	            'cal_recur_date' => $repitionStartTs
-    	        );
-    	        foreach ($repition->cal_participants as $participant) {
-    	            $user_table->insert( array_merge( 
-    	                $repitionBaseData,
-    	                $participant
-    	            ));
-    	        }
-    	    }
+        
+	    $repitions = $this->_computeRepitions( $_event );
+	    $repitions->addRecord($_event);
+	    
+	    if ($_event->cal_recur_type > 0) {
+	        $repetionData['cal_id'] = $_event->getId();
+    	    $repeats_table->insert($repetionData);
     	}
+	    
+	    foreach ($repitions as $repition) {
+	        $repitionStartTs = $repition->cal_start->getTimestamp();
+	        $repitionStopTs = $repition->cal_stop->getTimestamp();
+
+	        $dates_table->insert( array(
+	            'cal_id' => $_event->getId(),
+	            'cal_start' => $repitionStartTs,
+	            'cal_end' => $repitionStopTs,
+	        ));
+	        
+	        $repitionBaseData = array(
+	          	'cal_id'         => $repition->getId(),
+	            'cal_recur_date' => $repitionStartTs
+	        );
+	        foreach ($repition->cal_participants as $participant) {
+	            $user_table->insert( array_merge( 
+	                $repitionBaseData,
+	                $participant
+	            ));
+	        }
+	    }
     }
     
     /**

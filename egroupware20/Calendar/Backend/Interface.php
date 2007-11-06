@@ -22,7 +22,7 @@ interface Calendar_Backend_Interface
     public function getEvents( Zend_Date $_start, Zend_Date $_end, $_users, $_filters );
     
     /**
-     * returns an event object idenitfied by $_uid
+     * Returns an event object idenitfied by $_uid
      *
      * @param string $_uid
      * @return event
