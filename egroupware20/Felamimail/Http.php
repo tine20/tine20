@@ -15,8 +15,8 @@ class Felamimail_Http extends Egwbase_Application_Http_Abstract
 {
     protected $_appname = 'Felamimail';
     
-    public function getInitialData()
+    public function getInitialMainScreenData()
     {
-        return Felamimail_Json::getInitialTree();
+        return array('initialTree' => Felamimail_Json::getInitialTree());
     }
 }

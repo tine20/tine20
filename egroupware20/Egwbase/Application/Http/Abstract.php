@@ -38,19 +38,29 @@ abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abs
     /**
      * Returns initial data which is send to the app at createon time.
      *
-     * This function returns the needed structure, to display the initial tree, 
-     * after the the login. Additional tree items get loaded on demand see 
-     * getSubTree.
+     * When the mainScreen is created, Egwbase_Http_Controler queries this function
+     * to get the initial datas for this app. This pattern prevents that any app needs
+     * to make an server-request for its initial datas.
      * 
-     * $param string $_location 
-     *
-     * @return 
+     * Initial datas are just javascript varialbes declared in the mainScreen html code.
+     * 
+     * The returned data have to be an array with the variable names as keys and
+     * the datas as values. The datas will be JSON encoded later. Note that the
+     * varialbe names get prefixed with Egw.<applicationname>
+     * 
+     * @return mixed array 'variable name' => 'data'
      */
-    public function getInitialData()
+    public function getInitialMainScreenData()
     {
-        return;
+        return array();
     }
     
+    /**
+     * Helper function to coerce browsers to reload js files when changed.
+     *
+     * @param string $_file
+     * @return string file
+     */
     public static function _appendFileTime( $_file )
     {
         $path = dirname(__FILE__). "/../../../$_file";

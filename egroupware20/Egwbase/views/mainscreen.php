@@ -21,9 +21,19 @@
 		foreach ($this->cssIncludeFiles as $name) {
 			echo "\n\t". '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
 		}
-	?>
-	<script type="text/javascript" language="javascript">
-		var initialTree = <?php echo Zend_Json::encode($this->initialTree) ?>;
+    ?>
+    
+    <script type="text/javascript" language="javascript">
+	   <?php
+	       foreach ($this->initialData as $appname => $data) {
+	           if (!empty($data) ) {
+	               foreach ($data as $var => $content) {
+	                   echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
+	               }
+	           }
+	       }
+        ?>
+        
 		Ext.onReady(function(){
             <?php if(isset($this->configData)) echo "configData=" . Zend_Json::encode($this->configData) . ";" ?>
 			Egw.Egwbase.display();
