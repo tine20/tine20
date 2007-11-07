@@ -125,9 +125,6 @@ class Egwbase_Controller
             $logger->addWriter($writer);
         }
 
-        
-
-        //
         Zend_Registry::set('logger', $logger);
 
         Zend_Registry::get('logger')->debug('logger initialized');
