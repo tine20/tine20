@@ -1,205 +1,6 @@
 Ext.namespace('Egw.Felamimail');
 
 Egw.Felamimail = function() {
-
-	//var grid;
-
-	// private function
-	var showGrid = function(_layout) {
-		var center = _layout.getRegion('center', false);
-		
-		// add a div, which will bneehe parent element for the grid
-		var bodyTag = Ext.Element.get(document.body);
-		var gridDivTag = bodyTag.createChild({tag: 'div',id: 'gridAddressbook',cls: 'x-layout-inactive-content'});
-		
-		// create the Data Store
-		var ds = new Ext.data.JsonStore({
-			url: 'index.php',
-			baseParams: {method:'Felamimail.getData'},
-			root: 'results',
-			totalProperty: 'totalcount',
-			id: 'message_id',
-			fields: [
-				{name: 'message_id'},
-				{name: 'model'},
-				{name: 'description'},
-				{name: 'config_id'},
-				{name: 'setting_id'},
-				{name: 'software_id'}
-			],
-			// turn on remote sorting
-			remoteSort: true
-		});
-
-		ds.setDefaultSort('message_id', 'desc');
-
-		ds.load();
-
-		var cm = new Ext.grid.ColumnModel([{
-				resizable: true,
-				id: 'userid',
-				header: "ID",
-				dataIndex: 'userid',
-				width: 30
-			},
-			{
-				resizable: true,
-				id: 'lastname',
-				header: "lastname",
-				dataIndex: 'lastname'
-			},
-			{
-				resizable: true,
-				id: 'firstname',
-				header: "firstname",
-				dataIndex: 'firstname',
-				hidden: true
-			},
-			{
-				resizable: true,
-				header: "street",
-				dataIndex: 'street'
-			},
-			{
-				resizable: true,
-				id: 'city',
-				header: "zip/city",
-				dataIndex: 'city'
-			},
-			{
-				resizable: true,
-				header: "birthday",
-				dataIndex: 'birthday'
-			},
-			{
-				resizable: true,
-				id: 'addressbook',
-				header: "addressbook",
-				dataIndex: 'addressbook'
-		}]);
-		
-		cm.defaultSortable = true; // by default columns are sortable
-
-		var grid = new Ext.grid.Grid(outerDivTag, {
-			ds: ds,
-			cm: cm,
-			autoSizeColumns: false,
-			selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
-			enableColLock:false,
-			loadMask: true,
-			enableDragDrop:true,
-			ddGroup: 'TreeDD',
-			autoExpandColumn: 'n_given'
-		});		
-		
-
-		grid.render();
-
-		var gridHeader = grid.getView().getHeaderPanel(true);
-		
-		// add a paging toolbar to the grid's footer
-		var pagingHeader = new Ext.PagingToolbar(gridHeader, ds, {
-			pageSize: 50,
-			displayInfo: true,
-			displayMsg: 'Displaying contacts {0} - {1} of {2}',
-			emptyMsg: "No contacts to display"
-		});
-
-		pagingHeader.insertButton(0, {
-			id: 'addbtn',
-			cls:'x-btn-icon',
-			icon:'images/oxygen/16x16/actions/edit-add.png',
-			tooltip: 'add new contact',
-			onClick: _openDialog
-		});
-
-		pagingHeader.insertButton(1, {
-			id: 'editbtn',
-			cls:'x-btn-icon',
-			icon:'images/oxygen/16x16/actions/edit.png',
-			tooltip: 'edit current contact',
-			disabled: true,
-			onClick: _openDialog
-		});
-
-		pagingHeader.insertButton(2, {
-			id: 'deletebtn',
-			cls:'x-btn-icon',
-			icon:'images/oxygen/16x16/actions/edit-delete.png',
-			tooltip: 'delete selected contacts',
-			disabled: true,
-			onClick: _openDialog
-		});
-
-		pagingHeader.insertButton(3, new Ext.Toolbar.Separator());
-
-		center.add(new Ext.GridPanel(grid));
-		
-		grid.on('rowclick', function(gridP, rowIndexP, eventP) {
-			var rowCount = grid.getSelectionModel().getCount();
-			
-			var btns = pagingHeader.items.map;
-			
-			if(rowCount < 1) {
-				btns.editbtn.disable();
-				btns.deletebtn.disable();
-			} else if(rowCount == 1) {
-				btns.editbtn.enable();
-				btns.deletebtn.enable();
-			} else {
-				btns.editbtn.disable();
-				btns.deletebtn.enable();
-			}
-		});
-
-		grid.on('rowdblclick', function(gridPar, rowIndexPar, ePar) {
-			var record = gridPar.getDataSource().getAt(rowIndexPar);
-			console.log('id: ' + record.data.contact_id);
-			try {
-				_openDialog(record.data.contact_id);
-			} catch(e) {
-			//	alert(e);
-			}
-		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		var grid = new Ext.grid.Grid(gridDivTag, {
-				ds: ds,
-				cm: cm,
-				autoSizeColumns: false,
-				selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
-				enableColLock:false,
-				//monitorWindowResize: true,
-				loadMask: true,
-				enableDragDrop:true,
-				ddGroup: 'TreeDD',
-				autoExpandColumn: 'lastname'
-			});		
-		
-		// remove the first contentpanel from center region
-		center.remove(0);
-
-		grid.render();
-
-		center.add(new Ext.GridPanel(grid));
-    }
-    
-    
-    
     
     var _getFolderPanel = function() 
     {
@@ -235,19 +36,13 @@ Egw.Felamimail = function() {
         }
         
         treePanel.on('click', function(_node, _event) {
-            var currentToolbar = Egw.Egwbase.getActiveToolbar();
-
-            if(currentToolbar != false && currentToolbar.id == 'toolbarFelamimail') {
-                Ext.getCmp('gridFelamimail').getStore().load({params:{start:0, limit:50}});
-            } else {
-                Egw.Felamimail.Email.show();
-            }
+            Egw.Felamimail.Email.show(_node);
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() == null) {
                 _panel.expandPath('/root');
-                //_panel.selectPath('/root/applications');
+                _panel.selectPath('/root/account1');
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
@@ -275,6 +70,10 @@ Egw.Felamimail = function() {
 	
 }(); // end of application
 
+
+/**
+ * the class which handles the email part
+ */
 Egw.Felamimail.Email = function() {
 
     /**
@@ -314,11 +113,45 @@ Egw.Felamimail.Email = function() {
         Ext.getCmp('gridAdminAccessLog').getSelectionModel().selectAll();
     }
     
+    var _action_new = new Ext.Action({
+        text: 'new email',
+        handler: _deleteHandler,
+        iconCls: 'action_email_new'
+    });
+
     var _action_delete = new Ext.Action({
-        text: 'delete entry',
+        text: 'delete email',
         disabled: true,
         handler: _deleteHandler,
         iconCls: 'action_delete'
+    });
+
+    var _action_flag = new Ext.Action({
+        text: 'flag mail',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_email_flag'
+    });
+
+    var _action_reply = new Ext.Action({
+        text: 'reply',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_email_reply'
+    });
+
+    var _action_replyAll = new Ext.Action({
+        text: 'reply all',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_email_replyAll'
+    });
+
+    var _action_forward = new Ext.Action({
+        text: 'forward',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_email_forward'
     });
 
     var _action_selectAll = new Ext.Action({
@@ -326,7 +159,7 @@ Egw.Felamimail.Email = function() {
         handler: _selectAllHandler
     });
 
-    var _contextMenuGridAdminAccessLog = new Ext.menu.Menu({
+    var _contextMenuGrid = new Ext.menu.Menu({
         items: [
             _action_delete,
             '-',
@@ -339,49 +172,41 @@ Egw.Felamimail.Email = function() {
         /**
          * the datastore for accesslog entries
          */
-        var ds_accessLog = new Ext.data.JsonStore({
+        var dataStore = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method: 'Admin.getAccessLogEntries'
+                method:     'Felamimail.getEmailOverview',
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'log_id',
+            id: 'uid',
             fields: [
-                {name: 'sessionid'},
-                {name: 'loginid'},
-                {name: 'ip'},
-                {name: 'li'},
-                {name: 'lo'},
-                {name: 'log_id'},
-                {name: 'account_id'},
-                {name: 'result'}
+                {name: 'uid'},
+                {name: 'subject'},
+                {name: 'from'},
+                {name: 'to'},
+                {name: 'sent'},
+                {name: 'received'},
+                {name: 'size'},
+                {name: 'attachment'},
+                {name: 'seen'},
+                {name: 'answered'},
+                {name: 'deleted'},
+                {name: 'flagged'}
             ],
             // turn on remote sorting
             remoteSort: true
         });
         
-        ds_accessLog.setDefaultSort('li', 'desc');
+        dataStore.setDefaultSort('uid', 'desc');
 
-        ds_accessLog.on('beforeload', function(_dataSource) {
-            _dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
-            
-            var from = Date.parseDate(
-               Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/y'
-            );
-            _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
-
-            var to = Date.parseDate(
-               Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/y'
-            );
-            _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");
+        dataStore.on('beforeload', function(_dataStore) {
+            _dataStore.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
         });        
         
-        ds_accessLog.load({params:{start:0, limit:50}});
+        //dataStore.load({params:{start:0, limit:50}});
         
-        return ds_accessLog;
+        return dataStore;
     }
 
     var _showToolbar = function()
@@ -392,40 +217,22 @@ Egw.Felamimail.Email = function() {
             emptyText: 'enter searchfilter'
         }); 
         quickSearchField.on('change', function() {
-            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
-        });
-        
-        var currentDate = new Date();
-        var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
-        
-        var dateFrom = new Ext.form.DateField({
-            id:             'adminApplications_dateFrom',
-            allowBlank:     false,
-            validateOnBlur: false,
-            value:          oneWeekAgo
-        });
-        var dateTo = new Ext.form.DateField({
-            id:             'adminApplications_dateTo',
-            allowBlank:     false,
-            validateOnBlur: false,
-            value:          currentDate
+            Ext.getCmp('gridFelamimail').getStore().load({params:{start:0, limit:50}});
         });
         
         var toolbar = new Ext.Toolbar({
-            id: 'toolbarAdminAccessLog',
+            id: 'toolbarFelamimail',
             split: false,
             height: 26,
             items: [
-                _action_delete,'->',
-                'Display from: ',
-                ' ',
-                dateFrom,
-                new Ext.Toolbar.Spacer(),
-                'to: ',
-                ' ',
-                dateTo,
-                new Ext.Toolbar.Spacer(),
+                _action_new,
+                _action_delete,
+                _action_flag,
                 '-',
+                _action_reply,
+                _action_replyAll,
+                _action_forward,
+                '->',
                 'Search:', ' ',
 /*                new Ext.ux.SelectBox({
                   listClass:'x-combo-list-small',
@@ -445,42 +252,6 @@ Egw.Felamimail.Email = function() {
         });
         
         Egw.Egwbase.setActiveToolbar(toolbar);
-
-        dateFrom.on('valid', function(_dateField) {
-            var from = Date.parseDate(
-               Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/y'
-            );
-
-            var to = Date.parseDate(
-               Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/y'
-            );
-            
-            if(from.getTime() > to.getTime()) {
-                Ext.getCmp('adminApplications_dateTo').setRawValue(Ext.getCmp('adminApplications_dateFrom').getRawValue());
-            }
-
-            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
-        });
-        
-        dateTo.on('valid', function(_dateField) {
-            var from = Date.parseDate(
-               Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/y'
-            );
-
-            var to = Date.parseDate(
-               Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/y'
-            );
-            
-            if(from.getTime() > to.getTime()) {
-                Ext.getCmp('adminApplications_dateFrom').setRawValue(Ext.getCmp('adminApplications_dateTo').getRawValue());
-            }
-
-            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}})
-        });
     }
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
@@ -513,7 +284,7 @@ Egw.Felamimail.Email = function() {
      */
     var _showGrid = function() 
     {
-        _action_delete.setDisabled(true);
+        //_action_delete.setDisabled(true);
         
         var dataStore = _createDataStore();
         
@@ -521,18 +292,19 @@ Egw.Felamimail.Email = function() {
             pageSize: 50,
             store: dataStore,
             displayInfo: true,
-            displayMsg: 'Displaying access log entries {0} - {1} of {2}',
-            emptyMsg: "No access log entries to display"
+            displayMsg: 'Displaying messages {0} - {1} of {2}',
+            emptyMsg: "No messages to display"
         }); 
         
         var columnModel = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
-            {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
-            {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 120},
-            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 120},
-            {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
-            {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
+            {resizable: false, header: 'UID', id: 'uid', dataIndex: 'uid', width: 20, hidden: false},
+            {resizable: false, header: 'Attachment', dataIndex: 'attachment', width: 20},
+            {resizable: true, header: 'Subject', id: 'subject', dataIndex: 'subject'},
+            {resizable: true, header: 'From', dataIndex: 'from', width: 200},
+            {resizable: true, header: 'To', dataIndex: 'to', width: 200, hidden: true},
+            {resizable: true, header: 'Sent', dataIndex: 'sent'},
+            {resizable: true, header: 'Received', dataIndex: 'received'},
+            {resizable: true, header: 'Size', dataIndex: 'size'},
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -550,7 +322,7 @@ Egw.Felamimail.Email = function() {
         });
         
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'gridAdminAccessLog',
+            id: 'gridFelamimail',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -558,7 +330,7 @@ Egw.Felamimail.Email = function() {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'loginid',
+            autoExpandColumn: 'subject',
             border: false
         });
         
@@ -570,19 +342,43 @@ Egw.Felamimail.Email = function() {
                 _grid.getSelectionModel().selectRow(_rowIndex);
                 _action_delete.setDisabled(false);
             }
-            _contextMenuGridAdminAccessLog.showAt(_eventObject.getXY());
+            _contextMenuGrid.showAt(_eventObject.getXY());
         });
         
 /*        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
         });*/
     }
+
+    /**
+     * update datastore with node values and load datastore
+     */
+    var _loadData = function(_node)
+    {
+        var dataStore = Ext.getCmp('gridFelamimail').getStore();
+        
+        // we set them directly, because this properties also need to be set when paging
+        dataStore.baseParams.accountId    = _node.attributes.accountId;
+        dataStore.baseParams.folderName   = _node.attributes.folderName;
+        
+        dataStore.load({
+            params:{
+                start:0, 
+                limit:50 
+            }
+        });
+    }
         
     // public functions and variables
     return {
-        show: function() {
-            _showToolbar();
-            _showGrid();            
+        show: function(_node) {
+            var currentToolbar = Egw.Egwbase.getActiveToolbar();
+
+            if(currentToolbar == false || currentToolbar.id != 'toolbarFelamimail') {
+                _showToolbar();
+                _showGrid(_node);
+            }
+            _loadData(_node);
         }
     }
     
