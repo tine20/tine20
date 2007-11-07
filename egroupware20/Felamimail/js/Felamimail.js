@@ -31,7 +31,7 @@ Egw.Felamimail = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(i=0; i<initialTree.Felamimail.length; i++) {
+        for(var i=0; i<initialTree.Felamimail.length; i++) {
             treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Felamimail[i]));
         }
         
