@@ -12,7 +12,7 @@
  * @version     $Id$
  *
  */
-abstract class Egwbase_Application_Json_Abstract extends Egwbase_Application_Abstract
+abstract class Egwbase_Application_Json_Abstract extends Egwbase_Application_Abstract implements Egwbase_Application_Json_Interface
 {
 
 }

@@ -13,7 +13,7 @@
  * @version     $Id$
  *
  */
-abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abstract
+abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abstract implements Egwbase_Application_Http_Interface
 {
     /**
      * Returns all JS files which must be included for this app
