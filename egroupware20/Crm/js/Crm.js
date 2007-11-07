@@ -59,7 +59,55 @@ Egw.Crm = function() {
         ]
     });
 
-    
+    var _initialTree = [{
+		"text":"Projekte",
+		"cls":"treemain",
+		"allowDrag":false,
+		"allowDrop":true,
+		"id":"projekte",
+		"icon":"images\/oxygen\/16x16\/apps\/package-multimedia.png",
+		"application":"Crm",
+		"datatype":"projekte",
+		"children":[{
+			"text":"Leads",
+			"cls":"file",
+			"allowDrag":false,
+			"allowDrop":true,
+			"id":"leads",
+			"icon":false,
+			"application":"Crm",
+			"datatype":"leads",
+			"children":[],
+			"leaf":null,
+			"contextMenuClass":"ctxMenuLeadsTree",
+			"expanded":true,
+			"owner":"currentuser",
+			"jsonMethod":"Crm.getLeadsByOwner",
+			"dataPanelType":"leads"
+			},{
+			"text":"Partner",
+			"cls":"file",
+			"allowDrag":false,
+			"allowDrop":true,
+			"id":"partner",
+			"icon":false,
+			"application":"Crm",
+			"datatype":"partner",
+			"children":[],
+			"leaf":null,
+			"contextMenuClass":"ctxMenuPartnerTree",
+			"expanded":true,
+			"owner":"currentuser",
+			"jsonMethod":"Crm.getPartnerByOwner",
+			"dataPanelType":"partner"
+		}],
+		"leaf":null,
+		"contextMenuClass":"ctxMenuProject",
+		"owner":"allprojects",
+		"jsonMethod":"Crm.getProjectsByOwner",
+		"dataPanelType":"projects"
+	}];
+        
     var _getCrmTree = function() 
     {
         var treeLoader = new Ext.tree.TreeLoader({

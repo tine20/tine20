@@ -2,6 +2,38 @@ Ext.namespace('Egw.Admin');
 
 Egw.Admin = function() {
 
+    var _initialTree = [{
+        "text":"Applications",
+		"cls":"treemain",
+		"allowDrag":false,
+		"allowDrop":true,
+		"id":"applications",
+		"icon":false,
+		"application":"Admin",
+		"datatype":"applications",
+		"children":[],
+		"leaf":null,
+		"contextMenuClass":null,
+		"expanded":true,
+		"jsonMethod":"Admin.getApplications",
+		"dataPanelType":"applications"
+		},{
+		"text":"Access Log",
+		"cls":"treemain",
+		"allowDrag":false,
+		"allowDrop":true,
+		"id":"accesslog",
+		"icon":false,
+		"application":"Admin",
+		"datatype":"accesslog",
+		"children":[],
+		"leaf":null,
+		"contextMenuClass":null,
+		"expanded":true,
+		"jsonMethod":"Admin.getAccessLog"
+		,"dataPanelType":"accesslog"
+	}];
+
 	/**
      * creates the address grid
      *
@@ -34,8 +66,8 @@ Egw.Admin = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(var i=0; i<initialTree.Admin.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Admin[i]));
+        for(var i=0; i<_initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
         }
         
         treePanel.on('click', function(_node, _event) {

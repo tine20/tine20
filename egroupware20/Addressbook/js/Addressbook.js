@@ -180,7 +180,142 @@ Egw.Addressbook = function() {
 		Egw.Egwbase.setActiveToolbar(contactToolbar);
     }
 
-
+    var _initialTree = [{
+    	text: "All Contacts",
+    	cls:"treemain",
+    	allowDrag:false,
+    	allowDrop:true,
+    	id:"allcontacts",
+    	icon:"images\/oxygen\/16x16\/apps\/kaddressbook.png",
+    	application:"Addressbook",
+    	datatype:"allcontacts",
+    	children: [{
+    		"text":"My Contacts",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"mycontacts",
+    		"icon":false,
+    		"application":"Addressbook",
+    		"datatype":"contacts",
+    		"children":[],
+    		"leaf":null,
+    		"contextMenuClass":"ctxMenuContactsTree",
+    		"expanded":true,
+    		"owner":"currentuser",
+    		"jsonMethod":"Addressbook.getContactsByOwner",
+    		"dataPanelType":"contacts"
+    		},{
+    		"text":"All Users",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"accounts",
+    		"icon":false,
+    		"application":"Addressbook",
+    		"datatype":"accounts",
+    		"children":[],
+    		"leaf":null,
+    		"contextMenuClass":null,
+    		"expanded":true,
+    		"owner":0
+    		},{
+    		"text":"Other Users Contacts",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"otheraddressbooks",
+    		"icon":false,"application":
+    		"Addressbook","datatype":
+    		"otheraddressbooks",
+    		"children":null,
+    		"leaf":null,
+    		"contextMenuClass":null,
+    		"owner":"otheraddressbooks",
+    		"jsonMethod":"Addressbook.getContactsByOwner",
+    		"dataPanelType":"contacts"
+    		},{
+    		"text":"Shared Contacts",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"sharedaddressbooks",
+    		"icon":false,
+    		"application":"Addressbook",
+    		"datatype":"sharedaddressbooks",
+    		"children":null,
+    		"leaf":null,
+    		"contextMenuClass":null,
+    		"owner":"sharedaddressbooks",
+    		"jsonMethod":"Addressbook.getContactsByOwner",
+    		"dataPanelType":"contacts"
+    		}],
+    	"leaf":null,
+    	"contextMenuClass":null,
+    	"owner":"allcontacts",
+    	"jsonMethod":"Addressbook.getContactsByOwner",
+    	"dataPanelType":"contacts"
+    	},{
+    	"text":"All Lists",
+    	"cls":"treemain",
+    	"allowDrag":false,
+    	"allowDrop":true,
+    	"id":"alllists",
+    	"icon":"images\/oxygen\/16x16\/apps\/kaddressbook.png",
+    	"application":"Addressbook",
+    	"datatype":"alllists",
+    	"children":[{
+    		"text":"My Lists",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"mylists",
+    		"icon":false,
+    		"application":"Addressbook",
+    		"datatype":"lists",
+    		"children":null,
+    		"leaf":null,"contextMenuClass":null,
+    		"owner":"currentuser",
+    		"jsonMethod":"Addressbook.getListsByOwner",
+    		"dataPanelType":"lists"
+    		},{
+    		"text":"Other Users Lists",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"otherlists",
+    		"icon":false,
+    		"application":"Addressbook",
+    		"datatype":"otherlists",
+    		"children":null,
+    		"leaf":null,
+    		"contextMenuClass":null,
+    		"owner":"otherlists",
+    		"jsonMethod":"Addressbook.getListsByOwner",
+    		"dataPanelType":"lists"
+    		},{
+    		"text":"Shared Lists",
+    		"cls":"file",
+    		"allowDrag":false,
+    		"allowDrop":true,
+    		"id":"sharedlists",
+    		"icon":false,
+    		"application":"Addressbook",
+    		"datatype":"sharedlists",
+    		"children":null,
+    		"leaf":null,
+    		"contextMenuClass":null,
+    		"owner":"sharedlists",
+    		"jsonMethod":"Addressbook.getListsByOwner",
+    		"dataPanelType":"lists"
+    	}],
+    	"leaf":null,
+    	"contextMenuClass":null,
+    	"owner":"alllists",
+    	"jsonMethod":"Addressbook.getListsByOwner",
+    	"dataPanelType":"lists"
+    }];
+    
     /**
      * creates the address grid
      *
@@ -215,8 +350,8 @@ Egw.Addressbook = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(var i=0; i<initialTree.Addressbook.length; i++) {
-        	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Addressbook[i]));
+        for(var i=0; i< _initialTree.length; i++) {
+        	treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
         }
         
         treePanel.on('click', function(_node, _event) {

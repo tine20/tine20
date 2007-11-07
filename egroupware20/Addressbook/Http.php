@@ -11,8 +11,10 @@
  * @version     $Id$
  *
  */
-class Addressbook_Http
+class Addressbook_Http extends Egwbase_Application_Http_Abstract
 {
+    protected $_appname = 'Addressbook';
+    
 	public function editContact($_contactId)
 	{
         if(empty($_contactId)) {

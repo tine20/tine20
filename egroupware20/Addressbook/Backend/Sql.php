@@ -443,7 +443,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
-
+        
+        if ($_owner == 'currentuser') {
+            $_owner = $currentAccount->account_id;
+        }
+        
         if($_owner == 'allcontacts' || $_owner == 'sharedaddressbooks' || $_owner == 'otheraddressbooks') {
             switch($_owner) {
                 case 'allcontacts':

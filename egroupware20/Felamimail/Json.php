@@ -84,7 +84,7 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
      *
      * @return array
      */
-    public function getInitialTree()
+    public static function getInitialTree()
     {
         $controller = new Felamimail_Controller();
         $accounts = $controller->getListOfAccounts();        

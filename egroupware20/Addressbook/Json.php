@@ -298,7 +298,6 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
      * Additional tree items get loaded on demand.
      *
      * @return array
-     */
     public function getInitialTree()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
@@ -366,6 +365,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 
         return $treeNodes;
     }
+    */
     
     public function getSelectFolderTree()
     {

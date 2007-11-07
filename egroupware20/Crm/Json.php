@@ -23,7 +23,6 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * Additional tree items get loaded on demand.
      *
      * @return array
-     */
     public function getInitialTree()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
@@ -39,14 +38,14 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $treeNode->dataPanelType = 'projects';
 
         $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'leads', 'Leads', TRUE);
-        $childNode->owner = $currentAccount->account_id;
+        $childNode->owner = 'currentuser';
         $childNode->jsonMethod = 'Crm.getLeadsByOwner';
         $childNode->dataPanelType = 'leads';
         $childNode->contextMenuClass = 'ctxMenuLeadsTree';
         $treeNode->addChildren($childNode);
         
         $childNode = new Egwbase_Ext_Treenode('Crm', 'partner', 'partner', 'Partner', TRUE);
-        $childNode->owner = $currentAccount->account_id;
+        $childNode->owner = 'currentuser';
         $childNode->jsonMethod = 'Crm.getPartnerByOwner';
         $childNode->dataPanelType = 'partner';
         $childNode->contextMenuClass = 'ctxMenuPartnerTree';
@@ -56,7 +55,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
         return $treeNodes;
     }   
-  
+  */
     
     /**
      * returns the nodes for the dynamic tree

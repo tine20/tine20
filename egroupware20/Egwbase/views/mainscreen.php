@@ -16,10 +16,10 @@
 	<script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
 	<?php 
 		foreach ($this->jsIncludeFiles as $name) {
-			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
+			echo "\n\t". '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
 		}
 		foreach ($this->cssIncludeFiles as $name) {
-			echo '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
+			echo "\n\t". '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
 		}
 	?>
 	<script type="text/javascript" language="javascript">

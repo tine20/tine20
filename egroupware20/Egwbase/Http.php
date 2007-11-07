@@ -24,7 +24,8 @@ class Egwbase_Http
 
     public function mainScreen()
     {
-        $userApplications = array('Addressbook'/*, 'Felamimail'*/, 'Admin', 'Calendar');
+        $userApplications = Egwbase_Controller::getEnabledApplications();
+        //array('Addressbook'/*, 'Felamimail'*/, 'Admin', 'Calendar', 'Crm');
         $view = new Zend_View();
 
         $view->setScriptPath('Egwbase/views');
@@ -35,13 +36,13 @@ class Egwbase_Http
         $view->initialTree = array();
         
         foreach($userApplications as $applicationName) {
-            $jsonAppName = $applicationName . '_Json';
+            $jsonAppName = $applicationName . '_Http';
             $application = new $jsonAppName;
             
             $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());
             $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array)$application->getCssFilesToInclude());
-
-            $view->initialTree[$applicationName] = $application->getInitialTree();
+            
+            //$application->getInitialData();
         }
         
         $translatedTimeZones = Zend_Registry::get('locale')->getTranslationList('timezone');

@@ -11,9 +11,10 @@
  * @version     $Id: Http.php 135 2007-09-26 13:37:11Z twadewitz $
  *
  */
-class Crm_Http
+class Crm_Http extends Egwbase_Application_Http_Abstract
 {
-
+    protected $_appname = 'Crm';
+    
 	public function editEvent($_venueId, $_eventId)
 	{
         $locale = Zend_Registry::get('locale');

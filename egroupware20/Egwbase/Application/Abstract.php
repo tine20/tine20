@@ -12,5 +12,10 @@
  */
 abstract class Egwbase_Application_Abstract implements Egwbase_Application_Interface
 {
+    protected $_appname;
     
+    public function getApplicationName()
+    {
+        return $this->_appname;
+    }
 }

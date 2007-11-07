@@ -67,11 +67,9 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Json', 'Egwbase');
 
             if($auth->hasIdentity()) {
-                $server->setClass('Addressbook_Json', 'Addressbook');
-                $server->setClass('Admin_Json', 'Admin');
-                //$server->setClass('Asterisk_Json', 'Asterisk');
-                //$server->setClass('Felamimail_Json', 'Felamimail');
-                $server->setClass('Calendar_Json', 'Calendar');
+                foreach ( self::getEnabledApplications() as $applicationName ) {
+                    $server->setClass($applicationName.'_Json', $applicationName);
+                }
             }
 
             $server->handle($_REQUEST);
@@ -85,9 +83,10 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Http', 'Egwbase');
     
             if($auth->hasIdentity()) {
-                $server->setClass('Addressbook_Http', 'Addressbook');
-                $server->setClass('Admin_Http', 'Admin');
-                //$server->setClass('Felamimail_Http', 'Felamimail');
+                
+                foreach ( self::getEnabledApplications() as $applicationName ) {
+                    $server->setClass($applicationName.'_Http', $applicationName);
+                }
             }
     
             if(empty($_REQUEST['method'])) {
@@ -149,5 +148,23 @@ class Egwbase_Controller
     protected function setupUserTimezone()
     {
         Zend_Registry::set('userTimeZone', 'Europe/Berlin');
+    }
+    
+    public static function getEnabledApplications()
+    {
+        if  (isset($apps) && !empty($apps) ) {
+            return $apps;
+        }
+        
+        $apps = array();
+        
+        $conf = new Zend_Config_Ini('../../config.ini', 'applications');
+        $applications = $conf->toArray();
+        foreach ( $applications as $appname => $status ) {
+            if ($status > 0) {
+                $apps[] = $appname;
+            }
+        }
+        return $apps;
     }
 }

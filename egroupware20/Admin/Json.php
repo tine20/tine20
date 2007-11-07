@@ -115,7 +115,6 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
      * Additional tree items get loaded on demand.
      *
      * @return array
-     */
     public function getInitialTree()
     {
         $treeNodes = array();
@@ -136,4 +135,5 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
 
         return $treeNodes;
     }
+    */
 }
