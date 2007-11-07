@@ -1,1 +1,614 @@
-Ext.namespace("Egw.Admin");Egw.Admin=function(){var h=function(){var v=new Ext.tree.TreeLoader({dataUrl:"index.php"});v.on("beforeload",function(V,s){V.baseParams.method="Admin.getSubTree";V.baseParams.node=s.id;V.baseParams.location="mainTree";},this);var X=new Ext.tree.TreePanel({title:"Admin",id:"admin-tree",loader:v,rootVisible:false,border:false});var p=new Ext.tree.TreeNode({text:"root",draggable:false,allowDrop:false,id:"root"});X.setRootNode(p);for(i=0;i<initialTree.Admin.length;i++){p.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Admin[i]));}X.on("click",function(V,s){var Z=Egw.Egwbase.getActiveToolbar();switch(V.attributes.dataPanelType){case "accesslog":if(Z!=false&&Z.id=="toolbarAdminAccessLog"){Ext.getCmp("gridAdminAccessLog").getStore().load({params:{start:0,limit:50}});}else{Egw.Admin.AccessLog.show();}break;case "applications":if(Z!=false&&Z.id=="toolbarAdminApplications"){Ext.getCmp("gridAdminApplications").getStore().load({params:{start:0,limit:50}});}else{Egw.Admin.Applications.show();}break;}},this);X.on("beforeexpand",function(s){if(s.getSelectionModel().getSelectedNode()==null){s.expandPath("/root");s.selectPath("/root/applications");}s.fireEvent("click",s.getSelectionModel().getSelectedNode());},this);X.on("contextmenu",function(V,s){s.stopEvent();});return X;};return {getPanel:h,};}();Egw.Admin.AccessLog=function(){var g=function(z,I){Ext.MessageBox.confirm("Confirm","Do you really want to delete the selected access log entries?",function(M){if(M=="yes"){var C=Array();var H=Ext.getCmp("gridAdminAccessLog").getSelectionModel().getSelections();for(var k=0;k<H.length;++k){C.push(H[k].id);}new Ext.data.Connection().request({url:"index.php",method:"post",scope:this,params:{method:"Admin.deleteAccessLogEntries",logIds:Ext.util.JSON.encode(C)},callback:function(Y,w,n){if(w==true){var U=Ext.util.JSON.decode(n.responseText);if(U.success==true){Ext.getCmp("gridAdminAccessLog").getStore().reload();}}}});}});};var v=function(z,I){Ext.getCmp("gridAdminAccessLog").getSelectionModel().selectAll();};var X=new Ext.Action({text:"delete entry",disabled:true,handler:g,iconCls:"action_delete"});var p=new Ext.Action({text:"select all",handler:v});var Z=new Ext.menu.Menu({items:[X,"-",p]});var h=function(){var I=new Ext.data.JsonStore({url:"index.php",baseParams:{method:"Admin.getAccessLogEntries"},root:"results",totalProperty:"totalcount",id:"log_id",fields:[{name:"sessionid"},{name:"loginid"},{name:"ip"},{name:"li"},{name:"lo"},{name:"log_id"},{name:"account_id"},{name:"result"}],remoteSort:true});I.setDefaultSort("li","desc");I.on("beforeload",function(z){z.baseParams.filter=Ext.getCmp("quickSearchField").getRawValue();var H=Date.parseDate(Ext.getCmp("adminApplications_dateFrom").getRawValue(),"m/d/y");z.baseParams.from=H.format("Y-m-d\\T00:00:00");var k=Date.parseDate(Ext.getCmp("adminApplications_dateTo").getRawValue(),"m/d/y");z.baseParams.to=k.format("Y-m-d\\T23:59:59");});I.load({params:{start:0,limit:50}});return I;};var s=function(){var M=new Ext.app.SearchField({id:"quickSearchField",width:200,emptyText:"enter searchfilter"});M.on("change",function(){Ext.getCmp("gridAdminAccessLog").getStore().load({params:{start:0,limit:50}});});var z=new Date();var I=new Date(z.getTime()-604800000);var C=new Ext.form.DateField({id:"adminApplications_dateFrom",allowBlank:false,validateOnBlur:false,value:I});var H=new Ext.form.DateField({id:"adminApplications_dateTo",allowBlank:false,validateOnBlur:false,value:z});var k=new Ext.Toolbar({id:"toolbarAdminAccessLog",split:false,height:26,items:[X,"->","Display from: "," ",C,new Ext.Toolbar.Spacer(),"to: "," ",H,new Ext.Toolbar.Spacer(),"-","Search:"," "," ",M]});Egw.Egwbase.setActiveToolbar(k);C.on("valid",function(U){var n=Date.parseDate(Ext.getCmp("adminApplications_dateFrom").getRawValue(),"m/d/y");var Y=Date.parseDate(Ext.getCmp("adminApplications_dateTo").getRawValue(),"m/d/y");if(n.getTime()>Y.getTime()){Ext.getCmp("adminApplications_dateTo").setRawValue(Ext.getCmp("adminApplications_dateFrom").getRawValue());}Ext.getCmp("gridAdminAccessLog").getStore().load({params:{start:0,limit:50}});});H.on("valid",function(U){var n=Date.parseDate(Ext.getCmp("adminApplications_dateFrom").getRawValue(),"m/d/y");var Y=Date.parseDate(Ext.getCmp("adminApplications_dateTo").getRawValue(),"m/d/y");if(n.getTime()>Y.getTime()){Ext.getCmp("adminApplications_dateFrom").setRawValue(Ext.getCmp("adminApplications_dateTo").getRawValue());}Ext.getCmp("gridAdminAccessLog").getStore().load({params:{start:0,limit:50}});});};var m=function(z,C,M,I,k,H){switch(z){case "-3":return "invalid password";break;case "-2":return "ambiguous username";break;case "-1":return "user not found";break;case "0":return "failure";break;case "1":return "success";break;}};var V=function(){X.setDisabled(true);var I=h();var M=new Ext.PagingToolbar({pageSize:50,store:I,displayInfo:true,displayMsg:"Displaying access log entries {0} - {1} of {2}",emptyMsg:"No access log entries to display"});var H=new Ext.grid.ColumnModel([{resizable:true,header:"Session ID",id:"sessionid",dataIndex:"sessionid",width:200,hidden:true},{resizable:true,header:"Login Name",id:"loginid",dataIndex:"loginid"},{resizable:true,header:"IP Address",id:"ip",dataIndex:"ip",width:150},{resizable:true,header:"Login Time",id:"li",dataIndex:"li",width:120},{resizable:true,header:"Logout Time",id:"lo",dataIndex:"lo",width:120},{resizable:true,header:"Account ID",id:"account_id",dataIndex:"account_id",width:70,hidden:true},{resizable:true,header:"Result",id:"result",dataIndex:"result",width:110,renderer:m}]);H.defaultSortable=true;var k=new Ext.grid.RowSelectionModel({multiSelect:true});k.on("selectionchange",function(U){var C=U.getCount();if(C<1){X.setDisabled(true);}else{X.setDisabled(false);}});var z=new Ext.grid.GridPanel({id:"gridAdminAccessLog",store:I,cm:H,tbar:M,autoSizeColumns:false,selModel:k,enableColLock:false,loadMask:true,autoExpandColumn:"loginid",border:false});Egw.Egwbase.setActiveContentPanel(z);z.on("rowcontextmenu",function(U,C,Y){Y.stopEvent();if(!U.getSelectionModel().isSelected(C)){U.getSelectionModel().selectRow(C);X.setDisabled(false);}Z.showAt(Y.getXY());});};return {show:function(){s();V();}};}();Egw.Admin.Applications=function(){var X=function(m,Z){var g=Ext.getCmp("grid_applications").getSelectionModel().getSelections();var I=g[0].id;Egw.Egwbase.openWindow("applicationWindow","index.php?method=Admin.getApplication&appId="+I,800,450);};var V=new Ext.Action({text:"edit",disabled:true,handler:X,iconCls:"action_edit"});var v=function(){var Z=new Ext.data.JsonStore({url:"index.php",baseParams:{method:"Admin.getApplications"},root:"results",totalProperty:"totalcount",id:"app_id",fields:[{name:"app_id"},{name:"app_name"},{name:"app_enabled"},{name:"app_order"},{name:"app_tables"},{name:"app_version"}],remoteSort:true});Z.setDefaultSort("app_name","asc");Z.on("beforeload",function(g){g.baseParams.filter=Ext.getCmp("quickSearchField").getRawValue();});Z.load({params:{start:0,limit:50}});return Z;};var p=function(){var g=new Ext.app.SearchField({id:"quickSearchField",width:240,emptyText:"enter searchfilter"});var Z=new Ext.Toolbar({id:"toolbarAdminApplications",split:false,height:26,items:[V,"->","Search:"," "," ",g]});Egw.Egwbase.setActiveToolbar(Z);};var h=function(g,k,z,Z,m,I){switch(g){case "0":return "disabled";break;case "1":return "enabled";break;case "2":return "enabled (but hidden)";break;case "3":return "enabled (new window)";break;default:return "unknown status ("+g+")";break;}};var s=function(){var Z=v();var m=new Ext.PagingToolbar({pageSize:50,store:Z,displayInfo:true,displayMsg:"Displaying application {0} - {1} of {2}",emptyMsg:"No applications to display"});var I=new Ext.grid.ColumnModel([{resizable:true,header:"order",id:"app_order",dataIndex:"app_order",width:50},{resizable:true,header:"name",id:"app_name",dataIndex:"app_name"},{resizable:true,header:"status",id:"app_enabled",dataIndex:"app_enabled",width:150,renderer:h},{resizable:true,header:"version",id:"app_version",dataIndex:"app_version",width:70}]);I.defaultSortable=true;var g=new Ext.grid.GridPanel({id:"gridAdminApplications",store:Z,cm:I,tbar:m,autoSizeColumns:false,selModel:new Ext.grid.RowSelectionModel({multiSelect:true}),enableColLock:false,loadMask:true,autoExpandColumn:"app_name",border:false});Egw.Egwbase.setActiveContentPanel(g);g.on("rowclick",function(M,H,k){var z=M.getSelectionModel().getCount();});g.on("rowcontextmenu",function(k,z,H){H.stopEvent();if(!k.getSelectionModel().isSelected(z)){k.getSelectionModel().selectRow(z);}});g.on("rowdblclick",function(k,H,M){var z=k.getStore().getAt(H);try{Egw.Egwbase.openWindow("listWindow","index.php?method=Addressbook.editList&_listId="+z.data.list_id,800,450);}catch(C){}});return ;};return {show:function(){p();s();}};}();
+Ext.namespace('Egw.Admin');
+
+Egw.Admin = function() {
+
+	/**
+     * creates the address grid
+     *
+     */
+    var _getAdminTree = function() 
+    {
+        var treeLoader = new Ext.tree.TreeLoader({
+            dataUrl:'index.php'
+        });
+        treeLoader.on("beforeload", function(_loader, _node) {
+            _loader.baseParams.method   = 'Admin.getSubTree';
+            _loader.baseParams.node     = _node.id;
+            _loader.baseParams.location = 'mainTree';
+        }, this);
+    
+        var treePanel = new Ext.tree.TreePanel({
+            title: 'Admin',
+            id: 'admin-tree',
+            loader: treeLoader,
+            rootVisible: false,
+            border: false
+        });
+        
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        treePanel.setRootNode(treeRoot);
+
+        for(var i=0; i<initialTree.Admin.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Admin[i]));
+        }
+        
+        treePanel.on('click', function(_node, _event) {
+        	var currentToolbar = Egw.Egwbase.getActiveToolbar();
+
+        	switch(_node.attributes.dataPanelType) {
+                case 'accesslog':
+                    if(currentToolbar != false && currentToolbar.id == 'toolbarAdminAccessLog') {
+                        Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Egw.Admin.AccessLog.show();
+                    }
+                    
+                    break;
+                    
+                case 'applications':
+                    if(currentToolbar != false && currentToolbar.id == 'toolbarAdminApplications') {
+                    	Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                    	Egw.Admin.Applications.show();
+                    }
+                    
+                    break;
+            }
+        }, this);
+
+        treePanel.on('beforeexpand', function(_panel) {
+            if(_panel.getSelectionModel().getSelectedNode() == null) {
+                _panel.expandPath('/root');
+                _panel.selectPath('/root/applications');
+            }
+            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
+        }, this);
+
+        treePanel.on('contextmenu', function(_node, _event) {
+            _event.stopEvent();
+            //_node.select();
+            //_node.getOwnerTree().fireEvent('click', _node);
+            //console.log(_node.attributes.contextMenuClass);
+            /* switch(_node.attributes.contextMenuClass) {
+                case 'ctxMenuContactsTree':
+                    ctxMenuContactsTree.showAt(_event.getXY());
+                    break;
+            } */
+        });
+
+        return treePanel;
+    }
+    
+    // public functions and variables
+    return {
+        getPanel: _getAdminTree,
+    }
+    
+}();
+
+Egw.Admin.AccessLog = function() {
+
+    /**
+     * onclick handler for edit action
+     */
+    var _deleteHandler = function(_button, _event) {
+    	Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected access log entries?', function(_button) {
+    		if(_button == 'yes') {
+    			var logIds = Array();
+                var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    logIds.push(selectedRows[i].id);
+                }
+                
+                new Ext.data.Connection().request( {
+                    url : 'index.php',
+                    method : 'post',
+                    scope : this,
+                    params : {
+                        method : 'Admin.deleteAccessLogEntries',
+                        logIds : Ext.util.JSON.encode(logIds)
+                    },
+                    callback : function(_options, _success, _response) {
+                        if(_success == true) {
+                        	var result = Ext.util.JSON.decode(_response.responseText);
+                        	if(result.success == true) {
+                                Ext.getCmp('gridAdminAccessLog').getStore().reload();
+                        	}
+                        }
+                    }
+                });
+    		}
+    	});
+    }
+
+    var _selectAllHandler = function(_button, _event) {
+    	Ext.getCmp('gridAdminAccessLog').getSelectionModel().selectAll();
+    }
+
+    var _action_delete = new Ext.Action({
+        text: 'delete entry',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_delete'
+    });
+
+    var _action_selectAll = new Ext.Action({
+        text: 'select all',
+        handler: _selectAllHandler
+    });
+
+    var _contextMenuGridAdminAccessLog = new Ext.menu.Menu({
+        items: [
+            _action_delete,
+            '-',
+            _action_selectAll 
+        ]
+    });
+
+    var _createDataStore = function()
+    {
+        /**
+         * the datastore for accesslog entries
+         */
+        var ds_accessLog = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {
+                method: 'Admin.getAccessLogEntries'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'log_id',
+            fields: [
+                {name: 'sessionid'},
+                {name: 'loginid'},
+                {name: 'ip'},
+                {name: 'li'},
+                {name: 'lo'},
+                {name: 'log_id'},
+                {name: 'account_id'},
+                {name: 'result'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
+        });
+        
+        ds_accessLog.setDefaultSort('li', 'desc');
+
+        ds_accessLog.on('beforeload', function(_dataSource) {
+        	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+        	
+        	var from = Date.parseDate(
+        	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
+        	   'm/d/y'
+        	);
+            _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
+
+            var to = Date.parseDate(
+               Ext.getCmp('adminApplications_dateTo').getRawValue(),
+               'm/d/y'
+            );
+            _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");
+        });        
+        
+        ds_accessLog.load({params:{start:0, limit:50}});
+        
+        return ds_accessLog;
+    }
+
+    var _showToolbar = function()
+    {
+        var quickSearchField = new Ext.app.SearchField({
+            id:        'quickSearchField',
+            width:     200,
+            emptyText: 'enter searchfilter'
+        }); 
+        quickSearchField.on('change', function() {
+            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+        });
+        
+        var currentDate = new Date();
+        var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
+        
+        var dateFrom = new Ext.form.DateField({
+            id:             'adminApplications_dateFrom',
+            allowBlank:     false,
+            validateOnBlur: false,
+            value:          oneWeekAgo
+        });
+        var dateTo = new Ext.form.DateField({
+            id:             'adminApplications_dateTo',
+            allowBlank:     false,
+            validateOnBlur: false,
+            value:          currentDate
+        });
+        
+        var toolbar = new Ext.Toolbar({
+            id: 'toolbarAdminAccessLog',
+            split: false,
+            height: 26,
+            items: [
+                _action_delete,'->',
+                'Display from: ',
+                ' ',
+                dateFrom,
+                new Ext.Toolbar.Spacer(),
+                'to: ',
+                ' ',
+                dateTo,
+                new Ext.Toolbar.Spacer(),
+                '-',
+                'Search:', ' ',
+/*                new Ext.ux.SelectBox({
+                  listClass:'x-combo-list-small',
+                  width:90,
+                  value:'Starts with',
+                  id:'search-type',
+                  store: new Ext.data.SimpleStore({
+                    fields: ['text'],
+                    expandData: true,
+                    data : ['Starts with', 'Ends with', 'Any match']
+                  }),
+                  displayField: 'text'
+                }), */
+                ' ',
+                quickSearchField
+            ]
+        });
+        
+        Egw.Egwbase.setActiveToolbar(toolbar);
+
+        dateFrom.on('valid', function(_dateField) {
+            var from = Date.parseDate(
+               Ext.getCmp('adminApplications_dateFrom').getRawValue(),
+               'm/d/y'
+            );
+
+            var to = Date.parseDate(
+               Ext.getCmp('adminApplications_dateTo').getRawValue(),
+               'm/d/y'
+            );
+            
+            if(from.getTime() > to.getTime()) {
+            	Ext.getCmp('adminApplications_dateTo').setRawValue(Ext.getCmp('adminApplications_dateFrom').getRawValue());
+            }
+
+            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+        });
+        
+        dateTo.on('valid', function(_dateField) {
+            var from = Date.parseDate(
+               Ext.getCmp('adminApplications_dateFrom').getRawValue(),
+               'm/d/y'
+            );
+
+            var to = Date.parseDate(
+               Ext.getCmp('adminApplications_dateTo').getRawValue(),
+               'm/d/y'
+            );
+            
+            if(from.getTime() > to.getTime()) {
+                Ext.getCmp('adminApplications_dateFrom').setRawValue(Ext.getCmp('adminApplications_dateTo').getRawValue());
+            }
+
+            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}})
+        });
+    }
+    
+    var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        switch (_value) {
+            case '-3' :
+                return 'invalid password';
+                break;
+
+            case '-2' :
+                return 'ambiguous username';
+                break;
+
+            case '-1' :
+                return 'user not found';
+                break;
+
+            case '0' :
+                return 'failure';
+                break;
+
+            case '1' :
+                return 'success';
+                break;
+        }
+    }
+
+    /**
+     * creates the address grid
+     * 
+     */
+    var _showGrid = function() 
+    {
+    	_action_delete.setDisabled(true);
+    	
+        var dataStore = _createDataStore();
+        
+        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
+            pageSize: 50,
+            store: dataStore,
+            displayInfo: true,
+            displayMsg: 'Displaying access log entries {0} - {1} of {2}',
+            emptyMsg: "No access log entries to display"
+        }); 
+        
+        var columnModel = new Ext.grid.ColumnModel([
+            {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
+            {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
+            {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
+            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 120},
+            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 120},
+            {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
+            {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
+        ]);
+        
+        columnModel.defaultSortable = true; // by default columns are sortable
+        
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        
+        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                _action_delete.setDisabled(true);
+            } else {
+                _action_delete.setDisabled(false);
+            }
+        });
+        
+        var gridPanel = new Ext.grid.GridPanel({
+            id: 'gridAdminAccessLog',
+            store: dataStore,
+            cm: columnModel,
+            tbar: pagingToolbar,     
+            autoSizeColumns: false,
+            selModel: rowSelectionModel,
+            enableColLock:false,
+            loadMask: true,
+            autoExpandColumn: 'loginid',
+            border: false
+        });
+        
+        Egw.Egwbase.setActiveContentPanel(gridPanel);
+
+        gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+                _action_delete.setDisabled(false);
+            }
+            _contextMenuGridAdminAccessLog.showAt(_eventObject.getXY());
+        });
+        
+/*        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
+            var record = _gridPanel.getStore().getAt(_rowIndexPar);
+        });*/
+    }
+        
+    // public functions and variables
+    return {
+        show: function() {
+            _showToolbar();
+            _showGrid();            
+        }
+    }
+    
+}();
+
+
+Egw.Admin.Applications = function() {
+
+    /**
+     * onclick handler for edit action
+     */
+    var _editButtonHandler = function(_button, _event) {
+        var selectedRows = Ext.getCmp('grid_applications').getSelectionModel().getSelections();
+        var applicationId = selectedRows[0].id;
+        
+        Egw.Egwbase.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
+    }
+
+	var _action_edit = new Ext.Action({
+        text: 'edit',
+        disabled: true,
+        handler: _editButtonHandler,
+        iconCls: 'action_edit'
+    });
+        
+	var _createApplicationaDataStore = function()
+    {
+        /**
+         * the datastore for lists
+         */
+        var ds_applications = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {
+                method: 'Admin.getApplications'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'app_id',
+            fields: [
+                {name: 'app_id'},
+                {name: 'app_name'},
+                {name: 'app_enabled'},
+                {name: 'app_order'},
+                {name: 'app_tables'},
+                {name: 'app_version'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
+        });
+        
+        ds_applications.setDefaultSort('app_name', 'asc');
+
+        ds_applications.on('beforeload', function(_dataSource) {
+            _dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+        });        
+        
+        ds_applications.load({params:{start:0, limit:50}});
+        
+        return ds_applications;
+    }
+
+	var _showApplicationsToolbar = function()
+    {
+        var quickSearchField = new Ext.app.SearchField({
+            id: 'quickSearchField',
+            width:240,
+            emptyText: 'enter searchfilter'
+        }); 
+        //quickSearchField.on('change', searchFieldHandler);
+        
+        var applicationToolbar = new Ext.Toolbar({
+            /*region: 'south', */
+            id: 'toolbarAdminApplications',
+            split: false,
+            height: 26,
+            items: [
+                _action_edit,
+                '->',
+                'Search:', ' ',
+/*                new Ext.ux.SelectBox({
+                  listClass:'x-combo-list-small',
+                  width:90,
+                  value:'Starts with',
+                  id:'search-type',
+                  store: new Ext.data.SimpleStore({
+                    fields: ['text'],
+                    expandData: true,
+                    data : ['Starts with', 'Ends with', 'Any match']
+                  }),
+                  displayField: 'text'
+                }), */
+                ' ',
+                quickSearchField
+            ]
+        });
+        
+        Egw.Egwbase.setActiveToolbar(applicationToolbar);
+    }
+    
+    var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+    	switch(_value) {
+            case '0':
+              return 'disabled';
+              break;
+              
+    		case '1':
+    		  return 'enabled';
+    		  break;
+    		  
+            case '2':
+              return 'enabled (but hidden)';
+              break;
+              
+            case '3':
+              return 'enabled (new window)';
+              break;
+              
+    		default:
+    		  return 'unknown status (' + _value + ')';
+    		  break;
+    	}
+	}
+
+    /**
+	 * creates the address grid
+	 * 
+	 */
+    var _showApplicationsGrid = function() 
+    {
+        var ds_applications = _createApplicationaDataStore();
+        
+        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
+            pageSize: 50,
+            store: ds_applications,
+            displayInfo: true,
+            displayMsg: 'Displaying application {0} - {1} of {2}',
+            emptyMsg: "No applications to display"
+        }); 
+        
+        var cm_applications = new Ext.grid.ColumnModel([
+            {resizable: true, header: 'order', id: 'app_order', dataIndex: 'app_order', width: 50},
+            {resizable: true, header: 'name', id: 'app_name', dataIndex: 'app_name'},
+            {resizable: true, header: 'status', id: 'app_enabled', dataIndex: 'app_enabled', width: 150, renderer: _renderEnabled},
+            {resizable: true, header: 'version', id: 'app_version', dataIndex: 'app_version', width: 70}
+        ]);
+        
+        cm_applications.defaultSortable = true; // by default columns are sortable
+        
+        var grid_applications = new Ext.grid.GridPanel({
+        	id: 'gridAdminApplications',
+            store: ds_applications,
+            cm: cm_applications,
+            tbar: pagingToolbar,     
+            autoSizeColumns: false,
+            selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
+            enableColLock:false,
+            loadMask: true,
+            autoExpandColumn: 'app_name',
+            border: false
+        });
+        
+        Egw.Egwbase.setActiveContentPanel(grid_applications);
+
+        grid_applications.on('rowclick', function(gridP, rowIndexP, eventP) {
+            var rowCount = gridP.getSelectionModel().getCount();
+            
+/*            if(rowCount < 1) {
+                action_edit.setDisabled(true);
+                action_delete.setDisabled(true);
+            } else if(rowCount == 1) {
+                action_edit.setDisabled(false);
+                action_delete.setDisabled(false);
+            } else {
+                action_edit.setDisabled(true);
+                action_delete.setDisabled(false);
+            } */
+        });
+        
+        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+
+/*                action_edit.setDisabled(false);
+                action_delete.setDisabled(false);*/
+            }
+            //var record = _grid.getStore().getAt(rowIndex);
+/*            ctxMenuListGrid.showAt(_eventObject.getXY()); */
+        });
+        
+        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+            var record = _gridPar.getStore().getAt(_rowIndexPar);
+            //console.log('id: ' + record.data.contact_id);
+            try {
+                Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+            } catch(e) {
+            //  alert(e);
+            }
+        });
+        
+        return;
+    }    
+    
+    // public functions and variables
+    return {
+        show: function() {
+        	_showApplicationsToolbar();
+            _showApplicationsGrid();        	
+        }
+    }
+    
+}();
