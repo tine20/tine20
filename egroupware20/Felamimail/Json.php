@@ -23,6 +23,11 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
             'results'   => $controller->getEmailOverview($accountId, $folderName, $filter, $sort, $dir, $limit, $start)
         );
         
+        foreach($result['results'] as $key => $message) {
+            $result['results'][$key]['sent']     = $message['sent']->get(Zend_Date::ISO_8601);
+            $result['results'][$key]['received'] = $message['received']->get(Zend_Date::ISO_8601);
+        }
+        
         return $result;
     }
     
@@ -84,7 +89,8 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
      *
      * @return array
      */
-    public static function getInitialTree()
+    //public static function getInitialTree()
+    public function getInitialTree()
     {
         $controller = new Felamimail_Controller();
         $accounts = $controller->getListOfAccounts();        
