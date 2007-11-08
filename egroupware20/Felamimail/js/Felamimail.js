@@ -31,8 +31,8 @@ Egw.Felamimail = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(var i=0; i<this.initialTree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(this.initialTree[i]));
+        for(var i=0; i<initialTree.Felamimail.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Felamimail[i]));
         }
         
         treePanel.on('click', function(_node, _event) {
@@ -65,9 +65,9 @@ Egw.Felamimail = function() {
 
     // public stuff
     return {
-        getPanel: _getFolderPanel
+        getPanel: _getFolderPanel,
     }
-	
+    
 }(); // end of application
 
 
@@ -175,7 +175,7 @@ Egw.Felamimail.Email = function() {
         var dataStore = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method:     'Felamimail.getEmailOverview'
+                method:     'Felamimail.getEmailOverview',
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -278,6 +278,19 @@ Egw.Felamimail.Email = function() {
         }
     }
 
+    var _renderAddress = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+        var emailAddress = _data[0][2] + '@' + _data[0][3];
+        
+        if(_data[0][0]) {
+            _cell.attr = 'ext:qtip="' +  _data[0][0] + ' - ' + emailAddress + '"';
+            return _data[0][0] + ' - ' + emailAddress + '';
+        } else {
+            _cell.attr = 'ext:qtip="' + emailAddress + '"';
+            return emailAddress;
+        }
+    }
+
+
     /**
      * creates the address grid
      * 
@@ -300,7 +313,7 @@ Egw.Felamimail.Email = function() {
             {resizable: false, header: 'UID', id: 'uid', dataIndex: 'uid', width: 20, hidden: false},
             {resizable: false, header: 'Attachment', dataIndex: 'attachment', width: 20},
             {resizable: true, header: 'Subject', id: 'subject', dataIndex: 'subject'},
-            {resizable: true, header: 'From', dataIndex: 'from', width: 200},
+            {resizable: true, header: 'From', dataIndex: 'from', width: 200, renderer: _renderAddress},
             {resizable: true, header: 'To', dataIndex: 'to', width: 200, hidden: true},
             {resizable: true, header: 'Sent', dataIndex: 'sent'},
             {resizable: true, header: 'Received', dataIndex: 'received'},

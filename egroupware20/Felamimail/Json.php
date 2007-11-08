@@ -41,7 +41,7 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 		$accounts = $controller->getListOfAccounts();
 		
 		try {
-			$mail = new Zend_Mail_Storage_Imap($accounts[$accountId]->toArray());
+			$mail = new Felamimail_Imap($accounts[$accountId]->toArray());
 			
 			if(empty($folderName)) {
 				$folder = $mail->getFolders('', '%');
@@ -51,17 +51,17 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 			
 			//error_log(print_r($folder, true));
 			
-			foreach($folder as $folderObject) {
+			foreach($folder as $folderArray) {
 				$treeNode = new Egwbase_Ext_Treenode(
 					'Felamimail', 
 					'email', 
-					$folderObject->getGlobalName(), 
-					$folderObject->getLocalName(), 
-					!$folderObject->hasChildren()
+					$folderArray['globalName'], 
+					$folderArray['localName'], 
+					!$folderArray['hasChildren']
 				);
 				$treeNode->contextMenuClass = 'ctxMenuTreeFellow';
                 $treeNode->accountId  = $accountId;
-                $treeNode->folderName = $folderObject->getGlobalName();
+                $treeNode->folderName = $folderArray['globalName'];
 				$nodes[] = $treeNode;
 				
 			}

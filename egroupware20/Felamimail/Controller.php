@@ -67,7 +67,7 @@ class Felamimail_Controller
 	    }
 	    
 	    try {
-    	    $mail = new Zend_Mail_Storage_Imap($accountData->toArray());
+    	    $mail = new Felamimail_Imap($accountData->toArray());
     	    
     	    $this->connections[$_accountId] = $mail;
     	    
@@ -90,7 +90,7 @@ class Felamimail_Controller
 	    $seenMessages = $imapConnection->getSummary(array_slice($seen, $_start, $_limit));
 	    
 	    foreach($seenMessages as $message) {
-	        $result[] = array(
+/*	        $result[] = array(
 	           'uid'      => $message->uid,
 	           'subject'  => $message->getHeader('subject'),
                'from'     => $message->getHeader('from'),
@@ -98,9 +98,21 @@ class Felamimail_Controller
                'sent'     => $message->getHeader('date'),
 	           'received' => $message->internalDate,
 	           'size'     => $message->size
-	        );
+	        ); */
+	        $result[] = $message;
 	    }
 	    
 	    return $result;
+	}
+	
+	public function getSubFolder($_accountId, $_folderName)
+	{
+        $imapConnection = $this->getImapConnection($_accountId);
+        
+        if(empty($folderName)) {
+            $folder = $imapConnection->getFolders('', '%');
+        } else {
+            $folder = $imapConnection->getFolders($folderName.'/', '%');
+        }
 	}
 }
