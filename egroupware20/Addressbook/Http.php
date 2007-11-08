@@ -62,7 +62,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		    $view->formData['config']['addressbookName'] = 'My Contacts';
 		}
 		
-		$view->jsIncludeFiles[] = 'Addressbook/Js/Addressbook.js';
+		$view->jsIncludeFiles[] = 'Addressbook/js/Addressbook.js';
 		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
 		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display();';
 
@@ -115,7 +115,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		    $view->formData['config']['addressbookName'] = 'My Lists';
 		}
 		
-		$view->jsIncludeFiles[] = 'Addressbook/Js/Addressbook.js';
+		$view->jsIncludeFiles[] = 'Addressbook/js/Addressbook.js';
 		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
 		$view->jsExecute = 'Egw.Addressbook.ListEditDialog.display();';
 
