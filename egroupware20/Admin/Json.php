@@ -115,11 +115,12 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
      * Additional tree items get loaded on demand.
      *
      * @return array
+     */
     public function getInitialTree()
     {
         $treeNodes = array();
 
-        $treeNode = new Egwbase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
+/*        $treeNode = new Egwbase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
         //$treeNode->setIcon('apps/kaddressbook.png');
         $treeNode->cls = 'treemain';
         $treeNode->jsonMethod = 'Admin.getApplications';
@@ -132,8 +133,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $treeNode->jsonMethod = 'Admin.getAccessLog';
         $treeNode->dataPanelType = 'accesslog';
         $treeNodes[] = $treeNode;
-
+*/
         return $treeNodes;
     }
-    */
 }
