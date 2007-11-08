@@ -1784,7 +1784,7 @@ Egw.Addressbook.ListEditDialog = function() {
 		
     	if(contactForm.isValid()) {
 			var additionalData = {
-				listMembers: Ext.util.JSON.encode(listMembers),
+				listMembers: Ext.util.JSON.encode(listMembers)
 			};
 
 			contactForm.submit({
@@ -1814,7 +1814,7 @@ Egw.Addressbook.ListEditDialog = function() {
 		
     	if(contactForm.isValid()) {
 			var additionalData = {
-				listMembers: Ext.util.JSON.encode(listMembers),
+				listMembers: Ext.util.JSON.encode(listMembers)
 			};
 			    		
 			contactForm.submit({
