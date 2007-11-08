@@ -1,4 +1,4 @@
-Ext.namespace('Egw.Crm');
+﻿Ext.namespace('Egw.Crm');
 
 Egw.Crm = function() {
 
@@ -59,55 +59,7 @@ Egw.Crm = function() {
         ]
     });
 
-    var _initialTree = [{
-		"text":"Projekte",
-		"cls":"treemain",
-		"allowDrag":false,
-		"allowDrop":true,
-		"id":"projekte",
-		"icon":"images\/oxygen\/16x16\/apps\/package-multimedia.png",
-		"application":"Crm",
-		"datatype":"projekte",
-		"children":[{
-			"text":"Leads",
-			"cls":"file",
-			"allowDrag":false,
-			"allowDrop":true,
-			"id":"leads",
-			"icon":false,
-			"application":"Crm",
-			"datatype":"leads",
-			"children":[],
-			"leaf":null,
-			"contextMenuClass":"ctxMenuLeadsTree",
-			"expanded":true,
-			"owner":"currentuser",
-			"jsonMethod":"Crm.getLeadsByOwner",
-			"dataPanelType":"leads"
-			},{
-			"text":"Partner",
-			"cls":"file",
-			"allowDrag":false,
-			"allowDrop":true,
-			"id":"partner",
-			"icon":false,
-			"application":"Crm",
-			"datatype":"partner",
-			"children":[],
-			"leaf":null,
-			"contextMenuClass":"ctxMenuPartnerTree",
-			"expanded":true,
-			"owner":"currentuser",
-			"jsonMethod":"Crm.getPartnerByOwner",
-			"dataPanelType":"partner"
-		}],
-		"leaf":null,
-		"contextMenuClass":"ctxMenuProject",
-		"owner":"allprojects",
-		"jsonMethod":"Crm.getProjectsByOwner",
-		"dataPanelType":"projects"
-	}];
-        
+    
     var _getCrmTree = function() 
     {
         var treeLoader = new Ext.tree.TreeLoader({
@@ -143,8 +95,7 @@ Egw.Crm = function() {
         }
    
         treePanel.on('click', function(_node, _event) {
-            alert(_node);
-            
+                        
         	var currentToolbar = Egw.Egwbase.getActiveToolbar();
 
         	switch(_node.attributes.dataPanelType) {
@@ -202,9 +153,7 @@ Egw.Crm = function() {
     
     var _createDataStore = function()
     {
-        /**
-         * the datastore for accesslog entries
-         */
+
 /*         var ds_crm = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
@@ -312,11 +261,25 @@ Egw.Crm = function() {
             value:          currentDate
         });
         
+	  	var action_add = new Ext.Action({
+			text: 'add',
+			handler: function () {
+           //     var tree = Ext.getCmp('venues-tree');
+		//		var curSelNode = tree.getSelectionModel().getSelectedNode();
+			//	var RootNode   = tree.getRootNode();
+            
+                openWindow('CrmProjectWindow', 'index.php?method=Crm.editProject&_projectId=0&_eventId=NULL', 900, 700);
+             },
+			iconCls: 'action_add'
+		});        
+        
+        
         var toolbar = new Ext.Toolbar({
             id: 'toolbarCrm',
             split: false,
             height: 26,
             items: [
+                action_add,
                 _action_delete,'->',
                 'Display from: ',
                 ' ',
@@ -408,6 +371,34 @@ Egw.Crm = function() {
         }
     }
 
+    
+    var openWindow = function(_windowName, _url, _width, _height) 
+    {
+        if (document.all) {
+            w = document.body.clientWidth;
+            h = document.body.clientHeight;
+            x = window.screenTop;
+            y = window.screenLeft;
+        } else if (window.innerWidth) {
+            w = window.innerWidth;
+            h = window.innerHeight;
+            x = window.screenX;
+            y = window.screenY;
+        }
+        var leftPos = ((w - _width)/2)+y; 
+        var topPos = ((h - _height)/2)+x;
+
+        var popup = window.open(
+            _url, 
+            _windowName,
+            'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
+            ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no'
+        );
+        
+        return popup;
+    }    
+    
+    
     /**
      * creates the address grid
      * 
@@ -483,8 +474,8 @@ Egw.Crm = function() {
     return {
         show: function(_node) {
             _showToolbar();
-          //  _showEventTree();
-            _showGrid();            
+          //  _getCrmTree();
+          //  _showGrid();            
         },
         
         getPanel: _getCrmTree
@@ -499,8 +490,8 @@ Egw.Crm.ProjectEditDialog = function() {
     var dialog;
     
     /**
-     * the dialog to display the contact data
-     */
+        * the dialog to display the contact data
+        */
     var projectedit;
     
     // private functions and variables
@@ -864,6 +855,254 @@ Egw.Crm.ProjectEditDialog = function() {
         }
   
   
+        var st_leadstatus =  new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','noch nicht kontaktiert'],
+                        ['1','versucht zu kontaktieren'],
+                        ['2','kontaktiert'],
+                        ['3','Lead verloren'],
+                        ['4','in Zukunft wieder anrufen'],
+                        ['5','unbrauchbarer Lead'],
+                        ['6','abgeschlossen gewonnen']
+                    ]
+        });
+        
+        var st_leadtyp =  new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','Mitbewerber'],
+                        ['1','Kunde'],
+                        ['2','Partner'],
+                        ['3','Presse'],
+                        ['4','Prospekt'],
+                        ['5','Wiederverkäufer'],
+                        ['6','Lieferant'],
+                        ['7','anderer Kundentyp']
+                    ]
+        });
+        
+        var st_leadsource =  new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','Werbung'],
+                        ['1','Tip von Wiederverkäufer'],
+                        ['2','InLabBus'],
+                        ['3','Messe'],
+                        ['4','andere Leadquelle'],
+                        ['5','Kaltaquise'],
+                        ['6','Empfehlung'],
+                        ['7','Arbeitskreise'],
+                        ['8','Telefonkontakt'],
+                        ['9','Kongress']
+                    ]
+        });
+        
+        var st_owner =  new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','Meier, Heinz'],
+                        ['1','Schultze, Hans'],
+                        ['2','Vorfelder, Meier']
+                    ]
+        });
+        
+        var st_activities = new Ext.data.SimpleStore({
+                fields: ['id','status','status2','datum','titel','message','responsible'],
+                data: [
+                        ['0','3','4','05.12.2007 15:30','der titel','die lange message','Meier,Heiner'],
+                        ['1','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
+                        ['2','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
+                        ['3','3','4','05.12.2007 15:30','der titel','die lange message','Meier,Heiner'],
+                        ['4','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
+                        ['5','3','4','05.12.2007 15:30','der titel','die lange message','Meier,Heiner'],
+                        ['6','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
+                        ['7','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
+                        ['8','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
+                        ['9','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner']
+                    ]
+        });
+     
+        var st_probability = new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','0%'],
+                        ['1','10%'],
+                        ['2','20%'],
+                        ['3','30%'],
+                        ['4','40%'],
+                        ['5','50%'],
+                        ['6','60%'],
+                        ['7','70%'],
+                        ['8','80%'],
+                        ['9','90%'],
+                        ['10','100%']
+                    ]
+        });
+     
+        var st_contacts = new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','0%'],
+                        ['1','10%'],
+                        ['2','20%'],
+                        ['3','30%'],
+                        ['4','40%'],
+                        ['5','50%'],
+                        ['6','60%'],
+                        ['7','70%'],
+                        ['8','80%'],
+                        ['9','90%'],
+                        ['10','100%']
+                    ]
+        });
+     
+        var tpl_contacts = new Ext.Template(
+            '<div class="search-item">',
+                '<h3>{n_fileas}</h3>',
+            '</div>'
+        );
+     
+        var cm_activities = new Ext.grid.ColumnModel([
+            	{id:'status', header: "Status", dataIndex: 'status', width: 25, sortable: true },
+                {id:'status2', header: "Status2", dataIndex: 'status2', width: 25, sortable: true },
+                {id:'datum', header: "Datum", dataIndex: 'datum', width: 100, sortable: true },
+                {id:'titel', header: "Titel", dataIndex: 'titel', width: 170, sortable: true },
+                {id:'message', header: "Message", dataIndex: 'message', width: 300, sortable: true },
+                {id:'responsible', header: "Verantwortlicher", dataIndex: 'responsible', width: 300, sortable: true }
+        ]);
+        
+        var activities_limited = new Ext.grid.GridPanel({
+                store: st_activities,
+                id:'grid_activities_limited',
+                cm: cm_activities,
+                viewConfig: {
+                    forceFit: true
+                },
+                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+                anchor: '100% 100%',
+                enableColumnHide: false,
+                enableColumnMove: false,
+                enableHdMenu: false,
+                stripeRows: true, 
+                frame:false,
+                iconCls:'icon-grid'
+        });  
+  
+  /*
+        var st_productsAvailable = new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','CEREC AE'],
+                        ['1','CEREC MC XL'],
+                        ['2','CEREC 3 SE'],
+                        ['3','CEREC PPU'],
+                        ['4','Inlab MC XL'],
+                        ['5','Inlab'],
+                        ['6','InEOS'],
+                        ['7','InFire'],
+                        ['8','InCoris'],
+                        ['9','InFinident'],
+                        ['10','PC']
+                    ]
+        });
+  
+        var cm_choosenProducts = new Ext.grid.ColumnModel([{
+                header: "Produkt",
+                dataIndex: 'products',
+                width: 220,
+                editor: new Ext.form.ComboBox({
+                    allowBlank: false, 
+                    store: st_productsAvailable, 
+                    displayField:'value', 
+                    valueField:'key', 
+                    mode: 'local', 
+                    emptyText:'',
+                    lazyRender:true,
+                    listClass: 'x-combo-list-small'
+                    })
+                } , {
+                header: "Anzahl",
+                dataIndex: 'product_count',
+                width: 30,
+                editor: new Ext.form.NumberField({
+                    allowBlank: false,
+                    allowNegative: false,
+                    maxValue: 10
+                    })
+                } , { 
+                header: "Seriennummer",
+                dataIndex: 'product_serials',
+                width: 30,
+                editor: new Ext.form.TextField({
+                    allowBlank: false
+                    })
+                }
+        ]);
+        
+        var product = Ext.data.Record.create([
+           {name: 'products'},
+           {name: 'product_count', type: 'float'},
+           {name: 'product_serials', type: 'string'}
+        ]);
+        
+        var grid_choosenProducts = new Ext.grid.EditorGridPanel({
+         //   store: st_choosenProducts,
+            cm: cm_choosenProducts,
+            anchor: '100% 100%',
+            autoExpandColumn:'common',
+            frame:false,
+            clicksToEdit:1,
+            tbar: [{
+                text: 'Produkt hinzufügen',
+                handler : function(){
+                    var p = new product({
+                        products: '',
+                        product_count: 0,
+                        product_serials:''
+                    });
+                    grid_choosenProducts.stopEditing();
+        //            st_choosenProducts.insert(0, p);
+                    grid_choosenProducts.startEditing(0, 0);
+                    }
+                }]
+            });
+
+          //  st_choosenProducts.load();
+        
+   */   
+        
+  
+        var cm_choosenContacts = new Ext.grid.ColumnModel([
+            	{id:'anschrift', header: "Anschrift", dataIndex: 'anschrift', width: 250, sortable: true },
+                {id:'kontakt', header: "Kontakt", dataIndex: 'kontakt', width: 250, sortable: true }
+        ]);
+  
+        var st_choosenContacts = new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','0%'],
+                        ['1','10%']
+                    ]
+        });
+  
+        var grid_contact = new Ext.grid.GridPanel({
+                store: st_choosenContacts,
+                id:'grid_choosenContacts',
+                cm: cm_choosenContacts,
+                viewConfig: {
+                    forceFit: true
+                },
+                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+                anchor: '100% 87%',
+                enableColumnHide: false,
+                enableColumnMove: false,
+                enableHdMenu: false,
+                stripeRows: true, 
+                frame:false,
+                iconCls:'icon-grid'
+        });  
+  
 		var projectedit = new Ext.FormPanel({
 			url:'index.php',
 			baseParams: {method :'Crm.saveEvent'},
@@ -882,368 +1121,280 @@ Egw.Crm.ProjectEditDialog = function() {
                 anchor:'100% 100%',
 	            defaults:{bodyStyle:'padding:10px'},
 	            items:[{
-	                title:'&Uuml;bersicht',
+	                title:'Übersicht',
 	                layout:'form',
 					deferredRender:false,
 					border:false,
 					items:[{  
-                        
-
-
-                    
-                        xtype:'textfield',
-                        fieldLabel:'Titel', 
-                        name:'em__title',
-                        anchor:'100%'
-                       } , {                    
                         layout:'column',
         	            border:false,
         				deferredRender:false,
                         anchor:'100%',
                         items:[{
-                            columnWidth:.4,
+                            columnWidth:.5,
                             layout: 'form',
                             border:false,
                             items: [{
-                                xtype:'textfield',
-                                fieldLabel:'K&uuml;nstler', 
-                                name:'em_kuenstler',
-                                anchor:'95%'
-                            } , {
-                                xtype:'textfield',
-                                fieldLabel:'Veranstaltungsnummer', 
-                                name:'em_veranstaltungsnummer',
-                                anchor:'95%'
-                            } ]
-                        } , {
-                            columnWidth:.2,
-                            layout: 'form',
-                            border:false,
-                            items: [{
-                                xtype:'combo',
-                                fieldLabel:'Typ', 
-                                name:'em_typ',
-                                anchor:'95%'
-                           } , {
-                                xtype:'textfield',
-                                fieldLabel:'Dauer', 
-                                name:'em_dauer',
-                                anchor:'95%'
-                           } ]
-                       } , {
-                            columnWidth:.2,
-                            layout: 'form',
-                            border:false,
-                            items: [{
-                                xtype:'combo',
-                                fieldLabel:'Status', 
-                                name:'em_status',
-                                anchor:'95%'
-                           } , {
-                                xtype:'textfield',
-                                fieldLabel:'FSK', 
-                                name:'em_fsk',
-                                anchor:'95%'
-                           }]
-                       } , {
-                            columnWidth:.2,
-                            layout: 'form',
-                            border:false,
-                            items: [venueTrigger]
-                       }]
-                    } , {
-                        xtype:'tabpanel',
-                        plain:true,
-                        activeTab: 0,
-                        deferredRender:false,
-                        anchor:'100% 100%',
-                        defaults:{bodyStyle:'padding:10px'},
-                        items:[{
-                            title:'Inhalt',
-                            layout:'column',
-                            deferredRender:false,
-                            border:false,
-                            items:[{
-                                columnWidth:.5,
-                                layout: 'form',
-                                anchor:'100% 100%',
-                                border:false,
+                                xtype:'fieldset',
+                                title:'Projekt',
+                                height: 270,
+                                anchor:'99%',
                                 items: [{
+                                    xtype:'textfield',
+                                    fieldLabel:'Projektname', 
+                                    name:'pj_name',
+                                    anchor:'100%'
+                                } , {
+                                    layout:'column',
+                    	            border:false,
+                    				deferredRender:false,
+                                    anchor:'100%',
+                                    items:[{
+                                        columnWidth:.5,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'combo',
+                                            fieldLabel:'Leadstatus', 
+                                            name:'pj_leadstatus',
+            								store: st_leadstatus,
+            								displayField:'value',
+            								valueField:'key',
+            								typeAhead: true,
+            								mode: 'local',
+            								triggerAction: 'all',
+            								emptyText:'',
+            								selectOnFocus:true,
+            								editable: false,
+            								anchor:'96%'
+                                        } , {
+                                            xtype:'combo',
+                                            fieldLabel:'Leadtyp', 
+                                            name:'pj_leadtyp',
+            								store: st_leadtyp,
+            								displayField:'value',
+            								valueField:'key',
+            								typeAhead: true,
+            								mode: 'local',
+            								triggerAction: 'all',
+            								emptyText:'',
+            								selectOnFocus:true,
+            								editable: false,
+            								anchor:'96%'
+                                        }]
+                                    } , {                               
+                                        columnWidth:.5,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'combo',
+                                            fieldLabel:'Leadquelle', 
+                                            name:'pj_leadsource',
+            								store: st_leadsource,
+            								displayField:'value',
+            								valueField:'key',
+            								typeAhead: true,
+            								mode: 'local',
+            								triggerAction: 'all',
+            								emptyText:'',
+            								selectOnFocus:true,
+            								editable: false,
+            								anchor:'100%'
+                                        } , {
+                                            xtype:'combo',
+                                            fieldLabel:'Verantwortlicher', 
+                                            name:'pj_owner',
+            								store: st_owner,
+            								displayField:'value',
+            								valueField:'key',
+            								typeAhead: true,
+            								mode: 'local',
+            								triggerAction: 'all',
+            								emptyText:'',
+            								selectOnFocus:true,
+            								editable: false,
+            								anchor:'100%'
+                                        }]
+                                    }]
+                                } , {
                                     xtype:'textarea',
-                                    fieldLabel:'Beschreibung', 
-                                    name:'em_beschreibung',
-                                    anchor:'100% 100%'
-                                }]  
-                            }]
-                          } , {
-                            title:'Technik',
-                            layout:'form',
-                            deferredRender:false,
-                            border:false,
-                            items:[{ 
-                                layout:'column',
-                	            border:false,
-                				deferredRender:false,
-                                anchor:'100% 100%',
-                                items:[{
-                                    columnWidth:.65,
-                                    layout: 'form',
-                                    anchor:'100% 100%',
-                                    border:false,
-                                    items: [ grid_technik ]
+                                    fieldLabel:'Notizen', 
+                                    hideLabel: true,
+                                    name:'pj_notes',
+                                    height: 90,
+                                    anchor:'100%'
+                                }]
+                            } , {
+                                xtype:'fieldset',
+                                title:'Projektdaten',
+                                height: 75,
+                                anchor:'99%',
+                                items: [{
+                                    layout:'column',
+                    	            border:false,
+                    				deferredRender:false,
+                                    anchor:'100%',
+                                    items:[{
+                                        columnWidth:.33,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'datefield',
+                                            fieldLabel:'Start', 
+                                            name:'startDate',
+                                            id:'startDate',
+                                            format: 'd.m.Y',
+                                            anchor:'95%'
+                                        }]
                                     } , {
-                                    columnWidth:.35,
-                                    layout: 'form',
-                                    anchor:'100% 100%',
-                                    border:false,
-                                    items: [{ xtype:'textarea',
-                                            fieldLabel:'Besonderheiten', 
-                                            name:'em_besonderheiten',
-                                            anchor:'100% 100%' }]
+                                        columnWidth:.33,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'datefield',
+                                            fieldLabel:'Ende', 
+                                            name:'endDate',
+                                            id:'endDate',
+                                            format: 'd.m.Y',
+                                            anchor:'95%'
+                                        }]
+                                    } , {
+                                        columnWidth:.33,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'datefield',
+                                            fieldLabel:'voraussichtl. Ende', 
+                                            name:'exprectedEndDate',
+                                            id:'expectedEndDate',
+                                            format: 'd.m.Y',
+                                            anchor:'95%'
+                                        }]
                                     }]
                                 }]
-                          } , {
-                            title:'Werbung',
-                            layout:'form',
-                            deferredRender:false,
+                            }]
+                        } , {
+                            columnWidth:.5,
+                            layout: 'form',
                             border:false,
-                            items:[ grid_werbung ]
-                          } , {
-                            title:'Organisation',
-                            layout:'form',
-                            deferredRender:false,
-                            border:false,
-                            items:[ grid_organisation ]
-                          } , {
-                            title:'Preise',
-                            layout:'form',
-                            deferredRender:false,
-                            border:false,
-                            items:[ grid_preise ]
-                          }]
+                            items: [{
+                                xtype:'fieldset',
+                                title:'Kontakt',
+                                height: 270,
+                                anchor:'100%',
+                                items: [{
+                                    xtype:'combo',
+                                    fieldLabel:'Kontakt auswählen', 
+                                    hideLabel: true,
+                                    name:'pj_contacts',
+                                    store: st_contacts,
+                                    displayField:'value',
+                                    valueField:'key',
+                                    typeAhead: false,
+                                    loadingText: 'Searching...',
+                                    mode: 'local',
+                                    hideTrigger: true,
+                                    emptyText:'',
+                                    selectOnFocus:true,
+                                    anchor:'100%',
+                                    pageSize:10,
+                                    tpl: tpl_contacts,		
+                            		onSelect: function(record) {
+                            			alert(record);
+                                    }
+                                } , grid_contact
+                                ]
+                            } , {
+                                xtype:'fieldset',
+                                title:'Umsatz',
+                                height: 75,
+                                anchor:'100%',
+                                items: [{
+                                    layout:'column',
+                    	            border:false,
+                    				deferredRender:false,
+                                    anchor:'100%',
+                                    items:[{
+                                        columnWidth:.5,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'textfield',
+                                            fieldLabel:'erwarteter Umsatz', 
+                                            name:'pj_turnover',
+                                            anchor:'97%'
+                                        }]
+                                    } , {
+                                        columnWidth:.5,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype:'combo',
+                                            fieldLabel:'Wahrscheinlichkeit', 
+                                            name:'pj_probability',
+            								store: st_probability,
+            								displayField:'value',
+            								valueField:'key',
+            								typeAhead: true,
+            								mode: 'local',
+            								triggerAction: 'all',
+            								emptyText:'',
+            								selectOnFocus:true,
+            								editable: false,
+            								anchor:'100%'
+                                        }]
+                                    }]
+                                }]
+                            }]
                         }]
                     } , {
-                    title:'Aktivit&auml;ten',
-	                layout:'form',
-					deferredRender:false,
-					border:false,
-					items:[
-                            grid_termine
-                        ]
-                    } , {
-                    title:'Produkte',
-	                layout:'form',
-					deferredRender:false,
-					border:false,
-					items:[
-                            grid_termine
-                        ]
-                    }]
-                }]
-            });
-            
-    
-
-            
-            
-            
-            
-            /*
-            
-	            layout:'form',
-	            border:false,
-				deferredRender:false,
-                anchor:'100%',
-	            items:[{
-                    xtype:'textfield',
-                    fieldLabel:'Title', 
-                    name:'cal_title',
-                    anchor:'100%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Location', 
-                    name:'cal_location',
-                    anchor:'100%'
-                }, {
-                    layout:'column',
-    	            border:false,
-    				deferredRender:false,
-                    anchor:'100%',
-                    items:[{
-                        columnWidth:.2,
-                        layout: 'form',
-                        border:false,
+                        xtype:'fieldset',
+                        title:'Produktübersicht',
+                        height: 60,
+                        anchor:'100%',
                         items: [{
-                            xtype:'datefield',
-                            id:'startdate',
-                            fieldLabel:'startdate', 
-                            format: 'd.m.Y',
-                             validator: function() {
-                                var end_date = Ext.getCmp('enddate');
-                                if( end_date.isValid() == true) {
-                                    alert(end_date.getRawValue());
-                                    alert(end_date.getValue());
-                                    
-                                return true
-                                } else return true;
-                            }, 
-                            name:'cal_start',
-                            anchor:'95%'
-                        }]  
+                            xtype:'textfield',
+                            fieldLabel:'Produkte', 
+                            hideLabel: true,
+                            name:'pj_productoverview',
+                            id:'productoverview',
+                            disabled: true,
+                            value:'1 Inlab MC XL, 1 InEOS, 1 InFire, 1 InCoris',
+                            anchor:'100%'
+                        }]
                     } , {
-                        columnWidth:.2,
-                        layout: 'form',
-                        border:false,
-                        items: [{   
-                            xtype: 'timefield',
-                            id: 'starttime',
-                            fieldLabel: 'starttime',
-                            name: 'time_start',
-                            format: 'H:i',
-                            minValue: '00:00',
-                            maxValue: '23:45',
-                            value: now_h_m,
-                            anchor:'95%'
-                            }]
-                    } , {
-                        columnWidth:.2,
-                        layout: 'form',
-                        labelAlign: 'left',
-                        border:false,
+                        xtype:'fieldset',
+                        title:'letzte 10 Aktivitäten',
+                        anchor:'100%',
+                        height: 190,
                         items: [
-                                whole_day_box
-                            ]
-                    }]
-                } , { 
-                    layout:'column',
-    	            border:false,
-    				deferredRender:false,
-                    anchor:'100%',
-                    items:[{
-                        columnWidth:.2,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'datefield',
-                            id:'enddate', 
-                            fieldLabel:'enddate', 
-                            format: 'd.m.Y',
-                            name:'cal_end',
-                            anchor:'95%'
-                        }]  
-                    } , {
-                        columnWidth:.2,
-                        layout: 'form',
-                        border:false,
-                        items: [{   
-                            xtype: 'timefield',
-                            id: 'endtime',
-                            fieldLabel: 'endtime',
-                            name: 'time_end',
-                            format: 'H:i',
-                            minValue: '00:00',
-                            maxValue: '23:45',
-                            anchor:'95%'
-                            }]
-                    } , {
-                        columnWidth:.2,
-                        layout: 'form',
-                        labelAlign: 'left',
-                        border:false,
-                        anchor: '95%',
-                        items: [repeat_box]
-                    }]
-                } , { 
-                    layout:'column',
-    	            border:false,
-    				deferredRender:false,
-                    anchor:'100%',
-                    items:[{
-                        columnWidth:.5,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'textfield',
-                            fieldLabel:'calendar', 
-                            name:'cal_end',
-                            anchor:'95%'
-                        }]  
-                    } , {
-                        columnWidth:.5,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'textfield',
-                            fieldLabel:'categorie', 
-                            name:'cal_end',
-                            anchor:'100%'
-                        }]                      
+                                activities_limited
+                        ]
                     }]
                 } , {
-                    xtype:'textarea',
-                    fieldLabel:'description', 
-                    name:'cal_location',
-                    anchor:'100%'
-                } , {
-                    layout:'column',
-    	            border:false,
-    				deferredRender:false,
-                    anchor:'100%',
-                    items:[{
-                        columnWidth:.5,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'textfield',
-                            fieldLabel:'participants', 
-                            name:'cal_end',
-                            anchor:'95%'
-                        }]  
-                    } , {
-                        columnWidth:.5,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'textfield',
-                            fieldLabel:'protection', 
-                            name:'cal_end',
-                            anchor:'100%'
-                        } , {
-                            xtype:'textfield',
-                            fieldLabel:'priority', 
-                            name:'cal_end',
-                            anchor:'100%'
-                        } , {
-                            xtype:'textfield',
-                            fieldLabel:'state', 
-                            name:'cal_end',
-                            anchor:'100%'
-                        } , {
-                            xtype:'textfield',
-                            fieldLabel:'alarm', 
-                            name:'cal_end',
-                            anchor:'100%'
-                        }]                      
+	                title:'Aktivitäten',
+	                layout:'form',
+					deferredRender:false,
+					border:false,
+					items:[{  
                     }]
                 } , {
-                    xtype:'textfield',
-                    fieldLabel:'url', 
-                    name:'cal_end',
-                    anchor:'100%'
+	                title:'Produkte',
+	                layout:'form',
+					deferredRender:false,
+					border:false,
+					items:[{  
+                        xtype:'fieldset',
+                        title:'gewählte Produkte',
+                        items: [{
+    //                        grid_choosenProducts
+                        }]
+                    
+                    }]
                 }]
             }]
-		});
-	*/
-    /*
-    var startdate = Ext.getCmp('startdate');
-    startdate.on('valid', function() {
-                   repeat_box.enable();
-            });
-    startdate.on('invalid', function() {
-                   repeat_box.disable();
-            });            
-    
-    */
+        });
+
 		var viewport = new Ext.Viewport({
 			layout: 'border',
 			items: projectedit
