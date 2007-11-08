@@ -162,9 +162,10 @@ Egw.Egwbase = function() {
         
         for(_application in Egw) {
         	try{
-        	   panels.push(Egw[_application].getPanel());
+                panels.push(Egw[_application].getPanel());
         	} catch(e) {
-        		//console.log('error');
+        		//console.log(_application + ' failed');
+        		//console.log(e);
         	}
         };
         

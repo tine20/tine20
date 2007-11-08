@@ -34,13 +34,22 @@ class Egwbase_Http
         $view->jsIncludeFiles = array();
         $view->cssIncludeFiles = array();
         $view->initialTree = array();
+        $view->initialData = array();
         
         foreach($userApplications as $applicationName) {
-            $jsonAppName = $applicationName . '_Http';
-            $application = new $jsonAppName;
+            $httpAppName = $applicationName . '_Http';
+            $application = new $httpAppName;
             
             $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());
             $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array)$application->getCssFilesToInclude());
+            
+            $jsonAppName = $applicationName . '_Json';
+            $application = new $jsonAppName;
+            try {
+                $view->initialData[$applicationName]['Tree'] = (array)$application->getInitialTree();
+            } catch (Exception $e) {
+                // do nothing
+            }
             
             //$application->getInitialData();
         }
