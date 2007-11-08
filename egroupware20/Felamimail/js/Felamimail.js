@@ -65,7 +65,7 @@ Egw.Felamimail = function() {
 
     // public stuff
     return {
-        getPanel: _getFolderPanel,
+        getPanel: _getFolderPanel
     }
 	
 }(); // end of application
@@ -175,7 +175,7 @@ Egw.Felamimail.Email = function() {
         var dataStore = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method:     'Felamimail.getEmailOverview',
+                method:     'Felamimail.getEmailOverview'
             },
             root: 'results',
             totalProperty: 'totalcount',
