@@ -119,7 +119,7 @@ Egw.Admin = function() {
     
     // public functions and variables
     return {
-        getPanel: _getAdminTree,
+        getPanel: _getAdminTree
     }
     
 }();
