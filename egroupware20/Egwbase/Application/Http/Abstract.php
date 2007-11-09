@@ -22,7 +22,12 @@ abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abs
      */
     public function getJsFilesToInclude()
     {
-        return $this->_appendFileTime("{$this->_appname}/js/{$this->_appname}.js");
+        $standartFile = "{$this->_appname}/js/{$this->_appname}.js";
+        if (file_exists($standartFile)) {
+            return array(self::_appendFileTime($standartFile));
+        }
+        return array();
+        
     }
     
     /**
@@ -32,7 +37,11 @@ abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abs
      */
     public function getCssFilesToInclude()
     {
-        return self::_appendFileTime("{$this->_appname}/css/{$this->_appname}.css");
+        $standartFile = "{$this->_appname}/css/{$this->_appname}.css";
+        if (file_exists($standartFile)) {
+            return array(self::_appendFileTime($standartFile));
+        }
+        return array();
     }
     
     /**
