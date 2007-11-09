@@ -6,3 +6,19 @@ html, body {
 	overflow:hidden;
 	height:100%;
 }
+
+.action_edit {
+    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
+}
+
+.action_delete {
+    background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+}
+
+.action_edit {
+    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
+}
+
+.action_delete {
+    background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+}
