@@ -2,44 +2,45 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title><?php echo $this->escape($this->title) ?></title>
-	<!-- EXT JS -->
-	<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><?php echo $this->escape($this->title) ?></title>
+    <!-- EXT JS -->
+    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="extjs/resources/css/xtheme-gray.css" />
 	
-	<script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
-	<script type="text/javascript" src="extjs/ext-all-debug.js"></script>
+    <script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="extjs/ext-all-debug.js"></script>
 
-	<!-- eGW -->
-	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-	<script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
-	<?php 
-		foreach ($this->jsIncludeFiles as $name) {
-			echo "\n\t". '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
-		}
-		foreach ($this->cssIncludeFiles as $name) {
-			echo "\n\t". '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
-		}
+    <!-- eGW -->
+    <link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
+    <script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
+    <?php 
+    	foreach ($this->jsIncludeFiles as $name) {
+    		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
+    	}
+    	foreach ($this->cssIncludeFiles as $name) {
+    		echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
+    	}
     ?>
     
     <script type="text/javascript" language="javascript">
-	   <?php
-	       foreach ($this->initialData as $appname => $data) {
-	           if (!empty($data) ) {
-	               foreach ($data as $var => $content) {
-	                   echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
-	               }
-	           }
-	       }
+        <?php
+           foreach ($this->initialData as $appname => $data) {
+               if (!empty($data) ) {
+                   foreach ($data as $var => $content) {
+                       echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
+                   }
+               }
+           }
         ?>
-        
-		Ext.onReady(function(){
+
+        Ext.onReady(function(){
             <?php if(isset($this->configData)) echo "configData=" . Zend_Json::encode($this->configData) . ";" ?>
-			Egw.Egwbase.display();
-			window.focus();
-		});
-	</script>
+            
+            Egw.Egwbase.display();
+            window.focus();
+    	});
+    </script>
 </head>
 <body>
 </body>
