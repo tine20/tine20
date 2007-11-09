@@ -31,8 +31,8 @@ Egw.Felamimail = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(var i=0; i<Egw.Felamimail.Tree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Egw.Felamimail.Tree[i]));
+        for(var i=0; i<Egw.Felamimail.initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Egw.Felamimail.initialTree[i]));
         }
         
         treePanel.on('click', function(_node, _event) {
