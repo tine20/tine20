@@ -154,11 +154,8 @@ Egw.Egwbase = function() {
      * returns array of panels to display in south region
      */
     var _getPanels = function() {
-    	var panels = [{
-            title: 'Home',
-            id: 'home-panel',
-            border: false
-        }];
+		
+    	var panels = [];
         
         for(_application in Egw) {
         	try{
