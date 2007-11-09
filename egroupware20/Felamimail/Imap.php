@@ -81,10 +81,8 @@ class Felamimail_Imap extends Zend_Mail_Storage_Imap
             $message = array(
                 'uid'           => $messageInfo['UID'],
                 'flags'         => $flags,
-                'received'      => $messageInfo['INTERNALDATE'],
                 'received'      => new Zend_Date($messageInfo['INTERNALDATE'], 'dd-MMM-YYYY HH:mm:ss ZZZ', 'en'),
                 'size'          => $messageInfo['RFC822.SIZE'],
-                'sent'          => $messageInfo['ENVELOPE'][0],
                 'sent'          => new Zend_Date($messageInfo['ENVELOPE'][0], Zend_Date::RFC_1123, 'en'),
                 'subject'       => $this->decodeMimeHeader($messageInfo['ENVELOPE'][1]),
                 'from'          => $this->decodeMimeHeader($messageInfo['ENVELOPE'][2]),

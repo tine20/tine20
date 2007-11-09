@@ -134,7 +134,7 @@ Egw.Felamimail.Email = function() {
     });
 
     var _action_reply = new Ext.Action({
-        text: 'reply',
+        text: 'reply sender',
         disabled: true,
         handler: _deleteHandler,
         iconCls: 'action_email_reply'
@@ -148,10 +148,24 @@ Egw.Felamimail.Email = function() {
     });
 
     var _action_forward = new Ext.Action({
-        text: 'forward',
+        text: 'forward message',
         disabled: true,
         handler: _deleteHandler,
         iconCls: 'action_email_forward'
+    });
+
+    var _action_previousMessage = new Ext.Action({
+        text: 'previous',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_email_previuosMessage'
+    });
+
+    var _action_nextMessage = new Ext.Action({
+        text: 'next',
+        disabled: true,
+        handler: _deleteHandler,
+        iconCls: 'action_email_nextMessage'
     });
 
     var _action_selectAll = new Ext.Action({
@@ -181,13 +195,13 @@ Egw.Felamimail.Email = function() {
             totalProperty: 'totalcount',
             id: 'uid',
             fields: [
-                {name: 'uid'},
+                {name: 'uid', type: 'int'},
                 {name: 'subject'},
                 {name: 'from'},
                 {name: 'to'},
                 {name: 'sent'},
                 {name: 'received'},
-                {name: 'size'},
+                {name: 'size', type: 'int'},
                 {name: 'attachment'},
                 {name: 'seen'},
                 {name: 'answered'},
@@ -226,12 +240,16 @@ Egw.Felamimail.Email = function() {
             height: 26,
             items: [
                 _action_new,
+                '-',
                 _action_delete,
                 _action_flag,
                 '-',
                 _action_reply,
                 _action_replyAll,
                 _action_forward,
+                '-',
+                _action_previousMessage,
+                _action_nextMessage,
                 '->',
                 'Search:', ' ',
 /*                new Ext.ux.SelectBox({
@@ -254,31 +272,13 @@ Egw.Felamimail.Email = function() {
         Egw.Egwbase.setActiveToolbar(toolbar);
     }
     
-    var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
-        switch (_value) {
-            case '-3' :
-                return 'invalid password';
-                break;
-
-            case '-2' :
-                return 'ambiguous username';
-                break;
-
-            case '-1' :
-                return 'user not found';
-                break;
-
-            case '0' :
-                return 'failure';
-                break;
-
-            case '1' :
-                return 'success';
-                break;
-        }
+    var _renderDateTime = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+    	var date = Date.parseDate(_data, 'c');
+    	
+    	return date.format('d.m.Y h:i:s');
     }
 
-    var _renderAddress = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+  	var _renderAddress = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
         var emailAddress = _data[0][2] + '@' + _data[0][3];
         
         if(_data[0][0]) {
@@ -315,8 +315,8 @@ Egw.Felamimail.Email = function() {
             {resizable: true, header: 'Subject', id: 'subject', dataIndex: 'subject'},
             {resizable: true, header: 'From', dataIndex: 'from', width: 200, renderer: _renderAddress},
             {resizable: true, header: 'To', dataIndex: 'to', width: 200, hidden: true},
-            {resizable: true, header: 'Sent', dataIndex: 'sent'},
-            {resizable: true, header: 'Received', dataIndex: 'received'},
+            {resizable: true, header: 'Sent', dataIndex: 'sent', renderer: _renderDateTime},
+            {resizable: true, header: 'Received', dataIndex: 'received', renderer: _renderDateTime},
             {resizable: true, header: 'Size', dataIndex: 'size'},
         ]);
         
