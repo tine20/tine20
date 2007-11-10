@@ -31,7 +31,7 @@ class Egwbase_Auth
      */
     static public function factory($type)
     {
-        $className = Egwbase_Auth_.$type;
+        $className = 'Egwbase_Auth_'.$type;
         $instance = new $className();
         
         //throw new Exception('unknown type');
