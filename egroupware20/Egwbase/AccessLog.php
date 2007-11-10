@@ -25,7 +25,12 @@ class Egwbase_AccessLog
      */
     public function __construct()
     {
-        $this->accessLogTable = new Egwbase_Db_Table(array('name' => 'egw_access_log'));
+        $conf = array('name' => 'egw_access_log');
+        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
+            $conf['primary'] = array('ip','li');
+        }
+        
+        $this->accessLogTable = new Egwbase_Db_Table($conf);
     }
 
     /**
