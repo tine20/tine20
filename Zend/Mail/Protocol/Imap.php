@@ -183,6 +183,8 @@ class Zend_Mail_Protocol_Imap
                 array_push($stack, $tokens);
                 $tokens = array();
                 $token = substr($token, 1);
+                $line = substr($line, 1);
+                $pos--;
             }
             if ($token[0] == '"') {
                 if (preg_match('%^"((.|\\\\|\\")*?)" *%', $line, $matches)) {
