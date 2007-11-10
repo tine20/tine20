@@ -301,7 +301,33 @@ class Zend_Mail_Protocol_Imap
         }
         return null;
     }
+    
+    
+    /**
+     * search messages
+     *
+     * @param array $parameters
+     * @return unknown
+     */
+    public function search(array $parameters)
+    {
+        $response = $this->requestAndResponse('SEARCH', $parameters);
 
+        if (!$response) {
+            return $response;
+        }
+
+        $messages = array();
+        foreach ($response as $line) {
+            if($line[0] == 'SEARCH') {
+                unset($line[0]);
+            }
+            $messages = array_merge($messages, $line);
+        }
+
+        return $messages;
+    }
+    
     /**
      * send a request
      *
