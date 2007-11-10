@@ -51,7 +51,9 @@ class Egwbase_Controller
 
         $auth = Zend_Auth::getInstance();
 
-        if($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && isset($_REQUEST['method']) 
+              && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
+                  
             Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
             //Json request from ExtJS
 
@@ -75,7 +77,7 @@ class Egwbase_Controller
             $server->handle($_REQUEST);
 
         } else {
-            Zend_Registry::get('logger')->debug('is http request. method: ' . $_REQUEST['method']);
+            Zend_Registry::get('logger')->debug('is http request. method: ' . ( isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY' ) );
             // HTTP request
     
             $server = new Egwbase_Http_Server();
@@ -133,6 +135,8 @@ class Egwbase_Controller
     {
         $dbConfig = new Zend_Config_Ini('../../config.ini', 'database');
         Zend_Registry::set('dbConfig', $dbConfig);
+        
+        define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'egw_');
     
         $db = Zend_Db::factory('PDO_MYSQL', Zend_Registry::get('dbConfig')->toArray());
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
