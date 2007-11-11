@@ -40,7 +40,7 @@ Egw.Felamimail = function() {
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
-            if(_panel.getSelectionModel().getSelectedNode() == null) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
                 _panel.expandPath('/root');
                 _panel.selectPath('/root/account1');
             }
@@ -60,13 +60,13 @@ Egw.Felamimail = function() {
         });
 
         return treePanel;
-    }
+    };
 
 
     // public stuff
     return {
-        getPanel: _getFolderPanel,
-    }
+        getPanel: _getFolderPanel
+    };
     
 }(); // end of application
 
@@ -82,13 +82,13 @@ Egw.Felamimail.Email = function() {
     var _deleteHandler = function(_button, _event) {
         Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected access log entries?', function(_button) {
             if(_button == 'yes') {
-                var logIds = Array();
+                var logIds = new Array();
                 var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     logIds.push(selectedRows[i].id);
                 }
                 
-                new Ext.data.Connection().request( {
+                Ext.data.Connection().request( {
                     url : 'index.php',
                     method : 'post',
                     scope : this,
@@ -97,9 +97,9 @@ Egw.Felamimail.Email = function() {
                         logIds : Ext.util.JSON.encode(logIds)
                     },
                     callback : function(_options, _success, _response) {
-                        if(_success == true) {
+                        if(_success === true) {
                             var result = Ext.util.JSON.decode(_response.responseText);
-                            if(result.success == true) {
+                            if(result.success === true) {
                                 Ext.getCmp('gridAdminAccessLog').getStore().reload();
                             }
                         }
@@ -107,11 +107,40 @@ Egw.Felamimail.Email = function() {
                 });
             }
         });
-    }
+    };
+
+    var _flagHandler = function(_button, _event) {
+        var messageIds = new Array();
+        var selectedRows = Ext.getCmp('gridFelamimail').getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            messageIds.push(selectedRows[i].id);
+        }
+        
+        Ext.data.Connection().request( {
+            url : 'index.php',
+            method : 'post',
+            scope : this,
+            params : {
+                method : 'Felamimail.flagMessages',
+                accountId: '',
+                folder: '',
+                flag: 'Flagged',
+                messageIds : Ext.util.JSON.encode(messageIds)
+            },
+            callback : function(_options, _success, _response) {
+                if(_success === true) {
+                    var result = Ext.util.JSON.decode(_response.responseText);
+                    if(result.success === true) {
+                        Ext.getCmp('gridFelamimail').getStore().reload();
+                    }
+                }
+            }
+        });
+    };
 
     var _selectAllHandler = function(_button, _event) {
         Ext.getCmp('gridAdminAccessLog').getSelectionModel().selectAll();
-    }
+    };
     
     var _action_new = new Ext.Action({
         text: 'new email',
@@ -129,7 +158,7 @@ Egw.Felamimail.Email = function() {
     var _action_flag = new Ext.Action({
         text: 'flag mail',
         disabled: true,
-        handler: _deleteHandler,
+        handler: _flagHandler,
         iconCls: 'action_email_flag'
     });
 
@@ -176,6 +205,9 @@ Egw.Felamimail.Email = function() {
     var _contextMenuGrid = new Ext.menu.Menu({
         items: [
             _action_delete,
+            _action_reply,
+            _action_replyAll,
+            _action_forward,
             '-',
             _action_selectAll 
         ]
@@ -189,7 +221,7 @@ Egw.Felamimail.Email = function() {
         var dataStore = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method:     'Felamimail.getEmailOverview',
+                method:     'Felamimail.getEmailOverview'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -221,7 +253,7 @@ Egw.Felamimail.Email = function() {
         //dataStore.load({params:{start:0, limit:50}});
         
         return dataStore;
-    }
+    };
 
     var _showToolbar = function()
     {
@@ -270,13 +302,13 @@ Egw.Felamimail.Email = function() {
         });
         
         Egw.Egwbase.setActiveToolbar(toolbar);
-    }
+    };
     
     var _renderDateTime = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
     	var date = Date.parseDate(_data, 'c');
     	
     	return date.format('d.m.Y h:i:s');
-    }
+    };
 
   	var _renderAddress = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
         var emailAddress = _data[0][2] + '@' + _data[0][3];
@@ -288,7 +320,7 @@ Egw.Felamimail.Email = function() {
             _cell.attr = 'ext:qtip="' + emailAddress + '"';
             return emailAddress;
         }
-    }
+    };
 
 
     /**
@@ -317,7 +349,7 @@ Egw.Felamimail.Email = function() {
             {resizable: true, header: 'To', dataIndex: 'to', width: 200, hidden: true},
             {resizable: true, header: 'Sent', dataIndex: 'sent', renderer: _renderDateTime},
             {resizable: true, header: 'Received', dataIndex: 'received', renderer: _renderDateTime},
-            {resizable: true, header: 'Size', dataIndex: 'size'},
+            {resizable: true, header: 'Size', dataIndex: 'size'}
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -328,9 +360,32 @@ Egw.Felamimail.Email = function() {
             var rowCount = _selectionModel.getCount();
 
             if(rowCount < 1) {
+                // no row selected
                 _action_delete.setDisabled(true);
-            } else {
+                _action_flag.setDisabled(true);
+                _action_forward.setDisabled(true);
+                _action_nextMessage.setDisabled(true);
+                _action_previousMessage.setDisabled(true);
+                _action_reply.setDisabled(true);
+                _action_replyAll.setDisabled(true);
+            } else if(rowCount > 1) {
+                // more than one row selected
                 _action_delete.setDisabled(false);
+                _action_flag.setDisabled(false);
+                _action_forward.setDisabled(false);
+                _action_nextMessage.setDisabled(true);
+                _action_previousMessage.setDisabled(true);
+                _action_reply.setDisabled(true);
+                _action_replyAll.setDisabled(true);
+            } else {
+                // only one row selected
+                _action_delete.setDisabled(false);
+                _action_flag.setDisabled(false);
+                _action_forward.setDisabled(false);
+                _action_nextMessage.setDisabled(true);
+                _action_previousMessage.setDisabled(true);
+                _action_reply.setDisabled(false);
+                _action_replyAll.setDisabled(false);                
             }
         });
         
@@ -361,7 +416,7 @@ Egw.Felamimail.Email = function() {
 /*        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
         });*/
-    }
+    };
 
     /**
      * update datastore with node values and load datastore
@@ -380,19 +435,19 @@ Egw.Felamimail.Email = function() {
                 limit:50 
             }
         });
-    }
+    };
         
     // public functions and variables
     return {
         show: function(_node) {
             var currentToolbar = Egw.Egwbase.getActiveToolbar();
 
-            if(currentToolbar == false || currentToolbar.id != 'toolbarFelamimail') {
+            if(currentToolbar === false || currentToolbar.id != 'toolbarFelamimail') {
                 _showToolbar();
                 _showGrid(_node);
             }
             _loadData(_node);
         }
-    }
+    };
     
 }();
