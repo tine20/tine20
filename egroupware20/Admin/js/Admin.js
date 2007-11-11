@@ -17,7 +17,7 @@ Egw.Admin = function() {
 		"expanded":true,
 		"jsonMethod":"Admin.getApplications",
 		"dataPanelType":"applications"
-		},{
+	},{
 		"text":"Access Log",
 		"cls":"treemain",
 		"allowDrag":false,
@@ -30,8 +30,8 @@ Egw.Admin = function() {
 		"leaf":null,
 		"contextMenuClass":null,
 		"expanded":true,
-		"jsonMethod":"Admin.getAccessLog"
-		,"dataPanelType":"accesslog"
+		"jsonMethod":"Admin.getAccessLog",
+		"dataPanelType":"accesslog"
 	}];
 
 	/**
@@ -75,7 +75,7 @@ Egw.Admin = function() {
 
         	switch(_node.attributes.dataPanelType) {
                 case 'accesslog':
-                    if(currentToolbar != false && currentToolbar.id == 'toolbarAdminAccessLog') {
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminAccessLog') {
                         Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
                     } else {
                         Egw.Admin.AccessLog.show();
@@ -84,7 +84,7 @@ Egw.Admin = function() {
                     break;
                     
                 case 'applications':
-                    if(currentToolbar != false && currentToolbar.id == 'toolbarAdminApplications') {
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminApplications') {
                     	Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
                     } else {
                     	Egw.Admin.Applications.show();
@@ -95,7 +95,7 @@ Egw.Admin = function() {
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
-            if(_panel.getSelectionModel().getSelectedNode() == null) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
                 _panel.expandPath('/root');
                 _panel.selectPath('/root/applications');
             }
@@ -115,12 +115,12 @@ Egw.Admin = function() {
         });
 
         return treePanel;
-    }
+    };
     
     // public functions and variables
     return {
         getPanel: _getAdminTree
-    }
+    };
     
 }();
 
@@ -132,13 +132,13 @@ Egw.Admin.AccessLog = function() {
     var _deleteHandler = function(_button, _event) {
     	Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected access log entries?', function(_button) {
     		if(_button == 'yes') {
-    			var logIds = Array();
+    			var logIds = new Array();
                 var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     logIds.push(selectedRows[i].id);
                 }
                 
-                new Ext.data.Connection().request( {
+                Ext.data.Connection().request( {
                     url : 'index.php',
                     method : 'post',
                     scope : this,
@@ -147,9 +147,9 @@ Egw.Admin.AccessLog = function() {
                         logIds : Ext.util.JSON.encode(logIds)
                     },
                     callback : function(_options, _success, _response) {
-                        if(_success == true) {
+                        if(_success === true) {
                         	var result = Ext.util.JSON.decode(_response.responseText);
-                        	if(result.success == true) {
+                        	if(result.success === true) {
                                 Ext.getCmp('gridAdminAccessLog').getStore().reload();
                         	}
                         }
@@ -157,11 +157,11 @@ Egw.Admin.AccessLog = function() {
                 });
     		}
     	});
-    }
+    };
 
     var _selectAllHandler = function(_button, _event) {
     	Ext.getCmp('gridAdminAccessLog').getSelectionModel().selectAll();
-    }
+    };
 
     var _action_delete = new Ext.Action({
         text: 'delete entry',
@@ -217,7 +217,7 @@ Egw.Admin.AccessLog = function() {
         	
         	var from = Date.parseDate(
         	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-        	   'm/d/y'
+               'm/d/y'
         	);
             _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
 
@@ -231,7 +231,7 @@ Egw.Admin.AccessLog = function() {
         ds_accessLog.load({params:{start:0, limit:50}});
         
         return ds_accessLog;
-    }
+    };
 
     var _showToolbar = function()
     {
@@ -328,9 +328,9 @@ Egw.Admin.AccessLog = function() {
                 Ext.getCmp('adminApplications_dateFrom').setRawValue(Ext.getCmp('adminApplications_dateTo').getRawValue());
             }
 
-            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}})
+            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
         });
-    }
+    };
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
         switch (_value) {
@@ -354,7 +354,7 @@ Egw.Admin.AccessLog = function() {
                 return 'success';
                 break;
         }
-    }
+    };
 
     /**
      * creates the address grid
@@ -425,7 +425,7 @@ Egw.Admin.AccessLog = function() {
 /*        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
         });*/
-    }
+    };
         
     // public functions and variables
     return {
@@ -433,7 +433,7 @@ Egw.Admin.AccessLog = function() {
             _showToolbar();
             _showGrid();            
         }
-    }
+    };
     
 }();
 
@@ -448,7 +448,7 @@ Egw.Admin.Applications = function() {
         var applicationId = selectedRows[0].id;
         
         Egw.Egwbase.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
-    }
+    };
 
 	var _action_edit = new Ext.Action({
         text: 'edit',
@@ -491,7 +491,7 @@ Egw.Admin.Applications = function() {
         ds_applications.load({params:{start:0, limit:50}});
         
         return ds_applications;
-    }
+    };
 
 	var _showApplicationsToolbar = function()
     {
@@ -529,31 +529,35 @@ Egw.Admin.Applications = function() {
         });
         
         Egw.Egwbase.setActiveToolbar(applicationToolbar);
-    }
+    };
     
     var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        var gridValue;
+        
     	switch(_value) {
             case '0':
-              return 'disabled';
+              gridValue = 'disabled';
               break;
               
     		case '1':
-    		  return 'enabled';
+    		  gridValue = 'enabled';
     		  break;
     		  
             case '2':
-              return 'enabled (but hidden)';
+              gridValue = 'enabled (but hidden)';
               break;
               
             case '3':
-              return 'enabled (new window)';
+              gridValue = 'enabled (new window)';
               break;
               
     		default:
-    		  return 'unknown status (' + _value + ')';
+    		  gridValue = 'unknown status (' + _value + ')';
     		  break;
     	}
-	}
+        
+        return gridValue;
+	};
 
     /**
 	 * creates the address grid
@@ -633,7 +637,7 @@ Egw.Admin.Applications = function() {
         });
         
         return;
-    }    
+    };   
     
     // public functions and variables
     return {
@@ -641,6 +645,6 @@ Egw.Admin.Applications = function() {
         	_showApplicationsToolbar();
             _showApplicationsGrid();        	
         }
-    }
+    };
     
 }();
