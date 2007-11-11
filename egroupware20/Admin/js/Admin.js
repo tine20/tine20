@@ -333,27 +333,31 @@ Egw.Admin.AccessLog = function() {
     };
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        var gridValue;
+        
         switch (_value) {
             case '-3' :
-                return 'invalid password';
+                gridValue = 'invalid password';
                 break;
 
             case '-2' :
-                return 'ambiguous username';
+                gridValue = 'ambiguous username';
                 break;
 
             case '-1' :
-                return 'user not found';
+                gridValue = 'user not found';
                 break;
 
             case '0' :
-                return 'failure';
+                gridValue = 'failure';
                 break;
 
             case '1' :
-                return 'success';
+                gridValue = 'success';
                 break;
         }
+        
+        return gridValue;
     };
 
     /**
