@@ -4,7 +4,101 @@ Ext.QuickTips.init();
 
 Ext.namespace('Egw.Egwbase');
 
-Egw.Egwbase = function() {
+/**
+ * generic storage class helps to manage global data
+ */
+Egw.Egwbase.Registry = function(){
+	
+    /**
+     * @var {object}
+     */
+    var regData = {};// = Ext.util.JSON.decode(initialConfig);
+    
+    return {
+    
+        /**
+         * Getter method
+         * 
+         * @param {string} index
+         */
+        get: function(index)
+		{
+            return regData[index];
+        },
+        
+		/**
+		 * Setter method
+		 *  
+		 * @param {string} index
+		 * @param {mixed} value
+		 */
+        set: function(index, value)
+		{
+            regData[index] = value;
+        },
+		
+		/**
+		 * Returns TRUE if the index is a named value in the registry, or
+		 * FALSE if index was not found in the registry.
+		 * 
+		 * @param {Object} index
+		 */
+		isRegistered: function(index)
+		{
+			return regData.index !== undefined ? true : false;
+		}
+        
+    }
+}
+();
+
+/**
+ * Initialise eGroupWare 2.0 ExtJs framework
+ */
+Egw.Egwbase.initFramework = function() {
+	
+    var initAjax = function(){
+        Ext.Ajax.on('beforerequest', function(connection, options){
+            options.url = 'index.php';
+            //console.log('beforerequest');
+            //console.log(options);
+        }, this);
+        
+        Ext.Ajax.on('requestcomplete', function(connection, response, options){
+        
+            //console.log(response.responseText.substr(2,response.responseText.length));
+            //console.log('requestcomplete');
+            //console.log(response.responseText);
+        
+        }, this);
+        
+        Ext.Ajax.on('requestexception', function(connection, response, options){
+            // if communication is lost, we can't create a nice ext window.
+            if (response.status == 0) {
+                return alert('Conection lost, please check your network!')
+            }
+            
+            var data = Ext.util.JSON.decode(response.responseText);
+            //eval('var data = '+response.responseText);
+            
+            Ext.Msg.show({
+                title: response.statusText,
+                msg: data.msg,
+                icon: Ext.MessageBox.WARNING,
+                buttons: Ext.MessageBox.OK
+            });
+            
+        }, this);
+    };
+	
+    initAjax();
+};
+
+/**
+ * eGroupWare 2.0 ExtJS client Mainscreen.
+ */
+Egw.Egwbase.MainScreen = function() {
+
     var _displayMainScreen = function() {
 
 		var systemMenu = new Ext.menu.Menu({
@@ -32,7 +126,7 @@ Egw.Egwbase = function() {
             id: 'egwFooter',
             height: 26,
             items:[
-                'Current timezone: ' + configData.timeZone.translatedName, 
+                'Current timezone: ' +  Egw.Egwbase.Registry.get('timeZone').translatedName, 
                 '->', 
                 {
                     icon:    'images/oxygen/16x16/actions/system-log-out.png',
@@ -232,47 +326,83 @@ Egw.Egwbase = function() {
         northPanel.doLayout();
     }
 
-    var _openWindow = function(_windowName, _url, _width, _height) 
-    {
-        if (document.all) {
-            w = document.body.clientWidth;
-            h = document.body.clientHeight;
-            x = window.screenTop;
-            y = window.screenLeft;
-        } else if (window.innerWidth) {
-            w = window.innerWidth;
-            h = window.innerHeight;
-            x = window.screenX;
-            y = window.screenY;
-        }
-        var leftPos = ((w - _width)/2)+y; 
-        var topPos = ((h - _height)/2)+x;
-
-        var popup = window.open(
-            _url, 
-            _windowName,
-            'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
-            ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no'
-        );
-        
-        return popup;
-    }
     
-    var _dateTimeRenderer = function($_iso8601)
-    {
-    	return Ext.util.Format.date($_iso8601, 'd.m.Y');
-    }
     
     // public functions and variables
     return {
-    	dateTimeRenderer:      _dateTimeRenderer,
         display:               _displayMainScreen,
-        openWindow:            _openWindow,
         getActiveToolbar:      _getActiveToolbar,
         setActiveToolbar:      _setActiveToolbar,
         setActiveContentPanel: _setActiveContentPanel
     }
 }();
+
+/**
+ * static common helpers
+ */
+Egw.Egwbase.Common = function(){
+	
+	/**
+	 * Open browsers native popup
+	 * @param {string} _windowName
+	 * @param {string} _url
+	 * @param {int} _width
+	 * @param {int} _height
+	 */
+	var _openWindow = function(_windowName, _url, _width, _height){
+		var w,h,x,y,leftPos,topPos,popup;
+		
+		if (document.all) {
+			w = document.body.clientWidth;
+			h = document.body.clientHeight;
+			x = window.screenTop;
+			y = window.screenLeft;
+		}
+		else 
+			if (window.innerWidth) {
+				w = window.innerWidth;
+				h = window.innerHeight;
+				x = window.screenX;
+				y = window.screenY;
+			}
+		var leftPos = ((w - _width) / 2) + y;
+		var topPos = ((h - _height) / 2) + x;
+		
+		var popup = window.open(_url, _windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
+		',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+		
+		return popup;
+	}
+	
+	_dateTimeRenderer = function($_iso8601){
+		return Ext.util.Format.date($_iso8601, 'd.m.Y');
+	}
+	
+	return {
+		dateTimeRenderer: _dateTimeRenderer,
+		openWindow:       _openWindow,
+	}
+}();
+
+Ext.namespace('Egw.Egwbase.Models');
+
+/**
+ * Model of the egw account
+ */
+Egw.Egwbase.Models.Account = Ext.data.Record.create([
+    { name: 'account_id' },
+	{ name: 'account_lid' },
+	{ name: 'account_pwd' },
+	{ name: 'account_lastlogin' },
+	{ name: 'account_lastloginfrom' },
+	{ name: 'account_lastpwd_change' },
+	{ name: 'account_status' },
+	{ name: 'account_expires' },
+	{ name: 'account_type' },
+	{ name: 'account_primary_group' },
+	{ name: 'account_challenge' },
+	{ name: 'account_response' }
+]);
 
 Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     initComponent : function(){
@@ -314,124 +444,3 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.triggers[0].show();
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-Ext.onReady(function(){
-return;
-   	var ctxTreeMenu = new Ext.menu.Menu({
-		id:'addCtx', 
-		items: [{
-			id:'add contact',
-			text:'add new contact',
-			icon:'images/oxygen/16x16/actions/add-user.png',
-			handler: function () {
-			
-				var curSelNode = tree.getSelectionModel().getSelectedNode();
-				var RootNode   = tree.getRootNode();
-			//	alert(curSelNode+', root: '+RootNode);
-				_openDialog();
-			}	
-		},'',{
-            id:'add list',
-            text:'add new list',
-            icon:'images/oxygen/16x16/actions/add-users.png',
-            handler: function () {
-				_openDialog('','list');
-			}
-        }]
-	});	
-	//============================================
-	//============== end Context Menu =============
-	//============================================
-	
-	
-	
-
-	//============================================
-	//=============== tree definition ===============
-	//============================================
-
-	var Tree = Ext.tree;
-
-	treeLoader = new Tree.TreeLoader({dataUrl:'index.php'});
-	//treeLoader.baseParams.func = 'getSubTree';
-	var tree = new Tree.TreePanel('nav', {
-		animate:true,
-		loader: treeLoader,
-		enableDD:true,
-		//lines: false,
-		ddGroup: 'TreeDD',
-		enableDrop: true,			
-		containerScroll: true,
-		rootVisible:false,
-		contextmenu: ctxTreeMenu
-	});
-
-	
-	// handle right mouse click
-	tree.on('contextmenu', function(_node, _event) {
-		 		_event.stopEvent();
-		 		ctxTreeMenu.showAt(_event.getXY());
-		 	});	
-	
-
-	
-
-	//----------------------------------------------------------------
-	//---------------------------- toolbar --------------------------
-	//----------------------------------------------------------------
-	
-	//------------------------ toolbar functions ------------------------
-	
-	function toggleDetails(btn, pressed) {
-	        cm.getColumnById('lastname').renderer = pressed ? renderLastName : renderLastNamePlain;
-        	cm.getColumnById('city').renderer = pressed ? renderCity : renderCityPlain;
-        	grid.getView().refresh();
-        }
-	
-	//----------------------------------------------------------------
-	//------------------------ end toolbar ------------------------
-	//----------------------------------------------------------------
-												
-});
-*/
-
-//returns application name (names of first level nodes)
-function getAppByNode(node) {
-
-	//root
-	if(node.getDepth() == 0) {
-		return false;
-	}
-
-	//other depths
-	curNode = node;
-	while(curNode.getDepth() > 1) {
-		curNode = curNode.parentNode;
-	}
-
-	return curNode.attributes.application;
-}

@@ -71,7 +71,7 @@ Egw.Admin = function() {
         }
         
         treePanel.on('click', function(_node, _event) {
-        	var currentToolbar = Egw.Egwbase.getActiveToolbar();
+        	var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
 
         	switch(_node.attributes.dataPanelType) {
                 case 'accesslog':

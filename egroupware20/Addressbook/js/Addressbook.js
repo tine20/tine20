@@ -701,7 +701,7 @@ Egw.Addressbook.Contacts = function(){
 
     return {
         show: function(_node) {
-            var currentToolbar = Egw.Egwbase.getActiveToolbar();
+            var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
 
             if(currentToolbar === false || currentToolbar.id != 'Addressbook_Contacts_Toolbar') {
                 _showToolbar();
@@ -1025,7 +1025,7 @@ Egw.Addressbook.Lists = function(){
 
     return {
         show: function(_node) {
-            var currentToolbar = Egw.Egwbase.getActiveToolbar();
+            var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
 
             if(currentToolbar === false || currentToolbar.id != 'Addressbook_Lists_Toolbar') {
                 _showToolbar();

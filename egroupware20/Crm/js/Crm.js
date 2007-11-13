@@ -96,7 +96,7 @@ Egw.Crm = function() {
    
         treePanel.on('click', function(_node, _event) {
                         
-        	var currentToolbar = Egw.Egwbase.getActiveToolbar();
+        	var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
 
         	switch(_node.attributes.dataPanelType) {
                 case 'lead':
@@ -185,7 +185,7 @@ Egw.Crm = function() {
      */
 /* 
         var projects = [
-			['Dentales','Henry Schein Dental Depot GmbH<br>Kenning, Sebastian','Grub, Jörg',''],
+			['Dentales','Henry Schein Dental Depot GmbH<br>Kenning, Sebastian','Grub, Jï¿½rg',''],
             
 		]; */
 		var ds_crm = new Ext.data.SimpleStore({

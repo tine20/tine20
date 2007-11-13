@@ -440,7 +440,7 @@ Egw.Felamimail.Email = function() {
     // public functions and variables
     return {
         show: function(_node) {
-            var currentToolbar = Egw.Egwbase.getActiveToolbar();
+            var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
 
             if(currentToolbar === false || currentToolbar.id != 'toolbarFelamimail') {
                 _showToolbar();

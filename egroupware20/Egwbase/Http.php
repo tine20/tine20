@@ -53,7 +53,8 @@ class Egwbase_Http
         );
         
         $view->configData = array(
-            'timeZone' => $timeZoneData
+            'timeZone' => $timeZoneData,
+            'currentAccount' => Zend_Registry::get('currentAccount')
         );
         
         

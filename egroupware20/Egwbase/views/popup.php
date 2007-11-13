@@ -24,6 +24,12 @@
 	?>
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function(){
+		    <?php
+                foreach ((array)$this->configData as $index => $value) {
+                    echo "Egw.Egwbase.Registry.set('$index'," . Zend_Json::encode($value) . ");\n";
+                }
+            ?>
+            Egw.Egwbase.initFramework();
 			<?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";" ?>
 			<?php if(isset($this->jsExecute)) echo "$this->jsExecute" ?>
 			window.focus();

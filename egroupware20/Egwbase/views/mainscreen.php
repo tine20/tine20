@@ -35,9 +35,13 @@
         ?>
 
         Ext.onReady(function(){
-            <?php if(isset($this->configData)) echo "configData=" . Zend_Json::encode($this->configData) . ";" ?>
-            
-            Egw.Egwbase.display();
+            <?php
+                foreach ((array)$this->configData as $index => $value) {
+                    echo "Egw.Egwbase.Registry.set('$index'," . Zend_Json::encode($value) . ");\n";
+                }
+            ?>
+            Egw.Egwbase.initFramework();
+            Egw.Egwbase.MainScreen.display();
             window.focus();
     	});
     </script>
