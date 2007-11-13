@@ -332,14 +332,14 @@ Egw.Addressbook.Contacts = function(){
      * onclick handler for addBtn
      */
     var _addBtnHandler = function(_button, _event) {
-        Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+        Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
     };
     
     /**
      * onclick handler for addLstBtn
      */
     var _addLstBtnHandler = function(_button, _event) {
-        Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
+        Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
     };
     
     /**
@@ -382,7 +382,7 @@ Egw.Addressbook.Contacts = function(){
         var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
         var contactId = selectedRows[0].id;
         
-        Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
+        Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
     };
 
     var action_addContact = new Ext.Action({
@@ -464,7 +464,7 @@ Egw.Addressbook.Contacts = function(){
             ]
         });
 
-        Egw.Egwbase.setActiveToolbar(contactToolbar);
+        Egw.Egwbase.MainScreen.setActiveToolbar(contactToolbar);
     };
     
     /**
@@ -652,7 +652,7 @@ Egw.Addressbook.Contacts = function(){
             border: false
         });
         
-        Egw.Egwbase.setActiveContentPanel(gridPanel);
+        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -667,7 +667,7 @@ Egw.Addressbook.Contacts = function(){
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.contact_id);
             try {
-                Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
+                Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
             } catch(e) {
                 // alert(e);
             }
@@ -717,14 +717,14 @@ Egw.Addressbook.Lists = function(){
      * onclick handler for addBtn
      */
     var _addBtnHandler = function(_button, _event) {
-        Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+        Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
     };
     
     /**
      * onclick handler for addLstBtn
      */
     var _addLstBtnHandler = function(_button, _event) {
-        Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
+        Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=', 800, 450);
     };
     
     /**
@@ -791,10 +791,10 @@ Egw.Addressbook.Lists = function(){
         var contactId = selectedRows[0].id;
         
         if(selectedNode.attributes.dataPanelType == 'lists') {
-            Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 800, 450);
+            Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + contactId, 800, 450);
         }
         else {
-            Egw.Egwbase.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
+            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
         }
     };
 
@@ -915,7 +915,7 @@ Egw.Addressbook.Lists = function(){
             border: false
         });
         
-        Egw.Egwbase.setActiveContentPanel(gridPanel);
+        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowclick', function(gridP, rowIndexP, eventP) {
             var rowCount = contactGrid.getSelectionModel().getCount();
@@ -948,7 +948,7 @@ Egw.Addressbook.Lists = function(){
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.contact_id);
             try {
-                Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+                Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
             } catch(e) {
             //  alert(e);
             }
@@ -1020,7 +1020,7 @@ Egw.Addressbook.Lists = function(){
             ]
         });
 
-        Egw.Egwbase.setActiveToolbar(contactToolbar);
+        Egw.Egwbase.MainScreen.setActiveToolbar(contactToolbar);
     };
 
     return {

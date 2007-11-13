@@ -301,7 +301,7 @@ Egw.Felamimail.Email = function() {
             ]
         });
         
-        Egw.Egwbase.setActiveToolbar(toolbar);
+        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
     };
     
     var _renderDateTime = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
@@ -402,7 +402,7 @@ Egw.Felamimail.Email = function() {
             border: false
         });
         
-        Egw.Egwbase.setActiveContentPanel(gridPanel);
+        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();

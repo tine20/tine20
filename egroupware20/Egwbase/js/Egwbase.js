@@ -379,7 +379,7 @@ Egw.Egwbase.Common = function(){
 	}
 	
 	return {
-		dateTimeRenderer: _dateTimeRenderer,
+		//dateTimeRenderer: _dateTimeRenderer,
 		openWindow:       _openWindow,
 	}
 }();

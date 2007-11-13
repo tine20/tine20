@@ -308,7 +308,7 @@ Egw.Crm = function() {
             ]
         });
         
-        Egw.Egwbase.setActiveToolbar(toolbar);
+        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
 
         dateFrom.on('valid', function(_dateField) {
             var from = Date.parseDate(
@@ -454,7 +454,7 @@ Egw.Crm = function() {
             border: false
         });
         
-        Egw.Egwbase.setActiveContentPanel(gridPanel);
+        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();

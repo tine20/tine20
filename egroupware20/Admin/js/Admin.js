@@ -293,7 +293,7 @@ Egw.Admin.AccessLog = function() {
             ]
         });
         
-        Egw.Egwbase.setActiveToolbar(toolbar);
+        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
 
         dateFrom.on('valid', function(_dateField) {
             var from = Date.parseDate(
@@ -415,7 +415,7 @@ Egw.Admin.AccessLog = function() {
             border: false
         });
         
-        Egw.Egwbase.setActiveContentPanel(gridPanel);
+        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -451,7 +451,7 @@ Egw.Admin.Applications = function() {
         var selectedRows = Ext.getCmp('grid_applications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
-        Egw.Egwbase.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
+        Egw.Egwbase.Common.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
     };
 
 	var _action_edit = new Ext.Action({
@@ -532,7 +532,7 @@ Egw.Admin.Applications = function() {
             ]
         });
         
-        Egw.Egwbase.setActiveToolbar(applicationToolbar);
+        Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
     };
     
     var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
@@ -601,7 +601,7 @@ Egw.Admin.Applications = function() {
             border: false
         });
         
-        Egw.Egwbase.setActiveContentPanel(grid_applications);
+        Egw.Egwbase.MainScreen.setActiveContentPanel(grid_applications);
 
         grid_applications.on('rowclick', function(gridP, rowIndexP, eventP) {
             var rowCount = gridP.getSelectionModel().getCount();
@@ -634,7 +634,7 @@ Egw.Admin.Applications = function() {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.contact_id);
             try {
-                Egw.Egwbase.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+                Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
             } catch(e) {
             //  alert(e);
             }
