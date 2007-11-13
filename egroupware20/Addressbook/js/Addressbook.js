@@ -962,7 +962,7 @@ Egw.Addressbook.Lists = function(){
      */
     var _loadData = function(_node)
     {
-        var dataStore = Ext.getCmp('Addressbook_Contacts_Grid').getStore();
+        var dataStore = Ext.getCmp('Addressbook_Lists_Grid').getStore();
         
         // we set them directly, because this properties also need to be set when paging
         dataStore.baseParams.dataType = _node.attributes.datatype;
