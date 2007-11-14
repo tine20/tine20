@@ -14,10 +14,11 @@
     <!-- eGW -->
     <link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
     <script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
+    <!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">
             <?php
                 foreach ((array)$this->configData as $index => $value) {
-                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");console.log('add $index');\n";
+                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
                 }
             ?>
     </script>
