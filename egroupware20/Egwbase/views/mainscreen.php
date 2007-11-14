@@ -14,6 +14,13 @@
     <!-- eGW -->
     <link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
     <script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
+    <script type="text/javascript" language="javascript">
+            <?php
+                foreach ((array)$this->configData as $index => $value) {
+                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");console.log('add $index');\n";
+                }
+            ?>
+    </script>
     <?php 
     	foreach ($this->jsIncludeFiles as $name) {
     		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
@@ -35,11 +42,6 @@
         ?>
 
         Ext.onReady(function(){
-            <?php
-                foreach ((array)$this->configData as $index => $value) {
-                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
-                }
-            ?>
             Egw.Egwbase.initFramework();
             Egw.Egwbase.MainScreen.display();
             window.focus();
