@@ -37,7 +37,7 @@
         Ext.onReady(function(){
             <?php
                 foreach ((array)$this->configData as $index => $value) {
-                    echo "Egw.Egwbase.Registry.set('$index'," . Zend_Json::encode($value) . ");\n";
+                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
                 }
             ?>
             Egw.Egwbase.initFramework();

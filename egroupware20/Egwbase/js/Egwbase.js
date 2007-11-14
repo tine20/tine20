@@ -7,50 +7,7 @@ Ext.namespace('Egw.Egwbase');
 /**
  * generic storage class helps to manage global data
  */
-Egw.Egwbase.Registry = function(){
-	
-    /**
-     * @var {object}
-     */
-    var regData = {};// = Ext.util.JSON.decode(initialConfig);
-    
-    return {
-    
-        /**
-         * Getter method
-         * 
-         * @param {string} index
-         */
-        get: function(index)
-		{
-            return regData[index];
-        },
-        
-		/**
-		 * Setter method
-		 *  
-		 * @param {string} index
-		 * @param {mixed} value
-		 */
-        set: function(index, value)
-		{
-            regData[index] = value;
-        },
-		
-		/**
-		 * Returns TRUE if the index is a named value in the registry, or
-		 * FALSE if index was not found in the registry.
-		 * 
-		 * @param {Object} index
-		 */
-		isRegistered: function(index)
-		{
-			return regData.index !== undefined ? true : false;
-		}
-        
-    }
-}
-();
+Egw.Egwbase.Registry = new Ext.util.MixedCollection(true);
 
 /**
  * Initialise eGroupWare 2.0 ExtJs framework
@@ -126,7 +83,7 @@ Egw.Egwbase.MainScreen = function() {
             id: 'egwFooter',
             height: 26,
             items:[
-                'Current timezone: ' +  Egw.Egwbase.Registry.get('timeZone').translatedName, 
+                'Current timezone: ' +  Egw.Egwbase.Registry.get('timeZone'), 
                 '->', 
                 {
                     icon:    'images/oxygen/16x16/actions/system-log-out.png',

@@ -45,15 +45,16 @@ class Egwbase_Http
             $view->initialData[$applicationName] = $application->getInitialMainScreenData();
         }
         
-        $translatedTimeZones = Zend_Registry::get('locale')->getTranslationList('timezone');
+        // NOTE there is no 1:1 mapping of timezones:translation
+        /*$translatedTimeZones = Zend_Registry::get('locale')->getTranslationList('timezone');
         
         $timeZoneData = array(
             'name'           => Zend_Registry::get('userTimeZone'),
             'translatedName' => $translatedTimeZones[Zend_Registry::get('userTimeZone')]
-        );
+        );*/
         
         $view->configData = array(
-            'timeZone' => $timeZoneData,
+            'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')
         );
         
