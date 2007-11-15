@@ -222,6 +222,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
+    public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) {
+        return $this->getOtherPeopleContacts_14($_filter, $_sort, $_dir, $_limit, $_start);
+    }
+    
     /**
      * get list of contacts from all other people the current user has access to
      *
@@ -232,7 +236,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getOtherPeopleContacts_14($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -259,7 +263,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      *
      * @return int count of all other users contacts
      */
-    public function getCountOfAllOtherPeopleContacts()
+    public function getCountOfOtherPeopleContacts()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -325,7 +329,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
-
+    public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) {
+        return $this->getSharedContacts_14($_filter, $_sort, $_dir, $_limit, $_start);
+    }
+    
+    
     /**
      * get list of contacts from all shared addressbooks the current user has access to
      *
@@ -336,7 +344,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getSharedContacts_14($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -352,7 +360,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $groupIds),
             $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n')
         );
-
+        
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
 
         return $result;
@@ -363,7 +371,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      *
      * @return int count of all other users contacts
      */
-    public function getCountOfAllSharedContacts()
+    public function getCountOfSharedContacts()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -442,13 +450,19 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
+        // convert to int
+        $owner = (int)$_owner;
+        if($owner != $_owner) {
+            throw new InvalidArgumentException('$_owner must be integer');
+        }
+        
         $currentAccount = Zend_Registry::get('currentAccount');
         
         if ($_owner == 'currentuser') {
             $_owner = $currentAccount->account_id;
         }
         
-        if($_owner == 'allcontacts' || $_owner == 'sharedaddressbooks' || $_owner == 'otheraddressbooks') {
+        if($owner == 'allcontacts' || $owner == 'sharedaddressbooks' || $owner == 'otheraddressbooks') {
             switch($_owner) {
                 case 'allcontacts':
                     $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
@@ -470,11 +484,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $contactOwner = array_keys($acl);
 
         } else {
-            if($_owner != $currentAccount->account_id && !$this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $_owner, Egwbase_Acl::READ) ) {
-                throw new Exception("access to addressbook $_owner by $currentAccount->account_id denied.");
+            if($owner != $currentAccount->account_id && !$this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $owner, Egwbase_Acl::READ) ) {
+                throw new Exception("access to addressbook $owner by $currentAccount->account_id denied.");
             }
 
-            $contactOwner = $_owner;
+            $contactOwner = $owner;
         }
         
         $where = array(
@@ -747,13 +761,17 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         return $result;
     }
+    
+    public function getSharedAddressbooks() {
+        return $this->getSharedAddressbooks_14();
+    }
 
     /**
      * get all shared addressbooks
      *
      * @return unknown
      */
-    public function getSharedAddressbooks()
+    public function getSharedAddressbooks_14()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -765,15 +783,19 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $groupInfo = new stdClass();
             $groupInfo->id = $groupId;
             $groupInfo->rights = $rights;
-            $groupInfo->title = 'Group ' . $groupId;
+            $groupInfo->name = 'Group ' . $groupId;
 
             $result[$groupId] = $groupInfo;
         }
 
         return $result;
     }
-
-    public function getOtherAddressbooks()
+    
+    public function getOtherUsers() {
+        return $this->getOtherUsers_14();
+    }
+    
+    public function getOtherUsers_14()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -785,12 +807,33 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $groupInfo = new stdClass();
             $groupInfo->id = $groupId;
             $groupInfo->rights = $rights;
-            $groupInfo->title = 'Account ' . $groupId;
+            $groupInfo->name = 'Account ' . $groupId;
 
             $result[$groupId] = $groupInfo;
         }
 
         return $result;
+    }
+    
+    public function getAddressbooksByOwner($_owner) {
+        // convert to int
+        $owner = (int)$_owner;
+        if($owner != $_owner) {
+            throw new InvalidArgumentException('$_owner must be integer');
+        }
+        
+        
+        $addressBook = new stdClass();
+        $addressBook->id = 1;
+        $addressBook->name = 'Addressbook 1';
+        $addressBooks[] = $addressBook;
+
+        $addressBook = new stdClass();
+        $addressBook->id = 2;
+        $addressBook->name = 'Addressbook 2';
+        $addressBooks[] = $addressBook;
+        
+        return $addressBooks;
     }
 
     protected function _getContactsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start)

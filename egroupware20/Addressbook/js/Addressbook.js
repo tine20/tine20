@@ -1,7 +1,247 @@
 Ext.namespace('Egw.Addressbook');
 
-Egw.Addressbook = function() {
+Egw.Addressbook = function(){
+    /**
+     * holds the current tree context menu
+     *
+     * gets set by Egw.Addressbook.setTreeContextMenu()
+     */
+    var _treeContextMenu = null;
 
+    /**
+     * the initial tree to display in the left treePanel
+     */
+    var _initialTree = [{
+        text: 'All Addressbooks',
+        cls: "treemain",
+        nodeType: 'allAddressbooks',
+        id: 'allAddressbooks',
+        children: [{
+            text: "Internal Addressbook",
+            cls: "file",
+            nodeType: "internalAddressbook",
+            children: [],
+            leaf: false,
+            expanded: true
+        }, {
+            text: 'My Addressbooks',
+            cls: 'file',
+            nodeType: 'userAddressbooks',
+            id: 'userAddressbooks',
+            leaf: null,
+            owner: Egw.Egwbase.Registry.get('currentAccount').account_id
+        }, {
+            text: "Shared Addressbooks",
+            cls: "file",
+            nodeType: "sharedAddressbooks",
+            children: null,
+            leaf: null
+        }, {
+            text: "Other Users Addressbooks",
+            cls: "file",
+            nodeType: "otherAddressbooks",
+            children: null,
+            leaf: null
+        }]
+    }];
+    
+    var _handler_addAddressbook = function(_button, _event) {
+    };
+
+    var _action_addAddressbook = new Ext.Action({
+        text: 'Add Addressbook',
+        handler: _handler_addAddressbook
+    });
+
+    var _contextMenuUserAddressbooks = new Ext.menu.Menu({
+        items: [
+            _action_addAddressbook
+        ]
+    });
+    
+    /**
+     * creates the address grid
+     *
+     */
+    var _getTreePanel = function() 
+    {
+        var treeLoader = new Ext.tree.TreeLoader({
+            dataUrl:'index.php'
+        });
+        treeLoader.on("beforeload", function(_loader, _node) {
+            switch(_node.attributes.nodeType) {
+                case 'otherAddressbooks':
+                    _loader.baseParams.method   = 'Addressbook.getOtherUsers';
+                    break;
+                    
+                case 'sharedAddressbooks':
+                    _loader.baseParams.method   = 'Addressbook.getSharedAddressbooks';
+                    break;
+
+                case 'userAddressbooks':
+                    _loader.baseParams.method   = 'Addressbook.getAddressbooksByOwner';
+                    _loader.baseParams.owner    = _node.attributes.owner;
+                    break;
+            }
+            _loader.baseParams.location = 'mainTree';
+        }, this);
+    
+        var treePanel = new Ext.tree.TreePanel({
+            title: 'Contacts',
+            id: 'Addressbook_Tree',
+            loader: treeLoader,
+            rootVisible: false,
+            border: false
+        });
+        
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        treePanel.setRootNode(treeRoot);
+
+        for(var i=0; i< _initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
+        }
+        
+        treePanel.on('click', function(_node, _event) {
+            Egw.Addressbook.Contacts.show(_node);
+        }, this);
+
+        treePanel.on('beforeexpand', function(_panel) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
+                _panel.expandPath('/root/allAddressbooks');
+                _panel.selectPath('/root/allAddressbooks');
+            }
+            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
+        }, this);
+
+        treePanel.on('contextmenu', function(_node, _event) {
+            _event.stopEvent();
+            //_node.select();
+            //_node.getOwnerTree().fireEvent('click', _node);
+            switch(_node.attributes.nodeType) {
+                case 'userAddressbooks':
+                    _contextMenuUserAddressbooks.showAt(_event.getXY());
+                    break;
+                default:
+                    //console.log(_node.attributes.nodeType);
+                    break;
+            }
+            /*if (_treeContextMenu !== null) {
+                _treeContextMenu.showAt(_event.getXY());
+            }*/
+        });
+
+        return treePanel;
+    };
+
+    /**
+     * reload main window
+     *
+     */
+/*    var _reloadMainWindow = function(closeCurrentWindow) {
+        closeCurrentWindow = (closeCurrentWindow == null) ? false : closeCurrentWindow;
+        
+        window.opener.Egw.Addressbook.reload();
+        if(closeCurrentWindow == true) {
+            window.setTimeout("window.close()", 400);
+        }
+    }*/
+    
+    /**
+     * displays the addressbook select dialog
+     * shared between contact and list edit dialog
+     */
+    var _displayAddressbookSelectDialog = function(_fieldName){         
+                
+        if(!addressBookDialog) {
+                   
+            //################## listView #################
+
+            var addressBookDialog = new Ext.Window({
+                title: 'please select addressbook',
+                modal: true,
+                width: 375,
+                height: 400,
+                minWidth: 375,
+                minHeight: 400,
+                layout: 'fit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                buttonAlign:'center'
+            });         
+            
+            var treeLoader = new Ext.tree.TreeLoader({dataUrl:'index.php'});
+            treeLoader.on("beforeload", function(_loader, _node) {
+                _loader.baseParams.method       = 'Addressbook.getSubTree';
+                _loader.baseParams.node        = _node.id;
+                _loader.baseParams.datatype    = _node.attributes.datatype;
+                _loader.baseParams.owner       = _node.attributes.owner;
+                _loader.baseParams.location    = 'selectFolder';
+            }, this);
+                            
+            var tree = new Ext.tree.TreePanel({
+                animate:true,
+                id: 'addressbookTree',
+                loader: treeLoader,
+                containerScroll: true,
+                rootVisible:false
+            });
+            
+            // set the root node
+            var root = new Ext.tree.TreeNode({
+                text: 'root',
+                draggable:false,
+                allowDrop:false,
+                id:'root'
+            });
+            tree.setRootNode(root);             
+            
+            // add the initial tree nodes    
+            Ext.each(formData.config.initialTree, function(_treeNode) {
+                root.appendChild(new Tree.AsyncTreeNode(_treeNode));                    
+            });
+          
+            tree.on('click', function(_node) {
+                if(_node.attributes.datatype == 'contacts') {                
+                    Ext.getCmp(_fieldName).setValue(_node.attributes.owner);
+                    Ext.getCmp(_fieldName + '_name').setValue(_node.text);
+                    addressBookDialog.hide();
+                }
+            });
+
+            addressBookDialog.add(tree);
+    
+            addressBookDialog.show();               
+        }
+                
+    };
+    
+    
+    // public functions and variables
+    return {
+        // public functions
+        displayAddressbookSelectDialog: _displayAddressbookSelectDialog,
+        
+        getPanel:           _getTreePanel,
+        
+        setTreeContextMenu: function (_contextMenu) {
+            _treeContextMenu = _contextMenu;
+        },
+        
+        reload:             function() {
+            Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
+        }
+    };
+    
+}();
+
+
+Egw.Addressbook.Shared = function(){
     /**
      * holds the current tree context menu
      * 
@@ -349,7 +589,7 @@ Egw.Addressbook.Contacts = function(){
         Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected contacts?', function(_button){
             if (_button == 'yes') {
             
-                var contactIds = [];
+                var contactIds = new Array();
                 var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     contactIds.push(selectedRows[i].id);
@@ -446,6 +686,21 @@ Egw.Addressbook.Contacts = function(){
                 action_addList,
                 action_edit,
                 action_delete,
+                '-',
+                'Sort by: ',
+                ' ',
+                {
+                    text: 'Addressbooks',
+                    enableToggle: true,
+                    toggleGroup: 'orderBy',
+                    pressed: true
+                    
+                }, {
+                    text: 'Tags',
+                    enableToggle: true,
+                    toggleGroup: 'orderBy',
+                    disabled: true
+                },
                 '->', 'Search:', ' ',
 /*              new Ext.ux.SelectBox({
                   listClass:'x-combo-list-small',
@@ -683,13 +938,37 @@ Egw.Addressbook.Contacts = function(){
     {
         var dataStore = Ext.getCmp('Addressbook_Contacts_Grid').getStore();
         
+        //console.log(_node.attributes.nodeType);
+        
         // we set them directly, because this properties also need to be set when paging
-        dataStore.baseParams.dataType    = _node.attributes.datatype;
-        dataStore.baseParams.owner   = _node.attributes.owner;
-        dataStore.baseParams.method   = _node.attributes.jsonMethod;
-        if(_node.attributes.datatype == 'listMembers') {
-            dataStore.baseParams.listId   = _node.attributes.listId;
-        }
+        switch(_node.attributes.nodeType) {
+            case 'internalAddressbook':
+                dataStore.baseParams.method = 'Addressbook.getAccounts';
+                break;
+
+            case 'sharedAddressbooks':
+                dataStore.baseParams.method = 'Addressbook.getSharedContacts';
+                break;
+
+            case 'otherAddressbooks':
+                dataStore.baseParams.method = 'Addressbook.getOtherPeopleContacts';
+                break;
+
+            case 'allAddressbooks':
+                dataStore.baseParams.method = 'Addressbook.getAllContacts';
+                break;
+
+
+            case 'userAddressbooks':
+                dataStore.baseParams.method = 'Addressbook.getContactsByOwner';
+                dataStore.baseParams.owner  = _node.attributes.owner;
+                break;
+
+            case 'singleAddressbook':
+                dataStore.baseParams.method        = 'Addressbook.getContactsByAddressbookId';
+                dataStore.baseParams.addressbookId = _node.attributes.addressbookId;
+                break;
+        };
         
         dataStore.load({
             params:{
@@ -734,7 +1013,7 @@ Egw.Addressbook.Lists = function(){
         var selectedNode = Ext.getCmp('contacts-tree').getSelectionModel().getSelectedNode();
         
         if(selectedNode.attributes.dataPanelType == 'lists') {
-            var listIds = [];
+            var listIds = new Array();
             var selectedRows = contactGrid.getSelectionModel().getSelections();
             for (var i = 0; i < selectedRows.length; ++i) {
                 listIds.push(selectedRows[i].id);
@@ -757,7 +1036,7 @@ Egw.Addressbook.Lists = function(){
                 } 
             });
         } else {
-            var contactIds = [];
+            var contactIds = new Array();
             var selectedRows = contactGrid.getSelectionModel().getSelections();
             for (var i = 0; i < selectedRows.length; ++i) {
                 contactIds.push(selectedRows[i].id);
@@ -1815,7 +2094,7 @@ Egw.Addressbook.ListEditDialog = function() {
     {	
     	var contactForm = Ext.getCmp('listDialog').getForm();
 		var ds_listMembers = Ext.getCmp('listGrid').getStore();
-		var listMembers = [];
+		var listMembers = new Array();
 		ds_listMembers.each(function(_record) {
 			listMembers.push(_record.data);
 		});
@@ -2111,7 +2390,7 @@ Egw.Addressbook.ListEditDialog = function() {
 		if(formData.values.list_members) {
 			var listmembers = formData.values.list_members;
 		} else {
-			var listmembers = [];
+			var listmembers = new Array();
 		}
 		
 		var ds_listMembers = new Ext.data.SimpleStore({

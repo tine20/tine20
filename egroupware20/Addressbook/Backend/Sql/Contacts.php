@@ -28,7 +28,15 @@ class Addressbook_Backend_Sql_Contacts extends Zend_Db_Table_Abstract
     public function fetchAll($_where = NULL, $_order = NULL, $_dir = NULL, $_count = NULL, $_offset = NULL, $_readACL = NULL)
     {
         if($_dir !== NULL && ($_dir != 'ASC' && $_dir != 'DESC')) {
-            throw new Exception('$_dir can be only ASC or DESC');
+            throw new InvalidArgumentException('$_dir can only be DESC or ASC or NULL');
+        }
+
+        if($_limit !== NULL && !is_int($_limit)) {
+            throw new InvalidArgumentException('$_limit must be integer or NULL');
+        }
+
+        if($_start !== NULL && !is_int($_start)) {
+            throw new InvalidArgumentException('$_start must be integer or NULL');
         }
         
         $result = parent::fetchAll($_where, "$_order $_dir", $_count, $_offset);
