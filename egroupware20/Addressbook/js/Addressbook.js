@@ -46,6 +46,24 @@ Egw.Addressbook = function(){
     }];
     
     var _handler_addAddressbook = function(_button, _event) {
+        Ext.MessageBox.prompt('New addressbook', 'Please enter the name of the new addressbook:', function(_btn, _text) {
+            if(_btn == 'ok') {
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Addressbook.addAddressbook',
+                        name: _text
+                    },
+                    text: 'Creating new addressbook...',
+                    success: function(_result, _request){
+                        //Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
+                    },
+                    failure: function(result, request){
+                        //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
+                    }
+                });
+            }
+        });
     };
 
     var _action_addAddressbook = new Ext.Action({
@@ -968,7 +986,7 @@ Egw.Addressbook.Contacts = function(){
                 dataStore.baseParams.method        = 'Addressbook.getContactsByAddressbookId';
                 dataStore.baseParams.addressbookId = _node.attributes.addressbookId;
                 break;
-        };
+        }
         
         dataStore.load({
             params:{
