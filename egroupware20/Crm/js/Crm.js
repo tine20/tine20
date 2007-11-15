@@ -14,7 +14,7 @@ Egw.Crm = function() {
                     logIds.push(selectedRows[i].id);
                 }
                 
-                new Ext.data.Connection().request( {
+                    Ext.Ajax.request( {
                     url : 'index.php',
                     method : 'post',
                     scope : this,
