@@ -10,7 +10,7 @@
  * @version     $Id$
  *
  */
-class Egwbase_Acl_Sql extends Zend_Db_Table_Abstract
+class Egwbase_Acl_Sql_Grants extends Zend_Db_Table_Abstract
 {
     protected $_name = 'egw_acl';
 }

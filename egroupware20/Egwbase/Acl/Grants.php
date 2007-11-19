@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * the class needed to access the acl table
+ *
+ * @see Egwbase_Acl_Sql_Grants
+ */
+require_once 'Egwbase/Acl/Sql/Grants.php';
+
+
 /**
  * the class provides functions to handle ACL
  * 
@@ -10,7 +19,7 @@
  *
  */
 
-class Egwbase_Acl
+class Egwbase_Acl_Grants
 {
     /**
      * the numeric id of the user the read the acl from the sql table
@@ -69,7 +78,7 @@ class Egwbase_Acl
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Acl;
+            self::$instance = new Egwbase_Acl_Grants;
         }
         
         return self::$instance;

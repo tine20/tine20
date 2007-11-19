@@ -18,15 +18,21 @@ class Egwbase_Application
      * @var Zend_Db_Table_Abstract
      */
     protected $applicationTable;
-    
-    /**
-     * the constructor
-     *
-     */
-    public function __construct()
-    {
+
+    private function __construct() {
         $this->applicationTable = new Egwbase_Db_Table(array('name' => 'egw_applications'));
     }
+    private function __clone() {}
+    
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Egwbase_Application;
+        }
+        
+        return self::$instance;
+    }
+    
     
     /**
      * returns one application identified by app_id
@@ -39,11 +45,25 @@ class Egwbase_Application
     public function getApplicationById($_applicationId)
     {
         $applicationId = (int)$_applicationId;
-        if($applicationId < 1) {
-            throw new Exception('$_applicationId must be integer and greater 0');
+        if($applicationId != $_applicationId) {
+            throw new InvalidArgumentException('$_applicationId must be integer');
         }
         
         $row = $this->applicationTable->fetchRow('app_id = ' . $applicationId);
+        
+        $result = new Egwbase_Record_Application($row->toArray());
+        
+        return $result;
+    }
+
+    public function getApplicationByName($_applicationName)
+    {
+        if(empty($_applicationId)) {
+            throw new InvalidArgumentException('$_applicationName can not be empty');
+        }
+        
+        $where = $this->applicationTable->getAdapter()->quoteInto('app_name = ?', $_applicationName);
+        $row = $this->applicationTable->fetchRow($where);
         
         $result = new Egwbase_Record_Application($row->toArray());
         
