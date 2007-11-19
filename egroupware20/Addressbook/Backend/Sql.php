@@ -57,9 +57,26 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $this->contactsTable = new Addressbook_Backend_Sql_Contacts();
         $this->listsTable = new Addressbook_Backend_Sql_Lists();
         $this->listsMapping = new Addressbook_Backend_Sql_ListMapping();
+    //    try {
+    //        $this->addressbooksTable = new Egwbase_Db_Table(array('name' => 'egw_addressbooks'));
+    //    } catch (Zend_Db_Statement_Exception $e) {
+    //        $this->createAddressboosTable();
+    //        //$this->addressbooksTable = new Egwbase_Db_Table(array('name' => 'egw_addressbooks'));
+    //    }
         $this->egwbaseAcl = Egwbase_Acl::getInstance();
     }
 
+    protected function createAddressboosTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_addressbooks');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec('CREATE TABLE egw_addressbooks (id, name, owner)');
+        }
+    }
+    
     /**
      * add or updates a contact
      *
