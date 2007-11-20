@@ -38,4 +38,12 @@ class Egwbase_Record_Application extends Egwbase_Record_Abstract
         'app_tables'  => array('allowEmpty' => true),
         'app_version' => array('presence' => 'required')
     );
+
+   /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'app_id';
 }
