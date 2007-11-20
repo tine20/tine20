@@ -174,7 +174,7 @@ class Egwbase_Acl_Rights
             throw new UnderFlowException('no applications found');
         }
         
-        $resultSet = new Egwbase_RecordSet_Abstract();
+        $resultSet = new Egwbase_Record_RecordSet();
         
         foreach($rowSet as $row) {
             try {
