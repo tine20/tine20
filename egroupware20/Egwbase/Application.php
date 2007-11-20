@@ -23,6 +23,13 @@ class Egwbase_Application
         $this->applicationTable = new Egwbase_Db_Table(array('name' => 'egw_applications'));
     }
     private function __clone() {}
+
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Egwbase_Application
+     */
+    private static $instance = NULL;
     
     public static function getInstance() 
     {
@@ -58,12 +65,14 @@ class Egwbase_Application
 
     public function getApplicationByName($_applicationName)
     {
-        if(empty($_applicationId)) {
+        if(empty($_applicationName)) {
             throw new InvalidArgumentException('$_applicationName can not be empty');
         }
         
         $where = $this->applicationTable->getAdapter()->quoteInto('app_name = ?', $_applicationName);
-        $row = $this->applicationTable->fetchRow($where);
+        if(!$row = $this->applicationTable->fetchRow($where)) {
+            throw new Exception("application $_applicationName not found");
+        }
         
         $result = new Egwbase_Record_Application($row->toArray());
         
