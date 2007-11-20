@@ -12,7 +12,7 @@
 class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {
     protected $_listOfRecords = array();
-    protected $_recordClass = 'Egwbase_Record';
+    protected $_recordClass = NULL;
 
 
     /**
@@ -21,17 +21,24 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
      * @param array $_records array of record objects
      * @param strin $_className the required classType
      */
-    public function __construct(array $_records = array())
+    public function __construct(array $_records = array(), $_className = NULL)
     {
+        if($this->_recordClass === NULL && $_className !== NULL) {
+            $this->_recordClass = $_className;
+        }
+        
         foreach($_records as $record) {
             if (is_array($record)) {
+                if($this->_recordClass === NULL) {
+                    throw new UnexpectedValueException('$_recordClass can not be NULL, when adding arrays');
+                }
                 $record = new $this->_recordClass($record, true);
             }
             
             if($record instanceof $this->_recordClass) {
                 $this->_listOfRecords[$record->getId()] = $record;
             } else {
-                throw new InvalidArgumentException('invalid datatype for Egwbase_RecordSet_Abstract');
+                throw new InvalidArgumentException('invalid datatype for Egwbase_Record_RecordSet');
             }
         }
     }
@@ -50,13 +57,18 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
     /**
      * converts RecordSet to array
      * 
+     * param bool $_withKeys return array with keys when TRUE 
      * @return array identifier => recordarray
      */
-    public function toArray()
+    public function toArray($_withKeys = FALSE)
     {
         $resultArray = array();
         foreach($this->_listOfRecords as $id => $record) {
-            $resultArray[$id] = $record->toArray();
+            if($_withKeys === TRUE) {
+                $resultArray[$id] = $record->toArray();
+            } else {
+                $resultArray[] = $record->toArray();
+            }
         }
          
         return $resultArray;

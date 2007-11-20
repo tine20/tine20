@@ -113,7 +113,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
     public function getId()
     {
         if (!$this->_identifier) {
-            throw new OutOfBoundsExecption('Identifier is not declared');
+            throw new OutOfBoundsException('Identifier is not declared');
         }
         return $this->_properties[$this->_identifier];
     }

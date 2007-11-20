@@ -40,4 +40,12 @@ class Egwbase_Record_AccessLog extends Egwbase_Record_Abstract
         'result'     => array('presence' => 'required'),
         'account_id' => array('presence' => 'required')
     );
+    
+    /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'log_id';
 }
