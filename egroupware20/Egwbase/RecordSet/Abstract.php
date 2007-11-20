@@ -12,7 +12,7 @@
 abstract class Egwbase_RecordSet_Abstract implements IteratorAggregate, Countable, ArrayAccess
 {
     protected $_listOfRecords = array();
-    protected $_recordClass = NULL;
+    protected $_recordClass = 'Record';
 
 
     /**
@@ -21,15 +21,10 @@ abstract class Egwbase_RecordSet_Abstract implements IteratorAggregate, Countabl
      * @param array $_records array of record objects
      * @param strin $_className the required classType
      */
-    public function __construct(array $_records = array())
+    public function __construct(array $_records = array(), $_recordClass=NULL)
     {
-        if (!$this->_recordClass){
-            $classname = substr(get_class($this), 0, -3);
-            if (class_exists($classname)) {
-                $this->_recordClass = $classname;
-            } else {
-                throw new Egwbase_Record_Exception('Class of records not set!');
-            }
+        if (is_string($_recordClass)) {
+            $this->_recordClass = $_recordClass;
         }
         
         foreach($_records as $record) {
