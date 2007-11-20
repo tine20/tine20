@@ -7,7 +7,6 @@
  */
 require_once 'Egwbase/Acl/Sql/Rights.php';
 
-
 /**
  * the class provides functions to handle ACL
  * 
@@ -21,14 +20,45 @@ require_once 'Egwbase/Acl/Sql/Rights.php';
 
 class Egwbase_Acl_Rights
 {
+    /**
+     * list of supported rights
+     * 
+     * this is just a temporary list, until we have moved the rights to a separate table
+     *
+     * @var array
+     */
+    protected $supportedRights = array('run', 'admin');
+    
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Egwbase_Acl_Rights
+     */
     private static $instance = NULL;
     
+    /**
+     * the constructor
+     *
+     * disabled. use the singleton
+     */
     private function __construct() {
-        $this->applicationTable = new Egwbase_Acl_Sql_Rights();
+        $this->rightsTable = new Egwbase_Db_Table(array(
+        	'name' => 'egw_acl',
+        ));
     }
     
+    /**
+     * the clone function
+     *
+     * disabled. use the singleton
+     */
     private function __clone() {}
     
+    /**
+     * the singleton pattern
+     *
+     * @return Egwbase_Acl_Rights
+     */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
@@ -41,170 +71,120 @@ class Egwbase_Acl_Rights
     /**
      * check if the user has a given right for a given application
      *
-     * @param string $_application
-     * @param string $_right
+     * @param int $_accountId the numeric id of a user account
+     * @param string $_application the name of the application
+     * @param string $_right the name of the right
+     * @return bool
      */
-    public function hasRight($_application, $_right) {
+    public function hasRight($_accountId, $_application, $_right) 
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $accounts = new Egwbase_Account_Sql();
+        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+    	
+        $egwbaseApplication = Egwbase_Application::getInstance();
+        $application = $egwbaseApplication->getApplicationByName($_application);
+
+        $where = array(
+            $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
+            $this->rightsTable->getAdapter()->quoteInto('acl_location = ?', $_right),
+            // check if the account or the groups of this account has the given right
+            $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships)
+        );
+        
+        if(!$row = $this->rightsTable->fetchRow($where)) {
+        	return false;
+        } else {
+        	return true;
+        }
+    }
+
+    public function getRights($_accountId, $_application) 
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $accounts = new Egwbase_Account_Sql();
+        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+    	
+        $egwbaseApplication = Egwbase_Application::getInstance();
+        $application = $egwbaseApplication->getApplicationByName($_application);
+
+        $where = array(
+            $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
+            $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships),
+            $this->rightsTable->getAdapter()->quoteInto('acl_location IN (?)', $this->supportedRights)
+        );
+        
+        $rowSet = $this->rightsTable->fetchAll($where);
+        
+        if(empty($rowSet)) {
+            throw new UnderFlowException('no rights for given application found');
+        }
+        
+        $returnValue = array();
+        
+        foreach($rowSet as $row) {
+            $returnValue[$row->acl_location] = true;
+        }
+
+         return array_keys($returnValue);
+        
+    }
+        
+    /**
+     * returns list of applications the current user is able to use
+     *
+     * this function takes group memberships into account. Applications the accounts is able to use
+     * must have the 'run' right set 
+     * 
+     * @param int $_accountId
+     * @return array list of enabled applications for this account
+     */
+    public function getApplications($_accountId)
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $accounts = new Egwbase_Account_Sql();
+        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+
         $egwbaseApplication = Egwbase_Application::getInstance();
         
-        $application = $egwbaseApplication->getApplicationByName($_application);
-        
-        
-    }
-    
-    /**
-     * get the grants for the user identified by $accountId for a specific application
-     *
-     * @param int $accountId the accountid of the user
-     * @param string $appName the name of the application to return the rights for
-     * @param bool $enumerateGroupAcls if TRUE the acl for the groupmembers gets returned too
-     * @return array the grants
-     */
-    public function getApplicationGrants($accountId, $appName, $enumerateGroupAcls = TRUE)
-    {
-        $accounts = new Egwbase_Account_Sql();
-        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-        
-        $aclTable = new Egwbase_Acl_Sql();
         $where = array(
-            $aclTable->getAdapter()->quoteInto('acl_appname = ?', $appName),
-            // who gave rights to me and my groups
-            $aclTable->getAdapter()->quoteInto('acl_location IN (?)', $groupMemberships)
-        );
-        $rowSet = $aclTable->fetchAll($where);
-
-        $grants = array();
-        
-        foreach($rowSet as $row) {
-            $grantedBy        = $row->acl_account;
-            $grantedRights    = $row->acl_rights;
-            
-            // initialize grants to Egwbase_Acl::NONE
-            if(!isset($grants[$grantedBy])) {
-                $grants[$grantedBy] = Egwbase_Acl::NONE;
-            }
-            $grants[$grantedBy] |= $grantedRights;
-
-            // if it is a group(negative id) fetch the group members acl too
-            if ($grantedBy < 0 && $enumerateGroupAcls === TRUE) {
-                $groupMembers = $accounts->getGroupMembers($grantedBy);
-                
-                foreach($groupMembers as $grantedBy) {
-                    // Don't allow to override private with group ACL's!
-                    $grantedRights    &= ~Egwbase_Acl::PERSONAL;
-                    
-                    if(!isset($grants[$grantedBy])) {
-                        $grants[$grantedBy] = Egwbase_Acl::NONE;
-                    }
-                    
-                    $grants[$grantedBy] |= $grantedRights;
-                }
-            }
-        }
-        
-        // the user has always access to his own data
-        $grants[$accountId] = Egwbase_Acl::ANY;
-            
-        return $grants;
-    }
-    
-    /**
-     * return the user/groups who granted $accountId the $requiredRight for given $appName
-     *
-     * @param int $accountId the accountid of the user
-     * @param string $appName the name of the application to return the rights for
-     * @param int $requiredRight which rights needs to be set, to get the group returned
-     * @param int $grantType which type of grants to return (Egwbase_Acl::ANY_GRANTS, Egwbase_Acl::GROUP_GRANTS or Egwbase_Acl::ACCOUNT_GRANTS)
-     * @return array the grants
-     */
-    public function getGrantors($accountId, $appName, $requiredRight, $grantType = Egwbase_Acl::ANY_GRANTS)
-    {
-    	$result = $this->getGrants($accountId, $appName, $requiredRight, $grantType);
-    	
-    	return array_keys($result);
-	}
-    /**
-     * get the grants for the currently set accountId for a spefic application
-     *
-     * @param int $accountId the accountid of the user
-     * @param string $appName the name of the application to return the rights for
-     * @param int $requiredRight which rights needs to be set, to get the group returned
-     * @param int $grantType which type of grants to return (Egwbase_Acl::ANY_GRANTS, Egwbase_Acl::GROUP_GRANTS or Egwbase_Acl::ACCOUNT_GRANTS)
-     * @return array the grants
-     */
-    public function getGrants($accountId, $appName, $requiredRight, $grantType = Egwbase_Acl::ANY_GRANTS)
-    {
-        $accounts = new Egwbase_Account_Sql();
-        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-        
-        $aclTable = new Egwbase_Acl_Sql();
-        $where = array(
-            $aclTable->getAdapter()->quoteInto('acl_appname = ?', $appName),
-            // who gave rights to $accountId's groups and $accountId itself
-            $aclTable->getAdapter()->quoteInto('acl_location IN (?)', $groupMemberships)
-        );
-
-        if($grantType === Egwbase_Acl::GROUP_GRANTS) {
-            // return groups only (negative id)
-            $where[] = 'acl_account < 0';
-        } elseif ($grantType === Egwbase_Acl::ACCOUNT_GRANTS) {
-            // return accounts only (positive id)
-            $where[] = 'acl_account > 0';
-        }
-        
-        $rowSet = $aclTable->fetchAll($where);
-
-        $grants = array();
-        
-        foreach($rowSet as $row) {
-            $grantedBy        = $row->acl_account;
-            $grantedRights    = $row->acl_rights;
-            
-            if (!!($grantedRights & $requiredRight)) {
-                // initialize grants to Egwbase_Acl::NONE
-                if(!isset($grants[$grantedBy])) {
-                    $grants[$grantedBy] = Egwbase_Acl::NONE;
-                }
-                $grants[$grantedBy] |= $grantedRights;
-            }
-
-        }
-        
-        if($grantType == Egwbase_Acl::ANY_GRANTS) {
-            // the user has always access to his own data
-            $grants[$accountId] = Egwbase_Acl::ANY;
-        }
-            
-        return $grants;
-    }
-    
-    public function checkPermissions($_grantedTo, $_appName, $_grantedBy, $_requiredRight)
-    {
-        $accounts = new Egwbase_Account_Sql();
-        $grantedTo = $accounts->getAccountGroupMemberships($_grantedTo);
-        $grantedTo[] = $accountId;
-        
-        $aclTable = new Egwbase_Acl_Sql();
-        $where = array(
-            $aclTable->getAdapter()->quoteInto('acl_appname = ?', $_appName),
-            // me and my groups
-            $aclTable->getAdapter()->quoteInto('acl_location IN (?)', $grantedTo),
-            $aclTable->getAdapter()->quoteInto('acl_account = ?', $_grantedBy),
+            $this->rightsTable->getAdapter()->quoteInto('acl_location = ?', 'run'),
+            // check if the account or the groups of this account has the given right
+            $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships)
         );
         
-        $rowSet = $aclTable->fetchAll($where);
+        $rowSet = $this->rightsTable->fetchAll($where);
+        
+        if(empty($rowSet)) {
+            throw new UnderFlowException('no applications found');
+        }
+        
+        $resultSet = new Egwbase_RecordSet_Abstract();
         
         foreach($rowSet as $row) {
-            $grantedRights    = $row->acl_rights;
-            
-            if(!!($grantedRights & $row->acl_rights)) {
-                return true;
+            try {
+                $application = $egwbaseApplication->getApplicationByName($row->acl_appname);
+                $resultSet->addRecord($application);
+            } catch (Exception $e) {
+                // application does not exist anymore, but is still in the acl table
             }
         }
         
-        return false;
-        
+        return $resultSet;
     }
 }
