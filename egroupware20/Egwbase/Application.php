@@ -100,7 +100,7 @@ class Egwbase_Application
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Egwbase_RecordSet_Application($rowSet->toArray(), 'Egwbase_Record_Application');
+        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Record_Application');
 
         return $result;
     }    

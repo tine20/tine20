@@ -137,7 +137,7 @@ class Egwbase_AccessLog
             $arrayRowSet[$rowId] = $row;
         }
 
-        $result = new Egwbase_RecordSet_AccessLog($arrayRowSet, 'Egwbase_Record_AccessLog');
+        $result = new Egwbase_Record_RecordSet($arrayRowSet, 'Egwbase_Record_AccessLog');
 
         return $result;
     }
