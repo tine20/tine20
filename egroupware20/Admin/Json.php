@@ -60,7 +60,11 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $applicationSet = $egwApplications->getApplications($sort, $dir, $filter, $limit, $start);
 
         $result['results']    = $applicationSet->toArray();
-        $result['totalcount'] = $egwApplications->getTotalApplicationCount();
+        if(count($result['results']) < $limit) {
+            $result['totalcount'] = count($result['results']);
+        } else {
+            $result['totalcount'] = $egwApplications->getTotalApplicationCount();
+        }
         
         return $result;
     }
@@ -87,7 +91,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $sort, $dir, $filter, $limit, $start);
         
         $arrayAccessLogRowSet = $accessLogSet->toArray();
-        
+
         $dateFormat = Zend_Registry::get('locale')->getTranslationList('Dateformat');
         $timeFormat = Zend_Registry::get('locale')->getTranslationList('Timeformat');
         
@@ -95,14 +99,16 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             $row['li'] = $row['li']->get($dateFormat['default'] . ' ' . $timeFormat['default'], Zend_Registry::get('locale'));
             if($row['lo'] instanceof Zend_Date) {
                 $row['lo'] = $row['lo']->get($dateFormat['default'] . ' ' . $timeFormat['default'], Zend_Registry::get('locale'));
-            //} else {
-            //    $row['lo'] = '';
             }
             $arrayAccessLogRowSet[$id] = $row;
         }
         
         $result['results']    = $arrayAccessLogRowSet;
-        $result['totalcount'] = $egwAccessLog->getTotalCount();
+        if(count($result['results']) < $limit) {
+            $result['totalcount'] = count($result['results']);
+        } else {
+            $result['totalcount'] = $egwAccessLog->getTotalCount();
+        }
         
         return $result;
     }
