@@ -55,7 +55,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $egwApplications = new Egwbase_Application();
+        $egwApplications = Egwbase_Application::getInstance();
         
         $applicationSet = $egwApplications->getApplications($sort, $dir, $filter, $limit, $start);
 
