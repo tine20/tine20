@@ -56,10 +56,10 @@ class Egwbase_Acl_Grants
      */
     const DELETE = 8;
     /**
-     * constant for personal right
+     * constant for admin right
      *
      */
-    const PERSONAL = 16;
+    const ADMIN = 16;
     /**
      * constant for all rights
      *

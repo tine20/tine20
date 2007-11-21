@@ -192,7 +192,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
             }
             return $this->_properties[$_name] = $_value;
         }
-        throw new Egwbase_Record_Exception($_name . ' is no property of $this->_properties');
+        throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
     }
     
     /**
@@ -206,7 +206,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
         if (array_key_exists ($_name, $this->_validators)) {
             return $this->_properties[$_name];
         }
-        throw new Egwbase_Record_Exception($_name . ' is no property of $this->_properties');
+        throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
     }
     
     /**
