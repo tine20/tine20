@@ -315,8 +315,8 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         if($rows = $backend->getAddressbooksByOwner($owner)) {
             foreach($rows as $addressbookData) {
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'addressbook-' . $addressbookData->id, $addressbookData->name, TRUE);
-                $childNode->addressbookId = $addressbookData->id;
+                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'addressbook-' . $addressbookData->container_id, $addressbookData->container_name, TRUE);
+                $childNode->addressbookId = $addressbookData->container_id;
                 $childNode->nodeType = 'singleAddressbook';
                 $treeNodes[] = $childNode;
             }

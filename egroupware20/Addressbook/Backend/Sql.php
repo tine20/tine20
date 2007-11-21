@@ -13,8 +13,6 @@ require_once 'Addressbook/Backend/Sql/Contacts.php';
  */
 require_once 'Addressbook/Backend/Sql/Lists.php';
 
-
-
 /**
  * interface for contacs class
  *
@@ -57,26 +55,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $this->contactsTable = new Addressbook_Backend_Sql_Contacts();
         $this->listsTable = new Addressbook_Backend_Sql_Lists();
         $this->listsMapping = new Addressbook_Backend_Sql_ListMapping();
-    //    try {
-    //        $this->addressbooksTable = new Egwbase_Db_Table(array('name' => 'egw_addressbooks'));
-    //    } catch (Zend_Db_Statement_Exception $e) {
-    //        $this->createAddressboosTable();
-    //        //$this->addressbooksTable = new Egwbase_Db_Table(array('name' => 'egw_addressbooks'));
-    //    }
         $this->egwbaseAcl = Egwbase_Acl::getInstance();
+
+//        $data = $this->egwbaseContainer->getContainer(8, 7, array(1));
+//        
+//        error_log(print_r($data->toArray(), true));
     }
 
-    protected function createAddressboosTable() {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        try {
-            $tableData = $db->describeTable('egw_addressbooks');
-        } catch (Zend_Db_Statement_Exception $e) {
-            // table does not exist
-            $result = $db->getConnection()->exec('CREATE TABLE egw_addressbooks (id, name, owner)');
-        }
-    }
-    
     /**
      * add or updates a contact
      *
@@ -569,17 +554,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         ->where('egw_addressbook_lists.list_owner = ?', $_owner)
         ->where('egw_addressbook.contact_owner IN (?)', array_keys($acl))
         ->limit($limit, $start);
-        /*
-         $select = $db->select()
-         ->from('egw_addressbook2list', array())
-         ->order($_sort . ' ' . $_dir)
-         ->join(array('contact_data' => 'egw_addressbook'),'contact_data.contact_id = egw_addressbook2list.contact_id')
-         ->join(array('list_data' => 'egw_addressbook'),'list_data.contact_id = egw_addressbook2list.list_id', array())
-         ->where('list_data.contact_id = ?', $_list)
-         ->where('list_data.contact_owner IN (?)', array_keys($acl))
-         ->where('contact_data.contact_owner IN (?)', array_keys($acl))
-         ->limit($limit, $start);
-         */
+
         //error_log("getContactsByListQuery:: " . $select->__toString());
 
         $stmt = $db->query($select);
@@ -839,6 +814,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_owner must be integer');
         }
         
+        $egwbaseContainer = Egwbase_Container::getInstance();
+        $personalAddressbooks = $egwbaseContainer->getContainerByOwner('addressbook', $_owner);
         
         $addressBook = new stdClass();
         $addressBook->id = 1;
@@ -850,7 +827,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $addressBook->name = 'Addressbook 2';
         $addressBooks[] = $addressBook;
         
-        return $addressBooks;
+        return $personalAddressbooks;
     }
 
     protected function _getContactsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start)

@@ -22,13 +22,17 @@ class Addressbook_Backend
      * constant for Sql contacts backend class
      *
      */
-    const SQL = 'Sql';
+    const SQL = 'sql';
     
     /**
      * constant for LDAP contacts backend class
      *
      */
-    const LDAP = 'Ldap';
+    const LDAP = 'ldap';
+    
+    const PERSONAL = 'personal';
+    
+    const SHARED = 'shared';
     
     /**
      * factory function to return a selected contacts backend class
@@ -41,7 +45,7 @@ class Addressbook_Backend
         switch($type) {
             case self::SQL:
             case self::LDAP:
-                $className = Addressbook_Backend_.$type;
+                $className = Addressbook_Backend_ . ucfirst($type);
                 $instance = new $className();
                 break;
                 
