@@ -808,25 +808,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     public function getAddressbooksByOwner($_owner) {
-        // convert to int
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
-        
-        $egwbaseContainer = Egwbase_Container::getInstance();
-        $personalAddressbooks = $egwbaseContainer->getContainerByOwner('addressbook', $_owner);
-        
-        $addressBook = new stdClass();
-        $addressBook->id = 1;
-        $addressBook->name = 'Addressbook 1';
-        $addressBooks[] = $addressBook;
-
-        $addressBook = new stdClass();
-        $addressBook->id = 2;
-        $addressBook->name = 'Addressbook 2';
-        $addressBooks[] = $addressBook;
-        
+        $personalAddressbooks = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
+                
         return $personalAddressbooks;
     }
 
