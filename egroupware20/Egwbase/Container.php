@@ -191,7 +191,7 @@ class Egwbase_Container
         return $result;
     }
 
-    public function getContainerByOwner($_application, $_owner)
+    public function getPersonalContainer($_application, $_owner)
     {
         $owner = (int)$_owner;
         if($owner != $_owner) {
@@ -203,17 +203,6 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
         
         $addressbook = Egwbase_Application::getInstance()->getApplicationByName($_application);
-        
-        //$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
-
-//        $select = $db->select()
-//            ->from('egw_container')
-//            ->join('egw_container_acl','egw_container.container_id = egw_container_acl.container_id', array())
-//            ->where('egw_container.application_id = ?', $_applicationId)
-//            ->where('egw_container_acl.account_id IN (?)', $_accountId)
-//            ->where('egw_container_acl.account_grant & ?', Egwbase_Acl_Grants::READ)
-//            ->order('egw_container.container_name')
-//            ->group('egw_container.container_id');
 
         $select = $db->select()
             ->from(array('owner' => 'egw_container_acl'), array())
@@ -224,6 +213,7 @@ class Egwbase_Container
             ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
             ->where('user.account_id IN (?)', $accountId)
             ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('egw_container.container_type = ?', 'personal')
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
