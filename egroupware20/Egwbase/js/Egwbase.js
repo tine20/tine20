@@ -356,7 +356,6 @@ Egw.Egwbase.Common = function(){
 	}
 	
 	_dateTimeRenderer = function($_iso8601){
-		console.log($_iso8601);
 		return Ext.util.Format.date($_iso8601, 'd.m.Y H:i:s');
 	}
 	
