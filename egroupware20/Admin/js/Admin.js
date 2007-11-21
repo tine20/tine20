@@ -200,8 +200,8 @@ Egw.Admin.AccessLog = function() {
                 {name: 'sessionid'},
                 {name: 'loginid'},
                 {name: 'ip'},
-                {name: 'li'},
-                {name: 'lo'},
+                {name: 'li', type: 'date', dateFormat: 'c'},
+                {name: 'lo', type: 'date', dateFormat: 'c'},
                 {name: 'log_id'},
                 {name: 'account_id'},
                 {name: 'result'}
@@ -382,8 +382,8 @@ Egw.Admin.AccessLog = function() {
             {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
             {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
             {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 120},
-            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 120},
+            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
             {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);

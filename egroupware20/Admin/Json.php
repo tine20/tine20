@@ -96,9 +96,9 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $timeFormat = Zend_Registry::get('locale')->getTranslationList('Timeformat');
         
         foreach($arrayAccessLogRowSet as $id => $row) {
-            $row['li'] = $row['li']->get($dateFormat['default'] . ' ' . $timeFormat['default'], Zend_Registry::get('locale'));
+            $row['li'] = $row['li']->get(Zend_Date::ISO_8601);
             if($row['lo'] instanceof Zend_Date) {
-                $row['lo'] = $row['lo']->get($dateFormat['default'] . ' ' . $timeFormat['default'], Zend_Registry::get('locale'));
+                $row['lo'] = $row['lo']->get(Zend_Date::ISO_8601);
             }
             $arrayAccessLogRowSet[$id] = $row;
         }
