@@ -26,6 +26,12 @@ class Egwbase_Container
      */
     protected $containerAclTable;
 
+    const INTERNAL = 'internal';
+    
+    const PERSONAL = 'personal';
+    
+    const SHARED = 'shared';
+    
     /**
      * the constructor
      *
@@ -39,22 +45,29 @@ class Egwbase_Container
             $this->createContainerTable();
             $this->containerTable = new Egwbase_Db_Table(array('name' => 'egw_container'));
 
-            $egwApplication = Egwbase_Application::getInstance();
-            $addressbook = $egwApplication->getApplicationByName('addressbook');
+            $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             
             $data = array(
-                'container_name'    => 'Default Addressbook',
-                'container_type'    => Addressbook_Backend::PERSONAL,
+                'container_name'    => 'Internal Addressbook',
+                'container_type'    => Egwbase_Container::INTERNAL,
                 'container_backend' => Addressbook_Backend::SQL,
-                'application_id'    => $addressbook->app_id
+                'application_id'    => $application->app_id
+            );
+            $this->containerTable->insert($data);
+
+            $data = array(
+                'container_name'    => 'Default Addressbook',
+                'container_type'    => Egwbase_Container::PERSONAL,
+                'container_backend' => Addressbook_Backend::SQL,
+                'application_id'    => $application->app_id
             );
             $this->containerTable->insert($data);
             
             $data = array(
                 'container_name'    => 'Shared 1',
-                'container_type'    => Addressbook_Backend::SHARED,
+                'container_type'    => Egwbase_Container::SHARED,
                 'container_backend' => Addressbook_Backend::SQL,
-                'application_id'    => $addressbook->app_id
+                'application_id'    => $application->app_id
             );
             $this->containerTable->insert($data);
         }
@@ -65,20 +78,28 @@ class Egwbase_Container
             $this->createContainerAclTable();
             $this->containerAclTable = new Egwbase_Db_Table(array('name' => 'egw_container_acl'));
 
-            $addressbook = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
+            $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             $accountId = Zend_Registry::get('currentAccount')->account_id;
             
             $data = array(
                 'container_id'   => 1,
-                'application_id' => $addressbook->app_id,
-                'account_id'     => $accountId,
-                'account_grant'  => Egwbase_Acl_Grants::ANY
+                'application_id' => $application->app_id,
+                'account_id'     => NULL,
+                'account_grant'  => Egwbase_Acl_Grants::READ
             );
             $this->containerAclTable->insert($data);
 
             $data = array(
                 'container_id'   => 2,
-                'application_id' => $addressbook->app_id,
+                'application_id' => $application->app_id,
+                'account_id'     => $accountId,
+                'account_grant'  => Egwbase_Acl_Grants::ANY
+            );
+            $this->containerAclTable->insert($data);
+            
+            $data = array(
+                'container_id'   => 3,
+                'application_id' => $application->app_id,
                 'account_id'     => $accountId,
                 'account_grant'  => Egwbase_Acl_Grants::ANY
             );
@@ -126,7 +147,7 @@ class Egwbase_Container
             $result = $db->getConnection()->exec("CREATE TABLE egw_container (
             	container_id int(11) NOT NULL auto_increment, 
             	container_name varchar(256), 
-            	container_type enum('personal', 'shared') NOT NULL,
+            	container_type enum('personal', 'shared', 'internal') NOT NULL,
             	container_backend varchar(64) NOT NULL,
             	application_id int(11) NOT NULL,
             	PRIMARY KEY  (`container_id`),
@@ -147,12 +168,14 @@ class Egwbase_Container
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
             $result = $db->getConnection()->exec("CREATE TABLE egw_container_acl (
-            	container_id int(11) NOT NULL auto_increment, 
+                acl_id int(11) NOT NULL auto_increment,
+            	container_id int(11) NOT NULL, 
             	application_id int(11) NOT NULL,
-            	account_id int(11) NOT NULL,
+            	account_id int(11),
             	/* account_type int(11) NOT NULL, */
             	account_grant int(11) NOT NULL,
-            	PRIMARY KEY  (`container_id`, `application_id`, `account_id`/*, `account_type`*/),
+            	PRIMARY KEY (`acl_id`),
+            	UNIQUE KEY `egw_container_acl_primary` (`container_id`, `application_id`, `account_id`),
             	KEY `egw_container_acl_application_id` (`application_id`),
             	KEY `egw_container_acl_account_id` (`account_id`)
             	) ENGINE=InnoDB DEFAULT CHARSET=utf8"
@@ -160,6 +183,36 @@ class Egwbase_Container
         }
     }
     
+    public function getInternalContainer($_application)
+    {
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from('egw_container_acl', array())
+            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
+            ->where('egw_container_acl.application_id = ?', $application->app_id)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('egw_container.container_type = ?', Egwbase_Container::INTERNAL)
+            ->order('egw_container.container_name')
+            ->group('egw_container.container_id');
+            
+        //error_log("getInternalContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+        
+        if($stmt->rowCount() == 0) {
+            throw new Exception('internal container not found or not accessible');
+        }
+
+        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
+        
+        return $result;
+        
+    }
     
     /**
      * return all container, which are visible for the user(aka the user has read rights for)
@@ -216,18 +269,18 @@ class Egwbase_Container
                 
         $db = Zend_Registry::get('dbAdapter');
         
-        $addressbook = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from(array('owner' => 'egw_container_acl'), array())
             ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
-            ->join('egw_container', 'user.container_id = egw_container.container_id')
-            ->where('owner.application_id = ?', $addressbook->app_id)
+            ->join('egw_container', 'owner.container_id = egw_container.container_id')
+            ->where('owner.application_id = ?', $application->app_id)
             ->where('owner.account_id = ?', $_owner)
             ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
             ->where('user.account_id IN (?)', $accountId)
             ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
-            ->where('egw_container.container_type = ?', 'personal')
+            ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
@@ -246,15 +299,15 @@ class Egwbase_Container
                 
         $db = Zend_Registry::get('dbAdapter');
         
-        $addressbook = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from('egw_container_acl', array())
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
-            ->where('egw_container_acl.application_id = ?', $addressbook->app_id)
+            ->where('egw_container_acl.application_id = ?', $application->app_id)
             ->where('egw_container_acl.account_id IN (?)', $accountId)
             ->where('egw_container_acl.account_grant & ?', Egwbase_Acl_Grants::READ)
-            ->where('egw_container.container_type = ?', 'shared')
+            ->where('egw_container.container_type = ?', Egwbase_Container::SHARED)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
@@ -273,18 +326,18 @@ class Egwbase_Container
                 
         $db = Zend_Registry::get('dbAdapter');
         
-        $addressbook = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from(array('owner' => 'egw_container_acl'), array('account_id'))
             ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
             ->join('egw_container', 'user.container_id = egw_container.container_id', array())
-            ->where('owner.application_id = ?', $addressbook->app_id)
+            ->where('owner.application_id = ?', $application->app_id)
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
             ->where('user.account_id IN (?)', $accountId)
             ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
-            ->where('egw_container.container_type = ?', 'personal')
+            ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
@@ -305,5 +358,41 @@ class Egwbase_Container
     public function setContainer()
     {
         
+    }
+    
+    public function hasAccess($_application, $_containerId, $_right) 
+    {
+        $containerId = (int)$_containerId;
+        if($containerId != $_containerId) {
+            throw new InvalidArgumentException('$_containerId must be integer');
+        }
+        
+        $right = (int)$_right;
+        if($right != $_right) {
+            throw new InvalidArgumentException('$_right must be integer');
+        }
+        
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from('egw_container_acl', array('container_id'))
+            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id', array())
+            ->where('egw_container_acl.application_id = ?', $application->app_id)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_grant & ?', $right)
+            ->where('egw_container.container_id = ?', $containerId);
+                    
+        //error_log("getContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+        
+        if($stmt->rowCount() == 0) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
 }
