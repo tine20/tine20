@@ -452,49 +452,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        // convert to int
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
+        $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
         
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $containerIds = array();
         
-        if ($_owner == 'currentuser') {
-            $_owner = $currentAccount->account_id;
-        }
-        
-        if($owner == 'allcontacts' || $owner == 'sharedaddressbooks' || $owner == 'otheraddressbooks') {
-            switch($_owner) {
-                case 'allcontacts':
-                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
-                    break;
-    
-                case 'sharedaddressbooks':
-                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
-                    break;
-    
-                case 'otheraddressbooks':
-                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
-                    break;
-            }
-            
-            if(empty($acl)) {
-                return false;
-            }
-
-            $contactOwner = array_keys($acl);
-
-        } else {
-            if($owner != $currentAccount->account_id && !$this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'addressbook', $owner, Egwbase_Acl::READ) ) {
-                throw new Exception("access to addressbook $owner by $currentAccount->account_id denied.");
-            }
-
-            $contactOwner = $owner;
+        foreach($ownerContainer as $container) {
+            $containerIds[] = $container->container_id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $contactOwner)
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -502,6 +469,27 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
+    public function getContactsByAddressbookId($_addressbookId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    {
+        // convert to int
+        $addressbookId = (int)$_addressbookId;
+        if($addressbookId != $_addressbookId) {
+            throw new InvalidArgumentException('$_addressbookId must be integer');
+        }
+        
+        if(!Egwbase_Container::getInstance()->hasAccess('addressbook', $_addressbookId, Egwbase_Acl_Grants::READ)) {
+            throw new Exception('read access denied to addressbook');
+        }
+        
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $addressbookId)
+        );
+
+        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+         
+        return $result;
+    }
+    
     public function getCountByOwner($_owner)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
@@ -736,14 +724,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
     public function getAccounts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        $where[] = 'account_id IS NOT NULL';
-        if($_filter !== NULL) {
-            $where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . $_filter . '%');
-        }
+        $egwbaseContainer = Egwbase_Container::getInstance();
+        
+        $internalContainer = $egwbaseContainer->getInternalContainer('addressbook');
 
-
-        $result = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
-
+        $result = $this->getContactsByAddressbookId($internalContainer->container_id, $_filter, $_sort, $_dir, $_limit, $_start);
+        
         return $result;
     }
 

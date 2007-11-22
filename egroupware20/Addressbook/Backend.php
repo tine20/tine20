@@ -30,10 +30,6 @@ class Addressbook_Backend
      */
     const LDAP = 'ldap';
     
-    const PERSONAL = 'personal';
-    
-    const SHARED = 'shared';
-    
     /**
      * factory function to return a selected contacts backend class
      *

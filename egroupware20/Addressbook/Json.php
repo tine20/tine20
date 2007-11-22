@@ -245,16 +245,9 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
-            if($rows = $backend->getContactsByOwner($addressbookId, $filter, $sort, $dir, $limit = NULL, $start)) {
-                $result['results']    = $rows->toArray();
-                $result['totalcount'] = $backend->getCountByOwner($addressbookId);
-            }
-        } else {
-            if($rows = $backend->getContactsByOwner($addressbookId, $filter, $sort, $dir, $limit = NULL, $start)) {
-                $result['results']    = $rows->toArray();
-                $result['totalcount'] = $backend->getCountByOwner($addressbookId);
-            }
+        if($rows = $backend->getContactsByAddressbookId($addressbookId, $filter, $sort, $dir, $limit, $start)) {
+            $result['results']    = $rows->toArray();
+            //$result['totalcount'] = $backend->getCountByOwner($addressbookId);
         }
         
         return $result;
@@ -426,11 +419,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
-            $rows = $backend->getSharedContacts_14($filter, $sort, $dir, $limit, $start);
-        } else {
-            $rows = $backend->getSharedContacts($filter, $sort, $dir, $limit, $start);
-        }
+        $rows = $backend->getSharedContacts($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
