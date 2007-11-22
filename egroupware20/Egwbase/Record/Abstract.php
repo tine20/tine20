@@ -140,7 +140,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface, Arra
                 $this->_validationErrors[] = array('id'  => $fieldName,
                                   'msg' => $errorMessages[0]);
             }
-    		throw new Egwbase_Record_Exception('some fields have invalid content');
+    		throw new UnexpectedValueException('some fields have invalid content');
     	}
     }
     
