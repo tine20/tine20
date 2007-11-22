@@ -267,6 +267,36 @@ class Egwbase_Container
         return $result;
     }
     
+    public function getOtherUsers($_application)
+    {
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+                
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $addressbook = Egwbase_Application::getInstance()->getApplicationByName($_application);
+
+        $select = $db->select()
+            ->from(array('owner' => 'egw_container_acl'), array('account_id'))
+            ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
+            ->join('egw_container', 'user.container_id = egw_container.container_id', array())
+            ->where('owner.application_id = ?', $addressbook->app_id)
+            ->where('owner.account_id != ?', $accountId)
+            ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
+            ->where('user.account_id IN (?)', $accountId)
+            ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('egw_container.container_type = ?', 'personal')
+            ->order('egw_container.container_name')
+            ->group('egw_container.container_id');
+            
+        //error_log("getContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+
+        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        return $result;
+    }
+    
     public function deleteContainer()
     {
         
