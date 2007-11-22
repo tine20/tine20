@@ -305,13 +305,6 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
-            // eGW 1.4 does not support multiple addressbooks per user
-
-            // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-            return NULL;
-        }
-        
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         if($rows = $backend->getAddressbooksByOwner($owner)) {
             foreach($rows as $addressbookData) {
@@ -333,16 +326,10 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         $treeNodes = array();
         
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
-            $rows = $backend->getSharedAddressbooks_14();
-        } else {
-            $rows = $backend->getSharedAddressbooks();
-        }
-        
-        if(is_array($rows)) {
+        if($rows = $backend->getSharedAddressbooks()) {
             foreach($rows as $addressbookData) {
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'shared-' . $addressbookData->id, $addressbookData->name, TRUE);
-                $childNode->addressbookId = $addressbookData->id;
+                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'shared-' . $addressbookData->container_id, $addressbookData->container_name, TRUE);
+                $childNode->addressbookId = $addressbookData->container_id;
                 $childNode->nodeType = 'singleAddressbook';
                 $treeNodes[] = $childNode;
             }

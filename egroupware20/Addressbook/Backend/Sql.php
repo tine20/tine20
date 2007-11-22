@@ -755,7 +755,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     public function getSharedAddressbooks() {
-        return $this->getSharedAddressbooks_14();
+        $sharedAddressbooks = Egwbase_Container::getInstance()->getSharedContainer('addressbook');
+                
+        return $sharedAddressbooks;
     }
 
     /**
@@ -763,7 +765,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      *
      * @return unknown
      */
-    public function getSharedAddressbooks_14()
+/*  public function getSharedAddressbooks_14()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -781,7 +783,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
 
         return $result;
-    }
+    }*/
     
     public function getOtherUsers() {
         return $this->getOtherUsers_14();
