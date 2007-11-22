@@ -57,7 +57,7 @@ interface Addressbook_Backend_Interface
      * 
      * @return array list of contacts from contact list identified by $list
      */
-    public function getContactsByListId($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    //public function getContactsByListId($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
     
     /**
      * Enter description here...
@@ -72,7 +72,7 @@ interface Addressbook_Backend_Interface
      * 
      * @return array list of contacts from contact list identified by $list
      */
-    public function getContactsByListOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    //public function getContactsByListOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
     
 	/**
      * returns list of all personal contact lists
@@ -81,7 +81,7 @@ interface Addressbook_Backend_Interface
      * @return array list of all personal contact lists
      *
      */
-    public function getListsByOwner($owner, $filter, $sort, $dir, $limit, $start);
+    //public function getListsByOwner($owner, $filter, $sort, $dir, $limit, $start);
     
     /**
      * return list of internal conacts (aka accounts)

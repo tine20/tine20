@@ -453,11 +453,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
-            $rows = $backend->getOtherPeopleContacts_14($filter, $sort, $dir, $limit, $start);
-        } else {
-            $rows = $backend->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
-        }
+        $rows = $backend->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
