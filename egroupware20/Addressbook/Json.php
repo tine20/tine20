@@ -346,26 +346,22 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         $treeNodes = array();
         
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
-            $rows = $backend->getOtherUsers_14();
-        } else {
-            $rows = $backend->getOtherUsers();
-        }
+        $rows = $backend->getOtherUsers();
         
-        if(is_array($rows)) {
-            foreach($rows as $addressbookData) {
+        //error_log(print_r($rows, true));
+        
+            foreach($rows as $accountData) {
                 $treeNode = new Egwbase_Ext_Treenode(
-                                    'Addressbook',
-                                    'contacts',
-                                    'otheraddressbook_'. $addressbookData->id, 
-                                    $addressbookData->name,
-                                    Zend_Registry::get('dbConfig')->get('egw14compat') == 1
+                    'Addressbook',
+                    'contacts',
+                    'otheraddressbook_'. $accountData->account_id, 
+                    $accountData->account_name,
+                    false
                 );
-                $treeNode->owner  = $addressbookData->id;
+                $treeNode->owner  = $accountData->account_id;
                 $treeNode->nodeType = 'userAddressbooks';
                 $treeNodes[] = $treeNode;
             }
-        }
         
         echo Zend_Json::encode($treeNodes);
 

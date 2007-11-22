@@ -786,10 +786,24 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }*/
     
     public function getOtherUsers() {
-        return $this->getOtherUsers_14();
+        $rows = Egwbase_Container::getInstance()->getOtherUsers('addressbook');
+
+        $accountData = array();
+
+        foreach($rows as $account) {
+            $accountData[] = array(
+                'account_id'      => $account['account_id'],
+                'account_loginid' => 'loginid',
+                'account_name'    => 'Account ' . $account['account_id']
+            );
+        }
+
+        $result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Record_Account');
+        
+        return $result;
     }
     
-    public function getOtherUsers_14()
+/*    public function getOtherUsers_14()
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -807,7 +821,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
 
         return $result;
-    }
+    } */
     
     public function getAddressbooksByOwner($_owner) {
         $personalAddressbooks = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
