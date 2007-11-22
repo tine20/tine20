@@ -224,28 +224,23 @@ class Egwbase_Container
      * @param array $_containerType array containing int of containertypes
      * @return Egwbase_Record_RecordSet
      */
-    public function getContainerIdsByACL($_applicationId, $_right)
+    public function getContainerIdsByACL($_application, $_right)
     {
-        $applicationId = (int)$_applicationId;
-        if($_applicationId != $_applicationId) {
-            throw new InvalidArgumentException('$_applicationId must be integer');
+        $right = (int)$_right;
+        if($right != $_right) {
+            throw new InvalidArgumentException('$_right must be integer');
         }
-        
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-                
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+               
         $db = Zend_Registry::get('dbAdapter');
         
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
-
         $select = $db->select()
             ->from('egw_container')
             ->join('egw_container_acl','egw_container.container_id = egw_container_acl.container_id', array())
-            ->where('egw_container.application_id = ?', $_applicationId)
-            ->where('egw_container_acl.account_id IN (?)', $_accountId)
-            ->where('egw_container_acl.account_grant & ?', $_right)
+            ->where('egw_container.application_id = ?', $application->app_id)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_grant & ?', $right)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
 
@@ -339,13 +334,43 @@ class Egwbase_Container
             ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
             ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
             ->order('egw_container.container_name')
-            ->group('egw_container.container_id');
+            ->group('owner.account_id');
             
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
 
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        return $result;
+    }
+    
+    public function getOtherUsersContainer($_application)
+    {
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+                
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+
+        $select = $db->select()
+            ->from(array('owner' => 'egw_container_acl'))
+            ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
+            ->join('egw_container', 'user.container_id = egw_container.container_id')
+            ->where('owner.application_id = ?', $application->app_id)
+            ->where('owner.account_id != ?', $accountId)
+            ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
+            ->where('user.account_id IN (?) or user.account_id IS NULL', $accountId)
+            ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
+            ->order('egw_container.container_name')
+            ->group('egw_container.container_id');
+            
+        //error_log("getContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
         
         return $result;
     }
