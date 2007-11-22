@@ -33,8 +33,8 @@ class Egwbase_Record_Container extends Egwbase_Record_Abstract
     protected $_validators = array(
         'container_id'      => array('Digits', 'presence' => 'required'),
         'container_name'    => array('presence' => 'required'),
-        'container_type'    => array('Digits', 'presence' => 'required'),
-        'container_backend' => array('Digits', 'presence' => 'required'),
+        'container_type'    => array('presence' => 'required'),
+        'container_backend' => array('presence' => 'required'),
         'application_id'    => array('Digits', 'presence' => 'required')
     );
 
