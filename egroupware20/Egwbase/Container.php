@@ -169,13 +169,10 @@ class Egwbase_Container
             $result = $db->getConnection()->exec("CREATE TABLE egw_container_acl (
                 acl_id int(11) NOT NULL auto_increment,
             	container_id int(11) NOT NULL, 
-            	/* application_id int(11) NOT NULL, */
             	account_id int(11),
-            	/* account_type int(11) NOT NULL, */
             	account_grant int(11) NOT NULL,
             	PRIMARY KEY (`acl_id`),
             	UNIQUE KEY `egw_container_acl_primary` (`container_id`, `account_id`),
-            	/*KEY `egw_container_acl_application_id` (`application_id`), */
             	KEY `egw_container_acl_account_id` (`account_id`)
             	) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
@@ -208,9 +205,13 @@ class Egwbase_Container
             throw new InvalidArgumentException('$_containerId must be integer');
         }
         
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
+        if($_accountId !== NULL) {
+            $accountId = (int)$_accountId;
+            if($accountId != $_accountId) {
+                throw new InvalidArgumentException('$_accountId must be integer or NULL');
+            }
+        } else {
+            $accountId = NULL;
         }
         
         $rights = (int)$_rights;

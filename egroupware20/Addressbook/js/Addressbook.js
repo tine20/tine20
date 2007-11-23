@@ -49,11 +49,17 @@ Egw.Addressbook = function(){
         Ext.MessageBox.prompt('New addressbook', 'Please enter the name of the new addressbook:', function(_btn, _text) {
             if(_treeNodeContextMenu !== null && _btn == 'ok') {
 
+                //console.log(_treeNodeContextMenu);
+                var type = 'personal';
+                if(_treeNodeContextMenu.attributes.nodeType == 'sharedAddressbooks') {
+                	type = 'shared';
+                }
                 Ext.Ajax.request({
                     url: 'index.php',
                     params: {
-                        method: 'Addressbook.addPersonalAddressbook',
+                        method: 'Addressbook.addAddressbook',
                         name: _text,
+                        type: type,
                         owner: _treeNodeContextMenu.attributes.owner
                     },
                     text: 'Creating new addressbook...',
@@ -61,14 +67,16 @@ Egw.Addressbook = function(){
                         //Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
                         //_treeNodeContextMenu.expand(false, false);
                         //console.log('before');
-                        var newNode = new Ext.tree.TreeNode({
-                            leaf: true,
-                            cls: 'file',
-                            text: _text
-                        });
-                        //console.log('after');
-                        _treeNodeContextMenu.appendChild(newNode);
-                        //_treeNodeContextMenu.expand(false);
+                        if(_treeNodeContextMenu.isExpanded()) {
+	                        var newNode = new Ext.tree.TreeNode({
+	                            leaf: true,
+	                            cls: 'file',
+	                            text: _text
+	                        });
+                            _treeNodeContextMenu.appendChild(newNode);
+                        } else {
+                        	_treeNodeContextMenu.expand(false);
+                        }
                     },
                     failure: function(result, request){
                         //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
@@ -154,11 +162,13 @@ Egw.Addressbook = function(){
             //_node.select();
             //_node.getOwnerTree().fireEvent('click', _node);
             _treeNodeContextMenu = _node;
+
             switch(_node.attributes.nodeType) {
                 case 'userAddressbooks':
+                case 'sharedAddressbooks':
                     _contextMenuUserAddressbooks.showAt(_event.getXY());
-                    _node.expand(false, false);
                     break;
+
                 default:
                     //console.log(_node.attributes.nodeType);
                     break;

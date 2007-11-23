@@ -220,14 +220,24 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     } */
     
-    public function addPersonalAddressbook($_name) 
+    public function addAddressbook($_name, $_type) 
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->account_id;
         
-        $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::PERSONAL, Addressbook_Backend::SQL);
+        if($_type == Egwbase_Container::SHARED) {
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::SHARED, Addressbook_Backend::SQL);
+
+            // add admin grants to creator
+            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Acl_Grants::ANY);
+            // add read grants to any other user
+            $egwbaseContainer->addACL($addressbookId, NULL, Egwbase_Acl_Grants::READ);
+        } else {
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::PERSONAL, Addressbook_Backend::SQL);
         
-        $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Acl_Grants::ANY);
+            // add admin grants to creator
+            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Acl_Grants::ANY);
+        }
         
         return $addressbookId;
     }

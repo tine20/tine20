@@ -15,17 +15,17 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
     
-    public function addPersonalAddressbook($name)
+    public function addAddressbook($name, $type)
     {
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         
-        $id = $backend->addPersonalAddressbook($name);
+        $id = $backend->addAddressbook($name, $type);
         
         $result = array('success'   => TRUE);
         
         return $result;
     }
-    
+        
     /**
      * delete a array of contacts
      *
