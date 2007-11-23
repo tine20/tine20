@@ -183,6 +183,40 @@ class Egwbase_Container
         }
     }
     
+    public function addContainer($_application, $_name, $_type, $_backend)
+    {
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        
+        $data = array(
+            'container_name'    => $_name,
+            'container_type'    => $_type,
+            'container_backend' => $_name,
+            'application_id'    => $application->app_id
+        );
+        $this->containerTable->insert($data);
+        
+        $containerId = $this->containerTable->lastInsertId();
+        
+        return $containerId;
+    }
+    
+    public function addACL($_application, $_name, $_type, $_backend)
+    {
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        
+        $data = array(
+            'container_name'    => $_name,
+            'container_type'    => $_type,
+            'container_backend' => $_name,
+            'application_id'    => $application->app_id
+        );
+        $this->containerTable->insert($data);
+        
+        $containerId = $this->containerTable->lastInsertId();
+        
+        return $containerId;
+    }
+    
     public function getInternalContainer($_application)
     {
         $accountId   = Zend_Registry::get('currentAccount')->account_id;
