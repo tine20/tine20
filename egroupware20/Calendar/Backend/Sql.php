@@ -189,7 +189,6 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
         }
         
         $this->_addParticipantsToEventsObjs($events);
-        print_r($events->toArray());
         return $events;
     }
     

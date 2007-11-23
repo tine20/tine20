@@ -25,12 +25,21 @@ class Calendar_Json extends Egwbase_Application_Json_Abstract
         $this->_backend = new Calendar_Backend_Sql();
     }
 
-    public function getEvents( $_start, $_end, $_users, $_filters )
+    public function getEvents( $start, $end, $users, $filters )
     {
         //$now = new Zend_Date();
         //$etime = $now->add(60, Zend_Date::DAY);
         
-        //$events = $this->_backend->getEvents( new Zend_Date('01-10-2007') , new Zend_Date('30-12-2007'), 'r1', array() );
+        $events = $this->_backend->getEvents( 
+            new Zend_Date($start,Zend_Date::ISO_8601), 
+            new Zend_Date($end,Zend_Date::ISO_8601), 
+            5, 
+            array() 
+        );
+        $jsonEvents = array();
+        foreach ($events as $event) {
+            $jsonEvents[] = self::date2Iso( $event->toArray() );
+        }
         //exit;
         //$events = $this->_backend->getEventById( 5 );
         //print_r($events->toArray());
@@ -45,9 +54,12 @@ class Calendar_Json extends Egwbase_Application_Json_Abstract
         //echo $event->cal_title. '<br>';
         //$this->_backend->saveEvent($event);
         
-        echo 'hallo';
+        //echo 'hallo';
         //print_r($this->getEventById(5));
-        
+        return array(
+            'results' => $jsonEvents,
+            'totalcount' => count($events),
+        );
     }
     
     public function getEventById( $_id )
@@ -95,5 +107,6 @@ class Calendar_Json extends Egwbase_Application_Json_Abstract
                 $toConvert[$field] = self::date2Iso($value);
             }
         }
+        return $toConvert;
     }
 }
