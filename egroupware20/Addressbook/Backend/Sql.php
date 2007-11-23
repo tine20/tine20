@@ -242,6 +242,30 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $addressbookId;
     }
     
+    public function deleteAddressbook($_addressbookId)
+    {
+        $egwbaseContainer = Egwbase_Container::getInstance();
+        
+        $egwbaseContainer->deleteContainer($_addressbookId);
+        
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', (int)$_addressbookId)
+        );
+        
+        //$this->contactsTable->delete($where);
+        
+        return true;
+    }
+    
+    public function renameAddressbook($_addressbookId, $_name)
+    {
+        $egwbaseContainer = Egwbase_Container::getInstance();
+        
+        $egwbaseContainer->renameContainer($_addressbookId, $_name);
+                
+        return true;
+    }
+    
     public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
         $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('addressbook');
@@ -462,7 +486,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        if(!Egwbase_Container::getInstance()->hasAccess('addressbook', $_addressbookId, Egwbase_Acl_Grants::READ)) {
+        if(!Egwbase_Container::getInstance()->hasRight($_addressbookId, Egwbase_Acl_Grants::READ)) {
             throw new Exception('read access denied to addressbook');
         }
         

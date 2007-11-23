@@ -322,7 +322,7 @@ class Egwbase_Container
             ->join('egw_container', 'owner.container_id = egw_container.container_id')
             ->where('owner.account_id = ?', $_owner)
             ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
-            ->where('user.account_id IN (?)', $accountId)
+            ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
             ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
@@ -349,7 +349,7 @@ class Egwbase_Container
         $select = $db->select()
             ->from('egw_container_acl', array())
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
-            ->where('egw_container_acl.account_id IN (?)', $accountId)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
             ->where('egw_container_acl.account_grant & ?', Egwbase_Acl_Grants::READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', Egwbase_Container::SHARED)
@@ -379,7 +379,7 @@ class Egwbase_Container
             ->join('egw_container', 'user.container_id = egw_container.container_id', array())
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
-            ->where('user.account_id IN (?)', $accountId)
+            ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
             ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
@@ -389,6 +389,10 @@ class Egwbase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
+        
+        if($stmt->rowCount() == 0) {
+            throw new UnderflowException('no other users found');
+        }
 
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -425,9 +429,35 @@ class Egwbase_Container
         return $result;
     }
     
-    public function deleteContainer()
+    public function deleteContainer($_containerId)
     {
+        if (!$this->hasRight($_containerId, Egwbase_Acl_Grants::ADMIN)) {
+            throw new Exception('admin permission to container denied');
+        }
         
+        $where = array(
+            $this->containerTable->getAdapter()->quoteInto('container_id = ?', (int)$_containerId)
+        );
+        
+        $this->containerTable->delete($where);
+        $this->containerAclTable->delete($where);
+    }
+    
+    public function renameContainer($_containerId, $_containerName)
+    {
+        if (!$this->hasRight($_containerId, Egwbase_Acl_Grants::ADMIN)) {
+            throw new Exception('admin permission to container denied');
+        }
+        
+        $where = array(
+            $this->containerTable->getAdapter()->quoteInto('container_id = ?', (int)$_containerId)
+        );
+        
+        $data = array(
+            'container_name' => $_containerName
+        );
+        
+        $this->containerTable->update($data, $where);
     }
     
     public function setContainer()
@@ -435,7 +465,7 @@ class Egwbase_Container
         
     }
     
-    public function hasAccess($_application, $_containerId, $_right) 
+    public function hasRight($_containerId, $_right) 
     {
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
@@ -448,7 +478,6 @@ class Egwbase_Container
         }
         
         $accountId   = Zend_Registry::get('currentAccount')->account_id;
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
         
         $db = Zend_Registry::get('dbAdapter');
 

@@ -18,14 +18,32 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     public function addAddressbook($name, $type)
     {
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        
+
         $id = $backend->addAddressbook($name, $type);
         
-        $result = array('success'   => TRUE);
+        $result = array('addressbookId' => $id);
         
         return $result;
     }
-        
+    
+    public function deleteAddressbook($addressbookId)
+    {
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+
+        $backend->deleteAddressbook($addressbookId);
+            
+        return TRUE;
+    }
+    
+    public function renameAddressbook($addressbookId, $name)
+    {
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+
+        $backend->renameAddressbook($addressbookId, $name);
+            
+        return TRUE;
+    }
+    
     /**
      * delete a array of contacts
      *

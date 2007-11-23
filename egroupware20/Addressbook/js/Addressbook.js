@@ -54,6 +54,7 @@ Egw.Addressbook = function(){
                 if(_treeNodeContextMenu.attributes.nodeType == 'sharedAddressbooks') {
                 	type = 'shared';
                 }
+                
                 Ext.Ajax.request({
                     url: 'index.php',
                     params: {
@@ -66,11 +67,14 @@ Egw.Addressbook = function(){
                     success: function(_result, _request){
                         //Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
                         //_treeNodeContextMenu.expand(false, false);
-                        //console.log('before');
+                        //console.log(_result);
                         if(_treeNodeContextMenu.isExpanded()) {
+                        	var responseData = Ext.util.JSON.decode(_result.responseText);
 	                        var newNode = new Ext.tree.TreeNode({
 	                            leaf: true,
 	                            cls: 'file',
+	                            nodeType: 'singleAddressbook',
+	                            addressbookId: responseData.addressbookId,
 	                            text: _text
 	                        });
                             _treeNodeContextMenu.appendChild(newNode);
@@ -86,14 +90,102 @@ Egw.Addressbook = function(){
         });
     };
 
+    var _handler_renameAddressbook = function(_button, _event) {
+        var resulter = function(_btn, _text) {
+            if(_treeNodeContextMenu !== null && _btn == 'ok') {
+
+                //console.log(_treeNodeContextMenu);
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Addressbook.renameAddressbook',
+                        addressbookId: _treeNodeContextMenu.attributes.addressbookId,
+                        name: _text
+                    },
+                    text: 'Renamimg addressbook...',
+                    success: function(_result, _request){
+                        _treeNodeContextMenu.setText(_text);
+                    },
+                    failure: function(result, request){
+                        //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
+                    }
+                });
+            }
+        };
+        
+        Ext.MessageBox.show({
+            title: 'Rename addressbook',
+            msg: 'Please enter the new name of the addressbook:',
+            buttons: Ext.MessageBox.OKCANCEL,
+            value: _treeNodeContextMenu.text,
+            fn: resulter,
+            prompt: true,
+            icon: Ext.MessageBox.QUESTION
+        });
+        
+    };
+
+    var _handler_deleteAddressbook = function(_button, _event) {
+        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the addressbook ' + _treeNodeContextMenu.text + ' ?', function(_button){
+            if (_button == 'yes') {
+            
+                //console.log(_treeNodeContextMenu);
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Addressbook.deleteAddressbook',
+                        addressbookId: _treeNodeContextMenu.attributes.addressbookId
+                    },
+                    text: 'Deleting Addressbook...',
+                    success: function(_result, _request){
+                        if(_treeNodeContextMenu.isSelected()) {
+                            Ext.getCmp('Addressbook_Tree').getSelectionModel().select(_treeNodeContextMenu.parentNode);
+                            Ext.getCmp('Addressbook_Tree').fireEvent('click', _treeNodeContextMenu.parentNode);
+                        }
+                        _treeNodeContextMenu.remove();
+                    },
+                    failure: function(_result, _request){
+                        Ext.MessageBox.alert('Failed', 'The addressbook could not be deleted.');
+                    }
+                });
+            }
+        });
+    };
+
     var _action_addAddressbook = new Ext.Action({
-        text: 'Add Addressbook',
+        text: 'add addressbook',
         handler: _handler_addAddressbook
+    });
+
+    var _action_deleteAddressbook = new Ext.Action({
+        text: 'delete addressbook',
+        iconCls: 'action_delete',
+        handler: _handler_deleteAddressbook
+    });
+
+    var _action_renameAddressbook = new Ext.Action({
+        text: 'rename addressbook',
+        iconCls: 'action_rename',
+        handler: _handler_renameAddressbook
+    });
+
+    var _action_permisionsAddressbook = new Ext.Action({
+    	disabled: true,
+        text: 'permissions',
+        handler: _handler_deleteAddressbook
     });
 
     var _contextMenuUserAddressbooks = new Ext.menu.Menu({
         items: [
             _action_addAddressbook
+        ]
+    });
+    
+    var _contextMenuSingleAddressbook= new Ext.menu.Menu({
+        items: [
+            _action_renameAddressbook,
+            _action_deleteAddressbook,
+            _action_permisionsAddressbook
         ]
     });
     
@@ -162,11 +254,15 @@ Egw.Addressbook = function(){
             //_node.select();
             //_node.getOwnerTree().fireEvent('click', _node);
             _treeNodeContextMenu = _node;
-
+            //console.log(_node.attributes.nodeType);
             switch(_node.attributes.nodeType) {
                 case 'userAddressbooks':
                 case 'sharedAddressbooks':
                     _contextMenuUserAddressbooks.showAt(_event.getXY());
+                    break;
+
+                case 'singleAddressbook':
+                    _contextMenuSingleAddressbook.showAt(_event.getXY());
                     break;
 
                 default:
