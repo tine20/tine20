@@ -15,8 +15,12 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
     
-    public function addAddressbook($name, $owner)
+    public function addPersonalAddressbook($name)
     {
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        
+        $id = $backend->addPersonalAddressbook($name);
+        
         $result = array('success'   => TRUE);
         
         return $result;

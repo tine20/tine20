@@ -56,10 +56,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $this->listsTable = new Addressbook_Backend_Sql_Lists();
         $this->listsMapping = new Addressbook_Backend_Sql_ListMapping();
         $this->egwbaseAcl = Egwbase_Acl::getInstance();
-
-//        $data = $this->egwbaseContainer->getContainer(8, 7, array(1));
-//        
-//        error_log(print_r($data->toArray(), true));
     }
 
     /**
@@ -109,7 +105,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @todo check acl when adding list
      * @return unknown
      */
-    public function saveList(Addressbook_List $_listData)
+/*    public function saveList(Addressbook_List $_listData)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -158,7 +154,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         
         return $_listData;
-    }
+    }*/
 
     /**
      * delete contacts identified by contact id
@@ -223,6 +219,18 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         return $result;
     } */
+    
+    public function addPersonalAddressbook($_name) 
+    {
+        $egwbaseContainer = Egwbase_Container::getInstance();
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        
+        $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::PERSONAL, Addressbook_Backend::SQL);
+        
+        $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Acl_Grants::ANY);
+        
+        return $addressbookId;
+    }
     
     public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {

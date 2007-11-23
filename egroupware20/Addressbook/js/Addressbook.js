@@ -52,7 +52,7 @@ Egw.Addressbook = function(){
                 Ext.Ajax.request({
                     url: 'index.php',
                     params: {
-                        method: 'Addressbook.addAddressbook',
+                        method: 'Addressbook.addPersonalAddressbook',
                         name: _text,
                         owner: _treeNodeContextMenu.attributes.owner
                     },

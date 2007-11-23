@@ -83,7 +83,6 @@ class Egwbase_Container
             
             $data = array(
                 'container_id'   => 1,
-                'application_id' => $application->app_id,
                 'account_id'     => NULL,
                 'account_grant'  => Egwbase_Acl_Grants::READ
             );
@@ -91,7 +90,6 @@ class Egwbase_Container
 
             $data = array(
                 'container_id'   => 2,
-                'application_id' => $application->app_id,
                 'account_id'     => $accountId,
                 'account_grant'  => Egwbase_Acl_Grants::ANY
             );
@@ -99,7 +97,6 @@ class Egwbase_Container
             
             $data = array(
                 'container_id'   => 3,
-                'application_id' => $application->app_id,
                 'account_id'     => $accountId,
                 'account_grant'  => Egwbase_Acl_Grants::ANY
             );
@@ -192,31 +189,47 @@ class Egwbase_Container
         $data = array(
             'container_name'    => $_name,
             'container_type'    => $_type,
-            'container_backend' => $_name,
+            'container_backend' => $_backend,
             'application_id'    => $application->app_id
         );
-        $this->containerTable->insert($data);
+        $containerId = $this->containerTable->insert($data);
         
-        $containerId = $this->containerTable->lastInsertId();
+        if($containerId < 1) {
+            throw new UnexpectedValueException('$containerId can not be 0');
+        }
         
         return $containerId;
     }
     
-    public function addACL($_application, $_name, $_type, $_backend)
+    public function addACL($_containerId, $_accountId, $_rights)
     {
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $containerId = (int)$_containerId;
+        if($containerId != $_containerId) {
+            throw new InvalidArgumentException('$_containerId must be integer');
+        }
+        
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $rights = (int)$_rights;
+        if($rights != $_rights || $rights > Egwbase_Acl_Grants::ANY) {
+            throw new InvalidArgumentException('$_right must be integer and can not be greater ' . Egwbase_Acl_Grants::ANY);
+        }
         
         $data = array(
-            'container_name'    => $_name,
-            'container_type'    => $_type,
-            'container_backend' => $_name,
-            'application_id'    => $application->app_id
+            'container_id'   => $containerId,
+            'account_id'     => $accountId,
+            'account_grant'  => $rights
         );
-        $this->containerTable->insert($data);
-        
-        $containerId = $this->containerTable->lastInsertId();
-        
-        return $containerId;
+        $affectedRows = $this->containerAclTable->insert($data);
+                        
+        if($affectedRows == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
     
     public function getInternalContainer($_application)
