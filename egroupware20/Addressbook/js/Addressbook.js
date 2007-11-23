@@ -6,7 +6,7 @@ Egw.Addressbook = function(){
      *
      * gets set by Egw.Addressbook.setTreeContextMenu()
      */
-    var _treeContextMenu = null;
+    var _treeNodeContextMenu = null;
 
     /**
      * the initial tree to display in the left treePanel
@@ -47,16 +47,28 @@ Egw.Addressbook = function(){
     
     var _handler_addAddressbook = function(_button, _event) {
         Ext.MessageBox.prompt('New addressbook', 'Please enter the name of the new addressbook:', function(_btn, _text) {
-            if(_btn == 'ok') {
+            if(_treeNodeContextMenu !== null && _btn == 'ok') {
+
                 Ext.Ajax.request({
                     url: 'index.php',
                     params: {
                         method: 'Addressbook.addAddressbook',
-                        name: _text
+                        name: _text,
+                        owner: _treeNodeContextMenu.attributes.owner
                     },
                     text: 'Creating new addressbook...',
                     success: function(_result, _request){
                         //Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
+                        //_treeNodeContextMenu.expand(false, false);
+                        //console.log('before');
+                        var newNode = new Ext.tree.TreeNode({
+                            leaf: true,
+                            cls: 'file',
+                            text: _text
+                        });
+                        //console.log('after');
+                        _treeNodeContextMenu.appendChild(newNode);
+                        //_treeNodeContextMenu.expand(false);
                     },
                     failure: function(result, request){
                         //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
@@ -141,17 +153,16 @@ Egw.Addressbook = function(){
             _event.stopEvent();
             //_node.select();
             //_node.getOwnerTree().fireEvent('click', _node);
+            _treeNodeContextMenu = _node;
             switch(_node.attributes.nodeType) {
                 case 'userAddressbooks':
                     _contextMenuUserAddressbooks.showAt(_event.getXY());
+                    _node.expand(false, false);
                     break;
                 default:
                     //console.log(_node.attributes.nodeType);
                     break;
             }
-            /*if (_treeContextMenu !== null) {
-                _treeContextMenu.showAt(_event.getXY());
-            }*/
         });
 
         return treePanel;

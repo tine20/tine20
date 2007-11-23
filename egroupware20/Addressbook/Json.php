@@ -15,6 +15,13 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
     
+    public function addAddressbook($name, $owner)
+    {
+        $result = array('success'   => TRUE);
+        
+        return $result;
+    }
+    
     /**
      * delete a array of contacts
      *
