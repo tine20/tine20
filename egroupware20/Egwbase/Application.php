@@ -12,6 +12,10 @@
 
 class Egwbase_Application
 {
+    const ENABLED  = 1;
+    
+    const DISABLED = 0;
+    
     /**
      * the table object for the egw_applications table
      *
@@ -117,5 +121,24 @@ class Egwbase_Application
         $count = $this->applicationTable->getTotalCount($where);
         
         return $count;
+    }
+    
+    public function setApplicationState(array $_applicationIds, $_state)
+    {
+        if($_state != Egwbase_Application::DISABLED && $_state != Egwbase_Application::ENABLED) {
+            throw new OutOfRangeException('$_state can be only ' . Egwbase_Application::DISABLED . ' or ' . Egwbase_Application::ENABLED);
+        }
+        
+        $where = array(
+            $this->applicationTable->getAdapter()->quoteInto('app_id IN (?)', $_applicationIds)
+        );
+        
+        $data = array(
+            'app_enabled' => $_state
+        );
+        
+        $affectedRows = $this->applicationTable->update($data, $where);
+        
+        error_log("AFFECTED:: $affectedRows");
     }
 }
