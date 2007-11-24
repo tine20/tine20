@@ -114,7 +114,7 @@ class Egwbase_AccessLog
      * 
      * @return Egwbase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getEntries(Zend_Date $_from, Zend_Date $_to, $_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
+    public function getEntries(Zend_Date $_from, Zend_Date $_to, $_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
         $where = array(
             'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()

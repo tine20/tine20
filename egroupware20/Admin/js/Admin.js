@@ -504,10 +504,11 @@ Egw.Admin.Applications = function() {
             width:240,
             emptyText: 'enter searchfilter'
         }); 
-        //quickSearchField.on('change', searchFieldHandler);
+        quickSearchField.on('change', function() {
+            Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
+        });
         
         var applicationToolbar = new Ext.Toolbar({
-            /*region: 'south', */
             id: 'toolbarAdminApplications',
             split: false,
             height: 26,

@@ -44,7 +44,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         return $application->toArray();
     }
     
-    public function getApplications($filter, $sort, $dir, $limit, $start)
+    public function getApplications($filter, $sort, $dir, $start, $limit)
     {
         if(empty($filter)) {
             $filter = NULL;
@@ -57,13 +57,13 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         
         $egwApplications = Egwbase_Application::getInstance();
         
-        $applicationSet = $egwApplications->getApplications($sort, $dir, $filter, $limit, $start);
+        $applicationSet = $egwApplications->getApplications($filter, $sort, $dir, $start, $limit);
 
         $result['results']    = $applicationSet->toArray();
-        if(count($result['results']) < $limit) {
+        if($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
-            $result['totalcount'] = $egwApplications->getTotalApplicationCount();
+            $result['totalcount'] = $egwApplications->getTotalApplicationCount($filter);
         }
         
         return $result;
@@ -88,7 +88,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         
         $egwAccessLog = new Egwbase_AccessLog();
 
-        $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $sort, $dir, $filter, $limit, $start);
+        $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $filter, $sort, $dir, $start, $limit);
         
         $arrayAccessLogRowSet = $accessLogSet->toArray();
 
@@ -104,10 +104,10 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         }
         
         $result['results']    = $arrayAccessLogRowSet;
-        if(count($result['results']) < $limit) {
+        if($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
-            $result['totalcount'] = $egwAccessLog->getTotalCount();
+            $result['totalcount'] = $egwAccessLog->getTotalCount($fromDateObject, $toDateObject, $filter);
         }
         
         return $result;

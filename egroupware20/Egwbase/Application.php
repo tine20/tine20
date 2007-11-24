@@ -89,13 +89,11 @@ class Egwbase_Application
      * @param int $_start optional offset for applications
      * @return Egwbase_RecordSet_Application
      */
-    public function getApplications($_sort = 'app_id', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
+    public function getApplications($_filter = NULL, $_sort = 'app_id', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
-        if(empty($_filter)) {
-            $where = NULL;
-        } elseif($_filter !== NULL) {
-            // $where = array(...);
-            $where = NULL;
+        $where = array();
+        if($_filter !== NULL) {
+            $where[] = $this->applicationTable->getAdapter()->quoteInto('app_name LIKE ?', '%' . $_filter . '%');
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -110,9 +108,13 @@ class Egwbase_Application
      *
      * @return int
      */
-    public function getTotalApplicationCount()
+    public function getTotalApplicationCount($_filter = NULL)
     {
-        $count = $this->applicationTable->getTotalCount();
+        $where = array();
+        if($_filter !== NULL) {
+            $where[] = $this->applicationTable->getAdapter()->quoteInto('app_name LIKE ?', '%' . $_filter . '%');
+        }
+        $count = $this->applicationTable->getTotalCount($where);
         
         return $count;
     }
