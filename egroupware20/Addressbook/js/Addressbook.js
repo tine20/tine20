@@ -17,7 +17,7 @@ Egw.Addressbook = function(){
         nodeType: 'allAddressbooks',
         id: 'allAddressbooks',
         children: [{
-            text: "Internal Addressbook",
+            text: "Internal Contacts",
             cls: "file",
             nodeType: "internalAddressbook",
             children: [],
