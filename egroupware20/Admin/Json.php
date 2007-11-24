@@ -68,6 +68,19 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         
         return $result;
     }
+    
+    public function setApplicationState($applicationIds, $state)
+    {
+        $applicationIds = Zend_Json::decode($applicationIds);
+
+        Egwbase_Application::getInstance()->setApplicationState($applicationIds, $state);
+
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
 
     public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
     {

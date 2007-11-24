@@ -448,24 +448,60 @@ Egw.Admin.Applications = function() {
      * onclick handler for edit action
      */
     var _editButtonHandler = function(_button, _event) {
-        var selectedRows = Ext.getCmp('grid_applications').getSelectionModel().getSelections();
+        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
         Egw.Egwbase.Common.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
     };
+    
+    var _enableDisableButtonHandler = function(_button, _event) {
+    	//console.log(_button);
+    	
+    	var state = 0;
+    	if(_button.id == 'Admin_Accesslog_Action_Enable') {
+    		state = 1;
+    	}
+    	
+        var applicationIds = new Array();
+        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            applicationIds.push(selectedRows[i].id);
+        }
+        
+        Ext.Ajax.request({
+            url : 'index.php',
+            method : 'post',
+            params : {
+                method : 'Admin.setApplicationState',
+                applicationIds : Ext.util.JSON.encode(applicationIds),
+                state: state
+            },
+            callback : function(_options, _success, _response) {
+                if(_success === true) {
+                    var result = Ext.util.JSON.decode(_response.responseText);
+                    if(result.success === true) {
+                        Ext.getCmp('gridAdminApplications').getStore().reload();
+                    }
+                }
+            }
+        });
+    };
+    
 
     var _action_enable = new Ext.Action({
         text: 'enable application',
         disabled: true,
-        handler: _editButtonHandler,
-        iconCls: 'action_enable'
+        handler: _enableDisableButtonHandler,
+        iconCls: 'action_enable',
+        id: 'Admin_Accesslog_Action_Enable'
     });
 
     var _action_disable = new Ext.Action({
         text: 'disable application',
         disabled: true,
-        handler: _editButtonHandler,
-        iconCls: 'action_disable'
+        handler: _enableDisableButtonHandler,
+        iconCls: 'action_disable',
+        id: 'Admin_Accesslog_Action_Disable'
     });
 
 	var _action_settings = new Ext.Action({
@@ -605,14 +641,34 @@ Egw.Admin.Applications = function() {
         ]);
         
         cm_applications.defaultSortable = true; // by default columns are sortable
+
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         
+        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                _action_enable.setDisabled(true);
+                _action_disable.setDisabled(true);
+                //_action_settings.setDisabled(true);
+            } else if (rowCount > 1){
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                //_action_settings.setDisabled(true);
+            } else {
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                //_action_settings.setDisabled(false);            	
+            }
+        });
+                
         var grid_applications = new Ext.grid.GridPanel({
         	id: 'gridAdminApplications',
             store: ds_applications,
             cm: cm_applications,
             tbar: pagingToolbar,     
             autoSizeColumns: false,
-            selModel: new Ext.grid.RowSelectionModel({multiSelect:true}),
+            selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
             autoExpandColumn: 'app_name',
