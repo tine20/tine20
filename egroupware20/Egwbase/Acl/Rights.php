@@ -21,6 +21,18 @@ require_once 'Egwbase/Acl/Sql/Rights.php';
 class Egwbase_Acl_Rights
 {
     /**
+     * the right to run an application
+     *
+     */
+    const RUN = 'run';
+    
+    /**
+     * the right to be an administrative account for an application
+     *
+     */
+    const ADMIN = 'admin';
+    
+    /**
      * list of supported rights
      * 
      * this is just a temporary list, until we have moved the rights to a separate table
@@ -87,8 +99,10 @@ class Egwbase_Acl_Rights
         $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
     	
-        $egwbaseApplication = Egwbase_Application::getInstance();
-        $application = $egwbaseApplication->getApplicationByName($_application);
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        if($application->app_enabled == 0) {
+            throw new Exception('user has no rights. the application is disabled.');
+        }
 
         $where = array(
             $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
@@ -115,9 +129,11 @@ class Egwbase_Acl_Rights
         $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
     	
-        $egwbaseApplication = Egwbase_Application::getInstance();
-        $application = $egwbaseApplication->getApplicationByName($_application);
-
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        if($application->app_enabled == 0) {
+            throw new Exception('user has no rights. the application is disabled.');
+        }
+        
         $where = array(
             $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
             $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships),
@@ -163,7 +179,7 @@ class Egwbase_Acl_Rights
         $egwbaseApplication = Egwbase_Application::getInstance();
         
         $where = array(
-            $this->rightsTable->getAdapter()->quoteInto('acl_location = ?', 'run'),
+            $this->rightsTable->getAdapter()->quoteInto('acl_location = ?', Egwbase_Acl_Rights::RUN),
             // check if the account or the groups of this account has the given right
             $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships)
         );
@@ -179,7 +195,9 @@ class Egwbase_Acl_Rights
         foreach($rowSet as $row) {
             try {
                 $application = $egwbaseApplication->getApplicationByName($row->acl_appname);
-                $resultSet->addRecord($application);
+                if($application->app_enabled > 0) {
+                    $resultSet->addRecord($application);
+                }
             } catch (Exception $e) {
                 // application does not exist anymore, but is still in the acl table
             }
