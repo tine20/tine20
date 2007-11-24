@@ -418,7 +418,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 
         if($rows = $backend->getAllContacts($filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
-            $result['totalcount'] = $backend->getCountOfAllContacts();
+            //$result['totalcount'] = $backend->getCountOfAllContacts();
         }
 
         return $result;
@@ -452,7 +452,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
-            $result['totalcount'] = $backend->getCountOfSharedContacts();
+            //$result['totalcount'] = $backend->getCountOfSharedContacts();
         }
 
         return $result;
@@ -486,7 +486,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
-            $result['totalcount'] = $backend->getCountOfOtherPeopleContacts();
+            //$result['totalcount'] = $backend->getCountOfOtherPeopleContacts();
         }
 
         return $result;
