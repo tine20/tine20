@@ -43,13 +43,25 @@ class Egwbase_Db_Table extends Zend_Db_Table_Abstract
      * get total count of rows
      *
      */
-    public function getTotalCount()
+    public function getTotalCount(array $_where)
     {
         $tableInfo = $this->info();
         
         $result = $this->getAdapter()->fetchOne('SELECT count(*) FROM ' . $tableInfo['name']);
         
-        return $result;
+        $select = $this->getAdapter()->select()
+            ->from($tableInfo['name'], array('count' => 'COUNT(*)'));
+            
+        foreach($_where as $where) {
+            $select->where($where);
+        }
+        
+        $stmt = $this->getAdapter()->query($select);
+        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        //error_log(print_r($result, true));
+        
+        return $result['count'];
     }
     
 }

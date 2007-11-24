@@ -114,7 +114,7 @@ class Egwbase_AccessLog
      * 
      * @return Egwbase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getEntries(Zend_Date $_from, Zend_Date $_to, $_sort = 'li', $_dir = 'ASC', $_filter = NULL, $_limit = NULL, $_start = NULL)
+    public function getEntries(Zend_Date $_from, Zend_Date $_to, $_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
     {
         $where = array(
             'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()
@@ -147,9 +147,16 @@ class Egwbase_AccessLog
      *
      * @return int
      */
-    public function getTotalCount()
+    public function getTotalCount(Zend_Date $_from, Zend_Date $_to, $_filter = NULL)
     {
-        $count = $this->accessLogTable->getTotalCount();
+        $where = array(
+            'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()
+        );
+        if(!empty($_filter)) {
+            $where[] = $this->accessLogTable->getAdapter()->quoteInto('loginid LIKE ?', '%' . $_filter . '%');
+        }
+
+        $count = $this->accessLogTable->getTotalCount($where);
 
         return $count;
     }
