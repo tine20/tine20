@@ -454,11 +454,25 @@ Egw.Admin.Applications = function() {
         Egw.Egwbase.Common.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
     };
 
-	var _action_edit = new Ext.Action({
-        text: 'edit',
+    var _action_enable = new Ext.Action({
+        text: 'enable application',
         disabled: true,
         handler: _editButtonHandler,
-        iconCls: 'action_edit'
+        iconCls: 'action_enable'
+    });
+
+    var _action_disable = new Ext.Action({
+        text: 'disable application',
+        disabled: true,
+        handler: _editButtonHandler,
+        iconCls: 'action_disable'
+    });
+
+	var _action_settings = new Ext.Action({
+        text: 'settings',
+        disabled: true,
+        handler: _editButtonHandler,
+        iconCls: 'action_settings'
     });
         
 	var _createApplicationaDataStore = function()
@@ -513,7 +527,10 @@ Egw.Admin.Applications = function() {
             split: false,
             height: 26,
             items: [
-                _action_edit,
+                _action_enable,
+                _action_disable,
+                '-',
+                _action_settings,
                 '->',
                 'Search:', ' ',
 /*                new Ext.ux.SelectBox({
