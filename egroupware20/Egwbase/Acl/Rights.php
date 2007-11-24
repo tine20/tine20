@@ -1,12 +1,4 @@
 <?php
-
-/**
- * the class needed to access the acl table
- *
- * @see Egwbase_Acl_Sql_Rights
- */
-require_once 'Egwbase/Acl/Sql/Rights.php';
-
 /**
  * the class provides functions to handle ACL
  * 
@@ -24,23 +16,14 @@ class Egwbase_Acl_Rights
      * the right to run an application
      *
      */
-    const RUN = 'run';
+    const RUN = 1;
     
     /**
      * the right to be an administrative account for an application
      *
      */
-    const ADMIN = 'admin';
-    
-    /**
-     * list of supported rights
-     * 
-     * this is just a temporary list, until we have moved the rights to a separate table
-     *
-     * @var array
-     */
-    protected $supportedRights = array('run', 'admin');
-    
+    const ADMIN = 2;
+        
     /**
      * holdes the instance of the singleton
      *
@@ -54,9 +37,68 @@ class Egwbase_Acl_Rights
      * disabled. use the singleton
      */
     private function __construct() {
-        $this->rightsTable = new Egwbase_Db_Table(array(
-        	'name' => 'egw_acl',
-        ));
+        try {
+            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_acl'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->createApplicationAclTable();
+            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_acl'));
+
+            $accountId = Zend_Registry::get('currentAccount')->account_id;
+            
+            $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
+            $data = array(
+                'account_right'  => Egwbase_Acl_Rights::ADMIN,
+                'account_id'     => $accountId,
+                'application_id' => $application->app_id
+            );
+            $this->rightsTable->insert($data);
+
+            $data = array(
+                'account_right'  => Egwbase_Acl_Rights::RUN,
+                'account_id'     => NULL,
+                'application_id' => $application->app_id
+            );
+            $this->rightsTable->insert($data);
+
+            $application = Egwbase_Application::getInstance()->getApplicationByName('admin');
+            $data = array(
+                'account_right'  => Egwbase_Acl_Rights::ADMIN,
+                'account_id'     => $accountId,
+                'application_id' => $application->app_id
+            );
+            $this->rightsTable->insert($data);
+
+            $data = array(
+                'account_right'  => Egwbase_Acl_Rights::RUN,
+                'account_id'     => NULL,
+                'application_id' => $application->app_id
+            );
+            $this->rightsTable->insert($data);
+        }
+    }
+    
+    /**
+     * temporary function to create the egw_application_acl table on demand
+     *
+     */
+    protected function createApplicationAclTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_application_acl');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE egw_application_acl (
+                acl_id int(11) NOT NULL auto_increment,
+                application_id int(11) NOT NULL,
+                account_right int(11) NOT NULL,
+                account_id int(11),
+                PRIMARY KEY  (`acl_id`),
+                UNIQUE KEY `egw_application_aclid` (`application_id`, `account_right`, `account_id`),
+                KEY `egw_application_acl_account_right` (`account_right`),
+                KEY `egw_application_acl_account_id` (`account_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
     }
     
     /**
@@ -83,32 +125,38 @@ class Egwbase_Acl_Rights
     /**
      * check if the user has a given right for a given application
      *
-     * @param int $_accountId the numeric id of a user account
      * @param string $_application the name of the application
+     * @param int $_accountId the numeric id of a user account
      * @param string $_right the name of the right
      * @return bool
      */
-    public function hasRight($_accountId, $_application, $_right) 
+    public function hasRight($_application, $_accountId, $_right) 
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accounts = new Egwbase_Account_Sql();
-        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-    	
+        $right = (int)$_right;
+        if($right != $_right) {
+            throw new InvalidArgumentException('$_right must be integer');
+        }
+        
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
         if($application->app_enabled == 0) {
             throw new Exception('user has no rights. the application is disabled.');
         }
+        
+        //$accounts = new Egwbase_Account_Sql();
+        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+    	
 
         $where = array(
-            $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
-            $this->rightsTable->getAdapter()->quoteInto('acl_location = ?', $_right),
+            $this->rightsTable->getAdapter()->quoteInto('application_id = ?', $application->app_id),
+            $this->rightsTable->getAdapter()->quoteInto('account_right = ?', $right),
             // check if the account or the groups of this account has the given right
-            $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships)
+            $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', $groupMemberships)
         );
         
         if(!$row = $this->rightsTable->fetchRow($where)) {
@@ -118,21 +166,39 @@ class Egwbase_Acl_Rights
         }
     }
 
-    public function getRights($_accountId, $_application) 
+    public function getRights($_application, $_accountId) 
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accounts = new Egwbase_Account_Sql();
-        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-    	
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
         if($application->app_enabled == 0) {
             throw new Exception('user has no rights. the application is disabled.');
         }
+        
+        //$accounts = new Egwbase_Account_Sql();
+        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+        
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from('egw_application_acl', array('rights' => 'BIT_XOR(egw_application_acl.account_right)'))
+            ->where('egw_application_acl.account_id IN (?) OR egw_application_acl.account_id IS NULL', $groupMemberships)
+            ->where('egw_application_acl.application_id = ?', $application->app_id)
+            ->group('egw_application_acl.application_id');
+            
+        $stmt = $db->query($select);
+
+        if($stmt->rowCount() == 0) {
+            throw new UnderFlowException('no rights found for accountId ' . $accountId);
+        }
+
+        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        return $result['rights'];
         
         $where = array(
             $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
@@ -172,37 +238,29 @@ class Egwbase_Acl_Rights
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accounts = new Egwbase_Account_Sql();
-        $groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        //$accounts = new Egwbase_Account_Sql();
+        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
 
-        $egwbaseApplication = Egwbase_Application::getInstance();
-        
-        $where = array(
-            $this->rightsTable->getAdapter()->quoteInto('acl_location = ?', Egwbase_Acl_Rights::RUN),
-            // check if the account or the groups of this account has the given right
-            $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships)
-        );
-        
-        $rowSet = $this->rightsTable->fetchAll($where);
-        
-        if(empty($rowSet)) {
-            throw new UnderFlowException('no applications found');
+        //$egwbaseApplication = Egwbase_Application::getInstance();
+
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from('egw_application_acl', array())
+            ->join('egw_applications', 'egw_application_acl.application_id = egw_applications.app_id')
+            ->where('egw_application_acl.account_id IN (?) OR egw_application_acl.account_id IS NULL', $groupMemberships)
+            ->where('egw_application_acl.account_right = ?', Egwbase_Acl_Rights::RUN)
+            ->group('egw_application_acl.application_id');
+            
+        $stmt = $db->query($select);
+
+        if($stmt->rowCount() == 0) {
+            throw new UnderFlowException('no applications found for accountId ' . $accountId);
         }
+
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Application');
         
-        $resultSet = new Egwbase_Record_RecordSet();
-        
-        foreach($rowSet as $row) {
-            try {
-                $application = $egwbaseApplication->getApplicationByName($row->acl_appname);
-                if($application->app_enabled > 0) {
-                    $resultSet->addRecord($application);
-                }
-            } catch (Exception $e) {
-                // application does not exist anymore, but is still in the acl table
-            }
-        }
-        
-        return $resultSet;
+        return $result;
     }
 }
