@@ -48,7 +48,7 @@ class Egwbase_Container
             $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             
             $data = array(
-                'container_name'    => 'Internal Addressbook',
+                'container_name'    => 'Internal Contacts',
                 'container_type'    => Egwbase_Container::INTERNAL,
                 'container_backend' => Addressbook_Backend::SQL,
                 'application_id'    => $application->app_id
@@ -56,7 +56,7 @@ class Egwbase_Container
             $this->containerTable->insert($data);
 
             $data = array(
-                'container_name'    => 'Default Addressbook',
+                'container_name'    => 'Personal Contacts',
                 'container_type'    => Egwbase_Container::PERSONAL,
                 'container_backend' => Addressbook_Backend::SQL,
                 'application_id'    => $application->app_id
@@ -64,7 +64,7 @@ class Egwbase_Container
             $this->containerTable->insert($data);
             
             $data = array(
-                'container_name'    => 'Shared 1',
+                'container_name'    => 'Shared Contacts',
                 'container_type'    => Egwbase_Container::SHARED,
                 'container_backend' => Addressbook_Backend::SQL,
                 'application_id'    => $application->app_id
