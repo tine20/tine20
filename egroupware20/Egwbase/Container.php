@@ -26,11 +26,53 @@ class Egwbase_Container
      */
     protected $containerAclTable;
 
-    const INTERNAL = 'internal';
+    /**
+     * constant for no grants
+     *
+     */
+    const GRANT_NONE = 0;
+
+    /**
+     * constant for read grant
+     *
+     */
+    const GRANT_READ = 1;
+
+    /**
+     * constant for add grant
+     *
+     */
+    const GRANT_ADD = 2;
+
+    /**
+     * constant for edit grant
+     *
+     */
+    const GRANT_EDIT = 4;
+
+    /**
+     * constant for delete grant
+     *
+     */
+    const GRANT_DELETE = 8;
+
+    /**
+     * constant for admin grant
+     *
+     */
+    const GRANT_ADMIN = 16;
+
+    /**
+     * constant for all grants
+     *
+     */
+    const GRANT_ANY = 31;
     
-    const PERSONAL = 'personal';
+    const TYPE_INTERNAL = 'internal';
     
-    const SHARED = 'shared';
+    const TYPE_PERSONAL = 'personal';
+    
+    const TYPE_SHARED = 'shared';
     
     /**
      * the constructor
@@ -49,7 +91,7 @@ class Egwbase_Container
             
             $data = array(
                 'container_name'    => 'Internal Contacts',
-                'container_type'    => Egwbase_Container::INTERNAL,
+                'container_type'    => self::TYPE_INTERNAL,
                 'container_backend' => Addressbook_Backend::SQL,
                 'application_id'    => $application->app_id
             );
@@ -57,7 +99,7 @@ class Egwbase_Container
 
             $data = array(
                 'container_name'    => 'Personal Contacts',
-                'container_type'    => Egwbase_Container::PERSONAL,
+                'container_type'    => self::TYPE_PERSONAL,
                 'container_backend' => Addressbook_Backend::SQL,
                 'application_id'    => $application->app_id
             );
@@ -65,7 +107,7 @@ class Egwbase_Container
             
             $data = array(
                 'container_name'    => 'Shared Contacts',
-                'container_type'    => Egwbase_Container::SHARED,
+                'container_type'    => self::TYPE_SHARED,
                 'container_backend' => Addressbook_Backend::SQL,
                 'application_id'    => $application->app_id
             );
@@ -84,21 +126,21 @@ class Egwbase_Container
             $data = array(
                 'container_id'   => 1,
                 'account_id'     => NULL,
-                'account_grant'  => Egwbase_Acl_Grants::READ
+                'account_grant'  => self::GRANT_READ
             );
             $this->containerAclTable->insert($data);
 
             $data = array(
                 'container_id'   => 2,
                 'account_id'     => $accountId,
-                'account_grant'  => Egwbase_Acl_Grants::ANY
+                'account_grant'  => self::GRANT_ANY
             );
             $this->containerAclTable->insert($data);
             
             $data = array(
                 'container_id'   => 3,
                 'account_id'     => $accountId,
-                'account_grant'  => Egwbase_Acl_Grants::ANY
+                'account_grant'  => self::GRANT_ANY
             );
             $this->containerAclTable->insert($data);
         }
@@ -215,8 +257,8 @@ class Egwbase_Container
         }
         
         $rights = (int)$_rights;
-        if($rights != $_rights || $rights > Egwbase_Acl_Grants::ANY) {
-            throw new InvalidArgumentException('$_right must be integer and can not be greater ' . Egwbase_Acl_Grants::ANY);
+        if($rights != $_rights || $rights > self::GRANT_ANY) {
+            throw new InvalidArgumentException('$_right must be integer and can not be greater ' . self::GRANT_ANY);
         }
         
         $data = array(
@@ -244,8 +286,8 @@ class Egwbase_Container
             ->from('egw_container_acl', array())
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
             ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container_acl.account_grant & ?', Egwbase_Acl_Grants::READ)
-            ->where('egw_container.container_type = ?', Egwbase_Container::INTERNAL)
+            ->where('egw_container_acl.account_grant & ?', self::GRANT_READ)
+            ->where('egw_container.container_type = ?', self::TYPE_INTERNAL)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
@@ -321,11 +363,11 @@ class Egwbase_Container
             ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
             ->join('egw_container', 'owner.container_id = egw_container.container_id')
             ->where('owner.account_id = ?', $_owner)
-            ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
+            ->where('owner.account_grant & ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
-            ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('user.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
+            ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
@@ -350,9 +392,9 @@ class Egwbase_Container
             ->from('egw_container_acl', array())
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
             ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container_acl.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('egw_container_acl.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', Egwbase_Container::SHARED)
+            ->where('egw_container.container_type = ?', self::TYPE_SHARED)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
@@ -378,11 +420,11 @@ class Egwbase_Container
             ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
             ->join('egw_container', 'user.container_id = egw_container.container_id', array())
             ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
+            ->where('owner.account_grant & ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
-            ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('user.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
+            ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
             ->order('egw_container.container_name')
             ->group('owner.account_id');
             
@@ -412,11 +454,11 @@ class Egwbase_Container
             ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
             ->join('egw_container', 'user.container_id = egw_container.container_id')
             ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant & ?', Egwbase_Acl_Grants::ADMIN)
+            ->where('owner.account_grant & ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) or user.account_id IS NULL', $accountId)
-            ->where('user.account_grant & ?', Egwbase_Acl_Grants::READ)
+            ->where('user.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', Egwbase_Container::PERSONAL)
+            ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
             ->order('egw_container.container_name')
             ->group('egw_container.container_id');
             
@@ -431,7 +473,7 @@ class Egwbase_Container
     
     public function deleteContainer($_containerId)
     {
-        if (!$this->hasRight($_containerId, Egwbase_Acl_Grants::ADMIN)) {
+        if (!$this->hasRight($_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         
@@ -445,7 +487,7 @@ class Egwbase_Container
     
     public function renameContainer($_containerId, $_containerName)
     {
-        if (!$this->hasRight($_containerId, Egwbase_Acl_Grants::ADMIN)) {
+        if (!$this->hasRight($_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         

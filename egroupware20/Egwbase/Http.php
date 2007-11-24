@@ -24,7 +24,8 @@ class Egwbase_Http
 
     public function mainScreen()
     {
-        $userApplications = Egwbase_Controller::getEnabledApplications();
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
 
         $view = new Zend_View();
 
@@ -35,8 +36,9 @@ class Egwbase_Http
         $view->cssIncludeFiles = array();
         $view->initialData = array();
         
-        foreach($userApplications as $applicationName) {
-            $httpAppName = $applicationName . '_Http';
+        foreach($userApplications as $application) {
+            $applicationName = $application->app_name;
+            $httpAppName = ucfirst($applicationName) . '_Http';
             $application = new $httpAppName;
             
             $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());

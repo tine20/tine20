@@ -69,7 +69,11 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Json', 'Egwbase');
 
             if($auth->hasIdentity()) {
-                foreach ( self::getEnabledApplications() as $applicationName ) {
+                $accountId   = Zend_Registry::get('currentAccount')->account_id;
+                $userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
+                
+                foreach ($userApplications as $application) {
+                    $applicationName = ucfirst($application->app_name);
                     $server->setClass($applicationName.'_Json', $applicationName);
                 }
             }
@@ -85,8 +89,11 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Http', 'Egwbase');
     
             if($auth->hasIdentity()) {
+                $accountId   = Zend_Registry::get('currentAccount')->account_id;
+                $userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
                 
-                foreach ( self::getEnabledApplications() as $applicationName ) {
+                foreach ($userApplications as $application) {
+                    $applicationName = ucfirst($application->app_name);
                     $server->setClass($applicationName.'_Http', $applicationName);
                 }
             }
@@ -154,11 +161,11 @@ class Egwbase_Controller
         Zend_Registry::set('userTimeZone', 'Europe/Berlin');
     }
     
-    public static function getEnabledApplications()
+/*    public static function getEnabledApplications()
     {
-        if  (isset($apps) && !empty($apps) ) {
-            return $apps;
-        }
+        //if  (isset($apps) && !empty($apps) ) {
+        //    return $apps;
+        //}
         
         $apps = array();
         
@@ -170,5 +177,5 @@ class Egwbase_Controller
             }
         }
         return $apps;
-    }
+    } */
 }
