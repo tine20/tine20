@@ -14,6 +14,14 @@
 	<!-- eGW -->
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
 	<script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
+    <!-- initialize the registry, before the other js files get included -->
+    <script type="text/javascript" language="javascript">
+            <?php
+                foreach ((array)$this->configData as $index => $value) {
+                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
+                }
+            ?>
+    </script>
 	<?php 
 		foreach ($this->jsIncludeFiles as $name) {
 			echo '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
@@ -24,11 +32,6 @@
 	?>
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function(){
-		    <?php
-                foreach ((array)$this->configData as $index => $value) {
-                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
-                }
-            ?>
             Egw.Egwbase.initFramework();
 			<?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";" ?>
 			<?php if(isset($this->jsExecute)) echo "$this->jsExecute" ?>

@@ -363,14 +363,17 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         exit;
     }    
     
+    /**
+     * returns a list a accounts who gave current account at least read access to 1 personal addressbook 
+     *
+     */
     public function getOtherUsers()
     {
         $treeNodes = array();
         
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        $rows = $backend->getOtherUsers();
-        
-        //error_log(print_r($rows, true));
+        try {
+            $rows = $backend->getOtherUsers();
         
             foreach($rows as $accountData) {
                 $treeNode = new Egwbase_Ext_Treenode(
@@ -384,7 +387,10 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
                 $treeNode->nodeType = 'userAddressbooks';
                 $treeNodes[] = $treeNode;
             }
-        
+        } catch (Exception $e) {
+            // do nothing
+            // or throw Execption???
+        }
         echo Zend_Json::encode($treeNodes);
 
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array

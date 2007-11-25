@@ -33,7 +33,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 
 		$addressbookJson = new Addressbook_Json;		
-		$view->formData['config']['initialTree'] = $addressbookJson->getSelectFolderTree();
+		//$view->formData['config']['initialTree'] = $addressbookJson->getSelectFolderTree();
 
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
@@ -65,7 +65,14 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->jsIncludeFiles[] = 'Addressbook/js/Addressbook.js';
 		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
 		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display();';
-
+        
+		$view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')
+        );
+        
+		$view->title="edit contact";
+		
 		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');
 	}

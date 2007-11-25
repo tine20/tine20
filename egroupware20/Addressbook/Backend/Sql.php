@@ -409,23 +409,31 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * fetch one contact identified by contactid
      *
-     * @param array $_contacts
+     * @param int $_contactId
      * @return The row results per the Zend_Db_Adapter fetch mode, or null if no row found.
      */
     public function getContactById($_contactId)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $contactId = (int)$_contactId;
+        if($contactId != $_contactId) {
+            throw new InvalidArgumentException('$_contactId must be integer');
+        }
+        
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ);
-
-        // return the requested contact_id only if the contact_owner matches the current users acl
         $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactId),
-            $this->contactsTable->getAdapter()->quoteInto('contact_tid = ?', 'n'),
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $contactId)
         );
 
         $result = $this->contactsTable->fetchRow($where);
+        
+        if($result === NULL) {
+            throw new UnderFlowExecption('contact not found');
+        }
+        
+        if(!Egwbase_Container::getInstance()->hasGrant($result->contact_owner, Egwbase_Container::GRANT_READ)) {
+            throw new Exception('permission to contact denied');
+        }
 
         return $result;
     }
