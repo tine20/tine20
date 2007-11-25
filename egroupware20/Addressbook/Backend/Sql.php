@@ -55,7 +55,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $this->contactsTable = new Addressbook_Backend_Sql_Contacts();
         $this->listsTable = new Addressbook_Backend_Sql_Lists();
         $this->listsMapping = new Addressbook_Backend_Sql_ListMapping();
-        $this->egwbaseAcl = Egwbase_Acl::getInstance();
+        //$this->egwbaseAcl = Egwbase_Acl::getInstance();
     }
 
     /**
@@ -229,14 +229,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::SHARED, Addressbook_Backend::SQL);
 
             // add admin grants to creator
-            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Acl_Grants::ANY);
+            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Container::GRANT_ANY);
             // add read grants to any other user
-            $egwbaseContainer->addACL($addressbookId, NULL, Egwbase_Acl_Grants::READ);
+            $egwbaseContainer->addACL($addressbookId, NULL, Egwbase_Container::GRANT_READ);
         } else {
             $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::PERSONAL, Addressbook_Backend::SQL);
         
             // add admin grants to creator
-            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Acl_Grants::ANY);
+            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Container::GRANT_ANY);
         }
         
         return $addressbookId;
@@ -320,7 +320,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        $allContainer = Egwbase_Container::getInstance()->getContainerIdsByACL('addressbook', Egwbase_Acl_Grants::READ);
+        $allContainer = Egwbase_Container::getInstance()->getContainerIdsByACL('addressbook', Egwbase_Container::GRANT_READ);
         
         $containerIds = array();
         
@@ -486,7 +486,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        if(!Egwbase_Container::getInstance()->hasRight($_addressbookId, Egwbase_Acl_Grants::READ)) {
+        if(!Egwbase_Container::getInstance()->hasRight($_addressbookId, Egwbase_Container::GRANT_READ)) {
             throw new Exception('read access denied to addressbook');
         }
         
