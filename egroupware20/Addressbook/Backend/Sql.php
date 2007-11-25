@@ -224,19 +224,26 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $allGrants = array(
+            Egwbase_Container::GRANT_ADD,
+            Egwbase_Container::GRANT_ADMIN,
+            Egwbase_Container::GRANT_DELETE,
+            Egwbase_Container::GRANT_EDIT,
+            Egwbase_Container::GRANT_READ
+        );
         
-        if($_type == Egwbase_Container::SHARED) {
-            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::SHARED, Addressbook_Backend::SQL);
+        if($_type == Egwbase_Container::TYPE_SHARED) {
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_SHARED, Addressbook_Backend::SQL);
 
             // add admin grants to creator
-            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Container::GRANT_ANY);
+            $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
             // add read grants to any other user
-            $egwbaseContainer->addACL($addressbookId, NULL, Egwbase_Container::GRANT_READ);
+            $egwbaseContainer->addGrants($addressbookId, NULL, array(Egwbase_Container::GRANT_READ));
         } else {
-            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::PERSONAL, Addressbook_Backend::SQL);
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend::SQL);
         
             // add admin grants to creator
-            $egwbaseContainer->addACL($addressbookId, $accountId, Egwbase_Container::GRANT_ANY);
+            $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
         }
         
         return $addressbookId;
