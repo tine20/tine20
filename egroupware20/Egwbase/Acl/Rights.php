@@ -1,6 +1,9 @@
 <?php
 /**
- * the class provides functions to handle ACL
+ * this class handles the rights for a given application
+ * 
+ * a right is always specific to an application and not to a record
+ * examples for rights are: admin, run
  * 
  * @package     Egwbase
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
