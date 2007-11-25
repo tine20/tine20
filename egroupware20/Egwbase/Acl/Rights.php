@@ -13,17 +13,17 @@
 class Egwbase_Acl_Rights
 {
     /**
-     * the right to run an application
-     *
-     */
-    const RUN = 1;
-    
-    /**
      * the right to be an administrative account for an application
      *
      */
     const ADMIN = 2;
         
+    /**
+     * the right to run an application
+     *
+     */
+    const RUN = 1;
+    
     /**
      * holdes the instance of the singleton
      *
@@ -32,9 +32,17 @@ class Egwbase_Acl_Rights
     private static $instance = NULL;
     
     /**
+     * the clone function
+     *
+     * disabled. use the singleton
+     */
+    private function __clone() {}
+    
+    /**
      * the constructor
      *
      * disabled. use the singleton
+     * temporarly the constructor also creates the needed tables on demand and fills them with some initial values
      */
     private function __construct() {
         try {
@@ -75,6 +83,20 @@ class Egwbase_Acl_Rights
             );
             $this->rightsTable->insert($data);
         }
+    }    
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Egwbase_Acl_Rights
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Egwbase_Acl_Rights;
+        }
+        
+        return self::$instance;
     }
     
     /**
@@ -101,134 +123,14 @@ class Egwbase_Acl_Rights
         }
     }
     
-    /**
-     * the clone function
-     *
-     * disabled. use the singleton
-     */
-    private function __clone() {}
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Egwbase_Acl_Rights
-     */
-    public static function getInstance() 
-    {
-        if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Acl_Rights;
-        }
-        
-        return self::$instance;
-    }
-    
-    /**
-     * check if the user has a given right for a given application
-     *
-     * @param string $_application the name of the application
-     * @param int $_accountId the numeric id of a user account
-     * @param string $_right the name of the right
-     * @return bool
-     */
-    public function hasRight($_application, $_accountId, $_right) 
-    {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-        
-        $right = (int)$_right;
-        if($right != $_right) {
-            throw new InvalidArgumentException('$_right must be integer');
-        }
-        
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
-        if($application->app_enabled == 0) {
-            throw new Exception('user has no rights. the application is disabled.');
-        }
-        
-        //$accounts = new Egwbase_Account_Sql();
-        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-    	
-
-        $where = array(
-            $this->rightsTable->getAdapter()->quoteInto('application_id = ?', $application->app_id),
-            $this->rightsTable->getAdapter()->quoteInto('application_right = ?', $right),
-            // check if the account or the groups of this account has the given right
-            $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', $groupMemberships)
-        );
-        
-        if(!$row = $this->rightsTable->fetchRow($where)) {
-        	return false;
-        } else {
-        	return true;
-        }
-    }
-
-    public function getRights($_application, $_accountId) 
-    {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-        
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
-        if($application->app_enabled == 0) {
-            throw new Exception('user has no rights. the application is disabled.');
-        }
-        
-        //$accounts = new Egwbase_Account_Sql();
-        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-        
-        $db = Zend_Registry::get('dbAdapter');
-
-        $select = $db->select()
-            ->from('egw_application_rights', array('rights' => 'BIT_OR(egw_application_rights.application_right)'))
-            ->where('egw_application_rights.account_id IN (?) OR egw_application_rights.account_id IS NULL', $groupMemberships)
-            ->where('egw_application_rights.application_id = ?', $application->app_id)
-            ->group('egw_application_rights.application_id');
-            
-        $stmt = $db->query($select);
-
-        if($stmt->rowCount() == 0) {
-            throw new UnderFlowException('no rights found for accountId ' . $accountId);
-        }
-
-        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        return $result['rights'];
-        
-        $where = array(
-            $this->rightsTable->getAdapter()->quoteInto('acl_appname = ?', $application->app_name),
-            $this->rightsTable->getAdapter()->quoteInto('acl_account IN (?)', $groupMemberships),
-            $this->rightsTable->getAdapter()->quoteInto('acl_location IN (?)', $this->supportedRights)
-        );
-        
-        $rowSet = $this->rightsTable->fetchAll($where);
-        
-        if(empty($rowSet)) {
-            throw new UnderFlowException('no rights for given application found');
-        }
-        
-        $returnValue = array();
-        
-        foreach($rowSet as $row) {
-            $returnValue[$row->acl_location] = true;
-        }
-
-         return array_keys($returnValue);
-        
-    }
         
     /**
-     * returns list of applications the current user is able to use
+     * returns list of applications the user is able to use
      *
      * this function takes group memberships into account. Applications the accounts is able to use
      * must have the 'run' right set 
      * 
-     * @param int $_accountId
+     * @param int $_accountId the numeric account id
      * @return array list of enabled applications for this account
      */
     public function getApplications($_accountId)
@@ -262,5 +164,91 @@ class Egwbase_Acl_Rights
         $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Application');
         
         return $result;
+    }
+
+    /**
+     * returns a bitmask of rights for given application and accountId
+     *
+     * @param string $_application the name of the application
+     * @param int $_accountId the numeric account id
+     * @return int bitmask of rights
+     */
+    public function getRights($_application, $_accountId) 
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        if($application->app_enabled == 0) {
+            throw new Exception('user has no rights. the application is disabled.');
+        }
+        
+        //$accounts = new Egwbase_Account_Sql();
+        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+        
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from('egw_application_rights', array('account_rights' => 'BIT_OR(egw_application_rights.application_right)'))
+            ->where('egw_application_rights.account_id IN (?) OR egw_application_rights.account_id IS NULL', $groupMemberships)
+            ->where('egw_application_rights.application_id = ?', $application->app_id)
+            ->group('egw_application_rights.application_id');
+            
+        $stmt = $db->query($select);
+
+        if($stmt->rowCount() == 0) {
+            throw new UnderFlowException('no rights found for accountId ' . $accountId);
+        }
+
+        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        return (int)$result['account_rights'];
+    }
+
+    /**
+     * check if the user has a given right for a given application
+     *
+     * @param string $_application the name of the application
+     * @param int $_accountId the numeric id of a user account
+     * @param int $_right the right to check for
+     * @return bool
+     */
+    public function hasRight($_application, $_accountId, $_right) 
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $right = (int)$_right;
+        if($right != $_right) {
+            throw new InvalidArgumentException('$_right must be integer');
+        }
+        
+        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        if($application->app_enabled == 0) {
+            throw new Exception('user has no rights. the application is disabled.');
+        }
+        
+        //$accounts = new Egwbase_Account_Sql();
+        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
+        
+
+        $where = array(
+            $this->rightsTable->getAdapter()->quoteInto('application_id = ?', $application->app_id),
+            $this->rightsTable->getAdapter()->quoteInto('application_right = ?', $right),
+            // check if the account or the groups of this account has the given right
+            $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', $groupMemberships)
+        );
+        
+        if(!$row = $this->rightsTable->fetchRow($where)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
