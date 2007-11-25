@@ -1,6 +1,9 @@
 <?php
 /**
- * the class provides functions to handle applications
+ * this class handles access rights(grants) to containers
+ * 
+ * any record in eGroupWare 2.0 is tied to a container. the rights of an account on a record gets 
+ * calculated by the grants given to this account on the container holding the record (if you know what i mean ;-))
  * 
  * @package     Egwbase
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -68,10 +71,24 @@ class Egwbase_Container
      */
     const GRANT_ANY = 31;
     
+    /**
+     * type for internal contaier
+     * 
+     * for example the internal addressbook
+     *
+     */
     const TYPE_INTERNAL = 'internal';
     
+    /**
+     * type for personal containers
+     *
+     */
     const TYPE_PERSONAL = 'personal';
     
+    /**
+     * type for shared container
+     *
+     */
     const TYPE_SHARED = 'shared';
     
     /**
@@ -224,6 +241,15 @@ class Egwbase_Container
         }
     }
     
+    /**
+     * creates a new container
+     *
+     * @param string $_application the name of the application
+     * @param string $_name the name of the container
+     * @param int $_type the type of the container(Egwbase_Container::TYPE_SHARED, Egwbase_Container::TYPE_PERSONAL. Egwbase_Container::TYPE_INTERNAL)
+     * @param string $_backend type of the backend. for eaxmple: sql, ldap, ...
+     * @return int the id of the newly create container
+     */
     public function addContainer($_application, $_name, $_type, $_backend)
     {
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
@@ -243,7 +269,15 @@ class Egwbase_Container
         return $containerId;
     }
     
-    public function addACL($_containerId, $_accountId, $_grants)
+    /**
+     * add grants to container
+     *
+     * @param int $_containerId
+     * @param int $_accountId
+     * @param array $_grants list of grants to add
+     * @return boolean
+     */
+    public function addGrants($_containerId, $_accountId, array $_grants)
     {
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
@@ -260,24 +294,34 @@ class Egwbase_Container
         }
         
         $grants = (int)$_grants;
-        if($grants != $_grants || $grants > self::GRANT_ANY) {
-            throw new InvalidArgumentException('$_grant must be integer and can not be greater then ' . self::GRANT_ANY);
-        }
         
-        foreach(array(self::GRANT_ADD, self::GRANT_ADMIN, self::GRANT_DELETE, self::GRANT_EDIT, self::GRANT_READ) as $grant) {
-            if($grants & $grant) {
-                $data = array(
-                    'container_id'   => $containerId,
-                    'account_id'     => $accountId,
-                    'account_grant'  => $grant
-                );
-                $this->containerAclTable->insert($data);
+        foreach($_grants as $grant) {
+            $grant = (int)$grant;
+            
+            if($grant === 0 || $grant > self::GRANT_ADMIN) {
+                throw new InvalidArgumentException('$_grant must be integer and can not be greater then ' . self::GRANT_ADMIN);
             }
+            if($grant > 1 && $grant % 2 !== 0) {
+                throw new InvalidArgumentException('you can only set one grant(1,2,4,8,...) at once');
+            }
+            
+            $data = array(
+                'container_id'   => $containerId,
+                'account_id'     => $accountId,
+                'account_grant'  => $grant
+            );
+            $this->containerAclTable->insert($data);
         }
                         
         return true;
     }
     
+    /**
+     * returns the internal conatainer for a given application
+     *
+     * @param string $_application name of the application
+     * @return Egwbase_Record_Container the internal container
+     */
     public function getInternalContainer($_application)
     {
         $accountId   = Zend_Registry::get('currentAccount')->account_id;
@@ -351,6 +395,13 @@ class Egwbase_Container
         return $result;
     }
 
+    /**
+     * returns the personal container of a given account accessible by the current user
+     *
+     * @param string $_application the name of the application
+     * @param int $_owner the numeric account id of the owner
+     * @return Egwbase_Record_RecordSet set of Egwbase_Record_Container
+     */
     public function getPersonalContainer($_application, $_owner)
     {
         $owner = (int)$_owner;
@@ -390,6 +441,12 @@ class Egwbase_Container
         return $result;
     }
     
+    /**
+     * returns the shared container for a given application accessible by the current user
+     *
+     * @param string $_application the name of the application
+     * @return Egwbase_Record_RecordSet set of Egwbase_Record_Container
+     */
     public function getSharedContainer($_application)
     {
         $accountId = Zend_Registry::get('currentAccount')->account_id;
@@ -417,6 +474,12 @@ class Egwbase_Container
         return $result;
     }
     
+    /**
+     * return users which made personal containers accessible to current account
+     *
+     * @param string $_application the name of the application
+     * @return array list of accountids
+     */
     public function getOtherUsers($_application)
     {
         $accountId = Zend_Registry::get('currentAccount')->account_id;
@@ -451,6 +514,12 @@ class Egwbase_Container
         return $result;
     }
     
+    /**
+     * return set of all personal container of other users made accessible to the current account 
+     *
+     * @param string $_application the name of the application
+     * @return Egwbase_Record_RecordSet set of Egwbase_Record_Container
+     */
     public function getOtherUsersContainer($_application)
     {
         $accountId = Zend_Registry::get('currentAccount')->account_id;
@@ -484,6 +553,11 @@ class Egwbase_Container
         return $result;
     }
     
+    /**
+     * delete container if user has the required right
+     *
+     * @param int $_containerId
+     */
     public function deleteContainer($_containerId)
     {
         if (!$this->hasGrant($_containerId, self::GRANT_ADMIN)) {
@@ -498,6 +572,12 @@ class Egwbase_Container
         $this->containerAclTable->delete($where);
     }
     
+    /**
+     * rename container, if the user has the required right
+     *
+     * @param int $_containerId
+     * @param string $_containerName the new name
+     */
     public function renameContainer($_containerId, $_containerName)
     {
         if (!$this->hasGrant($_containerId, self::GRANT_ADMIN)) {
@@ -515,11 +595,13 @@ class Egwbase_Container
         $this->containerTable->update($data, $where);
     }
     
-    public function setContainer()
-    {
-        
-    }
-    
+    /**
+     * check if the current user has a given grant
+     *
+     * @param int $_containerId
+     * @param int $_grant
+     * @return boolean
+     */
     public function hasGrant($_containerId, $_grant) 
     {
         $containerId = (int)$_containerId;
