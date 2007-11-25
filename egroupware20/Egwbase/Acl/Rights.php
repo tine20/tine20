@@ -38,23 +38,23 @@ class Egwbase_Acl_Rights
      */
     private function __construct() {
         try {
-            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_acl'));
+            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_rights'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createApplicationAclTable();
-            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_acl'));
+            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_rights'));
 
             $accountId = Zend_Registry::get('currentAccount')->account_id;
             
             $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             $data = array(
-                'account_right'  => Egwbase_Acl_Rights::ADMIN,
+                'application_right'  => Egwbase_Acl_Rights::ADMIN,
                 'account_id'     => $accountId,
                 'application_id' => $application->app_id
             );
             $this->rightsTable->insert($data);
 
             $data = array(
-                'account_right'  => Egwbase_Acl_Rights::RUN,
+                'application_right'  => Egwbase_Acl_Rights::RUN,
                 'account_id'     => NULL,
                 'application_id' => $application->app_id
             );
@@ -62,14 +62,14 @@ class Egwbase_Acl_Rights
 
             $application = Egwbase_Application::getInstance()->getApplicationByName('admin');
             $data = array(
-                'account_right'  => Egwbase_Acl_Rights::ADMIN,
+                'application_right'  => Egwbase_Acl_Rights::ADMIN,
                 'account_id'     => $accountId,
                 'application_id' => $application->app_id
             );
             $this->rightsTable->insert($data);
 
             $data = array(
-                'account_right'  => Egwbase_Acl_Rights::RUN,
+                'application_right'  => Egwbase_Acl_Rights::RUN,
                 'account_id'     => NULL,
                 'application_id' => $application->app_id
             );
@@ -78,25 +78,25 @@ class Egwbase_Acl_Rights
     }
     
     /**
-     * temporary function to create the egw_application_acl table on demand
+     * temporary function to create the egw_application_rights table on demand
      *
      */
     protected function createApplicationAclTable() {
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_application_acl');
+            $tableData = $db->describeTable('egw_application_rights');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE egw_application_acl (
+            $result = $db->getConnection()->exec("CREATE TABLE egw_application_rights (
                 acl_id int(11) NOT NULL auto_increment,
                 application_id int(11) NOT NULL,
-                account_right int(11) NOT NULL,
+                application_right int(11) NOT NULL,
                 account_id int(11),
                 PRIMARY KEY  (`acl_id`),
-                UNIQUE KEY `egw_application_aclid` (`application_id`, `account_right`, `account_id`),
-                KEY `egw_application_acl_account_right` (`account_right`),
-                KEY `egw_application_acl_account_id` (`account_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+                UNIQUE KEY `egw_application_rightsid` (`application_id`, `application_right`, `account_id`),
+                KEY `egw_application_rights_application_right` (`application_right`),
+                KEY `egw_application_rights_account_id` (`account_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
     }
@@ -154,7 +154,7 @@ class Egwbase_Acl_Rights
 
         $where = array(
             $this->rightsTable->getAdapter()->quoteInto('application_id = ?', $application->app_id),
-            $this->rightsTable->getAdapter()->quoteInto('account_right = ?', $right),
+            $this->rightsTable->getAdapter()->quoteInto('application_right = ?', $right),
             // check if the account or the groups of this account has the given right
             $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', $groupMemberships)
         );
@@ -185,10 +185,10 @@ class Egwbase_Acl_Rights
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_application_acl', array('rights' => 'BIT_XOR(egw_application_acl.account_right)'))
-            ->where('egw_application_acl.account_id IN (?) OR egw_application_acl.account_id IS NULL', $groupMemberships)
-            ->where('egw_application_acl.application_id = ?', $application->app_id)
-            ->group('egw_application_acl.application_id');
+            ->from('egw_application_rights', array('rights' => 'BIT_OR(egw_application_rights.application_right)'))
+            ->where('egw_application_rights.account_id IN (?) OR egw_application_rights.account_id IS NULL', $groupMemberships)
+            ->where('egw_application_rights.application_id = ?', $application->app_id)
+            ->group('egw_application_rights.application_id');
             
         $stmt = $db->query($select);
 
@@ -247,11 +247,11 @@ class Egwbase_Acl_Rights
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_application_acl', array())
-            ->join('egw_applications', 'egw_application_acl.application_id = egw_applications.app_id')
-            ->where('egw_application_acl.account_id IN (?) OR egw_application_acl.account_id IS NULL', $groupMemberships)
-            ->where('egw_application_acl.account_right = ?', Egwbase_Acl_Rights::RUN)
-            ->group('egw_application_acl.application_id');
+            ->from('egw_application_rights', array())
+            ->join('egw_applications', 'egw_application_rights.application_id = egw_applications.app_id')
+            ->where('egw_application_rights.account_id IN (?) OR egw_application_rights.account_id IS NULL', $groupMemberships)
+            ->where('egw_application_rights.application_right = ?', Egwbase_Acl_Rights::RUN)
+            ->group('egw_application_rights.application_id');
             
         $stmt = $db->query($select);
 

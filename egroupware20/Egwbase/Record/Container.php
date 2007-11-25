@@ -35,7 +35,8 @@ class Egwbase_Record_Container extends Egwbase_Record_Abstract
         'container_name'    => array('presence' => 'required'),
         'container_type'    => array('presence' => 'required'),
         'container_backend' => array('presence' => 'required'),
-        'application_id'    => array('Digits', 'presence' => 'required')
+        'application_id'    => array('Digits', 'presence' => 'required'),
+        'account_grants'    => array('Digits', 'presence' => 'required')
     );
 
    /**

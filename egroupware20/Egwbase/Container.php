@@ -130,19 +130,23 @@ class Egwbase_Container
             );
             $this->containerAclTable->insert($data);
 
-            $data = array(
-                'container_id'   => 2,
-                'account_id'     => $accountId,
-                'account_grant'  => self::GRANT_ANY
-            );
-            $this->containerAclTable->insert($data);
+            foreach(array(self::GRANT_ADD, self::GRANT_ADMIN, self::GRANT_DELETE, self::GRANT_EDIT, self::GRANT_READ) as $grant) {
+                $data = array(
+                    'container_id'   => 2,
+                    'account_id'     => $accountId,
+                    'account_grant'  => $grant
+                );
+                $this->containerAclTable->insert($data);
+            }
             
-            $data = array(
-                'container_id'   => 3,
-                'account_id'     => $accountId,
-                'account_grant'  => self::GRANT_ANY
-            );
-            $this->containerAclTable->insert($data);
+            foreach(array(self::GRANT_ADD, self::GRANT_ADMIN, self::GRANT_DELETE, self::GRANT_EDIT, self::GRANT_READ) as $grant) {
+                $data = array(
+                    'container_id'   => 3,
+                    'account_id'     => $accountId,
+                    'account_grant'  => $grant
+                );
+                $this->containerAclTable->insert($data);
+            }
         }
     }
     /**
@@ -190,7 +194,6 @@ class Egwbase_Container
             	container_backend varchar(64) NOT NULL,
             	application_id int(11) NOT NULL,
             	PRIMARY KEY  (`container_id`),
-            	UNIQUE KEY `egw_container_container_id` (`container_id`, `application_id`),
             	KEY `egw_container_container_type` (`container_type`),
             	KEY `egw_container_container_application_id` (`application_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
@@ -214,7 +217,7 @@ class Egwbase_Container
             	account_id int(11),
             	account_grant int(11) NOT NULL,
             	PRIMARY KEY (`acl_id`),
-            	UNIQUE KEY `egw_container_acl_primary` (`container_id`, `account_id`),
+            	UNIQUE KEY `egw_container_acl_primary` (`container_id`, `account_id`, `account_grant`),
             	KEY `egw_container_acl_account_id` (`account_id`)
             	) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
@@ -240,7 +243,7 @@ class Egwbase_Container
         return $containerId;
     }
     
-    public function addACL($_containerId, $_accountId, $_rights)
+    public function addACL($_containerId, $_accountId, $_grants)
     {
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
@@ -256,23 +259,23 @@ class Egwbase_Container
             $accountId = NULL;
         }
         
-        $rights = (int)$_rights;
-        if($rights != $_rights || $rights > self::GRANT_ANY) {
-            throw new InvalidArgumentException('$_right must be integer and can not be greater ' . self::GRANT_ANY);
+        $grants = (int)$_grants;
+        if($grants != $_grants || $grants > self::GRANT_ANY) {
+            throw new InvalidArgumentException('$_grant must be integer and can not be greater then ' . self::GRANT_ANY);
         }
         
-        $data = array(
-            'container_id'   => $containerId,
-            'account_id'     => $accountId,
-            'account_grant'  => $rights
-        );
-        $affectedRows = $this->containerAclTable->insert($data);
-                        
-        if($affectedRows == 0) {
-            return false;
-        } else {
-            return true;
+        foreach(array(self::GRANT_ADD, self::GRANT_ADMIN, self::GRANT_DELETE, self::GRANT_EDIT, self::GRANT_READ) as $grant) {
+            if($grants & $grant) {
+                $data = array(
+                    'container_id'   => $containerId,
+                    'account_id'     => $accountId,
+                    'account_grant'  => $grant
+                );
+                $this->containerAclTable->insert($data);
+            }
         }
+                        
+        return true;
     }
     
     public function getInternalContainer($_application)
@@ -283,14 +286,14 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_container_acl', array())
+            ->from('egw_container_acl', array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)'))
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
             ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container_acl.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.container_type = ?', self::TYPE_INTERNAL)
             ->where('egw_container.application_id = ?', $application->app_id)
-            ->order('egw_container.container_name')
-            ->group('egw_container.container_id');
+            ->group('egw_container.container_id')
+            ->having('account_grants & ?', self::GRANT_READ)
+            ->order('egw_container.container_name');
             
         //error_log("getInternalContainer:: " . $select->__toString());
 
@@ -307,16 +310,15 @@ class Egwbase_Container
     }
     
     /**
-     * return all container, which are visible for the user(aka the user has read rights for)
+     * return all container, which the user has the requested right for
      *
-     * used to read all contacts available
+     * used to get a list of all containers accesssible by the current user
      * 
-     * @param int $_applicationId the application id
-     * @param int $_accountId the account id
-     * @param array $_containerType array containing int of containertypes
+     * @param string $_application the application name
+     * @param int $_right the required right
      * @return Egwbase_Record_RecordSet
      */
-    public function getContainerIdsByACL($_application, $_right)
+    public function getContainerByACL($_application, $_right)
     {
         $right = (int)$_right;
         if($right != $_right) {
@@ -329,12 +331,16 @@ class Egwbase_Container
         
         $select = $db->select()
             ->from('egw_container')
-            ->join('egw_container_acl','egw_container.container_id = egw_container_acl.container_id', array())
+            ->join(
+                'egw_container_acl',
+                'egw_container.container_id = egw_container_acl.container_id', 
+                array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)')
+            )
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container_acl.account_grant & ?', $right)
-            ->order('egw_container.container_name')
-            ->group('egw_container.container_id');
+            ->group('egw_container.container_id')
+            ->having('account_grants & ?', $right)
+            ->order('egw_container.container_name');
 
         //error_log("getContainer:: " . $select->__toString());
 
@@ -360,16 +366,20 @@ class Egwbase_Container
 
         $select = $db->select()
             ->from(array('owner' => 'egw_container_acl'), array())
-            ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
+            ->join(
+                array('user' => 'egw_container_acl'),
+                'owner.container_id = user.container_id', 
+                array('account_grants' => 'BIT_OR(user.account_grant)')
+            )
             ->join('egw_container', 'owner.container_id = egw_container.container_id')
             ->where('owner.account_id = ?', $_owner)
-            ->where('owner.account_grant & ?', self::GRANT_ADMIN)
+            ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
-            ->where('user.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
-            ->order('egw_container.container_name')
-            ->group('egw_container.container_id');
+            ->group('egw_container.container_id')
+            ->having('account_grants & ?', self::GRANT_READ)
+            ->order('egw_container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -389,14 +399,14 @@ class Egwbase_Container
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
-            ->from('egw_container_acl', array())
+            ->from('egw_container_acl', array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)'))
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
             ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container_acl.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_SHARED)
-            ->order('egw_container.container_name')
-            ->group('egw_container.container_id');
+            ->group('egw_container.container_id')
+            ->having('account_grants & ?', self::GRANT_READ)
+            ->order('egw_container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -420,9 +430,9 @@ class Egwbase_Container
             ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
             ->join('egw_container', 'user.container_id = egw_container.container_id', array())
             ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant & ?', self::GRANT_ADMIN)
+            ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
-            ->where('user.account_grant & ?', self::GRANT_READ)
+            ->where('user.account_grant = ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
             ->order('egw_container.container_name')
@@ -450,17 +460,20 @@ class Egwbase_Container
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
-            ->from(array('owner' => 'egw_container_acl'))
-            ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
+            ->from(array('owner' => 'egw_container_acl'), array())
+            ->join(
+                array('user' => 'egw_container_acl'),
+                'owner.container_id = user.container_id', 
+                array('account_grants' => 'BIT_OR(user.account_grant)'))
             ->join('egw_container', 'user.container_id = egw_container.container_id')
             ->where('owner.account_id != ?', $accountId)
-            ->where('owner.account_grant & ?', self::GRANT_ADMIN)
+            ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) or user.account_id IS NULL', $accountId)
-            ->where('user.account_grant & ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
-            ->order('egw_container.container_name')
-            ->group('egw_container.container_id');
+            ->group('egw_container.container_id')
+            ->having('account_grants & ?', self::GRANT_READ)
+            ->order('egw_container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -473,7 +486,7 @@ class Egwbase_Container
     
     public function deleteContainer($_containerId)
     {
-        if (!$this->hasRight($_containerId, self::GRANT_ADMIN)) {
+        if (!$this->hasGrant($_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         
@@ -487,7 +500,7 @@ class Egwbase_Container
     
     public function renameContainer($_containerId, $_containerName)
     {
-        if (!$this->hasRight($_containerId, self::GRANT_ADMIN)) {
+        if (!$this->hasGrant($_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         
@@ -507,16 +520,16 @@ class Egwbase_Container
         
     }
     
-    public function hasRight($_containerId, $_right) 
+    public function hasGrant($_containerId, $_grant) 
     {
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
             throw new InvalidArgumentException('$_containerId must be integer');
         }
         
-        $right = (int)$_right;
-        if($right != $_right) {
-            throw new InvalidArgumentException('$_right must be integer');
+        $grant = (int)$_grant;
+        if($grant != $_grant) {
+            throw new InvalidArgumentException('$_grant must be integer');
         }
         
         $accountId   = Zend_Registry::get('currentAccount')->account_id;
@@ -527,7 +540,7 @@ class Egwbase_Container
             ->from('egw_container_acl', array('container_id'))
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id', array())
             ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container_acl.account_grant & ?', $right)
+            ->where('egw_container_acl.account_grant = ?', $grant)
             ->where('egw_container.container_id = ?', $containerId);
                     
         //error_log("getContainer:: " . $select->__toString());
