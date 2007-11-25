@@ -320,7 +320,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        $allContainer = Egwbase_Container::getInstance()->getContainerIdsByACL('addressbook', Egwbase_Container::GRANT_READ);
+        $allContainer = Egwbase_Container::getInstance()->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
         
         $containerIds = array();
         
@@ -486,7 +486,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        if(!Egwbase_Container::getInstance()->hasRight($_addressbookId, Egwbase_Container::GRANT_READ)) {
+        if(!Egwbase_Container::getInstance()->hasGrant($_addressbookId, Egwbase_Container::GRANT_READ)) {
             throw new Exception('read access denied to addressbook');
         }
         
