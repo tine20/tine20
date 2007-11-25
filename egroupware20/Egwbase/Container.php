@@ -394,7 +394,53 @@ class Egwbase_Container
         
         return $result;
     }
+    
+    /**
+     * return a container by containerId
+     *
+     * @param int $_containerId the id of the container
+     * @return Egwbase_Record_Container
+     */
+    public function getContainerById($_containerId)
+    {
+        $containerId = (int)$_containerId;
+        if($containerId != $_containerId) {
+            throw new InvalidArgumentException('$_containerId must be integer');
+        }
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
 
+        if(!$this->hasGrant($containerId, self::GRANT_READ)) {
+            throw new Exception('permission to container denied');
+        }
+        
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $select = $db->select()
+            ->from('egw_container')
+            ->join(
+                'egw_container_acl',
+                'egw_container.container_id = egw_container_acl.container_id', 
+                array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)')
+            )
+            ->where('egw_container.container_id = ?', $containerId)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->group('egw_container.container_id')
+            ->order('egw_container.container_name');
+
+        //error_log("getContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+
+        if($stmt->rowCount() == 0) {
+            throw new UnderflowException('container not found');
+        }
+        
+        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
+        
+        return $result;
+        
+    }
+    
     /**
      * returns the personal container of a given account accessible by the current user
      *
