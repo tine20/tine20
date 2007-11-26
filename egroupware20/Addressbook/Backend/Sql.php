@@ -86,9 +86,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
 
         if($_contactData->contact_id === NULL) {
-            $result = $this->contactsTable->insert($contactData);
-            $_contactData->contact_id = $this->contactsTable->getAdapter()->lastInsertId();
-            error_log("ADD:: result: (" . $result . ") === (" . $_contactData->contact_id . ")???");
+            $_contactData->contact_id = $this->contactsTable->insert($contactData);
         } else {
             $oldContactData = $this->getContactById($_contactData->contact_id);
             if(!Egwbase_Container::getInstance()->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
