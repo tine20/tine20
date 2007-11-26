@@ -43,17 +43,8 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 			$view->formData['values'] = $contact->toArray();
 			$addressbook = Egwbase_Container::getInstance()->getContainerById($contact->contact_owner);
 			
-			$view->formData['config']['addressbookName'] = $addressbook->container_name;
-			
-/*			if($contact->contact_owner == $currentAccount->account_id) {
-			    $view->formData['config']['addressbookName'] = 'My Contacts';
-			} else {
-			    if($contact->contact_owner > 0) {
-			        $view->formData['config']['addressbookName'] = 'Account ' . $contact->contact_owner;
-			    } else {
-			        $view->formData['config']['addressbookName'] = 'Group ' . $contact->contact_owner;
-			    }
-			} */
+			$view->formData['config']['addressbookName']   = $addressbook->container_name;
+			$view->formData['config']['addressbookRights'] = $addressbook->account_grants;
 
 			if(!empty($contact->adr_one_countryname)) {
 			    $view->formData['config']['oneCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);

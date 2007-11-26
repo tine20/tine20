@@ -1549,19 +1549,22 @@ Egw.Addressbook.ContactEditDialog = function() {
    	var action_saveAndClose = new Ext.Action({
 		text: 'save and close',
 		handler: handler_saveAndClose,
-		iconCls: 'action_saveAndClose'
+		iconCls: 'action_saveAndClose',
+		disabled: true
 	});
 
    	var action_applyChanges = new Ext.Action({
 		text: 'apply changes',
 		handler: handler_applyChanges,
-		iconCls: 'action_applyChanges'
+		iconCls: 'action_applyChanges',
+		disabled: true
 	});
 
    	var action_deleteContact = new Ext.Action({
 		text: 'delete contact',
 		handler: handler_deleteContact,
-		iconCls: 'action_delete'
+		iconCls: 'action_delete',
+		disabled: true
 	});
 
     /**
@@ -1574,11 +1577,15 @@ Egw.Addressbook.ContactEditDialog = function() {
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
 
-        var disableButtons = true;
-        if(formData.values) {
-            disableButtons = false;
-        }       
-        
+        if(formData.config.addressbookRights & 4) {
+        	action_saveAndClose.setDisabled(false);
+        	action_applyChanges.setDisabled(false);
+        }
+
+        if(formData.config.addressbookRights & 8) {
+            action_deleteContact.setDisabled(false);
+        }
+
         var contactToolbar = new Ext.Toolbar({
         	region: 'south',
           	id: 'applicationToolbar',
@@ -2148,7 +2155,6 @@ Egw.Addressbook.ContactEditDialog = function() {
 			items: addressedit
 		});        
 
-		
 /*		var photo = Ext.get('photo');
 
 		var c = photo.createChild({
