@@ -9,7 +9,7 @@ Egw.Addressbook = function(){
     var _treeNodeContextMenu = null;
 
     /**
-     * the initial tree to display in the left treePanel
+     * the initial tree to be displayed in the left treePanel
      */
     var _initialTree = [{
         text: 'All Addressbooks',
@@ -20,6 +20,7 @@ Egw.Addressbook = function(){
             text: "Internal Contacts",
             cls: "file",
             nodeType: "internalAddressbook",
+            id: "internalAddressbook",
             children: [],
             leaf: false,
             expanded: true
@@ -293,7 +294,7 @@ Egw.Addressbook = function(){
      */
     var _displayAddressbookSelectDialog = function(_fieldName){         
                 
-        if(!addressBookDialog) {
+        //if(!addressBookDialog) {
                    
             //################## listView #################
 
@@ -310,13 +311,25 @@ Egw.Addressbook = function(){
                 buttonAlign:'center'
             });         
             
-            var treeLoader = new Ext.tree.TreeLoader({dataUrl:'index.php'});
+            var treeLoader = new Ext.tree.TreeLoader({
+                dataUrl:'index.php'
+            });
             treeLoader.on("beforeload", function(_loader, _node) {
-                _loader.baseParams.method       = 'Addressbook.getSubTree';
-                _loader.baseParams.node        = _node.id;
-                _loader.baseParams.datatype    = _node.attributes.datatype;
-                _loader.baseParams.owner       = _node.attributes.owner;
-                _loader.baseParams.location    = 'selectFolder';
+                switch(_node.attributes.nodeType) {
+                    case 'otherAddressbooks':
+                        _loader.baseParams.method   = 'Addressbook.getOtherUsers';
+                        break;
+                        
+                    case 'sharedAddressbooks':
+                        _loader.baseParams.method   = 'Addressbook.getSharedAddressbooks';
+                        break;
+    
+                    case 'userAddressbooks':
+                        _loader.baseParams.method   = 'Addressbook.getAddressbooksByOwner';
+                        _loader.baseParams.owner    = _node.attributes.owner;
+                        break;
+                }
+                _loader.baseParams.location = 'mainTree';
             }, this);
                             
             var tree = new Ext.tree.TreePanel({
@@ -328,22 +341,22 @@ Egw.Addressbook = function(){
             });
             
             // set the root node
-            var root = new Ext.tree.TreeNode({
+            var treeRoot = new Ext.tree.TreeNode({
                 text: 'root',
                 draggable:false,
                 allowDrop:false,
                 id:'root'
             });
-            tree.setRootNode(root);             
+            tree.setRootNode(treeRoot);             
             
             // add the initial tree nodes    
-            Ext.each(formData.config.initialTree, function(_treeNode) {
-                root.appendChild(new Tree.AsyncTreeNode(_treeNode));                    
-            });
-          
+            for(var i=0; i< _initialTree.length; i++) {
+                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
+            }
             tree.on('click', function(_node) {
-                if(_node.attributes.datatype == 'contacts') {                
-                    Ext.getCmp(_fieldName).setValue(_node.attributes.owner);
+                //console.log(_node);
+                if(_node.attributes.nodeType == 'singleAddressbook') {                
+                    Ext.getCmp(_fieldName).setValue(_node.attributes.addressbookId);
                     Ext.getCmp(_fieldName + '_name').setValue(_node.text);
                     addressBookDialog.hide();
                 }
@@ -351,8 +364,11 @@ Egw.Addressbook = function(){
 
             addressBookDialog.add(tree);
     
-            addressBookDialog.show();               
-        }
+            addressBookDialog.show();
+                           
+            tree.expandPath('/root/allAddressbooks');
+            tree.getNodeById('internalAddressbook').disable();
+        //}
                 
     };
     
@@ -818,7 +834,7 @@ Egw.Addressbook.Contacts = function(){
             height: 26,
             items: [
                 action_addContact, 
-                action_addList,
+                /*action_addList, */
                 action_edit,
                 action_delete,
                 '-',
