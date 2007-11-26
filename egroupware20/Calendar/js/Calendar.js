@@ -110,37 +110,22 @@ Egw.Calendar.MainScreen = function() {
 			root: 'results',
 			totalProperty: 'totalcount',
 			id: 'cal_id',
-			fields: [{
-				name: 'cal_id'
-			}, {
-				name: 'cal_start',
-				type: 'date',
-				dateFormat: 'c'
-			}, {
-				name: 'cal_end',
-				type: 'date',
-				dateFormat: 'c'
-			}, {
-				name: 'cal_title'
-			}, {
-				name: 'cal_description'
-			}, ],
+			fields: [
+			    { name: 'cal_id' }, 
+			    { name: 'cal_start', type: 'date', dateFormat: 'c' },
+				{ name: 'cal_end', type: 'date', dateFormat: 'c' },
+				{ name: 'cal_title'	},
+				{ name: 'cal_description' }
+			],
 			// turn on remote sorting
 			remoteSort: false
 		});
 		
 		// some calibration to render events into grid
 		store.on('load', function(s, rs, o)	{
-			var TimeGridBody = TimeGrid.getView().mainBody;
-			var TimeGridBodyHeight = TimeGridBody.getHeight();
-			var dpdt = TimeGridBodyHeight / Date.Const.msDAY;
-			
-			s.each(function(event){
-				DisplayCalendarEvent(event, TimeGridBody, dpdt);
-			}, this);
-			
-			TimeGridBody.setHeight(TimeGridBodyHeight);
-		})
+			States.StoreLoaded = true;
+			DisplayCalendarEvents(s);
+		});
 		
 		with (Egw.Calendar.Request) {
 			store.load({
@@ -160,6 +145,7 @@ Egw.Calendar.MainScreen = function() {
 	 */
 	var initTimeGrid = function(request)
 	{
+		States.GridSized = false;
         if (request.view != 'day') {
 			throw new Error(request.view + ' not implemeted yet!')
 		}
@@ -177,6 +163,7 @@ Egw.Calendar.MainScreen = function() {
 			columns.push({
 				header: Egw.Egwbase.Common.dateRenderer(request.start.add(Date.DAY, i-1)),
                 sortable: false,
+				fixed: true,
                 dataIndex: 'cdata'
 			})
 		}
@@ -187,12 +174,14 @@ Egw.Calendar.MainScreen = function() {
 			}),
 			columns: columns,
 			sm: new Ext.grid.CellSelectionModel({}),
+			//view: new Egw.Calendar.GridView_Days({}),
 			iconCls: 'icon-grid',
 			border: false
 		});
 		
 		
 		TimeGrid.on('resize', function(cmp){
+			States.GridSized = false;
 			this.MainScreenCmp = cmp;
 			
 			// resize columns
@@ -208,15 +197,11 @@ Egw.Calendar.MainScreen = function() {
 			for (var i = 1; i < nc; i++) {
 				cm.setColumnWidth(i, cw);
 			}
-			
-			// scroll to working hours
-			//console.log(Egw.Calendar.wdaystartidx);
-			TimeGrid.getView().focusRow(Egw.Calendar.wdaystartidx);
+
+			States.GridSized = true;
+			DisplayCalendarEvents(store);
 		});
-		
 	};
-	
-	
 		
 	var mkGridData = function(days)
     {
@@ -238,37 +223,71 @@ Egw.Calendar.MainScreen = function() {
         return TimeAxis;
     };
 	
-	var DisplayCalendarEvent = function(event, TimeGridBody, dpdt)
-	{
-		// timestamp based calculations are far more easy!
-		var rStart = Egw.Calendar.Request.start.getTime();
-		var rEnd   = Egw.Calendar.Request.end.getTime();
-		var eStart = event.data.cal_start.getTime();
-		var eEnd   = event.data.cal_end.getTime();
-
-		if ( eStart > rEnd || eEnd < rStart) {
-		 	// skip, out of range!
-		 	return true;
+    DisplayCalendarEvents = function(eventsStore){
+		if (!States.GridSized || !States.StoreLoaded) {
+			// not ready to draw events!
+			return;
 		}
 		
-		// in which column is the event? (0...n)
-		var col = Math.floor((eStart - rStart) / Date.Const.msDAY);
-		// left border of 
-		var left = TimeGridBody.getLeft() + dims.timeAxisWidth + col*dims.timeSheetWidth;
-		// top position of event
-		var top = TimeGridBody.getTop() + (eStart - rStart - col*Date.Const.msDAY) * dpdt;
-		// height of event
-		var height = (eEnd - eStart) * dpdt;
+		var TimeGridBody = TimeGrid.getView().mainBody;
 		
-		var e = TimeGridBody.createChild({ id : 'x-cal-'+event.data.cal_id });
-		e.addClass(['x-horizontalTimeView-event', 'x-TimeView-event', 'x-form-text']);
-		e.setSize(dims.timeSheetWidth, height);
-		e.position('absolute', 4, left,top);
-		var title = e.createChild();
-        title.insertHtml('afterBegin', event.data.cal_title);
+		var TimeGridBodyHeight = TimeGridBody.getHeight();
+		var dpdt = TimeGridBodyHeight / Date.Const.msDAY;
 		
-		return true;
-	}
+		eventsStore.each(function(event){
+			// timestamp based calculations are far more easy!
+			var rStart = Egw.Calendar.Request.start.getTime();
+			var rEnd = Egw.Calendar.Request.end.getTime();
+			var eStart = event.data.cal_start.getTime();
+			var eEnd = event.data.cal_end.getTime();
+			
+			if (eStart > rEnd || eEnd < rStart) {
+				// skip, out of range!
+				return true;
+			}
+			
+			// in which column is the event? (0...n)
+			var col = Math.floor((eStart - rStart) / Date.Const.msDAY);
+			// left border of 
+			var left = TimeGridBody.getLeft() + dims.timeAxisWidth + col * dims.timeSheetWidth;
+			// top position of event
+			var top = TimeGridBody.getTop() + (eStart - rStart - col * Date.Const.msDAY) * dpdt;
+			// height of event
+			var height = (eEnd - eStart) * dpdt;
+			
+			var e = Ext.get(event.data.cal_id);
+			if (!e) {
+				var e = eventTpl.insertAfter(TimeGridBody, event.data, true);
+				e.addClass(['x-horizontalTimeView-event', 'x-TimeView-event', 'x-form-text']);
+			}
+			
+			e.setSize(dims.timeSheetWidth, height);
+			e.position('absolute', 4, left, top);
+		}, this);
+
+        TimeGridBody.setHeight(TimeGridBodyHeight);
+		
+        // scroll to wday start
+		TimeGrid.getView().scroller.setStyle('overflow-x', 'hidden');
+        TimeGrid.getView().scroller.dom.scrollTop = 
+            Egw.Calendar.Preferences.workDayStart.getTime() * dpdt;
+    };
+		
+    var eventTpl = new Ext.XTemplate(
+	    '<div id="{cal_id}">',
+		' <table>',
+		'  <tr class="x-calendar-dayview-event-header">',
+		'    {[values.cal_start.format("H:i")]}',
+		'  </tr>',
+		'  <tr class="x-calendar-dayview-event-body">',
+		'    {cal_title}',
+		'  </tr>',
+		'  <tr class="x-calendar-dayview-event-footer">',
+		'  </tr>',
+		' </table>',
+		'</div>'
+	);//.compile();
+	//eventTpl.compile();
 	
 	return {
 		getMainScreen: function(request){
