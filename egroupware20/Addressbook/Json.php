@@ -55,7 +55,9 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         $contactIds = Zend_Json::decode($_contactIds);
         if(is_array($contactIds)) {
             $contacts = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-            $contacts->deleteContactsById($contactIds);
+            foreach($contactIds as $contactId) {
+                $contacts->deleteContactById($contactId);
+            }
 
             $result = array('success'   => TRUE, 'ids' => $contactIds);
         } else {

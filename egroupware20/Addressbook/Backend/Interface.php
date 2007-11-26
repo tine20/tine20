@@ -13,11 +13,11 @@
 interface Addressbook_Backend_Interface
 {
     /**
-     * deletes personal contacts
+     * deletes contact
      *
-     * @param array $contacts list of contactids
+     * @param int $contacts contactid
      */
-    public function deleteContactsById(array $contacts);
+    public function deleteContactById($_contactId);
     
     public function getContactById($_contactId);
     

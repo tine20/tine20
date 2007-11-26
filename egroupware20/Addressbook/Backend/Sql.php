@@ -69,25 +69,34 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function saveContact(Addressbook_Contact $_contactData)
     {
+        if(empty($_contactData->contact_owner)) {
+            throw new UnderflowException('contact_owner can not be empty');
+        }
+        
+        if(!Egwbase_Container::getInstance()->hasGrant($_contactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+            throw new Exception('write access to new addressbook denied');
+        }
+        
+        $accountId   = Zend_Registry::get('currentAccount')->account_id;
         $currentAccount = Zend_Registry::get('currentAccount');
 
         $contactData = $_contactData->toArray();
         $contactData['contact_tid'] = 'n';
         unset($contactData['contact_id']);
-        if(empty($contactData['contact_owner'])) {
-            $contactData['contact_owner'] = $currentAccount->account_id;
-        }
+        
 
         if($_contactData->contact_id === NULL) {
             $result = $this->contactsTable->insert($contactData);
             $_contactData->contact_id = $this->contactsTable->getAdapter()->lastInsertId();
+            error_log("ADD:: result: (" . $result . ") === (" . $_contactData->contact_id . ")???");
         } else {
-            $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::EDIT);
-
-            // update the requested contact_id only if the contact_owner matches the current users acl
+            $oldContactData = $this->getContactById($_contactData->contact_id);
+            if(!Egwbase_Container::getInstance()->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+                throw new Exception('write access to old addressbook denied');
+            }
+            
             $where  = array(
-                $this->contactsTable->getAdapter()->quoteInto('contact_id = (?)', $_contactData->contact_id),
-                $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+                $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactData->contact_id)
             );
 
             $result = $this->contactsTable->update($contactData, $where);
@@ -157,21 +166,26 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }*/
 
     /**
-     * delete contacts identified by contact id
+     * delete contact identified by contact id
      *
-     * @param array $_contacts list of contact ids
+     * @param int $_contacts contact ids
      * @return int the number of rows deleted
      */
-    public function deleteContactsById(array $_contacts)
+    public function deleteContactById($_contactId)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $contactId = (int)$_contactId;
+        if($contactId != $_contactId) {
+            throw new InvalidArgumentException('$_contactId must be integer');
+        }
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::DELETE);
+        $oldContactData = $this->getContactById($_contactId);
 
-        // delete the requested contact_id only if the contact_owner matches the current users acl
+        if(!Egwbase_Container::getInstance()->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+            throw new Exception('delete access to addressbook denied');
+        }
+        
         $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_id IN (?)', $_contacts),
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', array_keys($acl))
+            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $contactId),
         );
          
         $result = $this->contactsTable->delete($where);

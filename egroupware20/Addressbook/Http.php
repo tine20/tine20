@@ -53,8 +53,13 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 			    $view->formData['config']['twoCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
 			}
 		} else {
-		    $view->formData['values'] = array('contact_owner' => $currentAccount->account_id);
-		    $view->formData['config']['addressbookName'] = 'My Contacts';
+		    $personalAddressbooks = $addresses->getAddressbooksByOwner($currentAccount->account_id);
+		    foreach($personalAddressbooks as $addressbook) {
+    		    $view->formData['values'] = array('contact_owner' => $addressbook->container_id);
+    		    $view->formData['config']['addressbookName']   = $addressbook->container_name;
+    		    $view->formData['config']['addressbookRights'] = 31;
+                break;
+		    }
 		}
 		
 		$view->jsIncludeFiles[] = 'Addressbook/js/Addressbook.js';
