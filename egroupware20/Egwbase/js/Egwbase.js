@@ -34,8 +34,10 @@ Egw.Egwbase.initFramework = function() {
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             var responseData = Ext.util.JSON.decode(response.responseText);
 			if(responseData.status && responseData.status.code != 200) {
-				    connection.purgeListeners();
-					connection.fireEvent('requestexception', connection, response, options );
+				    //console.log(connection);
+					//connection.purgeListeners();
+					//connection.fireEvent('requestexception', connection, response, options );
+					//return false;
 			}
         }, this);
         
