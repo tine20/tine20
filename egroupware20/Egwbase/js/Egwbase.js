@@ -14,30 +14,40 @@ Egw.Egwbase.Registry = new Ext.util.MixedCollection(true);
  */
 Egw.Egwbase.initFramework = function() {
 	
+	/**
+     * Ajax reuest proxy
+     * 
+     * Any ajax request (direct Ext.Ajax, Grid and Tree) is proxied here to
+     * set some defaults and check the response status. 
+     * 
+     * We don't use the HTTP status codes directly as no seperation between real 
+     * HTTP problems and application problems would be possible with this schema. 
+     * However on PHP side we allways maintain a status object within the response
+     * where the same HTTP codes are used.
+     */
     var initAjax = function(){
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.url = 'index.php';
-            //console.log('beforerequest');
-            //console.log(options);
         }, this);
         
+		
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
-        
-            //console.log(response.responseText.substr(2,response.responseText.length));
-            //console.log('requestcomplete');
-            //console.log(response.responseText);
-        
+            var responseData = Ext.util.JSON.decode(response.responseText);
+			if(responseData.status && responseData.status.code != 200) {
+				    connection.purgeListeners();
+					connection.fireEvent('requestexception', connection, response, options );
+			}
         }, this);
         
         Ext.Ajax.on('requestexception', function(connection, response, options){
+			connection.purgeListeners();
+
             // if communication is lost, we can't create a nice ext window.
             if (response.status == 0) {
-                return alert('Conection lost, please check your network!')
+                alert('Conection lost, please check your network!')
             }
             
             var data = Ext.util.JSON.decode(response.responseText);
-            //eval('var data = '+response.responseText);
-            
             Ext.Msg.show({
                 title: response.statusText,
                 msg: data.msg,
@@ -360,12 +370,43 @@ Egw.Egwbase.Common = function(){
 		return popup;
 	}
 	
+	/**
+     * Returns localised date and time string
+     * 
+     * @param {mixed} date
+     * @see Ext.util.Format.date
+     * @return {string} localised date and time
+     */
 	_dateTimeRenderer = function($_iso8601){
 		return Ext.util.Format.date($_iso8601, 'd.m.Y H:i:s');
 	}
 	
+	/**
+     * Returns localised date string
+     * 
+     * @param {mixed} date
+     * @see Ext.util.Format.date
+     * @return {string} localised date
+     */
+	_dateRenderer = function(date){
+		return Ext.util.Format.date(date, 'd.m.Y');
+	}
+	
+	/**
+	 * Returns localised time string
+	 * 
+	 * @param {mixed} date
+	 * @see Ext.util.Format.date
+	 * @return {string} localised time
+	 */
+	_timeRenderer = function(date){
+		return Ext.util.Format.date(date, 'H:i:s');
+	}
+	
 	return {
 		dateTimeRenderer: _dateTimeRenderer,
+		dateRenderer: _dateRenderer,
+		timeRenderer: _timeRenderer,
 		openWindow:       _openWindow,
 	}
 }();
