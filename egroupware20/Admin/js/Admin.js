@@ -826,14 +826,14 @@ Egw.Admin.Accounts = function() {
             fields: [
                 {name: 'account_id'},
                 {name: 'account_lid'},
-                {name: 'account_familyname'},
-                {name: 'account_givenname'},
-                {name: 'account_emailaddress'},
-                {name: 'account_lastlogin '},
+                {name: 'n_family'},
+                {name: 'n_given'},
+                {name: 'contact_email'},
+                {name: 'account_lastlogin', type: 'date', dateFormat: 'c'},
                 {name: 'account_lastloginfrom'},
-                {name: 'account_lastpwd_change'},
+                {name: 'account_lastpwd_change', type: 'date', dateFormat: 'c'},
                 {name: 'account_status'},
-                {name: 'account_expires '}
+                {name: 'account_expires', type: 'date', dateFormat: 'c'}
             ],
             // turn on remote sorting
             remoteSort: true
@@ -939,14 +939,14 @@ Egw.Admin.Accounts = function() {
         var columnModel = new Ext.grid.ColumnModel([
             {resizable: true, header: 'ID', id: 'account_id', dataIndex: 'account_id', width: 50},
             {resizable: true, header: 'Login name', id: 'account_lid', dataIndex: 'account_lid'},
-            {resizable: true, header: 'First name', id: 'account_familyname', dataIndex: 'account_familyname', width: 150, renderer: _renderEnabled},
-            {resizable: true, header: 'Given Name', id: 'account_givenname', dataIndex: 'account_givenname'},
-            {resizable: true, header: 'Email', id: 'account_emailaddress', dataIndex: 'account_emailaddress'},
-            {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin'},
+            {resizable: true, header: 'First name', id: 'n_family', dataIndex: 'n_family'},
+            {resizable: true, header: 'Given Name', id: 'n_given', dataIndex: 'n_given'},
+            {resizable: true, header: 'Email', id: 'contact_email', dataIndex: 'contact_email', width: 150},
+            {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Last login from', id: 'account_lastloginfrom', dataIndex: 'account_lastloginfrom'},
-            {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change'},
+            {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Status', id: 'account_status', dataIndex: 'account_status'},
-            {resizable: true, header: 'Expires', id: 'account_expires', dataIndex: 'account_expires'}
+            {resizable: true, header: 'Expires', id: 'account_expires', dataIndex: 'account_expires', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer}
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -980,7 +980,7 @@ Egw.Admin.Accounts = function() {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'account_familyname',
+            autoExpandColumn: 'n_family',
             border: false
         });
         
