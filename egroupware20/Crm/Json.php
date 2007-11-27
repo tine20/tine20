@@ -15,7 +15,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 {
 
     protected $_appname = 'Crm';
-    
+  
   /**
      * Returns the structure of the initial tree for this application.
      *
@@ -23,39 +23,45 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * Additional tree items get loaded on demand.
      *
      * @return array
-    public function getInitialTree()
+     */
+    public function getInitialTree($_location)
     {
         $currentAccount = Zend_Registry::get('currentAccount');
          
-        $treeNodes = array();
-        
-        $treeNode = new Egwbase_Ext_Treenode('Crm', 'projekte', 'projekte', 'Projekte', FALSE);
-        $treeNode->setIcon('apps/package-multimedia.png');
-        $treeNode->cls = 'treemain';
-        $treeNode->contextMenuClass = 'ctxMenuProject';
-        $treeNode->owner = 'allprojects';
-        $treeNode->jsonMethod = 'Crm.getProjectsByOwner';
-        $treeNode->dataPanelType = 'projects';
+        switch($_location) {
+            case 'mainTree':
+                $treeNodes = array();
+                
+                $treeNode = new Egwbase_Ext_Treenode('Crm', 'projekte', 'projekte', 'Projekte', FALSE);
+                $treeNode->setIcon('apps/package-multimedia.png');
+                $treeNode->cls = 'treemain';
+                $treeNode->contextMenuClass = 'ctxMenuProject';
+                $treeNode->owner = 'allprojects';
+                $treeNode->jsonMethod = 'Crm.getProjectsByOwner';
+                $treeNode->dataPanelType = 'projects';
 
-        $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'leads', 'Leads', TRUE);
-        $childNode->owner = 'currentuser';
-        $childNode->jsonMethod = 'Crm.getLeadsByOwner';
-        $childNode->dataPanelType = 'leads';
-        $childNode->contextMenuClass = 'ctxMenuLeadsTree';
-        $treeNode->addChildren($childNode);
-        
-        $childNode = new Egwbase_Ext_Treenode('Crm', 'partner', 'partner', 'Partner', TRUE);
-        $childNode->owner = 'currentuser';
-        $childNode->jsonMethod = 'Crm.getPartnerByOwner';
-        $childNode->dataPanelType = 'partner';
-        $childNode->contextMenuClass = 'ctxMenuPartnerTree';
-        $treeNode->addChildren($childNode);
-        
-        $treeNodes[] = $treeNode;
+                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'leads', 'Leads', TRUE);
+                $childNode->owner = $currentAccount->account_id;
+                $childNode->jsonMethod = 'Crm.getLeadsByOwner';
+                $childNode->dataPanelType = 'leads';
+                $childNode->contextMenuClass = 'ctxMenuLeadsTree';
+                $treeNode->addChildren($childNode);
+                
+                $childNode = new Egwbase_Ext_Treenode('Crm', 'partner', 'partner', 'Partner', TRUE);
+                $childNode->owner = $currentAccount->account_id;
+                $childNode->jsonMethod = 'Crm.getPartnerByOwner';
+                $childNode->dataPanelType = 'partner';
+                $childNode->contextMenuClass = 'ctxMenuPartnerTree';
+                $treeNode->addChildren($childNode);
+                
+                $treeNodes[] = $treeNode;
 
-        return $treeNodes;
+                return $treeNodes;
+                 
+                break;
+        }
     }   
-  */
+  
     
     /**
      * returns the nodes for the dynamic tree
@@ -69,7 +75,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $nodes = array();
      
             switch($datatype) {
-                case 'venues':
+                case 'projects':
                    //  $backend = Crm_Backend::factory(Crm_Backend::SQL);
                    //  $venues = $backend->getVenues();
                     
@@ -133,4 +139,84 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
         exit;
      }
+     
+
+  /**
+	 * save one project
+	 *
+	 * if $_projectId is 0 the project gets added, otherwise it gets updated
+	 *
+	 * @return array
+	 */	
+	public function saveProject()
+    {
+        if(empty($_POST['pj_id'])) {
+            unset($_POST['pj_id']);
+        }
+
+        $project = new Crm_Project();
+        try {
+            $project->setFromUserData($_POST);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $project->getValidationErrors(),
+                            'errorMessage'      => 'filter NOT ok');
+
+            return $result;
+        }
+
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+        try {
+            $backend->saveProject($project);
+            $result = array('success'           => true,
+                            'welcomeMessage'    => 'Entry updated');
+        } catch (Exception $e) {
+            $result = array('success'           => false,
+        					'errorMessage'      => $e->getMessage());
+        }
+
+        return $result;
+         
+    }      
+      
+     
+    public function getProjectsByOwner($filter, $owner, $start, $sort, $dir, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+
+        if(empty($filter)) {
+            $filter = NULL;
+        }
+
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        if($rows = $backend->getProjectsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
+            $result['results']    = $rows;
+            //$result['totalcount'] = $backend->getCountByOwner($owner);
+        }
+
+        return $result;
+    }
+     
+   public function getProjectstate()
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+error_log('JSON :: getProjectstate');
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        if($rows = $backend->getProjectstates()) {
+                 
+            $result['results']    = $rows;
+        }
+
+        return $result;
+    }     
+     
+     
 }

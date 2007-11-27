@@ -2,66 +2,63 @@
 
 Egw.Crm = function() {
 
-   /**
-     * onclick handler for edit action
-     */
-    var _deleteHandler = function(_button, _event) {
-    	Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected access log entries?', function(_button) {
-    		if(_button == 'yes') {
-    			var logIds = Array();
-                var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
-                for (var i = 0; i < selectedRows.length; ++i) {
-                    logIds.push(selectedRows[i].id);
-                }
-                
-                    Ext.Ajax.request( {
-                    url : 'index.php',
-                    method : 'post',
-                    scope : this,
-                    params : {
-                        method : 'Admin.deleteAccessLogEntries',
-                        logIds : Ext.util.JSON.encode(logIds)
-                    },
-                    callback : function(_options, _success, _response) {
-                        if(_success == true) {
-                        	var result = Ext.util.JSON.decode(_response.responseText);
-                        	if(result.success == true) {
-                                Ext.getCmp('gridAdminAccessLog').getStore().reload();
-                        	}
-                        }
-                    }
-                });
-    		}
-    	});
-    }
-
-    var _selectAllHandler = function(_button, _event) {
-    	Ext.getCmp('gridAdminAccessLog').getSelectionModel().selectAll();
-    }
-
-    var _action_delete = new Ext.Action({
-        text: 'delete entry',
-        disabled: true,
-        handler: _deleteHandler,
-        iconCls: 'action_delete'
-    });
-
-    var _action_selectAll = new Ext.Action({
-        text: 'select all',
-        handler: _selectAllHandler
-    });
-
-    var _contextMenuGridAdminAccessLog = new Ext.menu.Menu({
-        items: [
-            _action_delete,
-            '-',
-            _action_selectAll 
-        ]
-    });
-
+    var _initialTree = [{
+        "text":"Projects",
+        "cls":"treemain",
+        "allowDrag":false,
+        "allowDrop":true,
+        "id":"crm",
+        "icon":"images\/oxygen\/16x16\/apps\/package-multimedia.png",
+        "application":"Crm",
+        "datatype":"projects",
+        /*"children":[],*/
+        "leaf":null,
+        "contextMenuClass":"ctxMenuProject",
+        "owner":"all",
+    //    "jsonMethod":"Crm.getProjectsByOwner",
+        "dataPanelType":"projects"
+    }];
     
     var _getCrmTree = function() 
     {
+    function dummyHandler(item){
+            Ext.example.msg('FUTURE FEATURE', '...soon you will be able to ', item.text);
+        }
+    
+        var settings_tb_menu = new Ext.menu.Menu({
+            id: 'crmSettingsMenu',
+            items: [
+                '-', {
+                    text: 'Settings',
+                    menu: {       
+                        items: [
+                            {text: 'Edit Leadstati', handler: dummyHandler},
+                            {text: 'Edit Leadsources', handler: dummyHandler},
+                            {text: 'Edit Leadtypes', handler: dummyHandler},
+                            {text: 'Edit Products', handler: dummyHandler}
+                        ]
+                    }
+                } , {
+                    text: 'Admin',
+                    menu: {       
+                        items: [
+                            {text: 'Global Categories', handler: dummyHandler}
+                        ]
+                    }
+                }
+            ]
+        });
+        
+      
+        var settings_tb = new Ext.Toolbar({
+            id: 'settingsCrm',
+            split: false,
+            height: 26,
+            items: [
+                settings_tb_menu
+            ]
+        });    
+       
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php'
         });
@@ -76,6 +73,7 @@ Egw.Crm = function() {
         var treePanel = new Ext.tree.TreePanel({
             title: 'Crm',
             id: 'crm-tree',
+            tbar: settings_tb_menu,
             loader: treeLoader,
             rootVisible: false,
             border: false
@@ -90,14 +88,16 @@ Egw.Crm = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(i=0; i<initialTree.Crm.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(initialTree.Crm[i]));
+        for(i=0; i<_initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
         }
    
         treePanel.on('click', function(_node, _event) {
-                        
+               this.show();
+/*               
         	var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
 
+                
         	switch(_node.attributes.dataPanelType) {
                 case 'lead':
                     Egw.Crm.show();
@@ -124,7 +124,7 @@ Egw.Crm = function() {
                         
                     break;    
                     
-            }
+            }  */
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
@@ -151,22 +151,25 @@ Egw.Crm = function() {
     }    
     
     
+    
     var _createDataStore = function()
     {
 
-/*         var ds_crm = new Ext.data.JsonStore({
+         var ds_crm = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method: 'Crm.getAllProjects'
+                method: 'Crm.getProjectsByOwner',
+                owner: 'all'
             },
             root: 'results',
             totalProperty: 'totalcount',
             id: 'pj_id',
             fields: [
+                {name: 'pj_id'},            
                 {name: 'pj_name'},
-                {name: 'pj_distributionphase'},
-                {name: 'pj_customertype'},
-                {name: 'pj_leadsource'},
+                {name: 'pj_distributionphase_id'},
+                {name: 'pj_customertype_id'},
+                {name: 'pj_leadsource_id'},
                 {name: 'pj_owner'},
                 {name: 'pj_modifier'},
                 {name: 'pj_start'},
@@ -177,40 +180,22 @@ Egw.Crm = function() {
                 {name: 'pj_probability'},
                 {name: 'pj_end_scheduled'},
                 {name: 'pj_lastread'},
-                {name: 'pj_lastreader'}
+                {name: 'pj_lastreader'},
+                
+                {name: 'pj_projectstate'},
+                {name: 'pj_leadtype'},
+                {name: 'pj_leadsource'}//,
+                /*
+                {name: 'pj_partner'},
+                {name: 'pj_lead'},
+                {name: 'pj_partner_id'},
+                {name: 'pj_lead_id'}  */
             ],
             // turn on remote sorting
             remoteSort: true
         });
-     */
-/* 
-        var projects = [
-			['Dentales','Henry Schein Dental Depot GmbH<br>Kenning, Sebastian','Grub, J�rg',''],
-            
-		]; */
-		var ds_crm = new Ext.data.SimpleStore({
-			fields: [
-                {name: 'pj_name'},
-                {name: 'pj_distributionphase'},
-                {name: 'pj_customertype'},
-                {name: 'pj_leadsource'},
-                {name: 'pj_owner'},
-                {name: 'pj_modifier'},
-                {name: 'pj_start'},
-                {name: 'pj_modified'},
-                {name: 'pj_description'},
-                {name: 'pj_end'},
-                {name: 'pj_turnover'},
-                {name: 'pj_probability'},
-                {name: 'pj_end_scheduled'},
-                {name: 'pj_lastread'},
-                {name: 'pj_lastreader'}
-            ],
-		//	data : projects
-		});     
-
-
-    
+     
+   
         ds_crm.setDefaultSort('pj_name', 'asc');
 
         ds_crm.on('beforeload', function(_dataSource) {
@@ -234,8 +219,8 @@ Egw.Crm = function() {
         return ds_crm;
     }
 
-    var _showToolbar = function()
-    {
+    var _showCrmToolbar = function() {
+    
         var quickSearchField = new Ext.app.SearchField({
             id:        'quickSearchField',
             width:     200,
@@ -268,7 +253,7 @@ Egw.Crm = function() {
 		//		var curSelNode = tree.getSelectionModel().getSelectedNode();
 			//	var RootNode   = tree.getRootNode();
             
-                openWindow('CrmProjectWindow', 'index.php?method=Crm.editProject&_projectId=0&_eventId=NULL', 900, 700);
+                Egw.Egwbase.Common.openWindow('CrmProjectWindow', 'index.php?method=Crm.editProject&_projectId=0&_eventId=NULL', 900, 700);
              },
 			iconCls: 'action_add'
 		});        
@@ -280,7 +265,7 @@ Egw.Crm = function() {
             height: 26,
             items: [
                 action_add,
-                _action_delete,'->',
+                //_action_delete,'->',
                 'Display from: ',
                 ' ',
                 dateFrom,
@@ -291,60 +276,12 @@ Egw.Crm = function() {
                 new Ext.Toolbar.Spacer(),
                 '-',
                 'Search:', ' ',
-/*                new Ext.ux.SelectBox({
-                  listClass:'x-combo-list-small',
-                  width:90,
-                  value:'Starts with',
-                  id:'search-type',
-                  store: new Ext.data.SimpleStore({
-                    fields: ['text'],
-                    expandData: true,
-                    data : ['Starts with', 'Ends with', 'Any match']
-                  }),
-                  displayField: 'text'
-                }), */
                 ' ',
                 quickSearchField
             ]
         });
         
         Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
-
-        dateFrom.on('valid', function(_dateField) {
-            var from = Date.parseDate(
-               Ext.getCmp('Crm_dateFrom').getRawValue(),
-               'm/d/y'
-            );
-
-            var to = Date.parseDate(
-               Ext.getCmp('Crm_dateTo').getRawValue(),
-               'm/d/y'
-            );
-            
-            if(from.getTime() > to.getTime()) {
-            	Ext.getCmp('Crm_dateTo').setRawValue(Ext.getCmp('Crm_dateFrom').getRawValue());
-            }
-
-            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
-        });
-        
-        dateTo.on('valid', function(_dateField) {
-            var from = Date.parseDate(
-               Ext.getCmp('Crm_dateFrom').getRawValue(),
-               'm/d/y'
-            );
-
-            var to = Date.parseDate(
-               Ext.getCmp('Crm_dateTo').getRawValue(),
-               'm/d/y'
-            );
-            
-            if(from.getTime() > to.getTime()) {
-                Ext.getCmp('Crm_dateFrom').setRawValue(Ext.getCmp('Crm_dateTo').getRawValue());
-            }
-
-            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}})
-        });
     }
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
@@ -372,40 +309,13 @@ Egw.Crm = function() {
     }
 
     
-    var openWindow = function(_windowName, _url, _width, _height) 
-    {
-        if (document.all) {
-            w = document.body.clientWidth;
-            h = document.body.clientHeight;
-            x = window.screenTop;
-            y = window.screenLeft;
-        } else if (window.innerWidth) {
-            w = window.innerWidth;
-            h = window.innerHeight;
-            x = window.screenX;
-            y = window.screenY;
-        }
-        var leftPos = ((w - _width)/2)+y; 
-        var topPos = ((h - _height)/2)+x;
-
-        var popup = window.open(
-            _url, 
-            _windowName,
-            'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
-            ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no'
-        );
-        
-        return popup;
-    }    
-    
-    
     /**
-     * creates the address grid
+     * creates the grid
      * 
      */
     var _showGrid = function() 
     {
-    	_action_delete.setDisabled(true);
+    //	_action_delete.setDisabled(true);
     	
         var dataStore = _createDataStore();
         
@@ -416,21 +326,29 @@ Egw.Crm = function() {
             displayMsg: 'Displaying projects {0} - {1} of {2}',
             emptyMsg: "No projects to display"
         }); 
+
+        var expander = new Ext.grid.RowExpander({
+            tpl : new Ext.Template(
+                '<p><b>Notes:</b> {pj_description}<br>',
+                '<p><b>Activities:</b> </p>'
+            )
+        });
         
         var columnModel = new Ext.grid.ColumnModel([
+            expander,
             {resizable: true, header: 'Projekt ID', id: 'pj_id', dataIndex: 'pj_id', width: 20, hidden: true},
             {resizable: true, header: 'Projektname', id: 'pj_name', dataIndex: 'pj_name', width: 200},
             {resizable: true, header: 'Partner', id: 'pj_partner', dataIndex: 'pj_partner', width: 150},
             {resizable: true, header: 'Lead', id: 'pj_lead', dataIndex: 'pj_lead', width: 150},
-            {resizable: true, header: 'Status', id: 'pj_state', dataIndex: 'pj_state', width: 150},
-            {resizable: true, header: 'Wahrscheinlichkeit', id: 'pj_probability', dataIndex: 'pj_probability', width: 50},
-            {resizable: true, header: 'Umsatz', id: 'pj_turnover', dataIndex: 'pj_turnover', width: 100}
+            {resizable: true, header: 'Status', id: 'pj_projectstate', dataIndex: 'pj_projectstate', width: 150},
+            {resizable: true, header: 'Wahrscheinlichkeit', id: 'pj_probability', dataIndex: 'pj_probability', width: 50, renderer: Ext.util.Format.percentage},
+            {resizable: true, header: 'Umsatz', id: 'pj_turnover', dataIndex: 'pj_turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
         
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-        
+        /*
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
@@ -440,17 +358,21 @@ Egw.Crm = function() {
                 _action_delete.setDisabled(false);
             }
         });
-        
+      */  
         var gridPanel = new Ext.grid.GridPanel({
             id: 'gridCrm',
             store: dataStore,
             cm: columnModel,
-            tbar: pagingToolbar,     
+//            tbar: pagingToolbar,   
+            viewConfig: {
+                        forceFit:true
+                    },  
+            plugins: expander,                    
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'Projektname',
+   //         autoExpandColumn: 'Projektname',
             border: false
         });
         
@@ -465,17 +387,21 @@ Egw.Crm = function() {
             _contextMenuGridAdminAccessLog.showAt(_eventObject.getXY());
         });
         
-/*        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
+        gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-        });*/
+            Egw.Egwbase.Common.openWindow('projectWindow', 'index.php?method=Crm.editProject&_projectId='+record.data.pj_id, 850, 600);            
+        });
+       
+       return;
     }
         
     // public functions and variables
     return {
-        show: function(_node) {
-            _showToolbar();
+        show: function(_node) {          
+            _showCrmToolbar();
+            _showGrid();    
           //  _getCrmTree();
-          //  _showGrid();            
+          
         },
         
         getPanel: _getCrmTree
@@ -526,16 +452,39 @@ Egw.Crm.ProjectEditDialog = function() {
 
     var handler_saveAndClose = function(_button, _event) 
     {
-    	var eventForm = Ext.getCmp('eventDialog').getForm();
-		eventForm.render();
+        var store_products = Ext.getCmp('grid_choosenProducts').getStore();
+        var modified_products = store_products.getModifiedRecords();
+        
+       
+        var _getJSONDsRecs = function(_dataSrc) {
+            
+        if(Ext.isEmpty(_dataSrc)) {
+                return false;
+            }
+                
+            var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array();            
+            for(i=0; i < dataLen; i++) {
+                var curRecData = data.itemAt(i).data;
+                jsonData.push(curRecData);
+            }   
+
+            return Ext.util.JSON.encode(jsonData);
+        }
+
+        var modified_products_json = _getJSONDsRecs(store_products);
+       
+    	var projectForm = Ext.getCmp('projectDialog').getForm();
+		projectForm.render();
     	
-    	if(eventForm.isValid()) {
+    	if(projectForm.isValid()) {
 			var additionalData = {};
 			if(formData.values) {
-				additionalData.event_id = formData.values.event_id;
+				additionalData.event_id = formData.values.project_id;
 			}
 			    		
-			eventForm.submit({
+            additionalData.products = modified_products_json;
+                        
+			projectForm.submit({
     			waitTitle:'Please wait!',
     			waitMsg:'saving event...',
     			params:additionalData,
@@ -603,6 +552,7 @@ Egw.Crm.ProjectEditDialog = function() {
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
 
+        
         var disableButtons = true;
         if(formData.values) {
             disableButtons = false;
@@ -622,50 +572,19 @@ Egw.Crm.ProjectEditDialog = function() {
 
 		var _setParameter = function(_dataSource)
 		{
-                _dataSource.baseParams.method = 'Crm.getEvents';
-                _dataSource.baseParams.options = Ext.encode({
-                });
+            _dataSource.baseParams.method = 'Crm.getEvents';
+            _dataSource.baseParams.options = Ext.encode({
+            });
         }
   
   
-
-  var editWindow = new Ext.Window({
-                                    title: 'Technikeintrag editieren',
-                                    modal: true,
-                                    width: 375,
-                                    height: 500,
-                                    closeAction: 'hide',
-                                    layout: 'fit',
-                                    plain:true,
-                                    bodyStyle:'padding:5px;',
-                                    buttonAlign:'center'
-                                });	
  
- 
-    var _editHandler = function(_button, _event) {
+        var _editHandler = function(_button, _event) {
         
-        editWindow.show();
-    	/* 
-    			var logIds = Array();
-                var selectedRows = Ext.getCmp('gridAdminAccessLog').getSelectionModel().getSelections();
-                for (var i = 0; i < selectedRows.length; ++i) {
-                    logIds.push(selectedRows[i].id);
-                } */
-    }; 
- 
-        var addEventDate = new Ext.Window({
-                            title: 'neues Datum hinzuf&uuml;gen',
-                            modal: true,
-                            width: 375,
-                            height: 500,
-                            closeAction: 'hide',
-                            layout: 'fit',
-                            plain:true,
-                            bodyStyle:'padding:5px;',
-                            buttonAlign:'center'
-                        });	
- 
- 
+            editWindow.show();
+            	
+        }; 
+
         var _action_edit = new Ext.Action({
             text: 'editieren',
             //disabled: true,
@@ -673,201 +592,30 @@ Egw.Crm.ProjectEditDialog = function() {
             iconCls: 'action_edit'
         });
  
-       var _contextMenuGridTechnik = new Ext.menu.Menu({
-            items: [
-                _action_edit
-            ]
-        }); 
- 
-       var cm_technik = new Ext.grid.ColumnModel([
-            	{header: "Technik", width: 200, sortable: true, dataIndex: '1'},
-            	{header: "Lieferant", width: 200, sortable: true, dataIndex: '2'},
-            	{header: "St&uuml;ckzahl", width: 50, sortable: true, dataIndex: '3'},
-            	{id:"status", header: "Status", dataIndex: '4', width: 100, sortable: true, resizable: false  }
-             ]);
-        cm_technik.defaultSortable = true;
-        
-        var cm_werbung = new Ext.grid.ColumnModel([
-            	{header: "Aktion", width: 200, sortable: true, dataIndex: '1'},
-            	{header: "Datum", width: 150, sortable: true, dataIndex: '2'},
-            	{header: "Verantwortlicher", width: 150, sortable: true, dataIndex: '3'},
-            	{header: "Status", width: 50, sortable: true, resizable: false, dataIndex: '4'}
-             ]);
-        cm_werbung.defaultSortable = true;        
-        
-        var cm_organisation = new Ext.grid.ColumnModel([
-            	{header: "ToDo", width: 200, sortable: true, dataIndex: '1'},
-            	{header: "Datum", width: 150, sortable: true, dataIndex: '2'},
-            	{header: "Verantwortlicher", width: 150, sortable: true, dataIndex: '3'},
-            	{header: "Status", width: 50, sortable: true, resizable: false, dataIndex: '4'}
-             ]);
-        cm_organisation.defaultSortable = true;        
-        
-        var cm_preise = new Ext.grid.ColumnModel([
-            	{header: "Preisgruppe", width: 200, sortable: true, dataIndex: '1'},
-            	{header: "Preis", width: 200, sortable: true, dataIndex: '2'}
-             ]);
-        cm_preise.defaultSortable = true; 
 
         function formatDate(value){
             return value ? value.dateFormat('M d, Y') : '';
         };
     
-         var cm_termine = new Ext.grid.ColumnModel([
-            	{id:'datum', header: "Datum", dataIndex: '1', width: 100, editor: new Ext.form.DateField({allowBlank: false, format: 'd.m.Y', renderer: formatDate}), sortable: true },
-            	{id:'bemerkungen', header: "Bemerkungen", dataIndex: '2', width: 300, editor: new Ext.form.TextField({allowBlank: false}), sortable: true},
-                {id:'preisgruppe', header: "Preisgruppe", dataIndex: '3', width: 100, sortable: true},
-                {id:'veranstaltungsort', header: "Veranstaltungsort", dataIndex: '4', width: 100, sortable: true}
-             ]);
-        cm_termine.defaultSortable = true;  
- 
+      
+        var st_leadstatus = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {
+                method: 'Crm.getProjectstate'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'pj_projectstate_id',
+            fields: [
+                {name: 'pj_projectstate_id'},
+                {name: 'pj_projectstate'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
+        });
+        st_leadstatus.load();
         
-        
-        
-        var dummy_store = new Ext.data.Store({
-                        //  reader: reader,
-                        //   data: xg.dummyData
-                });
                 
-        var st_technik =  new Ext.data.SimpleStore({
-                                fields: ['1','2','3','4'],
-                                data: [
-                                        ['Lampen E8','Lampen-Schulze','10','geordert'],
-                                        ['Leiter','Leiter-Meier','1','Versand best&auml;tigt']
-                                    ]
-        });      
-        
-        var st_termine =  new Ext.data.SimpleStore({
-                                fields: ['1','2','3','4'],
-                                data: [
-                                        ['01.05.2008','...','Preisgruppe B','Variete'],
-                                        ['03.08.2008','','Preisgruppe A','Hauptbuehne']
-                                    ]
-        });         
-        
-        var grid_technik = new Ext.grid.EditorGridPanel({
-                store: st_technik,
-                cm: cm_technik,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                anchor: '95% 100%',
-                frame:false,
-               // title:'Framed with Checkbox Selection and Horizontal Scrolling',
-                iconCls:'icon-grid'
-            });
- 
-        grid_technik.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-                    _eventObject.stopEvent();
-                    if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                        _grid.getSelectionModel().selectRow(_rowIndex);
-                    }
-                    _contextMenuGridTechnik.showAt(_eventObject.getXY());
-        });
-        
-        grid_technik.on('rowdblclick', function(_grid, _rowIndex, _eventObject) {
-                    _eventObject.stopEvent();
-                   editWindow.show();
-        });
- 
-        var grid_werbung = new Ext.grid.GridPanel({
-                store: dummy_store,
-                cm: cm_werbung,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                anchor: '100% 100%',
-                frame:false,
-               // title:'Framed with Checkbox Selection and Horizontal Scrolling',
-                iconCls:'icon-grid'
-            });
-        
-        var grid_organisation = new Ext.grid.GridPanel({
-                store: dummy_store,
-                cm: cm_organisation,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                anchor: '100% 100%',
-                frame:false,
-               // title:'Framed with Checkbox Selection and Horizontal Scrolling',
-                iconCls:'icon-grid'
-            });  
-            
-        var grid_preise = new Ext.grid.GridPanel({
-                store: dummy_store,
-                cm: cm_preise,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                anchor: '50% 100%',
-                frame:false,
-               // title:'Framed with Checkbox Selection and Horizontal Scrolling',
-                iconCls:'icon-grid'
-            });  
-
-            
-        var grid_termine = new Ext.grid.EditorGridPanel({
-                store: st_termine,
-                cm: cm_termine,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                anchor: '100% 80%',
-                frame:false,
-                clicksToEdit:1,
-                tbar: [{
-                    text: 'neuer Termin',
-                    handler : function(){
-                    addEventDate.show();
-                        /* var p = new Plant({
-                            common: 'New Plant 1',
-                            light: 'Mostly Shade',
-                            price: 0,
-                            availDate: new Date(),
-                            indoor: false
-                        });
-                        grid.stopEditing();
-                        ds.insert(0, p);
-                        grid.startEditing(0, 0); */
-                    }
-                }],
-               // title:'Framed with Checkbox Selection and Horizontal Scrolling',
-                iconCls:'icon-grid'
-            });  
-            
-  	var venueTrigger = new Ext.form.TriggerField({
-            fieldLabel:'Spielst&auml;tte', 
-			id: 'em_spielstaette',
-            anchor:'100%',
-            allowBlank: false,
-            readOnly:true
-        });
-
-        venueTrigger.onTriggerClick = function() {
-         //   Egw.Eventscheduler.displayVenueSelectDialog('contact_owner');
-            Egw.Eventscheduler.displayVenueSelectDialog();
-        }
-  
-  
-        var st_leadstatus =  new Ext.data.SimpleStore({
-                fields: ['key','value'],
-                data: [
-                        ['0','noch nicht kontaktiert'],
-                        ['1','versucht zu kontaktieren'],
-                        ['2','kontaktiert'],
-                        ['3','Lead verloren'],
-                        ['4','in Zukunft wieder anrufen'],
-                        ['5','unbrauchbarer Lead'],
-                        ['6','abgeschlossen gewonnen']
-                    ]
-        });
-        
         var st_leadtyp =  new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
@@ -940,26 +688,89 @@ Egw.Crm.ProjectEditDialog = function() {
                     ]
         });
      
-        var st_contacts = new Ext.data.SimpleStore({
-                fields: ['key','value'],
-                data: [
-                        ['0','0%'],
-                        ['1','10%'],
-                        ['2','20%'],
-                        ['3','30%'],
-                        ['4','40%'],
-                        ['5','50%'],
-                        ['6','60%'],
-                        ['7','70%'],
-                        ['8','80%'],
-                        ['9','90%'],
-                        ['10','100%']
-                    ]
+        var st_contacts = new Ext.data.JsonStore({
+            url: 'index.php',
+            //baseParams: getParameterContactsDataStore(_node),
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'contact_id',
+            fields: [
+                {name: 'contact_id'},
+                {name: 'contact_tid'},
+                {name: 'contact_owner'},
+                {name: 'contact_private'},
+                {name: 'cat_id'},
+                {name: 'n_family'},
+                {name: 'n_given'},
+                {name: 'n_middle'},
+                {name: 'n_prefix'},
+                {name: 'n_suffix'},
+                {name: 'n_fn'},
+                {name: 'n_fileas'},
+                {name: 'contact_bday'},
+                {name: 'org_name'},
+                {name: 'org_unit'},
+                {name: 'contact_title'},
+                {name: 'contact_role'},
+                {name: 'contact_assistent'},
+                {name: 'contact_room'},
+                {name: 'adr_one_street'},
+                {name: 'adr_one_street2'},
+                {name: 'adr_one_locality'},
+                {name: 'adr_one_region'},
+                {name: 'adr_one_postalcode'},
+                {name: 'adr_one_countryname'},
+                {name: 'contact_label'},
+                {name: 'adr_two_street'},
+                {name: 'adr_two_street2'},
+                {name: 'adr_two_locality'},
+                {name: 'adr_two_region'},
+                {name: 'adr_two_postalcode'},
+                {name: 'adr_two_countryname'},
+                {name: 'tel_work'},
+                {name: 'tel_cell'},
+                {name: 'tel_fax'},
+                {name: 'tel_assistent'},
+                {name: 'tel_car'},
+                {name: 'tel_pager'},
+                {name: 'tel_home'},
+                {name: 'tel_fax_home'},
+                {name: 'tel_cell_private'},
+                {name: 'tel_other'},
+                {name: 'tel_prefer'},
+                {name: 'contact_email'},
+                {name: 'contact_email_home'},
+                {name: 'contact_url'},
+                {name: 'contact_url_home'},
+                {name: 'contact_freebusy_uri'},
+                {name: 'contact_calendar_uri'},
+                {name: 'contact_note'},
+                {name: 'contact_tz'},
+                {name: 'contact_geo'},
+                {name: 'contact_pubkey'},
+                {name: 'contact_created'},
+                {name: 'contact_creator'},
+                {name: 'contact_modified'},
+                {name: 'contact_modifier'},
+                {name: 'contact_jpegphoto'},
+                {name: 'account_id'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
         });
-     
+        
+        st_contacts.setDefaultSort('n_family', 'asc');
+        
+        st_contacts.on('beforeload', function(_st_contacts) {
+            _st_contacts.baseParams.datatype = 'allcontacts';
+            _st_contacts.baseParams.method = 'Crm.getContactsByOwner';
+            _st_contacts.baseParams.owner = 'allcontacts';
+        });   
+        
+        
         var tpl_contacts = new Ext.Template(
             '<div class="search-item">',
-                '<h3>{n_fileas}</h3>',
+                '<h3>{contact_id} , {n_fileas}</h3>',
             '</div>'
         );
      
@@ -989,7 +800,16 @@ Egw.Crm.ProjectEditDialog = function() {
                 iconCls:'icon-grid'
         });  
   
-  /*
+        var st_choosenProducts = new Ext.data.SimpleStore({
+                fields: ['id','product_id','product_price','product_serial'],
+                data: [
+                        ['1','2','1500','254234231da2'],
+                        ['2','4','2100','fqw2323g2f3'],
+                        ['3','8','2800','sf323fq23f']
+                    ]
+        });
+ 
+  
         var st_productsAvailable = new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
@@ -1004,74 +824,110 @@ Egw.Crm.ProjectEditDialog = function() {
                         ['8','InCoris'],
                         ['9','InFinident'],
                         ['10','PC']
-                    ]
-        });
+                    ],
+                id: 'key'
+        });  
+  
+        function renderProductCombo(value) {
+            if(value) return st_productsAvailable.getAt(value).get('value');
+        }
   
         var cm_choosenProducts = new Ext.grid.ColumnModel([{
                 header: "Produkt",
-                dataIndex: 'products',
-                width: 220,
+                dataIndex: 'product_id',
+                width: 300,
                 editor: new Ext.form.ComboBox({
-                    allowBlank: false, 
+                    name: 'product_combo',
+                    hiddenName: 'product_id',
                     store: st_productsAvailable, 
                     displayField:'value', 
-                    valueField:'key', 
+                    valueField: 'key',
+                    allowBlank: false, 
+                    editable: false,
+                    forceSelection: true, 
+                    triggerAction: "all", 
                     mode: 'local', 
-                    emptyText:'',
                     lazyRender:true,
                     listClass: 'x-combo-list-small'
-                    })
-                } , {
-                header: "Anzahl",
-                dataIndex: 'product_count',
-                width: 30,
-                editor: new Ext.form.NumberField({
-                    allowBlank: false,
-                    allowNegative: false,
-                    maxValue: 10
-                    })
+                    }),
+                renderer: renderProductCombo
                 } , { 
                 header: "Seriennummer",
-                dataIndex: 'product_serials',
-                width: 30,
+                dataIndex: 'product_serial',
+                width: 300,
                 editor: new Ext.form.TextField({
                     allowBlank: false
                     })
+                } , {
+                header: "Preis",
+                dataIndex: 'product_price',
+                width: 150,
+                align: 'right',
+                editor: new Ext.form.NumberField({
+                    allowBlank: false,
+                    allowNegative: false,
+                    decimalSeparator: ','
+                    }),
+                renderer: Ext.util.Format.euMoney
                 }
         ]);
         
+        
+        
         var product = Ext.data.Record.create([
-           {name: 'products'},
-           {name: 'product_count', type: 'float'},
-           {name: 'product_serials', type: 'string'}
+           {name: 'id', type: 'int'},
+           {name: 'product_id', type: 'int'},
+           {name: 'product_serial', type: 'string'},
+           {name: 'product_price', type: 'float'}
         ]);
         
         var grid_choosenProducts = new Ext.grid.EditorGridPanel({
-         //   store: st_choosenProducts,
+            store: st_choosenProducts,
+            id: 'grid_choosenProducts',
             cm: cm_choosenProducts,
             anchor: '100% 100%',
-            autoExpandColumn:'common',
+//            autoExpandColumn:'common',
             frame:false,
             clicksToEdit:1,
             tbar: [{
                 text: 'Produkt hinzufügen',
                 handler : function(){
                     var p = new product({
-                        products: '',
-                        product_count: 0,
-                        product_serials:''
+                        id: '-1',
+                        product_id: '',                       
+                        product_serial:'',
+                        product_price: 0
                     });
                     grid_choosenProducts.stopEditing();
-        //            st_choosenProducts.insert(0, p);
+                    st_choosenProducts.insert(0, p);
                     grid_choosenProducts.startEditing(0, 0);
-                    }
-                }]
-            });
+                }
+            }]  
+        });
 
-          //  st_choosenProducts.load();
+        grid_choosenProducts.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+            }
+            //var record = _grid.getStore().getAt(rowIndex);
+            //_ctxMenuGrid.showAt(_eventObject.getXY());
+        });
+        /*
+    var action_delete = new Ext.Action({
+        text: 'delete contact',
+        disabled: true,
+        handler: _deleteBtnHandler,
+        iconCls: 'action_delete'
+    });        
         
-   */   
-        
+    var _ctxMenuGrid = new Ext.menu.Menu({
+        id:'ctxMenuProduct', 
+        items: [
+            action_delete
+        ]
+    });
+      */  
   
         var cm_choosenContacts = new Ext.grid.ColumnModel([
             	{id:'anschrift', header: "Anschrift", dataIndex: 'anschrift', width: 250, sortable: true },
@@ -1105,7 +961,7 @@ Egw.Crm.ProjectEditDialog = function() {
   
 		var projectedit = new Ext.FormPanel({
 			url:'index.php',
-			baseParams: {method :'Crm.saveEvent'},
+			baseParams: {method :'Crm.saveProject'},
 		    labelAlign: 'top',
 			bodyStyle:'padding:5px',
             anchor:'100%',
@@ -1157,6 +1013,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                             xtype:'combo',
                                             fieldLabel:'Leadstatus', 
                                             name:'pj_leadstatus',
+                                            hiddenName:'pj_distributionphase_id',
             								store: st_leadstatus,
             								displayField:'value',
             								valueField:'key',
@@ -1171,6 +1028,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                             xtype:'combo',
                                             fieldLabel:'Leadtyp', 
                                             name:'pj_leadtyp',
+                                            hiddenName:'pj_customertype_id',
             								store: st_leadtyp,
             								displayField:'value',
             								valueField:'key',
@@ -1190,6 +1048,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                             xtype:'combo',
                                             fieldLabel:'Leadquelle', 
                                             name:'pj_leadsource',
+                                            hiddenName:'pj_leadsource_id',
             								store: st_leadsource,
             								displayField:'value',
             								valueField:'key',
@@ -1284,23 +1143,33 @@ Egw.Crm.ProjectEditDialog = function() {
                                 anchor:'100%',
                                 items: [{
                                     xtype:'combo',
+                                    store: st_contacts,
+                                    id: 'st_contacts',
+                                    displayField:'contact_id',
+                                    typeAhead: false,
+                                    loadingText: 'Searching...',
+                                    anchor: '100%',
+                                    pageSize:50,
+                                    queryParam: 'filter',
+                                    hideTrigger:true,
+                                    tpl: tpl_contacts,
+                                    itemSelector: 'div.search-item',
                                     fieldLabel:'Kontakt auswählen', 
                                     hideLabel: true,
                                     name:'pj_contacts',
-                                    store: st_contacts,
-                                    displayField:'value',
-                                    valueField:'key',
+                                  /*  store: st_contacts,                            
+                                    displayField:'n_fileas',
+                                    valueField:'contact_id',
                                     typeAhead: false,
                                     loadingText: 'Searching...',
                                     mode: 'local',
-                                    hideTrigger: true,
-                                    emptyText:'',
-                                    selectOnFocus:true,
-                                    anchor:'100%',
+                                    hideTrigger: true,                                    
                                     pageSize:10,
-                                    tpl: tpl_contacts,		
+                                    tpl: tpl_contacts,
+                                    itemSelector: 'div.search-item', */
                             		onSelect: function(record) {
-                            			alert(record);
+                                        alert(st_contacts.getById(0));
+                            			//alert(record);
                                     }
                                 } , grid_contact
                                 ]
@@ -1319,7 +1188,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                         layout: 'form',
                                         border:false,
                                         items: [{
-                                            xtype:'textfield',
+                                            xtype:'numberfield',
                                             fieldLabel:'erwarteter Umsatz', 
                                             name:'pj_turnover',
                                             anchor:'97%'
@@ -1382,13 +1251,15 @@ Egw.Crm.ProjectEditDialog = function() {
 	                title:'Produkte',
 	                layout:'form',
 					deferredRender:false,
+                    anchor:'100% 100%',
 					border:false,
 					items:[{  
                         xtype:'fieldset',
                         title:'gewählte Produkte',
-                        items: [{
-    //                        grid_choosenProducts
-                        }]
+                        anchor:'100% 100%',
+                        items: [
+                            grid_choosenProducts
+                        ]
                     
                     }]
                 }]
@@ -1403,11 +1274,11 @@ Egw.Crm.ProjectEditDialog = function() {
     }
 
     var setContactDialogValues = function(_formData) {
-    	var form = Ext.getCmp('contactDialog').getForm();
+    	var form = Ext.getCmp('projectDialog').getForm();
     	
     	form.setValues(_formData);
     	
-    	form.findField('contact_owner_name').setRawValue(formData.config.addressbookName);
+  //  	form.findField('contact_owner_name').setRawValue(formData.config.addressbookName);
     	
     	if(formData.config.oneCountryName) {
     		//console.log('set adr_one_countryname to ' + formData.config.oneCountryName);

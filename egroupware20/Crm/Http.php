@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * backend class for Egwbase_Http_Server
  *
@@ -15,56 +15,58 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 {
     protected $_appname = 'Crm';
     
-	public function editEvent($_venueId, $_eventId)
+    public function getJsFilesToInclude()
+    {
+        return array_merge( parent::getJsFilesToInclude(), array(
+            //self::_appendFileTime("{$this->_appname}/js/Crm.js")
+        ));
+    }
+
+    public function getCssFilesToInclude()
+    {
+        
+    }
+
+    public function getInitialMainScreenData()
+    {
+      //  return array('initialTree' => Crm_Json::getInitialTree());
+    }    
+    
+    
+	public function editProject($_projectId)
 	{
-        $locale = Zend_Registry::get('locale');
-		
+         if(empty($_projectId)) {
+            $_projectId = NULL;
+        }
+	    
+	    $locale = Zend_Registry::get('locale');
+		$currentAccount = Zend_Registry::get('currentAccount');
+	    
 		$view = new Zend_View();
 		 
 		$view->setScriptPath('Egwbase/views');
 		$view->formData = array();
-
+        
 		$list = $locale->getTranslationList('Dateformat');
 		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 
 		$crmJson = new Crm_Json;		
-		$view->formData['config']['initialTree'] = $crmJson->getInitialTree('selectFolder');
+//		$view->formData['config']['initialTree'] = $eventschedulerJson->getInitialTree('mainTree');
 
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
-		$currentAccount = Zend_Registry::get('currentAccount');
-		//$egwbaseAcl = Egwbase_Acl::getInstance();
-
-/*
-		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
-			$view->formData['values'] = $contact->toArray();
-			if($contact->contact_owner == $currentAccount->account_id) {
-			    $view->formData['config']['addressbookName'] = 'My Contacts';
-			} else {
-			    if($contact->contact_owner > 0) {
-			        $view->formData['config']['addressbookName'] = 'Account ' . $contact->contact_owner;
-			    } else {
-			        $view->formData['config']['addressbookName'] = 'Group ' . $contact->contact_owner;
-			    }
-			}
-
-			$locale = Zend_Registry::get('locale');
-			if(!empty($contact->adr_one_countryname)) {
-			    $view->formData['config']['oneCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
-			}
-			if(!empty($contact->adr_two_countryname)) {
-			    $view->formData['config']['twoCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
-			}
+		$projects = Crm_Backend::factory(Crm_Backend::SQL);
+		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
+			$view->formData['values'] = $project->toArray();
+			
 		} else {
-		    $view->formData['values'] = array('contact_owner' => $currentAccount->account_id);
-		    $view->formData['config']['addressbookName'] = 'My Contacts';
+		    
 		}
-	*/	
-		$view->jsIncludeFiles[] = 'Crm/Js/Crm.js';
+		
+		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
-		$view->jsExecute = 'Egw.Crm.EventEditDialog.display();';
+		$view->jsExecute = 'Egw.Crm.ProjectEditDialog.display();';
 
 		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');
