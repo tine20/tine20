@@ -3,19 +3,27 @@ Ext.namespace('Egw.Admin');
 Egw.Admin = function() {
 
     var _initialTree = [{
+        text: 'Accounts',
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'accounts',
+        icon: false,
+        children: [],
+        leaf: null,
+        expanded: true,
+        dataPanelType: 'accounts'
+    },{
         "text":"Applications",
 		"cls":"treemain",
 		"allowDrag":false,
 		"allowDrop":true,
 		"id":"applications",
 		"icon":false,
-		"application":"Admin",
-		"datatype":"applications",
+      /*"application":"Admin", */
 		"children":[],
 		"leaf":null,
-		"contextMenuClass":null,
 		"expanded":true,
-		"jsonMethod":"Admin.getApplications",
 		"dataPanelType":"applications"
 	},{
 		"text":"Access Log",
@@ -24,13 +32,10 @@ Egw.Admin = function() {
 		"allowDrop":true,
 		"id":"accesslog",
 		"icon":false,
-		"application":"Admin",
-		"datatype":"accesslog",
+	  /*"application":"Admin",*/
 		"children":[],
 		"leaf":null,
-		"contextMenuClass":null,
 		"expanded":true,
-		"jsonMethod":"Admin.getAccessLog",
 		"dataPanelType":"accesslog"
 	}];
 
@@ -80,6 +85,15 @@ Egw.Admin = function() {
                         Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
                     } else {
                         Egw.Admin.AccessLog.show();
+                    }
+                    
+                    break;
+                    
+                case 'accounts':
+                    if(currentToolbar !== false && currentToolbar.id == 'AdminAccountsToolbar') {
+                        Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Egw.Admin.Accounts.show();
                     }
                     
                     break;
@@ -723,6 +737,285 @@ Egw.Admin.Applications = function() {
         show: function() {
         	_showApplicationsToolbar();
             _showApplicationsGrid();        	
+        }
+    };
+    
+}();
+
+Egw.Admin.Accounts = function() {
+
+    /**
+     * onclick handler for edit action
+     */
+    var _editButtonHandler = function(_button, _event) {
+        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+        var applicationId = selectedRows[0].id;
+        
+        Egw.Egwbase.Common.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
+    };
+    
+    var _enableDisableButtonHandler = function(_button, _event) {
+        //console.log(_button);
+        
+        var state = 0;
+        if(_button.id == 'Admin_Accesslog_Action_Enable') {
+            state = 1;
+        }
+        
+        var applicationIds = new Array();
+        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            applicationIds.push(selectedRows[i].id);
+        }
+        
+        Ext.Ajax.request({
+            url : 'index.php',
+            method : 'post',
+            params : {
+                method : 'Admin.setApplicationState',
+                applicationIds : Ext.util.JSON.encode(applicationIds),
+                state: state
+            },
+            callback : function(_options, _success, _response) {
+                if(_success === true) {
+                    var result = Ext.util.JSON.decode(_response.responseText);
+                    if(result.success === true) {
+                        Ext.getCmp('gridAdminApplications').getStore().reload();
+                    }
+                }
+            }
+        });
+    };
+    
+
+    var _action_enable = new Ext.Action({
+        text: 'enable application',
+        disabled: true,
+        handler: _enableDisableButtonHandler,
+        iconCls: 'action_enable',
+        id: 'Admin_Accesslog_Action_Enable'
+    });
+
+    var _action_disable = new Ext.Action({
+        text: 'disable application',
+        disabled: true,
+        handler: _enableDisableButtonHandler,
+        iconCls: 'action_disable',
+        id: 'Admin_Accesslog_Action_Disable'
+    });
+
+    var _action_settings = new Ext.Action({
+        text: 'settings',
+        disabled: true,
+        handler: _editButtonHandler,
+        iconCls: 'action_settings'
+    });
+        
+    var _createDataStore = function()
+    {
+        /**
+         * the datastore for lists
+         */
+        var dataStore = new Ext.data.JsonStore({
+            baseParams: {
+                method: 'Admin.getAccounts'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'account_id',
+            fields: [
+                {name: 'account_id'},
+                {name: 'account_lid'},
+                {name: 'account_familyname'},
+                {name: 'account_givenname'},
+                {name: 'account_emailaddress'},
+                {name: 'account_lastlogin '},
+                {name: 'account_lastloginfrom'},
+                {name: 'account_lastpwd_change'},
+                {name: 'account_status'},
+                {name: 'account_expires '}
+            ],
+            // turn on remote sorting
+            remoteSort: true
+        });
+        
+        dataStore.setDefaultSort('account_lid', 'asc');
+
+        dataStore.on('beforeload', function(_dataSource) {
+            _dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+        });        
+        
+        dataStore.load({params:{start:0, limit:50}});
+        
+        return dataStore;
+    };
+
+    var _showApplicationsToolbar = function()
+    {
+        var quickSearchField = new Ext.app.SearchField({
+            id: 'quickSearchField',
+            width:240,
+            emptyText: 'enter searchfilter'
+        }); 
+        quickSearchField.on('change', function() {
+            Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
+        });
+        
+        var applicationToolbar = new Ext.Toolbar({
+            id: 'AdminAccountsToolbar',
+            split: false,
+            height: 26,
+            items: [
+                _action_enable,
+                _action_disable,
+                '-',
+                _action_settings,
+                '->',
+                'Search:', ' ',
+/*                new Ext.ux.SelectBox({
+                  listClass:'x-combo-list-small',
+                  width:90,
+                  value:'Starts with',
+                  id:'search-type',
+                  store: new Ext.data.SimpleStore({
+                    fields: ['text'],
+                    expandData: true,
+                    data : ['Starts with', 'Ends with', 'Any match']
+                  }),
+                  displayField: 'text'
+                }), */
+                ' ',
+                quickSearchField
+            ]
+        });
+        
+        Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
+    };
+    
+    var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        var gridValue;
+        
+        switch(_value) {
+            case '0':
+              gridValue = 'disabled';
+              break;
+              
+            case '1':
+              gridValue = 'enabled';
+              break;
+              
+            case '2':
+              gridValue = 'enabled (but hidden)';
+              break;
+              
+            case '3':
+              gridValue = 'enabled (new window)';
+              break;
+              
+            default:
+              gridValue = 'unknown status (' + _value + ')';
+              break;
+        }
+        
+        return gridValue;
+    };
+
+    /**
+     * creates the address grid
+     * 
+     */
+    var _showApplicationsGrid = function() 
+    {
+        var dataStore = _createDataStore();
+        
+        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
+            pageSize: 50,
+            store: dataStore,
+            displayInfo: true,
+            displayMsg: 'Displaying accounts {0} - {1} of {2}',
+            emptyMsg: "No accounts to display"
+        }); 
+        
+        var columnModel = new Ext.grid.ColumnModel([
+            {resizable: true, header: 'ID', id: 'account_id', dataIndex: 'account_id', width: 50},
+            {resizable: true, header: 'Login name', id: 'account_lid', dataIndex: 'account_lid'},
+            {resizable: true, header: 'First name', id: 'account_familyname', dataIndex: 'account_familyname', width: 150, renderer: _renderEnabled},
+            {resizable: true, header: 'Given Name', id: 'account_givenname', dataIndex: 'account_givenname'},
+            {resizable: true, header: 'Email', id: 'account_emailaddress', dataIndex: 'account_emailaddress'},
+            {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin'},
+            {resizable: true, header: 'Last login from', id: 'account_lastloginfrom', dataIndex: 'account_lastloginfrom'},
+            {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change'},
+            {resizable: true, header: 'Status', id: 'account_status', dataIndex: 'account_status'},
+            {resizable: true, header: 'Expires', id: 'account_expires', dataIndex: 'account_expires'}
+        ]);
+        
+        columnModel.defaultSortable = true; // by default columns are sortable
+
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        
+        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                _action_enable.setDisabled(true);
+                _action_disable.setDisabled(true);
+                //_action_settings.setDisabled(true);
+            } else if (rowCount > 1){
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                //_action_settings.setDisabled(true);
+            } else {
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                //_action_settings.setDisabled(false);              
+            }
+        });
+                
+        var grid_applications = new Ext.grid.GridPanel({
+            id: 'AdminAccountsGrid',
+            store: dataStore,
+            cm: columnModel,
+            tbar: pagingToolbar,     
+            autoSizeColumns: false,
+            selModel: rowSelectionModel,
+            enableColLock:false,
+            loadMask: true,
+            autoExpandColumn: 'account_familyname',
+            border: false
+        });
+        
+        Egw.Egwbase.MainScreen.setActiveContentPanel(grid_applications);
+
+        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+
+/*                action_edit.setDisabled(false);
+                action_delete.setDisabled(false);*/
+            }
+            //var record = _grid.getStore().getAt(rowIndex);
+/*            ctxMenuListGrid.showAt(_eventObject.getXY()); */
+        });
+        
+        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+            var record = _gridPar.getStore().getAt(_rowIndexPar);
+            //console.log('id: ' + record.data.contact_id);
+            try {
+                Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+            } catch(e) {
+            //  alert(e);
+            }
+        });
+        
+        return;
+    };   
+    
+    // public functions and variables
+    return {
+        show: function() {
+            _showApplicationsToolbar();
+            _showApplicationsGrid();            
         }
     };
     

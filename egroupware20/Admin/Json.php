@@ -15,6 +15,22 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Admin';
     
+    public function getAccounts($filter, $sort, $dir, $start, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $accounts = Admin_Controller::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit);
+        
+        $result['results'] = $accounts;
+        $result['totalcount'] = count($accounts);
+        
+        return $result;
+        return $result->toArray();
+    }
+    
     public function deleteAccessLogEntries($logIds)
     {
         try {
