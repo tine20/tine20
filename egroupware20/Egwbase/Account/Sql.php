@@ -123,7 +123,17 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
 
         $stmt = $db->query($select);
 
-        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $result = array();
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach($rows as $account) {
+            if(!empty($account['account_lastlogin'])) {
+                $account['account_lastlogin'] = new Zend_Date($account['account_lastlogin'], Zend_Date::TIMESTAMP);
+            } else {
+                $account['account_lastlogin'] = NULL;
+            }
+            $result[] = $account;
+        }
         //$result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
         
         return $result;
