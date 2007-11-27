@@ -220,6 +220,7 @@ Egw.Addressbook = function(){
         var treePanel = new Ext.tree.TreePanel({
             title: 'Contacts',
             id: 'Addressbook_Tree',
+            iconCls: 'AddressbookTreePanel',
             loader: treeLoader,
             rootVisible: false,
             border: false

@@ -52,6 +52,7 @@ Egw.Admin = function() {
         var treePanel = new Ext.tree.TreePanel({
             title: 'Admin',
             id: 'admin-tree',
+            iconCls: 'AdminTreePanel',
             loader: treeLoader,
             rootVisible: false,
             border: false

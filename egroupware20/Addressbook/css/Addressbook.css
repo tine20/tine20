@@ -31,3 +31,7 @@
 .action_applyChanges {
 	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
 }
+
+.AddressbookTreePanel {
+    background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
+}
