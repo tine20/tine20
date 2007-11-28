@@ -107,7 +107,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         //}
         //$accountId   = Zend_Registry::get('currentAccount')->account_id;
         //$application = Egwbase_Application::getInstance()->getApplicationByName($_application);
-               
+        error_log("START::$_start LIMIT::$_limit");
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
@@ -116,10 +116,10 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
                 'egw_addressbook',
                 'egw_accounts.account_id = egw_addressbook.account_id'
             )
-            ->limit($_start, $_limit)
+            ->limit($_limit, $_start)
             ->order($_sort . ' ' . $_dir);
 
-        //error_log("getContainer:: " . $select->__toString());
+        error_log("getAccounts:: " . $select->__toString());
 
         $stmt = $db->query($select);
 

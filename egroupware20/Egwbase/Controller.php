@@ -118,7 +118,7 @@ class Egwbase_Controller
         $logger = new Zend_Log();
         
         try {
-            $loggerConfig = new Zend_Config_Ini('../../config.ini', 'logger');
+            $loggerConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'logger');
             
             $filename = $loggerConfig->filename;
             $priority = (int)$loggerConfig->priority;
@@ -141,7 +141,7 @@ class Egwbase_Controller
     
     protected function setupDatabaseConnection()
     {
-        $dbConfig = new Zend_Config_Ini('../../config.ini', 'database');
+        $dbConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'database');
         Zend_Registry::set('dbConfig', $dbConfig);
         
         define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'egw_');
