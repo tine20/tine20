@@ -197,7 +197,11 @@ Egw.Addressbook = function(){
     var _getTreePanel = function() 
     {
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php'
+            dataUrl:'index.php',
+            baseParams: {
+            	jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+            	location: 'mainTree'
+            }
         });
         treeLoader.on("beforeload", function(_loader, _node) {
             switch(_node.attributes.nodeType) {
@@ -214,7 +218,6 @@ Egw.Addressbook = function(){
                     _loader.baseParams.owner    = _node.attributes.owner;
                     break;
             }
-            _loader.baseParams.location = 'mainTree';
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
@@ -313,7 +316,12 @@ Egw.Addressbook = function(){
             });         
             
             var treeLoader = new Ext.tree.TreeLoader({
-                dataUrl:'index.php'
+                dataUrl:'index.php',
+                baseParams: {
+                    jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                    location: 'mainTree'
+                }
+                
             });
             treeLoader.on("beforeload", function(_loader, _node) {
                 switch(_node.attributes.nodeType) {
@@ -330,7 +338,6 @@ Egw.Addressbook = function(){
                         _loader.baseParams.owner    = _node.attributes.owner;
                         break;
                 }
-                _loader.baseParams.location = 'mainTree';
             }, this);
                             
             var tree = new Ext.tree.TreePanel({
@@ -548,14 +555,18 @@ Egw.Addressbook.Shared = function(){
     var _getTreePanel = function() 
     {
 		var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php'
+            dataUrl:'index.php',
+            baseParams: {
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                location: 'mainTree',
+                method: 'Addressbook.getSubTree'
+            }
+
         });
         treeLoader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.method   = 'Addressbook.getSubTree';
             _loader.baseParams.node     = _node.id;
             _loader.baseParams.datatype = _node.attributes.datatype;
             _loader.baseParams.owner    = _node.attributes.owner;
-            _loader.baseParams.location = 'mainTree';
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
@@ -654,13 +665,18 @@ Egw.Addressbook.Shared = function(){
 			    buttonAlign:'center'
             });			
 			
-            var treeLoader = new Ext.tree.TreeLoader({dataUrl:'index.php'});
+            var treeLoader = new Ext.tree.TreeLoader({
+            	dataUrl:'index.php',
+	            baseParams: {
+	                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+	                method: 'Addressbook.getSubTree',
+	                location: 'selectFolder'
+	            }
+            });
             treeLoader.on("beforeload", function(_loader, _node) {
-                _loader.baseParams.method       = 'Addressbook.getSubTree';
                 _loader.baseParams.node        = _node.id;
                 _loader.baseParams.datatype    = _node.attributes.datatype;
                 _loader.baseParams.owner       = _node.attributes.owner;
-                _loader.baseParams.location    = 'selectFolder';
             }, this);
                             
             var tree = new Ext.tree.TreePanel({

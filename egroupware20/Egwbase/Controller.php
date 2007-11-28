@@ -33,6 +33,7 @@ class Egwbase_Controller
         if(!isset($egwBaseNamespace->jsonKey)) {
             $egwBaseNamespace->jsonKey = md5(mktime());
         }
+        Zend_Registry::set('jsonKey', $egwBaseNamespace->jsonKey);
 
         if(isset($egwBaseNamespace->currentAccount)) {
             Zend_Registry::set('currentAccount', $egwBaseNamespace->currentAccount);
@@ -59,10 +60,10 @@ class Egwbase_Controller
 
             // is it save to use the jsonKey from $_GET too???
             // can we move this to the Zend_Json_Server???
-            //  if($_POST['jsonKey'] != $egwBaseNamespace->jsonKey) {
-            //      error_log('wrong JSON Key sent!!!');
-            //      die('wrong JSON Key sent!!!');
-            //  }
+            if($_POST['jsonKey'] != Zend_Registry::get('jsonKey')) {
+                error_log('wrong JSON Key sent!!!');
+                throw new Exception('wrong JSON Key sent!!!');
+            }
 
             $server = new Zend_Json_Server();
 

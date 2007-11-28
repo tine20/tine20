@@ -46,12 +46,15 @@ Egw.Admin = function() {
     var _getAdminTree = function() 
     {
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php'
+            dataUrl:'index.php',
+            baseParams: {
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                method: 'Admin.getSubTree',
+                location: 'mainTree'
+            }
         });
         treeLoader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.method   = 'Admin.getSubTree';
             _loader.baseParams.node     = _node.id;
-            _loader.baseParams.location = 'mainTree';
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
@@ -941,7 +944,7 @@ Egw.Admin.Accounts = function() {
             {resizable: true, header: 'Login name', id: 'account_lid', dataIndex: 'account_lid'},
             {resizable: true, header: 'First name', id: 'n_family', dataIndex: 'n_family'},
             {resizable: true, header: 'Given Name', id: 'n_given', dataIndex: 'n_given'},
-            {resizable: true, header: 'Email', id: 'contact_email', dataIndex: 'contact_email', width: 150},
+            {resizable: true, header: 'Email', id: 'contact_email', dataIndex: 'contact_email', width: 180},
             {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Last login from', id: 'account_lastloginfrom', dataIndex: 'account_lastloginfrom'},
             {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},

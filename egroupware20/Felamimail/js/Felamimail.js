@@ -5,13 +5,16 @@ Egw.Felamimail = function() {
     var _getFolderPanel = function() 
     {
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php'
+            dataUrl:'index.php',
+            baseParams: {
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                method: 'Felamimail.getSubTree',
+                location: 'mainTree'
+            }
         });
         treeLoader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.method       = 'Felamimail.getSubTree';
             _loader.baseParams.accountId    = _node.attributes.accountId;
             _loader.baseParams.folderName   = _node.attributes.folderName;
-            _loader.baseParams.location     = 'mainTree';
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({

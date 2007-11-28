@@ -14,6 +14,13 @@
 	<!-- eGW -->
 	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
 	<script type="text/javascript" language="javascript" src="Egwbase/js/Login.js"></script>
+	<!-- initialize the registry, before the other js files get included -->
+    <script type="text/javascript" language="javascript">
+            <?php
+                echo "Egw.Egwbase.jsonKey = '" . Zend_Registry::get('jsonKey') . "';\n";
+            ?>
+    </script>
+	
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function() {
 			EGWNameSpace.Login.showLoginDialog();

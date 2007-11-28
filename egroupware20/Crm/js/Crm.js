@@ -1,4 +1,4 @@
-ÔªøExt.namespace('Egw.Crm');
+Ext.namespace('Egw.Crm');
 
 Egw.Crm = function() {
 
@@ -21,7 +21,7 @@ Egw.Crm = function() {
     
     var _getCrmTree = function() 
     {
-    function dummyHandler(item){
+        function dummyHandler(item){
             Ext.example.msg('FUTURE FEATURE', '...soon you will be able to ', item.text);
         }
     
@@ -60,14 +60,17 @@ Egw.Crm = function() {
         });    
        
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php'
+            dataUrl:'index.php',
+            baseParams: {
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                method: 'Crm.getSubTree',
+                location: 'mainTree'
+            }
         });
         treeLoader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.method   = 'Crm.getSubTree';
             _loader.baseParams.node     = _node.id;
             _loader.baseParams.datatype = _node.attributes.datatype;
             _loader.baseParams.owner    = _node.attributes.owner;
-            _loader.baseParams.location = 'mainTree';
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
@@ -624,7 +627,7 @@ Egw.Crm.ProjectEditDialog = function() {
                         ['2','Partner'],
                         ['3','Presse'],
                         ['4','Prospekt'],
-                        ['5','Wiederverk√§ufer'],
+                        ['5','Wiederverk‰ufer'],
                         ['6','Lieferant'],
                         ['7','anderer Kundentyp']
                     ]
@@ -634,7 +637,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 fields: ['key','value'],
                 data: [
                         ['0','Werbung'],
-                        ['1','Tip von Wiederverk√§ufer'],
+                        ['1','Tip von Wiederverk‰ufer'],
                         ['2','InLabBus'],
                         ['3','Messe'],
                         ['4','andere Leadquelle'],
@@ -890,7 +893,7 @@ Egw.Crm.ProjectEditDialog = function() {
             frame:false,
             clicksToEdit:1,
             tbar: [{
-                text: 'Produkt hinzuf√ºgen',
+                text: 'Produkt hinzuf¸gen',
                 handler : function(){
                     var p = new product({
                         id: '-1',
@@ -977,7 +980,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 anchor:'100% 100%',
 	            defaults:{bodyStyle:'padding:10px'},
 	            items:[{
-	                title:'√úbersicht',
+	                title:'‹bersicht',
 	                layout:'form',
 					deferredRender:false,
 					border:false,
@@ -1154,7 +1157,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                     hideTrigger:true,
                                     tpl: tpl_contacts,
                                     itemSelector: 'div.search-item',
-                                    fieldLabel:'Kontakt ausw√§hlen', 
+                                    fieldLabel:'Kontakt ausw‰hlen', 
                                     hideLabel: true,
                                     name:'pj_contacts',
                                   /*  store: st_contacts,                            
@@ -1218,7 +1221,7 @@ Egw.Crm.ProjectEditDialog = function() {
                         }]
                     } , {
                         xtype:'fieldset',
-                        title:'Produkt√ºbersicht',
+                        title:'Produkt¸bersicht',
                         height: 60,
                         anchor:'100%',
                         items: [{
@@ -1233,7 +1236,7 @@ Egw.Crm.ProjectEditDialog = function() {
                         }]
                     } , {
                         xtype:'fieldset',
-                        title:'letzte 10 Aktivit√§ten',
+                        title:'letzte 10 Aktivit‰ten',
                         anchor:'100%',
                         height: 190,
                         items: [
@@ -1241,7 +1244,7 @@ Egw.Crm.ProjectEditDialog = function() {
                         ]
                     }]
                 } , {
-	                title:'Aktivit√§ten',
+	                title:'Aktivit‰ten',
 	                layout:'form',
 					deferredRender:false,
 					border:false,
@@ -1255,7 +1258,7 @@ Egw.Crm.ProjectEditDialog = function() {
 					border:false,
 					items:[{  
                         xtype:'fieldset',
-                        title:'gew√§hlte Produkte',
+                        title:'gew‰hlte Produkte',
                         anchor:'100% 100%',
                         items: [
                             grid_choosenProducts

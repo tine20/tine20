@@ -8,6 +8,8 @@
 
 var EGWNameSpace = EGWNameSpace || {};
 
+Ext.namespace('Egw.Egwbase.Registry');
+
 EGWNameSpace.Login = function() {
     // turn on validation errors beside the field globally
     Ext.form.Field.prototype.msgTarget = 'side';
@@ -46,6 +48,9 @@ EGWNameSpace.Login = function() {
                         loginDialog.getForm().submit({
                             waitTitle: 'Please wait!', 
                             waitMsg:'Loging you in...',
+                            params: {
+                            	jsonKey: Egw.Egwbase.jsonKey
+                            },
                             success:function(form, action, o) {
                                 Ext.MessageBox.wait('Login successful. Loading eGroupWare...', 'Please wait!');
                                 window.location.reload();

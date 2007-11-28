@@ -28,6 +28,7 @@ Egw.Egwbase.initFramework = function() {
     var initAjax = function(){
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.url = 'index.php';
+            options.params.jsonKey = Egw.Egwbase.Registry.get('jsonKey');
         }, this);
         
 		
@@ -268,10 +269,7 @@ Egw.Egwbase.MainScreen = function() {
 		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to logout?', function(btn, text) {
 			if (btn == 'yes') {
 				Ext.MessageBox.wait('Loging you out...', 'Please wait!');
-				new Ext.data.Connection().request( {
-					url : 'index.php',
-					method : 'post',
-					scope : this,
+				Ext.Ajax.request( {
 					params : {
 						method : 'Egwbase.logout'
 					},

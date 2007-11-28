@@ -127,11 +127,20 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         foreach($rows as $account) {
-            if(!empty($account['account_lastlogin'])) {
+            if($account['account_lastlogin'] !== NULL) {
                 $account['account_lastlogin'] = new Zend_Date($account['account_lastlogin'], Zend_Date::TIMESTAMP);
-            } else {
-                $account['account_lastlogin'] = NULL;
             }
+            
+            if($account['account_lastpwd_change'] !== NULL) {
+                $account['account_lastpwd_change'] = new Zend_Date($account['account_lastpwd_change'], Zend_Date::TIMESTAMP);
+            }
+            
+            if($account['account_expires'] > 0) {
+                $account['account_expires'] = new Zend_Date($account['account_expires'], Zend_Date::TIMESTAMP);
+            } else {
+                $account['account_expires'] = NULL;
+            }
+            
             $result[] = $account;
         }
         //$result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
