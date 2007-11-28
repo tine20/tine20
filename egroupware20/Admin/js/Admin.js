@@ -400,8 +400,8 @@ Egw.Admin.AccessLog = function() {
             {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
             {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
             {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
             {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);
@@ -944,12 +944,12 @@ Egw.Admin.Accounts = function() {
             {resizable: true, header: 'Login name', id: 'account_lid', dataIndex: 'account_lid'},
             {resizable: true, header: 'First name', id: 'n_family', dataIndex: 'n_family'},
             {resizable: true, header: 'Given Name', id: 'n_given', dataIndex: 'n_given'},
-            {resizable: true, header: 'Email', id: 'contact_email', dataIndex: 'contact_email', width: 180},
-            {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Email', id: 'contact_email', dataIndex: 'contact_email', width: 200},
+            {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Last login from', id: 'account_lastloginfrom', dataIndex: 'account_lastloginfrom'},
-            {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Status', id: 'account_status', dataIndex: 'account_status'},
-            {resizable: true, header: 'Expires', id: 'account_expires', dataIndex: 'account_expires', width: 120, renderer: Egw.Egwbase.Common.dateTimeRenderer}
+            {resizable: true, header: 'Expires', id: 'account_expires', dataIndex: 'account_expires', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer}
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable

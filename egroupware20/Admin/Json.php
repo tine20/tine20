@@ -23,6 +23,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         );
         
         $accounts = Admin_Controller::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit);
+
         foreach($accounts as $key => $account) {
             if($account['account_lastlogin'] !== NULL) {
                  $accounts[$key]['account_lastlogin'] = $account['account_lastlogin']->get(Zend_Date::ISO_8601);
