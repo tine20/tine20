@@ -156,10 +156,7 @@ Egw.Admin.AccessLog = function() {
                     logIds.push(selectedRows[i].id);
                 }
                 
-                Ext.data.Connection().request( {
-                    url : 'index.php',
-                    method : 'post',
-                    scope : this,
+                Ext.Ajax.request( {
                     params : {
                         method : 'Admin.deleteAccessLogEntries',
                         logIds : Ext.util.JSON.encode(logIds)
