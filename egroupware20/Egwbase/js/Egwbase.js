@@ -47,7 +47,7 @@ Egw.Egwbase.initFramework = function() {
 
             // if communication is lost, we can't create a nice ext window.
             if (response.status == 0) {
-                alert('Conection lost, please check your network!')
+                alert('Conection lost, please check your network!');
             }
             
             var data = Ext.util.JSON.decode(response.responseText);
@@ -87,7 +87,7 @@ Egw.Egwbase.initFramework = function() {
         });
     
 
-    }
+    };
 	
     initAjax();
     initFormats();
@@ -241,7 +241,7 @@ Egw.Egwbase.MainScreen = function() {
             tooltip: {text:'Click this button to logout from eGroupWare'},
             handler: _logoutButtonHandler
         }); */
-    }
+    };
     
     /**
      * returns array of panels to display in south region
@@ -257,10 +257,10 @@ Egw.Egwbase.MainScreen = function() {
         		//console.log(_application + ' failed');
         		//console.log(e);
         	}
-        };
+        }
         
         return panels;
-    }
+    };
     
     /**
      * the logout button handler function
@@ -281,7 +281,7 @@ Egw.Egwbase.MainScreen = function() {
 				});
 			}
         });
-	}
+	};
     
     var _setActiveContentPanel = function(_panel)
     {
@@ -295,7 +295,7 @@ Egw.Egwbase.MainScreen = function() {
 
         centerPanel.add(_panel);
         centerPanel.doLayout();
-    }
+    };
     
     var _getActiveToolbar = function()
     {
@@ -306,7 +306,7 @@ Egw.Egwbase.MainScreen = function() {
     	} else {
     		return false;
     	}
-    }
+    };
     
     var _setActiveToolbar = function(_toolbar)
     {
@@ -320,7 +320,7 @@ Egw.Egwbase.MainScreen = function() {
         
         northPanel.add(_toolbar);
         northPanel.doLayout();
-    }
+    };
 
     
     
@@ -330,7 +330,7 @@ Egw.Egwbase.MainScreen = function() {
         getActiveToolbar:      _getActiveToolbar,
         setActiveToolbar:      _setActiveToolbar,
         setActiveContentPanel: _setActiveContentPanel
-    }
+    };
 }();
 
 /**
@@ -368,7 +368,7 @@ Egw.Egwbase.Common = function(){
 		',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
 		
 		return popup;
-	}
+	};
 	
 	/**
      * Returns localised date and time string
@@ -379,7 +379,7 @@ Egw.Egwbase.Common = function(){
      */
 	_dateTimeRenderer = function($_iso8601){
 		return Ext.util.Format.date($_iso8601, 'd.m.Y H:i:s');
-	}
+	};
 	
 	/**
      * Returns localised date string
@@ -390,7 +390,7 @@ Egw.Egwbase.Common = function(){
      */
 	_dateRenderer = function(date){
 		return Ext.util.Format.date(date, 'd.m.Y');
-	}
+	};
 	
 	/**
 	 * Returns localised time string
@@ -401,14 +401,14 @@ Egw.Egwbase.Common = function(){
 	 */
 	_timeRenderer = function(date){
 		return Ext.util.Format.date(date, 'H:i:s');
-	}
+	};
 	
 	return {
 		dateTimeRenderer: _dateTimeRenderer,
 		dateRenderer: _dateRenderer,
 		timeRenderer: _timeRenderer,
-		openWindow:       _openWindow,
-	}
+		openWindow:       _openWindow
+	};
 }();
 
 Ext.namespace('Egw.Egwbase.Models');
