@@ -48,7 +48,7 @@ class Admin_Controller
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
-        
+
         $result = $backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit);
         
         return $result;

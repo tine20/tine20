@@ -119,7 +119,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             ->limit($_limit, $_start)
             ->order($_sort . ' ' . $_dir);
 
-        error_log("getAccounts:: " . $select->__toString());
+        //error_log("getAccounts:: " . $select->__toString());
 
         $stmt = $db->query($select);
 
