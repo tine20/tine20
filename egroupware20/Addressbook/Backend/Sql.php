@@ -842,8 +842,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . $_filter . '%');
         }
 
-        error_log(print_r($where, true));
-        error_log("$_sort, $_dir, $_limit, $_start");
         $result = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
          
         return $result;

@@ -107,7 +107,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         //}
         //$accountId   = Zend_Registry::get('currentAccount')->account_id;
         //$application = Egwbase_Application::getInstance()->getApplicationByName($_application);
-        error_log("START::$_start LIMIT::$_limit");
+
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
