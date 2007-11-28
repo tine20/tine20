@@ -1507,7 +1507,9 @@ Egw.Addressbook.ContactEditDialog = function() {
 		contactForm.render();
     	
     	if(contactForm.isValid()) {
-			var additionalData = {};
+			var additionalData = {
+				jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+		    };
 			if(formData.values) {
 				additionalData.contact_id = formData.values.contact_id;
 			}
@@ -1534,7 +1536,9 @@ Egw.Addressbook.ContactEditDialog = function() {
 		contactForm.render();
     	
     	if(contactForm.isValid()) {
-			var additionalData = {};
+            var additionalData = {
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+            };
 			if(formData.values) {
 				additionalData.contact_id = formData.values.contact_id;
 			}
