@@ -80,14 +80,27 @@ Egw.Calendar.getPanel = function() {
 Egw.Calendar.MainScreen = function() {
 	
 	/**
-	 * @var {store} events store
+	 * @var {Ext.data.Store} events store
 	 */
 	var store;
 	
 	/**
-	 * @var {grid} time grid
+	 * Layout of day views
+	 * @var {Ext.Panel} day view layout
+	 */
+	var dayViewLayout;
+	
+    /**
+     * @var {Ext.Panel} grid for whole-day events
+     */
+	var WholeDayGrid;
+	
+	/**
+	 * @var {Ext.Panel} time grid
 	 */
 	var TimeGrid;
+	
+	
 	
 	// internal states
 	var States = {
@@ -101,6 +114,9 @@ Egw.Calendar.MainScreen = function() {
         timeSheetWidth: 0,
     };
 	
+	/**
+     * @param {Egw.Calendar.Request} request
+     */
 	var initStore = function(request)
 	{
 		store = new Ext.data.JsonStore({
@@ -140,7 +156,6 @@ Egw.Calendar.MainScreen = function() {
 	};
 	
 	/**
-	 * 
 	 * @param {Egw.Calendar.Request} request
 	 */
 	var initTimeGrid = function(request)
@@ -151,28 +166,41 @@ Egw.Calendar.MainScreen = function() {
 		}
 		var nDays = request.viewMultiplier;
 		
-		var columns = new Array({
-            id: 'time',
-            header: "",
-            width: dims.timeAxisWidth,
-            sortable: false,
-            dataIndex: 'time'
-        });
-		
-		for (var i=1; i<=nDays; i++) {
-			columns.push({
-				header: Egw.Egwbase.Common.dateRenderer(request.start.add(Date.DAY, i-1)),
-                sortable: false,
+		/**
+		 * helper function to create columns
+		 * for TimeGrid and WholeDayGrid
+		 * 
+		 * @param {bool} includeHeader
+		 */
+		var mkDayColumns = function(includeHeader)
+		{
+			var columns = new Array({
+				id: 'time',
+				//header: "",
+				width: dims.timeAxisWidth,
 				fixed: true,
-                dataIndex: 'cdata'
-			})
-		}
+				sortable: false,
+				dataIndex: 'time'
+			});
+			
+			for (var i = 1; i <= nDays; i++) {
+				columns.push({
+					header: includeHeader ? Egw.Egwbase.Common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
+					sortable: false,
+					fixed: true,
+					dataIndex: 'cdata'
+				})
+			}
+			return columns;
+		};
+		
+		
 		TimeGrid = new Ext.grid.GridPanel({
 			store: new Ext.data.SimpleStore({
 				'fields': ['time', 'cdata'],
-				'data': mkGridData(Array(nDays))
+				'data': mkTimeGridData(nDays, 30*Date.Const.msMINUTE)
 			}),
-			columns: columns,
+			columns: mkDayColumns(false),
 			sm: new Ext.grid.CellSelectionModel({}),
 			//view: new Egw.Calendar.GridView_Days({}),
 			iconCls: 'icon-grid',
@@ -186,6 +214,7 @@ Egw.Calendar.MainScreen = function() {
 			
 			// resize columns
 			var cm = TimeGrid.getColumnModel();
+			var cm2 = WholeDayGrid.getColumnModel();
 			var nc = cm.getColumnCount();
 			var cw = dims.timeSheetWidth = 
 			    (
@@ -196,30 +225,67 @@ Egw.Calendar.MainScreen = function() {
 				
 			for (var i = 1; i < nc; i++) {
 				cm.setColumnWidth(i, cw);
+				cm2.setColumnWidth(i, cw);
 			}
 
 			States.GridSized = true;
 			DisplayCalendarEvents(store);
 		});
+		
+		WholeDayGrid = new Ext.grid.GridPanel({
+			store: new Ext.data.SimpleStore({
+                'fields': ['time', 'cdata']
+                //'data': [['Gantaegig']]
+			}),
+			sm: new Ext.grid.CellSelectionModel({}),
+            //view: new Egw.Calendar.GridView_Days({}),
+            iconCls: 'icon-grid',
+            border: false,
+            columns: mkDayColumns(true)
+		});
+		
+		dayViewLayout = new Ext.Panel({
+	        layout:'border',
+	        border: false,
+	        items: [{
+				id: 'calendar-dayView-WholeDay',
+	            region: 'north',
+				layout: 'fit',
+				border: false,
+	            height: 50,
+	            //minSize: 50,
+	            //maxSize: 100,
+				items: [
+                    WholeDayGrid
+                ]
+	        },{
+				id: 'calendar-dayView-TimeGrid',
+	            region:'center',
+				layout: 'fit',
+				border: false,
+	            items: [
+	                TimeGrid
+	            ]
+	        }]
+	    });
 	};
 		
-	var mkGridData = function(days)
+	/**
+	 * helper function to initalize TimeGrid
+	 * 
+	 * @param {int} numberOfDays
+	 * @param {int} granularity of Grid in miliseconds
+	 */
+	var mkTimeGridData = function(numberOfDays, gty)
     {
-        var numberOfDays = days.length;
-        var gty = 30*Date.Const.msMINUTE;
-        
+        //var numberOfDays = days.length;
         var TimeAxis = new Array(Date.Const.msDAY / gty);
         var offset = new Date().getTimezoneOffset() * Date.Const.msMINUTE;
         for (var i=0; i<TimeAxis.length; i++) {
             TimeAxis[i] = new Array(numberOfDays+1);
             TimeAxis[i][0] = new Date(i*gty+offset).format('H:i');
-			
-			if ( new Date(i*gty+offset).getTime() == Egw.Calendar.Preferences.workDayStart.getTime() ) {
-				//TimeAxis[i][0] = 'wday start!';
-				Egw.Calendar.wdaystartidx = i;
-			}
         }
-
+        
         return TimeAxis;
     };
 	
@@ -230,9 +296,15 @@ Egw.Calendar.MainScreen = function() {
 		}
 		
 		var TimeGridBody = TimeGrid.getView().mainBody;
+		var WholeDayGridBody = WholeDayGrid.getView().mainBody;
 		
 		var TimeGridBodyHeight = TimeGridBody.getHeight();
 		var dpdt = TimeGridBodyHeight / Date.Const.msDAY;
+		
+		
+		var SimultaneousRegistryGranularity = 5*Date.Const.msMINUTE;
+		var SimultaneousRegistryMaxColumns = 10;
+		var SimultaneousRegistry = mkTimeGridData(Egw.Calendar.Request.viewMultiplier, SimultaneousRegistryGranularity);
 		
 		eventsStore.each(function(event){
 			// timestamp based calculations are far more easy!
@@ -247,22 +319,109 @@ Egw.Calendar.MainScreen = function() {
 			}
 			
 			// in which column is the event? (0...n)
-			var col = Math.floor((eStart - rStart) / Date.Const.msDAY);
-			// left border of 
-			var left = TimeGridBody.getLeft() + dims.timeAxisWidth + col * dims.timeSheetWidth;
+            var col = Math.floor((eStart - rStart) / Date.Const.msDAY);
+			
+			// quick hack for egw1.4 compat
+			// in the future the bakcend itself shoud know if it is wholedayevent
+			var isWholeDayEvent = (eEnd - eStart) >= (Date.Const.msDAY-Date.Const.msMINUTE-1);
+			
+			// Simultaneously check
+			if (!isWholeDayEvent) {
+				var simRegDay = col + 1;
+				var simRegStartIdx = Math.floor((eStart - rStart - col * Date.Const.msDAY) / SimultaneousRegistryGranularity);
+				var simRegStopIdx = Math.ceil((eEnd - rStart - col * Date.Const.msDAY) / SimultaneousRegistryGranularity) - 1;
+				var affectedEvents = [event];
+				
+				// check which column (j) is free betwwen Idxs 
+				for (var j = 0; j < SimultaneousRegistryMaxColumns; j++) {
+					var columnFree = true;
+					for (var i = simRegStartIdx; i <= simRegStopIdx; i++) {
+						if (SimultaneousRegistry[i][simRegDay] == undefined) {
+							SimultaneousRegistry[i][simRegDay] = new Array(SimultaneousRegistryMaxColumns);
+						}
+						if (SimultaneousRegistry[i][simRegDay][j] != undefined) {
+							columnFree = false;
+							if (affectedEvents.indexOf(SimultaneousRegistry[i][simRegDay][j]) < 0) {
+								affectedEvents.push(SimultaneousRegistry[i][simRegDay][j]);
+							}
+						}
+					}
+					if (columnFree) 
+						break;
+				}
+				
+				// register event in the free column
+				for (var i = simRegStartIdx; i <= simRegStopIdx; i++) {
+					SimultaneousRegistry[i][simRegDay][j] = event;
+				}
+				event.layout = {
+					column: j,
+					maxColumns: 0
+				};
+				
+				// we also need to calculate the maximum of simultaneous events,
+				// as this is the differnet number as affectedEvents
+				for (var i = simRegStartIdx; i <= simRegStopIdx; i++) {
+					var maxColumns = 0;
+					for (k = 0; k < SimultaneousRegistryMaxColumns; k++) {
+						if (SimultaneousRegistry[i][simRegDay][k] instanceof Object) maxColumns++;
+					}
+					for (k = 0; k < SimultaneousRegistryMaxColumns; k++) {
+						if (SimultaneousRegistry[i][simRegDay][k] instanceof Object && SimultaneousRegistry[i][simRegDay][k].layout.maxColumns < maxColumns) {
+							SimultaneousRegistry[i][simRegDay][k].layout.maxColumns = maxColumns;
+						}
+					}
+				}
+			}
+			
 			// top position of event
 			var top = TimeGridBody.getTop() + (eStart - rStart - col * Date.Const.msDAY) * dpdt;
 			// height of event
 			var height = (eEnd - eStart) * dpdt;
 			
-			var e = Ext.get(event.data.cal_id);
-			if (!e) {
-				var e = eventTpl.insertAfter(TimeGridBody, event.data, true);
-				e.addClass(['x-horizontalTimeView-event', 'x-TimeView-event', 'x-form-text']);
+			// left border of event
+            var left = TimeGridBody.getLeft() + dims.timeAxisWidth + col * dims.timeSheetWidth;
+			// width of evnet
+			var width = dims.timeSheetWidth;
+			
+			if (!isWholeDayEvent) {
+				var e = Ext.get(event.data.cal_id);
+                if (!e) {
+                    var e = eventTpl.insertAfter(TimeGridBody, event.data, true);
+                    e.on('mouseover', function(event, element){
+                        //console.log(element);
+                    }, this);
+                    e.addClass(['x-horizontalTimeView-event', 'x-TimeView-event', 'x-form-text']);
+                }
+				e.setSize(width, height);
+				e.position('absolute', 4, left, top);
+				
+				//console.log('-> now drawing: '+event.data.cal_id);
+				for (var i = 0; i < affectedEvents.length; i++) {
+					event = affectedEvents[i];
+					e = Ext.get(event.data.cal_id);
+					
+					//console.log('redrawing: ' + event.data.cal_id);
+					//console.log(event.layout);
+					
+					//layout={column:j, maxColumns
+	                ovlWidth = width / event.layout.maxColumns; //affectedEvents.length;
+	                ovlLeft = left + event.layout.column*ovlWidth;
+
+					e.setWidth(ovlWidth);
+					e.setX(ovlLeft);
+				}
+
+			} else {
+				var e = Ext.get(event.data.cal_id);
+				if (!e) {
+                    var e = WholeDayEventTpl.insertAfter(WholeDayGridBody, event.data, true);
+                    e.addClass(['x-horizontalTimeView-event', 'x-TimeView-event', 'x-form-text']);
+                }
+				e.setSize(width, 20);
+                e.position('absolute', 4, left, WholeDayGridBody.getTop()+3);
 			}
 			
-			e.setSize(dims.timeSheetWidth, height);
-			e.position('absolute', 4, left, top);
 		}, this);
 
         TimeGridBody.setHeight(TimeGridBodyHeight);
@@ -280,14 +439,20 @@ Egw.Calendar.MainScreen = function() {
 		'    {[values.cal_start.format("H:i")]}',
 		'  </tr>',
 		'  <tr class="x-calendar-dayview-event-body">',
-		'    {cal_title}',
+		'    {cal_id}',
 		'  </tr>',
 		'  <tr class="x-calendar-dayview-event-footer">',
 		'  </tr>',
 		' </table>',
 		'</div>'
-	);//.compile();
-	//eventTpl.compile();
+	).compile();
+	
+	var WholeDayEventTpl = new Ext.XTemplate(
+        '<div id="{cal_id}">',
+		'  {cal_title}',
+        '</div>'
+    ).compile();
+	
 	
 	return {
 		getMainScreen: function(request){
@@ -296,9 +461,10 @@ Egw.Calendar.MainScreen = function() {
 			Egw.Calendar.Request.on('requestchange', function(request){
 		        initStore(request);
 		        initTimeGrid(request);
-		        Egw.Egwbase.MainScreen.setActiveContentPanel(TimeGrid);
+		        Egw.Egwbase.MainScreen.setActiveContentPanel(dayViewLayout);
 		    },this);
-			return TimeGrid;
+			//return TimeGrid;
+			return dayViewLayout;
 		}
 	}
 }();
@@ -320,8 +486,8 @@ Egw.Calendar.ToolBar = function() {
 	{
 		
 		Egw.Calendar.Request.on('requestchange', function(request){
-            console.log(request.view);
-            console.log(request.viewMultiplier);
+            //console.log(request.view);
+            //console.log(request.viewMultiplier);
         },this);
 		
 		return new Ext.Toolbar({
