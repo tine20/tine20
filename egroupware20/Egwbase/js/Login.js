@@ -47,7 +47,7 @@ EGWNameSpace.Login = function() {
                     if (loginDialog.getForm().isValid()) {
                         loginDialog.getForm().submit({
                             waitTitle: 'Please wait!', 
-                            waitMsg:'Loging you in...',
+                            waitMsg:'Logging you in...',
                             params: {
                             	jsonKey: Egw.Egwbase.jsonKey
                             },
