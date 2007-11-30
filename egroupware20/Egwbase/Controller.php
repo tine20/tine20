@@ -61,8 +61,8 @@ class Egwbase_Controller
             // is it save to use the jsonKey from $_GET too???
             // can we move this to the Zend_Json_Server???
             if($_POST['jsonKey'] != Zend_Registry::get('jsonKey')) {
-                error_log('wrong JSON Key sent!!!');
-                throw new Exception('wrong JSON Key sent!!!');
+                error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);
+                //throw new Exception('wrong JSON Key sent!!!');
             }
 
             $server = new Zend_Json_Server();
