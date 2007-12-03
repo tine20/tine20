@@ -160,10 +160,6 @@ class Egwbase_Acl_Rights
             
         $stmt = $db->query($select);
 
-        if($stmt->rowCount() == 0) {
-            throw new UnderFlowException('no applications found for accountId ' . $accountId);
-        }
-
         $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Application');
         
         return $result;
@@ -188,8 +184,6 @@ class Egwbase_Acl_Rights
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        //$accounts = new Egwbase_Account_Sql();
-        //$groupMemberships = $accounts->getAccountGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');
@@ -202,12 +196,12 @@ class Egwbase_Acl_Rights
             
         $stmt = $db->query($select);
 
-        if($stmt->rowCount() == 0) {
+        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        if($result === false) {
             throw new UnderFlowException('no rights found for accountId ' . $accountId);
         }
 
-        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
         return (int)$result['account_rights'];
     }
 
