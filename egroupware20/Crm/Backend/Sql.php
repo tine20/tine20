@@ -21,11 +21,18 @@ require_once 'Crm/Backend/Sql/Leadsources.php';
 require_once 'Crm/Backend/Sql/Leadtypes.php';
 
 /**
- * the class needed to access the products table
+ * the class needed to access the products source table
  *
  * @see Crm_Backend_Sql_Productsource
  */
 require_once 'Crm/Backend/Sql/Productsource.php';
+
+/**
+ * the class needed to access the products table
+ *
+ * @see Crm_Backend_Sql_Products
+ */
+require_once 'Crm/Backend/Sql/Products.php';
 
 /**
  * the class needed to access the projectstates table
@@ -84,14 +91,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     protected $projectstatesTable;    
         
     
-	
-	/**
-	* Instance of the Egwbase_Acl class
-	*
-	* @var unknown_type
-	*/
-    protected $egwbaseAcl;
-
 	/**
 	* the constructor
 	*
@@ -103,8 +102,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $this->leadtypesTable     = new Crm_Backend_Sql_Leadtypes();
         $this->productsourceTable = new Crm_Backend_Sql_Productsource();
         $this->projectstatesTable = new Crm_Backend_Sql_Projectstates();
-        
-        $this->egwbaseAcl = Egwbase_Acl::getInstance();
+        $this->productsTable      = new Crm_Backend_Sql_Products();
     }
 
 	
@@ -148,8 +146,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function getProjectstates()
     {	
-	
-      error_log('SQL :: getProjectstates : ');   
     	$result = $this->projectstatesTable->fetchAll();
    
         return $result;
@@ -169,7 +165,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $currentAccount = Zend_Registry::get('currentAccount');
 
         $projectData = $_projectData->toArray();
-        
+
         foreach($projectData AS $atom) {
             $line .= $atom.' |';
         }
@@ -249,29 +245,17 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if ($_owner == 'currentuser') {
             $_owner = $currentAccount->account_id;
         }
-        
-        if($owner == 'all') {
-            switch($_owner) {
-                case 'all':
-                    $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::READ, Egwbase_Acl::ANY_GRANTS);
-                    break;
-            }
-            
-            if(empty($acl)) {
-                return false;
-            }
-
-            $projectOwner = array_keys($acl);
-
-        } else {
-            if($owner != $currentAccount->account_id && !$this->egwbaseAcl->checkPermissions($currentAccount->account_id, 'crm', $owner, Egwbase_Acl::READ) ) {
-                throw new Exception("access to crm $owner by $currentAccount->account_id denied.");
-            }
-
-            $projectOwner = $owner;
+          
+        $allContainer = Egwbase_Container::getInstance()->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
+    
+        $containerIds = array();
+    
+        foreach($allContainer as $container) {
+            $containerIds[] = $container->container_id;
         }
-        
-        $where = $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $projectOwner);
+
+        $where = $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds);
+
  
         $db = Zend_Registry::get('dbAdapter');
 
@@ -281,7 +265,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         ->join('egw_metacrm_leadsource','egw_metacrm_leadsource.pj_leadsource_id = egw_metacrm_project.pj_leadsource_id')
         ->join('egw_metacrm_leadtype','egw_metacrm_leadtype.pj_leadtype_id = egw_metacrm_project.pj_customertype_id')
         ->join('egw_metacrm_projectstate','egw_metacrm_projectstate.pj_projectstate_id = egw_metacrm_project.pj_distributionphase_id')
-        ->where($where)
+//        ->where($where)
         ->limit($limit, $start);
 
 //        error_log("CRM :: SQL : getProjectsByOwner : " . $select->__toString());
@@ -293,6 +277,31 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;        
       
     }
+   
+   
+	/**
+	* get products by project id
+	*
+	* 
+	* 
+	* 
+	* @return unknown
+	*/
+     public function getProductsById($_id)
+    {
+        $id = (int) $_id;
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+
+        $where  = array(
+            $this->productsTable->getAdapter()->quoteInto('pj_project_id = ?', $_id)
+        );
+
+        $result = $this->productsTable->fetchAll($where);
+
+        return $result;
+    }   
     
     
 	/**
@@ -310,12 +319,18 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_id must be integer');
         }
 
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+
         $where  = array(
             $this->projectsTable->getAdapter()->quoteInto('pj_id = ?', $_id)
         );
 
         $result = $this->projectsTable->fetchRow($where);
-        
+      
+ /*       if(!Egwbase_Container::getInstance()->hasGrant($result->pj_owner, Egwbase_Container::GRANT_READ)) {
+            throw new Exception('permission to contact denied');
+        }      
+ */       
         return $result;
     }
     

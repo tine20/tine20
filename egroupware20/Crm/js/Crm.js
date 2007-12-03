@@ -1,4 +1,4 @@
-Ext.namespace('Egw.Crm');
+﻿Ext.namespace('Egw.Crm');
 
 Egw.Crm = function() {
 
@@ -21,7 +21,7 @@ Egw.Crm = function() {
     
     var _getCrmTree = function() 
     {
-        function dummyHandler(item){
+    function dummyHandler(item){
             Ext.example.msg('FUTURE FEATURE', '...soon you will be able to ', item.text);
         }
     
@@ -60,17 +60,14 @@ Egw.Crm = function() {
         });    
        
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php',
-            baseParams: {
-                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
-                method: 'Crm.getSubTree',
-                location: 'mainTree'
-            }
+//            dataUrl:'index.php'
         });
         treeLoader.on("beforeload", function(_loader, _node) {
+            _loader.baseParams.method   = 'Crm.getSubTree';
             _loader.baseParams.node     = _node.id;
             _loader.baseParams.datatype = _node.attributes.datatype;
             _loader.baseParams.owner    = _node.attributes.owner;
+            _loader.baseParams.location = 'mainTree';
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
@@ -159,7 +156,6 @@ Egw.Crm = function() {
     {
 
          var ds_crm = new Ext.data.JsonStore({
-            url: 'index.php',
             baseParams: {
                 method: 'Crm.getProjectsByOwner',
                 owner: 'all'
@@ -269,15 +265,14 @@ Egw.Crm = function() {
             items: [
                 action_add,
                 //_action_delete,'->',
+                new Ext.Toolbar.Separator(),
                 'Display from: ',
                 ' ',
                 dateFrom,
-                new Ext.Toolbar.Spacer(),
                 'to: ',
                 ' ',
                 dateTo,
-                new Ext.Toolbar.Spacer(),
-                '-',
+                '->',
                 'Search:', ' ',
                 ' ',
                 quickSearchField
@@ -482,9 +477,9 @@ Egw.Crm.ProjectEditDialog = function() {
     	if(projectForm.isValid()) {
 			var additionalData = {};
 			if(formData.values) {
-				additionalData.event_id = formData.values.project_id;
+				additionalData.pj_id = formData.values.pj_id;
 			}
-			    		
+   		
             additionalData.products = modified_products_json;
                         
 			projectForm.submit({
@@ -509,7 +504,7 @@ Egw.Crm.ProjectEditDialog = function() {
 		var eventIds = Ext.util.JSON.encode([formData.values.event_id]);
 			
 		Ext.Ajax.request({
-			url: 'index.php',
+//			url: 'index.php',
 			params: {
 				method: 'Eventscheduler.deleteEvents', 
 				_eventIds: eventIds
@@ -600,25 +595,41 @@ Egw.Crm.ProjectEditDialog = function() {
             return value ? value.dateFormat('M d, Y') : '';
         };
     
-      
+     
         var st_leadstatus = new Ext.data.JsonStore({
-            url: 'index.php',
+//            url: 'index.php',
             baseParams: {
-                method: 'Crm.getProjectstate'
+                method: 'Crm.getProjectstates'
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'pj_projectstate_id',
+            id: 'key',
             fields: [
-                {name: 'pj_projectstate_id'},
-                {name: 'pj_projectstate'}
+                {name: 'key', mapping: 'pj_projectstate_id'},
+                {name: 'value', mapping: 'pj_projectstate'}
+
             ],
             // turn on remote sorting
             remoteSort: true
         });
-        st_leadstatus.load();
+ 
+        var leadstatus = new Ext.form.ComboBox({
+                fieldLabel:'Leadstatus', 
+                id:'leadstatus',
+                name:'projectstate',
+                hiddenName:'pj_distributionphase_id',
+				store: st_leadstatus,
+				displayField:'value',
+                valueField:'key',
+				typeAhead: true,
+//				mode: 'local',
+				triggerAction: 'all',
+				emptyText:'',
+				selectOnFocus:true,
+				editable: false,
+				anchor:'96%'    
+        });
         
-                
         var st_leadtyp =  new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
@@ -692,7 +703,7 @@ Egw.Crm.ProjectEditDialog = function() {
         });
      
         var st_contacts = new Ext.data.JsonStore({
-            url: 'index.php',
+ //           url: 'index.php',
             //baseParams: getParameterContactsDataStore(_node),
             root: 'results',
             totalProperty: 'totalcount',
@@ -803,18 +814,30 @@ Egw.Crm.ProjectEditDialog = function() {
                 iconCls:'icon-grid'
         });  
   
-        var st_choosenProducts = new Ext.data.SimpleStore({
-                fields: ['id','product_id','product_price','product_serial'],
-                data: [
-                        ['1','2','1500','254234231da2'],
-                        ['2','4','2100','fqw2323g2f3'],
-                        ['3','8','2800','sf323fq23f']
-                    ]
+        var st_choosenProducts = new Ext.data.JsonStore({
+//            url: 'index.php',
+            baseParams: {
+                method: 'Crm.getProductsById',
+                _id: '3'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'pj_id',
+            fields: [
+                {name: 'pj_id'},
+                {name: 'pj_product_id'},
+                {name: 'pj_product_desc'},
+                {name: 'pj_product_price'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
         });
+      
+        st_choosenProducts.load();
  
   
         var st_productsAvailable = new Ext.data.SimpleStore({
-                fields: ['key','value'],
+                fields: ['pj_product_id','value'],
                 data: [
                         ['0','CEREC AE'],
                         ['1','CEREC MC XL'],
@@ -828,7 +851,7 @@ Egw.Crm.ProjectEditDialog = function() {
                         ['9','InFinident'],
                         ['10','PC']
                     ],
-                id: 'key'
+                id: 'pj_product_id'
         });  
   
         function renderProductCombo(value) {
@@ -837,14 +860,14 @@ Egw.Crm.ProjectEditDialog = function() {
   
         var cm_choosenProducts = new Ext.grid.ColumnModel([{
                 header: "Produkt",
-                dataIndex: 'product_id',
+                dataIndex: 'pj_product_id',
                 width: 300,
                 editor: new Ext.form.ComboBox({
                     name: 'product_combo',
-                    hiddenName: 'product_id',
+                    hiddenName: 'pj_product_id',
                     store: st_productsAvailable, 
                     displayField:'value', 
-                    valueField: 'key',
+                    valueField: 'pj_product_id',
                     allowBlank: false, 
                     editable: false,
                     forceSelection: true, 
@@ -856,14 +879,14 @@ Egw.Crm.ProjectEditDialog = function() {
                 renderer: renderProductCombo
                 } , { 
                 header: "Seriennummer",
-                dataIndex: 'product_serial',
+                dataIndex: 'pj_product_desc',
                 width: 300,
                 editor: new Ext.form.TextField({
                     allowBlank: false
                     })
                 } , {
                 header: "Preis",
-                dataIndex: 'product_price',
+                dataIndex: 'pj_product_price',
                 width: 150,
                 align: 'right',
                 editor: new Ext.form.NumberField({
@@ -878,10 +901,11 @@ Egw.Crm.ProjectEditDialog = function() {
         
         
         var product = Ext.data.Record.create([
-           {name: 'id', type: 'int'},
-           {name: 'product_id', type: 'int'},
-           {name: 'product_serial', type: 'string'},
-           {name: 'product_price', type: 'float'}
+           {name: 'pj_id', type: 'int'},
+           {name: 'pj_project_id', type: 'int'},
+           {name: 'pj_product_id', type: 'int'},
+           {name: 'pj_product_desc', type: 'string'},
+           {name: 'pj_product_price', type: 'float'}
         ]);
         
         var grid_choosenProducts = new Ext.grid.EditorGridPanel({
@@ -963,7 +987,7 @@ Egw.Crm.ProjectEditDialog = function() {
         });  
   
 		var projectedit = new Ext.FormPanel({
-			url:'index.php',
+//			url:'index.php',
 			baseParams: {method :'Crm.saveProject'},
 		    labelAlign: 'top',
 			bodyStyle:'padding:5px',
@@ -1012,24 +1036,12 @@ Egw.Crm.ProjectEditDialog = function() {
                                         columnWidth:.5,
                                         layout: 'form',
                                         border:false,
-                                        items: [{
-                                            xtype:'combo',
-                                            fieldLabel:'Leadstatus', 
-                                            name:'pj_leadstatus',
-                                            hiddenName:'pj_distributionphase_id',
-            								store: st_leadstatus,
-            								displayField:'value',
-            								valueField:'key',
-            								typeAhead: true,
-            								mode: 'local',
-            								triggerAction: 'all',
-            								emptyText:'',
-            								selectOnFocus:true,
-            								editable: false,
-            								anchor:'96%'
-                                        } , {
+                                        items: [
+                                                leadstatus  
+                                         , {
                                             xtype:'combo',
                                             fieldLabel:'Leadtyp', 
+                                            id: 'leadtyp',
                                             name:'pj_leadtyp',
                                             hiddenName:'pj_customertype_id',
             								store: st_leadtyp,
@@ -1103,9 +1115,10 @@ Egw.Crm.ProjectEditDialog = function() {
                                         items: [{
                                             xtype:'datefield',
                                             fieldLabel:'Start', 
-                                            name:'startDate',
+                                            name:'pj_start',
                                             id:'startDate',
-                                            format: 'd.m.Y',
+                                            format:formData.config.dateFormat, 
+                                            altFormat:'Y-m-d',
                                             anchor:'95%'
                                         }]
                                     } , {
@@ -1115,9 +1128,10 @@ Egw.Crm.ProjectEditDialog = function() {
                                         items: [{
                                             xtype:'datefield',
                                             fieldLabel:'Ende', 
-                                            name:'endDate',
+                                            name:'pj_end',
                                             id:'endDate',
-                                            format: 'd.m.Y',
+                                            format:formData.config.dateFormat, 
+                                            altFormat:'Y-m-d',
                                             anchor:'95%'
                                         }]
                                     } , {
@@ -1127,9 +1141,10 @@ Egw.Crm.ProjectEditDialog = function() {
                                         items: [{
                                             xtype:'datefield',
                                             fieldLabel:'voraussichtl. Ende', 
-                                            name:'exprectedEndDate',
+                                            name:'pj_end_scheduled',
                                             id:'expectedEndDate',
-                                            format: 'd.m.Y',
+                                            format:formData.config.dateFormat, 
+                                            altFormat:'Y-m-d',
                                             anchor:'95%'
                                         }]
                                     }]
@@ -1280,18 +1295,23 @@ Egw.Crm.ProjectEditDialog = function() {
     	var form = Ext.getCmp('projectDialog').getForm();
     	
     	form.setValues(_formData);
-    	
-  //  	form.findField('contact_owner_name').setRawValue(formData.config.addressbookName);
-    	
-    	if(formData.config.oneCountryName) {
-    		//console.log('set adr_one_countryname to ' + formData.config.oneCountryName);
-	    	form.findField('adr_one_countryname').setRawValue(formData.config.oneCountryName);
-    	}
 
-    	if(formData.config.twoCountryName) {
-    		//console.log('set adr_two_countryname to ' + formData.config.twoCountryName);
-	    	form.findField('adr_two_countryname').setRawValue(formData.config.twoCountryName);
-    	}
+        var startDate       = new Date(eval(formData.values.pj_start*1000));
+        var endDate         = new Date(eval(formData.values.pj_end*1000));
+        var expectedEndDate = new Date(eval(formData.values.pj_end_scheduled*1000));        
+
+        form.findField('startDate').setValue(startDate);
+        form.findField('endDate').setValue(endDate);
+        form.findField('expectedEndDate').setValue(expectedEndDate);
+
+        var leadstatus = Ext.getCmp('leadstatus');
+        var st_leadstatus = leadstatus.store;
+        
+        st_leadstatus.on('load', function(){
+    		leadstatus.setValue(formData.values.pj_distributionphase_id); 
+    	}, this, {single:true});
+	
+	    st_leadstatus.load();       
     }
 
     var _exportContact = function(_btn, _event) {
@@ -1305,7 +1325,7 @@ Egw.Crm.ProjectEditDialog = function() {
             if(formData.values) {
                 setContactDialogValues(formData.values);
             }
-        }
+         }
         
     }
     
