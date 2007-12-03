@@ -1,18 +1,21 @@
 <?php
 /**
+ * eGroupWare 2.0
+ * 
+ * @package     Egwbase
+ * @subpackage  Acl
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @version     $Id: $
+ */
+
+/**
  * this class handles access rights(grants) to containers
  * 
  * any record in eGroupWare 2.0 is tied to a container. the rights of an account on a record gets 
  * calculated by the grants given to this account on the container holding the record (if you know what i mean ;-))
- * 
- * @package     Egwbase
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Application.php 314 2007-11-20 18:09:35Z lkneschke $
- *
  */
-
 class Egwbase_Container
 {
     /**

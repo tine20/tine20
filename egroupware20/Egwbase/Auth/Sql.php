@@ -1,10 +1,17 @@
 <?php
 /**
- * SQL authentication backend
+ * eGroupWare 2.0
  * 
- * @author Lars Kneschke <l.kneschke@metaways.de>
- * @package Egwbase
- *
+ * @package     Egwbase
+ * @subpackage  Auth
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @version     $Id$
+ */ 
+
+/**
+ * SQL authentication backend
  */
 class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 {

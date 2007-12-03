@@ -1,17 +1,18 @@
 <?php
 /**
- * Interface for records
+ * eGroupWare 2.0
  * 
  * @package     Egwbase
+ * @subpackage  Record
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
- *
  */
 
 /**
- * class Egwbase_Record_Interface
+ * Egwbase_Record_Interface
+ * 
  * This a the abstract interface of an record.
  * A record is e.g. a single address or or single event.
  * The idea behind is that we can have metaoperation over differnt apps by 
@@ -19,7 +20,7 @@
  * A record is identified by a identifier. As we are a Webapp and want to 
  * deal with the objects in the browser, identifier should be a string!
  */
-interface Egwbase_Record_Interface
+interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate 
 {
     /**
      * Default constructor

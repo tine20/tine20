@@ -1,12 +1,17 @@
 <?php
 /**
- * class to hold a list of records
- *
+ * eGroupWare 2.0
+ * 
  * @package     Egwbase
+ * @subpackage  Record
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Abstract.php 306 2007-11-20 11:12:38Z nelius_weiss $
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id: $
+ */
+
+/**
+ * class to hold a list of records
  *
  */
 class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess

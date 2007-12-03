@@ -1,14 +1,19 @@
 <?php
 /**
- * main authentication class
+ * eGroupWare 2.0
  * 
- * @package	Egwbase
- * @license     http://www.gnu.org/license/gpl GPL
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @package     Egwbase
+ * @subpackage  Auth
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- *
  */
+
+/**
+ * main authentication class
+ */
+
 class Egwbase_Auth
 {
     /**

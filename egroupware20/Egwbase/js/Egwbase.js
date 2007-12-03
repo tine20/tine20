@@ -35,7 +35,7 @@ Egw.Egwbase.initFramework = function() {
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             var responseData = Ext.util.JSON.decode(response.responseText);
 			if(responseData.status && responseData.status.code != 200) {
-				    //console.log(connection);
+					//console.log(arguments);
 					//connection.purgeListeners();
 					//connection.fireEvent('requestexception', connection, response, options );
 					//return false;
@@ -43,7 +43,7 @@ Egw.Egwbase.initFramework = function() {
         }, this);
         
         Ext.Ajax.on('requestexception', function(connection, response, options){
-			connection.purgeListeners();
+			//connection.purgeListeners();
 
             // if communication is lost, we can't create a nice ext window.
             if (response.status == 0) {

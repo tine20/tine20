@@ -1,13 +1,17 @@
 <?php
 /**
- * controller for Admin
- *
- * @package     Admin
+ * eGroupWare 2.0
+ * 
+ * @package     Egwbase
+ * @subpackage  Accounts
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Controller.php 273 2007-11-08 22:51:16Z lkneschke $
- *
+ */
+ 
+/**
+ * controller for Admin
  */
 class Egwbase_Account_Factory
 {

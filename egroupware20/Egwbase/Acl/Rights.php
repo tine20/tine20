@@ -1,18 +1,21 @@
 <?php
 /**
+ * eGroupWare 2.0
+ * 
+ * @package     Egwbase
+ * @subpackage  Acl
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @version     $Id$
+ */
+
+/**
  * this class handles the rights for a given application
  * 
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
- * 
- * @package     Egwbase
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
- *
  */
-
 class Egwbase_Acl_Rights
 {
     /**

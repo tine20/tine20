@@ -1,15 +1,18 @@
 <?php
 /**
- * the class provides functions to handle applications
+ * eGroupWare 2.0
  * 
  * @package     Egwbase
+ * @subpackage  Db
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
- *
- */
 
+/**
+ * the class provides functions to handle applications
+ * 
+ */
 class Egwbase_Db_Table extends Zend_Db_Table_Abstract
 {
     /**
