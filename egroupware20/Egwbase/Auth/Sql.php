@@ -32,5 +32,12 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 		
 		$this->setCredentialTreatment('MD5(?)');
 	}
+	
+/*	public function authenticate()
+	{
+	    $result = parent::authenticate();
+	    
+	    return $result;
+	} */
 }
 ?>

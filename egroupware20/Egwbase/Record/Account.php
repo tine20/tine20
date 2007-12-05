@@ -60,4 +60,13 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         
         return $result;
     }
+    
+    public function setLoginTime($_ipAddress)
+    {
+        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        
+        $result = $backend->setLoginTime($this->account_id, $_ipAddress);
+        
+        return $result;
+    }
 }

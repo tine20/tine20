@@ -49,35 +49,17 @@ class Egwbase_Json
      */
     function login($username, $password)
     {
+        $result = Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']);
+        
         $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
-
-        $auth = Zend_Auth::getInstance();
-
-        $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
-
-        $authAdapter->setIdentity($username)
-            ->setCredential($password);
-        	
-        $result = $auth->authenticate($authAdapter);
 
         if ($result->isValid()) {
             $egwBaseNamespace->isAutenticated = TRUE;
-            $egwBaseNamespace->currentAccount = $authAdapter->getResultRowObject(NULL, array('account_pwd'));
 
             $response = array(
 				'success'        => TRUE,
                 'welcomeMessage' => "Some welcome message!"
 			);
-					
-			$accesslog = new Egwbase_AccessLog();
-            
-			$accesslog->addLoginEntry(
-    			session_id(),
-    			$username,
-    			$_SERVER['REMOTE_ADDR'],
-    			$result->getCode(),
-                $egwBaseNamespace->currentAccount->account_id
-    		);
         } else {
             $egwBaseNamespace->isAutenticated = FALSE;
 
@@ -85,22 +67,6 @@ class Egwbase_Json
 				'success'      => FALSE,
 				'errorMessage' => "Wrong username or passord!"
 			);
-
-			$accesslog = new Egwbase_AccessLog();
-			$accesslog->addLoginEntry(
-    			session_id(),
-    			$username,
-    			$_SERVER['REMOTE_ADDR'],
-    			$result->getCode()
-			);
-            $accesslog->addLogoutEntry(
-                session_id(),
-                $_SERVER['REMOTE_ADDR']
-            );
-            
-            Zend_Session::destroy();
-            
-			sleep(2);
         }
 
 
@@ -114,19 +80,8 @@ class Egwbase_Json
      */
     function logout()
     {
-        if (Zend_Registry::isRegistered('currentAccount')) {
-            $currentAccount = Zend_Registry::get('currentAccount');
-    
-            $accesslog = new Egwbase_AccessLog();
-            $accesslog->addLogoutEntry(
-                session_id(),
-                $_SERVER['REMOTE_ADDR'],
-                $currentAccount->account_id
-            );
-        }
+        Egwbase_Controller::getInstance()->logout();
         
-        Zend_Session::destroy();
-
         $result = array(
 			'success'=> true,
         );

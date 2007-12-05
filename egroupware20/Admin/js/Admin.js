@@ -934,28 +934,20 @@ Egw.Admin.Accounts = function() {
         Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
     };
     
-    var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+    var _renderStatus = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
         var gridValue;
         
         switch(_value) {
-            case '0':
-              gridValue = 'disabled';
+            case 'A':
+              gridValue = "<img src='images/oxygen/16x16/actions/dialog-apply.png' width='12' height='12'/>";
               break;
               
-            case '1':
-              gridValue = 'enabled';
-              break;
-              
-            case '2':
-              gridValue = 'enabled (but hidden)';
-              break;
-              
-            case '3':
-              gridValue = 'enabled (new window)';
+            case 'D':
+              gridValue = "<img src='images/oxygen/16x16/actions/dialog-cancel.png' width='12' height='12'/>";
               break;
               
             default:
-              gridValue = 'unknown status (' + _value + ')';
+              gridValue = _value;
               break;
         }
         
@@ -979,7 +971,8 @@ Egw.Admin.Accounts = function() {
         }); 
         
         var columnModel = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'ID', id: 'account_id', dataIndex: 'account_id', width: 50},
+            {resizable: true, header: 'ID', id: 'account_id', dataIndex: 'account_id', hidden: true, width: 50},
+            {resizable: true, header: 'Status', id: 'account_status', dataIndex: 'account_status', width: 50, renderer: _renderStatus},
             {resizable: true, header: 'Login name', id: 'account_lid', dataIndex: 'account_lid'},
             {resizable: true, header: 'First name', id: 'n_family', dataIndex: 'n_family'},
             {resizable: true, header: 'Given Name', id: 'n_given', dataIndex: 'n_given'},
@@ -987,7 +980,6 @@ Egw.Admin.Accounts = function() {
             {resizable: true, header: 'Last login at', id: 'account_lastlogin', dataIndex: 'account_lastlogin', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Last login from', id: 'account_lastloginfrom', dataIndex: 'account_lastloginfrom'},
             {resizable: true, header: 'Password changed', id: 'account_lastpwd_change', dataIndex: 'account_lastpwd_change', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Status', id: 'account_status', dataIndex: 'account_status'},
             {resizable: true, header: 'Expires', id: 'account_expires', dataIndex: 'account_expires', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer}
         ]);
         

@@ -13,6 +13,6 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-$egwBase = new Egwbase_Controller();
+$egwBase = Egwbase_Controller::getInstance();
 
 $egwBase->handle();

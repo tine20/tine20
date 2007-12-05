@@ -16,10 +16,24 @@
 class Egwbase_Controller
 {
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Egwbase_Controller
+     */
+    private static $instance = NULL;
+    
+    /**
+     * stores the egwbase session namespace
+     *
+     * @var Zend_Session_Namespace
+     */
+    protected $session;
+    
+    /**
      * the constructor
      *
      */
-    public function __construct()
+    private function __construct()
     {
         Zend_Session::start();
 
@@ -31,19 +45,33 @@ class Egwbase_Controller
 
         $this->setupUserTimezone();
 
-        $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
-
-        if(!isset($egwBaseNamespace->jsonKey)) {
-            $egwBaseNamespace->jsonKey = md5(mktime());
+        $this->session = new Zend_Session_Namespace('egwbase');
+        
+        if(!isset($this->session->jsonKey)) {
+            $this->session->jsonKey = md5(mktime());
         }
-        Zend_Registry::set('jsonKey', $egwBaseNamespace->jsonKey);
+        Zend_Registry::set('jsonKey', $session->jsonKey);
 
-        if(isset($egwBaseNamespace->currentAccount)) {
-            Zend_Registry::set('currentAccount', $egwBaseNamespace->currentAccount);
+        if(isset($this->session->currentAccount)) {
+            Zend_Registry::set('currentAccount', $this->session->currentAccount);
         }
 
     }
-
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Egwbase_Controller
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Egwbase_Controller;
+        }
+        
+        return self::$instance;
+    }
+    
     /**
      * Enter description here...
      * 
@@ -164,22 +192,76 @@ class Egwbase_Controller
     {
         Zend_Registry::set('userTimeZone', 'Europe/Berlin');
     }
-    
-/*    public static function getEnabledApplications()
+
+    public function login($_username, $_password, $_idAddress)
     {
-        //if  (isset($apps) && !empty($apps) ) {
-        //    return $apps;
-        //}
+        $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
         
-        $apps = array();
+        $authAdapter->setIdentity($_username);
+        $authAdapter->setCredential($_password);
+            
+        $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         
-        $conf = new Zend_Config_Ini('../../config.ini', 'applications');
-        $applications = $conf->toArray();
-        foreach ( $applications as $appname => $status ) {
-            if ($status > 0) {
-                $apps[] = $appname;
+        if ($result->isValid()) {
+            $accountClass = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+            $account = $accountClass->getAccountByLoginName($result->getIdentity());
+            
+            if($account === FALSE) {
+                throw new Exception('account ' . $result->getIdentity() . ' not found in account storage');
             }
+            
+            Zend_Registry::set('currentAccount', $account);
+
+            $this->session->currentAccount = $account;
+            
+            $account->setLoginTime($_idAddress);
+            
+            Egwbase_AccessLog::getInstance()->addLoginEntry(
+                session_id(),
+                $result->getIdentity(),
+                $_idAddress,
+                $result->getCode(),
+                Zend_Registry::get('currentAccount')->account_id
+            );
+            
+        } else {
+            Egwbase_AccessLog::getInstance()->addLoginEntry(
+                session_id(),
+                $username,
+                $_idAddress,
+                $result->getCode()
+            );
+            
+            Egwbase_AccessLog::getInstance()->addLogoutEntry(
+                session_id(),
+                $_idAddress
+            );
+            
+            Zend_Session::destroy();
+            
+            sleep(2);
         }
-        return $apps;
-    } */
+        
+        return $result;
+    }
+    
+    /**
+     * destroy session
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        if (Zend_Registry::isRegistered('currentAccount')) {
+            $currentAccount = Zend_Registry::get('currentAccount');
+    
+            Egwbase_AccessLog::getInstance()->addLogoutEntry(
+                session_id(),
+                $_SERVER['REMOTE_ADDR'],
+                $currentAccount->account_id
+            );
+        }
+        
+        Zend_Session::destroy();
+    }
 }

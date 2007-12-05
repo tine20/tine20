@@ -48,8 +48,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         try {
             $logIds = Zend_Json::decode($logIds);
 
-            $egwAccessLog = new Egwbase_AccessLog();
-            $egwAccessLog->deleteEntries($logIds);
+            Egwbase_AccessLog::getInstance()->deleteEntries($logIds);
 
             $result = array(
                 'success' => TRUE
@@ -159,7 +158,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
         $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
         
-        $egwAccessLog = new Egwbase_AccessLog();
+        $egwAccessLog = Egwbase_AccessLog::getInstance();
 
         $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $filter, $sort, $dir, $start, $limit);
         

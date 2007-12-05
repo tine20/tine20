@@ -151,6 +151,50 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         
         return $result;
     }
+
+    public function getAccountByLoginName($_loginName)
+    {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $select = $db->select()
+            ->from('egw_accounts', array('account_id', 'account_loginid' => 'account_lid'))
+            ->join(
+                'egw_addressbook',
+                'egw_accounts.account_id = egw_addressbook.account_id', 
+                array()
+            )
+            ->where('egw_accounts.account_lid = ?', $_loginName);
+
+        //error_log("getAccountByLoginName:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+    
+        $account = $stmt->fetchObject('Egwbase_Record_Account', array(array(), true));
+        
+        return $account;
+        
+        
+        foreach($rows as $account) {
+            if($account['account_lastlogin'] !== NULL) {
+                $account['account_lastlogin'] = new Zend_Date($account['account_lastlogin'], Zend_Date::TIMESTAMP);
+            }
+            
+            if($account['account_lastpwd_change'] !== NULL) {
+                $account['account_lastpwd_change'] = new Zend_Date($account['account_lastpwd_change'], Zend_Date::TIMESTAMP);
+            }
+            
+            if($account['account_expires'] > 0) {
+                $account['account_expires'] = new Zend_Date($account['account_expires'], Zend_Date::TIMESTAMP);
+            } else {
+                $account['account_expires'] = NULL;
+            }
+            
+            $result[] = $account;
+        }
+        //$result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
+        
+        return $result;
+    }
     
     public function setAccountStatus($_accountId, $_status)
     {
@@ -199,6 +243,27 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         
         $accountData['account_pwd'] = md5($_password);
         $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
+        
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        
+        return $result;
+    }
+    
+    public function setLoginTime($_accountId, $_ipAddress) 
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        
+        $accountData['account_lastloginfrom'] = $_ipAddress;
+        $accountData['account_lastlogin'] = Zend_Date::now()->getTimestamp();
         
         $where = array(
             $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)

@@ -15,6 +15,13 @@
 class Egwbase_AccessLog
 {
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Egwbase_AccessLog
+     */
+    private static $instance = NULL;
+    
+    /**
      * the table object for the egw_applications table
      *
      * @var Zend_Db_Table_Abstract
@@ -25,7 +32,7 @@ class Egwbase_AccessLog
      * the constructor
      *
      */
-    public function __construct()
+    private function __construct()
     {
         $conf = array('name' => 'egw_access_log');
         if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
@@ -34,7 +41,21 @@ class Egwbase_AccessLog
         
         $this->accessLogTable = new Egwbase_Db_Table($conf);
     }
-
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Egwbase_AccessLog
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Egwbase_AccessLog;
+        }
+        
+        return self::$instance;
+    }
+    
     /**
      * add login entry to the access log
      *
