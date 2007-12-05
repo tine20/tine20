@@ -68,7 +68,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
         
 		$view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
         
 		$view->title="edit contact";
