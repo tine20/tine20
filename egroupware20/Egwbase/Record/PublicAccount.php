@@ -13,7 +13,7 @@
 /**
  * defines the datatype for one application
  */
-class Egwbase_Record_Account extends Egwbase_Record_Abstract
+class Egwbase_Record_PublicAccount extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -34,16 +34,9 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'account_id'            => array('Digits', 'presence' => 'required'),
-        'account_lid'           => array('presence' => 'required'),
-        'account_name'          => array('allowEmpty' => true),
-        'account_lastlogin'     => array('Digits', 'allowEmpty' => true),
-        'account_lastloginfrom' => array('allowEmpty' => true),
-        'account_lastpwd_change' => array('Digits', 'allowEmpty' => true),
-        'account_status'        => array('presence' => 'required'),
-        'account_expires'       => array('Digits', 'allowEmpty' => true),
-        'account_primary_group' => array('Digits', 'presence' => 'required')
-    
+        'account_id'      => array('Digits', 'presence' => 'required'),
+        'account_loginid' => array('presence' => 'required'),
+        'account_name'    => array('allowEmpty' => true),
     );
 
    /**

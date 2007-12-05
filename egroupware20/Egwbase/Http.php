@@ -64,7 +64,7 @@ class Egwbase_Http
         
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
         
         

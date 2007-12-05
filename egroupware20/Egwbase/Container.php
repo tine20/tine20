@@ -371,7 +371,10 @@ class Egwbase_Container
         if($right != $_right) {
             throw new InvalidArgumentException('$_right must be integer');
         }
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
                
         $db = Zend_Registry::get('dbAdapter');
@@ -384,7 +387,7 @@ class Egwbase_Container
                 array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)')
             )
             ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
             ->group('egw_container.container_id')
             ->having('account_grants & ?', $right)
             ->order('egw_container.container_name');
@@ -410,7 +413,10 @@ class Egwbase_Container
         if($containerId != $_containerId) {
             throw new InvalidArgumentException('$_containerId must be integer');
         }
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        
 
         if(!$this->hasGrant($containerId, self::GRANT_READ)) {
             throw new Exception('permission to container denied');
@@ -426,7 +432,7 @@ class Egwbase_Container
                 array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)')
             )
             ->where('egw_container.container_id = ?', $containerId)
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
             ->group('egw_container.container_id')
             ->order('egw_container.container_name');
 
@@ -458,8 +464,9 @@ class Egwbase_Container
             throw new InvalidArgumentException('$_owner must be integer');
         }
         
-        $accountId = Zend_Registry::get('currentAccount')->account_id;
-                
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        
         $db = Zend_Registry::get('dbAdapter');
         
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
@@ -474,7 +481,7 @@ class Egwbase_Container
             ->join('egw_container', 'owner.container_id = egw_container.container_id')
             ->where('owner.account_id = ?', $_owner)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
-            ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
+            ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
             ->group('egw_container.container_id')
@@ -498,8 +505,9 @@ class Egwbase_Container
      */
     public function getSharedContainer($_application)
     {
-        $accountId = Zend_Registry::get('currentAccount')->account_id;
-                
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        
         $db = Zend_Registry::get('dbAdapter');
         
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
@@ -507,7 +515,7 @@ class Egwbase_Container
         $select = $db->select()
             ->from('egw_container_acl', array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)'))
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_SHARED)
             ->group('egw_container.container_id')
@@ -532,7 +540,10 @@ class Egwbase_Container
     public function getOtherUsers($_application)
     {
         $accountId = Zend_Registry::get('currentAccount')->account_id;
-                
+        
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        
         $db = Zend_Registry::get('dbAdapter');
         
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
@@ -543,7 +554,7 @@ class Egwbase_Container
             ->join('egw_container', 'user.container_id = egw_container.container_id', array())
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
-            ->where('user.account_id IN (?) OR user.account_id IS NULL', $accountId)
+            ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
             ->where('user.account_grant = ?', self::GRANT_READ)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
@@ -572,7 +583,10 @@ class Egwbase_Container
     public function getOtherUsersContainer($_application)
     {
         $accountId = Zend_Registry::get('currentAccount')->account_id;
-                
+        
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        
         $db = Zend_Registry::get('dbAdapter');
         
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
@@ -586,7 +600,7 @@ class Egwbase_Container
             ->join('egw_container', 'user.container_id = egw_container.container_id')
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
-            ->where('user.account_id IN (?) or user.account_id IS NULL', $accountId)
+            ->where('user.account_id IN (?) or user.account_id IS NULL', $groupMemberships)
             ->where('egw_container.application_id = ?', $application->app_id)
             ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
             ->group('egw_container.container_id')
@@ -663,14 +677,15 @@ class Egwbase_Container
             throw new InvalidArgumentException('$_grant must be integer');
         }
         
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
         
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
             ->from('egw_container_acl', array('container_id'))
             ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id', array())
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
+            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
             ->where('egw_container_acl.account_grant = ?', $grant)
             ->where('egw_container.container_id = ?', $containerId);
                     
