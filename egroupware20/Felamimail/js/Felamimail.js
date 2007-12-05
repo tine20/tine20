@@ -20,6 +20,7 @@ Egw.Felamimail = function() {
         var treePanel = new Ext.tree.TreePanel({
             title: 'Email',
             id: 'felamimail-tree',
+            iconCls: 'FelamimailTreePanel',
             loader: treeLoader,
             rootVisible: false,
             border: false
@@ -224,7 +225,8 @@ Egw.Felamimail.Email = function() {
         var dataStore = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method:     'Felamimail.getEmailOverview'
+                method:     'Felamimail.getEmailOverview',
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey')
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -318,6 +320,7 @@ Egw.Felamimail.Email = function() {
         
         if(_data[0][0]) {
             _cell.attr = 'ext:qtip="' +  _data[0][0] + ' - ' + emailAddress + '"';
+            return _data[0][0];
             return _data[0][0] + ' - ' + emailAddress + '';
         } else {
             _cell.attr = 'ext:qtip="' + emailAddress + '"';
@@ -352,7 +355,7 @@ Egw.Felamimail.Email = function() {
             {resizable: true, header: 'To', dataIndex: 'to', width: 200, hidden: true},
             {resizable: true, header: 'Sent', dataIndex: 'sent', renderer: _renderDateTime},
             {resizable: true, header: 'Received', dataIndex: 'received', renderer: _renderDateTime},
-            {resizable: true, header: 'Size', dataIndex: 'size'}
+            {resizable: true, header: 'Size', dataIndex: 'size', renderer:Ext.util.Format.fileSize }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable

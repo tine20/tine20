@@ -151,4 +151,61 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         
         return $result;
     }
+    
+    public function setAccountStatus($_accountId, $_status)
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        switch($_status) {
+            case 'enabled':
+                $accountData['account_status'] = 'A';
+                break;
+                
+            case 'disabled':
+                $accountData['account_status'] = 'D';
+                break;
+                
+            case 'expired':
+                $accountData['account_expires'] = Zend_Date::getTimestamp();
+                break;
+            
+            default:
+                throw new InvalidArgumentException('$_status can be only enabled, disabled or epxired');
+                break;
+        }
+        
+        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        
+        return $result;
+    }
+
+    public function setAccountPassword($_accountId, $_password)
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        
+        $accountData['account_pwd'] = md5($_password);
+        $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
+        
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        
+        return $result;
+    }
 }

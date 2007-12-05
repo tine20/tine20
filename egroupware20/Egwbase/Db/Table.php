@@ -50,8 +50,6 @@ class Egwbase_Db_Table extends Zend_Db_Table_Abstract
     {
         $tableInfo = $this->info();
         
-        $result = $this->getAdapter()->fetchOne('SELECT count(*) FROM ' . $tableInfo['name']);
-        
         $select = $this->getAdapter()->select()
             ->from($tableInfo['name'], array('count' => 'COUNT(*)'));
             
@@ -61,8 +59,6 @@ class Egwbase_Db_Table extends Zend_Db_Table_Abstract
         
         $stmt = $this->getAdapter()->query($select);
         $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        //error_log(print_r($result, true));
         
         return $result['count'];
     }

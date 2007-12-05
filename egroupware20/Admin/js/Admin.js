@@ -757,58 +757,100 @@ Egw.Admin.Accounts = function() {
     var _enableDisableButtonHandler = function(_button, _event) {
         //console.log(_button);
         
-        var state = 0;
-        if(_button.id == 'Admin_Accesslog_Action_Enable') {
-            state = 1;
+        var status = 'disabled';
+        if(_button.id == 'Admin_Accounts_Action_Enable') {
+            status = 'enabled';
         }
         
-        var applicationIds = new Array();
-        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+        var accountIds = new Array();
+        var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
-            applicationIds.push(selectedRows[i].id);
+            accountIds.push(selectedRows[i].id);
         }
         
         Ext.Ajax.request({
             url : 'index.php',
             method : 'post',
             params : {
-                method : 'Admin.setApplicationState',
-                applicationIds : Ext.util.JSON.encode(applicationIds),
-                state: state
+                method : 'Admin.setAccountState',
+                accountIds : Ext.util.JSON.encode(accountIds),
+                status: status
             },
             callback : function(_options, _success, _response) {
                 if(_success === true) {
                     var result = Ext.util.JSON.decode(_response.responseText);
                     if(result.success === true) {
-                        Ext.getCmp('gridAdminApplications').getStore().reload();
+                        Ext.getCmp('AdminAccountsGrid').getStore().reload();
                     }
                 }
             }
         });
     };
     
+    var _resetPasswordHandler = function(_button, _event) {
+        Ext.MessageBox.prompt('Set new password', 'Please enter the new password:', function(_button, _text) {
+            if(_button == 'ok') {
+                var accountId = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelected().id;
+                
+                Ext.Ajax.request( {
+                    params : {
+                        method    : 'Admin.resetPassword',
+                        accountId : accountId,
+                        password  : _text
+                    },
+                    callback : function(_options, _success, _response) {
+                        if(_success === true) {
+                            var result = Ext.util.JSON.decode(_response.responseText);
+                            if(result.success === true) {
+                                Ext.getCmp('AdminAccountsGrid').getStore().reload();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    };
 
     var _action_enable = new Ext.Action({
-        text: 'enable application',
+        text: 'enable account',
         disabled: true,
         handler: _enableDisableButtonHandler,
         iconCls: 'action_enable',
-        id: 'Admin_Accesslog_Action_Enable'
+        id: 'Admin_Accounts_Action_Enable'
     });
 
     var _action_disable = new Ext.Action({
-        text: 'disable application',
+        text: 'disable account',
         disabled: true,
         handler: _enableDisableButtonHandler,
         iconCls: 'action_disable',
-        id: 'Admin_Accesslog_Action_Disable'
+        id: 'Admin_Accounts_Action_Disable'
     });
 
-    var _action_settings = new Ext.Action({
-        text: 'settings',
+    var _action_resetPassword = new Ext.Action({
+        text: 'reset password',
+        disabled: true,
+        handler: _resetPasswordHandler,
+        /*iconCls: 'action_disable',*/
+        id: 'Admin_Accounts_Action_resetPassword'
+    });
+
+    var _action_addAccount = new Ext.Action({
+        text: 'add account',
         disabled: true,
         handler: _editButtonHandler,
         iconCls: 'action_settings'
+    });    
+
+    var _ctxMenuGrid = new Ext.menu.Menu({
+        /*id:'AdminAccountContextMenu',*/ 
+        items: [
+            _action_enable,
+            _action_disable,
+            _action_resetPassword,
+            '-',
+            _action_addAccount 
+        ]
     });
         
     var _createDataStore = function()
@@ -869,7 +911,7 @@ Egw.Admin.Accounts = function() {
                 _action_enable,
                 _action_disable,
                 '-',
-                _action_settings,
+                _action_addAccount,
                 '->',
                 'Search:', ' ',
 /*                new Ext.ux.SelectBox({
@@ -959,14 +1001,17 @@ Egw.Admin.Accounts = function() {
             if(rowCount < 1) {
                 _action_enable.setDisabled(true);
                 _action_disable.setDisabled(true);
+                _action_resetPassword.setDisabled(true);
                 //_action_settings.setDisabled(true);
             } else if (rowCount > 1){
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
+                _action_resetPassword.setDisabled(true);
                 //_action_settings.setDisabled(true);
             } else {
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
+                _action_resetPassword.setDisabled(false);
                 //_action_settings.setDisabled(false);              
             }
         });
@@ -991,11 +1036,11 @@ Egw.Admin.Accounts = function() {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
 
-/*                action_edit.setDisabled(false);
-                action_delete.setDisabled(false);*/
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
             }
             //var record = _grid.getStore().getAt(rowIndex);
-/*            ctxMenuListGrid.showAt(_eventObject.getXY()); */
+            _ctxMenuGrid.showAt(_eventObject.getXY());
         });
         
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {

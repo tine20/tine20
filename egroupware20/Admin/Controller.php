@@ -45,11 +45,42 @@ class Admin_Controller
         return self::$instance;
     }
     
+    public function getAccount($_accountId)
+    {
+        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+
+        $result = $backend->getAccount($_accountId);
+        
+        return $result;
+    }
+    
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
 
         $result = $backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit);
+        
+        return $result;
+    }
+    
+    public function setAccountStatus($_accountId, $_status)
+    {
+        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        
+        $result = $backend->setAccountStatus($_accountId, $_status);
+        
+        return $result;
+    }
+
+    public function setAccountPassword($_accountId, $_password1, $_password2)
+    {
+        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        
+        if($_password1 != $_password2) {
+            throw new Exception("passwords don't match");
+        }
+        
+        $result = $backend->setAccountPassword($_accountId, $_password1);
         
         return $result;
     }

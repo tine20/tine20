@@ -37,11 +37,11 @@
 var a_vars = Array();
 var pagename='';
 
-var phpmyvisitesSite = 1;
-var phpmyvisitesURL = "http://lars.kneschke.de/phpmv2/phpmyvisites.php";
+var phpmyvisitesSite = 4;
+var phpmyvisitesURL = "http://stats.egroupware20.org/phpmyvisites.php";
 //-->
 </script>
-<script language="javascript" src="http://lars.kneschke.de/phpmv2/phpmyvisites.js" type="text/javascript"></script>
+<script language="javascript" src="http://stats.egroupware20.org/phpmyvisites.js" type="text/javascript"></script>
 <!-- /phpmyvisites --> 
 </body>
 </html>

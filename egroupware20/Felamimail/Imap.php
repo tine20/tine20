@@ -122,4 +122,8 @@ class Felamimail_Imap extends Zend_Mail_Storage_Imap
         return $header;
     }
     
+    public function search(array $parameters)
+    {
+        return $this->_protocol->search($parameters);
+    }
 }

@@ -110,6 +110,38 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
 
+    public function setAccountState($accountIds, $status)
+    {
+        $accountIds = Zend_Json::decode($accountIds);
+        
+        $controller = Admin_Controller::getInstance();
+        
+        foreach($accountIds as $accountId) {
+            $controller->setAccountStatus($accountId, $status);
+        }
+        
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
+    
+    public function resetPassword($accountId, $password)
+    {
+        $accountIds = Zend_Json::decode($accountIds);
+        
+        $controller = Admin_Controller::getInstance();
+
+        $controller->setAccountPassword($accountId, $password, $password);
+        
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
+    
     public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
     {
         if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {

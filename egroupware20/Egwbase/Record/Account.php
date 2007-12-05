@@ -46,4 +46,18 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
      * @var string
      */    
     protected $_identifier = 'account_id';
+    
+    public function getGroupMemberships()
+    {
+        
+    }
+
+    public function hasRight($_application, $_right)
+    {
+        $rights = Egwbase_Acl_Rights::getInstance();
+        
+        $result = $rights->hasRight($_application, $this->account_id, $_right);
+        
+        return $result;
+    }
 }

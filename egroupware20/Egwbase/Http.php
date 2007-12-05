@@ -51,7 +51,7 @@ class Egwbase_Http
             $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());
             $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array)$application->getCssFilesToInclude());
             
-            $view->initialData[$applicationName] = $application->getInitialMainScreenData();
+            $view->initialData[ucfirst($applicationName)] = $application->getInitialMainScreenData();
         }
         
         // NOTE there is no 1:1 mapping of timezones:translation
