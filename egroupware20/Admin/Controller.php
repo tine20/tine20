@@ -67,7 +67,7 @@ class Admin_Controller
     {
         $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
         
-        $result = $backend->setAccountStatus($_accountId, $_status);
+        $result = $backend->setStatus($_accountId, $_status);
         
         return $result;
     }
@@ -80,7 +80,7 @@ class Admin_Controller
             throw new Exception("passwords don't match");
         }
         
-        $result = $backend->setAccountPassword($_accountId, $_password1);
+        $result = $backend->setPassword($_accountId, $_password1);
         
         return $result;
     }
