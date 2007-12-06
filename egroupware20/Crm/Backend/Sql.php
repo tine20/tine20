@@ -129,11 +129,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	}	
     
 	/**
-	* get Products
+	* get Products available
 	*
 	* @return unknown
 	*/
-    public function getProductsource()
+    public function getProductsAvailable()
     {	
 		$result = $this->productsourceTable->fetchAll();
         return $result;
@@ -150,7 +150,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
    
         return $result;
 	}    
-    
+  
+  
+
+
 
 	/**
 	* add or updates an project

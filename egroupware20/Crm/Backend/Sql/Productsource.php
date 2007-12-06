@@ -27,12 +27,7 @@ class Crm_Backend_Sql_Productsource extends Zend_Db_Table_Abstract
      */
     public function fetchAll($_where = NULL, $_order = NULL, $_dir = NULL, $_count = NULL, $_offset = NULL, $_readACL = NULL)
     {
-        if($_dir !== NULL && ($_dir != 'ASC' && $_dir != 'DESC')) {
-            throw new Exception('$_dir can be only ASC or DESC');
-        }
-        
-        $result = parent::fetchAll($_where, "$_order $_dir", $_count, $_offset);
-                                
+		$result = parent::fetchAll();                                
         return $result;
     }
 } 

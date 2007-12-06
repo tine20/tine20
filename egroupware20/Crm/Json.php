@@ -154,6 +154,22 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             unset($_POST['pj_id']);
         }
 
+        // timestamps
+        $_changeDate = time();
+        
+//        'pj_modified'
+        if(empty($_POST['pj_created'])) {
+            $_POST['pj_created'];
+            
+            
+        }
+        
+        
+        // date transition
+        
+        // products
+
+
         $project = new Crm_Project();
         try {
             $project->setFromUserData($_POST);
@@ -180,6 +196,27 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;
          
     }      
+ 
+ 
+   public function getProductsById($_id)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+
+        if(empty($filter)) {
+            $filter = NULL;
+        }
+
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        if($rows = $backend->getProductsById($_id)) {
+            $result['results']    = $rows->toArray();
+            //$result['totalcount'] = $backend->getCountByOwner($owner);
+        }
+
+        return $result;
+    } 
       
      
     public function getProjectsByOwner($filter, $owner, $start, $sort, $dir, $limit)
@@ -202,21 +239,57 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
      
-   public function getProjectstate()
+   public function getProjectstates()
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-error_log('JSON :: getProjectstate');
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
         if($rows = $backend->getProjectstates()) {
-                 
-            $result['results']    = $rows;
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;    
+    }     
+	
+   public function getLeadsources()
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getLeadsources()) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;    
+    }     	
+ 
+   public function getLeadtypes()
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getLeadtypes()) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;    
+    }   
+	
+	public function getProductsAvailable()
+	{
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getProductsAvailable()) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
         }
 
         return $result;
-    }     
+	}   
      
      
 }
