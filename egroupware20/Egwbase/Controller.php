@@ -205,8 +205,8 @@ class Egwbase_Controller
         $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         
         if ($result->isValid()) {
-            $accountClass = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
-            $account = $accountClass->getAccountByLoginName($result->getIdentity());
+            $backend = self::getAccountsBackend();
+            $account = $backend->getAccountByLoginName($result->getIdentity());
             
             if($account === FALSE) {
                 throw new Exception('account ' . $result->getIdentity() . ' not found in account storage');

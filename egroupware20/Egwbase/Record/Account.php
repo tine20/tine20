@@ -74,7 +74,7 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
     
     public function getGroupMemberships()
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
         
         $result = $backend->getGroupMemberships($this->account_id);
         
@@ -83,7 +83,7 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
     
     public function setLoginTime($_ipAddress)
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
         
         $result = $backend->setLoginTime($this->account_id, $_ipAddress);
         
@@ -92,7 +92,7 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
     
     public function setPassword($_password)
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
         
         $result = $backend->setPassword($this->account_id, $_password);
         
