@@ -101,8 +101,9 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Json', 'Egwbase');
 
             if($auth->hasIdentity()) {
-                $accountId   = Zend_Registry::get('currentAccount')->account_id;
-                $userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
+                //$accountId   = Zend_Registry::get('currentAccount')->account_id;
+                //$userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
+                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
                     $applicationName = ucfirst($application->app_name);
@@ -121,8 +122,9 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Http', 'Egwbase');
     
             if($auth->hasIdentity()) {
-                $accountId   = Zend_Registry::get('currentAccount')->account_id;
-                $userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
+                //$accountId   = Zend_Registry::get('currentAccount')->account_id;
+                //$userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
+                $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
                     $applicationName = ucfirst($application->app_name);
