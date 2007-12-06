@@ -42,7 +42,7 @@ interface Addressbook_Backend_Interface
      * @return int total number of personal contacts
      *
      */
-    public function getCountByOwner($_owner);
+    public function getCountByOwner($_owner, $_filter);
     
     /**
      * Enter description here...
@@ -82,25 +82,4 @@ interface Addressbook_Backend_Interface
      *
      */
     //public function getListsByOwner($owner, $filter, $sort, $dir, $limit, $start);
-    
-    /**
-     * return list of internal conacts (aka accounts)
-     *
-     * @param string $filter string to search for in contacts
-     * @param string $sort fieldname to sort by
-     * @param string $dir sort ascending or descending (ASC | DESC)
-     * @param int $limit how many contacts to display
-     * @param int $start how many contaxts to skip
-     * 
-     * @return array list of internal contacts
-    */
-    public function getAccounts($filter, $sort, $dir, $limit = NULL, $start = NULL);
-
-    /**
-     * returns total number of internal contacts
-     * 
-     * @return int total number of internal contacts
-     *
-     */    
-    public function getCountOfAccounts();
 }

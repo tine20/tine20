@@ -38,7 +38,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function __construct()
     {
-        $this->contactsTable = new Addressbook_Backend_Sql_Contacts();
+        $this->contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
     }
 
     /**
