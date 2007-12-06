@@ -63,7 +63,7 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
     /**
      * Add default routes which are used to mimic basic router behaviour
      */
-    protected function addDefaultRoutes()
+    public function addDefaultRoutes()
     {
         if (!$this->hasRoute('default')) {
 

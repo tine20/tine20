@@ -149,8 +149,7 @@ class Zend_Gdata_AuthSub
         }
         $client->setUri(self::AUTHSUB_REVOKE_TOKEN_URI);
         $headers['authorization'] = 'AuthSub token="' . $token . '"';
-        $useragent = 'Zend_Framework_Gdata/' . Zend_Version::VERSION .
-                ' ' . $source;
+        $useragent = 'Zend_Framework_Gdata/' . Zend_Version::VERSION;
         $client->setConfig(array(
                 'strictredirects' => true,
                 'useragent' => $useragent

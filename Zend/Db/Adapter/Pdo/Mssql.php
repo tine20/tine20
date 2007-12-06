@@ -90,7 +90,7 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
         unset($dsn['driver_options']);
 
         if (isset($dsn['port'])) {
-            $dsn['host'] .= ',' . $port;
+            $dsn['host'] .= ',' . $dsn['port'];
             unset($dsn['port']);
         }
 

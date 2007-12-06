@@ -290,7 +290,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
 
         $xpath = new DOMXPath($this->_doc);
 
-        $matchedNodes = $xpath->query("/html/body/*");
+        $matchedNodes = $xpath->query("/html/body");
         foreach ($matchedNodes as $matchedNode) {
             $this->_highlightNode($matchedNode, $wordsToHighlightFlipped, $color);
         }

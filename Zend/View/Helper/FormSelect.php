@@ -90,8 +90,8 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
             // generate a plain list of selected options.
             // show the label, not the value, of the option.
             $list = array();
-            foreach ($options as $opt_value => $opt_label) {
-                if (in_array($opt_value, $value)) {
+            foreach ((array) $options as $opt_value => $opt_label) {
+                if (in_array($opt_value, $value, 0 === $opt_value)) {
                     // add the hidden value
                     $opt = $this->_hidden($name, $opt_value);
                     // add the display label
@@ -114,7 +114,7 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
 
             // build the list of options
             $list = array();
-            foreach ($options as $opt_value => $opt_label) {
+            foreach ((array) $options as $opt_value => $opt_label) {
 
                 if (is_array($opt_label)) {
                     $list[] = '<optgroup '
@@ -151,7 +151,7 @@ class Zend_View_Helper_FormSelect extends Zend_View_Helper_FormElement
              . ' label="' . $this->view->escape($label) . '"';
 
         // selected?
-        if (in_array($value, $selected)) {
+        if (in_array($value, $selected, 0 === $value)) {
             $opt .= ' selected="selected"';
         }
 

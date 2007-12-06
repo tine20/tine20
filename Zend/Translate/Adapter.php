@@ -39,6 +39,7 @@ abstract class Zend_Translate_Adapter {
      * @var string|null
      */
     protected $_locale;
+    private   $_automatic = true;
 
     /**
      * Table of all supported languages
@@ -47,12 +48,19 @@ abstract class Zend_Translate_Adapter {
      */
     protected $_languages = array();
 
+    // Scan options
+    const LOCALE_DIRECTORY = 1;
+    const LOCALE_FILENAME  = 2;
+
     /**
      * Array with all options, each adapter can have own additional options
      *
      * @var array
      */
-    protected $_options = array('clear' => false);
+    protected $_options = array(
+        'clear' => false, // clear previous loaded translation data
+        'scan'  => null   // where to find the locale
+    );
 
     /**
      * Translation table
@@ -76,9 +84,63 @@ abstract class Zend_Translate_Adapter {
         if ($locale === null) {
             $locale = new Zend_Locale();
         }
+        if ($locale instanceof Zend_Locale) { 
+            $locale = $locale->toString(); 
+        } 
 
-        $this->addTranslation($data, $locale, $options);
-        $this->setLocale($locale);
+        $options = array_merge($this->_options, $options);
+        if (is_string($data) and is_dir($data)) {
+            foreach (new RecursiveIteratorIterator(
+                     new RecursiveDirectoryIterator($data, RecursiveDirectoryIterator::KEY_AS_PATHNAME), 
+                     RecursiveIteratorIterator::SELF_FIRST) as $file => $info) {
+                if ($info->isDir()) {
+
+                    $directory = $info->getPath();
+                    // pathname as locale
+                    if (($options['scan'] === self::LOCALE_DIRECTORY) and (Zend_Locale::isLocale((string) $info))) {
+                        $locale = (string) $info;
+                    }
+
+                } else if ($info->isFile()) {
+
+                    // filename as locale
+                    if ($options['scan'] === self::LOCALE_FILENAME) {
+                        if (Zend_Locale::isLocale((string) $info)) {
+                            $locale = (string) $info;
+                        } else {
+                            $found = false;
+                            $parts = explode('.', (string) $info);
+                            foreach($parts as $token) {
+                                $parts = array_merge(explode('_', $token), $parts);
+                            }
+                            foreach($parts as $token) {
+                                $parts = array_merge(explode('-', $token), $parts);
+                            }
+                            $parts = array_unique($parts);
+                            foreach($parts as $token) {
+                                if (Zend_Locale::isLocale($token)) {
+                                    $locale = $token;
+                                }
+                            }
+                        }
+                    }
+                    try {
+                        $this->addTranslation((string) $info->getPathname(), $locale, $options);
+                        if ((array_key_exists($locale, $this->_translate)) and (count($this->_translate[$locale]) > 0)) {
+                            $this->setLocale($locale);
+                        }
+                    } catch (Zend_Translate_Exception $e) {
+                        // ignore failed sources while scanning
+                    }
+                }
+            }
+        } else {
+            $this->addTranslation($data, $locale, $options);
+            if ((array_key_exists($locale, $this->_translate)) and (count($this->_translate[$locale]) > 0)) {
+                $this->setLocale($locale);
+            }
+        } 
+        $this->_automatic = true;
     }
 
 
@@ -140,10 +202,19 @@ abstract class Zend_Translate_Adapter {
         }
 
         if (!in_array($locale, $this->_languages)) {
-            throw new Zend_Translate_Exception("Language ({$locale}) has to be added before it can be used.");
+            $temp = explode('_', $locale);
+            if (!in_array($temp[0], $this->_languages)) {
+                throw new Zend_Translate_Exception("Language ({$locale}) has to be added before it can be used.");
+            }
+            $locale = $temp[0];
         }
 
         $this->_locale = $locale;
+        if ($locale == "auto") {
+            $this->_automatic = true;
+        } else {
+            $this->_automatic = false;
+        }
     }
 
 
@@ -160,23 +231,37 @@ abstract class Zend_Translate_Adapter {
 
     /**
      * Returns all avaiable message ids from this adapter
+     * If no locale is given, the actual language will be used
      *
+     * @param  $locale  String|Zend_Locale  Language to return the message ids from
      * @return array
      */
-    public function getMessageIds()
+    public function getMessageIds($locale = null)
     {
-        return array_keys($this->_translate);
+        if (empty($locale) or !$this->isAvaiable($locale)) {
+            $locale = $this->_locale;
+        }
+        return array_keys($this->_translate[$locale]);
     }
 
 
     /**
      * Returns all avaiable translations from this adapter
+     * If no locale is given, the actual language will be used
+     * If 'all' is given the complete translation dictionary will be returned
      *
+     * @param  $locale  String|Zend_Locale  Language to return the messages from
      * @return array
      */
-    public function getMessages()
+    public function getMessages($locale = null)
     {
-        return $this->_translate;
+        if ($locale == 'all') { 
+            return $this->_translate; 
+        } 
+        if (empty($locale) or !$this->isAvaiable($locale)) { 
+            $locale = $this->_locale; 
+        } 
+        return $this->_translate[$locale];
     }
 
 
@@ -229,6 +314,17 @@ abstract class Zend_Translate_Adapter {
         }
 
         $this->_loadTranslationData($data, $locale, $options);
+        if ($this->_automatic === true) {
+            $find = new Zend_Locale($locale);
+            $browser = $find->getBrowser() + $find->getEnvironment();
+            arsort($browser);
+            foreach($browser as $language => $quality) {
+                if (in_array($language, $this->_languages)) {
+                    $this->_locale = $language;
+                    break;
+                }
+            }
+        }
     }
 
 

@@ -19,6 +19,7 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+
 /**
  * Abstract class for all XML elements
  *
@@ -243,6 +244,16 @@ abstract class Zend_Gdata_App_Base
      * children
      */
     public function getXML()
+    {
+        return $this->saveXML();
+    }
+    
+    /**
+     * Alias for saveXML()
+     * Can be overridden by children to provide more complex representations
+     * of entries.
+     */
+    public function encode()
     {
         return $this->saveXML();
     }

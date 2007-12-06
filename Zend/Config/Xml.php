@@ -52,12 +52,12 @@ class Zend_Config_Xml extends Zend_Config
      * @param boolean $allowModifications
      * @throws Zend_Config_Exception
      */
-    public function __construct($filename, $section, $allowModifications = false)
+    public function __construct($filename, $section = null, $allowModifications = false)
     {
         if (empty($filename)) {
             throw new Zend_Config_Exception('Filename is not set');
         }
-
+        
         $config = simplexml_load_file($filename);
 
         if (null === $section) {
@@ -79,7 +79,12 @@ class Zend_Config_Xml extends Zend_Config
             if (!isset($config->$section)) {
                 throw new Zend_Config_Exception("Section '$section' cannot be found in $filename");
             }
-            parent::__construct($this->_processExtends($config, $section), $allowModifications);
+            $dataArray = $this->_processExtends($config, $section);
+            if(!is_array($dataArray)) {
+                // section in the XML file contains just one top level string
+                $dataArray = array($section=>$dataArray);
+            }
+            parent::__construct($dataArray, $allowModifications);
         }
 
         $this->_loadedSection = $section;
@@ -117,20 +122,26 @@ class Zend_Config_Xml extends Zend_Config
 
 
     /**
-     * Returns an associative and possibly multidimensional array from a SimpleXMLElement.
+     * Returns a string or an associative and possibly multidimensional array from 
+     * a SimpleXMLElement.
      *
      * @param SimpleXMLElement $xmlObject
-     * @return array
+     * @return array|string
      */
     protected function _toArray($xmlObject)
     {
         $config = array();
-        foreach ($xmlObject->children() as $key => $value) {
-            if ($value->children()) {
-                $config[$key] = $this->_toArray($value);
-            } else {
-                $config[$key] = (string) $value;
+        if (count($xmlObject->children())) {
+            foreach ($xmlObject->children() as $key => $value) {
+                if ($value->children()) {
+                    $config[$key] = $this->_toArray($value);
+                } else {
+                    $config[$key] = (string) $value;
+                }
             }
+        } elseif (!isset($xmlObject['extends'])) {
+            // object has no children and doesn't use the extends attribute: it's a string
+            $config = (string) $xmlObject;
         }
         return $config;
     }

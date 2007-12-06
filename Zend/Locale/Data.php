@@ -65,7 +65,7 @@ class Zend_Locale_Data
 
 
     /**
-     *      * Read the content from locale
+     * Read the content from locale
      *
      * Can be called like:
      * <ldml>
@@ -249,21 +249,20 @@ class Zend_Locale_Data
             $locale = new Zend_Locale();
         }
 
-        if (!Zend_Locale::isLocale($locale)) {
-            throw new Zend_Locale_Exception("Locale ($locale) is a unknown locale");
-        }
-
         if ($locale instanceof Zend_Locale) {
             $locale = $locale->toString();
         }
 
+        if (!($locale = Zend_Locale::isLocale($locale))) {
+            throw new Zend_Locale_Exception("Locale ($locale) is a unknown locale");
+        }
+
         if (isset(self::$_cache)) {
             $val = $value;
-            if (is_array($val)) {
-                $val = implode('_' . $value);
+            if (is_array($value)) {
+                $val = implode('_' , $value);
             }
-            $id = 'Zend_Locale_' . $locale . '_' . $path . '_' . implode('_' . $val);
-            
+            $id = strtr('Zend_Locale_' . $locale . '_' . $path . '_' . $val, array('-' => '_', '/' => '_'));
             if ($result = self::$_cache->load($id)) {
                 return unserialize($result);
             }
@@ -773,6 +772,6 @@ class Zend_Locale_Data
      */
     public static function setCache(Zend_Cache_Core $cache)
     {
-        self::$cache = $cache;
+        self::$_cache = $cache;
     }
 }

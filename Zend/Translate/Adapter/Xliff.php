@@ -46,7 +46,7 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
     private $_scontent    = null;
     private $_tcontent    = null;
     private $_stag        = false;
-    private $_ttag        = true;
+    private $_ttag        = false;
 
     /**
      * Generates the xliff adapter
@@ -55,10 +55,11 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
      * @param  string              $data     Translation data
      * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
      *                                       see Zend_Locale for more information
+     * @param  array               $options  OPTIONAL Options to set
      */
-    public function __construct($data, $locale = null)
+    public function __construct($data, $locale = null, array $options = array())
     {
-        parent::__construct($data, $locale);
+        parent::__construct($data, $locale, $options);
     }
 
 
@@ -99,59 +100,79 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
 
     private function _startElement($file, $name, $attrib)
     {
-        switch(strtolower($name)) {
-            case 'file':
-                $this->_source = $attrib['source-language'];
-                $this->_target = $attrib['target-language'];
-                $this->_translate[$this->_source] = array();
-                $this->_translate[$this->_target] = array();
-                break;
-            case 'trans-unit':
-                $this->_transunit = true;
-                break;
-            case 'source':
-                if ($this->_transunit === true) {
-                    $this->_scontent = null;
-                    $this->_stag = true;
-                    $this->_ttag = false;
-                }
-                break;
-            case 'target':
-                if ($this->_transunit === true) {
-                    $this->_tcontent = null;
-                    $this->_ttag = true;
-                    $this->_stag = false;
-                }
-                break;
-            default:
-                break;
+        if ($this->_stag === true) {
+            $this->_scontent .= "<".$name;
+            foreach($attrib as $key => $value) {
+                $this->_scontent .= " $key=\"$value\"";
+            }
+            $this->_scontent .= ">";
+        } else if ($this->_ttag === true) {
+            $this->_tcontent .= "<".$name;
+            foreach($attrib as $key => $value) {
+                $this->_tcontent .= " $key=\"$value\"";
+            }
+            $this->_tcontent .= ">";
+        } else {
+            switch(strtolower($name)) {
+                case 'file':
+                    $this->_source = $attrib['source-language'];
+                    $this->_target = $attrib['target-language'];
+                    $this->_translate[$this->_source] = array();
+                    $this->_translate[$this->_target] = array();
+                    break;
+                case 'trans-unit':
+                    $this->_transunit = true;
+                    break;
+                case 'source':
+                    if ($this->_transunit === true) {
+                        $this->_scontent = null;
+                        $this->_stag = true;
+                        $this->_ttag = false;
+                    }
+                    break;
+                case 'target':
+                    if ($this->_transunit === true) {
+                        $this->_tcontent = null;
+                        $this->_ttag = true;
+                        $this->_stag = false;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     private function _endElement($file, $name)
     {
-        switch (strtolower($name)) {
-            case 'trans-unit':
-                $this->_transunit = null;
-                $this->_scontent = null;
-                $this->_tcontent = null;
-                break;
-            case 'source':
-                if (!empty($this->_scontent) and !empty($this->_tcontent) or
-                    !array_key_exists($this->_scontent, $this->_translate[$this->_source])) {
-                    $this->_translate[$this->_source][$this->_scontent] = $this->_scontent;
-                }
-                $this->_stag = false;
-                break;
-            case 'target':
-                if (!empty($this->_scontent) and !empty($this->_tcontent) or
-                    !array_key_exists($this->_scontent, $this->_translate[$this->_source])) {
-                    $this->_translate[$this->_target][$this->_scontent] = $this->_tcontent;
-                }
-                $this->_ttag = false;
-                break;
-            default:
-                break;
+        if (($this->_stag === true) and ($name !== 'source')) {
+            $this->_scontent .= "</".$name.">";
+        } else if (($this->_ttag === true) and ($name !== 'target')) {
+            $this->_tcontent .= "</".$name.">";
+        } else {
+            switch (strtolower($name)) {
+                case 'trans-unit':
+                    $this->_transunit = null;
+                    $this->_scontent = null;
+                    $this->_tcontent = null;
+                    break;
+                case 'source':
+                    if (!empty($this->_scontent) and !empty($this->_tcontent) or
+                        !array_key_exists($this->_scontent, $this->_translate[$this->_source])) {
+                        $this->_translate[$this->_source][$this->_scontent] = $this->_scontent;
+                    }
+                    $this->_stag = false;
+                    break;
+                case 'target':
+                    if (!empty($this->_scontent) and !empty($this->_tcontent) or
+                        !array_key_exists($this->_scontent, $this->_translate[$this->_source])) {
+                        $this->_translate[$this->_target][$this->_scontent] = $this->_tcontent;
+                    }
+                    $this->_ttag = false;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

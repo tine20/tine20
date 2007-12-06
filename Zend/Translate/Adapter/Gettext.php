@@ -47,10 +47,11 @@ class Zend_Translate_Adapter_Gettext extends Zend_Translate_Adapter {
      * @param  string              $data     Translation data
      * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
      *                                       see Zend_Locale for more information
+     * @param  array               $options  OPTIONAL Options to set
      */
-    public function __construct($data, $locale = null)
+    public function __construct($data, $locale = null, array $options = array())
     {
-        parent::__construct($data, $locale);
+        parent::__construct($data, $locale, $options);
     }
 
 
@@ -90,6 +91,9 @@ class Zend_Translate_Adapter_Gettext extends Zend_Translate_Adapter {
         $this->_file = @fopen($filename, 'rb');
         if (!$this->_file) {
             throw new Zend_Translate_Exception('Error opening translation file \'' . $filename . '\'.');
+        }
+        if (@filesize($filename) < 10) {
+            throw new Zend_Translate_Exception('\'' . $filename . '\' is not a gettext file');
         }
 
         // get Endian

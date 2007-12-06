@@ -191,25 +191,11 @@ class Zend_Loader
      */
     public static function isReadable($filename)
     {
-        if (@is_readable($filename)) {
-            return true;
+        if (!$fh = @fopen($filename, 'r', true)) {
+            return false;
         }
 
-        $path = get_include_path();
-        $dirs = explode(PATH_SEPARATOR, $path);
-
-        foreach ($dirs as $dir) {
-            // No need to check against current dir -- already checked
-            if ('.' == $dir) {
-                continue;
-            }
-
-            if (@is_readable($dir . DIRECTORY_SEPARATOR . $filename)) {
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 
     /**

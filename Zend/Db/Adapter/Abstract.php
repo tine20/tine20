@@ -133,8 +133,8 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Constructor.
      *
-     * $config is an array of key/value pairs containing configuration
-     * options.  These options are common to most adapters:
+     * $config is an array of key/value pairs or an instance of Zend_Config
+     * containing configuration options.  These options are common to most adapters:
      *
      * dbname         => (string) The name of the database to user
      * username       => (string) Connect to the database as this username.
@@ -148,7 +148,7 @@ abstract class Zend_Db_Adapter_Abstract
      * protocol       => (string) The network protocol, defaults to TCPIP
      * caseFolding    => (int) style of case-alteration used for identifiers
      *
-     * @param mixed $config An array of configuration keys, or an object of Zend_Config
+     * @param  array|Zend_Config $config An array or instance of Zend_Config having configuration data
      * @throws Zend_Db_Adapter_Exception
      */
     public function __construct($config)
@@ -177,7 +177,7 @@ abstract class Zend_Db_Adapter_Abstract
             Zend_Db::CASE_FOLDING           => $this->_caseFolding,
             Zend_DB::AUTO_QUOTE_IDENTIFIERS => $this->_autoQuoteIdentifiers
         );
-        $driver_options = array();
+        $driverOptions = array();
 
         /*
          * normalize the config and merge it with the defaults
@@ -191,12 +191,12 @@ abstract class Zend_Db_Adapter_Abstract
         if (array_key_exists('driver_options', $config)) {
             // can't use array_merge() because keys might be integers
             foreach ((array) $config['driver_options'] as $key => $value) {
-                $driver_options[$key] = $value;
+                $driverOptions[$key] = $value;
             }
         }
         $this->_config  = array_merge($this->_config, $config);
         $this->_config['options'] = $options;
-        $this->_config['driver_options'] = $driver_options;
+        $this->_config['driver_options'] = $driverOptions;
 
         // obtain the case setting, if there is one
         if (array_key_exists(Zend_Db::CASE_FOLDING, $options)) {
@@ -209,7 +209,8 @@ abstract class Zend_Db_Adapter_Abstract
                     break;
                 default:
                     require_once 'Zend/Db/Adapter/Exception.php';
-                    throw new Zend_Db_Adapter_Exception("Case must be one of the following constants: Zend_Db::CASE_NATURAL, Zend_Db::CASE_LOWER, Zend_Db::CASE_UPPER");
+                    throw new Zend_Db_Adapter_Exception('Case must be one of the following constants: '
+                        . 'Zend_Db::CASE_NATURAL, Zend_Db::CASE_LOWER, Zend_Db::CASE_UPPER');
             }
         }
 
@@ -226,6 +227,7 @@ abstract class Zend_Db_Adapter_Abstract
         }
         $this->setProfiler($profiler);
     }
+
     /**
      * Check for config options that are mandatory.
      * Throw exceptions if any are missing.
@@ -272,52 +274,53 @@ abstract class Zend_Db_Adapter_Abstract
 
     /**
      * Set the adapter's profiler object.
-     * The argument may be boolean, string, associative array, an instance of 
+     *
+     * The argument may be a boolean, an associative array, an instance of
      * Zend_Db_Profiler, or an instance of Zend_Config.
      *
-     * A boolean argument sets the profiler to enabled if true, or disabled if 
+     * A boolean argument sets the profiler to enabled if true, or disabled if
      * false.  The profiler class is the adapter's default profiler class,
-     * e.g. Zend_Db_Profiler.
+     * Zend_Db_Profiler.
      *
-     * A string argument names the class to use for a custom profiler, and the 
-     * profiler instance created defaults to disabled.  The profiler must be 
-     * enabled in a separate call to setEnabled().
+     * An instance of Zend_Db_Profiler sets the adapter's instance to that
+     * object.  The profiler is enabled and disabled separately.
      *
-     * An instance of Zend_Db_Profiler sets the adapter's instance to that 
-     * object.  The profiler must be enabled in a separate call to 
-     * setEnabled().
+     * An associative array argument may contain any of the keys 'enabled',
+     * 'class', and 'instance'. The 'enabled' and 'instance' keys correspond to the
+     * boolean and object types documented above. The 'class' key is used to name a
+     * class to use for a custom profiler. The class must be Zend_Db_Profiler or a
+     * subclass. The class is instantiated with no constructor arguments. The 'class'
+     * option is ignored when the 'instance' option is supplied.
      *
-     * An associative array argument may contain any of the keys 'enabled', 
-     * 'class', or 'instance', which correspond to the boolean, string, and 
-     * object types documented above.
+     * An object of type Zend_Config may contain the properties 'enabled', 'class', and
+     * 'instance', just as if an associative array had been passed instead.
      *
-     * An object of type Zend_Config may contain either of the properties 
-     * 'enabled' or 'class', which are treated as the array keys described 
-     * above.  A Zend_Config object cannot contain an object instance.
-     *
-     * @param mixed $profiler
-     * @return void
-     * @throws Zend_Db_Profiler_Exception if the object instance or class specified 
-     * is not Zend_Db_Profiler or an extension of that class.
+     * @param  Zend_Db_Profiler|Zend_Config|array|boolean $profiler
+     * @return Zend_Db_Adapter_Abstract Provides a fluent interface
+     * @throws Zend_Db_Profiler_Exception if the object instance or class specified
+     *         is not Zend_Db_Profiler or an extension of that class.
      */
     public function setProfiler($profiler)
     {
-        $enabled          = false;
+        $enabled          = null;
         $profilerClass    = $this->_defaultProfilerClass;
         $profilerInstance = null;
 
-        if (is_bool($profiler)) {
-            $enabled = $profiler;
+        if ($profilerIsObject = is_object($profiler)) {
+            if ($profiler instanceof Zend_Db_Profiler) {
+                $profilerInstance = $profiler;
+            } else if ($profiler instanceof Zend_Config) {
+                $profiler = $profiler->toArray();
+            } else {
+                /**
+                 * @see Zend_Db_Profiler_Exception
+                 */
+                require_once 'Zend/Db/Profiler/Exception.php';
+                throw new Zend_Db_Profiler_Exception('Profiler argument must be an instance of either Zend_Db_Profiler'
+                    . ' or Zend_Config when provided as an object');
+            }
         }
-        if (is_string($profiler)) {
-            $profilerClass = $profiler;
-        }
-        if ($profiler instanceof Zend_Db_Profiler) {
-            $profilerInstance = $profiler;
-        }
-        if ($profiler instanceof Zend_Config) {
-            $profiler = $profiler->toArray();
-        }
+
         if (is_array($profiler)) {
             if (isset($profiler['enabled'])) {
                 $enabled = (bool) $profiler['enabled'];
@@ -328,18 +331,28 @@ abstract class Zend_Db_Adapter_Abstract
             if (isset($profiler['instance'])) {
                 $profilerInstance = $profiler['instance'];
             }
+        } else if (!$profilerIsObject) {
+            $enabled = (bool) $profiler;
         }
 
         if ($profilerInstance === null) {
             Zend_Loader::loadClass($profilerClass);
             $profilerInstance = new $profilerClass();
         }
+
         if (!$profilerInstance instanceof Zend_Db_Profiler) {
             require_once 'Zend/Db/Profiler/Exception.php';
-            throw new Zend_Db_Profiler_Exception("Class '$profilerClass' does not extend Zend_Db_Profiler");
+            throw new Zend_Db_Profiler_Exception('Class ' . get_class($profilerInstance) . ' does not extend '
+                . 'Zend_Db_Profiler');
         }
-        $profilerInstance->setEnabled($enabled);
+
+        if (null !== $enabled) {
+            $profilerInstance->setEnabled($enabled);
+        }
+
         $this->_profiler = $profilerInstance;
+
+        return $this;
     }
 
 

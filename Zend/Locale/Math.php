@@ -123,11 +123,12 @@ class Zend_Locale_Math
         $convert = localeconv();
         $value = str_replace($convert['thousands_sep'], "",$value);
         $value = str_replace($convert['positive_sign'], "",$value);
+        $value = str_replace($convert['decimal_point'], ".",$value);
         if (!empty($convert['negative_sign']) and (strpos($value, $convert['negative_sign']))) {
             $value = str_replace($convert['negative_sign'], "",$value);
             $value = "-".$value;
         }
-        return $value;
+        return (string) $value;
     }
 }
 
@@ -135,5 +136,3 @@ if ((defined('TESTS_ZEND_LOCALE_BCMATH_ENABLED') && !TESTS_ZEND_LOCALE_BCMATH_EN
     || !extension_loaded('bcmath')) {
     require_once 'Zend/Locale/Math/PhpMath.php';
 }
-
-?>

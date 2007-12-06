@@ -36,9 +36,13 @@ class Zend_Translate {
     const AN_CSV     = 'csv';
     const AN_GETTEXT = 'gettext';
     const AN_QT      = 'qt';
+    const AN_TBX     = 'tbx';
     const AN_TMX     = 'tmx';
     const AN_XLIFF   = 'xliff';
+    const AN_XMLTM   = 'xmltm';
 
+    const LOCALE_DIRECTORY = 1;
+    const LOCALE_FILENAME  = 2;
     /**
      * Adapter
      *
@@ -51,14 +55,15 @@ class Zend_Translate {
      * Generates the standard translation object
      *
      * @param  string              $adapter  Adapter to use
-     * @param  array               $options  Options for this adapter to set
+     * @param  array               $data     Translation source data for the adapter
      *                                       Depends on the Adapter
      * @param  string|Zend_Locale  $locale   OPTIONAL locale to use
+     * @param  array               $options  OPTIONAL options for the adapter
      * @throws Zend_Translate_Exception
      */
-    public function __construct($adapter, $options, $locale = null)
+    public function __construct($adapter, $data, $locale = null, array $options = array())
     {
-        $this->setAdapter($adapter, $options, $locale);
+        $this->setAdapter($adapter, $data, $locale, $options);
     }
 
 
@@ -86,11 +91,17 @@ class Zend_Translate {
             case 'qt':
                 $adapter = 'Zend_Translate_Adapter_Qt';
                 break;
+            case 'tbx':
+                $adapter = 'Zend_Translate_Adapter_Tbx';
+                break;
             case 'tmx':
                 $adapter = 'Zend_Translate_Adapter_Tmx';
                 break;
             case 'xliff':
                 $adapter = 'Zend_Translate_Adapter_Xliff';
+                break;
+            case 'xmltm':
+                $adapter = 'Zend_Translate_Adapter_XmlTm';
                 break;
         }
 
@@ -115,129 +126,13 @@ class Zend_Translate {
 
 
     /**
-     * Add translation data.
-     *
-     * It may be a new language or additional data for existing language
-     * If $clear parameter is true, then translation data for specified
-     * language is replaced and added otherwise
-     *
-     * @param  string|array        $data     Translation data
-     * @param  string|Zend_Locale  $locale   Locale/Language to add to this adapter
-     * @param  array               $options  OPTIONAL Options to use
+     * Calls all methods from the adapter
      */
-    public function addTranslation($data, $locale, array $options = array())
+    public function __call($method, array $options)
     {
-        $this->_adapter->addTranslation($data, $locale, $options);
-    }
-
-
-    /**
-     * Sets a new locale/language
-     *
-     * @param  string|Zend_Locale  $locale  Locale/Language to set for translations
-     */
-    public function setLocale($locale)
-    {
-        $this->_adapter->setLocale($locale);
-    }
-
-
-    /**
-     * Returns the actual set locale/language
-     *
-     * @return Zend_Locale|null
-     */
-    public function getLocale()
-    {
-        return $this->_adapter->getLocale();
-    }
-
-
-    /**
-     * Returns all avaiable locales/languages from this adapter
-     *
-     * @return array
-     */
-    public function getList()
-    {
-        return $this->_adapter->getList();
-    }
-
-
-    /**
-     * Is the wished language avaiable ?
-     *
-     * @param  string|Zend_Locale  $locale  Is the locale/language avaiable
-     * @return boolean
-     */
-    public function isAvailable($locale)
-    {
-        return $this->_adapter->isAvailable($locale);
-    }
-
-
-    /**
-     * Translate the given string
-     *
-     * @param  string              $messageId  Original to translate
-     * @param  string|Zend_Locale  $locale     OPTIONAL locale/language to translate to
-     * @return string
-     */
-    public function _($messageId, $locale = null)
-    {
-        return $this->_adapter->translate($messageId, $locale);
-    }
-
-
-    /**
-     * Translate the given string
-     *
-     * @param  string              $messageId  Original to translate
-     * @param  string|Zend_Locale  $locale     OPTIONAL locale/language to translate to
-     * @return string
-     */
-    public function translate($messageId, $locale = null)
-    {
-        return $this->_adapter->translate($messageId, $locale);
-    }
-
-
-    /**
-     * Checks if a given string can be translated
-     * returns boolean
-     *
-     * @param  string              $messageId  Translation string
-     * @param  boolean             $original   OPTIONAL Allow translation only for original language
-     *                                         when true, a translation for 'en_US' would give false when it can
-     *                                         be translated with 'en' only
-     * @param  string|Zend_Locale  $locale     OPTIONAL Locale/Language to use, identical with locale identifier,
-     *                                         see Zend_Locale for more information
-     * @return boolean
-     */
-    public function isTranslated($messageId, $original = false, $locale = null)
-    {
-        return $this->_adapter->isTranslated($messageId, $original, $locale);
-    }
-
-
-    /**
-     * Returns all actual known message ids as array
-     *
-     * @return array
-     */
-    public function getMessageIds()
-    {
-        return $this->_adapter->getMessageIds();
-    }
-
-
-    /**
-     * Returns all known messages with  ids
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_adapter->getMessages();
+        if (method_exists($this->_adapter, $method)) {
+            return call_user_func_array(array($this->_adapter, $method), $options);
+        }
+        throw new Zend_Translate_Exception("Unknown method '" . $method . "' called!");
     }
 }

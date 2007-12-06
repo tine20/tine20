@@ -238,7 +238,9 @@ class Zend_Json_Server extends Zend_Server_Abstract implements Zend_Server_Inter
 			$error['code'] = $code;
 		}
 		
-		if (!headers_sent()) {
+$file = '';
+$line = '';
+		if (!headers_sent($file, $line)) {
 			header("Content-Type: application/json");
 			if (is_null($code)) {
 				header("HTTP/1.0 400 Bad Request");
@@ -250,6 +252,9 @@ class Zend_Json_Server extends Zend_Server_Abstract implements Zend_Server_Inter
 				}
 			}
 		}
+else {
+$error['msg'] = "headers allready sent.In $file line $line";
+}
 		$json = Zend_Json::encode($error);
 		
 		

@@ -259,7 +259,9 @@ abstract class Zend_Controller_Action
     {
         if (!$this->getInvokeArg('noViewRenderer') && $this->_helper->hasHelper('viewRenderer')) {
             $viewRenderer = $this->_helper->getHelper('viewRenderer');
-            $viewRenderer->setNoController($noController);
+            if (null !== $noController) {
+                $viewRenderer->setNoController($noController);
+            }
             return $viewRenderer->getViewScript($action);
         }
 

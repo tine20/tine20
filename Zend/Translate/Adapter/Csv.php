@@ -49,8 +49,6 @@ class Zend_Translate_Adapter_Csv extends Zend_Translate_Adapter {
     public function __construct($data, $locale = null, array $options = array())
     {
         $this->_options['separator'] = ";";
-        $options = array_merge($this->_options, $options);
-
         parent::__construct($data, $locale, $options);
     }
 

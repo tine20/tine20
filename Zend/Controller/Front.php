@@ -153,6 +153,15 @@ class Zend_Controller_Front
     }
 
     /**
+     * Enforce singleton; disallow cloning 
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+    }
+
+    /**
      * Singleton instance
      *
      * @return Zend_Controller_Front

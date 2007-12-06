@@ -38,7 +38,7 @@ require_once 'Zend/Locale/Math.php';
  */
 class Zend_Date extends Zend_Date_DateObject {
 
-    private $_Locale  = null;
+    private   $_Locale  = null;
 
     // Fractional second variables
     private $_Fractional = 0;
@@ -60,10 +60,10 @@ class Zend_Date extends Zend_Date_DateObject {
     const DAY_OF_YEAR    = 'DAY_OF_YEAR';    // z - Number of day of year
 
     const WEEKDAY        = 'WEEKDAY';        // l - full day name - locale aware, Monday - Sunday
-    const WEEKDAY_SHORT  = 'WEEKDAY_SHORT';  // D - 3 letter day of week - locale aware, Mon-Sun
+    const WEEKDAY_SHORT  = 'WEEKDAY_SHORT';  // --- 3 letter day of week - locale aware, Mon-Sun
     const WEEKDAY_NARROW = 'WEEKDAY_NARROW'; // --- 1 letter day name - locale aware, M-S
-    const WEEKDAY_NAME   = 'WEEKDAY_NAME';   // --- 2 letter day name - locale aware,Mo-Su
-
+    const WEEKDAY_NAME   = 'WEEKDAY_NAME';   // D - abbreviated day name, 1-3 letters - locale aware, Mon-Sun
+    
     const WEEKDAY_8601   = 'WEEKDAY_8601';   // N - digit weekday ISO 8601, 1-7 1 = monday, 7=sunday
     const WEEKDAY_DIGIT  = 'WEEKDAY_DIGIT';  // w - weekday, 0-6 0=sunday, 6=saturday
 
@@ -173,9 +173,7 @@ class Zend_Date extends Zend_Date_DateObject {
 
         // set the timezone and offset for $this
         $zone = @date_default_timezone_get();
-        if ($zone !== 'UTC') {
-            $this->setTimezone($zone);
-        }
+        $this->setTimezone($zone);
 
         if (is_string($date) && defined("self::".$date)) {
             $part = $date;
@@ -198,8 +196,18 @@ class Zend_Date extends Zend_Date_DateObject {
 
         // set datepart
         if (($part !== null && $part !== Zend_Date::TIMESTAMP) or (!is_numeric($date))) {
-            $this->setUnixTimestamp(0);
+            // switch off dst handling for value setting
+            $this->setUnixTimestamp($this->getGmtOffset());
             $this->set($date, $part, $this->_Locale);
+
+            // DST fix 
+            if (is_array($date) and array_key_exists('hour', $date)) {
+                $hour = $this->toString('H');
+                $hour = $date['hour'] - $hour;
+                if ($hour !== 0) {
+                    $this->addTimestamp($hour * 3600);
+                }
+            }
         } else {
             $this->setUnixTimestamp($date);
         }
@@ -221,7 +229,7 @@ class Zend_Date extends Zend_Date_DateObject {
         foreach ($options as $name => $value) {
             $name  = strtolower($name);
 
-            if (isset(self::$_Options[$name])) {
+            if (array_key_exists($name, self::$_Options)) {
                 switch($name) {
                     case 'format_type' :
                         if ((strtolower($value) != 'php') && (strtolower($value) != 'iso')) {
@@ -239,6 +247,10 @@ class Zend_Date extends Zend_Date_DateObject {
                         }
                         break;
                     case 'cache' :
+                        if (!$value instanceof Zend_Cache_Core) {
+                            throw new Zend_Date_Exception("Instance of Zend_Cache expected");
+                        }
+                        parent::$_cache = $value;
                         Zend_Locale_Data::setCache($value);
                         break;
                 }
@@ -1101,6 +1113,10 @@ class Zend_Date extends Zend_Date_DateObject {
     /**
      * Return digit from standard names (english)
      * Faster implementation than locale aware searching
+     *
+     * @param  string  $name
+     * @return integer  Number of this month
+     * @throws Zend_Date_Exception
      */
     private function getDigitFromName($name)
     {
@@ -1144,6 +1160,26 @@ class Zend_Date extends Zend_Date_DateObject {
             default:
                 throw new Zend_Date_Exception('Month ($name) is not a known month');
         }
+    }
+
+
+    /**
+     * Counts the exact year number
+     * < 70 - 2000 added, >70 < 100 - 1900, others just returned
+     *
+     * @param  integer  $value year number
+     * @return integer  Number of year
+     */
+    private function _century($value)
+    {
+        if ($value >= 0) {
+            if ($value < 70) {
+                $value += 2000;
+            } else if ($value < 100) {
+                $value += 1900;
+            }
+        }
+        return $value;
     }
 
 
@@ -1294,8 +1330,8 @@ class Zend_Date extends Zend_Date_DateObject {
                 break;
         }
 
-        // dst-correction if 'fix_dst' = true and dst !== false
-        if ((self::$_Options['fix_dst'] === true) and ($dst !== false)) {
+        // dst-correction if 'fix_dst' = true and dst !== false but only for non UTC and non GMT
+        if ((self::$_Options['fix_dst'] === true) and ($dst !== false) and ($this->_dst === true)) {
             $hour = $this->get(Zend_Date::HOUR);
             if ($hour != $dst) {
                 if (($dst == ($hour + 1)) or ($dst == ($hour - 23))) {
@@ -1860,11 +1896,8 @@ class Zend_Date extends Zend_Date_DateObject {
             case Zend_Date::YEAR_SHORT :
                 if (is_numeric($date)) {
                     $date = intval($date);
-                    if (($date >= 0) and ($date <= 100) and ($calc == 'set')) {
-                        $date += 1900;
-                        if ($date < 1970) {
-                            $date += 100;
-                        }
+                    if ($calc == 'set') {
+                        $date = self::_century($date);
                     }
                     if ($calc == 'add') {
                         $date += $year;
@@ -1883,11 +1916,8 @@ class Zend_Date extends Zend_Date_DateObject {
             case Zend_Date::YEAR_SHORT_8601 :
                 if (is_numeric($date)) {
                     $date = intval($date);
-                    if (($date >= 0) and ($date <= 100) and ($calc == 'set')) {
-                        $date += 1900;
-                        if ($date < 1970) {
-                            $date += 100;
-                        }
+                    if ($calc == 'set') {
+                        $date = self::_century($date);
                     }
                     if ($calc == 'add') {
                         $date += $year;
@@ -2025,149 +2055,74 @@ class Zend_Date extends Zend_Date_DateObject {
 
             // date strings
             case Zend_Date::ISO_8601 :
-
-                $next = 0;
-                if (preg_match('/-\d{4}-\d{2}-\d{2}/', $date, $datematch)) {
-                    // -yyyy-mm-dd
-                    $minus = true;
-                    $result = array('Y' => 1, 'M' => 6, 'd' => 9);
-                    $next = 11;
-                } else if (preg_match('/\d{4}-\d{2}-\d{2}/', $date, $datematch)) {
-                    // yyyy-mm-dd
-                    $result = array('Y' => 0, 'M' => 5, 'd' => 8);
-                    $next = 10;
-                } else if (preg_match('/-\d{2}-\d{2}-\d{2}/', $date, $datematch)) {
-                    // -yy-mm-dd
-                    $minus = true;
-                    $result = array('y' => 1, 'M' => 4, 'd' => 7);
-                    $next = 9;
-                } else if (preg_match('/\d{2}-\d{2}-\d{2}/', $date, $datematch)) {
-                    // yy-mm-dd
-                    $result = array('y' => 0, 'M' => 3, 'd' => 6);
-                    $next = 8;
-                } else if (preg_match('/-\d{8}/', $date, $datematch)) {
-                    // -yyyymmdd
-                    $minus = true;
-                    $result = array('Y' => 1, 'M' => 5, 'd' => 7);
-                    $next = 9;
-                } else if (preg_match('/\d{8}/', $date, $datematch)) {
-                    // yyyymmdd
-                    $result = array('Y' => 0, 'M' => 4, 'd' => 6);
-                    $next = 8;
-                } else if (preg_match('/-\d{6}/', $date, $datematch)) {
-                    // -yymmdd
-                    $minus = true;
-                    $result = array('y' => 1, 'M' => 3, 'd' => 5);
-                    $next = 7;
-                } else if (preg_match('/\d{6}/', $date, $datematch)) {
-                    // yymmdd
-                    $result = array('y' => 0, 'M' => 2, 'd' => 4);
-                    $next = 6;
+                // (-)YYYY-MM-dd
+                preg_match('/^(-{0,1}\d{4})-(\d{2})-(\d{2})/', $date, $datematch);
+                // (-)YY-MM-dd
+                if (empty($datematch)) {
+                    preg_match('/^(-{0,1}\d{2})-(\d{2})-(\d{2})/', $date, $datematch);
                 }
-                if (strlen($date) > $next) {
-                    $date = substr($date, $next);
-                    // Thh:mm:ss
-                    if (preg_match('/[T,\s]{1}\d{2}:\d{2}:\d{2}/', $date, $timematch)) {
-                        // Thh:mm:ss | _hh:mm:ss
-                        $result['h'] = 1;
-                        $result['m'] = 4;
-                        $result['s'] = 7;
-                        $next += 9;
-                    } else if (preg_match('/\d{2}:\d{2}:\d{2}/', $date, $timematch)) {
-                        // hh:mm:ss
-                        $result['h'] = 0;
-                        $result['m'] = 3;
-                        $result['s'] = 6;
-                        $next += 8;
-                    } else if (preg_match('/[T,\s]{1}\d{2}\d{2}\d{2}/', $date, $timematch)) {
-                        // Thhmmss | _hhmmss
-                        $result['h'] = 1;
-                        $result['m'] = 3;
-                        $result['s'] = 5;
-                        $next += 7;
-                    } else if (preg_match('/\d{2}\d{2}\d{2}/', $date, $timematch)) {
-                        // hhmmss | hhmmss
-                        $result['h'] = 0;
-                        $result['m'] = 2;
-                        $result['s'] = 4;
-                        $next += 6;
-                    }
+                // (-)YYYYMMdd
+                if (empty($datematch)) {
+                    preg_match('/^(-{0,1}\d{4})(\d{2})(\d{2})/', $date, $datematch);
                 }
-
-                if (!isset($result)) {
+                // (-)YYMMdd
+                if (empty($datematch)) {
+                    preg_match('/^(-{0,1}\d{2})(\d{2})(\d{2})/', $date, $datematch);
+                }
+                if (!empty($datematch)) {
+                    $date = substr($date, strlen($datematch[0]));
+                }
+                // (T)hh:mm:ss
+                preg_match('/[T,\s]{0,1}(\d{2}):(\d{2}):(\d{2}).{0,21}$/', $date, $timematch);
+                if (empty($timematch)) {
+                    preg_match('/[T,\s]{0,1}(\d{2})(\d{2})(\d{2}).{0,21}$/', $date, $timematch);
+                }
+                if (empty($datematch) and empty($timematch)) {
                     throw new Zend_Date_Exception("unsupported ISO8601 format ($date)", $date);
                 }
-
-                if(isset($result['M'])) {
-                    if (isset($result['Y'])) {
-                        $years = substr($datematch[0], $result['Y'], 4);
-                        if (isset($minus)) {
-                            $years = 0 - $years;
-                        }
-                    } else {
-                        $years = substr($datematch[0], $result['y'], 2);
-                        if (isset($minus)) {
-                            $years = 0 - $years;
-                        }
-                        if ($years >= 0) {
-                            $years += 1900;
-                            if ($years < 1970)
-                                $years += 100;
-                        }
-                    }
-                    $months  = substr($datematch[0], $result['M'], 2);
-                    $days    = substr($datematch[0], $result['d'], 2);
-                } else {
-                    $years  = 1970;
-                    $months = 1;
-                    $days   = 1;
+                if (empty($datematch)) {
+                    $datematch[1] = 1970;
+                    $datematch[2] = 1;
+                    $datematch[3] = 1;
+                } else if (strlen($datematch[1]) == 2) {
+                    $datematch[1] = self::_century($datematch[1]);
                 }
-                if (isset($result['h'])) {
-                    $hours   = substr($timematch[0], $result['h'], 2);
-                    $minutes = substr($timematch[0], $result['m'], 2);
-                    $seconds = substr($timematch[0], $result['s'], 2);
-                } else {
-                    $hours   = 0;
-                    $minutes = 0;
-                    $seconds = 0;
+                if (empty($timematch)) {
+                    $timematch[1] = 0;
+                    $timematch[2] = 0;
+                    $timematch[3] = 0;
                 }
 
                 if ($calc == 'set') {
-                    --$months;
+                    --$datematch[2];
                     --$month;
-                    --$days;
+                    --$datematch[3];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $datematch[1] -= 1970;
+                    $year         -= 1970;
                 }
-
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, false),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  false), false);
+                return $this->_assign($calc, $this->mktime($timematch[1], $timematch[2], $timematch[3], 1 + $datematch[2], 1 + $datematch[3], 1970 + $datematch[1], false),
+                                             $this->mktime($hour,         $minute,       $second,       1 + $month,        1 + $day,          1970 + $year,         false), false);
                 break;
 
             case Zend_Date::RFC_2822 :
-                $result = preg_match('/\w{3},\s\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s\+\d{4}/', $date, $match);
+                $result = preg_match('/^\w{3},\s(\d{2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):(\d{2})\s\+\d{4}$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("no RFC 2822 format ($date)", $date);
                 }
 
-                $days    = substr($match[0], 5, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 8, 3));
-                $years   = substr($match[0], 12, 4);
-                $hours   = substr($match[0], 17, 2);
-                $minutes = substr($match[0], 20, 2);
-                $seconds = substr($match[0], 23, 2);
+                $months  = $this->getDigitFromName($match[2]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[3] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, false),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  false), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], false),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     false), false);
                 break;
 
             case Zend_Date::TIMESTAMP :
@@ -2269,12 +2224,7 @@ class Zend_Date extends Zend_Date_DateObject {
                     $format = Zend_Locale_Data::getContent($locale, 'dateformat', array('gregorian', 'short'));
                     $parsed = Zend_Locale_Format::getDate($date, array('date_format' => $format['pattern'], 'format_type' => 'iso', 'locale' => $locale));
 
-                    if ($parsed['year'] < 100) {
-                        $parsed['year'] += 1900;
-                        if ($parsed['year'] < 1970) {
-                            $parsed['year'] += 100;
-                        }
-                    }
+                    $parsed['year'] = self::_century($parsed['year']);
 
                     if ($calc == 'set') {
                         --$parsed['month'];
@@ -2373,215 +2323,166 @@ class Zend_Date extends Zend_Date_DateObject {
             // ATOM and RFC_3339 are identical
             case Zend_Date::ATOM :
             case Zend_Date::RFC_3339:
-                $result = preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]{1}\d{2}:\d{2}$/', $date, $match);
+                $result = preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\d{0,4}([+-]{1}\d{2}:\d{2}|Z)$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, ATOM format expected", $date);
                 }
 
-                $years   = substr($match[0], 0, 4);
-                $months  = substr($match[0], 5, 2);
-                $days    = substr($match[0], 8, 2);
-                $hours   = substr($match[0], 11, 2);
-                $minutes = substr($match[0], 14, 2);
-                $seconds = substr($match[0], 17, 2);
-
                 if ($calc == 'set') {
-                    --$months;
+                    --$match[2];
                     --$month;
-                    --$days;
+                    --$match[3];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[1] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $match[2], 1 + $match[3], 1970 + $match[1], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,    1 + $day,      1970 + $year,     true), false);
                 break;
 
             case Zend_Date::COOKIE :
-                $result = preg_match('/\w{6,9},\s\d{2}-\w{3}-\d{2}\s\d{2}:\d{2}:\d{2}\s\w{3}/', $date, $match);
+                $result = preg_match("/^\w{6,9},\s(\d{2})-(\w{3})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\s.{3,20}$/", $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, COOKIE format expected", $date);
                 }
                 $match[0] = substr($match[0], strpos($match[0], ' ')+1);
 
-                $days    = substr($match[0], 0, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 3, 3));
-                $years   = substr($match[0], 7, 4);
-                $years  += 2000;
-                $hours   = substr($match[0], 10, 2);
-                $minutes = substr($match[0], 13, 2);
-                $seconds = substr($match[0], 16, 2);
+                $months    = $this->getDigitFromName($match[2]);
+                $match[3] = self::_century($match[3]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[3] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     true), false);
                 break;
 
             case Zend_Date::RFC_822 :
                 // new RFC 822 format
-                $result = preg_match('/^\w{3},\s\d{2}\s\w{3}\s\d{2}\s\d{2}:\d{2}:\d{2}\s[+-]{1}\d{4}$/', $date, $match);
-                if (!$result) {
-                    // old RFC 822 format
-                    $result = preg_match('/\w{3},\s\d{2}\s\w{3}\s\d{2}\s\d{2}:\d{2}:\d{2}\s\w{1,3}/', $date, $match);
-                }
+                $result = preg_match('/^\w{3},\s(\d{2})\s(\w{3})\s(\d{2})\s(\d{2}):(\d{2}):(\d{2})\s([+-]{1}\d{4}|\w{1,20})$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, RFC 822 date format expected", $date);
                 }
 
-                $days    = substr($match[0], 5, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 8, 3));
-                $years   = substr($match[0], 12, 4);
-                $years  += 2000;
-                $hours   = substr($match[0], 15, 2);
-                $minutes = substr($match[0], 18, 2);
-                $seconds = substr($match[0], 21, 2);
+                $months    = $this->getDigitFromName($match[2]);
+                $match[3] = self::_century($match[3]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[3] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, false),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  false), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], false),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     false), false);
                 break;
 
             case Zend_Date::RFC_850 :
-                $result = preg_match('/\w{6,9},\s\d{2}-\w{3}-\d{2}\s\d{2}:\d{2}:\d{2}\s\w{3}/', $date, $match);
+                $result = preg_match('/^\w{6,9},\s(\d{2})-(\w{3})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\s.{3,21}$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, RFC 850 date format expected", $date);
                 }
 
-                $match[0] = substr($match[0], strpos($match[0], ' ')+1);
-
-                $days    = substr($match[0], 0, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 3, 3));
-                $years   = substr($match[0], 7, 4);
-                $years  += 2000;
-                $hours   = substr($match[0], 10, 2);
-                $minutes = substr($match[0], 13, 2);
-                $seconds = substr($match[0], 16, 2);
+                $months    = $this->getDigitFromName($match[2]);
+                $match[3] = self::_century($match[3]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[3] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     true), false);
                 break;
 
             case Zend_Date::RFC_1036 :
-                $result = preg_match('/^\w{3},\s\d{2}\s\w{3}\s\d{2}\s\d{2}:\d{2}:\d{2}\s[+-]{1}\d{4}$/', $date, $match);
+                $result = preg_match('/^\w{3},\s(\d{2})\s(\w{3})\s(\d{2})\s(\d{2}):(\d{2}):(\d{2})\s[+-]{1}\d{4}$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, RFC 1036 date format expected", $date);
                 }
 
-                $days    = substr($match[0], 5, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 8, 3));
-                $years   = substr($match[0], 12, 4);
-                $years  += 2000;
-                $hours   = substr($match[0], 15, 2);
-                $minutes = substr($match[0], 18, 2);
-                $seconds = substr($match[0], 21, 2);
+                $months    = $this->getDigitFromName($match[2]);
+                $match[3] = self::_century($match[3]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[3] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     true), false);
                 break;
 
             case Zend_Date::RFC_1123 :
-                $result = preg_match('/^\w{3},\s\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s[+-]{1}\d{4}$/', $date, $match);
+                $result = preg_match('/^\w{3},\s(\d{2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):(\d{2})\s[+-]{1}\d{4}$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, RFC 1123 date format expected", $date);
                 }
 
-                $days    = substr($match[0], 5, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 8, 3));
-                $years   = substr($match[0], 12, 4);
-                $hours   = substr($match[0], 17, 2);
-                $minutes = substr($match[0], 20, 2);
-                $seconds = substr($match[0], 23, 2);
+                $months  = $this->getDigitFromName($match[2]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[3] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     true), false);
                 break;
 
             case Zend_Date::RSS :
-                $result = preg_match('/^\w{3},\s\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s[+-]{1}\d{4}$/', $date, $match);
+                $result = preg_match('/^\w{3},\s(\d{2})\s(\w{3})\s(\d{2,4})\s(\d{1,2}):(\d{2}):(\d{2})\s.{1,21}$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, RSS date format expected", $date);
                 }
 
-                $days    = substr($match[0], 5, 2);
-                $months  = $this->getDigitFromName(substr($match[0], 8, 3));
-                $years   = substr($match[0], 12, 4);
-                $hours   = substr($match[0], 17, 2);
-                $minutes = substr($match[0], 20, 2);
-                $seconds = substr($match[0], 23, 2);
+                $months  = $this->getDigitFromName($match[2]);
+                $match[3] = self::_century($match[3]);
 
                 if ($calc == 'set') {
                     --$months;
                     --$month;
-                    --$days;
+                    --$match[1];
                     --$day;
-                    $years -= 1970;
+                    $match[3] -= 1970;
                     $year  -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $months, 1 + $match[1], 1970 + $match[3], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,  1 + $day,      1970 + $year,     true), false);
                 break;
 
             case Zend_Date::W3C :
-                $result = preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]{1}\d{2}:\d{2}$/', $date, $match);
+                $result = preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})[+-]{1}\d{2}:\d{2}$/', $date, $match);
                 if (!$result) {
                     throw new Zend_Date_Exception("invalid date ($date) operand, W3C date format expected", $date);
                 }
 
-                $years   = substr($match[0], 0, 4);
-                $months  = substr($match[0], 5, 2);
-                $days    = substr($match[0], 8, 2);
-                $hours   = substr($match[0], 11, 2);
-                $minutes = substr($match[0], 14, 2);
-                $seconds = substr($match[0], 17, 2);
-
                 if ($calc == 'set') {
-                    --$months;
+                    --$match[2];
                     --$month;
-                    --$days;
+                    --$match[3];
                     --$day;
-                    $years -= 1970;
-                    $year  -= 1970;
+                    $match[1] -= 1970;
+                    $year     -= 1970;
                 }
-                return $this->_assign($calc, $this->mktime($hours, $minutes, $seconds, 1 + $months, 1 + $days, 1970 + $years, true),
-                                             $this->mktime($hour,  $minute,  $second,  1 + $month,  1 + $day,  1970 + $year,  true), false);
+                return $this->_assign($calc, $this->mktime($match[4], $match[5], $match[6], 1 + $match[2], 1 + $match[3], 1970 + $match[1], true),
+                                             $this->mktime($hour,     $minute,   $second,   1 + $month,    1 + $day,      1970 + $year,     true), false);
                 break;
 
             default :

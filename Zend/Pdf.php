@@ -630,10 +630,6 @@ class Zend_Pdf
                         break;
                 }
             }
-            $docPages->Type  = new Zend_Pdf_Element_Name('Pages');
-            $docPages->Kids  = new Zend_Pdf_Element_Array();
-            $docPages->Count = new Zend_Pdf_Element_Numeric(0);
-            $docCatalog->Pages = $docPages;
 
             $this->_trailer->Info = $docInfo;
         }

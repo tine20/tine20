@@ -48,6 +48,6 @@ class Zend_Locale_Math_Exception extends Zend_Exception
 
     public function getResults()
     {
-        return array($this->op1 = $op1, $this->op2 = $op2, $this->result = $result);
+        return array($this->op1, $this->op2, $this->result);
     }
 }

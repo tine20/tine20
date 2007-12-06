@@ -307,7 +307,8 @@ class Zend_Rest_Server extends Zend_Server_Abstract implements Zend_Server_Inter
                 $element = $dom->createElement($key);
                 $this->_structValue($value, $dom, $element);
             } else {
-                $element = $dom->createElement($key, $value);
+                $element = $dom->createElement($key);
+                $element->appendChild($dom->createTextNode($value));
             }
 
             $parent->appendChild($element);
@@ -351,7 +352,9 @@ class Zend_Rest_Server extends Zend_Server_Abstract implements Zend_Server_Inter
         }
 
         if (isset($value)) {
-            $methodNode->appendChild($dom->createElement('response', $value));
+            $element = $dom->createElement('response');
+            $element->appendChild($dom->createTextNode($value));
+            $methodNode->appendChild($element);
         } else {
             $methodNode->appendChild($dom->createElement('response'));
         }
@@ -409,7 +412,9 @@ class Zend_Rest_Server extends Zend_Server_Abstract implements Zend_Server_Inter
         $xmlMethod->appendChild($xmlResponse);
 
         if ($exception instanceof Exception) {
-            $xmlResponse->appendChild($dom->createElement('message', $exception->getMessage()));
+            $element = $dom->createElement('message');
+            $element->appendChild($dom->createTextNode($exception->getMessage()));
+            $xmlResponse->appendChild($element);
             $code = $exception->getCode();
         } elseif (!is_null($exception) || 'rest' == $function) {
             $xmlResponse->appendChild($dom->createElement('message', 'An unknown error occured. Please try again.'));

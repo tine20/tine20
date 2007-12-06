@@ -162,6 +162,10 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
             return false;
         }
 
+        if (class_exists($className)) {
+            return true;
+        }
+
         $fileSpec    = $this->classToFilename($className);
         $dispatchDir = $this->getDispatchDirectory();
         $test        = $dispatchDir . DIRECTORY_SEPARATOR . $fileSpec;
@@ -271,8 +275,15 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
      */
     public function loadClass($className)
     {
-        $dispatchDir = $this->getDispatchDirectory();
+        $finalClass  = $className;
+        if ($this->_defaultModule != $this->_curModule) {
+            $finalClass = $this->formatModuleName($this->_curModule) . '_' . $className;
+        }
+        if (class_exists($finalClass)) {
+            return $finalClass;
+        }
 
+        $dispatchDir = $this->getDispatchDirectory();
         $loadFile    = $dispatchDir . DIRECTORY_SEPARATOR . $this->classToFilename($className);
         $dir         = dirname($loadFile);
         $file        = basename($loadFile);
@@ -284,16 +295,12 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
             throw new Zend_Controller_Dispatcher_Exception('Cannot load controller class "' . $className . '" from file "' . $file . '" in directory "' . $dir . '"');
         }
 
-        if ($this->_defaultModule != $this->_curModule) {
-            $className = $this->formatModuleName($this->_curModule) . '_' . $className;
-        }
-
-        if (!class_exists($className)) {
+        if (!class_exists($finalClass)) {
             require_once 'Zend/Controller/Dispatcher/Exception.php';
-            throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $className . '")');
+            throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $finalClass . '")');
         }
 
-        return $className;
+        return $finalClass;
     }
 
     /**
@@ -369,12 +376,20 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
         $this->_curModule    = $this->_defaultModule;
         $this->_curDirectory = $controllerDirs[$this->_defaultModule];
         if ($this->isValidModule($module)) {
-            $moduleDir = $controllerDirs[$module];
-            $fileSpec  = $moduleDir . DIRECTORY_SEPARATOR . $this->classToFilename($default);
-            if (Zend_Loader::isReadable($fileSpec)) {
+            $found = false;
+            if (class_exists($default)) {
+                $found = true;
+            } else {
+                $moduleDir = $controllerDirs[$module];
+                $fileSpec  = $moduleDir . DIRECTORY_SEPARATOR . $this->classToFilename($default);
+                if (Zend_Loader::isReadable($fileSpec)) {
+                    $found = true;
+                    $this->_curDirectory = $moduleDir;
+                }
+            }
+            if ($found) {
                 $request->setModuleName($module);
                 $this->_curModule    = $this->formatModuleName($module);
-                $this->_curDirectory = $moduleDir;
             }
         } else {
             $request->setModuleName($this->_defaultModule);

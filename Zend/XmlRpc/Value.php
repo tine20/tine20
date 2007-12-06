@@ -224,6 +224,18 @@ abstract class Zend_XmlRpc_Value
 
 
     /**
+     * Callback used when determining if an array is associative
+     * 
+     * @param  int|string $a 
+     * @param  int|string $b 
+     * @return int
+     */
+    protected static function _isAssocCallback($a, $b)
+    {
+        return $a === $b ? $a + 1 : 0;
+    }
+
+    /**
      * Transform a PHP native variable into a XML-RPC native value
      *
      * @param mixed $value The PHP variable for convertion
@@ -240,19 +252,16 @@ abstract class Zend_XmlRpc_Value
                 // Break intentionally omitted
             case 'array':
                 // Default native type for a PHP array (a simple numeric array) is 'array'
-                // If the PHP array is an assosiative array the native type will be 'struct'
                 $obj = 'Zend_XmlRpc_Value_Array';
 
-                // Go over the elements in the array, if the key is different than the index
-                //  it means this array has associative keys and it's a struct
+                // Determine if this is an associative array
                 if (is_array($value)) { // If the value is not array, it can't be an associated array
-                    $i = 0;
-                    foreach ($value as $key => $element) {
-                        if ($i !== $key) {
-                            $obj = 'Zend_XmlRpc_Value_Struct';
-                            break;
-                        }
-                        ++$i;
+                    if (count($value) 
+                        && (count($value) !== array_reduce(array_keys($value), array(__CLASS__, '_isAssocCallback'), 0))) 
+                    {
+                        // If the PHP array is an assosiative array the native 
+                        // type will be 'struct'
+                        $obj = 'Zend_XmlRpc_Value_Struct';
                     }
                 }
                 return new $obj($value);
@@ -327,13 +336,25 @@ abstract class Zend_XmlRpc_Value
                 // If the XML is valid, $value must be an SimpleXML element and contain the <data> tag
                 if (!$value instanceof SimpleXMLElement) {
                     throw new Zend_XmlRpc_Value_Exception('XML string is invalid for XML-RPC native '. self::XMLRPC_TYPE_ARRAY .' type');
-                } elseif (empty($value->data)) {
+                } 
+
+                // PHP 5.2.4 introduced a regression in how empty($xml->value) 
+                // returns; need to look for the item specifically
+                $data = null;
+                foreach ($value->children() as $key => $value) {
+                    if ('data' == $key) {
+                        $data = $value;
+                        break;
+                    }
+                }
+                
+                if (null === $data) {
                     throw new Zend_XmlRpc_Value_Exception('Invalid XML for XML-RPC native '. self::XMLRPC_TYPE_ARRAY .' type: ARRAY tag must contain DATA tag');
                 }
                 $values = array();
                 // Parse all the elements of the array from the XML string
                 // (simple xml element) to Zend_XmlRpc_Value objects
-                foreach ($value->data->value as $element) {
+                foreach ($data->value as $element) {
                     $values[] = self::_xmlStringToNativeXmlRpc($element);
                 }
                 $xmlrpc_val = new Zend_XmlRpc_Value_Array($values);

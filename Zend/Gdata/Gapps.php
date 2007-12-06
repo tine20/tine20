@@ -192,15 +192,18 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      * @param mixed $data The Zend_Gdata_App_Entry or XML to post
      * @param string $uri (optional) POST URI
      * @param integer $remainingRedirects (optional)
+     * @param string $contentType Content-type of the data
+     * @param array $extraHaders Extra headers to add tot he request
      * @return Zend_Http_Response
      * @throws Zend_Gdata_App_HttpException
      * @throws Zend_Gdata_App_InvalidArgumentException
      * @throws Zend_Gdata_Gapps_ServiceException
      */
-    public function post($data, $uri = null, $remainingRedirects = null)
+    public function post($data, $uri = null, $remainingRedirects = null, 
+            $contentType = null, $extraHeaders = null)
     {
         try {
-            return parent::post($data, $uri, $remainingRedirects);
+            return parent::post($data, $uri, $remainingRedirects, $contentType, $extraHeaders);
         } catch (Zend_Gdata_App_HttpException $e) {
             self::throwServiceExceptionIfDetected($e);
         }
@@ -214,15 +217,18 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      * @param mixed $data The Zend_Gdata_App_Entry or XML to post
      * @param string $uri (optional) PUT URI
      * @param integer $remainingRedirects (optional)
+     * @param string $contentType Content-type of the data
+     * @param array $extraHaders Extra headers to add tot he request
      * @return Zend_Http_Response
      * @throws Zend_Gdata_App_HttpException
      * @throws Zend_Gdata_App_InvalidArgumentException
      * @throws Zend_Gdata_Gapps_ServiceException
      */
-    public function put($data, $uri = null, $remainingRedirects = null)
+    public function put($data, $uri = null, $remainingRedirects = null, 
+            $contentType = null, $extraHeaders = null)
     {
         try {
-            return parent::put($data, $uri, $remainingRedirects);
+            return parent::put($data, $uri, $remainingRedirects, $contentType, $extraHeaders);
         } catch (Zend_Gdata_App_HttpException $e) {
             self::throwServiceExceptionIfDetected($e);
         }

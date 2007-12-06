@@ -12,8 +12,9 @@
  * through the world-wide-web, please send a note to license@zend.com
  * so we can mail you a copy immediately.
  *
+ * @category   Zend
  * @package    Zend_View
- * @subpackage Helpers
+ * @subpackage Helper
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @version    $Id$
  * @license    http://framework.zend.com/license/new-bsd     New BSD License

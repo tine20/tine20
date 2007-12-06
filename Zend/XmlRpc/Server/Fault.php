@@ -75,9 +75,12 @@ class Zend_XmlRpc_Server_Fault extends Zend_XmlRpc_Fault
         $message          = 'Unknown error';
         $exceptionClass   = get_class($e);
 
-        if (isset(self::$_faultExceptionClasses[$exceptionClass])) {
-            $code    = $e->getCode();
-            $message = $e->getMessage();
+        foreach (array_keys(self::$_faultExceptionClasses) as $class) {
+            if ($e instanceof $class) {
+                $code    = $e->getCode();
+                $message = $e->getMessage();
+                break;
+            }
         }
 
         parent::__construct($code, $message);

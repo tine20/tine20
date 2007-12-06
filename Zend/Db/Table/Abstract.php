@@ -995,7 +995,7 @@ abstract class Zend_Db_Table_Abstract
 
     /**
      * Fetches one row in an object of type Zend_Db_Table_Row_Abstract,
-     * or returns Boolean false if no row matches the specified criteria.
+     * or returns null if no row matches the specified criteria.
      *
      * @param string|array $where         OPTIONAL An SQL WHERE clause.
      * @param string|array $order         OPTIONAL An SQL ORDER clause.

@@ -82,6 +82,11 @@ class Zend_XmlRpc_Request
      */
     protected $_fault = null;
 
+    /**
+     * XML-RPC request params
+     * @var array
+     */
+    protected $_xmlRpcParams = array();
 
     /**
      * Create a new XML-RPC request
