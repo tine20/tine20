@@ -266,4 +266,10 @@ class Egwbase_Controller
         
         Zend_Session::destroy();
     }
+    
+    public static function getAccountsBackend() 
+    {
+        return Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+    }
+    
 }
