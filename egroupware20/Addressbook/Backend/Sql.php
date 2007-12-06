@@ -73,7 +73,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new UnderflowException('contact_owner can not be empty');
         }
         
-        if(!Egwbase_Container::getInstance()->hasGrant($_contactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_contactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
             throw new Exception('write access to new addressbook denied');
         }
         
@@ -89,7 +89,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $_contactData->contact_id = $this->contactsTable->insert($contactData);
         } else {
             $oldContactData = $this->getContactById($_contactData->contact_id);
-            if(!Egwbase_Container::getInstance()->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+            if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
                 throw new Exception('write access to old addressbook denied');
             }
             
@@ -178,7 +178,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $oldContactData = $this->getContactById($_contactId);
 
-        if(!Egwbase_Container::getInstance()->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
             throw new Exception('delete access to addressbook denied');
         }
         
@@ -443,7 +443,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new UnderFlowExecption('contact not found');
         }
         
-        if(!Egwbase_Container::getInstance()->hasGrant($result->contact_owner, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($result->contact_owner, Egwbase_Container::GRANT_READ)) {
             throw new Exception('permission to contact denied');
         }
 
@@ -513,7 +513,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        if(!Egwbase_Container::getInstance()->hasGrant($_addressbookId, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_addressbookId, Egwbase_Container::GRANT_READ)) {
             throw new Exception('read access denied to addressbook');
         }
         
