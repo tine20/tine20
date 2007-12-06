@@ -107,4 +107,13 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         
         return $result;
     }
+    
+    public function hasGrant($_containerId, $_grant)
+    {
+        $container = Egwbase_Container::getInstance();
+        
+        $result = $container->hasGrant($this->account_id, $_containerId, $_grant);
+        
+        return $result;
+    }
 }

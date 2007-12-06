@@ -414,11 +414,13 @@ class Egwbase_Container
             throw new InvalidArgumentException('$_containerId must be integer');
         }
         
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        
         $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        $groupMemberships[] = $accountId;
         
 
-        if(!$this->hasGrant($containerId, self::GRANT_READ)) {
+        if(!$this->hasGrant($accountId, $containerId, self::GRANT_READ)) {
             throw new Exception('permission to container denied');
         }
         
@@ -623,7 +625,9 @@ class Egwbase_Container
      */
     public function deleteContainer($_containerId)
     {
-        if (!$this->hasGrant($_containerId, self::GRANT_ADMIN)) {
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        
+        if (!$this->hasGrant($accountId, $_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         
@@ -643,7 +647,9 @@ class Egwbase_Container
      */
     public function renameContainer($_containerId, $_containerName)
     {
-        if (!$this->hasGrant($_containerId, self::GRANT_ADMIN)) {
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        
+        if (!$this->hasGrant($accountId, $_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         
@@ -661,12 +667,18 @@ class Egwbase_Container
     /**
      * check if the current user has a given grant
      *
+     * @param int $_accountId
      * @param int $_containerId
      * @param int $_grant
      * @return boolean
      */
-    public function hasGrant($_containerId, $_grant) 
+    public function hasGrant($_accountId, $_containerId, $_grant) 
     {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
             throw new InvalidArgumentException('$_containerId must be integer');
@@ -677,8 +689,8 @@ class Egwbase_Container
             throw new InvalidArgumentException('$_grant must be integer');
         }
         
-        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        $groupMemberships   = Egwbase_Controller::getAccountsBackend()->getGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');
 
