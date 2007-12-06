@@ -267,6 +267,11 @@ class Egwbase_Controller
         Zend_Session::destroy();
     }
     
+    /**
+     * return a instance of the current accounts backend
+     *
+     * @return Egwbase_Account_Sql
+     */
     public static function getAccountsBackend() 
     {
         return Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
