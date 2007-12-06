@@ -146,7 +146,7 @@ class Egwbase_Acl_Rights
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $groupMemberships   = Egwbase_Controller::getAccountsBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
 
         $db = Zend_Registry::get('dbAdapter');
@@ -184,7 +184,7 @@ class Egwbase_Acl_Rights
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Egwbase_Controller::getAccountsBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');
@@ -231,7 +231,7 @@ class Egwbase_Acl_Rights
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Egwbase_Controller::getAccountsBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
 

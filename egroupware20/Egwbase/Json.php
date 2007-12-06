@@ -80,7 +80,7 @@ class Egwbase_Json
      */
     function logout()
     {
-        Egwbase_Controller::getInstance()->logout();
+        Egwbase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         
         $result = array(
 			'success'=> true,

@@ -31,8 +31,7 @@ class Egwbase_Http
 
     public function mainScreen()
     {
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
-        $userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
+        $userApplications = Zend_Registry::get('currentAccount')->getApplications();
 
         $view = new Zend_View();
 
@@ -53,14 +52,6 @@ class Egwbase_Http
             
             $view->initialData[ucfirst($applicationName)] = $application->getInitialMainScreenData();
         }
-        
-        // NOTE there is no 1:1 mapping of timezones:translation
-        /*$translatedTimeZones = Zend_Registry::get('locale')->getTranslationList('timezone');
-        
-        $timeZoneData = array(
-            'name'           => Zend_Registry::get('userTimeZone'),
-            'translatedName' => $translatedTimeZones[Zend_Registry::get('userTimeZone')]
-        );*/
         
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

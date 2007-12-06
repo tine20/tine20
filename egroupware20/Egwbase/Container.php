@@ -689,7 +689,7 @@ class Egwbase_Container
             throw new InvalidArgumentException('$_grant must be integer');
         }
         
-        $groupMemberships   = Egwbase_Controller::getAccountsBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');

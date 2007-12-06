@@ -16,8 +16,33 @@
  */
 class Egwbase_Account
 {
-    public function __construct()
+    const SQL = 'sql';
+    
+    const LDAP = 'ldap';
+    
+    /**
+     * return a instance of the current accounts backend
+     *
+     * @return Egwbase_Account_Sql
+     */
+    public static function getBackend() 
     {
+        // to be read from config backend later
+        $type = self::SQL;
         
+        switch($type) {
+            case self::LDAP:
+                $result = Egwbase_Account_Ldap::getInstance();
+                break;
+                
+            case self::SQL:
+                $result = Egwbase_Account_Sql::getInstance();
+                break;
+            
+            default:
+                throw new Exception('accounts backend type not implemented');
+        }
+        
+        return $result;
     }
 }

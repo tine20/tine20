@@ -101,8 +101,6 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Json', 'Egwbase');
 
             if($auth->hasIdentity()) {
-                //$accountId   = Zend_Registry::get('currentAccount')->account_id;
-                //$userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
@@ -122,8 +120,6 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Http', 'Egwbase');
     
             if($auth->hasIdentity()) {
-                //$accountId   = Zend_Registry::get('currentAccount')->account_id;
-                //$userApplications = Egwbase_Acl_Rights::getInstance()->getApplications($accountId);
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
@@ -195,7 +191,7 @@ class Egwbase_Controller
         Zend_Registry::set('userTimeZone', 'Europe/Berlin');
     }
 
-    public function login($_username, $_password, $_idAddress)
+    public function login($_username, $_password, $_ipAddress)
     {
         $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
         
@@ -205,7 +201,7 @@ class Egwbase_Controller
         $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         
         if ($result->isValid()) {
-            $backend = self::getAccountsBackend();
+            $backend = Egwbase_Account::getBackend();
             $account = $backend->getAccountByLoginName($result->getIdentity());
             
             if($account === FALSE) {
@@ -221,7 +217,7 @@ class Egwbase_Controller
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $result->getIdentity(),
-                $_idAddress,
+                $_ipAddress,
                 $result->getCode(),
                 Zend_Registry::get('currentAccount')->account_id
             );
@@ -230,13 +226,13 @@ class Egwbase_Controller
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $username,
-                $_idAddress,
+                $_ipAddress,
                 $result->getCode()
             );
             
             Egwbase_AccessLog::getInstance()->addLogoutEntry(
                 session_id(),
-                $_idAddress
+                $_ipAddress
             );
             
             Zend_Session::destroy();
@@ -252,29 +248,18 @@ class Egwbase_Controller
      *
      * @return void
      */
-    public function logout()
+    public function logout($_ipAddress)
     {
         if (Zend_Registry::isRegistered('currentAccount')) {
             $currentAccount = Zend_Registry::get('currentAccount');
     
             Egwbase_AccessLog::getInstance()->addLogoutEntry(
                 session_id(),
-                $_SERVER['REMOTE_ADDR'],
+                $_ipAddress,
                 $currentAccount->account_id
             );
         }
         
         Zend_Session::destroy();
-    }
-    
-    /**
-     * return a instance of the current accounts backend
-     *
-     * @return Egwbase_Account_Sql
-     */
-    public static function getAccountsBackend() 
-    {
-        return Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
-    }
-    
+    }    
 }
