@@ -66,28 +66,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 
         return $result;
     }
-     
-    /**
-     * delete a array of lists
-     *
-     * @param array $listIDs
-     * @return array
-     */
-/*    public function deleteLists($listIds)
-    {
-        $listIds = Zend_Json::decode($listIds);
-        if(is_array($listIds)) {
-            $contacts = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-            $contacts->deleteListsById($listIds);
-
-            $result = array('success'   => TRUE, 'ids' => $listIds);
-        } else {
-            $result = array('success'   => FALSE);
-        }
-
-        return $result;
-    } */
-     
+          
     /**
      * save one contact
      *
@@ -141,57 +120,6 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     }
 
     /**
-     * save one list
-     *
-     * if $_listID is NULL the contact gets added, otherwise it gets updated
-     *
-     * @param int $_listId the id of the list to update, set to 0 for new lists
-     * @param int $_listOwner the id the list owner
-     * @return array
-     */
-/*    public function saveList($list_id, $list_owner, $listMembers, $list_description, $list_name)
-    {
-        $listMembers = Zend_Json::decode($listMembers);
-        
-        $list = new Addressbook_List();
-        try {
-            $userData['list_owner'] = $list_owner;
-            $userData['list_description'] = $list_description;
-            $userData['list_name'] = $list_name;
-            if(!empty($list_id)) {
-                $userData['list_id'] = $list_id;
-            }
-            if(is_array($listMembers)) {
-                $userData['list_members'] = $listMembers;
-            }
-             
-            $list->setFromUserData($userData);
-
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $list->getValidationErrors(),
-                            'errorMessage'      => 'filter NOT ok');
-
-            return $result;
-        }
-
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-
-        try {
-            $backend->saveList($list);
-            $result = array('success'           => true,
-            				'listId'			=> $list->list_id,
-                            'welcomeMessage'    => 'Entry updated');
-        } catch (Exception $e) {
-            $result = array('success'           => false,
-        					'errorMessage'      => $e->getMessage());
-        }
-
-        return $result;
-    } */
-
-    /**
      * get data for overview
      *
      * returns the data to be displayed in a ExtJS grid
@@ -212,14 +140,14 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
 
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-        
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         if($rows = $backend->getContactsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountByOwner($owner);
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = $backend->getCountByOwner($owner, $filter);
+            }
         }
 
         return $result;
@@ -227,43 +155,14 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 
     public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-         
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if($rows = $backend->getAccounts($filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
-            $result['totalcount'] = $backend->getCountOfAccounts();
-        }
-         
+        $internalContainer = Egwbase_Container::getInstance()->getInternalContainer('addressbook');
+        
+        $addressbookId = $internalContainer->container_id;
+        
+        $result = $this->getContactsByAddressbookId($addressbookId, $filter, $start, $sort, $dir, $limit);
+
         return $result;
     }
-
-    
-    
-/*    public function getContactsByListId($listId, $filter, $owner, $start, $sort, $dir, $limit)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-         
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if($rows = $backend->getContactsByListId($listId, $owner, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
-            $result['totalcount'] = $backend->getCountByOwner($owner);
-        }
-         
-        return $result;
-    } */
     
     public function getContactsByAddressbookId($addressbookId, $filter, $start, $sort, $dir, $limit)
     {
@@ -271,60 +170,20 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-        if(empty($filter)) {
-            $filter = NULL;
-        }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         if($rows = $backend->getContactsByAddressbookId($addressbookId, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountByOwner($addressbookId);
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = $backend->getCountByAddressbookId($addressbookId, $filter);
+            }
         }
         
         return $result;
     }
 
-    
-    /*public function getListMemberByOwner($query, $owner, $start, $sort, $dir, $limit)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if(empty($query)) {
-            $query = NULL;
-        }
-
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if($rows = $backend->getContactsByListOwner($owner, $query, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountByOwner($owner);
-        }
-         
-        return $result;
-    } */
-
-/*    public function getListsByOwner($owner, $filter, $sort, $dir, $limit, $start)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        if($rows = $backend->getListsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountByOwner($owner);
-        }
-         
-        return $result;
-    } */
-        
     public function getAddressbooksByOwner($owner)
     {
         $treeNodes = array();
@@ -418,15 +277,12 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-        if(empty($filter)) {
-            $filter = NULL;
-        }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
 
         if($rows = $backend->getAllContacts($filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountOfAllContacts();
+            $result['totalcount'] = $backend->getCountOfAllContacts($filter);
         }
 
         return $result;
@@ -451,9 +307,6 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-        if(empty($filter)) {
-            $filter = NULL;
-        }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         $rows = $backend->getSharedContacts($filter, $sort, $dir, $limit, $start);
@@ -485,9 +338,6 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-        if(empty($filter)) {
-            $filter = NULL;
-        }
                 
         $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
         $rows = $backend->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
@@ -500,5 +350,12 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
     
-    
+    public function getAddressbookSettings($_addressbookId)
+    {
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        
+        $result = $backend->getAddressbookSettings($_addressbookId);
+        
+        return $result;
+    }
 }
