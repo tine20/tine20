@@ -47,7 +47,7 @@ class Admin_Controller
     
     public function getAccount($_accountId)
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
 
         $result = $backend->getAccount($_accountId);
         
@@ -56,7 +56,7 @@ class Admin_Controller
     
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
 
         $result = $backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit);
         
@@ -65,7 +65,7 @@ class Admin_Controller
     
     public function setAccountStatus($_accountId, $_status)
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
         
         $result = $backend->setStatus($_accountId, $_status);
         
@@ -74,7 +74,7 @@ class Admin_Controller
 
     public function setAccountPassword($_accountId, $_password1, $_password2)
     {
-        $backend = Egwbase_Account_Factory::factory(Egwbase_Account_Factory::SQL);
+        $backend = Egwbase_Controller::getAccountsBackend();
         
         if($_password1 != $_password2) {
             throw new Exception("passwords don't match");
