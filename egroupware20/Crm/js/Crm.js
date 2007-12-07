@@ -387,7 +387,7 @@ Egw.Crm = function() {
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Egw.Egwbase.Common.openWindow('projectWindow', 'index.php?method=Crm.editProject&_projectId='+record.data.pj_id, 850, 600);            
+            Egw.Egwbase.Common.openWindow('projectWindow', 'index.php?method=Crm.editProject&_projectId='+record.data.pj_id, 900, 700);            
         });
        
        return;
@@ -648,9 +648,9 @@ Egw.Crm.ProjectEditDialog = function() {
 		
 		var leadtyp = new Ext.form.ComboBox({
                 fieldLabel:'Leadtypes', 
-                id:'leadtyp',
+                id:'leadtype',
                 name:'pj_leadtyp',
-                hiddenName:'pj_customertyp_id',
+                hiddenName:'pj_customertype_id',
 				store: st_leadtyp,
 				displayField:'value',
                 valueField:'key',
@@ -859,7 +859,7 @@ Egw.Crm.ProjectEditDialog = function() {
 	   if (formData.values) {
 			var _pj_id = formData.values.pj_id;
 	   } else {
-			var _pj_id = NULL;
+			var _pj_id = '-1';
 	   }
   
         var st_choosenProducts = new Ext.data.JsonStore({
@@ -879,9 +879,9 @@ Egw.Crm.ProjectEditDialog = function() {
             // turn on remote sorting
             remoteSort: true
         });
-   //     st_choosenProducts.load();
+        st_choosenProducts.load();
  
-  
+  /*
         var st_productsAvailable = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Crm.getProductsAvailable',
@@ -898,8 +898,8 @@ Egw.Crm.ProjectEditDialog = function() {
             remoteSort: true
         });
 		st_productsAvailable.load();
-	/* 	
-		new Ext.data.SimpleStore({
+	*/	
+		var st_productsAvailable = new Ext.data.SimpleStore({
                 fields: ['pj_product_id','value'],
                 data: [
                         ['0','CEREC AE'],
@@ -916,7 +916,7 @@ Egw.Crm.ProjectEditDialog = function() {
                     ],
                 id: 'pj_product_id'
         });  
-  */
+  
         function renderProductCombo(value) {
             if(value) return st_productsAvailable.getAt(value).get('value');
         }
@@ -983,10 +983,11 @@ Egw.Crm.ProjectEditDialog = function() {
                 text: 'Produkt hinzufügen',
                 handler : function(){
                     var p = new product({
-                        id: '-1',
-                        product_id: '',                       
-                        product_serial:'',
-                        product_price: 0
+                        pj_id: '-1',
+						pj_project_id: _pj_id,
+                        pj_product_id: '',                       
+                        pj_product_desc:'',
+                        pj_product_price: ''
                     });
                     grid_choosenProducts.stopEditing();
                     st_choosenProducts.insert(0, p);
@@ -1153,7 +1154,8 @@ Egw.Crm.ProjectEditDialog = function() {
                                             fieldLabel:'Start', 
                                             name:'pj_start',
                                             id:'startDate',
-                                            format:formData.config.dateFormat, 
+                                     //       format:formData.config.dateFormat, 
+									 		format: 'd.m.Y',
                                             altFormat:'Y-m-d',
                                             anchor:'95%'
                                         }]
@@ -1166,7 +1168,8 @@ Egw.Crm.ProjectEditDialog = function() {
                                             fieldLabel:'Ende', 
                                             name:'pj_end',
                                             id:'endDate',
-                                            format:formData.config.dateFormat, 
+                                     //       format:formData.config.dateFormat, 
+ 									 		format: 'd.m.Y',
                                             altFormat:'Y-m-d',
                                             anchor:'95%'
                                         }]
@@ -1179,7 +1182,8 @@ Egw.Crm.ProjectEditDialog = function() {
                                             fieldLabel:'voraussichtl. Ende', 
                                             name:'pj_end_scheduled',
                                             id:'expectedEndDate',
-                                            format:formData.config.dateFormat, 
+                                      //    format:formData.config.dateFormat, 
+  									 		format: 'd.m.Y',
                                             altFormat:'Y-m-d',
                                             anchor:'95%'
                                         }]
@@ -1349,6 +1353,7 @@ Egw.Crm.ProjectEditDialog = function() {
         form.findField('expectedEndDate').setValue(expectedEndDate);
 
 		if (formData.values.pj_distributionphase_id) {
+			
 			var leadstatus = Ext.getCmp('leadstatus');
 			var st_leadstatus = leadstatus.store;
 			st_leadstatus.on('load', function(){
@@ -1370,11 +1375,11 @@ Egw.Crm.ProjectEditDialog = function() {
 			st_leadsource.load();
 		}
 	
-		if (formData.values.pj_leadtype_id) {
+		if (formData.values.pj_customertype_id) {
 			var leadtype = Ext.getCmp('leadtype');
 			var st_leadtype = leadtype.store;
 			st_leadtype.on('load', function(){
-				leadtype.setValue(formData.values.pj_leadtype_id);
+				leadtype.setValue(formData.values.pj_customertype_id);
 			}, this, {
 				single: true
 			});

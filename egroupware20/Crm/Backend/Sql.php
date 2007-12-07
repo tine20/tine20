@@ -152,7 +152,39 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	}    
   
   
+	/**
+	* add or updates an product (which belongs to one project)
+	*
+	* @param int $_productId the id of the product, NULL if new, else gets updated
+	* @param Crm_Product $_productData the productdata
+	* @param int $_projectId the project id
+	* @return unknown
+	*/
+    public function saveProduct(Crm_Project $_productData)
+    {
+  //      $currentAccount = Zend_Registry::get('currentAccount');
 
+        $productData = $_productData->toArray();
+      
+//        unset($productData['pj_project_id']);
+
+        if($_productData->pj_id === NULL) {
+            $result = $this->productsTable->insert($productData);
+            $_productData->pj_id = $this->productsTable->getAdapter()->lastInsertId();
+        } else {
+            //$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::EDIT);
+
+            // update the requested pj_id only if the pj_owner matches the current users acl
+            $where  = array(
+                $this->productsTable->getAdapter()->quoteInto('pj_id = (?)', $_productData->pj_id),
+              //  $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', array_keys($acl))
+            );
+
+//            $result = $this->productsTable->update($productData, $where);
+        }
+
+        return $_productData;
+    }
 
 
 	/**
@@ -169,10 +201,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $projectData = $_projectData->toArray();
 
-        foreach($projectData AS $atom) {
-            $line .= $atom.' |';
-        }
-        
 
         
         unset($projectData['pj_id']);

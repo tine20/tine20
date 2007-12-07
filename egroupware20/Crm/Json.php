@@ -156,18 +156,90 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
         // timestamps
         $_changeDate = time();
-        
-//        'pj_modified'
+
         if(empty($_POST['pj_created'])) {
-            $_POST['pj_created'];
-            
-            
+            $_POST['pj_created'] = $_changeDate;
         }
-        
-        
+		
+		$_POST['pj_modified'] = $_changeDate;
+
         // date transition
+		if(isset($_POST['pj_start'])) {
+		   // $locale = Zend_Registry::get('locale');
+           // $dateFormat = $locale->getTranslationList('Dateformat');
+            try {
+           //     $date = new Zend_Date($_POST['pj_start'], $dateFormat['long'], 'en');
+                $date = new Zend_Date($_POST['pj_start'], 'dd.MM.YYYY');
+                $_POST['pj_start'] = $date->toString('U');
+            } catch (Exception $e) {
+                unset($_POST['pj_start']);
+            }
+		}
+		
+		if(isset($_POST['pj_end'])) {
+		   // $locale = Zend_Registry::get('locale');
+           // $dateFormat = $locale->getTranslationList('Dateformat');
+            try {
+           //     $date = new Zend_Date($_POST['pj_end'], $dateFormat['long'], 'en');
+                $date = new Zend_Date($_POST['pj_end'], 'dd.MM.YYYY');
+                $_POST['pj_end'] = $date->toString('U');
+            } catch (Exception $e) {
+                unset($_POST['pj_end']);
+            }			
+		}		
+        
+		if(isset($_POST['pj_end_scheduled'])) {
+		   // $locale = Zend_Registry::get('locale');
+           // $dateFormat = $locale->getTranslationList('Dateformat');
+            try {
+           //     $date = new Zend_Date($_POST['pj_end_scheduled'], $dateFormat['long'], 'en');
+                $date = new Zend_Date($_POST['pj_end_scheduled'], 'dd.MM.YYYY');
+                $_POST['pj_end_scheduled'] = $date->toString('U');
+            } catch (Exception $e) {
+                unset($_POST['pj_end_scheduled']);
+            }						
+		}		
         
         // products
+		if(isset($_POST['products'])) {
+
+			$_products = Zend_Json::decode($_POST['products']);
+
+			if(is_array($_products)) {
+
+				foreach($_products AS $_product) {
+					
+					if($_product['pj_id'] == "-1") {
+						unset($_product['pj_id']);
+					}
+					
+					$product = new Crm_Product();
+				        try {
+				            $product->setFromUserData($_product);
+				        } catch (Exception $e) {
+				            // invalid data in some fields sent from client
+				            $result = array('success'           => false,
+				                            'errors'            => $product->getValidationErrors(),
+				                            'errorMessage'      => 'filter NOT ok');
+				
+				            return $result;
+				        }
+				
+				        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+				         
+				        try {
+				            $backend->saveProduct($product);
+				            $result = array('success'           => true,
+				                            'welcomeMessage'    => 'Entry updated');
+				        } catch (Exception $e) {
+				            $result = array('success'           => false,
+				        					'errorMessage'      => $e->getMessage());
+				        }
+				}
+				
+			}
+		}
+
 
 
         $project = new Crm_Project();
