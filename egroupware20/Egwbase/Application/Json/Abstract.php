@@ -10,6 +10,7 @@
  * @version     $Id$
  */
 
+
 /**
  * Abstract class for an EGW2.0 application with Json interface
  * Each egw application must extend this class to gain an native egw2.0 user

@@ -22,7 +22,7 @@ abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abs
     /**
      * Returns all JS files which must be included for this app
      *
-     * @return array of filenames
+     * @return array Array of filenames
      */
     public function getJsFilesToInclude()
     {
@@ -37,7 +37,7 @@ abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abs
     /**
      * Retruns all CSS files which must be inclued for this app
      *
-     * @return array of filenames
+     * @return array Array of filenames
      */
     public function getCssFilesToInclude()
     {
@@ -77,6 +77,6 @@ abstract class Egwbase_Application_Http_Abstract extends Egwbase_Application_Abs
     public static function _appendFileTime( $_file )
     {
         $path = dirname(__FILE__). "/../../../$_file";
-        return "$_file?". filectime($path);
+        return "$_file?". @filectime($path);
     }
 }

@@ -18,7 +18,8 @@ interface Egwbase_Application_Interface
 {
     /**
      * Returns application name
-     *
+     * 
+     * @return string application name
      */
     public function getApplicationName();
 }

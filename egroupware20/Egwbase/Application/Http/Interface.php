@@ -24,14 +24,14 @@ Interface Egwbase_Application_Http_Interface extends Egwbase_Application_Interfa
     /**
      * Returns all JS files which must be included for this app
      *
-     * @return array of filenames
+     * @return array Array of filenames
      */
     public function getJsFilesToInclude();
     
     /**
      * Retruns all CSS files which must be inclued for this app
      *
-     * @return array of filenames
+     * @return array Array of filenames
      */
     public function getCssFilesToInclude();
     
