@@ -50,7 +50,7 @@ class Egwbase_Controller
         if(!isset($this->session->jsonKey)) {
             $this->session->jsonKey = md5(mktime());
         }
-        Zend_Registry::set('jsonKey', $session->jsonKey);
+        Zend_Registry::set('jsonKey', $this->session->jsonKey);
 
         if(isset($this->session->currentAccount)) {
             Zend_Registry::set('currentAccount', $this->session->currentAccount);
