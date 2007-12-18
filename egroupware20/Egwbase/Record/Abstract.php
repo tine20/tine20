@@ -54,6 +54,13 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     protected $_validationErrors = array();
     
+    /**
+     * name of fields containing datetime or or an array of datetime
+     * information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array();
     
     protected $_bypassFilters = false;
     
@@ -73,10 +80,11 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * 
      * @param mixed $_data
      * @param bool $_bypassFilters
+     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * @return void
      * @throws Egwbase_Record_Exception
      */
-    public function __construct($_data = NULL, $_bypassFilters = false)
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
     {
         if ($_bypassFilters) {
             foreach ($_data as $key => $value) {
@@ -86,6 +94,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
             }
         } else {
             $this->setFromUserData($_data);
+        }
+        
+        if ($_convertDates) {
+            call_user_func_array(array($this, 'iso2dates'), $_convertDates);
         }
     }
     
@@ -161,11 +173,18 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * returns array with record related properties 
      *
+     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * @return array
      */
-    public function toArray()
+    public function toArray($_convertDates = NULL)
     {
-        return $this->_properties;
+        $recordArray = $this->_properties;
+        if ($_convertDates) {
+           $part = isset($_convertDates['part']) ? $_convertDates['part'] : Zend_Date::ISO_8601;
+           $locale = isset($_convertDates['locale']) ? $_convertDates['locale'] : NULL;
+            $recordArray = $this->date2iso($recordArray, $part, $locale);
+        }
+        return $recordArray;
     }
     
     /**
@@ -225,6 +244,50 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
            $this->_Zend_Filter = new Zend_Filter_Input( $this->_filters, $this->_validators);
         }
         return $this->_Zend_Filter;
+    }
+    
+    /**
+     * Converts Zend_Dates into iso representation
+     *
+     * @param array $_toConvert
+     * @param string $_part
+     * @param [string|Zend_Locale] $_locale
+     * @return 
+     */
+    protected function date2iso($_toConvert, $_part=Zend_Date::ISO_8601, $_locale=NULL)
+    {
+        error_log($_part);
+        foreach ($_toConvert as $field => $value) {
+            if ($value instanceof Zend_Date) {
+                $_toConvert[$field] = $value->get($_part, $_locale);
+            } elseif (is_array($value)) {
+                $_toConvert[$field] = $this->date2Iso($value, $_part, $_locale);
+            }
+        }
+        return $_toConvert;
+    }
+    
+    /**
+     * Converts dates into Zend_Date representation
+     *
+     * @param string $_part
+     * @param [string|Zend_Locale] $_locale
+     * @return void
+     */
+    protected function iso2dates($_part=NULL, $_locale=NULL)
+    {
+        foreach ($this->_datetimeFields as $field) {
+            if (!isset($this->_properties[$field])) continue;
+            if(!is_array($this->_properties[$field])) {
+                $toConvert = array(&$this->_properties[$field]);
+            } else {
+                $toConvert = &$this->_properties[$field];
+            }
+
+            foreach ($toConvert as $field => $value) {
+                $toConvert[$field] = new Zend_Date($value, $_part, $_locale);
+            } 
+        }
     }
     
     /**

@@ -65,14 +65,14 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
      * param bool $_withKeys return array with keys when TRUE 
      * @return array identifier => recordarray
      */
-    public function toArray($_withKeys = FALSE)
+    public function toArray($_convertDates = NULL, $_withKeys = FALSE)
     {
         $resultArray = array();
         foreach($this->_listOfRecords as $id => $record) {
             if($_withKeys === TRUE) {
-                $resultArray[$id] = $record->toArray();
+                $resultArray[$id] = $record->toArray($_convertDates);
             } else {
-                $resultArray[] = $record->toArray();
+                $resultArray[] = $record->toArray($_convertDates);
             }
         }
          
