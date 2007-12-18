@@ -97,7 +97,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
         }
         
         if ($_convertDates) {
-            call_user_func_array(array($this, 'iso2dates'), $_convertDates);
+            $part = isset($_convertDates['part']) ? $_convertDates['part'] : Zend_Date::ISO_8601;
+            $locale = isset($_convertDates['locale']) ? $_convertDates['locale'] : NULL;
+            $this->iso2dates($part, $locale);
         }
     }
     
@@ -182,7 +184,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
         if ($_convertDates) {
            $part = isset($_convertDates['part']) ? $_convertDates['part'] : Zend_Date::ISO_8601;
            $locale = isset($_convertDates['locale']) ? $_convertDates['locale'] : NULL;
-            $recordArray = $this->date2iso($recordArray, $part, $locale);
+           $recordArray = $this->date2iso($recordArray, $part, $locale);
         }
         return $recordArray;
     }
@@ -256,7 +258,6 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     protected function date2iso($_toConvert, $_part=Zend_Date::ISO_8601, $_locale=NULL)
     {
-        error_log($_part);
         foreach ($_toConvert as $field => $value) {
             if ($value instanceof Zend_Date) {
                 $_toConvert[$field] = $value->get($_part, $_locale);
