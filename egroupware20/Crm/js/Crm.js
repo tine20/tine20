@@ -1,7 +1,11 @@
-﻿Ext.namespace('Egw.Crm');
+Ext.namespace('Egw.Crm');
 
 Egw.Crm = function() {
 
+
+      /**
+     * the initial tree to be displayed in the left treePanel
+     */
     var _initialTree = [{
         "text":"Projects",
         "cls":"treemain",
@@ -19,61 +23,40 @@ Egw.Crm = function() {
         "dataPanelType":"projects"
     }];
     
-    var _getCrmTree = function() 
+     /**
+     * creates the crm tree panel
+     *
+     */
+    var _getTreePanel = function() 
     {
-    function dummyHandler(item){
-            Ext.example.msg('FUTURE FEATURE', '...soon you will be able to ', item.text);
-        }
-    
-        var settings_tb_menu = new Ext.menu.Menu({
-            id: 'crmSettingsMenu',
-            items: [
-                '-', {
-                    text: 'Settings',
-                    menu: {       
-                        items: [
-                            {text: 'Edit Leadstati', handler: dummyHandler},
-                            {text: 'Edit Leadsources', handler: dummyHandler},
-                            {text: 'Edit Leadtypes', handler: dummyHandler},
-                            {text: 'Edit Products', handler: dummyHandler}
-                        ]
-                    }
-                } , {
-                    text: 'Admin',
-                    menu: {       
-                        items: [
-                            {text: 'Global Categories', handler: dummyHandler}
-                        ]
-                    }
-                }
-            ]
-        });
-        
-      
-        var settings_tb = new Ext.Toolbar({
-            id: 'settingsCrm',
-            split: false,
-            height: 26,
-            items: [
-                settings_tb_menu
-            ]
-        });    
-       
         var treeLoader = new Ext.tree.TreeLoader({
-//            dataUrl:'index.php'
+            dataUrl:'index.php',
+            baseParams: {
+            	jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+            	location: 'mainTree'
+            }
         });
-        treeLoader.on("beforeload", function(_loader, _node) {
-            _loader.baseParams.method   = 'Crm.getSubTree';
-            _loader.baseParams.node     = _node.id;
-            _loader.baseParams.datatype = _node.attributes.datatype;
-            _loader.baseParams.owner    = _node.attributes.owner;
-            _loader.baseParams.location = 'mainTree';
+   /*     treeLoader.on("beforeload", function(_loader, _node) {
+            switch(_node.attributes.nodeType) {
+                case 'otherAddressbooks':
+                    _loader.baseParams.method   = 'Addressbook.getOtherUsers';
+                    break;
+                    
+                case 'sharedAddressbooks':
+                    _loader.baseParams.method   = 'Addressbook.getSharedAddressbooks';
+                    break;
+
+                case 'userAddressbooks':
+                    _loader.baseParams.method   = 'Addressbook.getAddressbooksByOwner';
+                    _loader.baseParams.owner    = _node.attributes.owner;
+                    break;
+            }
         }, this);
-    
+ */   
         var treePanel = new Ext.tree.TreePanel({
-            title: 'Crm',
-            id: 'crm-tree',
-            tbar: settings_tb_menu,
+            title: 'CRM',
+            id: 'Crm_Tree',
+//            iconCls: 'CrmTreePanel',
             loader: treeLoader,
             rootVisible: false,
             border: false
@@ -88,67 +71,46 @@ Egw.Crm = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(i=0; i<_initialTree.length; i++) {
+        for(var i=0; i< _initialTree.length; i++) {
             treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
         }
-   
+        
         treePanel.on('click', function(_node, _event) {
-               this.show();
-/*               
-        	var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
-
-                
-        	switch(_node.attributes.dataPanelType) {
-                case 'lead':
-                    Egw.Crm.show();
-                    if(currentToolbar != false && currentToolbar.id == 'toolbarCrmLead') {
-                        Ext.getCmp('gridCrmLead').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Egw.Crm.Lead.show();
-                    }
-                    
-                    break;
-                    
-                case 'partner':
-                    Egw.Crm.show();
-                    if(currentToolbar != false && currentToolbar.id == 'toolbarCrmPartner') {
-                    	Ext.getCmp('gridCrmPartner').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                    	Egw.Crm.Partner.show();
-                    }
-                        
-                    break;
-                    
-                case 'projects':
-                    Egw.Crm.show();
-                        
-                    break;    
-                    
-            }  */
+            Egw.Crm.show(_node);
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
-            if(_panel.getSelectionModel().getSelectedNode() == null) {
-                _panel.expandPath('/root/projekte');
-                _panel.selectPath('/root/projekte');
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
+                _panel.expandPath('/root');
+                _panel.selectPath('/root');
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
 
-        treePanel.on('contextmenu', function(_node, _event) {
+  /*      treePanel.on('contextmenu', function(_node, _event) {
             _event.stopEvent();
             //_node.select();
             //_node.getOwnerTree().fireEvent('click', _node);
-            //console.log(_node.attributes.contextMenuClass);
-            /* switch(_node.attributes.contextMenuClass) {
-                case 'ctxMenuContactsTree':
-                    ctxMenuContactsTree.showAt(_event.getXY());
+            _treeNodeContextMenu = _node;
+            //console.log(_node.attributes.nodeType);
+            switch(_node.attributes.nodeType) {
+                case 'userAddressbooks':
+                case 'sharedAddressbooks':
+                    _contextMenuUserAddressbooks.showAt(_event.getXY());
                     break;
-            } */
-        });
 
+                case 'singleAddressbook':
+                    _contextMenuSingleAddressbook.showAt(_event.getXY());
+                    break;
+
+                default:
+                    //console.log(_node.attributes.nodeType);
+                    break;
+            }
+        });
+*/
         return treePanel;
-    }    
+    };  
     
     
     
@@ -199,6 +161,7 @@ Egw.Crm = function() {
 
         ds_crm.on('beforeload', function(_dataSource) {
         	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+            
         	/*
         	var from = Date.parseDate(
         	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
@@ -217,6 +180,81 @@ Egw.Crm = function() {
         
         return ds_crm;
     }
+
+
+	  	var action_add = new Ext.Action({
+			text: 'add',
+			iconCls: 'action_add',
+			handler: function () {
+           //     var tree = Ext.getCmp('venues-tree');
+		//		var curSelNode = tree.getSelectionModel().getSelectedNode();
+			//	var RootNode   = tree.getRootNode();
+            
+                Egw.Egwbase.Common.openWindow('CrmProjectWindow', 'index.php?method=Crm.editProject&_projectId=0&_eventId=NULL', 900, 700);
+             }
+ 		}); 
+        
+        var handler_edit = function() 
+        {
+            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
+            Egw.Egwbase.Common.openWindow('projectWindow', 'index.php?method=Crm.editProject&_projectId='+_rowIndex[0].id, 900, 700);   
+
+        }
+
+    var handler_pre_delete = function(){
+        Ext.MessageBox.show({
+            title: 'Delete Project?',
+            msg: 'Are you sure you want to delete this project?',
+            buttons: Ext.MessageBox.YESNO,
+            fn: handler_delete,
+            icon: Ext.MessageBox.QUESTION
+        });
+    }
+
+        var handler_delete = function(btn) 
+        {
+            if (btn == 'yes') {
+                
+                var _rowIndexIds = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
+
+                var toDelete_Ids = new Array();
+                
+                for (var i = 0; i < _rowIndexIds.length; ++i) {
+                         toDelete_Ids.push(_rowIndexIds[i].id);
+                } 
+                
+                var projectIds = Ext.util.JSON.encode(toDelete_Ids);
+
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Crm.deleteProjects',
+                        _projectIds: projectIds
+                    },
+                    text: 'Deleting project...',
+                    success: function(_result, _request){
+                        Ext.getCmp('gridCrm').getStore().reload();
+                    },
+                    failure: function(result, request){
+                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the project.');
+                    }
+                });
+            } 
+        }
+
+	   	var action_edit = new Ext.Action({
+			text: 'edit',
+			disabled: true,
+			handler: handler_edit,
+			iconCls: 'action_edit'
+		});
+			
+	   	var action_delete = new Ext.Action({
+			text: 'delete',
+			disabled: true,
+			handler: handler_pre_delete,
+			iconCls: 'action_delete'
+		});	
+
 
     var _showCrmToolbar = function() {
     
@@ -245,17 +283,175 @@ Egw.Crm = function() {
             value:          currentDate
         });
         
-	  	var action_add = new Ext.Action({
-			text: 'add',
-			handler: function () {
-           //     var tree = Ext.getCmp('venues-tree');
-		//		var curSelNode = tree.getSelectionModel().getSelectedNode();
-			//	var RootNode   = tree.getRootNode();
+
+       function editOptions(item) {
+           var deleted_options = new Array();
+           
+           var Dialog = new Ext.Window({
+				title: item.table,
+                id: 'options_window',
+				modal: true,
+			    width: 350,
+			    height: 500,
+			    minWidth: 300,
+			    minHeight: 500,
+			    layout: 'fit',
+			    plain:true,
+			    bodyStyle:'padding:5px;',
+			    buttonAlign:'center'
+            });	
             
-                Egw.Egwbase.Common.openWindow('CrmProjectWindow', 'index.php?method=Crm.editProject&_projectId=0&_eventId=NULL', 900, 700);
-             },
-			iconCls: 'action_add'
-		});        
+            var st = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.get'+item.table,
+                    sort: item.mapping,
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'key',
+                fields: [
+                    {name: 'key', mapping: item.mapping + '_id'},
+                    {name: 'value', mapping: item.mapping}    
+                ],
+                // turn on remote sorting
+                remoteSort: false
+            });
+            
+            st.on('remove', function(_store,_record,_index){
+                deleted_options.push(_record.data.key);
+            })
+            st.load();
+            
+
+            
+            var cm = new Ext.grid.ColumnModel([
+                	{id:'id', header: "id", dataIndex: 'key', width: 25, hidden: true },
+                    {id:'value', header: 'entries', dataIndex: 'value', width: 200, hideable: false, sortable: false, editor: new Ext.form.TextField({
+                    allowBlank: false
+                    }) }
+            ]);            
+            
+             var entry = Ext.data.Record.create([
+               {name: 'key', mapping: item.mapping + '_id', type: 'int'},
+               {name: 'value', mapping: item.mapping, type: 'int'}
+            ]);
+            
+            var handler_options_add = function(){
+                var p = new entry({
+                    key: '-1',
+					value: ''
+                });
+                gridPanel.stopEditing();
+                st.insert(0, p);
+                gridPanel.startEditing(0, 0);
+            }
+                        
+            var handler_options_delete = function(){
+               	var optionGrid  = Ext.getCmp('editOptionsGrid');
+        		var optionStore = optionGrid.getStore();
+                
+        		var selectedRows = optionGrid.getSelectionModel().getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    optionStore.remove(selectedRows[i]);
+                }   
+            }                        
+                        
+          
+           var handler_options_saveClose = function(){
+                var store_options = Ext.getCmp('editOptionsGrid').getStore();
+                var store_options_mod = store_options.getModifiedRecords();
+                var modified_options_json = Egw.Egwbase.Common.getJSONdata(store_options_mod);
+           
+                var options = Ext.getCmp('optionsData');
+                    options.setValue(modified_options_json);
+         
+           	    var form_options = Ext.getCmp('editOptionsDialog').getForm();
+            	form_options.render();
+         
+            	if(form_options.isValid()) {     
+        			var additionalData = {};
+                        additionalData.deletedOptions = Ext.util.JSON.encode(deleted_options);
+                    
+                                                        
+        			form_options.submit({
+            			waitTitle:'Please wait!',
+            			waitMsg:'saving options...',
+                        params:additionalData,
+            			success:function(form, action, o) {
+                            store_options.reload();
+                            Ext.getCmp('options_window').hide();
+                            Ext.getCmp('options_window').destroy();                            
+            			},
+            			failure:function(form, action) {
+            			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
+            			}
+            		});
+            	} else {
+            		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            	}           
+            }          
+            
+            var gridPanel = new Ext.grid.EditorGridPanel({
+                store: st,
+                id: 'editOptionsGrid',
+                cm: cm,
+                autoExpandColumn:'value',
+                frame:false,
+                viewConfig: {
+                    forceFit: true
+                },
+                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+                clicksToEdit:2,
+                tbar: [{
+                    text: 'new item',
+                    iconCls: 'action_add',
+                    handler : handler_options_add
+                    },{
+                    text: 'delete item',
+                    iconCls: 'action_delete',
+                    handler : handler_options_delete
+                    },{
+                    text: 'save',
+                    iconCls: 'action_saveAndClose',
+                    handler : handler_options_saveClose 
+                    }]  
+                });
+                  
+                      
+      		var form = new Ext.FormPanel({
+			baseParams: {method :'Crm.save' + item.table },
+		    labelAlign: 'top',
+			region: 'center',
+            id: 'editOptionsDialog',
+			deferredRender: false,
+            items: [{
+                layout: 'form',
+                border: false,
+                items: [{
+                   xtype: 'hidden',
+                   name: 'optionsData',
+                   id: 'optionsData',
+                   value: ''
+                }]
+              }] 
+            });
+              
+          Dialog.add(gridPanel);
+          Dialog.add(form);
+          Dialog.show();		  
+        }
+
+        
+        var settings_tb_menu = new Ext.menu.Menu({
+            id: 'crmSettingsMenu',
+            items: [
+                {text: 'Leadstatus', handler: editOptions, table: 'Projectstates', mapping: 'pj_projectstate'},
+                {text: 'Leadsource', handler: editOptions, table: 'Leadsources', mapping: 'pj_leadsource'},
+                {text: 'Leadtype', handler: editOptions, table: 'Leadtypes', mapping: 'pj_leadtype'},
+                {text: 'Product', handler: editOptions, table: 'Productsource', mapping: 'pj_productsource'}
+            ]
+        });     
         
         
         var toolbar = new Ext.Toolbar({
@@ -264,14 +460,22 @@ Egw.Crm = function() {
             height: 26,
             items: [
                 action_add,
-                //_action_delete,'->',
+                action_edit,
+                action_delete,
                 new Ext.Toolbar.Separator(),
+                {
+                    text:'Options',
+                    iconCls: 'action_edit',  
+                    menu: settings_tb_menu
+                },
+                '->',
                 'Display from: ',
                 ' ',
                 dateFrom,
                 'to: ',
                 ' ',
-                dateTo,
+                dateTo,                
+                new Ext.Toolbar.Separator(),
                 '->',
                 'Search:', ' ',
                 ' ',
@@ -313,7 +517,6 @@ Egw.Crm = function() {
      */
     var _showGrid = function() 
     {
-    //	_action_delete.setDisabled(true);
     	
         var dataStore = _createDataStore();
         
@@ -324,6 +527,14 @@ Egw.Crm = function() {
             displayMsg: 'Displaying projects {0} - {1} of {2}',
             emptyMsg: "No projects to display"
         }); 
+        
+      	var ctxMenuGrid = new Ext.menu.Menu({
+        id:'ctxMenuGrid', 
+        items: [
+            action_edit,
+            action_delete
+        ]
+    });
 
         var expander = new Ext.grid.RowExpander({
             tpl : new Ext.Template(
@@ -346,22 +557,28 @@ Egw.Crm = function() {
         columnModel.defaultSortable = true; // by default columns are sortable
         
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-        /*
+        
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
             if(rowCount < 1) {
-                _action_delete.setDisabled(true);
-            } else {
-                _action_delete.setDisabled(false);
+                action_delete.setDisabled(true);
+                action_edit.setDisabled(true);
+            } 
+            if (rowCount == 1) {
+               action_edit.setDisabled(false);
+               action_delete.setDisabled(false);               
+            }    
+            if(rowCount > 1) {                
+               action_edit.setDisabled(true);
             }
         });
-      */  
+        
         var gridPanel = new Ext.grid.GridPanel({
             id: 'gridCrm',
             store: dataStore,
             cm: columnModel,
-//            tbar: pagingToolbar,   
+            tbar: pagingToolbar,   
             viewConfig: {
                         forceFit:true
                     },  
@@ -376,13 +593,14 @@ Egw.Crm = function() {
         
         Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
 
+
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
-                _action_delete.setDisabled(false);
+                action_delete.setDisabled(false);
             }
-            _contextMenuGridAdminAccessLog.showAt(_eventObject.getXY());
+            ctxMenuGrid.showAt(_eventObject.getXY());
         });
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
@@ -402,7 +620,12 @@ Egw.Crm = function() {
           
         },
         
-        getPanel: _getCrmTree
+        getPanel: _getTreePanel,
+
+        reload: function() {
+            Ext.getCmp('gridCrm').getStore().reload();
+            Ext.getCmp('gridCrm').doLayout();
+        }
     }
     
 }(); // end of application
@@ -413,6 +636,8 @@ Egw.Crm.ProjectEditDialog = function() {
 
     var dialog;
     
+    var deleted_products = new Array();
+    
     /**
         * the dialog to display the contact data
         */
@@ -422,54 +647,10 @@ Egw.Crm.ProjectEditDialog = function() {
     
     var handler_applyChanges = function(_button, _event) 
     {
-		
-    	var eventForm = Ext.getCmp('eventDialog').getForm();
-		eventForm.render();
-    	
-    	if(eventForm.isValid()) {
-			var additionalData = {};
-			if(formData.values) {
-				additionalData.event_id = formData.values.event_id;
-			}
-			    		
-			eventForm.submit({
-    			waitTitle:'Please wait!',
-    			waitMsg:'saving event...',
-    			params:additionalData,
-    			success:function(form, action, o) {
-    				window.opener.Egw.Eventscheduler.reload();
-    			},
-    			failure:function(form, action) {
-    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
-    			}
-    		});
-    	} else {
-    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-    	}
-    }
-
-    var handler_saveAndClose = function(_button, _event) 
-    {
-        var store_products = Ext.getCmp('grid_choosenProducts').getStore();
-        var modified_products = store_products.getModifiedRecords();
-        
-       
-        var _getJSONDsRecs = function(_dataSrc) {
-            
-        if(Ext.isEmpty(_dataSrc)) {
-                return false;
-            }
-                
-            var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array();            
-            for(i=0; i < dataLen; i++) {
-                var curRecData = data.itemAt(i).data;
-                jsonData.push(curRecData);
-            }   
-
-            return Ext.util.JSON.encode(jsonData);
-        }
-
-        var modified_products_json = _getJSONDsRecs(store_products);
+        var grid_products          = Ext.getCmp('grid_choosenProducts');
+		var store_products         = Ext.getCmp('grid_choosenProducts').getStore();
+        var store_products_mod     = store_products.getModifiedRecords();
+        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products_mod);
        
     	var projectForm = Ext.getCmp('projectDialog').getForm();
 		projectForm.render();
@@ -478,20 +659,56 @@ Egw.Crm.ProjectEditDialog = function() {
 			var additionalData = {};
 			if(formData.values) {
 				additionalData.pj_id = formData.values.pj_id;
-			}
-   		
+			}	
             additionalData.products = modified_products_json;
+            additionalData.deletedProducts = Ext.util.JSON.encode(deleted_products);
                         
 			projectForm.submit({
     			waitTitle:'Please wait!',
     			waitMsg:'saving event...',
     			params:additionalData,
     			success:function(form, action, o) {
-    				window.opener.Egw.Eventscheduler.reload();
+                    store_products.reload();
+    				window.opener.Egw.Crm.reload();
+    			},
+    			failure:function(form, action) {
+    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
+    			}
+    		});
+    	} else {
+    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+    	}
+    }
+ 
+
+    var handler_saveAndClose = function(_button, _event) 
+    {       
+        var store_products = Ext.getCmp('grid_choosenProducts').getStore();
+        var store_products_mod = store_products.getModifiedRecords();
+        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products_mod);
+       
+    	var projectForm = Ext.getCmp('projectDialog').getForm();
+		projectForm.render();
+    	
+    	if(projectForm.isValid()) {
+			var additionalData = {};
+			if(formData.values) {
+				additionalData.pj_id = formData.values.pj_id;
+			}	
+            additionalData.products = modified_products_json;
+            additionalData.deletedProducts = Ext.util.JSON.encode(deleted_products);
+                        
+			projectForm.submit({
+    			waitTitle:'Please wait!',
+    			waitMsg:'saving event...',
+    			params:additionalData,
+    			success:function(form, action, o) {
+                    store_products.reload();                    
+    				window.opener.Egw.Crm.reload();
     				window.setTimeout("window.close()", 400);
     			},
     			failure:function(form, action) {
-    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
     			}
     		});
     	} else {
@@ -499,26 +716,38 @@ Egw.Crm.ProjectEditDialog = function() {
     	}
     }
 
-    var handler_delete = function(_button, _event) 
+    var handler_pre_delete = function(){
+        Ext.MessageBox.show({
+            title: 'Delete Project?',
+            msg: 'Are you sure you want to delete this project?',
+            buttons: Ext.MessageBox.YESNO,
+            fn: handler_delete,
+//            animEl: 'mb4',
+            icon: Ext.MessageBox.QUESTION
+        });
+    }
+
+
+    var handler_delete = function(btn) 
     {
-		var eventIds = Ext.util.JSON.encode([formData.values.event_id]);
-			
-		Ext.Ajax.request({
-//			url: 'index.php',
-			params: {
-				method: 'Eventscheduler.deleteEvents', 
-				_eventIds: eventIds
-			},
-			text: 'Deleting event...',
-			success: function(_result, _request) {
-  				window.opener.Egw.Eventscheduler.reload();
-   				window.setTimeout("window.close()", 400);
-			},
-			failure: function ( result, request) { 
-				Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
-			} 
-		});
-        			    		
+        if (btn == 'yes') {
+            var projectIds = Ext.util.JSON.encode([formData.values.pj_id]);
+            
+            Ext.Ajax.request({
+                params: {
+                    method: 'Crm.deleteProjects',
+                    _projectIds: projectIds
+                },
+                text: 'Deleting project...',
+                success: function(_result, _request){
+                    window.opener.Egw.Crm.reload();
+                    window.setTimeout("window.close()", 400);
+                },
+                failure: function(result, request){
+                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the project.');
+                }
+            });
+        } 
     }
 
 
@@ -535,8 +764,8 @@ Egw.Crm.ProjectEditDialog = function() {
 	});
 
    	var action_delete = new Ext.Action({
-		text: 'delete event',
-		handler: handler_delete,
+		text: 'delete project',
+		handler: handler_pre_delete,
 		iconCls: 'action_delete'
 	});
 
@@ -598,7 +827,9 @@ Egw.Crm.ProjectEditDialog = function() {
      
         var st_leadstatus = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Crm.getProjectstates'
+                method: 'Crm.getProjectstates',
+                sort: 'pj_projectstate',
+                dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -632,7 +863,9 @@ Egw.Crm.ProjectEditDialog = function() {
 	
         var st_leadtyp = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Crm.getLeadtypes'
+                method: 'Crm.getLeadtypes',
+                sort: 'pj_leadtype',
+                dir: 'ASC'                
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -666,7 +899,9 @@ Egw.Crm.ProjectEditDialog = function() {
 
         var st_leadsource = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Crm.getLeadsources'
+                method: 'Crm.getLeadsources',
+                sort: 'pj_leadsource',
+                dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -879,6 +1114,11 @@ Egw.Crm.ProjectEditDialog = function() {
             // turn on remote sorting
             remoteSort: true
         });
+        
+        st_choosenProducts.on('remove', function(_store,_record,_index){
+            deleted_products.push(_record.data.pj_id);
+        })
+        
         st_choosenProducts.load();
  
   /*
@@ -889,10 +1129,10 @@ Egw.Crm.ProjectEditDialog = function() {
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'product_id ',
+            id: 'pj_product_id ',
             fields: [
-                {name: 'product_id '},
-                {name: 'product_name'}
+                {name: 'pj_product_id '},
+                {name: 'pj_product'}
             ],
             // turn on remote sorting
             remoteSort: true
@@ -961,7 +1201,16 @@ Egw.Crm.ProjectEditDialog = function() {
                 }
         ]);
         
-        
+        var handler_remove_product = function(_button, _event)
+        {
+    		var productGrid = Ext.getCmp('grid_choosenProducts');
+    		var productStore = productGrid.getStore();
+            
+    		var selectedRows = productGrid.getSelectionModel().getSelections();
+            for (var i = 0; i < selectedRows.length; ++i) {
+                productStore.remove(selectedRows[i]);
+            }    	
+        }; 
         
         var product = Ext.data.Record.create([
            {name: 'pj_id', type: 'int'},
@@ -975,10 +1224,11 @@ Egw.Crm.ProjectEditDialog = function() {
             store: st_choosenProducts,
             id: 'grid_choosenProducts',
             cm: cm_choosenProducts,
+            sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
             anchor: '100% 100%',
 //            autoExpandColumn:'common',
             frame:false,
-            clicksToEdit:1,
+            clicksToEdit:2,
             tbar: [{
                 text: 'Produkt hinzufügen',
                 handler : function(){
@@ -993,6 +1243,9 @@ Egw.Crm.ProjectEditDialog = function() {
                     st_choosenProducts.insert(0, p);
                     grid_choosenProducts.startEditing(0, 0);
                 }
+            } , {
+                text: 'Produkt löschen',
+                handler : handler_remove_product
             }]  
         });
 
@@ -1051,7 +1304,6 @@ Egw.Crm.ProjectEditDialog = function() {
         });  
   
 		var projectedit = new Ext.FormPanel({
-//			url:'index.php',
 			baseParams: {method :'Crm.saveProject'},
 		    labelAlign: 'top',
 			bodyStyle:'padding:5px',

@@ -16,132 +16,359 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
     protected $_appname = 'Crm';
   
-  /**
-     * Returns the structure of the initial tree for this application.
-     *
-     * This function returns the needed structure, to display the initial tree, after the the logoin.
-     * Additional tree items get loaded on demand.
-     *
-     * @return array
-     */
-    public function getInitialTree($_location)
+
+    /**
+	 * save leadsources
+	 *
+	 * if $_Id is -1 the options element gets added, otherwise it gets updated
+	 * this function handles insert and updates as well as deleting vanished items
+	 *
+	 * @return array
+	 */	
+	public function saveLeadsources()
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
-         
-        switch($_location) {
-            case 'mainTree':
-                $treeNodes = array();
-                
-                $treeNode = new Egwbase_Ext_Treenode('Crm', 'projekte', 'projekte', 'Projekte', FALSE);
-                $treeNode->setIcon('apps/package-multimedia.png');
-                $treeNode->cls = 'treemain';
-                $treeNode->contextMenuClass = 'ctxMenuProject';
-                $treeNode->owner = 'allprojects';
-                $treeNode->jsonMethod = 'Crm.getProjectsByOwner';
-                $treeNode->dataPanelType = 'projects';
+        if(strlen($_POST['deletedOptions']) > 2) {
+               $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
+               
+            if(is_array($_deleted_options)) {
+                $backend = Crm_Backend::factory(Crm_Backend::SQL);
 
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'leads', 'Leads', TRUE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Crm.getLeadsByOwner';
-                $childNode->dataPanelType = 'leads';
-                $childNode->contextMenuClass = 'ctxMenuLeadsTree';
-                $treeNode->addChildren($childNode);
-                
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'partner', 'partner', 'Partner', TRUE);
-                $childNode->owner = $currentAccount->account_id;
-                $childNode->jsonMethod = 'Crm.getPartnerByOwner';
-                $childNode->dataPanelType = 'partner';
-                $childNode->contextMenuClass = 'ctxMenuPartnerTree';
-                $treeNode->addChildren($childNode);
-                
-                $treeNodes[] = $treeNode;
-
-                return $treeNodes;
-                 
-                break;
+                foreach($_deleted_options as $_deleted_option) {
+                    $backend->deleteLeadsourceById($_deleted_option);
+                }
+    
+                $result = array('success'   => TRUE, 'ids' => $_deleted_options);
+            } else {
+                $result = array('success'   => FALSE);
+                return $result;
+            }
         }
-    }   
-  
+
+       if(strlen($_POST['optionsData']) > 2) 
+       {     
+           $_leadsources = Zend_Json::decode($_POST['optionsData']);     
+
+           foreach($_leadsources AS $_leadsource) {
+               $options[] = array('pj_leadsource_id' => $_leadsource['key'], 'pj_leadsource' => $_leadsource['value']);    
+           }
+
+           if(is_array($options)) {
+               	foreach($options AS $_option) {
+                    if($_option['pj_leadsource_id'] == "-1") {
+						unset($_option['pj_leadsource_id']);
+					}
+				
+					$option = new Crm_Leadsource();
+				        try {
+				            $option->setFromUserData($_option);
+				        } catch (Exception $e) {
+				            // invalid data in some fields sent from client
+				            $result = array('success'           => false,
+				                            'errors'            => $option->getValidationErrors(),
+				                            'errorMessage'      => 'filter NOT ok');
+				
+				            return $result;
+				        }
+
+			        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+				         
+				        try {	            
+				            $backend->saveLeadsource($option);
+				            $result = array('success'           => true,
+				                            'welcomeMessage'    => 'Entry updated');
+				        } catch (Exception $e) {			            
+				            $result = array('success'           => false,
+				        					'errorMessage'      => $e->getMessage());
+                            return $result;
+				        }
+				}
+               
+           }        
+       } else {
+            $result = array('success' => false,
+                            'errorMessage' => 'nothing to save');
+        }
+       return $result;        
+    }  
+
+
+    /**
+	 * save leadtypes
+	 *
+	 * if $_Id is -1 the options element gets added, otherwise it gets updated
+	 * this function handles insert and updates as well as deleting vanished items
+	 *
+	 * @return array
+	 */	
+	public function saveLeadtypes()
+    {
+        if(strlen($_POST['deletedOptions']) > 2) {
+               $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
+               
+            if(is_array($_deleted_options)) {
+                $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+                foreach($_deleted_options as $_deleted_option) {
+                    $backend->deleteLeadtypeById($_deleted_option);
+                }
+    
+                $result = array('success'   => TRUE, 'ids' => $_deleted_options);
+            } else {
+                $result = array('success'   => FALSE);
+                return $result;
+            }
+        }
+
+       if(strlen($_POST['optionsData']) > 2) 
+       {     
+           $_leadtypes = Zend_Json::decode($_POST['optionsData']);     
+
+           foreach($_leadtypes AS $_leadtype) {
+               $options[] = array('pj_leadtype_id' => $_leadtype['key'], 'pj_leadtype' => $_leadtype['value']);    
+           }
+
+           if(is_array($options)) {
+               	foreach($options AS $_option) {
+                    if($_option['pj_leadtype_id'] == "-1") {
+						unset($_option['pj_leadtype_id']);
+					}
+				
+					$option = new Crm_Leadtype();
+				        try {
+				            $option->setFromUserData($_option);
+				        } catch (Exception $e) {
+				            // invalid data in some fields sent from client
+				            $result = array('success'           => false,
+				                            'errors'            => $option->getValidationErrors(),
+				                            'errorMessage'      => 'filter NOT ok');
+				
+				            return $result;
+				        }
+
+			        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+				         
+				        try {	            
+				            $backend->saveLeadtype($option);
+				            $result = array('success'           => true,
+				                            'welcomeMessage'    => 'Entry updated');
+				        } catch (Exception $e) {			            
+				            $result = array('success'           => false,
+				        					'errorMessage'      => $e->getMessage());
+                            return $result;
+				        }
+				}
+               
+           }        
+       } else {
+            $result = array('success' => false,
+                            'errorMessage' => 'nothing to save');
+        }
+       return $result;        
+    }
+    
     
     /**
-     * returns the nodes for the dynamic tree
-     *
-     * @param string $node which node got selected in the UI
-     * @param string $datatype what kind of data to search
-     * @return string json encoded array
-     */
-    public function getSubTree($node, $owner, $datatype, $location)
+	 * save projectstates
+	 *
+	 * if $_Id is -1 the options element gets added, otherwise it gets updated
+	 * this function handles insert and updates as well as deleting vanished items
+	 *
+	 * @return array
+	 */	
+	public function saveProjectstates()
     {
-        $nodes = array();
-     
-            switch($datatype) {
-                case 'projects':
-                   //  $backend = Crm_Backend::factory(Crm_Backend::SQL);
-                   //  $venues = $backend->getVenues();
-                    
-                    $venues = array('0' => array('id' => '1', 'name' => 'Schmidt Theater'),
-                                    '1' => array('id' => '2', 'name' => 'Schmidts TIVOLI'));
-                                        
-                    // foreach($venues as $venueObject) {
-                     foreach($venues as $venue) {
-                    
-                        $treeNode = new Egwbase_Ext_Treenode(
-                            'Crm',
-                            'stages',
-                            'venue-'.$venue['id'], 
-                            $venue['name'],
-                          //  $venueObject->venue_id, 
-                          //  $venueObject->venue_name,
-                            FALSE
-                        );
-                        $treeNode->contextMenuClass = 'ctxMenuHouse';
-                        $treeNode->venueId = $venue['id'];
-                       // $treeNode->jsonMethod = 'Addressbook.getContactsByListId';
-                        $treeNode->dataPanelType = 'venues';
-                      //  $treeNode->owner  = $owner;
-                        $nodes[] = $treeNode;
-                    }
-                break;                  
+        if(strlen($_POST['deletedOptions']) > 2) {
+               $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
+               
+            if(is_array($_deleted_options)) {
+                $backend = Crm_Backend::factory(Crm_Backend::SQL);
 
-
-               case 'stages':
-                // $backend = Crm_Backend::factory(Crm_Backend::SQL);
-               //  $stages = $backend->getStages();
-                
-                $stages = array('0' => array('id' => '1', 'name' => 'B&uuml;hne A'),
-                                    '1' => array('id' => '2', 'name' => 'B&uuml;hne B'),
-                                    '2' => array('id' => '3', 'name' => 'B&uuml;hne C'));
-                
-                
-                // foreach($stages as $stageObject) {
-                 foreach($stages as $stage) {
-                    $treeNode = new Egwbase_Ext_Treenode(
-                        'Crm',
-                        'events',
-                        'stage-'.$stage['id'], 
-                        $stage['name'],
-                      //  $stageObject->stage_id, 
-                      //  $stageObject->stage_name,
-                        TRUE
-                    );
-                    $treeNode->contextMenuClass = 'ctxMenuEvent';
-                    $treeNode->stageId = $stage['id'];
-                   // $treeNode->jsonMethod = 'Addressbook.getContactsByListId';
-                    $treeNode->dataPanelType = 'stages';
-                  //  $treeNode->owner  = $owner;
-                    $nodes[] = $treeNode;
+                foreach($_deleted_options as $_deleted_option) {
+                    $backend->deleteProjectstateById($_deleted_option);
                 }
-               break;			
+    
+                $result = array('success'   => TRUE, 'ids' => $_deleted_options);
+            } else {
+                $result = array('success'   => FALSE);
+                return $result;
+            }
         }
 
-        echo Zend_Json::encode($nodes);
+       if(strlen($_POST['optionsData']) > 2) 
+       {     
+           $_projectstates = Zend_Json::decode($_POST['optionsData']);     
 
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-     }
-     
+           foreach($_projectstates AS $_projectstate) {
+               $options[] = array('pj_projectstate_id' => $_projectstate['key'], 'pj_projectstate' => $_projectstate['value']);    
+           }
 
-  /**
+           if(is_array($options)) {
+               	foreach($options AS $_option) {
+                    if($_option['pj_projectstate_id'] == "-1") {
+						unset($_option['pj_projectstate_id']);
+					}
+				
+					$option = new Crm_Projectstate();
+				        try {
+				            $option->setFromUserData($_option);
+				        } catch (Exception $e) {
+				            // invalid data in some fields sent from client
+				            $result = array('success'           => false,
+				                            'errors'            => $option->getValidationErrors(),
+				                            'errorMessage'      => 'filter NOT ok');
+				
+				            return $result;
+				        }
+
+			        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+				         
+				        try {	            
+				            $backend->saveProjectstate($option);
+				            $result = array('success'           => true,
+				                            'welcomeMessage'    => 'Entry updated');
+				        } catch (Exception $e) {			            
+				            $result = array('success'           => false,
+				        					'errorMessage'      => $e->getMessage());
+                            return $result;
+				        }
+				}
+               
+           }        
+       } else {
+            $result = array('success' => false,
+                            'errorMessage' => 'nothing to save');
+        }
+       return $result;        
+    }    
+    
+    
+    /**
+	 * save productsources
+	 *
+	 * if $_Id is -1 the options element gets added, otherwise it gets updated
+	 * this function handles insert and updates as well as deleting vanished items
+	 *
+	 * @return array
+	 */	
+	public function saveProductsource()
+    {
+        if(strlen($_POST['deletedOptions']) > 2) {
+               $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
+               
+            if(is_array($_deleted_options)) {
+                $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+                foreach($_deleted_options as $_deleted_option) {
+                    $backend->deleteProductsourceById($_deleted_option);
+                }
+    
+                $result = array('success'   => TRUE, 'ids' => $_deleted_options);
+            } else {
+                $result = array('success'   => FALSE);
+                return $result;
+            }
+        }
+
+       if(strlen($_POST['optionsData']) > 2) 
+       {     
+           $_productsources = Zend_Json::decode($_POST['optionsData']);     
+
+           foreach($_productsources AS $_productsource) {
+               $options[] = array('pj_productsource_id' => $_productsource['key'], 'pj_productsource' => $_productsource['value']);    
+           }
+
+           if(is_array($options)) {
+               	foreach($options AS $_option) {
+                    if($_option['pj_productsource_id'] == "-1") {
+						unset($_option['pj_productsource_id']);
+					}
+				
+					$option = new Crm_Productsource();
+				        try {
+				            $option->setFromUserData($_option);
+				        } catch (Exception $e) {
+				            // invalid data in some fields sent from client
+				            $result = array('success'           => false,
+				                            'errors'            => $option->getValidationErrors(),
+				                            'errorMessage'      => 'filter NOT ok');
+				
+				            return $result;
+				        }
+
+			        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+				         
+				        try {	            
+				            $backend->saveProductsource($option);
+				            $result = array('success'           => true,
+				                            'welcomeMessage'    => 'Entry updated');
+				        } catch (Exception $e) {			            
+				            $result = array('success'           => false,
+				        					'errorMessage'      => $e->getMessage());
+                            return $result;
+				        }
+				}
+               
+           }        
+       } else {
+            $result = array('success' => false,
+                            'errorMessage' => 'nothing to save');
+        }
+       return $result;        
+    }     
+    
+
+    /**
+	 * save products
+	 *
+	 * 
+	 * 
+	 *
+	 * @return array
+	 */
+   public function saveProducts($products, $pj_id) {
+	
+    $_products = Zend_Json::decode($products);
+
+			if(is_array($_products)) {
+
+				foreach($_products AS $_product) {
+					
+					if($_product['pj_id'] == "-1") {
+						unset($_product['pj_id']);
+					}
+                    if($_product['pj_project_id'] == "-1") {
+						$_product['pj_project_id'] = $pj_id;
+					}
+					
+					$product = new Crm_Product();
+				        try {
+				            $product->setFromUserData($_product);
+				        } catch (Exception $e) {
+				            // invalid data in some fields sent from client
+				            $result = array('success'           => false,
+				                            'errors'            => $product->getValidationErrors(),
+				                            'errorMessage'      => 'filter NOT ok');
+				
+				            return $result;
+				        }
+				
+				        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+				         
+				        try {	            
+				            $backend->saveProduct($product);
+				            $result = array('success'           => true,
+				                            'welcomeMessage'    => 'Entry updated');
+				        } catch (Exception $e) {			            
+				            $result = array('success'           => false,
+				        					'errorMessage'      => $e->getMessage());
+				        }
+				}
+				
+			}      
+   }
+
+
+     /**
 	 * save one project
 	 *
 	 * if $_projectId is 0 the project gets added, otherwise it gets updated
@@ -162,6 +389,10 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
 		
 		$_POST['pj_modified'] = $_changeDate;
+        
+        // project modifier
+        $_POST['pj_modifier'] = Zend_Registry::get('currentAccount')->account_id;
+
 
         // date transition
 		if(isset($_POST['pj_start'])) {
@@ -200,48 +431,6 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }						
 		}		
         
-        // products
-		if(isset($_POST['products'])) {
-
-			$_products = Zend_Json::decode($_POST['products']);
-
-			if(is_array($_products)) {
-
-				foreach($_products AS $_product) {
-					
-					if($_product['pj_id'] == "-1") {
-						unset($_product['pj_id']);
-					}
-					
-					$product = new Crm_Product();
-				        try {
-				            $product->setFromUserData($_product);
-				        } catch (Exception $e) {
-				            // invalid data in some fields sent from client
-				            $result = array('success'           => false,
-				                            'errors'            => $product->getValidationErrors(),
-				                            'errorMessage'      => 'filter NOT ok');
-				
-				            return $result;
-				        }
-				
-				        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-				         
-				        try {
-				            $backend->saveProduct($product);
-				            $result = array('success'           => true,
-				                            'welcomeMessage'    => 'Entry updated');
-				        } catch (Exception $e) {
-				            $result = array('success'           => false,
-				        					'errorMessage'      => $e->getMessage());
-				        }
-				}
-				
-			}
-		}
-
-
-
         $project = new Crm_Project();
         try {
             $project->setFromUserData($_POST);
@@ -255,7 +444,6 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
 
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
         try {
             $backend->saveProject($project);
             $result = array('success'           => true,
@@ -264,10 +452,60 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $result = array('success'           => false,
         					'errorMessage'      => $e->getMessage());
         }
+        
+        
+        // products
+		if(isset($_POST['products'])) {
+            $this->saveProducts($_POST['products'], $project->pj_id);
+		}
+        
+        if(isset($_POST['deletedProducts'])) {
+               $_deleted_products = Zend_Json::decode($_POST['deletedProducts']);
+               
+              if(is_array($_deleted_products)) {
+                $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+                foreach($_deleted_products as $_deleted_product) {
+                    $backend->deleteProductById($_deleted_product);
+                }
+    
+                $result = array('success'   => TRUE, 'ids' => $_deleted_products);
+            } else {
+                $result = array('success'   => FALSE);
+            }
+
+            return $result;    
+        }        
+        
 
         return $result;
          
     }      
+ 
+ 
+    /**
+     * delete a array of projects
+     *
+     * @param array $_projectIDs
+     * @return array
+     */
+    public function deleteProjects($_projectIds)
+    {
+        $projectIds = Zend_Json::decode($_projectIds);
+        if(is_array($projectIds)) {
+            $projects = Crm_Backend::factory(Crm_Backend::SQL);
+            foreach($projectIds as $projectId) {
+                $projects->deleteProjectById($projectId);
+            }
+
+            $result = array('success'   => TRUE, 'ids' => $projectIds);
+        } else {
+            $result = array('success'   => FALSE);
+        }
+
+        return $result;
+    } 
+    
  
  
    public function getProductsById($_id)
@@ -301,7 +539,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         if(empty($filter)) {
             $filter = NULL;
         }
-
+        
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
         if($rows = $backend->getProjectsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows;
@@ -311,12 +549,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
      
-   public function getProjectstates()
+   public function getProjectstates($sort, $dir)
     {
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
          
             
-        if($rows = $backend->getProjectstates()) {
+        if($rows = $backend->getProjectstates($sort, $dir)) {
             $result['results']    = $rows->toArray();
 //              $result['results']    = $rows;
         }
@@ -324,12 +562,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;    
     }     
 	
-   public function getLeadsources()
+   public function getLeadsources($sort, $dir)
     {
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
          
             
-        if($rows = $backend->getLeadsources()) {
+        if($rows = $backend->getLeadsources($sort, $dir)) {
             $result['results']    = $rows->toArray();
 //              $result['results']    = $rows;
         }
@@ -337,12 +575,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;    
     }     	
  
-   public function getLeadtypes()
+   public function getLeadtypes($sort, $dir)
     {
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
          
             
-        if($rows = $backend->getLeadtypes()) {
+        if($rows = $backend->getLeadtypes($sort, $dir)) {
             $result['results']    = $rows->toArray();
 //              $result['results']    = $rows;
         }
@@ -350,12 +588,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;    
     }   
 	
-	public function getProductsAvailable()
+	public function getProductsource($sort, $dir)
 	{
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
          
             
-        if($rows = $backend->getProductsAvailable()) {
+        if($rows = $backend->getProductsAvailable($sort, $dir)) {
             $result['results']    = $rows->toArray();
 //              $result['results']    = $rows;
         }

@@ -1,47 +1,4 @@
 <?php
-/**
- * the class needed to access the projects table
- *
- * @see Crm_Backend_Sql_Projects
- */
-require_once 'Crm/Backend/Sql/Projects.php';
-
-/**
- * the class needed to access the leadsoure table
- *
- * @see Crm_Backend_Sql_Leadsources
- */
-require_once 'Crm/Backend/Sql/Leadsources.php';
-
-/**
- * the class needed to access the leadtypes table
- *
- * @see Crm_Backend_Sql_Leadtypes
- */
-require_once 'Crm/Backend/Sql/Leadtypes.php';
-
-/**
- * the class needed to access the products source table
- *
- * @see Crm_Backend_Sql_Productsource
- */
-require_once 'Crm/Backend/Sql/Productsource.php';
-
-/**
- * the class needed to access the products table
- *
- * @see Crm_Backend_Sql_Products
- */
-require_once 'Crm/Backend/Sql/Products.php';
-
-/**
- * the class needed to access the projectstates table
- *
- * @see Crm_Backend_Sql_Projectstates
- */
-require_once 'Crm/Backend/Sql/Projectstates.php';
-
-
 
 /**
  * interface for projects class
@@ -97,12 +54,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function __construct()
     {
-        $this->projectsTable      = new Crm_Backend_Sql_Projects();
-        $this->leadsourcesTable   = new Crm_Backend_Sql_Leadsources();
-        $this->leadtypesTable     = new Crm_Backend_Sql_Leadtypes();
-        $this->productsourceTable = new Crm_Backend_Sql_Productsource();
-        $this->projectstatesTable = new Crm_Backend_Sql_Projectstates();
-        $this->productsTable      = new Crm_Backend_Sql_Products();
+        $this->projectsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_project'));
+        $this->leadsourcesTable   = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
+        $this->leadtypesTable     = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
+        $this->productsourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+        $this->projectstatesTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_projectstate'));
+        $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
 
 	
@@ -111,9 +68,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @return unknown
 	*/
-    public function getLeadsources()
+    public function getLeadsources($sort, $dir)
     {	
-		$result = $this->leadsourcesTable->fetchAll();
+		$result = $this->leadsourcesTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}
 
@@ -122,9 +79,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @return unknown
 	*/
-    public function getLeadtypes()
+    public function getLeadtypes($sort, $dir)
     {	
-		$result = $this->leadtypesTable->fetchAll();
+		$result = $this->leadtypesTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}	
     
@@ -133,9 +90,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @return unknown
 	*/
-    public function getProductsAvailable()
+    public function getProductsAvailable($sort, $dir)
     {	
-		$result = $this->productsourceTable->fetchAll();
+		$result = $this->productsourceTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}    
     
@@ -144,14 +101,238 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @return unknown
 	*/
-    public function getProjectstates()
+    public function getProjectstates($sort, $dir)
     {	
-    	$result = $this->projectstatesTable->fetchAll();
+    	$result = $this->projectstatesTable->fetchAll(NULL, $sort, $dir);
    
         return $result;
 	}    
   
-  
+
+	/**
+	* add or updates an option
+	*
+	* @param Crm_Leadsource $_optionData the optiondata
+	* @return unknown
+	*/
+    public function saveLeadsource(Crm_Leadsource $_optionData)
+    {
+        $optionData = $_optionData->toArray();
+
+        if($_optionData->pj_leadsource_id === NULL) {        
+            $result = $this->leadsourcesTable->insert($optionData);
+            $_optionData->pj_leadsource_id = $this->leadsourcesTable->getAdapter()->lastInsertId();
+        } else {
+            //$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::EDIT);
+
+            // update the requested pj_id only if the pj_owner matches the current users acl
+            $where  = array(
+                $this->leadsourcesTable->getAdapter()->quoteInto('pj_leadsource_id = (?)', $_optionData->pj_leadsource_id),
+            );
+            $result = $this->leadsourcesTable->update($optionData, $where);
+        }
+
+        return $_optionData;
+    }
+
+    /**
+     * delete option identified by id and table
+     *
+     * @param int $_Id option id
+     * @param $_table which option section
+     * @return int the number of rows deleted
+     */
+    public function deleteLeadsourceById($_Id)
+    {
+        $Id = (int)$_Id;
+        if($Id != $_Id) {
+            throw new InvalidArgumentException('$_Id must be integer');
+        }
+    
+    //        $oldContactData = $this->getContactById($_contactId);
+    
+    //        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+    //            throw new Exception('delete access to addressbook denied');
+    //        }
+            
+            $where  = array(
+                $this->leadsourcesTable->getAdapter()->quoteInto('pj_leadsource_id = ?', $Id),
+            );
+             
+            $result = $this->leadsourcesTable->delete($where);
+
+        return $result;
+    }
+
+
+	/**
+	* add or updates an option
+	*
+	* @param Crm_Leadtype $_optionData the optiondata
+	* @return unknown
+	*/
+    public function saveLeadtype(Crm_Leadtype $_optionData)
+    {
+        $optionData = $_optionData->toArray();
+
+        if($_optionData->pj_leadtype_id === NULL) {        
+            $result = $this->leadtypesTable->insert($optionData);
+            $_optionData->pj_leadtype_id = $this->leadtypesTable->getAdapter()->lastInsertId();
+        } else {
+            //$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::EDIT);
+
+            // update the requested pj_id only if the pj_owner matches the current users acl
+            $where  = array(
+                $this->leadtypesTable->getAdapter()->quoteInto('pj_leadtype_id = (?)', $_optionData->pj_leadtype_id),
+            );
+            $result = $this->leadtypesTable->update($optionData, $where);
+        }
+
+        return $_optionData;
+    }
+
+    /**
+     * delete option identified by id and table
+     *
+     * @param int $_Id option id
+     * @param $_table which option section
+     * @return int the number of rows deleted
+     */
+    public function deleteLeadtypeById($_Id)
+    {
+        $Id = (int)$_Id;
+        if($Id != $_Id) {
+            throw new InvalidArgumentException('$_Id must be integer');
+        }
+    
+    //        $oldContactData = $this->getContactById($_contactId);
+    
+    //        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+    //            throw new Exception('delete access to addressbook denied');
+    //        }
+            
+            $where  = array(
+                $this->leadtypesTable->getAdapter()->quoteInto('pj_leadtype_id = ?', $Id),
+            );
+             
+            $result = $this->leadtypesTable->delete($where);
+
+        return $result;
+    }
+
+
+	/**
+	* add or updates an option
+	*
+	* @param Crm_Productsource $_optionData the optiondata
+	* @return unknown
+	*/
+    public function saveProductsource(Crm_Productsource $_optionData)
+    {
+        $optionData = $_optionData->toArray();
+
+        if($_optionData->pj_productsource_id === NULL) {        
+            $result = $this->productsourceTable->insert($optionData);
+            $_optionData->pj_productsource_id = $this->productsourceTable->getAdapter()->lastInsertId();
+        } else {
+            //$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::EDIT);
+
+            // update the requested pj_id only if the pj_owner matches the current users acl
+            $where  = array(
+                $this->productsourceTable->getAdapter()->quoteInto('pj_productsource_id = (?)', $_optionData->pj_productsource_id),
+            );
+            $result = $this->productsourceTable->update($optionData, $where);
+        }
+
+        return $_optionData;
+    }
+
+    /**
+     * delete option identified by id and table
+     *
+     * @param int $_Id option id
+     * @param $_table which option section
+     * @return int the number of rows deleted
+     */
+    public function deleteProductsourceById($_Id)
+    {
+        $Id = (int)$_Id;
+        if($Id != $_Id) {
+            throw new InvalidArgumentException('$_Id must be integer');
+        }
+    
+    //        $oldContactData = $this->getContactById($_contactId);
+    
+    //        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+    //            throw new Exception('delete access to addressbook denied');
+    //        }
+            
+            $where  = array(
+                $this->productsourceTable->getAdapter()->quoteInto('pj_productsource_id = ?', $Id),
+            );
+             
+            $result = $this->productsourceTable->delete($where);
+
+        return $result;
+    }
+
+
+	/**
+	* add or updates an option
+	*
+	* @param Crm_Projectstate $_optionData the optiondata
+	* @return unknown
+	*/
+    public function saveProjectstate(Crm_Projectstate $_optionData)
+    {
+        $optionData = $_optionData->toArray();
+
+        if($_optionData->pj_projectstate_id === NULL) {        
+            $result = $this->projectstatesTable->insert($optionData);
+            $_optionData->pj_projectstate_id = $this->projectstatesTable->getAdapter()->lastInsertId();
+        } else {
+            //$acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::EDIT);
+
+            // update the requested pj_id only if the pj_owner matches the current users acl
+            $where  = array(
+                $this->projectstatesTable->getAdapter()->quoteInto('pj_projectstate_id = (?)', $_optionData->pj_projectstate_id),
+            );
+            $result = $this->projectstatesTable->update($optionData, $where);
+        }
+
+        return $_optionData;
+    }
+
+    /**
+     * delete option identified by id and table
+     *
+     * @param int $_Id option id
+     * @param $_table which option section
+     * @return int the number of rows deleted
+     */
+    public function deleteProjectstateById($_Id)
+    {
+        $Id = (int)$_Id;
+        if($Id != $_Id) {
+            throw new InvalidArgumentException('$_Id must be integer');
+        }
+    
+    //        $oldContactData = $this->getContactById($_contactId);
+    
+    //        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+    //            throw new Exception('delete access to addressbook denied');
+    //        }
+            
+            $where  = array(
+                $this->projectstatesTable->getAdapter()->quoteInto('pj_projectstate_id = ?', $Id),
+            );
+             
+            $result = $this->projectstatesTable->delete($where);
+
+        return $result;
+    }
+
+
 	/**
 	* add or updates an product (which belongs to one project)
 	*
@@ -160,7 +341,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param int $_projectId the project id
 	* @return unknown
 	*/
-    public function saveProduct(Crm_Project $_productData)
+    public function saveProduct(Crm_Product $_productData)
     {
   //      $currentAccount = Zend_Registry::get('currentAccount');
 
@@ -180,7 +361,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
               //  $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', array_keys($acl))
             );
 
-//            $result = $this->productsTable->update($productData, $where);
+            $result = $this->productsTable->update($productData, $where);
         }
 
         return $_productData;
@@ -202,7 +383,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $projectData = $_projectData->toArray();
 
 
-        
         unset($projectData['pj_id']);
         if(empty($projectData['pj_owner'])) {
             $projectData['pj_owner'] = $currentAccount->account_id;
@@ -227,6 +407,63 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
 
 
+    /**
+     * delete project identified by pj_id
+     *
+     * @param int $_projects project ids
+     * @return int the number of rows deleted
+     */
+    public function deleteProjectById($_projectId)
+    {
+        $projectId = (int)$_projectId;
+        if($projectId != $_projectId) {
+            throw new InvalidArgumentException('$_projectId must be integer');
+        }
+
+        $oldProjectData = $this->getProjectById($_projectId);
+        
+/*
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldProjectData->pj_owner, Egwbase_Container::GRANT_DELETE)) {
+            throw new Exception('delete access to CRM denied');
+        }
+   */     
+        $where  = array(
+            $this->projectsTable->getAdapter()->quoteInto('pj_id = ?', $projectId),
+        );
+
+        $result = $this->projectsTable->delete($where);
+
+        return $result;
+    }
+
+
+    /**
+     * delete product identified by product id
+     *
+     * @param int $_contacts contact ids
+     * @return int the number of rows deleted
+     */
+    public function deleteProductById($_productId)
+    {
+        $productId = (int)$_productId;
+        if($productId != $_productId) {
+            throw new InvalidArgumentException('$_productId must be integer');
+        }
+
+//        $oldContactData = $this->getContactById($_contactId);
+
+//        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+//            throw new Exception('delete access to addressbook denied');
+//        }
+        
+        $where  = array(
+            $this->productsTable->getAdapter()->quoteInto('pj_id = ?', $productId),
+        );
+         
+        $result = $this->productsTable->delete($where);
+
+        return $result;
+    }
 
 	/**
 	* get all products which belong to one project
@@ -243,14 +480,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($id != $_id) {
             throw new InvalidArgumentException('$_id must be integer');
         }
-        
+
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
         ->from('egw_metacrm_project')
         ->order('egw_metacrm_product. pj_id ASC')    
         ->join('egw_metacrm_product','egw_metacrm_product.pj_project_id = egw_metacrm_project.pj_id')
-        ->join('egw_metacrm_productsource','egw_metacrm_productsource.product_id = egw_metacrm_product.pj_product_id')
+        ->join('egw_metacrm_productsource','egw_metacrm_productsource.pj_product_id = egw_metacrm_product.pj_product_id')
         ->where('egw_metacrm_project.pj_id = ?', $id);     
     }
     
@@ -270,6 +507,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
+    
+        if(empty($_filter)) {
+            $_filter = '%';
+        } else {
+            $_filter = '%' . $_filter .'%';
+        }
         
         $currentAccount = Zend_Registry::get('currentAccount');
         
@@ -286,6 +529,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $where = $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds);
+        $where_filter = $this->projectsTable->getAdapter()->quoteInto('pj_name LIKE (?)', $_filter);        
 
  
         $db = Zend_Registry::get('dbAdapter');
@@ -297,6 +541,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         ->join('egw_metacrm_leadtype','egw_metacrm_leadtype.pj_leadtype_id = egw_metacrm_project.pj_customertype_id')
         ->join('egw_metacrm_projectstate','egw_metacrm_projectstate.pj_projectstate_id = egw_metacrm_project.pj_distributionphase_id')
 //        ->where($where)
+        ->where($where_filter)
         ->limit($limit, $start);
 
 //        error_log("CRM :: SQL : getProjectsByOwner : " . $select->__toString());
@@ -357,11 +602,15 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         );
 
         $result = $this->projectsTable->fetchRow($where);
-      
- /*       if(!Egwbase_Container::getInstance()->hasGrant($result->pj_owner, Egwbase_Container::GRANT_READ)) {
-            throw new Exception('permission to contact denied');
-        }      
- */       
+
+        if($result === NULL) {
+            throw new UnderFlowExecption('project not found');
+        }
+ /*      
+        if(!Zend_Registry::get('currentAccount')->hasGrant($result->pj_owner, Egwbase_Container::GRANT_READ)) {
+            throw new Exception('permission to project denied');
+        }
+*/
         return $result;
     }
     

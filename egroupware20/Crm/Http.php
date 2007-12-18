@@ -14,24 +14,7 @@
 class Crm_Http extends Egwbase_Application_Http_Abstract
 {
     protected $_appname = 'Crm';
-    
-    public function getJsFilesToInclude()
-    {
-        return array_merge( parent::getJsFilesToInclude(), array(
-            //self::_appendFileTime("{$this->_appname}/js/Crm.js")
-        ));
-    }
-
-    public function getCssFilesToInclude()
-    {
-        
-    }
-
-    public function getInitialMainScreenData()
-    {
-      //  return array('initialTree' => Crm_Json::getInitialTree());
-    }    
-    
+      
     
 	public function editProject($_projectId)
 	{
@@ -59,7 +42,6 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$projects = Crm_Backend::factory(Crm_Backend::SQL);
 		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
 			$view->formData['values'] = $project->toArray();
-			
 		} else {
 		    
 		}
@@ -67,6 +49,13 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
 		$view->jsExecute = 'Egw.Crm.ProjectEditDialog.display();';
+
+		$view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+		$view->title="edit project";
 
 		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');
