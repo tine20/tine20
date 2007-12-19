@@ -29,11 +29,12 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param mixed $_contactData
      * @param bool $_bypassFilters Bypass filters at object creation with data
      * this is usefull when datas are for shure valid, e.g. after database query
+     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * 
      * @return void
      * @throws Egwbase_Record_Exception
      */
-    public function __construct($_data = NULL, $_bypassFilters = false);
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL);
     
     /**
      * sets identifier of record
@@ -76,9 +77,10 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * returns array with record related properties 
      *
+     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * @return array
      */
-    public function toArray();
+    public function toArray($_convertDates = NULL);
     
 
     
