@@ -3,25 +3,193 @@ Ext.namespace('Egw.Crm');
 Egw.Crm = function() {
 
 
-      /**
+   var _treeNodeContextMenu = null;
+
+    /**
      * the initial tree to be displayed in the left treePanel
      */
     var _initialTree = [{
-        "text":"Projects",
-        "cls":"treemain",
-        "allowDrag":false,
-        "allowDrop":true,
-        "id":"crm",
-        "icon":"images\/oxygen\/16x16\/apps\/package-multimedia.png",
-        "application":"Crm",
-        "datatype":"projects",
-        /*"children":[],*/
-        "leaf":null,
-        "contextMenuClass":"ctxMenuProject",
-        "owner":"all",
-    //    "jsonMethod":"Crm.getProjectsByOwner",
-        "dataPanelType":"projects"
+        text: 'All Projects',
+        cls: "treemain",
+        nodeType: 'allProjects',
+        id: 'allProjects',
+        children: [{
+            text: "Internal Projects",
+            cls: "file",
+            nodeType: "internalProjects",
+            id: "internalProjects",
+            children: [],
+            leaf: false,
+            expanded: true
+        }, {
+            text: 'My Projects',
+            cls: 'file',
+            nodeType: 'userProjects',
+            id: 'userProjects',
+            leaf: null,
+            owner: Egw.Egwbase.Registry.get('currentAccount').account_id
+        }, {
+            text: "Shared Projects",
+            cls: "file",
+            nodeType: "sharedProjects",
+            children: null,
+            leaf: null
+        }, {
+            text: "Other Users Projects",
+            cls: "file",
+            nodeType: "otherProjects",
+            children: null,
+            leaf: null
+        }]
     }];
+    
+    var _handler_addFolder = function(_button, _event) {
+        Ext.MessageBox.prompt('New Folder', 'Please enter the name of the new folder:', function(_btn, _text) {
+            if(_treeNodeContextMenu !== null && _btn == 'ok') {
+
+                //console.log(_treeNodeContextMenu);
+                var type = 'personal';
+                if(_treeNodeContextMenu.attributes.nodeType == 'sharedProjects') {
+                	type = 'shared';
+                }
+                
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Crm.addFolder',
+                        name: _text,
+                        type: type,
+                        owner: _treeNodeContextMenu.attributes.owner
+                    },
+                    text: 'Creating new folder...',
+                    success: function(_result, _request){
+                        //Ext.getCmp('Crm_Projects_Grid').getStore().reload();
+                        //_treeNodeContextMenu.expand(false, false);
+                        //console.log(_result);
+                        if(_treeNodeContextMenu.isExpanded()) {
+                        	var responseData = Ext.util.JSON.decode(_result.responseText);
+	                        var newNode = new Ext.tree.TreeNode({
+	                            leaf: true,
+	                            cls: 'file',
+	                            nodeType: 'singleProject',
+	                            projectId: responseData.projectId,
+	                            text: _text
+	                        });
+                            _treeNodeContextMenu.appendChild(newNode);
+                        } else {
+                        	_treeNodeContextMenu.expand(false);
+                        }
+                    },
+                    failure: function(result, request){
+                        //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the project.');
+                    }
+                });
+            }
+        });
+    };
+
+    var _handler_renameFolder = function(_button, _event) {
+        var resulter = function(_btn, _text) {
+            if(_treeNodeContextMenu !== null && _btn == 'ok') {
+
+                //console.log(_treeNodeContextMenu);
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Crm.renameFolder',
+                        projectId: _treeNodeContextMenu.attributes.projectId,
+                        name: _text
+                    },
+                    text: 'Renamimg folder...',
+                    success: function(_result, _request){
+                        _treeNodeContextMenu.setText(_text);
+                    },
+                    failure: function(result, request){
+                        //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the project.');
+                    }
+                });
+            }
+        };
+        
+        Ext.MessageBox.show({
+            title: 'Rename folder',
+            msg: 'Please enter the new name of the folder:',
+            buttons: Ext.MessageBox.OKCANCEL,
+            value: _treeNodeContextMenu.text,
+            fn: resulter,
+            prompt: true,
+            icon: Ext.MessageBox.QUESTION
+        });
+        
+    };
+
+    var _handler_deleteFolder = function(_button, _event) {
+        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the folder ' + _treeNodeContextMenu.text + ' ?', function(_button){
+            if (_button == 'yes') {
+            
+                //console.log(_treeNodeContextMenu);
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    params: {
+                        method: 'Crm.deleteFolder',
+                        projectId: _treeNodeContextMenu.attributes.projectId
+                    },
+                    text: 'Deleting Folder...',
+                    success: function(_result, _request){
+                        if(_treeNodeContextMenu.isSelected()) {
+                            Ext.getCmp('Crm_Tree').getSelectionModel().select(_treeNodeContextMenu.parentNode);
+                            Ext.getCmp('Crm_Tree').fireEvent('click', _treeNodeContextMenu.parentNode);
+                        }
+                        _treeNodeContextMenu.remove();
+                    },
+                    failure: function(_result, _request){
+                        Ext.MessageBox.alert('Failed', 'The folder could not be deleted.');
+                    }
+                });
+            }
+        });
+    };    
+     
+   var _action_addFolder = new Ext.Action({
+        text: 'add folder',
+        handler: _handler_addFolder
+    });
+
+    var _action_deleteFolder = new Ext.Action({
+        text: 'delete folder',
+        iconCls: 'action_delete',
+        handler: _handler_deleteFolder
+    });
+
+    var _action_renameFolder = new Ext.Action({
+        text: 'rename folder',
+        iconCls: 'action_rename',
+        handler: _handler_renameFolder
+    });
+
+    var _action_permisionsFolder = new Ext.Action({
+    	disabled: true,
+        text: 'permissions',
+        handler: _handler_deleteFolder
+    });
+
+// >>>>
+
+    var _contextMenuUserAddressbooks = new Ext.menu.Menu({
+        items: [
+            _action_addAddressbook
+        ]
+    });
+    
+    var _contextMenuSingleAddressbook= new Ext.menu.Menu({
+        items: [
+            _action_renameAddressbook,
+            _action_deleteAddressbook,
+            _action_permisionsAddressbook
+        ]
+    });
+
+// <<<<    
     
      /**
      * creates the crm tree panel
@@ -56,7 +224,7 @@ Egw.Crm = function() {
         var treePanel = new Ext.tree.TreePanel({
             title: 'CRM',
             id: 'Crm_Tree',
-//            iconCls: 'CrmTreePanel',
+            iconCls: 'Crm_thumbnail_application',
             loader: treeLoader,
             rootVisible: false,
             border: false
@@ -380,8 +548,7 @@ Egw.Crm = function() {
                         params:additionalData,
             			success:function(form, action, o) {
                             store_options.reload();
-                            Ext.getCmp('options_window').hide();
-                            Ext.getCmp('options_window').destroy();                            
+                            store_options.rejectChanges();
             			},
             			failure:function(form, action) {
             			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -634,17 +801,12 @@ Egw.Crm = function() {
 
 Egw.Crm.ProjectEditDialog = function() {
 
+    // private variables
     var dialog;
-    
     var deleted_products = new Array();
-    
-    /**
-        * the dialog to display the contact data
-        */
     var projectedit;
     
-    // private functions and variables
-    
+    // private functions 
     var handler_applyChanges = function(_button, _event) 
     {
         var grid_products          = Ext.getCmp('grid_choosenProducts');
@@ -662,13 +824,16 @@ Egw.Crm.ProjectEditDialog = function() {
 			}	
             additionalData.products = modified_products_json;
             additionalData.deletedProducts = Ext.util.JSON.encode(deleted_products);
-                        
 			projectForm.submit({
     			waitTitle:'Please wait!',
     			waitMsg:'saving event...',
     			params:additionalData,
     			success:function(form, action, o) {
                     store_products.reload();
+                    store_products.rejectChanges();
+                    for(var i=0; i< deleted_products.length; i++)  {
+                        deleted_products.pop();
+                    }
     				window.opener.Egw.Crm.reload();
     			},
     			failure:function(form, action) {
@@ -703,7 +868,11 @@ Egw.Crm.ProjectEditDialog = function() {
     			waitMsg:'saving event...',
     			params:additionalData,
     			success:function(form, action, o) {
-                    store_products.reload();                    
+                    store_products.reload();       
+                    store_products.rejectChanges();
+                    for(var i=0; i< deleted_products.length; i++)  {
+                        deleted_products.pop();
+                    }                                 
     				window.opener.Egw.Crm.reload();
     				window.setTimeout("window.close()", 400);
     			},
@@ -812,6 +981,10 @@ Egw.Crm.ProjectEditDialog = function() {
             	
         }; 
 
+        function formatDate(value){
+            return value ? value.dateFormat('M d, Y') : '';
+        };
+    
         var _action_edit = new Ext.Action({
             text: 'editieren',
             //disabled: true,
@@ -819,12 +992,26 @@ Egw.Crm.ProjectEditDialog = function() {
             iconCls: 'action_edit'
         });
  
-
-        function formatDate(value){
-            return value ? value.dateFormat('M d, Y') : '';
-        };
-    
-     
+ 
+         var st_productsAvailable = new Ext.data.JsonStore({
+            baseParams: {
+                method: 'Crm.getProductsource',
+                sort: 'pj_productsource',
+                dir: 'ASC'
+            },
+            root: 'results',
+            autoLoad: true,
+            totalProperty: 'totalcount',
+            id: 'pj_productsource_id',
+            fields: [
+                {name: 'pj_productsource_id'},
+                {name: 'value', mapping: 'pj_productsource'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
+        });
+ 
+ 
         var st_leadstatus = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Crm.getProjectstates',
@@ -888,7 +1075,6 @@ Egw.Crm.ProjectEditDialog = function() {
 				displayField:'value',
                 valueField:'key',
 				typeAhead: true,
-//				mode: 'local',
 				triggerAction: 'all',
 				emptyText:'',
 				selectOnFocus:true,
@@ -932,10 +1118,7 @@ Egw.Crm.ProjectEditDialog = function() {
 				anchor:'100%'    
         });
 		
-		
-
-	
-        
+     
         var st_owner =  new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
@@ -979,8 +1162,7 @@ Egw.Crm.ProjectEditDialog = function() {
         });
      
         var st_contacts = new Ext.data.JsonStore({
- //           url: 'index.php',
-            //baseParams: getParameterContactsDataStore(_node),
+      //      baseParams: getParameterContactsDataStore(_node),
             root: 'results',
             totalProperty: 'totalcount',
             id: 'contact_id',
@@ -1120,66 +1302,40 @@ Egw.Crm.ProjectEditDialog = function() {
         })
         
         st_choosenProducts.load();
- 
-  /*
-        var st_productsAvailable = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getProductsAvailable',
-                _id: _pj_id
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'pj_product_id ',
-            fields: [
-                {name: 'pj_product_id '},
-                {name: 'pj_product'}
-            ],
-            // turn on remote sorting
-            remoteSort: true
-        });
-		st_productsAvailable.load();
-	*/	
-		var st_productsAvailable = new Ext.data.SimpleStore({
-                fields: ['pj_product_id','value'],
-                data: [
-                        ['0','CEREC AE'],
-                        ['1','CEREC MC XL'],
-                        ['2','CEREC 3 SE'],
-                        ['3','CEREC PPU'],
-                        ['4','Inlab MC XL'],
-                        ['5','Inlab'],
-                        ['6','InEOS'],
-                        ['7','InFire'],
-                        ['8','InCoris'],
-                        ['9','InFinident'],
-                        ['10','PC']
-                    ],
-                id: 'pj_product_id'
-        });  
-  
-        function renderProductCombo(value) {
-            if(value) return st_productsAvailable.getAt(value).get('value');
-        }
-  
+
+
         var cm_choosenProducts = new Ext.grid.ColumnModel([{
                 header: "Produkt",
                 dataIndex: 'pj_product_id',
                 width: 300,
                 editor: new Ext.form.ComboBox({
                     name: 'product_combo',
-                    hiddenName: 'pj_product_id',
+                    id: 'product_combo',
+                    hiddenName: 'pj_productsource_id', //pj_product_id',
                     store: st_productsAvailable, 
                     displayField:'value', 
-                    valueField: 'pj_product_id',
+                    valueField: 'pj_productsource_id',
                     allowBlank: false, 
                     editable: false,
+                    selectOnFocus:true,
                     forceSelection: true, 
                     triggerAction: "all", 
-                    mode: 'local', 
+                  //  mode: 'local', 
                     lazyRender:true,
                     listClass: 'x-combo-list-small'
                     }),
-                renderer: renderProductCombo
+                renderer: function(data){
+                    record = st_productsAvailable.getById(data);
+                    if (record) {
+                        console.log(record.data);
+                        return record.data.value;
+                    }
+                    else {
+                        console.log('store noch net da');
+                        Ext.getCmp('projectDialog').doLayout();
+                        return data;
+                    }
+                  }
                 } , { 
                 header: "Seriennummer",
                 dataIndex: 'pj_product_desc',
@@ -1200,6 +1356,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 renderer: Ext.util.Format.euMoney
                 }
         ]);
+       
         
         var handler_remove_product = function(_button, _event)
         {
@@ -1248,6 +1405,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 handler : handler_remove_product
             }]  
         });
+
 
         grid_choosenProducts.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -1583,7 +1741,7 @@ Egw.Crm.ProjectEditDialog = function() {
 
     }
 
-    var setContactDialogValues = function(_formData) {
+    var setContactDialogValues = function(_formData) {        
     	var form = Ext.getCmp('projectDialog').getForm();
     	
     	form.setValues(_formData);
@@ -1636,7 +1794,7 @@ Egw.Crm.ProjectEditDialog = function() {
 				single: true
 			});
 			st_leadtype.load();
-		}
+		}  
     }
 
     var _exportContact = function(_btn, _event) {

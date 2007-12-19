@@ -519,8 +519,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if ($_owner == 'currentuser') {
             $_owner = $currentAccount->account_id;
         }
-          
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
+        
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);    
     
         $containerIds = array();
     

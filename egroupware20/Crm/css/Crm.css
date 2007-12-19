@@ -82,6 +82,10 @@ input {
 
 
 
+.Crm_thumbnail_application {
+    background-image:url(../../images/oxygen/16x16/actions/paperbag.png) !important;
+}
+
 .action_prev {
 	background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
 }
