@@ -11,7 +11,7 @@
 
 /**
  * json interface for calendar
- *
+ * @package     Calendar
  */
 class Calendar_Json extends Egwbase_Application_Json_Abstract
 {
