@@ -1,16 +1,18 @@
 <?php
-
 /**
- * json interface for calendar
+ * eGroupWare 2.0
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
 
+/**
+ * json interface for calendar
+ *
+ */
 class Calendar_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Calendar';
@@ -62,20 +64,19 @@ class Calendar_Json extends Egwbase_Application_Json_Abstract
         );
     }
     
-    public function getEventById( $_id )
+    public function getEventById( $id )
     {
-        echo 'hallo';
-        $event = $this->_backend->getEventById( $_id );
+        $event = $this->_backend->getEventById( $id );
         self::date2Iso($event);
         return $event->toArray();
     }
     
-    public function saveEvent( $_event )
+    public function saveEvent( $event )
     {
         
     }
     
-    public function deleteEventsById( $_events )
+    public function deleteEventsById( $events )
     {
         
     }
@@ -94,19 +95,21 @@ class Calendar_Json extends Egwbase_Application_Json_Abstract
     }
     
     /**
-     * converts Zend_Dates into iso format for json transport
+     * converts all Zend_Dates in an iteratable object
+     * into iso format for json transport
      *
-     * @param iteratable $toConvert
+     * @param iteratable $_toConvert
+     * @return iteratable converted $_toConvert
      */
-    public static function date2Iso( $toConvert )
+    public static function date2Iso( $_toConvert )
     {
-        foreach ($toConvert as $field => $value) {
+        foreach ($_toConvert as $field => $value) {
             if ($value instanceof Zend_Date) {
-                $toConvert[$field] = $value->getIso();
+                $_toConvert[$field] = $value->getIso();
             } elseif (is_array($value)) {
-                $toConvert[$field] = self::date2Iso($value);
+                $_toConvert[$field] = self::date2Iso($value);
             }
         }
-        return $toConvert;
+        return $_toConvert;
     }
 }

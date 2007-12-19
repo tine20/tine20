@@ -14,4 +14,24 @@
 class Calendar_Http extends Egwbase_Application_Http_Abstract
 {
     protected $_appname = 'Calendar';
+    
+    public function getJsFilesToInclude()
+    {
+        foreach( ( $files = array(
+            'Calendar.js',
+            'GridView_Days.js'
+        ) ) as $key => $file) {
+            $files[$key] = 'Calendar/js/' . self::_appendFileTime($file);
+        }
+        return $files;
+        
+    }
+    
+    public function getCssFilesToInclude()
+    {
+        return array(
+            'Crm/css/Eventscheduler.css',
+            'Calendar/css/Calendar.css'
+        );
+    }
 }

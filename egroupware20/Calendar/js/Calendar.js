@@ -63,8 +63,10 @@ Egw.Calendar.Preferences = {
 Egw.Calendar.getPanel = function() {
     
     var calPanel =  new Ext.Panel({
+		iconCls: 'CalendarTreePanel',
         title: 'Calendar',
-        html: '<p>Magic Calendar App!</p>',
+        //html: '<p>Magic Calendar App!</p>',
+        items: new Ext.DatePicker({}),
         border: false
     });
     
@@ -185,7 +187,8 @@ Egw.Calendar.MainScreen = function() {
 			
 			for (var i = 1; i <= nDays; i++) {
 				columns.push({
-					header: includeHeader ? Egw.Egwbase.Common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
+					//header: includeHeader ? Egw.Egwbase.Common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
+					header: includeHeader ? request.start.add(Date.DAY, i-1).format('l, \\t\\he jS \\o\\f F') : '',
 					sortable: false,
 					fixed: true,
 					dataIndex: 'cdata'
@@ -439,7 +442,7 @@ Egw.Calendar.MainScreen = function() {
 		'    {[values.cal_start.format("H:i")]}',
 		'  </tr>',
 		'  <tr class="x-calendar-dayview-event-body">',
-		'    {cal_id}',
+		'    {cal_title}',
 		'  </tr>',
 		'  <tr class="x-calendar-dayview-event-footer">',
 		'  </tr>',
@@ -486,7 +489,7 @@ Egw.Calendar.ToolBar = function() {
 	{
 		
 		Egw.Calendar.Request.on('requestchange', function(request){
-            //console.log(request.view);
+            console.log(request.view);
             //console.log(request.viewMultiplier);
         },this);
 		
@@ -495,7 +498,7 @@ Egw.Calendar.ToolBar = function() {
 			items: [{
 				selectedView: 'day',
 	            selectedViewMultiplier: 1,
-	            text: '1day view',
+	            text: 'day view',
 	            iconCls: 'action_1dayview',
 	            xtype: 'tbbtnlockedtoggle',
 	            handler: changeView,
@@ -503,8 +506,8 @@ Egw.Calendar.ToolBar = function() {
 	            toggleGroup: 'Calendar_Toolbar_tgViews'
 			}, {
 				selectedView: 'day',
-                selectedViewMultiplier: 5,
-				text: '5day view',
+                selectedViewMultiplier: 4,
+				text: '4 days view',
 				iconCls: 'action_5daysview',
                 xtype: 'tbbtnlockedtoggle',
                 handler: changeView,
@@ -513,7 +516,7 @@ Egw.Calendar.ToolBar = function() {
 			}, {
 				selectedView: 'day',
                 selectedViewMultiplier: 7,
-				text: '7day view',
+				text: 'week view',
 				iconCls: 'action_7daysview',
                 xtype: 'tbbtnlockedtoggle',
                 handler: changeView,
