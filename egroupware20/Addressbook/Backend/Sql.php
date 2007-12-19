@@ -221,7 +221,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        $allContainer = Egwbase_Container::getInstance()->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
         
         $containerIds = array();
         
@@ -247,7 +247,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getCountOfAllContacts($_filter)
     {
-        $allContainer = Egwbase_Container::getInstance()->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
         
         $containerIds = array();
         

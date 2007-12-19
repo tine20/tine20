@@ -54,6 +54,13 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
      */    
     protected $_identifier = 'account_id';
     
+    /**
+     * check if current user has a given right for a given application
+     *
+     * @param string $_application the name of the application
+     * @param int $_right the right to check for
+     * @return bool
+     */
     public function hasRight($_application, $_right)
     {
         $rights = Egwbase_Acl_Rights::getInstance();
@@ -63,6 +70,12 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         return $result;
     }
     
+    /**
+     * returns a bitmask of rights for current user and given application
+     *
+     * @param string $_application the name of the application
+     * @return int bitmask of rights
+     */
     public function getRights($_application)
     {
         $rights = Egwbase_Acl_Rights::getInstance();
@@ -72,6 +85,11 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         return $result;
     }
     
+    /**
+     * return the group ids current user is member of
+     *
+     * @return array list of group ids
+     */
     public function getGroupMemberships()
     {
         $backend = Egwbase_Account::getBackend();
@@ -81,6 +99,12 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         return $result;
     }
     
+    /**
+     * update the lastlogin time of current user
+     *
+     * @param string $_ipAddress
+     * @return void
+     */
     public function setLoginTime($_ipAddress)
     {
         $backend = Egwbase_Account::getBackend();
@@ -90,6 +114,12 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         return $result;
     }
     
+    /**
+     * set the password for current user
+     *
+     * @param string $_password
+     * @return void
+     */
     public function setPassword($_password)
     {
         $backend = Egwbase_Account::getBackend();
@@ -99,6 +129,14 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         return $result;
     }
     
+    /**
+     * returns list of applications the current user is able to use
+     *
+     * this function takes group memberships into account. Applications the accounts is able to use
+     * must have the 'run' right set 
+     * 
+     * @return array list of enabled applications for this account
+     */
     public function getApplications()
     {
         $rights = Egwbase_Acl_Rights::getInstance();
@@ -108,6 +146,31 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         return $result;
     }
     
+    /**
+     * return all container, which the user has the requested right for
+     *
+     * used to get a list of all containers accesssible by the current user
+     * 
+     * @param string $_application the application name
+     * @param int $_right the required right
+     * @return Egwbase_Record_RecordSet
+     */
+    public function getContainerByACL($_application, $_right)
+    {
+        $container = Egwbase_Container::getInstance();
+        
+        $result = $container->getContainerByACL($this->account_id, $_application, $_right);
+        
+        return $result;
+    }
+    
+    /**
+     * check if the current user has a given grant
+     *
+     * @param int $_containerId
+     * @param int $_grant
+     * @return boolean
+     */
     public function hasGrant($_containerId, $_grant)
     {
         $container = Egwbase_Container::getInstance();

@@ -361,19 +361,25 @@ class Egwbase_Container
      *
      * used to get a list of all containers accesssible by the current user
      * 
+     * @param int $_accountId
      * @param string $_application the application name
      * @param int $_right the required right
      * @return Egwbase_Record_RecordSet
      */
-    public function getContainerByACL($_application, $_right)
+    public function getContainerByACL($_accountId, $_application, $_right)
     {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
         $right = (int)$_right;
         if($right != $_right) {
             throw new InvalidArgumentException('$_right must be integer');
         }
         
-        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->account_id;
+        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
+        $groupMemberships[] = $accountId;
         
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
                
@@ -665,7 +671,7 @@ class Egwbase_Container
     }
     
     /**
-     * check if the current user has a given grant
+     * check if the given user user has a certain grant
      *
      * @param int $_accountId
      * @param int $_containerId

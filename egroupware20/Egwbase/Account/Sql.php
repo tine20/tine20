@@ -302,7 +302,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      *
      * @param int $_accountId
      * @param string $_password
-     * @return unknown
+     * @return void
      */
     public function setPassword($_accountId, $_password)
     {
@@ -321,8 +321,9 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         );
         
         $result = $accountsTable->update($accountData, $where);
-        
-        return $result;
+        if ($result != 1) {
+            throw new Exception('Unable to update password');
+        }
     }
     
     /**
