@@ -42,10 +42,22 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$projects = Crm_Backend::factory(Crm_Backend::SQL);
 		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
 			$view->formData['values'] = $project->toArray();
+			$folder = Egwbase_Container::getInstance()->getContainerById($project->pj_owner);
+			
+			$view->formData['config']['folderName']   = $folder->container_name;
+			$view->formData['config']['folderRights'] = $folder->account_grants;
+            
 		} else {
+		    $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
+		    foreach($personalFolders as $folder) {
+    		    $view->formData['values'] = array('pj_owner' => $folder->container_id);
+    		    $view->formData['config']['folderName']   = $folder->container_name;
+    		    $view->formData['config']['folderRights'] = 31;
+                break;
+		    }
 		    
 		}
-		
+
 		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
 		$view->jsExecute = 'Egw.Crm.ProjectEditDialog.display();';

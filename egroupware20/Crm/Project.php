@@ -39,6 +39,7 @@ class Crm_Project
         'pj_modifier'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_start'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_modified'               => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'pj_created'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_description'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_end'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_turnover'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),

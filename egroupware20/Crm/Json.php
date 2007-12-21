@@ -15,7 +15,21 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 {
 
     protected $_appname = 'Crm';
-  
+
+
+// handle LEADSOURCES
+   public function getLeadsources($sort, $dir)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getLeadsources($sort, $dir)) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;    
+    }     	
 
     /**
 	 * save leadsources
@@ -92,6 +106,20 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }  
 
 
+// handle LEADTYPES
+   public function getLeadtypes($sort, $dir)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getLeadtypes($sort, $dir)) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;    
+    }  
+
     /**
 	 * save leadtypes
 	 *
@@ -167,6 +195,20 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }
     
     
+// handle PROJECTSTATES    
+   public function getProjectstates($sort, $dir)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getProjectstates($sort, $dir)) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;    
+    }  
+
     /**
 	 * save projectstates
 	 *
@@ -241,7 +283,21 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
        return $result;        
     }    
     
-    
+ 
+// handle PRODUCTSOURCES  
+	public function getProductsource($sort, $dir)
+	{
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+         
+            
+        if($rows = $backend->getProductsAvailable($sort, $dir)) {
+            $result['results']    = $rows->toArray();
+//              $result['results']    = $rows;
+        }
+
+        return $result;
+	}    
+  
     /**
 	 * save productsources
 	 *
@@ -317,6 +373,27 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }     
     
 
+// handle PRODUCTS
+   public function getProductsById($_id)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+
+        if(empty($filter)) {
+            $filter = NULL;
+        }
+
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        if($rows = $backend->getProductsById($_id)) {
+            $result['results']    = $rows->toArray();
+            //$result['totalcount'] = $backend->getCountByOwner($owner);
+        }
+
+        return $result;
+    } 
+    
     /**
 	 * save products
 	 *
@@ -325,8 +402,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */
-   public function saveProducts($products, $pj_id) {
-	
+   public function saveProducts($products, $pj_id) {	
     $_products = Zend_Json::decode($products);
 
 			if(is_array($_products)) {
@@ -336,7 +412,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 					if($_product['pj_id'] == "-1") {
 						unset($_product['pj_id']);
 					}
-                    if($_product['pj_project_id'] == "-1") {
+                    if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
 						$_product['pj_project_id'] = $pj_id;
 					}
 					
@@ -368,6 +444,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
    }
 
 
+// handle PROJECT
      /**
 	 * save one project
 	 *
@@ -377,12 +454,15 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 */	
 	public function saveProject()
     {
-        if(empty($_POST['pj_id'])) {
-            unset($_POST['pj_id']);
-        }
-
         // timestamps
         $_changeDate = time();
+
+        if(empty($_POST['pj_id'])) {
+            unset($_POST['pj_id']);
+            $_POST['pj_created'] = $_changeDate;
+        }
+
+
 
         if(empty($_POST['pj_created'])) {
             $_POST['pj_created'] = $_changeDate;
@@ -482,8 +562,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
          
     }      
  
- 
-    /**
+     /**
      * delete a array of projects
      *
      * @param array $_projectIDs
@@ -507,27 +586,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     } 
     
  
- 
-   public function getProductsById($_id)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
 
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-        if($rows = $backend->getProductsById($_id)) {
-            $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountByOwner($owner);
-        }
-
-        return $result;
-    } 
-      
      
     public function getProjectsByOwner($filter, $owner, $start, $sort, $dir, $limit)
     {
@@ -542,64 +601,249 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
         if($rows = $backend->getProjectsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows;
-            //$result['totalcount'] = $backend->getCountByOwner($owner);
+            $result['results']    = $rows->toArray();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = $backend->getCountByOwner($owner, $filter);
+            }
         }
 
         return $result;
     }
-     
-   public function getProjectstates($sort, $dir)
+        
+     public function getProjectsByFolderId($folderId, $filter, $start, $sort, $dir, $limit)
     {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+                
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getProjectstates($sort, $dir)) {
+        if($rows = $backend->getProjectsByFolderId($folderId, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = $backend->getCountByFolderId($folderId, $filter);
+            }
         }
-
-        return $result;    
-    }     
-	
-   public function getLeadsources($sort, $dir)
-    {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getLeadsources($sort, $dir)) {
-            $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
-        }
-
-        return $result;    
-    }     	
+        
+        return $result;
+    }    
  
-   public function getLeadtypes($sort, $dir)
-    {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getLeadtypes($sort, $dir)) {
-            $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
-        }
 
-        return $result;    
-    }   
-	
-	public function getProductsource($sort, $dir)
-	{
+    /**
+     * get data for the overview
+     *
+     * returns the data to be displayed in a ExtJS grid
+     *
+     * @todo implement correc total count for lists
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @param string $options json encoded array of additional options
+     * @return array
+     */
+    public function getSharedProjects($filter, $sort, $dir, $limit, $start)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+                
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getProductsAvailable($sort, $dir)) {
+        $rows = $backend->getSharedProjects($filter, $sort, $dir, $limit, $start);
+        
+        if($rows !== false) {
             $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
+            //$result['totalcount'] = $backend->getCountOfSharedProjects();
         }
 
         return $result;
-	}   
+    }
+
+    /**
+     * get data for the overview
+     *
+     * returns the data to be displayed in a ExtJS grid
+     *
+     * @todo implement correc total count for lists
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @param string $options json encoded array of additional options
+     * @return array
+     */
+    public function getOtherPeopleProjects($filter, $sort, $dir, $limit, $start)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+                
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $rows = $backend->getOtherPeopleProjects($filter, $sort, $dir, $limit, $start);
+        
+        if($rows !== false) {
+            $result['results']    = $rows->toArray();
+            //$result['totalcount'] = $backend->getCountOfOtherPeopleProjects();
+        }
+
+        return $result;
+    }
+  
+ 
+ 
+   /**
+     * get data for the overview
+     *
+     * returns the data to be displayed in a ExtJS grid
+     *
+     * @todo implement correc total count for lists
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @param string $options json encoded array of additional options
+     * @return array
+     */
+    public function getAllProjects($filter, $start, $sort, $dir, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+                
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+        if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start)) {
+            $result['results']    = $rows->toArray();
+            $result['totalcount'] = $backend->getCountOfAllProjects($filter);
+        }
+
+        return $result;
+    } 
      
+     
+// handle FOLDERS
+    public function getFoldersByOwner($owner)
+    {
+        $treeNodes = array();
+        
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        if($rows = $backend->getFoldersByOwner($owner)) {
+            foreach($rows as $folderData) {
+                $childNode = new Egwbase_Ext_Treenode('Crm', 'projects', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
+                $childNode->folderId = $folderData->container_id;
+                $childNode->nodeType = 'singleFolder';
+                $treeNodes[] = $childNode;
+            }
+        }
+        
+        echo Zend_Json::encode($treeNodes);
+
+        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
+        exit;
+    }    
+
+
+    public function getSharedFolders()
+    {
+        $treeNodes = array();
+        
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        if($rows = $backend->getSharedFolders()) {
+            foreach($rows as $folderData) {
+                $childNode = new Egwbase_Ext_Treenode('Crm', 'projects', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
+                $childNode->folderId = $folderData->container_id;
+                $childNode->nodeType = 'singleFolder';
+                $treeNodes[] = $childNode;
+            }
+        }
+        
+        echo Zend_Json::encode($treeNodes);
+
+        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
+        exit;
+    }    
+
+   /**
+     * returns a list a accounts who gave current account at least read access to 1 personal folder 
+     *
+     */
+    public function getOtherUsers()
+    {
+        $treeNodes = array();
+        
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        try {
+            $rows = $backend->getOtherUsers();
+        
+            foreach($rows as $accountData) {
+                $treeNode = new Egwbase_Ext_Treenode(
+                    'Crm',
+                    'projects',
+                    'otherfolder_'. $accountData->account_id, 
+                    $accountData->account_name,
+                    false
+                );
+                $treeNode->owner  = $accountData->account_id;
+                $treeNode->nodeType = 'userFolders';
+                $treeNodes[] = $treeNode;
+            }
+        } catch (Exception $e) {
+            // do nothing
+            // or throw Execption???
+        }
+        echo Zend_Json::encode($treeNodes);
+
+        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
+        exit;
+    }  
+
+
+    public function getAccounts($filter, $start, $sort, $dir, $limit)
+    {
+        $internalContainer = Egwbase_Container::getInstance()->getInternalContainer('crm');
+        
+        $folderId = $internalContainer->container_id;
+        
+        $result = $this->getProjectsByFolderId($folderId, $filter, $start, $sort, $dir, $limit);
+
+        return $result;
+    }
+
+
+   public function addFolder($name, $type)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+        $id = $backend->addFolder($name, $type);
+        
+        $result = array('folderId' => $id);
+        
+        return $result;
+    }
+    
+    public function deleteFolder($folderId)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+        $backend->deleteFolder($folderId);
+            
+        return TRUE;
+    }
+    
+    public function renameFolder($folderId, $name)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+
+        $backend->renameFolder($folderId, $name);
+            
+        return TRUE;
+    }     
      
 }

@@ -37,7 +37,7 @@ Egw.Crm = function() {
         }, {
             text: "Other Users Projects",
             cls: "file",
-            nodeType: "otherProjects",
+            nodeType: "otherUsersProjects",
             children: null,
             leaf: null
         }]
@@ -71,8 +71,8 @@ Egw.Crm = function() {
 	                        var newNode = new Ext.tree.TreeNode({
 	                            leaf: true,
 	                            cls: 'file',
-	                            nodeType: 'singleProject',
-	                            projectId: responseData.projectId,
+	                            nodeType: 'singleFolder',
+	                            folderId: responseData.folderId,
 	                            text: _text
 	                        });
                             _treeNodeContextMenu.appendChild(newNode);
@@ -97,7 +97,7 @@ Egw.Crm = function() {
                     url: 'index.php',
                     params: {
                         method: 'Crm.renameFolder',
-                        projectId: _treeNodeContextMenu.attributes.projectId,
+                        folderId: _treeNodeContextMenu.attributes.folderId,
                         name: _text
                     },
                     text: 'Renamimg folder...',
@@ -173,23 +173,106 @@ Egw.Crm = function() {
         handler: _handler_deleteFolder
     });
 
-// >>>>
 
-    var _contextMenuUserAddressbooks = new Ext.menu.Menu({
+    var _contextMenuUserFolder = new Ext.menu.Menu({
         items: [
-            _action_addAddressbook
+            _action_addFolder
         ]
     });
     
-    var _contextMenuSingleAddressbook= new Ext.menu.Menu({
+    var _contextMenuSingleFolder= new Ext.menu.Menu({
         items: [
-            _action_renameAddressbook,
-            _action_deleteAddressbook,
-            _action_permisionsAddressbook
+            _action_renameFolder,
+            _action_deleteFolder,
+            _action_permisionsFolder
         ]
     });
 
-// <<<<    
+
+    var _displayFolderSelectDialog = function(_fieldName){         
+               
+            //################## listView #################
+
+            var folderDialog = new Ext.Window({
+                title: 'please select folder',
+                modal: true,
+                width: 375,
+                height: 400,
+                minWidth: 375,
+                minHeight: 400,
+                layout: 'fit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                buttonAlign:'center'
+            });         
+            
+            var treeLoader = new Ext.tree.TreeLoader({
+                dataUrl:'index.php',
+                baseParams: {
+                    jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                    location: 'mainTree'
+                }
+                
+            });
+             treeLoader.on("beforeload", function(_loader, _node) {
+                switch(_node.attributes.nodeType) {
+                    case 'otherProjects':
+                        _loader.baseParams.method   = 'Crm.getOtherUsers';
+                        break;
+                        
+                    case 'sharedProjects':
+                        _loader.baseParams.method   = 'Crm.getSharedFolders';
+                        break;
+    
+                    case 'userProjects':
+                        _loader.baseParams.method   = 'Crm.getFoldersByOwner';
+                        _loader.baseParams.owner    = _node.attributes.owner;
+                        break;
+                }
+            }, this);
+                            
+            var tree = new Ext.tree.TreePanel({
+                title: 'CRM',
+                id: 'Crm_Tree',
+                iconCls: 'Crm_thumbnail_application',
+                loader: treeLoader,
+                rootVisible: false,
+                border: false
+            });
+            
+            // set the root node
+            var treeRoot = new Ext.tree.TreeNode({
+                text: 'root',
+                draggable:false,
+                allowDrop:false,
+                id:'root'
+            });            
+            tree.setRootNode(treeRoot);
+            
+            // add the initial tree nodes    
+            for(var i=0; i< _initialTree.length; i++) {
+                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
+            }
+            
+            tree.on('click', function(_node) {
+                //console.log(_node);
+                    if(_node.attributes.nodeType == 'singleFolder') {                
+                        Ext.getCmp(_fieldName).setValue(_node.attributes.folderId);
+                        Ext.getCmp(_fieldName + '_name').setValue(_node.text);
+                        folderDialog.hide();
+                    }
+            }, this);
+
+            folderDialog.add(tree);
+    
+            folderDialog.show();
+                           
+            tree.expandPath('/root/allProjects');
+            tree.getNodeById('internalProjects').disable();
+          
+    };
+
+ 
     
      /**
      * creates the crm tree panel
@@ -204,23 +287,23 @@ Egw.Crm = function() {
             	location: 'mainTree'
             }
         });
-   /*     treeLoader.on("beforeload", function(_loader, _node) {
+        treeLoader.on("beforeload", function(_loader, _node) {
             switch(_node.attributes.nodeType) {
-                case 'otherAddressbooks':
-                    _loader.baseParams.method   = 'Addressbook.getOtherUsers';
+                case 'otherProjects':
+                    _loader.baseParams.method   = 'Crm.getOtherUsers';
                     break;
                     
-                case 'sharedAddressbooks':
-                    _loader.baseParams.method   = 'Addressbook.getSharedAddressbooks';
+                case 'sharedProjects':
+                    _loader.baseParams.method   = 'Crm.getSharedFolders';
                     break;
 
-                case 'userAddressbooks':
-                    _loader.baseParams.method   = 'Addressbook.getAddressbooksByOwner';
+                case 'userProjects':
+                    _loader.baseParams.method   = 'Crm.getFoldersByOwner';
                     _loader.baseParams.owner    = _node.attributes.owner;
                     break;
             }
         }, this);
- */   
+
         var treePanel = new Ext.tree.TreePanel({
             title: 'CRM',
             id: 'Crm_Tree',
@@ -238,7 +321,7 @@ Egw.Crm = function() {
             id:'root'
         });
         treePanel.setRootNode(treeRoot);
-
+// tree vs. treepanel
         for(var i=0; i< _initialTree.length; i++) {
             treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
         }
@@ -249,34 +332,32 @@ Egw.Crm = function() {
 
         treePanel.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
-                _panel.expandPath('/root');
-                _panel.selectPath('/root');
+                _panel.expandPath('/root/allProjects');
+                _panel.selectPath('/root/allProjects');
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
 
-  /*      treePanel.on('contextmenu', function(_node, _event) {
+        treePanel.on('contextmenu', function(_node, _event) {
             _event.stopEvent();
             //_node.select();
             //_node.getOwnerTree().fireEvent('click', _node);
             _treeNodeContextMenu = _node;
-            //console.log(_node.attributes.nodeType);
+
             switch(_node.attributes.nodeType) {
-                case 'userAddressbooks':
-                case 'sharedAddressbooks':
-                    _contextMenuUserAddressbooks.showAt(_event.getXY());
+                case 'userProjects':
+                case 'sharedProjects':
+                    _contextMenuUserFolder.showAt(_event.getXY());
                     break;
 
-                case 'singleAddressbook':
-                    _contextMenuSingleAddressbook.showAt(_event.getXY());
+                case 'singleFolder':
+                    _contextMenuSingleFolder.showAt(_event.getXY());
                     break;
 
                 default:
-                    //console.log(_node.attributes.nodeType);
                     break;
             }
         });
-*/
         return treePanel;
     };  
     
@@ -622,7 +703,7 @@ Egw.Crm = function() {
         
         
         var toolbar = new Ext.Toolbar({
-            id: 'toolbarCrm',
+            id: 'Crm_toolbar',
             split: false,
             height: 26,
             items: [
@@ -777,14 +858,63 @@ Egw.Crm = function() {
        
        return;
     }
+    
+
+   var _loadData = function(_node)
+    {
+        var dataStore = Ext.getCmp('gridCrm').getStore();
+        
+     //   console.log(_node.attributes.nodeType);
+        
+        // we set them directly, because this properties also need to be set when paging
+        switch(_node.attributes.nodeType) {
+            case 'internalProjects':
+                dataStore.baseParams.method = 'Crm.getAccounts';
+                break;
+
+            case 'sharedProjects':
+                dataStore.baseParams.method = 'Crm.getSharedProjects';
+                break;
+
+            case 'otherUsersProjects':
+                dataStore.baseParams.method = 'Crm.getOtherPeopleProjects';
+                break;
+
+            case 'allProjects':
+                dataStore.baseParams.method = 'Crm.getAllProjects';
+                break;
+
+
+            case 'userProjects':
+                dataStore.baseParams.method = 'Crm.getProjectsByOwner';
+                dataStore.baseParams.owner  = _node.attributes.owner;
+                break;
+
+            case 'singleFolder':
+                dataStore.baseParams.method        = 'Crm.getProjectsByFolderId';
+                dataStore.baseParams.folderId = _node.attributes.folderId;
+                break;
+        }
+        
+        dataStore.load({
+            params:{
+                start:0, 
+                limit:50 
+            }
+        });
+    };    
+    
         
     // public functions and variables
     return {
+        displayFolderSelectDialog: _displayFolderSelectDialog,
         show: function(_node) {          
-            _showCrmToolbar();
-            _showGrid();    
-          //  _getCrmTree();
-          
+             var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
+            if (currentToolbar === false || currentToolbar.id != 'Crm_toolbar') {
+                _showCrmToolbar();
+                _showGrid(_node);
+            }
+            _loadData(_node);
         },
         
         getPanel: _getTreePanel,
@@ -1168,10 +1298,7 @@ Egw.Crm.ProjectEditDialog = function() {
             id: 'contact_id',
             fields: [
                 {name: 'contact_id'},
-                {name: 'contact_tid'},
                 {name: 'contact_owner'},
-                {name: 'contact_private'},
-                {name: 'cat_id'},
                 {name: 'n_family'},
                 {name: 'n_given'},
                 {name: 'n_middle'},
@@ -1179,53 +1306,13 @@ Egw.Crm.ProjectEditDialog = function() {
                 {name: 'n_suffix'},
                 {name: 'n_fn'},
                 {name: 'n_fileas'},
-                {name: 'contact_bday'},
                 {name: 'org_name'},
                 {name: 'org_unit'},
-                {name: 'contact_title'},
-                {name: 'contact_role'},
-                {name: 'contact_assistent'},
-                {name: 'contact_room'},
                 {name: 'adr_one_street'},
-                {name: 'adr_one_street2'},
                 {name: 'adr_one_locality'},
                 {name: 'adr_one_region'},
                 {name: 'adr_one_postalcode'},
-                {name: 'adr_one_countryname'},
-                {name: 'contact_label'},
-                {name: 'adr_two_street'},
-                {name: 'adr_two_street2'},
-                {name: 'adr_two_locality'},
-                {name: 'adr_two_region'},
-                {name: 'adr_two_postalcode'},
-                {name: 'adr_two_countryname'},
-                {name: 'tel_work'},
-                {name: 'tel_cell'},
-                {name: 'tel_fax'},
-                {name: 'tel_assistent'},
-                {name: 'tel_car'},
-                {name: 'tel_pager'},
-                {name: 'tel_home'},
-                {name: 'tel_fax_home'},
-                {name: 'tel_cell_private'},
-                {name: 'tel_other'},
-                {name: 'tel_prefer'},
-                {name: 'contact_email'},
-                {name: 'contact_email_home'},
-                {name: 'contact_url'},
-                {name: 'contact_url_home'},
-                {name: 'contact_freebusy_uri'},
-                {name: 'contact_calendar_uri'},
-                {name: 'contact_note'},
-                {name: 'contact_tz'},
-                {name: 'contact_geo'},
-                {name: 'contact_pubkey'},
-                {name: 'contact_created'},
-                {name: 'contact_creator'},
-                {name: 'contact_modified'},
-                {name: 'contact_modifier'},
-                {name: 'contact_jpegphoto'},
-                {name: 'account_id'}
+                {name: 'adr_one_countryname'}
             ],
             // turn on remote sorting
             remoteSort: true
@@ -1235,14 +1322,14 @@ Egw.Crm.ProjectEditDialog = function() {
         
         st_contacts.on('beforeload', function(_st_contacts) {
             _st_contacts.baseParams.datatype = 'allcontacts';
-            _st_contacts.baseParams.method = 'Crm.getContactsByOwner';
+            _st_contacts.baseParams.method = 'Addressbook.getAllContacts';
             _st_contacts.baseParams.owner = 'allcontacts';
         });   
         
         
         var tpl_contacts = new Ext.Template(
-            '<div class="search-item">',
-                '<h3>{contact_id} , {n_fileas}</h3>',
+            '<div >',
+                '<h3>{n_family}</h3>',
             '</div>'
         );
      
@@ -1327,11 +1414,9 @@ Egw.Crm.ProjectEditDialog = function() {
                 renderer: function(data){
                     record = st_productsAvailable.getById(data);
                     if (record) {
-                        console.log(record.data);
                         return record.data.value;
                     }
                     else {
-                        console.log('store noch net da');
                         Ext.getCmp('projectDialog').doLayout();
                         return data;
                     }
@@ -1461,6 +1546,19 @@ Egw.Crm.ProjectEditDialog = function() {
                 iconCls:'icon-grid'
         });  
   
+  		var folderTrigger = new Ext.form.TriggerField({
+            fieldLabel:'Folder (Verantwortlicher)', 
+			id: 'pj_owner_name',
+            anchor:'100%',
+            allowBlank: false,
+            readOnly:true
+        });
+
+        folderTrigger.onTriggerClick = function() {
+            Egw.Crm.displayFolderSelectDialog('pj_owner');
+        };
+  
+  
 		var projectedit = new Ext.FormPanel({
 			baseParams: {method :'Crm.saveProject'},
 		    labelAlign: 'top',
@@ -1521,22 +1619,12 @@ Egw.Crm.ProjectEditDialog = function() {
                                         border:false,
                                         items: [
                                         	leadsource  
-                                         , {
-                                            xtype:'combo',
-                                            fieldLabel:'Verantwortlicher', 
-                                            name:'pj_owner',
-            								store: st_owner,
-            								displayField:'value',
-            								valueField:'key',
-            								typeAhead: true,
-            								mode: 'local',
-            								triggerAction: 'all',
-            								emptyText:'',
-            								selectOnFocus:true,
-            								editable: false,
-            								anchor:'100%'
-                                        }]
-                                    }]
+                                         , folderTrigger]
+                                    },{
+                                        xtype: 'hidden',
+                        				name: 'pj_owner',
+                        				id: 'pj_owner'
+                        			}]
                                 } , {
                                     xtype:'textarea',
                                     fieldLabel:'Notizen', 
@@ -1636,8 +1724,8 @@ Egw.Crm.ProjectEditDialog = function() {
                                     tpl: tpl_contacts,
                                     itemSelector: 'div.search-item', */
                             		onSelect: function(record) {
-                                        alert(st_contacts.getById(0));
-                            			//alert(record);
+                                       // alert(st_contacts.getById(0));
+                            			console.log(record.data);
                                     }
                                 } , grid_contact
                                 ]
@@ -1741,10 +1829,13 @@ Egw.Crm.ProjectEditDialog = function() {
 
     }
 
-    var setContactDialogValues = function(_formData) {        
+    var setProjectDialogValues = function(_formData) {        
     	var form = Ext.getCmp('projectDialog').getForm();
     	
-    	form.setValues(_formData);
+    	form.setValues(_formData.values);
+        
+        form.findField('pj_owner_name').setValue(_formData.config.folderName);
+        
 
         if (formData.values.pj_start > 0) {
 			var startDate = new Date(eval(formData.values.pj_start * 1000));
@@ -1806,7 +1897,7 @@ Egw.Crm.ProjectEditDialog = function() {
         display: function() {
             var dialog = _displayDialog();
             if(formData.values) {
-                setContactDialogValues(formData.values);
+                setProjectDialogValues(formData);
             }
          }
         
