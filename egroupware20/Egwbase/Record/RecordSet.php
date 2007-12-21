@@ -49,6 +49,23 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
     }
 
     /**
+     * executes given function in all records
+     *
+     * @param string $_fname
+     * @param array $_arguments
+     * @return array array indentifier => return value
+     */
+    public function __call($_fname, $_arguments)
+    {
+        $returnValues = array();
+        foreach ($this->_listOfRecords as $id => $record) {
+            $return[$id] = call_user_func_array(array($record, $_fname), $_arguments);
+        }
+        
+        return $returnValues;
+    }
+    
+    /**
      * add Egwbase_Record_Interface like object to internal list, if an record
      * with the records identifier allready exists, this record will be replaeced
      *

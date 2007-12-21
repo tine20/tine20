@@ -43,8 +43,8 @@ class Egwbase_Controller
 
         $this->setupUserLocale();
 
-        $this->setupUserTimezone();
-
+        $this->setupTimezones();
+        
         $this->session = new Zend_Session_Namespace('egwbase');
         
         if(!isset($this->session->jsonKey)) {
@@ -186,8 +186,12 @@ class Egwbase_Controller
         Zend_Registry::set('locale', $locale);
     }
     
-    protected function setupUserTimezone()
+    protected function setupTimezones()
     {
+        // All server operations are done in UTC
+        date_default_timezone_set('UTC');
+        
+        // Timezone for client
         Zend_Registry::set('userTimeZone', 'Europe/Berlin');
     }
 

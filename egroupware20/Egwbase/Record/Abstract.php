@@ -80,7 +80,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * 
      * @param mixed $_data
      * @param bool $_bypassFilters
-     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
+     * @param [bool|array] $_convertDates array with keys: part and locale. See Zend_Date
      * @return void
      * @throws Egwbase_Record_Exception
      */
@@ -163,6 +163,32 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     }
     
     /**
+     * Sets timezone of $this->_datetimeFields
+     * 
+     * @see Zend_Date::setTimezone()
+     * @param string $_timezone
+     * @return void
+     */
+    public function setTimezone($_timezone)
+    {
+        foreach ($this->_datetimeFields as $field) {
+            if (!isset($this->_properties[$field])) continue;
+            if(!is_array($this->_properties[$field])) {
+                $toConvert = array(&$this->_properties[$field]);
+            } else {
+                $toConvert = &$this->_properties[$field];
+            }
+
+            foreach ($toConvert as $field => &$value) {
+                if (! $value instanceof Zend_Date) {
+                    throw new Exception($toConvert[$field] . 'must be an Zend_Date'); 
+                }
+                $value->setTimezone($_timezone);
+            } 
+        }
+    }
+    
+    /**
      * returns array of fields with validation errors 
      *
      * @return array
@@ -175,7 +201,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * returns array with record related properties 
      *
-     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
+     * @param [bool|array] $_convertDates array with keys: part and locale. See Zend_Date
      * @return array
      */
     public function toArray($_convertDates = NULL)
