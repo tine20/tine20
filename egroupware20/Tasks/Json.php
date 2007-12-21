@@ -19,6 +19,8 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     
     protected $_controller;
     
+    protected $_timezone;
+    
     /**
      * TODO: Invoke Contoller!
      *
@@ -30,6 +32,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
         } catch (Exception $e) {
             //error_log($e);
         }
+        $this->_timezone = Zend_Registry::get('userTimeZone');
     }
 
     /**
@@ -46,8 +49,11 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     {
         //Tasks_Setup_MigrateFromEgw14::MigrateInfolog2Tasks();
         //$this->_controller->searchTasks($query, $due, $container, $organizer, $tag);
+        $tasks = $this->_controller->searchTasks($query, $due, $container, $organizer, $tag);
+        $tasks->setTimezone($this->_timezone);
+        
         return array(
-            'results' => $this->_controller->searchTasks($query, $due, $container, $organizer, $tag)->toArray(array('part' => Zend_Date::ISO_8601)),
+            'results' => $tasks->toArray(array('part' => Zend_Date::ISO_8601)),
             'totalcount' => 4
         );
     }
