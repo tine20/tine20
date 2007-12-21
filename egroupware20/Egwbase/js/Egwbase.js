@@ -253,6 +253,7 @@ Egw.Egwbase.MainScreen = function() {
         for(_application in Egw) {
         	try{
                 panels.push(Egw[_application].getPanel());
+                
         	} catch(e) {
         		//console.log(_application + ' failed');
         		//console.log(e);
@@ -403,11 +404,34 @@ Egw.Egwbase.Common = function(){
 		return Ext.util.Format.date(date, 'H:i:s');
 	};
 	
+     /**
+	 * Returns JSON encoded array
+	 * from Store Object
+	 * 
+	 * @param {object} _dataSrc 
+	 * @return {json} json encoded data
+	 */    
+    _getJSONDsRecs = function(_dataSrc) {
+            if(Ext.isEmpty(_dataSrc)) {
+                return false;
+            }
+            var dataLen = _dataSrc.length
+            var jsonData = new Array(dataLen);            
+
+            for(var i=0; i < dataLen; i++) {
+                var curRecData = _dataSrc[i].data;
+                jsonData[i] = curRecData;
+            }   
+
+            return Ext.util.JSON.encode(jsonData);  
+       }      
+    
 	return {
 		dateTimeRenderer: _dateTimeRenderer,
 		dateRenderer: _dateRenderer,
 		timeRenderer: _timeRenderer,
-		openWindow:       _openWindow
+		openWindow:       _openWindow,
+        getJSONdata:    _getJSONDsRecs
 	};
 }();
 
@@ -504,7 +528,7 @@ Ext.grid.RowExpander = function(config){
         dataIndex: '',
         id: 'expander',
         lazyRender : true,
-        enableCaching: true,
+        enableCaching: false,
     
         getRowClass : function(record, rowIndex, p, ds){
             p.cols = p.cols-1;
