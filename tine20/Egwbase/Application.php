@@ -39,6 +39,11 @@ class Egwbase_Application
      */
     private static $instance = NULL;
     
+    /**
+     * Returns instance of Egwbase_Application
+     *
+     * @return Egwbase_Application
+     */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
@@ -71,6 +76,14 @@ class Egwbase_Application
         return $result;
     }
 
+    /**
+     * returns one application identified by application name
+     *
+     * @param string $$_applicationName the name of the application
+     * @todo code still needs some testing
+     * @throws InvalidArgumentException, Exception
+     * @return Egwbase_Record_Application the information about the application
+     */
     public function getApplicationByName($_applicationName)
     {
         if(empty($_applicationName)) {
