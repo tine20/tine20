@@ -34,7 +34,7 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return void
      * @throws Egwbase_Record_Exception
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL);
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
     
     /**
      * sets identifier of record

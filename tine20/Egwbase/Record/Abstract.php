@@ -84,7 +84,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * @return void
      * @throws Egwbase_Record_Exception
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         if ($_bypassFilters) {
             foreach ($_data as $key => $value) {
