@@ -36,6 +36,10 @@ class Addressbook_Contact
      * @var array
      */
     protected $_validators = array(
+        //'contact_created'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'contact_creator'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_modified'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'contact_modifier'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),

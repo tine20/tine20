@@ -67,20 +67,35 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $contactData['contact_tid'] = 'n';
         unset($contactData['contact_id']);
         
-
-        if($_contactData->contact_id === NULL) {
-            $_contactData->contact_id = $this->contactsTable->insert($contactData);
-        } else {
-            $oldContactData = $this->getContactById($_contactData->contact_id);
-            if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
-                throw new Exception('write access to old addressbook denied');
+        $db = $this->contactsTable->getAdapter();
+        
+        try {
+            $db->beginTransaction();
+            if($_contactData->contact_id === NULL) {
+                $_contactData->contact_id = $this->contactsTable->insert($contactData);
+            } else {
+                $oldContactData = $this->getContactById($_contactData->contact_id);
+                if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+                    throw new Exception('write access to old addressbook denied');
+                }
+                if($oldContactData->contact_modified != $_contactData->contact_modified) {
+                    throw new Exception('concurrency conflict!');
+                }
+                
+                $now = new Zend_Date();
+                $contactData['contact_modified'] = $now->getTimestamp();
+                
+                $where  = array(
+                    $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactData->contact_id),
+                );
+    
+                $result = $this->contactsTable->update($contactData, $where);
+                
+                $db->commit();
             }
-            
-            $where  = array(
-                $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactData->contact_id)
-            );
-
-            $result = $this->contactsTable->update($contactData, $where);
+        } catch (Exception $e) {
+            $db->rollBack();
+            throw($e);
         }
 
         return $_contactData;

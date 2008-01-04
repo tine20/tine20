@@ -1512,6 +1512,7 @@ Egw.Addressbook.ContactEditDialog = function() {
 		    };
 			if(formData.values) {
 				additionalData.contact_id = formData.values.contact_id;
+				additionalData.contact_modified = formData.values.contact_modified;
 			}
 			    		
 			contactForm.submit({
@@ -1519,10 +1520,11 @@ Egw.Addressbook.ContactEditDialog = function() {
     			waitMsg:'saving contact...',
     			params:additionalData,
     			success:function(form, action, o) {
+					window.location = window.location;
     				window.opener.Egw.Addressbook.reload();
     			},
     			failure:function(form, action) {
-    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    				Ext.MessageBox.alert("Error",action.result.errorMessage);
     			}
     		});
     	} else {
@@ -1541,6 +1543,7 @@ Egw.Addressbook.ContactEditDialog = function() {
             };
 			if(formData.values) {
 				additionalData.contact_id = formData.values.contact_id;
+				additionalData.contact_modified = formData.values.contact_modified;
 			}
 			    		
 			contactForm.submit({
@@ -1552,7 +1555,7 @@ Egw.Addressbook.ContactEditDialog = function() {
     				window.setTimeout("window.close()", 400);
     			},
     			failure:function(form, action) {
-    				//Ext.MessageBox.alert("Error",action.result.errorMessage);
+    				Ext.MessageBox.alert("Error",action.result.errorMessage);
     			}
     		});
     	} else {
@@ -1610,7 +1613,7 @@ Egw.Addressbook.ContactEditDialog = function() {
      */
     var _displayDialog = function() {
         Ext.QuickTips.init();
-
+		
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
 
@@ -2217,6 +2220,7 @@ Egw.Addressbook.ContactEditDialog = function() {
     };
 
     var setContactDialogValues = function(_formData) {
+		
     	var form = Ext.getCmp('contactDialog').getForm();
     	
     	form.setValues(_formData);
