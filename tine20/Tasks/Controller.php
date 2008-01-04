@@ -170,20 +170,6 @@ class Tasks_Controller implements Tasks_Backend_Interface
         } elseif(!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container::GRANT_EDIT))  {
             throw new Exception('Not allowed!');
         }
-        
-        // manage concurrency
-        if($oldtask->last_modified_time == $_task->last_modified_time) {
-            // easy case: nothing changed during get -> update cycle
-            $Task = $this->_backend->updateTask($_task);
-            
-        } else {
-            // conflict, lets ask histroy log if we can avoid the confilict
-            // it might depend on the backend if we do this or not.
-            
-            // The idea is to merge diffs from $_task into $oldtask and send
-            // $oldtask to backend.
-            throw new Exception('confilict!');
-        }
         return $Task;
     }
     

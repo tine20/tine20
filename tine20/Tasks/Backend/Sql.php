@@ -57,6 +57,13 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     protected $_db;
     
     /**
+     * Holds instance of current account
+     *
+     * @var Egwbase_Record_Account
+     */
+    protected $_currentAccount;
+    
+    /**
      * Constructor
      *
      */
@@ -68,6 +75,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
         
         $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_currentAccount = Zend_Registry::get('currentAccount');
         
         //temporary hack to enshure migration from egw14
         $this->getTableInstance('tasks');
@@ -146,6 +154,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     public function createTask(Tasks_Task $_task)
     {
         $_task->creation_time = Zend_Date::now();
+        $_task->created_by = $this->_currentAccount->getId();
+        
         $taskParts = $this->seperateTaskData($_task);
         
         try {
@@ -171,25 +181,58 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */ 
     public function updateTask(Tasks_Task $_task)
     {
-        $taskParts = $this->seperateTaskData($_task);
-        $taskParts['last_modified_time'] = Zend_Date::now()->getIso();
-
         try {
             $this->_db->beginTransaction();
+            
+            $currentMods = array_diff_assoc($_task->toArray(), $oldTask->toArray());
+            $modLog = Egwbase_Timemachine_ModificationLog::getInstance();
+            
+            // concurrency management
+            $oldTask = $this->getTask($_task->identifier);
+            if($oldtask->last_modified_time != $_task->last_modified_time) {
+                $mods = $modLog->getModifications('Tasks', $_task->identifier,
+                        'Tasks_Task', Tasks_Backend_Factory::SQL,
+                        $_task->last_modified_time, $oldTask->last_modified_time);
+                foreach ($mods as $mod) {
+                    if(! in_array($mod->modified_attribute,$currentMods) ) {
+                        // merge mods into current task, if not changed in current 
+                        // update request.
+                        $_task->$mod->modified_attribute = $mod->modified_to;
+                    } else {
+                        // non resolvable conflict!
+                        throw new Exception('concurrency confilict!');
+                    }
+                }
+            }
+            
+            // database update
+            $taskParts = $this->seperateTaskData($_task);
+            $taskParts['tasks']['last_modified_time'] = Zend_Date::now()->getIso();
+            $taskParts['tasks']['last_modified_by'] = $this->_currentAccount->getId();
+        
             $tasksTable = $this->getTableInstance('tasks');
             $numAffectedRows = $tasksTable->update($taskParts['tasks'], array(
                 $this->_db->quoteInto('identifier = ?', $_task->identifier),
-                $this->_db->quoteInto('last_modified_time = ?', $_task->last_modified_time),
-                'is_deleted = 0'
             ));
-            
-            if ($numAffectedRows != 1) {
-                // TODO: need to investigate situation!
-                throw new Exception('update failed!');
-            }
-            
             $this->deleteDependentRows($_task->identifier);
             $this->insertDependentRows($taskParts);
+
+            // modification log
+            $modLogEntry = new Egwbase_Timemachine_Model_ModificationLog(array(
+                'application'          => 'Tasks',
+                'record_identifier'    => $_task->identifier,
+                'record_type'          => 'Tasks_Task',
+                'record_backend'       => Tasks_Backend_Factory::SQL,
+                'modification_time'    => $taskParts['tasks']['last_modified_time'],
+                'modification_account' => $this->_currentAccount->getId()
+            ),true);
+            foreach ($currentMods as $modified_attribute => $modified_to) {
+                $modLogEntry->modified_attribute = $modified_attribute;
+                $modLogEntry->modified_from      = $oldTask->$modified_attribute;
+                $modLogEntry->modified_to        = $modified_to;
+                $modLog->setModification($modLogEntry);
+            }
+            
             $this->_db->commit();
 
             return $this->getTask($taskId);
@@ -210,8 +253,9 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     {
         $tasksTable = $this->getTableInstance($this->tablenames['tasks']);
         $data = array(
-            'is_deleted' => true, 
-            'deleted_time' => Zend_Date::now()->getIso()
+            'is_deleted'   => true, 
+            'deleted_time' => Zend_Date::now()->getIso(),
+            'deleted_by'   => $this->_currentAccount->getId()
         );
         $tasksTable->update($data, array(
             $this->_db->quoteInto('identifier = ?', $_uid)
@@ -219,6 +263,34 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         
         // NOTE: cascading delete through the use of forign keys!
         //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('identifier = ?', $_uid));
+    }
+
+    /**
+     * Returns a record as it was at a given point in history
+     * 
+     * @param [string|int] _id 
+     * @param Zend_Date _at 
+     * @param bool _idIsUID wether global (string) or local (int) identifiers are given as _id
+     * @return Egwbase_Record
+     * @access public
+     */
+    public function getRecord( $_id,  Zend_Date $_at, $_idIsUID = FALSE)
+    {
+        
+    }
+    
+    /**
+     * Returns a set of records as they where at a given point in history
+     * 
+     * @param array _ids array of [string|int] 
+     * @param Zend_Date _at 
+     * @param bool _idsAreUIDs wether global (string) or local (int) identifiers are given as _ids
+     * @return Egwbase_Record_RecordSet
+     * @access public
+     */
+    public function getRecords( array $_ids,  Zend_Date $_at, $_idsAreUIDs = FALSE )
+    {
+        
     }
     
     /**
