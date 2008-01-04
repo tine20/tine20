@@ -41,7 +41,7 @@ class Addressbook_Backend
         switch($type) {
             case self::SQL:
             case self::LDAP:
-                $className = Addressbook_Backend_ . ucfirst($type);
+                $className = 'Addressbook_Backend_' . ucfirst($type);
                 $instance = new $className();
                 break;
                 

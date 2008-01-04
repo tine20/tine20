@@ -33,12 +33,20 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     protected $contactsTable;
 
     /**
+     * Holds instance of current account
+     *
+     * @var Egwbase_Record_Account
+     */
+    protected $_currentAccount;
+    
+    /**
      * the constructor
      *
      */
     public function __construct()
     {
         $this->contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
+        $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
 
     /**
@@ -71,26 +79,73 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         try {
             $db->beginTransaction();
+            
             if($_contactData->contact_id === NULL) {
+                // create new contact
                 $_contactData->contact_id = $this->contactsTable->insert($contactData);
             } else {
+                // update existing contact
                 $oldContactData = $this->getContactById($_contactData->contact_id);
                 if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
                     throw new Exception('write access to old addressbook denied');
                 }
-                if($oldContactData->contact_modified != $_contactData->contact_modified) {
-                    throw new Exception('concurrency conflict!');
+                
+                // concurrency management
+                $currentMods = array_diff_assoc($_contactData->toArray(), $oldContactData->toArray());
+                $modLog = Egwbase_Timemachine_ModificationLog::getInstance();
+                
+                if (empty($currentMods)) {
+                    // nothing canged!
+                    $db->rollBack();
+                    return $_contactData;
                 }
                 
+                if($oldContactData->contact_modified != $_contactData->contact_modified) {
+                    $from  = new Zend_Date($_contactData->contact_modified, Zend_Date::TIMESTAMP);
+                    $until = new Zend_Date($oldContactData->contact_modified, Zend_Date::TIMESTAMP);
+                    $mods = $modLog->getModifications('Addressbook', $_contactData->contact_id,
+                            'Addressbook_Contact', Addressbook_Backend::SQL, $from, $until);
+                    
+                            
+                    foreach ($mods as $mod) {
+                        if(! in_array($mod->modified_attribute,$currentMods) ) {
+                            // merge mods into current contact, if not changed in current 
+                            // update request.
+                            $_task->$mod->modified_attribute = $mod->modified_to;
+                        } else {
+                            // non resolvable conflict!
+                            throw new Exception('concurrency confilict!');
+                        }
+                    }
+                }
+                
+                
+                // update database
                 $now = new Zend_Date();
                 $contactData['contact_modified'] = $now->getTimestamp();
+                $contactData['contact_modifier'] = $this->_currentAccount->getId();
                 
                 $where  = array(
                     $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactData->contact_id),
                 );
-    
                 $result = $this->contactsTable->update($contactData, $where);
                 
+                // modification logging
+                $modLogEntry = new Egwbase_Timemachine_Model_ModificationLog(array(
+                    'application'          => 'Addressbook',
+                    'record_identifier'    => $_contactData->contact_id,
+                    'record_type'          => 'Addressbook_Contact',
+                    'record_backend'       => Addressbook_Backend::SQL,
+                    'modification_time'    => $now,
+                    'modification_account' => $this->_currentAccount->getId()
+                ),true);
+                foreach ($currentMods as $modified_attribute => $modified_to) {
+                    $modLogEntry->modified_attribute = $modified_attribute;
+                    $modLogEntry->modified_from      = $oldContactData->$modified_attribute;
+                    $modLogEntry->modified_to        = $modified_to;
+                    $modLog->setModification($modLogEntry);
+                }
+            
                 $db->commit();
             }
         } catch (Exception $e) {
