@@ -36,6 +36,15 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      */
     private static $instance = NULL;
     
+    protected $rowNameMapping = array(
+        'accountId'             => 'account_id',
+        'accountDisplayName'    => 'n_fileas',
+        'accountFullName'       => 'n_fn',
+        'accountFirstName'      => 'n_given',
+        'accountLastName'       => 'n_family'
+    );
+    
+    
     /**
      * the singleton pattern
      *
@@ -110,7 +119,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     }
     
     /**
-     * get list of accounts
+     * get list of accounts with all internal informations, should get used by the admin application only
      *
      * @param string $_filter
      * @param string $_sort
@@ -120,14 +129,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @return array
      */
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
-    {
-        //$right = (int)$_right;
-        //if($right != $_right) {
-        //    throw new InvalidArgumentException('$_right must be integer');
-        //}
-        //$accountId   = Zend_Registry::get('currentAccount')->account_id;
-        //$application = Egwbase_Application::getInstance()->getApplicationByName($_application);
-
+    {        
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
@@ -168,6 +170,38 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         return $result;
     }
     
+    public function getPublicAccountProperties($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    {        
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $select = $db->select()
+            ->from('egw_accounts', array('accountId' => $this->rowNameMapping['accountId']))
+            ->join(
+                'egw_addressbook',
+                'egw_accounts.account_id = egw_addressbook.account_id',
+                array(
+                    'accountDisplayName' => $this->rowNameMapping['accountDisplayName'],
+                    'accountFullName' => $this->rowNameMapping['accountFullName']
+                )
+            )
+            ->where('(n_family LIKE ? OR n_given LIKE ?)', '%' . $_filter . '%')
+            ->where('account_status != ?', 'D')
+            ->limit($_limit, $_start)
+            ->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+
+        //error_log("getPublicAccountData:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+
+        $result = array();
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $result = new Egwbase_Record_RecordSet($rows, 'Egwbase_Record_PublicAccountProperties');
+        
+        return $result;
+    }
+    
     /**
      * read the account from acl depending on the where query and value
      *
@@ -193,7 +227,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             ->join(
                 'egw_addressbook',
                 'egw_accounts.account_id = egw_addressbook.account_id', 
-                array()
+                array('n_family', 'n_given', 'n_fn', 'n_fileas')
             )
             ->where($_whereQuery, $_whereValue);
 
