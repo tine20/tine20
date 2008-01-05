@@ -30,8 +30,12 @@
  * NOTE: Maximum time resolution is one second. If there are more than one
  * modifications in a second, they are distinguished by the accounts which made
  * the modifications and a autoincement key of the underlaying database table.
- * NOTE: Timespans are allways defined, with the beginning point included and
- * the end point excluded. Mathematical: [_from, _until)
+ * NOTE: Timespans are allways defined, with the beginning point excluded and
+ * the end point included. Mathematical: (_from, _until]
+ * 
+ * @todo Add registry for logbook starttime and methods to throw away logbook 
+ * entries. Throw exceptions when times are requested which are not in the 
+ * log anymore!
  * 
  * @package Egwbase
  * @subpackage Timemachine
@@ -101,21 +105,24 @@ class Egwbase_Timemachine_ModificationLog
      * @param int _identifier identifier to retreave modification log for
      * @param string _type 
      * @param string _backend 
-     * @param Zend_Date _from beginning point of timespan, including point itself
-     * @param Zend_Date _until end point of timespan, excluding point itself 
+     * @param Zend_Date _from beginning point of timespan, excluding point itself
+     * @param Zend_Date _until end point of timespan, including point itself 
      * @param int _modifierId optional
      * @return Egwbase_Record_RecordSet RecordSet of Egwbase_Timemachine_Model_ModificationLog
      */
     public function getModifications( $_application,  $_identifier, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
         
+        $isoDef = 'YYYY-MM-ddTHH:mm:ss';
+        
         $db = $this->_table->getAdapter();
         $select = $db->select()
             ->from($this->_tablename)
+            ->order('modification_time ASC')
             ->where('application = ' . $application->app_id)
             ->where($db->quoteInto('record_identifier = ?', $_identifier))
-            ->where($db->quoteInto('modification_time >= ?', $_from->getIso()))
-            ->where($db->quoteInto('modification_time < ?', $_until->getIso()));
+            ->where($db->quoteInto('modification_time > ?', $_from->toString($isoDef)))
+            ->where($db->quoteInto('modification_time <= ?', $_until->toString($isoDef)));
             
        if (is_int($_modifierId)) {
            $select->where($db->quoteInto('modification_account = ?', $_modifierId));
@@ -128,6 +135,27 @@ class Egwbase_Timemachine_ModificationLog
        return $modifications;
     } // end of member function getModifications
 
+    /**
+     * Computes effective difference from a set of modifications
+     * 
+     * If a attribute got changed more than once, the returned diff has all
+     * properties of the last change to the attribute, besides the 
+     * 'modified_from', which holds the modified_from of the first change.
+     * 
+     * @param Egwbase_Record_RecordSet _modifications
+     * @return Egwbase_Record_RecordSet differences
+     */
+    public function computeDiff(Egwbase_Record_RecordSet $_modifications) {
+        $diff = array();
+        foreach ($_modifications as $modification) {
+            if (array_key_exists($modification->modified_attribute, $diff)) {
+                $modification->modified_from = $diff[$modification->modified_attribute]->modified_from;
+            }
+            $diff[$modification->modified_attribute] = $modification;
+        }
+        return new Egwbase_Record_RecordSet($diff, 'Egwbase_Timemachine_Model_ModificationLog');
+    }
+    
     /**
      * Returns a single logbook entry identified by an logbook identifier
      * 
