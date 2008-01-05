@@ -34,8 +34,8 @@
  * paticipate sync), it has to throw exceptions when a UID handling method gets 
  * invoked.
  * 
- * NOTE: Timespans are allways defined, with the beginning point included and
- * the end point excluded. Mathematical: [_from, _until)
+ * NOTE: Timespans are allways defined, with the beginning point excluded and
+ * the end point included. Mathematical: (_from, _until]
  * NOTE: Records _at_ a given point in history include changes which contingently
  * where made _at_ the end of time resolution of this point
  * 
@@ -48,8 +48,8 @@ interface Egwbase_Timemachine_Interface
     /**
      * Returns ids(int)/uids(strings) of records which where created in a given timespan.
      * 
-     * @param Zend_Date _from beginning point of timespan, including point itself
-     * @param Zend_Date _until end point of timespan, excluding point itself
+     * @param Zend_Date _from beginning point of timespan, excluding point itself
+     * @param Zend_Date _until end point of timespan, included point itself
      * @param Egwbase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
@@ -60,8 +60,8 @@ interface Egwbase_Timemachine_Interface
     /**
      * Returns ids(int)/uids(strings) of records which where modified in a given timespan.
      * 
-     * @param Zend_Date _from beginning point of timespan, including point itself
-     * @param Zend_Date _until end point of timespan, excluding point itself
+     * @param Zend_Date _from beginning point of timespan, excluding point itself
+     * @param Zend_Date _until end point of timespan, included point itself
      * @param Egwbase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
@@ -73,7 +73,7 @@ interface Egwbase_Timemachine_Interface
      * Returns ids(int)/uids(strings) of records which where deleted in a given timespan.
      * 
      * @param Zend_Date _from beginning point of timespan, including point itself
-     * @param Zend_Date _until end point of timespan, excluding point itself
+     * @param Zend_Date _until end point of timespan, included point itself
      * @param Egwbase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
