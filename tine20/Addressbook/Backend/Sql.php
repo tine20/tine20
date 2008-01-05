@@ -562,25 +562,4 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
          
         return $result;
     }
-
-    public function getAddressbookSettings($_addressbookId)
-    {
-        $result = array(
-            'name'      => 'addressbook name',
-            'grants'    => array(
-                array(
-                    'accountId'     => 7,
-                    'accountName'   => 'Lars Kneschke',
-                    'grants'        => array (1,2,4,8)
-                ),
-                array(
-                    'accountId'     => NULL,
-                    'accountName'   => 'Anyone',
-                    'grants'        => array (1)
-                )
-            )
-        );
-        
-        return $result;
-    }
 }
