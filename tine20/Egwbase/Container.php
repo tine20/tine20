@@ -345,12 +345,13 @@ class Egwbase_Container
         //error_log("getInternalContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
         
-        if(empty($result)) {
+        if($stmt->rowCount() == 0) {
             throw new Exception('internal container not found or not accessible');
         }
 
+        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
+        
         return $result;
         
     }
@@ -446,11 +447,12 @@ class Egwbase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
-        
-        if(empty($result)) {
+
+        if($stmt->rowCount() == 0) {
             throw new UnderflowException('container not found');
         }
+        
+        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
         
         return $result;
         
@@ -570,13 +572,21 @@ class Egwbase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        if(empty($result)) {
-            throw new UnderflowException('no other users found');
+        if($stmt->rowCount() == 0) {
+            return false;
         }
 
+        $accountsBackend = Egwbase_Account::getBackend();
         
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Record_Account');
+        
+        foreach($rows as $row) {
+            $account = $accountsBackend->getAccountById($row['account_id']);
+            $result->addRecord($account);
+        }
         
         return $result;
     }
@@ -710,11 +720,151 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
         
-        $grants = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        if(empty($grants)) {
+        if($stmt->rowCount() == 0) {
             return FALSE;
         } else {
             return TRUE;
         }
     }
+    
+    public function getAllGrants($_containerId) 
+    {
+        $containerId = (int)$_containerId;
+        if($containerId != $_containerId) {
+            throw new InvalidArgumentException('$_containerId must be integer');
+        }
+        
+        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        
+        if(!$this->hasGrant($accountId, $containerId, self::GRANT_ADMIN)) {
+            throw new Exception('permission to container denied');
+        }
+        
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from('egw_container_acl')
+            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id', array())
+            ->where('egw_container.container_id = ?', $containerId);
+                    
+        //error_log("getAllGrants:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Record_Grants');
+
+        $egwBaseAccounts = Egwbase_Account::getBackend();
+        
+        foreach($rows as $row) {
+            if(!isset($result[$row['account_id']])) {
+                if($row['account_id'] === NULL) {
+                    $displayName = 'Anyone';
+                } else {
+                    $account = $egwBaseAccounts->getAccountById($row['account_id']);
+                    $displayName = $account->n_fileas;
+                }
+                
+                $result[$row['account_id']] = new Egwbase_Record_Grants(
+                    array(
+                        'accountId'     => $row['account_id'],
+                        'accountName'   => $displayName
+                    ), 
+                    true
+                );
+            }
+            
+            switch($row['account_grant']) {
+                case self::GRANT_READ:
+                    $result[$row['account_id']]->readGrant = TRUE; 
+                    break;
+                case self::GRANT_ADD:
+                    $result[$row['account_id']]->addGrant = TRUE; 
+                    break;
+                case self::GRANT_EDIT:
+                    $result[$row['account_id']]->editGrant = TRUE; 
+                    break;
+                case self::GRANT_DELETE:
+                    $result[$row['account_id']]->deleteGrant = TRUE; 
+                    break;
+                case self::GRANT_ADMIN:
+                    $result[$row['account_id']]->adminGrant = TRUE; 
+                    break;
+            }
+        }
+        
+        return $result;
+    }
+    
+    public function setAllGrants($_containerId, Egwbase_Record_RecordSet $_grants) 
+    {
+        $containerId = (int)$_containerId;
+        if($containerId != $_containerId) {
+            throw new InvalidArgumentException('$_containerId must be integer');
+        }
+        
+        $currentAccountId = Zend_Registry::get('currentAccount')->account_id;
+        
+        if(!$this->hasGrant($currentAccountId, $containerId, self::GRANT_ADMIN)) {
+            throw new Exception('permission to container denied');
+        }
+        
+        $container = $this->getContainerById($containerId);
+        if($container->container_type === Egwbase_Container::TYPE_PERSONAL) {
+            // make sure that only the current user has admin rights
+            foreach($_grants as $key => $recordGrants) {
+                $_grants[$key]->adminGrant = false;
+            }
+            
+            if(isset($_grants[$currentAccountId])) {
+                $_grants[$currentAccountId]->readGrant = true;
+                $_grants[$currentAccountId]->addGrant = true;
+                $_grants[$currentAccountId]->editGrant = true;
+                $_grants[$currentAccountId]->deleteGrant = true;
+                $_grants[$currentAccountId]->adminGrant = true;
+            } else {
+                $_grants[$currentAccountId] = new Egwbase_Record_Grants(
+                    array(
+                        'accountId'     => $currentAccountId,
+                        'accountName'   => 'not used',
+                        'readGrant'     => true,
+                        'addGrant'      => true,
+                        'editGrant'     => true,
+                        'editGrant'     => true,
+                        'adminGrant'    => true
+                    ), true);
+            }
+        }
+        
+        //error_log(print_r($_grants->toArray(), true));
+        
+        $where = $this->containerAclTable->getAdapter()->quoteInto('container_id = ?', $containerId);
+        $this->containerAclTable->delete($where);
+        
+        foreach($_grants as $recordGrants) {
+            $data = array(
+                'container_id'  => $containerId,
+                'account_id'    => $recordGrants['accountId'],
+            );
+            if($recordGrants->readGrant === true) {
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_READ));
+            }
+            if($recordGrants->addGrant === true) {
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_ADD));
+            }
+            if($recordGrants->editGrant === true) {
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_EDIT));
+            }
+            if($recordGrants->deleteGrant === true) {
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_DELETE));
+            }
+            if($recordGrants->adminGrant === true) {
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_ADMIN));
+            }
+        }
+        
+        return true;
+    }
+    
 }
