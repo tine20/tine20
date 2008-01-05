@@ -39,6 +39,25 @@ class Egwbase_Json
 
         return $result;
     }
+    
+    function getAccounts($filter, $sort, $dir, $start, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Egwbase_Controller::getInstance()->getPublicAccountProperties($filter, $sort, $dir, $start, $limit)) {
+            $result['results']    = $rows->toArray();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                //$result['totalcount'] = $backend->getCountByAddressbookId($addressbookId, $filter);
+            }
+        }
+        
+        return $result;
+    }
 
     /**
      * authenticate user by username and password
@@ -89,4 +108,3 @@ class Egwbase_Json
         return $result;
     }
 }
-?>
