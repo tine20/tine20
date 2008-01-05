@@ -91,34 +91,46 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                 }
                 
                 // concurrency management
-                $currentMods = array_diff_assoc($_contactData->toArray(), $oldContactData->toArray());
+                $dbMods = array_diff_assoc($_contactData->toArray(), $oldContactData->toArray());
+                error_log('$dbMods = ' . print_r($dbMods,true));
+                
                 $modLog = Egwbase_Timemachine_ModificationLog::getInstance();
                 
-                if (empty($currentMods)) {
+                if (empty($dbMods)) {
                     // nothing canged!
                     $db->rollBack();
                     return $_contactData;
                 }
                 
-                if($oldContactData->contact_modified != $_contactData->contact_modified) {
+                if(!empty($dbMods['contact_modified'])) {
+                    // concurrency problem. The following situations could occour:
+                    // - current user did not change value, but other(s)
+                    //   [$dbMod & $logedMods but equal values] -> resolvable 
+                    // - current user changed value, but other(s) not
+                    //   [$dbMod only] ->resolvable 
+                    // - current user changed value and other(s) also
+                    //   [$dbMod & $logedMods, values not equal] -> not resolvable -> real conflict
                     $from  = new Zend_Date($_contactData->contact_modified, Zend_Date::TIMESTAMP);
                     $until = new Zend_Date($oldContactData->contact_modified, Zend_Date::TIMESTAMP);
-                    $mods = $modLog->getModifications('Addressbook', $_contactData->contact_id,
+                    $logedMods = $modLog->getModifications('Addressbook', $_contactData->contact_id,
                             'Addressbook_Contact', Addressbook_Backend::SQL, $from, $until);
-                    
+                    $diffs = $modLog->computeDiff($logedMods);
                             
-                    foreach ($mods as $mod) {
-                        if(! in_array($mod->modified_attribute,$currentMods) ) {
-                            // merge mods into current contact, if not changed in current 
-                            // update request.
-                            $_task->$mod->modified_attribute = $mod->modified_to;
+                    foreach ($diffs as $diff) {
+                        $modified_attribute = $diff->modified_attribute;
+                        if (!array_key_exists($modified_attribute, $dbMods)) {
+                            // useres updated to same value, nothing to do.
+                        } elseif ($diff->modified_from == $contactData[$modified_attribute]) {
+                            unset($dbMods[$modified_attribute]);
+                            // merge diff into current contact, as it was not changed in current update request.
+                            $contactData[$modified_attribute] = $diff->modified_to;
                         } else {
                             // non resolvable conflict!
                             throw new Exception('concurrency confilict!');
                         }
                     }
+                    unset($dbMods['contact_modified']);
                 }
-                
                 
                 // update database
                 $now = new Zend_Date();
@@ -139,7 +151,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                     'modification_time'    => $now,
                     'modification_account' => $this->_currentAccount->getId()
                 ),true);
-                foreach ($currentMods as $modified_attribute => $modified_to) {
+                foreach ($dbMods as $modified_attribute => $modified_to) {
                     $modLogEntry->modified_attribute = $modified_attribute;
                     $modLogEntry->modified_from      = $oldContactData->$modified_attribute;
                     $modLogEntry->modified_to        = $modified_to;
