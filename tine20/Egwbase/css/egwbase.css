@@ -22,3 +22,12 @@ html, body {
 .action_delete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
+
+.action_addContact {
+    background-image:url(../../images/oxygen/16x16/actions/add-user.png) !important;
+}
+
+.action_deleteContact {
+    background-image:url(../../images/oxygen/16x16/actions/delete-user.png) !important;
+}
+
