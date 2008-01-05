@@ -140,10 +140,13 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
     public function offsetSet($_offset, $_value)
     {
         if (! $_value instanceof $this->_recordClass) {
-            throw new Egwbase_Record_Exception('Attempt to add/set record of wrong record class');
-        } elseif ($_offset !== $_value->getID()) {
-            throw new Egwbase_Record_Exception('Attempt to add/set record with wrong identifier');
+            throw new Exception('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
+        
+        if ($_offset !== $_value->getID()) {
+            throw new Exception('Attempt to add/set record with wrong identifier. ' . $_offset . ' / ' . $_value->getID());
+        }
+        
         return $this->addRecord($_value);
     }
     
