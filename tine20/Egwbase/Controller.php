@@ -265,5 +265,14 @@ class Egwbase_Controller
         }
         
         Zend_Session::destroy();
-    }    
+    }   
+
+    public function getPublicAccountProperties($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    {
+        $accountsBackend = Egwbase_Account::getBackend();
+        
+        $result = $accountsBackend->getPublicAccountProperties($_filter, $_sort, $_dir, $_start, $_limit);
+        
+        return $result;
+    }
 }
