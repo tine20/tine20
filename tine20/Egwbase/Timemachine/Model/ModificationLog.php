@@ -37,16 +37,16 @@ class Egwbase_Timemachine_Model_ModificationLog extends Egwbase_Record_Abstract
      * @var array list of zend validator
      */
     protected $_validators = array(
-        'identifier'           => array('allowEmpty' => false, 'Int'  ),
-        'application'          => array('allowEmpty' => false, 'Alnum'),
-        'record_identifier'    => array('allowEmpty' => false, 'Int'  ),
-        'record_type'          => array('allowEmpty' => true,  'Alnum'),
-        'record_backend'       => array('allowEmpty' => false, 'Alnum'),
-        'modification_time'    => array('allowEmpty' => false         ),
-        'modification_account' => array('allowEmpty' => false, 'Int'  ),
-        'modified_attribute'   => array('allowEmpty' => false, 'Alnum'),
-        'modified_from'        => array('allowEmpty' => true,  'Alnum'),
-        'modified_to'          => array('allowEmpty' => false         )
+        'identifier'           => array('allowEmpty' => false, 'Int' ),
+        'application'          => array('allowEmpty' => false        ),
+        'record_identifier'    => array('allowEmpty' => false, 'Int' ),
+        'record_type'          => array('allowEmpty' => true         ),
+        'record_backend'       => array('allowEmpty' => false        ),
+        'modification_time'    => array('allowEmpty' => false        ),
+        'modification_account' => array('allowEmpty' => false, 'Int' ),
+        'modified_attribute'   => array('allowEmpty' => false        ),
+        'modified_from'        => array('allowEmpty' => true         ),
+        'modified_to'          => array('allowEmpty' => true         )
     );
     
     /**
@@ -65,14 +65,27 @@ class Egwbase_Timemachine_Model_ModificationLog extends Egwbase_Record_Abstract
      */
     public function isValid()
     {
+        $isValid = true;
         if (! $this->modification_time instanceof Zend_Date) {
-            $this->_validationErrors['modification_time'] = 
-                'modification_time must be of type Zend_Date';
-            return false;
+            $isValid = false;
+            $this->_validationErrors[] = array(
+                'id'  => 'modification_time',
+                'msg' => 'modification_time must be of type Zend_Date'
+            );
         }
+        
         $inputFilter = $this->getFilter();
         $inputFilter->setData($this->_properties);
-        return true;//$inputFilter->isValid();
+        if (!$inputFilter->isValid()) {
+            $isValid = false;
+            foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
+                $this->_validationErrors[] = array(
+                    'id'  => $fieldName,
+                    'msg' => $errorMessages[0]
+                );
+            }
+        }
+        return $isValid;
     }
 }
 
