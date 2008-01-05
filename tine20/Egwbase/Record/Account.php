@@ -42,7 +42,11 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         'account_lastpwd_change' => array('Digits', 'allowEmpty' => true),
         'account_status'        => array('presence' => 'required'),
         'account_expires'       => array('Digits', 'allowEmpty' => true),
-        'account_primary_group' => array('Digits', 'presence' => 'required')
+        'account_primary_group' => array('Digits', 'presence' => 'required'),
+        'n_fileas'              => array('presence' => 'required'),
+        'n_family'              => array('presence' => 'required'),
+        'n_given'               => array('allowEmpty' => true),
+        'n_fn'                  => array('presence' => 'required'),
     
     );
 
@@ -176,6 +180,21 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         $container = Egwbase_Container::getInstance();
         
         $result = $container->hasGrant($this->account_id, $_containerId, $_grant);
+        
+        return $result;
+    }
+    
+    public function getPublicProperties()
+    {
+        $accountData = array(
+            'accountId'             => $this->account_id,
+            'accountDisplayName'    => $this->n_fileas,
+            'accountLastName'       => $this->n_family,
+            'accountFirstName'      => $this->n_given,
+            'accountFullName'       => $this->n_given
+        );
+        
+        $result = new Egwbase_Record_PublicAccountProperties($accountData, true);
         
         return $result;
     }
