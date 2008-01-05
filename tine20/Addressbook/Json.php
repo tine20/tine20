@@ -232,26 +232,21 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        try {
-            $rows = $backend->getOtherUsers();
+        $rows = Addressbook_Controller::getInstance()->getOtherUsers();
         
-            foreach($rows as $accountData) {
-                $treeNode = new Egwbase_Ext_Treenode(
-                    'Addressbook',
-                    'contacts',
-                    'otheraddressbook_'. $accountData->account_id, 
-                    $accountData->account_name,
-                    false
-                );
-                $treeNode->owner  = $accountData->account_id;
-                $treeNode->nodeType = 'userAddressbooks';
-                $treeNodes[] = $treeNode;
-            }
-        } catch (Exception $e) {
-            // do nothing
-            // or throw Execption???
+        foreach($rows as $accountData) {
+            $treeNode = new Egwbase_Ext_Treenode(
+                'Addressbook',
+                'contacts',
+                'otheraddressbook_'. $accountData->accountId, 
+                $accountData->accountDisplayName,
+                false
+            );
+            $treeNode->owner  = $accountData->accountId;
+            $treeNode->nodeType = 'userAddressbooks';
+            $treeNodes[] = $treeNode;
         }
+
         echo Zend_Json::encode($treeNodes);
 
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
@@ -350,12 +345,25 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
     
-    public function getAddressbookSettings($_addressbookId)
+    public function getGrants($addressbookId)
     {
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
         
-        $result = $backend->getAddressbookSettings($_addressbookId);
+        $result['results'] = Addressbook_Controller::getInstance()->getGrants($addressbookId)->toArray();
+        $result['totalcount'] = count($result['results']);
         
+        return $result;
+    }
+    
+    public function setGrants($addressbookId, $grants)
+    {
+        $newGrants = new Egwbase_Record_RecordSet(Zend_Json::decode($grants), 'Egwbase_Record_Grants');
+        
+        $result = Addressbook_Controller::getInstance()->setGrants($addressbookId, $newGrants);
+               
         return $result;
     }
 }

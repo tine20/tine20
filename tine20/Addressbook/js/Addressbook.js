@@ -152,6 +152,10 @@ Egw.Addressbook = function(){
             }
         });
     };
+    
+    var _handler_addressbookSettings = function(_button, _event) {
+    	Egw.Addressbook.GrantsDialog.display(_treeNodeContextMenu.attributes.addressbookId, _treeNodeContextMenu.text);
+    };
 
     var _action_addAddressbook = new Ext.Action({
         text: 'add addressbook',
@@ -170,10 +174,10 @@ Egw.Addressbook = function(){
         handler: _handler_renameAddressbook
     });
 
-    var _action_permisionsAddressbook = new Ext.Action({
-    	disabled: true,
-        text: 'permissions',
-        handler: _handler_deleteAddressbook
+    var _action_grantsAddressbook = new Ext.Action({
+    	/*disabled: true,*/
+        text: 'manage permissions',
+        handler: _handler_addressbookSettings
     });
 
     var _contextMenuUserAddressbooks = new Ext.menu.Menu({
@@ -186,7 +190,7 @@ Egw.Addressbook = function(){
         items: [
             _action_renameAddressbook,
             _action_deleteAddressbook,
-            _action_permisionsAddressbook
+            _action_grantsAddressbook
         ]
     });
     
@@ -2254,12 +2258,432 @@ Egw.Addressbook.ContactEditDialog = function() {
     
 }(); // end of application
 
+Egw.Addressbook.GrantsDialog = function() {
+    var _removeAccountHandler = function(_button, _event) {
+        var selectedRows = Ext.getCmp('Addressbook_Grants_Grid').getSelectionModel().getSelections();
+        var grantsStore = Ext.getCmp('Addressbook_Grants_Grid').getStore();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            grantsStore.remove(selectedRows[i]);
+        }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// the dialog to manage lists
-//
-///////////////////////////////////////////////////////////////////////////////
+        Ext.getCmp('Addressbook_Grants_SaveButton').enable();
+        Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
+    };
+    
+    var _addAccountHandler = function(_button, _event) {
+    	//
+        var grantsStore = Ext.getCmp('Addressbook_Grants_Grid').getStore();
+        var grantsSelectionModel = Ext.getCmp('Addressbook_Grants_Grid').getSelectionModel();
+        var accountsSelectionModel = Ext.getCmp('Egwbase_Accounts_Grid').getSelectionModel();
+        
+        var selectedRows = accountsSelectionModel.getSelections();
+
+        var currentRecordId; 
+        var addedRows = false;
+
+        for (var i = 0; i < selectedRows.length; ++i) {
+        	currentRecordId = selectedRows[i].id;
+	        if(grantsStore.getById(selectedRows[i].id) === undefined) {
+	        
+	            var grantsRecord = Ext.data.Record.create(
+	                {name: 'accountId'},
+	                {name: 'accountName'},
+	                {name: 'readGrant'},
+	                {name: 'addGrant'},
+	                {name: 'editGrant'},
+	                {name: 'deleteGrant'}
+	            );
+	            
+	            grantsStore.addSorted(new grantsRecord({
+	                accountId: selectedRows[i].data.accountId,
+	                accountName: selectedRows[i].data.accountDisplayName,
+	                readGrant: true,
+	                addGrant: false,
+	                editGrant: false,
+	                deleteGrant: false
+	            }, selectedRows[i].id));
+	            
+	            addedRows = true;
+	        }
+        }
+        
+        grantsSelectionModel.selectRow(grantsStore.indexOfId(currentRecordId));
+        
+        if(addedRows === true) {
+	        Ext.getCmp('Addressbook_Grants_SaveButton').enable();
+	        Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
+        }
+    };
+
+
+    var action_addAccount = new Ext.Action({
+        text: 'add account',
+        disabled: true,
+        handler: _addAccountHandler,
+        iconCls: 'action_addContact'
+    });
+
+    var action_removeAccount = new Ext.Action({
+        text: 'remove account',
+        disabled: true,
+        handler: _removeAccountHandler,
+        iconCls: 'action_deleteContact'
+    });
+
+    var _displayGrantsDialog = function(_addressbookId, _addressbookName) {
+        var dataStore = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {
+                method: 'Addressbook.getGrants',
+                addressbookId: _addressbookId
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'accountId',
+            fields: [
+                {name: 'accountId'},
+                {name: 'accountName'},
+                {name: 'readGrant'},
+                {name: 'addGrant'},
+                {name: 'editGrant'},
+                {name: 'deleteGrant'}
+            ],
+            // turn off remote sorting
+            //remoteSort: false
+        });
+        
+        dataStore.setDefaultSort('accountName', 'asc');
+        
+        dataStore.load();
+        
+        dataStore.on('update', function(_store){
+            Ext.getCmp('Addressbook_Grants_SaveButton').enable();
+            Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
+        });
+        
+        var readColumn = new Ext.grid.CheckColumn({
+            header: 'Read',
+            dataIndex: 'readGrant',
+            width: 55
+        });
+
+        var addColumn = new Ext.grid.CheckColumn({
+            header: 'Add',
+            dataIndex: 'addGrant',
+            width: 55
+        });
+        
+        var editColumn = new Ext.grid.CheckColumn({
+            header: "Edit",
+            dataIndex: 'editGrant',
+            width: 55
+        });
+        
+        var deleteColumn = new Ext.grid.CheckColumn({
+            header: "Delete",
+            dataIndex: 'deleteGrant',
+            width: 55
+        });
+        
+        var columnModel = new Ext.grid.ColumnModel([
+            {
+                resizable: true, 
+                id: 'accountName', 
+                header: 'Name', 
+                dataIndex: 'accountName', 
+                width: 70
+            },
+            readColumn,
+            addColumn,
+            editColumn,
+            deleteColumn/*,
+            new Ext.grid.CheckColumn({
+                header: "Admin",
+                dataIndex: 'admin',
+                width: 55
+            }) */
+        ]);
+
+        columnModel.defaultSortable = true; // by default columns are sortable
+        
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        
+        var permissionsBottomToolbar = new Ext.Toolbar({
+            items: [
+                action_removeAccount
+            ]
+        });
+        
+
+        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                // no row selected
+                action_removeAccount.setDisabled(true);
+            } else {
+                // only one row selected
+                action_removeAccount.setDisabled(false);
+            }
+        });
+        
+        var gridPanel = new Ext.grid.EditorGridPanel({
+            region: 'center',
+            id: 'Addressbook_Grants_Grid',
+            title: 'Permissions',
+            store: dataStore,
+            cm: columnModel,
+            autoSizeColumns: false,
+            selModel: rowSelectionModel,
+            enableColLock:false,
+            loadMask: true,
+            plugins:[readColumn, addColumn, editColumn, deleteColumn],
+            autoExpandColumn: 'accountName',
+            bbar: permissionsBottomToolbar,
+            border: false
+        });
+        
+        /*******************************
+         * search accounts
+         ******************************/
+        var dataStore = new Ext.data.JsonStore({
+            url: 'index.php',
+            baseParams: {
+                method: 'Egwbase.getAccounts',
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'accountId',
+            fields: [
+                {name: 'accountId'},
+                {name: 'accountDisplayName'}
+            ],
+            remoteSort: true
+        });
+        
+        dataStore.setDefaultSort('accountDisplayName', 'asc');
+
+        dataStore.on('beforeload', function(_dataStore) {
+            _dataStore.baseParams.filter = Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue();
+        });        
+
+        var columnModel = new Ext.grid.ColumnModel([
+            {
+                resizable: true, 
+                id: 'accountDisplayName', 
+                header: 'Name', 
+                dataIndex: 'accountDisplayName', 
+                width: 70
+            }
+        ]);
+
+        columnModel.defaultSortable = true; // by default columns are sortable
+        
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+
+        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                // no row selected
+                action_addAccount.setDisabled(true);
+            } else {
+                // only one row selected
+                action_addAccount.setDisabled(false);
+            }
+        });
+
+        var quickSearchField = new Ext.app.SearchField({
+            id: 'Egwbase_Accounts_SearchField',
+            width: 290,
+            emptyText: 'enter searchfilter'
+        }); 
+        quickSearchField.on('change', function(){
+            if(Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue() == '') {
+                Ext.getCmp('Egwbase_Accounts_Grid').getStore().removeAll();
+            } else {
+                Ext.getCmp('Egwbase_Accounts_Grid').getStore().load({
+                    params: {
+                        start: 0,
+                        limit: 50
+                    }
+                });
+            }
+        });
+
+        var contactToolbar = new Ext.Toolbar({
+            /*id: 'Addressbook_Contacts_Toolbar', */
+            items: [
+                quickSearchField
+            ]
+        });
+
+
+        var contactToolbar2 = new Ext.Toolbar({
+            /*id: 'Addressbook_Contacts_Toolbar', */
+            items: [
+                action_addAccount
+            ]
+        });
+
+        var searchPanel = new Ext.grid.GridPanel({
+            title: 'Search',
+            id: 'Egwbase_Accounts_Grid',
+            store: dataStore,
+            cm: columnModel,
+            autoSizeColumns: false,
+            selModel: rowSelectionModel,
+            enableColLock:false,
+            loadMask: true,
+            autoExpandColumn: 'accountDisplayName',
+            tbar: contactToolbar,
+            bbar: contactToolbar2,
+            border: false
+        });
+        
+        searchPanel.on('rowdblclick', function(_grid, _rowIndex, _eventObject){
+            var record = _grid.getStore().getAt(_rowIndex);
+            var grantsStore = Ext.getCmp('Addressbook_Grants_Grid').getStore();
+            
+            if(grantsStore.getById(record.id) === undefined) {
+            
+                var grantsRecord = Ext.data.Record.create(
+                    {name: 'accountId'},
+                    {name: 'accountName'},
+                    {name: 'readGrant'},
+                    {name: 'addGrant'},
+                    {name: 'editGrant'},
+                    {name: 'deleteGrant'}
+                );
+                
+                grantsStore.addSorted(new grantsRecord({
+                    accountId: record.data.accountId,
+                    accountName: record.data.accountDisplayName,
+                    readGrant: true,
+                    addGrant: false,
+                    editGrant: false,
+                    deleteGrant: false
+                }, record.id));
+            }
+            
+            var selectionModel = Ext.getCmp('Addressbook_Grants_Grid').getSelectionModel();
+            
+            selectionModel.selectRow(grantsStore.indexOfId(record.id));
+            
+            Ext.getCmp('Addressbook_Grants_SaveButton').enable();
+            Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
+            
+        });
+        
+        // tabs for the center
+        var searchPanel = new Ext.TabPanel({
+            region: 'west',
+            activeTab: 0,
+            defaults:{autoScroll:true},
+            border: false,
+            split: true,
+            width: 300,
+            collapsible: false,
+
+            items:[searchPanel, {
+               title: 'Browse',
+               html: 'Browse',
+               disabled: true
+            }]
+        });
+
+        action_addAccount.setDisabled(true);
+        action_removeAccount.setDisabled(true);
+        
+        var win = new Ext.Window({
+            modal: true,
+                id: 'Addressbook_Grants_Window',
+                title: 'Manage permissions for addressbook: ' + _addressbookName,
+                layout:'border',
+                width:700,
+                height:450,
+                closeAction:'hide',
+                plain: true,
+                
+/*                items: new Ext.TabPanel({
+                    el: 'hello-tabs',
+                    autoTabs:true,
+                    activeTab:0,
+                    deferredRender:false,
+                    border:false
+                }), */
+                
+                items: [gridPanel, searchPanel],
+                buttons: [{
+                    text:'Save',
+                    id: 'Addressbook_Grants_SaveButton',
+                    disabled:true,
+                    handler: function(){
+                        _sentGrants(_addressbookId, function(_result, _request) { 
+                        	win.close() 
+                        });
+                    }
+                },{
+                    text:'Apply',
+                    id: 'Addressbook_Grants_ApplyButton',
+                    disabled:true,
+                    handler: function() {
+                    	_sentGrants(_addressbookId);
+                    }
+                },{
+                    text: 'Close',
+                    handler: function(){
+                        win.close();
+                    }
+                }]
+        });
+        
+        win.show();     
+    };
+    
+    var _sentGrants = function(_addressbookId, _onSuccess) {
+        var grants = new Array();
+        var grantsStore = Ext.getCmp('Addressbook_Grants_Grid').getStore();
+        grantsStore.each(function(_record) {
+            grants.push(_record.data);
+        });
+        
+        var encodedGrants = Ext.util.JSON.encode(grants);
+        
+        //console.log(encodedGrants);
+
+        Ext.Ajax.request({
+            url: 'index.php',
+            params: {
+                method: 'Addressbook.setGrants',
+                addressbookId: _addressbookId,
+                grants: encodedGrants
+            },
+            text: 'Setting grants...',
+            success: _onSuccess,
+            failure: function(result, request){
+            }
+        });
+        
+        Ext.getCmp('Addressbook_Grants_SaveButton').disable();
+        Ext.getCmp('Addressbook_Grants_ApplyButton').disable();
+    };
+    
+    // public functions and variables
+    return {
+        display: function(_addressbookId, _addressbookName) {
+        	_displayGrantsDialog(_addressbookId, _addressbookName);
+        }    
+    };
+
+}(); // end of application
+/********************************
+ *
+ * the dialog to manage lists
+ *
+ * not used anymore
+ *
+ *********************************/
 
 Egw.Addressbook.ListEditDialog = function() {
 
@@ -2709,3 +3133,35 @@ Egw.Addressbook.ListEditDialog = function() {
         }
     };
 }(); // end of Egw.Addressbook.ListEditDialog
+
+Ext.grid.CheckColumn = function(config){
+    Ext.apply(this, config);
+    if(!this.id){
+        this.id = Ext.id();
+    }
+    this.renderer = this.renderer.createDelegate(this);
+};
+
+Ext.grid.CheckColumn.prototype ={
+    init : function(grid){
+        this.grid = grid;
+        this.grid.on('render', function(){
+            var view = this.grid.getView();
+            view.mainBody.on('mousedown', this.onMouseDown, this);
+        }, this);
+    },
+
+    onMouseDown : function(e, t){
+        if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+            e.stopEvent();
+            var index = this.grid.getView().findRowIndex(t);
+            var record = this.grid.store.getAt(index);
+            record.set(this.dataIndex, !record.data[this.dataIndex]);
+        }
+    },
+
+    renderer : function(v, p, record){
+        p.css += ' x-grid3-check-col-td'; 
+        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+    }
+};
