@@ -284,16 +284,14 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     }
 
     /**
-     * get data for the overview
+     * get list of shared contacts
      *
-     * returns the data to be displayed in a ExtJS grid
-     *
-     * @todo implement correc total count for lists
+     * @todo implement correct total count of shared contacts
+     * @param string $filter
      * @param int $start
      * @param int $sort
      * @param string $dir
      * @param int $limit
-     * @param string $options json encoded array of additional options
      * @return array
      */
     public function getSharedContacts($filter, $sort, $dir, $limit, $start)
@@ -302,13 +300,16 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-                
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
-        $rows = $backend->getSharedContacts($filter, $sort, $dir, $limit, $start);
+
+        $rows = Addressbook_Controller::getInstance()->getSharedContacts($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountOfSharedContacts();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                //$result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts();
+            }
         }
 
         return $result;

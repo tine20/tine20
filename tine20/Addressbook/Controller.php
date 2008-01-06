@@ -84,5 +84,22 @@ class Addressbook_Controller
         return $result;
     }
         
-    
+    /**
+     * get list of shared contacts
+     *
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset
+     */
+    public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
+    {
+        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        
+        $rows = $backend->getSharedContacts($_filter, $_sort, $_dir, $_limit, $_start);
+        
+        return $rows;
+    }
 }

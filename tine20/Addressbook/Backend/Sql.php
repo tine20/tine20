@@ -1,11 +1,11 @@
 <?php
 /**
- * interface for contacs class
+ * sql backend class for the addressbook
  *
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -182,6 +182,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
+    /**
+     * add a new addressbook
+     *
+     * @param string $_name the name of the addressbook
+     * @param int $_type
+     * @return int the id of the new addressbook
+     */
     public function addAddressbook($_name, $_type) 
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
@@ -211,6 +218,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $addressbookId;
     }
     
+    /**
+     * delete an addressbook
+     *
+     * @param int $_addressbookId id of the addressbook
+     * @return unknown
+     */
     public function deleteAddressbook($_addressbookId)
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
@@ -226,6 +239,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return true;
     }
     
+    /**
+     * rename an addressbook
+     *
+     * @param int $_addressbookId id of the addressbook
+     * @param string $_name new name of the addressbook
+     * @return unknown
+     */
     public function renameAddressbook($_addressbookId, $_name)
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
@@ -334,9 +354,23 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
+    /**
+     * get list of shared contacts
+     *
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset returns false if user has no access to shared addressbooks
+     */
     public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
         $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('addressbook');
+        
+        if(count($sharedContainer) === 0) {
+            return false;
+        }
         
         $containerIds = array();
         
