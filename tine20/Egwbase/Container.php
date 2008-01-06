@@ -345,13 +345,12 @@ class Egwbase_Container
         //error_log("getInternalContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
+        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
         
-        if($stmt->rowCount() == 0) {
+        if(empty($result)) {
             throw new Exception('internal container not found or not accessible');
         }
 
-        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
-        
         return $result;
         
     }
@@ -447,12 +446,11 @@ class Egwbase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-
-        if($stmt->rowCount() == 0) {
+        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
+        
+        if(empty($result)) {
             throw new UnderflowException('container not found');
         }
-        
-        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
         
         return $result;
         
@@ -573,16 +571,14 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
         
-        if($stmt->rowCount() == 0) {
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        if(empty($result)) {
             return false;
         }
 
         $accountsBackend = Egwbase_Account::getBackend();
         
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
         $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Record_Account');
-        
         foreach($rows as $row) {
             $account = $accountsBackend->getAccountById($row['account_id']);
             $result->addRecord($account);
@@ -720,7 +716,8 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
         
-        if($stmt->rowCount() == 0) {
+        $grants = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        if(empty($grants)) {
             return FALSE;
         } else {
             return TRUE;
