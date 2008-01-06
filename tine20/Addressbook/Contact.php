@@ -54,8 +54,20 @@ class Addressbook_Contact
         'adr_two_street2'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_assistent'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_bday'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    	'contact_email'		=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_email_home'	=> array('EmailAddress', Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_email'     => array(
+            array(
+                'Regex', 
+                '/^[^0-9][a-z0-9_]+([.][a-z0-9_]+)*[@][a-z0-9_]+([.][a-z0-9_]+)*[.][a-z]{2,4}$/'
+            ), 
+            Zend_Filter_Input::ALLOW_EMPTY => true
+        ),
+        'contact_email_home'     => array(
+            array(
+                'Regex', 
+                '/^[^0-9][a-z0-9_]+([.][a-z0-9_]+)*[@][a-z0-9_]+([.][a-z0-9_]+)*[.][a-z]{2,4}$/'
+            ), 
+            Zend_Filter_Input::ALLOW_EMPTY => true
+        ),
         'contact_id'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     	'contact_note'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
