@@ -238,15 +238,15 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $accountArray = $stmt->fetch(Zend_Db::FETCH_ASSOC);
 
         if($accountArray['account_lastlogin'] !== NULL) {
-            $accountArray['account_lastlogin'] = new Zend_Date($account['account_lastlogin'], Zend_Date::TIMESTAMP);
+            $accountArray['account_lastlogin'] = new Zend_Date($accountArray['account_lastlogin'], Zend_Date::TIMESTAMP);
         }
             
         if($accountArray['account_lastpwd_change'] !== NULL) {
-            $accountArray['account_lastpwd_change'] = new Zend_Date($account['account_lastpwd_change'], Zend_Date::TIMESTAMP);
+            $accountArray['account_lastpwd_change'] = new Zend_Date($accountArray['account_lastpwd_change'], Zend_Date::TIMESTAMP);
         }
             
         if($accountArray['account_expires'] > 0) {
-            $accountArray['account_expires'] = new Zend_Date($account['account_expires'], Zend_Date::TIMESTAMP);
+            $accountArray['account_expires'] = new Zend_Date($accountArray['account_expires'], Zend_Date::TIMESTAMP);
         } else {
             $accountArray['account_expires'] = NULL;
         }
