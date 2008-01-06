@@ -1,19 +1,5 @@
 <?php
 /**
- * the class needed to access the contacts table
- *
- * @see Addressbook_Backend_Sql_Contacts
- */
-require_once 'Addressbook/Backend/Sql/Contacts.php';
-
-/**
- * the class needed to access the lists table
- *
- * @see Addressbook_Backend_Sql_Lists
- */
-require_once 'Addressbook/Backend/Sql/Lists.php';
-
-/**
  * interface for contacs class
  *
  * @package     Addressbook
