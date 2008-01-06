@@ -216,7 +216,7 @@ class Egwbase_Controller
 
             $this->session->currentAccount = $account;
             
-            $account->setLoginTime($_idAddress);
+            $account->setLoginTime($_ipAddress);
             
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
