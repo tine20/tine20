@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id: Application.php 390 2007-12-03 15:29:54Z nelius_weiss $
+ * @version     $Id$
  */
 
 /**
