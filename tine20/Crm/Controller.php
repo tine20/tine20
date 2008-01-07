@@ -93,6 +93,22 @@ class Crm_Controller
         return $result;    
     }    
     
+   /**
+     * save Leadtypes
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
+     */ 
+    public function saveLeadtypes(Egwbase_Record_Recordset $_leadTypes)
+    {
+          $daten = $_leadTypes->toArray();
+          
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend->saveLeadtypes($_leadTypes);
+    }      
+    
     /**
      * get products available
      *
@@ -107,6 +123,22 @@ class Crm_Controller
 
         return $result;    
     }     
+
+   /**
+     * save Productsource
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
+     */ 
+    public function saveProductSource(Egwbase_Record_Recordset $_productSource)
+    {
+          $daten = $_productSource->toArray();
+          
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend->saveProductsource($_productSource);
+    } 
 
     /**
      * get project states
@@ -123,5 +155,20 @@ class Crm_Controller
         return $result;    
     }     
 
+   /**
+     * save Projectstates
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
+     */ 
+    public function saveProjectstates(Egwbase_Record_Recordset $_projectStates)
+    {
+          $daten = $_projectStates->toArray();
+          
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend->saveProjectstates($_projectStates);
+    } 
     
 }

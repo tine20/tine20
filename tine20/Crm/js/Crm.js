@@ -604,17 +604,9 @@ Egw.Crm = function() {
           
            var handler_options_saveClose = function(){
                 var store_options = Ext.getCmp('editOptionsGrid').getStore();
-                
-                console.log(store_options.data.itemAt(1).data.value);
-                Ext.each(store_options.data,function(item,i,all){
-            
-                });
-                
                 var switchKeys = new Array(item.mapping + '_id', item.mapping);
-
                 
-                  var options_json = Egw.Egwbase.Common.getJSONdataSKeys(store_options, switchKeys); 
-//                var options_json = Egw.Egwbase.Common.getJSONdata(store_options);
+                var options_json = Egw.Egwbase.Common.getJSONdataSKeys(store_options, switchKeys); 
 
                  Ext.Ajax.request({
                        //     url: 'index.php',
@@ -1698,7 +1690,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                     itemSelector: 'div.search-item', */
                             		onSelect: function(record) {
                                        // alert(st_contacts.getById(0));
-                            			console.log(record.data);
+                            		//	console.log(record.data);
                                     }
                                 } , grid_contact
                                 ]

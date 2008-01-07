@@ -71,37 +71,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function getLeadsources($sort, $dir)
     {	
-    
-error_log('SQL :: getLeadsources');    
 		$result = $this->leadsourcesTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}
 
-	/**
-	* add or updates an option
-	*
-	* @param Crm_Leadsource $_optionData the optiondata
-	* @return unknown
-	*/
-    public function saveLeadsource(Crm_Leadsource $_optionData)
-    {
-
-                
-        $optionData = $_optionData->toArray();
-
-        if($_optionData->pj_leadsource_id === NULL) {        
-            $result = $this->leadsourcesTable->insert($optionData);
-            $_optionData->pj_leadsource_id = $this->leadsourcesTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->leadsourcesTable->getAdapter()->quoteInto('pj_leadsource_id = (?)', $_optionData->pj_leadsource_id),
-            );
-            $result = $this->leadsourcesTable->update($optionData, $where);
-        }
-
-        return $_optionData;
-    }
-    
     /**
     * add or updates an option
     *
@@ -115,27 +88,28 @@ error_log('SQL :: getLeadsources');
         // datentype(Crm_Model_Leadsource) checken und schreiben 
         // wenn fehler rollback
         // transaction commit
-        
-        
-        /*
+
+        $_daten = $_optionData->toArray();
+    
+
         $db = Zend_Registry::get('dbAdapter');
-        
+  
         $db->beginTransaction();
         
         try {
             $db->delete('egw_metacrm_leadsource');
-                    
-            foreach($_optionData as $_data) {
-                $db->insert($_data);                
+
+            foreach($_daten as $_data) {
+                $db->insert('egw_metacrm_leadsource', $_data);                
             }
 
             $db->commit();
-        
+
         } catch (Exception $e) {
             $db->rollBack();
-            echo $e->getMessage();
+            error_log($e->getMessage());
         }
-      */  
+
         return $_optionData;
     }
     
@@ -180,20 +154,28 @@ error_log('SQL :: getLeadsources');
 	* @param Crm_Leadtype $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveLeadtype(Crm_Leadtype $_optionData)
+    public function saveLeadtypes(Egwbase_Record_Recordset $_optionData)
     {
 
-                
-        $optionData = $_optionData->toArray();
+        $_daten = $_optionData->toArray();
+    
 
-        if($_optionData->pj_leadtype_id === NULL) {        
-            $result = $this->leadtypesTable->insert($optionData);
-            $_optionData->pj_leadtype_id = $this->leadtypesTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->leadtypesTable->getAdapter()->quoteInto('pj_leadtype_id = (?)', $_optionData->pj_leadtype_id),
-            );
-            $result = $this->leadtypesTable->update($optionData, $where);
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $db->delete('egw_metacrm_leadtype');
+
+            foreach($_daten as $_data) {
+                $db->insert('egw_metacrm_leadtype', $_data);                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
         }
 
         return $_optionData;
@@ -240,25 +222,32 @@ error_log('SQL :: getLeadsources');
 	* @param Crm_Productsource $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveProductsource(Crm_Productsource $_optionData)
+    public function saveProductsource(Egwbase_Record_Recordset $_optionData)
     {
-      
-        
-        $optionData = $_optionData->toArray();
 
-        if($_optionData->pj_productsource_id === NULL) {        
-            $result = $this->productsourceTable->insert($optionData);
-            $_optionData->pj_productsource_id = $this->productsourceTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->productsourceTable->getAdapter()->quoteInto('pj_productsource_id = (?)', $_optionData->pj_productsource_id),
-            );
-            $result = $this->productsourceTable->update($optionData, $where);
+        $_daten = $_optionData->toArray();
+    
+
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $db->delete('egw_metacrm_productsource');
+
+            foreach($_daten as $_data) {
+                $db->insert('egw_metacrm_productsource', $_data);                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
         }
 
         return $_optionData;
     }
-
     /**
      * delete option identified by id and table
      *
@@ -301,18 +290,28 @@ error_log('SQL :: getLeadsources');
 	* @param Crm_Projectstate $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveProjectstate(Crm_Projectstate $_optionData)
-    {   
-        $optionData = $_optionData->toArray();
+    public function saveProjectstates(Egwbase_Record_Recordset $_optionData)
+    {
 
-        if($_optionData->pj_projectstate_id === NULL) {        
-            $result = $this->projectstatesTable->insert($optionData);
-            $_optionData->pj_projectstate_id = $this->projectstatesTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->projectstatesTable->getAdapter()->quoteInto('pj_projectstate_id = (?)', $_optionData->pj_projectstate_id),
-            );
-            $result = $this->projectstatesTable->update($optionData, $where);
+        $_daten = $_optionData->toArray();
+    
+
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $db->delete('egw_metacrm_projectstate');
+
+            foreach($_daten as $_data) {
+                $db->insert('egw_metacrm_projectstate', $_data);                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
         }
 
         return $_optionData;
