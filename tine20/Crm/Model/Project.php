@@ -9,7 +9,7 @@
  * @version     $Id: Event.php 200 2007-11-16 10:50:03Z twadewitz $
  *
  */
-class Crm_Project
+class Crm_Model_Project extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -50,76 +50,11 @@ class Crm_Project
         
     );
     
-    protected $_validationErrors = array();
-    
-    public function __construct($_eventData = NULL)
-    {
-    	if(is_array($_eventData)) {
-    		foreach($_eventData as $key => $value) {
-    			if(isset($this->_validators[$key])) {
-    				$this->$key = $value;
-    			}
-    		}
-    	}
-    }
-    
     /**
-     * returns array of fields with validation errors 
-     *
-     * @return array
-     */
-    public function getValidationErrors()
-    {
-    	return $this->_validationErrors;
-    }
-    
-    /**
-     * sets the eventdata from user generated input. data get filtered by Zend_Filter_Input
-     *
-     * @param array $_eventData
-     * @throws Execption when content contains invalid or missing data
-     */
-    public function setFromUserData(array $_eventData)
-    {
-    	$inputFilter = new Zend_Filter_Input($this->_filters, $this->_validators, $_eventData);
-    	
-    	if ($inputFilter->isValid()) {
-    		$eventData = $inputFilter->getUnescaped();
-    		foreach($eventData as $key => $value) {
-    			$this->$key = $value;
-    		}
-    	} else {
-            foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
-                $this->_validationErrors[] = array('id'  => $fieldName,
-                                  'msg' => $errorMessages[0]);
-            }
-    		throw new Exception("some fields have invalid content");
-    	}
-    }
-    
-    /**
-     * return public fields as array
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-    	$resultArray = array();
-    	foreach($this->_validators as $key => $name) {
-    		if(isset($this->$key)) {
-    			$resultArray[$key] = $this->$key;
-    		}
-    	}
-    	
-    	return $resultArray;
-    }
-    
-    private function __set($_name, $_value)
-    {
-    	if(isset($this->_validators[$_name])) {
-    		$this->$_name = $_value;
-    	} else {
-    		throw new Exception("$_name is not a valid resource name");
-    	}
-    }
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'pj_id';
 }

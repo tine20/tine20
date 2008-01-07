@@ -9,7 +9,7 @@
  * @version     $Id: option.php 200 2007-11-16 10:50:03Z twadewitz $
  *
  */
-class Crm_Leadsource extends Egwbase_Record_Abstract
+class Crm_Model_Leadtype extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -19,7 +19,7 @@ class Crm_Leadsource extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'                 => 'StringTrim'
+        '*'                     => 'StringTrim'
     );
     
     /**
@@ -30,16 +30,16 @@ class Crm_Leadsource extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'pj_leadsource_id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'pj_leadtype_id' 	  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'pj_leadtype'         => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
-    
+  
    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'pj_leadsource_id';
-    
+    protected $_identifier = 'pj_leadtype_id';  
+  
 }

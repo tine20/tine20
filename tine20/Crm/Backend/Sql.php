@@ -71,6 +71,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function getLeadsources($sort, $dir)
     {	
+    
+error_log('SQL :: getLeadsources');    
 		$result = $this->leadsourcesTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}
@@ -113,18 +115,27 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         // datentype(Crm_Model_Leadsource) checken und schreiben 
         // wenn fehler rollback
         // transaction commit
-        $optionData = $_optionData->toArray();
+        
+        
+        /*
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $db->beginTransaction();
+        
+        try {
+            $db->delete('egw_metacrm_leadsource');
+                    
+            foreach($_optionData as $_data) {
+                $db->insert($_data);                
+            }
 
-        if($_optionData->pj_leadsource_id === NULL) {        
-            $result = $this->leadsourcesTable->insert($optionData);
-            $_optionData->pj_leadsource_id = $this->leadsourcesTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->leadsourcesTable->getAdapter()->quoteInto('pj_leadsource_id = (?)', $_optionData->pj_leadsource_id),
-            );
-            $result = $this->leadsourcesTable->update($optionData, $where);
+            $db->commit();
+        
+        } catch (Exception $e) {
+            $db->rollBack();
+            echo $e->getMessage();
         }
-
+      */  
         return $_optionData;
     }
     

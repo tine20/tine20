@@ -534,8 +534,6 @@ Egw.Crm = function() {
         
 
        function editOptions(item) {
-           var deleted_options = new Array();
-           
            var Dialog = new Ext.Window({
 				title: item.table,
                 id: 'options_window',
@@ -567,9 +565,6 @@ Egw.Crm = function() {
                 remoteSort: false
             });
             
-            st.on('remove', function(_store,_record,_index){
-                deleted_options.push(_record.data.key);
-            })
             st.load();
             
 
@@ -588,7 +583,7 @@ Egw.Crm = function() {
             
             var handler_options_add = function(){
                 var p = new entry({
-                    key: '-1',
+                    key: 'NULL',
 					value: ''
                 });
                 gridPanel.stopEditing();
@@ -609,35 +604,33 @@ Egw.Crm = function() {
           
            var handler_options_saveClose = function(){
                 var store_options = Ext.getCmp('editOptionsGrid').getStore();
-                var store_options_mod = store_options.getModifiedRecords();
-                var modified_options_json = Egw.Egwbase.Common.getJSONdata(store_options_mod);
-           
-                var options = Ext.getCmp('optionsData');
-                    options.setValue(modified_options_json);
-         
-           	    var form_options = Ext.getCmp('editOptionsDialog').getForm();
-            	form_options.render();
-         
-            	if(form_options.isValid()) {     
-        			var additionalData = {};
-                        additionalData.deletedOptions = Ext.util.JSON.encode(deleted_options);
-                    
-                                                        
-        			form_options.submit({
-            			waitTitle:'Please wait!',
-            			waitMsg:'saving options...',
-                        params:additionalData,
-            			success:function(form, action, o) {
-                            store_options.reload();
-                            store_options.rejectChanges();
-            			},
-            			failure:function(form, action) {
-            			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-            			}
-            		});
-            	} else {
-            		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-            	}           
+                
+                console.log(store_options.data.itemAt(1).data.value);
+                Ext.each(store_options.data,function(item,i,all){
+            
+                });
+                
+                var switchKeys = new Array(item.mapping + '_id', item.mapping);
+
+                
+                  var options_json = Egw.Egwbase.Common.getJSONdataSKeys(store_options, switchKeys); 
+//                var options_json = Egw.Egwbase.Common.getJSONdata(store_options);
+
+                 Ext.Ajax.request({
+                       //     url: 'index.php',
+                            params: {
+                                method: 'Crm.save' + item.table,
+                                optionsData: options_json
+                            },
+                            text: 'Saving options...',
+                            success: function(_result, _request){
+                                    store_options.reload();
+                                    store_options.rejectChanges();
+                               },
+                            failure: function(form, action) {
+                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
+                    			}
+                        });          
             }          
             
             var gridPanel = new Ext.grid.EditorGridPanel({
@@ -665,28 +658,8 @@ Egw.Crm = function() {
                     handler : handler_options_saveClose 
                     }]  
                 });
-                  
-                      
-      		var form = new Ext.FormPanel({
-			baseParams: {method :'Crm.save' + item.table },
-		    labelAlign: 'top',
-			region: 'center',
-            id: 'editOptionsDialog',
-			deferredRender: false,
-            items: [{
-                layout: 'form',
-                border: false,
-                items: [{
-                   xtype: 'hidden',
-                   name: 'optionsData',
-                   id: 'optionsData',
-                   value: ''
-                }]
-              }] 
-            });
-              
+                        
           Dialog.add(gridPanel);
-          Dialog.add(form);
           Dialog.show();		  
         }
 
@@ -1363,7 +1336,7 @@ Egw.Crm.ProjectEditDialog = function() {
 	   if (formData.values) {
 			var _pj_id = formData.values.pj_id;
 	   } else {
-			var _pj_id = '-1';
+			var _pj_id = 'NULL';
 	   }
   
         var st_choosenProducts = new Ext.data.JsonStore({
@@ -1475,7 +1448,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 text: 'Produkt hinzufügen',
                 handler : function(){
                     var p = new product({
-                        pj_id: '-1',
+                        pj_id: 'NULL',
 						pj_project_id: _pj_id,
                         pj_product_id: '',                       
                         pj_product_desc:'',

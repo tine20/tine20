@@ -20,6 +20,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      */
     protected $_appname = 'Crm';
 
+    
     /**
      * get lead sources
      *
@@ -28,7 +29,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @return array
      */
     public function getLeadsources($sort, $dir)
-    {
+    {     
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
@@ -40,25 +41,18 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
 
         return $result;    
-    }     	
+    } 
 
     /**
-     * save leadsources
-     *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @param string $deletedOptions json encoded array
-     * @param string $optionsData json encoded array
-     * @return array
-     */	
-    public function saveLeadsources($optionsData)
+	 * save leadsources
+	 *
+	 * if $_Id is -1 the options element gets added, otherwise it gets updated
+	 * this function handles insert and updates as well as deleting vanished items
+	 *
+	 * @return array
+	 */	
+	public function saveLeadsources($optionsData)
     {
-        /*array(
-            array("name1" => "value1", "name2" => "value2"),
-            array("name1" => "value1", "name2" => "value2")
-        );*/
-        //$deletedOptions = Zend_Json::decode($deletedOptions);
         $leadSources = Zend_Json::decode($optionsData);
          
         try {
@@ -80,18 +74,26 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
         
         return $result;        
-    }  
+    }    
 
 
-// handle LEADTYPES
+    /**
+     * get lead types
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
    public function getLeadtypes($sort, $dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getLeadtypes($sort, $dir)) {
-            $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
+         $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller::getInstance()->getLeadtypes($sort, $dir)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
         }
 
         return $result;    
@@ -105,7 +107,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */	
-	public function saveLeadtypes($deletedOptions)
+	public function saveLeadtypes()
     {
         if(strlen($_POST['deletedOptions']) > 2) {
                $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
@@ -172,18 +174,26 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }
     
     
-// handle PROJECTSTATES    
+    /**
+     * get project states
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */   
    public function getProjectstates($sort, $dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getProjectstates($sort, $dir)) {
-            $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
+         $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller::getInstance()->getProjectstates($sort, $dir)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
         }
 
-        return $result;    
+        return $result;   
     }  
 
     /**
@@ -261,18 +271,26 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }    
     
  
-// handle PRODUCTSOURCES  
+    /**
+     * get product source
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
 	public function getProductsource($sort, $dir)
 	{
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getProductsAvailable($sort, $dir)) {
-            $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
+         $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller::getInstance()->getProductsAvailable($sort, $dir)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
         }
 
-        return $result;
+        return $result;  
 	}    
   
     /**

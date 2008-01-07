@@ -56,8 +56,7 @@ class Crm_Controller
      */
     public function getLeadsources($_sort, $_dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-        
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
         $result = $backend->getLeadsources($_sort, $_dir);
 
         return $result;    
@@ -73,8 +72,56 @@ class Crm_Controller
      */ 
     public function saveLeadsources(Egwbase_Record_Recordset $_leadSources)
     {
+          $daten = $_leadSources->toArray();
+          
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
-        
         $backend->saveLeadsources($_leadSources);
     }  
+    
+    /**
+     * get lead types
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return array
+     */
+    public function getLeadtypes($_sort, $_dir)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $result = $backend->getLeadtypes($_sort, $_dir);
+
+        return $result;    
+    }    
+    
+    /**
+     * get products available
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return array
+     */
+    public function getProductsAvailable($_sort, $_dir)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $result = $backend->getProductsAvailable($_sort, $_dir);
+
+        return $result;    
+    }     
+
+    /**
+     * get project states
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return array
+     */
+    public function getProjectstates($_sort, $_dir)
+    {
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $result = $backend->getProjectstates($_sort, $_dir);
+
+        return $result;    
+    }     
+
+    
 }
