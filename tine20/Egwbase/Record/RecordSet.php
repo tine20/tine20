@@ -1,6 +1,6 @@
 <?php
 /**
- * eGroupWare 2.0
+ * eGroupWare 2.00
  * 
  * @package     Egwbase
  * @subpackage  Record
