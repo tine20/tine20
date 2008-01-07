@@ -568,7 +568,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     protected function _addQuickSearchFilter($_where, $_filter)
     {
         if(!empty($_filter)) {
-            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . $_filter . '%');
+            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . trim($_filter) . '%');
         }
         
         return $_where;
