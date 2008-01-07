@@ -404,34 +404,68 @@ Egw.Egwbase.Common = function(){
 		return Ext.util.Format.date(date, 'H:i:s');
 	};
 	
-     /**
-	 * Returns JSON encoded array
-	 * from Store Object
-	 * 
-	 * @param {object} _dataSrc 
-	 * @return {json} json encoded data
-	 */    
-    _getJSONDsRecs = function(_dataSrc) {
-            if(Ext.isEmpty(_dataSrc)) {
-                return false;
-            }
-            var dataLen = _dataSrc.length
-            var jsonData = new Array(dataLen);            
+    /** 
+     * returns json coded data from given data source
+	 *
+	 * @param _dataSrc - Ext.data.JsonStore object
+	 * @return json coded string
+	 **/	
+	var _getJSONDsRecs = function(_dataSrc) {
+			
+		if(Ext.isEmpty(_dataSrc)) {
+			return false;
+		}
+			
+		var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array();		
+		for(i=0; i < dataLen; i++) {
+			var curRecData = data.itemAt(i).data;
+			jsonData.push(curRecData);
+		}	
 
-            for(var i=0; i < dataLen; i++) {
-                var curRecData = _dataSrc[i].data;
-                jsonData[i] = curRecData;
-            }   
+		return Ext.util.JSON.encode(jsonData);
+	}
+       
+    /** 
+     * returns json coded data from given data source
+     * switches array keys
+	 *
+	 * @param _dataSrc - Ext.data.JsonStore object
+	 * @param _switchKeys - Array with old=>new key pairs
+	 * @return json coded string
+	 **/	
+	var _getJSONDsRecsSwitchedKeys = function(_dataSrc, _switchKeys) {
+			
+		if(Ext.isEmpty(_dataSrc) || Ext.isEmpty(_switchKeys)) {
+			return false;
+		}
+			
+		var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array(), keysLen = _switchKeys.length;		
+        
+        if(keysLen < 1) {
+            return false;
+        }
+        
+		for(var i=0; i < dataLen; i++) {
 
-            return Ext.util.JSON.encode(jsonData);  
-       }      
+                var curRecData = new Array();
+                curRecData[0] = new Object();
+                curRecData[0][_switchKeys[0]] = data.itemAt(i).data.key;
+                curRecData[0][_switchKeys[1]] = data.itemAt(i).data.value;                
+
+			jsonData.push(curRecData[0]);
+		}	
+
+		return Ext.util.JSON.encode(jsonData);
+	}       
+       
     
 	return {
 		dateTimeRenderer: _dateTimeRenderer,
 		dateRenderer: _dateRenderer,
 		timeRenderer: _timeRenderer,
 		openWindow:       _openWindow,
-        getJSONdata:    _getJSONDsRecs
+        getJSONdata:    _getJSONDsRecs,
+        getJSONdataSKeys:    _getJSONDsRecsSwitchedKeys
 	};
 }();
 
