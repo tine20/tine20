@@ -10,6 +10,75 @@
  */
 Ext.namespace('Egw.Tasks');
 
+Egw.Tasks.getToolbar = function() {
+
+	  	var action_add = new Ext.Action({
+		text: 'add',
+		iconCls: 'action_add',
+		handler: function () {
+       //     var tree = Ext.getCmp('venues-tree');
+	//		var curSelNode = tree.getSelectionModel().getSelectedNode();
+		//	var RootNode   = tree.getRootNode();
+        
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&_taskId=', 900, 700);
+         }
+ 		}); 
+    
+    
+        var quickSearchField = new Ext.app.SearchField({
+            id:        'quickSearchField',
+            width:     200,
+            emptyText: 'enter searchfilter'
+        }); 
+        quickSearchField.on('change', function() {
+            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
+        });
+        
+        var currentDate = new Date();
+        var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
+        
+        var dateFrom = new Ext.form.DateField({
+            id:             'Crm_dateFrom',
+            allowBlank:     false,
+            validateOnBlur: false,
+            value:          oneWeekAgo
+        });
+        var dateTo = new Ext.form.DateField({
+            id:             'Crm_dateTo',
+            allowBlank:     false,
+            validateOnBlur: false,
+            value:          currentDate
+        });
+        
+
+        
+        var toolbar = new Ext.Toolbar({
+            id: 'Crm_toolbar',
+            split: false,
+            height: 26,
+            items: [
+                action_add,
+                new Ext.Toolbar.Separator(),
+                '->',
+                'Display from: ',
+                ' ',
+                dateFrom,
+                'to: ',
+                ' ',
+                dateTo,                
+                new Ext.Toolbar.Separator(),
+                '->',
+                'Search:', ' ',
+                ' ',
+                quickSearchField
+            ]
+        });
+        
+        return toolbar;
+    }
+  
+
+
 // entry point, required by egwbase
 Egw.Tasks.getPanel = function() {
     
@@ -22,7 +91,7 @@ Egw.Tasks.getPanel = function() {
     
     taskPanel.on('beforeexpand', function(_calPanel) {
         Egw.Egwbase.MainScreen.setActiveContentPanel(Egw.Tasks.TaskGrid.getGrid());
-        //Egw.Egwbase.MainScreen.setActiveToolbar(Egw.Calendar.ToolBar.getToolBar());
+        Egw.Egwbase.MainScreen.setActiveToolbar(Egw.Tasks.getToolbar());
     });
     
     return taskPanel;
@@ -124,5 +193,21 @@ Egw.Tasks.TaskGrid = function(){
 	return{
 		getGrid: function() {initStore(); initGrid(); return grid;}
 	}
+}();
+
+Egw.Tasks.EditDialog = function(){
+  
+    // public functions and variables
+    return {
+        display: function() {
+            var dialog = _displayDialog();
+            if(formData.values) {
+                setProjectDialogValues(formData);
+            }
+         }
+        
+    }
+
 }
 ();
+
