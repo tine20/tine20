@@ -99,7 +99,35 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $_optionData;
     }
+    
+    /**
+    * add or updates an option
+    *
+    * @param Crm_Leadsource $_optionData the optiondata
+    * @return unknown
+    */
+    public function saveLeadsources(Egwbase_Record_Recordset $_optionData)
+    {
+        // transaction start
+        // delete all
+        // datentype(Crm_Model_Leadsource) checken und schreiben 
+        // wenn fehler rollback
+        // transaction commit
+        $optionData = $_optionData->toArray();
 
+        if($_optionData->pj_leadsource_id === NULL) {        
+            $result = $this->leadsourcesTable->insert($optionData);
+            $_optionData->pj_leadsource_id = $this->leadsourcesTable->getAdapter()->lastInsertId();
+        } else {
+            $where  = array(
+                $this->leadsourcesTable->getAdapter()->quoteInto('pj_leadsource_id = (?)', $_optionData->pj_leadsource_id),
+            );
+            $result = $this->leadsourcesTable->update($optionData, $where);
+        }
+
+        return $_optionData;
+    }
+    
     /**
      * delete option identified by id and table
      *

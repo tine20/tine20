@@ -9,7 +9,7 @@
  * @version     $Id: option.php 200 2007-11-16 10:50:03Z twadewitz $
  *
  */
-class Crm_Leadsource extends Egwbase_Record_Abstract
+class Crm_Model_Leadsource extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter

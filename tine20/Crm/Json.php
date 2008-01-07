@@ -5,104 +5,81 @@
  * This class handles all Json requests for the Crm application
  *
  * @package     Crm
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Json.php 199 2007-10-15 16:30:00Z twadewitz $
  *
  */
 class Crm_Json extends Egwbase_Application_Json_Abstract
 {
-
+    /**
+     * the internal name of the application
+     *
+     * @var string
+     */
     protected $_appname = 'Crm';
 
-
-// handle LEADSOURCES
-   public function getLeadsources($sort, $dir)
+    /**
+     * get lead sources
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getLeadsources($sort, $dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-         
-            
-        if($rows = $backend->getLeadsources($sort, $dir)) {
-            $result['results']    = $rows->toArray();
-//              $result['results']    = $rows;
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller::getInstance()->getLeadsources($sort, $dir)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
         }
 
         return $result;    
     }     	
 
     /**
-	 * save leadsources
-	 *
-	 * if $_Id is -1 the options element gets added, otherwise it gets updated
-	 * this function handles insert and updates as well as deleting vanished items
-	 *
-	 * @return array
-	 */	
-	public function saveLeadsources()
+     * save leadsources
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @param string $deletedOptions json encoded array
+     * @param string $optionsData json encoded array
+     * @return array
+     */	
+    public function saveLeadsources($optionsData)
     {
-        if(strlen($_POST['deletedOptions']) > 2) {
-               $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
-               
-            if(is_array($_deleted_options)) {
-                $backend = Crm_Backend::factory(Crm_Backend::SQL);
-
-                foreach($_deleted_options as $_deleted_option) {
-                    $backend->deleteLeadsourceById($_deleted_option);
-                }
-    
-                $result = array('success'   => TRUE, 'ids' => $_deleted_options);
-            } else {
-                $result = array('success'   => FALSE);
-                return $result;
-            }
+        /*array(
+            array("name1" => "value1", "name2" => "value2"),
+            array("name1" => "value1", "name2" => "value2")
+        );*/
+        //$deletedOptions = Zend_Json::decode($deletedOptions);
+        $leadSources = Zend_Json::decode($optionsData);
+         
+        try {
+            $leadSources = new Egwbase_Record_RecordSet($leadSources, 'Crm_Model_Leadsource');
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errorMessage'      => 'filter NOT ok'
+            );
+            
+            return $result;
         }
-
-       if(strlen($_POST['optionsData']) > 2) 
-       {     
-           $_leadsources = Zend_Json::decode($_POST['optionsData']);     
-
-           foreach($_leadsources AS $_leadsource) {
-               $options[] = array('pj_leadsource_id' => $_leadsource['key'], 'pj_leadsource' => $_leadsource['value']);    
-           }
-
-           if(is_array($options)) {
-               	foreach($options AS $_option) {
-                    if($_option['pj_leadsource_id'] == "-1") {
-						unset($_option['pj_leadsource_id']);
-					}
-				
-					$option = new Crm_Leadsource();
-				        try {
-				            $option->setFromUserData($_option);
-				        } catch (Exception $e) {
-				            // invalid data in some fields sent from client
-				            $result = array('success'           => false,
-				                            'errors'            => $option->getValidationErrors(),
-				                            'errorMessage'      => 'filter NOT ok');
-				
-				            return $result;
-				        }
-
-			        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-				         
-				        try {	            
-				            $backend->saveLeadsource($option);
-				            $result = array('success'           => true,
-				                            'welcomeMessage'    => 'Entry updated');
-				        } catch (Exception $e) {			            
-				            $result = array('success'           => false,
-				        					'errorMessage'      => $e->getMessage());
-                            return $result;
-				        }
-				}
-               
-           }        
-       } else {
-            $result = array('success' => false,
-                            'errorMessage' => 'nothing to save');
+            
+        
+        if(Crm_Controller::getInstance()->saveLeadsources($leadSources) === FALSE) {
+            $result = array('success'   => FALSE);
+        } else {
+            $result = array('success'   => TRUE);
         }
-       return $result;        
+        
+        return $result;        
     }  
 
 
@@ -128,7 +105,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */	
-	public function saveLeadtypes()
+	public function saveLeadtypes($deletedOptions)
     {
         if(strlen($_POST['deletedOptions']) > 2) {
                $_deleted_options = Zend_Json::decode($_POST['deletedOptions']);
