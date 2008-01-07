@@ -1,6 +1,6 @@
 <?php
 /**
- * class to handle grants
+ * class to handle grantss
  * 
  * @package     Egwbase
  * @subpackage  Record

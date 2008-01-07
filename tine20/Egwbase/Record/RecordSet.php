@@ -1,6 +1,6 @@
 <?php
 /**
- * eGroupWare 2.00
+ * Tine 2.0
  * 
  * @package     Egwbase
  * @subpackage  Record
