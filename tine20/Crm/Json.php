@@ -383,13 +383,6 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }						
 		}		
   
-        // products
-		if(isset($_POST['products'])) {
-//            $this->saveProducts($_POST['products'], $projectData->pj_id);
-        //    $this->saveProducts($_POST['products'], $_POST['pj_id']);
-		}          
-  
-          
         $projectData[] = $_POST;  
           
         try {
@@ -410,8 +403,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $result = array('success'   => TRUE);
         }
         
-//error_log('JSON :: returned pj_id : '.$projectData->pj_id);        
-        
+
+
+        // products
+		if(strlen($_POST['products']) < 2) {
+            $this->saveProducts($_POST['products'], $projectData->pj_id);
+		}         
   
         
         
