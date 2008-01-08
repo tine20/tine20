@@ -392,29 +392,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }      
    
-	/**
-	* get a single product by Id, which belong to one project
-	* (needed for deleting to get project owner)
-	* 
-	* 
-	* 
-	* @return unknown
-	*/
-     public function getProductByProjectId($_id)
-    {    
-        $id = (int)$_id;
-        
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
 
-        $db = Zend_Registry::get('dbAdapter');
-
-        $select = $db->select()
-        ->from(array('egw_metacrm_product','egw_metacrm_project'))
-        ->join('egw_metacrm_project','egw_metacrm_project.pj_id = egw_metacrm_project.pj_project_id')
-        ->where('egw_metacrm_product.pj_id = ?', $id);     
-    } 
 	/**
 	* add or updates an product (which belongs to one project)
 	*
@@ -524,14 +502,16 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('crm', $owner);
         
         $containerIds = array();
-        
+
         foreach($ownerContainer as $container) {
             $containerIds[] = $container->container_id;
         }
-        
+
+                
         $where = array(
             $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
+
 
         $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
          
@@ -674,7 +654,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->projectsTable->getAdapter()->quoteInto('pj_owner = ?', (int)$_folderId)
         );
         
-        //$this->projectsTable->delete($where);
+        $this->projectsTable->delete($where);
         
         return true;
     }
@@ -723,12 +703,38 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
 
     //handle for FOLDER->PROJECTS functions
-    protected function _getProjectsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start)
+    protected function _getProjectsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start) //, $_datenFrom, $_dateTo)
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
+/*
+        if((int)$_datenFrom) {    
+            $where[] = $this->projectsTable->getAdapter()->quoteInto('pj_start >= ? ', $_datenFrom);
+        }
 
-        $result = $this->projectsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
-         
+        if((int)$_datenTo) {    
+            $where[] = $this->projectsTable->getAdapter()->quoteInto('pj_end <= ? ', $_datenTo);
+        }
+*/
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+        ->from(array('project' => 'egw_metacrm_project'))
+        ->join(array('state' => 'egw_metacrm_projectstate'), 
+                'project.pj_distributionphase_id = state.pj_projectstate_id')
+        ->order($_sort.' '.$_dir)
+        ->limit($_limit, $_start);
+
+        if(is_array($where)) {
+             foreach($where as $_where) {
+                  $select->where($_where);
+             }               
+        }
+        //error_log($select->__toString());
+       
+        $stmt = $db->query($select);
+        $result = array();
+        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
         return $result;
     }   
 
@@ -751,9 +757,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many projects to display
      * @param unknown_type $_start how many projects to skip
+     * @param string $_dateFrom
+     * @param string $_dateTo
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getAllProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_dateFrom = NULL, $_dateTo = NULL)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
         
@@ -771,7 +779,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
 
-        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo);
          
         return $result;
     }
@@ -896,9 +904,18 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('crm');
         
         $containerIds = array();
-        
+        $containerIdsPresent = "0";
+
         foreach($otherPeoplesContainer as $container) {
             $containerIds[] = $container->container_id;
+            
+            if(is_numeric($container->container_id)) {
+                  $containerIdsPresent = "1";
+            }            
+        }
+
+        if($containerIdsPresent == "0") {
+             return false;   
         }
         
         $where = array(

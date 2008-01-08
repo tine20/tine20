@@ -458,7 +458,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
         if($rows = $backend->getProjectsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
+            $result['results']    = $rows;//->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -478,7 +478,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
                 
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
         if($rows = $backend->getProjectsByFolderId($folderId, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
+            $result['results']    = $rows;//->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -514,7 +514,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $rows = $backend->getSharedProjects($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
-            $result['results']    = $rows->toArray();
+            $result['results']    = $rows;//->toArray();
             //$result['totalcount'] = $backend->getCountOfSharedProjects();
         }
 
@@ -545,7 +545,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $rows = $backend->getOtherPeopleProjects($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
-            $result['results']    = $rows->toArray();
+            $result['results']    = $rows;//->toArray();
             //$result['totalcount'] = $backend->getCountOfOtherPeopleProjects();
         }
 
@@ -564,20 +564,32 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param int $sort
      * @param string $dir
      * @param int $limit
+     * @param string $dateFrom
+     * @param string $datenTo
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getAllProjects($filter, $start, $sort, $dir, $limit)
+    public function getAllProjects($filter, $start, $sort, $dir, $limit, $dateFrom = NULL, $dateTo = NULL)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
+
+        if(!empty($dateFrom)) {
+            $df_tmp = explode("/", $dateFrom);
+            $dateFrom = mktime(0,0,0,$df_tmp[0],$df_tmp[1],$df_tmp[2]);
+        }
+
+        if(!empty($dateTo)) {
+            $dt_tmp = explode("/", $dateTo);
+            $dateTo = mktime(0,0,0,$dt_tmp[0],$dt_tmp[1],$dt_tmp[2]);            
+        }
                 
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
 
-        if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows->toArray();
+        if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo)) {
+            $result['results']    = $rows;//->toArray();
             $result['totalcount'] = $backend->getCountOfAllProjects($filter);
         }
 

@@ -124,7 +124,7 @@ Egw.Crm = function() {
                     url: 'index.php',
                     params: {
                         method: 'Crm.deleteFolder',
-                        projectId: _treeNodeContextMenu.attributes.projectId
+                        folderId: _treeNodeContextMenu.attributes.folderId
                     },
                     text: 'Deleting Folder...',
                     success: function(_result, _request){
@@ -208,7 +208,7 @@ Egw.Crm = function() {
             });
              treeLoader.on("beforeload", function(_loader, _node) {
                 switch(_node.attributes.nodeType) {
-                    case 'otherProjects':
+                    case 'otherUsersProjects':
                         _loader.baseParams.method   = 'Crm.getOtherUsers';
                         break;
                         
@@ -279,7 +279,7 @@ Egw.Crm = function() {
         });
         treeLoader.on("beforeload", function(_loader, _node) {
             switch(_node.attributes.nodeType) {
-                case 'otherProjects':
+                case 'otherUsersProjects':
                     _loader.baseParams.method   = 'Crm.getOtherUsers';
                     break;
                     
@@ -415,7 +415,12 @@ Egw.Crm = function() {
             _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");  */
         });        
         
-        ds_crm.load({params:{start:0, limit:50}});
+        ds_crm.load({params:{
+                            start:0,
+                            limit:50,
+                            dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                            dateTo: Ext.getCmp('Crm_dateTo').getRawValue()
+                             }});
         
         return ds_crm;
     }
@@ -495,32 +500,61 @@ Egw.Crm = function() {
 		});	
 
 
-    var _showCrmToolbar = function() {
+    var _showCrmToolbar = function(){
     
         var quickSearchField = new Ext.app.SearchField({
-            id:        'quickSearchField',
-            width:     200,
+            id: 'quickSearchField',
+            width: 200,
             emptyText: 'enter searchfilter'
-        }); 
-        quickSearchField.on('change', function() {
-            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
+        });
+        quickSearchField.on('change', function(){
+            Ext.getCmp('gridCrm').getStore().load({
+                params: {
+                    dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),                    
+                    start: 0,
+                    limit: 50
+                }
+            });
         });
         
         var currentDate = new Date();
         var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
         
         var dateFrom = new Ext.form.DateField({
-            id:             'Crm_dateFrom',
-            allowBlank:     false,
+            id: 'Crm_dateFrom',
+            allowBlank: false,
             validateOnBlur: false,
-            value:          oneWeekAgo
+            value: oneWeekAgo
         });
+        dateFrom.on('change', function(){
+            Ext.getCmp('gridCrm').getStore().load({
+                params: {
+                    dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
+                    start: 0,
+                    limit: 50
+                }
+            });        
+        })
+    
+        
         var dateTo = new Ext.form.DateField({
             id:             'Crm_dateTo',
             allowBlank:     false,
             validateOnBlur: false,
             value:          currentDate
         });
+        dateTo.on('change', function(){
+            Ext.getCmp('gridCrm').getStore().load({
+                params: {
+                    dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
+                    start: 0,
+                    limit: 50
+                }
+            });        
+        })        
         
 
        function editOptions(item) {
@@ -819,14 +853,12 @@ Egw.Crm = function() {
     {
         var dataStore = Ext.getCmp('gridCrm').getStore();
         
-     //   console.log(_node.attributes.nodeType);
-        
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.nodeType) {
             case 'sharedProjects':
                 dataStore.baseParams.method = 'Crm.getSharedProjects';
                 break;
-
+                  
             case 'otherUsersProjects':
                 dataStore.baseParams.method = 'Crm.getOtherPeopleProjects';
                 break;
@@ -850,7 +882,9 @@ Egw.Crm = function() {
         dataStore.load({
             params:{
                 start:0, 
-                limit:50 
+                limit:50,
+                dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                dateTo: Ext.getCmp('Crm_dateTo').getRawValue()
             }
         });
     };    
@@ -1000,13 +1034,15 @@ Egw.Crm.ProjectEditDialog = function() {
    	var action_applyChanges = new Ext.Action({
 		text: 'apply changes',
 		handler: handler_applyChanges,
-		iconCls: 'action_applyChanges'
+		iconCls: 'action_applyChanges',
+        disabled: true
 	});
 
    	var action_delete = new Ext.Action({
 		text: 'delete project',
 		handler: handler_pre_delete,
-		iconCls: 'action_delete'
+		iconCls: 'action_delete',
+        disabled: true
 	});
 
     /**
@@ -1773,6 +1809,10 @@ Egw.Crm.ProjectEditDialog = function() {
         
         form.findField('pj_owner_name').setValue(_formData.config.folderName);
         
+        if (formData.values.pj_id > 0) {
+            action_applyChanges.enable();
+            action_delete.enable();
+        }
 
         if (formData.values.pj_start > 0) {
 			var startDate = new Date(eval(formData.values.pj_start * 1000));
