@@ -422,7 +422,7 @@ Egw.Crm = function() {
 
 
 	  	var action_add = new Ext.Action({
-			text: 'add',
+			text: 'add lead',
 			iconCls: 'action_add',
 			handler: function () {
            //     var tree = Ext.getCmp('venues-tree');
@@ -481,14 +481,14 @@ Egw.Crm = function() {
         }
 
 	   	var action_edit = new Ext.Action({
-			text: 'edit',
+			text: 'edit lead',
 			disabled: true,
 			handler: handler_edit,
 			iconCls: 'action_edit'
 		});
 			
 	   	var action_delete = new Ext.Action({
-			text: 'delete',
+			text: 'delete lead',
 			disabled: true,
 			handler: handler_pre_delete,
 			iconCls: 'action_delete'
