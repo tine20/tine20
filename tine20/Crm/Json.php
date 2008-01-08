@@ -386,7 +386,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         // products
 		if(isset($_POST['products'])) {
 //            $this->saveProducts($_POST['products'], $projectData->pj_id);
-            $this->saveProducts($_POST['products'], $_POST['pj_id']);
+        //    $this->saveProducts($_POST['products'], $_POST['pj_id']);
 		}          
   
           

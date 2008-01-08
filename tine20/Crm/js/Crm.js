@@ -14,14 +14,6 @@ Egw.Crm = function() {
         nodeType: 'allProjects',
         id: 'allProjects',
         children: [{
-            text: "Internal Projects",
-            cls: "file",
-            nodeType: "internalProjects",
-            id: "internalProjects",
-            children: [],
-            leaf: false,
-            expanded: true
-        }, {
             text: 'My Projects',
             cls: 'file',
             nodeType: 'userProjects',
@@ -268,8 +260,6 @@ Egw.Crm = function() {
             folderDialog.show();
                            
             tree.expandPath('/root/allProjects');
-            tree.getNodeById('internalProjects').disable();
-          
     };
 
  
@@ -833,10 +823,6 @@ Egw.Crm = function() {
         
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.nodeType) {
-            case 'internalProjects':
-                dataStore.baseParams.method = 'Crm.getAccounts';
-                break;
-
             case 'sharedProjects':
                 dataStore.baseParams.method = 'Crm.getSharedProjects';
                 break;
