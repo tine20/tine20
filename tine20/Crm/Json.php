@@ -122,7 +122,6 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
             
-        
         if(Crm_Controller::getInstance()->saveLeadtypes($leadTypes) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
@@ -277,11 +276,10 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
    public function saveProducts($products, $pj_id) {	
    
         $_products = Zend_Json::decode($products);
-       
-       	if(is_array($_products)) {
 
+       	if(is_array($_products)) {
 		foreach($_products AS $_product) {
-			if($_product['pj_id'] == "-1") {
+			if($_product['pj_id'] == "NULL") {
 				unset($_product['pj_id']);
 			}
             if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
@@ -293,7 +291,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     	}
    
         try {
-            $_products = new Egwbase_Record_RecordSet($_productsData, 'Crm_Model_Product');
+            $_productsData = new Egwbase_Record_RecordSet($_productsData, 'Crm_Model_Product');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -303,8 +301,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
             
-        
-        if(Crm_Controller::getInstance()->saveProducts($_products) === FALSE) {
+        if(Crm_Controller::getInstance()->saveProducts($_productsData) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);
@@ -406,8 +403,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
 
         // products
-		if(strlen($_POST['products']) < 2) {
-            $this->saveProducts($_POST['products'], $projectData->pj_id);
+		if(strlen($_POST['products']) > 2) {	    
+            if(!empty($projectData->pj_id)) {
+                $this->saveProducts($_POST['products'], $projectData->pj_id);
+            } else {
+                $this->saveProducts($_POST['products'], $_POST['pj_id']);    
+            }
 		}         
   
         

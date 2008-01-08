@@ -4,10 +4,10 @@
  * interface for projects class
  *
  * @package     Crm
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Sql.php 221 2007-11-12 12:35:08Z twadewitz  $
+ * @version     $Id: Sql.php 199 2007-10-15 16:30:00Z twadewitz $
  *
  */
 class Crm_Backend_Sql implements Crm_Backend_Interface
@@ -434,6 +434,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
         $project_id = $_daten[0]['pj_project_id'];
 
+
         if(!(int)$project_id) {
              return $_productData;  
         }
@@ -759,7 +760,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if(count($allContainer) === 0) {
             $this->createPersonalContainer();
             $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
-        }
+        }        
         $containerIds = array();
         
         foreach($allContainer as $container) {
@@ -932,12 +933,13 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }   
  
-    /**
+   /**
      * create personal container for current user
      *
      */
     public function createPersonalContainer()
     {
         $this->addFolder('Personal Leads', Egwbase_Container::TYPE_PERSONAL);
-    }
+    } 
+    
 }
