@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * backend class for Egwbase_Http_Server
  *
