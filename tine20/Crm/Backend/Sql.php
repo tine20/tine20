@@ -57,11 +57,36 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $this->projectsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_project'));
         $this->leadsourcesTable   = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
         $this->leadtypesTable     = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
-        $this->productsourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+        try {
+            $this->productsourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            // temporary hack, until setup is available
+            $this->createProductSourceTable();
+        }
         $this->projectstatesTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_projectstate'));
         $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
-
+    
+    /**
+     * temporary function to create the egw_metacrm_productsource table on demand
+     *
+     */
+    protected function createProductSourceTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_productsource');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_productsource` (
+                `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
+                `pj_productsource` varchar(200) NOT NULL default '',
+                PRIMARY KEY  (`pj_productsource_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+            );
+        }
+    }
+    
     
 	// handle LEADSOURCES
 	/**
@@ -204,7 +229,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }    
     
   
-	// handle PRODUCTS AVAILABLE
 	/**
 	* get Products available
 	*
@@ -723,6 +747,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
         
+        if(count($allContainer) === 0) {
+            $this->createPersonalContainer();
+            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
+        }
         $containerIds = array();
         
         foreach($allContainer as $container) {
@@ -895,5 +923,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }   
  
-    
+    /**
+     * create personal container for current user
+     *
+     */
+    public function createPersonalContainer()
+    {
+        $this->addFolder('Personal Projects', Egwbase_Container::TYPE_PERSONAL);
+    }
 }
