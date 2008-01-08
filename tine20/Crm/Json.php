@@ -275,52 +275,52 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 * @return array
 	 */
    public function saveProducts($products, $pj_id) {	
-    $_products = Zend_Json::decode($products);
+   
+        $_products = Zend_Json::decode($products);
+       
+       	if(is_array($_products)) {
 
-			if(is_array($_products)) {
+		foreach($_products AS $_product) {
+			if($_product['pj_id'] == "-1") {
+				unset($_product['pj_id']);
+			}
+            if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
+				$_product['pj_project_id'] = $pj_id;
 
-				foreach($_products AS $_product) {
-					
-					if($_product['pj_id'] == "-1") {
-						unset($_product['pj_id']);
-					}
-                    if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
-						$_product['pj_project_id'] = $pj_id;
-					}
-					
-					$product = new Crm_Product();
-				        try {
-				            $product->setFromUserData($_product);
-				        } catch (Exception $e) {
-				            // invalid data in some fields sent from client
-				            $result = array('success'           => false,
-				                            'errors'            => $product->getValidationErrors(),
-				                            'errorMessage'      => 'filter NOT ok');
-				
-				            return $result;
-				        }
-				
-				        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-				         
-				        try {	            
-				            $backend->saveProduct($product);
-				            $result = array('success'           => true,
-				                            'welcomeMessage'    => 'Entry updated');
-				        } catch (Exception $e) {			            
-				            $result = array('success'           => false,
-				        					'errorMessage'      => $e->getMessage());
-				        }
-				}
-				
-			}      
+			}			
+            
+            $_productsData[] = $_product;
+    	}
+   
+        try {
+            $_products = new Egwbase_Record_RecordSet($_productsData, 'Crm_Model_Product');
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errorMessage'      => 'products filter NOT ok'
+            );
+            
+            return $result;
+        }
+            
+        
+        if(Crm_Controller::getInstance()->saveProducts($_products) === FALSE) {
+            $result = array('success'   => FALSE);
+        } else {
+            $result = array('success'   => TRUE);
+        }
+       
+        return $result;  
+      
+       }
    }
 
 
-// handle PROJECT
+
      /**
 	 * save one project
 	 *
-	 * if $_projectId is 0 the project gets added, otherwise it gets updated
+	 * if $_projectId is NULL the project gets added, otherwise it gets updated
 	 *
 	 * @return array
 	 */	
@@ -382,56 +382,41 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
                 unset($_POST['pj_end_scheduled']);
             }						
 		}		
-        
-        $project = new Crm_Project();
+  
+        // products
+		if(isset($_POST['products'])) {
+//            $this->saveProducts($_POST['products'], $projectData->pj_id);
+            $this->saveProducts($_POST['products'], $_POST['pj_id']);
+		}          
+  
+          
+        $projectData[] = $_POST;  
+          
         try {
-            $project->setFromUserData($_POST);
+            $projectData = new Egwbase_Record_RecordSet($projectData, 'Crm_Model_Project');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
-                            'errors'            => $project->getValidationErrors(),
-                            'errorMessage'      => 'filter NOT ok');
-
+                            'errorMessage'      => 'project filter NOT ok'
+            );
+            
             return $result;
         }
-
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
-        try {
-            $backend->saveProject($project);
-            $result = array('success'           => true,
-                            'welcomeMessage'    => 'Entry updated');
-        } catch (Exception $e) {
-            $result = array('success'           => false,
-        					'errorMessage'      => $e->getMessage());
+            
+        
+        if(Crm_Controller::getInstance()->saveProject($projectData) === FALSE) {
+            $result = array('success'   => FALSE);
+        } else {
+            $result = array('success'   => TRUE);
         }
         
+//error_log('JSON :: returned pj_id : '.$projectData->pj_id);        
         
-        // products
-		if(isset($_POST['products'])) {
-            $this->saveProducts($_POST['products'], $project->pj_id);
-		}
+  
         
-        if(isset($_POST['deletedProducts'])) {
-               $_deleted_products = Zend_Json::decode($_POST['deletedProducts']);
-               
-              if(is_array($_deleted_products)) {
-                $backend = Crm_Backend::factory(Crm_Backend::SQL);
-
-                foreach($_deleted_products as $_deleted_product) {
-                    $backend->deleteProductById($_deleted_product);
-                }
-    
-                $result = array('success'   => TRUE, 'ids' => $_deleted_products);
-            } else {
-                $result = array('success'   => FALSE);
-            }
-
-            return $result;    
-        }        
         
-
-        return $result;
-         
+        return $result;  
+ 
     }      
  
      /**
@@ -443,6 +428,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     public function deleteProjects($_projectIds)
     {
         $projectIds = Zend_Json::decode($_projectIds);
+
         if(is_array($projectIds)) {
             $projects = Crm_Backend::factory(Crm_Backend::SQL);
             foreach($projectIds as $projectId) {
@@ -455,6 +441,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
 
         return $result;
+        
     } 
     
  

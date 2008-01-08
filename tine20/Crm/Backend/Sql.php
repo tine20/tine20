@@ -63,11 +63,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             // temporary hack, until setup is available
             $this->createProductSourceTable();
         }
+
         $this->projectstatesTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_projectstate'));
         $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
-    
-    /**
+
+   /**
      * temporary function to create the egw_metacrm_productsource table on demand
      *
      */
@@ -86,6 +87,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
     }
+        
     
     
 	// handle LEADSOURCES
@@ -229,6 +231,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }    
     
   
+	// handle PRODUCTS AVAILABLE
 	/**
 	* get Products available
 	*
@@ -420,12 +423,45 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param int $_projectId the project id
 	* @return unknown
 	*/
-    public function saveProduct(Crm_Product $_productData)
+    public function saveProducts(Egwbase_Record_Recordset $_productData)
     {
         /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_projectData->pj_owner, Egwbase_Container::GRANT_EDIT)) {
             throw new Exception('write access to project->product denied');
         }    
-    */        
+    */   
+    
+        $_daten = $_productData->toArray();
+    
+        $project_id = $_daten[0]['pj_project_id'];
+
+        if(!(int)$project_id) {
+             return $_productData;  
+        }
+        
+
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $db->delete('egw_metacrm_product', 'pj_project_id = '.$project_id);
+
+            foreach($_daten as $_data) {
+                $db->insert('egw_metacrm_product', $_data);                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
+        }
+
+        return $_optionData;
+         
+         
+         
+         
         $productData = $_productData->toArray();
 
         if($_productData->pj_id === NULL) {
@@ -442,34 +478,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $_productData;
     }
 
-   /**
-     * delete product identified by product id
-     *
-     * @param int $_productId product id
-     * @return int the number of rows deleted
-     */
-    public function deleteProductById($_productId)
-    {
-        $productId = (int)$_productId;
-        if($productId != $_productId) {
-            throw new InvalidArgumentException('$_productId must be integer');
-        }
-/*
-        $oldProductData = $this->getProductById($_productId);
-
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldProductData->pj_owner, Egwbase_Container::GRANT_DELETE)) {
-            throw new Exception('delete access to CRM denied');
-        } */
-        
-        $where  = array(
-            $this->productsTable->getAdapter()->quoteInto('pj_id = ?', $productId),
-        );
-         
-        $result = $this->productsTable->delete($where);
-
-        return $result;
-    }
-    
    
 	// handle PROJECTS    
 	/**
@@ -562,31 +570,32 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param int $_projectId the project to update, if NULL the project gets added
 	* @return unknown
 	*/
-    public function saveProject(Crm_Project $_projectData)
+    public function saveProject(Egwbase_Record_Recordset $_projectData)
     {
-        if(empty($_projectData->pj_owner)) {
+        $projectData = $_projectData->toArray();
+        $projectData = $projectData[0];
+    
+
+        if(empty($projectData['pj_owner'])) {
             throw new UnderflowException('pj_owner can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_projectData->pj_owner, Egwbase_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($projectData['pj_owner'], Egwbase_Container::GRANT_EDIT)) {
             throw new Exception('write access to project denied');
         }
 
         $currentAccount = Zend_Registry::get('currentAccount');
 
-        $projectData = $_projectData->toArray();
-
-        unset($projectData['pj_id']);
         if(empty($projectData['pj_owner'])) {
             $projectData['pj_owner'] = $currentAccount->account_id;
         }
 
-        if($_projectData->pj_id === NULL) {
+        if($projectData['pj_id'] === NULL) {
             $result = $this->projectsTable->insert($projectData);
             $_projectData->pj_id = $this->projectsTable->getAdapter()->lastInsertId();
         } else {      
             $where  = array(
-                $this->projectsTable->getAdapter()->quoteInto('pj_id = (?)', $_projectData->pj_id),
+                $this->projectsTable->getAdapter()->quoteInto('pj_id = (?)', $projectData['pj_id']),
             );
 
             $result = $this->projectsTable->update($projectData, $where);
@@ -747,10 +756,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
         
-        if(count($allContainer) === 0) {
-            $this->createPersonalContainer();
-            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
-        }
         $containerIds = array();
         
         foreach($allContainer as $container) {
@@ -923,12 +928,5 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }   
  
-    /**
-     * create personal container for current user
-     *
-     */
-    public function createPersonalContainer()
-    {
-        $this->addFolder('Personal Projects', Egwbase_Container::TYPE_PERSONAL);
-    }
+    
 }

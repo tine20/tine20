@@ -898,7 +898,6 @@ Egw.Crm.ProjectEditDialog = function() {
 
     // private variables
     var dialog;
-    var deleted_products = new Array();
     var projectedit;
     
     // private functions 
@@ -906,8 +905,7 @@ Egw.Crm.ProjectEditDialog = function() {
     {
         var grid_products          = Ext.getCmp('grid_choosenProducts');
 		var store_products         = Ext.getCmp('grid_choosenProducts').getStore();
-        var store_products_mod     = store_products.getModifiedRecords();
-        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products_mod);
+        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products);
        
     	var projectForm = Ext.getCmp('projectDialog').getForm();
 		projectForm.render();
@@ -918,7 +916,7 @@ Egw.Crm.ProjectEditDialog = function() {
 				additionalData.pj_id = formData.values.pj_id;
 			}	
             additionalData.products = modified_products_json;
-            additionalData.deletedProducts = Ext.util.JSON.encode(deleted_products);
+            
 			projectForm.submit({
     			waitTitle:'Please wait!',
     			waitMsg:'saving event...',
@@ -926,9 +924,6 @@ Egw.Crm.ProjectEditDialog = function() {
     			success:function(form, action, o) {
                     store_products.reload();
                     store_products.rejectChanges();
-                    for(var i=0; i< deleted_products.length; i++)  {
-                        deleted_products.pop();
-                    }
     				window.opener.Egw.Crm.reload();
     			},
     			failure:function(form, action) {
@@ -944,8 +939,7 @@ Egw.Crm.ProjectEditDialog = function() {
     var handler_saveAndClose = function(_button, _event) 
     {       
         var store_products = Ext.getCmp('grid_choosenProducts').getStore();
-        var store_products_mod = store_products.getModifiedRecords();
-        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products_mod);
+        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products);
        
     	var projectForm = Ext.getCmp('projectDialog').getForm();
 		projectForm.render();
@@ -956,7 +950,6 @@ Egw.Crm.ProjectEditDialog = function() {
 				additionalData.pj_id = formData.values.pj_id;
 			}	
             additionalData.products = modified_products_json;
-            additionalData.deletedProducts = Ext.util.JSON.encode(deleted_products);
                         
 			projectForm.submit({
     			waitTitle:'Please wait!',
@@ -964,10 +957,7 @@ Egw.Crm.ProjectEditDialog = function() {
     			params:additionalData,
     			success:function(form, action, o) {
                     store_products.reload();       
-                    store_products.rejectChanges();
-                    for(var i=0; i< deleted_products.length; i++)  {
-                        deleted_products.pop();
-                    }                                 
+                    store_products.rejectChanges();                            
     				window.opener.Egw.Crm.reload();
     				window.setTimeout("window.close()", 400);
     			},
@@ -1348,10 +1338,6 @@ Egw.Crm.ProjectEditDialog = function() {
             // turn on remote sorting
             remoteSort: true
         });
-        
-        st_choosenProducts.on('remove', function(_store,_record,_index){
-            deleted_products.push(_record.data.pj_id);
-        })
         
         st_choosenProducts.load();
 

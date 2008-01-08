@@ -170,5 +170,39 @@ class Crm_Controller
         $backend = Crm_Backend::factory(Crm_Backend::SQL);
         $backend->saveProjectstates($_projectStates);
     } 
+  
+  
+   /**
+     * save Products
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
+     */ 
+    public function saveProducts(Egwbase_Record_Recordset $_productData)
+    {
+          $daten = $_productData->toArray();
+          
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend->saveProducts($_productData);
+    }   
+    
+    
+   /**
+     * save Project
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
+     */ 
+    public function saveProject(Egwbase_Record_Recordset $_projectData)
+    {
+          $daten = $_projectData->toArray();
+          
+        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend->saveProject($_projectData);
+    }     
     
 }

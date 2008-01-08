@@ -36,17 +36,17 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
         'pj_customertype_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'pj_leadsource_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'pj_owner'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_modifier'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+   #     'pj_modifier'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_start'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_modified'               => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_created'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+   #     'pj_modified'               => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+   #     'pj_created'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_description'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_end'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_turnover'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pj_probability'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_end_scheduled'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_lastread'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_lastreader'             => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
+        'pj_end_scheduled'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)//,
+   #     'pj_lastread'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+   #     'pj_lastreader'             => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
         
     );
     
