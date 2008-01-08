@@ -9,25 +9,25 @@ Egw.Crm = function() {
      * the initial tree to be displayed in the left treePanel
      */
     var _initialTree = [{
-        text: 'All Projects',
+        text: 'All Leads',
         cls: "treemain",
         nodeType: 'allProjects',
         id: 'allProjects',
         children: [{
-            text: 'My Projects',
+            text: 'My Leads',
             cls: 'file',
             nodeType: 'userProjects',
             id: 'userProjects',
             leaf: null,
             owner: Egw.Egwbase.Registry.get('currentAccount').account_id
         }, {
-            text: "Shared Projects",
+            text: "Shared Leads",
             cls: "file",
             nodeType: "sharedProjects",
             children: null,
             leaf: null
         }, {
-            text: "Other Users Projects",
+            text: "Other Users Leads",
             cls: "file",
             nodeType: "otherUsersProjects",
             children: null,
