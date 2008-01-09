@@ -10,12 +10,12 @@
  * 
  * 
  * @package     Crm
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Backend.php 121 2007-10-15 16:30:00Z twadewitz $ *
  */
-class Crm_Backend
+class Crm_Backend_Factory
 {
     /**
      * constant for Sql contacts backend class

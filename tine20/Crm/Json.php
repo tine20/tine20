@@ -256,7 +256,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $filter = NULL;
         }
 
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getProductsById($_id)) {
             $result['results']    = $rows->toArray();
             //$result['totalcount'] = $backend->getCountByOwner($owner);
@@ -428,7 +428,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $projectIds = Zend_Json::decode($_projectIds);
 
         if(is_array($projectIds)) {
-            $projects = Crm_Backend::factory(Crm_Backend::SQL);
+            $projects = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
             foreach($projectIds as $projectId) {
                 $projects->deleteProjectById($projectId);
             }
@@ -456,7 +456,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $filter = NULL;
         }
         
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getProjectsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows;//->toArray();
             if($start == 0 && count($result['results']) < $limit) {
@@ -476,7 +476,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getProjectsByFolderId($folderId, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows;//->toArray();
             if($start == 0 && count($result['results']) < $limit) {
@@ -510,7 +510,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $rows = $backend->getSharedProjects($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
@@ -541,7 +541,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $rows = $backend->getOtherPeopleProjects($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
@@ -586,7 +586,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $dateTo = mktime(0,0,0,$dt_tmp[0],$dt_tmp[1],$dt_tmp[2]);            
         }
                 
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 
         if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo)) {
             $result['results']    = $rows;//->toArray();
@@ -602,7 +602,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getFoldersByOwner($owner)) {
             foreach($rows as $folderData) {
                 $childNode = new Egwbase_Ext_Treenode('Crm', 'projects', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
@@ -623,7 +623,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getSharedFolders()) {
             foreach($rows as $folderData) {
                 $childNode = new Egwbase_Ext_Treenode('Crm', 'projects', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
@@ -647,7 +647,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         try {
             $rows = $backend->getOtherUsers();
         
@@ -688,7 +688,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
    public function addFolder($name, $type)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 
         $id = $backend->addFolder($name, $type);
         
@@ -699,7 +699,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     
     public function deleteFolder($folderId)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 
         $backend->deleteFolder($folderId);
             
@@ -708,7 +708,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     
     public function renameFolder($folderId, $name)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 
         $backend->renameFolder($folderId, $name);
             

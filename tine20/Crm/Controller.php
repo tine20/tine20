@@ -56,7 +56,7 @@ class Crm_Controller
      */
     public function getLeadsources($_sort, $_dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
         $result = $backend->getLeadsources($_sort, $_dir);
 
         return $result;    
@@ -74,7 +74,7 @@ class Crm_Controller
     {
           $daten = $_leadSources->toArray();
           
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveLeadsources($_leadSources);
     }  
     
@@ -87,7 +87,7 @@ class Crm_Controller
      */
     public function getLeadtypes($_sort, $_dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
         $result = $backend->getLeadtypes($_sort, $_dir);
 
         return $result;    
@@ -105,7 +105,7 @@ class Crm_Controller
     {
           $daten = $_leadTypes->toArray();
           
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveLeadtypes($_leadTypes);
     }      
     
@@ -118,7 +118,7 @@ class Crm_Controller
      */
     public function getProductsAvailable($_sort, $_dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
         $result = $backend->getProductsAvailable($_sort, $_dir);
 
         return $result;    
@@ -136,7 +136,7 @@ class Crm_Controller
     {
           $daten = $_productSource->toArray();
           
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveProductsource($_productSource);
     } 
 
@@ -149,7 +149,7 @@ class Crm_Controller
      */
     public function getProjectstates($_sort, $_dir)
     {
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);       
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
         $result = $backend->getProjectstates($_sort, $_dir);
 
         return $result;    
@@ -167,7 +167,7 @@ class Crm_Controller
     {
           $daten = $_projectStates->toArray();
           
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveProjectstates($_projectStates);
     } 
   
@@ -184,7 +184,7 @@ class Crm_Controller
     {
           $daten = $_productData->toArray();
           
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveProducts($_productData);
     }   
     
@@ -201,7 +201,7 @@ class Crm_Controller
     {
           $daten = $_projectData->toArray();
           
-        $backend = Crm_Backend::factory(Crm_Backend::SQL);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveProject($_projectData);
     }     
     

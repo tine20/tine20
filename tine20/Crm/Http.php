@@ -39,7 +39,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
-		$projects = Crm_Backend::factory(Crm_Backend::SQL);
+		$projects = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
 			$view->formData['values'] = $project->toArray();
 			$folder = Egwbase_Container::getInstance()->getContainerById($project->pj_owner);
