@@ -9,8 +9,16 @@
  * @version     $Id$
  *
  */
-class Addressbook_Contact
+class Addressbook_Model_Contact extends Egwbase_Record_Abstract
 {
+    /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */
+    protected $_identifier = 'contact_id';
+    
     /**
      * list of zend inputfilter
      * 
@@ -93,76 +101,13 @@ class Addressbook_Contact
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
-    protected $_validationErrors = array();
-    
-    public function __construct($_contactData = NULL)
-    {
-    	if(is_array($_contactData)) {
-    		foreach($_contactData as $key => $value) {
-    			if(isset($this->_validators[$key])) {
-    				$this->$key = $value;
-    			}
-    		}
-    	}
-    }
-    
     /**
-     * returns array of fields with validation errors 
+     * name of fields containing datetime or or an array of datetime information
      *
-     * @return array
+     * @var array list of datetime fields
      */
-    public function getValidationErrors()
-    {
-    	return $this->_validationErrors;
-    }
+    //protected $_datetimeFields = array(
+    //    'modification_time'
+    //);
     
-    /**
-     * sets the contactdata from user generated input. data get filtered by Zend_Filter_Input
-     *
-     * @param array $_contactData
-     * @throws Execption when content contains invalid or missing data
-     */
-    public function setFromUserData(array $_contactData)
-    {
-    	$inputFilter = new Zend_Filter_Input($this->_filters, $this->_validators, $_contactData);
-    	
-    	if ($inputFilter->isValid()) {
-    		$contactData = $inputFilter->getUnescaped();
-    		foreach($contactData as $key => $value) {
-    			$this->$key = $value;
-    		}
-    	} else {
-            foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
-                $this->_validationErrors[] = array('id'  => $fieldName,
-                                  'msg' => $errorMessages[0]);
-            }
-    		throw new Exception("some fields have invalid content");
-    	}
-    }
-    
-    /**
-     * return public fields as array
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-    	$resultArray = array();
-    	foreach($this->_validators as $key => $name) {
-    		if(isset($this->$key)) {
-    			$resultArray[$key] = $this->$key;
-    		}
-    	}
-    	
-    	return $resultArray;
-    }
-    
-    private function __set($_name, $_value)
-    {
-    	if(isset($this->_validators[$_name])) {
-    		$this->$_name = $_value;
-    	} else {
-    		throw new Exception("$_name is not a valid resource name");
-    	}
-    }
 }

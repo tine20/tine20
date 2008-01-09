@@ -39,14 +39,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * add or updates a contact
      *
      * @param int $_contactOwner the owner of the addressbook entry
-     * @param Addressbook_Contact $_contactData the contactdata
+     * @param Addressbook_Model_Contact $_contactData the contactdata
      * @param int $_contactId the contact to update, if NULL the contact gets added
      * @todo check acl when adding contact
      * @return unknown
      */
-    public function saveContact(Addressbook_Contact $_contactData)
+    public function saveContact(Addressbook_Model_Contact $_contactData)
     {
-        if(empty($_contactData->contact_owner)) {
+        if((int)$_contactData->contact_owner < 0) {
             throw new UnderflowException('contact_owner can not be empty');
         }
         
@@ -99,7 +99,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                     $from  = new Zend_Date($_contactData->contact_modified, Zend_Date::TIMESTAMP);
                     $until = new Zend_Date($oldContactData->contact_modified, Zend_Date::TIMESTAMP);
                     $logedMods = $modLog->getModifications('Addressbook', $_contactData->contact_id,
-                            'Addressbook_Contact', Addressbook_Backend::SQL, $from, $until);
+                            'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $from, $until);
                     $diffs = $modLog->computeDiff($logedMods);
                             
                     foreach ($diffs as $diff) {
@@ -132,8 +132,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                 $modLogEntry = new Egwbase_Timemachine_Model_ModificationLog(array(
                     'application'          => 'Addressbook',
                     'record_identifier'    => $_contactData->contact_id,
-                    'record_type'          => 'Addressbook_Contact',
-                    'record_backend'       => Addressbook_Backend::SQL,
+                    'record_type'          => 'Addressbook_Model_Contact',
+                    'record_backend'       => Addressbook_Backend_Factory::SQL,
                     'modification_time'    => $now,
                     'modification_account' => $this->_currentAccount->getId()
                 ),true);
@@ -202,14 +202,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         );
         
         if($_type == Egwbase_Container::TYPE_SHARED) {
-            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_SHARED, Addressbook_Backend::SQL);
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_SHARED, Addressbook_Backend_Factory::SQL);
 
             // add admin grants to creator
             $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
             // add read grants to any other user
             $egwbaseContainer->addGrants($addressbookId, NULL, array(Egwbase_Container::GRANT_READ));
         } else {
-            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend::SQL);
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
         
             // add admin grants to creator
             $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
@@ -255,6 +255,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return true;
     }
     
+    /**
+     * get contacts of other people, takes acl of current owner into account
+     *
+     * @param string $_filter the search filter
+     * @param string $_sort the columnname to sort after
+     * @param string $_dir the direction to sort after
+     * @param int $_limit
+     * @param int $_start
+     * @return Zend_Db_Table_Rowset
+     */
     public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
         $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('addressbook');
@@ -327,10 +337,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * get total count of all contacts from shared addressbooks
+     * get total count of contacts from all addressbooks
      *
-     * @todo return the correct count (the accounts are missing)
-     *
+     * @param string $_filter the search filter
      * @return int count of all other users contacts
      */
     public function getCountOfAllContacts($_filter)
@@ -387,7 +396,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
-    
     /**
      * get total count of all contacts from shared addressbooks
      *
@@ -442,6 +450,17 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
+    /**
+     * get contacts of user identified by account id
+     *
+     * @param int $_owner account id
+     * @param string $_filter search filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @return Zend_Db_Table_Rowset
+     */
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
         $owner = (int)$_owner;

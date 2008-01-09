@@ -3,9 +3,9 @@
  * controller for Addressbook
  *
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -96,7 +96,7 @@ class Addressbook_Controller
      */
     public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
         $rows = $backend->getSharedContacts($_filter, $_sort, $_dir, $_limit, $_start);
         

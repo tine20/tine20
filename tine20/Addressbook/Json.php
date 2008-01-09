@@ -5,9 +5,9 @@
  * This class handles all Json requests for the addressbook application
  *
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -17,7 +17,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     
     public function addAddressbook($name, $type)
     {
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 
         $id = $backend->addAddressbook($name, $type);
         
@@ -28,7 +28,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     
     public function deleteAddressbook($addressbookId)
     {
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 
         $backend->deleteAddressbook($addressbookId);
             
@@ -37,7 +37,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     
     public function renameAddressbook($addressbookId, $name)
     {
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 
         $backend->renameAddressbook($addressbookId, $name);
             
@@ -54,7 +54,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     {
         $contactIds = Zend_Json::decode($_contactIds);
         if(is_array($contactIds)) {
-            $contacts = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+            $contacts = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
             foreach($contactIds as $contactId) {
                 $contacts->deleteContactById($contactId);
             }
@@ -93,9 +93,12 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             unset($_POST['contact_id']);
         }
 
-        $contact = new Addressbook_Contact();
+        $contact = new Addressbook_Model_Contact();
+        error_log("1");
         try {
+            error_log("2");
             $contact->setFromUserData($_POST);
+            error_log("3");
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -105,7 +108,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
 
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
          
         try {
             $backend->saveContact($contact);
@@ -141,7 +144,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
 
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         if($rows = $backend->getContactsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
@@ -172,7 +175,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         if($rows = $backend->getContactsByAddressbookId($addressbookId, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
@@ -189,7 +192,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         if($rows = $backend->getAddressbooksByOwner($owner)) {
             foreach($rows as $addressbookData) {
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'addressbook-' . $addressbookData->container_id, $addressbookData->container_name, TRUE);
@@ -209,7 +212,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         if($rows = $backend->getSharedAddressbooks()) {
             foreach($rows as $addressbookData) {
                 $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'shared-' . $addressbookData->container_id, $addressbookData->container_name, TRUE);
@@ -274,7 +277,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 
         if($rows = $backend->getAllContacts($filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
@@ -336,7 +339,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $rows = $backend->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {

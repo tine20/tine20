@@ -5,9 +5,9 @@
  * This class handles all Http requests for the addressbook application
  *
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -38,7 +38,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
-		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+		$addresses = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 			$view->formData['values'] = $contact->toArray();
 			$addressbook = Egwbase_Container::getInstance()->getContainerById($contact->contact_owner);
@@ -98,7 +98,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->formData['config']['initialTree'] = $addressbookJson->getSelectFolderTree();
 		
 		// get the list
-		$addresses = Addressbook_Backend::factory(Addressbook_Backend::SQL);
+		$addresses = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 		if($_listId && $list = $addresses->getListById($_listId)) {
 			$view->formData['values']['list_id'] = $list->list_id;
 			$view->formData['values']['list_name'] = $list->list_name;

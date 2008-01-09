@@ -4,14 +4,31 @@
  * interface for contacs class
  * 
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
 interface Addressbook_Backend_Interface
 {
+    /**
+     * add a new addressbook
+     *
+     * @param string $_name the name of the addressbook
+     * @param int $_type
+     * @return int the id of the new addressbook
+     */
+    public function addAddressbook($_name, $_type);
+    
+    /**
+     * delete an addressbook
+     *
+     * @param int $_addressbookId id of the addressbook
+     * @return unknown
+     */
+    public function deleteAddressbook($_addressbookId);
+        
     /**
      * deletes contact
      *
@@ -19,19 +36,31 @@ interface Addressbook_Backend_Interface
      */
     public function deleteContactById($_contactId);
     
+    /**
+     * get list of contacts from all shared addressbooks the current user has access to
+     *
+     * @param string $_filter string to search for in contacts
+     * @param array $_contactType filter by type (list or contact currently)
+     * @param unknown_type $_sort fieldname to sort by
+     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
+     * @param unknown_type $_limit how many contacts to display
+     * @param unknown_type $_start how many contaxts to skip
+     * @return unknown The row results per the Zend_Db_Adapter fetch mode.
+     */
+    public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    
     public function getContactById($_contactId);
     
     /**
-     * get list of personal contacts
+     * get contacts of user identified by account id
      *
-     * @param int $_owner id of the addressbook to read the contacts from
-     * @param string $_filter string to search for in contacts
-     * @param string $_sort fieldname to sort by
-     * @param string $_dir sort ascending or descending (ASC | DESC)
-     * @param int $_limit how many contacts to display
-     * @param int $_start how many contaxts to skip
-     * 
-     * @return array
+     * @param int $_owner account id
+     * @param string $_filter search filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @return Zend_Db_Table_Rowset
      */
     public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
 
@@ -45,41 +74,68 @@ interface Addressbook_Backend_Interface
     public function getCountByOwner($_owner, $_filter);
     
     /**
-     * Enter description here...
+     * get total count of contacts from all addressbooks
      *
-     * @param int $_list id of the personal contact list
-     * @param int $_owner 
-     * @param string $_filter string to search for in contacts
-     * @param string $_sort fieldname to sort by
-     * @param string $_dir sort ascending or descending (ASC | DESC)
-     * @param int $_limit how many contacts to display
-     * @param int $_start how many contaxts to skip
-     * 
-     * @return array list of contacts from contact list identified by $list
+     * @param string $_filter the search filter
+     * @return int count of all other users contacts
      */
-    //public function getContactsByListId($_list, $_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    public function getCountOfAllContacts($_filter);
     
     /**
-     * Enter description here...
+     * get total count of all other users contacts
      *
-     * @param int $_list id of the personal contact list
-     * @param int $_owner 
-     * @param string $_filter string to search for in contacts
-     * @param string $_sort fieldname to sort by
-     * @param string $_dir sort ascending or descending (ASC | DESC)
-     * @param int $_limit how many contacts to display
-     * @param int $_start how many contaxts to skip
-     * 
-     * @return array list of contacts from contact list identified by $list
+     * @return int count of all other users contacts
      */
-    //public function getContactsByListOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    public function getCountOfOtherPeopleContacts();
     
-	/**
-     * returns list of all personal contact lists
-     * 
-     * @param int $_owner owner of the addressbook
-     * @return array list of all personal contact lists
+    /**
+     * get total count of all contacts from shared addressbooks
      *
+     * @return int count of all other users contacts
      */
-    //public function getListsByOwner($owner, $filter, $sort, $dir, $limit, $start);
+    public function getCountOfSharedContacts();
+            
+    /**
+     * get contacts of other people, takes acl of current owner into account
+     *
+     * @param string $_filter the search filter
+     * @param string $_sort the columnname to sort after
+     * @param string $_dir the direction to sort after
+     * @param int $_limit
+     * @param int $_start
+     * @return Zend_Db_Table_Rowset
+     */
+    public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+
+    /**
+     * get list of shared contacts
+     *
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset returns false if user has no access to shared addressbooks
+     */
+    public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL); 
+    
+    /**
+     * rename an addressbook
+     *
+     * @param int $_addressbookId id of the addressbook
+     * @param string $_name new name of the addressbook
+     * @return unknown
+     */
+    public function renameAddressbook($_addressbookId, $_name);    
+
+    /**
+     * add or updates a contact
+     *
+     * @param int $_contactOwner the owner of the addressbook entry
+     * @param Addressbook_Model_Contact $_contactData the contactdata
+     * @param int $_contactId the contact to update, if NULL the contact gets added
+     * @todo check acl when adding contact
+     * @return unknown
+     */
+    public function saveContact(Addressbook_Model_Contact $_contactData);
 }

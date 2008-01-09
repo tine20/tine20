@@ -4,19 +4,19 @@
  * 
  * a instance of the addressbook backendclass should be created using this class
  * 
- * $contacts = Addressbook_Backend::factory(Addressbook_Backend::$type);
+ * $contacts = Addressbook_Backend_Factory::factory(Addressbook_Backend::$type);
  * 
- * currently implemented backend classes: Addressbook_Backend::Sql
+ * currently implemented backend classes: Addressbook_Backend_Factory::Sql
  * 
- * currently planned backend classed: Addressbook_Backend::Ldap
+ * currently planned backend classed: Addressbook_Backend_Factory::Ldap
  * 
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ *
  */
-class Addressbook_Backend
+class Addressbook_Backend_Factory
 {
     /**
      * constant for Sql contacts backend class
