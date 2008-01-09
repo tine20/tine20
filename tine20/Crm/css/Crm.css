@@ -4,6 +4,10 @@
 	padding:10px 0px 0px 0px;
 }
 
+.x-form-item {
+    font-size: 11px;
+}
+
 .x-horizontalTimeView-header {
 	border-bottom: 1px dotted #15428B;
 }
@@ -140,4 +144,29 @@ input {
 	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
 }
 
+.contact-item {
+    padding: 2px 4px; 
+    border-bottom: 1px solid #B5B8C8;
+}
 
+.contact-item a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.contact-item a:hover {
+    text-decoration: underline;
+    color: #999999
+}
+
+.contact-item p {
+    line-height: 13px;
+    margin: 7px 0px;
+}
+
+.contacts_background {
+    background: #FFFFFF url(../../extjs/resources/images/default/form/text-bg.gif) repeat-x scroll 0pt 19pt;
+
+    border: 1px solid #B5B8C8;
+
+}
