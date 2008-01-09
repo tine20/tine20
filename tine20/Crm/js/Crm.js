@@ -1460,7 +1460,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 }
             } , {
                 text: 'Produkt löschen',
-                handler : handler_remove_product
+                handler : handler_remove_product 
             }]  
         });
 
@@ -1487,6 +1487,17 @@ Egw.Crm.ProjectEditDialog = function() {
             ]
         });
   
+        var st_contactSearch = new Ext.data.SimpleStore({
+            fields: ['firstname','lastname', 'company', 'street', 'plz', 'town', 'phone', 'cellphone', 'email', 'contact_id', 'contact_type'],
+            data: [
+                ['Lars', 'Kneschke', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '1'],
+                ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2'],                                                                                                                    
+                ['Lars', 'Kneschke', '', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '1'],
+                ['', '', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2'],
+                                
+            ]
+        });  
+  
         var grid_contact = new Ext.grid.GridPanel({
                 store: st_choosenContacts,
                 id:'grid_choosenContacts',
@@ -1505,38 +1516,51 @@ Egw.Crm.ProjectEditDialog = function() {
         });  
         
 	    // Custom rendering Template for the View
-	    var resultTpl = new Ext.XTemplate(
-	        '<tpl for=".">',
-	        '<div class="search-item">',
-	            '<h3><span>{lastPost:date("M j, Y")}<br />by {lastname}</span>',
-	            '<a href="http://extjs.com/forum/showthread.php?t={topicId}&p={postId}" target="_blank">{title}</a></h3>',
-	            '<p>{excerpt}</p>',
-	        '</div></tpl>'
-	    );
-        var resultTpl = new Ext.XTemplate(
-            '<tpl for=".">',
-            '<div class="contact-item">',
-                '{lastname}, {firstname}<br />',
-                '{company}',
-            '</div></tpl>'
-        );
+        var resultTpl = new Ext.XTemplate( 
+                    '<tpl for=".">',
+                    '<div class="contact-item">',
+                    '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{lastname}, {firstname}</b></a><br />',
+//                    '<tpl if="this.isNotEmpty(company)">', 
+                    '{company}<br />', 
+//                    '</tpl>', 
+                    '{street}<br />', 
+                    '{plz} {town}<br />', 
+                    '<p><i>Phone</i> {phone}<br />', 
+                    '<i>Cellphone</i> {cellphone}<br />', 
+                    '<a href="mailto:{email}">{email}</a></p>', 
+                    '</div></tpl>', {
+            isNotEmpty: function(company){
+                if ((company.value.length == 0) ||
+                (company.value == null)) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+        });
 
         var grid_contact = new Ext.Panel({
 	        height:300,
+            id: 'grid_contact',
+            cls: 'contacts_background',                            
 	        autoScroll:true,
 	
 	        items: new Ext.DataView({
 	            tpl: resultTpl,
-	            store: st_choosenContacts,
+//                cls: 'contacts_background',                
+	            store: st_contactSearch,
+                height: '95%',
 	            itemSelector: 'div.contact-item'
-	        }),
-	
+	        }),	
 	        tbar: [
 	            new Ext.app.SearchField({
-	                store: st_choosenContacts,
+	                store: st_contactSearch
 	            })
 	        ]
         });  
+  
+  
   
   		var folderTrigger = new Ext.form.TriggerField({
             fieldLabel:'Folder (Verantwortlicher)', 
@@ -1675,28 +1699,11 @@ Egw.Crm.ProjectEditDialog = function() {
                     border: false,
                     frame: true,
                     height: 350,
-                    items: [/*{
-                        xtype:'combo',
-                        store: st_contacts,
-                        id: 'st_contacts',
-                        displayField:'contact_id',
-                        typeAhead: false,
-                        loadingText: 'Searching...',
-                        anchor: '99%',
-                        pageSize:50,
-                        queryParam: 'filter',
-                        hideTrigger:true,
-                        tpl: tpl_contacts,
-                        itemSelector: 'div.search-item',
-                        fieldLabel:'Kontakt auswählen', 
-                        hideLabel: true,
-                        name:'pj_contacts',
-                        onSelect: function(record) {
+                    items: [
                             // alert(st_contacts.getById(0));
                             //  console.log(record.data);
-                        }
-                    }, */
-                        grid_contact
+                
+                     grid_contact
                     ]
                 }]
             } , {
