@@ -1151,7 +1151,7 @@ Egw.Crm.ProjectEditDialog = function() {
 				emptyText:'',
 				selectOnFocus:true,
 				editable: false,
-				anchor:'96%'    
+				anchor:'95%'    
         });
 	
 	
@@ -1186,7 +1186,7 @@ Egw.Crm.ProjectEditDialog = function() {
 				emptyText:'',
 				selectOnFocus:true,
 				editable: false,
-				anchor:'96%'    
+				anchor:'95%'    
         });
     
 
@@ -1222,7 +1222,7 @@ Egw.Crm.ProjectEditDialog = function() {
 				emptyText:'',
 				selectOnFocus:true,
 				editable: false,
-				anchor:'100%'    
+				anchor:'95%'    
         });
 		
      
@@ -1473,21 +1473,6 @@ Egw.Crm.ProjectEditDialog = function() {
             //var record = _grid.getStore().getAt(rowIndex);
             //_ctxMenuGrid.showAt(_eventObject.getXY());
         });
-        /*
-    var action_delete = new Ext.Action({
-        text: 'delete contact',
-        disabled: true,
-        handler: _deleteBtnHandler,
-        iconCls: 'action_delete'
-    });        
-        
-    var _ctxMenuGrid = new Ext.menu.Menu({
-        id:'ctxMenuProduct', 
-        items: [
-            action_delete
-        ]
-    });
-      */  
   
         var cm_choosenContacts = new Ext.grid.ColumnModel([
             	{id:'anschrift', header: "Anschrift", dataIndex: 'anschrift', width: 250, sortable: true },
@@ -1495,11 +1480,11 @@ Egw.Crm.ProjectEditDialog = function() {
         ]);
   
         var st_choosenContacts = new Ext.data.SimpleStore({
-                fields: ['key','value'],
-                data: [
-                        ['0','0%'],
-                        ['1','10%']
-                    ]
+            fields: ['firstname','lastname', 'company'],
+            data: [
+                ['Lars', 'Kneschke', 'Metaways Infosystems GmbH'],
+                ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH']
+            ]
         });
   
         var grid_contact = new Ext.grid.GridPanel({
@@ -1510,7 +1495,7 @@ Egw.Crm.ProjectEditDialog = function() {
                     forceFit: true
                 },
                 sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                anchor: '100% 87%',
+                height: 150,
                 enableColumnHide: false,
                 enableColumnMove: false,
                 enableHdMenu: false,
@@ -1518,11 +1503,45 @@ Egw.Crm.ProjectEditDialog = function() {
                 frame:false,
                 iconCls:'icon-grid'
         });  
+        
+	    // Custom rendering Template for the View
+	    var resultTpl = new Ext.XTemplate(
+	        '<tpl for=".">',
+	        '<div class="search-item">',
+	            '<h3><span>{lastPost:date("M j, Y")}<br />by {lastname}</span>',
+	            '<a href="http://extjs.com/forum/showthread.php?t={topicId}&p={postId}" target="_blank">{title}</a></h3>',
+	            '<p>{excerpt}</p>',
+	        '</div></tpl>'
+	    );
+        var resultTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+            '<div class="contact-item">',
+                '{lastname}, {firstname}<br />',
+                '{company}',
+            '</div></tpl>'
+        );
+
+        var grid_contact = new Ext.Panel({
+	        height:300,
+	        autoScroll:true,
+	
+	        items: new Ext.DataView({
+	            tpl: resultTpl,
+	            store: st_choosenContacts,
+	            itemSelector: 'div.contact-item'
+	        }),
+	
+	        tbar: [
+	            new Ext.app.SearchField({
+	                store: st_choosenContacts,
+	            })
+	        ]
+        });  
   
   		var folderTrigger = new Ext.form.TriggerField({
             fieldLabel:'Folder (Verantwortlicher)', 
 			id: 'pj_owner_name',
-            anchor:'100%',
+            anchor:'95%',
             allowBlank: false,
             readOnly:true
         });
@@ -1530,7 +1549,206 @@ Egw.Crm.ProjectEditDialog = function() {
         folderTrigger.onTriggerClick = function() {
             Egw.Crm.displayFolderSelectDialog('pj_owner');
         };
-  
+        
+        
+        
+        var tabPanelOverview = {
+            title:'Overview',
+            layout:'form',
+            //deferredRender:false,
+            border:false,
+            items:[{  
+                layout:'column',
+                border:false,
+                //deferredRender:false,
+                items:[{
+                    columnWidth: 1,
+                    layout: 'form',
+                    //title: 'Overview',
+                    border:false,
+                    frame: true,
+                    height: 350,
+                    hideLabel:true,
+                    items: [{
+                        xtype:'textfield',
+                        hideLabel: true,
+                        //fieldLabel:'Projektname', 
+                        emptyText: 'enter short name',
+                        name:'pj_name',
+                        anchor:'100%'
+                        //selectOnFocus:true
+                    }, {
+                        xtype:'textarea',
+                        //fieldLabel:'Notizen', 
+                        hideLabel: true,
+                        name:'pj_description',
+                        height: 110,
+                        anchor:'100%',
+                        emptyText: 'enter description'
+                    }, {
+					    layout:'column',
+					    //anchor:'100%',
+					    items: [{
+                            columnWidth: .33,
+                            //anchor:'100%',
+                            items:[{
+                                layout: 'form',
+                                items: [
+                                    leadstatus, 
+                                    leadtyp,
+                                    leadsource
+                                ]
+                            }]					        
+					    },{
+					        columnWidth: .33,
+                            items:[{
+                                layout: 'form',
+                                border:false,
+                                items: [
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel:'erwarteter Umsatz', 
+                                    name:'pj_turnover',
+                                    anchor:'95%'
+                                }, {
+                                    xtype:'combo',
+                                    fieldLabel:'Wahrscheinlichkeit', 
+                                    name:'pj_probability',
+                                    store: st_probability,
+                                    displayField:'value',
+                                    valueField:'key',
+                                    typeAhead: true,
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    emptyText:'',
+                                    selectOnFocus:true,
+                                    editable: false,
+                                    anchor:'95%'
+                                },
+                                    folderTrigger 
+                                ]
+                            }]              
+					    },{
+					        columnWidth: .33,
+                            items:[{
+                                layout: 'form',
+                                border:false,
+                                items: [{
+                                    xtype:'datefield',
+                                    fieldLabel:'Start', 
+                                    name:'pj_start',
+                                    id:'startDate',
+                                    //       format:formData.config.dateFormat, 
+                                    format: 'd.m.Y',
+                                    altFormat:'Y-m-d',
+                                    anchor:'95%'
+                                }, {
+                                    xtype:'datefield',
+                                    fieldLabel:'voraussichtl. Ende', 
+                                    name:'pj_end_scheduled',
+                                    id:'expectedEndDate',
+                                    //    format:formData.config.dateFormat, 
+                                    format: 'd.m.Y',
+                                    altFormat:'Y-m-d',
+                                    anchor:'95%'
+                                }, {
+                                    xtype:'datefield',
+                                    fieldLabel:'Ende', 
+                                    name:'pj_end',
+                                    id:'endDate',
+                                    //       format:formData.config.dateFormat, 
+                                    format: 'd.m.Y',
+                                    altFormat:'Y-m-d',
+                                    anchor:'95%'
+                                }]
+                            }]
+					    },{
+                            xtype: 'hidden',
+                            name: 'pj_owner',
+                            id: 'pj_owner'
+                        }]
+					}]
+                }, {
+                    //title: 'Contacts',
+                    width: 300,
+                    layout: 'form',
+                    border: false,
+                    frame: true,
+                    height: 350,
+                    items: [/*{
+                        xtype:'combo',
+                        store: st_contacts,
+                        id: 'st_contacts',
+                        displayField:'contact_id',
+                        typeAhead: false,
+                        loadingText: 'Searching...',
+                        anchor: '99%',
+                        pageSize:50,
+                        queryParam: 'filter',
+                        hideTrigger:true,
+                        tpl: tpl_contacts,
+                        itemSelector: 'div.search-item',
+                        fieldLabel:'Kontakt auswählen', 
+                        hideLabel: true,
+                        name:'pj_contacts',
+                        onSelect: function(record) {
+                            // alert(st_contacts.getById(0));
+                            //  console.log(record.data);
+                        }
+                    }, */
+                        grid_contact
+                    ]
+                }]
+            } , {
+                xtype:'fieldset',
+                title:'Produktübersicht',
+                height: 60,
+                anchor:'100%',
+                items: [{
+                    xtype:'textfield',
+                    fieldLabel:'Produkte', 
+                    hideLabel: true,
+                    name:'pj_productoverview',
+                    id:'productoverview',
+                    disabled: true,
+                    value:'1 Inlab MC XL, 1 InEOS, 1 InFire, 1 InCoris',
+                    anchor:'100%'
+                }]
+            } , {
+                xtype:'fieldset',
+                title:'letzte 10 Aktivitäten',
+                anchor:'100%',
+                height: 190,
+                items: [
+                        activities_limited
+                ]
+            }]
+        };        
+                
+        var tabPanelActivities = {
+            title:'Aktivitäten',
+            layout:'form',
+            deferredRender:false,
+            border:false,
+            items:[{  
+            }]
+        };
+        
+        var tabPanelProducts = {
+            title:'Produkte',
+            layout:'form',
+            deferredRender:false,
+            anchor:'100% 100%',
+            border:false,
+            items:[{  
+                xtype:'fieldset',
+                title:'gewählte Produkte',
+                anchor:'100% 100%',
+                items: [
+                    grid_choosenProducts
+                ]
+            }]
+        };
   
 		var projectedit = new Ext.FormPanel({
 			baseParams: {method :'Crm.saveProject'},
@@ -1540,258 +1758,19 @@ Egw.Crm.ProjectEditDialog = function() {
 			region: 'center',
             id: 'projectDialog',
 			tbar: projectToolbar, 
-			deferredRender: false,
+			//deferredRender: false,
             items: [{
                 xtype:'tabpanel',
 	            plain:true,
 	            activeTab: 0,
-				deferredRender:false,
+				//deferredRender:false,
                 anchor:'100% 100%',
 	            defaults:{bodyStyle:'padding:10px'},
-	            items:[{
-	                title:'Übersicht',
-	                layout:'form',
-					deferredRender:false,
-					border:false,
-					items:[{  
-                        layout:'column',
-        	            border:false,
-        				deferredRender:false,
-                        anchor:'100%',
-                        items:[{
-                            columnWidth:.5,
-                            layout: 'form',
-                            border:false,
-                            items: [{
-                                xtype:'fieldset',
-                                title:'Projekt',
-                                height: 270,
-                                anchor:'99%',
-                                items: [{
-                                    xtype:'textfield',
-                                    fieldLabel:'Projektname', 
-                                    name:'pj_name',
-                                    anchor:'100%'
-                                } , {
-                                    layout:'column',
-                    	            border:false,
-                    				deferredRender:false,
-                                    anchor:'100%',
-                                    items:[{
-                                        columnWidth:.5,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [
-                                            leadstatus  
-                                         , 
-									 		leadtyp
-										]
-                                    } , {                               
-                                        columnWidth:.5,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [
-                                        	leadsource  
-                                         , folderTrigger]
-                                    },{
-                                        xtype: 'hidden',
-                        				name: 'pj_owner',
-                        				id: 'pj_owner'
-                        			}]
-                                } , {
-                                    xtype:'textarea',
-                                    fieldLabel:'Notizen', 
-                                    hideLabel: true,
-                                    name:'pj_description',
-                                    height: 90,
-                                    anchor:'100%'
-                                }]
-                            } , {
-                                xtype:'fieldset',
-                                title:'Projektdaten',
-                                height: 75,
-                                anchor:'99%',
-                                items: [{
-                                    layout:'column',
-                    	            border:false,
-                    				deferredRender:false,
-                                    anchor:'100%',
-                                    items:[{
-                                        columnWidth:.33,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [{
-                                            xtype:'datefield',
-                                            fieldLabel:'Start', 
-                                            name:'pj_start',
-                                            id:'startDate',
-                                     //       format:formData.config.dateFormat, 
-									 		format: 'd.m.Y',
-                                            altFormat:'Y-m-d',
-                                            anchor:'95%'
-                                        }]
-                                    } , {
-                                        columnWidth:.33,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [{
-                                            xtype:'datefield',
-                                            fieldLabel:'Ende', 
-                                            name:'pj_end',
-                                            id:'endDate',
-                                     //       format:formData.config.dateFormat, 
- 									 		format: 'd.m.Y',
-                                            altFormat:'Y-m-d',
-                                            anchor:'95%'
-                                        }]
-                                    } , {
-                                        columnWidth:.33,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [{
-                                            xtype:'datefield',
-                                            fieldLabel:'voraussichtl. Ende', 
-                                            name:'pj_end_scheduled',
-                                            id:'expectedEndDate',
-                                      //    format:formData.config.dateFormat, 
-  									 		format: 'd.m.Y',
-                                            altFormat:'Y-m-d',
-                                            anchor:'95%'
-                                        }]
-                                    }]
-                                }]
-                            }]
-                        } , {
-                            columnWidth:.5,
-                            layout: 'form',
-                            border:false,
-                            items: [{
-                                xtype:'fieldset',
-                                title:'Kontakt',
-                                height: 270,
-                                anchor:'100%',
-                                items: [{
-                                    xtype:'combo',
-                                    store: st_contacts,
-                                    id: 'st_contacts',
-                                    displayField:'contact_id',
-                                    typeAhead: false,
-                                    loadingText: 'Searching...',
-                                    anchor: '100%',
-                                    pageSize:50,
-                                    queryParam: 'filter',
-                                    hideTrigger:true,
-                                    tpl: tpl_contacts,
-                                    itemSelector: 'div.search-item',
-                                    fieldLabel:'Kontakt auswählen', 
-                                    hideLabel: true,
-                                    name:'pj_contacts',
-                                  /*  store: st_contacts,                            
-                                    displayField:'n_fileas',
-                                    valueField:'contact_id',
-                                    typeAhead: false,
-                                    loadingText: 'Searching...',
-                                    mode: 'local',
-                                    hideTrigger: true,                                    
-                                    pageSize:10,
-                                    tpl: tpl_contacts,
-                                    itemSelector: 'div.search-item', */
-                            		onSelect: function(record) {
-                                       // alert(st_contacts.getById(0));
-                            		//	console.log(record.data);
-                                    }
-                                } , grid_contact
-                                ]
-                            } , {
-                                xtype:'fieldset',
-                                title:'Umsatz',
-                                height: 75,
-                                anchor:'100%',
-                                items: [{
-                                    layout:'column',
-                    	            border:false,
-                    				deferredRender:false,
-                                    anchor:'100%',
-                                    items:[{
-                                        columnWidth:.5,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [{
-                                            xtype:'numberfield',
-                                            fieldLabel:'erwarteter Umsatz', 
-                                            name:'pj_turnover',
-                                            anchor:'97%'
-                                        }]
-                                    } , {
-                                        columnWidth:.5,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [{
-                                            xtype:'combo',
-                                            fieldLabel:'Wahrscheinlichkeit', 
-                                            name:'pj_probability',
-            								store: st_probability,
-            								displayField:'value',
-            								valueField:'key',
-            								typeAhead: true,
-            								mode: 'local',
-            								triggerAction: 'all',
-            								emptyText:'',
-            								selectOnFocus:true,
-            								editable: false,
-            								anchor:'100%'
-                                        }]
-                                    }]
-                                }]
-                            }]
-                        }]
-                    } , {
-                        xtype:'fieldset',
-                        title:'Produktübersicht',
-                        height: 60,
-                        anchor:'100%',
-                        items: [{
-                            xtype:'textfield',
-                            fieldLabel:'Produkte', 
-                            hideLabel: true,
-                            name:'pj_productoverview',
-                            id:'productoverview',
-                            disabled: true,
-                            value:'1 Inlab MC XL, 1 InEOS, 1 InFire, 1 InCoris',
-                            anchor:'100%'
-                        }]
-                    } , {
-                        xtype:'fieldset',
-                        title:'letzte 10 Aktivitäten',
-                        anchor:'100%',
-                        height: 190,
-                        items: [
-                                activities_limited
-                        ]
-                    }]
-                } , {
-	                title:'Aktivitäten',
-	                layout:'form',
-					deferredRender:false,
-					border:false,
-					items:[{  
-                    }]
-                } , {
-	                title:'Produkte',
-	                layout:'form',
-					deferredRender:false,
-                    anchor:'100% 100%',
-					border:false,
-					items:[{  
-                        xtype:'fieldset',
-                        title:'gewählte Produkte',
-                        anchor:'100% 100%',
-                        items: [
-                            grid_choosenProducts
-                        ]
-                    
-                    }]
-                }]
+	            items:[
+                    tabPanelOverview, 
+                    tabPanelActivities, 
+                    tabPanelProducts
+                ]
             }]
         });
 

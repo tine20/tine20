@@ -732,7 +732,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         //error_log($select->__toString());
        
         $stmt = $db->query($select);
-        $result = array();
+        //$result = array();
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         return $result;
