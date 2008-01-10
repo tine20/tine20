@@ -42,7 +42,7 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @string identifier
      * @bool bypass Filter
      */
-    public function setId($_id, $_bypassFilter = false);
+    public function setId($_id, $_bypassFilters = NULL);
     
     /**
      * gets identifier of record
@@ -81,7 +81,4 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return array
      */
     public function toArray($_convertDates = NULL);
-    
-
-    
 }

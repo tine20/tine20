@@ -64,6 +64,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     
     protected $_bypassFilters = false;
     
+    protected $_convertDates = true;
+    
+    protected $_isValidated = false;
+    
     /**
      * holds instance of Zend_Filter
      * 
@@ -86,20 +90,16 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        if ($_bypassFilters) {
-            foreach ($_data as $key => $value) {
-                if (array_key_exists ($key, $this->_validators)) {
-                    $this->_properties[$key] = $value;
-                }
-            }
-        } else {
-            $this->setFromUserData($_data);
+        if ($this->_identifier === NULL) {
+            throw new Egwbase_Record_Exception('$_identifier is not declared');
         }
         
-        if ($_convertDates) {
-            $part = isset($_convertDates['part']) ? $_convertDates['part'] : Zend_Date::ISO_8601;
-            $locale = isset($_convertDates['locale']) ? $_convertDates['locale'] : NULL;
-            $this->iso2dates($part, $locale);
+        $this->_bypassFilters = (bool)$_bypassFilters;
+        $this->_convertDates = (bool)$_convertDates;
+        
+        // try to set data only, when $_data is an array
+        if(is_array($_data)) {
+            $this->setFromArray($_data);
         }
     }
     
@@ -108,18 +108,21 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * 
      * @string identifier
      */
-    public function setId($_id, $_bypassFilters = false)
+    public function setId($_id, $_bypassFilters = NULL)
     {
-        if (!$this->_identifier) {
-            throw new Egwbase_Record_Exception('Identifier is not declared');
+        if($_bypassFilters === NULL) {
+            $bypassFilters = $this->_bypassFilters;
+        } else {
+            $bypassFilters = (bool)$_bypassFilters;
         }
         
-        if ($_bypassFilters) {
+        if ($bypassFilters === true) {
             $this->_properties[$this->_identifier] = $_id;
         } else {
-            $this->setFromUserData( array(
-                $this->_identifier => $_id
-            ));
+            $newData = $this->_properties;
+            $newData[$this->_identifier] = $_id;
+            
+            $this->setFromUserData($newData);
         }
     }
     
@@ -130,9 +133,6 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function getId()
     {
-        if (!$this->_identifier) {
-            throw new OutOfBoundsException('Identifier is not declared');
-        }
         return $this->_properties[$this->_identifier];
     }
     
@@ -145,21 +145,55 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function setFromUserData(array $_data)
     {
-        $inputFilter = $this->getFilter();
-        $inputFilter->setData($_data);
-    	
-    	if ($inputFilter->isValid()) {
-    		$data = $inputFilter->getUnescaped();
-    		foreach($data as $key => $value) {
-    			$this->_properties[$key] = $value;
-    		}
-    	} else {
-            foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
-                $this->_validationErrors[] = array('id'  => $fieldName,
-                                  'msg' => $errorMessages[0]);
+        $this->setFromArray($_data, true);
+    }
+    
+    public function setFromArray(array $_data, $_bypassFilters = NULL)
+    {
+        if($_bypassFilters === NULL) {
+            $bypassFilters = $this->_bypassFilters;
+        } else {
+            $bypassFilters = (bool)$_bypassFilters;
+        }
+
+        if($this->_convertDates === true) {
+            $this->_convertISO8601ToZendDate($_data);
+        }
+        
+        if($bypassFilters === true) {
+            // set data without validation
+            foreach ($_data as $key => $value) {
+                if (array_key_exists ($key, $this->_validators)) {
+                    $this->_properties[$key] = $value;
+                }
             }
-    		throw new UnexpectedValueException('some fields have invalid content');
-    	}
+            
+            // set internal state to "not validated"
+            $this->_isValidated = false;
+            
+        } else {
+            // set data with validation
+            $inputFilter = $this->_getFilter();
+            $inputFilter->setData($_data);
+            
+            if ($inputFilter->isValid()) {
+                $data = $inputFilter->getUnescaped();
+                foreach($data as $key => $value) {
+                    $this->_properties[$key] = $value;
+                }
+                
+                // set internal state to "validated"
+                $this->_isValidated = true;
+            } else {
+                foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
+                    $this->_validationErrors[] = array(
+                        'id'  => $fieldName,
+                        'msg' => $errorMessages[0]
+                    );
+                }
+                throw new UnexpectedValueException('some fields have invalid content');
+            }
+        }
     }
     
     /**
@@ -206,11 +240,15 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function toArray($_convertDates = NULL)
     {
+        if($_convertDates === NULL) {
+            $convertDates = $this->_convertDates;
+        } else {
+            $convertDates = (bool)$_convertDates;
+        }
+        
         $recordArray = $this->_properties;
-        if ($_convertDates) {
-           $part = isset($_convertDates['part']) ? $_convertDates['part'] : Zend_Date::ISO_8601;
-           $locale = isset($_convertDates['locale']) ? $_convertDates['locale'] : NULL;
-           $recordArray = $this->date2iso($recordArray, $part, $locale);
+        if ($convertDates === true) {
+            $this->_convertZendDateToISO8601($recordArray);
         }
         return $recordArray;
     }
@@ -233,17 +271,11 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function __set($_name, $_value)
     {
-        if (array_key_exists ($_name, $this->_validators)) {
-            if (!$this->_bypassFilters) {
-                $inputFilter = $this->getFilter();
-                $inputFilter->setData(array($_name => $_value));
-                if($inputFilter->isValid() && array_key_exists($_name, $inputFilter->getUnescaped())){
-                    return $this->_properties[$_name] = $_value;
-                }
-            }
-            return $this->_properties[$_name] = $_value;
+        if (!array_key_exists ($_name, $this->_validators)) {
+            throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
         }
-        throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
+        
+        $this->_properties[$_name] = $_value;
     }
     
     /**
@@ -254,10 +286,11 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function __get($_name)
     {
-        if (array_key_exists ($_name, $this->_validators)) {
-            return $this->_properties[$_name];
+        if (!array_key_exists ($_name, $this->_validators)) {
+            throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
         }
-        throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
+        
+        return $this->_properties[$_name];
     }
     
     /**
@@ -266,7 +299,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * 
      * @retrun Zend_Filter
      */
-    protected function getFilter()
+    protected function _getFilter()
     {
         if ($this->_Zend_Filter == NULL) {
            $this->_Zend_Filter = new Zend_Filter_Input( $this->_filters, $this->_validators);
@@ -282,16 +315,15 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * @param [string|Zend_Locale] $_locale
      * @return 
      */
-    protected function date2iso($_toConvert, $_part=Zend_Date::ISO_8601, $_locale=NULL)
+    protected function _convertZendDateToISO8601(&$_toConvert)
     {
         foreach ($_toConvert as $field => $value) {
             if ($value instanceof Zend_Date) {
-                $_toConvert[$field] = $value->get($_part, $_locale);
+                $_toConvert[$field] = $value->get(Zend_Date::ISO_8601);
             } elseif (is_array($value)) {
-                $_toConvert[$field] = $this->date2Iso($value, $_part, $_locale);
+                $_toConvert[$field] = $this->_convertZendDateToISO8601($value);
             }
         }
-        return $_toConvert;
     }
     
     /**
@@ -301,19 +333,21 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * @param [string|Zend_Locale] $_locale
      * @return void
      */
-    protected function iso2dates($_part=NULL, $_locale=NULL)
+    protected function _convertISO8601ToZendDate(array &$_data)
     {
         foreach ($this->_datetimeFields as $field) {
-            if (!isset($this->_properties[$field])) continue;
-            if(!is_array($this->_properties[$field])) {
-                $toConvert = array(&$this->_properties[$field]);
+            if (!isset($_data[$field])) continue;
+            
+            // no need to convert, is already a Zend_Date
+            if($_data[$field] instanceof Zend_Date) continue;
+            
+            if(is_array($_data[$field])) {
+                foreach($_data[$field] as $dataKey => $dataValue) {
+                    $_data[$field][$dataKey] = new Zend_Date($dataValue, Zend_Date::ISO_8601);
+                }
             } else {
-                $toConvert = &$this->_properties[$field];
+                $_data[$field] = new Zend_Date($_data[$field], Zend_Date::ISO_8601);
             }
-
-            foreach ($toConvert as $field => $value) {
-                $toConvert[$field] = new Zend_Date($value, $_part, $_locale);
-            } 
         }
     }
     
