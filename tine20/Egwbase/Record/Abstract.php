@@ -245,7 +245,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
         } else {
             $convertDates = (bool)$_convertDates;
         }
-        
+
         $recordArray = $this->_properties;
         if ($convertDates === true) {
             $this->_convertZendDateToISO8601($recordArray);
@@ -342,9 +342,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
             if($_data[$field] instanceof Zend_Date) continue;
             
             if(is_array($_data[$field])) {
-                foreach($_data[$field] as $dataKey => $dataValue) {
-                    $_data[$field][$dataKey] = new Zend_Date($dataValue, Zend_Date::ISO_8601);
-                }
+                //foreach($_data[$field] as $dataKey => $dataValue) {
+                //    $_data[$field][$dataKey] = new Zend_Date($dataValue, Zend_Date::ISO_8601);
+                //}
+                $this->_convertISO8601ToZendDate($_data[$field]);
             } else {
                 $_data[$field] = new Zend_Date($_data[$field], Zend_Date::ISO_8601);
             }

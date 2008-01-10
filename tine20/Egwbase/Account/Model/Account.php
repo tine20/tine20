@@ -7,13 +7,13 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
+ * @version     $Id: Account.php 499 2008-01-10 20:37:59Z lkneschke $
  */
 
 /**
  * defines the datatype for one application
  */
-class Egwbase_Record_Account extends Egwbase_Record_Abstract
+class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -23,7 +23,12 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'      => 'StringTrim'
+        'account_lid'           => 'StringTrim',
+        'account_name'          => 'StringTrim',
+        'n_fileas'              => 'StringTrim',
+        'n_family'              => 'StringTrim',
+        'n_given'               => 'StringTrim',
+        'n_fn'                  => 'StringTrim',
     );
     
     /**
@@ -48,6 +53,18 @@ class Egwbase_Record_Account extends Egwbase_Record_Abstract
         'n_given'               => array('allowEmpty' => true),
         'n_fn'                  => array('presence' => 'required'),
     
+    );
+
+    /**
+     * name of fields containing datetime or or an array of datetime
+     * information
+     *
+     * @var array list of datetime fields
+     */    
+    protected $_datetimeFields = array(
+        'account_lastlogin',
+        'account_lastpwd_change',
+        'account_expires'
     );
 
    /**

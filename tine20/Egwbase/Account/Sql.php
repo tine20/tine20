@@ -207,7 +207,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      *
      * @param string $_whereQuery the where query 
      * @param int|string $_whereValue the where value
-     * @return Egwbase_Record_Account the account object
+     * @return Egwbase_Account_Model_Account the account object
      */
     protected function _getAccountFromSQL($_whereQuery, $_whereValue)
     {
@@ -217,11 +217,11 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             ->from('egw_accounts', array(
                 'account_id', 
                 'account_lid', 
-                'account_lastlogin', 
+                'account_lastlogin' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastlogin`)', 
                 'account_lastloginfrom', 
-                'account_lastpwd_change', 
+                'account_lastpwd_change' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastpwd_change`)', 
                 'account_status', 
-                'account_expires', 
+                'account_expires' => 'FROM_UNIXTIME(`egw_accounts`.`account_expires`)', 
                 'account_primary_group')
             )
             ->join(
@@ -236,23 +236,9 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $stmt = $db->query($select);
     
         $accountArray = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-
-        if($accountArray['account_lastlogin'] !== NULL) {
-            $accountArray['account_lastlogin'] = new Zend_Date($accountArray['account_lastlogin'], Zend_Date::TIMESTAMP);
-        }
-            
-        if($accountArray['account_lastpwd_change'] !== NULL) {
-            $accountArray['account_lastpwd_change'] = new Zend_Date($accountArray['account_lastpwd_change'], Zend_Date::TIMESTAMP);
-        }
-            
-        if($accountArray['account_expires'] > 0) {
-            $accountArray['account_expires'] = new Zend_Date($accountArray['account_expires'], Zend_Date::TIMESTAMP);
-        } else {
-            $accountArray['account_expires'] = NULL;
-        }
         
-        $account = new Egwbase_Record_Account($accountArray, true);
-        
+        $account = new Egwbase_Account_Model_Account($accountArray);
+                
         return $account;
         
     }
@@ -261,7 +247,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * get eGW account by login name
      *
      * @param string $_loginName the loginname of the account
-     * @return Egwbase_Record_Account the account object
+     * @return Egwbase_Account_Model_Account the account object
      */
     public function getAccountByLoginName($_loginName)
     {
@@ -274,7 +260,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * get eGW account by accountId
      *
      * @param int $_accountId the account id
-     * @return Egwbase_Record_Account the account object
+     * @return Egwbase_Account_Model_Account the account object
      */
     public function getAccountById($_accountId)
     {
