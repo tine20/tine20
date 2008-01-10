@@ -578,7 +578,7 @@ class Egwbase_Container
 
         $accountsBackend = Egwbase_Account::getBackend();
         
-        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Record_Account');
+        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Account_Model_Account');
         foreach($rows as $row) {
             $account = $accountsBackend->getAccountById($row['account_id']);
             $result->addRecord($account);
