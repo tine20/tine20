@@ -52,7 +52,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * Holds instance of current account
      *
-     * @var Egwbase_Record_Account
+     * @var Egwbase_Account_Model_Account
      */
     protected $_currentAccount;
     
