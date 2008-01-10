@@ -696,7 +696,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
 
-        $result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Record_Account');
+        $result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Account_Model_Account');
         
         return $result;
     }
