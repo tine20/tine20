@@ -32,8 +32,8 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
     protected $_validators = array(
         'pj_id' 				    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'pj_name'                   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_distributionphase_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_customertype_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'pj_leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'pj_leadtype_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'pj_leadsource_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'pj_owner'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
    #     'pj_modifier'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),

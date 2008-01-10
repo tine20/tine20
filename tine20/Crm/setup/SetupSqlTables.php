@@ -22,7 +22,7 @@ class Crm_Setup_SetupSqlTables
      * Creates CRM 2.0 tables
      * @return void
      */
-    public static function createTasksTables() {
+    public static function createCrmTables() {
         $db = Zend_Registry::get('dbAdapter');
         
         try {
@@ -59,6 +59,7 @@ class Crm_Setup_SetupSqlTables
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_productsource` (
                   `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
                   `pj_productsource` varchar(200) NOT NULL default '',
+                  `pj_productsource_price` decimal(12,2) unsigned NOT NULL default '0.00',
                   PRIMARY KEY  (`pj_productsource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );            
@@ -66,8 +67,8 @@ class Crm_Setup_SetupSqlTables
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_project` (
                   `pj_id` int(11) NOT NULL auto_increment,
                   `pj_name` varchar(255) NOT NULL default '',
-                  `pj_distributionphase_id` int(11) NOT NULL default '0',
-                  `pj_customertype_id` int(11) NOT NULL default '0',
+                  `pj_leadstate_id` int(11) NOT NULL default '0',
+                  `pj_leadtype_id` int(11) NOT NULL default '0',
                   `pj_leadsource_id` int(11) NOT NULL default '0',
                   `pj_owner` int(11) NOT NULL default '0',
                   `pj_modifier` int(11) default NULL,
@@ -85,11 +86,13 @@ class Crm_Setup_SetupSqlTables
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );            
             
-            $db->getConnection()->exec("CREATE TABLE `egw_metacrm_projectstate` (
-                  `pj_projectstate_id` int(11) NOT NULL auto_increment,
-                  `pj_projectstate` varchar(255) default NULL,
-                  `pj_projectstate_translate` tinyint(4) default '1',
-                  PRIMARY KEY  (`pj_projectstate_id`)
+            $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadstate` (
+                  `pj_leadstate_id` int(11) NOT NULL auto_increment,
+                  `pj_leadstate` varchar(255) default NULL,
+                  `pj_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
+                  `pj_leadstate_endsproject` tinyint(1) NOT NULL default '0'
+                  `pj_leadstate_translate` tinyint(4) default '1',
+                  PRIMARY KEY  (`pj_leadstate_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );                                                
         }

@@ -9,7 +9,7 @@
  * @version     $Id: option.php 200 2007-11-16 10:50:03Z twadewitz $
  *
  */
-class Crm_Model_Projectstate extends Egwbase_Record_Abstract
+class Crm_Model_Leadstate extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -30,8 +30,10 @@ class Crm_Model_Projectstate extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'pj_projectstate_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_projectstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'pj_leadstate_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'pj_leadstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'pj_leadstate_probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),        
+        'pj_leadstate_endsproject'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
     );
     
    /**
@@ -40,5 +42,5 @@ class Crm_Model_Projectstate extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'pj_projectstate_id';
+    protected $_identifier = 'pj_leadstate_id';
 }

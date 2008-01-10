@@ -168,5 +168,28 @@ input {
     background: #FFFFFF url(../../extjs/resources/images/default/form/text-bg.gif) repeat-x scroll 0pt 19pt;
 
     border: 1px solid #B5B8C8;
+}
 
+.contactType_lead {
+    background-color: #f4edf5;
+}
+
+.contactType_partner {
+    background-color: #edf5ee;
+}
+
+.contactType_internal {
+    background-color: #f5f5ed;
+}
+
+.contactType_lead_icon {
+    width: 30%;
+}
+
+.contactType_partner_icon {
+    width: 30%;
+}
+
+.contactType_internal_icon {
+    width: 30%;
 }

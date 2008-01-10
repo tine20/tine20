@@ -139,14 +139,14 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */   
-   public function getProjectstates($sort, $dir)
+   public function getLeadstates($sort, $dir)
     {
          $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getProjectstates($sort, $dir)) {
+        if($rows = Crm_Controller::getInstance()->getLeadstates($sort, $dir)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -155,19 +155,19 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }  
 
     /**
-	 * save projectstates
+	 * save leadstates
 	 *
 	 * if $_Id is -1 the options element gets added, otherwise it gets updated
 	 * this function handles insert and updates as well as deleting vanished items
 	 *
 	 * @return array
 	 */	
-	public function saveProjectstates($optionsData)
+	public function saveLeadstates($optionsData)
     {
-        $projectStates = Zend_Json::decode($optionsData);
+        $leadStates = Zend_Json::decode($optionsData);
          
         try {
-            $projectStates = new Egwbase_Record_RecordSet($projectStates, 'Crm_Model_Projectstate');
+            $leadStates = new Egwbase_Record_RecordSet($leadStates, 'Crm_Model_Leadstate');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -178,7 +178,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
             
         
-        if(Crm_Controller::getInstance()->saveProjectstates($projectStates) === FALSE) {
+        if(Crm_Controller::getInstance()->saveLeadstates($leadStates) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);

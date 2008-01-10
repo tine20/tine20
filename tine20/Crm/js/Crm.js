@@ -367,8 +367,8 @@ Egw.Crm = function() {
             fields: [
                 {name: 'pj_id'},            
                 {name: 'pj_name'},
-                {name: 'pj_distributionphase_id'},
-                {name: 'pj_customertype_id'},
+                {name: 'pj_leadstate_id'},
+                {name: 'pj_leadtype_id'},
                 {name: 'pj_leadsource_id'},
                 {name: 'pj_owner'},
                 {name: 'pj_modifier'},
@@ -382,7 +382,7 @@ Egw.Crm = function() {
                 {name: 'pj_lastread'},
                 {name: 'pj_lastreader'},
                 
-                {name: 'pj_projectstate'},
+                {name: 'pj_leadstate'},
                 {name: 'pj_leadtype'},
                 {name: 'pj_leadsource'}//,
                 /*
@@ -502,6 +502,23 @@ Egw.Crm = function() {
 
     var _showCrmToolbar = function(){
     
+        var st_probability = new Ext.data.SimpleStore({
+                fields: ['key','value'],
+                data: [
+                        ['0','0 %'],
+                        ['10','10 %'],
+                        ['20','20 %'],
+                        ['30','30 %'],
+                        ['40','40 %'],
+                        ['50','50 %'],
+                        ['60','60 %'],
+                        ['70','70 %'],
+                        ['80','80 %'],
+                        ['90','90 %'],
+                        ['100','100 %']
+                    ]
+        });
+    
         var quickSearchField = new Ext.app.SearchField({
             id: 'quickSearchField',
             width: 200,
@@ -557,10 +574,10 @@ Egw.Crm = function() {
         })        
         
 
-       function editOptions(item) {
+       function editLeadstate() {
            var Dialog = new Ext.Window({
-				title: item.table,
-                id: 'options_window',
+				title: 'Leadstates',
+                id: 'Leadstate_window',
 				modal: true,
 			    width: 350,
 			    height: 500,
@@ -572,76 +589,119 @@ Egw.Crm = function() {
 			    buttonAlign:'center'
             });	
             
-            var st = new Ext.data.JsonStore({
+            var st_leadstate = new Ext.data.JsonStore({
                 baseParams: {
-                    method: 'Crm.get'+item.table,
-                    sort: item.mapping,
+                    method: 'Crm.getLeadstates',
+                    sort: 'pj_leadstate',
                     dir: 'ASC'
                 },
                 root: 'results',
                 totalProperty: 'totalcount',
-                id: 'key',
+                id: 'pj_leadstate_id',
                 fields: [
-                    {name: 'key', mapping: item.mapping + '_id'},
-                    {name: 'value', mapping: item.mapping}    
+                    {name: 'pj_leadstate_id'},
+                    {name: 'pj_leadstate'},
+                    {name: 'pj_leadstate_probability'},
+                    {name: 'pj_leadstate_endsproject', type: 'boolean'}
                 ],
                 // turn on remote sorting
                 remoteSort: false
             });
             
-            st.load();
+            st_leadstate.load();
             
-
+           var checkColumn = new Ext.grid.CheckColumn({
+               header: "X Project?",
+               dataIndex: 'pj_leadstate_endsproject',
+               width: 50
+            });
             
-            var cm = new Ext.grid.ColumnModel([
-                	{id:'id', header: "id", dataIndex: 'key', width: 25, hidden: true },
-                    {id:'value', header: 'entries', dataIndex: 'value', width: 200, hideable: false, sortable: false, editor: new Ext.form.TextField({
-                    allowBlank: false
-                    }) }
+            var cm_leadstate = new Ext.grid.ColumnModel([
+                	{ id:'pj_leadstate_id', 
+                      header: "id", 
+                      dataIndex: 'pj_leadstate_id', 
+                      width: 25, 
+                      hidden: true 
+                    },
+                    { id:'pj_leadstate', 
+                      header: 'entries', 
+                      dataIndex: 'pj_leadstate', 
+                      width: 170, 
+                      hideable: false, 
+                      sortable: false, 
+                      editor: new Ext.form.TextField({allowBlank: false}) 
+                    },
+                    { id:'pj_leadstate_probability', 
+                      header: 'probability', 
+                      dataIndex: 'pj_leadstate_probability', 
+                      width: 50, 
+                      hideable: false, 
+                      sortable: false, 
+                      renderer: Ext.util.Format.percentage,
+                      editor: new Ext.form.ComboBox({
+                        name: 'probability',
+                        id: 'leadstate_probability',
+                        hiddenName: 'pj_leadstate_probability',
+                        store: st_probability, 
+                        displayField:'value', 
+                        valueField: 'key',
+                        allowBlank: true, 
+                        editable: false,
+                        selectOnFocus:true,
+                        forceSelection: true, 
+                        triggerAction: "all", 
+                        mode: 'local', 
+                        lazyRender:true,
+                        listClass: 'x-combo-list-small'
+                        }) 
+                    }, 
+                    checkColumn                    
             ]);            
             
              var entry = Ext.data.Record.create([
-               {name: 'key', mapping: item.mapping + '_id', type: 'int'},
-               {name: 'value', mapping: item.mapping, type: 'int'}
+               {name: 'pj_leadstate_id', type: 'int'},
+               {name: 'pj_leadstate', type: 'varchar'},
+               {name: 'pj_leadstate_probability', type: 'int'},
+               {name: 'pj_leadstate_endsproject', type: 'boolean'}
             ]);
             
-            var handler_options_add = function(){
+            var handler_leadstate_add = function(){
                 var p = new entry({
-                    key: 'NULL',
-					value: ''
+                    pj_leadstate_id: 'NULL',
+                    pj_leadstate: '',
+                    pj_leadstate_probability: '',
+                    pj_leadstate_endsproject: false
                 });
-                gridPanel.stopEditing();
-                st.insert(0, p);
-                gridPanel.startEditing(0, 0);
+                leadstateGridPanel.stopEditing();
+                st_leadstate.insert(0, p);
+                leadstateGridPanel.startEditing(0, 0);
             }
                         
-            var handler_options_delete = function(){
-               	var optionGrid  = Ext.getCmp('editOptionsGrid');
-        		var optionStore = optionGrid.getStore();
+            var handler_leadstate_delete = function(){
+               	var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
+        		var leadstateStore = leadstateGrid.getStore();
                 
-        		var selectedRows = optionGrid.getSelectionModel().getSelections();
+        		var selectedRows = leadstateGrid.getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
-                    optionStore.remove(selectedRows[i]);
+                    leadstateStore.remove(selectedRows[i]);
                 }   
             }                        
                         
           
-           var handler_options_saveClose = function(){
-                var store_options = Ext.getCmp('editOptionsGrid').getStore();
-                var switchKeys = new Array(item.mapping + '_id', item.mapping);
+           var handler_leadstate_saveClose = function(){
+                var leadstate_store = Ext.getCmp('editLeadstateGrid').getStore();
                 
-                var options_json = Egw.Egwbase.Common.getJSONdataSKeys(store_options, switchKeys); 
+                var leadstate_json = Egw.Egwbase.Common.getJSONdata(leadstate_store); 
 
                  Ext.Ajax.request({
-                       //     url: 'index.php',
                             params: {
-                                method: 'Crm.save' + item.table,
-                                optionsData: options_json
+                                method: 'Crm.saveLeadstates',
+                                optionsData: leadstate_json
                             },
-                            text: 'Saving options...',
+                            text: 'Saving leadstates...',
                             success: function(_result, _request){
-                                    store_options.reload();
-                                    store_options.rejectChanges();
+                                    leadstate_store.reload();
+                                    leadstate_store.rejectChanges();
                                },
                             failure: function(form, action) {
                     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -649,11 +709,12 @@ Egw.Crm = function() {
                         });          
             }          
             
-            var gridPanel = new Ext.grid.EditorGridPanel({
-                store: st,
-                id: 'editOptionsGrid',
-                cm: cm,
-                autoExpandColumn:'value',
+            var leadstateGridPanel = new Ext.grid.EditorGridPanel({
+                store: st_leadstate,
+                id: 'editLeadstateGrid',
+                cm: cm_leadstate,
+                autoExpandColumn:'pj_leadstate',
+                plugins:checkColumn,
                 frame:false,
                 viewConfig: {
                     forceFit: true
@@ -663,30 +724,465 @@ Egw.Crm = function() {
                 tbar: [{
                     text: 'new item',
                     iconCls: 'action_add',
-                    handler : handler_options_add
+                    handler : handler_leadstate_add
                     },{
                     text: 'delete item',
                     iconCls: 'action_delete',
-                    handler : handler_options_delete
+                    handler : handler_leadstate_delete
                     },{
                     text: 'save',
                     iconCls: 'action_saveAndClose',
-                    handler : handler_options_saveClose 
+                    handler : handler_leadstate_saveClose 
                     }]  
                 });
+
+
+            Ext.grid.CheckColumn = function(config){
+                Ext.apply(this, config);
+                if(!this.id){
+                    this.id = Ext.id();
+                }
+                this.renderer = this.renderer.createDelegate(this);
+            };
+            
+            Ext.grid.CheckColumn.prototype ={
+                init : function(grid){
+                    this.grid = grid;
+                    this.grid.on('render', function(){
+                        var view = this.grid.getView();
+                        view.mainBody.on('mousedown', this.onMouseDown, this);
+                    }, this);
+                },
+            
+                onMouseDown : function(e, t){
+                    if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+                        e.stopEvent();
+                        var index = this.grid.getView().findRowIndex(t);
+                        var record = this.grid.store.getAt(index);
+                        record.set(this.dataIndex, !record.data[this.dataIndex]);
+                    }
+                },
+            
+                renderer : function(v, p, record){
+                    p.css += ' x-grid3-check-col-td'; 
+                    return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+                }
+            };                    
                         
-          Dialog.add(gridPanel);
+          Dialog.add(leadstateGridPanel);
           Dialog.show();		  
         }
 
+      function editLeadsource() {
+           var Dialog = new Ext.Window({
+				title: 'Leadsources',
+                id: 'Leadsource_window',
+				modal: true,
+			    width: 350,
+			    height: 500,
+			    minWidth: 300,
+			    minHeight: 500,
+			    layout: 'fit',
+			    plain:true,
+			    bodyStyle:'padding:5px;',
+			    buttonAlign:'center'
+            });	
+            
+            var st_leadsource = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.getLeadsources',
+                    sort: 'pj_leadsource',
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'pj_leadsource_id',
+                fields: [
+                    {name: 'pj_leadsource_id'},
+                    {name: 'pj_leadsource'}
+                ],
+                // turn on remote sorting
+                remoteSort: false
+            });
+            
+            st_leadsource.load();
+            
+            var cm_leadsource = new Ext.grid.ColumnModel([
+                	{ id:'pj_leadsource_id', 
+                      header: "id", 
+                      dataIndex: 'pj_leadsource_id', 
+                      width: 25, 
+                      hidden: true 
+                    },
+                    { id:'pj_leadsource', 
+                      header: 'entries', 
+                      dataIndex: 'pj_leadsource', 
+                      width: 170, 
+                      hideable: false, 
+                      sortable: false, 
+                      editor: new Ext.form.TextField({allowBlank: false}) 
+                    }                    
+            ]);            
+            
+             var entry = Ext.data.Record.create([
+               {name: 'pj_leadsource_id', type: 'int'},
+               {name: 'pj_leadsource', type: 'varchar'}
+            ]);
+            
+            var handler_leadsource_add = function(){
+                var p = new entry({
+                    pj_leadsource_id: 'NULL',
+                    pj_leadsource: ''
+                });
+                leadsourceGridPanel.stopEditing();
+                st_leadsource.insert(0, p);
+                leadsourceGridPanel.startEditing(0, 0);
+            }
+                        
+            var handler_leadsource_delete = function(){
+               	var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
+        		var leadsourceStore = leadsourceGrid.getStore();
+                
+        		var selectedRows = leadsourceGrid.getSelectionModel().getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    leadsourceStore.remove(selectedRows[i]);
+                }   
+            }                        
+                        
+          
+           var handler_leadsource_saveClose = function(){
+                var leadsource_store = Ext.getCmp('editLeadsourceGrid').getStore();
+                
+                var leadsource_json = Egw.Egwbase.Common.getJSONdata(leadsource_store); 
+
+                 Ext.Ajax.request({
+                            params: {
+                                method: 'Crm.saveLeadsources',
+                                optionsData: leadsource_json
+                            },
+                            text: 'Saving leadsources...',
+                            success: function(_result, _request){
+                                    leadsource_store.reload();
+                                    leadsource_store.rejectChanges();
+                               },
+                            failure: function(form, action) {
+                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
+                    			}
+                        });          
+            }          
+            
+            var leadsourceGridPanel = new Ext.grid.EditorGridPanel({
+                store: st_leadsource,
+                id: 'editLeadsourceGrid',
+                cm: cm_leadsource,
+                autoExpandColumn:'pj_leadsource',
+                frame:false,
+                viewConfig: {
+                    forceFit: true
+                },
+                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+                clicksToEdit:2,
+                tbar: [{
+                    text: 'new item',
+                    iconCls: 'action_add',
+                    handler : handler_leadsource_add
+                    },{
+                    text: 'delete item',
+                    iconCls: 'action_delete',
+                    handler : handler_leadsource_delete
+                    },{
+                    text: 'save',
+                    iconCls: 'action_saveAndClose',
+                    handler : handler_leadsource_saveClose 
+                    }]  
+                });
+                    
+                        
+          Dialog.add(leadsourceGridPanel);
+          Dialog.show();		  
+        }
+  
+     function editLeadtype() {
+           var Dialog = new Ext.Window({
+				title: 'Leadtypes',
+                id: 'Leadtype_window',
+				modal: true,
+			    width: 350,
+			    height: 500,
+			    minWidth: 300,
+			    minHeight: 500,
+			    layout: 'fit',
+			    plain:true,
+			    bodyStyle:'padding:5px;',
+			    buttonAlign:'center'
+            });	
+            
+            var st_leadtype = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.getLeadtypes',
+                    sort: 'pj_leadtype',
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'pj_leadtype_id',
+                fields: [
+                    {name: 'pj_leadtype_id'},
+                    {name: 'pj_leadtype'}
+                ],
+                // turn on remote sorting
+                remoteSort: false
+            });
+            
+            st_leadtype.load();
+            
+            var cm_leadtype = new Ext.grid.ColumnModel([
+                	{ id:'pj_leadtype_id', 
+                      header: "id", 
+                      dataIndex: 'pj_leadtype_id', 
+                      width: 25, 
+                      hidden: true 
+                    },
+                    { id:'pj_leadtype', 
+                      header: 'entries', 
+                      dataIndex: 'pj_leadtype', 
+                      width: 170, 
+                      hideable: false, 
+                      sortable: false, 
+                      editor: new Ext.form.TextField({allowBlank: false}) 
+                    }                    
+            ]);            
+            
+             var entry = Ext.data.Record.create([
+               {name: 'pj_leadtype_id', type: 'int'},
+               {name: 'pj_leadtype', type: 'varchar'}
+            ]);
+            
+            var handler_leadtype_add = function(){
+                var p = new entry({
+                    pj_leadtype_id: 'NULL',
+                    pj_leadtype: ''
+                });
+                leadtypeGridPanel.stopEditing();
+                st_leadtype.insert(0, p);
+                leadtypeGridPanel.startEditing(0, 0);
+            }
+                        
+            var handler_leadtype_delete = function(){
+               	var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
+        		var leadtypeStore = leadtypeGrid.getStore();
+                
+        		var selectedRows = leadtypeGrid.getSelectionModel().getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    leadtypeStore.remove(selectedRows[i]);
+                }   
+            }                        
+                        
+          
+           var handler_leadtype_saveClose = function(){
+                var leadtype_store = Ext.getCmp('editLeadtypeGrid').getStore();
+                
+                var leadtype_json = Egw.Egwbase.Common.getJSONdata(leadtype_store); 
+
+                 Ext.Ajax.request({
+                            params: {
+                                method: 'Crm.saveLeadtypes',
+                                optionsData: leadtype_json
+                            },
+                            text: 'Saving leadtypes...',
+                            success: function(_result, _request){
+                                    leadtype_store.reload();
+                                    leadtype_store.rejectChanges();
+                               },
+                            failure: function(form, action) {
+                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
+                    			}
+                        });          
+            }          
+            
+            var leadtypeGridPanel = new Ext.grid.EditorGridPanel({
+                store: st_leadtype,
+                id: 'editLeadtypeGrid',
+                cm: cm_leadtype,
+                autoExpandColumn:'pj_leadtype',
+                frame:false,
+                viewConfig: {
+                    forceFit: true
+                },
+                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+                clicksToEdit:2,
+                tbar: [{
+                    text: 'new item',
+                    iconCls: 'action_add',
+                    handler : handler_leadtype_add
+                    },{
+                    text: 'delete item',
+                    iconCls: 'action_delete',
+                    handler : handler_leadtype_delete
+                    },{
+                    text: 'save',
+                    iconCls: 'action_saveAndClose',
+                    handler : handler_leadtype_saveClose 
+                    }]  
+                });
+                    
+                        
+          Dialog.add(leadtypeGridPanel);
+          Dialog.show();		  
+        }
+    
+    function editProductsource() {
+           var Dialog = new Ext.Window({
+				title: 'Products',
+                id: 'Product_window',
+				modal: true,
+			    width: 350,
+			    height: 500,
+			    minWidth: 300,
+			    minHeight: 500,
+			    layout: 'fit',
+			    plain:true,
+			    bodyStyle:'padding:5px;',
+			    buttonAlign:'center'
+            });	
+            
+            var st_productsource = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.getProductsource',
+                    sort: 'pj_productsource',
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'pj_productsource_id',
+                fields: [
+                    {name: 'pj_productsource_id'},
+                    {name: 'pj_productsource'},
+                    {name: 'pj_productsource_price'}
+                ],
+                // turn on remote sorting
+                remoteSort: false
+            });
+            
+            st_productsource.load();
+            
+            var cm_productsource = new Ext.grid.ColumnModel([
+                	{ id:'pj_productsource_id', 
+                      header: "id", 
+                      dataIndex: 'pj_productsource_id', 
+                      width: 25, 
+                      hidden: true 
+                    },
+                    { id:'pj_productsource', 
+                      header: 'entries', 
+                      dataIndex: 'pj_productsource', 
+                      width: 170, 
+                      hideable: false, 
+                      sortable: false, 
+                      editor: new Ext.form.TextField({allowBlank: false}) 
+                    }, 
+                    {
+                      id: 'pj_productsource_price',  
+                      header: "price",
+                      dataIndex: 'pj_productsource_price',
+                      width: 80,
+                      align: 'right',
+                      editor: new Ext.form.NumberField({
+                          allowBlank: false,
+                          allowNegative: false,
+                          decimalSeparator: ','
+                          }),
+                      renderer: Ext.util.Format.euMoney                    
+                    }
+            ]);            
+            
+             var entry = Ext.data.Record.create([
+               {name: 'pj_productsource_id', type: 'int'},
+               {name: 'pj_productsource', type: 'varchar'},
+               {name: 'pj_productsource_price', type: 'number'}
+            ]);
+            
+            var handler_productsource_add = function(){
+                var p = new entry({
+                    pj_productsource_id: 'NULL',
+                    pj_productsource: '',
+                    pj_productsource_price: '0,00'
+                });
+                productsourceGridPanel.stopEditing();
+                st_productsource.insert(0, p);
+                productsourceGridPanel.startEditing(0, 0);
+            }
+                        
+            var handler_productsource_delete = function(){
+               	var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
+        		var productsourceStore = productsourceGrid.getStore();
+                
+        		var selectedRows = productsourceGrid.getSelectionModel().getSelections();
+                for (var i = 0; i < selectedRows.length; ++i) {
+                    productsourceStore.remove(selectedRows[i]);
+                }   
+            }                        
+                        
+          
+           var handler_productsource_saveClose = function(){
+                var productsource_store = Ext.getCmp('editProductsourceGrid').getStore();
+                
+                var productsource_json = Egw.Egwbase.Common.getJSONdata(productsource_store); 
+
+                 Ext.Ajax.request({
+                            params: {
+                                method: 'Crm.saveProductsource',
+                                optionsData: productsource_json
+                            },
+                            text: 'Saving productsource...',
+                            success: function(_result, _request){
+                                    productsource_store.reload();
+                                    productsource_store.rejectChanges();
+                               },
+                            failure: function(form, action) {
+                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
+                    			}
+                        });          
+            }          
+            
+            var productsourceGridPanel = new Ext.grid.EditorGridPanel({
+                store: st_productsource,
+                id: 'editProductsourceGrid',
+                cm: cm_productsource,
+                autoExpandColumn:'pj_productsource',
+                frame:false,
+                viewConfig: {
+                    forceFit: true
+                },
+                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+                clicksToEdit:2,
+                tbar: [{
+                    text: 'new item',
+                    iconCls: 'action_add',
+                    handler : handler_productsource_add
+                    },{
+                    text: 'delete item',
+                    iconCls: 'action_delete',
+                    handler : handler_productsource_delete
+                    },{
+                    text: 'save',
+                    iconCls: 'action_saveAndClose',
+                    handler : handler_productsource_saveClose 
+                    }]  
+                });
+                    
+                        
+          Dialog.add(productsourceGridPanel);
+          Dialog.show();		  
+        }     
         
         var settings_tb_menu = new Ext.menu.Menu({
             id: 'crmSettingsMenu',
             items: [
-                {text: 'Leadstatus', handler: editOptions, table: 'Projectstates', mapping: 'pj_projectstate'},
-                {text: 'Leadsource', handler: editOptions, table: 'Leadsources', mapping: 'pj_leadsource'},
-                {text: 'Leadtype', handler: editOptions, table: 'Leadtypes', mapping: 'pj_leadtype'},
-                {text: 'Product', handler: editOptions, table: 'Productsource', mapping: 'pj_productsource'}
+                {text: 'Leadstatus', handler: editLeadstate},
+                {text: 'Leadsource', handler: editLeadsource},
+                {text: 'Leadtype', handler: editLeadtype},
+                {text: 'Product', handler: editProductsource}
             ]
         });     
         
@@ -786,7 +1282,7 @@ Egw.Crm = function() {
             {resizable: true, header: 'Projektname', id: 'pj_name', dataIndex: 'pj_name', width: 200},
             {resizable: true, header: 'Partner', id: 'pj_partner', dataIndex: 'pj_partner', width: 150},
             {resizable: true, header: 'Lead', id: 'pj_lead', dataIndex: 'pj_lead', width: 150},
-            {resizable: true, header: 'Status', id: 'pj_projectstate', dataIndex: 'pj_projectstate', width: 150},
+            {resizable: true, header: 'Status', id: 'pj_leadstate', dataIndex: 'pj_leadstate', width: 150},
             {resizable: true, header: 'Wahrscheinlichkeit', id: 'pj_probability', dataIndex: 'pj_probability', width: 50, renderer: Ext.util.Format.percentage},
             {resizable: true, header: 'Umsatz', id: 'pj_turnover', dataIndex: 'pj_turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
@@ -915,7 +1411,6 @@ Egw.Crm = function() {
 
 
 Egw.Crm.ProjectEditDialog = function() {
-
     // private variables
     var dialog;
     var projectedit;
@@ -1112,7 +1607,8 @@ Egw.Crm.ProjectEditDialog = function() {
             id: 'pj_productsource_id',
             fields: [
                 {name: 'pj_productsource_id'},
-                {name: 'value', mapping: 'pj_productsource'}
+                {name: 'value', mapping: 'pj_productsource'},
+                {name: 'pj_productsource_price'}
             ],
             // turn on remote sorting
             remoteSort: true
@@ -1121,16 +1617,16 @@ Egw.Crm.ProjectEditDialog = function() {
  
         var st_leadstatus = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Crm.getProjectstates',
-                sort: 'pj_projectstate',
+                method: 'Crm.getLeadstates',
+                sort: 'pj_leadstate',
                 dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
             id: 'key',
             fields: [
-                {name: 'key', mapping: 'pj_projectstate_id'},
-                {name: 'value', mapping: 'pj_projectstate'}
+                {name: 'key', mapping: 'pj_leadstate_id'},
+                {name: 'value', mapping: 'pj_leadstate'}
 
             ],
             // turn on remote sorting
@@ -1140,8 +1636,8 @@ Egw.Crm.ProjectEditDialog = function() {
         var leadstatus = new Ext.form.ComboBox({
                 fieldLabel:'Leadstatus', 
                 id:'leadstatus',
-                name:'projectstate',
-                hiddenName:'pj_distributionphase_id',
+                name:'leadstate',
+                hiddenName:'pj_leadstate_id',
 				store: st_leadstatus,
 				displayField:'value',
                 valueField:'key',
@@ -1177,7 +1673,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 fieldLabel:'Leadtypes', 
                 id:'leadtype',
                 name:'pj_leadtyp',
-                hiddenName:'pj_customertype_id',
+                hiddenName:'pj_leadtype_id',
 				store: st_leadtyp,
 				displayField:'value',
                 valueField:'key',
@@ -1492,52 +1988,46 @@ Egw.Crm.ProjectEditDialog = function() {
             data: [
                 ['Lars', 'Kneschke', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '1'],
                 ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2'],                                                                                                                    
-                ['Lars', 'Kneschke', '', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '1'],
-                ['', '', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2'],
+                ['Lars', 'Kneschke', '', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '3'],
+                ['', 'Wadewitz', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2']
                                 
             ]
         });  
   
-        var grid_contact = new Ext.grid.GridPanel({
-                store: st_choosenContacts,
-                id:'grid_choosenContacts',
-                cm: cm_choosenContacts,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-                height: 150,
-                enableColumnHide: false,
-                enableColumnMove: false,
-                enableHdMenu: false,
-                stripeRows: true, 
-                frame:false,
-                iconCls:'icon-grid'
-        });  
         
 	    // Custom rendering Template for the View
         var resultTpl = new Ext.XTemplate( 
                     '<tpl for=".">',
-                    '<div class="contact-item">',
+                    '<div class="contact-item {contact_type:this.getType}">',
+                    '{company:this.isNotEmpty}', 
                     '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{lastname}, {firstname}</b></a><br />',
-//                    '<tpl if="this.isNotEmpty(company)">', 
-                    '{company}<br />', 
-//                    '</tpl>', 
-                    '{street}<br />', 
-                    '{plz} {town}<br />', 
-                    '<p><i>Phone</i> {phone}<br />', 
-                    '<i>Cellphone</i> {cellphone}<br />', 
+                    '{street:this.isNotEmpty}',                     
+                    '{plz} {town:this.isNotEmpty}',
+                    
+                    '<p><i>Phone:</i> {phone}<br />', 
+                    '<i>Cellphone:</i> {cellphone}<br />', 
                     '<a href="mailto:{email}">{email}</a></p>', 
                     '</div></tpl>', {
-            isNotEmpty: function(company){
-                if ((company.value.length == 0) ||
-                (company.value == null)) {
-                    return false;
-                }
-                else {
-                    return true;
-                }
-            }
+                        isNotEmpty: function(textValue){
+                            if ((textValue.length == 0) || (textValue == null)) {
+                                return '';
+                            }
+                            else {
+                                return textValue+'<br />';
+                            }
+                        }, 
+                        getType: function(typeId){                          
+                            switch (typeId) {
+                                case "1": return ' contactType_lead';
+                                          break;
+                                     
+                                case "2": return ' contactType_partner';
+                                          break;
+                                          
+                                case "3": return ' contactType_internal';
+                                          break;
+                            }
+                        }                                                
         });
 
         var grid_contact = new Ext.Panel({
@@ -1547,8 +2037,7 @@ Egw.Crm.ProjectEditDialog = function() {
 	        autoScroll:true,
 	
 	        items: new Ext.DataView({
-	            tpl: resultTpl,
-//                cls: 'contacts_background',                
+	            tpl: resultTpl,                
 	            store: st_contactSearch,
                 height: '95%',
 	            itemSelector: 'div.contact-item'
@@ -1557,7 +2046,28 @@ Egw.Crm.ProjectEditDialog = function() {
 	            new Ext.app.SearchField({
 	                store: st_contactSearch
 	            })
-	        ]
+	        ],
+            bbar: [
+                new Ext.Action({
+                    text: 'Lead',
+                    //disabled: true,
+                    //handler: handler_toggleLeads,
+                    iconCls: 'contactType_lead_icon'
+                }),
+                new Ext.Action({
+                    text: 'Partner',
+                    //disabled: true,
+                    //handler: handler_toggleLeads,
+                    iconCls: 'contactType_partner_icon'
+                }),            
+                new Ext.Action({
+                    text: 'Internal',                    
+                    //disabled: true,
+                    //handler: handler_toggleLeads,
+                    iconCls: 'contactType_internal_icon'
+                })                    
+            
+            ]
         });  
   
   
@@ -1647,6 +2157,7 @@ Egw.Crm.ProjectEditDialog = function() {
                                     emptyText:'',
                                     selectOnFocus:true,
                                     editable: false,
+                                    renderer: Ext.util.Format.percentage,
                                     anchor:'95%'
                                 },
                                     folderTrigger 
@@ -1816,12 +2327,12 @@ Egw.Crm.ProjectEditDialog = function() {
         form.findField('endDate').setValue(endDate);
         form.findField('expectedEndDate').setValue(expectedEndDate);
 
-		if (formData.values.pj_distributionphase_id) {
+		if (formData.values.pj_leadstate_id) {
 			
 			var leadstatus = Ext.getCmp('leadstatus');
 			var st_leadstatus = leadstatus.store;
 			st_leadstatus.on('load', function(){
-				leadstatus.setValue(formData.values.pj_distributionphase_id);
+				leadstatus.setValue(formData.values.pj_leadstate_id);
 			}, this, {
 				single: true
 			});
@@ -1839,11 +2350,11 @@ Egw.Crm.ProjectEditDialog = function() {
 			st_leadsource.load();
 		}
 	
-		if (formData.values.pj_customertype_id) {
+		if (formData.values.pj_leadtype_id) {
 			var leadtype = Ext.getCmp('leadtype');
 			var st_leadtype = leadtype.store;
 			st_leadtype.on('load', function(){
-				leadtype.setValue(formData.values.pj_customertype_id);
+				leadtype.setValue(formData.values.pj_leadtype_id);
 			}, this, {
 				single: true
 			});

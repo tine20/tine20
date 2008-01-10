@@ -41,11 +41,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     protected $productsourceTable;
     
 	/**
-	* Instance of Crm_Backend_Sql_Projectstates
+	* Instance of Crm_Backend_Sql_Leadstates
 	*
-	* @var Crm_Backend_Sql_Projectstates
+	* @var Crm_Backend_Sql_Leadstates
 	*/
-    protected $projectstatesTable;    
+    protected $leadstatesTable;    
         
     
 	/**
@@ -64,7 +64,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->createProductSourceTable();
         }
 
-        $this->projectstatesTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_projectstate'));
+        $this->leadstatesTable    = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
         $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
 
@@ -298,15 +298,15 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }    
     
   
-	// handle PROJECTSTATES    
+	// handle LEADSTATES    
 	/**
-	* get Projectstates
+	* get Leadstates
 	*
 	* @return unknown
 	*/
-    public function getProjectstates($sort, $dir)
+    public function getLeadstates($sort, $dir)
     {	
-    	$result = $this->projectstatesTable->fetchAll(NULL, $sort, $dir);
+    	$result = $this->leadstatesTable->fetchAll(NULL, $sort, $dir);
    
         return $result;
 	}    
@@ -314,10 +314,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	/**
 	* add or updates an option
 	*
-	* @param Crm_Projectstate $_optionData the optiondata
+	* @param Crm_Leadstate $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveProjectstates(Egwbase_Record_Recordset $_optionData)
+    public function saveLeadstates(Egwbase_Record_Recordset $_optionData)
     {
 
         $_daten = $_optionData->toArray();
@@ -328,10 +328,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete('egw_metacrm_projectstate');
+            $db->delete('egw_metacrm_leadstate');
 
             foreach($_daten as $_data) {
-                $db->insert('egw_metacrm_projectstate', $_data);                
+                $db->insert('egw_metacrm_leadstate', $_data);                
             }
 
             $db->commit();
@@ -351,17 +351,17 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param $_table which option section
      * @return int the number of rows deleted
      */
-    public function deleteProjectstateById($_Id)
+    public function deleteLeadstateById($_Id)
     {
         $Id = (int)$_Id;
         if($Id != $_Id) {
             throw new InvalidArgumentException('$_Id must be integer');
         }      
             $where  = array(
-                $this->projectstatesTable->getAdapter()->quoteInto('pj_projectstate_id = ?', $Id),
+                $this->leadstatesTable->getAdapter()->quoteInto('pj_leadstate_id = ?', $Id),
             );
              
-            $result = $this->projectstatesTable->delete($where);
+            $result = $this->leadstatesTable->delete($where);
 
         return $result;
     }
@@ -719,8 +719,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $select = $db->select()
         ->from(array('project' => 'egw_metacrm_project'))
-        ->join(array('state' => 'egw_metacrm_projectstate'), 
-                'project.pj_distributionphase_id = state.pj_projectstate_id')
+        ->join(array('state' => 'egw_metacrm_leadstate'), 
+                'project.pj_leadstate_id = state.pj_leadstate_id')
         ->order($_sort.' '.$_dir)
         ->limit($_limit, $_start);
 

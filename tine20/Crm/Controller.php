@@ -147,28 +147,28 @@ class Crm_Controller
      * @param string $_dir
      * @return array
      */
-    public function getProjectstates($_sort, $_dir)
+    public function getLeadstates($_sort, $_dir)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
-        $result = $backend->getProjectstates($_sort, $_dir);
+        $result = $backend->getLeadstates($_sort, $_dir);
 
         return $result;    
     }     
 
    /**
-     * save Projectstates
+     * save Leadstates
      *
      * if $_Id is -1 the options element gets added, otherwise it gets updated
      * this function handles insert and updates as well as deleting vanished items
      *
      * @return array
      */ 
-    public function saveProjectstates(Egwbase_Record_Recordset $_projectStates)
+    public function saveLeadstates(Egwbase_Record_Recordset $_leadStates)
     {
-          $daten = $_projectStates->toArray();
+          $daten = $_leadStates->toArray();
           
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $backend->saveProjectstates($_projectStates);
+        $backend->saveLeadstates($_leadStates);
     } 
   
   
