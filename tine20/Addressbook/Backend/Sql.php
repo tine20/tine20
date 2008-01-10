@@ -21,7 +21,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * Holds instance of current account
      *
-     * @var Egwbase_Record_Account
+     * @var Egwbase_Account_Model_Account
      */
     protected $_currentAccount;
     
@@ -572,7 +572,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             );
         }
 
-        $result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Record_Account');
+        $result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Account_Model_Account');
         
         return $result;
     }
