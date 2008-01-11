@@ -62,10 +62,25 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     protected $_datetimeFields = array();
     
+    /**
+     * save state if data should be validated on the fly(false) or on demand(false)
+     *
+     * @var bool
+     */
     protected $_bypassFilters = false;
     
+    /**
+     * save state if datetimeFields should be converted from iso8601 strings to ZendDate objects and back 
+     *
+     * @var bool
+     */
     protected $_convertDates = true;
     
+    /**
+     * save state if data are validated
+     *
+     * @var bool
+     */
     protected $_isValidated = false;
     
     /**
@@ -110,6 +125,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function setId($_id, $_bypassFilters = NULL)
     {
+        // set internal state to "not validated"
+        $this->_isValidated = false;
+        
         if($_bypassFilters === NULL) {
             $bypassFilters = $this->_bypassFilters;
         } else {
@@ -138,9 +156,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     
     /**
      * sets the record related properties from user generated input.
-     * Input-filtering and validation is here by Zend_Filter_Input
+     * 
+     * Input-filtering and validation by Zend_Filter_Input is always done
      *
-     * @param array $_data
+     * @param array $_data the new data to set
      * @throws Egwbase_Record_Exception when content contains invalid or missing data
      */
     public function setFromUserData(array $_data)
@@ -148,6 +167,15 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
         $this->setFromArray($_data, true);
     }
     
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data the new data to set
+     * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
+     * @throws Egwbase_Record_Exception when content contains invalid or missing data
+     */
     public function setFromArray(array $_data, $_bypassFilters = NULL)
     {
         if($_bypassFilters === NULL) {
@@ -160,6 +188,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
             $this->_convertISO8601ToZendDate($_data);
         }
         
+        // set internal state to "not validated"
+        $this->_isValidated = false;
+        
         if($bypassFilters === true) {
             // set data without validation
             foreach ($_data as $key => $value) {
@@ -167,10 +198,6 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
                     $this->_properties[$key] = $value;
                 }
             }
-            
-            // set internal state to "not validated"
-            $this->_isValidated = false;
-            
         } else {
             // set data with validation
             $inputFilter = $this->_getFilter();
@@ -207,6 +234,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     {
         foreach ($this->_datetimeFields as $field) {
             if (!isset($this->_properties[$field])) continue;
+            
             if(!is_array($this->_properties[$field])) {
                 $toConvert = array(&$this->_properties[$field]);
             } else {
@@ -235,7 +263,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * returns array with record related properties 
      *
-     * @param [bool|array] $_convertDates array with keys: part and locale. See Zend_Date
+     * @param bool $_convertDates set to NULL to use value set by the constructor
      * @return array
      */
     public function toArray($_convertDates = NULL)
@@ -259,7 +287,6 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function __toString(){
         foreach ($this->_properties as $key => $value) {
-            
         }
     }
     
@@ -275,7 +302,17 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
             throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
         }
         
-        $this->_properties[$_name] = $_value;
+        // set internal state to "not validated"
+        $this->_isValidated = false;
+        
+        if ($this->_bypassFilters === true) {
+            $this->_properties[$_name] = $_value;
+        } else {
+            $newData = $this->_properties;
+            $newData[$_name] = $_value;
+            
+            $this->setFromUserData($newData);
+        }
     }
     
     /**
