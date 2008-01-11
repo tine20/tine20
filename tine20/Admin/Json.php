@@ -163,17 +163,6 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $filter, $sort, $dir, $start, $limit);
         
         $arrayAccessLogRowSet = $accessLogSet->toArray();
-
-        $dateFormat = Zend_Registry::get('locale')->getTranslationList('Dateformat');
-        $timeFormat = Zend_Registry::get('locale')->getTranslationList('Timeformat');
-        
-        foreach($arrayAccessLogRowSet as $id => $row) {
-            $row['li'] = $row['li']->get(Zend_Date::ISO_8601);
-            if($row['lo'] instanceof Zend_Date) {
-                $row['lo'] = $row['lo']->get(Zend_Date::ISO_8601);
-            }
-            $arrayAccessLogRowSet[$id] = $row;
-        }
         
         $result['results']    = $arrayAccessLogRowSet;
         if($start == 0 && count($result['results']) < $limit) {
