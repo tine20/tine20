@@ -34,7 +34,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      *
      * @var Egwbase_Account_Sql
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     protected $rowNameMapping = array(
         'accountId'             => 'account_id',
@@ -52,11 +52,11 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Account_Sql;
+        if (self::$_instance === NULL) {
+            self::$_instance = new Egwbase_Account_Sql;
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
 
     /**
@@ -92,12 +92,12 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     }
     
     /**
-     * return the list of group members
+     * return a list of group members account id's
      *
      * @param int $groupId
      * @todo the group info do not belong into the ACL table, there should be a separate group table
      * @deprecated 
-     * @return array list of group members
+     * @return array list of group members account id's
      */
     public function getGroupMembers($groupId)
     {
@@ -126,14 +126,19 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return array
+     * @return Egwbase_Record_RecordSet with record class Egwbase_Account_Model_Account
      */
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {        
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
-            ->from('egw_accounts')
+            ->from('egw_accounts', array(
+                '*',
+                'account_lastlogin' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastlogin`)', 
+                'account_lastpwd_change' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastpwd_change`)', 
+                'account_expires' => 'FROM_UNIXTIME(`egw_accounts`.`account_expires`)', 
+            ))
             ->join(
                 'egw_addressbook',
                 'egw_accounts.account_id = egw_addressbook.account_id'
@@ -144,32 +149,24 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         //error_log("getAccounts:: " . $select->__toString());
 
         $stmt = $db->query($select);
-
-        $result = array();
         
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach($rows as $account) {
-            if($account['account_lastlogin'] !== NULL) {
-                $account['account_lastlogin'] = new Zend_Date($account['account_lastlogin'], Zend_Date::TIMESTAMP);
-            }
-            
-            if($account['account_lastpwd_change'] !== NULL) {
-                $account['account_lastpwd_change'] = new Zend_Date($account['account_lastpwd_change'], Zend_Date::TIMESTAMP);
-            }
-            
-            if($account['account_expires'] > 0) {
-                $account['account_expires'] = new Zend_Date($account['account_expires'], Zend_Date::TIMESTAMP);
-            } else {
-                $account['account_expires'] = NULL;
-            }
-            
-            $result[] = $account;
-        }
-        //$result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
+        
+        $result = new Egwbase_Record_RecordSet($rows, 'Egwbase_Account_Model_Account');
         
         return $result;
     }
     
+    /**
+     * get list of public account properties like firstname, lastname, displayname, account_id
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Egwbase_Record_RecordSet with record class Egwbase_Record_PublicAccountProperties
+     */
     public function getPublicAccountProperties($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {        
         $db = Zend_Registry::get('dbAdapter');
@@ -235,9 +232,9 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
 
         $stmt = $db->query($select);
     
-        $accountArray = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-        $account = new Egwbase_Account_Model_Account($accountArray);
+        $account = new Egwbase_Account_Model_Account($row);
                 
         return $account;
         

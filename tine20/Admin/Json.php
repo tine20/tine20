@@ -24,7 +24,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         
         $accounts = Admin_Controller::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit);
 
-        foreach($accounts as $key => $account) {
+        /*foreach($accounts as $key => $account) {
             if($account['account_lastlogin'] !== NULL) {
                  $accounts[$key]['account_lastlogin'] = $account['account_lastlogin']->get(Zend_Date::ISO_8601);
             }
@@ -34,13 +34,12 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             if($account['account_expires'] !== NULL) {
                  $accounts[$key]['account_expires'] = $account['account_expires']->get(Zend_Date::ISO_8601);
             }
-        }
+        }*/
         
-        $result['results'] = $accounts;
+        $result['results'] = $accounts->toArray();
         $result['totalcount'] = count($accounts);
         
         return $result;
-        return $result->toArray();
     }
     
     public function deleteAccessLogEntries($logIds)
