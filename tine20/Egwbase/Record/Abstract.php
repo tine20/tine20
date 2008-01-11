@@ -282,6 +282,35 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     }
     
     /**
+     * validate the the internal data
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        if($this->_isValidated === false) {
+            $inputFilter = $this->_getFilter();
+            $inputFilter->setData($this->_properties);
+            
+            $this->_isValidated = $inputFilter->isValid();
+            
+            // still invalid? let's store the fields with problems
+            if($this->_isValidated === false) {
+                $this->_validationErrors = array();
+                
+                foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
+                    $this->_validationErrors[] = array(
+                        'id'  => $fieldName,
+                        'msg' => $errorMessages[0]
+                    );
+                }
+            }
+        }
+        
+        return $this->_isValidated;
+    }
+    
+    /**
      * @todo implement a usefull __toString()
      *
      */
