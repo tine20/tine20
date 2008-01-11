@@ -54,7 +54,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function __construct()
     {
-        $this->projectsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_project'));
+        try {
+            $this->projectsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_project'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->createProjectTable();
+        }
+            
         $this->leadsourcesTable   = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
         $this->leadtypesTable     = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
         try {
@@ -64,7 +69,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->createProductSourceTable();
         }
 
-        $this->leadstatesTable    = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+        try {
+            $this->leadstatesTable    = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            // temporary hack, until setup is available
+            $this->createLeadStateTable();
+        }
         $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
 
@@ -83,11 +93,60 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                 `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
                 `pj_productsource` varchar(200) NOT NULL default '',
                 PRIMARY KEY  (`pj_productsource_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
     }
         
+    protected function createLeadStateTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_leadstate');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadstate` (
+                `pj_leadstate_id` int(11) NOT NULL auto_increment,
+                `pj_leadstate` varchar(255) default NULL,
+                `pj_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
+                `pj_leadstate_endsproject` tinyint(1) default NULL,
+                `pj_leadstate_translate` tinyint(4) default '1',
+                PRIMARY KEY  (`pj_leadstate_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+    }
+        
+    protected function createProjectTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_project');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_project` (
+                `pj_id` int(11) NOT NULL auto_increment,
+                `pj_name` varchar(255) NOT NULL default '',
+                `pj_leadstate_id` int(11) NOT NULL default '0',
+                `pj_leadtype_id` int(11) NOT NULL default '0',
+                `pj_leadsource_id` int(11) NOT NULL default '0',
+                `pj_owner` int(11) NOT NULL default '0',
+                `pj_modifier` int(11) default NULL,
+                `pj_start` int(11) NOT NULL default '0',
+                `pj_modified` int(11) NOT NULL default '0',
+                `pj_created` int(11) unsigned NOT NULL default '0',
+                `pj_description` text,
+                `pj_end` int(11) default NULL,
+                `pj_turnover` double default NULL,
+                `pj_probability` decimal(3,0) default NULL,
+                `pj_end_scheduled` int(11) NOT NULL default '0',
+                `pj_lastread` int(11) NOT NULL default '0',
+                `pj_lastreader` int(11) NOT NULL default '0',
+                PRIMARY KEY  (`pj_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+    }
     
     
 	// handle LEADSOURCES
