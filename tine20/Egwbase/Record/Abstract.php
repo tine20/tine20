@@ -114,7 +114,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
         
         // try to set data only, when $_data is an array
         if(is_array($_data)) {
-            $this->setFromArray($_data);
+            $this->setFromArray($_data, $this->_bypassFilters);
         }
     }
     
@@ -164,7 +164,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      */
     public function setFromUserData(array $_data)
     {
-        $this->setFromArray($_data, true);
+        $this->setFromArray($_data, false);
     }
     
     /**
@@ -176,14 +176,8 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
      * @throws Egwbase_Record_Exception when content contains invalid or missing data
      */
-    public function setFromArray(array $_data, $_bypassFilters = NULL)
+    public function setFromArray(array $_data, $_bypassFilters)
     {
-        if($_bypassFilters === NULL) {
-            $bypassFilters = $this->_bypassFilters;
-        } else {
-            $bypassFilters = (bool)$_bypassFilters;
-        }
-
         if($this->_convertDates === true) {
             $this->_convertISO8601ToZendDate($_data);
         }
@@ -191,7 +185,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
         // set internal state to "not validated"
         $this->_isValidated = false;
         
-        if($bypassFilters === true) {
+        if($_bypassFilters === true) {
             // set data without validation
             foreach ($_data as $key => $value) {
                 if (array_key_exists ($key, $this->_validators)) {
@@ -403,7 +397,6 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     {
         foreach ($this->_datetimeFields as $field) {
             if (!isset($_data[$field])) continue;
-            
             // no need to convert, is already a Zend_Date
             if($_data[$field] instanceof Zend_Date) continue;
             
