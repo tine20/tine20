@@ -39,6 +39,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
 		$view->cssIncludeFiles = array();
 		
+		$controller = Crm_Controller::getInstance();
 		$projects = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
 			$view->formData['values'] = $project->toArray();
@@ -46,17 +47,32 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 			
 			$view->formData['config']['folderName']   = $folder->container_name;
 			$view->formData['config']['folderRights'] = $folder->account_grants;
-            
+		    
 		} else {
-		    $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
+            $view->formData['values'] = $controller->getEmptyLead()->toArray();
+		    
+            $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
 		    foreach($personalFolders as $folder) {
-    		    $view->formData['values'] = array('pj_owner' => $folder->container_id);
+		        $view->formData['values']['pj_owner']     = $folder->container_id;
     		    $view->formData['config']['folderName']   = $folder->container_name;
     		    $view->formData['config']['folderRights'] = 31;
                 break;
 		    }
 		    
 		}
+
+		$_leadTypes = $projects->getLeadtypes('pj_leadtype','ASC');
+		$view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
+		
+		$_leadStates =  $projects->getLeadStates('pj_leadstate','ASC');
+		$view->formData['comboData']['leadstates'] = $_leadStates->toArray();
+		
+		$_leadSources =  $projects->getLeadSources('pj_leadsource','ASC');
+		$view->formData['comboData']['leadsources'] = $_leadSources->toArray();
+
+		$_productSource =  $projects->getProductsAvailable('pj_productsource','ASC');
+		$view->formData['comboData']['productsource'] = $_productSource->toArray();
+
 
 		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';

@@ -358,7 +358,7 @@ Egw.Crm = function() {
 
          var ds_crm = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Crm.getProjectsByOwner',
+                method: 'Crm.getLeadsByOwner',
                 owner: 'all'
             },
             root: 'results',
@@ -418,8 +418,10 @@ Egw.Crm = function() {
         ds_crm.load({params:{
                             start:0,
                             limit:50,
-                            dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                            dateTo: Ext.getCmp('Crm_dateTo').getRawValue()
+                            dateFrom: '', //Ext.getCmp('Crm_dateFrom').getRawValue(),
+                            dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
+							leadstate: Ext.getCmp('filter_leadstate').getValue(),
+							probability: Ext.getCmp('filter_probability').getValue()
                              }});
         
         return ds_crm;
@@ -527,17 +529,19 @@ Egw.Crm = function() {
         quickSearchField.on('change', function(){
             Ext.getCmp('gridCrm').getStore().load({
                 params: {
-                    dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),                    
+                    dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
                     start: 0,
-                    limit: 50
+                    limit: 50,
+					leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });
         });
         
         var currentDate = new Date();
         var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
-        
+       
         var dateFrom = new Ext.form.DateField({
             id: 'Crm_dateFrom',
             allowBlank: false,
@@ -550,7 +554,9 @@ Egw.Crm = function() {
                     dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
                     dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
                     start: 0,
-                    limit: 50
+                    limit: 50,
+					leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });        
         })
@@ -568,11 +574,98 @@ Egw.Crm = function() {
                     dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
                     dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
                     start: 0,
-                    limit: 50
+                    limit: 50,
+					leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });        
         })        
-        
+       
+	  
+	   var st_leadstate = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.getLeadstates',
+                    sort: 'pj_leadstate',
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'pj_leadstate_id',
+                fields: [
+                    {name: 'pj_leadstate_id'},
+                    {name: 'pj_leadstate'},
+                    {name: 'pj_leadstate_probability'},
+                    {name: 'pj_leadstate_endsproject', type: 'boolean'}
+                ],
+                // turn on remote sorting
+                remoteSort: false
+            });
+            
+            st_leadstate.load();
+			
+	   var filter_combo_leadstate = new Ext.form.ComboBox({
+			fieldLabel:'Leadstate', 
+			id:'filter_leadstate',
+			name:'leadstate',
+			hideLabel: true,
+			width: 180,   
+			blankText: 'leadstate...',
+			hiddenName:'pj_leadstate_id',
+			store: st_leadstate,
+			displayField:'pj_leadstate',
+			valueField:'pj_leadstate_id',
+			typeAhead: true,
+	//		mode: 'local',
+			triggerAction: 'all',
+			emptyText:'leadstate...',
+			selectOnFocus:true,
+			editable: false 
+	   });          
+	   filter_combo_leadstate.on('select', function(combo, record, index) {
+	       Ext.getCmp('gridCrm').getStore().load({
+                params: {
+                    dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
+                    start: 0,
+                    limit: 50,
+					leadstate: record.data.pj_leadstate_id,
+					probability: Ext.getCmp('filter_probability').getValue()
+                }
+            });	   		
+	   });
+	   
+	   
+	   var filter_combo_probability = new Ext.form.ComboBox({
+			fieldLabel:'probability', 
+			id: 'filter_probability',
+			name:'pj_probability',
+			hideLabel: true,			
+			store: st_probability,
+			blankText: 'probability...',			
+			displayField:'value',
+			valueField:'key',
+			typeAhead: true,
+			mode: 'local',
+			triggerAction: 'all',
+			emptyText:'probability...',
+			selectOnFocus:true,
+			editable: false,
+			renderer: Ext.util.Format.percentage,
+			width:90    
+		});
+	   filter_combo_probability.on('select', function(combo, record, index) {
+	       Ext.getCmp('gridCrm').getStore().load({
+                params: {
+                    dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
+                    start: 0,
+                    limit: 50,
+					leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					probability: record.data.key
+                }
+            });	   		
+	   });		
+	    
 
        function editLeadstate() {
            var Dialog = new Ext.Window({
@@ -1179,10 +1272,10 @@ Egw.Crm = function() {
         var settings_tb_menu = new Ext.menu.Menu({
             id: 'crmSettingsMenu',
             items: [
-                {text: 'Leadstatus', handler: editLeadstate},
-                {text: 'Leadsource', handler: editLeadsource},
-                {text: 'Leadtype', handler: editLeadtype},
-                {text: 'Product', handler: editProductsource}
+                {text: 'leadstate', handler: editLeadstate},
+                {text: 'leadsource', handler: editLeadsource},
+                {text: 'leadtype', handler: editLeadtype},
+                {text: 'product', handler: editProductsource}
             ]
         });     
         
@@ -1202,12 +1295,27 @@ Egw.Crm = function() {
                     menu: settings_tb_menu
                 },
                 '->',
-                'Display from: ',
-                ' ',
-                dateFrom,
-                'to: ',
-                ' ',
-                dateTo,                
+                {
+                    iconCls: 'filter_search',
+					handler: function() {
+						Ext.getCmp('filter_leadstate').reset();
+						Ext.getCmp('filter_probability').reset();
+						
+			            Ext.getCmp('gridCrm').getStore().load({
+			                params: {
+			                    dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
+			                    dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
+			                    start: 0,
+			                    limit: 50,
+								leadstate: Ext.getCmp('filter_leadstate').getValue(),
+								probability: Ext.getCmp('filter_probability').getValue()					
+			                }
+			            });
+					}
+                },
+                filter_combo_leadstate,
+				' ',
+                filter_combo_probability,                
                 new Ext.Toolbar.Separator(),
                 '->',
                 'Search:', ' ',
@@ -1278,13 +1386,13 @@ Egw.Crm = function() {
         
         var columnModel = new Ext.grid.ColumnModel([
             expander,
-            {resizable: true, header: 'Projekt ID', id: 'pj_id', dataIndex: 'pj_id', width: 20, hidden: true},
-            {resizable: true, header: 'Projektname', id: 'pj_name', dataIndex: 'pj_name', width: 200},
-            {resizable: true, header: 'Partner', id: 'pj_partner', dataIndex: 'pj_partner', width: 150},
-            {resizable: true, header: 'Lead', id: 'pj_lead', dataIndex: 'pj_lead', width: 150},
-            {resizable: true, header: 'Status', id: 'pj_leadstate', dataIndex: 'pj_leadstate', width: 150},
-            {resizable: true, header: 'Wahrscheinlichkeit', id: 'pj_probability', dataIndex: 'pj_probability', width: 50, renderer: Ext.util.Format.percentage},
-            {resizable: true, header: 'Umsatz', id: 'pj_turnover', dataIndex: 'pj_turnover', width: 100, renderer: Ext.util.Format.euMoney }
+            {resizable: true, header: 'projekt ID', id: 'pj_id', dataIndex: 'pj_id', width: 20, hidden: true},
+            {resizable: true, header: 'project name', id: 'pj_name', dataIndex: 'pj_name', width: 200},
+            {resizable: true, header: 'partner', id: 'pj_partner', dataIndex: 'pj_partner', width: 150},
+            {resizable: true, header: 'lead', id: 'pj_lead', dataIndex: 'pj_lead', width: 150},
+            {resizable: true, header: 'state', id: 'pj_leadstate', dataIndex: 'pj_leadstate', width: 150},
+            {resizable: true, header: 'probability', id: 'pj_probability', dataIndex: 'pj_probability', width: 50, renderer: Ext.util.Format.percentage},
+            {resizable: true, header: 'turnover', id: 'pj_turnover', dataIndex: 'pj_turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -1352,7 +1460,7 @@ Egw.Crm = function() {
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.nodeType) {
             case 'sharedProjects':
-                dataStore.baseParams.method = 'Crm.getSharedProjects';
+                dataStore.baseParams.method = 'Crm.getSharedLeads';
                 break;
                   
             case 'otherUsersProjects':
@@ -1365,12 +1473,12 @@ Egw.Crm = function() {
 
 
             case 'userProjects':
-                dataStore.baseParams.method = 'Crm.getProjectsByOwner';
+                dataStore.baseParams.method = 'Crm.getLeadsByOwner';
                 dataStore.baseParams.owner  = _node.attributes.owner;
                 break;
 
             case 'singleFolder':
-                dataStore.baseParams.method        = 'Crm.getProjectsByFolderId';
+                dataStore.baseParams.method        = 'Crm.getLeadsByFolder';
                 dataStore.baseParams.folderId = _node.attributes.folderId;
                 break;
         }
@@ -1379,8 +1487,10 @@ Egw.Crm = function() {
             params:{
                 start:0, 
                 limit:50,
-                dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                dateTo: Ext.getCmp('Crm_dateTo').getRawValue()
+                dateFrom: '',// Ext.getCmp('Crm_dateFrom').getRawValue(),
+                dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
+                leadstate: Ext.getCmp('filter_leadstate').getValue(),
+                probability: Ext.getCmp('filter_probability').getValue()																                
             }
         });
     };    
@@ -1415,30 +1525,56 @@ Egw.Crm.ProjectEditDialog = function() {
     var dialog;
     var projectedit;
     
+    var _getAdditionalData = function()
+    {
+        var additionalData = {};
+
+        if(formData.values.pj_id) {
+            additionalData.pj_id = formData.values.pj_id;
+        }   
+        
+        var store_products         = Ext.getCmp('grid_choosenProducts').getStore();
+        additionalData.products = Egw.Egwbase.Common.getJSONdata(store_products);
+
+        // the start date (can not be empty
+        var startDate = Ext.getCmp('_pj_start').getValue();
+        additionalData.pj_start = startDate.format('c');
+
+        // the end date
+        var endDate = Ext.getCmp('_pj_end').getValue();
+        if(typeof endDate == 'object') {
+            additionalData.pj_end = endDate.format('c');
+        } else {
+            additionalData.pj_end = null;
+        }
+
+        // the estimated end
+        var endScheduledDate = Ext.getCmp('_pj_end_scheduled').getValue();
+        if(typeof endScheduledDate == 'object') {
+            additionalData.pj_end_scheduled = endScheduledDate.format('c');
+        } else {
+            additionalData.pj_end_scheduled = null;
+        }
+        
+        return additionalData;
+    }
+
     // private functions 
     var handler_applyChanges = function(_button, _event) 
     {
         var grid_products          = Ext.getCmp('grid_choosenProducts');
-		var store_products         = Ext.getCmp('grid_choosenProducts').getStore();
-        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products);
        
     	var projectForm = Ext.getCmp('projectDialog').getForm();
-		projectForm.render();
+		//projectForm.render();
     	
-    	if(projectForm.isValid()) {
-			var additionalData = {};
-			if(formData.values) {
-				additionalData.pj_id = formData.values.pj_id;
-			}	
-            additionalData.products = modified_products_json;
-            
+    	if(projectForm.isValid()) {            
 			projectForm.submit({
     			waitTitle:'Please wait!',
-    			waitMsg:'saving event...',
-    			params:additionalData,
+    			waitMsg:'saving lead...',
+    			params:_getAdditionalData(),
     			success:function(form, action, o) {
-                    store_products.reload();
-                    store_products.rejectChanges();
+                    //store_products.reload();
+                    //store_products.rejectChanges();
     				window.opener.Egw.Crm.reload();
     			},
     			failure:function(form, action) {
@@ -1453,28 +1589,18 @@ Egw.Crm.ProjectEditDialog = function() {
 
     var handler_saveAndClose = function(_button, _event) 
     {       
-        var store_products = Ext.getCmp('grid_choosenProducts').getStore();
-        var modified_products_json = Egw.Egwbase.Common.getJSONdata(store_products);
-       
     	var projectForm = Ext.getCmp('projectDialog').getForm();
-		projectForm.render();
     	
     	if(projectForm.isValid()) {
-			var additionalData = {};
-			if(formData.values) {
-				additionalData.pj_id = formData.values.pj_id;
-			}	
-            additionalData.products = modified_products_json;
-                        
 			projectForm.submit({
     			waitTitle:'Please wait!',
-    			waitMsg:'saving event...',
-    			params:additionalData,
+    			waitMsg:'saving lead...',
+    			params:_getAdditionalData(),
     			success:function(form, action, o) {
-                    store_products.reload();       
-                    store_products.rejectChanges();                            
+                    //store_products.reload();       
+                    //store_products.rejectChanges();                            
     				window.opener.Egw.Crm.reload();
-    				window.setTimeout("window.close()", 400);
+    				window.setTimeout("window.close()", 500);
     			},
     			failure:function(form, action) {
     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -1596,116 +1722,101 @@ Egw.Crm.ProjectEditDialog = function() {
  
  
          var st_productsAvailable = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getProductsource',
-                sort: 'pj_productsource',
-                dir: 'ASC'
-            },
-            root: 'results',
-            autoLoad: true,
-            totalProperty: 'totalcount',
+			data: formData.comboData.productsource,
+			autoLoad: true,
             id: 'pj_productsource_id',
             fields: [
                 {name: 'pj_productsource_id'},
                 {name: 'value', mapping: 'pj_productsource'},
                 {name: 'pj_productsource_price'}
-            ],
-            // turn on remote sorting
-            remoteSort: true
+            ]
         });
  
  
         var st_leadstatus = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getLeadstates',
-                sort: 'pj_leadstate',
-                dir: 'ASC'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
+			data: formData.comboData.leadstates,
+			autoLoad: true,			
             id: 'key',
             fields: [
                 {name: 'key', mapping: 'pj_leadstate_id'},
-                {name: 'value', mapping: 'pj_leadstate'}
-
-            ],
-            // turn on remote sorting
-            remoteSort: true
+                {name: 'value', mapping: 'pj_leadstate'},
+				{name: 'probability', mapping: 'pj_leadstate_probability'},
+				{name: 'endsproject', mapping: 'pj_leadstate_endsproject'}
+            ]
         });
- 
-        var leadstatus = new Ext.form.ComboBox({
-                fieldLabel:'Leadstatus', 
+
+        var combo_leadstatus = new Ext.form.ComboBox({
+                fieldLabel:'leadstate', 
                 id:'leadstatus',
                 name:'leadstate',
                 hiddenName:'pj_leadstate_id',
 				store: st_leadstatus,
 				displayField:'value',
                 valueField:'key',
-				typeAhead: true,
-//				mode: 'local',
+				//typeAhead: true,
+				mode: 'local',
 				triggerAction: 'all',
-				emptyText:'',
-				selectOnFocus:true,
 				editable: false,
+				allowBlank: false,
+				forceSelection: true,
 				anchor:'95%'    
         });
+		//combo_leadstatus.setValue('1');
 	
+		combo_leadstatus.on('select', function(combo, record, index) {
+			var combo_probability = Ext.getCmp('combo_probability');
+			combo_probability.setValue(record.data.probability);
+
+			if (record.data.endsproject == '1') {
+				var combo_endDate = Ext.getCmp('_pj_end');
+				combo_endDate.setValue(new Date());
+			}
+		});
+		
 	
         var st_leadtyp = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getLeadtypes',
-                sort: 'pj_leadtype',
-                dir: 'ASC'                
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
+			data: formData.comboData.leadtypes,
+			autoLoad: true,
             id: 'key',
             fields: [
                 {name: 'key', mapping: 'pj_leadtype_id'},
                 {name: 'value', mapping: 'pj_leadtype'}
 
-            ],
-            // turn on remote sorting
-            remoteSort: true
+            ]
         }); 	
 		
-		var leadtyp = new Ext.form.ComboBox({
-                fieldLabel:'Leadtypes', 
+		var combo_leadtyp = new Ext.form.ComboBox({
+                fieldLabel:'leadtype', 
                 id:'leadtype',
                 name:'pj_leadtyp',
                 hiddenName:'pj_leadtype_id',
 				store: st_leadtyp,
+				mode: 'local',
 				displayField:'value',
                 valueField:'key',
 				typeAhead: true,
 				triggerAction: 'all',
-				emptyText:'',
-				selectOnFocus:true,
-				editable: false,
+                editable: false,
+                allowBlank: false,
+                forceSelection: true,
 				anchor:'95%'    
         });
+		combo_leadtyp.setValue('1');
     
 
         var st_leadsource = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getLeadsources',
-                sort: 'pj_leadsource',
-                dir: 'ASC'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
+			data: formData.comboData.leadsources,
+			autoLoad: true,
             id: 'key',
             fields: [
                 {name: 'key', mapping: 'pj_leadsource_id'},
                 {name: 'value', mapping: 'pj_leadsource'}
 
-            ],
-            // turn on remote sorting
-            remoteSort: true
+            ]
         }); 	
 
-		var leadsource = new Ext.form.ComboBox({
-                fieldLabel:'Leadquelle', 
+		var combo_leadsource = new Ext.form.ComboBox({
+                fieldLabel:'leadsource', 
                 id:'leadsource',
                 name:'pj_leadsource',
                 hiddenName:'pj_leadsource_id',
@@ -1713,14 +1824,14 @@ Egw.Crm.ProjectEditDialog = function() {
 				displayField:'value',
                 valueField:'key',
 				typeAhead: true,
-//				mode: 'local',
+				mode: 'local',
 				triggerAction: 'all',
-				emptyText:'',
-				selectOnFocus:true,
-				editable: false,
+                editable: false,
+                allowBlank: false,
+                forceSelection: true,
 				anchor:'95%'    
         });
-		
+		combo_leadsource.setValue('1');
      
         var st_owner =  new Ext.data.SimpleStore({
                 fields: ['key','value'],
@@ -1751,19 +1862,38 @@ Egw.Crm.ProjectEditDialog = function() {
                 fields: ['key','value'],
                 data: [
                         ['0','0%'],
-                        ['1','10%'],
-                        ['2','20%'],
-                        ['3','30%'],
-                        ['4','40%'],
-                        ['5','50%'],
-                        ['6','60%'],
-                        ['7','70%'],
-                        ['8','80%'],
-                        ['9','90%'],
-                        ['10','100%']
+                        ['10','10%'],
+                        ['20','20%'],
+                        ['30','30%'],
+                        ['40','40%'],
+                        ['50','50%'],
+                        ['60','60%'],
+                        ['70','70%'],
+                        ['80','80%'],
+                        ['90','90%'],
+                        ['100','100%']
                     ]
         });
      
+	 	var combo_probability =  new Ext.form.ComboBox({
+			fieldLabel:'probability', 
+			id: 'combo_probability',
+			name:'pj_probability',
+			store: st_probability,
+			displayField:'value',
+			valueField:'key',
+			typeAhead: true,
+			mode: 'local',
+			triggerAction: 'all',
+			emptyText:'',
+			selectOnFocus:true,
+			editable: false,
+			renderer: Ext.util.Format.percentage,
+			anchor:'95%'			
+		});
+		combo_probability.setValue('0');
+	 
+	 
         var st_contacts = new Ext.data.JsonStore({
       //      baseParams: getParameterContactsDataStore(_node),
             root: 'results',
@@ -1805,14 +1935,56 @@ Egw.Crm.ProjectEditDialog = function() {
                 '<h3>{n_family}</h3>',
             '</div>'
         );
+		
+		
+		var date_start = new Ext.form.DateField({
+	        fieldLabel:'start', 
+	        allowBlank:false,
+	        id:'_pj_start',
+	        //       format:formData.config.dateFormat, 
+	        format: 'd.m.Y',
+	        /*altFormat:'Y-m-d',
+	        altFormat:'c',*/
+	        anchor:'95%'
+		});
+		//date_start.on('render', function(box){
+			//console.log("buh " + box.getValue());
+		//	console.log(typeof (box.getValue()));
+		//	if(typeof (box.getValue()) != 'object') {
+		//		box.setValue(new Date());
+		//	}
+		//});
+		
+		var date_scheduledEnd = new Ext.form.DateField({
+            fieldLabel:'estimated end', 
+            //name:'pj_end_scheduled',
+            id:'_pj_end_scheduled',
+            //    format:formData.config.dateFormat, 
+            format: 'd.m.Y',
+            altFormat:'Y-m-d',
+            anchor:'95%'
+		});
+		
+		var date_end = new Ext.form.DateField({
+            xtype:'datefield',
+            fieldLabel:'end', 
+            //name:'pj_end',
+            id:'_pj_end',
+            //       format:formData.config.dateFormat, 
+            format: 'd.m.Y',
+            altFormat:'Y-m-d',
+            anchor:'95%'
+		});
+		
+		
      
         var cm_activities = new Ext.grid.ColumnModel([
-            	{id:'status', header: "Status", dataIndex: 'status', width: 25, sortable: true },
-                {id:'status2', header: "Status2", dataIndex: 'status2', width: 25, sortable: true },
-                {id:'datum', header: "Datum", dataIndex: 'datum', width: 100, sortable: true },
-                {id:'titel', header: "Titel", dataIndex: 'titel', width: 170, sortable: true },
-                {id:'message', header: "Message", dataIndex: 'message', width: 300, sortable: true },
-                {id:'responsible', header: "Verantwortlicher", dataIndex: 'responsible', width: 300, sortable: true }
+            	{id:'status', header: "state", dataIndex: 'status', width: 25, sortable: true },
+                {id:'status2', header: "state2", dataIndex: 'status2', width: 25, sortable: true },
+                {id:'datum', header: "date", dataIndex: 'datum', width: 100, sortable: true },
+                {id:'titel', header: "title", dataIndex: 'titel', width: 170, sortable: true },
+                {id:'message', header: "message", dataIndex: 'message', width: 300, sortable: true },
+                {id:'responsible', header: "person in charge", dataIndex: 'responsible', width: 300, sortable: true }
         ]);
         
         var activities_limited = new Ext.grid.GridPanel({
@@ -1876,7 +2048,7 @@ Egw.Crm.ProjectEditDialog = function() {
                     selectOnFocus:true,
                     forceSelection: true, 
                     triggerAction: "all", 
-                  //  mode: 'local', 
+                    mode: 'local', 
                     lazyRender:true,
                     listClass: 'x-combo-list-small'
                     }),
@@ -1941,7 +2113,7 @@ Egw.Crm.ProjectEditDialog = function() {
             frame:false,
             clicksToEdit:2,
             tbar: [{
-                text: 'Produkt hinzufügen',
+                text: 'add product',
                 handler : function(){
                     var p = new product({
                         pj_id: 'NULL',
@@ -1955,7 +2127,7 @@ Egw.Crm.ProjectEditDialog = function() {
                     grid_choosenProducts.startEditing(0, 0);
                 }
             } , {
-                text: 'Produkt löschen',
+                text: 'delete product',
                 handler : handler_remove_product 
             }]  
         });
@@ -2049,19 +2221,19 @@ Egw.Crm.ProjectEditDialog = function() {
 	        ],
             bbar: [
                 new Ext.Action({
-                    text: 'Lead',
+                    text: 'lead',
                     //disabled: true,
                     //handler: handler_toggleLeads,
                     iconCls: 'contactType_lead_icon'
                 }),
                 new Ext.Action({
-                    text: 'Partner',
+                    text: 'partner',
                     //disabled: true,
                     //handler: handler_toggleLeads,
                     iconCls: 'contactType_partner_icon'
                 }),            
                 new Ext.Action({
-                    text: 'Internal',                    
+                    text: 'internal',                    
                     //disabled: true,
                     //handler: handler_toggleLeads,
                     iconCls: 'contactType_internal_icon'
@@ -2069,14 +2241,13 @@ Egw.Crm.ProjectEditDialog = function() {
             
             ]
         });  
-  
-  
-  
+        
   		var folderTrigger = new Ext.form.TriggerField({
-            fieldLabel:'Folder (Verantwortlicher)', 
+            fieldLabel:'folder (person in charge)', 
 			id: 'pj_owner_name',
             anchor:'95%',
             allowBlank: false,
+            editable: false,
             readOnly:true
         });
 
@@ -2084,10 +2255,8 @@ Egw.Crm.ProjectEditDialog = function() {
             Egw.Crm.displayFolderSelectDialog('pj_owner');
         };
         
-        
-        
         var tabPanelOverview = {
-            title:'Overview',
+            title:'overview',
             layout:'form',
             //deferredRender:false,
             border:false,
@@ -2109,6 +2278,8 @@ Egw.Crm.ProjectEditDialog = function() {
                         //fieldLabel:'Projektname', 
                         emptyText: 'enter short name',
                         name:'pj_name',
+                        allowBlank: false,
+                        selectOnFocus: true,
                         anchor:'100%'
                         //selectOnFocus:true
                     }, {
@@ -2128,9 +2299,9 @@ Egw.Crm.ProjectEditDialog = function() {
                             items:[{
                                 layout: 'form',
                                 items: [
-                                    leadstatus, 
-                                    leadtyp,
-                                    leadsource
+                                    combo_leadstatus, 
+                                    combo_leadtyp,
+                                    combo_leadsource
                                 ]
                             }]					        
 					    },{
@@ -2141,25 +2312,12 @@ Egw.Crm.ProjectEditDialog = function() {
                                 items: [
                                 {
                                     xtype:'numberfield',
-                                    fieldLabel:'erwarteter Umsatz', 
+                                    fieldLabel:'expected turnover', 
                                     name:'pj_turnover',
+                                    selectOnFocus: true,
                                     anchor:'95%'
-                                }, {
-                                    xtype:'combo',
-                                    fieldLabel:'Wahrscheinlichkeit', 
-                                    name:'pj_probability',
-                                    store: st_probability,
-                                    displayField:'value',
-                                    valueField:'key',
-                                    typeAhead: true,
-                                    mode: 'local',
-                                    triggerAction: 'all',
-                                    emptyText:'',
-                                    selectOnFocus:true,
-                                    editable: false,
-                                    renderer: Ext.util.Format.percentage,
-                                    anchor:'95%'
-                                },
+                                },  
+                                    combo_probability,
                                     folderTrigger 
                                 ]
                             }]              
@@ -2168,34 +2326,11 @@ Egw.Crm.ProjectEditDialog = function() {
                             items:[{
                                 layout: 'form',
                                 border:false,
-                                items: [{
-                                    xtype:'datefield',
-                                    fieldLabel:'Start', 
-                                    name:'pj_start',
-                                    id:'startDate',
-                                    //       format:formData.config.dateFormat, 
-                                    format: 'd.m.Y',
-                                    altFormat:'Y-m-d',
-                                    anchor:'95%'
-                                }, {
-                                    xtype:'datefield',
-                                    fieldLabel:'voraussichtl. Ende', 
-                                    name:'pj_end_scheduled',
-                                    id:'expectedEndDate',
-                                    //    format:formData.config.dateFormat, 
-                                    format: 'd.m.Y',
-                                    altFormat:'Y-m-d',
-                                    anchor:'95%'
-                                }, {
-                                    xtype:'datefield',
-                                    fieldLabel:'Ende', 
-                                    name:'pj_end',
-                                    id:'endDate',
-                                    //       format:formData.config.dateFormat, 
-                                    format: 'd.m.Y',
-                                    altFormat:'Y-m-d',
-                                    anchor:'95%'
-                                }]
+                                items: [
+                                	date_start,
+									date_scheduledEnd,
+									date_end   
+                                ]
                             }]
 					    },{
                             xtype: 'hidden',
@@ -2219,7 +2354,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 }]
             } , {
                 xtype:'fieldset',
-                title:'Produktübersicht',
+                title:'product overview',
                 height: 60,
                 anchor:'100%',
                 items: [{
@@ -2234,7 +2369,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 }]
             } , {
                 xtype:'fieldset',
-                title:'letzte 10 Aktivitäten',
+                title:'last 10 activities',
                 anchor:'100%',
                 height: 190,
                 items: [
@@ -2244,7 +2379,7 @@ Egw.Crm.ProjectEditDialog = function() {
         };        
                 
         var tabPanelActivities = {
-            title:'Aktivitäten',
+            title:'activities',
             layout:'form',
             deferredRender:false,
             border:false,
@@ -2253,14 +2388,14 @@ Egw.Crm.ProjectEditDialog = function() {
         };
         
         var tabPanelProducts = {
-            title:'Produkte',
+            title:'products',
             layout:'form',
             deferredRender:false,
             anchor:'100% 100%',
             border:false,
             items:[{  
                 xtype:'fieldset',
-                title:'gewählte Produkte',
+                title:'selected products',
                 anchor:'100% 100%',
                 items: [
                     grid_choosenProducts
@@ -2291,7 +2426,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 ]
             }]
         });
-
+        
 		var viewport = new Ext.Viewport({
 			layout: 'border',
 			items: projectedit
@@ -2301,71 +2436,45 @@ Egw.Crm.ProjectEditDialog = function() {
 
     var setProjectDialogValues = function(_formData) {        
     	var form = Ext.getCmp('projectDialog').getForm();
-    	
-    	form.setValues(_formData.values);
+
+        var myReader = new Ext.data.JsonStore({
+        	root: 'rows',
+        	fields:[
+	            {name: 'pj_id', type: 'int'},
+	            {name: 'pj_name', type: 'string'},
+	            {name: 'pj_leadstate_id', type: 'int'},
+	            {name: 'pj_leadtype_id', type: 'int'},
+	            {name: 'pj_leadsource_id', type: 'int'},
+	            {name: 'pj_owner', type: 'int'},
+	            {name: '_pj_start', mapping: 'pj_start', type: 'date', dateFormat: 'c'},
+	            {name: 'pj_description', type: 'string'},
+	            {name: '_pj_end', mapping: 'pj_end', type: 'date', dateFormat: 'c'},
+	            {name: 'pj_turnover', type: 'int'},
+	            {name: 'pj_probability', type: 'int'},
+	            {name: '_pj_end_scheduled', mapping: 'pj_end_scheduled', type: 'date', dateFormat: 'c'}
+            ] 
+        });
         
+        myReader.loadData({'rows': [_formData.values]});
+        
+        var projectRecord = myReader.getAt(0);
+        
+        if(typeof(projectRecord.data._pj_start) != 'object') {
+        	projectRecord.data._pj_start = new Date();
+        };
+        
+    	form.setValues(projectRecord.data);
+
         form.findField('pj_owner_name').setValue(_formData.config.folderName);
         
         if (formData.values.pj_id > 0) {
             action_applyChanges.enable();
             action_delete.enable();
         }
-
-        if (formData.values.pj_start > 0) {
-			var startDate = new Date(eval(formData.values.pj_start * 1000));
-		}
-		
-		if (formData.values.pj_end > 0) {
-			var endDate = new Date(eval(formData.values.pj_end * 1000));
-		}
-		
-		if (formData.values.pj_end_scheduled > 0) {
-			var expectedEndDate = new Date(eval(formData.values.pj_end_scheduled * 1000));
-		}
-
-        form.findField('startDate').setValue(startDate);
-        form.findField('endDate').setValue(endDate);
-        form.findField('expectedEndDate').setValue(expectedEndDate);
-
-		if (formData.values.pj_leadstate_id) {
-			
-			var leadstatus = Ext.getCmp('leadstatus');
-			var st_leadstatus = leadstatus.store;
-			st_leadstatus.on('load', function(){
-				leadstatus.setValue(formData.values.pj_leadstate_id);
-			}, this, {
-				single: true
-			});
-			st_leadstatus.load();
-		}
-
-		if (formData.values.pj_leadsource_id) {
-			var leadsource = Ext.getCmp('leadsource');
-			var st_leadsource = leadsource.store;
-			st_leadsource.on('load', function(){
-				leadsource.setValue(formData.values.pj_leadsource_id);
-			}, this, {
-				single: true
-			});
-			st_leadsource.load();
-		}
-	
-		if (formData.values.pj_leadtype_id) {
-			var leadtype = Ext.getCmp('leadtype');
-			var st_leadtype = leadtype.store;
-			st_leadtype.on('load', function(){
-				leadtype.setValue(formData.values.pj_leadtype_id);
-			}, this, {
-				single: true
-			});
-			st_leadtype.load();
-		}  
+    	
+    	return;
     }
 
-    var _exportContact = function(_btn, _event) {
-        Ext.MessageBox.alert('Export', 'Not yet implemented.');
-    }
-    
     // public functions and variables
     return {
         display: function() {
@@ -2373,7 +2482,7 @@ Egw.Crm.ProjectEditDialog = function() {
             if(formData.values) {
                 setProjectDialogValues(formData);
             }
-         }
+        }
         
     }
     

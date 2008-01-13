@@ -197,12 +197,28 @@ class Crm_Controller
      *
      * @return array
      */ 
-    public function saveProject(Egwbase_Record_Recordset $_projectData)
+    public function saveProject(Crm_Model_Project $_project)
     {
-          $daten = $_projectData->toArray();
+        //$data = $_projectData->toArray();
           
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $backend->saveProject($_projectData);
+        $result = $backend->saveProject($_project);
+        
+        return $result;
     }     
+    
+    public function getEmptyLead()
+    {
+        $defaultData = array(
+            'pj_leadstate_id'   => 1,
+            'pj_leadtype_id'    => 1,
+            'pj_leadsource_id'  => 1,
+            'pj_start'          => new Zend_Date(),
+            'pj_probability'    => 0
+        );
+        $emptyLead = new Crm_Model_Project($defaultData, true);
+        
+        return $emptyLead;
+    }
     
 }

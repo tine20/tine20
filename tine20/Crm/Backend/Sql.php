@@ -17,35 +17,35 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @var Crm_Backend_Sql_Projects
 	*/
-    protected $projectsTable;
+    protected $leadTable;
 
 	/**
 	* Instance of Crm_Backend_Sql_Leadsources
 	*
 	* @var Crm_Backend_Sql_Leadsources
 	*/
-    protected $leadsourcesTable;
+    protected $leadSourceTable;
 
 	/**
 	* Instance of Crm_Backend_Sql_Leadtypes
 	*
 	* @var Crm_Backend_Sql_Leadtypes
 	*/
-    protected $leadtypesTable;
+    protected $leadTypeTable;
     
 	/**
 	* Instance of Crm_Backend_Sql_Products
 	*
 	* @var Crm_Backend_Sql_Products
 	*/
-    protected $productsourceTable;
+    protected $productSourceTable;
     
 	/**
 	* Instance of Crm_Backend_Sql_Leadstates
 	*
 	* @var Crm_Backend_Sql_Leadstates
 	*/
-    protected $leadstatesTable;    
+    protected $leadStateTable;    
         
     
 	/**
@@ -55,30 +55,217 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function __construct()
     {
         try {
-            $this->projectsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_project'));
+            $this->leadTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_lead'));
         } catch (Zend_Db_Statement_Exception $e) {
-            $this->createProjectTable();
+            $this->createLeadTable();
         }
-            
-        $this->leadsourcesTable   = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
-        $this->leadtypesTable     = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
+
         try {
-            $this->productsourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+            $this->leadSourceTable   = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->createLeadSourceTable();
+        }
+        
+        try {
+            $this->leadTypeTable     = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            $this->createLeadTypeTable();
+        }
+        
+        try {
+            $this->leadStateTable    = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+        } catch (Zend_Db_Statement_Exception $e) {
+            // temporary hack, until setup is available
+            $this->createLeadStateTable();
+        }
+        
+        try {
+            $this->productSourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             $this->createProductSourceTable();
         }
 
         try {
-            $this->leadstatesTable    = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+            $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
-            $this->createLeadStateTable();
+            $this->createProductTable();
         }
-        $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
 
-   /**
+    /**
+     * temporary function to create the egw_metacrm_lead table on demand
+     *
+     */
+    protected function createLeadTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_lead');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_lead` (
+                    `pj_id` int(11) NOT NULL auto_increment,
+                    `pj_name` varchar(255) NOT NULL default '',
+                    `pj_leadstate_id` int(11) NOT NULL default '0',
+                    `pj_leadtype_id` int(11) NOT NULL default '0',
+                    `pj_leadsource_id` int(11) NOT NULL default '0',
+                    `pj_owner` int(11) NOT NULL default '0',
+                    `pj_modifier` int(11) default NULL,
+                    `pj_start` DATETIME NOT NULL,
+                    `pj_modified` int(11) NOT NULL default '0',
+                    `pj_created` int(11) unsigned NOT NULL default '0',
+                    `pj_description` text,
+                    `pj_end` DATETIME default NULL,
+                    `pj_turnover` double default NULL,
+                    `pj_probability` decimal(3,0) default NULL,
+                    `pj_end_scheduled` DATETIME default NULL,
+                    `pj_lastread` int(11) NOT NULL default '0',
+                    `pj_lastreader` int(11) NOT NULL default '0',
+                    PRIMARY KEY  (`pj_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+        
+        $this->leadTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_lead'));
+    }
+    
+    /**
+     * temporary function to create the egw_metacrm_leadsource table on demand
+     *
+     */
+    protected function createLeadSourceTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_leadsource');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadsource` (
+                    `pj_leadsource_id` int(11) NOT NULL auto_increment,
+                    `pj_leadsource` varchar(255) NOT NULL,
+                    `pj_leadsource_translate` tinyint(4) default '1',
+                    PRIMARY KEY  (`pj_leadsource_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+        
+        $this->leadSourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
+        
+        $this->leadSourceTable->insert(array(
+            'pj_leadsource_id'    => 1,
+            'pj_leadsource'       => 'telephone'
+        ));
+        $this->leadSourceTable->insert(array(
+            'pj_leadsource_id'    => 2,
+            'pj_leadsource'       => 'email'
+        ));
+        $this->leadSourceTable->insert(array(
+            'pj_leadsource_id'    => 3,
+            'pj_leadsource'       => 'website'
+        ));
+        $this->leadSourceTable->insert(array(
+            'pj_leadsource_id'    => 4,
+            'pj_leadsource'       => 'fair'
+        ));
+    }
+        
+    /**
+     * temporary function to create the egw_metacrm_leadtype table on demand
+     *
+     */
+    protected function createLeadTypeTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_leadtype');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadtype` (
+                    `pj_leadtype_id` int(11) NOT NULL auto_increment,
+                    `pj_leadtype` varchar(255) default NULL,
+                    `pj_leadtype_translate` tinyint(4) default '1',
+                    PRIMARY KEY  (`pj_leadtype_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+        
+        $this->leadTypeTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
+        
+        $this->leadTypeTable->insert(array(
+            'pj_leadtype_id'    => 1,
+            'pj_leadtype'       => 'customer'
+        ));
+        $this->leadTypeTable->insert(array(
+            'pj_leadtype_id'    => 2,
+            'pj_leadtype'       => 'partner'
+        ));
+        $this->leadTypeTable->insert(array(
+            'pj_leadtype_id'    => 3,
+            'pj_leadtype'       => 'reseller'
+        ));
+    }
+        
+    /**
+     * temporary function to create the egw_metacrm_leadstate table on demand
+     *
+     */
+    protected function createLeadStateTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable('egw_metacrm_leadstate');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadstate` (
+                    `pj_leadstate_id` int(11) NOT NULL auto_increment,
+                    `pj_leadstate` varchar(255) default NULL,
+                    `pj_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
+                    `pj_leadstate_endsproject` tinyint(1) default NULL,
+                    `pj_leadstate_translate` tinyint(4) default '1',
+                    PRIMARY KEY  (`pj_leadstate_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+        
+        $this->leadStateTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+
+        $this->leadStateTable->insert(array(
+            'pj_leadstate_id'           => 1,
+            'pj_leadstate'              => 'open',
+            'pj_leadstate_probability'  => 0
+        ));    
+        $this->leadStateTable->insert(array(
+            'pj_leadstate_id'           => 2,
+            'pj_leadstate'              => 'contacted',
+            'pj_leadstate_probability'  => 10
+        ));
+        $this->leadStateTable->insert(array(
+            'pj_leadstate_id'           => 3,
+            'pj_leadstate'              => 'waiting for feedback',
+            'pj_leadstate_probability'  => 30
+        ));
+        $this->leadStateTable->insert(array(
+            'pj_leadstate_id'           => 4,
+            'pj_leadstate'              => 'quote sent',
+            'pj_leadstate_probability'  => 50
+        ));
+        $this->leadStateTable->insert(array(
+            'pj_leadstate_id'           => 5,
+            'pj_leadstate'              => 'accepted',
+            'pj_leadstate_probability'  => 100,
+            'pj_leadstate_endsproject'  => 1
+        ));
+        $this->leadStateTable->insert(array(
+            'pj_leadstate_id'           => 6,
+            'pj_leadstate'              => 'lost',
+            'pj_leadstate_probability'  => 0,
+            'pj_leadstate_endsproject'  => 1
+        ));
+    }
+        
+    /**
      * temporary function to create the egw_metacrm_productsource table on demand
      *
      */
@@ -90,74 +277,51 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
             $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_productsource` (
-                `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
-                `pj_productsource` varchar(200) NOT NULL default '',
-                PRIMARY KEY  (`pj_productsource_id`)
+                    `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
+                    `pj_productsource` varchar(200) NOT NULL default '',
+                    PRIMARY KEY  (`pj_productsource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
-    }
         
-    protected function createLeadStateTable() {
+        $this->productSourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+    }
+    
+    /**
+     * temporary function to create the egw_metacrm_product table on demand
+     *
+     */
+    protected function createProductTable() {
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_leadstate');
+            $tableData = $db->describeTable('egw_metacrm_product');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadstate` (
-                `pj_leadstate_id` int(11) NOT NULL auto_increment,
-                `pj_leadstate` varchar(255) default NULL,
-                `pj_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
-                `pj_leadstate_endsproject` tinyint(1) default NULL,
-                `pj_leadstate_translate` tinyint(4) default '1',
-                PRIMARY KEY  (`pj_leadstate_id`)
+            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_product` (
+                    `pj_id` int(11) NOT NULL auto_increment,
+                    `pj_project_id` int(11) NOT NULL,
+                    `pj_product_id` int(11) NOT NULL,
+                    `pj_product_desc` varchar(255) default NULL,
+                    `pj_product_price` decimal(12,2) unsigned NOT NULL default '0.00',
+                    PRIMARY KEY  (`pj_id`),
+                    KEY `pj_project_id` (`pj_project_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
-    }
         
-    protected function createProjectTable() {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        try {
-            $tableData = $db->describeTable('egw_metacrm_project');
-        } catch (Zend_Db_Statement_Exception $e) {
-            // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_project` (
-                `pj_id` int(11) NOT NULL auto_increment,
-                `pj_name` varchar(255) NOT NULL default '',
-                `pj_leadstate_id` int(11) NOT NULL default '0',
-                `pj_leadtype_id` int(11) NOT NULL default '0',
-                `pj_leadsource_id` int(11) NOT NULL default '0',
-                `pj_owner` int(11) NOT NULL default '0',
-                `pj_modifier` int(11) default NULL,
-                `pj_start` int(11) NOT NULL default '0',
-                `pj_modified` int(11) NOT NULL default '0',
-                `pj_created` int(11) unsigned NOT NULL default '0',
-                `pj_description` text,
-                `pj_end` int(11) default NULL,
-                `pj_turnover` double default NULL,
-                `pj_probability` decimal(3,0) default NULL,
-                `pj_end_scheduled` int(11) NOT NULL default '0',
-                `pj_lastread` int(11) NOT NULL default '0',
-                `pj_lastreader` int(11) NOT NULL default '0',
-                PRIMARY KEY  (`pj_id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
-            );
-        }
+        $this->productsTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
     }
     
-    
-	// handle LEADSOURCES
 	/**
-	* get Leadsources
-	*
-	* @return unknown
-	*/
+	 * get Leadsources
+	 *
+	 * @return unknown
+	 */
     public function getLeadsources($sort, $dir)
     {	
-		$result = $this->leadsourcesTable->fetchAll(NULL, $sort, $dir);
+		$result = $this->leadSourceTable->fetchAll(NULL, $sort, $dir);
+		
         return $result;
 	}
 
@@ -213,10 +377,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }
             $where  = array(
-                $this->leadsourcesTable->getAdapter()->quoteInto('pj_leadsource_id = ?', $Id),
+                $this->leadSourceTable->getAdapter()->quoteInto('pj_leadsource_id = ?', $Id),
             );
              
-            $result = $this->leadsourcesTable->delete($where);
+            $result = $this->leadSourceTable->delete($where);
 
         return $result;
     }
@@ -230,7 +394,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function getLeadtypes($sort, $dir)
     {	
-		$result = $this->leadtypesTable->fetchAll(NULL, $sort, $dir);
+		$result = $this->leadTypeTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}	
     
@@ -281,10 +445,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }
             $where  = array(
-                $this->leadtypesTable->getAdapter()->quoteInto('pj_leadtype_id = ?', $Id),
+                $this->leadTypeTable->getAdapter()->quoteInto('pj_leadtype_id = ?', $Id),
             );
              
-            $result = $this->leadtypesTable->delete($where);
+            $result = $this->leadTypeTable->delete($where);
 
         return $result;
     }    
@@ -298,7 +462,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function getProductsAvailable($sort, $dir)
     {	
-		$result = $this->productsourceTable->fetchAll(NULL, $sort, $dir);
+		$result = $this->productSourceTable->fetchAll(NULL, $sort, $dir);
         return $result;
 	}    
     
@@ -348,10 +512,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }      
             $where  = array(
-                $this->productsourceTable->getAdapter()->quoteInto('pj_productsource_id = ?', $Id),
+                $this->productSourceTable->getAdapter()->quoteInto('pj_productsource_id = ?', $Id),
             );
              
-            $result = $this->productsourceTable->delete($where);
+            $result = $this->productSourceTable->delete($where);
 
         return $result;
     }    
@@ -365,7 +529,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function getLeadstates($sort, $dir)
     {	
-    	$result = $this->leadstatesTable->fetchAll(NULL, $sort, $dir);
+    	$result = $this->leadStateTable->fetchAll(NULL, $sort, $dir);
    
         return $result;
 	}    
@@ -417,10 +581,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }      
             $where  = array(
-                $this->leadstatesTable->getAdapter()->quoteInto('pj_leadstate_id = ?', $Id),
+                $this->leadStateTable->getAdapter()->quoteInto('pj_leadstate_id = ?', $Id),
             );
              
-            $result = $this->leadstatesTable->delete($where);
+            $result = $this->leadStateTable->delete($where);
 
         return $result;
     }
@@ -526,20 +690,37 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* 
 	* @return unknown
 	*/
-     public function getProjectById($_id)
+    public function getProjectById($_id)
     {
         $id = (int) $_id;
         if($id != $_id) {
             throw new InvalidArgumentException('$_id must be integer');
         }
 
-        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        $select = $this->_getProjectSelectObject()
+            ->where(Zend_Registry::get('dbAdapter')->quoteInto('pj_id = ?', $id));
 
-        $where  = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_id = ?', $_id)
-        );
+        //error_log($select->__toString());
+       
+        $stmt = $select->query();
 
-        $result = $this->projectsTable->fetchRow($where);
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        if(empty($row)) {
+            throw new UnderFlowExecption('project not found');
+        }
+        
+        //error_log(print_r($row, true));
+        
+        $project = new Crm_Model_Project($row);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($project->pj_owner, Egwbase_Container::GRANT_READ)) {
+            throw new Exception('permission to project denied');
+        }
+        
+        return $project;
+
+/*        $result = $this->leadTable->fetchRow($where);
 
         if($result === NULL) {
             throw new UnderFlowExecption('project not found');
@@ -549,10 +730,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new Exception('permission to project denied');
         }
         
-        return $result;
+        return $result;*/
     }    
     
-    public function getProjectsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL)
     {
         $owner = (int)$_owner;
         if($owner != $_owner) {
@@ -566,13 +747,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $containerIds[] = $container->container_id;
         }
 
-                
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
 
-
-        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
          
         return $result;
     }
@@ -592,12 +771,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
         
-        $result = $this->projectsTable->getTotalCount($where);
+        $result = $this->leadTable->getTotalCount($where);
 
         return $result;
     }    
@@ -610,11 +789,29 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param int $_projectId the project to update, if NULL the project gets added
 	* @return unknown
 	*/
-    public function saveProject(Egwbase_Record_Recordset $_projectData)
+    public function saveProject(Crm_Model_Project $_project)
     {
-        $projectData = $_projectData->toArray();
-        $projectData = $projectData[0];
-    
+        // do not convert timestamps, until we have changed the table layout to store iso dates
+        //$projectData = $_project->toArray(false);
+        $projectData = $_project->toArray();
+        
+/*        if($projectData['pj_start'] instanceof Zend_Date) {
+            $projectData['pj_start'] = $projectData['pj_start']->get(Zend_Date::TIMESTAMP);
+        }
+
+        if($projectData['pj_end'] instanceof Zend_Date) {
+            $projectData['pj_end'] = $projectData['pj_end']->get(Zend_Date::TIMESTAMP);
+        } else {
+            $projectData['pj_end'] = null;
+        }
+        
+        if($projectData['pj_end_scheduled'] instanceof Zend_Date) {
+            $projectData['pj_end_scheduled'] = $projectData['pj_end_scheduled']->get(Zend_Date::TIMESTAMP);
+        } else {
+            $projectData['pj_end_scheduled'] = null;
+        } */
+        
+        //error_log(print_r($projectData, true));
 
         if(empty($projectData['pj_owner'])) {
             throw new UnderflowException('pj_owner can not be empty');
@@ -624,21 +821,21 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new Exception('write access to project denied');
         }
 
-        $currentAccount = Zend_Registry::get('currentAccount');
+        //$currentAccount = Zend_Registry::get('currentAccount');
 
-        if(empty($projectData['pj_owner'])) {
-            $projectData['pj_owner'] = $currentAccount->account_id;
-        }
+        //if(empty($projectData['pj_owner'])) {
+        //    $projectData['pj_owner'] = $currentAccount->account_id;
+        //}
 
         if($projectData['pj_id'] === NULL) {
-            $result = $this->projectsTable->insert($projectData);
-            $_projectData->pj_id = $this->projectsTable->getAdapter()->lastInsertId();
+            $result = $this->leadTable->insert($projectData);
+            $_projectData->pj_id = $this->leadTable->getAdapter()->lastInsertId();
         } else {      
             $where  = array(
-                $this->projectsTable->getAdapter()->quoteInto('pj_id = (?)', $projectData['pj_id']),
+                $this->leadTable->getAdapter()->quoteInto('pj_id = (?)', $projectData['pj_id']),
             );
 
-            $result = $this->projectsTable->update($projectData, $where);
+            $result = $this->leadTable->update($projectData, $where);
         }
 
         return $_projectData;
@@ -664,10 +861,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
        
         $where  = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_id = ?', $projectId),
+            $this->leadTable->getAdapter()->quoteInto('pj_id = ?', $projectId),
         );
 
-        $result = $this->projectsTable->delete($where);
+        $result = $this->leadTable->delete($where);
 
         return $result;
     }
@@ -710,10 +907,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $egwbaseContainer->deleteContainer($_folderId);
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner = ?', (int)$_folderId)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner = ?', (int)$_folderId)
         );
         
-        $this->projectsTable->delete($where);
+        $this->leadTable->delete($where);
         
         return true;
     }
@@ -762,26 +959,32 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
 
     //handle for FOLDER->PROJECTS functions
-    protected function _getProjectsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start) //, $_datenFrom, $_dateTo)
+    protected function _getProjectsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_datenFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability)
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
 /*
-        if((int)$_datenFrom) {    
-            $where[] = $this->projectsTable->getAdapter()->quoteInto('pj_start >= ? ', $_datenFrom);
+        if(is_numeric($_datenFrom)) {    
+            $where[] = $this->leadTable->getAdapter()->quoteInto('pj_start >= ? ', $_datenFrom);
         }
 
-        if((int)$_datenTo) {    
-            $where[] = $this->projectsTable->getAdapter()->quoteInto('pj_end <= ? ', $_datenTo);
+        if(is_numeric($_datenTo)) {    
+            $where[] = $this->leadTable->getAdapter()->quoteInto('pj_end <= ? ', $_datenTo);
         }
 */
+
+		if( is_numeric($_leadstate) && ($_leadstate > 0) ) {
+			$where[] = $this->leadTable->getAdapter()->quoteInto('project.pj_leadstate_id = ?', $_leadstate);
+		}
+		
+		if( is_numeric($_probability) && ($_probability > 0) ) {
+			$where[] = $this->leadTable->getAdapter()->quoteInto('pj_probability >= ?', $_probability);
+		}		
+
         $db = Zend_Registry::get('dbAdapter');
 
-        $select = $db->select()
-        ->from(array('project' => 'egw_metacrm_project'))
-        ->join(array('state' => 'egw_metacrm_leadstate'), 
-                'project.pj_leadstate_id = state.pj_leadstate_id')
-        ->order($_sort.' '.$_dir)
-        ->limit($_limit, $_start);
+        $select = $this->_getProjectSelectObject()
+            ->order($_sort.' '.$_dir)
+            ->limit($_limit, $_start);
 
         if(is_array($where)) {
              foreach($where as $_where) {
@@ -791,16 +994,48 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         //error_log($select->__toString());
        
         $stmt = $db->query($select);
-        //$result = array();
-        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        return $result;
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $projects = new Egwbase_Record_RecordSet($rows, 'Crm_Model_Project');
+        
+        return $projects;
     }   
+    
+    /**
+     * get the basic select object to fetch projects from the database 
+     *
+     * @return Zend_Db_Select
+     */
+    protected function _getProjectSelectObject()
+    {
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+        ->from(array('project' => 'egw_metacrm_lead'), array(
+            'pj_id',
+            'pj_name',
+            'pj_leadstate_id',
+            'pj_leadtype_id',
+            'pj_leadsource_id',
+            'pj_owner',
+            'pj_start',
+            'pj_description',
+            'pj_end',
+            'pj_turnover',
+            'pj_probability',
+            'pj_end_scheduled')
+        )
+        ->join(array('state' => 'egw_metacrm_leadstate'), 
+                'project.pj_leadstate_id = state.pj_leadstate_id');
+        
+        return $select;
+    }
 
     protected function _addQuickSearchFilter($_where, $_filter)
     {
         if(!empty($_filter)) {
-            $_where[] = $this->projectsTable->getAdapter()->quoteInto('(pj_name LIKE ? OR pj_description LIKE ?)', '%' . $_filter . '%');
+            $_where[] = $this->leadTable->getAdapter()->quoteInto('(pj_name LIKE ? OR pj_description LIKE ?)', '%' . $_filter . '%');
         }
         
         return $_where;
@@ -818,9 +1053,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param unknown_type $_start how many projects to skip
      * @param string $_dateFrom
      * @param string $_dateTo
-     * @return unknown The row results per the Zend_Db_Adapter fetch mode.
+     * @return Egwbase_Record_RecordSet subclass Crm_Model_Project
      */
-    public function getAllProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_dateFrom = NULL, $_dateTo = NULL)
+    public function getAllProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
         
@@ -835,10 +1070,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
+            Zend_Registry::get('dbAdapter')->quoteInto('pj_owner IN (?)', $containerIds)
         );
 
-        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo);
+        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo ,$_leadstate, $_probability);
          
         return $result;
     }
@@ -861,18 +1096,18 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
         
-        $result = $this->projectsTable->getTotalCount($where);
+        $result = $this->leadTable->getTotalCount($where);
 
         return $result;
     }
    
    
-    public function getProjectsByFolderId($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL)
     {
         // convert to int
         $folderId = (int)$_folderId;
@@ -885,10 +1120,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner = ?', $folderId)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner = ?', $folderId)
         );
 
-        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
          
         return $result;
     }
@@ -905,18 +1140,18 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner = ?', $folderId)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner = ?', $folderId)
         );
                 
         $where = $this->_addQuickSearchFilter($where, $_filter);
         
-        $result = $this->projectsTable->getTotalCount($where);
+        $result = $this->leadTable->getTotalCount($where);
 
         return $result;
     } 
 
     
-    public function getSharedProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
+    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL) 
     {
         $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('crm');
         
@@ -927,10 +1162,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
 
-        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
          
         return $result;
     }
@@ -952,13 +1187,13 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $groupIds = array_keys($acl);
 
-        $result = $this->projectsTable->getCountByAcl($groupIds);
+        $result = $this->leadTable->getCountByAcl($groupIds);
 
         return $result;
     }        
  
    
-   public function getOtherPeopleProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
+   public function getOtherPeopleProjects($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability) 
     {
         $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('crm');
         
@@ -978,10 +1213,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->projectsTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('pj_owner IN (?)', $containerIds)
         );
 
-        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getProjectsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
          
         return $result;
     }
@@ -1004,7 +1239,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $groupIds = array_keys($acl);
 
-        $result = $this->projectsTable->getCountByAcl($groupIds);
+        $result = $this->leadTable->getCountByAcl($groupIds);
 
         return $result;
     }   

@@ -323,77 +323,28 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 */	
 	public function saveProject()
     {
-        // timestamps
-        $_changeDate = time();
-
         if(empty($_POST['pj_id'])) {
             unset($_POST['pj_id']);
-            $_POST['pj_created'] = $_changeDate;
         }
 
-
-
-        if(empty($_POST['pj_created'])) {
-            $_POST['pj_created'] = $_changeDate;
-        }
-		
-		$_POST['pj_modified'] = $_changeDate;
-        
         // project modifier
         $_POST['pj_modifier'] = Zend_Registry::get('currentAccount')->account_id;
 
-
-        // date transition
-		if(isset($_POST['pj_start'])) {
-		   // $locale = Zend_Registry::get('locale');
-           // $dateFormat = $locale->getTranslationList('Dateformat');
-            try {
-           //     $date = new Zend_Date($_POST['pj_start'], $dateFormat['long'], 'en');
-                $date = new Zend_Date($_POST['pj_start'], 'dd.MM.YYYY');
-                $_POST['pj_start'] = $date->toString('U');
-            } catch (Exception $e) {
-                unset($_POST['pj_start']);
-            }
-		}
-		
-		if(isset($_POST['pj_end'])) {
-		   // $locale = Zend_Registry::get('locale');
-           // $dateFormat = $locale->getTranslationList('Dateformat');
-            try {
-           //     $date = new Zend_Date($_POST['pj_end'], $dateFormat['long'], 'en');
-                $date = new Zend_Date($_POST['pj_end'], 'dd.MM.YYYY');
-                $_POST['pj_end'] = $date->toString('U');
-            } catch (Exception $e) {
-                unset($_POST['pj_end']);
-            }			
-		}		
-        
-		if(isset($_POST['pj_end_scheduled'])) {
-		   // $locale = Zend_Registry::get('locale');
-           // $dateFormat = $locale->getTranslationList('Dateformat');
-            try {
-           //     $date = new Zend_Date($_POST['pj_end_scheduled'], $dateFormat['long'], 'en');
-                $date = new Zend_Date($_POST['pj_end_scheduled'], 'dd.MM.YYYY');
-                $_POST['pj_end_scheduled'] = $date->toString('U');
-            } catch (Exception $e) {
-                unset($_POST['pj_end_scheduled']);
-            }						
-		}		
-  
-        $projectData[] = $_POST;  
-          
+        $projectData = new Crm_Model_Project();
         try {
-            $projectData = new Egwbase_Record_RecordSet($projectData, 'Crm_Model_Project');
+            $projectData->setFromUserData($_POST);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errorMessage'      => 'project filter NOT ok'
+            $result = array(
+                'success'       => false,
+                'errors'        => $projectData->getValidationErrors(),
+                'errorMessage'  => 'invalid data for some fields'
             );
             
             return $result;
         }
             
-        
+        error_log(print_r($projectData->toArray(), true));
         if(Crm_Controller::getInstance()->saveProject($projectData) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
@@ -445,7 +396,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
  
 
      
-    public function getProjectsByOwner($filter, $owner, $start, $sort, $dir, $limit)
+    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -457,8 +408,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getProjectsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows;//->toArray();
+        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability)) {
+            $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -469,7 +420,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
         
-     public function getProjectsByFolderId($folderId, $filter, $start, $sort, $dir, $limit)
+     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -477,8 +428,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getProjectsByFolderId($folderId, $filter, $sort, $dir, $limit, $start)) {
-            $result['results']    = $rows;//->toArray();
+        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability)) {
+            $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -503,7 +454,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getSharedProjects($filter, $sort, $dir, $limit, $start)
+    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -511,11 +462,15 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getSharedProjects($filter, $sort, $dir, $limit, $start);
+        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability);
         
         if($rows !== false) {
-            $result['results']    = $rows;//->toArray();
-            //$result['totalcount'] = $backend->getCountOfSharedProjects();
+            $result['results']    = $rows->toArray();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                //$result['totalcount'] = $backend->getCountOfSharedProjects();
+            }
         }
 
         return $result;
@@ -534,7 +489,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOtherPeopleProjects($filter, $sort, $dir, $limit, $start)
+    public function getOtherPeopleProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -542,7 +497,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleProjects($filter, $sort, $dir, $limit, $start);
+        $rows = $backend->getOtherPeopleProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability);
         
         if($rows !== false) {
             $result['results']    = $rows;//->toArray();
@@ -569,7 +524,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getAllProjects($filter, $start, $sort, $dir, $limit, $dateFrom = NULL, $dateTo = NULL)
+    public function getAllProjects($filter, $start, $sort, $dir, $limit, $dateFrom = NULL, $dateTo = NULL, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -588,8 +543,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 
-        if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo)) {
-            $result['results']    = $rows;//->toArray();
+        if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)) {
+            $result['results']    = $rows->toArray();
             $result['totalcount'] = $backend->getCountOfAllProjects($filter);
         }
 
@@ -674,17 +629,17 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     }  
 
 
-    public function getAccounts($filter, $start, $sort, $dir, $limit)
+/*    public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
         $internalContainer = Egwbase_Container::getInstance()->getInternalContainer('crm');
         
         $folderId = $internalContainer->container_id;
         
-        $result = $this->getProjectsByFolderId($folderId, $filter, $start, $sort, $dir, $limit);
+        $result = $this->getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit);
 
         return $result;
     }
-
+*/
 
    public function addFolder($name, $type)
     {

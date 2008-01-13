@@ -140,6 +140,10 @@ input {
 	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
 }
 
+.filter_search {
+	background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
+}
+
 .repeat_action {
 	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
 }
@@ -183,13 +187,13 @@ input {
 }
 
 .contactType_lead_icon {
-    width: 30%;
+    background-image:url(contact_lead.png) !important;
 }
 
 .contactType_partner_icon {
-    width: 30%;
+	background-image:url(contact_partner.png) !important;
 }
 
 .contactType_internal_icon {
-    width: 30%;
+    background-image:url(contact_internal.png) !important;
 }
