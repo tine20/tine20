@@ -276,29 +276,31 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
    public function saveProducts($products, $pj_id) {	
    
         $_products = Zend_Json::decode($products);
+        $_productsData = array();
 
        	if(is_array($_products)) {
-		foreach($_products AS $_product) {
-			if($_product['pj_id'] == "NULL") {
-				unset($_product['pj_id']);
-			}
-            if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
-				$_product['pj_project_id'] = $pj_id;
-
-			}			
-            
-            $_productsData[] = $_product;
-    	}
-   
-        try {
-            $_productsData = new Egwbase_Record_RecordSet($_productsData, 'Crm_Model_Product');
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errorMessage'      => 'products filter NOT ok'
-            );
-            
-            return $result;
+    		foreach($_products AS $_product) {
+    			if($_product['pj_id'] == "NULL") {
+    				unset($_product['pj_id']);
+    			}
+                if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
+    				$_product['pj_project_id'] = $pj_id;
+    
+    			}			
+                
+                $_productsData[] = $_product;
+    	    }
+           
+            try {
+                $_productsData = new Egwbase_Record_RecordSet($_productsData, 'Crm_Model_Product');
+            } catch (Exception $e) {
+                // invalid data in some fields sent from client
+                $result = array('success'           => false,
+                                'errorMessage'      => 'products filter NOT ok'
+                );
+                
+                return $result;
+            } 
         }
             
         if(Crm_Controller::getInstance()->saveProducts($_productsData) === FALSE) {
@@ -308,8 +310,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
        
         return $result;  
-      
-       }
+
    }
 
 
@@ -344,7 +345,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
             
-        error_log(print_r($projectData->toArray(), true));
+   //     error_log(print_r($projectData->toArray(), true));
         if(Crm_Controller::getInstance()->saveProject($projectData) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
@@ -360,7 +361,14 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             } else {
                 $this->saveProducts($_POST['products'], $_POST['pj_id']);    
             }
-		}         
+		} else {
+            if(!empty($projectData->pj_id)) {
+                Crm_Controller::getInstance()->deleteProducts($projectData->pj_id);    
+            } else {
+                Crm_Controller::getInstance()->deleteProducts($_POST['pj_id']);                    
+            }		    
+		    
+        }         
   
         
         

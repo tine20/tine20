@@ -32,7 +32,7 @@ class Crm_Model_Leadstate extends Egwbase_Record_Abstract
     protected $_validators = array(
         'pj_leadstate_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'pj_leadstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_leadstate_probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),        
+        'pj_leadstate_probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),      
         'pj_leadstate_endsproject'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
     );
     

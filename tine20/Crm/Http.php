@@ -45,12 +45,16 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 			$view->formData['values'] = $project->toArray();
 			$folder = Egwbase_Container::getInstance()->getContainerById($project->pj_owner);
 			
+            $_products = $projects->getProductsById($_projectId);
+            $view->formData['values']['products'] = $_products->toArray();
+           
 			$view->formData['config']['folderName']   = $folder->container_name;
 			$view->formData['config']['folderRights'] = $folder->account_grants;
 		    
 		} else {
             $view->formData['values'] = $controller->getEmptyLead()->toArray();
-		    
+            $view->formData['values']['products'] = array();                
+            
             $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
 		    foreach($personalFolders as $folder) {
 		        $view->formData['values']['pj_owner']     = $folder->container_id;

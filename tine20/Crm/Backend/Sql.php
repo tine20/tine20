@@ -279,6 +279,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_productsource` (
                     `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
                     `pj_productsource` varchar(200) NOT NULL default '',
+                    `pj_productsource_price` decimal(12,2) unsigned NOT NULL default '0.00',
                     PRIMARY KEY  (`pj_productsource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
@@ -617,6 +618,32 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
    
 
 	/**
+	* delete products (which belong to one project)
+	*
+	* @param int $_Id the id of the project
+    *
+	* @return unknown
+	*/
+    public function deleteProducts($_id)
+    {
+        $id = (int) $_id;
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+
+        $db = Zend_Registry::get('dbAdapter');      
+        
+        try {          
+            $db->delete('egw_metacrm_product', 'pj_project_id = '.$_id);      
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+        
+        return true;
+
+    }
+
+	/**
 	* add or updates an product (which belongs to one project)
 	*
 	* @param int $_productId the id of the product, NULL if new, else gets updated
@@ -631,8 +658,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }    
     */   
     
-        $_daten = $_productData->toArray();
+
     
+        $_daten = $_productData->toArray();
         $project_id = $_daten[0]['pj_project_id'];
 
 
@@ -1035,7 +1063,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     protected function _addQuickSearchFilter($_where, $_filter)
     {
         if(!empty($_filter)) {
-            $_where[] = $this->leadTable->getAdapter()->quoteInto('(pj_name LIKE ? OR pj_description LIKE ?)', '%' . $_filter . '%');
+            $search_values = explode(" ", $_filter);
+            
+            foreach($search_values AS $search_value) {
+                $_where[] = $this->leadTable->getAdapter()->quoteInto('(pj_name LIKE ? OR pj_description LIKE ?)', '%' . $search_value . '%');                            
+            }
         }
         
         return $_where;

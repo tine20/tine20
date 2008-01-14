@@ -155,6 +155,23 @@ class Crm_Controller
         return $result;    
     }     
 
+
+    /**
+     * delete products (belonging to one project)
+     *
+     * @param string $_id
+     *
+     * @return array
+     */
+    public function deleteProducts($_id)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
+        $result = $backend->deleteProducts($_id);
+error_log('CONTROLLER :: deleteProducts');
+        return $result;    
+    }     
+
+
    /**
      * save Leadstates
      *

@@ -32,7 +32,7 @@ class Crm_Model_Productsource extends Egwbase_Record_Abstract
     protected $_validators = array(
         'pj_productsource_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'pj_productsource'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_productsource_price'         => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
+        'pj_productsource_price'   => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
     );
 
    /**
