@@ -55,39 +55,39 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function __construct()
     {
         try {
-            $this->leadTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_lead'));
+            $this->leadTable      = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createLeadTable();
         }
 
         try {
-            $this->leadSourceTable   = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
+            $this->leadSourceTable   = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createLeadSourceTable();
         }
         
         try {
-            $this->leadTypeTable     = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
+            $this->leadTypeTable     = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createLeadTypeTable();
         }
         
         try {
-            $this->leadStateTable    = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+            $this->leadStateTable    = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             $this->createLeadStateTable();
         }
         
         try {
-            $this->productSourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+            $this->productSourceTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             $this->createProductSourceTable();
         }
 
         try {
-            $this->productsTable      = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
+            $this->productsTable      = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             $this->createProductTable();
@@ -102,10 +102,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_lead');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'metacrm_lead');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_lead` (
+            $result = $db->getConnection()->exec("CREATE TABLE `" . SQL_TABLE_PREFIX . "metacrm_lead` (
                     `pj_id` int(11) NOT NULL auto_increment,
                     `pj_name` varchar(255) NOT NULL default '',
                     `pj_leadstate_id` int(11) NOT NULL default '0',
@@ -128,7 +128,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
         
-        $this->leadTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_lead'));
+        $this->leadTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
     }
     
     /**
@@ -139,10 +139,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_leadsource');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'metacrm_leadsource');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadsource` (
+            $result = $db->getConnection()->exec("CREATE TABLE `" . SQL_TABLE_PREFIX . "metacrm_leadsource` (
                     `pj_leadsource_id` int(11) NOT NULL auto_increment,
                     `pj_leadsource` varchar(255) NOT NULL,
                     `pj_leadsource_translate` tinyint(4) default '1',
@@ -151,7 +151,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
         
-        $this->leadSourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadsource'));
+        $this->leadSourceTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         
         $this->leadSourceTable->insert(array(
             'pj_leadsource_id'    => 1,
@@ -179,10 +179,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_leadtype');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'metacrm_leadtype');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadtype` (
+            $result = $db->getConnection()->exec("CREATE TABLE `" . SQL_TABLE_PREFIX . "metacrm_leadtype` (
                     `pj_leadtype_id` int(11) NOT NULL auto_increment,
                     `pj_leadtype` varchar(255) default NULL,
                     `pj_leadtype_translate` tinyint(4) default '1',
@@ -191,7 +191,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
         
-        $this->leadTypeTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadtype'));
+        $this->leadTypeTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         
         $this->leadTypeTable->insert(array(
             'pj_leadtype_id'    => 1,
@@ -215,10 +215,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_leadstate');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'metacrm_leadstate');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadstate` (
+            $result = $db->getConnection()->exec("CREATE TABLE `" . SQL_TABLE_PREFIX . "metacrm_leadstate` (
                     `pj_leadstate_id` int(11) NOT NULL auto_increment,
                     `pj_leadstate` varchar(255) default NULL,
                     `pj_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
@@ -229,7 +229,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
         
-        $this->leadStateTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_leadstate'));
+        $this->leadStateTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
 
         $this->leadStateTable->insert(array(
             'pj_leadstate_id'           => 1,
@@ -273,10 +273,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_productsource');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'metacrm_productsource');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_productsource` (
+            $result = $db->getConnection()->exec("CREATE TABLE `" . SQL_TABLE_PREFIX . "metacrm_productsource` (
                     `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
                     `pj_productsource` varchar(200) NOT NULL default '',
                     `pj_productsource_price` decimal(12,2) unsigned NOT NULL default '0.00',
@@ -285,7 +285,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
         
-        $this->productSourceTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_productsource'));
+        $this->productSourceTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
     }
     
     /**
@@ -296,10 +296,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_metacrm_product');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'metacrm_product');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE `egw_metacrm_product` (
+            $result = $db->getConnection()->exec("CREATE TABLE `" . SQL_TABLE_PREFIX . "metacrm_product` (
                     `pj_id` int(11) NOT NULL auto_increment,
                     `pj_project_id` int(11) NOT NULL,
                     `pj_product_id` int(11) NOT NULL,
@@ -311,7 +311,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         }
         
-        $this->productsTable = new Egwbase_Db_Table(array('name' => 'egw_metacrm_product'));
+        $this->productsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
     }
     
 	/**
@@ -329,29 +329,20 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
     * add or updates an option
     *
-    * @param Crm_Leadsource $_optionData the optiondata
+    * @param Egwbase_Record_Recordset $_leadSources list of lead sources
     * @return unknown
     */
-    public function saveLeadsources(Egwbase_Record_Recordset $_optionData)
+    public function saveLeadsources(Egwbase_Record_Recordset $_leadSources)
     {
-        // transaction start
-        // delete all
-        // datentype(Crm_Model_Leadsource) checken und schreiben 
-        // wenn fehler rollback
-        // transaction commit
-
-        $_daten = $_optionData->toArray();
-    
-
         $db = Zend_Registry::get('dbAdapter');
   
         $db->beginTransaction();
         
         try {
-            $db->delete('egw_metacrm_leadsource');
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leadsource');
 
-            foreach($_daten as $_data) {
-                $db->insert('egw_metacrm_leadsource', $_data);                
+            foreach($_leadSources as $leadSource) {
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_leadsource', $leadSource->toArray());                
             }
 
             $db->commit();
@@ -361,7 +352,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             error_log($e->getMessage());
         }
 
-        return $_optionData;
+        return $_leadSources;
     }
     
     /**
@@ -377,11 +368,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($Id != $_Id) {
             throw new InvalidArgumentException('$_Id must be integer');
         }
-            $where  = array(
-                $this->leadSourceTable->getAdapter()->quoteInto('pj_leadsource_id = ?', $Id),
-            );
+        
+        $where  = array(
+            $this->leadSourceTable->getAdapter()->quoteInto('pj_leadsource_id = ?', $Id),
+        );
              
-            $result = $this->leadSourceTable->delete($where);
+        $result = $this->leadSourceTable->delete($where);
 
         return $result;
     }
@@ -416,10 +408,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete('egw_metacrm_leadtype');
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leadtype');
 
             foreach($_daten as $_data) {
-                $db->insert('egw_metacrm_leadtype', $_data);                
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_leadtype', $_data);                
             }
 
             $db->commit();
@@ -484,10 +476,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete('egw_metacrm_productsource');
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_productsource');
 
             foreach($_daten as $_data) {
-                $db->insert('egw_metacrm_productsource', $_data);                
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_productsource', $_data);                
             }
 
             $db->commit();
@@ -552,10 +544,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete('egw_metacrm_leadstate');
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leadstate');
 
             foreach($_daten as $_data) {
-                $db->insert('egw_metacrm_leadstate', $_data);                
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_leadstate', $_data);                
             }
 
             $db->commit();
@@ -615,7 +607,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $result;
     }      
-   
 
 	/**
 	* delete products (which belong to one project)
@@ -634,13 +625,13 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');      
         
         try {          
-            $db->delete('egw_metacrm_product', 'pj_project_id = '.$_id);      
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'pj_project_id = '.$_id);      
         } catch (Exception $e) {
             error_log($e->getMessage());
-        }
+        }      
         
         return true;
-
+   
     }
 
 	/**
@@ -658,9 +649,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }    
     */   
     
-
-    
         $_daten = $_productData->toArray();
+    
         $project_id = $_daten[0]['pj_project_id'];
 
 
@@ -674,10 +664,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete('egw_metacrm_product', 'pj_project_id = '.$project_id);
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'pj_project_id = '.$project_id);
 
             foreach($_daten as $_data) {
-                $db->insert('egw_metacrm_product', $_data);                
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_product', $_data);                
             }
 
             $db->commit();
@@ -1040,7 +1030,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-        ->from(array('project' => 'egw_metacrm_lead'), array(
+        ->from(array('project' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
             'pj_id',
             'pj_name',
             'pj_leadstate_id',
@@ -1054,7 +1044,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             'pj_probability',
             'pj_end_scheduled')
         )
-        ->join(array('state' => 'egw_metacrm_leadstate'), 
+        ->join(array('state' => SQL_TABLE_PREFIX . 'metacrm_leadstate'), 
                 'project.pj_leadstate_id = state.pj_leadstate_id');
         
         return $select;
