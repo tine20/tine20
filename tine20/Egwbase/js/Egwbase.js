@@ -82,8 +82,13 @@ Egw.Egwbase.initFramework = function() {
                     return v + " €";
                 },
                 percentage: function(v){
-                    return v + " %";
-                }
+                    if(v === null) {
+                        return 'none';
+                    }
+                    if(!isNaN(v)) {
+                        return v + " %";                        
+                    } 
+               }
         });
     
 
