@@ -31,7 +31,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function __construct()
     {
-        $this->contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
+        $this->contactsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
 
