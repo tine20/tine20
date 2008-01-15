@@ -1935,50 +1935,12 @@ Egw.Crm.ProjectEditDialog = function() {
 			anchor:'95%'			
 		});
 		combo_probability.setValue('0');
-	 
-	 
-        var st_contacts = new Ext.data.JsonStore({
-      //      baseParams: getParameterContactsDataStore(_node),
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'contact_id',
-            fields: [
-                {name: 'contact_id'},
-                {name: 'contact_owner'},
-                {name: 'n_family'},
-                {name: 'n_given'},
-                {name: 'n_middle'},
-                {name: 'n_prefix'},
-                {name: 'n_suffix'},
-                {name: 'n_fn'},
-                {name: 'n_fileas'},
-                {name: 'org_name'},
-                {name: 'org_unit'},
-                {name: 'adr_one_street'},
-                {name: 'adr_one_locality'},
-                {name: 'adr_one_region'},
-                {name: 'adr_one_postalcode'},
-                {name: 'adr_one_countryname'}
-            ],
-            // turn on remote sorting
-            remoteSort: true
-        });
-        
-        st_contacts.setDefaultSort('n_family', 'asc');
-        
-        st_contacts.on('beforeload', function(_st_contacts) {
-            _st_contacts.baseParams.datatype = 'allcontacts';
-            _st_contacts.baseParams.method = 'Addressbook.getAllContacts';
-            _st_contacts.baseParams.owner = 'allcontacts';
-        });   
-        
-        
-        var tpl_contacts = new Ext.Template(
-            '<div >',
-                '<h3>{n_family}</h3>',
-            '</div>'
-        );
-		
+	         
+        //var tpl_contacts = new Ext.Template(
+        //    '<div >',
+        //        '<h3>{n_family}</h3>',
+        //    '</div>'
+        //);
 		
 		var date_start = new Ext.form.DateField({
 	        fieldLabel:'start', 
@@ -1990,13 +1952,6 @@ Egw.Crm.ProjectEditDialog = function() {
 	        altFormat:'c',*/
 	        anchor:'95%'
 		});
-		//date_start.on('render', function(box){
-			//console.log("buh " + box.getValue());
-		//	console.log(typeof (box.getValue()));
-		//	if(typeof (box.getValue()) != 'object') {
-		//		box.setValue(new Date());
-		//	}
-		//});
 		
 		var date_scheduledEnd = new Ext.form.DateField({
             fieldLabel:'estimated end', 
@@ -2004,7 +1959,7 @@ Egw.Crm.ProjectEditDialog = function() {
             id:'_pj_end_scheduled',
             //    format:formData.config.dateFormat, 
             format: 'd.m.Y',
-            altFormat:'Y-m-d',
+            //altFormat:'Y-m-d',
             anchor:'95%'
 		});
 		
@@ -2177,21 +2132,61 @@ Egw.Crm.ProjectEditDialog = function() {
             //_ctxMenuGrid.showAt(_eventObject.getXY());
         });
   
-        var cm_choosenContacts = new Ext.grid.ColumnModel([
-            	{id:'anschrift', header: "Anschrift", dataIndex: 'anschrift', width: 250, sortable: true },
-                {id:'kontakt', header: "Kontakt", dataIndex: 'kontakt', width: 250, sortable: true }
-        ]);
+        //var cm_choosenContacts = new Ext.grid.ColumnModel([
+        //    	{id:'anschrift', header: "Anschrift", dataIndex: 'anschrift', width: 250, sortable: true },
+        //        {id:'kontakt', header: "Kontakt", dataIndex: 'kontakt', width: 250, sortable: true }
+        //]);
   
-        var st_choosenContacts = new Ext.data.SimpleStore({
-            fields: ['firstname','lastname', 'company'],
-            data: [
-                ['Lars', 'Kneschke', 'Metaways Infosystems GmbH'],
-                ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH']
-            ]
+        //var st_choosenContacts = new Ext.data.SimpleStore({
+        //    fields: ['firstname','lastname', 'company'],
+        //    data: [
+        //        ['Lars', 'Kneschke', 'Metaways Infosystems GmbH'],
+        //        ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH']
+        //    ]
+        //});  
+     
+        var store_contactSearch = new Ext.data.JsonStore({
+      //      baseParams: getParameterContactsDataStore(_node),
+            baseParams: {
+                method: 'Addressbook.getAllContacts',
+                start: 0,
+                sort: 'n_fileas',
+                dir: 'asc',
+                limit: 0
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'contact_id',
+            fields: [
+                {name: 'contact_id'},
+                {name: 'contact_owner'},
+                {name: 'n_family'},
+                {name: 'n_given'},
+                {name: 'n_middle'},
+                {name: 'n_prefix'},
+                {name: 'n_suffix'},
+                {name: 'n_fn'},
+                {name: 'n_fileas'},
+                {name: 'org_name'},
+                {name: 'org_unit'},
+                {name: 'adr_one_street'},
+                {name: 'adr_one_locality'},
+                {name: 'adr_one_region'},
+                {name: 'adr_one_postalcode'},
+                {name: 'adr_one_countryname'}
+            ],
+            // turn on remote sorting
+            remoteSort: true
         });
-  
+        
+        store_contactSearch.setDefaultSort('n_family', 'asc');
+        
+        store_contactSearch.on('beforeload', function(_store) {
+            _store.baseParams.filter = Ext.getCmp('crm_editDialog_quickSearchField').getRawValue();
+        });   
+
         var st_contactSearch = new Ext.data.SimpleStore({
-            fields: ['firstname','lastname', 'company', 'street', 'plz', 'town', 'phone', 'cellphone', 'email', 'contact_id', 'contact_type'],
+            fields: ['n_given','n_family', 'org_name', 'adr_one_street', 'adr_one_postalcode', 'adr_one_locality', 'phone', 'cellphone', 'email', 'contact_id', 'contact_type'],
             data: [
                 ['Lars', 'Kneschke', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '1'],
                 ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2'],                                                                                                                    
@@ -2206,10 +2201,10 @@ Egw.Crm.ProjectEditDialog = function() {
         var resultTpl = new Ext.XTemplate( 
                     '<tpl for=".">',
                     '<div class="contact-item {contact_type:this.getType}">',
-                    '{company:this.isNotEmpty}', 
-                    '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{lastname}, {firstname}</b></a><br />',
-                    '{street:this.isNotEmpty}',                     
-                    '{plz} {town:this.isNotEmpty}',
+                    '{org_name:this.isNotEmpty}', 
+                    '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{n_family}, {n_given}</b></a><br />',
+                    '{adr_one_street:this.isNotEmpty}',                     
+                    '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
                     
                     '<p><i>Phone:</i> {phone}<br />', 
                     '<i>Cellphone:</i> {cellphone}<br />', 
@@ -2250,8 +2245,19 @@ Egw.Crm.ProjectEditDialog = function() {
 	            itemSelector: 'div.contact-item'
 	        }),	
 	        tbar: [
-	            new Ext.app.SearchField({
-	                store: st_contactSearch
+	            /*new Ext.app.SearchField({
+	            	id: 'crm_editDialog_quickSearchField',
+	                store: store_contactSearch
+	            }),*/
+	            new Ext.form.ComboBox({
+	            	id: 'crm_editDialog_quickSearchField',
+	            	store: store_contactSearch,
+	            	typeAhead: false,
+	            	loadingText: 'Searching...',
+	            	width: 280,
+	            	pageSize:10,
+	            	hideTrigger:true,
+                    tpl: resultTpl,                   
 	            })
 	        ],
             bbar: [
