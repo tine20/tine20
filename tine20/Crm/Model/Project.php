@@ -47,7 +47,6 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
         'pj_end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)//,
         #'pj_lastread'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'pj_lastreader'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
-        
     );
 
     /**

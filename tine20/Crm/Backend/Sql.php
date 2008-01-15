@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Sql.php 199 2007-10-15 16:30:00Z twadewitz $
+ * @version     $Id: Sql.php 199 2008-01-15 15:27:00Z twadewitz $
  *
  */
 class Crm_Backend_Sql implements Crm_Backend_Interface
@@ -92,6 +92,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             // temporary hack, until setup is available
             $this->createProductTable();
         }
+        
+        
+        $this->linksTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
+        
     }
 
     /**
@@ -505,7 +509,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }      
             $where  = array(
-                $this->productSourceTable->getAdapter()->quoteInto('pj_productsource_id = ?', $Id),
+                $this->linksTable->getAdapter()->quoteInto('pj_productsource_id = ?', $Id),
             );
              
             $result = $this->productSourceTable->delete($where);
@@ -513,6 +517,54 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }    
     
+  
+	/**
+	* get Contacts
+	*
+	* @return unknown
+	*/  
+    public function getContactsById($_id)
+    {
+        $id = (int) $_id;
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+        
+        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_app1 = ?', 'crm');
+        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_app2 = ?', 'addressbook');        
+        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_id1 = ?', $_id);        
+				        
+        $select = $this->_getContactsSelectObject();
+
+        if(is_array($where)) {
+             foreach($where as $_where) {
+                  $select->where($_where);
+             }               
+        }
+
+        //error_log($select->__toString());
+       
+        $stmt = $select->query();
+/*
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        
+        if(empty($row)) {
+            throw new UnderFlowExecption('no contacts found');
+        }
+        
+        //error_log(print_r($row, true));
+        
+        $contacts = new Crm_Model_Project($row);
+    */    
+    
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $contacts = new Egwbase_Record_RecordSet($rows, 'Crm_Model_Contact');
+        
+        return $contacts;
+    }
+  
+  
   
 	// handle LEADSTATES    
 	/**
@@ -699,7 +751,46 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
 
    
-	// handle PROJECTS    
+	
+    /**
+    * adds contacts
+    *
+    * @param Egwbase_Record_Recordset $_leadSources list of lead sources
+    * @return unknown
+    */
+    public function saveContacts(Egwbase_Record_Recordset $_contacts, $_id)
+    {
+        $id = (int)$_id;
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+        
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $where[] = $db->quoteInto('link_id1 = ?', $id);
+            $where[] = $db->quoteInto('link_app1 = ?', 'crm');            
+            
+            $db->delete(SQL_TABLE_PREFIX . 'links', $where);
+
+            foreach($_contacts as $_contact) {
+                $db->insert(SQL_TABLE_PREFIX . 'links', $_contact->toArray());                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
+        }
+
+        return $_contacts;
+    }    
+    
+    
+    
 	/**
 	* get single project by id
 	*
@@ -997,6 +1088,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 		if( is_numeric($_probability) && ($_probability > 0) ) {
 			$where[] = $this->leadTable->getAdapter()->quoteInto('pj_probability >= ?', $_probability);
 		}		
+              
 
         $db = Zend_Registry::get('dbAdapter');
 
@@ -1009,7 +1101,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                   $select->where($_where);
              }               
         }
-        //error_log($select->__toString());
+        error_log($select->__toString());
        
         $stmt = $db->query($select);
 
@@ -1019,6 +1111,42 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         return $projects;
     }   
+    
+    /**
+     * get the basic select object to fetch contacts from the database 
+     *
+     * @return Zend_Db_Select
+     */
+    protected function _getContactsSelectObject()
+    {
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+        ->from(array('links' => SQL_TABLE_PREFIX . 'links'), array(
+            'link_remark')
+        )
+        ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), 
+                'links.link_id2 = contacts.contact_id', array(
+                                    'contact_id',
+                                    'contact_owner',
+                                    'n_family',
+                                    'n_given',
+                                    'n_middle',
+                                    'n_prefix',
+                                    'n_suffix',
+                                    'n_fn',
+                                    'n_fileas',
+                                    'org_name',
+                                    'org_unit',
+                                    'adr_one_street',
+                                    'adr_one_locality',
+                                    'adr_one_region',
+                                    'adr_one_postalcode',
+                                    'adr_one_countryname')
+                );
+        
+        return $select;
+    }    
     
     /**
      * get the basic select object to fetch projects from the database 

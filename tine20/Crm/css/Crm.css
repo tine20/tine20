@@ -148,6 +148,13 @@ input {
 	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
 }
 
+
+.contact-item-small {
+    padding: 2px 4px; 
+    border-bottom: 1px solid #B5B8C8;
+    font-size: 11px;
+}
+
 .contact-item {
     padding: 2px 4px; 
     border-bottom: 1px solid #B5B8C8;

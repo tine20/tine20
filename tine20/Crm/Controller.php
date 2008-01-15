@@ -188,6 +188,22 @@ error_log('CONTROLLER :: deleteProducts');
         $backend->saveLeadstates($_leadStates);
     } 
   
+
+   /**
+     * save Contacts
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
+     */ 
+    public function saveContacts(Egwbase_Record_Recordset $_contacts, $_id)
+    {
+          
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        $backend->saveContacts($_contacts, $_id);
+    }   
+  
   
    /**
      * save Products

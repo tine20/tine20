@@ -371,11 +371,58 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }         
   
         
+        // contacts
+		if(strlen($_POST['contacts']) > 2) {  
+            if(!empty($projectData->pj_id)) {      
+                $this->saveContacts($_POST['contacts'], $projectData->pj_id);
+            } else {
+                $this->saveContacts($_POST['contacts'], $_POST['pj_id']);    
+            }
+        }
         
         return $result;  
  
     }      
- 
+
+     /**
+     * save an array of contacts (belonging to one lead)
+     *
+     * @param array $_contacts  contacts data
+     * @param int $_id  id of the lead
+     * @return array
+     */
+    public function saveContacts($_contacts, $_id)
+    {  
+        $contacts = Zend_Json::decode($_contacts);
+
+       	if(is_array($contacts)) {            
+            for($i = 0; $i < count($contacts); $i++) {
+                $contacts[$i]['link_id1'] = $_id;
+            }
+
+            try {
+                $contacts = new Egwbase_Record_RecordSet($contacts, 'Crm_Model_ContactLink');
+            } catch (Exception $e) {
+                // invalid data in some fields sent from client
+                $result = array('success'           => false,
+                                'errorMessage'      => 'filter NOT ok'
+                );
+                
+                return $result;
+            }
+        }    
+        
+        if(Crm_Controller::getInstance()->saveContacts($contacts, $_id) === FALSE) {
+            $result = array('success'   => FALSE);
+        } else {
+            $result = array('success'   => TRUE);
+        }
+        
+        return $result;  
+    }
+
+
+
      /**
      * delete a array of projects
      *

@@ -1581,6 +1581,24 @@ Egw.Crm.ProjectEditDialog = function() {
             additionalData.pj_end_scheduled = null;
         }
         
+        
+        // data of contacts
+        var contactsData = new Array();
+        var contactsStore = Ext.getCmp('choosenContactsView').store;
+        var i = '0';
+        contactsStore.each(function(record) {
+            console.log(i);
+            contactsData[i] = new Object();
+            contactsData[i]['link_app1']    = 'crm';
+            contactsData[i]['link_app2']    = 'addressbook';
+            contactsData[i]['link_id2']     = record.data.contact_id;
+            contactsData[i]['link_remark']  = 'lead';            
+            
+            i = eval(i + 1);
+        });
+        
+        additionalData.contacts = Ext.util.JSON.encode(contactsData);
+        
         return additionalData;
     }
 
@@ -1874,15 +1892,6 @@ Egw.Crm.ProjectEditDialog = function() {
 				anchor:'95%'    
         });
 		combo_leadsource.setValue('1');
-     
-        var st_owner =  new Ext.data.SimpleStore({
-                fields: ['key','value'],
-                data: [
-                        ['0','Meier, Heinz'],
-                        ['1','Schultze, Hans'],
-                        ['2','Vorfelder, Meier']
-                    ]
-        });
         
         var st_activities = new Ext.data.SimpleStore({
                 fields: ['id','status','status2','datum','titel','message','responsible'],
@@ -2072,6 +2081,11 @@ Egw.Crm.ProjectEditDialog = function() {
                 }
         ]);
        
+       var product_combo = Ext.getCmp('product_combo');
+       product_combo.on('change', function(field, value) {
+          console.log(field);
+    
+       });
         
         var handler_remove_product = function(_button, _event)
         {
@@ -2104,6 +2118,7 @@ Egw.Crm.ProjectEditDialog = function() {
             clicksToEdit:2,
             tbar: [{
                 text: 'add product',
+                iconCls: 'action_add',
                 handler : function(){
                     var p = new product({
                         pj_id: 'NULL',
@@ -2118,6 +2133,7 @@ Egw.Crm.ProjectEditDialog = function() {
                 }
             } , {
                 text: 'delete product',
+                iconCls: 'action_delete',
                 handler : handler_remove_product 
             }]  
         });
@@ -2132,18 +2148,30 @@ Egw.Crm.ProjectEditDialog = function() {
             //_ctxMenuGrid.showAt(_eventObject.getXY());
         });
   
-        //var cm_choosenContacts = new Ext.grid.ColumnModel([
-        //    	{id:'anschrift', header: "Anschrift", dataIndex: 'anschrift', width: 250, sortable: true },
-        //        {id:'kontakt', header: "Kontakt", dataIndex: 'kontakt', width: 250, sortable: true }
-        //]);
-  
-        //var st_choosenContacts = new Ext.data.SimpleStore({
-        //    fields: ['firstname','lastname', 'company'],
-        //    data: [
-        //        ['Lars', 'Kneschke', 'Metaways Infosystems GmbH'],
-        //        ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH']
-        //    ]
-        //});  
+       var store_contacts = new Ext.data.JsonStore({
+			data: formData.values.contacts,
+			autoLoad: true,
+            id: 'contact_id',
+            fields: [
+                {name: 'link_remark'},                        
+                {name: 'contact_id'},
+                {name: 'contact_owner'},
+                {name: 'n_family'},
+                {name: 'n_given'},
+                {name: 'n_middle'},
+                {name: 'n_prefix'},
+                {name: 'n_suffix'},
+                {name: 'n_fn'},
+                {name: 'n_fileas'},
+                {name: 'org_name'},
+                {name: 'org_unit'},
+                {name: 'adr_one_street'},
+                {name: 'adr_one_locality'},
+                {name: 'adr_one_region'},
+                {name: 'adr_one_postalcode'},
+                {name: 'adr_one_countryname'}
+            ]
+        });     
      
         var store_contactSearch = new Ext.data.JsonStore({
       //      baseParams: getParameterContactsDataStore(_node),
@@ -2158,6 +2186,7 @@ Egw.Crm.ProjectEditDialog = function() {
             totalProperty: 'totalcount',
             id: 'contact_id',
             fields: [
+                {name: 'link_remark'},            
                 {name: 'contact_id'},
                 {name: 'contact_owner'},
                 {name: 'n_family'},
@@ -2184,23 +2213,38 @@ Egw.Crm.ProjectEditDialog = function() {
         store_contactSearch.on('beforeload', function(_store) {
             _store.baseParams.filter = Ext.getCmp('crm_editDialog_quickSearchField').getRawValue();
         });   
+        store_contactSearch.on('load', function(_store) {
+            
+            _store.each(function(recorda) {
+                  console.log(recorda);  
+                });
+            
+            
+            _store.filterBy(function(records, id) {
+                var present_ids = new Array();
+                var choosenContactsStore = Ext.getCmp('choosenContactsView').store;                
+                choosenContactsStore.each(function(record) {
+                    present_ids.push(record.data.contact_id);
+                })
 
-        var st_contactSearch = new Ext.data.SimpleStore({
-            fields: ['n_given','n_family', 'org_name', 'adr_one_street', 'adr_one_postalcode', 'adr_one_locality', 'phone', 'cellphone', 'email', 'contact_id', 'contact_type'],
-            data: [
-                ['Lars', 'Kneschke', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '1'],
-                ['Thomas', 'Wadewitz', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2'],                                                                                                                    
-                ['Lars', 'Kneschke', '', 'Pickhuben 2-4', '20457', 'Hamburg', '0123 / 456 78 90', '0177 / 123 45 67', 'l.kneschke@metaways.de', '62', '3'],
-                ['', 'Wadewitz', 'Metaways Infosystems GmbH', 'Pickhuben 2-4', '20457', 'Hamburg', '5678 / 910 12 34', '0160 / 789 01 23', 't.wadewitz@metaways.de', '66', '2']
-                                
-            ]
-        });  
-  
+                var present = '0';
+                for (p = 0; p < present_ids.length; p++) {
+                    if (records.data.contact_id == present_ids[p]) {
+                        present = '1';
+                    }
+                }                
+                if (present == '1') {
+                    return false;
+                } else {
+                    return true;
+                }
+            });            
+        });
         
 	    // Custom rendering Template for the View
-        var resultTpl = new Ext.XTemplate( 
+        var contactsTpl = new Ext.XTemplate( 
                     '<tpl for=".">',
-                    '<div class="contact-item {contact_type:this.getType}">',
+                    '<div class="contact-item {link_remark:this.getType}">',
                     '{org_name:this.isNotEmpty}', 
                     '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{n_family}, {n_given}</b></a><br />',
                     '{adr_one_street:this.isNotEmpty}',                     
@@ -2231,6 +2275,24 @@ Egw.Crm.ProjectEditDialog = function() {
                             }
                         }                                                
         });
+        
+        var searchContactsTpl = new Ext.XTemplate( 
+                    '<tpl for=".">',
+                    '<div class="contact-item-small">',
+                    '{org_name:this.isNotEmpty}', 
+                    '<b>{n_family}, {n_given}</b><br />',
+                    '{adr_one_street:this.isNotEmpty}',                     
+                    '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
+                    '</div></tpl>', {
+                        isNotEmpty: function(textValue){
+                            if ((textValue.length == 0) || (textValue == null)) {
+                                return '';
+                            }
+                            else {
+                                return textValue+'<br />';
+                            }
+                        }                                                
+        });        
 
         var grid_contact = new Ext.Panel({
 	        height:300,
@@ -2239,8 +2301,9 @@ Egw.Crm.ProjectEditDialog = function() {
 	        autoScroll:true,
 	
 	        items: new Ext.DataView({
-	            tpl: resultTpl,                
-	            store: st_contactSearch,
+	            tpl: contactsTpl,                
+                id: 'choosenContactsView',
+	            store: store_contacts,
                 height: '95%',
 	            itemSelector: 'div.contact-item'
 	        }),	
@@ -2257,7 +2320,8 @@ Egw.Crm.ProjectEditDialog = function() {
 	            	width: 280,
 	            	pageSize:10,
 	            	hideTrigger:true,
-                    tpl: resultTpl,                   
+                    tpl: searchContactsTpl,
+                    itemSelector: 'div.contact-item-small'                  
 	            })
 	        ],
             bbar: [
@@ -2282,6 +2346,12 @@ Egw.Crm.ProjectEditDialog = function() {
             
             ]
         });  
+        
+        var crm_editDialog_quickSearchField = Ext.getCmp('crm_editDialog_quickSearchField');
+        crm_editDialog_quickSearchField.on('select', function(combo, record, index) {
+            var choosenContactsStore = Ext.getCmp('choosenContactsView').store;
+            choosenContactsStore.add(record);
+        });
         
   		var folderTrigger = new Ext.form.TriggerField({
             fieldLabel:'folder (person in charge)', 

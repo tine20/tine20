@@ -5,10 +5,10 @@
  * This class handles all Http requests for the Crm application
  *
  * @package     Crm
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Http.php 135 2007-09-26 13:37:11Z twadewitz $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $
  *
  */
 class Crm_Http extends Egwbase_Application_Http_Abstract
@@ -47,6 +47,9 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 			
             $_products = $projects->getProductsById($_projectId);
             $view->formData['values']['products'] = $_products->toArray();
+            
+            $_contacts = $projects->getContactsById($_projectId);
+            $view->formData['values']['contacts'] = $_contacts->toArray();      
            
 			$view->formData['config']['folderName']   = $folder->container_name;
 			$view->formData['config']['folderRights'] = $folder->account_grants;
@@ -54,6 +57,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		} else {
             $view->formData['values'] = $controller->getEmptyLead()->toArray();
             $view->formData['values']['products'] = array();                
+            $view->formData['values']['contacts'] = array();                       
             
             $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
 		    foreach($personalFolders as $folder) {
