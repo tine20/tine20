@@ -2255,7 +2255,7 @@ Egw.Crm.ProjectEditDialog = function() {
                     '<a href="mailto:{email}">{email}</a></p>', 
                     '</div></tpl>', {
                         isNotEmpty: function(textValue){
-                            if ((textValue.length == 0) || (textValue == null)) {
+                            if ((textValue === null) || (textValue.length == 0)) {
                                 return '';
                             }
                             else {
@@ -2285,7 +2285,7 @@ Egw.Crm.ProjectEditDialog = function() {
                     '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
                     '</div></tpl>', {
                         isNotEmpty: function(textValue){
-                            if ((textValue.length == 0) || (textValue == null)) {
+                            if ((textValue === null) || (textValue.length == 0)) {
                                 return '';
                             }
                             else {
