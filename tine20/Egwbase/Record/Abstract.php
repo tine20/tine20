@@ -99,7 +99,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * 
      * @param mixed $_data
      * @param bool $_bypassFilters
-     * @param [bool|array] $_convertDates array with keys: part and locale. See Zend_Date
+     * @param bool $_convertDates converts ISO 8801 to Zend_Date representation of $this->_datetimeFields
      * @return void
      * @throws Egwbase_Record_Exception
      */
@@ -368,11 +368,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     }
     
     /**
-     * Converts Zend_Dates into iso representation
+     * Converts Zend_Dates into ISO8601 representation
      *
-     * @param array $_toConvert
-     * @param string $_part
-     * @param [string|Zend_Locale] $_locale
+     * @param array &$_toConvert
      * @return 
      */
     protected function _convertZendDateToISO8601(&$_toConvert)
@@ -389,8 +387,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * Converts dates into Zend_Date representation
      *
-     * @param string $_part
-     * @param [string|Zend_Locale] $_locale
+     * @param array &$_data
      * @return void
      */
     protected function _convertISO8601ToZendDate(array &$_data)
@@ -401,10 +398,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
             if($_data[$field] instanceof Zend_Date) continue;
             
             if(is_array($_data[$field])) {
-                //foreach($_data[$field] as $dataKey => $dataValue) {
-                //    $_data[$field][$dataKey] = new Zend_Date($dataValue, Zend_Date::ISO_8601);
-                //}
-                $this->_convertISO8601ToZendDate($_data[$field]);
+                foreach($_data[$field] as $dataKey => $dataValue) {
+                    $_data[$field][$dataKey] = new Zend_Date($dataValue, Zend_Date::ISO_8601);
+                }
+                //$this->_convertISO8601ToZendDate($_data[$field]);
             } else {
                 $_data[$field] = new Zend_Date($_data[$field], Zend_Date::ISO_8601);
             }
