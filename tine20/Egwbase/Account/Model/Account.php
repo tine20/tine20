@@ -46,7 +46,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
         'account_lastloginfrom' => array('allowEmpty' => true),
         'account_lastpwd_change' => array('Digits', 'allowEmpty' => true),
         'account_status'        => array('presence' => 'required'),
-        'account_expires'       => array('Digits', 'allowEmpty' => true),
+        'account_expires'       => array('allowEmpty' => true),
         'account_primary_group' => array('presence' => 'required'),
         'n_fileas'              => array('presence' => 'required'),
         'n_family'              => array('presence' => 'required'),

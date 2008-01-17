@@ -234,8 +234,17 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-        $account = new Egwbase_Account_Model_Account($row);
-                
+        try {
+            $account = new Egwbase_Account_Model_Account(NULL, true);
+            $account->setFromUserData($row);
+        } catch (Exception $e) {
+            $validation_errors = $account->getValidationErrors();
+            Zend_Registry::get('logger')->debug( 'Egwbase_Account_Sql::_getAccountFromSQL: ' . $e->getMessage() . "\n" .
+                "Egwbase_Account_Model_Account::validation_errors: \n" .
+                print_r($validation_errors,true));
+            throw ($e);
+        }
+        
         return $account;
         
     }
