@@ -30,9 +30,9 @@ class Crm_Model_Productsource extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'pj_productsource_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_productsource'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_productsource_price'   => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
+        'lead_productsource_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_productsource'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'lead_productsource_price'   => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
     );
 
    /**
@@ -41,6 +41,6 @@ class Crm_Model_Productsource extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'pj_productsource_id';    
+    protected $_identifier = 'lead_productsource_id';    
 
 }

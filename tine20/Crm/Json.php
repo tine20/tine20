@@ -273,18 +273,18 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */
-   public function saveProducts($products, $pj_id) {	
+   public function saveProducts($products, $lead_id) {	
    
         $_products = Zend_Json::decode($products);
         $_productsData = array();
 
        	if(is_array($_products)) {
     		foreach($_products AS $_product) {
-    			if($_product['pj_id'] == "NULL") {
-    				unset($_product['pj_id']);
+    			if($_product['lead_id'] == "NULL") {
+    				unset($_product['lead_id']);
     			}
-                if($_product['pj_project_id'] == "-1" || empty($_product['pj_project_id'])) {
-    				$_product['pj_project_id'] = $pj_id;
+                if($_product['lead_project_id'] == "-1" || empty($_product['lead_project_id'])) {
+    				$_product['lead_project_id'] = $lead_id;
     
     			}			
                 
@@ -324,12 +324,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 */	
 	public function saveProject()
     {
-        if(empty($_POST['pj_id'])) {
-            unset($_POST['pj_id']);
+        if(empty($_POST['lead_id'])) {
+            unset($_POST['lead_id']);
         }
 
         // project modifier
-        $_POST['pj_modifier'] = Zend_Registry::get('currentAccount')->account_id;
+        $_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->account_id;
 
         $projectData = new Crm_Model_Project();
         try {
@@ -356,16 +356,16 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
         // products
 		if(strlen($_POST['products']) > 2) {	    
-            if(!empty($projectData->pj_id)) {
-                $this->saveProducts($_POST['products'], $projectData->pj_id);
+            if(!empty($projectData->lead_id)) {
+                $this->saveProducts($_POST['products'], $projectData->lead_id);
             } else {
-                $this->saveProducts($_POST['products'], $_POST['pj_id']);    
+                $this->saveProducts($_POST['products'], $_POST['lead_id']);    
             }
 		} else {
-            if(!empty($projectData->pj_id)) {
-                Crm_Controller::getInstance()->deleteProducts($projectData->pj_id);    
+            if(!empty($projectData->lead_id)) {
+                Crm_Controller::getInstance()->deleteProducts($projectData->lead_id);    
             } else {
-                Crm_Controller::getInstance()->deleteProducts($_POST['pj_id']);                    
+                Crm_Controller::getInstance()->deleteProducts($_POST['lead_id']);                    
             }		    
 		    
         }         
@@ -373,10 +373,10 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         
         // contacts
 		if(strlen($_POST['contacts']) > 2) {  
-            if(!empty($projectData->pj_id)) {      
-                $this->saveContacts($_POST['contacts'], $projectData->pj_id);
+            if(!empty($projectData->lead_id)) {      
+                $this->saveContacts($_POST['contacts'], $projectData->lead_id);
             } else {
-                $this->saveContacts($_POST['contacts'], $_POST['pj_id']);    
+                $this->saveContacts($_POST['contacts'], $_POST['lead_id']);    
             }
         }
         
@@ -399,18 +399,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             for($i = 0; $i < count($contacts); $i++) {
                 $contacts[$i]['link_id1'] = $_id;
             }
-
-            try {
-                $contacts = new Egwbase_Record_RecordSet($contacts, 'Crm_Model_ContactLink');
-            } catch (Exception $e) {
-                // invalid data in some fields sent from client
-                $result = array('success'           => false,
-                                'errorMessage'      => 'filter NOT ok'
-                );
-                
-                return $result;
-            }
         }    
+    
         
         if(Crm_Controller::getInstance()->saveContacts($contacts, $_id) === FALSE) {
             $result = array('success'   => FALSE);
@@ -595,15 +585,50 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $dt_tmp = explode("/", $dateTo);
             $dateTo = mktime(0,0,0,$dt_tmp[0],$dt_tmp[1],$dt_tmp[2]);            
         }
-                
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+               
 
-        if($rows = $backend->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)) {
-            $result['results']    = $rows->toArray();
-            $result['totalcount'] = $backend->getCountOfAllProjects($filter);
+        
+        if($rows = Crm_Controller::getInstance()->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
         }
 
-        return $result;
+        $result['results'] = $this->formatContacts($result['results']);
+        
+     
+        return $result;                
+  
+    } 
+     
+     
+    public function formatContacts(array $_data)
+    {
+        $i = '0';
+        
+        foreach($_data AS $single_result) {
+            $_contacts = $single_result['contacts']->toArray();    
+            
+            foreach($_contacts AS $_contact) {
+                if($_contact['link_remark'] == 'lead') {
+                    $_data[$i]['lead_lead_linkId'] = $_contact['link_id'];
+                    $_data[$i]['lead_lead'] = $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'];
+                    $_data[$i]['lead_lead_detail'] =  $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'] . '<br>' . $_contact['adr_one_street'] . '<br>' . $_contact['adr_one_locality'] . '<br>' . $_contact['adr_one_countryname'];                    
+                }    
+                
+                if($_contact['link_remark'] == 'partner') {                
+                    $_data[$i]['lead_partner_linkId'] = $_contact['link_id']; ;
+                    $_data[$i]['lead_partner'] = $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'];
+                    $_data[$i]['lead_partner_detail'] =  $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'] . '<br>' . $_contact['adr_one_street'] . '<br>' . $_contact['adr_one_locality'] . '<br>' . $_contact['adr_one_countryname'];               
+                }
+            }
+            
+            $_data[$i]['contacts'] = $_contacts;
+            $i = $i + 1;
+        }   
+
+        
+        
+        return $_data;
     } 
      
      

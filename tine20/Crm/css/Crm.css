@@ -204,3 +204,7 @@ input {
 .contactType_internal_icon {
     background-image:url(contact_internal.png) !important;
 }
+
+.x-view-over {
+				background-color: #efefef
+			}

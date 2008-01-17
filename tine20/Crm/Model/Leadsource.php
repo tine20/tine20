@@ -30,8 +30,8 @@ class Crm_Model_Leadsource extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'pj_leadsource_id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'lead_leadsource_id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
     
    /**
@@ -40,6 +40,6 @@ class Crm_Model_Leadsource extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'pj_leadsource_id';
+    protected $_identifier = 'lead_leadsource_id';
     
 }

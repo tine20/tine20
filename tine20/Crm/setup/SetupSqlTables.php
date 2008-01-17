@@ -3,11 +3,10 @@
  * egroupware 2.0
  * 
  * @package     CRM
- * @subpackage  Setup
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>, Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $ 
  *
  */
 
@@ -29,70 +28,70 @@ class Crm_Setup_SetupSqlTables
             $tableData = $db->describeTable('egw_metacrm_project');
         } catch (Zend_Db_Statement_Exception $e) {
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadsource` (
-                  `pj_leadsource_id` int(11) NOT NULL auto_increment,
-                  `pj_leadsource` varchar(255) default NULL,
-                  `pj_leadsource_translate` tinyint(4) default '1',
-                  PRIMARY KEY  (`pj_leadsource_id`)
+                  `lead_leadsource_id` int(11) NOT NULL auto_increment,
+                  `lead_leadsource` varchar(255) default NULL,
+                  `lead_leadsource_translate` tinyint(4) default '1',
+                  PRIMARY KEY  (`lead_leadsource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
             );
 
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadtype` (
-                  `pj_leadtype_id` int(11) NOT NULL auto_increment,
-                  `pj_leadtype` varchar(255) default NULL,
-                  `pj_leadtype_translate` tinyint(4) default '1',
-                  PRIMARY KEY  (`pj_leadtype_id`)
+                  `lead_leadtype_id` int(11) NOT NULL auto_increment,
+                  `lead_leadtype` varchar(255) default NULL,
+                  `lead_leadtype_translate` tinyint(4) default '1',
+                  PRIMARY KEY  (`lead_leadtype_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
             );            
 
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_product` (
-                  `pj_id` int(11) NOT NULL auto_increment,
-                  `pj_project_id` int(11) NOT NULL default '0',
-                  `pj_product_id` int(11) NOT NULL default '0',
-                  `pj_product_desc` varchar(255) default NULL,
-                  `pj_product_price` decimal(12,2) unsigned NOT NULL default '0.00',
-                  PRIMARY KEY  (`pj_id`),
-                  KEY `pj_id` (`pj_id`),
-                  KEY `pj_project_id` (`pj_project_id`)
+                  `lead_id` int(11) NOT NULL auto_increment,
+                  `lead_project_id` int(11) NOT NULL default '0',
+                  `lead_product_id` int(11) NOT NULL default '0',
+                  `lead_product_desc` varchar(255) default NULL,
+                  `lead_product_price` decimal(12,2) unsigned NOT NULL default '0.00',
+                  PRIMARY KEY  (`lead_id`),
+                  KEY `lead_id` (`lead_id`),
+                  KEY `lead_project_id` (`lead_project_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );            
             
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_productsource` (
-                  `pj_productsource_id` int(10) unsigned NOT NULL auto_increment,
-                  `pj_productsource` varchar(200) NOT NULL default '',
-                  `pj_productsource_price` decimal(12,2) unsigned NOT NULL default '0.00',
-                  PRIMARY KEY  (`pj_productsource_id`)
+                  `lead_productsource_id` int(10) unsigned NOT NULL auto_increment,
+                  `lead_productsource` varchar(200) NOT NULL default '',
+                  `lead_productsource_price` decimal(12,2) unsigned NOT NULL default '0.00',
+                  PRIMARY KEY  (`lead_productsource_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );            
             
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_project` (
-                  `pj_id` int(11) NOT NULL auto_increment,
-                  `pj_name` varchar(255) NOT NULL default '',
-                  `pj_leadstate_id` int(11) NOT NULL default '0',
-                  `pj_leadtype_id` int(11) NOT NULL default '0',
-                  `pj_leadsource_id` int(11) NOT NULL default '0',
-                  `pj_owner` int(11) NOT NULL default '0',
-                  `pj_modifier` int(11) default NULL,
-                  `pj_start` int(11) NOT NULL default '0',
-                  `pj_modified` int(11) NOT NULL default '0',
-                  `pj_created` int(11) unsigned NOT NULL default '0',
-                  `pj_description` text,
-                  `pj_end` int(11) default NULL,
-                  `pj_turnover` double default NULL,
-                  `pj_probability` decimal(3,0) default NULL,
-                  `pj_end_scheduled` int(11) NOT NULL default '0',
-                  `pj_lastread` int(11) NOT NULL default '0',
-                  `pj_lastreader` int(11) NOT NULL default '0',
-                  PRIMARY KEY  (`pj_id`)
+                  `lead_id` int(11) NOT NULL auto_increment,
+                  `lead_name` varchar(255) NOT NULL default '',
+                  `lead_leadstate_id` int(11) NOT NULL default '0',
+                  `lead_leadtype_id` int(11) NOT NULL default '0',
+                  `lead_leadsource_id` int(11) NOT NULL default '0',
+                  `lead_container` int(11) NOT NULL default '0',
+                  `lead_modifier` int(11) default NULL,
+                  `lead_start` int(11) NOT NULL default '0',
+                  `lead_modified` int(11) NOT NULL default '0',
+                  `lead_created` int(11) unsigned NOT NULL default '0',
+                  `lead_description` text,
+                  `lead_end` int(11) default NULL,
+                  `lead_turnover` double default NULL,
+                  `lead_probability` decimal(3,0) default NULL,
+                  `lead_end_scheduled` int(11) NOT NULL default '0',
+                  `lead_lastread` int(11) NOT NULL default '0',
+                  `lead_lastreader` int(11) NOT NULL default '0',
+                  PRIMARY KEY  (`lead_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );            
             
             $db->getConnection()->exec("CREATE TABLE `egw_metacrm_leadstate` (
-                  `pj_leadstate_id` int(11) NOT NULL auto_increment,
-                  `pj_leadstate` varchar(255) default NULL,
-                  `pj_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
-                  `pj_leadstate_endsproject` tinyint(1) NOT NULL default '0'
-                  `pj_leadstate_translate` tinyint(4) default '1',
-                  PRIMARY KEY  (`pj_leadstate_id`)
+                  `lead_leadstate_id` int(11) NOT NULL auto_increment,
+                  `lead_leadstate` varchar(255) default NULL,
+                  `lead_leadstate_probability` tinyint(3) unsigned NOT NULL default '0',
+                  `lead_leadstate_endsproject` tinyint(1) NOT NULL default '0'
+                  `lead_leadstate_translate` tinyint(4) default '1',
+                  PRIMARY KEY  (`lead_leadstate_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;"
             );                                                
         }

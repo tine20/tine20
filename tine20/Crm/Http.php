@@ -43,7 +43,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$projects = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
 		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
 			$view->formData['values'] = $project->toArray();
-			$folder = Egwbase_Container::getInstance()->getContainerById($project->pj_owner);
+			$folder = Egwbase_Container::getInstance()->getContainerById($project->lead_container);
 			
             $_products = $projects->getProductsById($_projectId);
             $view->formData['values']['products'] = $_products->toArray();
@@ -61,7 +61,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
             
             $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
 		    foreach($personalFolders as $folder) {
-		        $view->formData['values']['pj_owner']     = $folder->container_id;
+		        $view->formData['values']['lead_container']     = $folder->container_id;
     		    $view->formData['config']['folderName']   = $folder->container_name;
     		    $view->formData['config']['folderRights'] = 31;
                 break;
@@ -69,16 +69,16 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		    
 		}
 
-		$_leadTypes = $projects->getLeadtypes('pj_leadtype','ASC');
+		$_leadTypes = $projects->getLeadtypes('lead_leadtype','ASC');
 		$view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
 		
-		$_leadStates =  $projects->getLeadStates('pj_leadstate','ASC');
+		$_leadStates =  $projects->getLeadStates('lead_leadstate','ASC');
 		$view->formData['comboData']['leadstates'] = $_leadStates->toArray();
 		
-		$_leadSources =  $projects->getLeadSources('pj_leadsource','ASC');
+		$_leadSources =  $projects->getLeadSources('lead_leadsource','ASC');
 		$view->formData['comboData']['leadsources'] = $_leadSources->toArray();
 
-		$_productSource =  $projects->getProductsAvailable('pj_productsource','ASC');
+		$_productSource =  $projects->getProductsAvailable('lead_productsource','ASC');
 		$view->formData['comboData']['productsource'] = $_productSource->toArray();
 
 

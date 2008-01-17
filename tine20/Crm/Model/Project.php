@@ -3,10 +3,10 @@
  * class to hold project data
  * 
  * @package     CRM
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Event.php 200 2007-11-16 10:50:03Z twadewitz $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $
  *
  */
 class Crm_Model_Project extends Egwbase_Record_Abstract
@@ -19,7 +19,7 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'pj_name'                     => 'StringTrim'
+        'lead_name'                     => 'StringTrim'
     );
     
     /**
@@ -30,23 +30,24 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'pj_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_name'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'pj_owner'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'pj_modifier'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'pj_modified'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'pj_created'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pj_probability'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'pj_end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)//,
-        #'pj_lastread'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'pj_lastreader'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
+        'lead_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_name'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'lead_leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'lead_leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'lead_container'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        #'lead_modifier'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        #'lead_modified'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        #'lead_created'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_probability'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'lead_end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'contacts'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)        
+        #'lead_lastread'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_lastreader'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
     );
 
     /**
@@ -56,9 +57,9 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'pj_start',
-        'pj_end',
-        'pj_end_scheduled'
+        'lead_start',
+        'lead_end',
+        'lead_end_scheduled'
     );
     
     /**
@@ -67,5 +68,19 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'pj_id';    
+    protected $_identifier = 'lead_id';    
+    
+    
+    /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    public function setContactData($_contactData)
+    {
+        $_key = $this->_properties['lead_id'];
+        $_contact = $_contactData[$_key];
+        $this->_properties['contacts'] = $_contact;
+    }
 }

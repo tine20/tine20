@@ -47,6 +47,24 @@ class Crm_Controller
         return self::$instance;
     }
 
+
+    /**
+     * get all leads
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return array
+     */
+    public function getAllProjects($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability)
+    {
+                
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        $result = $backend->getAllProjects($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability);
+
+        return $result;
+    }
+
+
     /**
      * get lead sources
      *
@@ -197,9 +215,8 @@ error_log('CONTROLLER :: deleteProducts');
      *
      * @return array
      */ 
-    public function saveContacts(Egwbase_Record_Recordset $_contacts, $_id)
-    {
-          
+    public function saveContacts(array $_contacts, $_id)
+    {        
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $backend->saveContacts($_contacts, $_id);
     }   
@@ -243,11 +260,11 @@ error_log('CONTROLLER :: deleteProducts');
     public function getEmptyLead()
     {
         $defaultData = array(
-            'pj_leadstate_id'   => 1,
-            'pj_leadtype_id'    => 1,
-            'pj_leadsource_id'  => 1,
-            'pj_start'          => new Zend_Date(),
-            'pj_probability'    => 0
+            'lead_leadstate_id'   => 1,
+            'lead_leadtype_id'    => 1,
+            'lead_leadsource_id'  => 1,
+            'lead_start'          => new Zend_Date(),
+            'lead_probability'    => 0
         );
         $emptyLead = new Crm_Model_Project($defaultData, true);
         

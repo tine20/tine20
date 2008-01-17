@@ -30,11 +30,11 @@ class Crm_Model_Product extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'pj_id' 				    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'pj_project_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-		'pj_product_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-		'pj_product_desc'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-		'pj_product_price'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'lead_id' 				    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_project_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+		'lead_product_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+		'lead_product_desc'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+		'lead_product_price'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
  
     /**
@@ -43,5 +43,5 @@ class Crm_Model_Product extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'pj_id';
+    protected $_identifier = 'lead_id';
 }

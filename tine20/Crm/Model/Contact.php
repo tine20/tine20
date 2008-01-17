@@ -3,10 +3,10 @@
  * class to hold Contact data
  * 
  * @package     CRM
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: product.php 200 2007-11-16 10:50:03Z twadewitz $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $
  *
  */
 class Crm_Model_Contact extends Egwbase_Record_Abstract
@@ -30,6 +30,7 @@ class Crm_Model_Contact extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
+        'link_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'link_remark'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),         
         'contact_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'contact_owner'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
