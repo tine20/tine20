@@ -69,7 +69,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function __construct()
     {
-        // fix talbe prefixes
+        // fix table prefixes
         foreach ($this->_tableNames as $basename => $name) {
             $this->_tableNames[$basename] = SQL_TABLE_PREFIX . $name;
         }
