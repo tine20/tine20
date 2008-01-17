@@ -3,10 +3,10 @@
  * class to hold option data
  * 
  * @package     CRM
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: option.php 200 2007-11-16 10:50:03Z twadewitz $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Sql.php 199 2008-01-17 10:55:12Z twadewitz $
  *
  */
 class Crm_Model_Leadstate extends Egwbase_Record_Abstract
@@ -33,7 +33,7 @@ class Crm_Model_Leadstate extends Egwbase_Record_Abstract
         'lead_leadstate_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'lead_leadstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'lead_leadstate_probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),      
-        'lead_leadstate_endsproject'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
+        'lead_leadstate_endslead'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
     );
     
    /**

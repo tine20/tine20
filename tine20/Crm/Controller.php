@@ -55,11 +55,11 @@ class Crm_Controller
      * @param string $_dir
      * @return array
      */
-    public function getAllProjects($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability)
+    public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability)
     {
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $result = $backend->getAllProjects($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability);
+        $result = $backend->getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability);
 
         return $result;
     }
@@ -159,7 +159,7 @@ class Crm_Controller
     } 
 
     /**
-     * get project states
+     * get lead states
      *
      * @param string $_sort
      * @param string $_dir
@@ -175,7 +175,7 @@ class Crm_Controller
 
 
     /**
-     * delete products (belonging to one project)
+     * delete products (belonging to one lead)
      *
      * @param string $_id
      *
@@ -240,19 +240,19 @@ error_log('CONTROLLER :: deleteProducts');
     
     
    /**
-     * save Project
+     * save Lead
      *
      * if $_Id is -1 the options element gets added, otherwise it gets updated
      * this function handles insert and updates as well as deleting vanished items
      *
      * @return array
      */ 
-    public function saveProject(Crm_Model_Project $_project)
+    public function saveLead(Crm_Model_Lead $_lead)
     {
-        //$data = $_projectData->toArray();
+        //$data = $_leadData->toArray();
           
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $result = $backend->saveProject($_project);
+        $result = $backend->saveLead($_lead);
         
         return $result;
     }     
@@ -266,7 +266,7 @@ error_log('CONTROLLER :: deleteProducts');
             'lead_start'          => new Zend_Date(),
             'lead_probability'    => 0
         );
-        $emptyLead = new Crm_Model_Project($defaultData, true);
+        $emptyLead = new Crm_Model_Lead($defaultData, true);
         
         return $emptyLead;
     }

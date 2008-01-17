@@ -1,21 +1,21 @@
 <?php
 
 /**
- * interface for project class
+ * interface for lead class
  * 
  * @package     CRM
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Interface.php 197 2007-11-13 14:32:56Z twadewitz $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Sql.php 199 2008-01-17 10:55:08Z twadewitz $
  *
  */
 interface Crm_Backend_Interface
 {
    
- //   public function deleteProjectById(array $projects);
+ //   public function deleteLeadById(array $leads);
     
- //   public function getProjectById($_projectId);
+ //   public function getLeadById($_leadId);
     
 
 

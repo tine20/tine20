@@ -16,10 +16,10 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
     protected $_appname = 'Crm';
       
     
-	public function editProject($_projectId)
+	public function editLead($_leadId)
 	{
-         if(empty($_projectId)) {
-            $_projectId = NULL;
+         if(empty($_leadId)) {
+            $_leadId = NULL;
         }
 	    
 	    $locale = Zend_Registry::get('locale');
@@ -40,15 +40,15 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		$view->cssIncludeFiles = array();
 		
 		$controller = Crm_Controller::getInstance();
-		$projects = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-		if($_projectId !== NULL && $project = $projects->getProjectById($_projectId)) {
-			$view->formData['values'] = $project->toArray();
-			$folder = Egwbase_Container::getInstance()->getContainerById($project->lead_container);
+		$leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+		if($_leadId !== NULL && $lead = $leads->getLeadById($_leadId)) {
+			$view->formData['values'] = $lead->toArray();
+			$folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
 			
-            $_products = $projects->getProductsById($_projectId);
+            $_products = $leads->getProductsById($_leadId);
             $view->formData['values']['products'] = $_products->toArray();
             
-            $_contacts = $projects->getContactsById($_projectId);
+            $_contacts = $leads->getContactsById($_leadId);
             $view->formData['values']['contacts'] = $_contacts->toArray();      
            
 			$view->formData['config']['folderName']   = $folder->container_name;
@@ -59,7 +59,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
             $view->formData['values']['products'] = array();                
             $view->formData['values']['contacts'] = array();                       
             
-            $personalFolders = $projects->getFoldersByOwner($currentAccount->account_id);
+            $personalFolders = $leads->getFoldersByOwner($currentAccount->account_id);
 		    foreach($personalFolders as $folder) {
 		        $view->formData['values']['lead_container']     = $folder->container_id;
     		    $view->formData['config']['folderName']   = $folder->container_name;
@@ -69,29 +69,29 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		    
 		}
 
-		$_leadTypes = $projects->getLeadtypes('lead_leadtype','ASC');
+		$_leadTypes = $leads->getLeadtypes('lead_leadtype','ASC');
 		$view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
 		
-		$_leadStates =  $projects->getLeadStates('lead_leadstate','ASC');
+		$_leadStates =  $leads->getLeadStates('lead_leadstate','ASC');
 		$view->formData['comboData']['leadstates'] = $_leadStates->toArray();
 		
-		$_leadSources =  $projects->getLeadSources('lead_leadsource','ASC');
+		$_leadSources =  $leads->getLeadSources('lead_leadsource','ASC');
 		$view->formData['comboData']['leadsources'] = $_leadSources->toArray();
 
-		$_productSource =  $projects->getProductsAvailable('lead_productsource','ASC');
+		$_productSource =  $leads->getProductsAvailable('lead_productsource','ASC');
 		$view->formData['comboData']['productsource'] = $_productSource->toArray();
 
 
 		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
-		$view->jsExecute = 'Egw.Crm.ProjectEditDialog.display();';
+		$view->jsExecute = 'Egw.Crm.LeadEditDialog.display();';
 
 		$view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
         
-		$view->title="edit project";
+		$view->title="edit lead";
 
 		header('Content-Type: text/html; charset=utf-8');
 		echo $view->render('popup.php');

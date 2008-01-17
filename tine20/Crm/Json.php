@@ -133,7 +133,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     
     
     /**
-     * get project states
+     * get lead states
      *
      * @param string $sort
      * @param string $dir
@@ -283,8 +283,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     			if($_product['lead_id'] == "NULL") {
     				unset($_product['lead_id']);
     			}
-                if($_product['lead_project_id'] == "-1" || empty($_product['lead_project_id'])) {
-    				$_product['lead_project_id'] = $lead_id;
+                if($_product['lead_lead_id'] == "-1" || empty($_product['lead_lead_id'])) {
+    				$_product['lead_lead_id'] = $lead_id;
     
     			}			
                 
@@ -316,37 +316,37 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
 
      /**
-	 * save one project
+	 * save one lead
 	 *
-	 * if $_projectId is NULL the project gets added, otherwise it gets updated
+	 * if $_leadId is NULL the lead gets added, otherwise it gets updated
 	 *
 	 * @return array
 	 */	
-	public function saveProject()
+	public function saveLead()
     {
         if(empty($_POST['lead_id'])) {
             unset($_POST['lead_id']);
         }
 
-        // project modifier
+        // lead modifier
         $_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->account_id;
 
-        $projectData = new Crm_Model_Project();
+        $leadData = new Crm_Model_Lead();
         try {
-            $projectData->setFromUserData($_POST);
+            $leadData->setFromUserData($_POST);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array(
                 'success'       => false,
-                'errors'        => $projectData->getValidationErrors(),
+                'errors'        => $leadData->getValidationErrors(),
                 'errorMessage'  => 'invalid data for some fields'
             );
             
             return $result;
         }
             
-   //     error_log(print_r($projectData->toArray(), true));
-        if(Crm_Controller::getInstance()->saveProject($projectData) === FALSE) {
+   //     error_log(print_r($leadData->toArray(), true));
+        if(Crm_Controller::getInstance()->saveLead($leadData) === FALSE) {
             $result = array('success'   => FALSE);
         } else {
             $result = array('success'   => TRUE);
@@ -356,14 +356,14 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
         // products
 		if(strlen($_POST['products']) > 2) {	    
-            if(!empty($projectData->lead_id)) {
-                $this->saveProducts($_POST['products'], $projectData->lead_id);
+            if(!empty($leadData->lead_id)) {
+                $this->saveProducts($_POST['products'], $leadData->lead_id);
             } else {
                 $this->saveProducts($_POST['products'], $_POST['lead_id']);    
             }
 		} else {
-            if(!empty($projectData->lead_id)) {
-                Crm_Controller::getInstance()->deleteProducts($projectData->lead_id);    
+            if(!empty($leadData->lead_id)) {
+                Crm_Controller::getInstance()->deleteProducts($leadData->lead_id);    
             } else {
                 Crm_Controller::getInstance()->deleteProducts($_POST['lead_id']);                    
             }		    
@@ -373,8 +373,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         
         // contacts
 		if(strlen($_POST['contacts']) > 2) {  
-            if(!empty($projectData->lead_id)) {      
-                $this->saveContacts($_POST['contacts'], $projectData->lead_id);
+            if(!empty($leadData->lead_id)) {      
+                $this->saveContacts($_POST['contacts'], $leadData->lead_id);
             } else {
                 $this->saveContacts($_POST['contacts'], $_POST['lead_id']);    
             }
@@ -414,22 +414,22 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
 
      /**
-     * delete a array of projects
+     * delete a array of leads
      *
-     * @param array $_projectIDs
+     * @param array $_leadIDs
      * @return array
      */
-    public function deleteProjects($_projectIds)
+    public function deleteLeads($_leadIds)
     {
-        $projectIds = Zend_Json::decode($_projectIds);
+        $leadIds = Zend_Json::decode($_leadIds);
 
-        if(is_array($projectIds)) {
-            $projects = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-            foreach($projectIds as $projectId) {
-                $projects->deleteProjectById($projectId);
+        if(is_array($leadIds)) {
+            $leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+            foreach($leadIds as $leadId) {
+                $leads->deleteLeadById($leadId);
             }
 
-            $result = array('success'   => TRUE, 'ids' => $projectIds);
+            $result = array('success'   => TRUE, 'ids' => $leadIds);
         } else {
             $result = array('success'   => FALSE);
         }
@@ -462,6 +462,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }
         }
 
+        $result['results'] = $this->formatContacts($result['results']);
+
         return $result;
     }
         
@@ -481,6 +483,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
                 $result['totalcount'] = $backend->getCountByFolderId($folderId, $filter);
             }
         }
+        
+        $result['results'] = $this->formatContacts($result['results']);        
         
         return $result;
     }    
@@ -514,9 +518,11 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                //$result['totalcount'] = $backend->getCountOfSharedProjects();
+                //$result['totalcount'] = $backend->getCountOfSharedLeads();
             }
         }
+
+        $result['results'] = $this->formatContacts($result['results']);
 
         return $result;
     }
@@ -534,7 +540,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOtherPeopleProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)
+    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -542,12 +548,14 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability);
+        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability);
         
         if($rows !== false) {
             $result['results']    = $rows;//->toArray();
-            //$result['totalcount'] = $backend->getCountOfOtherPeopleProjects();
+            //$result['totalcount'] = $backend->getCountOfOtherPeopleLeads();
         }
+
+        $result['results'] = $this->formatContacts($result['results']);
 
         return $result;
     }
@@ -569,7 +577,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getAllProjects($filter, $start, $sort, $dir, $limit, $dateFrom = NULL, $dateTo = NULL, $leadstate, $probability)
+    public function getAllLeads($filter, $start, $sort, $dir, $limit, $dateFrom = NULL, $dateTo = NULL, $leadstate, $probability)
     {
         $result = array(
             'results'     => array(),
@@ -588,7 +596,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
                
 
         
-        if($rows = Crm_Controller::getInstance()->getAllProjects($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)) {
+        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -640,7 +648,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getFoldersByOwner($owner)) {
             foreach($rows as $folderData) {
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'projects', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
+                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
                 $childNode->folderId = $folderData->container_id;
                 $childNode->nodeType = 'singleFolder';
                 $treeNodes[] = $childNode;
@@ -661,7 +669,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getSharedFolders()) {
             foreach($rows as $folderData) {
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'projects', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
+                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
                 $childNode->folderId = $folderData->container_id;
                 $childNode->nodeType = 'singleFolder';
                 $treeNodes[] = $childNode;
@@ -689,7 +697,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             foreach($rows as $accountData) {
                 $treeNode = new Egwbase_Ext_Treenode(
                     'Crm',
-                    'projects',
+                    'leads',
                     'otherfolder_'. $accountData->account_id, 
                     $accountData->account_name,
                     false

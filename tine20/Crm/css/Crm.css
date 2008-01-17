@@ -149,6 +149,22 @@ input {
 }
 
 
+.activities-item-small {
+    padding: 2px 4px; 
+    border-bottom: 1px solid #B5B8C8;
+    font-size: 11px;
+}
+
+.activities-item-small i {
+
+}
+
+.productSummary-item-small {
+    padding: 2px 4px; 
+    border-bottom: 1px solid #B5B8C8;
+    font-size: 11px;    
+}
+
 .contact-item-small {
     padding: 2px 4px; 
     border-bottom: 1px solid #B5B8C8;
@@ -204,6 +220,8 @@ input {
 .contactType_internal_icon {
     background-image:url(contact_internal.png) !important;
 }
+
+
 
 .x-view-over {
 				background-color: #efefef
