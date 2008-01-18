@@ -110,21 +110,21 @@ Egw.Tasks.TaskGrid = function(){
             root: 'results',
             totalProperty: 'totalcount',
             id: 'identifier',
-            /*
+            
 			fields: [
 			    // egw record fields
 		        { name: 'container' },
 		        { name: 'created_by' },
-		        //{ name: 'creation_time', type: 'date', dateFormat: 'c' },
+		        { name: 'creation_time', type: 'date', dateFormat: 'c' },
 		        { name: 'last_modified_by' },
-		        //{ name: 'last_modified_time', type: 'date', dateFormat: 'c' },
+		        { name: 'last_modified_time', type: 'date', dateFormat: 'c' },
 		        { name: 'is_deleted' },
-		        //{ name: 'deleted_time', type: 'date', dateFormat: 'c' },
+		        { name: 'deleted_time', type: 'date', dateFormat: 'c' },
 		        { name: 'deleted_by' },
 		        // task only fields
-		        //{ name: 'identifier' },
+		        { name: 'identifier' },
 		        { name: 'percent' },
-		        //{ name: 'completed', type: 'date', dateFormat: 'c' },
+		        { name: 'completed', type: 'date', dateFormat: 'c' },
 		        // ical common fields
 		        { name: 'class' },
 		        { name: 'description' },
@@ -145,8 +145,8 @@ Egw.Tasks.TaskGrid = function(){
 		        { name: 'resources' },
 		        { name: 'rstatus' },
 		        // scheduleable interface fields
-		        //{ name: 'dtstart', type: 'date', dateFormat: 'c' },
-		        //{ name: 'duration', type: 'date', dateFormat: 'c' },
+		        { name: 'dtstart', type: 'date', dateFormat: 'c' },
+		        { name: 'duration', type: 'date', dateFormat: 'c' },
 		        { name: 'recurid' },
 		        // scheduleable interface fields with multiple appearance
 		        { name: 'exdate' },
@@ -154,13 +154,6 @@ Egw.Tasks.TaskGrid = function(){
 		        { name: 'rdate' },
 		        { name: 'rrule' }
             ],
-            */
-			fields: [
-                // egw record fields
-                { name: 'priority' },
-                { name: 'summaray' },
-				{ name: 'organizer' }
-		    ],
             // turn on remote sorting
             remoteSort: true    
         });
@@ -179,15 +172,23 @@ Egw.Tasks.TaskGrid = function(){
 	
     initGrid = function(){
         //sm = new Ext.grid.CheckboxSelectionModel();
-        grid = new Ext.grid.GridPanel({
+        
+		grid = new Ext.grid.GridPanel({
             store: store,
             cm: new Ext.grid.ColumnModel([
-				{header: "Prio", width: 20, sortable: true, dataIndex: 'priority'},
-				{header: "Summaray", width: 200, sortable: true, dataIndex: 'summaray'},
-				{header: "Organizer", width: 200, sortable: true, dataIndex: 'organizer'}
+			
+				{id: 'status',    header: "Status",    width: 40,  sortable: true, dataIndex: 'status'},
+				{id: 'percent',   header: "Percent",   width: 50,  sortable: true, dataIndex: 'percent'},
+				{id: 'summary',   header: "Summaray",  width: 200, sortable: true, dataIndex: 'summaray'},
+				{id: 'priority',  header: "Priority",  width: 20,  sortable: true, dataIndex: 'priority'},
+				{id: 'duration',  header: "Due Date",  width: 150, sortable: true, dataIndex: 'duration'},
+				{id: 'organizer', header: "Organizer", width: 150, sortable: true, dataIndex: 'organizer'}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
-		    ])
-        })
+		    ]),
+			autoExpandColumn: 'summary'
+        });
+		
+		console.log(grid.getColumnModel().getColumnById('priority'));
     }
 	
 	return{

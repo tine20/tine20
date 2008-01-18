@@ -35,25 +35,25 @@ interface Tasks_Backend_Interface
      * Return a single Task
      *
      * @param string $_uid
-     * @return Tasks_Task task
+     * @return Tasks_Model_Task task
      */
     public function getTask($_uid);
     
     /**
      * Create a new Task
      *
-     * @param Tasks_Task $_task
-     * @return Tasks_Task
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
      */
-    public function createTask(Tasks_Task $_task);
+    public function createTask(Tasks_Model_Task $_task);
     
     /**
      * Upate an existing Task
      *
-     * @param Tasks_Task $_task
-     * @return Tasks_Task
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
      */
-    public function updateTask(Tasks_Task $_task);
+    public function updateTask(Tasks_Model_Task $_task);
     
     /**
      * Deletes an existing Task

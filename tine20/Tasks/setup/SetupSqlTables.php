@@ -68,6 +68,7 @@ class Tasks_Setup_SetupSqlTables
                 `deleted_by` INT(11),
                 `percent` INT(3),
                 `completed` DATETIME DEFAULT NULL,
+                `due` DATETIME DEFAULT NULL,
                 `class` INT(11),
                 `description` LONGTEXT,
                 `geo` FLOAT,

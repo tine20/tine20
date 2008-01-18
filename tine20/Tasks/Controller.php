@@ -38,14 +38,14 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * Holds possible classes of a task
      *
-     * @var unknown_type
+     * @var Zend_Db_Table_Rowset
      */
     protected $_classes;
     
     /**
      * Holds possible states of a task
      *
-     * @var unknown_type
+     * @var Zend_Db_Table_Rowset
      */
     protected $_stati;
     
@@ -110,14 +110,19 @@ class Tasks_Controller implements Tasks_Backend_Interface
             }
         }
         
-        return $this->_backend->searchTasks($_query, $_due, $container, $_organizer, $_tag);
+        $tasks =  $this->_backend->searchTasks($_query, $_due, $container, $_organizer, $_tag);
+        //Egwbase_Account::getBackend()->getPublicAccountProperties();
+        //foreach ($tasks as $task) {
+            //$taks->organizer = 
+        //}
+        return $tasks;
     }
     
     /**
      * Return a single Task
      *
      * @param string $_uid
-     * @return Tasks_Task task
+     * @return Tasks_Model_Task task
      */
     public function getTask($_uid)
     {
@@ -132,10 +137,10 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * Create a new Task
      *
-     * @param Tasks_Task $_task
-     * @return Tasks_Task
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
      */
-    public function createTask(Tasks_Task $_task)
+    public function createTask(Tasks_Model_Task $_task)
     {
         if (! $this->_currentAccount->hasGrant($_task->container, Egwbase_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
@@ -149,10 +154,10 @@ class Tasks_Controller implements Tasks_Backend_Interface
      * acl rights are managed, which is a bit complicated when a container change
      * happens. Also concurrency management is done in this contoller function
      *
-     * @param Tasks_Task $_task
-     * @return Tasks_Task
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
      */
-    public function updateTask(Tasks_Task $_task)
+    public function updateTask(Tasks_Model_Task $_task)
     {
         $oldtask = $this->getTask($_task->identifier);
 

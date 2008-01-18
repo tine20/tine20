@@ -20,7 +20,6 @@
  * to megrate cut-off fields later?
  * cut-off:
  *   -info_type         ?
- *   -info_planned-time pm interface -> later
  *   -info_used_time    pm interface -> later
  *   -info_confirm      ?
  *   -info_link_id      obsolete?
@@ -44,7 +43,7 @@ class Tasks_Setup_MigrateFromEgw14
         // egw record fields
         'container'            => '',
         'created_by'           => 'info_owner',
-        'creation_time'        => NULL,
+        'creation_time'        => 'info_datemodified',
         'last_modified_by'     => 'info_modifier',
         'last_modified_time'   => 'info_datemodified',
         'is_deleted'           => '',
@@ -54,6 +53,7 @@ class Tasks_Setup_MigrateFromEgw14
         'identifier'           => 'info_id',
         'percent'              => 'info_percent',
         'completed'            => 'info_datecompleted',
+        'due'                  => 'info_enddate',
         // ical common fields
         'class'                => 'info_access',
         'description'          => 'info_des',
@@ -75,7 +75,7 @@ class Tasks_Setup_MigrateFromEgw14
         'rstatus'               => '',
         // scheduleable interface fields
         'dtstart'               => 'info_startdate',
-        'duration'              => '',
+        'duration'              => 'info_planned_time',
         'recurid'               => '',
         // scheduleable interface fields with multiple appearance
         'exdate'                => '',
@@ -99,9 +99,45 @@ class Tasks_Setup_MigrateFromEgw14
         );
         
         while ($infolog = $stmt->fetchObject()) {
-            $Task = self::infolog2Task($infolog);
-            $Task->container = self::getOwnersContainer($infolog->info_owner);
-            $tasksBackend->createTask($Task);
+            $Task = self::$_mapping;
+            
+            foreach (array('info_datemodified', 'info_datecompleted', 'info_enddate', 'info_startdate' ) as $datefield) {
+                if ((int)$infolog->$datefield == 0) continue;
+                $infolog->$datefield = new Zend_Date($infolog->$datefield, Zend_Date::TIMESTAMP);
+            }
+            
+            foreach (self::$_mapping as $TaskKey => $InfoKey) {
+                if (!$InfoKey) continue;
+                
+                // Map fields
+                if (isset($infolog->$InfoKey)) {
+                    $Task[$TaskKey] = $infolog->$InfoKey;
+                }
+            }
+            
+            //$Task['identifier'] = self::id2uid($Task['identifier']);      // uid
+            unset($Task['identifier']);
+    
+            $Task['class']     = self::getClass($Task['class']);
+            $Task['status']    = self::getStatus($Task['status']);
+            $Task['container'] = self::getOwnersContainer($infolog->info_owner);
+            $Task['organizer'] = $Task['organizer'] ? $Task['organizer'] : $Task['created_by'];
+            
+            error_log(print_r($Task,true));
+            try {
+                $Task20 = new Tasks_Model_Task(NULL, true, true);
+                $Task20->setFromUserData($Task);
+                
+            } catch (Exception $e) {
+                $validation_errors = $Task20->getValidationErrors();
+                Zend_Registry::get('logger')->debug( 
+                    'Could not migrate Infolog with info_id ' . $infolog->info_id . "\n" . 
+                    'Tasks_Setup_MigrateFromEgw14::infolog2Task: ' . $e->getMessage() . "\n" .
+                    "Tasks_Model_Task::validation_errors: \n" .
+                    print_r($validation_errors,true));
+                    continue;
+            }
+            $tasksBackend->createTask($Task20);
         }
     }
     
@@ -201,52 +237,6 @@ class Tasks_Setup_MigrateFromEgw14
             
         }
         return $stati[$oldstatus];
-    }
-    
-    /**
-     * Convertes an infolog to a task
-     *
-     * @param Zend_Db_Table_Row $_infolog
-     * @retrun Tasks_Task Task
-     */
-    protected static function infolog2Task($_infolog)
-    {
-        $Task = self::$_mapping;
-        
-        foreach (self::$_mapping as $TaskKey => $InfoKey) {
-            if (!$InfoKey) continue;
-            
-            // Date conversions
-            if (in_array($InfoKey, array('info_datemodified','info_datecompleted', 'info_startdate'))) {
-                if ((int)$_infolog->$InfoKey > 0) {
-                    $_infolog->$InfoKey = new Zend_Date($_infolog->$InfoKey, Zend_Date::TIMESTAMP); 
-                } else {
-                    unset ($_infolog->$InfoKey);
-                    $Task[$TaskKey] = NULL;
-                }
-            }
-            
-            // Map fields
-            if (isset($_infolog->$InfoKey)) {
-                $Task[$TaskKey] = $_infolog->$InfoKey;
-            }
-        }
-        
-        // due
-        if ($Task['dtstart'] instanceof Zend_Date && (int)$_infolog->info_enddate > 0) {
-            $end = new Zend_Date($_infolog->info_enddate, Zend_Date::TIMESTAMP);
-            $Task['duration'] = $end->sub($Task['dtstart']);
-        }
-        
-        
-        //$Task['identifier'] = self::id2uid($Task['identifier']);      // uid
-        unset($Task['identifier']);
-        $Task['class'] = self::getClass($Task['class']);              // class
-        $Task['status'] = self::getStatus($Task['status']);           // status
-        $Task['organizer'] = $Task['organizer'] ? $Task['organizer'] : $Task['created_by'];
-        
-        //error_log(print_r($Task,true));
-        return new Tasks_Task($Task, true);
     }
     
 }

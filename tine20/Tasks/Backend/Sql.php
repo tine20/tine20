@@ -106,10 +106,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             ->group('tasks.identifier')
         );
         
-        $TaskSet = new Egwbase_Record_RecordSet(array(), 'Tasks_Task');
+        $TaskSet = new Egwbase_Record_RecordSet(array(), 'Tasks_Model_Task');
         $Tasks = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         foreach ($Tasks as $TaskArray) {
-            $Task = new Tasks_Task($TaskArray, true, array('part' => Zend_Date::ISO_8601));
+            $Task = new Tasks_Model_Task($TaskArray, true, true);
             $TaskSet->addRecord($Task);
             //error_log(print_r($Task->toArray(),true));
         }
@@ -120,7 +120,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * Return a single Task
      *
      * @param string $_uid
-     * @return Tasks_Task task
+     * @return Tasks_Model_Task task
      */
     public function getTask($_uid)
     {
@@ -141,17 +141,17 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             throw new Exception("Task with uid: $_uid not found!");
         }
         
-        $Task = new Tasks_Task($TaskArray[0], true, array('part' => Zend_Date::ISO_8601)); 
+        $Task = new Tasks_Model_Task($TaskArray[0], true, array('part' => Zend_Date::ISO_8601)); 
         return $Task;
     }
     
     /**
      * Create a new Task
      *
-     * @param Tasks_Task $_task
-     * @return Tasks_Task
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
      */
-    public function createTask(Tasks_Task $_task)
+    public function createTask(Tasks_Model_Task $_task)
     {
         $_task->creation_time = Zend_Date::now();
         $_task->created_by = $this->_currentAccount->getId();
@@ -176,10 +176,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Upate an existing Task
      *
-     * @param Tasks_Task $_task
-     * @return Tasks_Task
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
      */ 
-    public function updateTask(Tasks_Task $_task)
+    public function updateTask(Tasks_Model_Task $_task)
     {
         try {
             $this->_db->beginTransaction();
@@ -191,7 +191,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $oldTask = $this->getTask($_task->identifier);
             if($oldtask->last_modified_time != $_task->last_modified_time) {
                 $mods = $modLog->getModifications('Tasks', $_task->identifier,
-                        'Tasks_Task', Tasks_Backend_Factory::SQL,
+                        'Tasks_Model_Task', Tasks_Backend_Factory::SQL,
                         $_task->last_modified_time, $oldTask->last_modified_time);
                 foreach ($mods as $mod) {
                     if(! in_array($mod->modified_attribute,$currentMods) ) {
@@ -221,7 +221,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $modLogEntry = new Egwbase_Timemachine_Model_ModificationLog(array(
                 'application'          => 'Tasks',
                 'record_identifier'    => $_task->identifier,
-                'record_type'          => 'Tasks_Task',
+                'record_type'          => 'Tasks_Model_Task',
                 'record_backend'       => Tasks_Backend_Factory::SQL,
                 'modification_time'    => $taskParts['tasks']['last_modified_time'],
                 'modification_account' => $this->_currentAccount->getId()
@@ -335,7 +335,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Seperates tasks data into the different tables
      *
-     * @param Tasks_Task $_task
+     * @param Tasks_Model_Task $_task
      * @return array array of arrays
      */
     protected function seperateTaskData($_task)
