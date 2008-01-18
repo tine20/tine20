@@ -47,7 +47,11 @@ class Crm_Model_Contact extends Egwbase_Record_Abstract
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),      
         'adr_one_region'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
-        'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
+        'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_email'         => array(Zend_Filter_Input::ALLOW_EMPTY => true)         
     );
  
     /**

@@ -1902,10 +1902,10 @@ Egw.Crm.LeadEditDialog = function() {
         var st_activities = new Ext.data.SimpleStore({
                 fields: ['id','status','status2','datum','titel','message','responsible'],
                 data: [
-                        ['0','3','4','05.12.2007 15:30','der titel','Die Karl-Theodor-BrÃ¼cke, besser bekannt als Alte BrÃ¼cke, ist eine BrÃ¼cke Ã¼ber den Neckar in Heidelberg. Sie verbindet die Altstadt mit dem gegenÃ¼berliegenden Neckarufer am Ã¶stlichen Ende des Stadtteils Neuenheim. Die Alte BrÃ¼cke wurde 1788 unter KurfÃ¼rst Karl Theodor als insgesamt neunte BrÃ¼cke an dieser Stelle errichtet.','Meier,Heiner'],
-                        ['1','2','1','12.11.2007 07:10','der titel2','Erbaut wurde sie nach einem Vorschlag des Bauinspektors Mathias Mayer aus Stein auf den vorhandenen Pfeilern der VorgÃ¤ngerbauten. Im Zusammenspiel des Flusstals, der Altstadt und des Schlosses prÃ¤gt die Alte BrÃ¼cke seit jeher das klassische Heidelberg-Panorama.','Schultze,Heinz'],
+                        ['0','3','4','05.12.2007 15:30','der titel','Die Karl-Theodor-BrÃÂ¼cke, besser bekannt als Alte BrÃÂ¼cke, ist eine BrÃÂ¼cke ÃÂ¼ber den Neckar in Heidelberg. Sie verbindet die Altstadt mit dem gegenÃÂ¼berliegenden Neckarufer am ÃÂ¶stlichen Ende des Stadtteils Neuenheim. Die Alte BrÃÂ¼cke wurde 1788 unter KurfÃÂ¼rst Karl Theodor als insgesamt neunte BrÃÂ¼cke an dieser Stelle errichtet.','Meier,Heiner'],
+                        ['1','2','1','12.11.2007 07:10','der titel2','Erbaut wurde sie nach einem Vorschlag des Bauinspektors Mathias Mayer aus Stein auf den vorhandenen Pfeilern der VorgÃÂ¤ngerbauten. Im Zusammenspiel des Flusstals, der Altstadt und des Schlosses prÃÂ¤gt die Alte BrÃÂ¼cke seit jeher das klassische Heidelberg-Panorama.','Schultze,Heinz'],
                         ['2','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
-                        ['3','3','4','05.12.2007 15:30','der titel','Die Wirkung der Alten BrÃ¼cke liegt dabei vor allem in der Einbettung in die Landschaft. Heute gehÃ¶rt sie zu den bekanntesten SehenswÃ¼rdigkeiten Heidelbergs.','Meier,Heiner'],
+                        ['3','3','4','05.12.2007 15:30','der titel','Die Wirkung der Alten BrÃÂ¼cke liegt dabei vor allem in der Einbettung in die Landschaft. Heute gehÃÂ¶rt sie zu den bekanntesten SehenswÃÂ¼rdigkeiten Heidelbergs.','Meier,Heiner'],
                         ['4','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
                         ['5','3','4','05.12.2007 15:30','der titel','die lange message','Meier,Heiner'],
                         ['6','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
@@ -2184,7 +2184,11 @@ Egw.Crm.LeadEditDialog = function() {
                 {name: 'adr_one_locality'},
                 {name: 'adr_one_region'},
                 {name: 'adr_one_postalcode'},
-                {name: 'adr_one_countryname'}
+                {name: 'adr_one_countryname'},
+                {name: 'tel_work'},
+                {name: 'tel_cell'},
+                {name: 'tel_fax'},
+                {name: 'contact_email'}
             ]
         });     
      
@@ -2217,7 +2221,11 @@ Egw.Crm.LeadEditDialog = function() {
                 {name: 'adr_one_locality'},
                 {name: 'adr_one_region'},
                 {name: 'adr_one_postalcode'},
-                {name: 'adr_one_countryname'}
+                {name: 'adr_one_countryname'},
+                {name: 'tel_work'},
+                {name: 'tel_cell'},
+                {name: 'tel_fax'},
+                {name: 'contact_email'}
             ],
             // turn on remote sorting
             remoteSort: true
@@ -2232,15 +2240,29 @@ Egw.Crm.LeadEditDialog = function() {
 
       var cm_contacts = new Ext.grid.ColumnModel([
             	{id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
-            	{id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },                
-                {id:'n_family', header: "n_family", dataIndex: 'n_family', width: 150, sortable: true },
-                {id:'n_given', header: "n_given", dataIndex: 'n_given', width: 100, sortable: true },
-                {id:'org_name', header: "org_name", dataIndex: 'org_name', width: 170, sortable: true },
-                {id:'adr_one_street', header: "adr_one_street", dataIndex: 'adr_one_street', width: 150, sortable: true },
-                {id:'adr_one_postalcode', header: "adr_one_postalcode", dataIndex: 'adr_one_postalcode', width: 60, sortable: true },
-                {id:'adr_one_countryname', header: "adr_one_countryname", dataIndex: 'adr_one_countryname', width: 40, sortable: true }                            
+       //     	{id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },                
+                {id:'n_fileas', header: "", dataIndex: 'n_fileas', renderer: function(val, meta, record) {
+                        var formated_return = record.data.n_fileas + '<br />' + 
+                                              record.data.adr_one_street + '<br />' + 
+                                              record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality;
+                    
+                        return formated_return;
+                    }, width: 170, sortable: false },
+                {id:'org_name', header: "", dataIndex: 'org_name', renderer: function(val, meta, record) {
+                        var formated_return = 'phone: ' + record.data.tel_work + '<br />' + 
+                                              'cellphone: ' + record.data.tel_cell + '<br />' + 
+                                              'email: <a href="mailto:' + 'record.data.contact_email' + '">' + record.data.contact_email + '</a>';
+                    
+                        return formated_return;
+                    }, width: 170, sortable: false }
+                                      
         ]);
         
+        /*
+        renderer: function(val, meta, record) {
+                        return val;
+                    },
+        */
         var grid_contact = new Ext.grid.GridPanel({
                 id: 'choosenContactsView',
 	            store: store_contacts,
@@ -2249,7 +2271,10 @@ Egw.Crm.LeadEditDialog = function() {
                     forceFit: true
                 },
                 sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-        //        anchor: '100% 100%',
+                anchor: '100% 100%',
+                getRowClass: function(record, index){
+                    return 'contactType_lead';
+                },
                 autoHeight: true,        
                 enableColumnHide: false,
                 enableColumnMove: false,
@@ -2259,152 +2284,10 @@ Egw.Crm.LeadEditDialog = function() {
                 iconCls:'icon-grid'
         });
 
-
-
-/*
- 
- 
-       store_contactSearch.on('load', function(_store) {
-            _store.filterBy(function(records, id) {
-                var present_ids = new Array();
-                var choosenContactsStore = Ext.getCmp('choosenContactsView').store;                
-                choosenContactsStore.each(function(record) {
-                    present_ids.push(record.data.contact_id);
-                })
-
-                var present = '0';
-                for (p = 0; p < present_ids.length; p++) {
-                    if (records.data.contact_id == present_ids[p]) {
-                        present = '1';
-                    }
-                }                
-                if (present == '1') {
-                    return false;
-                } else {
-                    return true;
-                }
-            });            
+        grid_contact.on('beforeshow', function(grid_cont) {
+               grid_cont.getView ().addRowClass('contactType_lead'); 
         });
-        
-	    // Custom rendering Template for the View
-        var contactsTpl = new Ext.XTemplate(         
-                    '<tpl for=".">',
-                    '<div class="contact-item {link_remark:this.getType}">',
-                    '{org_name:this.isNotEmpty}', 
-                    '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{n_family}, {n_given}</b></a><br />',
-                    '{adr_one_street:this.isNotEmpty}',                     
-                    '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
-                    
-                    '<p><i>Phone:</i> {phone}<br />', 
-                    '<i>Cellphone:</i> {cellphone}<br />', 
-                    '<a href="mailto:{email}">{email}</a></p>', 
-                    '</div></tpl>', {
-                        isNotEmpty: function(textValue){
-                            if ((textValue === null) || (textValue.length == 0)) {
-                                return '';
-                            }
-                            else {
-                                return textValue+'<br />';
-                            }
-                        }, 
-                        getType: function(typeId){                          
-                            switch (typeId) {
-                                case "lead": return ' contactType_lead';
-                                          break;
-                                     
-                                case "partner": return ' contactType_partner';
-                                          break;
-                                          
-                                case "internal": return ' contactType_internal';
-                                          break;
-                            }
-                        }                                                
-        });
-        
-        var searchContactsTpl = new Ext.XTemplate( 
-                    '<tpl for=".">',
-                    '<div class="contact-item-small">',
-                    '{org_name:this.isNotEmpty}', 
-                    '<b>{n_family}, {n_given}</b><br />',
-                    '{adr_one_street:this.isNotEmpty}',                     
-                    '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
-                    '</div></tpl>', {
-                        isNotEmpty: function(textValue){
-                            if ((textValue === null) || (textValue.length == 0)) {
-                                return '';
-                            }
-                            else {
-                                return textValue+'<br />';
-                            }
-                        }                                                
-        });    
-        
-        var itemSelector = ".contact-item";    
- 
-
-
-
-
-        var grid_contact = new Ext.Panel({
-            id: 'grid_contact',
-            cls: 'contacts_background',                            
-            layout:'fit',  
-	        autoScroll: true,
-            autoHeight: true,
-	        items: new Ext.DataView({
-	            tpl: contactsTpl,       
-                autoHeight:true,                         
-                id: 'choosenContactsView',
-	            store: store_contacts,
-                overClass: 'x-view-over',
-	            itemSelector: itemSelector
-	        }),	
-	        tbar: [
-	            /*new Ext.app.SearchField({
-	            	id: 'crm_editDialog_quickSearchField',
-	                store: store_contactSearch
-	            }),*//*
-	            new Ext.form.ComboBox({
-	            	id: 'crm_editDialog_quickSearchField',
-	            	store: store_contactSearch,
-	            	typeAhead: false,
-	            	loadingText: 'Searching...',
-	            	width: 280,
-	            	pageSize:10,
-	            	hideTrigger:true,
-                    tpl: searchContactsTpl,
-                    itemSelector: 'div.contact-item-small'                  
-	            })
-	        ],
-            bbar: [
-                new Ext.Action({
-                    text: 'lead',
-                    //disabled: true,
-                    //handler: handler_toggleLeads,
-                    iconCls: 'contactType_lead_icon'
-                }),
-                new Ext.Action({
-                    text: 'partner',
-                    //disabled: true,
-                    //handler: handler_toggleLeads,
-                    iconCls: 'contactType_partner_icon'
-                }),            
-                new Ext.Action({
-                    text: 'internal',                    
-                    //disabled: true,
-                    //handler: handler_toggleLeads,
-                    iconCls: 'contactType_internal_icon'
-                })                    
-            
-            ]
-        });  
-        
-        var crm_editDialog_quickSearchField = Ext.getCmp('crm_editDialog_quickSearchField');
-        crm_editDialog_quickSearchField.on('select', function(combo, record, index) {
-            var choosenContactsStore = Ext.getCmp('choosenContactsView').store;
-            choosenContactsStore.add(record);
-        });
- */       
+       
   		var folderTrigger = new Ext.form.TriggerField({
             fieldLabel:'folder (person in charge)', 
 			id: 'lead_container_name',
@@ -2428,6 +2311,7 @@ Egw.Crm.LeadEditDialog = function() {
         var tabPanelOverview = {
             title:'overview',
             layout:'column',
+            layoutOnTabChange:true,            
             defaults: {
             //    bodyStyle:'padding:20px',
                 anchor: '100% 100%',
@@ -2537,19 +2421,194 @@ Egw.Crm.LeadEditDialog = function() {
                 ]
             }]
         };        
+   
+
+  /*
+       store_contactSearch.on('load', function(_store) {
+            _store.filterBy(function(records, id) {
+                var present_ids = new Array();
+                var choosenContactsStore = Ext.getCmp('choosenContactsView').store;                
+                choosenContactsStore.each(function(record) {
+                    present_ids.push(record.data.contact_id);
+                })
+
+                var present = '0';
+                for (p = 0; p < present_ids.length; p++) {
+                    if (records.data.contact_id == present_ids[p]) {
+                        present = '1';
+                    }
+                }                
+                if (present == '1') {
+                    return false;
+                } else {
+                    return true;
+                }
+            });            
+        }); 
+  */      
+	    // Custom rendering Template for the View
+        var contactsTpl = new Ext.XTemplate(         
+            '<tpl for="."><div class="contact-item {link_remark:this.getType}">',
+                '<table width="100%"><tr width="100%">',
+                    '<td width="50%" valign="top">',
+                        '{org_name:this.isNotEmpty}', 
+                        '<a href="index.php?method=Addressbook.editContact&_contactId={contact_id}" target="_new"><b>{n_family}, {n_given}</b></a><br />',
+                        '{adr_one_street:this.isNotEmpty}',                     
+                        '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
+                    '</td>',    
+                    '<td width="50%" valign="top">',
+                        '<i>Phone: </i> {tel_work}<br />', 
+                        '<i>Cellphone: </i> {tel_cell}<br />', 
+                        '<i>E-mail: </i> <a href="mailto:{contact_email}">{contact_email}</a></p>',                         
+                    '</td>',
+                '</tr></table>',
+            '</div></tpl>', {
+                        isNotEmpty: function(textValue){
+                            if ((textValue === null) || (textValue.length == 0)) {
+                                return '';
+                            }
+                            else {
+                                return textValue+'<br />';
+                            }
+                        }, 
+                        getType: function(typeId){                          
+                            switch (typeId) {
+                                case "lead": return ' contactType_lead';
+                                          break;
+                                     
+                                case "partner": return ' contactType_partner';
+                                          break;
+                                          
+                                case "internal": return ' contactType_internal';
+                                          break;
+                            }
+                        }                                                
+        });
+        
+        var searchContactsTpl = new Ext.XTemplate( 
+                    '<tpl for=".">',
+                    '<div class="contact-item-small">',
+                    '{org_name:this.isNotEmpty}', 
+                    '<b>{n_family}, {n_given}</b><br />',
+                    '{adr_one_street:this.isNotEmpty}',                     
+                    '{adr_one_postalcode} {adr_one_locality:this.isNotEmpty}',
+                    '</div></tpl>', {
+                        isNotEmpty: function(textValue){
+                            if ((textValue === null) || (textValue.length == 0)) {
+                                return '';
+                            }
+                            else {
+                                return textValue+'<br />';
+                            }
+                        }                                                
+        });    
+        
+
+        var grid_contact = new Ext.Panel({
+            id: 'grid_contact',
+            cls: 'contacts_background',                            
+            layout:'fit',  
+	    //    autoScroll: true,
+        //    autoHeight: true,
+            anchor: '40% 100%',
+	        items: new Ext.DataView({
+	            tpl: contactsTpl,       
+                autoHeight:true,                         
+                id: 'choosenContactsView',
+	            store: store_contacts,
+                overClass: 'x-view-over',
+	            itemSelector: '.contact-item'
+	        }),	
+            tbar: [
+                new Ext.Action({
+                    text: 'lead',
+                    //disabled: true,
+                    //handler: handler_toggleLeads,
+                    iconCls: 'contactType_lead_icon'
+                }),
+                new Ext.Action({
+                    text: 'partner',
+                    //disabled: true,
+                    //handler: handler_toggleLeads,
+                    iconCls: 'contactType_partner_icon'
+                }),            
+                new Ext.Action({
+                    text: 'internal',                    
+                    //disabled: true,
+                    //handler: handler_toggleLeads,
+                    iconCls: 'contactType_internal_icon'
+                })                    
+            
+            ]
+        });  
+
+        var contact_search = new Ext.Panel({
+            id: 'grid_contact_search',
+            cls: 'contacts_background',                            
+            layout:'fit',  
+	    //    autoScroll: true,
+        //    autoHeight: true,
+            anchor: '60%',
+	        items:  new Ext.form.ComboBox({
+                	id: 'crm_editDialog_quickSearchField',
+                	store: store_contactSearch,
+                	typeAhead: false,
+                	loadingText: 'Searching...',
+                    emptyText: 'Search for new contact...',
+    //	            	width: '100%',
+                    anchor: '60%',
+                	pageSize:10,
+                	hideTrigger:true,
+                    tpl: searchContactsTpl,
+                    itemSelector: 'div.contact-item-small'                  
+                })
+        });
+        
+        var crm_editDialog_quickSearchField = Ext.getCmp('crm_editDialog_quickSearchField');
+        crm_editDialog_quickSearchField.on('select', function(combo, record, index) {
+
+            var choosenContactsStore = Ext.getCmp('choosenContactsView').store;
+            
+            if(choosenContactsStore.getById(record.data.contact_id)) {
+                var choosenContacts = Ext.getCmp('choosenContactsView');
+                choosenContacts.select(record.data.contact_id);         
+                
+                Ext.Msg.alert('info', 'This contact already exists in list.');
+                
+            } else {
+                choosenContactsStore.add(record);
+            }
+        });   
+   
      
         var tabPanelPeople = {
             title:'people',
-            layout:'form',
-            deferredRender:false,
-            border:false,
-            items:[{  
-            }]            
+            layout:'column',
+            layoutOnTabChange:true,  
+            defaults: {
+                anchor: '100% 100%',
+                border:false,
+                frame:false
+              //deferredRender:false,                
+            },         
+            items:[{
+                columnWidth: .6,
+                items:[                
+                    grid_contact
+                ]
+            } , {
+                columnWidth: .4,
+                //anchor:'100%',
+                items:[                                
+                    contact_search
+                ]
+            }]         
         }; 
                 
         var tabPanelActivities = {
             title:'activities',
             layout:'form',
+            layoutOnTabChange:true,            
             deferredRender:false,
             border:false,
             items:[{  
@@ -2559,6 +2618,7 @@ Egw.Crm.LeadEditDialog = function() {
         var tabPanelProducts = {
             title:'products',
             layout:'form',
+            layoutOnTabChange:true,            
             deferredRender:false,
             anchor:'100% 100%',
             border:false,
@@ -2580,12 +2640,14 @@ Egw.Crm.LeadEditDialog = function() {
 			region: 'center',
             id: 'leadDialog',
 			tbar: leadToolbar, 
-			//deferredRender: false,
+			deferredRender: false,
+            layoutOnTabChange:true,            
             items: [{
                 xtype:'tabpanel',
 	            plain:true,
 	            activeTab: 0,
-				//deferredRender:false,
+				deferredRender:false,
+                layoutOnTabChange:true,                
                 anchor:'100% 100%',
 	            defaults:{bodyStyle:'padding:10px'},
 	            items:[

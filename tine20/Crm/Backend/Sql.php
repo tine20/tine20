@@ -775,6 +775,30 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->lead_container, Egwbase_Container::GRANT_DELETE)) {
             throw new Exception('delete access to CRM denied');
         }
+
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $db->beginTransaction();
+        
+        try {
+            $where_lead    = $db->quoteInto('lead_id = ?', $leadId);
+            $where_product = $db->quoteInto('lead_lead_id = ?', $leadId);          
+            $where_links[] = $db->quoteInto('link_app1 = ?', 'crm');          
+            $where_links[] = $db->quoteInto('link_id1 = ?', $leadId);                      
+            $where_links[] = $db->quoteInto('link_app2 = ?', 'addressbook');                                  
+
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where_lead);
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', $where_product);            
+            $db->delete(SQL_TABLE_PREFIX . 'links', $where_links);               
+
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log('TRANSACTION ERROR ' . $e->getMessage());
+        }
+
        
         $where  = array(
             $this->leadTable->getAdapter()->quoteInto('lead_id = ?', $leadId),
@@ -908,7 +932,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                   $select->where($_where);
              }               
         }
-        error_log($select->__toString());
+ //       error_log($select->__toString());
        
         $stmt = $db->query($select);
 

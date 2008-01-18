@@ -193,8 +193,8 @@ input {
 
 .contacts_background {
     background: #FFFFFF url(../../extjs/resources/images/default/form/text-bg.gif) repeat-x scroll 0pt 19pt;
-
     border: 1px solid #B5B8C8;
+    margin-right: 10px;
 }
 
 .contactType_lead {
