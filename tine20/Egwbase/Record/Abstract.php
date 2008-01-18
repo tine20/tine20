@@ -393,17 +393,14 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     protected function _convertISO8601ToZendDate(array &$_data)
     {
         foreach ($this->_datetimeFields as $field) {
-            if (!isset($_data[$field])) continue;
-            // no need to convert, is already a Zend_Date
-            if($_data[$field] instanceof Zend_Date) continue;
+            if (!isset($_data[$field]) || $_data[$field] instanceof Zend_Date) continue;
             
             if(is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
-                    $_data[$field][$dataKey] = new Zend_Date($dataValue, Zend_Date::ISO_8601);
+                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, Zend_Date::ISO_8601);
                 }
-                //$this->_convertISO8601ToZendDate($_data[$field]);
             } else {
-                $_data[$field] = new Zend_Date($_data[$field], Zend_Date::ISO_8601);
+                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Zend_Date($_data[$field], Zend_Date::ISO_8601);
             }
         }
     }
