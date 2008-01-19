@@ -102,4 +102,19 @@ class Addressbook_Controller
         
         return $rows;
     }
+    
+    /**
+     * fetch one contact identified by contactid
+     *
+     * @param int $_contactId
+     * @return Addressbook_Model_Contact
+     */
+    public function getContact($_contactId)
+    {
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        $result = $backend->getContactById($_contactId);
+        
+        return $result;
+    }
 }
