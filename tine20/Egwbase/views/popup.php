@@ -21,7 +21,6 @@
                     echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
                 }
                 echo "Egw.Egwbase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');\n";
-                if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";"
             ?>
     </script>
 	<?php 
@@ -35,6 +34,7 @@
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function(){
             Egw.Egwbase.initFramework();
+			<?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";" ?>
 			<?php if(isset($this->jsExecute)) echo "$this->jsExecute" ?>
 			window.focus();
 		});
