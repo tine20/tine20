@@ -2512,7 +2512,6 @@ Egw.Addressbook.GrantsDialog = function() {
         });
 
         var contactToolbar = new Ext.Toolbar({
-            /*id: 'Addressbook_Contacts_Toolbar', */
             items: [
                 quickSearchField
             ]
@@ -2613,7 +2612,10 @@ Egw.Addressbook.GrantsDialog = function() {
                     border:false
                 }), */
                 
-                items: [gridPanel, searchPanel],
+                items: [
+                    gridPanel, 
+                    searchPanel
+                ],
                 buttons: [{
                     text:'Save',
                     id: 'Addressbook_Grants_SaveButton',
