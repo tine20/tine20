@@ -437,15 +437,17 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $contactId)
         );
 
-        $result = $this->contactsTable->fetchRow($where);
+        $row = $this->contactsTable->fetchRow($where);
         
-        if($result === NULL) {
+        if($row === NULL) {
             throw new UnderFlowExecption('contact not found');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($result->contact_owner, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($row->contact_owner, Egwbase_Container::GRANT_READ)) {
             throw new Exception('permission to contact denied');
         }
+        
+        $result = new Addressbook_Model_Contact($row->toArray());
 
         return $result;
     }
@@ -597,8 +599,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
 
-        $result = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
-         
+        $rows = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
+
+        $result = new Egwbase_Record_RecordSet($rows->toArray(), 'Addressbook_Model_Contact');
+        
         return $result;
     }
 }
