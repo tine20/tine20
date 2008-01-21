@@ -1336,7 +1336,7 @@ Egw.Crm = function() {
                 '->',
                 ' ',
                 {
-                    text: 'Show ended Leads',
+                    text: 'Show closed leads',
                     enableToggle: true,
                     id: 'toggle_button',
                     handler: function(toggle) {
@@ -1605,7 +1605,24 @@ Egw.Crm.LeadEditDialog.Handler = function() {
 	    addContact: function(_button, _event) 
 	    {
             Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
-	    }                
+	    },    
+	    
+	    addContactToList: function(_button, _event) 
+	    {
+	    	var selectedRows = Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().getSelections();
+            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
+
+	    	for (var i = 0; i < selectedRows.length; ++i) {
+	            if(currentContactsStore.getById(selectedRows[i].id) === undefined) {
+	                //console.log('record ' + record.id + 'not found');
+	                currentContactsStore.addSorted(selectedRows[i], selectedRows[i].id);
+	            }
+            }
+	    	
+            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
+            
+            selectionModel.selectRow(currentContactsStore.indexOfId(selectedRows[0].id));
+        }      
     }
 }();
 
@@ -1628,7 +1645,9 @@ Egw.Crm.LeadEditDialog.Elements = function() {
         actionAddContactToList: new Ext.Action({
             text: 'add contact to list',
             disabled: true,
-            handler: Egw.Crm.LeadEditDialog.Handler.addContact,
+            handler: function(_button, _event) {
+            	Egw.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
+            },
             iconCls: 'action_add'
         }),
 	    
@@ -1669,8 +1688,8 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     var contact_url        = record.data.contact_url != null ? record.data.contact_url : ' ';                    
 
                 var formated_return = '<table>' + 
-                    '<tr><td>E-mail: </td><td>' + contact_email + '</td></tr>' + 
-                    '<tr><td>www: </td><td>' + contact_url + '</td></tr>' + 
+                    '<tr><td>Email: </td><td>' + contact_email + '</td></tr>' + 
+                    '<tr><td>WWW: </td><td>' + contact_url + '</td></tr>' + 
                     '</table>';
                 
                     return formated_return;
@@ -2864,17 +2883,17 @@ Egw.Crm.LeadEditDialog.Main = function() {
 		Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
 		    
         Ext.getCmp('crm_editLead_SearchContactsGrid').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-        	var record = _grid.getStore().getAt(_rowIndex);
-        	var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
-        	
-        	if(currentContactsStore.getById(record.id) === undefined) {
-        		//console.log('record ' + record.id + 'not found');
+            var record = _grid.getStore().getAt(_rowIndex);
+            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
+            
+            if(currentContactsStore.getById(record.id) === undefined) {
+                //console.log('record ' + record.id + 'not found');
                 currentContactsStore.addSorted(record, record.id);
-        	}
-        	
-        	var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
-        	
-        	selectionModel.selectRow(currentContactsStore.indexOfId(record.id));
+            }
+            
+            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
+            
+            selectionModel.selectRow(currentContactsStore.indexOfId(record.id));
         });
 
         var setRemoveContactButtonState = function(_selectionModel) {
@@ -2905,6 +2924,21 @@ Egw.Crm.LeadEditDialog.Main = function() {
         Ext.getCmp('crm_gridCostumer').on('activate', activateContactsSearch);
         Ext.getCmp('crm_gridPartner').on('activate', activateContactsSearch);
         Ext.getCmp('crm_gridAccount').on('activate', activateContactsSearch);
+        
+
+        var setAddContactButtonState = function(_selectionModel) {
+            var rowCount = _selectionModel.getCount();
+
+            if(rowCount < 1) {
+                // no row selected
+                Egw.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(true);
+            } else {
+                // at least one row selected
+                Egw.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(false);
+            }
+        }; 
+        
+        Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
         
     }
 
