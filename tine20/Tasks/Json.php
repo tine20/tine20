@@ -17,6 +17,9 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Tasks';
     
+    /**
+     * @var Tasks_Controller
+     */
     protected $_controller;
     
     protected $_timezone;
@@ -101,4 +104,12 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
         
     }
     
+    /**
+     * retruns all possible task stati
+     * 
+     * @return Egwbase_Record_RecordSet of Tasks_Model_Status
+     */
+    public function getStati() {
+        return $this->_controller->getStati()->toArray();
+    }
 }

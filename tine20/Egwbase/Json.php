@@ -59,6 +59,28 @@ class Egwbase_Json
         return $result;
     }
 
+    function getContainer($application, $nodeType, $owner=NULL)
+    {
+        switch($nodeType) {
+            case 'Personal':
+                if (!$owner) throw new Exception('No owner given');
+                $container = Egwbase_Container::getInstance()->getPersonalContainer($application,$owner);
+                break;
+            case 'Shared':
+                $container = Egwbase_Container::getInstance()->getSharedContainer($application);
+                break;
+            case 'OtherUsers':
+                $container = Egwbase_Container::getInstance()->getOtherUsers($application);
+                break;
+            default:
+                throw new Exception('no such NodeType');
+        }
+        echo Zend_Json::encode($container->toArray());
+
+        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
+        exit;
+    }
+    
     /**
      * authenticate user by username and password
      *

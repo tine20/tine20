@@ -2,7 +2,7 @@
  * egroupware 2.0
  * 
  * @package     Tasks
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: $
@@ -10,9 +10,48 @@
  */
  
 .TasksTreePanel {
-    background-image:url(../../images/oxygen/16x16/apps/kontact.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 
-.TasksMainGridPriorityHeader {
-    background-image:url(../../images/oxygen/16x16/apps/KVerbos.png) !important;
+.TasksMainGridStatus-DONE, TasksMainGridStatus-COMPLETED {
+    background-image:url(../../images/oxygen/16x16/actions/checkmark-korganizer.png) !important;
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+}
+
+.TasksMainGridStatus-NOT-STARTED {
+    background-image:url(../../images/oxygen/16x16/actions/application-exit.png) !important;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.TasksMainGridStatus-NEEDS-ACTION, .TasksMainGridStatus-IN-PROCESS {
+    background-image:url(../../images/oxygen/16x16/actions/tool.png) !important;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.TasksMainGridStatus-CANCELLED {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.TasksProgress {
+    height: 12px;
+}
+
+.TasksProgressText {
+	color:#000000;
+	font-size:9px;
+	font-weight:bold;
+	left:0pt;
+	overflow:hidden;
+	padding:0px 5px;
+	position:absolute;
+	text-align:center;
 }

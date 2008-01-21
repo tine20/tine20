@@ -80,8 +80,8 @@ class Tasks_Controller implements Tasks_Backend_Interface
         
         $classTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
         $statiTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
-        $this->_classes = $classTable->fetchAll();
-        $this->_stati = $statiTable->fetchAll();
+        //$this->_classes = new Egwbase_Record_RecordSet($classTable->fetchAll(), 'Egwbase_Record_Class');
+        $this->_stati = new Egwbase_Record_RecordSet($statiTable->fetchAll()->toArray(), 'Tasks_Model_Status');
         
         $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
@@ -192,5 +192,14 @@ class Tasks_Controller implements Tasks_Backend_Interface
             throw new Exception('Not allowed!');
         }
         $this->_backend->deleteTask($_uid);
+    }
+
+    /**
+     * retruns all possible task stati
+     * 
+     * @return Egwbase_Record_RecordSet of Tasks_Model_Status
+     */
+    public function getStati() {
+        return $this->_stati;
     }
 }

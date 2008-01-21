@@ -173,7 +173,7 @@ class Tasks_Setup_MigrateFromEgw14
                 Tasks_Backend_Factory::SQL
             );
             Egwbase_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
-                Egwbase_Container::GRANT_ADMIN
+                Egwbase_Container::GRANT_ANY
             ));
         }
         return $containers[$_owner];  

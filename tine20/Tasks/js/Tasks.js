@@ -2,7 +2,7 @@
  * egroupware 2.0
  * 
  * @package     Tasks
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: $
@@ -10,82 +10,18 @@
  */
 Ext.namespace('Egw.Tasks');
 
-Egw.Tasks.getToolbar = function() {
-
-	  	var action_add = new Ext.Action({
-		text: 'add',
-		iconCls: 'action_add',
-		handler: function () {
-       //     var tree = Ext.getCmp('venues-tree');
-	//		var curSelNode = tree.getSelectionModel().getSelectedNode();
-		//	var RootNode   = tree.getRootNode();
-        
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&_taskId=', 900, 700);
-         }
- 		}); 
-    
-    
-        var quickSearchField = new Ext.app.SearchField({
-            id:        'quickSearchField',
-            width:     200,
-            emptyText: 'enter searchfilter'
-        }); 
-        quickSearchField.on('change', function() {
-            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
-        });
-        
-        var currentDate = new Date();
-        var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
-        
-        var dateFrom = new Ext.form.DateField({
-            id:             'Crm_dateFrom',
-            allowBlank:     false,
-            validateOnBlur: false,
-            value:          oneWeekAgo
-        });
-        var dateTo = new Ext.form.DateField({
-            id:             'Crm_dateTo',
-            allowBlank:     false,
-            validateOnBlur: false,
-            value:          currentDate
-        });
-        
-
-        
-        var toolbar = new Ext.Toolbar({
-            id: 'Crm_toolbar',
-            split: false,
-            height: 26,
-            items: [
-                action_add,
-                new Ext.Toolbar.Separator(),
-                '->',
-                'Display from: ',
-                ' ',
-                dateFrom,
-                'to: ',
-                ' ',
-                dateTo,                
-                new Ext.Toolbar.Separator(),
-                '->',
-                'Search:', ' ',
-                ' ',
-                quickSearchField
-            ]
-        });
-        
-        return toolbar;
-    }
-  
-
-
 // entry point, required by egwbase
 Egw.Tasks.getPanel = function() {
     
-    var taskPanel =  new Ext.Panel({
+	// init stati
+    Egw.Tasks.Status.init();
+	
+    var taskPanel =  new Egw.containerTreePanel({
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
-        items: new Ext.DatePicker({}),
+		itemName: 'Tasks',
+		appName: 'Tasks',
+        //items: new Ext.DatePicker({}),
         border: false
     });
     
@@ -98,6 +34,7 @@ Egw.Tasks.getPanel = function() {
 }
 
 Egw.Tasks.TaskGrid = function(){
+    
     var sm;
     var grid;
     var store;
@@ -125,6 +62,7 @@ Egw.Tasks.TaskGrid = function(){
 		        { name: 'identifier' },
 		        { name: 'percent' },
 		        { name: 'completed', type: 'date', dateFormat: 'c' },
+		        { name: 'due', type: 'date', dateFormat: 'c' },
 		        // ical common fields
 		        { name: 'class' },
 		        { name: 'description' },
@@ -177,11 +115,11 @@ Egw.Tasks.TaskGrid = function(){
             store: store,
             cm: new Ext.grid.ColumnModel([
 			
-				{id: 'status',    header: "Status",    width: 40,  sortable: true, dataIndex: 'status'},
-				{id: 'percent',   header: "Percent",   width: 50,  sortable: true, dataIndex: 'percent'},
+				{id: 'status',    header: "Status",    width: 40,  sortable: true, dataIndex: 'status', renderer: Egw.Tasks.Status.getStatusIcon },
+				{id: 'percent',   header: "Percent",   width: 50,  sortable: true, dataIndex: 'percent', renderer: _progressBar },
 				{id: 'summary',   header: "Summaray",  width: 200, sortable: true, dataIndex: 'summaray'},
 				{id: 'priority',  header: "Priority",  width: 20,  sortable: true, dataIndex: 'priority'},
-				{id: 'duration',  header: "Due Date",  width: 150, sortable: true, dataIndex: 'duration'},
+				{id: 'due',       header: "Due Date",  width: 100, sortable: true, dataIndex: 'due', renderer: Egw.Egwbase.Common.dateRenderer },
 				{id: 'organizer', header: "Organizer", width: 150, sortable: true, dataIndex: 'organizer'}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
 		    ]),
@@ -189,12 +127,108 @@ Egw.Tasks.TaskGrid = function(){
         });
 		
 		console.log(grid.getColumnModel().getColumnById('priority'));
-    }
+    };
+	
+	_progressBar = function(percent) {
+		return '<div class="x-progress-wrap TasksProgress">' +
+                '<div class="x-progress-inner TasksProgress">' +
+                    '<div class="x-progress-bar TasksProgress" style="width:' + percent + '%">' +
+                        '<div class="TasksProgressText TasksProgress">' +
+                            '<div>'+ percent +'%</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="x-progress-text x-progress-text-back TasksProgress">' +
+                        '<div>&#160;</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+	};
 	
 	return{
 		getGrid: function() {initStore(); initGrid(); return grid;}
 	}
 }();
+
+Egw.Tasks.getToolbar = function() {
+
+        var action_add = new Ext.Action({
+        text: 'add',
+        iconCls: 'action_add',
+        handler: function () {
+        //  var tree = Ext.getCmp('venues-tree');
+        //  var curSelNode = tree.getSelectionModel().getSelectedNode();
+        //  var RootNode   = tree.getRootNode();
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&_taskId=', 900, 700);
+         }
+        }); 
+    
+    
+        var quickSearchField = new Ext.app.SearchField({
+            id:        'quickSearchField',
+            width:     200,
+            emptyText: 'enter searchfilter'
+        }); 
+        quickSearchField.on('change', function() {
+            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
+        });
+        
+        
+        var statusFilter = new Ext.app.ClearableComboBox({
+            id: 'TasksStatusFilter',
+            //name: 'statusFilter',
+            hideLabel: true,            
+            store: Egw.Tasks.Status.Store,
+            displayField: 'status',
+            valueField: 'identifier',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            emptyText: 'any',
+            selectOnFocus: true,
+            editable: false,
+            width:150    
+        });
+		statusFilter.on('select', function(combo, record, index) {
+           if (!record.data) {
+               var _probability = '';       
+           } else {
+               var _probability = record.data.key;
+           }
+           
+           combo.triggers[0].show();
+		});
+		
+		var organizerFilter = new Ext.form.ComboBox({
+			id: 'TasksorganizerFilter',
+			emptyText: 'Cornelius Weiss'
+		});
+
+        var toolbar = new Ext.Toolbar({
+            id: 'Tasks_Toolbar',
+            split: false,
+            height: 26,
+            items: [
+                action_add,
+                new Ext.Toolbar.Separator(),
+                '->',
+                'Status: ',
+                ' ',
+                statusFilter,
+                'Organizer: ',
+                ' ',
+                organizerFilter,                
+                new Ext.Toolbar.Separator(),
+                '->',
+                'Search:', ' ',
+                ' ',
+                quickSearchField
+            ]
+        });
+        
+        return toolbar;
+    }
+  
+
 
 Egw.Tasks.EditDialog = function(){
   
