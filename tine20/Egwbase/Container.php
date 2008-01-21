@@ -572,7 +572,7 @@ class Egwbase_Container
         $stmt = $db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Account_Model_Account');
+        $result = new Egwbase_Record_RecordSet(null, 'Egwbase_Account_Model_Account');
         $accountsBackend = Egwbase_Account::getBackend();
         
         foreach($rows as $row) {
