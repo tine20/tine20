@@ -3,8 +3,8 @@
  * eGroupWare 2.0
  * 
  * @package     Egwbase
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */ 
@@ -34,7 +34,7 @@ class Egwbase_AccessLog
      */
     private function __construct()
     {
-        $conf = array('name' => 'egw_access_log');
+        $conf = array('name' => SQL_TABLE_PREFIX . 'access_log');
         if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
             $conf['primary'] = array('ip','li');
         }

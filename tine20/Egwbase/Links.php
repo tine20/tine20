@@ -36,7 +36,7 @@ class Egwbase_Links
      * 
      */
     private function __construct() {
-        $this->_linksTable = new Egwbase_Db_Table(array('name' => 'egw_links'));
+        $this->_linksTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
     }
     
     /**
@@ -72,7 +72,7 @@ class Egwbase_Links
         }
         
         $select = $db->select()
-            ->from('egw_links')
+            ->from(SQL_TABLE_PREFIX . 'links')
             ->where($where1)
             ->orWhere($where2);
         

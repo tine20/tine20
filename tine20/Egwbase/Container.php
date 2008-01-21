@@ -102,10 +102,10 @@ class Egwbase_Container
      */
     private function __construct() {
         try {
-            $this->containerTable = new Egwbase_Db_Table(array('name' => 'egw_container'));
+            $this->containerTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createContainerTable();
-            $this->containerTable = new Egwbase_Db_Table(array('name' => 'egw_container'));
+            $this->containerTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
 
             $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             
@@ -135,10 +135,10 @@ class Egwbase_Container
         }
         
         try {
-            $this->containerAclTable = new Egwbase_Db_Table(array('name' => 'egw_container_acl'));
+            $this->containerAclTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createContainerAclTable();
-            $this->containerAclTable = new Egwbase_Db_Table(array('name' => 'egw_container_acl'));
+            $this->containerAclTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
 
             $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             $accountId = Zend_Registry::get('currentAccount')->account_id;
@@ -204,18 +204,18 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_container');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'container');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE egw_container (
+            $result = $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "container (
             	container_id int(11) NOT NULL auto_increment, 
             	container_name varchar(256), 
             	container_type enum('personal', 'shared', 'internal') NOT NULL,
             	container_backend varchar(64) NOT NULL,
             	application_id int(11) NOT NULL,
             	PRIMARY KEY  (`container_id`),
-            	KEY `egw_container_container_type` (`container_type`),
-            	KEY `egw_container_container_application_id` (`application_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            	KEY `" . SQL_TABLE_PREFIX . "container_container_type` (`container_type`),
+            	KEY `" . SQL_TABLE_PREFIX . "container_container_application_id` (`application_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
     }
@@ -228,17 +228,17 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_container_acl');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'container_acl');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE egw_container_acl (
+            $result = $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "container_acl (
                 acl_id int(11) NOT NULL auto_increment,
             	container_id int(11) NOT NULL, 
             	account_id int(11),
             	account_grant int(11) NOT NULL,
             	PRIMARY KEY (`acl_id`),
-            	UNIQUE KEY `egw_container_acl_primary` (`container_id`, `account_id`, `account_grant`),
-            	KEY `egw_container_acl_account_id` (`account_id`)
+            	UNIQUE KEY `" . SQL_TABLE_PREFIX . "container_acl_primary` (`container_id`, `account_id`, `account_grant`),
+            	KEY `" . SQL_TABLE_PREFIX . "container_acl_account_id` (`account_id`)
             	) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
@@ -333,14 +333,14 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_container_acl', array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)'))
-            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $accountId)
-            ->where('egw_container.container_type = ?', self::TYPE_INTERNAL)
-            ->where('egw_container.application_id = ?', $application->app_id)
-            ->group('egw_container.container_id')
+            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id')
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $accountId)
+            ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_INTERNAL)
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
+            ->group(SQL_TABLE_PREFIX . 'container.container_id')
             ->having('account_grants & ?', self::GRANT_READ)
-            ->order('egw_container.container_name');
+            ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getInternalContainer:: " . $select->__toString());
 
@@ -385,17 +385,17 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
-            ->from('egw_container')
+            ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
-                'egw_container_acl',
-                'egw_container.container_id = egw_container_acl.container_id', 
-                array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)')
+                SQL_TABLE_PREFIX . 'container_acl',
+                SQL_TABLE_PREFIX . 'container.container_id = ' . SQL_TABLE_PREFIX . 'container_acl.container_id', 
+                array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
-            ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
-            ->group('egw_container.container_id')
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+            ->group(SQL_TABLE_PREFIX . 'container.container_id')
             ->having('account_grants & ?', $right)
-            ->order('egw_container.container_name');
+            ->order(SQL_TABLE_PREFIX . 'container.container_name');
 
         //error_log("getContainer:: " . $select->__toString());
 
@@ -432,16 +432,16 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
-            ->from('egw_container')
+            ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
-                'egw_container_acl',
-                'egw_container.container_id = egw_container_acl.container_id', 
-                array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)')
+                SQL_TABLE_PREFIX . 'container_acl',
+                SQL_TABLE_PREFIX . 'container.container_id = ' . SQL_TABLE_PREFIX . 'container_acl.container_id', 
+                array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
-            ->where('egw_container.container_id = ?', $containerId)
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
-            ->group('egw_container.container_id')
-            ->order('egw_container.container_name');
+            ->where(SQL_TABLE_PREFIX . 'container.container_id = ?', $containerId)
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+            ->group(SQL_TABLE_PREFIX . 'container.container_id')
+            ->order(SQL_TABLE_PREFIX . 'container.container_name');
 
         //error_log("getContainer:: " . $select->__toString());
 
@@ -478,21 +478,21 @@ class Egwbase_Container
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
-            ->from(array('owner' => 'egw_container_acl'), array())
+            ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
             ->join(
-                array('user' => 'egw_container_acl'),
+                array('user' => SQL_TABLE_PREFIX . 'container_acl'),
                 'owner.container_id = user.container_id', 
                 array('account_grants' => 'BIT_OR(user.account_grant)')
             )
-            ->join('egw_container', 'owner.container_id = egw_container.container_id')
+            ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id')
             ->where('owner.account_id = ?', $_owner)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
-            ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
-            ->group('egw_container.container_id')
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
+            ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_PERSONAL)
+            ->group(SQL_TABLE_PREFIX . 'container.container_id')
             ->having('account_grants & ?', self::GRANT_READ)
-            ->order('egw_container.container_name');
+            ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -519,14 +519,14 @@ class Egwbase_Container
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
-            ->from('egw_container_acl', array('account_grants' => 'BIT_OR(egw_container_acl.account_grant)'))
-            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id')
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
-            ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', self::TYPE_SHARED)
-            ->group('egw_container.container_id')
+            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id')
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
+            ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_SHARED)
+            ->group(SQL_TABLE_PREFIX . 'container.container_id')
             ->having('account_grants & ?', self::GRANT_READ)
-            ->order('egw_container.container_name');
+            ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -555,16 +555,16 @@ class Egwbase_Container
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
-            ->from(array('owner' => 'egw_container_acl'), array('account_id'))
-            ->join(array('user' => 'egw_container_acl'),'owner.container_id = user.container_id', array())
-            ->join('egw_container', 'user.container_id = egw_container.container_id', array())
+            ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
+            ->join(array('user' => SQL_TABLE_PREFIX . 'container_acl'),'owner.container_id = user.container_id', array())
+            ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id', array())
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
             ->where('user.account_grant = ?', self::GRANT_READ)
-            ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
-            ->order('egw_container.container_name')
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
+            ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_PERSONAL)
+            ->order(SQL_TABLE_PREFIX . 'container.container_name')
             ->group('owner.account_id');
             
         //error_log("getContainer:: " . $select->__toString());
@@ -605,20 +605,20 @@ class Egwbase_Container
         $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
-            ->from(array('owner' => 'egw_container_acl'), array())
+            ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
             ->join(
-                array('user' => 'egw_container_acl'),
+                array('user' => SQL_TABLE_PREFIX . 'container_acl'),
                 'owner.container_id = user.container_id', 
                 array('account_grants' => 'BIT_OR(user.account_grant)'))
-            ->join('egw_container', 'user.container_id = egw_container.container_id')
+            ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id')
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) or user.account_id IS NULL', $groupMemberships)
-            ->where('egw_container.application_id = ?', $application->app_id)
-            ->where('egw_container.container_type = ?', self::TYPE_PERSONAL)
-            ->group('egw_container.container_id')
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
+            ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_PERSONAL)
+            ->group(SQL_TABLE_PREFIX . 'container.container_id')
             ->having('account_grants & ?', self::GRANT_READ)
-            ->order('egw_container.container_name');
+            ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
 
@@ -706,11 +706,11 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_container_acl', array('container_id'))
-            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id', array())
-            ->where('egw_container_acl.account_id IN (?) OR egw_container_acl.account_id IS NULL', $groupMemberships)
-            ->where('egw_container_acl.account_grant = ?', $grant)
-            ->where('egw_container.container_id = ?', $containerId);
+            ->from(SQL_TABLE_PREFIX . 'container_acl', array('container_id'))
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id', array())
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
+            ->where(SQL_TABLE_PREFIX . 'container.container_id = ?', $containerId);
                     
         //error_log("getContainer:: " . $select->__toString());
 
@@ -740,9 +740,9 @@ class Egwbase_Container
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_container_acl')
-            ->join('egw_container', 'egw_container_acl.container_id = egw_container.container_id', array())
-            ->where('egw_container.container_id = ?', $containerId);
+            ->from(SQL_TABLE_PREFIX . 'container_acl')
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.container_id', array())
+            ->where(SQL_TABLE_PREFIX . 'container.container_id = ?', $containerId);
                     
         //error_log("getAllGrants:: " . $select->__toString());
 
