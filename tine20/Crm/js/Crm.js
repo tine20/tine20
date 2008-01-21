@@ -1652,13 +1652,17 @@ Egw.Crm.LeadEditDialog.Elements = function() {
     	
     	getTabPanelManageContacts: function() {
     		// why does this not work????
-    		//var quickSearchField = new Ext.app.SearchField({
-            var quickSearchField = new Ext.form.TriggerField({
+    		var quickSearchField = new Ext.app.SearchField({
+            //var quickSearchField = new Ext.form.TriggerField({
 	            id: 'crm_editLead_SearchContactsField',
 	            width: 250,
 	            emptyText: 'enter searchfilter',
-            }); 
+            });
+			quickSearchField.on('resize', function(){
+				quickSearchField.wrap.setWidth(280);
+			})
             
+
             var contactToolbar = new Ext.Toolbar({
                 items: [
                     quickSearchField
