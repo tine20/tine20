@@ -1595,7 +1595,14 @@ Egw.Crm.LeadEditDialog.Elements = function() {
 	    }),
         
         actionAddContact: new Ext.Action({
-            text: 'add addressbook contact',
+            text: 'create new contact',
+            handler: Egw.Crm.LeadEditDialog.Handler.addContact,
+            iconCls: 'action_add'
+        }),
+
+        actionAddContactToList: new Ext.Action({
+            text: 'add contact to list',
+            disabled: true,
             handler: Egw.Crm.LeadEditDialog.Handler.addContact,
             iconCls: 'action_add'
         }),
@@ -1682,8 +1689,10 @@ Egw.Crm.LeadEditDialog.Elements = function() {
     		// why does this not work????
     		var quickSearchField = new Ext.app.SearchField({
             //var quickSearchField = new Ext.form.TriggerField({
+            //var quickSearchField = new Ext.form.TwinTriggerField({
 	            id: 'crm_editLead_SearchContactsField',
 	            width: 250,
+	            //autoWidth: true,
 	            emptyText: 'enter searchfilter',
             });
 			quickSearchField.on('resize', function(){
@@ -1701,11 +1710,6 @@ Egw.Crm.LeadEditDialog.Elements = function() {
 	            title:'manage contacts',
 	            layout:'border',
                 //tbar: contactToolbar,
-                tbar: [
-                    '->',
-                    Egw.Crm.LeadEditDialog.Elements.actionAddContact,                
-                    Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
-                ],                
 	            //layoutOnTabChange:true,  
                 defaults: {
                     //anchor: '100% 100%',
@@ -1715,19 +1719,27 @@ Egw.Crm.LeadEditDialog.Elements = function() {
 	            },         
 	            items:[{
 	            	region: 'west',
+	            	xtype: 'tabpanel',
 	            	width: 300,
 	            	split: true,
-	            	layout: 'fit',
+	            	activeTab: 0,
+	            	tbar: [
+                        Egw.Crm.LeadEditDialog.Elements.actionAddContactToList
+	            	],
 	            	items: [
                         {
                             xtype:'grid',
                             id: 'crm_editLead_SearchContactsGrid',
-                            //title:'Search Contacts',
+                            title:'Search',
                             cm: this.columnModelSearchContacts,
                             store: Egw.Crm.LeadEditDialog.Stores.getContactsSearch(),
                             autoExpandColumn: 'n_fileas',
                             tbar: contactToolbar
-                        }
+                        }, {
+			               title: 'Browse',
+			               html: 'Browse',
+			               disabled: true
+			            }
                         //searchPanel
 	               ]
 	            }, {
@@ -1736,6 +1748,10 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     id: 'crm_editLead_ListContactsTabPanel',
                     title:'contacts panel',
                     activeTab: 0,
+	                tbar: [
+	                    Egw.Crm.LeadEditDialog.Elements.actionAddContact,                
+	                    Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
+	                ],                
                     items: [
                         {
                             xtype:'grid',

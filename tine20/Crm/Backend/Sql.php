@@ -852,17 +852,20 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $rows = Egwbase_Container::getInstance()->getOtherUsers('crm');
 
-        $accountData = array();
+        //$accountData = array();
+        
+        $result = new Egwbase_Record_RecordSet(NULL, 'Egwbase_Account_Model_Account');
 
         foreach($rows as $account) {
-            $accountData[] = array(
+            $accountData = array(
                 'account_id'      => $account['account_id'],
                 'account_loginid' => 'loginid',
                 'account_name'    => 'Account ' . $account['account_id']
             );
+            $result->addRecord($accountData);
         }
 
-        $result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Account_Model_Account');
+        //$result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Account_Model_Account');
         
         return $result;
     }
