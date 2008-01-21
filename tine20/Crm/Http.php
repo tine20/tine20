@@ -15,7 +15,13 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 {
     protected $_appname = 'Crm';
       
-    
+    /**
+     * create edit lead dialog
+     *
+     * @param int $_leadId
+     * @todo catch permission denied exceptions only
+     * 
+     */
 	public function editLead($_leadId)
 	{
          if(empty($_leadId)) {
@@ -41,18 +47,37 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		
 		$controller = Crm_Controller::getInstance();
 		$leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-		if($_leadId !== NULL && $lead = $leads->getLeadById($_leadId)) {
-			$view->formData['values'] = $lead->toArray();
-			$folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
-			
-            $_products = $leads->getProductsById($_leadId);
-            $view->formData['values']['products'] = $_products->toArray();
+		
+		if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
+		    $view->formData['values'] = $lead->toArray();
             
-            $_contacts = $leads->getContactsById($_leadId);
-            $view->formData['values']['contacts'] = $_contacts->toArray();      
-           
-			$view->formData['config']['folderName']   = $folder->container_name;
-			$view->formData['config']['folderRights'] = $folder->account_grants;
+		    $links = $controller->getLinks($_leadId, 'addressbook');
+            foreach($links as $link) {
+                try {
+                    $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
+                    switch($link['remark']) {
+                        case 'customer':
+                            $view->formData['values']['contactsCustomer'][] = $contact->toArray();
+                            break;
+                        case 'partner':
+                            $view->formData['values']['contactsPartner'][] = $contact->toArray();
+                            break;
+                        case 'account':
+                            $view->formData['values']['contactsInternal'][] = $contact->toArray();
+                            break;
+                    }
+                } catch (Exception $e) {
+                    // do nothing
+                }
+            }
+            
+		    $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
+            $view->formData['config']['folderName']   = $folder->container_name;
+            $view->formData['config']['folderRights'] = $folder->account_grants;
+		    
+            $products = $leads->getProductsById($_leadId);
+            $view->formData['values']['products'] = $products->toArray();
+            
 		    
 		} else {
             $view->formData['values'] = $controller->getEmptyLead()->toArray();
@@ -84,7 +109,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 
 		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
-		$view->jsExecute = 'Egw.Crm.LeadEditDialog.display();';
+		$view->jsExecute = 'Egw.Crm.LeadEditDialog.Main.display();';
 
 		$view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

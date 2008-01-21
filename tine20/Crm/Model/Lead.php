@@ -19,7 +19,9 @@ class Crm_Model_Lead extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'lead_name'                     => 'StringTrim'
+        'lead_id'                       => 'Digits',
+        'lead_name'                     => 'StringTrim',
+        'lead_probability'              => 'Digits'
     );
     
     /**
@@ -32,21 +34,24 @@ class Crm_Model_Lead extends Egwbase_Record_Abstract
     protected $_validators = array(
         'lead_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'lead_name'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'lead_leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'lead_leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_container'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'lead_modifier'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lead_container'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'lead_start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'lead_modified'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'lead_created'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lead_description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lead_end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'lead_turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lead_probability'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'lead_end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        #'lead_lastread'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_lastreader'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
+        #'lead_partner'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_customer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_account'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_modified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        #'lead_created'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_modifier'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_lastread'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'lead_lastreader'     => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
     );
 
     /**

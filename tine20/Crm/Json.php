@@ -322,14 +322,14 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */	
-	public function saveLead()
+	public function saveLead($linkedCustomer, $linkedPartner, $linkedAccount)
     {
-        if(empty($_POST['lead_id'])) {
-            unset($_POST['lead_id']);
-        }
+        //if(empty($_POST['lead_id'])) {
+        //    unset($_POST['lead_id']);
+        //}
 
         // lead modifier
-        $_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->account_id;
+        //$_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->account_id;
 
         $leadData = new Crm_Model_Lead();
         try {
@@ -345,43 +345,30 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
             
-   //     error_log(print_r($leadData->toArray(), true));
-        if(Crm_Controller::getInstance()->saveLead($leadData) === FALSE) {
-            $result = array('success'   => FALSE);
-        } else {
-            $result = array('success'   => TRUE);
-        }
+        error_log(print_r($leadData->toArray(), true));
         
+        $savedLead = Crm_Controller::getInstance()->saveLead($leadData);
+        
+        // set linked contacts
+        $linkedCustomer = Zend_Json::decode($linkedCustomer);
+        Crm_Controller::getInstance()->setLinkedCustomer($savedLead->lead_id, $linkedCustomer);
 
+        $linkedPartner = Zend_Json::decode($linkedPartner);
+        Crm_Controller::getInstance()->setLinkedPartner($savedLead->lead_id, $linkedPartner);
+
+        $linkedAccount = Zend_Json::decode($linkedAccount);
+        Crm_Controller::getInstance()->setLinkedAccount($savedLead->lead_id, $linkedAccount);
 
         // products
 		if(strlen($_POST['products']) > 2) {	    
-            if(!empty($leadData->lead_id)) {
-                $this->saveProducts($_POST['products'], $leadData->lead_id);
-            } else {
-                $this->saveProducts($_POST['products'], $_POST['lead_id']);    
-            }
+            $this->saveProducts($_POST['products'], $savedLead->lead_id);
 		} else {
-            if(!empty($leadData->lead_id)) {
-                Crm_Controller::getInstance()->deleteProducts($leadData->lead_id);    
-            } else {
-                Crm_Controller::getInstance()->deleteProducts($_POST['lead_id']);                    
-            }		    
-		    
+            Crm_Controller::getInstance()->deleteProducts($savedLead->lead_id);    
         }         
-  
-        
-        // contacts
-		if(strlen($_POST['contacts']) > 2) {  
-            if(!empty($leadData->lead_id)) {      
-                $this->saveContacts($_POST['contacts'], $leadData->lead_id);
-            } else {
-                $this->saveContacts($_POST['contacts'], $_POST['lead_id']);    
-            }
-        }
-        
+
+        $result = array('success'   => TRUE);
+            
         return $result;  
- 
     }      
 
      /**
@@ -462,7 +449,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }
         }
 
-        $result['results'] = $this->formatContacts($result['results']);
+        $this->getLinkedContacts($result['results']);
 
         return $result;
     }
@@ -484,7 +471,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }
         }
         
-        $result['results'] = $this->formatContacts($result['results']);        
+        $this->getLinkedContacts($result['results']);
         
         return $result;
     }    
@@ -522,7 +509,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }
         }
 
-        $result['results'] = $this->formatContacts($result['results']);
+        $this->getLinkedContacts($result['results']);
 
         return $result;
     }
@@ -555,7 +542,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             //$result['totalcount'] = $backend->getCountOfOtherPeopleLeads();
         }
 
-        $result['results'] = $this->formatContacts($result['results']);
+        $this->getLinkedContacts($result['results']);
 
         return $result;
     }
@@ -601,45 +588,41 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $result['totalcount']   = count($result['results']);
         }
 
-        $result['results'] = $this->formatContacts($result['results']);
-        
+        $this->getLinkedContacts($result['results']);
      
         return $result;                
   
     } 
-     
-     
-    public function formatContacts(array $_data)
+    
+    public function getLinkedContacts(array &$_leads)
     {
-        $i = '0';
+        $controller = Crm_Controller::getInstance();
         
-        foreach($_data AS $single_result) {
-            $_contacts = $single_result['contacts']->toArray();    
-            
-            foreach($_contacts AS $_contact) {
-                if($_contact['link_remark'] == 'lead') {
-                    $_data[$i]['lead_lead_linkId'] = $_contact['link_id'];
-                    $_data[$i]['lead_lead'] = $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'];
-                    $_data[$i]['lead_lead_detail'] =  $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'] . '<br>' . $_contact['adr_one_street'] . '<br>' . $_contact['adr_one_locality'] . '<br>' . $_contact['adr_one_countryname'];                    
-                }    
-                
-                if($_contact['link_remark'] == 'partner') {                
-                    $_data[$i]['lead_partner_linkId'] = $_contact['link_id']; ;
-                    $_data[$i]['lead_partner'] = $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'];
-                    $_data[$i]['lead_partner_detail'] =  $_contact['org_name'] . '<br>' . $_contact['n_family'] . ', ' . $_contact['n_given'] . '<br>' . $_contact['adr_one_street'] . '<br>' . $_contact['adr_one_locality'] . '<br>' . $_contact['adr_one_countryname'];               
+        foreach($_leads as $id => $lead) {
+            $links = $controller->getLinks($lead['lead_id'], 'addressbook');
+            foreach($links as $link) {
+                switch($link['remark']) {
+                    case 'partner':
+                        try {
+                            $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
+                            $_leads[$id]['lead_partner'][] = $contact->toArray();
+                        } catch (Exception $e) {
+                            // do nothing
+                        }
+                        break;
+                    case 'customer':
+                        try {
+                            $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
+                            $_leads[$id]['lead_customer'][] = $contact->toArray();
+                        } catch (Exception $e) {
+                            // do nothing
+                        }
+                        break;
                 }
             }
-            
-            $_data[$i]['contacts'] = $_contacts;
-            $i = $i + 1;
-        }   
-
-        
-        
-        return $_data;
-    } 
-     
-     
+        }
+    }
+          
 // handle FOLDERS
     public function getFoldersByOwner($owner)
     {

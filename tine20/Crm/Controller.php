@@ -185,7 +185,7 @@ class Crm_Controller
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
         $result = $backend->deleteProducts($_id);
-error_log('CONTROLLER :: deleteProducts');
+
         return $result;    
     }     
 
@@ -252,10 +252,27 @@ error_log('CONTROLLER :: deleteProducts');
         //$data = $_leadData->toArray();
           
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
         $result = $backend->saveLead($_lead);
         
         return $result;
     }     
+    
+    public function getLead($_leadId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
+        $result = $backend->getLeadById($_leadId);
+                
+        return $result;
+    }
+    
+    public function getLinks($_leadId, $_application = NULL)
+    {
+        $links = Egwbase_Links::getInstance()->getLinks('crm', $_leadId, $_application);
+        
+        return $links;
+    }
     
     public function getEmptyLead()
     {
@@ -271,4 +288,18 @@ error_log('CONTROLLER :: deleteProducts');
         return $emptyLead;
     }
     
+    public function setLinkedCustomer($_leadId, array $_contactIds)
+    {
+        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'customer');
+    }
+
+    public function setLinkedPartner($_leadId, array $_contactIds)
+    {
+        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'partner');
+    }
+
+    public function setLinkedAccount($_leadId, array $_contactIds)
+    {
+        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
+    }
 }

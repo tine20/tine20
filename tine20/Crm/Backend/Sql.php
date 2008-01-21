@@ -338,7 +338,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_app1 = ?', 'crm');
         $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_app2 = ?', 'addressbook');        
-        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_id1 = ?', $_id);        
+        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_id1 = ?', $id);        
 				        
         $select = $this->_getContactsSelectObject();
 
@@ -348,21 +348,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
              }               
         }
 
-   //     error_log($select->__toString());
+        //error_log($select->__toString());
        
         $stmt = $select->query();
-/*
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        
-        if(empty($row)) {
-            throw new UnderFlowExecption('no contacts found');
-        }
-        
-        //error_log(print_r($row, true));
-        
-        $contacts = new Crm_Model_Lead($row);
-    */    
     
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $contacts = new Egwbase_Record_RecordSet($rows, 'Crm_Model_Contact');
@@ -483,7 +471,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');      
         
         try {          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_lead_id = '.$_id);      
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_lead_id = ' . $id);      
         } catch (Exception $e) {
             error_log($e->getMessage());
         }      
@@ -710,23 +698,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         // do not convert timestamps, until we have changed the table layout to store iso dates
         //$leadData = $_lead->toArray(false);
         $leadData = $_lead->toArray();
-        
-/*        if($leadData['lead_start'] instanceof Zend_Date) {
-            $leadData['lead_start'] = $leadData['lead_start']->get(Zend_Date::TIMESTAMP);
-        }
-
-        if($leadData['lead_end'] instanceof Zend_Date) {
-            $leadData['lead_end'] = $leadData['lead_end']->get(Zend_Date::TIMESTAMP);
-        } else {
-            $leadData['lead_end'] = null;
-        }
-        
-        if($leadData['lead_end_scheduled'] instanceof Zend_Date) {
-            $leadData['lead_end_scheduled'] = $leadData['lead_end_scheduled']->get(Zend_Date::TIMESTAMP);
-        } else {
-            $leadData['lead_end_scheduled'] = null;
-        } */
-        
+                
         //error_log(print_r($leadData, true));
 
         if(empty($leadData['lead_container'])) {
@@ -737,15 +709,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new Exception('write access to lead denied');
         }
 
-        //$currentAccount = Zend_Registry::get('currentAccount');
-
-        //if(empty($leadData['lead_container'])) {
-        //    $leadData['lead_container'] = $currentAccount->account_id;
-        //}
-
         if($leadData['lead_id'] === NULL) {
             $result = $this->leadTable->insert($leadData);
-            $_leadData->lead_id = $this->leadTable->getAdapter()->lastInsertId();
+            $_lead->lead_id = $this->leadTable->getAdapter()->lastInsertId();
         } else {      
             $where  = array(
                 $this->leadTable->getAdapter()->quoteInto('lead_id = (?)', $leadData['lead_id']),
@@ -754,7 +720,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $result = $this->leadTable->update($leadData, $where);
         }
 
-        return $_leadData;
+        return $_lead;
     }
 
     /**
@@ -942,11 +908,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
 
 
-        $leadContacts = $this->getLeadContacts($leads);
+        //$leadContacts = $this->getLeadContacts($leads);
 
-        $leads->setContactData($leadContacts);
+        //$leads->setContactData($leadContacts);
 
-//error_log(print_r($leads));            
+        //error_log(print_r($leads));            
         
         return $leads;
     }   
@@ -1144,6 +1110,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL) 
     {
         $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('crm');
+        
+        if($sharedContainer->count() === 0) {
+            return false;
+        }
         
         $containerIds = array();
         
