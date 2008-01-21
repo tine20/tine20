@@ -1575,7 +1575,12 @@ Egw.Crm.LeadEditDialog.Handler = function() {
 	
 	        //Ext.getCmp('Addressbook_Grants_SaveButton').enable();
 	        //Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
-	    }
+	    },
+
+	    addContact: function(_button, _event) 
+	    {
+            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+	    }                
     }
 }();
 
@@ -1583,35 +1588,58 @@ Egw.Crm.LeadEditDialog.Elements = function() {
     // public functions and variables
     return {
     	actionRemoveContact: new Ext.Action({
-	        text: 'remove contact',
+	        text: 'remove contact from list',
 	        disabled: true,
 	        handler: Egw.Crm.LeadEditDialog.Handler.removeContact,
-	        iconCls: 'action_removeContact'
+	        iconCls: 'action_delete'
 	    }),
+        
+        actionAddContact: new Ext.Action({
+            text: 'add addressbook contact',
+            handler: Egw.Crm.LeadEditDialog.Handler.addContact,
+            iconCls: 'action_add'
+        }),
 	    
     	columnModelDisplayContacts: new Ext.grid.ColumnModel([
             {id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
-            {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
+            {id:'n_fileas', header: 'Name / Address', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                 function(val, meta, record) {
-                    var n_fileas = record.data.n_fileas != null ? record.data.n_fileas : '';
-                    var org_name = record.data.org_name != null ? record.data.org_name : ' '
+                    var n_fileas           = record.data.n_fileas != null ? record.data.n_fileas : '';
+                    var org_name           = record.data.org_name != null ? record.data.org_name : ' ';
+                    var adr_one_street     = record.data.adr_one_street != null ? record.data.adr_one_street : ' ';
+                    var adr_one_postalcode = record.data.adr_one_postalcode != null ? record.data.adr_one_postalcode : ' ';
+                    var adr_one_locality   = record.data.adr_one_locality != null ? record.data.adr_one_locality : ' ' ;                                       
                     
-                    var formated_return = '<b>' + n_fileas + '</b><br />' + org_name;
+                    
+                    var formated_return = '<b>' + n_fileas + '</b><br />' + org_name + '<br  />' + 
+                        adr_one_street + '<br />' + 
+                        adr_one_postalcode + ' ' + adr_one_locality    ;                    
                     
                     return formated_return;
                 }
             },
-            {id:'contact_one', header: "Address", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
-                var formated_return =  
-                    record.data.adr_one_street + '<br />' + 
-                    record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality;
+            {id:'contact_one', header: "Phone", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
+                    var tel_work           = record.data.tel_work != null ? record.data.tel_work : ' ';
+                    var tel_fax            = record.data.tel_fax != null ? record.data.tel_fax : ' ';
+                    var tel_cell           = record.data.tel_cell != null ? record.data.tel_cell : ' '  ;                                      
+
+                var formated_return = '<table>' + 
+                    '<tr><td>Phone: </td><td>' + tel_work + '</td></tr>' + 
+                    '<tr><td>Fax: </td><td>' + tel_fax + '</td></tr>' + 
+                    '<tr><td>Cellphone: </td><td>' + tel_cell + '</td></tr>' + 
+                    '</table>';
                 
                     return formated_return;
                 }
             },
-            {id:'tel_work', header: "Contactdata", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                var formated_return = 'Phone: ' + record.data.tel_work + '<br />' + 
-                    'Cellphone: ' + record.data.tel_cell + '<br />';
+            {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
+                    var contact_email      = record.data.contact_email != null ? '<a href="mailto:'+record.data.contact_email+'">'+record.data.contact_email+'</a>' : ' ';
+                    var contact_url        = record.data.contact_url != null ? record.data.contact_url : ' ';                    
+
+                var formated_return = '<table>' + 
+                    '<tr><td>E-mail: </td><td>' + contact_email + '</td></tr>' + 
+                    '<tr><td>www: </td><td>' + contact_url + '</td></tr>' + 
+                    '</table>';
                 
                     return formated_return;
                 }
@@ -1670,9 +1698,14 @@ Egw.Crm.LeadEditDialog.Elements = function() {
             });
 
     		var tabPanel = {
-	            title:'Manage contacts',
+	            title:'manage contacts',
 	            layout:'border',
                 //tbar: contactToolbar,
+                tbar: [
+                    '->',
+                    Egw.Crm.LeadEditDialog.Elements.actionAddContact,                
+                    Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
+                ],                
 	            //layoutOnTabChange:true,  
                 defaults: {
                     //anchor: '100% 100%',
@@ -1703,9 +1736,6 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     id: 'crm_editLead_ListContactsTabPanel',
                     title:'contacts panel',
                     activeTab: 0,
-                    bbar: [
-                        Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
-                    ],
                     items: [
                         {
                             xtype:'grid',
@@ -1732,7 +1762,6 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     ]
                 }]         
             }
-            
             return tabPanel;
         }
     }
@@ -2508,8 +2537,10 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     }
                 },
                 {id:'tel_work', header: "Contactdata", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var formated_return = 'Phone: ' + record.data.tel_work + '<br />' + 
-                        'Cellphone: ' + record.data.tel_cell + '<br />';
+                    var formated_return = '<table>' + 
+                        '<tr><td>Phone: </td><td>' + record.data.tel_work + '</td></tr>' + 
+                        '<tr><td>Cellphone: </td><td>' + record.data.tel_cell + '</td></tr>' + 
+                        '</table>';
                     
                         return formated_return;
                     }
@@ -2537,7 +2568,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             '</div></tpl>');    
         
         var tabPanelOverview = {
-            title:'Overview',
+            title:'overview',
             layout:'border',
             layoutOnTabChange:true,
             //deferredRender:false,
@@ -2752,7 +2783,22 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 });
             }
         };
-		 
+
+        Ext.getCmp('crm_gridCostumer').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
+        	var record = _grid.getStore().getAt(_rowIndex);
+            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
+        });
+        
+        Ext.getCmp('crm_gridPartner').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
+        	var record = _grid.getStore().getAt(_rowIndex);
+            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
+        });
+        
+        Ext.getCmp('crm_gridAccount').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
+        	var record = _grid.getStore().getAt(_rowIndex);
+            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
+        });                
+         
 		Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
 		    
         Ext.getCmp('crm_editLead_SearchContactsGrid').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
