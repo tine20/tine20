@@ -345,7 +345,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
             
-        error_log(print_r($leadData->toArray(), true));
+        //error_log(print_r($leadData->toArray(), true));
         
         $savedLead = Crm_Controller::getInstance()->saveLead($leadData);
         
@@ -366,7 +366,9 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             Crm_Controller::getInstance()->deleteProducts($savedLead->lead_id);    
         }         
 
-        $result = array('success'   => TRUE);
+        $result = array(
+            'success'   => TRUE
+        );
             
         return $result;  
     }      
