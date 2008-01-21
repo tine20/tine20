@@ -404,7 +404,7 @@ Egw.Crm = function() {
 
         ds_crm.on('beforeload', function(_dataSource) {
         	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
-            
+
         	/*
         	var from = Date.parseDate(
         	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
@@ -1330,10 +1330,35 @@ Egw.Crm = function() {
                 new Ext.Toolbar.Separator(),
                 {
                     text:'Options',
-                    iconCls: 'action_edit',  
+                    iconCls: 'action_edit', 
                     menu: settings_tb_menu
                 },
                 '->',
+                ' ',
+                {
+                    text: 'Show ended Leads',
+                    enableToggle: true,
+                    id: 'toggle_button',
+                    handler: function(toggle) {
+                        var dataStore = Ext.getCmp('gridCrm').getStore();
+
+                        if(toggle.pressed) {
+                            dataStore.filterBy(function(record) {
+                                if(record.data.lead_end) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            });
+                        }
+                        
+                        if(!toggle.pressed) {
+                            dataStore.reload();
+                        }
+                    },                    
+                    pressed: false
+                    
+                },
                 'Search:  ', ' ',                
                 filter_combo_leadstate,
 				' ',
@@ -1693,7 +1718,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
 	            id: 'crm_editLead_SearchContactsField',
 	            width: 250,
 	            //autoWidth: true,
-	            emptyText: 'enter searchfilter',
+	            emptyText: 'enter searchfilter'
             });
 			quickSearchField.on('resize', function(){
 				quickSearchField.wrap.setWidth(280);
@@ -1713,7 +1738,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
 	            //layoutOnTabChange:true,  
                 defaults: {
                     //anchor: '100% 100%',
-                    border:false,
+                    border:false
                     //frame:false
                     //deferredRender:false,                
 	            },         
@@ -2593,22 +2618,22 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 //bodyStyle:'padding:20px',
                 //anchor: '100% 100%',
                 border: true,
-                frame: true,
+                frame: true
                 //deferredRender:false,                
             },
             items: [{
 		        title: 'Last 10 activities',
 		        region: 'east',
+                autoScroll: true,
 		        width: 300,
-		        //minSize: 200,
-		        //maxSize: 250,
-		        split: true,
+              //  layout: 'fit',
+		      //  split: true,
 		        //margins: '0 5 5 5'
 		        items: [
 		          new Ext.DataView({
                     tpl: ActivitiesTpl,       
-                    //autoHeight:true,                         
-                    id: 'ggrid_activities_limited',
+                    autoHeight:true,                    
+                    id: 'grid_activities_limited',
                     store: st_activities,
                     overClass: 'x-view-over',
                     itemSelector: 'activities-item-small'
@@ -2617,12 +2642,15 @@ Egw.Crm.LeadEditDialog.Main = function() {
 		    },{
 		        region:'center',
 		        layout: 'form',
+                autoHeight: true,
+                id: 'editCenterPanel',
 		        //margins: '5 5 0 0'
                 items: [
                     txtfld_leadName
                 , {
                     xtype:'textarea',
-                    //fieldLabel:'Notizen', 
+                    //fieldLabel:'Notizen',
+                    id: 'lead_notes',
                     hideLabel: true,
                     name:'lead_description',
                     height: 120,
@@ -2631,6 +2659,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 }, {
                     layout:'column',
                     height: 150,
+                    id: 'lead_combos',
                     anchor:'100%',                        
                     items: [{
                         columnWidth: .33,
@@ -2678,9 +2707,10 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     }]
                 }, {
                     xtype: 'tabpanel',
+                    id: 'contactsPanel',
                     title:'contacts panel',
                     activeTab: 0,
-                    height: 250,
+                    height: 307,
                     items: [
 	                    {
 		                    xtype:'grid',
@@ -2767,8 +2797,24 @@ Egw.Crm.LeadEditDialog.Main = function() {
         
 		var viewport = new Ext.Viewport({
 			layout: 'border',
+            id: 'editViewport',
 			items: leadedit
 		});
+
+        Ext.getCmp('editViewport').on('afterlayout',function(container) {
+             var _dimension = container.getSize();
+             var _offset = 100;
+             if(Ext.isIE7) {
+                 var _offset = 117;
+             }
+             var _heightContacts = _dimension.height - Ext.getCmp('lead_name').getSize().height 
+                                                     - Ext.getCmp('lead_notes').getSize().height
+                                                     - Ext.getCmp('lead_combos').getSize().height
+                                                     - _offset;
+
+             Ext.getCmp('contactsPanel').setHeight(_heightContacts);
+        }); 
+
 		
 		/*********************************
 		 * 
