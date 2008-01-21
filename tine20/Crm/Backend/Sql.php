@@ -645,6 +645,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('crm', $owner);
         
+        if($ownerContainer->count() === 0) {
+            return false;
+        }
+        
         $containerIds = array();
 
         foreach($ownerContainer as $container) {
