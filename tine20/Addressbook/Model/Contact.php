@@ -83,22 +83,23 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
         'contact_title'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_url'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_url_home'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'		=> array(),
-        'n_given'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_middle'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_prefix'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_suffix'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell_private'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_fax'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_fax_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'n_family'		    => array(),
+        'n_fileas'          => array(),
+        'n_given'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_middle'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_prefix'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_suffix'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'org_name'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'org_unit'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_assistent'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_car'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell_private'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax_home'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_pager'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_work'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**
@@ -110,4 +111,24 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
     //    'modification_time'
     //);
     
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data the new data to set
+     * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
+     * @throws Egwbase_Record_Exception when content contains invalid or missing data
+     */
+    public function setFromArray(array $_data, $_bypassFilters)
+    {
+        if(empty($_data['n_fileas'])) {
+            $_data['n_fileas'] = $_data['n_family'];
+            if(!empty($_data['n_given'])) {
+                $_data['n_fileas'] .= ', ' . $_data['n_given'];
+            }
+        }
+        
+        parent::setFromArray($_data, $_bypassFilters);
+    }
 }
