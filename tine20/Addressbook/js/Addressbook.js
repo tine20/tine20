@@ -397,7 +397,9 @@ Egw.Addressbook = function(){
         },
         
         reload:             function() {
-            Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
+        	if(Ext.ComponentMgr.all.containsKey('Addressbook_Contacts_Grid')) {
+        		setTimeout ("Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload()", 200);
+        	}
         }
     };
     
@@ -1524,7 +1526,7 @@ Egw.Addressbook.ContactEditDialog = function() {
     			waitMsg:'saving contact...',
     			params:additionalData,
     			success:function(form, action, o) {
-					window.location = window.location;
+					//window.location = window.location;
     				window.opener.Egw.Addressbook.reload();
     			},
     			failure:function(form, action) {
@@ -1555,8 +1557,10 @@ Egw.Addressbook.ContactEditDialog = function() {
     			waitMsg:'saving contact...',
     			params:additionalData,
     			success:function(form, action, o) {
-    				window.opener.Egw.Addressbook.reload();
-    				window.setTimeout("window.close()", 400);
+    				if(window.opener.Egw.Addressbook) {
+    				    window.opener.Egw.Addressbook.reload();
+    				}
+    				window.close();
     			},
     			failure:function(form, action) {
     				Ext.MessageBox.alert("Error",action.result.errorMessage);
