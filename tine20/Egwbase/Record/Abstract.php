@@ -316,8 +316,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * sets record related properties
      * 
-     * @param string name of property
-     * @param mixed value of property
+     * @param string _name of property
+     * @param mixed _value of property
+     * @return void
      */
     public function __set($_name, $_value)
     {
@@ -339,7 +340,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     }
     
     /**
-     * Checkes if an propertiy is set
+     * checkes if an propertiy is set
+     * 
+     * @param string _name name of property
+     * @return bool property is set or not
      */
     public function __isset($_name)
     {
@@ -349,7 +353,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * gets record related properties
      * 
-     * @param string name of property
+     * @param string _name of property
      * @return mixed value of property
      */
     public function __get($_name)
