@@ -404,9 +404,9 @@ Egw.Crm = function() {
 
         ds_crm.on('beforeload', function(_dataSource) {
         	_dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
-            _dataSource.baseParams.leadstate        = Ext.getCmp('filter_leadstate').getValue(),
-            _dataSource.baseParams.probability      = Ext.getCmp('filter_probability').getValue(),
-            _dataSource.baseParams.getClosedLeads  = Ext.getCmp('crm_ShowClosedLeadsButton').pressed
+            _dataSource.baseParams.leadstate        = Ext.getCmp('filter_leadstate').getValue();
+            _dataSource.baseParams.probability      = Ext.getCmp('filter_probability').getValue();
+            _dataSource.baseParams.getClosedLeads   = Ext.getCmp('crm_ShowClosedLeadsButton').pressed;
         });        
         
         ds_crm.load({params:{start:0, limit:50}});
@@ -535,7 +535,7 @@ Egw.Crm = function() {
             Ext.getCmp('gridCrm').getStore().load({
                 params: {
                     start: 0,
-                    limit: 50,
+                    limit: 50
 					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
 					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
@@ -557,7 +557,7 @@ Egw.Crm = function() {
                     //dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
                     //dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
                     start: 0,
-                    limit: 50,
+                    limit: 50
 					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
 					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
@@ -577,7 +577,7 @@ Egw.Crm = function() {
                     //dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
                     //dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
                     start: 0,
-                    limit: 50,
+                    limit: 50
 					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
 					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
@@ -677,7 +677,7 @@ Egw.Crm = function() {
                     //dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
                     //dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
                     start: 0,
-                    limit: 50,
+                    limit: 50
 					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
 					//probability: _probability
                 }
@@ -1300,6 +1300,55 @@ Egw.Crm = function() {
         });     
         
         
+        var handlerToggleDetails = function(toggle) {
+            var gridView         = Ext.getCmp('gridCrm').getView();
+            var gridColumnModell = Ext.getCmp('gridCrm').getColumnModel();
+            
+            if(toggle.pressed === true) {
+                gridColumnModell.setRenderer(1, function(value, meta, record) {
+                    return '<b>' + value + '</b><br />' + record.data.lead_description;
+                } );                
+                
+                gridColumnModell.setRenderer(2, function(_leadPartner) {                   
+                    if(typeof(_leadPartner == 'array')) {
+                        
+                        
+                        
+                        
+                        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
+                    }
+                } );
+                
+                gridColumnModell.setRenderer(3, function(_leadCustomer) {
+                if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
+                        return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
+                    }
+                });
+                  
+               gridView.refresh();              
+            } 
+            
+            if(toggle.pressed === false) {
+                gridColumnModell.setRenderer(1, function(value, meta, record) {
+                    return value;
+                } );                
+                
+                gridColumnModell.setRenderer(2, function(_leadPartner) {
+                if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
+                        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
+                    }
+                } );
+                
+                gridColumnModell.setRenderer(3, function(_leadCustomer) {
+                if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
+                        return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
+                    }
+                });
+                  
+               gridView.refresh();                                
+            }
+        };
+        
         var toolbar = new Ext.Toolbar({
             id: 'Crm_toolbar',
             split: false,
@@ -1315,6 +1364,14 @@ Egw.Crm = function() {
                     menu: settings_tb_menu
                 },
                 '->',
+                {
+                    text: 'Show Details',
+                    enableToggle: true,
+                    id: 'crm_ShowDetailsButton',
+                    handler: handlerToggleDetails,                    
+                    pressed: false
+                    
+                },                    
                 ' ',
                 {
                     text: 'Show closed leads',
@@ -1393,14 +1450,14 @@ Egw.Crm = function() {
     });
 
         var expander = new Ext.grid.RowExpander({
+            enableCaching: false,
             tpl : new Ext.Template(
-                '<p><b>Notes:</b> {lead_description}<br>',
-                '<p><b>Activities:</b> </p>'
+                '<b>Notes:</b> {lead_description}</div></td>',
+                '<td class="x-grid3-col x-grid3-cell"><b>Activities:</b> </td>'
             )
         });
         
         var columnModel = new Ext.grid.ColumnModel([
-            expander,
             {resizable: true, header: 'projekt ID', id: 'lead_id', dataIndex: 'lead_id', width: 20, hidden: true},
             {resizable: true, header: 'lead name', id: 'lead_name', dataIndex: 'lead_name', width: 200},
             {resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 150, sortable: false, renderer: function(_leadPartner) {
@@ -1519,7 +1576,7 @@ Egw.Crm = function() {
         dataStore.load({
             params:{
                 start:0, 
-                limit:50,
+                limit:50
                 //dateFrom: '',// Ext.getCmp('Crm_dateFrom').getRawValue(),
                 //dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
                 //leadstate: Ext.getCmp('filter_leadstate').getValue(),
@@ -2416,9 +2473,26 @@ Egw.Crm.LeadEditDialog.Main = function() {
             ]
         });
 
+
+        st_choosenProducts.on('update', function(store, record, index) {
+          //  if(record.data.lead_id == 'NULL' && record.data.lead_product_id) {
+            if(record.data.lead_product_id) {          
+                var st_productsAvailable = Egw.Crm.LeadEditDialog.Stores.getProductsAvailable();
+                var preset_price = st_productsAvailable.getById(record.data.lead_product_id);
+                record.data.lead_product_price = preset_price.data.lead_productsource_price;
+            }
+        });
+
         var st_productsAvailable = Egw.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
         
-        var cm_choosenProducts = new Ext.grid.ColumnModel([{
+        var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
+                header: "lead_id",
+                dataIndex: 'lead_id',
+                width: 1,
+                hidden: true,
+                sortable: false,
+                fixed: true
+                } , {
                 header: "Produkt",
                 dataIndex: 'lead_product_id',
                 width: 300,
@@ -2440,6 +2514,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     }),
                 renderer: function(data){
                     record = st_productsAvailable.getById(data);
+                    
                     if (record) {
                         return record.data.value;
                     }
@@ -2460,18 +2535,17 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 dataIndex: 'lead_product_price',
                 width: 150,
                 align: 'right',
-                editor: new Ext.form.NumberField({
+/*                editor: new Ext.form.NumberField({
                     allowBlank: false,
                     allowNegative: false,
                     decimalSeparator: ','
-                    }),
+                    }),   */
                 renderer: Ext.util.Format.euMoney
                 }
         ]);
        
        var product_combo = Ext.getCmp('product_combo');
        product_combo.on('change', function(field, value) {
-          console.log(field);
     
        });
         
@@ -2589,34 +2663,19 @@ Egw.Crm.LeadEditDialog.Main = function() {
             Egw.Crm.displayFolderSelectDialog('lead_container');
         };
         
-        var ProductSummaryTpl = new Ext.XTemplate( 
-            '<tpl for=".">',
-            '<div class="productSummary-item-small">',
-            // {productSummary}
-            '1x InEOS, 2x InFinident, 1x PC', 
-            '</div></tpl>');    
-        
         var tabPanelOverview = {
             title:'overview',
             layout:'border',
             layoutOnTabChange:true,
-            //deferredRender:false,
-            //anchor:'100% 100%',
             defaults: {
-                //bodyStyle:'padding:20px',
-                //anchor: '100% 100%',
                 border: true,
-                frame: true
-                //deferredRender:false,                
+                frame: true            
             },
             items: [{
 		        title: 'Last 10 activities',
 		        region: 'east',
                 autoScroll: true,
 		        width: 300,
-              //  layout: 'fit',
-		      //  split: true,
-		        //margins: '0 5 5 5'
 		        items: [
 		          new Ext.DataView({
                     tpl: ActivitiesTpl,       
@@ -2632,7 +2691,6 @@ Egw.Crm.LeadEditDialog.Main = function() {
 		        layout: 'form',
                 autoHeight: true,
                 id: 'editCenterPanel',
-		        //margins: '5 5 0 0'
                 items: [
                     txtfld_leadName
                 , {
@@ -2646,12 +2704,11 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     emptyText: 'enter description'
                 }, {
                     layout:'column',
-                    height: 150,
+                    height: 140,
                     id: 'lead_combos',
                     anchor:'100%',                        
                     items: [{
                         columnWidth: .33,
-                        //anchor:'100%',
                         items:[{
                             layout: 'form',
                             items: [
@@ -2694,11 +2751,23 @@ Egw.Crm.LeadEditDialog.Main = function() {
                         id: 'lead_container'
                     }]
                 }, {
+                    xtype: 'textfield',
+                    hideLabel: false,
+                    fieldLabel: 'products',
+                    id: 'productSummary',
+                    name:'productSummary',
+                    allowBlank: false,
+                    cls: 'productSummary',
+                    disabled: true,
+                    selectOnFocus: true,
+                    anchor:'100%',
+                    value: formData.values.productSummary
+                }, {
                     xtype: 'tabpanel',
                     id: 'contactsPanel',
                     title:'contacts panel',
                     activeTab: 0,
-                    height: 307,
+                    height: 273,
                     items: [
 	                    {
 		                    xtype:'grid',
@@ -2727,7 +2796,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             }]
         };        
 
-        var tabPanelActivities = {
+            var tabPanelActivities = {
             title:'manage activities',
             layout:'form',
             disabled: true,
@@ -2791,13 +2860,14 @@ Egw.Crm.LeadEditDialog.Main = function() {
 
         Ext.getCmp('editViewport').on('afterlayout',function(container) {
              var _dimension = container.getSize();
-             var _offset = 100;
+             var _offset = 125;
              if(Ext.isIE7) {
-                 var _offset = 117;
+                 var _offset = 142;
              }
              var _heightContacts = _dimension.height - Ext.getCmp('lead_name').getSize().height 
                                                      - Ext.getCmp('lead_notes').getSize().height
                                                      - Ext.getCmp('lead_combos').getSize().height
+                                                     - Ext.getCmp('productSummary').getSize().height
                                                      - _offset;
 
              Ext.getCmp('contactsPanel').setHeight(_heightContacts);
