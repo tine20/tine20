@@ -115,7 +115,7 @@ Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
             //console.log(this.baseParams);
             attr = {
                 nodeType: 'singleContainer',
-                containerId: attr.container_id,
+                container: attr.container_id,
                 text: attr.container_name,
                 cls: 'file',
                 leaf: true

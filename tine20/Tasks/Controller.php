@@ -87,35 +87,48 @@ class Tasks_Controller implements Tasks_Backend_Interface
     }
     
     /**
-     * Search for tasks matching given arguments
+     * Search for tasks matching given filter
      *
-     * @param string $_query
-     * @param Zend_Date $_due
-     * @param array $_container array of containers to search, defaults all accessable
-     * @param array $_organizer array of organizers to search, defaults all
-     * @param array $_tag array of tags to search defaults all
-     * @return RecordSet
+     * @param Tasks_Model_PagnitionFilter $_filter
+     * @return Egwbase_Record_RecordSet
      */
-    public function searchTasks($_query='', $_due=NULL, $_container=NULL, $_organizer=NULL, $_tag=NULL)
+    public function searchTasks($_filter)
     {
-        // check acl
-        if (empty($_container)) {
-            $container = array_keys($this->_currentAccount->getContainerByACL('tasks', Egwbase_Container::GRANT_READ)->toArray(NULL, true));
-        } else {
-            $container = array();
-            foreach ((array)$_container as $containerId) {
-                if ($this->_currentAccount->hasGrant($containerId, Egwbase_Container::GRANT_READ)) {
-                    $container[] = $containerId;
-                }
-            }
-        }
+        $this->_checkContainerACL($_filter);
         
-        $tasks =  $this->_backend->searchTasks($_query, $_due, $container, $_organizer, $_tag);
+        $tasks =  $this->_backend->searchTasks($_filter);
         //Egwbase_Account::getBackend()->getPublicAccountProperties();
         //foreach ($tasks as $task) {
             //$taks->organizer = 
         //}
         return $tasks;
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tasks_Model_PagnitionFilter $_filter
+     * @return int
+     */
+    public function getTotalCount($_filter) {
+        $this->_checkContainerACL($_filter);
+        return $this->_backend->getTotalCount($_filter);
+    }
+    
+    /**
+     * Removes containers where current user has no access to.
+     * 
+     * @param Tasks_Model_PagnitionFilter $_filter
+     * @return void
+     */
+    protected function _checkContainerACL($_filter)
+    {
+        foreach ($_filter->container as $containerId) {
+            if ($this->_currentAccount->hasGrant($containerId, Egwbase_Container::GRANT_READ)) {
+                $container[] = $containerId;
+            }
+        }
+        $_filter->container = $container;
     }
     
     /**

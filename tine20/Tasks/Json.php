@@ -24,10 +24,6 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     
     protected $_timezone;
     
-    /**
-     * TODO: Invoke Contoller!
-     *
-     */
     public function __construct()
     {
         try{
@@ -41,23 +37,20 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     /**
      * Search for tasks matching given arguments
      *
-     * @param string $_query
-     * @param Zend_Date $_due
-     * @param array $_container array of containers to search, defaults all accessable
-     * @param array $_organizer array of organizers to search, defaults all
-     * @param array $_tag array of tags to search defaults all
-     * @return RecordSet
+     * @param array $filter
+     * @return array
      */
-    public function searchTasks($query='', $due=NULL, $container=NULL, $organizer=NULL, $tag=NULL)
+    public function searchTasks($filter)
     {
-        //Tasks_Setup_MigrateFromEgw14::MigrateInfolog2Tasks();
-        //$this->_controller->searchTasks($query, $due, $container, $organizer, $tag);
-        $tasks = $this->_controller->searchTasks($query, $due, $container, $organizer, $tag);
+        $filter = new Tasks_Model_PagnitionFilter(Zend_Json::decode($filter));
+        //error_log(print_r($filter->toArray(),true));
+        
+        $tasks = $this->_controller->searchTasks($filter);
         $tasks->setTimezone($this->_timezone);
         
         return array(
             'results' => $tasks->toArray(array('part' => Zend_Date::ISO_8601)),
-            'totalcount' => 4
+            'totalcount' => $this->_controller->getTotalCount($filter)
         );
     }
     

@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 Ext.namespace('Egw.Tasks');
@@ -15,32 +15,43 @@ Egw.Tasks.getPanel = function() {
     
 	// init stati
     Egw.Tasks.Status.init();
+    return Egw.Tasks.TaskGrid.getTreePanel();
+}
+
+// Tasks main screen
+Egw.Tasks.TaskGrid = function(){
+    
+    var sm, grid, store, tree, paging, filter;
 	
-    var taskPanel =  new Egw.containerTreePanel({
+	tree =  new Egw.containerTreePanel({
+        id: 'TasksTreePanel',
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
-		itemName: 'Tasks',
-		appName: 'Tasks',
-        //items: new Ext.DatePicker({}),
+        itemName: 'Tasks',
+        appName: 'Tasks',
         border: false
     });
     
-    taskPanel.on('beforeexpand', function(_calPanel) {
-        Egw.Egwbase.MainScreen.setActiveContentPanel(Egw.Tasks.TaskGrid.getGrid());
-        Egw.Egwbase.MainScreen.setActiveToolbar(Egw.Tasks.getToolbar());
+    tree.on('click', function(node){
+        filter.nodeType = node.attributes.nodeType;
+        filter.owner = node.attributes.owner;
+        filter.container = node.attributes.container;
+        
+        store.load({
+            params: paging
+       });
     });
     
-    return taskPanel;
-}
-
-Egw.Tasks.TaskGrid = function(){
-    
-    var sm;
-    var grid;
-    var store;
+	// init of Tasks app
+    tree.on('beforeexpand', function(panel) {
+		initStore(); 
+		initGrid();
+        Egw.Egwbase.MainScreen.setActiveContentPanel(grid);
+        Egw.Egwbase.MainScreen.setActiveToolbar(Egw.Tasks.getToolbar());
+    });
 	
-	initStore = function(){
-		store = new Ext.data.JsonStore({
+	var initStore = function(){
+	    store = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Tasks.searchTasks'
             },
@@ -96,23 +107,64 @@ Egw.Tasks.TaskGrid = function(){
             remoteSort: true    
         });
 		
+		// prepare filter
+		store.on('beforeload', function(store, options){
+			filter.start = options.params.start ? options.params.start : 0;
+            filter.limit = options.params.limit ? options.params.limit : 50;
+            filter.sort = options.params.sort ? options.params.sort : 'due';
+            filter.dir = options.params.dir ? options.params.dir : 'DESC';
+			//filter.due
+			//filter.organizer
+			//filter.query
+			//filter.tag
+			
+			options.params.start = filter.start;
+			options.params.limit = filter.limit;
+			options.params.sort = filter.sort;
+			options.params.dir = filter.dir;
+			
+			options.params.filter = Ext.util.JSON.encode(filter);
+			
+			
+		});
+		
+		filter = {
+            nodeType: 'Personal',
+            owner: Egw.Egwbase.Registry.get('currentAccount').account_id,
+            query: '',
+            due: false,
+            container: false,
+            organizer: false,
+            tag: false,
+        }
+		
+		paging = {
+			start: 0,
+			limit: 50,
+			sort: 'due',
+			dir: 'DESC'
+		}
+		
 		store.load({
-			params:{
-				query: '',
-				due: false,
-				container: false,
-				organizer: false,
-				tag: false
-			}
+			params: paging
 		});
 		
 	};
+
 	
-    initGrid = function(){
+    var initGrid = function(){
         //sm = new Ext.grid.CheckboxSelectionModel();
-        
+        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
+	        pageSize: 50,
+	        store: store,
+	        displayInfo: true,
+	        displayMsg: 'Displaying tasks {0} - {1} of {2}',
+	        emptyMsg: "No tasks to display"
+	    });
+		
 		grid = new Ext.grid.GridPanel({
             store: store,
+			tbar: pagingToolbar,
             cm: new Ext.grid.ColumnModel([
 			
 				{id: 'status',    header: "Status",    width: 40,  sortable: true, dataIndex: 'status', renderer: Egw.Tasks.Status.getStatusIcon },
@@ -126,10 +178,11 @@ Egw.Tasks.TaskGrid = function(){
 			autoExpandColumn: 'summary'
         });
 		
-		console.log(grid.getColumnModel().getColumnById('priority'));
+		
+		//console.log(grid.getColumnModel().getColumnById('priority'));
     };
-	
-	_progressBar = function(percent) {
+		
+	var _progressBar = function(percent) {
 		return '<div class="x-progress-wrap TasksProgress">' +
                 '<div class="x-progress-inner TasksProgress">' +
                     '<div class="x-progress-bar TasksProgress" style="width:' + percent + '%">' +
@@ -145,7 +198,9 @@ Egw.Tasks.TaskGrid = function(){
 	};
 	
 	return{
-		getGrid: function() {initStore(); initGrid(); return grid;}
+		getTreePanel: function(){return tree;},
+		getGrid: function() {initStore(); initGrid(); return grid;},
+		getStore: function() {return store;}
 	}
 }();
 
@@ -161,7 +216,6 @@ Egw.Tasks.getToolbar = function() {
             Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&_taskId=', 900, 700);
          }
         }); 
-    
     
         var quickSearchField = new Ext.app.SearchField({
             id:        'quickSearchField',

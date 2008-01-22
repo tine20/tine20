@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 
@@ -82,31 +82,26 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     }
     
     /**
-     * Search for tasks matching given arguments
+     * Search for tasks matching given filter
      *
-     * @param string $_query
-     * @param Zend_Date $_due
-     * @param array $_container array of containers to search, defaults all accessable
-     * @param array $_organizer array of organizers to search, defaults all
-     * @param array $_tag array of tag to search defaults all
-     * @return RecordSet
+     * @param Tasks_Model_PagnitionFilter $_filter
+     * @return Egwbase_Record_RecordSet
      */
-    public function searchTasks($_query='', $_due=NULL, $_container=NULL, $_organizer=NULL, $_tag=NULL)
+    public function searchTasks($_filter)
     {
-        $stmt = $this->_db->query($this->_db->select()
-            ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
-                'contact'    => 'GROUP_CONCAT(DISTINCT contact.contact_identifier)',
-                'related'    => 'GROUP_CONCAT(DISTINCT related.related_identifier)',
-                'tag' => 'GROUP_CONCAT(DISTINCT tag.tag_identifier)'
-            ))
-            ->joinLeft(array('contact'    => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
-            ->joinLeft(array('related'    => $this->_tableNames['related']), 'tasks.identifier = related.task_identifier', array())
-            ->joinLeft(array('tag' => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
-            
-            ->group('tasks.identifier')
+        $TaskSet = new Egwbase_Record_RecordSet(array(), 'Tasks_Model_Task');
+        
+        if(empty($_filter->container)){
+            //error_log(print_r($_filter->container,true));
+            return $TaskSet;
+        }
+        
+        $stmt = $this->_db->query($this->_getSelect()
+            ->where($this->_db->quoteInto('tasks.container IN (?)', $_filter->container))
+            ->limit($_filter->limit, $_filter->start)
+            ->order($_filter->sort . ' ' . $_filter->dir)
         );
         
-        $TaskSet = new Egwbase_Record_RecordSet(array(), 'Tasks_Model_Task');
         $Tasks = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         foreach ($Tasks as $TaskArray) {
             $Task = new Tasks_Model_Task($TaskArray, true, true);
@@ -117,6 +112,20 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     }
     
     /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tasks_Model_PagnitionFilter $_filter
+     * @return int
+     */
+    public function getTotalCount($_filter)
+    {
+        if(empty($_filter->container)) return 0;
+        return $this->getTableInstance('tasks')->getTotalCount(array(
+            $this->_db->quoteInto('container IN (?)', $_filter->container)
+        ));
+    }
+    
+    /**
      * Return a single Task
      *
      * @param string $_uid
@@ -124,7 +133,27 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function getTask($_uid)
     {
-        $stmt = $this->_db->query($this->_db->select()
+        $stmt = $this->_db->query($this->_getSelect()
+            ->where($this->_db->quoteInto('tasks.identifier = ?', $_uid))
+        );
+        
+        $TaskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        if (empty($TaskArray)) {
+            throw new Exception("Task with uid: $_uid not found!");
+        }
+        
+        $Task = new Tasks_Model_Task($TaskArray[0], true, array('part' => Zend_Date::ISO_8601)); 
+        return $Task;
+    }
+    
+    /**
+     * Returns a common select Object
+     * 
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect()
+    {
+        return $this->_db->select()
             ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
                 'contact'    => 'GROUP_CONCAT(DISTINCT contact.contact_identifier)',
                 'related'    => 'GROUP_CONCAT(DISTINCT related.related_identifier)',
@@ -133,16 +162,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             ->joinLeft(array('contact'    => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
             ->joinLeft(array('related'    => $this->_tableNames['related']), 'tasks.identifier = related.task_identifier', array())
             ->joinLeft(array('tag' => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
-            ->group('tasks.identifier')
-            ->where($this->_db->quoteInto('tasks.identifier = ?', $_uid))
-        );
-        $TaskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        if (empty($TaskArray)) {
-            throw new Exception("Task with uid: $_uid not found!");
-        }
-        
-        $Task = new Tasks_Model_Task($TaskArray[0], true, array('part' => Zend_Date::ISO_8601)); 
-        return $Task;
+            ->group('tasks.identifier');
     }
     
     /**
@@ -172,6 +192,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             throw($e);
         }
     }
+    
     
     /**
      * Upate an existing Task
