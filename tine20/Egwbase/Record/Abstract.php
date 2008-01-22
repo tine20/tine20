@@ -339,6 +339,14 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     }
     
     /**
+     * Checkes if an propertiy is set
+     */
+    public function __isset($_name)
+    {
+        return isset($this->_properties[$_name]);
+    }
+    
+    /**
      * gets record related properties
      * 
      * @param string name of property
