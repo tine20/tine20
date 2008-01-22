@@ -637,7 +637,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;*/
     }    
     
-    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL)
+    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         $owner = (int)$_owner;
         if($owner != $_owner) {
@@ -659,7 +659,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -872,27 +872,21 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
 
     //handle for FOLDER->LEADS functions
-    protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_datenFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability)
+    protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
-/*
-        if(is_numeric($_datenFrom)) {    
-            $where[] = $this->leadTable->getAdapter()->quoteInto('lead_start >= ? ', $_datenFrom);
-        }
 
-        if(is_numeric($_datenTo)) {    
-            $where[] = $this->leadTable->getAdapter()->quoteInto('lead_end <= ? ', $_datenTo);
-        }
-*/
-
-		if( is_numeric($_leadstate) && ($_leadstate > 0) ) {
+        if( is_numeric($_leadstate) && ($_leadstate > 0) ) {
 			$where[] = $this->leadTable->getAdapter()->quoteInto('lead.lead_leadstate_id = ?', $_leadstate);
 		}
 		
 		if( is_numeric($_probability) && ($_probability > 0) ) {
 			$where[] = $this->leadTable->getAdapter()->quoteInto('lead_probability >= ?', $_probability);
 		}		
-              
+
+		if($_getClosedLeads === FALSE) {
+		    $where[] = 'lead_end IS NULL';
+		}
 
         $db = Zend_Registry::get('dbAdapter');
 
@@ -905,7 +899,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                   $select->where($_where);
              }               
         }
- //       error_log($select->__toString());
+        //error_log($select->__toString());
        
         $stmt = $db->query($select);
 
@@ -1014,11 +1008,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many leads to display
      * @param unknown_type $_start how many leads to skip
-     * @param string $_dateFrom
-     * @param string $_dateTo
+     * @param int $_leadstate
+     * @param int $_probability
+     * @param bool $_getClosedLeads
      * @return Egwbase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getAllLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability)
+    public function getAllLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
         
@@ -1035,8 +1030,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $where = array(
             Zend_Registry::get('dbAdapter')->quoteInto('lead_container IN (?)', $containerIds)
         );
-
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo ,$_leadstate, $_probability);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1070,7 +1064,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
    
    
-    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL)
+    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         // convert to int
         $folderId = (int)$_folderId;
@@ -1086,7 +1080,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('lead_container = ?', $folderId)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1114,7 +1108,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     } 
 
     
-    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL) 
+    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE) 
     {
         $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('crm');
         
@@ -1132,7 +1126,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1160,7 +1154,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }        
  
    
-   public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability) 
+   public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads) 
     {
         $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('crm');
         
@@ -1183,7 +1177,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom = NULL, $_dateTo = NULL, $_leadstate, $_probability);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }

@@ -55,11 +55,24 @@ class Crm_Controller
      * @param string $_dir
      * @return array
      */
-    public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability)
+    
+    /**
+     * get all leads, filtered by different criteria
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @param int $_leadstate
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Egwbase_Record_RecordSet subclass Crm_Model_Lead
+     */
+    public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
-                
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $result = $backend->getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_dateFrom, $_dateTo, $_leadstate, $_probability);
+        $result = $backend->getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
 
         return $result;
     }

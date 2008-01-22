@@ -387,7 +387,7 @@ Egw.Crm = function() {
                 {name: 'lead_leadsource'},
                 
                 {name: 'lead_partner_linkId'},
-                {name: 'lead_partner', type: ''},
+                {name: 'lead_partner'},
                 {name: 'lead_partner_detail'},                
                 {name: 'lead_lead_linkId'},
                 {name: 'lead_customer'},
@@ -403,30 +403,13 @@ Egw.Crm = function() {
         ds_crm.setDefaultSort('lead_name', 'asc');
 
         ds_crm.on('beforeload', function(_dataSource) {
-        	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
-
-        	/*
-        	var from = Date.parseDate(
-        	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-        	   'm/d/y'
-        	);
-            _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
-
-            var to = Date.parseDate(
-               Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/y'
-            );
-            _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");  */
+        	_dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
+            _dataSource.baseParams.leadstate        = Ext.getCmp('filter_leadstate').getValue(),
+            _dataSource.baseParams.probability      = Ext.getCmp('filter_probability').getValue(),
+            _dataSource.baseParams.getClosedLeads  = Ext.getCmp('crm_ShowClosedLeadsButton').pressed
         });        
         
-        ds_crm.load({params:{
-                            start:0,
-                            limit:50,
-                            dateFrom: '', //Ext.getCmp('Crm_dateFrom').getRawValue(),
-                            dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
-							leadstate: Ext.getCmp('filter_leadstate').getValue(),
-							probability: Ext.getCmp('filter_probability').getValue()
-                             }});
+        ds_crm.load({params:{start:0, limit:50}});
         
         return ds_crm;
     }
@@ -551,12 +534,10 @@ Egw.Crm = function() {
         quickSearchField.on('change', function(){
             Ext.getCmp('gridCrm').getStore().load({
                 params: {
-                    dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
                     start: 0,
                     limit: 50,
-					leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					probability: Ext.getCmp('filter_probability').getValue()					
+					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });
         });
@@ -573,12 +554,12 @@ Egw.Crm = function() {
         dateFrom.on('change', function(){
             Ext.getCmp('gridCrm').getStore().load({
                 params: {
-                    dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
+                    //dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    //dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
                     start: 0,
                     limit: 50,
-					leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					probability: Ext.getCmp('filter_probability').getValue()					
+					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });        
         })
@@ -593,12 +574,12 @@ Egw.Crm = function() {
         dateTo.on('change', function(){
             Ext.getCmp('gridCrm').getStore().load({
                 params: {
-                    dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
+                    //dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    //dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
                     start: 0,
                     limit: 50,
-					leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					probability: Ext.getCmp('filter_probability').getValue()					
+					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });        
         })        
@@ -693,12 +674,12 @@ Egw.Crm = function() {
            
 	       Ext.getCmp('gridCrm').getStore().load({
                 params: {
-                    dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
+                    //dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
+                    //dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
                     start: 0,
                     limit: 50,
-					leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					probability: _probability
+					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
+					//probability: _probability
                 }
             });	   		
 	   });		
@@ -1338,23 +1319,11 @@ Egw.Crm = function() {
                 {
                     text: 'Show closed leads',
                     enableToggle: true,
-                    id: 'toggle_button',
+                    id: 'crm_ShowClosedLeadsButton',
                     handler: function(toggle) {
                         var dataStore = Ext.getCmp('gridCrm').getStore();
-
-                        if(toggle.pressed) {
-                            dataStore.filterBy(function(record) {
-                                if(record.data.lead_end) {
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            });
-                        }
                         
-                        if(!toggle.pressed) {
-                            dataStore.reload();
-                        }
+                        dataStore.reload();
                     },                    
                     pressed: false
                     
@@ -1551,10 +1520,10 @@ Egw.Crm = function() {
             params:{
                 start:0, 
                 limit:50,
-                dateFrom: '',// Ext.getCmp('Crm_dateFrom').getRawValue(),
-                dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
-                leadstate: Ext.getCmp('filter_leadstate').getValue(),
-                probability: Ext.getCmp('filter_probability').getValue()																                
+                //dateFrom: '',// Ext.getCmp('Crm_dateFrom').getRawValue(),
+                //dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
+                //leadstate: Ext.getCmp('filter_leadstate').getValue(),
+                //probability: Ext.getCmp('filter_probability').getValue()																                
             }
         });
     };    

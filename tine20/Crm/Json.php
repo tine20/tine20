@@ -430,7 +430,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
  
 
      
-    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability)
+    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -442,7 +442,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         }
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability)) {
+        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -456,7 +456,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
         
-     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability)
+     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -464,7 +464,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability)) {
+        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -492,7 +492,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability)
+    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -500,7 +500,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability);
+        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
@@ -529,7 +529,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)
+    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -537,7 +537,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability);
+        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows;//->toArray();
@@ -566,26 +566,16 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getAllLeads($filter, $start, $sort, $dir, $limit, $dateFrom = NULL, $dateTo = NULL, $leadstate, $probability)
+    public function getAllLeads($filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
-
-        if(!empty($dateFrom)) {
-            $df_tmp = explode("/", $dateFrom);
-            $dateFrom = mktime(0,0,0,$df_tmp[0],$df_tmp[1],$df_tmp[2]);
-        }
-
-        if(!empty($dateTo)) {
-            $dt_tmp = explode("/", $dateTo);
-            $dateTo = mktime(0,0,0,$dt_tmp[0],$dt_tmp[1],$dt_tmp[2]);            
-        }
-               
-
         
-        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability)) {
+        $getClosedLeads = ($getClosedLeads == 'true' ? TRUE : FALSE);
+
+        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
