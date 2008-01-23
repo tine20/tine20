@@ -28,6 +28,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            self::_appendFileTime("Tasks/js/Widgets.js"),
             self::_appendFileTime("Tasks/js/Status.js"),
             self::_appendFileTime("Tasks/js/containerTree.js"),
             self::_appendFileTime("Tasks/js/Tasks.js"),
@@ -57,4 +58,29 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
         );
     }
 
+    /**
+     * Supplies HTML for edit tasks dialog
+     * 
+     */
+    public function editTask($taskId)
+    {
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Egwbase/views');
+        $view->formData = array();
+        $view->title="edit lead";
+        
+        $view->jsIncludeFiles  = $this->getJsFilesToInclude();
+        $view->cssIncludeFiles = $this->getCssFilesToInclude();
+        $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
+
+        $view->jsExecute = 'Egw.Tasks.EditDialog.render();';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('popup.php');
+    }
 }
