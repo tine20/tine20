@@ -81,8 +81,8 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
         $cc = Egwbase_Container::getInstance();
         switch($this->nodeType) {
             case 'all':
-                $account_id = Zend_Registry::get('currentAccount')->account_id;
-                $containers = $cc->getContainerByACL($account_id, $this->_application, Egwbase_Container::GRANT_READ);
+                $accountId = Zend_Registry::get('currentAccount')->accountId;
+                $containers = $cc->getContainerByACL($accountId, $this->_application, Egwbase_Container::GRANT_READ);
                 break;
             case 'Personal':
                 $containers = $cc->getPersonalContainer($this->_application, $this->owner);
