@@ -1,10 +1,10 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Egwbase
  * @subpackage  Server
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
@@ -12,6 +12,9 @@
 
 /**
  * the class provides functions to handle applications
+ * 
+ * @package     Egwbase
+ * @subpackage  Server
  */
 class Egwbase_Controller
 {
@@ -205,10 +208,13 @@ class Egwbase_Controller
         $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         
         if ($result->isValid()) {
-            $backend = Egwbase_Account::getBackend();
-            $account = $backend->getAccountByLoginName($result->getIdentity());
-            
-            if($account === FALSE) {
+            Zend_Registry::get('logger')->debug("authentication of $_username succeeded");
+            $accountsController = Egwbase_Account::getInstance();
+            try {
+                $account = $accountsController->getAccountByLoginName($result->getIdentity());
+            } catch (Exception $e) {
+                Zend_Session::destroy();
+                
                 throw new Exception('account ' . $result->getIdentity() . ' not found in account storage');
             }
             
@@ -223,10 +229,11 @@ class Egwbase_Controller
                 $result->getIdentity(),
                 $_ipAddress,
                 $result->getCode(),
-                Zend_Registry::get('currentAccount')->account_id
+                Zend_Registry::get('currentAccount')->accountId
             );
             
         } else {
+            Zend_Registry::get('logger')->debug("authentication of $_username failed");
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $username,
@@ -260,19 +267,10 @@ class Egwbase_Controller
             Egwbase_AccessLog::getInstance()->addLogoutEntry(
                 session_id(),
                 $_ipAddress,
-                $currentAccount->account_id
+                $currentAccount->accountId
             );
         }
         
         Zend_Session::destroy();
     }   
-
-    public function getPublicAccountProperties($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
-    {
-        $accountsBackend = Egwbase_Account::getBackend();
-        
-        $result = $accountsBackend->getPublicAccountProperties($_filter, $_sort, $_dir, $_start, $_limit);
-        
-        return $result;
-    }
 }

@@ -1,10 +1,10 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Egwbase
  * @subpackage  Server
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
@@ -12,6 +12,9 @@
 
 /**
  * Json interface to Egwbase
+ * 
+ * @package     Egwbase
+ * @subpackage  Server
  */
 class Egwbase_Json
 {
@@ -47,7 +50,7 @@ class Egwbase_Json
             'totalcount'  => 0
         );
         
-        if($rows = Egwbase_Controller::getInstance()->getPublicAccountProperties($filter, $sort, $dir, $start, $limit)) {
+        if($rows = Egwbase_Account::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);

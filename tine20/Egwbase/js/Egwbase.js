@@ -408,6 +408,16 @@ Egw.Egwbase.Common = function(){
 	_timeRenderer = function(date){
 		return Ext.util.Format.date(date, 'H:i:s');
 	};
+
+    /**
+     * Returns the formated username
+     * 
+     * @param {object} account object 
+     * @return {string} formated user display name
+     */
+    _usernameRenderer = function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store){
+        return _accountObject.accountDisplayName;
+    };
 	
     /** 
      * returns json coded data from given data source
@@ -467,6 +477,7 @@ Egw.Egwbase.Common = function(){
 	return {
 		dateTimeRenderer: _dateTimeRenderer,
 		dateRenderer: _dateRenderer,
+		usernameRenderer: _usernameRenderer,
 		timeRenderer: _timeRenderer,
 		openWindow:       _openWindow,
         getJSONdata:    _getJSONDsRecs,

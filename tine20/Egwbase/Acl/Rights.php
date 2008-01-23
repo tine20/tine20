@@ -1,10 +1,10 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Egwbase
  * @subpackage  Acl
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
@@ -15,6 +15,9 @@
  * 
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
+ * 
+ * @package     Egwbase
+ * @subpackage  Acl
  */
 class Egwbase_Acl_Rights
 {
@@ -57,7 +60,7 @@ class Egwbase_Acl_Rights
             $this->createApplicationAclTable();
             $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_rights'));
 
-            $accountId = Zend_Registry::get('currentAccount')->account_id;
+            $accountId = Zend_Registry::get('currentAccount')->accountId;
             
             $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
             $data = array(
@@ -146,7 +149,7 @@ class Egwbase_Acl_Rights
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
 
         $db = Zend_Registry::get('dbAdapter');
@@ -184,7 +187,7 @@ class Egwbase_Acl_Rights
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');
@@ -231,7 +234,7 @@ class Egwbase_Acl_Rights
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Egwbase_Account::getBackend()->getGroupMemberships($accountId);
+        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
 

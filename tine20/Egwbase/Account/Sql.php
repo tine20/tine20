@@ -1,17 +1,20 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Egwbase
  * @subpackage  Accounts
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
 /**
  * sql implementation of the eGW SQL accounts interface
+ * 
+ * @package     Egwbase
+ * @subpackage  Accounts
  */
 
 class Egwbase_Account_Sql implements Egwbase_Account_Interface
@@ -41,7 +44,15 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         'accountDisplayName'    => 'n_fileas',
         'accountFullName'       => 'n_fn',
         'accountFirstName'      => 'n_given',
-        'accountLastName'       => 'n_family'
+        'accountLastName'       => 'n_family',
+        'accountLoginName'      => 'account_lid',
+        'accountLastLogin'      => 'account_lastlogin',
+        'accountLastLoginfrom'  => 'account_lastloginfrom',
+        'accountLastPasswordChange' => 'account_lastpwd_change',
+        'accountStatus'         => 'account_status',
+        'accountExpires'        => 'account_expires',
+        'accountPrimaryGroup'   => 'account_primary_group'
+    
     );
     
     
@@ -58,6 +69,12 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         
         return self::$_instance;
     }
+    
+    /**
+     * 
+     * groupmembership handling
+     * 
+     */
 
     /**
      * return the group ids a account is member of
@@ -99,8 +116,13 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @deprecated 
      * @return array list of group members account id's
      */
-    public function getGroupMembers($groupId)
+    public function getGroupMembers($_groupId)
     {
+        $groupId = (int)$_groupId;
+        if($groupId != $_groupId) {
+            throw new InvalidArgumentException('$_groupId must be integer');
+        }
+        
         $aclTable = new Egwbase_Acl_Sql();
         $members = array();
         
@@ -119,7 +141,13 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     }
     
     /**
-     * get list of accounts with all internal informations, should get used by the admin application only
+     * 
+     * public account data handling
+     * 
+     */
+    
+    /**
+     * get list of accounts with NO internal informations
      *
      * @param string $_filter
      * @param string $_sort
@@ -128,114 +156,80 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @param int $_limit
      * @return Egwbase_Record_RecordSet with record class Egwbase_Account_Model_Account
      */
-    public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL, $_accountClass = 'Egwbase_Account_Model_Account')
     {        
-        $db = Zend_Registry::get('dbAdapter');
-        
-        $select = $db->select()
-            ->from('egw_accounts', array(
-                '*',
-                'account_lastlogin' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastlogin`)', 
-                'account_lastpwd_change' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastpwd_change`)', 
-                'account_expires' => 'FROM_UNIXTIME(`egw_accounts`.`account_expires`)', 
-            ))
-            ->join(
-                'egw_addressbook',
-                'egw_accounts.account_id = egw_addressbook.account_id'
-            )
-            ->limit($_limit, $_start)
-            ->order($_sort . ' ' . $_dir);
-
-        //error_log("getAccounts:: " . $select->__toString());
-
-        $stmt = $db->query($select);
-        
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = new Egwbase_Record_RecordSet($rows, 'Egwbase_Account_Model_Account');
-        
-        return $result;
-    }
-    
-    /**
-     * get list of public account properties like firstname, lastname, displayname, account_id
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Egwbase_Record_RecordSet with record class Egwbase_Record_PublicAccountProperties
-     */
-    public function getPublicAccountProperties($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
-    {        
-        $db = Zend_Registry::get('dbAdapter');
-        
-        $select = $db->select()
-            ->from('egw_accounts', array('accountId' => $this->rowNameMapping['accountId']))
-            ->join(
-                'egw_addressbook',
-                'egw_accounts.account_id = egw_addressbook.account_id',
-                array(
-                    'accountDisplayName' => $this->rowNameMapping['accountDisplayName'],
-                    'accountFullName' => $this->rowNameMapping['accountFullName']
-                )
-            )
+        $select = $this->_getAccountSelectObject()
             ->where('(n_family LIKE ? OR n_given LIKE ?)', '%' . $_filter . '%')
             ->where('account_status != ?', 'D')
             ->limit($_limit, $_start)
             ->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
 
-        //error_log("getPublicAccountData:: " . $select->__toString());
+        //error_log("getAccounts:: " . $select->__toString());
 
-        $stmt = $db->query($select);
+        $stmt = $select->query();
 
-        $result = array();
-        
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Egwbase_Record_RecordSet($rows, 'Egwbase_Record_PublicAccountProperties');
+        $result = new Egwbase_Record_RecordSet($rows, $_accountClass);
         
         return $result;
     }
     
     /**
-     * read the account from acl depending on the where query and value
+     * get eGW account by login name
      *
-     * @param string $_whereQuery the where query 
-     * @param int|string $_whereValue the where value
+     * @param string $_loginName the loginname of the account
      * @return Egwbase_Account_Model_Account the account object
      */
-    protected function _getAccountFromSQL($_whereQuery, $_whereValue)
+    public function getAccountByLoginName($_loginName, $_accountClass = 'Egwbase_Account_Model_Account')
     {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        $select = $db->select()
-            ->from('egw_accounts', array(
-                'account_id', 
-                'account_lid', 
-                'account_lastlogin' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastlogin`)', 
-                'account_lastloginfrom', 
-                'account_lastpwd_change' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastpwd_change`)', 
-                'account_status', 
-                'account_expires' => 'FROM_UNIXTIME(`egw_accounts`.`account_expires`)', 
-                'account_primary_group')
-            )
-            ->join(
-                'egw_addressbook',
-                'egw_accounts.account_id = egw_addressbook.account_id', 
-                array('n_family', 'n_given', 'n_fn', 'n_fileas')
-            )
-            ->where($_whereQuery, $_whereValue);
+        $select = $this->_getAccountSelectObject()
+            ->where('egw_accounts.account_lid = ?', $_loginName);
 
-        //error_log("getAccountByLoginName:: " . $select->__toString());
+        //error_log("getAccounts:: " . $select->__toString());
 
-        $stmt = $db->query($select);
-    
+        $stmt = $select->query();
+
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
+
         try {
-            $account = new Egwbase_Account_Model_Account(NULL, true);
+            $account = new $_accountClass();
+            $account->setFromUserData($row);
+        } catch (Exception $e) {
+            $validation_errors = $account->getValidationErrors();
+            Zend_Registry::get('logger')->debug( 'Egwbase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
+                "Egwbase_Account_Model_Account::validation_errors: \n" .
+                print_r($validation_errors,true));
+            throw ($e);
+        }
+        
+        return $account;
+    }
+    
+    /**
+     * get eGW account by accountId
+     *
+     * @param int $_accountId the account id
+     * @return Egwbase_Account_Model_Account the account object
+     */
+    public function getAccountById($_accountId, $_accountClass = 'Egwbase_Account_Model_Account')
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $select = $this->_getAccountSelectObject()
+            ->where('egw_accounts.account_id = ?', $accountId);
+
+        //error_log("getAccounts:: " . $select->__toString());
+
+        $stmt = $select->query();
+
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+
+        try {
+            $account = new $_accountClass();
             $account->setFromUserData($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
@@ -246,38 +240,37 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         }
         
         return $account;
-        
-    }
-
-    /**
-     * get eGW account by login name
-     *
-     * @param string $_loginName the loginname of the account
-     * @return Egwbase_Account_Model_Account the account object
-     */
-    public function getAccountByLoginName($_loginName)
-    {
-        $result = $this->_getAccountFromSQL('egw_accounts.account_lid = ?', $_loginName);
-        
-        return $result;
     }
     
-    /**
-     * get eGW account by accountId
-     *
-     * @param int $_accountId the account id
-     * @return Egwbase_Account_Model_Account the account object
-     */
-    public function getAccountById($_accountId)
+    protected function _getAccountSelectObject()
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $db = Zend_Registry::get('dbAdapter');
         
-        $result = $this->_getAccountFromSQL('egw_accounts.account_id = ?', $accountId);
-        
-        return $result;
+        $select = $db->select()
+            ->from('egw_accounts', 
+                array(
+                    'accountId' => $this->rowNameMapping['accountId'],
+                    'accountLoginName' => $this->rowNameMapping['accountLoginName'],
+                    'accountLastLogin' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastlogin`)',
+                    'accountLastLoginfrom' => $this->rowNameMapping['accountLastLoginfrom'],
+                    'accountLastPasswordChange' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastpwd_change`)',
+                    'accountStatus' => $this->rowNameMapping['accountStatus'],
+                    'accountExpires' => 'FROM_UNIXTIME(`egw_accounts`.`account_expires`)',
+                    'accountPrimaryGroup' => $this->rowNameMapping['accountPrimaryGroup']
+                )
+            )
+            ->join(
+                'egw_addressbook',
+                'egw_accounts.account_id = egw_addressbook.account_id',
+                array(
+                    'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
+                    'accountFullName'       => $this->rowNameMapping['accountFullName'],
+                    'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
+                    'accountLastName'       => $this->rowNameMapping['accountLastName']
+                )
+            );
+                
+        return $select;
     }
     
     /**

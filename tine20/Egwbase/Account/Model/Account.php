@@ -1,17 +1,20 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Egwbase
- * @subpackage  Record
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @subpackage  Account
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id: Account.php 499 2008-01-10 20:37:59Z lkneschke $
+ * @version     $Id$
  */
 
 /**
  * defines the datatype for one application
+ * 
+ * @package     Egwbase
+ * @subpackage  Account
  */
 class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
 {
@@ -23,12 +26,12 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'account_lid'           => 'StringTrim',
-        'account_name'          => 'StringTrim',
-        'n_fileas'              => 'StringTrim',
-        'n_family'              => 'StringTrim',
-        'n_given'               => 'StringTrim',
-        'n_fn'                  => 'StringTrim',
+        'accountId'             => 'Digits',
+        //'accountLoginName'    => 'StringTrim',
+        'accountDisplayName'    => 'StringTrim',
+        'accountLastName'       => 'StringTrim',
+        'accountFirstName'      => 'StringTrim',
+        'accountFullName'       => 'StringTrim',
     );
     
     /**
@@ -39,32 +42,13 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'account_id'            => array('Digits', 'presence' => 'required'),
-        'account_lid'           => array('presence' => 'required'),
-        'account_name'          => array('allowEmpty' => true),
-        'account_lastlogin'     => array('allowEmpty' => true),
-        'account_lastloginfrom' => array('allowEmpty' => true),
-        'account_lastpwd_change' => array('Digits', 'allowEmpty' => true),
-        'account_status'        => array('presence' => 'required'),
-        'account_expires'       => array('allowEmpty' => true),
-        'account_primary_group' => array('presence' => 'required'),
-        'n_fileas'              => array('presence' => 'required'),
-        'n_family'              => array('presence' => 'required'),
-        'n_given'               => array('allowEmpty' => true),
-        'n_fn'                  => array('presence' => 'required'),
+        'accountId'             => array('Digits', 'presence' => 'required'),
+        //'accountLoginName'    => array('presence' => 'required'),
+        'accountDisplayName'    => array('presence' => 'required'),
+        'accountLastName'       => array('presence' => 'required'),
+        'accountFirstName'      => array('allowEmpty' => true),
+        'accountFullName'       => array('presence' => 'required'),
     
-    );
-
-    /**
-     * name of fields containing datetime or or an array of datetime
-     * information
-     *
-     * @var array list of datetime fields
-     */    
-    protected $_datetimeFields = array(
-        'account_lastlogin',
-        'account_lastpwd_change',
-        'account_expires'
     );
 
    /**
@@ -73,7 +57,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'account_id';
+    protected $_identifier = 'accountId';
     
     /**
      * check if current user has a given right for a given application
@@ -86,7 +70,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
     {
         $rights = Egwbase_Acl_Rights::getInstance();
         
-        $result = $rights->hasRight($_application, $this->account_id, $_right);
+        $result = $rights->hasRight($_application, $this->accountId, $_right);
         
         return $result;
     }
@@ -101,7 +85,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
     {
         $rights = Egwbase_Acl_Rights::getInstance();
         
-        $result = $rights->getRights($_application, $this->account_id);
+        $result = $rights->getRights($_application, $this->accountId);
         
         return $result;
     }
@@ -113,9 +97,9 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function getGroupMemberships()
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
         
-        $result = $backend->getGroupMemberships($this->account_id);
+        $result = $backend->getGroupMemberships($this->accountId);
         
         return $result;
     }
@@ -128,9 +112,9 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function setLoginTime($_ipAddress)
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
         
-        $result = $backend->setLoginTime($this->account_id, $_ipAddress);
+        $result = $backend->setLoginTime($this->accountId, $_ipAddress);
         
         return $result;
     }
@@ -143,9 +127,9 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function setPassword($_password)
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
         
-        $result = $backend->setPassword($this->account_id, $_password);
+        $result = $backend->setPassword($this->accountId, $_password);
         
         return $result;
     }
@@ -162,7 +146,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
     {
         $rights = Egwbase_Acl_Rights::getInstance();
         
-        $result = $rights->getApplications($this->account_id);
+        $result = $rights->getApplications($this->accountId);
         
         return $result;
     }
@@ -180,7 +164,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
     {
         $container = Egwbase_Container::getInstance();
         
-        $result = $container->getContainerByACL($this->account_id, $_application, $_right);
+        $result = $container->getContainerByACL($this->accountId, $_application, $_right);
         
         return $result;
     }
@@ -196,22 +180,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
     {
         $container = Egwbase_Container::getInstance();
         
-        $result = $container->hasGrant($this->account_id, $_containerId, $_grant);
-        
-        return $result;
-    }
-    
-    public function getPublicProperties()
-    {
-        $accountData = array(
-            'accountId'             => $this->account_id,
-            'accountDisplayName'    => $this->n_fileas,
-            'accountLastName'       => $this->n_family,
-            'accountFirstName'      => $this->n_given,
-            'accountFullName'       => $this->n_given
-        );
-        
-        $result = new Egwbase_Record_PublicAccountProperties($accountData, true);
+        $result = $container->hasGrant($this->accountId, $_containerId, $_grant);
         
         return $result;
     }
