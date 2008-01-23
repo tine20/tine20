@@ -116,7 +116,7 @@ class Tasks_Setup_SetupSqlTables
      */
     public static function insertDefaultRecords() {
         $db = Zend_Registry::get('dbAdapter');
-        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        $accountId = Zend_Registry::get('currentAccount')->accountId;
         $now = $db->quote(Zend_Date::now()->getIso());
         
         // egw_class

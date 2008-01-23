@@ -196,7 +196,7 @@ class Tasks_Setup_MigrateFromEgw14
             $class = $classTable->fetchRow($classTable->getAdapter()->quoteInto('class LIKE ?', $oldclass));
             if (!$class) {
                 $identifier = $classTable->insert(array(
-                    'created_by'    => Zend_Registry::get('currentAccount')->account_id,
+                    'created_by'    => Zend_Registry::get('currentAccount')->accountId,
                     'creation_time' => Zend_Date::now()->getIso(),
                     'class'         => $oldclass
                 ));
@@ -226,7 +226,7 @@ class Tasks_Setup_MigrateFromEgw14
             $status = $statusTable->fetchRow($statusTable->getAdapter()->quoteInto('status LIKE ?', $oldstatus));
             if (!$status) {
                 $identifier = $statusTable->insert(array(
-                    'created_by'    => Zend_Registry::get('currentAccount')->account_id,
+                    'created_by'    => Zend_Registry::get('currentAccount')->accountId,
                     'creation_time' => Zend_Date::now()->getIso(),
                     'status'         => $oldstatus
                 ));

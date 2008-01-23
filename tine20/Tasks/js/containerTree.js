@@ -63,7 +63,7 @@
 	            nodeType: 'Personal',
 	            id: 'user',
 	            leaf: null,
-	            owner: Egw.Egwbase.Registry.get('currentAccount').account_id
+	            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
 	        }, {
 	            text: 'Shared ' + this.itemName,
 	            cls: 'file',
