@@ -32,6 +32,16 @@
 		}
 	?>
 	<script type="text/javascript" language="javascript">
+	   <?php
+           foreach ($this->initialData as $appname => $data) {
+               if (!empty($data) ) {
+                   foreach ($data as $var => $content) {
+                       echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
+                   }
+               }
+           }
+        ?>
+        
 		Ext.onReady(function(){
             Egw.Egwbase.initFramework();
 			<?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . ";" ?>
