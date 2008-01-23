@@ -11,6 +11,12 @@
 Ext.namespace('Egw.Tasks', 'Egw.Tasks.status');
 
 Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
+	/**
+     * @cfs {bool} autoExpand
+     * Autoexpand comboBox on focus.
+     */
+    autoExpand: false,
+	
 	fieldLabel: 'status',
     name: 'status',
     displayField: 'status',
@@ -26,12 +32,16 @@ Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	//private
     initComponent: function(){
 		this.store = Egw.Tasks.status.getStore();
+		if (!this.value) {
+			this.value = Egw.Tasks.status.getIdentifier('IN-PROCESS');
+		}
 		if (this.autoExpand) {
 			this.on('focus', function(){
 				this.lazyInit = false;
                 this.expand();
             });
 		}
+		//this.on('select', function(){console.log(this.value)});
 	    Egw.widgets.Percent.ComboBox.superclass.initComponent.call(this);
 	}
         
@@ -58,6 +68,12 @@ Egw.Tasks.status.getStore = function() {
        });
 	}
 	return store;
+}
+
+Egw.Tasks.status.getIdentifier = function(statusName) {
+	var index = Egw.Tasks.status.getStore().find('status', statusName);
+	var status = Egw.Tasks.status.getStore().getAt(index);
+	return status.data.identifier;
 }
 
 Egw.Tasks.status.getStatusName = function(identifier) {
