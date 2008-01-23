@@ -1,15 +1,20 @@
 <?php
 /**
- * backend class for Egwbase_Http_Server
- *
- * This class handles all Http requests for the addressbook application
+ * Tine 2.0
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ */
+
+/**
+ * backend class for Egwbase_Http_Server
  *
+ * This class handles all Http requests for the addressbook application
+ *
+ * @package     Addressbook
  */
 class Addressbook_Http extends Egwbase_Application_Http_Abstract
 {
@@ -53,7 +58,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 			    $view->formData['config']['twoCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
 			}
 		} else {
-		    $personalAddressbooks = $addresses->getAddressbooksByOwner($currentAccount->account_id);
+		    $personalAddressbooks = $addresses->getAddressbooksByOwner($currentAccount->accountId);
 		    foreach($personalAddressbooks as $addressbook) {
     		    $view->formData['values'] = array('contact_owner' => $addressbook->container_id);
     		    $view->formData['config']['addressbookName']   = $addressbook->container_name;
@@ -108,7 +113,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 				$view->formData['values']['list_members'][] = array($member->contact_id, $member->n_family, $member->contact_email);
 			} 
 
-			if($list->list_owner == $currentAccount->account_id) {
+			if($list->list_owner == $currentAccount->accountId) {
 			    $view->formData['config']['addressbookName'] = 'My Lists';
 			} else {
 			    if($list->list_owner > 0) {
@@ -118,7 +123,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 			    }
 			}
 		} else {
-		    $view->formData['values'] = array('list_owner' => $currentAccount->account_id);
+		    $view->formData['values'] = array('list_owner' => $currentAccount->accountId);
 		    $view->formData['config']['addressbookName'] = 'My Lists';
 		}
 		

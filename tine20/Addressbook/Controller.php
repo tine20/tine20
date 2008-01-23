@@ -1,13 +1,18 @@
 <?php
 /**
- * controller for Addressbook
+ * Tine 2.0
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ */
+
+/**
+ * controller for Addressbook
  *
+ * @package     Addressbook
  */
 class Addressbook_Controller
 {
@@ -71,16 +76,8 @@ class Addressbook_Controller
     
     public function getOtherUsers() 
     {
-        $rows = Egwbase_Container::getInstance()->getOtherUsers('addressbook');
-
-        $accountData = array();
-
-        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Record_PublicAccountProperties');
+        $result = Egwbase_Container::getInstance()->getOtherUsers('addressbook');
         
-        foreach($rows as $account) {
-            $result->addRecord($account->getPublicProperties());
-        }
-
         return $result;
     }
         

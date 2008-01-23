@@ -1,8 +1,6 @@
 <?php
 /**
- * backend class for Zend_Json_Server
- *
- * This class handles all Json requests for the addressbook application
+ * Tine 2.0
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -10,6 +8,14 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * backend class for Zend_Json_Server
+ *
+ * This class handles all Json requests for the addressbook application
+ *
+ * @package     Addressbook
  */
 class Addressbook_Json extends Egwbase_Application_Json_Abstract
 {
@@ -356,6 +362,10 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         
         $result['results'] = Addressbook_Controller::getInstance()->getGrants($addressbookId)->toArray();
         $result['totalcount'] = count($result['results']);
+        
+        foreach($result['results'] as $key => $value) {
+            $result['results'][$key]["accountName"] = Egwbase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
+        }
         
         return $result;
     }

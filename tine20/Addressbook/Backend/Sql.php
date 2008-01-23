@@ -1,13 +1,18 @@
 <?php
 /**
- * sql backend class for the addressbook
+ * Tine 2.0
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ */
+
+/**
+ * sql backend class for the addressbook
  *
+ * @package     Addressbook
  */
 class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 {
@@ -54,7 +59,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new Exception('write access to new addressbook denied');
         }
         
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $currentAccount = Zend_Registry::get('currentAccount');
 
         $contactData = $_contactData->toArray();
@@ -192,7 +197,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     public function addAddressbook($_name, $_type) 
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $allGrants = array(
             Egwbase_Container::GRANT_ADD,
             Egwbase_Container::GRANT_ADMIN,
@@ -293,7 +298,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->accountId, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
 
         if(empty($acl)) {
             return false;
@@ -405,7 +410,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->accountId, 'addressbook', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
 
         if(empty($acl)) {
             return false;
@@ -431,7 +436,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_contactId must be integer');
         }
         
-        $accountId = Zend_Registry::get('currentAccount')->account_id;
+        $accountId = Zend_Registry::get('currentAccount')->accountId;
 
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $contactId)

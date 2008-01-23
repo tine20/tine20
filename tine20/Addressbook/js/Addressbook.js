@@ -30,7 +30,7 @@ Egw.Addressbook = function(){
             nodeType: 'userAddressbooks',
             id: 'userAddressbooks',
             leaf: null,
-            owner: Egw.Egwbase.Registry.get('currentAccount').account_id
+            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
         }, {
             text: "Shared Addressbooks",
             cls: "file",
@@ -2395,6 +2395,7 @@ Egw.Addressbook.GrantsDialog = function() {
                 id: 'accountName', 
                 header: 'Name', 
                 dataIndex: 'accountName', 
+                renderer: Egw.Egwbase.Common.usernameRenderer,
                 width: 70
             },
             readColumn,
