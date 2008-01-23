@@ -19,7 +19,7 @@ Egw.Crm = function() {
             nodeType: 'userLeads',
             id: 'userLeads',
             leaf: null,
-            owner: Egw.Egwbase.Registry.get('currentAccount').account_id
+            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
         }, {
             text: "Shared Leads",
             cls: "file",

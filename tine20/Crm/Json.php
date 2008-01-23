@@ -1,15 +1,19 @@
 <?php
 /**
+ * Tine 2.0
+ * @package     Crm
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+
+/**
  * backend class for Zend_Json_Server
  *
  * This class handles all Json requests for the Crm application
  *
  * @package     Crm
- * @license     http://www.gnu.org/licenses/agpl.html
- * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Json.php 199 2007-10-15 16:30:00Z twadewitz $
- *
  */
 class Crm_Json extends Egwbase_Application_Json_Abstract
 {
@@ -329,7 +333,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         //}
 
         // lead modifier
-        //$_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->account_id;
+        //$_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->accountId;
 
         $leadData = new Crm_Model_Lead();
         try {
@@ -673,11 +677,11 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
                 $treeNode = new Egwbase_Ext_Treenode(
                     'Crm',
                     'leads',
-                    'otherfolder_'. $accountData->account_id, 
-                    $accountData->account_name,
+                    'otherfolder_'. $accountData->accountId, 
+                    $accountData->accountDisplayName,
                     false
                 );
-                $treeNode->owner  = $accountData->account_id;
+                $treeNode->owner  = $accountData->accountId;
                 $treeNode->nodeType = 'userFolders';
                 $treeNodes[] = $treeNode;
             }

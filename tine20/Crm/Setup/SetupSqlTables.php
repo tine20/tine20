@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>, Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $ 
+ * @version     $Id$ 
  *
  */
 

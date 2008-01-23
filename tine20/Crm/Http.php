@@ -1,15 +1,20 @@
 <?php
 /**
- * backend class for Egwbase_Http_Server
- *
- * This class handles all Http requests for the Crm application
+ * Tine 2.0
  *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $
+ * @version     $Id$
+ */
+
+/**
+ * backend class for Egwbase_Http_Server
  *
+ * This class handles all Http requests for the Crm application
+ *
+ * @package     Crm
  */
 class Crm_Http extends Egwbase_Application_Http_Abstract
 {
@@ -84,7 +89,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
             $view->formData['values']['products'] = array();                
             $view->formData['values']['contacts'] = array();                       
             
-            $personalFolders = $leads->getFoldersByOwner($currentAccount->account_id);
+            $personalFolders = $leads->getFoldersByOwner($currentAccount->accountId);
 		    foreach($personalFolders as $folder) {
 		        $view->formData['values']['lead_container']     = $folder->container_id;
     		    $view->formData['config']['folderName']   = $folder->container_name;

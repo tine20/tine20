@@ -13,7 +13,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Backend.php 121 2007-10-15 16:30:00Z twadewitz $ *
+ * @version     $Id$ *
  */
 class Crm_Backend_Factory
 {

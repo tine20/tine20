@@ -8,7 +8,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Controller.php 273 2007-11-08 22:51:16Z lkneschke $
+ * @version     $Id$
  *
  */
 class Crm_Controller

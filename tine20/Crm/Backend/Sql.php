@@ -1,14 +1,19 @@
 <?php
-
 /**
- * interface for leads class
+ * Tine 2.0
  *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Sql.php 199 2008-01-15 15:27:00Z twadewitz $
+ * @version     $Id$
  *
+ */
+
+/**
+ * interface for leads class
+ *
+ * @package     Crm
  */
 class Crm_Backend_Sql implements Crm_Backend_Interface
 {
@@ -784,7 +789,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function addFolder($_name, $_type) 
     {
         $egwbaseContainer = Egwbase_Container::getInstance();
-        $accountId   = Zend_Registry::get('currentAccount')->account_id;
+        $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $allGrants = array(
             Egwbase_Container::GRANT_ADD,
             Egwbase_Container::GRANT_ADMIN,
@@ -1140,7 +1145,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->accountId, 'crm', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
 
         if(empty($acl)) {
             return false;
@@ -1192,7 +1197,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $currentAccount = Zend_Registry::get('currentAccount');
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->account_id, 'crm', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
+        $acl = $this->egwbaseAcl->getGrants($currentAccount->accountId, 'crm', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
 
         if(empty($acl)) {
             return false;

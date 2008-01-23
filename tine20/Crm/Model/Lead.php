@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Sql.php 199 2008-01-15 15:10:04Z twadewitz $
+ * @version     $Id$
  *
  */
 class Crm_Model_Lead extends Egwbase_Record_Abstract
