@@ -14,7 +14,6 @@ Ext.namespace('Egw.Tasks');
 Egw.Tasks.getPanel = function() {
     
 	// init stati
-    Egw.Tasks.Status.init();
     return Egw.Tasks.TaskGrid.getTreePanel();
 }
 
@@ -22,6 +21,7 @@ Egw.Tasks.getPanel = function() {
 Egw.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
+	var ntStatus, ntPercent, ntSummaray, ntPriority, ntDue, ntOrganizer;
 	
 	tree =  new Egw.containerTreePanel({
         id: 'TasksTreePanel',
@@ -130,7 +130,7 @@ Egw.Tasks.TaskGrid = function(){
 		
 		filter = {
             nodeType: 'Personal',
-            owner: Egw.Egwbase.Registry.get('currentAccount').account_id,
+            owner: Egw.Egwbase.Registry.get('currentAccount').accountId,
             query: '',
             due: false,
             container: false,
@@ -162,23 +162,166 @@ Egw.Tasks.TaskGrid = function(){
 	        emptyMsg: "No tasks to display"
 	    });
 		
-		grid = new Ext.grid.GridPanel({
+		// custom template for the grid header
+	    var headerTpl = new Ext.Template(
+	        '<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
+	        '<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
+	        '<tbody><tr class="new-task-row">',
+	            '<td><div class="x-small-editor" id="new-task-status"></div></td>',
+	            '<td><div class="x-small-editor" id="new-task-percent"></div></td>',
+	            '<td><div class="x-small-editor" id="new-task-summaray"></div></td>',
+	            '<td><div class="x-small-editor" id="new-task-priority"></div></td>',
+	            '<td><div class="x-small-editor" id="new-task-due"></div></td>',
+	            '<td><div class="x-small-editor" id="new-task-organizer"></div></td>',
+	        '</tr></tbody>',
+	        "</table>"
+	    );
+		
+		grid = new Ext.grid.EditorGridPanel({
             store: store,
 			tbar: pagingToolbar,
-            cm: new Ext.grid.ColumnModel([
-			
-				{id: 'status',    header: "Status",    width: 40,  sortable: true, dataIndex: 'status', renderer: Egw.Tasks.Status.getStatusIcon },
-				{id: 'percent',   header: "Percent",   width: 50,  sortable: true, dataIndex: 'percent', renderer: _progressBar },
-				{id: 'summary',   header: "Summaray",  width: 200, sortable: true, dataIndex: 'summaray'},
-				{id: 'priority',  header: "Priority",  width: 20,  sortable: true, dataIndex: 'priority'},
-				{id: 'due',       header: "Due Date",  width: 100, sortable: true, dataIndex: 'due', renderer: Egw.Egwbase.Common.dateRenderer },
-				{id: 'organizer', header: "Organizer", width: 150, sortable: true, dataIndex: 'organizer'}
+			clicksToEdit: 'auto',
+            enableColumnHide:false,
+            enableColumnMove:false,
+			title:'All Tasks',
+            iconCls:'icon-show-all',
+            region:'center',
+			sm: new Ext.grid.RowSelectionModel(),
+            columns: [
+				{
+					id: 'status',
+					header: "Status",
+					width: 40,
+					sortable: true,
+					dataIndex: 'status',
+					renderer: Egw.Tasks.status.getStatusIcon,
+                    editor: new Egw.Tasks.status.ComboBox({
+		                autoExpand: true,
+		                listClass: 'x-combo-list-small'
+		            })
+				},
+				{
+					id: 'percent',
+					header: "Percent",
+					width: 50,
+					sortable: true,
+					dataIndex: 'percent',
+					renderer: _progressBar,
+                    editor: new Egw.widgets.Percent.ComboBox({
+                        //allowBlank: false
+                    })
+				},
+				{
+					id: 'summaray',
+					header: "Summaray",
+					width: 200,
+					sortable: true,
+					dataIndex: 'summaray',
+					editor: new Ext.form.TextField({
+						allowBlank: false
+					})
+				},
+				{
+					id: 'priority',
+					header: "Priority",
+					width: 20,
+					sortable: true,
+					dataIndex: 'priority',
+                    editor: new Ext.form.TextField({
+                        allowBlank: false
+                    })
+				},
+				{
+					id: 'due',
+					header: "Due Date",
+					width: 100,
+					sortable: true,
+					dataIndex: 'due',
+					renderer: Egw.Egwbase.Common.dateRenderer,
+					editor: new Ext.form.DateField({
+                        format : 'd.m.Y'
+                    })
+				},
+				{
+					id: 'organizer',
+					header: "Organizer",
+					width: 150,
+					sortable: true,
+					dataIndex: 'organizer',
+                    editor: new Ext.form.TextField({
+                        allowBlank: false
+                    })
+				}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
-		    ]),
-			autoExpandColumn: 'summary'
+		    ],
+			autoExpandColumn: 'summary',
+			view: new Ext.grid.GridView({
+	            forceFit:true,
+	            ignoreAdd: true,
+	            emptyText: 'No Tasks to display',
+	
+	            templates: {
+	                header: headerTpl
+	            },
+	
+	            getRowClass : function(r){
+	                var d = r.data;
+	                if(d.status == 'DONE'){
+	                    return 'task-completed';
+	                }
+	                if(d.due && d.due.getTime() < new Date().clearTime().getTime()){
+	                    return 'task-overdue';
+	                }
+	                return '';
+	            }
+	        })
         });
 		
 		
+		grid.on('render', function(){
+			// The fields in the grid's header
+			ntStatus = new Egw.Tasks.status.ComboBox({
+                renderTo: 'new-task-status',
+				autoExpand: true,
+                disabled:true,
+                listClass:'x-combo-list-small',
+            });
+			ntPercent = new Ext.form.ComboBox({
+				renderTo: 'new-task-percent',
+				disabled: true
+			});
+			ntSummaray = new Ext.form.TextField({
+	            renderTo: 'new-task-summaray',
+	            emptyText: 'Add a task...'
+	        });
+			ntPriority = new Ext.form.ComboBox({
+                renderTo: 'new-task-priority',
+                disabled: true
+            });
+            ntDue = new Ext.form.DateField({
+                renderTo: 'new-task-due',
+                value: new Date(),
+                disabled:true,
+                format : "m/d/Y"
+            });
+			ntOrganizer = new Ext.form.ComboBox({
+                renderTo: 'new-task-organizer',
+                disabled: true
+            });
+			//grid.on('resize', syncFields);
+            //grid.on('columnresize', syncFields);
+            syncFields();
+		});
+		
+		function syncFields(){
+            var cm = grid.getColumnModel();
+            ntStatus.setSize(cm.getColumnWidth(0)-4);
+            ntPercent.setSize(cm.getColumnWidth(1)-4);
+            ntSummaray.setSize(cm.getColumnWidth(2)-2);
+            ntPriority.setSize(cm.getColumnWidth(3)-4);
+            ntDue.setSize(cm.getColumnWidth(4)-4);
+            ntOrganizer.setSize(cm.getColumnWidth(5)-4);
+        }
 		//console.log(grid.getColumnModel().getColumnById('priority'));
     };
 		
@@ -207,14 +350,15 @@ Egw.Tasks.TaskGrid = function(){
 Egw.Tasks.getToolbar = function() {
 
         var action_add = new Ext.Action({
-        text: 'add',
-        iconCls: 'action_add',
-        handler: function () {
-        //  var tree = Ext.getCmp('venues-tree');
-        //  var curSelNode = tree.getSelectionModel().getSelectedNode();
-        //  var RootNode   = tree.getRootNode();
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&_taskId=', 900, 700);
-         }
+	        text: 'add',
+	        iconCls: 'action_add',
+	        handler: function () {
+				data = {};
+		        //  var tree = Ext.getCmp('venues-tree');
+		        //  var curSelNode = tree.getSelectionModel().getSelectedNode();
+		        //  var RootNode   = tree.getRootNode();
+	            editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=', 900, 700);
+	        }
         }); 
     
         var quickSearchField = new Ext.app.SearchField({
@@ -231,7 +375,7 @@ Egw.Tasks.getToolbar = function() {
             id: 'TasksStatusFilter',
             //name: 'statusFilter',
             hideLabel: true,            
-            store: Egw.Tasks.Status.Store,
+            store: Egw.Tasks.status.getStore(),
             displayField: 'status',
             valueField: 'identifier',
             typeAhead: true,
@@ -242,6 +386,7 @@ Egw.Tasks.getToolbar = function() {
             editable: false,
             width:150    
         });
+		
 		statusFilter.on('select', function(combo, record, index) {
            if (!record.data) {
                var _probability = '';       
@@ -284,19 +429,69 @@ Egw.Tasks.getToolbar = function() {
   
 
 
-Egw.Tasks.EditDialog = function(){
-  
-    // public functions and variables
-    return {
-        display: function() {
-            var dialog = _displayDialog();
-            if(formData.values) {
-                setProjectDialogValues(formData);
-            }
-         }
-        
-    }
-
-}
-();
+Egw.Tasks.EditDialog = function() {
+	var handler_applyChanges = function(_button, _event) {
+	};
+	var handler_saveAndClose = function(_button, _event) {
+	};
+	var handler_pre_delete = function(_button, _event) {
+	};
+	var getTaskForm = function() {
+		taskForm = {
+			layout: 'form',
+			labelWidth: 75,
+			//title: 'Form Layout',
+			bodyStyle: 'padding:15px',
+			width: 350,
+			labelPad: 10,
+			defaultType: 'textfield',
+			defaults: {
+				width: 230,
+				msgTarget: 'side'
+			},
+			items: [
+				{
+					labelSeparator: '',
+					type: 'textfield',
+					name: 'summaray',
+					allowBlank: false
+				}, {
+					fieldLabel: 'Status',
+					type: 'combo',
+					name: 'status'
+				}, new Egw.widgets.Percent.ComboBox({
+					fieldLabel: 'Percentage',
+					name: 'priority'
+				}), new Egw.Tasks.status.ComboBox({
+					fieldLabel: 'status',
+					name: 'status',
+				}), new Ext.form.DateField({
+                    fieldLabel: 'due date',
+					name: 'due',
+	                format: "m/d/Y"
+	            }),	{
+					fieldLabel: 'notes',
+					name: 'description',
+					type: 'htmleditor',
+					
+				}
+			]
+		}
+		return taskForm;
+	};
+	var _render = function() {
+		var viewport = new Ext.Viewport({
+            layout: 'border',
+            items: new Egw.widgets.dialog.EditRecord({
+				handler_applyChanges: handler_applyChanges,
+				handler_saveAndClose: handler_saveAndClose,
+				handler_pre_delete: handler_pre_delete,
+				items: getTaskForm()
+			})
+		});
+	};
+	return {
+		render: _render
+	}
+}();
 
