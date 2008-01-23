@@ -17,6 +17,7 @@ Egw.Tasks.getPanel = function() {
     return Egw.Tasks.TaskGrid.getTreePanel();
 }
 
+
 // Tasks main screen
 Egw.Tasks.TaskGrid = function(){
     
@@ -52,80 +53,35 @@ Egw.Tasks.TaskGrid = function(){
 	
 	var initStore = function(){
 	    store = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Tasks.searchTasks'
-            },
+			idProperty: 'identifier',
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'identifier',
-            
-			fields: [
-			    // egw record fields
-		        { name: 'container' },
-		        { name: 'created_by' },
-		        { name: 'creation_time', type: 'date', dateFormat: 'c' },
-		        { name: 'last_modified_by' },
-		        { name: 'last_modified_time', type: 'date', dateFormat: 'c' },
-		        { name: 'is_deleted' },
-		        { name: 'deleted_time', type: 'date', dateFormat: 'c' },
-		        { name: 'deleted_by' },
-		        // task only fields
-		        { name: 'identifier' },
-		        { name: 'percent' },
-		        { name: 'completed', type: 'date', dateFormat: 'c' },
-		        { name: 'due', type: 'date', dateFormat: 'c' },
-		        // ical common fields
-		        { name: 'class' },
-		        { name: 'description' },
-		        { name: 'geo' },
-		        { name: 'location' },
-		        { name: 'organizer' },
-		        { name: 'priority' },
-		        { name: 'status' },
-		        { name: 'summaray' },
-		        { name: 'url' },
-		        // ical common fields with multiple appearance
-		        { name: 'attach' },
-		        { name: 'attendee' },
-		        { name: 'categories' },
-		        { name: 'comment' },
-		        { name: 'contact' },
-		        { name: 'related' },
-		        { name: 'resources' },
-		        { name: 'rstatus' },
-		        // scheduleable interface fields
-		        { name: 'dtstart', type: 'date', dateFormat: 'c' },
-		        { name: 'duration', type: 'date', dateFormat: 'c' },
-		        { name: 'recurid' },
-		        // scheduleable interface fields with multiple appearance
-		        { name: 'exdate' },
-		        { name: 'exrule' },
-		        { name: 'rdate' },
-		        { name: 'rrule' }
-            ],
-            // turn on remote sorting
-            remoteSort: true    
+			successProperty: 'status',
+			fields: Egw.Tasks.Task,
+			remoteSort: true,
+			baseParams: {
+                method: 'Tasks.searchTasks'
+            }
         });
 		
 		// prepare filter
 		store.on('beforeload', function(store, options){
-			filter.start = options.params.start ? options.params.start : 0;
-            filter.limit = options.params.limit ? options.params.limit : 50;
-            filter.sort = options.params.sort ? options.params.sort : 'due';
-            filter.dir = options.params.dir ? options.params.dir : 'DESC';
+			// console.log(options);
+			// for some reasons, paging toolbar eats sort and dir
+			if (store.getSortState()) {
+				filter.sort = store.getSortState().field;
+				filter.dir = store.getSortState().direction;
+			} else {
+				filter.sort = paging.sort;
+                filter.dir = paging.dir;
+			}
+			filter.start = options.params.start;
+            filter.limit = options.params.limit;
 			//filter.due
 			//filter.organizer
 			//filter.query
 			//filter.tag
-			
-			options.params.start = filter.start;
-			options.params.limit = filter.limit;
-			options.params.sort = filter.sort;
-			options.params.dir = filter.dir;
-			
 			options.params.filter = Ext.util.JSON.encode(filter);
-			
-			
 		});
 		
 		filter = {
@@ -154,7 +110,7 @@ Egw.Tasks.TaskGrid = function(){
 	
     var initGrid = function(){
         //sm = new Ext.grid.CheckboxSelectionModel();
-        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
+        var pagingToolbar = new Ext.PagingToolbar({
 	        pageSize: 50,
 	        store: store,
 	        displayInfo: true,
@@ -183,8 +139,6 @@ Egw.Tasks.TaskGrid = function(){
 			clicksToEdit: 'auto',
             enableColumnHide:false,
             enableColumnMove:false,
-			title:'All Tasks',
-            iconCls:'icon-show-all',
             region:'center',
 			sm: new Ext.grid.RowSelectionModel(),
             columns: [
@@ -208,6 +162,7 @@ Egw.Tasks.TaskGrid = function(){
 					dataIndex: 'percent',
 					renderer: _progressBar,
                     editor: new Egw.widgets.Percent.ComboBox({
+						autoExpand: true,
                         //allowBlank: false
                     })
 				},
@@ -302,7 +257,7 @@ Egw.Tasks.TaskGrid = function(){
                 renderTo: 'new-task-due',
                 value: new Date(),
                 disabled:true,
-                format : "m/d/Y"
+                format : "d.m.Y"
             });
 			ntOrganizer = new Ext.form.ComboBox({
                 renderTo: 'new-task-organizer',
@@ -357,7 +312,7 @@ Egw.Tasks.getToolbar = function() {
 		        //  var tree = Ext.getCmp('venues-tree');
 		        //  var curSelNode = tree.getSelectionModel().getSelectedNode();
 		        //  var RootNode   = tree.getRootNode();
-	            editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=', 900, 700);
+	            editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=', 280, 480);
 	        }
         }); 
     
@@ -440,9 +395,9 @@ Egw.Tasks.EditDialog = function() {
 		taskForm = {
 			layout: 'form',
 			labelWidth: 75,
-			//title: 'Form Layout',
+			title: 'Edit Task',
 			bodyStyle: 'padding:15px',
-			width: 350,
+			width: '100%',
 			labelPad: 10,
 			defaultType: 'textfield',
 			defaults: {
@@ -451,28 +406,29 @@ Egw.Tasks.EditDialog = function() {
 			},
 			items: [
 				{
-					labelSeparator: '',
-					type: 'textfield',
+					fieldLabel: 'summaray',
+					xtype: 'textfield',
 					name: 'summaray',
 					allowBlank: false
-				}, {
-					fieldLabel: 'Status',
-					type: 'combo',
-					name: 'status'
-				}, new Egw.widgets.Percent.ComboBox({
-					fieldLabel: 'Percentage',
+				},  new Egw.widgets.Percent.ComboBox({
+					fieldLabel: 'percentage',
 					name: 'priority'
 				}), new Egw.Tasks.status.ComboBox({
 					fieldLabel: 'status',
 					name: 'status',
-				}), new Ext.form.DateField({
+				}), {
+                    fieldLabel: 'priority',
+                    xtype: 'combo',
+                    name: 'priority'
+                }, new Ext.form.DateField({
                     fieldLabel: 'due date',
 					name: 'due',
-	                format: "m/d/Y"
+	                format: "d.m.Y"
 	            }),	{
 					fieldLabel: 'notes',
 					name: 'description',
-					type: 'htmleditor',
+					xtype: 'textarea',
+					height: 100
 					
 				}
 			]
@@ -494,4 +450,50 @@ Egw.Tasks.EditDialog = function() {
 		render: _render
 	}
 }();
+
+// Task model
+Egw.Tasks.Task = Ext.data.Record.create([
+    // egw record fields
+    { name: 'container' },
+    { name: 'created_by' },
+    { name: 'creation_time', type: 'date', dateFormat: 'c' },
+    { name: 'last_modified_by' },
+    { name: 'last_modified_time', type: 'date', dateFormat: 'c' },
+    { name: 'is_deleted' },
+    { name: 'deleted_time', type: 'date', dateFormat: 'c' },
+    { name: 'deleted_by' },
+    // task only fields
+    { name: 'identifier' },
+    { name: 'percent' },
+    { name: 'completed', type: 'date', dateFormat: 'c' },
+    { name: 'due', type: 'date', dateFormat: 'c' },
+    // ical common fields
+    { name: 'class' },
+    { name: 'description' },
+    { name: 'geo' },
+    { name: 'location' },
+    { name: 'organizer' },
+    { name: 'priority' },
+    { name: 'status' },
+    { name: 'summaray' },
+    { name: 'url' },
+    // ical common fields with multiple appearance
+    { name: 'attach' },
+    { name: 'attendee' },
+    { name: 'categories' },
+    { name: 'comment' },
+    { name: 'contact' },
+    { name: 'related' },
+    { name: 'resources' },
+    { name: 'rstatus' },
+    // scheduleable interface fields
+    { name: 'dtstart', type: 'date', dateFormat: 'c' },
+    { name: 'duration', type: 'date', dateFormat: 'c' },
+    { name: 'recurid' },
+    // scheduleable interface fields with multiple appearance
+    { name: 'exdate' },
+    { name: 'exrule' },
+    { name: 'rdate' },
+    { name: 'rrule' }
+]);
 

@@ -59,6 +59,12 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 
 Ext.namespace('Egw.widgets.Percent');
 Egw.widgets.Percent.ComboBox = Ext.extend(Ext.form.ComboBox, {
+	/**
+	 * @cfs {bool} autoExpand
+	 * Autoexpand comboBox on focus.
+	 */
+	autoExpand: false,
+	
     displayField: 'value',
     valueField: 'key',
     //typeAhead: true,
@@ -72,6 +78,10 @@ Egw.widgets.Percent.ComboBox = Ext.extend(Ext.form.ComboBox, {
     //private
     initComponent: function(){
         Egw.widgets.Percent.ComboBox.superclass.initComponent.call(this);
+		// allways set a default
+		if(!this.value) 
+		    this.value = 0;
+			
 		this.store = new Ext.data.SimpleStore({
 	        fields: ['key','value'],
 	        data: [
@@ -88,13 +98,15 @@ Egw.widgets.Percent.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	                ['100','100%']
 	            ]
 	    });
-		this.on('focus', function(){
-			this.expand();
-			return true;
-		});
+		
+		if (this.autoExpand) {
+            this.on('focus', function(){
+                this.lazyInit = false;
+                this.expand();
+            });
+        }
 		
 		this.on('select', function(){
-			return true;
 			//this.el = Egw.widgets.Percent.ComboBox.progressBar(this.value);
 		})
     }
