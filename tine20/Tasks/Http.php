@@ -68,7 +68,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
          
         $view->setScriptPath('Egwbase/views');
         $view->formData = array();
-        $view->title="edit lead";
+        $view->title="edit task";
         
         $view->jsIncludeFiles  = $this->getJsFilesToInclude();
         $view->cssIncludeFiles = $this->getCssFilesToInclude();
