@@ -132,14 +132,6 @@ input {
 	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
 }
 
-.action_saveAndClose {
-	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
-}
-
-.action_applyChanges {
-	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
-}
-
 .filter_search {
 	background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
 }

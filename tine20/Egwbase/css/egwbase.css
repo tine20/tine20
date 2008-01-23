@@ -15,12 +15,12 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
 
-.action_edit {
-    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
+.action_saveAndClose {
+    background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
 }
 
-.action_delete {
-    background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+.action_applyChanges {
+    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
 }
 
 .action_addContact {
