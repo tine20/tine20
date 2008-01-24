@@ -97,19 +97,91 @@
 			loader.baseParams.owner    = node.attributes.owner;
 	    }, this);
 
-	   this.setRootNode(treeRoot);
-       
-	   for(var i=0; i<initialTree.length; i++) {
+        this.on("activate", function(){
+			this.expandPath('/root/all');
+		}, this);
+	    
+		this.setRootNode(treeRoot);
+	   
+	    for(var i=0; i<initialTree.length; i++) {
            treeRoot.appendChild( new Ext.tree.AsyncTreeNode(initialTree[i]) );
-       }
+        }
+		
+		
 	},
+	afterRender: function() {
+		Egw.containerTreePanel.superclass.afterRender.call(this);
+		console.log(this);
+		this.expandPath('/root/all');
+	}
 		
  });
- 
+
+Ext.namespace('Egw.widgets', 'Egw.widgets.container');
+Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
+    allowBlank: false,
+    readOnly:true,
+	container: null,
+	
+	// private
+	initComponent: function(){
+		Egw.widgets.container.selectionComboBox.superclass.initComponent.call(this);
+		this.onTriggerClick = function(e) {
+            var w = new Egw.widgets.container.selectionDialog({
+				TriggerField: this,
+			});
+        };
+	},
+	//private
+	getValue: function(){
+		return this.container;
+	}
+});
+
+Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
+	title: 'please select a container',
+
+	// private
+    initComponent: function(){
+		Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
+		console.log(this.hallo);
+		var w = new Ext.Window({
+			title: this.title,
+			modal: true,
+			width: 375,
+			height: 400,
+			minWidth: 375,
+			minHeight: 400,
+			layout: 'fit',
+			plain: true,
+			bodyStyle: 'padding:5px;',
+			buttonAlign: 'center',
+		});
+		
+		var tree = new Egw.containerTreePanel({
+			itemName: this.TriggerField.itemName,
+			appName: this.TriggerField.appName,
+		});
+		
+		tree.on('click', function(_node) {
+            if(_node.attributes.nodeType == 'singleContainer') {
+				
+				this.TriggerField.container = _node.attributes.container;
+				this.TriggerField.setValue(_node.attributes.text);
+                w.hide();
+            }
+        }, this);
+			
+		w.add(tree);
+		w.show();
+	}
+});
+
+
+			
 Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	//private
  	createNode: function(attr){
-		
 		// map attributes from Egwbase_Container to attrs from ExtJS
 		if (attr.container_name) {
             //console.log(this.baseParams);
@@ -120,13 +192,14 @@ Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
                 cls: 'file',
                 leaf: true
             };
-        } else if (attr.n_fileas) {
+        } else if (attr.accountDisplayName) {
+			
             attr = {
                 nodeType: 'Personal',
-                text: attr.n_fileas,
+                text: attr.accountDisplayName,
                 cls: 'folder',
                 leaf: false,
-                owner: attr.account_id
+                owner: attr.accountId
             }
         }
 		
