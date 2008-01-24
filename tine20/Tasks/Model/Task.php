@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 
@@ -20,7 +20,7 @@ class Tasks_Model_Task extends Egwbase_Record_Abstract
     
     protected $_validators = array(
         // egw record fields
-        'container'            => array('allowEmpty' => false, 'Int' ),
+        'container'            => array('presence' => 'required', 'allowEmpty' => false, 'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
         'creation_time'        => array('allowEmpty' => true         ),
         'last_modified_by'     => array('allowEmpty' => true         ),
