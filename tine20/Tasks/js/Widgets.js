@@ -22,20 +22,21 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	
 	//private
     initComponent: function(){
-		var action_saveAndClose = new Ext.Action({
+		
+		this.action_saveAndClose = new Ext.Action({
             text: 'save and close',
             handler: this.handler_saveAndClose,
             iconCls: 'action_saveAndClose'
         });
     
-        var action_applyChanges = new Ext.Action({
+        this.action_applyChanges = new Ext.Action({
             text: 'apply changes',
             handler: this.handler_applyChanges,
             iconCls: 'action_applyChanges',
-            disabled: true
+            //disabled: true
         });
     
-        var action_delete = new Ext.Action({
+        this.action_delete = new Ext.Action({
             text: 'delete',
             handler: this.handler_pre_delete,
             iconCls: 'action_delete',
@@ -48,9 +49,9 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             split: false,
             height: 26,
             items: [
-                action_saveAndClose,
-                action_applyChanges,
-                action_delete
+                this.action_saveAndClose,
+                this.action_applyChanges,
+                this.action_delete
             ]
         });
 		Egw.widgets.dialog.EditRecord.superclass.initComponent.call(this);

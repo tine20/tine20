@@ -64,7 +64,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * singleton
      *
-     * @return Tasks_Controler
+     * @return Tasks_Controller
      */
     public static function getInstance() 
     {

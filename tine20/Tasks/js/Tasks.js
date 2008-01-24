@@ -365,32 +365,40 @@ Egw.Tasks.getToolbar = function() {
         return toolbar;
     }
   
-Egw.Tasks.EditDialog = function() {
-	var taskFormPanel;
-	
+Egw.Tasks.EditDialog = function(task) {
+	if (!arguments[0]) var task = {};
+    var task = new Egw.Tasks.Task(task);
+		
 	var handler_applyChanges = function(_button, _event) {
-		var form = Ext.getCmp('TasksEditFormPanel').getForm();
+		var closeWindow = arguments[2] ? arguments[2] : false;
+		
+		var dlg = Ext.getCmp('TasksEditFormPanel');
+		var form = dlg.getForm();
 		form.render();
 
 		if(form.isValid()) {
+			Ext.MessageBox.wait('please wait', 'saving task');
+			
 			var task = new Egw.Tasks.Task({});
 			form.updateRecord(task);
 			//console.log(task);
 			
             Ext.Ajax.request({
 				params: {
-					form: form.el.dom,
-	                method: 'Tasks.createTask', 
+	                method: 'Tasks.saveTask', 
 	                task: Ext.util.JSON.encode(task.data),
-					jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+					//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
 	            },
-	            text: 'Createing contact...',
 	            success: function(_result, _request) {
 	                //window.opener.Egw.Addressbook.reload();
-	                //window.setTimeout("window.close()", 400);
+	                if (closeWindow) {
+						window.setTimeout("window.close()", 400);
+					}
+					dlg.action_delete.enable();
+					Ext.MessageBox.hide();
 	            },
 	            failure: function ( result, request) { 
-	                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+	                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
 	            } 
 			});
         } else {
@@ -398,76 +406,76 @@ Egw.Tasks.EditDialog = function() {
         }
 	};
 	var handler_saveAndClose = function(_button, _event) {
-		Egw.widgets.container.selectionDialog();
+		handler_applyChanges(_button, _event, true);
 	};
 	var handler_pre_delete = function(_button, _event) {
 		
 	};
-	var getTaskFormPanel = function() {
-		taskFormPanel = {
-			layout: 'form',
-			labelWidth: 75,
-			title: 'Edit Task',
-			bodyStyle: 'padding:15px',
-			width: '100%',
-			labelPad: 10,
-			defaultType: 'textfield',
-			defaults: {
-				width: 230,
-				msgTarget: 'side'
-			},
-			items: [
-				{
-					fieldLabel: 'summaray',
-					xtype: 'textfield',
-					name: 'summaray',
-					allowBlank: false
-				},  new Egw.widgets.Percent.ComboBox({
-					fieldLabel: 'percentage',
-					name: 'priority'
-				}), new Egw.Tasks.status.ComboBox({
-					fieldLabel: 'status',
-					name: 'status',
-				}), {
-                    fieldLabel: 'priority',
-                    xtype: 'combo',
-                    name: 'priority'
-                }, new Ext.form.DateField({
-                    fieldLabel: 'due date',
-					name: 'due',
-	                format: "d.m.Y"
-	            }),	new Egw.widgets.container.selectionComboBox({
-					fieldLabel: 'Container',
-					name: 'container',
-					itemName: 'Tasks',
-                    appName: 'Tasks',
-				}), {
-					fieldLabel: 'notes',
-					name: 'description',
-					xtype: 'textarea',
-					height: 100
-					
-				}
-			]
-		}
-		return taskFormPanel;
-	};
-	var _render = function() {
-		var viewport = new Ext.Viewport({
-            layout: 'border',
-            items: new Egw.widgets.dialog.EditRecord({
-				id : 'TasksEditFormPanel',
-				handler_applyChanges: handler_applyChanges,
-				handler_saveAndClose: handler_saveAndClose,
-				handler_pre_delete: handler_pre_delete,
-				items: getTaskFormPanel()
-			})
-		});
-	};
-	return {
-		render: _render
+	
+	var taskFormPanel = {
+		layout: 'form',
+		labelWidth: 75,
+		title: 'Edit Task',
+		bodyStyle: 'padding:15px',
+		width: '100%',
+		labelPad: 10,
+		defaultType: 'textfield',
+		defaults: {
+			width: 230,
+			msgTarget: 'side'
+		},
+		items: [
+			{
+				fieldLabel: 'summaray',
+				xtype: 'textfield',
+				name: 'summaray',
+				allowBlank: false
+			},  new Egw.widgets.Percent.ComboBox({
+				fieldLabel: 'percentage',
+				name: 'percent'
+			}), new Egw.Tasks.status.ComboBox({
+				fieldLabel: 'status',
+				name: 'status',
+			}), {
+                fieldLabel: 'priority',
+                xtype: 'combo',
+                name: 'priority'
+            }, new Ext.form.DateField({
+                fieldLabel: 'due date',
+				name: 'due',
+                format: "d.m.Y"
+            }),	new Egw.widgets.container.selectionComboBox({
+				fieldLabel: 'Container',
+				name: 'container',
+				itemName: 'Tasks',
+                appName: 'Tasks',
+			}), {
+				fieldLabel: 'notes',
+				name: 'description',
+				xtype: 'textarea',
+				height: 100
+				
+			}
+		]
 	}
-}();
+	
+	var dlg = new Egw.widgets.dialog.EditRecord({
+        id : 'TasksEditFormPanel',
+        handler_applyChanges: handler_applyChanges,
+        handler_saveAndClose: handler_saveAndClose,
+        handler_pre_delete: handler_pre_delete,
+        items: taskFormPanel
+    });
+	
+	var viewport = new Ext.Viewport({
+        layout: 'border',
+        items: dlg
+    });
+	
+	dlg.getForm().loadRecord(task);
+	if(task.get('identifier') > 0) dlg.action_delete.enable();
+};
+
 
 // Task model
 Egw.Tasks.Task = Ext.data.Record.create([

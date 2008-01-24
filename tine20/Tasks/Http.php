@@ -64,6 +64,14 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
      */
     public function editTask($taskId)
     {
+        if($taskId) {
+            $controler = Tasks_Controller::getInstance();
+            $task = $controler->getTask($taskId);
+            $task->setTimezone(Zend_Registry::get('userTimeZone'));
+            $task = Zend_Json::encode($task->toArray());
+        } else {
+            $task = 'null';
+        }
         $view = new Zend_View();
          
         $view->setScriptPath('Egwbase/views');
@@ -74,7 +82,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
         $view->cssIncludeFiles = $this->getCssFilesToInclude();
         $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
 
-        $view->jsExecute = 'Egw.Tasks.EditDialog.render();';
+        $view->jsExecute = 'Egw.Tasks.EditDialog(' . $task . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

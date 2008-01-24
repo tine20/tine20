@@ -76,15 +76,12 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
      */
     public function createTask($task)
     {
-        date_default_timezone_set($this->_userTimezone);
-        $newTask = new Tasks_Model_Task(Zend_Json::decode($task));
-        $newTask->setTimezone($this->_serverTimezone);
-        date_default_timezone_set($this->_serverTimezone);
+        $inTask = $this->_json2task($task);
         
         //error_log(print_r($newTask->toArray(),true));
-        $createdTask = $this->_controller->createTask($newTask);
-        $createdTask->setTimezone($this->_userTimezone);
-        return $createdTask->toArray();
+        $outTask = $this->_controller->createTask($inTask);
+        $outTask->setTimezone($this->_userTimezone);
+        return $outTask->toArray();
     }
     
     /**
@@ -95,7 +92,46 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
      */
     public function updateTask($task)
     {
+        $inTask = $this->_json2task($task);
         
+        //error_log(print_r($newTask->toArray(),true));
+        $outTask = $this->_controller->updateTask($inTask);
+        $outTask->setTimezone($this->_userTimezone);
+        return $outTask->toArray();
+    }
+    
+    /**
+     * creates/updates a Task
+     *
+     * @param  $task
+     * @return array created/updated task
+     */
+    public function saveTask($task)
+    {
+        $inTask = $this->_json2task($task);
+        
+        //error_log(print_r($newTask->toArray(),true));
+        $outTask = $inTask->getId() > 0 ? 
+            $this->_controller->updateTask($inTask): 
+            $this->_controller->createTask($inTask);
+            
+        $outTask->setTimezone($this->_userTimezone);
+        return $outTask->toArray();
+    }
+    
+    /**
+     * returns instance of Tasks_Model_Task from json encoded data
+     * 
+     * @param string JSON encoded task
+     * @return Tasks_Model_Task task
+     */
+    protected function _json2task($json) {
+        date_default_timezone_set($this->_userTimezone);
+        $inTask = new Tasks_Model_Task(Zend_Json::decode($json));
+        $inTask->setTimezone($this->_serverTimezone);
+        date_default_timezone_set($this->_serverTimezone);
+        
+        return $inTask;
     }
     
     /**
