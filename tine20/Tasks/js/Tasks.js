@@ -12,8 +12,6 @@ Ext.namespace('Egw.Tasks');
 
 // entry point, required by egwbase
 Egw.Tasks.getPanel = function() {
-    
-	// init stati
     return Egw.Tasks.TaskGrid.getTreePanel();
 }
 
@@ -160,7 +158,7 @@ Egw.Tasks.TaskGrid = function(){
 					width: 50,
 					sortable: true,
 					dataIndex: 'percent',
-					renderer: _progressBar,
+					renderer: Egw.widgets.Percent.ComboBox.progressBar,
                     editor: new Egw.widgets.Percent.ComboBox({
 						autoExpand: true,
                         //allowBlank: false
@@ -279,21 +277,6 @@ Egw.Tasks.TaskGrid = function(){
         }
 		//console.log(grid.getColumnModel().getColumnById('priority'));
     };
-		
-	var _progressBar = function(percent) {
-		return '<div class="x-progress-wrap TasksProgress">' +
-                '<div class="x-progress-inner TasksProgress">' +
-                    '<div class="x-progress-bar TasksProgress" style="width:' + percent + '%">' +
-                        '<div class="TasksProgressText TasksProgress">' +
-                            '<div>'+ percent +'%</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="x-progress-text x-progress-text-back TasksProgress">' +
-                        '<div>&#160;</div>' +
-                    '</div>' +
-                '</div>' +
-            '</div>';
-	};
 	
 	return{
 		getTreePanel: function(){return tree;},
@@ -312,7 +295,7 @@ Egw.Tasks.getToolbar = function() {
 		        //  var tree = Ext.getCmp('venues-tree');
 		        //  var curSelNode = tree.getSelectionModel().getSelectedNode();
 		        //  var RootNode   = tree.getRootNode();
-	            editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=', 280, 480);
+	            editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=', 500, 500);
 	        }
         }); 
     
@@ -382,17 +365,46 @@ Egw.Tasks.getToolbar = function() {
         return toolbar;
     }
   
-
-
 Egw.Tasks.EditDialog = function() {
+	var taskFormPanel;
+	
 	var handler_applyChanges = function(_button, _event) {
+		var form = Ext.getCmp('TasksEditFormPanel').getForm();
+		form.render();
+
+		if(form.isValid()) {
+			var task = new Egw.Tasks.Task({});
+			form.updateRecord(task);
+			//console.log(task);
+			
+            Ext.Ajax.request({
+				params: {
+					form: form.el.dom,
+	                method: 'Tasks.createTask', 
+	                task: Ext.util.JSON.encode(task.data),
+					jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+	            },
+	            text: 'Createing contact...',
+	            success: function(_result, _request) {
+	                //window.opener.Egw.Addressbook.reload();
+	                //window.setTimeout("window.close()", 400);
+	            },
+	            failure: function ( result, request) { 
+	                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
+	            } 
+			});
+        } else {
+            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+        }
 	};
 	var handler_saveAndClose = function(_button, _event) {
+		Egw.widgets.container.selectionDialog();
 	};
 	var handler_pre_delete = function(_button, _event) {
+		
 	};
-	var getTaskForm = function() {
-		taskForm = {
+	var getTaskFormPanel = function() {
+		taskFormPanel = {
 			layout: 'form',
 			labelWidth: 75,
 			title: 'Edit Task',
@@ -424,7 +436,12 @@ Egw.Tasks.EditDialog = function() {
                     fieldLabel: 'due date',
 					name: 'due',
 	                format: "d.m.Y"
-	            }),	{
+	            }),	new Egw.widgets.container.selectionComboBox({
+					fieldLabel: 'Container',
+					name: 'container',
+					itemName: 'Tasks',
+                    appName: 'Tasks',
+				}), {
 					fieldLabel: 'notes',
 					name: 'description',
 					xtype: 'textarea',
@@ -433,16 +450,17 @@ Egw.Tasks.EditDialog = function() {
 				}
 			]
 		}
-		return taskForm;
+		return taskFormPanel;
 	};
 	var _render = function() {
 		var viewport = new Ext.Viewport({
             layout: 'border',
             items: new Egw.widgets.dialog.EditRecord({
+				id : 'TasksEditFormPanel',
 				handler_applyChanges: handler_applyChanges,
 				handler_saveAndClose: handler_saveAndClose,
 				handler_pre_delete: handler_pre_delete,
-				items: getTaskForm()
+				items: getTaskFormPanel()
 			})
 		});
 	};
