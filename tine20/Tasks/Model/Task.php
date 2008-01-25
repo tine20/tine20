@@ -38,7 +38,7 @@ class Tasks_Model_Task extends Egwbase_Record_Abstract
         'description'          => array('allowEmpty' => true         ),
         'geo'                  => array('allowEmpty' => true         ),
         'location'             => array('allowEmpty' => true         ),
-        'organizer'            => array('allowEmpty' => false, 'Int' ),
+        'organizer'            => array('allowEmpty' => true, 'Int' ),
         'priority'             => array('allowEmpty' => true         ),
         'status'               => array('allowEmpty' => true         ),
         'summaray'             => array('presence' => 'required'     ),
