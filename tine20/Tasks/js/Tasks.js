@@ -511,15 +511,16 @@ Egw.Tasks.TaskGrid = function(){
 	        if(editing && !focused){
 	            var summaray = ntSummaray.getValue();
 	            if(!Ext.isEmpty(summaray)){
-					console.log('create task :-)');
 					task = new Egw.Tasks.Task({
-						status: ntStatus.getValue,
-						percent: ntPercent.getValue,
+						status: ntStatus.getValue(),
+						percent: ntPercent.getValue(),
 						summaray: summaray,
-						due: ntDue.getValue,
+						priority: ntPriority.getValue(),
+						due: ntDue.getValue(),
 						container: Egw.Tasks.DefaultContainer.container_id
 					});
-					
+                    
+					console.log(ntStatus.getValue());
 					Ext.Ajax.request({
                         params: {
                             method: 'Tasks.saveTask', 
@@ -555,49 +556,71 @@ Egw.Tasks.TaskGrid = function(){
 
 Egw.Tasks.EditDialog = function(task) {
 	if (!arguments[0]) var task = {};
+	
+	// init task record
     var task = new Egw.Tasks.Task(task);
-		
-	var handler_applyChanges = function(_button, _event) {
-		var closeWindow = arguments[2] ? arguments[2] : false;
-		
-		var dlg = Ext.getCmp('TasksEditFormPanel');
-		var form = dlg.getForm();
-		form.render();
-
-		if(form.isValid()) {
+	
+	var handlers = {
+	    applyChanges: function(_button, _event) {
+			var closeWindow = arguments[2] ? arguments[2] : false;
+			
+			var dlg = Ext.getCmp('TasksEditFormPanel');
+			var form = dlg.getForm();
+			form.render();
+	
+			if(form.isValid()) {
+				Ext.MessageBox.wait('please wait', 'saving task');
+				
+				// merge changes from form into task record
+				form.updateRecord(task);
+				
+	            Ext.Ajax.request({
+					params: {
+		                method: 'Tasks.saveTask', 
+		                task: Ext.util.JSON.encode(task.data),
+						//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+		            },
+		            success: function(_result, _request) {
+		                //window.opener.Egw.Addressbook.reload();
+		                if (closeWindow) {
+							window.setTimeout("window.close()", 400);
+						}
+						dlg.action_delete.enable();
+						
+						// override task with returned data
+						task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
+						// update form with this new data
+						form.loadRecord(task);
+						Ext.MessageBox.hide();
+		            },
+		            failure: function ( result, request) { 
+		                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+		            } 
+				});
+	        } else {
+	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+	        }
+		},
+		saveAndClose: function(_button, _event) {
+			handlers.applyChanges(_button, _event, true);
+		},
+		pre_delete: function(_button, _event) {
 			Ext.MessageBox.wait('please wait', 'saving task');
-			
-			var task = new Egw.Tasks.Task({});
-			form.updateRecord(task);
-			//console.log(task);
-			
-            Ext.Ajax.request({
-				params: {
-	                method: 'Tasks.saveTask', 
-	                task: Ext.util.JSON.encode(task.data),
-					//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
-	            },
-	            success: function(_result, _request) {
-	                //window.opener.Egw.Addressbook.reload();
-	                if (closeWindow) {
-						window.setTimeout("window.close()", 400);
-					}
-					dlg.action_delete.enable();
+			Ext.Ajax.request({
+                params: {
+					method: 'Tasks.deleteTask',
+					identifier: task.data.identifier
+				},
+                success: function(_result, _request) {
+					window.setTimeout("window.close()", 400);
+                    //store.load({params: paging});
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert('Failed', 'Could not delete task(s).');
 					Ext.MessageBox.hide();
-	            },
-	            failure: function ( result, request) { 
-	                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
-	            } 
+                }
 			});
-        } else {
-            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-        }
-	};
-	var handler_saveAndClose = function(_button, _event) {
-		handler_applyChanges(_button, _event, true);
-	};
-	var handler_pre_delete = function(_button, _event) {
-		
+		}
 	};
 	
 	var taskFormPanel = {
@@ -648,9 +671,9 @@ Egw.Tasks.EditDialog = function(task) {
 	
 	var dlg = new Egw.widgets.dialog.EditRecord({
         id : 'TasksEditFormPanel',
-        handler_applyChanges: handler_applyChanges,
-        handler_saveAndClose: handler_saveAndClose,
-        handler_pre_delete: handler_pre_delete,
+        handler_applyChanges: handlers.applyChanges,
+        handler_saveAndClose: handlers.saveAndClose,
+        handler_pre_delete: handlers.pre_delete,
         items: taskFormPanel
     });
 	
@@ -659,8 +682,10 @@ Egw.Tasks.EditDialog = function(task) {
         items: dlg
     });
 	
+	// load form with initial data
 	dlg.getForm().loadRecord(task);
 	if(task.get('identifier') > 0) dlg.action_delete.enable();
+
 };
 
 
