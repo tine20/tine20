@@ -78,7 +78,7 @@ Egw.Tasks.status.getIdentifier = function(statusName) {
 
 Egw.Tasks.status.getStatusName = function(identifier) {
 	var status = Egw.Tasks.status.getStore().getById(identifier);
-    return status.data.status;
+    return status ? status.data.status : identifier;
 };
 
 Egw.Tasks.status.getStatusIcon = function(identifier) {
