@@ -73,8 +73,8 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     public function editTask($taskId, $linkingApp=NULL, $linkedId=NULL)
     {
         if($taskId) {
-            $controler = Tasks_Controller::getInstance();
-            $task = $controler->getTask($taskId);
+            $controller = Tasks_Controller::getInstance();
+            $task = $controller->getTask($taskId);
             $task->setTimezone(Zend_Registry::get('userTimeZone'));
             $task = Zend_Json::encode($task->toArray());
         } else {
