@@ -33,15 +33,13 @@
 	?>
 	<script type="text/javascript" language="javascript">
 	   <?php
-	       if(is_array($this->initialData)) {
-               foreach ($this->initialData as $appname => $data) {
-                   if (!empty($data) ) {
-                       foreach ($data as $var => $content) {
-                           echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
-                       }
+           foreach ((array)$this->initialData as $appname => $data) {
+               if (!empty($data) ) {
+                   foreach ($data as $var => $content) {
+                       echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
                    }
                }
-	       }
+           }
         ?>
         
 		Ext.onReady(function(){

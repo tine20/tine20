@@ -137,11 +137,18 @@ class Egwbase_AccessLog
      * 
      * @return Egwbase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getEntries(Zend_Date $_from, Zend_Date $_to, $_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
     {
-        $where = array(
-            'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()
-        );
+        if($_from instanceof Zend_Date && $_to instanceof Zend_Date) {
+            $where = array(
+                'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()
+            );
+        } elseif ($_from instanceof Zend_Date) {
+            $where = array(
+                $this->accessLogTable->getAdapter()->quoteInto('li > ?', $_from->getTimestamp())
+            );
+        }
+        
         if(!empty($_filter)) {
             $where[] = $this->accessLogTable->getAdapter()->quoteInto('loginid LIKE ?', '%' . $_filter . '%');
         }

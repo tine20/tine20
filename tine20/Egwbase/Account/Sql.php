@@ -51,8 +51,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         'accountLastPasswordChange' => 'account_lastpwd_change',
         'accountStatus'         => 'account_status',
         'accountExpires'        => 'account_expires',
-        'accountPrimaryGroup'   => 'account_primary_group'
-    
+        'accountPrimaryGroup'   => 'account_primary_group',
+        'accountEmailAddress'   => 'contact_email'
     );
     
     
@@ -266,7 +266,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
                     'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
-                    'accountLastName'       => $this->rowNameMapping['accountLastName']
+                    'accountLastName'       => $this->rowNameMapping['accountLastName'],
+                    'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress']
                 )
             );
                 
@@ -371,5 +372,108 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $result = $accountsTable->update($accountData, $where);
         
         return $result;
+    }
+    
+    /**
+     * save a account
+     * 
+     * this function creates or updates an account 
+     *
+     * @param Egwbase_Account_Model_FullAccount $_account
+     */
+    public function saveAccount(Egwbase_Account_Model_FullAccount $_account, $_password = NULL)
+    {
+        if(!$_account->isValid()) {
+            throw(new Exception('invalid account object'));
+        }
+
+        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+
+        $accountData = array(
+            'account_lid'       => $_account->accountLoginName,
+            'account_status'    => $_account->accountStatus,
+            'account_expires'   => $_account->accountExpires,
+            'account_type'      => 'u',
+            'account_primary_group' => '-4'
+        );
+        
+        if(!empty($_account->accountPassword)) {
+            $accountData['account_pwd']            = $_account->accountPassword;
+            $accountData['account_lastpwd_change'] = now();
+        }
+        
+        $contactData = array(
+            'contact_tid'   => 'n',
+            'contact_owner' => 1,
+            'n_family'      => $_account->accountLastName,
+            'n_given'       => $_account->accountFirstName,
+            'n_fn'          => $_account->accountFullName,
+            'n_fileas'      => $_account->accountDisplayName
+            #'contact_email' => $_account->
+            #'account_id' 8
+        );
+        
+        try {
+            Zend_Registry::get('dbAdapter')->beginTransaction();
+            
+            $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+            $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
+
+            if(empty($_account->accountId)) {
+                // add new account
+                $accountId = $accountsTable->insert($accountData);
+                
+                if($accountId == 0) {
+                    throw new Exception("returned accountId is 0");
+                }
+                
+                $contactData['account_id'] = $accountId;
+                
+                $contactsTable->insert($contactData);
+            } else {
+                $where = array(
+                    Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $_account->accountId)
+                );
+                
+                $accountsTable->update($accountData, $where);
+                $contactsTable->update($contactData, $where);
+            }
+            
+            Zend_Registry::get('dbAdapter')->commit();
+            
+        } catch (Exception $e) {
+            Zend_Registry::get('dbAdapter')->rollBack();
+            throw($e);
+        }
+    }
+    
+    /**
+     * delete a account
+     *
+     * @param int $_accountId
+     */
+    public function deleteAccount($_accountId)
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        
+        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        
+        $where  = array(
+            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId),
+        );
+        
+        try {
+            $accountsTable->getAdapter()->beginTransaction();
+            
+            $accountsTable->delete($where);
+            
+            $accountsTable->getAdapter()->commit();
+        } catch (Exception $e) {
+            $accountsTable->getAdapter()->rollBack();
+            throw($e);
+        }
     }
 }

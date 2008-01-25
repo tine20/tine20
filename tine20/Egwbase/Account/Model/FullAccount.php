@@ -32,8 +32,9 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
         'accountDisplayName'    => 'StringTrim',
         'accountLastName'       => 'StringTrim',
         'accountFirstName'      => 'StringTrim',
-        'accountFullName'       => 'StringTrim'
-    );
+        'accountFullName'       => 'StringTrim',
+        'accountEmailAddress'   => 'StringTrim',
+    ); // _/-\_
     
     /**
      * list of zend validator
@@ -54,8 +55,8 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
         'accountDisplayName'    => array('presence' => 'required'),
         'accountLastName'       => array('presence' => 'required'),
         'accountFirstName'      => array('allowEmpty' => true),
-        'accountFullName'       => array('presence' => 'required')
-    
+        'accountFullName'       => array('presence' => 'required'),
+        'accountEmailAddress' => array('allowEmpty' => true)
     );
 
     /**
