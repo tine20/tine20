@@ -22,7 +22,6 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	
 	//private
     initComponent: function(){
-		
 		this.action_saveAndClose = new Ext.Action({
             text: 'save and close',
             handler: this.handler_saveAndClose,
@@ -54,6 +53,7 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
                 this.action_delete
             ]
         });
+		
 		Egw.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	}
 });
@@ -176,5 +176,6 @@ Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
 
 Egw.widgets.Priority.renderer = function(priority) {
 	var s = Egw.widgets.Priority.store;
-	return s.getAt(s.find('key', priority)).data.value;
+	var idx = s.find('key', priority);
+	return idx > 0 ? s.getAt(idx).data.value : priority;
 };
