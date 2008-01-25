@@ -53,10 +53,10 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
      */
     public function getInitialMainScreenData()
     {
-        $controler = Tasks_Controller::getInstance();
+        $controller = Tasks_Controller::getInstance();
         $initialData = array(
             'AllStati' => $controler->getStati(),
-            'DefaultContainer' => $controler->getDefaultContainer()
+            'DefaultContainer' => $controller->getDefaultContainer()
         );
         
         foreach ($initialData as &$data) {
