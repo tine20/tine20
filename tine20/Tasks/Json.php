@@ -110,7 +110,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     {
         $inTask = $this->_json2task($task);
         
-        //error_log(print_r($newTask->toArray(),true));
+        //error_log(print_r($inTask->toArray(),true));
         $outTask = $inTask->getId() > 0 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);

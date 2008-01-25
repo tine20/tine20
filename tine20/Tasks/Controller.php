@@ -188,6 +188,8 @@ class Tasks_Controller implements Tasks_Backend_Interface
         } elseif(!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container::GRANT_EDIT))  {
             throw new Exception('Not allowed!');
         }
+        
+        $Task = $this->_backend->updateTask($_task);
         return $Task;
     }
     
