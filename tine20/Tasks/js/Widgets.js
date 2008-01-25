@@ -59,7 +59,7 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 });
 
 Ext.namespace('Egw.widgets.Percent');
-Egw.widgets.Percent.ComboBox = Ext.extend(Ext.form.ComboBox, {
+Egw.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
 	/**
 	 * @cfs {bool} autoExpand
 	 * Autoexpand comboBox on focus.
@@ -78,7 +78,7 @@ Egw.widgets.Percent.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	
     //private
     initComponent: function(){
-        Egw.widgets.Percent.ComboBox.superclass.initComponent.call(this);
+        Egw.widgets.Percent.Combo.superclass.initComponent.call(this);
 		// allways set a default
 		if(!this.value) 
 		    this.value = 0;
@@ -113,7 +113,7 @@ Egw.widgets.Percent.ComboBox = Ext.extend(Ext.form.ComboBox, {
     }
 });
 
-Egw.widgets.Percent.ComboBox.progressBar = function(percent) {
+Egw.widgets.Percent.renderer = function(percent) {
     return '<div class="x-progress-wrap TasksProgress">' +
             '<div class="x-progress-inner TasksProgress">' +
                 '<div class="x-progress-bar TasksProgress" style="width:' + percent + '%">' +
@@ -126,4 +126,55 @@ Egw.widgets.Percent.ComboBox.progressBar = function(percent) {
                 '</div>' +
             '</div>' +
         '</div>';
+};
+
+Ext.namespace('Egw.widgets.Priority');
+Egw.widgets.Priority.store = new Ext.data.SimpleStore({
+	storeId: 'Priorities',
+	id: 'key',
+    fields: ['key','value', 'icon'],
+    data: [
+            ['0', 'low',    '' ],
+            ['1', 'normal', '' ],
+            ['2', 'high',   '' ],
+            ['3', 'urgent', '' ]
+        ]
+});
+
+Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
+	/**
+     * @cfs {bool} autoExpand
+     * Autoexpand comboBox on focus.
+     */
+    autoExpand: false,
+    
+    displayField: 'value',
+    valueField: 'key',
+    mode: 'local',
+    triggerAction: 'all',
+    //selectOnFocus: true,
+    editable: false,
+    lazyInit: false,
+    
+    //private
+    initComponent: function(){
+        Egw.widgets.Priority.Combo.superclass.initComponent.call(this);
+        // allways set a default
+        if(!this.value) 
+            this.value = 1;
+            
+        this.store = Egw.widgets.Priority.store;
+        
+        if (this.autoExpand) {
+            this.on('focus', function(){
+                this.lazyInit = false;
+                this.expand();
+            });
+        }
+    }
+});
+
+Egw.widgets.Priority.renderer = function(priority) {
+	var s = Egw.widgets.Priority.store;
+	return s.getAt(s.find('key', priority)).data.value;
 };
