@@ -205,25 +205,37 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         try {
             $this->_db->beginTransaction();
             
-            $currentMods = array_diff_assoc($_task->toArray(), $oldTask->toArray());
+            $oldTask = $this->getTask($_task->identifier);
+            
+            $dbMods = array_diff_assoc($_task->toArray(), $oldTask->toArray());
             $modLog = Egwbase_Timemachine_ModificationLog::getInstance();
             
+            if (empty($dbMods)) {
+                // nothing canged!
+                $this->_db->rollBack();
+                return $_task;
+            }
+            
             // concurrency management
-            $oldTask = $this->getTask($_task->identifier);
-            if($oldtask->last_modified_time != $_task->last_modified_time) {
-                $mods = $modLog->getModifications('Tasks', $_task->identifier,
-                        'Tasks_Model_Task', Tasks_Backend_Factory::SQL,
-                        $_task->last_modified_time, $oldTask->last_modified_time);
-                foreach ($mods as $mod) {
-                    if(! in_array($mod->modified_attribute,$currentMods) ) {
-                        // merge mods into current task, if not changed in current 
-                        // update request.
-                        $_task->$mod->modified_attribute = $mod->modified_to;
+            if(!empty($dbMods['last_modified_time'])) {
+                $logedMods = $modLog->getModifications('Tasks', $_task->identifier,
+                        'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $_task->last_modified_time, $oldTask->last_modified_time);
+                $diffs = $modLog->computeDiff($logedMods);
+                        
+                foreach ($diffs as $diff) {
+                    $modified_attribute = $diff->modified_attribute;
+                    if (!array_key_exists($modified_attribute, $dbMods)) {
+                        // useres updated to same value, nothing to do.
+                    } elseif ($diff->modified_from == $_task->$modified_attribute) {
+                        unset($dbMods[$modified_attribute]);
+                        // merge diff into current contact, as it was not changed in current update request.
+                        $_task->$modified_attribute = $diff->modified_to;
                     } else {
                         // non resolvable conflict!
                         throw new Exception('concurrency confilict!');
                     }
                 }
+                unset($dbMods['last_modified_time']);
             }
             
             // database update
@@ -247,7 +259,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                 'modification_time'    => $taskParts['tasks']['last_modified_time'],
                 'modification_account' => $this->_currentAccount->getId()
             ),true);
-            foreach ($currentMods as $modified_attribute => $modified_to) {
+            foreach ($dbMods as $modified_attribute => $modified_to) {
                 $modLogEntry->modified_attribute = $modified_attribute;
                 $modLogEntry->modified_from      = $oldTask->$modified_attribute;
                 $modLogEntry->modified_to        = $modified_to;
@@ -256,7 +268,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             
             $this->_db->commit();
 
-            return $this->getTask($taskId);
+            return $this->getTask($_task->identifier);
             
         } catch (Exception $e) {
             $this->_db->rollBack();
