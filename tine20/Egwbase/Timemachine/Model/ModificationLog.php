@@ -57,36 +57,4 @@ class Egwbase_Timemachine_Model_ModificationLog extends Egwbase_Record_Abstract
     protected $_datetimeFields = array(
         'modification_time'
     );
-    
-    /**
-     * Check if record data is valid
-     * 
-     * @return bool
-     */
-    public function isValid()
-    {
-        $isValid = true;
-        if (! $this->modification_time instanceof Zend_Date) {
-            $isValid = false;
-            $this->_validationErrors[] = array(
-                'id'  => 'modification_time',
-                'msg' => 'modification_time must be of type Zend_Date'
-            );
-        }
-        
-        $inputFilter = $this->getFilter();
-        $inputFilter->setData($this->_properties);
-        if (!$inputFilter->isValid()) {
-            $isValid = false;
-            foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
-                $this->_validationErrors[] = array(
-                    'id'  => $fieldName,
-                    'msg' => $errorMessages[0]
-                );
-            }
-        }
-        return $isValid;
-    }
 }
-
-?>
