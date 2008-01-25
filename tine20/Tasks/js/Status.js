@@ -42,7 +42,7 @@ Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
             });
 		}
 		//this.on('select', function(){console.log(this.value)});
-	    Egw.widgets.Percent.ComboBox.superclass.initComponent.call(this);
+	    Egw.Tasks.status.ComboBox.superclass.initComponent.call(this);
 	}
         
 });
