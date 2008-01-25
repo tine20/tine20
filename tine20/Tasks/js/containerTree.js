@@ -111,7 +111,7 @@
 	},
 	afterRender: function() {
 		Egw.containerTreePanel.superclass.afterRender.call(this);
-		console.log(this);
+		//console.log(this);
 		this.expandPath('/root/all');
 	}
 		
