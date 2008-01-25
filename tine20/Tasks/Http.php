@@ -55,7 +55,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     {
         $controller = Tasks_Controller::getInstance();
         $initialData = array(
-            'AllStati' => $controler->getStati(),
+            'AllStati' => $controller->getStati(),
             'DefaultContainer' => $controller->getDefaultContainer()
         );
         
