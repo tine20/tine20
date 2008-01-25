@@ -144,7 +144,6 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 	},
 	//private
 	getValue: function(){
-		console.log(this.container_id);
 		return this.container_id;
 	}
 });
