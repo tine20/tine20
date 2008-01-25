@@ -62,6 +62,9 @@ Egw.Tasks.TaskGrid = function(){
             }
         });
 		
+		// register store
+		Ext.StoreMgr.add('TaskGridStore', store);
+		
 		// prepare filter
 		store.on('beforeload', function(store, options){
 			// console.log(options);
@@ -82,6 +85,39 @@ Egw.Tasks.TaskGrid = function(){
 			options.params.filter = Ext.util.JSON.encode(filter);
 		});
 		
+		store.on('update', function(store, task, operation) {
+			switch (operation) {
+				case Ext.data.Record.EDIT:
+					Ext.Ajax.request({
+	                params: {
+	                    method: 'Tasks.saveTask', 
+	                    task: Ext.util.JSON.encode(task.data),
+	                },
+	                success: function(_result, _request) {
+						store.commitChanges();
+
+						// we need to reload store, cause filters might be 
+						// affected by the change!
+						store.load({params: paging});
+	                },
+	                failure: function ( result, request) { 
+	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+	                }
+				});
+				break;
+				case Ext.data.Record.COMMIT:
+				    //nothing to do, as we need to reload the store anyway.
+				break;
+			}
+			
+			
+			//store.commitChanges();
+			//if (operation == Ext.data.Record.COMMIT) {
+			//	console.log(task);
+			//}
+			
+		});
+		
 		filter = {
             nodeType: 'Personal',
             owner: Egw.Egwbase.Registry.get('currentAccount').accountId,
@@ -96,7 +132,7 @@ Egw.Tasks.TaskGrid = function(){
 			start: 0,
 			limit: 50,
 			sort: 'due',
-			dir: 'DESC'
+			dir: 'ASC'
 		}
 		
 		store.load({
@@ -216,7 +252,7 @@ Egw.Tasks.TaskGrid = function(){
 	            templates: {
 	                header: headerTpl
 	            },
-	
+	/*
 	            getRowClass : function(r){
 	                var d = r.data;
 	                if(d.status == 'DONE'){
@@ -227,6 +263,7 @@ Egw.Tasks.TaskGrid = function(){
 	                }
 	                return '';
 	            }
+	*/
 	        })
         });
 		
@@ -364,7 +401,8 @@ Egw.Tasks.getToolbar = function() {
         
         return toolbar;
     }
-  
+
+
 Egw.Tasks.EditDialog = function(task) {
 	if (!arguments[0]) var task = {};
     var task = new Egw.Tasks.Task(task);
