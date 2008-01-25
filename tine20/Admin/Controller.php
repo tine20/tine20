@@ -47,7 +47,7 @@ class Admin_Controller
     
     public function getAccount($_accountId)
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
 
         $result = $backend->getAccount($_accountId);
         
@@ -56,7 +56,7 @@ class Admin_Controller
     
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
 
         $result = $backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit);
         
@@ -65,7 +65,7 @@ class Admin_Controller
     
     public function setAccountStatus($_accountId, $_status)
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
         
         $result = $backend->setStatus($_accountId, $_status);
         
@@ -74,13 +74,22 @@ class Admin_Controller
 
     public function setAccountPassword($_accountId, $_password1, $_password2)
     {
-        $backend = Egwbase_Account::getBackend();
+        $backend = Egwbase_Account::getInstance();
         
         if($_password1 != $_password2) {
             throw new Exception("passwords don't match");
         }
         
         $result = $backend->setPassword($_accountId, $_password1);
+        
+        return $result;
+    }
+    
+    public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_from = NULL, $_to = NULL)
+    {
+        $egwAccessLog = Egwbase_AccessLog::getInstance();
+
+        $result = $egwAccessLog->getEntries($_filter, $_sort, $_dir, $_start, $_limit, $_from, $_to);
         
         return $result;
     }

@@ -15,4 +15,40 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
 {
     protected $_appname = 'Admin';
     
+    public function editAccountDialog($accountId)
+    {
+        if(!empty($accountId)) {
+            $account = Egwbase_Account::getInstance()->getFullAccountById($accountId);
+            $account->setTimezone(Zend_Registry::get('userTimeZone'));
+            $account = Zend_Json::encode($account->toArray());
+        } else {
+            $account = 'null';
+        }
+        
+        $locale = Zend_Registry::get('locale');
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Egwbase/views');
+        $view->formData = array();
+        $view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
+        $view->cssIncludeFiles = array();
+        
+        $view->jsIncludeFiles[] = 'Admin/js/Admin.js';
+        $view->jsIncludeFiles[] = 'Tasks/js/Widgets.js';
+        $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
+        $view->jsExecute = 'Egw.Admin.Accounts.EditDialog.display(' . $account . ');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit account";
+
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('popup.php');
+        
+    }
 }

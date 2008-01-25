@@ -22,7 +22,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $accounts = Admin_Controller::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit);
+        $accounts = Egwbase_Account::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
             if($account['account_lastlogin'] !== NULL) {
@@ -157,17 +157,18 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
         $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
         
-        $egwAccessLog = Egwbase_AccessLog::getInstance();
-
-        $accessLogSet = $egwAccessLog->getEntries($fromDateObject, $toDateObject, $filter, $sort, $dir, $start, $limit);
+        $accessLogSet = Egwbase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
         
-        $arrayAccessLogRowSet = $accessLogSet->toArray();
-        
-        $result['results']    = $arrayAccessLogRowSet;
+        $result['results']    = $accessLogSet->toArray();
         if($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
-            $result['totalcount'] = $egwAccessLog->getTotalCount($fromDateObject, $toDateObject, $filter);
+            $result['totalcount'] = Egwbase_AccessLog::getInstance()->getTotalCount($fromDateObject, $toDateObject, $filter);
+        }
+        
+        foreach($result['results'] as $key => $value) {
+            //print_r($value);
+            $result['results'][$key]['accountName'] = Egwbase_Account::getInstance()->getAccountById($value['account_id'])->toArray();
         }
         
         return $result;
