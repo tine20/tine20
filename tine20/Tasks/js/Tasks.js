@@ -21,6 +21,8 @@ Egw.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
 	var ntStatus, ntPercent, ntSummaray, ntPriority, ntDue, ntOrganizer;
+	var editing = false, focused = false, userTriggered = false;
+	
 	
 	tree =  new Egw.containerTreePanel({
         id: 'TasksTreePanel',
@@ -89,21 +91,21 @@ Egw.Tasks.TaskGrid = function(){
 			switch (operation) {
 				case Ext.data.Record.EDIT:
 					Ext.Ajax.request({
-	                params: {
-	                    method: 'Tasks.saveTask', 
-	                    task: Ext.util.JSON.encode(task.data),
-	                },
-	                success: function(_result, _request) {
-						store.commitChanges();
-
-						// we need to reload store, cause filters might be 
-						// affected by the change!
-						store.load({params: paging});
-	                },
-	                failure: function ( result, request) { 
-	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
-	                }
-				});
+		                params: {
+		                    method: 'Tasks.saveTask', 
+		                    task: Ext.util.JSON.encode(task.data),
+		                },
+		                success: function(_result, _request) {
+							store.commitChanges();
+	
+							// we need to reload store, cause filters might be 
+							// affected by the change!
+							store.load({params: paging});
+		                },
+		                failure: function ( result, request) { 
+		                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+		                }
+					});
 				break;
 				case Ext.data.Record.COMMIT:
 				    //nothing to do, as we need to reload the store anyway.
@@ -168,6 +170,7 @@ Egw.Tasks.TaskGrid = function(){
 	    );
 		
 		grid = new Ext.grid.EditorGridPanel({
+			id: 'TasksMainGrid',
             store: store,
 			tbar: pagingToolbar,
 			clicksToEdit: 'auto',
@@ -194,8 +197,8 @@ Egw.Tasks.TaskGrid = function(){
 					width: 50,
 					sortable: true,
 					dataIndex: 'percent',
-					renderer: Egw.widgets.Percent.ComboBox.progressBar,
-                    editor: new Egw.widgets.Percent.ComboBox({
+					renderer: Egw.widgets.Percent.renderer,
+                    editor: new Egw.widgets.Percent.Combo({
 						autoExpand: true,
                         //allowBlank: false
                     })
@@ -213,17 +216,19 @@ Egw.Tasks.TaskGrid = function(){
 				{
 					id: 'priority',
 					header: "Priority",
-					width: 20,
+					width: 30,
 					sortable: true,
 					dataIndex: 'priority',
-                    editor: new Ext.form.TextField({
-                        allowBlank: false
+					renderer: Egw.widgets.Priority.renderer,
+                    editor: new Egw.widgets.Priority.Combo({
+                        allowBlank: false,
+						autoExpand: true
                     })
 				},
 				{
 					id: 'due',
 					header: "Due Date",
-					width: 100,
+					width: 40,
 					sortable: true,
 					dataIndex: 'due',
 					renderer: Egw.Egwbase.Common.dateRenderer,
@@ -273,19 +278,21 @@ Egw.Tasks.TaskGrid = function(){
 			ntStatus = new Egw.Tasks.status.ComboBox({
                 renderTo: 'new-task-status',
 				autoExpand: true,
-                disabled:true,
-                listClass:'x-combo-list-small',
+                disabled:true
+                //listClass:'x-combo-list-small',
             });
-			ntPercent = new Ext.form.ComboBox({
+			ntPercent = new Egw.widgets.Percent.Combo({
 				renderTo: 'new-task-percent',
+				autoExpand: true,
 				disabled: true
 			});
 			ntSummaray = new Ext.form.TextField({
 	            renderTo: 'new-task-summaray',
 	            emptyText: 'Add a task...'
 	        });
-			ntPriority = new Ext.form.ComboBox({
+			ntPriority = new Egw.widgets.Priority.Combo({
                 renderTo: 'new-task-priority',
+				autoExpand: true,
                 disabled: true
             });
             ntDue = new Ext.form.DateField({
@@ -301,7 +308,47 @@ Egw.Tasks.TaskGrid = function(){
 			//grid.on('resize', syncFields);
             //grid.on('columnresize', syncFields);
             syncFields();
-		});
+			
+			
+            var handlers = {
+                focus: function(){
+                    focused = true;
+                },
+                blur: function(){
+                    focused = false;
+                    doBlur.defer(250);
+                },
+                specialkey: function(f, e){
+                    if(e.getKey()==e.ENTER){
+                        userTriggered = true;
+                        e.stopEvent();
+                        f.el.blur();
+                        if(f.triggerBlur){
+                            f.triggerBlur();
+                        }
+                    }
+                }
+            }
+            ntStatus.on(handlers);
+            ntSummaray.on(handlers);
+            ntPercent.on(handlers);
+            ntPriority.on(handlers);
+            ntDue.on(handlers);
+            ntOrganizer.on(handlers);
+            
+            ntSummaray.on('focus', function(){
+                focused = true;
+                if(!editing){
+                    ntStatus.enable();
+                    ntPercent.enable();
+                    ntPriority.enable();
+                    ntDue.enable();
+                    ntOrganizer.enable();
+                    syncFields();
+                    editing = true;
+                }
+            });
+		}, this);
 		
 		function syncFields(){
             var cm = grid.getColumnModel();
@@ -312,6 +359,44 @@ Egw.Tasks.TaskGrid = function(){
             ntDue.setSize(cm.getColumnWidth(4)-4);
             ntOrganizer.setSize(cm.getColumnWidth(5)-4);
         }
+		
+	    // when a field in the add bar is blurred, this determines
+	    // whether a new task should be created
+	    function doBlur(){
+	        if(editing && !focused){
+	            var summaray = ntSummaray.getValue();
+	            if(!Ext.isEmpty(summaray)){
+					console.log('create task :-)');
+					task = new Egw.Tasks.Task({
+						status: ntStatus.getValue,
+						percent: ntPercent.getValue,
+						summaray: summaray,
+						due: ntDue.getValue,
+						container: Egw.Tasks.DefaultContainer.container_id
+					});
+					
+					Ext.Ajax.request({
+                        params: {
+                            method: 'Tasks.saveTask', 
+                            task: Ext.util.JSON.encode(task.data),
+                        },
+                        success: function(_result, _request) {
+                            ntSummaray.setValue('');
+		                    Ext.StoreMgr.get('TaskGridStore').load({params: paging});
+                        },
+                        failure: function ( result, request) { 
+                            Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+                        }
+                    });
+	            }
+				ntStatus.disable();
+                ntPercent.disable();
+                ntPriority.disable();
+                ntDue.disable();
+                ntOrganizer.disable();
+	            editing = false;
+	        }
+	    }
 		//console.log(grid.getColumnModel().getColumnById('priority'));
     };
 	
@@ -468,17 +553,16 @@ Egw.Tasks.EditDialog = function(task) {
 				xtype: 'textfield',
 				name: 'summaray',
 				allowBlank: false
-			},  new Egw.widgets.Percent.ComboBox({
+			},  new Egw.widgets.Percent.Combo({
 				fieldLabel: 'percentage',
 				name: 'percent'
 			}), new Egw.Tasks.status.ComboBox({
 				fieldLabel: 'status',
 				name: 'status',
-			}), {
+			}), new Egw.widgets.Priority.Combo({
                 fieldLabel: 'priority',
-                xtype: 'combo',
                 name: 'priority'
-            }, new Ext.form.DateField({
+            }), new Ext.form.DateField({
                 fieldLabel: 'due date',
 				name: 'due',
                 format: "d.m.Y"
@@ -487,12 +571,12 @@ Egw.Tasks.EditDialog = function(task) {
 				name: 'container',
 				itemName: 'Tasks',
                 appName: 'Tasks',
+				defaultContainer: Egw.Tasks.DefaultContainer
 			}), {
 				fieldLabel: 'notes',
 				name: 'description',
 				xtype: 'textarea',
 				height: 100
-				
 			}
 		]
 	}

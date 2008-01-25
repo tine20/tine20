@@ -62,7 +62,7 @@ Egw.Tasks.status.getStore = function() {
                 { name: 'status'                                            }
            ],
 		   // initial data from http request
-           data: Egw.Tasks.InitialData.Status,
+           data: Egw.Tasks.AllStati,
            autoLoad: true,
            id: 'identifier'
        });

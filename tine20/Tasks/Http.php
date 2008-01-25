@@ -53,9 +53,17 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
      */
     public function getInitialMainScreenData()
     {
-        return array(
-            'InitialData' => array('Status' => Tasks_Controller::getInstance()->getStati()->toArray())
+        $controler = Tasks_Controller::getInstance();
+        $initialData = array(
+            'AllStati' => $controler->getStati(),
+            'DefaultContainer' => $controler->getDefaultContainer()
         );
+        
+        foreach ($initialData as &$data) {
+            $data->setTimezone(Zend_Registry::get('userTimeZone'));
+            $data = $data->toArray();
+        }
+        return $initialData;
     }
 
     /**

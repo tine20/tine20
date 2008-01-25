@@ -210,6 +210,20 @@ class Tasks_Controller implements Tasks_Backend_Interface
     }
 
     /**
+     * temporaray function to get a default container
+     * 
+     * @return Egwbase_Record_Container container
+     */
+    public function getDefaultContainer()
+    {
+        $containers = Egwbase_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
+        // autch! ugly hack, we need to rework the recordSet!
+        foreach ($containers as $container) {
+            return $container;
+        }
+    }
+    
+    /**
      * retruns all possible task stati
      * 
      * @return Egwbase_Record_RecordSet of Tasks_Model_Status

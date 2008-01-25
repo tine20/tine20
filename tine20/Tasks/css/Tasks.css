@@ -41,6 +41,22 @@
     height: 16px;
 }
 
+
+#TasksMainGrid .x-grid3-header {
+    background: #f9f9f9 url(../../images/grid3-dblhrow.gif) repeat-x left top;
+}
+
+#TasksMainGrid .new-task-row {
+    height:24px;
+}
+#TasksMainGrid .new-task-row .x-small-editor {
+    overflow:hidden;
+    width:100%;
+}
+#TasksMainGrid .new-task-row .x-small-editor input {
+    font-size:11px;
+}
+
 .TasksProgress {
     height: 12px;
 }
@@ -55,3 +71,4 @@
 	position:absolute;
 	text-align:center;
 }
+

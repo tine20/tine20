@@ -145,6 +145,18 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     }
     
     /**
+     * temporaray function to get a default container
+     * 
+     * @return array container
+     */
+    public function getDefaultContainer()
+    {
+        $container = $this->_controller->getDefaultContainer();
+        $container->setTimezone($this->_userTimezone);
+        return $container->toArray();
+    }
+    
+    /**
      * retruns all possible task stati
      * 
      * @return Egwbase_Record_RecordSet of Tasks_Model_Status
