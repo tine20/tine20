@@ -243,4 +243,17 @@ class Tasks_Controller implements Tasks_Backend_Interface
     public function getStati() {
         return $this->_stati;
     }
+    
+    /**
+     * Deletes a set of tasks.
+     * 
+     * If one of the tasks could not be deleted, no taks is deleted
+     * 
+     * @throws Exception
+     * @param array array of task identifiers
+     * @return void
+     */
+    public function deleteTasks($_identifiers)
+    {
+    }
 }
