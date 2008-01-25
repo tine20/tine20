@@ -127,13 +127,13 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 	
     allowBlank: false,
     readOnly:true,
-	container: null,
+	container_id: null,
 	
 	// private
 	initComponent: function(){
 		Egw.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         if (this.defaultContainer) {
-			this.container = this.defaultContainer.container_id;
+			this.container_id = this.defaultContainer.container_id;
 			this.value = this.defaultContainer.container_name;
 		}
 		this.onTriggerClick = function(e) {
@@ -144,7 +144,8 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 	},
 	//private
 	getValue: function(){
-		return this.container;
+		console.log(this.container_id);
+		return this.container_id;
 	}
 });
 
