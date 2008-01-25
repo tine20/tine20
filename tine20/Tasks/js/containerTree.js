@@ -36,7 +36,7 @@
      * name of containers items
      */
     itemName: 'item',
-
+    
 	iconCls: 'x-new-application',
 	rootVisible: false,
 	border: false,
@@ -119,6 +119,12 @@
 
 Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
+	/**
+     * @cfg {array}
+     * default container
+     */
+    defaultContainer: false,
+	
     allowBlank: false,
     readOnly:true,
 	container: null,
@@ -126,6 +132,10 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 	// private
 	initComponent: function(){
 		Egw.widgets.container.selectionComboBox.superclass.initComponent.call(this);
+        if (this.defaultContainer) {
+			this.container = this.defaultContainer.container_id;
+			this.value = this.defaultContainer.container_name;
+		}
 		this.onTriggerClick = function(e) {
             var w = new Egw.widgets.container.selectionDialog({
 				TriggerField: this,
@@ -161,6 +171,7 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 		var tree = new Egw.containerTreePanel({
 			itemName: this.TriggerField.itemName,
 			appName: this.TriggerField.appName,
+			defaultContainer: this.TriggerField.defaultContainer
 		});
 		
 		tree.on('click', function(_node) {
