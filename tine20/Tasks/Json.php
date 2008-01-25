@@ -137,11 +137,29 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     /**
      * Deletes an existing Task
      *
-     * @param string $_uid
+     * @throws Exception
+     * @param int $identifier
+     * @return string
      */
-    public function deleteTask($_uid)
+    public function deleteTask($identifier)
     {
-        
+        $this->_controller->deleteTask((int)$identifier);
+        return 'success';
+    }
+    
+    /**
+     * Deletes a set of tasks.
+     * 
+     * If one of the tasks could not be deleted, no taks is deleted
+     * 
+     * @throws Exception
+     * @param array array of task identifiers
+     * @return string
+     */
+    public function deleteTasks($identifiers)
+    {
+        $this->_controller->deleteTasks(Zend_Json::decode($identifiers));
+        return 'success';
     }
     
     /**

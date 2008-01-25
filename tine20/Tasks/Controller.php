@@ -196,19 +196,40 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * Deletes an existing Task
      *
-     * @param string $_uid
+     * @param string $_identifier
      * @return void
      */
-    public function deleteTask($_uid)
+    public function deleteTask($_identifier)
     {
-        $Task = $this->getTask($_uid);
+        $Task = $this->getTask($_identifier);
         
         if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_DELETE)) {
             throw new Exception('Not allowed!');
         }
-        $this->_backend->deleteTask($_uid);
+        $this->_backend->deleteTask($_identifier);
     }
 
+    /**
+     * Deletes a set of tasks.
+     * 
+     * If one of the tasks could not be deleted, no taks is deleted
+     * 
+     * @throws Exception
+     * @param array array of task identifiers
+     * @return void
+     */
+    public function deleteTasks($_identifiers)
+    {
+        foreach ($_identifiers as $identifier) {
+            $Task = $this->getTask($identifier);
+            if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_DELETE)) {
+                throw new Exception('Not allowed!');
+            }
+        }
+        
+        $this->_backend->deleteTasks($_identifiers);
+    }
+    
     /**
      * temporaray function to get a default container
      * 

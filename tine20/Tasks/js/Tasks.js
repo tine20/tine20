@@ -15,7 +15,6 @@ Egw.Tasks.getPanel = function() {
     return Egw.Tasks.TaskGrid.getTreePanel();
 }
 
-
 // Tasks main screen
 Egw.Tasks.TaskGrid = function(){
     
@@ -23,7 +22,74 @@ Egw.Tasks.TaskGrid = function(){
 	var ntStatus, ntPercent, ntSummaray, ntPriority, ntDue, ntOrganizer;
 	var editing = false, focused = false, userTriggered = false;
 	
+	// define handlers
+	var handlers = {
+		editInPopup: function(_button, _event){
+			var taskId = '';
+			if (_button.actionType == 'edit') {
+			    var selectedRows = grid.getSelectionModel().getSelections();
+                var task = selectedRows[0];
+				taskId = task.data.identifier;
+			}
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId, 500, 500);
+        },
+		deleteTaks: function(_button, _event){
+		    var selectedRows = grid.getSelectionModel().getSelections();
+			if (selectedRows.length < 1) return;
+			if (selectedRows.length > 1) {
+				var identifiers = [];
+				for (var i=0; i < selectedRows.length; i++) {
+					identifiers.push(selectedRows[i].data.identifier);
+				} 
+				var params = {
+                    method: 'Tasks.deleteTasks', 
+                    identifiers: Ext.util.JSON.encode(identifiers),
+                };
+			} else {
+				var params = {
+                    method: 'Tasks.deleteTask', 
+                    identifier: selectedRows[0].data.identifier,
+                };
+			}
+		    
+			Ext.Ajax.request({
+                params: params,
+                success: function(_result, _request) {
+                    store.load({params: paging});
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert('Failed', 'Could not delete task(s).'); 
+                }
+            });
+		}
+	}
+	// define actions
+	var actions = {
+        editInPopup: new Ext.Action({
+            text: 'edit task',
+			actionType: 'edit',
+            handler: handlers.editInPopup,
+            iconCls: 'action_edit'
+        }),
+        addInPopup: new Ext.Action({
+			actionType: 'add',
+            text: 'add task',
+            handler: handlers.editInPopup,
+            iconCls: 'action_add'
+        }),
+        deleteSingle: new Ext.Action({
+            text: 'delete task',
+            handler: handlers.deleteTaks,
+            iconCls: 'action_delete'
+        }),
+		deleteMultiple: new Ext.Action({
+            text: 'delete tasks',
+            handler: handlers.deleteTaks,
+            iconCls: 'action_delete'
+        }),
+    };
 	
+	// ------------- tree ----------
 	tree =  new Egw.containerTreePanel({
         id: 'TasksTreePanel',
         iconCls: 'TasksTreePanel',
@@ -48,9 +114,12 @@ Egw.Tasks.TaskGrid = function(){
 		initStore(); 
 		initGrid();
         Egw.Egwbase.MainScreen.setActiveContentPanel(grid);
-        Egw.Egwbase.MainScreen.setActiveToolbar(Egw.Tasks.getToolbar());
+        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
     });
 	
+	
+	
+	// ----------- store --------------
 	var initStore = function(){
 	    store = new Ext.data.JsonStore({
 			idProperty: 'identifier',
@@ -142,8 +211,72 @@ Egw.Tasks.TaskGrid = function(){
 		});
 		
 	};
-
 	
+    // --------- toolbar -------------
+    var quickSearchField = new Ext.app.SearchField({
+        id:        'quickSearchField',
+        width:     200,
+        emptyText: 'enter searchfilter'
+    }); 
+    quickSearchField.on('change', function() {
+        Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
+    });
+    
+    
+    var statusFilter = new Ext.app.ClearableComboBox({
+        id: 'TasksStatusFilter',
+        //name: 'statusFilter',
+        hideLabel: true,            
+        store: store,
+        displayField: 'status',
+        valueField: 'identifier',
+        typeAhead: true,
+        mode: 'local',
+        triggerAction: 'all',
+        emptyText: 'any',
+        selectOnFocus: true,
+        editable: false,
+        width:150    
+    });
+    
+    statusFilter.on('select', function(combo, record, index) {
+       if (!record.data) {
+           var _probability = '';       
+       } else {
+           var _probability = record.data.key;
+       }
+       
+       combo.triggers[0].show();
+    });
+    
+    var organizerFilter = new Ext.form.ComboBox({
+        id: 'TasksorganizerFilter',
+        emptyText: 'Cornelius Weiss'
+    });
+
+    var toolbar = new Ext.Toolbar({
+        id: 'Tasks_Toolbar',
+        split: false,
+        height: 26,
+        items: [
+            actions.addInPopup,
+            new Ext.Toolbar.Separator(),
+            '->',
+            'Status: ',
+            ' ',
+            statusFilter,
+            'Organizer: ',
+            ' ',
+            organizerFilter,                
+            new Ext.Toolbar.Separator(),
+            '->',
+            'Search:', ' ',
+            ' ',
+            quickSearchField
+        ]
+    });
+	
+	// --------- grid ----------
     var initGrid = function(){
         //sm = new Ext.grid.CheckboxSelectionModel();
         var pagingToolbar = new Ext.PagingToolbar({
@@ -206,7 +339,7 @@ Egw.Tasks.TaskGrid = function(){
 				{
 					id: 'summaray',
 					header: "Summaray",
-					width: 200,
+					width: 400,
 					sortable: true,
 					dataIndex: 'summaray',
 					editor: new Ext.form.TextField({
@@ -228,28 +361,19 @@ Egw.Tasks.TaskGrid = function(){
 				{
 					id: 'due',
 					header: "Due Date",
-					width: 40,
+					width: 50,
 					sortable: true,
 					dataIndex: 'due',
 					renderer: Egw.Egwbase.Common.dateRenderer,
 					editor: new Ext.form.DateField({
                         format : 'd.m.Y'
                     })
-				},
-				{
-					id: 'organizer',
-					header: "Organizer",
-					width: 150,
-					sortable: true,
-					dataIndex: 'organizer',
-                    editor: new Ext.form.TextField({
-                        allowBlank: false
-                    })
 				}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
 		    ],
-			autoExpandColumn: 'summary',
+			autoExpandColumn: 'summaray',
 			view: new Ext.grid.GridView({
+				autoFill: true,
 	            forceFit:true,
 	            ignoreAdd: true,
 	            emptyText: 'No Tasks to display',
@@ -272,6 +396,33 @@ Egw.Tasks.TaskGrid = function(){
 	        })
         });
 		
+		grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+			_eventObject.stopEvent();
+			var numSelected = _grid.getSelectionModel().getCount();
+			if (numSelected < 1) return;
+			
+			var items = numSelected > 1 ? [actions.deleteMultiple] : [
+			    actions.editInPopup,
+                actions.deleteSingle,
+                '-',
+                actions.addInPopup
+			]
+            
+            //if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+            //    _grid.getSelectionModel().selectRow(_rowIndex);
+            //}
+			var ctxMenu = new Ext.menu.Menu({
+		        //id:'ctxMenuAddress1', 
+		        items: items
+		    });
+            ctxMenu.showAt(_eventObject.getXY());
+        });
+		
+		grid.on('keydown', function(e){
+	         if(e.getKey() == e.DELETE && !grid.editing){
+	             handlers.deleteTaks();
+	         }
+	    });
 		
 		grid.on('render', function(){
 			// The fields in the grid's header
@@ -301,12 +452,9 @@ Egw.Tasks.TaskGrid = function(){
                 disabled:true,
                 format : "d.m.Y"
             });
-			ntOrganizer = new Ext.form.ComboBox({
-                renderTo: 'new-task-organizer',
-                disabled: true
-            });
-			//grid.on('resize', syncFields);
-            //grid.on('columnresize', syncFields);
+			
+			grid.on('resize', syncFields);
+            grid.on('columnresize', syncFields);
             syncFields();
 			
 			
@@ -334,7 +482,6 @@ Egw.Tasks.TaskGrid = function(){
             ntPercent.on(handlers);
             ntPriority.on(handlers);
             ntDue.on(handlers);
-            ntOrganizer.on(handlers);
             
             ntSummaray.on('focus', function(){
                 focused = true;
@@ -343,7 +490,6 @@ Egw.Tasks.TaskGrid = function(){
                     ntPercent.enable();
                     ntPriority.enable();
                     ntDue.enable();
-                    ntOrganizer.enable();
                     syncFields();
                     editing = true;
                 }
@@ -357,7 +503,6 @@ Egw.Tasks.TaskGrid = function(){
             ntSummaray.setSize(cm.getColumnWidth(2)-2);
             ntPriority.setSize(cm.getColumnWidth(3)-4);
             ntDue.setSize(cm.getColumnWidth(4)-4);
-            ntOrganizer.setSize(cm.getColumnWidth(5)-4);
         }
 		
 	    // when a field in the add bar is blurred, this determines
@@ -393,7 +538,6 @@ Egw.Tasks.TaskGrid = function(){
                 ntPercent.disable();
                 ntPriority.disable();
                 ntDue.disable();
-                ntOrganizer.disable();
 	            editing = false;
 	        }
 	    }
@@ -402,90 +546,11 @@ Egw.Tasks.TaskGrid = function(){
 	
 	return{
 		getTreePanel: function(){return tree;},
+		getToolbar: function() {return toolbar},
 		getGrid: function() {initStore(); initGrid(); return grid;},
 		getStore: function() {return store;}
 	}
 }();
-
-Egw.Tasks.getToolbar = function() {
-
-        var action_add = new Ext.Action({
-	        text: 'add',
-	        iconCls: 'action_add',
-	        handler: function () {
-				data = {};
-		        //  var tree = Ext.getCmp('venues-tree');
-		        //  var curSelNode = tree.getSelectionModel().getSelectedNode();
-		        //  var RootNode   = tree.getRootNode();
-	            editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=', 500, 500);
-	        }
-        }); 
-    
-        var quickSearchField = new Ext.app.SearchField({
-            id:        'quickSearchField',
-            width:     200,
-            emptyText: 'enter searchfilter'
-        }); 
-        quickSearchField.on('change', function() {
-            Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
-        });
-        
-        
-        var statusFilter = new Ext.app.ClearableComboBox({
-            id: 'TasksStatusFilter',
-            //name: 'statusFilter',
-            hideLabel: true,            
-            store: Egw.Tasks.status.getStore(),
-            displayField: 'status',
-            valueField: 'identifier',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText: 'any',
-            selectOnFocus: true,
-            editable: false,
-            width:150    
-        });
-		
-		statusFilter.on('select', function(combo, record, index) {
-           if (!record.data) {
-               var _probability = '';       
-           } else {
-               var _probability = record.data.key;
-           }
-           
-           combo.triggers[0].show();
-		});
-		
-		var organizerFilter = new Ext.form.ComboBox({
-			id: 'TasksorganizerFilter',
-			emptyText: 'Cornelius Weiss'
-		});
-
-        var toolbar = new Ext.Toolbar({
-            id: 'Tasks_Toolbar',
-            split: false,
-            height: 26,
-            items: [
-                action_add,
-                new Ext.Toolbar.Separator(),
-                '->',
-                'Status: ',
-                ' ',
-                statusFilter,
-                'Organizer: ',
-                ' ',
-                organizerFilter,                
-                new Ext.Toolbar.Separator(),
-                '->',
-                'Search:', ' ',
-                ' ',
-                quickSearchField
-            ]
-        });
-        
-        return toolbar;
-    }
 
 
 Egw.Tasks.EditDialog = function(task) {

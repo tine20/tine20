@@ -62,9 +62,20 @@ interface Tasks_Backend_Interface
     /**
      * Deletes an existing Task
      *
-     * @param string $_uid
+     * @param int $_identifier
      * @return void
      */
-    public function deleteTask($_uid);
+    public function deleteTask($_identifier);
+    
+    /**
+     * Deletes a set of tasks.
+     * 
+     * If one of the tasks could not be deleted, no taks is deleted
+     * 
+     * @throws Exception
+     * @param array array of task identifiers
+     * @return void
+     */
+    public function deleteTasks($_identifiers);
     
 }

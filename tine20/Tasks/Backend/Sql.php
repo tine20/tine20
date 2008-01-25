@@ -121,7 +121,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     {
         if(empty($_filter->container)) return 0;
         return $this->getTableInstance('tasks')->getTotalCount(array(
-            $this->_db->quoteInto('container IN (?)', $_filter->container)
+            $this->_db->quoteInto('container IN (?)', $_filter->container),
+            'is_deleted = FALSE'
         ));
     }
     
@@ -162,6 +163,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             ->joinLeft(array('contact'    => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
             ->joinLeft(array('related'    => $this->_tableNames['related']), 'tasks.identifier = related.task_identifier', array())
             ->joinLeft(array('tag' => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
+            ->where('tasks.is_deleted = FALSE')
             ->group('tasks.identifier');
     }
     
@@ -279,25 +281,49 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Deletes an existing Task
      *
-     * @param string $_uid
+     * @param int $_identifier
      * @return void
      */
-    public function deleteTask($_uid)
+    public function deleteTask($_identifier)
     {
-        $tasksTable = $this->getTableInstance($this->tablenames['tasks']);
+        $tasksTable = $this->getTableInstance('tasks');
         $data = array(
             'is_deleted'   => true, 
             'deleted_time' => Zend_Date::now()->getIso(),
             'deleted_by'   => $this->_currentAccount->getId()
         );
         $tasksTable->update($data, array(
-            $this->_db->quoteInto('identifier = ?', $_uid)
+            $this->_db->quoteInto('identifier = ?', $_identifier)
         ));
         
         // NOTE: cascading delete through the use of forign keys!
         //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('identifier = ?', $_uid));
     }
-
+    
+    /**
+     * Deletes a set of tasks.
+     * 
+     * If one of the tasks could not be deleted, no taks is deleted
+     * 
+     * @throws Exception
+     * @param array array of task identifiers
+     * @return void
+     */
+    public function deleteTasks($_identifiers)
+    {
+        try {
+            $this->_db->beginTransaction();
+            foreach ($_identifiers as $identifier) {
+                $this->deleteTask($identifier);
+            }
+            $this->_db->commit();
+            
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            throw $e;
+        }
+    }
+    
     /**
      * Returns a record as it was at a given point in history
      * 
