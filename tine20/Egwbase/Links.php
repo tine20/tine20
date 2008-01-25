@@ -74,7 +74,8 @@ class Egwbase_Links
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'links')
             ->where($where1)
-            ->orWhere($where2);
+            ->orWhere($where2)
+			->order('link_lastmod DESC');
         
         //error_log($select->__toString());
         
@@ -140,20 +141,26 @@ class Egwbase_Links
      * @param array $_recordId2
      * @param string $_remark
      * @todo validate parameters
+     * @todo discuss if old Links should be deleted at any time. (if link request comes from other app
+     *       like TASKS you wish to just add one entry rather than carry array of all valid entries with you 
+     *       TEMPORARY solved by removing 'array' def of var $_recordId and inserting if/else statement
      */
-    public function setLinks($_applicationName1, $_recordId1, $_applicationName2, array $_recordId2, $_remark)
+    public function setLinks($_applicationName1, $_recordId1, $_applicationName2, $_recordId2, $_remark)
     {
         $recordId1 = (int)$_recordId1;
         if($recordId1 != $_recordId1) {
             throw new InvalidArgumentException('$_recordId1 must be integer');
         }
+        if(is_array($_recordId2)) {
+	        $this->deleteLinks($_applicationName1, $_recordId1, $_applicationName2, $_remark);
         
-        $this->deleteLinks($_applicationName1, $_recordId1, $_applicationName2, $_remark);
-        
-        foreach($_recordId2 as $recordId) {
-            $this->addLink($_applicationName1, $_recordId1, $_applicationName2, $recordId, $_remark);
-        }
-    }
+	        foreach($_recordId2 as $recordId) {
+	            $this->addLink($_applicationName1, $_recordId1, $_applicationName2, $recordId, $_remark);
+	        }
+		} else {
+            $this->addLink($_applicationName1, $_recordId1, $_applicationName2, $_recordId2, $_remark);			
+		}   
+	 }
     
     public function addLink($_applicationName1, $_recordId1, $_applicationName2, $_recordId2, $_remark)
     {
@@ -162,7 +169,8 @@ class Egwbase_Links
             'link_id1'      => $_recordId1,
             'link_app2'     => $_applicationName2,
             'link_id2'      => $_recordId2,
-            'link_remark'   => $_remark
+            'link_remark'   => $_remark,
+			'link_lastmod'  => time()
         );
         $this->_linksTable->insert($data);
     }

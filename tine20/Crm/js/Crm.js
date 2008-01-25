@@ -474,6 +474,12 @@ Egw.Crm = function() {
             } 
         }
 
+        var handler_add_task = function() 
+        {
+            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _rowIndex[0].id, 280, 480);  
+        }
+        
 	   	var action_edit = new Ext.Action({
 			text: 'edit lead',
 			disabled: true,
@@ -488,6 +494,13 @@ Egw.Crm = function() {
 			iconCls: 'action_delete'
 		});	
 
+        var action_add_task = new Ext.Action({
+        		text: 'add task',
+        		handler: handler_add_task,
+        		iconCls: 'action_add_task',
+                disabled: true
+        });
+            
 
     var _showCrmToolbar = function(){
     
@@ -786,6 +799,7 @@ Egw.Crm = function() {
                 leadstateGridPanel.stopEditing();
                 st_leadstate.insert(0, p);
                 leadstateGridPanel.startEditing(0, 0);
+                leadstateGridPanel.fireEvent('celldblclick',this, 0, 1);
             }
                         
             var handler_leadstate_delete = function(){
@@ -950,6 +964,7 @@ Egw.Crm = function() {
                 leadsourceGridPanel.stopEditing();
                 st_leadsource.insert(0, p);
                 leadsourceGridPanel.startEditing(0, 0);
+                leadsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
             }
                         
             var handler_leadsource_delete = function(){
@@ -1079,6 +1094,7 @@ Egw.Crm = function() {
                 leadtypeGridPanel.stopEditing();
                 st_leadtype.insert(0, p);
                 leadtypeGridPanel.startEditing(0, 0);
+                leadtypeGridPanel.fireEvent('celldblclick',this, 0, 1);                
             }
                         
             var handler_leadtype_delete = function(){
@@ -1224,6 +1240,7 @@ Egw.Crm = function() {
                 productsourceGridPanel.stopEditing();
                 st_productsource.insert(0, p);
                 productsourceGridPanel.startEditing(0, 0);
+                productsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
             }
                         
             var handler_productsource_delete = function(){
@@ -1305,23 +1322,72 @@ Egw.Crm = function() {
             var gridColumnModell = Ext.getCmp('gridCrm').getColumnModel();
             
             if(toggle.pressed === true) {
+                toggle.setIconClass('hideDetails_action');    
+                toggle.setText('hide details');                                                     
+                
                 gridColumnModell.setRenderer(1, function(value, meta, record) {
-                    return '<b>' + value + '</b><br />' + record.data.lead_description;
+                    return '<b>' + value + '</b><br /><br />' + record.data.lead_description;
                 } );                
                 
                 gridColumnModell.setRenderer(2, function(_leadPartner) {                   
                     if(typeof(_leadPartner == 'array')) {
-                        
-                        
-                        
-                        
-                        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
+                        var _partner = '';
+                        for(i=0; i < _leadPartner.length; i++){
+                            var org_name           = Ext.isEmpty(_leadPartner[i].org_name) === false ? _leadPartner[i].org_name : '&nbsp;';
+                            var n_fileas           = Ext.isEmpty(_leadPartner[i].n_fileas) === false ? _leadPartner[i].n_fileas : '&nbsp;';
+                            var adr_one_street     = Ext.isEmpty(_leadPartner[i].adr_one_street) === false ? _leadPartner[i].adr_one_street : '&nbsp;';
+                            var adr_one_postalcode = Ext.isEmpty(_leadPartner[i].adr_one_postalcode) === false ? _leadPartner[i].adr_one_postalcode : '&nbsp;';
+                            var adr_one_locality   = Ext.isEmpty(_leadPartner[i].adr_one_locality) === false ? _leadPartner[i].adr_one_locality : '&nbsp;';
+                            var tel_work           = Ext.isEmpty(_leadPartner[i].tel_work) === false ? _leadPartner[i].tel_work : '&nbsp;';
+                            var tel_cell           = Ext.isEmpty(_leadPartner[i].tel_cell) === false ? _leadPartner[i].tel_cell : '&nbsp;';
+                            
+                            if(i > 0) {
+                                _style = 'borderTop';
+                            } else {
+                                _style = '';
+                            }
+                            
+                            _partner =  _partner + '<table width="100%" height="100%" class="' + _style + '">'
+                                                 + '<tr><td colspan="2">' + org_name + '</td></tr>'
+                                                 + '<tr><td colspan="2"><b>' + n_fileas + '</b></td></tr>'
+                                                 + '<tr><td colspan="2">' + adr_one_street + '</td></tr>'
+                                                 + '<tr><td colspan="2">' + adr_one_postalcode + ' ' + adr_one_locality + '</td></tr>'
+                                                 + '<tr><td width="50%">phone: </td><td width="50%">' + tel_work + '</td></tr>'
+                                                 + '<tr><td width="50%">cellphone: </td><td width="50%">' + tel_cell + '</td></tr>'
+                                                 + '</table> <br />';
+                        }
+                        return _partner;
                     }
-                } );
+                });
                 
                 gridColumnModell.setRenderer(3, function(_leadCustomer) {
-                if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
-                        return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
+                    if(typeof(_leadCustomer == 'array')) {
+                        var _customer = '';
+                        for(i=0; i < _leadCustomer.length; i++){
+                            var org_name           = Ext.isEmpty(_leadCustomer[i].org_name) === false ? _leadCustomer[i].org_name : '&nbsp;';
+                            var n_fileas           = Ext.isEmpty(_leadCustomer[i].n_fileas) === false ? _leadCustomer[i].n_fileas : '&nbsp;';
+                            var adr_one_street     = Ext.isEmpty(_leadCustomer[i].adr_one_street) === false ? _leadCustomer[i].adr_one_street : '&nbsp;';
+                            var adr_one_postalcode = Ext.isEmpty(_leadCustomer[i].adr_one_postalcode) === false ? _leadCustomer[i].adr_one_postalcode : '&nbsp;';                            
+                            var adr_one_locality   = Ext.isEmpty(_leadCustomer[i].adr_one_locality) === false ? _leadCustomer[i].adr_one_locality : '&nbsp;';                            
+                            var tel_work           = Ext.isEmpty(_leadCustomer[i].tel_work) === false ? _leadCustomer[i].tel_work : '&nbsp;';
+                            var tel_cell           = Ext.isEmpty(_leadCustomer[i].tel_cell) === false  ? _leadCustomer[i].tel_cell : '&nbsp;';
+                            
+                            if(i > 0) {
+                                _style = 'borderTop';
+                            } else {
+                                _style = '';
+                            }
+                                                        
+                            _customer =  _customer + '<table width="100%" height="100%" class="' + _style + '">'
+                                                 + '<tr><td colspan="2">' + org_name + '</td></tr>'
+                                                 + '<tr><td colspan="2"><b>' + n_fileas + '</b></td></tr>'
+                                                 + '<tr><td colspan="2">' + adr_one_street + '</td></tr>'
+                                                 + '<tr><td colspan="2">' + adr_one_postalcode + ' ' + adr_one_locality + '</td></tr>'
+                                                 + '<tr><td width="50%">phone: </td><td width="50%">' + tel_work + '</td></tr>'
+                                                 + '<tr><td width="50%">cellphone: </td><td width="50%">' + tel_cell + '</td></tr>'
+                                                 + '</table> <br />';
+                        }
+                        return _customer;
                     }
                 });
                   
@@ -1329,6 +1395,9 @@ Egw.Crm = function() {
             } 
             
             if(toggle.pressed === false) {
+                toggle.setIconClass('showDetails_action');   
+                toggle.setText('show details');                         
+                
                 gridColumnModell.setRenderer(1, function(value, meta, record) {
                     return value;
                 } );                
@@ -1357,6 +1426,7 @@ Egw.Crm = function() {
                 action_add,
                 action_edit,
                 action_delete,
+                action_add_task,
                 new Ext.Toolbar.Separator(),
                 {
                     text:'Options',
@@ -1368,6 +1438,7 @@ Egw.Crm = function() {
                     text: 'Show Details',
                     enableToggle: true,
                     id: 'crm_ShowDetailsButton',
+                    iconCls: 'showDetails_action',
                     handler: handlerToggleDetails,                    
                     pressed: false
                     
@@ -1376,8 +1447,19 @@ Egw.Crm = function() {
                 {
                     text: 'Show closed leads',
                     enableToggle: true,
+                    iconCls: 'showEndedLeads_action',
                     id: 'crm_ShowClosedLeadsButton',
                     handler: function(toggle) {
+                        
+                        if(toggle.pressed) {
+                            toggle.setIconClass('hideEndedLeads_action');
+                            toggle.setText('hide closed leads');                                                     
+                        } else {
+                            toggle.setIconClass('showEndedLeads_action');                            
+                            toggle.setText('show closed leads');                                                                                 
+                        }
+                        
+                        
                         var dataStore = Ext.getCmp('gridCrm').getStore();
                         
                         dataStore.reload();
@@ -1445,7 +1527,8 @@ Egw.Crm = function() {
         id:'ctxMenuGrid', 
         items: [
             action_edit,
-            action_delete
+            action_delete,
+            action_add_task
         ]
     });
 
@@ -1460,12 +1543,12 @@ Egw.Crm = function() {
         var columnModel = new Ext.grid.ColumnModel([
             {resizable: true, header: 'projekt ID', id: 'lead_id', dataIndex: 'lead_id', width: 20, hidden: true},
             {resizable: true, header: 'lead name', id: 'lead_name', dataIndex: 'lead_name', width: 200},
-            {resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 150, sortable: false, renderer: function(_leadPartner) {
+            {resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: function(_leadPartner) {
                 if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
                     return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
                 }
             }},
-            {resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'lead_customer', width: 150, sortable: false, renderer: function(_leadCustomer) {
+            {resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: function(_leadCustomer) {
                 if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
                     return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
                 }
@@ -1480,7 +1563,7 @@ Egw.Crm = function() {
                   var leadstate_name = leadstates.getById(leadstate_id);
                   return leadstate_name.data.lead_leadstate;
               },
-              width: 150},
+              width: 100},
             {resizable: true, header: 'probability', id: 'lead_probability', dataIndex: 'lead_probability', width: 50, renderer: Ext.util.Format.percentage},
             {resizable: true, header: 'turnover', id: 'lead_turnover', dataIndex: 'lead_turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
@@ -1495,13 +1578,16 @@ Egw.Crm = function() {
             if(rowCount < 1) {
                 action_delete.setDisabled(true);
                 action_edit.setDisabled(true);
+                action_add_task.setDisabled(true);
             } 
             if (rowCount == 1) {
                action_edit.setDisabled(false);
                action_delete.setDisabled(false);               
+               action_add_task.setDisabled(false);
             }    
             if(rowCount > 1) {                
                action_edit.setDisabled(true);
+               action_add_task.setDisabled(true);
             }
         });
         
@@ -1509,7 +1595,8 @@ Egw.Crm = function() {
             id: 'gridCrm',
             store: dataStore,
             cm: columnModel,
-            tbar: pagingToolbar,   
+            tbar: pagingToolbar, 
+            stripeRows: true,  
             viewConfig: {
                         forceFit:true
                     },  
@@ -1518,7 +1605,7 @@ Egw.Crm = function() {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-   //         autoExpandColumn: 'Projektname',
+            autoExpandColumn: 'lead_name',
             border: false
         });
         
@@ -1681,11 +1768,11 @@ Egw.Crm.LeadEditDialog.Elements = function() {
             {id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
             {id:'n_fileas', header: 'Name / Address', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                 function(val, meta, record) {
-                    var n_fileas           = record.data.n_fileas != null ? record.data.n_fileas : '';
-                    var org_name           = record.data.org_name != null ? record.data.org_name : ' ';
-                    var adr_one_street     = record.data.adr_one_street != null ? record.data.adr_one_street : ' ';
-                    var adr_one_postalcode = record.data.adr_one_postalcode != null ? record.data.adr_one_postalcode : ' ';
-                    var adr_one_locality   = record.data.adr_one_locality != null ? record.data.adr_one_locality : ' ' ;                                       
+                    var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : '&nbsp;';
+                    var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
+                    var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : '&nbsp;';
+                    var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : '&nbsp;';
+                    var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : '&nbsp;';                                       
                     
                     
                     var formated_return = '<b>' + n_fileas + '</b><br />' + org_name + '<br  />' + 
@@ -1696,9 +1783,9 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                 }
             },
             {id:'contact_one', header: "Phone", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
-                    var tel_work           = record.data.tel_work != null ? record.data.tel_work : ' ';
-                    var tel_fax            = record.data.tel_fax != null ? record.data.tel_fax : ' ';
-                    var tel_cell           = record.data.tel_cell != null ? record.data.tel_cell : ' '  ;                                      
+                    var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? record.data.tel_work : '&nbsp;';
+                    var tel_fax            = Ext.isEmpty(record.data.tel_fax) === false ? record.data.tel_fax : '&nbsp;';
+                    var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? record.data.tel_cell : '&nbsp;'  ;                                      
 
                 var formated_return = '<table>' + 
                     '<tr><td>Phone: </td><td>' + tel_work + '</td></tr>' + 
@@ -1710,8 +1797,8 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                 }
             },
             {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var contact_email      = record.data.contact_email != null ? '<a href="mailto:'+record.data.contact_email+'">'+record.data.contact_email+'</a>' : ' ';
-                    var contact_url        = record.data.contact_url != null ? record.data.contact_url : ' ';                    
+                    var contact_email      = Ext.isEmpty(record.data.contact_email) === false ? '<a href="mailto:'+record.data.contact_email+'">'+record.data.contact_email+'</a>' : '&nbsp;';
+                    var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '&nbsp;';                    
 
                 var formated_return = '<table>' + 
                     '<tr><td>Email: </td><td>' + contact_email + '</td></tr>' + 
@@ -1728,11 +1815,11 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                 function(val, meta, record) {
                 	var formated_return = null;
                 	
-                	if(record.data.n_fileas != null) {
+                	if(Ext.isEmpty(record.data.n_fileas) === false) {
                 		formated_return = '<b>' + record.data.n_fileas + '</b><br />';
                 	}
 
-                    if(record.data.org_name != null) {
+                    if(Ext.isEmpty(record.data.org_name) === false) {
                     	if(formated_return === null) {
                     		formated_return = '<b>' + record.data.org_name + '</b><br />';
                     	} else {
@@ -1740,13 +1827,13 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     	}
                     }
 
-                    if(record.data.adr_one_street != null) {
+                    if(Ext.isEmpty(record.data.adr_one_street) === false) {
                         formated_return += record.data.adr_one_street + '<br />';
                     }
                     
-                    if(record.data.adr_one_postalcode != null && record.data.adr_one_locality  != null) {
+                    if( (Ext.isEmpty(record.data.adr_one_postalcode) === false)  && (Ext.isEmpty(record.data.adr_one_locality) === false) ) {
                         formated_return += record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality + '<br />';
-                    } else if (record.data.adr_one_locality  != null) {
+                    } else if (Ext.isEmpty(record.data.adr_one_locality) === false) {
                     	formated_return += record.data.adr_one_locality + '<br />';
                     }
                 	                    
@@ -1980,7 +2067,7 @@ Egw.Crm.LeadEditDialog.Stores = function() {
 	                {name: 'lead_productsource_price'}
 	            ]
 	        });
-	        
+
 	        return store;
         },
 
@@ -2000,22 +2087,39 @@ Egw.Crm.LeadEditDialog.Stores = function() {
         },
         
         getActivities: function (){
-	        var store = new Ext.data.SimpleStore({
-	                fields: ['id','status','status2','datum','titel','message','responsible'],
-	                data: [
-	                        ['0','3','4','05.12.2007 15:30','der titel','Die Karl-Theodor-Brücke, besser bekannt als Alte Brücke, ist eine Brücke über den Neckar in Heidelberg. Sie verbindet die Altstadt mit dem gegenüberliegenden Neckarufer am östlichen Ende des Stadtteils Neuenheim. Die Alte Brücke wurde 1788 unter Kurfürst Karl Theodor als insgesamt neunte Brücke an dieser Stelle errichtet.','Meier,Heiner'],
-	                        ['1','2','1','12.11.2007 07:10','der titel2','Erbaut wurde sie nach einem Vorschlag des Bauinspektors Mathias Mayer aus Stein auf den vorhandenen Pfeilern der Vorgängerbauten. Im Zusammenspiel des Flusstals, der Altstadt und des Schlosses prägt die Alte Brücke seit jeher das klassische Heidelberg-Panorama.','Schultze,Heinz'],
-	                        ['2','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
-	                        ['3','3','4','05.12.2007 15:30','der titel','Die Wirkung der Alten Brücke liegt dabei vor allem in der Einbettung in die Landschaft. Heute gehört sie zu den bekanntesten Sehenswürdigkeiten Heidelbergs.','Meier,Heiner'],
-	                        ['4','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
-	                        ['5','3','4','05.12.2007 15:30','der titel','die lange message','Meier,Heiner'],
-	                        ['6','2','1','12.11.2007 07:10','der titel2','die lange message2','Schultze,Heinz'],
-	                        ['7','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
-	                        ['8','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner'],
-	                        ['9','4','2','14.12.2007 18:40','der titel3','die lange message3','Meier,Heiner']
-	                    ]
+	        var store = new Ext.data.JsonStore({
+                data: formData.values.tasks,
+                autoLoad: true,
+                id: 'identifier',
+                fields: [
+                    {name: 'identifier'},
+                    {name: 'container'},
+                    {name: 'created_by'},
+                    {name: 'creation_time', type: 'date', dateFormat: 'c'},
+                    {name: 'last_modified_by'},
+                    {name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+                    {name: 'is_deleted'},
+                    {name: 'deleted_time', type: 'date', dateFormat: 'c'},
+                    {name: 'deleted_by'},
+                    {name: 'percent'},
+                    {name: 'completed', type: 'date', dateFormat: 'c'},
+                    {name: 'due', type: 'date', dateFormat: 'c'},
+                    {name: 'class'},
+                    {name: 'description'},
+                    {name: 'geo'},
+                    {name: 'location'},
+                    {name: 'organizer'},
+                    {name: 'priority'},
+                    {name: 'status'},
+                    {name: 'summaray'},
+                    {name: 'url'},
+					
+					{name: 'creator'},
+					{name: 'modifier'},
+                    {name: 'status_realname'}
+                ]
 	        });
-	        
+
 	        return store;
         },
         
@@ -2108,6 +2212,17 @@ Egw.Crm.LeadEditDialog.Main = function() {
         });
         
         additionalData.linkedAccount = Ext.util.JSON.encode(linksContactsInternal);
+        
+        var linksTasks = new Array();
+        var taskGrid = Ext.getCmp('gridActivities');
+        var storeTasks = taskGrid.getStore();
+        
+        storeTasks.each(function(record) {
+            linksTasks.push(record.id);          
+        });
+        
+        additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
+        
         
         return additionalData;
     }
@@ -2218,6 +2333,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         disabled: true
 	});
 
+    
     /**
      * display the event edit dialog
      *
@@ -2364,7 +2480,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
 				anchor:'95%'    
         });
 		combo_leadsource.setValue('1');
-        
+
         var st_activities = Egw.Crm.LeadEditDialog.Stores.getActivities();
      
 	 	var combo_probability =  new Ext.form.ComboBox({
@@ -2417,17 +2533,22 @@ Egw.Crm.LeadEditDialog.Main = function() {
             altFormat:'Y-m-d',
             anchor:'95%'
 		});
+
+	activitiesGetStatusIcon = function(statusName) {   
+	    return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
+	};
 		
 
       var ActivitiesTpl = new Ext.XTemplate( 
-            '<tpl for=".">',
+        '<tpl for=".">',
             '<div class="activities-item-small">',
-            // {status} {status2} 
-            '<i>{datum} {responsible}</i><br />', 
-            '<b>{titel}</b><br />',
-            '{message}<br />',                     
+            '<div class="TasksMainGridStatus-{status_realname}" ext:qtip="{status_realname}"></div> {due}<br/>',
+            '<i>{creator}</i><br />', 
+            '<b>{summaray}</b><br />',
+            '{description}<br />',                     
             '</div></tpl>', {
-                isNotEmpty: function(textValue){
+                setContactField: function(textValue){
+					alert(textValue);
                     if ((textValue === null) || (textValue.length == 0)) {
                         return '';
                     }
@@ -2436,9 +2557,9 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     }
                 }                                                
         });    
-        
+    /*    
         var activities_limited = new Ext.Panel({
-            title: 'last 10 activities',
+            title: 'last activities',
             id: 'grid_activities_limited_panel',
             cls: 'contacts_background',                            
             layout:'fit',  
@@ -2453,7 +2574,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
 	            itemSelector: 'activities-item-small'
 	        })
         });  
-  
+  */
   
 	   if (formData.values) {
 			var _lead_id = formData.values.lead_id;
@@ -2493,7 +2614,8 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 sortable: false,
                 fixed: true
                 } , {
-                header: "Produkt",
+                header: "product",
+                id: 'cm_product',
                 dataIndex: 'lead_product_id',
                 width: 300,
                 editor: new Ext.form.ComboBox({
@@ -2504,7 +2626,8 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     displayField:'value', 
                     valueField: 'lead_productsource_id',
                     allowBlank: false, 
-                    editable: false,
+                    typeAhead: true,
+                    editable: true,
                     selectOnFocus:true,
                     forceSelection: true, 
                     triggerAction: "all", 
@@ -2524,14 +2647,14 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     }
                   }
                 } , { 
-                header: "Seriennummer",
+                header: "serialnumber",
                 dataIndex: 'lead_product_desc',
                 width: 300,
                 editor: new Ext.form.TextField({
                     allowBlank: false
                     })
                 } , {
-                header: "Preis",
+                header: "price",
                 dataIndex: 'lead_product_price',
                 width: 150,
                 align: 'right',
@@ -2559,6 +2682,17 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 productStore.remove(selectedRows[i]);
             }    	
         }; 
+
+        var handler_remove_task = function(_button, _event)
+        {
+    		var taskGrid = Ext.getCmp('gridActivities');
+    		var taskStore = taskGrid.getStore();
+            
+    		var selectedRows = taskGrid.getSelectionModel().getSelections();
+            for (var i = 0; i < selectedRows.length; ++i) {
+                taskStore.remove(selectedRows[i]);
+            }    	
+        };
         
         var product = Ext.data.Record.create([
            {name: 'lead_id', type: 'int'},
@@ -2575,7 +2709,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             mode: 'local',
             sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
             anchor: '100% 100%',
-//            autoExpandColumn:'common',
+            autoExpandColumn:'cm_product',
             frame: false,
             clicksToEdit:2,
             tbar: [{
@@ -2592,6 +2726,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     grid_choosenProducts.stopEditing();
                     st_choosenProducts.insert(0, p);
                     grid_choosenProducts.startEditing(0, 0);
+                    grid_choosenProducts.fireEvent('celldblclick',this, 0, 1);
                 }
             } , {
                 text: 'delete product',
@@ -2624,7 +2759,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         //    	{id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },
                 {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                     function(val, meta, record) {
-	                	var org_name = record.data.org_name != null ? record.data.org_name : ' '
+	                	var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;'
 	                	
 	                    var formated_return = '<b>' + record.data.n_fileas + '</b><br />' + org_name;
                         
@@ -2649,6 +2784,89 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     }
                 }                                    
         ]);
+
+         
+        var cm_activities = new Ext.grid.ColumnModel([
+            	{   id:'identifier', 
+                    header: "identifier", 
+                    dataIndex: 'identifier', 
+                    width: 5, 
+                    sortable: true, 
+                    hidden: true 
+                }, {
+					id: 'status',
+					header: "Status",
+					width: 40,
+					sortable: true,
+					dataIndex: 'status_realname',
+					renderer: activitiesGetStatusIcon
+				}, {
+					id: 'percent',
+					header: "Percent",
+					width: 50,
+					sortable: true,
+					dataIndex: 'percent'//,
+	//				renderer: Egw.widgets.Percent.renderer,
+				}, {
+					id: 'summaray',
+					header: "Summaray",
+					width: 200,
+					sortable: true,
+					dataIndex: 'summaray'
+				}, {
+					id: 'due',
+					header: "Due Date",
+					width: 80,
+					sortable: true,
+					dataIndex: 'due',
+					renderer: Egw.Egwbase.Common.dateRenderer
+				}, {
+					id: 'creator',
+					header: "Creator",
+					width: 130,
+					sortable: true,
+					dataIndex: 'creator'
+				}, {
+                    id: 'description',
+                    header: "Description",
+                    width: 240,
+                    sortable: false,
+                    dataIndex: 'description'
+                }                                  
+        ]);               
+      
+        var gridActivities = new Ext.grid.GridPanel({
+            id: 'gridActivities',
+            store: st_activities,
+            cm: cm_activities,
+            tbar: [{
+                text: 'add task',
+                iconCls: 'action_add',
+                handler : function(){
+                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 280, 480);
+                }
+            } , {
+                text: 'delete task',
+                iconCls: 'action_delete',
+                handler : handler_remove_task 
+            }],
+            stripeRows: true,  
+            viewConfig: {
+                        forceFit:true
+                    },  
+            autoSizeColumns: true,
+            sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+            enableColLock:false,
+            loadMask: true,
+            autoExpandColumn: 'description',
+            border: false
+        });               
+
+        gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
+            var record = _grid.getStore().getAt(_rowIndex);            
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+ record.data.identifier + '&linkingApp=&linkedId=', 280, 480);
+
+        });
                
   		var folderTrigger = new Ext.form.TriggerField({
             fieldLabel:'folder (person in charge)', 
@@ -2672,10 +2890,19 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 frame: true            
             },
             items: [{
-		        title: 'Last 10 activities',
+		        title: 'last activities',
 		        region: 'east',
                 autoScroll: true,
 		        width: 300,
+                tbar: [
+                    '->',
+                    {
+                    text: 'add task',
+                    iconCls: 'action_add',
+                    handler : function() {
+                        editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 280, 480);
+                    }
+                }],
 		        items: [
 		          new Ext.DataView({
                     tpl: ActivitiesTpl,       
@@ -2796,15 +3023,16 @@ Egw.Crm.LeadEditDialog.Main = function() {
             }]
         };        
 
-            var tabPanelActivities = {
+        var tabPanelActivities = {
             title:'manage activities',
             layout:'form',
-            disabled: true,
+            disabled: false,
             layoutOnTabChange:true,            
             deferredRender:false,
             border:false,
-            items:[{  
-            }]
+            items:[
+                gridActivities                  
+            ]
         };
         
         var tabPanelProducts = {

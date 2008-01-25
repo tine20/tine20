@@ -63,14 +63,14 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
             $data->setTimezone(Zend_Registry::get('userTimeZone'));
             $data = $data->toArray();
         }
-        return $initialData;
+        return $initialData;    
     }
 
     /**
      * Supplies HTML for edit tasks dialog
      * 
      */
-    public function editTask($taskId)
+    public function editTask($taskId, $linkingApp=NULL, $linkedId=NULL)
     {
         if($taskId) {
             $controler = Tasks_Controller::getInstance();
@@ -84,6 +84,9 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
          
         $view->setScriptPath('Egwbase/views');
         $view->formData = array();
+		$view->formData['linking']['link_app1'] = $linkingApp;
+		$view->formData['linking']['link_id1'] = $linkedId;		
+		
         $view->title="edit task";
         
         $view->jsIncludeFiles  = $this->getJsFilesToInclude();

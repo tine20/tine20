@@ -15,12 +15,13 @@ Egw.Tasks.getPanel = function() {
     return Egw.Tasks.TaskGrid.getTreePanel();
 }
 
+
 // Tasks main screen
 Egw.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
 	var ntStatus, ntPercent, ntSummaray, ntPriority, ntDue, ntOrganizer;
-	var editing = false, focused = false, userTriggered = false;
+    var editing = false, focused = false, userTriggered = false;    
 	
 	// define handlers
 	var handlers = {
@@ -90,6 +91,8 @@ Egw.Tasks.TaskGrid = function(){
     };
 	
 	// ------------- tree ----------
+    
+    
 	tree =  new Egw.containerTreePanel({
         id: 'TasksTreePanel',
         iconCls: 'TasksTreePanel',
@@ -117,9 +120,7 @@ Egw.Tasks.TaskGrid = function(){
         Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
     });
 	
-	
-	
-	// ----------- store --------------
+	// ----------- store --------------    
 	var initStore = function(){
 	    store = new Ext.data.JsonStore({
 			idProperty: 'identifier',
@@ -160,21 +161,23 @@ Egw.Tasks.TaskGrid = function(){
 			switch (operation) {
 				case Ext.data.Record.EDIT:
 					Ext.Ajax.request({
-		                params: {
-		                    method: 'Tasks.saveTask', 
-		                    task: Ext.util.JSON.encode(task.data),
-		                },
-		                success: function(_result, _request) {
-							store.commitChanges();
-	
-							// we need to reload store, cause filters might be 
-							// affected by the change!
-							store.load({params: paging});
-		                },
-		                failure: function ( result, request) { 
-		                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
-		                }
-					});
+	                params: {
+	                    method: 'Tasks.saveTask', 
+	                    task: Ext.util.JSON.encode(task.data),
+						linkingApp: '',
+						linkedId: ''					
+	                },
+	                success: function(_result, _request) {
+						store.commitChanges();
+
+						// we need to reload store, cause filters might be 
+						// affected by the change!
+						store.load({params: paging});
+	                },
+	                failure: function ( result, request) { 
+	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+	                }
+				});
 				break;
 				case Ext.data.Record.COMMIT:
 				    //nothing to do, as we need to reload the store anyway.
@@ -211,6 +214,7 @@ Egw.Tasks.TaskGrid = function(){
 		});
 		
 	};
+
 	
     // --------- toolbar -------------
     var quickSearchField = new Ext.app.SearchField({
@@ -276,7 +280,7 @@ Egw.Tasks.TaskGrid = function(){
         ]
     });
 	
-	// --------- grid ----------
+	// --------- grid ----------    
     var initGrid = function(){
         //sm = new Ext.grid.CheckboxSelectionModel();
         var pagingToolbar = new Ext.PagingToolbar({
@@ -303,7 +307,7 @@ Egw.Tasks.TaskGrid = function(){
 	    );
 		
 		grid = new Ext.grid.EditorGridPanel({
-			id: 'TasksMainGrid',
+            id: 'TasksMainGrid',
             store: store,
 			tbar: pagingToolbar,
 			clicksToEdit: 'auto',
@@ -373,7 +377,7 @@ Egw.Tasks.TaskGrid = function(){
 		    ],
 			autoExpandColumn: 'summaray',
 			view: new Ext.grid.GridView({
-				autoFill: true,
+                autoFill: true,
 	            forceFit:true,
 	            ignoreAdd: true,
 	            emptyText: 'No Tasks to display',
@@ -423,6 +427,7 @@ Egw.Tasks.TaskGrid = function(){
 	             handlers.deleteTaks();
 	         }
 	    });
+        
 		
 		grid.on('render', function(){
 			// The fields in the grid's header
@@ -430,7 +435,7 @@ Egw.Tasks.TaskGrid = function(){
                 renderTo: 'new-task-status',
 				autoExpand: true,
                 disabled:true
-                //listClass:'x-combo-list-small',
+          //      listClass:'x-combo-list-small',
             });
 			ntPercent = new Egw.widgets.Percent.Combo({
 				renderTo: 'new-task-percent',
@@ -452,13 +457,13 @@ Egw.Tasks.TaskGrid = function(){
                 disabled:true,
                 format : "d.m.Y"
             });
-			
+
 			grid.on('resize', syncFields);
             grid.on('columnresize', syncFields);
             syncFields();
-			
-			
-            var handlers = {
+		
+	
+           var handlers = {
                 focus: function(){
                     focused = true;
                 },
@@ -495,7 +500,7 @@ Egw.Tasks.TaskGrid = function(){
                 }
             });
 		}, this);
-		
+	
 		function syncFields(){
             var cm = grid.getColumnModel();
             ntStatus.setSize(cm.getColumnWidth(0)-4);
@@ -504,7 +509,7 @@ Egw.Tasks.TaskGrid = function(){
             ntPriority.setSize(cm.getColumnWidth(3)-4);
             ntDue.setSize(cm.getColumnWidth(4)-4);
         }
-		
+        
 	    // when a field in the add bar is blurred, this determines
 	    // whether a new task should be created
 	    function doBlur(){
@@ -515,12 +520,11 @@ Egw.Tasks.TaskGrid = function(){
 						status: ntStatus.getValue(),
 						percent: ntPercent.getValue(),
 						summaray: summaray,
-						priority: ntPriority.getValue(),
+                        priority: ntPriority.getValue(),
 						due: ntDue.getValue(),
 						container: Egw.Tasks.DefaultContainer.container_id
 					});
-                    
-					console.log(ntStatus.getValue());
+					
 					Ext.Ajax.request({
                         params: {
                             method: 'Tasks.saveTask', 
@@ -541,13 +545,13 @@ Egw.Tasks.TaskGrid = function(){
                 ntDue.disable();
 	            editing = false;
 	        }
-	    }
+	    }        
 		//console.log(grid.getColumnModel().getColumnById('priority'));
     };
 	
 	return{
 		getTreePanel: function(){return tree;},
-		getToolbar: function() {return toolbar},
+		getToolbar: function() {return toolbar},        
 		getGrid: function() {initStore(); initGrid(); return grid;},
 		getStore: function() {return store;}
 	}
@@ -556,71 +560,73 @@ Egw.Tasks.TaskGrid = function(){
 
 Egw.Tasks.EditDialog = function(task) {
 	if (!arguments[0]) var task = {};
-	
-	// init task record
+    
+	// init task record    
     var task = new Egw.Tasks.Task(task);
-	
-	var handlers = {
-	    applyChanges: function(_button, _event) {
-			var closeWindow = arguments[2] ? arguments[2] : false;
+		
+	var handlers = {        
+        applyChanges: function(_button, _event) {
+		var closeWindow = arguments[2] ? arguments[2] : false;
+		
+		var dlg = Ext.getCmp('TasksEditFormPanel');
+		var form = dlg.getForm();
+		form.render();
+
+		if(form.isValid()) {
+			Ext.MessageBox.wait('please wait', 'saving task');
 			
-			var dlg = Ext.getCmp('TasksEditFormPanel');
-			var form = dlg.getForm();
-			form.render();
-	
-			if(form.isValid()) {
-				Ext.MessageBox.wait('please wait', 'saving task');
-				
 				// merge changes from form into task record
-				form.updateRecord(task);
-				
-	            Ext.Ajax.request({
-					params: {
-		                method: 'Tasks.saveTask', 
-		                task: Ext.util.JSON.encode(task.data),
-						//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
-		            },
-		            success: function(_result, _request) {
-		                //window.opener.Egw.Addressbook.reload();
-		                if (closeWindow) {
-							window.setTimeout("window.close()", 400);
-						}
-						dlg.action_delete.enable();
-						
+			form.updateRecord(task);
+			
+            Ext.Ajax.request({
+				params: {
+	                method: 'Tasks.saveTask', 
+	                task: Ext.util.JSON.encode(task.data),
+					linkingApp: formData.linking.link_app1,
+					linkedId: formData.linking.link_id1 //,
+					//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+	            },
+	            success: function(_result, _request) {
+	                //window.opener.Egw.Addressbook.reload();
+	                if (closeWindow) {
+						window.setTimeout("window.close()", 400);
+					}
+					dlg.action_delete.enable();
 						// override task with returned data
 						task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
 						// update form with this new data
-						form.loadRecord(task);
-						Ext.MessageBox.hide();
-		            },
-		            failure: function ( result, request) { 
-		                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
-		            } 
-				});
-	        } else {
-	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-	        }
-		},
-		saveAndClose: function(_button, _event) {
-			handlers.applyChanges(_button, _event, true);
-		},
-		pre_delete: function(_button, _event) {
-			Ext.MessageBox.wait('please wait', 'saving task');
-			Ext.Ajax.request({
-                params: {
-					method: 'Tasks.deleteTask',
-					identifier: task.data.identifier
-				},
-                success: function(_result, _request) {
-					window.setTimeout("window.close()", 400);
-                    //store.load({params: paging});
-                },
-                failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not delete task(s).');
+						form.loadRecord(task);                    
 					Ext.MessageBox.hide();
-                }
+	            },
+	            failure: function ( result, request) { 
+	                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+	            } 
 			});
-		}
+        } else {
+            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+        }
+	},
+	saveAndClose:  function(_button, _event) {
+		handlers.applyChanges(_button, _event, true);
+	},
+	pre_delete: function(_button, _event) {
+        Ext.MessageBox.wait('please wait', 'saving task');
+    			Ext.Ajax.request({
+                    params: {
+    					method: 'Tasks.deleteTask',
+    					identifier: task.data.identifier
+    				},
+                    success: function(_result, _request) {
+    					window.setTimeout("window.close()", 400);
+                        //store.load({params: paging});
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert('Failed', 'Could not delete task(s).');
+    					Ext.MessageBox.hide();
+                    }
+    			});
+    		}
+		
 	};
 	
 	var taskFormPanel = {
@@ -681,11 +687,10 @@ Egw.Tasks.EditDialog = function(task) {
         layout: 'border',
         items: dlg
     });
-	
-	// load form with initial data
+    
+	// load form with initial data	
 	dlg.getForm().loadRecord(task);
 	if(task.get('identifier') > 0) dlg.action_delete.enable();
-
 };
 
 

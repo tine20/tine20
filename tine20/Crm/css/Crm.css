@@ -1,48 +1,7 @@
 @CHARSET "UTF-8";
 
-.TimeView-sheetDescription {
-	padding:10px 0px 0px 0px;
-}
-
 .x-form-item {
     font-size: 11px;
-}
-
-.x-horizontalTimeView-header {
-	border-bottom: 1px dotted #15428B;
-}
-.x-horizontalTimeView-header-hourly {
-	padding:0px 0px 0px 0px;
-	margin: 0 0 0 0;
-	text-align: center;
-	vertical-align: text-bottom;
-	color:#15428B;
-	font-family:tahoma,arial,verdana,sans-serif;
-	font-size:11px;
-	font-size-adjust:none;
-	font-stretch:normal;
-	font-style:normal;
-	font-variant:normal;
-	font-weight:bold;
-}
-
-.x-horizontalTimeView-header-hourly-on {
-	background:#DFECFB;
-}
-
-.x-horizontalTimeView-header-hourly-off {
-}
-
-.x-horizontalTimeView-event2 {
-	font-family:tahoma,arial,verdana,sans-serif;
-	font-size:11px;
-	font-size-adjust:none;
-	font-stretch:normal;
-	font-style:normal;
-	font-variant:normal;
-	color:#15428B;
-	background:#DFECFB;
-	margin:0px 0px 0px 0px;
 }
 
 body {
@@ -120,6 +79,10 @@ input {
     background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
 }
 
+.action_add_task {
+    background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
+}
+
 .action_edit {
 	background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
@@ -132,12 +95,36 @@ input {
 	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
 }
 
+.action_saveAndClose {
+	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+}
+
+.action_applyChanges {
+	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
+
 .filter_search {
 	background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
 }
 
 .repeat_action {
 	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
+}
+
+.showEndedLeads_action {
+	background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
+}
+
+.hideEndedLeads_action {
+	background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
+}
+
+.showDetails_action {
+	background-image:url(../../images/oxygen/16x16/actions/fileview-detailed.png) !important;
+}
+
+.hideDetails_action {
+	background-image:url(../../images/oxygen/16x16/actions/fileview-column.png) !important;
 }
 
 
@@ -213,7 +200,30 @@ input {
     background-image:url(contact_internal.png) !important;
 }
 
+.productSummary {
+    background: transparent none repeat;
+    border: 0px;
+    color: #000000;
+    opacity: 1;
+    padding: 0px 0px;
+}
 
+.x-grid3-cell-inner, .x-grid3-hd-inner {
+    white-space: normal;
+}
+
+
+.lowPadding {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.borderTop {
+    border-top: solid;
+    border-top-color: #bbbbbb;
+    border-top-width: 1px;
+    
+}
 
 .x-view-over {
 				background-color: #efefef

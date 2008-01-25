@@ -106,7 +106,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
      * @param  $task
      * @return array created/updated task
      */
-    public function saveTask($task)
+    public function saveTask($task, $linkingApp = NULL, $linkedId = NULL)
     {
         $inTask = $this->_json2task($task);
         
@@ -116,7 +116,16 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
             $this->_controller->createTask($inTask);
             
         $outTask->setTimezone($this->_userTimezone);
-        return $outTask->toArray();
+		$outTask->toArray();
+
+		$_linkId = $outTask->toArray();		
+		$linkId  = $_linkId['identifier'];
+
+		if( !empty($linkingApp) && is_numeric($linkedId) ) {
+	        $this->_controller->setLink($linkingApp, $linkedId, $linkId);					
+		}
+
+        return $outTask;
     }
     
     /**
@@ -137,32 +146,14 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     /**
      * Deletes an existing Task
      *
-     * @throws Exception
-     * @param int $identifier
-     * @return string
+     * @param string $_uid
      */
-    public function deleteTask($identifier)
+    public function deleteTask($_uid)
     {
-        $this->_controller->deleteTask((int)$identifier);
-        return 'success';
+        
     }
     
-    /**
-     * Deletes a set of tasks.
-     * 
-     * If one of the tasks could not be deleted, no taks is deleted
-     * 
-     * @throws Exception
-     * @param array array of task identifiers
-     * @return string
-     */
-    public function deleteTasks($identifiers)
-    {
-        $this->_controller->deleteTasks(Zend_Json::decode($identifiers));
-        return 'success';
-    }
-    
-    /**
+   /**
      * temporaray function to get a default container
      * 
      * @return array container
@@ -172,7 +163,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
         $container = $this->_controller->getDefaultContainer();
         $container->setTimezone($this->_userTimezone);
         return $container->toArray();
-    }
+    }    
     
     /**
      * retruns all possible task stati

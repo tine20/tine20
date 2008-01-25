@@ -56,11 +56,11 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
 		    $view->formData['values'] = $lead->toArray();
             
-		    $links = $controller->getLinks($_leadId, 'addressbook');
-            foreach($links as $link) {
+		    $contact_links = $controller->getLinks($_leadId, 'addressbook');
+            foreach($contact_links as $contact_link) {
                 try {
-                    $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
-                    switch($link['remark']) {
+                    $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
+                    switch($contact_link['remark']) {
                         case 'customer':
                             $view->formData['values']['contactsCustomer'][] = $contact->toArray();
                             break;
@@ -75,14 +75,45 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
                     // do nothing
                 }
             }
-            
+
+            $task_links = $controller->getLinks($_leadId, 'tasks');
+            foreach($task_links as $task_link) {
+				try {
+	                $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
+					$_task = $task->toArray();
+
+					$creator = Egwbase_Account::getInstance()->getAccountById($_task['created_by']);
+					$_creator = $creator->toArray();
+					$_task['creator'] = $_creator['accountFullName'];
+					
+					if($_task['last_modified_by'] != NULL) {
+						$modifier = Egwbase_Account::getInstance()->getAccountById($_task['last_modified_by']);
+						$_modifier = $modifier->toArray();
+						$_task['modifier'] = $_modifier['accountFullName'];			
+					}
+					
+					$stati = Tasks_Controller::getInstance()->getStati()->toArray();
+					foreach($stati AS $status) {
+						if($status['identifier'] == $task['status']) {
+							$_task['status_realname'] = $status['status'];
+						}
+					}
+									
+					
+		            $view->formData['values']['tasks'][] = $_task;	
+					
+				} catch (Exception $e) {
+					// do nothing
+				}
+			}
+			
 		    $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
             $view->formData['config']['folderName']   = $folder->container_name;
             $view->formData['config']['folderRights'] = $folder->account_grants;
 		    
             $products = $leads->getProductsById($_leadId);
             $view->formData['values']['products'] = $products->toArray();
-            
+
 		    
 		} else {
             $view->formData['values'] = $controller->getEmptyLead()->toArray();
@@ -114,6 +145,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 
 		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
 		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
+		$view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';		
 		$view->jsExecute = 'Egw.Crm.LeadEditDialog.Main.display();';
 
 		$view->configData = array(

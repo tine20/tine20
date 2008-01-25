@@ -326,7 +326,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */	
-	public function saveLead($linkedCustomer, $linkedPartner, $linkedAccount)
+	public function saveLead($linkedCustomer, $linkedPartner, $linkedAccount, $linkedTasks)
     {
         //if(empty($_POST['lead_id'])) {
         //    unset($_POST['lead_id']);
@@ -363,6 +363,11 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $linkedAccount = Zend_Json::decode($linkedAccount);
         Crm_Controller::getInstance()->setLinkedAccount($savedLead->lead_id, $linkedAccount);
 
+        // set linked tasks
+        $linkedTasks = Zend_Json::decode($linkedTasks);
+        Crm_Controller::getInstance()->setLinkedTasks($savedLead->lead_id, $linkedTasks);
+        
+        
         // products
 		if(strlen($_POST['products']) > 2) {	    
             $this->saveProducts($_POST['products'], $savedLead->lead_id);
@@ -384,7 +389,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param int $_id  id of the lead
      * @return array
      */
-    public function saveContacts($_contacts, $_id)
+/*    public function saveContacts($_contacts, $_id)
     {  
         $contacts = Zend_Json::decode($_contacts);
 
@@ -403,7 +408,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         
         return $result;  
     }
-
+*/
 
 
      /**
@@ -618,6 +623,8 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             }
         }
     }
+  
+   
           
 // handle FOLDERS
     public function getFoldersByOwner($owner)

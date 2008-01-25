@@ -315,4 +315,9 @@ class Crm_Controller
     {
         Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
     }
+    
+    public function setLinkedTasks($_leadId, array $_taskIds)
+    {
+        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'tasks', $_taskIds, '');
+    }    
 }

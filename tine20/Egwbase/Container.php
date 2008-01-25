@@ -468,6 +468,7 @@ class Egwbase_Container
      */
     public function getPersonalContainer($_application, $_owner)
     {
+error_log('EGWBASE :: CONTAINER :: getPersonalContainer : '.$_application.' | owner: '.$_owner);    	
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
@@ -497,7 +498,7 @@ class Egwbase_Container
             ->having('account_grants & ?', self::GRANT_READ)
             ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
-        //error_log("getContainer:: " . $select->__toString());
+        error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
 

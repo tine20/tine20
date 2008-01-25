@@ -557,7 +557,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     * @param Egwbase_Record_Recordset $_leadSources list of lead sources
     * @return unknown
     */
-    public function saveContacts(array $_contacts, $_id)
+/*    public function saveContacts(array $_contacts, $_id)
     {
         $id = (int)$_id;
         if($id != $_id) {
@@ -588,7 +588,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $_contacts;
     }    
-    
+ */   
     
     
 	/**
@@ -788,6 +788,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	// handle FOLDERS  
     public function addFolder($_name, $_type) 
     {
+    	
         $egwbaseContainer = Egwbase_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $allGrants = array(
@@ -799,14 +800,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         );
         
         if($_type == Egwbase_Container::TYPE_SHARED) {
-            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container::TYPE_SHARED, Crm_Backend::SQL);
+            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container::TYPE_SHARED, Crm_Backend_Factory::SQL);
 
             // add admin grants to creator
             $egwbaseContainer->addGrants($folderId, $accountId, $allGrants);
             // add read grants to any other user
             $egwbaseContainer->addGrants($folderId, NULL, array(Egwbase_Container::GRANT_READ));
         } else {
-            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container::TYPE_PERSONAL, Crm_Backend::SQL);
+            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container::TYPE_PERSONAL, Crm_Backend_Factory::SQL);
         
             // add admin grants to creator
             $egwbaseContainer->addGrants($folderId, $accountId, $allGrants);

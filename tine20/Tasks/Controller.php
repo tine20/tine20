@@ -147,6 +147,18 @@ class Tasks_Controller implements Tasks_Backend_Interface
         return $Task;
     }
     
+	
+    /**
+     * set linking to another app
+     *
+     * @param Tasks_Model_Task $_task
+     * @return Tasks_Model_Task
+     */	
+    public function setLink($_app1, $_id1, $_id2)
+    {
+        Egwbase_Links::getInstance()->setLinks($_app1, $_id1, 'tasks', $_id2, '');
+    }	
+	
     /**
      * Create a new Task
      *
@@ -196,40 +208,19 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * Deletes an existing Task
      *
-     * @param string $_identifier
+     * @param string $_uid
      * @return void
      */
-    public function deleteTask($_identifier)
+    public function deleteTask($_uid)
     {
-        $Task = $this->getTask($_identifier);
+        $Task = $this->getTask($_uid);
         
         if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_DELETE)) {
             throw new Exception('Not allowed!');
         }
-        $this->_backend->deleteTask($_identifier);
+        $this->_backend->deleteTask($_uid);
     }
 
-    /**
-     * Deletes a set of tasks.
-     * 
-     * If one of the tasks could not be deleted, no taks is deleted
-     * 
-     * @throws Exception
-     * @param array array of task identifiers
-     * @return void
-     */
-    public function deleteTasks($_identifiers)
-    {
-        foreach ($_identifiers as $identifier) {
-            $Task = $this->getTask($identifier);
-            if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_DELETE)) {
-                throw new Exception('Not allowed!');
-            }
-        }
-        
-        $this->_backend->deleteTasks($_identifiers);
-    }
-    
     /**
      * temporaray function to get a default container
      * 
@@ -242,7 +233,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
         foreach ($containers as $container) {
             return $container;
         }
-    }
+    }    
     
     /**
      * retruns all possible task stati

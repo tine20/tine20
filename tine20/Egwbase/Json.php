@@ -63,7 +63,7 @@ class Egwbase_Json
     }
 
     function getContainer($application, $nodeType, $owner=NULL)
-    {
+    {    	
         switch($nodeType) {
             case 'Personal':
                 if (!$owner) throw new Exception('No owner given');
