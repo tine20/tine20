@@ -381,7 +381,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      *
      * @param Egwbase_Account_Model_FullAccount $_account
      */
-    public function saveAccount(Egwbase_Account_Model_FullAccount $_account, $_password = NULL)
+    public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
     {
         if(!$_account->isValid()) {
             throw(new Exception('invalid account object'));
@@ -392,35 +392,40 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $accountData = array(
             'account_lid'       => $_account->accountLoginName,
             'account_status'    => $_account->accountStatus,
-            'account_expires'   => $_account->accountExpires,
-            'account_type'      => 'u',
+            'account_expires'   => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
             'account_primary_group' => '-4'
         );
         
         if(!empty($_account->accountPassword)) {
             $accountData['account_pwd']            = $_account->accountPassword;
-            $accountData['account_lastpwd_change'] = now();
+            $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
         }
         
         $contactData = array(
-            'contact_tid'   => 'n',
-            'contact_owner' => 1,
             'n_family'      => $_account->accountLastName,
             'n_given'       => $_account->accountFirstName,
             'n_fn'          => $_account->accountFullName,
-            'n_fileas'      => $_account->accountDisplayName
-            #'contact_email' => $_account->
+            'n_fileas'      => $_account->accountDisplayName,
+            'contact_email' => $_account->accountEmailAddress
             #'account_id' 8
         );
-        
+
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
             
             $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
             $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
 
-            if(empty($_account->accountId)) {
+            if(!empty($_account->accountId)) {
+                $where = array(
+                    Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $_account->accountId)
+                );
+                
+                $accountsTable->update($accountData, $where);
+                $contactsTable->update($contactData, $where);
+            } else {
                 // add new account
+                $accountData['account_type']    = 'u';
                 $accountId = $accountsTable->insert($accountData);
                 
                 if($accountId == 0) {
@@ -428,15 +433,10 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
                 }
                 
                 $contactData['account_id'] = $accountId;
+                $contactData['contact_tid'] = 'n';
+                $contactData['contact_owner'] = 1;
                 
                 $contactsTable->insert($contactData);
-            } else {
-                $where = array(
-                    Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $_account->accountId)
-                );
-                
-                $accountsTable->update($accountData, $where);
-                $contactsTable->update($contactData, $where);
             }
             
             Zend_Registry::get('dbAdapter')->commit();

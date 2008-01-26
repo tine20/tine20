@@ -56,7 +56,8 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
         'accountLastName'       => array('presence' => 'required'),
         'accountFirstName'      => array('allowEmpty' => true),
         'accountFullName'       => array('presence' => 'required'),
-        'accountEmailAddress' => array('allowEmpty' => true)
+        'accountPassword'       => array('allowEmpty' => true),
+        'accountEmailAddress'   => array('allowEmpty' => true)
     );
 
     /**
