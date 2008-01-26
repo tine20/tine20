@@ -93,4 +93,9 @@ class Admin_Controller
         
         return $result;
     }
+    
+    public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
+    {
+        Egwbase_Account::getInstance()->saveAccount($_account);
+    }
 }

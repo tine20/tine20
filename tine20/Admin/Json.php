@@ -203,4 +203,18 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
 */
         return $treeNodes;
     }
+    
+    public function saveAccount($accountData)
+    {
+        $account = new Egwbase_Account_Model_FullAccount(Zend_Json::decode($accountData));
+        
+        Admin_Controller::getInstance()->saveAccount($account);
+        
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+        
+    }
 }

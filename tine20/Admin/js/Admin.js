@@ -1086,11 +1086,18 @@ Egw.Admin.Accounts.EditDialog = function() {
 
         	if(form.isValid()) {
         		form.updateRecord(this.accountRecord);
+        		if(this.accountRecord.data.accountFirstName) {
+            		this.accountRecord.data.accountFullName = this.accountRecord.data.accountFirstName + ' ' + this.accountRecord.data.accountLastName;
+                    this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName + ', ' + this.accountRecord.data.accountFirstName;
+        		} else {
+                    this.accountRecord.data.accountFullName = this.accountRecord.data.accountLastName;
+                    this.accountRecord.data.accountDisplayName = this.accountRecord.data.accountLastName;
+        		}
 	    
 	            Ext.Ajax.request({
 	                params: {
 	                    method: 'Admin.saveAccount', 
-	                    account: Ext.util.JSON.encode(this.accountRecord.data)
+	                    accountData: Ext.util.JSON.encode(this.accountRecord.data)
 	                },
 	                success: function(_result, _request) {
 	                },
@@ -1102,108 +1109,113 @@ Egw.Admin.Accounts.EditDialog = function() {
 	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
 	        }
     	},
+        
+        editAccountDialog: [{
+            layout:'column',
+            items:[{
+                columnWidth:.6,
+                layout: 'form',
+                defaults: {
+                    anchor: '95%'
+                },
+                items: [{
+                        xtype: 'textfield',
+                        fieldLabel: 'First Name',
+                        name: 'accountFirstName'
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: 'Last Name',
+                        name: 'accountLastName',
+                        allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: 'Login Name',
+                        name: 'accountLoginName',
+                        allowBlank: false
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Primary group',
+                        name: 'accountPrimaryGroup',
+                        mode: 'local',
+                        displayField:'groupName',
+                        valueField:'key',
+                        triggerAction: 'all',
+                        allowBlank: false,
+                        editable: false,
+                        store: new Ext.data.SimpleStore(
+                            {
+                                fields: ['key','groupName'],
+                                data: [
+                                    ['1','Admins'],
+                                    ['2','Default'],
+                                    ['3','Guest']
+                                ]
+                            }
+                        )
+                    }, {
+                        xtype: 'textfield',
+                        vtype: 'email',
+                        fieldLabel: 'Emailaddress',
+                        name: 'accountEmailAddress'
+                    }
+                ]
+            },{
+                columnWidth:.4,
+                layout: 'form',
+                defaults: {
+                    anchor: '95%'
+                },
+                items: [{
+                        xtype: 'combo',
+                        fieldLabel: 'Status',
+                        name: 'accountStatus',
+                        mode: 'local',
+                        displayField:'status',
+                        valueField:'key',
+                        triggerAction: 'all',
+                        allowBlank: false,
+                        editable: false,
+                        store: new Ext.data.SimpleStore(
+                            {
+                                fields: ['key','status'],
+                                data: [
+                                    ['A','enabled'],
+                                    ['D','disabled'],
+                                    ['E','expired']
+                                ]
+                            }
+                        )
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'Expires',
+                        name: 'accountExpires',
+                        format: "d.m.Y",
+                        emptyText: 'never'
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'Last login at',
+                        name: 'accountLastLogin',
+                        format: "d.m.Y",
+                        emptyText: 'never'
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: 'Last login from',
+                        name: 'accountLastLoginfrom'
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'Password set',
+                        name: 'accountLastPasswordChange',
+                        format: "d.m.Y",
+                        emptyText: 'never'
+                    }
+                ]
+            }]
+        }],
     	
         display: function(_accountData) {
-            var editAccountDialog = [{
-                layout:'column',
-                items:[{
-                    columnWidth:.6,
-                    layout: 'form',
-                    defaults: {
-                        anchor: '95%'
-                    },
-                    items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'First Name',
-                            name: 'accountFirstName'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Last Name',
-                            name: 'accountLastName'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Login Name',
-                            name: 'accountLoginName'
-                        }, {
-                            xtype: 'combo',
-                            fieldLabel: 'Primary group',
-                            name: 'accountPrimaryGroup',
-                            mode: 'local',
-                            displayField:'groupName',
-                            valueField:'key',
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','groupName'],
-                                    data: [
-                                        ['1','Admins'],
-                                        ['2','Default'],
-                                        ['3','Guest']
-                                    ]
-                                }
-                            )
-                        }, {
-                            xtype: 'textfield',
-                            vtype: 'email',
-                            fieldLabel: 'Emailaddress',
-                            name: 'accountEmailAddress'
-                        }
-                    ]
-                },{
-                    columnWidth:.4,
-                    layout: 'form',
-                    defaults: {
-                        anchor: '95%'
-                    },
-                    items: [{
-                            xtype: 'combo',
-                            fieldLabel: 'Status',
-                            name: 'accountStatus',
-                            mode: 'local',
-                            displayField:'status',
-                            valueField:'key',
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','status'],
-                                    data: [
-                                        ['A','enabled'],
-                                        ['D','disabled'],
-                                        ['E','expired']
-                                    ]
-                                }
-                            )
-                        }, {
-                            xtype: 'datefield',
-                            fieldLabel: 'Expires',
-                            name: 'accountExpires',
-                            emptyText: 'never'
-                        }, {
-                            xtype: 'datefield',
-                            fieldLabel: 'Last login at',
-                            name: 'accountLastLogin',
-                            format: "d.m.Y",
-                            emptyText: 'never'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Last login from',
-                            name: 'accountLastLoginfrom'
-                        }, {
-                            xtype: 'datefield',
-                            fieldLabel: 'Password set',
-                            name: 'accountLastPasswordChange',
-                            emptyText: 'never'
-                        }
-                    ]
-                }]
-            }];
 
             // Ext.FormPanel
-		    var dlg = new Egw.widgets.dialog.EditRecord({
+		    var dialog = new Egw.widgets.dialog.EditRecord({
 		    //var dlg = new Ext.FormPanel({
 		        id : 'admin_editAccountForm',
 		        //title: 'the title',
@@ -1214,20 +1226,29 @@ Egw.Admin.Accounts.EditDialog = function() {
                 //bodyStyle:'padding:0px',
                 handlerScope: this,
                 handler_applyChanges: this.applyChanges,
-		        items: editAccountDialog
+		        items: this.editAccountDialog
 		    });
         	
             var viewport = new Ext.Viewport({
                 layout: 'fit',
-                height: 300,
-                items: [dlg]
+                //height: 300,
+                items: dialog
             });
 	        
 	        //if (!arguments[0]) var task = {};
-	        //console.log(_accountData);
+	        console.log(_accountData);
+            if(_accountData.accountExpires && _accountData.accountExpires !== null) {
+                _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, 'c');
+            }
+            if(_accountData.accountLastLogin && _accountData.accountLastLogin !== null) {
+                _accountData.accountLastLogin = Date.parseDate(_accountData.accountLastLogin, 'c');
+            }
+            if(_accountData.accountLastPasswordChange && _accountData.accountLastPasswordChange !== null) {
+                _accountData.accountLastPasswordChange = Date.parseDate(_accountData.accountLastPasswordChange, 'c');
+            }
             this.accountRecord = new Egw.Admin.Accounts.Account(_accountData);
             //console.log(this.accountRecord.data);
-	        dlg.getForm().loadRecord(this.accountRecord);
+	        dialog.getForm().loadRecord(this.accountRecord);
         }
     };
 }();
@@ -1237,6 +1258,7 @@ Egw.Admin.Accounts.Account = Ext.data.Record.create([
     { name: 'accountFirstName' },
     { name: 'accountLastName' },
     { name: 'accountLoginName' },
+    { name: 'accountFullName' },
     { name: 'accountStatus' },
     { name: 'accountPrimaryGroup' },
     { name: 'accountExpires', type: 'date', dateFormat: 'c' },

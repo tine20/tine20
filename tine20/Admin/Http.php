@@ -22,7 +22,7 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
             $account = Zend_Json::encode($account->toArray());
         } else {
-            $account = 'null';
+            $account = Zend_Json::encode(array('accountStatus' => 'A'));
         }
         
         $locale = Zend_Registry::get('locale');
