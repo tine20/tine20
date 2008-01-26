@@ -32,7 +32,7 @@ Egw.Tasks.TaskGrid = function(){
                 var task = selectedRows[0];
 				taskId = task.data.identifier;
 			}
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId, 500, 500);
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 500, 500);
         },
 		deleteTaks: function(_button, _event){
 		    var selectedRows = grid.getSelectionModel().getSelections();
@@ -114,6 +114,7 @@ Egw.Tasks.TaskGrid = function(){
     
 	// init of Tasks app
     tree.on('beforeexpand', function(panel) {
+		console.log(toolbar);
 		initStore(); 
 		initGrid();
         Egw.Egwbase.MainScreen.setActiveContentPanel(grid);
@@ -690,7 +691,7 @@ Egw.Tasks.EditDialog = function(task) {
         items: dlg
     });
     
-	// load form with initial data	
+	// load form with initial data
 	dlg.getForm().loadRecord(task);
 	if(task.get('identifier') > 0) dlg.action_delete.enable();
 };
