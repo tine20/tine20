@@ -1112,7 +1112,10 @@ Egw.Admin.Accounts.EditDialog = function() {
         
         editAccountDialog: [{
             layout:'column',
+            frame: true,
+            autoHeight: true,
             items:[{
+                //frame: true,
                 columnWidth:.6,
                 layout: 'form',
                 defaults: {
@@ -1216,12 +1219,12 @@ Egw.Admin.Accounts.EditDialog = function() {
 
             // Ext.FormPanel
 		    var dialog = new Egw.widgets.dialog.EditRecord({
-		    //var dlg = new Ext.FormPanel({
+		    //var dialog = new Ext.FormPanel({
 		        id : 'admin_editAccountForm',
 		        //title: 'the title',
 		        layout: 'fit',
 		        labelWidth: 100,
-		        frame:true,
+		        //frame:true,
                 labelAlign: 'side',
                 //bodyStyle:'padding:0px',
                 handlerScope: this,
@@ -1236,7 +1239,7 @@ Egw.Admin.Accounts.EditDialog = function() {
             });
 	        
 	        //if (!arguments[0]) var task = {};
-	        console.log(_accountData);
+	        //console.log(_accountData);
             if(_accountData.accountExpires && _accountData.accountExpires !== null) {
                 _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, 'c');
             }
