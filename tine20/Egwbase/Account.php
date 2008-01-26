@@ -138,4 +138,11 @@ class Egwbase_Account
         
         return $result;
     }
+    
+    public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
+    {
+        $result = $this->_backend->saveAccount($_account);
+        
+        return $result;
+    }
 }
