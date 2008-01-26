@@ -529,6 +529,8 @@ Egw.Tasks.TaskGrid = function(){
                         params: {
                             method: 'Tasks.saveTask', 
                             task: Ext.util.JSON.encode(task.data),
+							linkingApp: '',
+                            linkedId: ''
                         },
                         success: function(_result, _request) {
                             ntSummaray.setValue('');

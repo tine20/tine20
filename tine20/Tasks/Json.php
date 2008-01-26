@@ -106,7 +106,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
      * @param  $task
      * @return array created/updated task
      */
-    public function saveTask($task)
+    public function saveTask($task, $linkingApp, $linkedId)
     {
         $inTask = $this->_json2task($task);
         
@@ -116,6 +116,12 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
             $this->_controller->createTask($inTask);
             
         $outTask->setTimezone($this->_userTimezone);
+
+        // temporary linking stuff
+        if( !empty($linkingApp) && is_numeric($linkedId) ) {
+            Egwbase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), '');
+        }
+
         return $outTask->toArray();
     }
     
