@@ -50,6 +50,31 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
         'accountFullName'       => array('presence' => 'required'),
     
     );
+    
+    /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data the new data to set
+     * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
+     * @throws Egwbase_Record_Exception when content contains invalid or missing data
+     */
+    public function setFromArray(array $_data, $_bypassFilters)
+    {
+        if(empty($_data['accountDisplayName'])) {
+            $_data['accountDisplayName'] = !empty($_data['accountDisplayName']) ? 
+                $_data['accountLastName'] . ', ' . $_data['accountFirstName'] : 
+                $_data['accountLastName'];
+        }
+
+        if(empty($_data['accountFullName'])) {
+            $_data['accountFullName'] = !empty($_data['accountDisplayName']) ? 
+                $_data['accountFirstName'] . ' ' . $_data['accountLastName'] : 
+                $_data['accountLastName'];
+        }
+        parent::setFromArray($_data, $_bypassFilters);
+    }
 
    /**
      * key in $_validators/$_properties array for the filed which 
