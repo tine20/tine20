@@ -746,122 +746,6 @@ Egw.Admin.Applications = function() {
 
 Egw.Admin.Accounts = function() {
 
-    /**
-     * onclick handler for edit action
-     */
-    var _addButtonHandler = function(_button, _event) {
-        //var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        //var applicationId = selectedRows[0].id;
-        
-        Egw.Admin.Accounts.openAccountEditWindow();
-    };
-
-    var _editButtonHandler = function(_button, _event) {
-        //var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-        //var applicationId = selectedRows[0].id;
-        
-        Egw.Admin.Accounts.openAccountEditWindow(record.data.list_id);
-    };
-    
-    var _enableDisableButtonHandler = function(_button, _event) {
-        //console.log(_button);
-        
-        var status = 'disabled';
-        if(_button.id == 'Admin_Accounts_Action_Enable') {
-            status = 'enabled';
-        }
-        
-        var accountIds = new Array();
-        var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            accountIds.push(selectedRows[i].id);
-        }
-        
-        Ext.Ajax.request({
-            url : 'index.php',
-            method : 'post',
-            params : {
-                method : 'Admin.setAccountState',
-                accountIds : Ext.util.JSON.encode(accountIds),
-                status: status
-            },
-            callback : function(_options, _success, _response) {
-                if(_success === true) {
-                    var result = Ext.util.JSON.decode(_response.responseText);
-                    if(result.success === true) {
-                        Ext.getCmp('AdminAccountsGrid').getStore().reload();
-                    }
-                }
-            }
-        });
-    };
-    
-    var _resetPasswordHandler = function(_button, _event) {
-        Ext.MessageBox.prompt('Set new password', 'Please enter the new password:', function(_button, _text) {
-            if(_button == 'ok') {
-                var accountId = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelected().id;
-                
-                Ext.Ajax.request( {
-                    params : {
-                        method    : 'Admin.resetPassword',
-                        accountId : accountId,
-                        password  : _text
-                    },
-                    callback : function(_options, _success, _response) {
-                        if(_success === true) {
-                            var result = Ext.util.JSON.decode(_response.responseText);
-                            if(result.success === true) {
-                                Ext.getCmp('AdminAccountsGrid').getStore().reload();
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    };
-
-    var _action_enable = new Ext.Action({
-        text: 'enable account',
-        disabled: true,
-        handler: _enableDisableButtonHandler,
-        iconCls: 'action_enable',
-        id: 'Admin_Accounts_Action_Enable'
-    });
-
-    var _action_disable = new Ext.Action({
-        text: 'disable account',
-        disabled: true,
-        handler: _enableDisableButtonHandler,
-        iconCls: 'action_disable',
-        id: 'Admin_Accounts_Action_Disable'
-    });
-
-    var _action_resetPassword = new Ext.Action({
-        text: 'reset password',
-        disabled: true,
-        handler: _resetPasswordHandler,
-        /*iconCls: 'action_disable',*/
-        id: 'Admin_Accounts_Action_resetPassword'
-    });
-
-    var _action_addAccount = new Ext.Action({
-        text: 'add account',
-        //disabled: true,
-        handler: _addButtonHandler,
-        iconCls: 'action_settings'
-    });    
-
-    var _ctxMenuGrid = new Ext.menu.Menu({
-        /*id:'AdminAccountContextMenu',*/ 
-        items: [
-            _action_enable,
-            _action_disable,
-            _action_resetPassword,
-            '-',
-            _action_addAccount 
-        ]
-    });
-        
     var _createDataStore = function()
     {
         /**
@@ -874,19 +758,7 @@ Egw.Admin.Accounts = function() {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: [
-                {name: 'accountId'},
-                {name: 'accountLoginName'},
-                {name: 'accountLastName'},
-                {name: 'accountFirstName'},
-                {name: 'accountDisplayName'},
-                {name: 'accountEmailAddress'},
-                {name: 'accountLastLogin', type: 'date', dateFormat: 'c'},
-                {name: 'accountLastLoginfrom'},
-                {name: 'accountLastPasswordChange', type: 'date', dateFormat: 'c'},
-                {name: 'accountStatus'},
-                {name: 'accountExpires', type: 'date', dateFormat: 'c'}
-            ],
+            fields: Egw.Admin.Accounts.Account,
             // turn on remote sorting
             remoteSort: true
         });
@@ -902,47 +774,6 @@ Egw.Admin.Accounts = function() {
         return dataStore;
     };
 
-    var _showApplicationsToolbar = function()
-    {
-        var quickSearchField = new Ext.app.SearchField({
-            id: 'quickSearchField',
-            width:240,
-            emptyText: 'enter searchfilter'
-        }); 
-        quickSearchField.on('change', function() {
-            Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
-        });
-        
-        var applicationToolbar = new Ext.Toolbar({
-            id: 'AdminAccountsToolbar',
-            split: false,
-            height: 26,
-            items: [
-                _action_enable,
-                _action_disable,
-                '-',
-                _action_addAccount,
-                '->',
-                'Search:', ' ',
-/*                new Ext.ux.SelectBox({
-                  listClass:'x-combo-list-small',
-                  width:90,
-                  value:'Starts with',
-                  id:'search-type',
-                  store: new Ext.data.SimpleStore({
-                    fields: ['text'],
-                    expandData: true,
-                    data : ['Starts with', 'Ends with', 'Any match']
-                  }),
-                  displayField: 'text'
-                }), */
-                ' ',
-                quickSearchField
-            ]
-        });
-        
-        Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
-    };
     
     var _renderStatus = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
         var gridValue;
@@ -968,109 +799,272 @@ Egw.Admin.Accounts = function() {
      * creates the address grid
      * 
      */
-    var _showApplicationsGrid = function() 
-    {
-        var dataStore = _createDataStore();
-        
-        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
-            pageSize: 50,
-            store: dataStore,
-            displayInfo: true,
-            displayMsg: 'Displaying accounts {0} - {1} of {2}',
-            emptyMsg: "No accounts to display"
-        }); 
-        
-        var columnModel = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'ID', id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
-            {resizable: true, header: 'Status', id: 'accountStatus', dataIndex: 'accountStatus', width: 50, renderer: _renderStatus},
-            {resizable: true, header: 'Displayname', id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
-            {resizable: true, header: 'Loginname', id: 'accountLoginName', dataIndex: 'accountLoginName'},
-            {resizable: true, header: 'Last name', id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
-            {resizable: true, header: 'First name', id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
-            {resizable: true, header: 'Email', id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-            {resizable: true, header: 'Last login at', id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Last login from', id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
-            {resizable: true, header: 'Password changed', id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Expires', id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer}
-        ]);
-        
-        columnModel.defaultSortable = true; // by default columns are sortable
-
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-        
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                _action_enable.setDisabled(true);
-                _action_disable.setDisabled(true);
-                _action_resetPassword.setDisabled(true);
-                //_action_settings.setDisabled(true);
-            } else if (rowCount > 1){
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_resetPassword.setDisabled(true);
-                //_action_settings.setDisabled(true);
-            } else {
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_resetPassword.setDisabled(false);
-                //_action_settings.setDisabled(false);              
-            }
-        });
-                
-        var grid_applications = new Ext.grid.GridPanel({
-            id: 'AdminAccountsGrid',
-            store: dataStore,
-            cm: columnModel,
-            tbar: pagingToolbar,     
-            autoSizeColumns: false,
-            selModel: rowSelectionModel,
-            enableColLock:false,
-            loadMask: true,
-            autoExpandColumn: 'accountDisplayName',
-            border: false
-        });
-        
-        Egw.Egwbase.MainScreen.setActiveContentPanel(grid_applications);
-
-        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-            _eventObject.stopEvent();
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
-
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-            }
-            //var record = _grid.getStore().getAt(rowIndex);
-            _ctxMenuGrid.showAt(_eventObject.getXY());
-        });
-        
-        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-            var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-                Egw.Admin.Accounts.openAccountEditWindow(record.id);
-            } catch(e) {
-                //alert(e);
-            }
-        });
-        
-        return;
-    };   
     
     // public functions and variables
     return {
         show: function() 
         {
-            _showApplicationsToolbar();
-            _showApplicationsGrid();            
+        	this.initComponent();
+            this.showToolbar();
+            this.showMainGrid();            
         },
         
         openAccountEditWindow: function(_accountId) 
         {
         	var accountId = (_accountId ? _accountId : '');
         	Egw.Egwbase.Common.openWindow('accountEditWindow', 'index.php?method=Admin.editAccountDialog&accountId=' + accountId, 800, 450);
-        }
+        },
+
+	    addButtonHandler: function(_button, _event) {
+	        Egw.Admin.Accounts.openAccountEditWindow();
+	    },
+
+	    editButtonHandler: function(_button, _event) {
+	        //var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+	        //var applicationId = selectedRows[0].id;
+	        
+	        Egw.Admin.Accounts.openAccountEditWindow(record.data.list_id);
+	    },
+    
+	    enableDisableButtonHandler: function(_button, _event) {
+	        //console.log(_button);
+	        
+	        var status = 'disabled';
+	        if(_button.id == 'Admin_Accounts_Action_Enable') {
+	            status = 'enabled';
+	        }
+	        
+	        var accountIds = new Array();
+	        var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
+	        for (var i = 0; i < selectedRows.length; ++i) {
+	            accountIds.push(selectedRows[i].id);
+	        }
+	        
+	        Ext.Ajax.request({
+	            url : 'index.php',
+	            method : 'post',
+	            params : {
+	                method : 'Admin.setAccountState',
+	                accountIds : Ext.util.JSON.encode(accountIds),
+	                status: status
+	            },
+	            callback : function(_options, _success, _response) {
+	                if(_success === true) {
+	                    var result = Ext.util.JSON.decode(_response.responseText);
+	                    if(result.success === true) {
+	                        Ext.getCmp('AdminAccountsGrid').getStore().reload();
+	                    }
+	                }
+	            }
+	        });
+	    },
+    
+	    resetPasswordHandler: function(_button, _event) {
+	        Ext.MessageBox.prompt('Set new password', 'Please enter the new password:', function(_button, _text) {
+	            if(_button == 'ok') {
+	                var accountId = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelected().id;
+	                
+	                Ext.Ajax.request( {
+	                    params : {
+	                        method    : 'Admin.resetPassword',
+	                        accountId : accountId,
+	                        password  : _text
+	                    },
+	                    callback : function(_options, _success, _response) {
+	                        if(_success === true) {
+	                            var result = Ext.util.JSON.decode(_response.responseText);
+	                            if(result.success === true) {
+	                                Ext.getCmp('AdminAccountsGrid').getStore().reload();
+	                            }
+	                        }
+	                    }
+	                });
+	            }
+	        });
+	    },
+
+	    actionEnable: null,
+	    actionDisable: null,
+	    actionResetPassword: null,
+	    actionAddAccount: null,
+	    
+	    showToolbar: function()
+	    {
+	        var quickSearchField = new Ext.app.SearchField({
+	            id: 'quickSearchField',
+	            width:240,
+	            emptyText: 'enter searchfilter'
+	        }); 
+	        quickSearchField.on('change', function() {
+	            Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
+	        });
+	        
+	        var applicationToolbar = new Ext.Toolbar({
+	            id: 'AdminAccountsToolbar',
+	            split: false,
+	            height: 26,
+	            items: [
+	                this.actionAddAccount,
+	                '-',
+	                '->',
+	                'Search:', ' ',
+	/*                new Ext.ux.SelectBox({
+	                  listClass:'x-combo-list-small',
+	                  width:90,
+	                  value:'Starts with',
+	                  id:'search-type',
+	                  store: new Ext.data.SimpleStore({
+	                    fields: ['text'],
+	                    expandData: true,
+	                    data : ['Starts with', 'Ends with', 'Any match']
+	                  }),
+	                  displayField: 'text'
+	                }), */
+	                ' ',
+	                quickSearchField
+	            ]
+	        });
+	        
+	        Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
+	    },
+	    
+	    showMainGrid: function() 
+	    {
+	        var ctxMenuGrid = new Ext.menu.Menu({
+	            /*id:'AdminAccountContextMenu',*/ 
+	            items: [
+	                this.actionEnable,
+	                this.actionDisable,
+	                this.actionResetPassword,
+	                '-',
+	                this.actionAddAccount 
+	            ]
+	        });
+        
+	        var dataStore = _createDataStore();
+	        
+	        var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
+	            pageSize: 50,
+	            store: dataStore,
+	            displayInfo: true,
+	            displayMsg: 'Displaying accounts {0} - {1} of {2}',
+	            emptyMsg: "No accounts to display"
+	        }); 
+	        
+	        var columnModel = new Ext.grid.ColumnModel([
+	            {resizable: true, header: 'ID', id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
+	            {resizable: true, header: 'Status', id: 'accountStatus', dataIndex: 'accountStatus', width: 50, renderer: _renderStatus},
+	            {resizable: true, header: 'Displayname', id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
+	            {resizable: true, header: 'Loginname', id: 'accountLoginName', dataIndex: 'accountLoginName'},
+	            {resizable: true, header: 'Last name', id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
+	            {resizable: true, header: 'First name', id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
+	            {resizable: true, header: 'Email', id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
+	            {resizable: true, header: 'Last login at', id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+	            {resizable: true, header: 'Last login from', id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
+	            {resizable: true, header: 'Password changed', id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+	            {resizable: true, header: 'Expires', id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer}
+	        ]);
+	        
+	        columnModel.defaultSortable = true; // by default columns are sortable
+	
+	        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+	        
+	        rowSelectionModel.on('selectionchange', function(_selectionModel) {
+	            var rowCount = _selectionModel.getCount();
+	
+	            if(rowCount < 1) {
+	                this.actionEnable.setDisabled(true);
+	                this.actionDisable.setDisabled(true);
+	                this.actionResetPassword.setDisabled(true);
+	                //_action_settings.setDisabled(true);
+	            } else if (rowCount > 1){
+	                this.actionEnable.setDisabled(false);
+	                this.actionDisable.setDisabled(false);
+	                this.actionResetPassword.setDisabled(true);
+	                //_action_settings.setDisabled(true);
+	            } else {
+	                this.actionEnable.setDisabled(false);
+	                this.actionDisable.setDisabled(false);
+	                this.actionResetPassword.setDisabled(false);
+	                //_action_settings.setDisabled(false);              
+	            }
+	        }, this);
+	                
+	        var grid_applications = new Ext.grid.GridPanel({
+	            id: 'AdminAccountsGrid',
+	            store: dataStore,
+	            cm: columnModel,
+	            tbar: pagingToolbar,     
+	            autoSizeColumns: false,
+	            selModel: rowSelectionModel,
+	            enableColLock:false,
+	            loadMask: true,
+	            autoExpandColumn: 'accountDisplayName',
+	            border: false
+	        });
+	        
+	        Egw.Egwbase.MainScreen.setActiveContentPanel(grid_applications);
+	
+	        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+	            _eventObject.stopEvent();
+	            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+	                _grid.getSelectionModel().selectRow(_rowIndex);
+	
+	                this.actionEnable.setDisabled(false);
+	                this.actionDisable.setDisabled(false);
+	            }
+	            //var record = _grid.getStore().getAt(rowIndex);
+	            ctxMenuGrid.showAt(_eventObject.getXY());
+	        }, this);
+	        
+	        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+	            var record = _gridPar.getStore().getAt(_rowIndexPar);
+	            try {
+	                Egw.Admin.Accounts.openAccountEditWindow(record.id);
+	            } catch(e) {
+	                //alert(e);
+	            }
+	        });
+	    },
+	    
+	    initComponent: function()
+	    {
+	        this.actionAddAccount = new Ext.Action({
+	            text: 'add account',
+	            //disabled: true,
+	            handler: this.addButtonHandler,
+	            iconCls: 'action_settings',
+	            scope: this
+	        });
+	        
+	        this.actionEnable = new Ext.Action({
+	            text: 'enable account',
+	            disabled: true,
+	            handler: this.enableDisableButtonHandler,
+	            iconCls: 'action_enable',
+	            id: 'Admin_Accounts_Action_Enable',
+	            scope: this
+	        });
+	    
+	        this.actionDisable = new Ext.Action({
+	            text: 'disable account',
+	            disabled: true,
+	            handler: this.enableDisableButtonHandler,
+	            iconCls: 'action_disable',
+	            id: 'Admin_Accounts_Action_Disable',
+	            scope: this
+	        });
+	    
+	        this.actionResetPassword = new Ext.Action({
+	            text: 'reset password',
+	            disabled: true,
+	            handler: this.resetPasswordHandler,
+	            /*iconCls: 'action_disable',*/
+	            id: 'Admin_Accounts_Action_resetPassword',
+	            scope: this
+	        });
+	    }   
+	    
     };
     
 }();
@@ -1286,6 +1280,7 @@ Egw.Admin.Accounts.Account = Ext.data.Record.create([
     { name: 'accountLastName' },
     { name: 'accountLoginName' },
     { name: 'accountPassword' },
+    { name: 'accountDisplayName' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
     { name: 'accountPrimaryGroup' },
