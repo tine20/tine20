@@ -419,7 +419,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             
             $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
             $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
-
+            
             if(!empty($_account->accountId)) {
                 $accountId = $_account->accountId;
                 $where = array(
@@ -467,19 +467,21 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         }
         
         $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
         
         $where  = array(
-            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId),
+            Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
         );
         
         try {
-            $accountsTable->getAdapter()->beginTransaction();
+            Zend_Registry::get('dbAdapter')->beginTransaction();
             
+            $contactsTable->delete($where);
             $accountsTable->delete($where);
             
-            $accountsTable->getAdapter()->commit();
+            Zend_Registry::get('dbAdapter')->commit();
         } catch (Exception $e) {
-            $accountsTable->getAdapter()->rollBack();
+            Zend_Registry::get('dbAdapter')->rollBack();
             throw($e);
         }
     }

@@ -145,4 +145,18 @@ class Egwbase_Account
         
         return $result;
     }
+
+    public function deleteAccount($_accountId)
+    {
+        $result = $this->_backend->deleteAccount($_accountId);
+        
+        return $result;
+    }
+
+    public function deleteAccounts(array $_accountIds)
+    {
+        foreach($_accountIds as $accountId) {
+            $result = $this->_backend->deleteAccount($accountId);
+        }
+    }
 }
