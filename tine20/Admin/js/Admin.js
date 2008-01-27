@@ -1112,11 +1112,13 @@ Egw.Admin.Accounts.EditDialog = function() {
         
         editAccountDialog: [{
             layout:'column',
-            frame: true,
+            //frame: true,
+            border:false,
             autoHeight: true,
             items:[{
                 //frame: true,
                 columnWidth:.6,
+                border:false,
                 layout: 'form',
                 defaults: {
                     anchor: '95%'
@@ -1164,6 +1166,7 @@ Egw.Admin.Accounts.EditDialog = function() {
                 ]
             },{
                 columnWidth:.4,
+                border:false,
                 layout: 'form',
                 defaults: {
                     anchor: '95%'
@@ -1214,26 +1217,24 @@ Egw.Admin.Accounts.EditDialog = function() {
                 ]
             }]
         }],
-    	
+        
         display: function(_accountData) {
 
             // Ext.FormPanel
 		    var dialog = new Egw.widgets.dialog.EditRecord({
-		    //var dialog = new Ext.FormPanel({
 		        id : 'admin_editAccountForm',
 		        //title: 'the title',
 		        layout: 'fit',
-		        labelWidth: 100,
-		        //frame:true,
+		        labelWidth: 120,
                 labelAlign: 'side',
-                //bodyStyle:'padding:0px',
                 handlerScope: this,
                 handler_applyChanges: this.applyChanges,
 		        items: this.editAccountDialog
 		    });
-        	
+
             var viewport = new Ext.Viewport({
-                layout: 'fit',
+                layout: 'border',
+                frame: true,
                 //height: 300,
                 items: dialog
             });
