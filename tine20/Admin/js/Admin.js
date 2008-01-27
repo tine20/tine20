@@ -820,10 +820,10 @@ Egw.Admin.Accounts = function() {
 	    },
 
 	    editButtonHandler: function(_button, _event) {
-	        //var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
-	        //var applicationId = selectedRows[0].id;
+	        var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
+	        var accountId = selectedRows[0].id;
 	        
-	        Egw.Admin.Accounts.openAccountEditWindow(record.data.list_id);
+	        Egw.Admin.Accounts.openAccountEditWindow(accountId);
 	    },
     
 	    enableDisableButtonHandler: function(_button, _event) {
@@ -887,6 +887,7 @@ Egw.Admin.Accounts = function() {
 	    actionDisable: null,
 	    actionResetPassword: null,
 	    actionAddAccount: null,
+	    actionEditAccount: null,
 	    
 	    showToolbar: function()
 	    {
@@ -905,6 +906,7 @@ Egw.Admin.Accounts = function() {
 	            height: 26,
 	            items: [
 	                this.actionAddAccount,
+	                this.actionEditAccount,
 	                '-',
 	                '->',
 	                'Search:', ' ',
@@ -930,9 +932,10 @@ Egw.Admin.Accounts = function() {
 	    
 	    showMainGrid: function() 
 	    {
-	        var ctxMenuGrid = new Ext.menu.Menu({
-	            /*id:'AdminAccountContextMenu',*/ 
-	            items: [
+            var ctxMenuGrid = new Ext.menu.Menu({
+                /*id:'AdminAccountContextMenu',*/ 
+                items: [
+                    this.actionEditAccount,
 	                this.actionEnable,
 	                this.actionDisable,
 	                this.actionResetPassword,
@@ -973,16 +976,19 @@ Egw.Admin.Accounts = function() {
 	            var rowCount = _selectionModel.getCount();
 	
 	            if(rowCount < 1) {
+	            	this.actionEditAccount.setDisabled(true);
 	                this.actionEnable.setDisabled(true);
 	                this.actionDisable.setDisabled(true);
 	                this.actionResetPassword.setDisabled(true);
 	                //_action_settings.setDisabled(true);
 	            } else if (rowCount > 1){
+                    this.actionEditAccount.setDisabled(true);
 	                this.actionEnable.setDisabled(false);
 	                this.actionDisable.setDisabled(false);
 	                this.actionResetPassword.setDisabled(true);
 	                //_action_settings.setDisabled(true);
 	            } else {
+                    this.actionEditAccount.setDisabled(false);
 	                this.actionEnable.setDisabled(false);
 	                this.actionDisable.setDisabled(false);
 	                this.actionResetPassword.setDisabled(false);
@@ -1033,10 +1039,18 @@ Egw.Admin.Accounts = function() {
 	            text: 'add account',
 	            //disabled: true,
 	            handler: this.addButtonHandler,
-	            iconCls: 'action_settings',
+	            iconCls: 'action_addContact',
 	            scope: this
 	        });
 	        
+            this.actionEditAccount = new Ext.Action({
+                text: 'edit account',
+                disabled: true,
+                handler: this.editButtonHandler,
+                iconCls: 'action_edit',
+                scope: this
+            });
+            
 	        this.actionEnable = new Ext.Action({
 	            text: 'enable account',
 	            disabled: true,
