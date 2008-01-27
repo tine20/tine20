@@ -98,4 +98,9 @@ class Admin_Controller
     {
         return Egwbase_Account::getInstance()->saveAccount($_account);
     }
+
+    public function deleteAccounts(array $_accountIds)
+    {
+        return Egwbase_Account::getInstance()->deleteAccounts($_accountIds);
+    }
 }

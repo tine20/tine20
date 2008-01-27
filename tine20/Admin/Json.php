@@ -228,4 +228,18 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         return $result;
         
     }
+    
+    public function deleteAccounts($accountIds)
+    {
+        $result = array(
+            'success' => TRUE
+        );
+
+        $accountIds = Zend_Json::decode($accountIds);
+
+        Admin_Controller::getInstance()->deleteAccounts($accountIds);
+        
+        return $result;
+    }
+    
 }

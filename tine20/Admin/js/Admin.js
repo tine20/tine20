@@ -882,12 +882,41 @@ Egw.Admin.Accounts = function() {
 	            }
 	        });
 	    },
+	    
+	    deleteButtonHandler: function(_button, _event) {
+	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected account(s)?', function(_button){
+	            if (_button == 'yes') {
+	            
+	                var accountIds = new Array();
+	                var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
+	                for (var i = 0; i < selectedRows.length; ++i) {
+	                    accountIds.push(selectedRows[i].id);
+	                }
+	                
+	                Ext.Ajax.request({
+	                    url: 'index.php',
+	                    params: {
+	                        method: 'Admin.deleteAccounts',
+	                        accountIds: Ext.util.JSON.encode(accountIds)
+	                    },
+	                    text: 'Deleting account(s)...',
+	                    success: function(_result, _request){
+	                        Ext.getCmp('AdminAccountsGrid').getStore().reload();
+	                    },
+	                    failure: function(result, request){
+	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the account(s).');
+	                    }
+	                });
+	            }
+	        });
+        },
 
 	    actionEnable: null,
 	    actionDisable: null,
 	    actionResetPassword: null,
 	    actionAddAccount: null,
 	    actionEditAccount: null,
+	    actionDeleteAccount: null,
 	    
 	    showToolbar: function()
 	    {
@@ -907,6 +936,7 @@ Egw.Admin.Accounts = function() {
 	            items: [
 	                this.actionAddAccount,
 	                this.actionEditAccount,
+	                this.actionDeleteAccount,
 	                '-',
 	                '->',
 	                'Search:', ' ',
@@ -939,6 +969,7 @@ Egw.Admin.Accounts = function() {
 	                this.actionEnable,
 	                this.actionDisable,
 	                this.actionResetPassword,
+                    this.actionDeleteAccount,
 	                '-',
 	                this.actionAddAccount 
 	            ]
@@ -977,18 +1008,21 @@ Egw.Admin.Accounts = function() {
 	
 	            if(rowCount < 1) {
 	            	this.actionEditAccount.setDisabled(true);
+	            	this.actionDeleteAccount.setDisabled(true);
 	                this.actionEnable.setDisabled(true);
 	                this.actionDisable.setDisabled(true);
 	                this.actionResetPassword.setDisabled(true);
 	                //_action_settings.setDisabled(true);
 	            } else if (rowCount > 1){
                     this.actionEditAccount.setDisabled(true);
+                    this.actionDeleteAccount.setDisabled(false);
 	                this.actionEnable.setDisabled(false);
 	                this.actionDisable.setDisabled(false);
 	                this.actionResetPassword.setDisabled(true);
 	                //_action_settings.setDisabled(true);
 	            } else {
                     this.actionEditAccount.setDisabled(false);
+                    this.actionDeleteAccount.setDisabled(false);
 	                this.actionEnable.setDisabled(false);
 	                this.actionDisable.setDisabled(false);
 	                this.actionResetPassword.setDisabled(false);
@@ -1050,6 +1084,14 @@ Egw.Admin.Accounts = function() {
                 iconCls: 'action_edit',
                 scope: this
             });
+
+            this.actionDeleteAccount = new Ext.Action({
+                text: 'delete account',
+                disabled: true,
+                handler: this.deleteButtonHandler,
+                iconCls: 'action_delete',
+                scope: this
+            });            
             
 	        this.actionEnable = new Ext.Action({
 	            text: 'enable account',
