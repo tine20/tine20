@@ -206,13 +206,24 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
     
     public function saveAccount($accountData)
     {
-        $account = new Egwbase_Account_Model_FullAccount(Zend_Json::decode($accountData));
+        $decodedAccountData = Zend_Json::decode($accountData);
         
-        Admin_Controller::getInstance()->saveAccount($account);
+        $account = new Egwbase_Account_Model_FullAccount();
         
-        $result = array(
-            'success' => TRUE
-        );
+        try {
+            $account->setFromUserData($decodedAccountData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $account->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        
+        $saveAccount = Admin_Controller::getInstance()->saveAccount($account);
+        
+        $result = $saveAccount->toArray();
         
         return $result;
         

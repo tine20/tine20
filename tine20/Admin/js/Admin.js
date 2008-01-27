@@ -1080,7 +1080,26 @@ Egw.Admin.Accounts.EditDialog = function() {
     return {
     	accountRecord: null,
     	
-        applyChanges: function(_button, _event) {
+    	updateAccountRecord: function(_accountData)
+    	{
+            if(_accountData.accountExpires && _accountData.accountExpires !== null) {
+                _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, 'c');
+            }
+            if(_accountData.accountLastLogin && _accountData.accountLastLogin !== null) {
+                _accountData.accountLastLogin = Date.parseDate(_accountData.accountLastLogin, 'c');
+            }
+            if(_accountData.accountLastPasswordChange && _accountData.accountLastPasswordChange !== null) {
+                _accountData.accountLastPasswordChange = Date.parseDate(_accountData.accountLastPasswordChange, 'c');
+            }
+            if(!_accountData.accountPassword) {
+            	_accountData.accountPassword = null;
+            }
+
+            this.accountRecord = new Egw.Admin.Accounts.Account(_accountData);
+    	},
+    	
+        applyChanges: function(_button, _event) 
+        {
         	//console.log('buh');
         	var form = Ext.getCmp('admin_editAccountForm').getForm();
 
@@ -1100,10 +1119,13 @@ Egw.Admin.Accounts.EditDialog = function() {
 	                    accountData: Ext.util.JSON.encode(this.accountRecord.data)
 	                },
 	                success: function(_result, _request) {
+	                	this.updateAccountRecord(Ext.util.JSON.decode(_result.responseText));
+	                	form.loadRecord(this.accountRecord);
 	                },
 	                failure: function ( result, request) { 
 	                    Ext.MessageBox.alert('Failed', 'Could not save account.'); 
-	                } 
+	                },
+	                scope: this 
 	            });
 	        } else {
 	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
@@ -1137,6 +1159,12 @@ Egw.Admin.Accounts.EditDialog = function() {
                         fieldLabel: 'Login Name',
                         name: 'accountLoginName',
                         allowBlank: false
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: 'Password',
+                        name: 'accountPassword',
+                        inputType: 'password',
+                        emptyText: 'no password set'
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Primary group',
@@ -1186,8 +1214,7 @@ Egw.Admin.Accounts.EditDialog = function() {
                                 fields: ['key','status'],
                                 data: [
                                     ['A','enabled'],
-                                    ['D','disabled'],
-                                    ['E','expired']
+                                    ['D','disabled']
                                 ]
                             }
                         )
@@ -1201,24 +1228,31 @@ Egw.Admin.Accounts.EditDialog = function() {
                         xtype: 'datefield',
                         fieldLabel: 'Last login at',
                         name: 'accountLastLogin',
-                        format: "d.m.Y",
-                        emptyText: 'never'
+                        format: "d.m.Y H:i:s",
+                        emptyText: 'never logged in',
+                        hideTrigger: true,
+                        readOnly: true
                     }, {
                         xtype: 'textfield',
                         fieldLabel: 'Last login from',
-                        name: 'accountLastLoginfrom'
+                        name: 'accountLastLoginfrom',
+                        emptyText: 'never logged in',
+                        readOnly: true
                     }, {
                         xtype: 'datefield',
                         fieldLabel: 'Password set',
                         name: 'accountLastPasswordChange',
-                        format: "d.m.Y",
-                        emptyText: 'never'
+                        format: "d.m.Y H:i:s",
+                        emptyText: 'never',
+                        hideTrigger: true,
+                        readOnly: true
                     }
                 ]
             }]
         }],
         
-        display: function(_accountData) {
+        display: function(_accountData) 
+        {
 
             // Ext.FormPanel
 		    var dialog = new Egw.widgets.dialog.EditRecord({
@@ -1240,18 +1274,7 @@ Egw.Admin.Accounts.EditDialog = function() {
             });
 	        
 	        //if (!arguments[0]) var task = {};
-	        //console.log(_accountData);
-            if(_accountData.accountExpires && _accountData.accountExpires !== null) {
-                _accountData.accountExpires = Date.parseDate(_accountData.accountExpires, 'c');
-            }
-            if(_accountData.accountLastLogin && _accountData.accountLastLogin !== null) {
-                _accountData.accountLastLogin = Date.parseDate(_accountData.accountLastLogin, 'c');
-            }
-            if(_accountData.accountLastPasswordChange && _accountData.accountLastPasswordChange !== null) {
-                _accountData.accountLastPasswordChange = Date.parseDate(_accountData.accountLastPasswordChange, 'c');
-            }
-            this.accountRecord = new Egw.Admin.Accounts.Account(_accountData);
-            //console.log(this.accountRecord.data);
+            this.updateAccountRecord(_accountData);
 	        dialog.getForm().loadRecord(this.accountRecord);
         }
     };
@@ -1262,6 +1285,7 @@ Egw.Admin.Accounts.Account = Ext.data.Record.create([
     { name: 'accountFirstName' },
     { name: 'accountLastName' },
     { name: 'accountLoginName' },
+    { name: 'accountPassword' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
     { name: 'accountPrimaryGroup' },
