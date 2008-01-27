@@ -1063,7 +1063,14 @@ Egw.Admin.Accounts = function() {
 	            id: 'Admin_Accounts_Action_resetPassword',
 	            scope: this
 	        });
-	    }   
+	    },
+	    
+	    reload: function() {
+            if(Ext.ComponentMgr.all.containsKey('AdminAccountsGrid')) {
+                setTimeout ("Ext.getCmp('AdminAccountsGrid').getStore().reload()", 200);
+            }
+        }
+	       
 	    
     };
     
@@ -1092,9 +1099,8 @@ Egw.Admin.Accounts.EditDialog = function() {
             this.accountRecord = new Egw.Admin.Accounts.Account(_accountData);
     	},
     	
-        applyChanges: function(_button, _event) 
+        applyChanges: function(_button, _event, _closeWindow) 
         {
-        	//console.log('buh');
         	var form = Ext.getCmp('admin_editAccountForm').getForm();
 
         	if(form.isValid()) {
@@ -1113,8 +1119,13 @@ Egw.Admin.Accounts.EditDialog = function() {
 	                    accountData: Ext.util.JSON.encode(this.accountRecord.data)
 	                },
 	                success: function(_result, _request) {
-	                	this.updateAccountRecord(Ext.util.JSON.decode(_result.responseText));
-	                	form.loadRecord(this.accountRecord);
+	                	window.opener.Egw.Admin.Accounts.reload();
+                        if(_closeWindow === true) {
+                            window.close();
+                        } else {
+		                	this.updateAccountRecord(Ext.util.JSON.decode(_result.responseText));
+		                	form.loadRecord(this.accountRecord);
+                        }
 	                },
 	                failure: function ( result, request) { 
 	                    Ext.MessageBox.alert('Failed', 'Could not save account.'); 
@@ -1125,6 +1136,11 @@ Egw.Admin.Accounts.EditDialog = function() {
 	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
 	        }
     	},
+
+        saveChanges: function(_button, _event) 
+        {
+        	this.applyChanges(_button, _event, true);
+        },
         
         editAccountDialog: [{
             layout:'column',
@@ -1257,6 +1273,7 @@ Egw.Admin.Accounts.EditDialog = function() {
                 labelAlign: 'side',
                 handlerScope: this,
                 handler_applyChanges: this.applyChanges,
+                handler_saveAndClose: this.saveChanges,
 		        items: this.editAccountDialog
 		    });
 
