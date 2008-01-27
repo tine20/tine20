@@ -380,6 +380,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * this function creates or updates an account 
      *
      * @param Egwbase_Account_Model_FullAccount $_account
+     * @return Egwbase_Account_Model_FullAccount
      */
     public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
     {
@@ -417,8 +418,9 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
 
             if(!empty($_account->accountId)) {
+                $accountId = $_account->accountId;
                 $where = array(
-                    Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $_account->accountId)
+                    Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId)
                 );
                 
                 $accountsTable->update($accountData, $where);
@@ -445,6 +447,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             Zend_Registry::get('dbAdapter')->rollBack();
             throw($e);
         }
+        
+        return $this->getAccountById($accountId, 'Egwbase_Account_Model_FullAccount');
     }
     
     /**
