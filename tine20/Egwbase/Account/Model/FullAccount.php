@@ -26,7 +26,7 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
      * @var array
      */
     protected $_filters = array(
-        'accountId'             => 'Digits',
+        //'accountId'             => 'Digits',
         'accountLoginName'      => 'StringTrim',
         'account_primary_group' => 'Digits',
         'accountDisplayName'    => 'StringTrim',
@@ -44,11 +44,11 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
      * @var array
      */
     protected $_validators = array(
-        'accountId'             => array('Digits', 'presence' => 'required'),
+        'accountId'             => array('Digits', 'allowEmpty' => true),
         'accountLoginName'      => array('presence' => 'required'),
         'accountLastLogin'      => array('allowEmpty' => true),
         'accountLastLoginfrom'  => array('allowEmpty' => true),
-        'accountLastPasswordChange' => array('Digits', 'allowEmpty' => true),
+        'accountLastPasswordChange' => array('allowEmpty' => true),
         'accountStatus'         => array('presence' => 'required'),
         'accountExpires'        => array('allowEmpty' => true),
         'accountPrimaryGroup'   => array('presence' => 'required'),
