@@ -160,10 +160,13 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     {        
         $select = $this->_getAccountSelectObject()
             ->where('(n_family LIKE ? OR n_given LIKE ?)', '%' . $_filter . '%')
-            ->where('account_status != ?', 'D')
             ->limit($_limit, $_start)
             ->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
 
+        // return only active accounts, when searching for simple accounts
+        if($_accountClass == 'Egwbase_Account_Model_Account') {
+            $select->where('account_status = ?', 'A');
+        }
         //error_log("getAccounts:: " . $select->__toString());
 
         $stmt = $select->query();
@@ -398,7 +401,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         );
         
         if(!empty($_account->accountPassword)) {
-            $accountData['account_pwd']            = $_account->accountPassword;
+            $accountData['account_pwd']            = new Zend_Db_Expr("MD5('" . $_account->accountPassword . "')");
             $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
         }
         
