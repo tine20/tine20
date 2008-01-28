@@ -238,9 +238,25 @@ class Tasks_Controller implements Tasks_Backend_Interface
     public function getDefaultContainer()
     {
         $containers = Egwbase_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
-        // autch! ugly hack, we need to rework the recordSet!
-        foreach ($containers as $container) {
-            return $container;
+        
+        if($containers->count() == 0) {
+            $allGrants = array(
+                Egwbase_Container::GRANT_ADD,
+                Egwbase_Container::GRANT_ADMIN,
+                Egwbase_Container::GRANT_DELETE,
+                Egwbase_Container::GRANT_EDIT,
+                Egwbase_Container::GRANT_READ
+            );
+            
+            $containerId = Egwbase_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Egwbase_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
+            Egwbase_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
+            
+            return Egwbase_Container::getInstance()->getContainerById($containerId);
+        } else {
+            // autch! ugly hack, we need to rework the recordSet!
+            foreach ($containers as $container) {
+                return $container;
+            }
         }
     }
     
