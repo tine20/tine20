@@ -90,7 +90,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $aclTable = new Egwbase_Db_Table(array('name' => 'egw_acl'));
+        $aclTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'acl'));
         
         $groupMemberShips = array();
         
@@ -187,7 +187,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     public function getAccountByLoginName($_loginName, $_accountClass = 'Egwbase_Account_Model_Account')
     {
         $select = $this->_getAccountSelectObject()
-            ->where('egw_accounts.account_lid = ?', $_loginName);
+            ->where(SQL_TABLE_PREFIX . 'accounts.account_lid = ?', $_loginName);
 
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -223,7 +223,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         }
         
         $select = $this->_getAccountSelectObject()
-            ->where('egw_accounts.account_id = ?', $accountId);
+            ->where(SQL_TABLE_PREFIX . 'accounts.account_id = ?', $accountId);
 
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -253,21 +253,21 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
-            ->from('egw_accounts', 
+            ->from(SQL_TABLE_PREFIX . 'accounts', 
                 array(
                     'accountId' => $this->rowNameMapping['accountId'],
                     'accountLoginName' => $this->rowNameMapping['accountLoginName'],
-                    'accountLastLogin' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastlogin`)',
+                    'accountLastLogin' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`account_lastlogin`)',
                     'accountLastLoginfrom' => $this->rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => 'FROM_UNIXTIME(`egw_accounts`.`account_lastpwd_change`)',
+                    'accountLastPasswordChange' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`account_lastpwd_change`)',
                     'accountStatus' => $this->rowNameMapping['accountStatus'],
-                    'accountExpires' => 'FROM_UNIXTIME(`egw_accounts`.`account_expires`)',
+                    'accountExpires' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`account_expires`)',
                     'accountPrimaryGroup' => $this->rowNameMapping['accountPrimaryGroup']
                 )
             )
             ->join(
-                'egw_addressbook',
-                'egw_accounts.account_id = egw_addressbook.account_id',
+                SQL_TABLE_PREFIX . 'addressbook',
+                SQL_TABLE_PREFIX . 'accounts.account_id = ' . SQL_TABLE_PREFIX . 'addressbook.account_id',
                 array(
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
@@ -312,7 +312,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
                 break;
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
             $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
@@ -337,7 +337,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['account_pwd'] = md5($_password);
         $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
@@ -366,7 +366,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['account_lastloginfrom'] = $_ipAddress;
         $accountData['account_lastlogin'] = Zend_Date::now()->getTimestamp();
@@ -394,7 +394,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw(new Exception('invalid account object'));
         }
 
-        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
+        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
             'account_lid'       => $_account->accountLoginName,
@@ -420,8 +420,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
             
-            $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
-            $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
+            $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+            $contactsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
             
             if(!empty($_account->accountId)) {
                 $accountId = $_account->accountId;
@@ -469,8 +469,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => 'egw_accounts'));
-        $contactsTable = new Egwbase_Db_Table(array('name' => 'egw_addressbook'));
+        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $contactsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         
         $where  = array(
             Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
