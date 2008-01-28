@@ -274,6 +274,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     {
         $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('addressbook');
         
+        if(count($otherPeoplesContainer) === 0) {
+            return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
+        }
+        
         $containerIds = array();
         
         foreach($otherPeoplesContainer as $container) {
@@ -383,7 +387,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('addressbook');
         
         if(count($sharedContainer) === 0) {
-            return false;
+            return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
         }
         
         $containerIds = array();
@@ -475,6 +479,23 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_owner must be integer');
         }
         $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+        
+        if(count($ownerContainer) === 0 && $owner == Zend_Registry::get('currentAccount')->accountId) {
+            $allGrants = array(
+                Egwbase_Container::GRANT_ADD,
+                Egwbase_Container::GRANT_ADMIN,
+                Egwbase_Container::GRANT_DELETE,
+                Egwbase_Container::GRANT_EDIT,
+                Egwbase_Container::GRANT_READ
+            );
+            
+            $containerId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+            Egwbase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
+            
+            $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+        } elseif(Zend_Registry::get('currentAccount')) {
+            return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
+        }
         
         $containerIds = array();
         
