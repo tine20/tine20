@@ -536,8 +536,24 @@
 	                ntDue.disable();
 		            editing = false;
 		        }
-		    }        
+		    }
+			var test = function() {
+				console.log(arguments);
+			};
 			//console.log(grid.getColumnModel().getColumnById('priority'));
+			
+			// hack to get percentage editor working
+			grid.on('rowclick', function(grid,row,e) {
+				var cell = Ext.get(grid.getView().getCell(row,1));
+				var dom = cell.child('div:last');
+				while (cell.first()) {
+					cell = cell.first();
+					cell.on('click', function(e){
+						e.stopPropagation();
+						grid.fireEvent('celldblclick', grid, row, 1, e);
+					});
+				}
+			});
 	    };
 		
 		return{
