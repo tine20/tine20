@@ -87,7 +87,7 @@ Egw.Admin = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminAccessLog') {
                         Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Egw.Admin.AccessLog.show();
+                        Egw.Admin.AccessLog.Main.show();
                     }
                     
                     break;
@@ -96,7 +96,7 @@ Egw.Admin = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'AdminAccountsToolbar') {
                         Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Egw.Admin.Accounts.show();
+                        Egw.Admin.Accounts.Main.show();
                     }
                     
                     break;
@@ -105,7 +105,7 @@ Egw.Admin = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminApplications') {
                     	Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
                     } else {
-                    	Egw.Admin.Applications.show();
+                    	Egw.Admin.Applications.Main.show();
                     }
                     
                     break;
@@ -142,7 +142,8 @@ Egw.Admin = function() {
     
 }();
 
-Egw.Admin.AccessLog = function() {
+Ext.namespace('Egw.Admin.AccessLog');
+Egw.Admin.AccessLog.Main = function() {
 
     /**
      * onclick handler for edit action
@@ -458,8 +459,8 @@ Egw.Admin.AccessLog = function() {
     
 }();
 
-
-Egw.Admin.Applications = function() {
+Ext.namespace('Egw.Admin.Applications');
+Egw.Admin.Applications.Main = function() {
 
     /**
      * onclick handler for edit action
@@ -744,7 +745,8 @@ Egw.Admin.Applications = function() {
     
 }();
 
-Egw.Admin.Accounts = function() {
+Ext.namespace('Egw.Admin.Accounts');
+Egw.Admin.Accounts.Main = function() {
 
     var _createDataStore = function()
     {
@@ -816,14 +818,14 @@ Egw.Admin.Accounts = function() {
         },
 
 	    addButtonHandler: function(_button, _event) {
-	        Egw.Admin.Accounts.openAccountEditWindow();
+	        Egw.Admin.Accounts.Main.openAccountEditWindow();
 	    },
 
 	    editButtonHandler: function(_button, _event) {
 	        var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
 	        var accountId = selectedRows[0].id;
 	        
-	        Egw.Admin.Accounts.openAccountEditWindow(accountId);
+	        Egw.Admin.Accounts.Main.openAccountEditWindow(accountId);
 	    },
     
 	    enableDisableButtonHandler: function(_button, _event) {
@@ -1060,7 +1062,7 @@ Egw.Admin.Accounts = function() {
 	        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
 	            var record = _gridPar.getStore().getAt(_rowIndexPar);
 	            try {
-	                Egw.Admin.Accounts.openAccountEditWindow(record.id);
+	                Egw.Admin.Accounts.Main.openAccountEditWindow(record.id);
 	            } catch(e) {
 	                //alert(e);
 	            }
@@ -1155,6 +1157,27 @@ Egw.Admin.Accounts.EditDialog = function() {
             this.accountRecord = new Egw.Admin.Accounts.Account(_accountData);
     	},
     	
+    	deleteAccount: function(_button, _event)
+    	{
+	        var accountIds = Ext.util.JSON.encode([this.accountRecord.get('accountId')]);
+	            
+	        Ext.Ajax.request({
+	            url: 'index.php',
+	            params: {
+	                method: 'Admin.deleteAccounts', 
+	                accountIds: accountIds
+	            },
+	            text: 'Deleting account...',
+	            success: function(_result, _request) {
+	                window.opener.Egw.Admin.Accounts.Main.reload();
+	                window.close();
+	            },
+	            failure: function ( result, request) { 
+	                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the account.'); 
+	            } 
+	        });    		
+    	},
+    	
         applyChanges: function(_button, _event, _closeWindow) 
         {
         	var form = Ext.getCmp('admin_editAccountForm').getForm();
@@ -1175,11 +1198,12 @@ Egw.Admin.Accounts.EditDialog = function() {
 	                    accountData: Ext.util.JSON.encode(this.accountRecord.data)
 	                },
 	                success: function(_result, _request) {
-	                	window.opener.Egw.Admin.Accounts.reload();
+	                	window.opener.Egw.Admin.Accounts.Main.reload();
                         if(_closeWindow === true) {
                             window.close();
                         } else {
 		                	this.updateAccountRecord(Ext.util.JSON.decode(_result.responseText));
+		                	this.updateToolbarButtons();
 		                	form.loadRecord(this.accountRecord);
                         }
 	                },
@@ -1317,6 +1341,11 @@ Egw.Admin.Accounts.EditDialog = function() {
             }]
         }],
         
+        updateToolbarButtons: function()
+        {
+        	if(this.accountRecord.get('accountId') > 0) Ext.getCmp('admin_editAccountForm').action_delete.enable();
+        },
+        
         display: function(_accountData) 
         {
 
@@ -1330,6 +1359,7 @@ Egw.Admin.Accounts.EditDialog = function() {
                 handlerScope: this,
                 handler_applyChanges: this.applyChanges,
                 handler_saveAndClose: this.saveChanges,
+                handler_pre_delete: this.deleteAccount,
 		        items: this.editAccountDialog
 		    });
 
@@ -1342,6 +1372,7 @@ Egw.Admin.Accounts.EditDialog = function() {
 	        
 	        //if (!arguments[0]) var task = {};
             this.updateAccountRecord(_accountData);
+            this.updateToolbarButtons();
 	        dialog.getForm().loadRecord(this.accountRecord);
         }
     };
@@ -1349,6 +1380,7 @@ Egw.Admin.Accounts.EditDialog = function() {
 
 Egw.Admin.Accounts.Account = Ext.data.Record.create([
     // egw record fields
+    { name: 'accountId' },
     { name: 'accountFirstName' },
     { name: 'accountLastName' },
     { name: 'accountLoginName' },
