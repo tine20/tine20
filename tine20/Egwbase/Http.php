@@ -45,12 +45,14 @@ class Egwbase_Http
         foreach($userApplications as $application) {
             $applicationName = $application->app_name;
             $httpAppName = ucfirst($applicationName) . '_Http';
-            $application = new $httpAppName;
-            
-            $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());
-            $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array)$application->getCssFilesToInclude());
-            
-            $view->initialData[ucfirst($applicationName)] = $application->getInitialMainScreenData();
+            if(class_exists($httpAppName)) {
+                $application = new $httpAppName;
+                
+                $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());
+                $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array)$application->getCssFilesToInclude());
+                
+                $view->initialData[ucfirst($applicationName)] = $application->getInitialMainScreenData();
+            }
         }
         
         $view->configData = array(
