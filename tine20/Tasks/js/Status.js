@@ -68,13 +68,13 @@ Egw.Tasks.status.getStore = function() {
        });
 	}
 	return store;
-}
+};
 
 Egw.Tasks.status.getIdentifier = function(statusName) {
 	var index = Egw.Tasks.status.getStore().find('status', statusName);
 	var status = Egw.Tasks.status.getStore().getAt(index);
 	return status.data.identifier;
-}
+};
 
 Egw.Tasks.status.getStatusName = function(identifier) {
 	var status = Egw.Tasks.status.getStore().getById(identifier);
