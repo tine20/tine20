@@ -84,8 +84,9 @@ Egw.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
     initComponent: function(){
         Egw.widgets.Percent.Combo.superclass.initComponent.call(this);
 		// allways set a default
-		if(!this.value) 
+		if(!this.value) {
 		    this.value = 0;
+		}
 			
 		this.store = new Ext.data.SimpleStore({
 	        fields: ['key','value'],
@@ -113,7 +114,7 @@ Egw.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
 		
 		this.on('select', function(){
 			//this.el = Egw.widgets.Percent.ComboBox.progressBar(this.value);
-		})
+		});
     }
 });
 
@@ -164,8 +165,9 @@ Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
     initComponent: function(){
         Egw.widgets.Priority.Combo.superclass.initComponent.call(this);
         // allways set a default
-        if(!this.value) 
+        if(!this.value) {
             this.value = 1;
+        }
             
         this.store = Egw.widgets.Priority.store;
         
