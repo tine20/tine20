@@ -110,7 +110,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 			}
             
             if($no_links == '1') {
-                 $view->formData['values']['tasks'][] = NULL;   
+                 $view->formData['values']['tasks'] = array();   
             }
 			
 		    $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
