@@ -537,10 +537,6 @@
 		            editing = false;
 		        }
 		    }
-			var test = function() {
-				console.log(arguments);
-			};
-			//console.log(grid.getColumnModel().getColumnById('priority'));
 			
 			// hack to get percentage editor working
 			grid.on('rowclick', function(grid,row,e) {
