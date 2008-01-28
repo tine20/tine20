@@ -167,8 +167,12 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         }
         
         foreach($result['results'] as $key => $value) {
-            //print_r($value);
-            $result['results'][$key]['accountName'] = Egwbase_Account::getInstance()->getAccountById($value['account_id'])->toArray();
+            try {
+                $result['results'][$key]['accountName'] = Egwbase_Account::getInstance()->getAccountById($value['account_id'])->toArray();
+            } catch (Exception $e) {
+                // account not found
+                // do nothing so far
+            }
         }
         
         return $result;
