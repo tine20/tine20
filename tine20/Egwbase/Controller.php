@@ -236,7 +236,7 @@ class Egwbase_Controller
             Zend_Registry::get('logger')->debug("authentication of $_username failed");
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
-                $username,
+                $_username,
                 $_ipAddress,
                 $result->getCode()
             );

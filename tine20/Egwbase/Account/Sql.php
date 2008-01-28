@@ -230,6 +230,9 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        if($row === false) {
+            throw new Exception('account not found');
+        }
 
         try {
             $account = new $_accountClass();
