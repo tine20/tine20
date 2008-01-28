@@ -149,8 +149,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                     $modLog->setModification($modLogEntry);
                 }
             
-                $db->commit();
             }
+
+            $db->commit();
         } catch (Exception $e) {
             $db->rollBack();
             throw($e);
