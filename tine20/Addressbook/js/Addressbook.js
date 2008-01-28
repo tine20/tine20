@@ -2351,7 +2351,7 @@ Egw.Addressbook.GrantsDialog = function() {
                 {name: 'addGrant'},
                 {name: 'editGrant'},
                 {name: 'deleteGrant'}
-            ],
+            ]
             // turn off remote sorting
             //remoteSort: false
         });
@@ -2454,7 +2454,7 @@ Egw.Addressbook.GrantsDialog = function() {
         var dataStore = new Ext.data.JsonStore({
             url: 'index.php',
             baseParams: {
-                method: 'Egwbase.getAccounts',
+                method: 'Egwbase.getAccounts'
             },
             root: 'results',
             totalProperty: 'totalcount',
