@@ -138,7 +138,7 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 		}
 		this.onTriggerClick = function(e) {
             var w = new Egw.widgets.container.selectionDialog({
-				TriggerField: this,
+				TriggerField: this
 			});
         };
 	},
@@ -165,7 +165,7 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 			layout: 'fit',
 			plain: true,
 			bodyStyle: 'padding:5px;',
-			buttonAlign: 'center',
+			buttonAlign: 'center'
 		});
 		
 		var tree = new Egw.containerTreePanel({
@@ -192,7 +192,8 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 			
 Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	//private
- 	createNode: function(attr){
+ 	createNode: function(attr)
+ 	{
 		// map attributes from Egwbase_Container to attrs from ExtJS
 		if (attr.container_name) {
             //console.log(this.baseParams);
@@ -204,14 +205,13 @@ Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
                 leaf: true
             };
         } else if (attr.accountDisplayName) {
-			
             attr = {
                 nodeType: 'Personal',
                 text: attr.accountDisplayName,
                 cls: 'folder',
                 leaf: false,
                 owner: attr.accountId
-            }
+            };
         }
 		
 
@@ -228,5 +228,5 @@ Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
         return(attr.leaf ?
                         new Ext.tree.TreeNode(attr) :
                         new Ext.tree.AsyncTreeNode(attr));
-    },
+    }
  });
