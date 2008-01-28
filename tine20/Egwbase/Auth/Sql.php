@@ -23,7 +23,7 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 		$db = Zend_Registry::get('dbAdapter');
 		parent::__construct(
 			$db,
-			'egw_accounts',
+			SQL_TABLE_PREFIX . 'accounts',
 			'account_lid',
 			'account_pwd',
 			'MD5(?)'
