@@ -108,7 +108,11 @@ class Egwbase_Controller
                 
                 foreach ($userApplications as $application) {
                     $applicationName = ucfirst($application->app_name);
-                    $server->setClass($applicationName.'_Json', $applicationName);
+                    try {
+                        $server->setClass($applicationName.'_Json', $applicationName);
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
                 }
             }
 
@@ -127,7 +131,11 @@ class Egwbase_Controller
                 
                 foreach ($userApplications as $application) {
                     $applicationName = ucfirst($application->app_name);
-                    $server->setClass($applicationName.'_Http', $applicationName);
+                    try {
+                        $server->setClass($applicationName.'_Http', $applicationName);
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
                 }
             }
     
