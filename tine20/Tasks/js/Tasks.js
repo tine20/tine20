@@ -114,11 +114,10 @@ Egw.Tasks.TaskGrid = function(){
     
 	// init of Tasks app
     tree.on('beforeexpand', function(panel) {
-		console.log(toolbar);
 		initStore(); 
 		initGrid();
+		Egw.Egwbase.MainScreen.setActiveToolbar(_getToolbar());
         Egw.Egwbase.MainScreen.setActiveContentPanel(grid);
-        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
     });
 	
 	// ----------- store --------------    
@@ -151,9 +150,11 @@ Egw.Tasks.TaskGrid = function(){
 			}
 			filter.start = options.params.start;
             filter.limit = options.params.limit;
+			
 			//filter.due
 			//filter.organizer
-			//filter.query
+			filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
+			filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
 			//filter.tag
 			options.params.filter = Ext.util.JSON.encode(filter);
 		});
@@ -218,68 +219,63 @@ Egw.Tasks.TaskGrid = function(){
 
 	
     // --------- toolbar -------------
-    var quickSearchField = new Ext.app.SearchField({
-        id:        'quickSearchField',
-        width:     200,
-        emptyText: 'enter searchfilter'
-    }); 
-    quickSearchField.on('change', function() {
-        Ext.getCmp('gridCrm').getStore().load({params:{start:0, limit:50}});
-    });
-    
-    
-    var statusFilter = new Ext.app.ClearableComboBox({
-        id: 'TasksStatusFilter',
-        //name: 'statusFilter',
-        hideLabel: true,            
-        store: store,
-        displayField: 'status',
-        valueField: 'identifier',
-        typeAhead: true,
-        mode: 'local',
-        triggerAction: 'all',
-        emptyText: 'any',
-        selectOnFocus: true,
-        editable: false,
-        width:150    
-    });
-    
-    statusFilter.on('select', function(combo, record, index) {
-       if (!record.data) {
-           var _probability = '';       
-       } else {
-           var _probability = record.data.key;
-       }
-       
-       combo.triggers[0].show();
-    });
-    
-    var organizerFilter = new Ext.form.ComboBox({
-        id: 'TasksorganizerFilter',
-        emptyText: 'Cornelius Weiss'
-    });
-
-    var toolbar = new Ext.Toolbar({
-        id: 'Tasks_Toolbar',
-        split: false,
-        height: 26,
-        items: [
-            actions.addInPopup,
-            new Ext.Toolbar.Separator(),
-            '->',
-            'Status: ',
-            ' ',
-            statusFilter,
-            'Organizer: ',
-            ' ',
-            organizerFilter,                
-            new Ext.Toolbar.Separator(),
-            '->',
-            'Search:', ' ',
-            ' ',
-            quickSearchField
-        ]
-    });
+	// toolbar must be generated each time this fn is called, 
+	// as egwbase destroys the old toolbar when setting a new one.
+	var _getToolbar = function(){
+		var quickSearchField = new Ext.app.SearchField({
+			id: 'quickSearchField',
+			width: 200,
+			emptyText: 'enter searchfilter'
+		});
+		quickSearchField.on('change', function(){
+			if(filter.query != this.getValue()){
+				store.load({params: paging});
+			}
+		});
+		
+		var statusFilter = new Ext.app.ClearableComboBox({
+			id: 'TasksStatusFilter',
+			//name: 'statusFilter',
+			hideLabel: true,
+			store: Egw.Tasks.status.getStore(),
+			displayField: 'status',
+			valueField: 'identifier',
+			typeAhead: true,
+			mode: 'local',
+			triggerAction: 'all',
+			emptyText: 'any',
+			selectOnFocus: true,
+			editable: false,
+			width: 150
+		});
+		
+		statusFilter.on('select', function(combo, record, index){
+			store.load({params: paging});
+			combo.triggers[0].show();
+		});
+		
+		var organizerFilter = new Ext.form.ComboBox({
+			id: 'TasksorganizerFilter',
+			emptyText: 'Cornelius Weiss'
+		});
+		
+		var toolbar = new Ext.Toolbar({
+			id: 'Tasks_Toolbar',
+			split: false,
+			height: 26,
+			items: [
+			    actions.addInPopup,
+				new Ext.Toolbar.Separator(),
+				'->',
+				'Status: ',	' ', statusFilter,
+				'Organizer: ', ' ',	organizerFilter,
+				new Ext.Toolbar.Separator(),
+				'->',
+				'Search:', ' ', ' ', quickSearchField]
+		});
+	   
+	    return toolbar;
+	};
 	
 	// --------- grid ----------    
     var initGrid = function(){
@@ -554,7 +550,7 @@ Egw.Tasks.TaskGrid = function(){
 	
 	return{
 		getTreePanel: function(){return tree;},
-		getToolbar: function() {return toolbar},        
+		getToolbar: _getToolbar,        
 		getGrid: function() {initStore(); initGrid(); return grid;},
 		getStore: function() {return store;}
 	}
