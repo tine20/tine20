@@ -55,10 +55,10 @@ class Egwbase_Acl_Rights
      */
     private function __construct() {
         try {
-            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_rights'));
+            $this->rightsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createApplicationAclTable();
-            $this->rightsTable = new Egwbase_Db_Table(array('name' => 'egw_application_rights'));
+            $this->rightsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
 
             $accountId = Zend_Registry::get('currentAccount')->accountId;
             
@@ -116,18 +116,18 @@ class Egwbase_Acl_Rights
         $db = Zend_Registry::get('dbAdapter');
         
         try {
-            $tableData = $db->describeTable('egw_application_rights');
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'application_rights');
         } catch (Zend_Db_Statement_Exception $e) {
             // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE egw_application_rights (
+            $result = $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "application_rights (
                 acl_id int(11) NOT NULL auto_increment,
                 application_id int(11) NOT NULL,
                 application_right int(11) NOT NULL,
                 account_id int(11),
                 PRIMARY KEY  (`acl_id`),
-                UNIQUE KEY `egw_application_rightsid` (`application_id`, `application_right`, `account_id`),
-                KEY `egw_application_rights_application_right` (`application_right`),
-                KEY `egw_application_rights_account_id` (`account_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+                UNIQUE KEY `' . SQL_TABLE_PREFIX . 'application_rightsid` (`application_id`, `application_right`, `account_id`),
+                KEY `' . SQL_TABLE_PREFIX . 'application_rights_application_right` (`application_right`),
+                KEY `' . SQL_TABLE_PREFIX . 'application_rights_account_id` (`account_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
     }
@@ -155,11 +155,11 @@ class Egwbase_Acl_Rights
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_application_rights', array())
-            ->join('egw_applications', 'egw_application_rights.application_id = egw_applications.app_id')
-            ->where('egw_application_rights.account_id IN (?) OR egw_application_rights.account_id IS NULL', $groupMemberships)
-            ->where('egw_application_rights.application_right = ?', Egwbase_Acl_Rights::RUN)
-            ->group('egw_application_rights.application_id');
+            ->from(SQL_TABLE_PREFIX . 'application_rights', array())
+            ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.app_id')
+            ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
+            ->where(SQL_TABLE_PREFIX . 'application_rights.application_right = ?', Egwbase_Acl_Rights::RUN)
+            ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
         $stmt = $db->query($select);
 
@@ -193,10 +193,10 @@ class Egwbase_Acl_Rights
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from('egw_application_rights', array('account_rights' => 'BIT_OR(egw_application_rights.application_right)'))
-            ->where('egw_application_rights.account_id IN (?) OR egw_application_rights.account_id IS NULL', $groupMemberships)
-            ->where('egw_application_rights.application_id = ?', $application->app_id)
-            ->group('egw_application_rights.application_id');
+            ->from(SQL_TABLE_PREFIX . 'application_rights', array('account_rights' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'application_rights.application_right)'))
+            ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
+            ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->app_id)
+            ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
         $stmt = $db->query($select);
 
