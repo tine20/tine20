@@ -1343,7 +1343,9 @@ Egw.Admin.Accounts.EditDialog = function() {
         
         updateToolbarButtons: function()
         {
-        	if(this.accountRecord.get('accountId') > 0) Ext.getCmp('admin_editAccountForm').action_delete.enable();
+            if(this.accountRecord.get('accountId') > 0) {
+                Ext.getCmp('admin_editAccountForm').action_delete.enable();
+            }
         },
         
         display: function(_accountData) 
