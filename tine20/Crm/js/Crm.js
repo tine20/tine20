@@ -412,7 +412,7 @@ Egw.Crm = function() {
         ds_crm.load({params:{start:0, limit:50}});
         
         return ds_crm;
-    }
+    };
 
 
 	  	var action_add = new Ext.Action({
@@ -432,7 +432,7 @@ Egw.Crm = function() {
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             Egw.Egwbase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+_rowIndex[0].id, 900, 700);   
 
-        }
+        };
 
     var handler_pre_delete = function(){
         Ext.MessageBox.show({
@@ -442,7 +442,7 @@ Egw.Crm = function() {
             fn: handler_delete,
             icon: Ext.MessageBox.QUESTION
         });
-    }
+    };
 
         var handler_delete = function(btn) 
         {
@@ -472,13 +472,13 @@ Egw.Crm = function() {
                     }
                 });
             } 
-        }
+        };
 
         var handler_add_task = function() 
         {
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _rowIndex[0].id, 280, 480);  
-        }
+        };
         
 	   	var action_edit = new Ext.Action({
 			text: 'edit lead',
@@ -575,7 +575,7 @@ Egw.Crm = function() {
 					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });        
-        })
+        });
     
         
         var dateTo = new Ext.form.DateField({
@@ -595,7 +595,7 @@ Egw.Crm = function() {
 					//probability: Ext.getCmp('filter_probability').getValue()					
                 }
             });        
-        })        
+        });        
        
 	  
 	   var st_leadstate = new Ext.data.JsonStore({
@@ -800,7 +800,7 @@ Egw.Crm = function() {
                 st_leadstate.insert(0, p);
                 leadstateGridPanel.startEditing(0, 0);
                 leadstateGridPanel.fireEvent('celldblclick',this, 0, 1);
-            }
+            };
                         
             var handler_leadstate_delete = function(){
                	var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
@@ -810,7 +810,7 @@ Egw.Crm = function() {
                 for (var i = 0; i < selectedRows.length; ++i) {
                     leadstateStore.remove(selectedRows[i]);
                 }   
-            }                        
+            };                        
                         
           
            var handler_leadstate_saveClose = function(){
@@ -834,7 +834,7 @@ Egw.Crm = function() {
                     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
                     			}
                         });          
-            }          
+            };          
             
             var leadstateGridPanel = new Ext.grid.EditorGridPanel({
                 store: st_leadstate,
@@ -965,7 +965,7 @@ Egw.Crm = function() {
                 st_leadsource.insert(0, p);
                 leadsourceGridPanel.startEditing(0, 0);
                 leadsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
-            }
+            };
                         
             var handler_leadsource_delete = function(){
                	var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
@@ -975,7 +975,7 @@ Egw.Crm = function() {
                 for (var i = 0; i < selectedRows.length; ++i) {
                     leadsourceStore.remove(selectedRows[i]);
                 }   
-            }                        
+            };                        
                         
           
            var handler_leadsource_saveClose = function(){
@@ -997,7 +997,7 @@ Egw.Crm = function() {
                     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
                     			}
                         });          
-            }          
+            };          
             
             var leadsourceGridPanel = new Ext.grid.EditorGridPanel({
                 store: st_leadsource,
@@ -1095,7 +1095,7 @@ Egw.Crm = function() {
                 st_leadtype.insert(0, p);
                 leadtypeGridPanel.startEditing(0, 0);
                 leadtypeGridPanel.fireEvent('celldblclick',this, 0, 1);                
-            }
+            };
                         
             var handler_leadtype_delete = function(){
                	var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
@@ -1105,7 +1105,7 @@ Egw.Crm = function() {
                 for (var i = 0; i < selectedRows.length; ++i) {
                     leadtypeStore.remove(selectedRows[i]);
                 }   
-            }                        
+            };                        
                         
           
            var handler_leadtype_saveClose = function(){
@@ -1127,7 +1127,7 @@ Egw.Crm = function() {
                     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
                     			}
                         });          
-            }          
+            };          
             
             var leadtypeGridPanel = new Ext.grid.EditorGridPanel({
                 store: st_leadtype,
@@ -1241,7 +1241,7 @@ Egw.Crm = function() {
                 st_productsource.insert(0, p);
                 productsourceGridPanel.startEditing(0, 0);
                 productsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
-            }
+            };
                         
             var handler_productsource_delete = function(){
                	var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
@@ -1251,7 +1251,7 @@ Egw.Crm = function() {
                 for (var i = 0; i < selectedRows.length; ++i) {
                     productsourceStore.remove(selectedRows[i]);
                 }   
-            }                        
+            };                        
                         
           
            var handler_productsource_saveClose = function(){
@@ -1273,7 +1273,7 @@ Egw.Crm = function() {
                     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
                     			}
                         });          
-            }          
+            };          
             
             var productsourceGridPanel = new Ext.grid.EditorGridPanel({
                 store: st_productsource,
@@ -1479,7 +1479,7 @@ Egw.Crm = function() {
         });
         
         Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
-    }
+    };
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
         switch (_value) {
@@ -1503,7 +1503,7 @@ Egw.Crm = function() {
                 return 'success';
                 break;
         }
-    }
+    };
 
     
     /**
@@ -1536,8 +1536,7 @@ Egw.Crm = function() {
             enableCaching: false,
             tpl : new Ext.Template(
                 '<b>Notes:</b> {lead_description}</div></td>',
-                '<td class="x-grid3-col x-grid3-cell"><b>Activities:</b> </td>'
-            )
+                '<td class="x-grid3-col x-grid3-cell"><b>Activities:</b> </td>')
         });
         
         var columnModel = new Ext.grid.ColumnModel([
@@ -1627,7 +1626,7 @@ Egw.Crm = function() {
         });
        
        return;
-    }
+    };
     
 
    var _loadData = function(_node)
@@ -1691,7 +1690,7 @@ Egw.Crm = function() {
             Ext.getCmp('gridCrm').getStore().reload();
             Ext.getCmp('gridCrm').doLayout();
         }
-    }
+    };
     
 }(); // end of application
 
@@ -1736,7 +1735,7 @@ Egw.Crm.LeadEditDialog.Handler = function() {
             
             selectionModel.selectRow(currentContactsStore.indexOfId(selectedRows[0].id));
         }      
-    }
+    };
 }();
 
 Egw.Crm.LeadEditDialog.Elements = function() {
@@ -1854,7 +1853,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
             });
 			quickSearchField.on('resize', function(){
 				quickSearchField.wrap.setWidth(280);
-			})
+			});
             
 
             var contactToolbar = new Ext.Toolbar({
@@ -1934,10 +1933,10 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                         }
                     ]
                 }]         
-            }
+            };
             return tabPanel;
         }
-    }
+    };
 }();
 
 
@@ -2143,7 +2142,7 @@ Egw.Crm.LeadEditDialog.Stores = function() {
 	        
 	        return store;
         }
-    }
+    };
 }();
 
 Egw.Crm.LeadEditDialog.Main = function() {
@@ -2225,7 +2224,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         
         
         return additionalData;
-    }
+    };
 
     // private functions 
     var handler_applyChanges = function(_button, _event) 
@@ -2251,7 +2250,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
     	} else {
     		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
     	}
-    }
+    };
  
 
     var handler_saveAndClose = function(_button, _event) 
@@ -2276,7 +2275,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
     	} else {
     		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
     	}
-    }
+    };
 
     var handler_pre_delete = function(){
         Ext.MessageBox.show({
@@ -2287,7 +2286,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
 //            animEl: 'mb4',
             icon: Ext.MessageBox.QUESTION
         });
-    }
+    };
 
 
     var handler_delete = function(btn) 
@@ -2310,7 +2309,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 }
             });
         } 
-    }
+    };
 
 
    	var action_saveAndClose = new Ext.Action({
@@ -2367,7 +2366,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             _dataSource.baseParams.method = 'Crm.getEvents';
             _dataSource.baseParams.options = Ext.encode({
             });
-        }
+        };
   
   
  
@@ -2379,7 +2378,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
 
         function formatDate(value){
             return value ? value.dateFormat('M d, Y') : '';
-        };
+        }
     
         var _action_edit = new Ext.Action({
             text: 'editieren',
@@ -2759,7 +2758,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         //    	{id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },
                 {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                     function(val, meta, record) {
-	                	var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;'
+	                	var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
 	                	
 	                    var formated_return = '<b>' + record.data.n_fileas + '</b><br />' + org_name;
                         
@@ -2835,17 +2834,24 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 }                                  
         ]);               
       
+        var  _add_task = new Ext.Action({
+        		text: 'add task',
+        		handler: function(){
+                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 280, 480);
+                },
+        		iconCls: 'action_add',
+                disabled: true
+        });         
+
+       if(formData.values.lead_id !== null) {
+           _add_task.enable();
+       }
+      
         var gridActivities = new Ext.grid.GridPanel({
             id: 'gridActivities',
             store: st_activities,
             cm: cm_activities,
-            tbar: [{
-                text: 'add task',
-                iconCls: 'action_add',
-                handler : function(){
-                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 280, 480);
-                }
-            } , {
+            tbar: [_add_task , {
                 text: 'delete task',
                 iconCls: 'action_delete',
                 handler : handler_remove_task 
@@ -2881,6 +2887,12 @@ Egw.Crm.LeadEditDialog.Main = function() {
             Egw.Crm.displayFolderSelectDialog('lead_container');
         };
         
+        
+        
+       if(formData.values.lead_id !== null) {
+           _add_task.enable();
+       }
+        
         var tabPanelOverview = {
             title:'overview',
             layout:'border',
@@ -2896,13 +2908,8 @@ Egw.Crm.LeadEditDialog.Main = function() {
 		        width: 300,
                 tbar: [
                     '->',
-                    {
-                    text: 'add task',
-                    iconCls: 'action_add',
-                    handler : function() {
-                        editWindow = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 280, 480);
-                    }
-                }],
+                    _add_task
+                 ],
 		        items: [
 		          new Ext.DataView({
                     tpl: ActivitiesTpl,       
@@ -2919,8 +2926,8 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 autoHeight: true,
                 id: 'editCenterPanel',
                 items: [
-                    txtfld_leadName
-                , {
+                    txtfld_leadName, 
+                {
                     xtype:'textarea',
                     //fieldLabel:'Notizen',
                     id: 'lead_notes',
@@ -3153,7 +3160,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             var record = _grid.getStore().getAt(_rowIndex);
             var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
             
-            if(currentContactsStore.getById(record.id) === undefined) {
+            if(currentContactsStore.getById(record.id) == undefined) {
                 //console.log('record ' + record.id + 'not found');
                 currentContactsStore.addSorted(record, record.id);
             }
@@ -3207,7 +3214,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         
         Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
         
-    }
+    };
 
     var setLeadDialogValues = function(_formData) {        
     	var form = Ext.getCmp('leadDialog').getForm();
@@ -3236,7 +3243,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         
         if(typeof(leadRecord.data._lead_start) != 'object') {
         	leadRecord.data._lead_start = new Date();
-        };
+        }
         
     	form.setValues(leadRecord.data);
 
@@ -3248,7 +3255,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         }
     	
     	return;
-    }
+    };
 
     // public functions and variables
     return {
