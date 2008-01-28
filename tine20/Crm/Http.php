@@ -76,6 +76,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
                 }
             }
 
+            $no_links = '1';
             $task_links = $controller->getLinks($_leadId, 'tasks');
             foreach($task_links as $task_link) {
 				try {
@@ -101,11 +102,16 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 									
 					
 		            $view->formData['values']['tasks'][] = $_task;	
-					
+					$no_links = '0';
+                    
 				} catch (Exception $e) {
 					// do nothing
 				}
 			}
+            
+            if($no_links == '1') {
+                 $view->formData['values']['tasks'][] = NULL;   
+            }
 			
 		    $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
             $view->formData['config']['folderName']   = $folder->container_name;
@@ -118,7 +124,8 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
 		} else {
             $view->formData['values'] = $controller->getEmptyLead()->toArray();
             $view->formData['values']['products'] = array();                
-            $view->formData['values']['contacts'] = array();                       
+            $view->formData['values']['contacts'] = array();   
+            $view->formData['values']['tasks'] = array();                                   
             
             $personalFolders = $leads->getFoldersByOwner($currentAccount->accountId);
 		    foreach($personalFolders as $folder) {
