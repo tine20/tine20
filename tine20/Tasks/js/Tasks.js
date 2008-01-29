@@ -313,6 +313,7 @@
 			
 			grid = new Ext.grid.EditorGridPanel({
 	            id: 'TasksMainGrid',
+				border: false,
 	            store: store,
 				tbar: pagingToolbar,
 				clicksToEdit: 'auto',
