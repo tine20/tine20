@@ -609,7 +609,22 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     public function getAddressbooksByOwner($_owner) 
     {
         $personalAddressbooks = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
-                
+
+        if(count($personalAddressbooks) === 0 && $_owner == Zend_Registry::get('currentAccount')->accountId) {
+            $allGrants = array(
+                Egwbase_Container::GRANT_ADD,
+                Egwbase_Container::GRANT_ADMIN,
+                Egwbase_Container::GRANT_DELETE,
+                Egwbase_Container::GRANT_EDIT,
+                Egwbase_Container::GRANT_READ
+            );
+            
+            $containerId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+            Egwbase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
+            
+            $personalAddressbooks = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
+        }
+        
         return $personalAddressbooks;
     }
     
