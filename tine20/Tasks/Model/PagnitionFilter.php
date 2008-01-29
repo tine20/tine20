@@ -34,6 +34,7 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
         
         'query'                => array('allowEmpty' => true           ),
         'organizer'            => array('allowEmpty' => true           ),
+        'status'               => array('allowEmpty' => true           ),
         'due'                  => array('allowEmpty' => true           ),
         'tag'                  => array('allowEmpty' => true           ),
         

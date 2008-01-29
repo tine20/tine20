@@ -92,16 +92,31 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         $TaskSet = new Egwbase_Record_RecordSet(array(), 'Tasks_Model_Task');
         
         if(empty($_filter->container)){
-            //error_log(print_r($_filter->container,true));
             return $TaskSet;
         }
         
-        $stmt = $this->_db->query($this->_getSelect()
-            ->where($this->_db->quoteInto('tasks.container IN (?)', $_filter->container))
-            ->limit($_filter->limit, $_filter->start)
-            ->order($_filter->sort . ' ' . $_filter->dir)
-        );
-        
+        // build query
+        // TODO: abstract filter2sql
+        $select = $this->_getSelect()
+            ->where($this->_db->quoteInto('tasks.container IN (?)', $_filter->container));
+            
+        if (!empty($_filter->limit)) {
+            $select->limit($_filter->limit, $_filter->start);
+        }
+        if (!empty($_filter->sort)){
+            $select->order($_filter->sort . ' ' . $_filter->dir);
+        }
+        if(!empty($_filter->query)){
+            $select->where($this->_db->quoteInto('(summaray LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
+        }
+        if(!empty($_filter->status)){
+            $select->where($this->_db->quoteInto('status = ?',$_filter->status));
+        }
+        if(!empty($_filter->organizer)){
+            $select->where($this->_db->quoteInto('organizer = ?',$_filter->organizer));
+        }
+
+        $stmt = $this->_db->query($select);
         $Tasks = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         foreach ($Tasks as $TaskArray) {
             $Task = new Tasks_Model_Task($TaskArray, true, true);
