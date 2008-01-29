@@ -113,7 +113,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $select->where($this->_db->quoteInto('status = ?',$_filter->status));
         }
         if(!empty($_filter->organizer)){
-            $select->where($this->_db->quoteInto('organizer = ?',$_filter->organizer));
+            $select->where($this->_db->quoteInto('organizer = ?', (int)$_filter->organizer));
         }
 
         $stmt = $this->_db->query($select);
