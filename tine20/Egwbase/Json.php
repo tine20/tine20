@@ -84,6 +84,42 @@ class Egwbase_Json
         exit;
     }
     
+    
+    /**
+     * change password of user 
+     *
+     * @param string $oldPw the old password
+     * @param string $newPw the new password
+     * @return array
+     */
+    function changePassword($oldPw, $newPw)
+    {
+        $auth = Zend_Auth::getInstance();        
+              
+        $oldIsValid = Egwbase_Controller::getInstance()->isValidPassword($auth->getIdentity(), $oldPw);              
+
+        if ($oldIsValid === true) {
+            $_account   = Egwbase_Account::getInstance();
+            $result     = $_account->setPassword(Zend_Registry::get('currentAccount')->accountId, $newPw);
+            
+            if($result == 1) {
+                $res = array(
+    				'success'      => TRUE);                
+            } else {
+                 $res = array(
+    				'success'      => FALSE,
+	    			'errorMessage' => "new password could'nt be set!");   
+            }
+        } else {
+            $res = array(
+				'success'      => FALSE,
+				'errorMessage' => "old password is wrong!");
+        }
+        
+        return $res;
+    }    
+    
+    
     /**
      * authenticate user by username and password
      *

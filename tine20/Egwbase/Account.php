@@ -91,7 +91,7 @@ class Egwbase_Account
     }
     
     public function getAccountByLoginName($_loginName)
-    {
+    {     
         $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Egwbase_Account_Model_Account');
         
         return $result;
@@ -128,7 +128,7 @@ class Egwbase_Account
     public function setPassword($_accountId, $_password)
     {
         $result = $this->_backend->setPassword($_accountId, $_password);
-        
+      
         return $result;
     }
     

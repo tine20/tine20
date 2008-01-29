@@ -273,7 +273,7 @@ class Egwbase_Controller
     {
         $authAdapter = $this->_getAuthAdapter($_username, $_password);
         
-        $result = $adapter->authenticate();
+        $result = $authAdapter->authenticate();
         
         if ($result->isValid()) {
             return true;

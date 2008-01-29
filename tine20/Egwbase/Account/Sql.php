@@ -350,6 +350,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         if ($result != 1) {
             throw new Exception('Unable to update password');
         }
+        
+        return $result;
     }
     
     /**
