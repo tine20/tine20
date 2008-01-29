@@ -70,6 +70,7 @@
 		var actions = {
 	        editInPopup: new Ext.Action({
 	            text: 'edit task',
+				disabled: true,
 				actionType: 'edit',
 	            handler: handlers.editInPopup,
 	            iconCls: 'action_edit'
@@ -83,11 +84,13 @@
 	        deleteSingle: new Ext.Action({
 	            text: 'delete task',
 	            handler: handlers.deleteTaks,
+				disabled: true,
 	            iconCls: 'action_delete'
 	        }),
 			deleteMultiple: new Ext.Action({
 	            text: 'delete tasks',
 	            handler: handlers.deleteTaks,
+				disabled: true,
 	            iconCls: 'action_delete'
 	        })
 	    };
@@ -273,6 +276,8 @@
 				height: 26,
 				items: [
 				    actions.addInPopup,
+					actions.editInPopup,
+					actions.deleteSingle,
 					new Ext.Toolbar.Separator(),
 					'->',
 					'Status: ',	' ', statusFilter,
@@ -351,10 +356,10 @@
 						header: "Summaray",
 						width: 400,
 						sortable: true,
-						dataIndex: 'summaray',
-						editor: new Ext.form.TextField({
-							allowBlank: false
-						})
+						dataIndex: 'summaray'
+						//editor: new Ext.form.TextField({
+						//	allowBlank: false
+						//})
 					},
 					{
 						id: 'priority',
@@ -394,6 +399,17 @@
 		        })
 	        });
 			
+			grid.on('rowdblclick', function(grid, row, event){
+				handlers.editInPopup({actionType: 'edit'});
+			}, this);
+			
+			grid.getSelectionModel().on('selectionchange', function(sm){
+				var disabled = sm.getCount() != 1;
+				actions.editInPopup.setDisabled(disabled);
+				actions.deleteSingle.setDisabled(disabled);
+				actions.deleteMultiple.setDisabled(!disabled);
+			}, this);
+			
 			grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
 				_eventObject.stopEvent();
 				var numSelected = _grid.getSelectionModel().getCount();
@@ -408,9 +424,6 @@
 	                actions.addInPopup
 				];
 	            
-	            //if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-	            //    _grid.getSelectionModel().selectRow(_rowIndex);
-	            //}
 				var ctxMenu = new Ext.menu.Menu({
 			        //id:'ctxMenuAddress1', 
 			        items: items
