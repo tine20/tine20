@@ -2,7 +2,6 @@ Ext.namespace('Egw.Crm');
 
 Egw.Crm = function() {
 
-
    var _treeNodeContextMenu = null;
 
     /**
@@ -619,7 +618,7 @@ Egw.Crm = function() {
             
             st_leadstate.load();
 			
-	   var filter_combo_leadstate = new Ext.app.ClearableComboBox({
+	   var filter_combo_leadstate = new Ext.ux.ClearableComboBox({
 			fieldLabel:'Leadstate', 
 			id:'filter_leadstate',
 			name:'leadstate',
@@ -658,7 +657,7 @@ Egw.Crm = function() {
             });
 	   });
       
-	   var filter_combo_probability = new Ext.app.ClearableComboBox({
+	   var filter_combo_probability = new Ext.ux.ClearableComboBox({
 			fieldLabel:'probability', 
 			id: 'filter_probability',
 			name:'lead_probability',
