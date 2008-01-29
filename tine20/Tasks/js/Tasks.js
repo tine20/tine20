@@ -32,7 +32,7 @@
 	                var task = selectedRows[0];
 					taskId = task.data.identifier;
 				}
-	            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 500, 500);
+	            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
 	        },
 			deleteTaks: function(_button, _event){
 			    var selectedRows = grid.getSelectionModel().getSelections();
@@ -654,49 +654,76 @@
 		};
 		
 		var taskFormPanel = {
-			layout: 'form',
-			labelWidth: 75,
-			title: 'Edit Task',
-			bodyStyle: 'padding:15px',
-			width: '100%',
-			labelPad: 10,
-			defaultType: 'textfield',
-			defaults: {
-				width: 230,
-				msgTarget: 'side'
-			},
-			items: [
-				{
+			layout:'column',
+			labelWidth: 90,
+			//title: 'Edit Task',
+			border: false,
+			//bodyStyle: 'padding:15px',
+			//width: '100%',
+			//labelPad: 10,
+			//defaultType: 'textfield',
+			//defaults: {
+			//	width: 230,
+			//	msgTarget: 'side'
+			//},
+			items: [{
+                columnWidth:.65,
+                border:false,
+                layout: 'form',
+                defaults: {
+                    anchor: '95%',
+                    xtype: 'textfield'
+                },
+				items:[{
 					fieldLabel: 'summaray',
+					hideLabel: true,
 					xtype: 'textfield',
 					name: 'summaray',
+					emptyText: 'enter short name...',
 					allowBlank: false
-				},  new Egw.widgets.Percent.Combo({
-					fieldLabel: 'percentage',
-					name: 'percent'
-				}), new Egw.Tasks.status.ComboBox({
-					fieldLabel: 'status',
-					name: 'status'
-				}), new Egw.widgets.Priority.Combo({
-	                fieldLabel: 'priority',
-	                name: 'priority'
-	            }), new Ext.form.DateField({
-	                fieldLabel: 'due date',
-					name: 'due',
-	                format: "d.m.Y"
-	            }),	new Egw.widgets.container.selectionComboBox({
-					fieldLabel: 'Container',
-					name: 'container',
-					itemName: 'Tasks',
-	                appName: 'Tasks',
-					defaultContainer: Egw.Tasks.DefaultContainer
-				}), {
+				}, {
 					fieldLabel: 'notes',
+					hideLabel: true,
+                    emptyText: 'enter description...',
 					name: 'description',
 					xtype: 'textarea',
-					height: 100
-				}
-			]
+					height: 150
+				}]
+			}, {
+                columnWidth:.35,
+                border:false,
+                layout: 'form',
+                defaults: {
+                    anchor: '95%'
+                },
+                items:[ 
+                    new Egw.widgets.Percent.Combo({
+                        fieldLabel: 'Percentage',
+                        editable: false,
+                        name: 'percent'
+                    }), 
+                    new Egw.Tasks.status.ComboBox({
+                        fieldLabel: 'Status',
+                        name: 'status'
+                    }), 
+                    new Egw.widgets.Priority.Combo({
+                        fieldLabel: 'Priority',
+                        name: 'priority'
+                    }), 
+                    new Ext.form.DateField({
+                        fieldLabel: 'Due date',
+                        name: 'due',
+                        format: "d.m.Y"
+                    }), 
+                    new Egw.widgets.container.selectionComboBox({
+                        fieldLabel: 'Folder',
+                        name: 'container',
+	                    itemName: 'Tasks',
+	                    appName: 'Tasks',
+	                    defaultContainer: Egw.Tasks.DefaultContainer
+	                })
+                ]
+            }]
 		};
 		
 		var dlg = new Egw.widgets.dialog.EditRecord({
@@ -704,6 +731,8 @@
 	        handler_applyChanges: handlers.applyChanges,
 	        handler_saveAndClose: handlers.saveAndClose,
 	        handler_pre_delete: handlers.pre_delete,
+	        labelAlign: 'side',
+	        layout: 'fit',
 	        items: taskFormPanel
 	    });
 		
