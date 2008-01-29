@@ -1527,7 +1527,9 @@ Egw.Addressbook.ContactEditDialog = function() {
     			params:additionalData,
     			success:function(form, action, o) {
 					//window.location = window.location;
-    				window.opener.Egw.Addressbook.reload();
+					if(window.opener.Egw.Addressbook) {
+    				    window.opener.Egw.Addressbook.reload();
+					}
     			},
     			failure:function(form, action) {
     				Ext.MessageBox.alert("Error",action.result.errorMessage);
