@@ -154,7 +154,7 @@
 	            filter.limit = options.params.limit;
 				
 				//filter.due
-				//filter.organizer
+				filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
 				filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
 				filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
 				//filter.tag
@@ -235,7 +235,7 @@
 				}
 			});
 			
-			var statusFilter = new Ext.app.ClearableComboBox({
+			var statusFilter = new Ext.ux.ClearableComboBox({
 				id: 'TasksStatusFilter',
 				//name: 'statusFilter',
 				hideLabel: true,
@@ -256,10 +256,16 @@
 				combo.triggers[0].show();
 			});
 			
-			var organizerFilter = new Ext.form.ComboBox({
+			var organizerFilter = new Egw.widgets.AccountpickerField({
 				id: 'TasksorganizerFilter',
-				emptyText: 'Cornelius Weiss'
+				width: 200,
+			    emptyText: 'any'
 			});
+			
+			organizerFilter.on('select', function(combo, record, index){
+                store.load({params: paging});
+                //combo.triggers[0].show();
+            });
 			
 			var toolbar = new Ext.Toolbar({
 				id: 'Tasks_Toolbar',
