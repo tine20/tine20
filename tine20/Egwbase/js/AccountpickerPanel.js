@@ -12,11 +12,16 @@
 Ext.namespace('Egw.widgets');
 
 Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
+	/**
+     * @cfg {bool}
+     * selectOnFocus
+     */
+	selectOnFocus: true,
+	
 	allowBlank: true,
 	editable: false,
     readOnly:true,
 	triggerAction: 'all',
-	selectOnFocus: true,
 	typeAhead: true,
 	trigger1Class:'x-form-clear-trigger',
 	hideTrigger1:true,
@@ -33,36 +38,19 @@ Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		}
 		
 		this.onTrigger2Click = function(e) {
-		    var ok_button = new Ext.Button({
-	            disabled: true,
-	            handler: this.handler_okbutton,
-	            text: 'Ok',
-	            scope: this
-	        });
-			
             this.dlg = new Egw.widgets.AccountpickerDialog({
-                TriggerField: this,
-				buttons: [ok_button]
+                TriggerField: this
             });
-			
-			this.dlg.accountPicker.searchPanel.getSelectionModel().on('selectionchange', function(sm){
-	            ok_button.setDisabled(sm.getCount() < 1);
-	        },this);
         };
+		
+		this.on('select', function(){
+			this.triggers[0].show();
+		});
 	},
 	
     // private
     getValue: function(){
         return this.accountId;
-    },
-	//private
-	handler_okbutton: function(){
-        account = this.dlg.accountPicker.searchPanel.getSelectionModel().getSelected();
-        this.accountId = account.data.accountId;
-		this.setValue(account.data.accountDisplayName);
-		this.fireEvent('select', this, account, 0);
-        this.dlg.w.hide();
-		this.triggers[0].show();
     },
 	onTrigger1Click: function(){
 		this.accountId = null;
@@ -79,17 +67,26 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	 */
 	TriggerField: null,
 	/**
-     * @cfg {Array}
-     * buttons
+     * @cfg {string}
+     * title of dialog
      */
-    buttons: [],
-	
 	title: 'please select an account',
+	
+	// holds currently selected account
+	account: false,
 	
     // private
     initComponent: function(){
 		Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
-		this.w = new Ext.Window({
+		
+		var ok_button = new Ext.Button({
+            disabled: true,
+            handler: this.handler_okbutton,
+            text: 'Ok',
+            scope: this
+        });
+			
+		this.window = new Ext.Window({
             title: this.title,
             modal: true,
             width: 320,
@@ -99,6 +96,7 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
             layout: 'fit',
             plain: true,
             bodyStyle: 'padding:5px;',
+			buttons: [ok_button],
             buttonAlign: 'center'
         });
 		
@@ -106,8 +104,26 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 			'buttons': this.buttons
 		});
 		
-		this.w.add(this.accountPicker);
-		this.w.show();
+		this.accountPicker.on('accountdblclick', function(account){
+			this.account = account;
+			this.handler_okbutton();
+		}, this);
+		
+		this.accountPicker.on('accountselectionchange', function(account){
+			this.account = account;
+			ok_button.setDisabled(account ? false : true);
+        }, this);
+		
+		this.window.add(this.accountPicker);
+		this.window.show();
+	},
+	
+	// private
+	handler_okbutton: function(){
+		this.TriggerField.accountId = this.account.data.accountId;
+		this.TriggerField.setValue(this.account.data.accountDisplayName);
+		this.TriggerField.fireEvent('select');
+		this.window.hide();
 	}
 });
 
@@ -132,7 +148,20 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 	
 	//private
     initComponent: function(){
-		
+		this.addEvents(
+            /**
+             * @event accountdblclick
+             * Fires when an account is dbl clicked
+             * @param {Ext.Record} dbl clicked account
+             */
+            'accountdblclick',
+			/**
+             * @event accountselectionchange
+             * Fires when account selection changes
+             * @param {Ext.Record} dbl clicked account or undefined if none
+             */
+			'accountselectionchange'
+		);
 		this.dataStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Egwbase.getAccounts'
@@ -220,6 +249,16 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             border: false
         });
 		
+		this.searchPanel.on('rowdblclick', function(grid, row, event) {
+            var account = this.searchPanel.getSelectionModel().getSelected();
+			this.fireEvent('accountdblclick', account);
+		}, this);
+		
+		this.searchPanel.getSelectionModel().on('selectionchange', function(sm){
+			var account = sm.getSelected();
+			this.fireEvent('accountselectionchange', account);
+		}, this)
+		
 		this.items = [this.searchPanel, {
            title: 'Browse',
            html: 'Browse',
@@ -227,7 +266,6 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         }];
 		
 	    Egw.widgets.AccountpickerPanel.superclass.initComponent.call(this);
-		
 	}
 });
 
