@@ -363,8 +363,12 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         $result['results'] = Addressbook_Controller::getInstance()->getGrants($addressbookId)->toArray();
         $result['totalcount'] = count($result['results']);
         
-        foreach($result['results'] as $key => $value) {
-            $result['results'][$key]["accountName"] = Egwbase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
+        foreach($result['results'] as &$value) {
+            if($value['accountId'] === NULL) {
+                $value['accountName'] = array('accountDisplayName' => 'Anyone');
+            } else {
+                $value["accountName"] = Egwbase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
+            }
         }
         
         return $result;
