@@ -184,7 +184,8 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 
         var columnModel = new Ext.grid.ColumnModel([
             {
-                resizable: true, 
+                resizable: false,
+				sortable: false, 
                 id: 'accountDisplayName', 
                 header: 'Name', 
                 dataIndex: 'accountDisplayName', 
@@ -239,6 +240,8 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             id: 'Egwbase_Accounts_Grid',
             store: this.dataStore,
             cm: columnModel,
+			enableColumnHide:false,
+            enableColumnMove:false,
             autoSizeColumns: false,
             selModel: new Ext.grid.RowSelectionModel({multiSelect:this.multiSelect}),
             enableColLock:false,
@@ -269,3 +272,15 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 	}
 });
 
+/**
+ * @class Egw.widgets.AccountpickerActiondialog
+ * <p>A baseclass for assembling dialogs with actions related to accounts</p>
+ * <p>This class should be extended by its users and normaly not be instanciated
+ * using the new keyword.</p>
+ * @extends Ext.Component
+ * @constructor
+ * @param {Object} config The configuration options
+ */
+Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Component, {
+	
+});
