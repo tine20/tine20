@@ -13,7 +13,7 @@
  * HTTP interface to Egwbase
  *
  */
-class Egwbase_Http
+class Egwbase_Http extends Egwbase_Application_Http_Abstract
 {
     /**
      * displays the login dialog
@@ -38,9 +38,11 @@ class Egwbase_Http
         $view->setScriptPath('Egwbase/views');
 
         //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
-        $view->jsIncludeFiles = array();
-        $view->jsIncludeFiles[] = 'Egwbase/js/ExtUx.js';
-                
+        $view->jsIncludeFiles = array(
+            self::_appendFileTime("Egwbase/js/ExtUx.js"),
+            self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
+            self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
+        );
         $view->cssIncludeFiles = array();
         $view->initialData = array();
         
