@@ -1686,8 +1686,9 @@ Egw.Crm = function() {
         getPanel: _getTreePanel,
 
         reload: function() {
-            Ext.getCmp('gridCrm').getStore().reload();
-            Ext.getCmp('gridCrm').doLayout();
+            if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
+                setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
+            }
         }
     };
     
@@ -2240,7 +2241,9 @@ Egw.Crm.LeadEditDialog.Main = function() {
     			success:function(form, action, o) {
                     //store_products.reload();
                     //store_products.rejectChanges();
-    				window.opener.Egw.Crm.reload();
+                    if(window.opener.Egw.Crm) {
+    				    window.opener.Egw.Crm.reload();
+                    }
     			},
     			failure:function(form, action) {
     			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
