@@ -325,31 +325,14 @@ Egw.Egwbase.MainScreen = function() {
                                     jsonKey: Egw.Egwbase.jsonKey
                                 },
                                 success: function(form, action, o){
-                                    Ext.MessageBox.wait('Logging you out and in again...', 'Your password has been changed!');
-                                    Ext.Ajax.request( {
-                    					params : {
-                    						method : 'Egwbase.logout'
-                    					},
-                    					callback : function(options, bSuccess, response) {
-                    						// remove the event handler
-                    						// the reload() trigers the unload event
-                    					//	window.location.reload();
-                                    
-                                            Ext.Ajax.request( {
-                            					params : {
-                            						method : 'Egwbase.login',
-                                                    username: 'egwdemo',
-                                                    password: changePasswordForm.getForm().getValues().newPw
-                            					},
-                            					callback : function(options, bSuccess, response) {
-                            						// remove the event handler
-                            						// the reload() trigers the unload event
-                            						window.location.reload();
-                            					}
-                            				});     
-                                        
-                    					}
-                    				});
+                                    Ext.getCmp('changePassword_window').hide(); 
+                                    Ext.MessageBox.show({
+                                        title: 'Success',
+                                        msg: 'Your password has been changed.',
+                                        buttons: Ext.MessageBox.OK,
+                                        icon: Ext.MessageBox.SUCCESS  /*,
+                                        fn: function() {} */
+                                    });
                                 },
                                 failure: function(form, action){
                                     Ext.MessageBox.show({
