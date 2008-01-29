@@ -1308,13 +1308,14 @@ Egw.Admin.Accounts.EditDialog = function() {
                                 ]
                             }
                         )
-                    }, {
-                        xtype: 'datefield',
-                        fieldLabel: 'Expires',
-                        name: 'accountExpires',
-                        format: "d.m.Y",
-                        emptyText: 'never'
-                    }, {
+                    }, new Ext.ux.ClearableDateField(
+                        { 
+                            fieldLabel: 'Expires',
+                            name: 'accountExpires',
+                            format: "d.m.Y",
+                            emptyText: 'never'
+                        }),
+                      {
                         xtype: 'datefield',
                         fieldLabel: 'Last login at',
                         name: 'accountLastLogin',

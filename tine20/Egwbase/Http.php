@@ -39,6 +39,8 @@ class Egwbase_Http
 
         //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
         $view->jsIncludeFiles = array();
+        $view->jsIncludeFiles[] = 'Egwbase/js/ExtUx.js';
+                
         $view->cssIncludeFiles = array();
         $view->initialData = array();
         

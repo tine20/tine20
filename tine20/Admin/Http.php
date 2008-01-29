@@ -35,6 +35,7 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
         $view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
         $view->cssIncludeFiles = array();
         
+        $view->jsIncludeFiles[] = 'Egwbase/js/ExtUx.js';                
         $view->jsIncludeFiles[] = 'Admin/js/Admin.js';
         $view->jsIncludeFiles[] = 'Tasks/js/Widgets.js';
         $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
