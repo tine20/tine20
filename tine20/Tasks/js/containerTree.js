@@ -154,7 +154,7 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	// private
     initComponent: function(){
 		Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
-		console.log(this.hallo);
+
 		var w = new Ext.Window({
 			title: this.title,
 			modal: true,
