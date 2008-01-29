@@ -208,11 +208,8 @@ class Egwbase_Controller
 
     public function login($_username, $_password, $_ipAddress)
     {
-        $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
+        $authAdapter = $this->_getAuthAdapter($_username, $_password);
         
-        $authAdapter->setIdentity($_username);
-        $authAdapter->setCredential($_password);
-            
         $result = Zend_Auth::getInstance()->authenticate($authAdapter);
         
         if ($result->isValid()) {
@@ -260,6 +257,29 @@ class Egwbase_Controller
         }
         
         return $result;
+    }
+    
+    protected function _getAuthAdapter($_username, $_password)
+    {
+        $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
+        
+        $authAdapter->setIdentity($_username);
+        $authAdapter->setCredential($_password);
+        
+        return $authAdapter;
+    }
+    
+    public function isValidPassword($_username, $_password)
+    {
+        $authAdapter = $this->_getAuthAdapter($_username, $_password);
+        
+        $result = $adapter->authenticate();
+        
+        if ($result->isValid()) {
+            return true;
+        }
+        
+        return false;
     }
     
     /**
