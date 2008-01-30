@@ -412,10 +412,14 @@
 			
 			grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
 				_eventObject.stopEvent();
+                if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                    _grid.getSelectionModel().selectRow(_rowIndex);
+                }
+
 				var numSelected = _grid.getSelectionModel().getCount();
-				if (numSelected < 1) {
-					return;
-				}
+				//if (numSelected < 1) {
+				//	return;
+				//}
 				
 				var items = numSelected > 1 ? [actions.deleteMultiple] : [
 				    actions.editInPopup,
