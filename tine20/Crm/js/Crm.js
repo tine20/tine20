@@ -1321,8 +1321,6 @@ Egw.Crm = function() {
             var gridColumnModell = Ext.getCmp('gridCrm').getColumnModel();
             
             if(toggle.pressed === true) {
-                toggle.setIconClass('hideDetails_action');    
-                toggle.setText('hide details');                                                     
                 
                 gridColumnModell.setRenderer(1, function(value, meta, record) {
                     return '<b>' + value + '</b><br /><br />' + record.data.lead_description;
@@ -1394,8 +1392,6 @@ Egw.Crm = function() {
             } 
             
             if(toggle.pressed === false) {
-                toggle.setIconClass('showDetails_action');   
-                toggle.setText('show details');                         
                 
                 gridColumnModell.setRenderer(1, function(value, meta, record) {
                     return value;
@@ -1448,19 +1444,8 @@ Egw.Crm = function() {
                     enableToggle: true,
                     iconCls: 'showEndedLeads_action',
                     id: 'crm_ShowClosedLeadsButton',
-                    handler: function(toggle) {
-                        
-                        if(toggle.pressed) {
-                            toggle.setIconClass('hideEndedLeads_action');
-                            toggle.setText('hide closed leads');                                                     
-                        } else {
-                            toggle.setIconClass('showEndedLeads_action');                            
-                            toggle.setText('show closed leads');                                                                                 
-                        }
-                        
-                        
+                    handler: function(toggle) {                        
                         var dataStore = Ext.getCmp('gridCrm').getStore();
-                        
                         dataStore.reload();
                     },                    
                     pressed: false
@@ -1604,7 +1589,13 @@ Egw.Crm = function() {
             enableColLock:false,
             loadMask: true,
             autoExpandColumn: 'lead_name',
-            border: false
+            border: false,
+			view: new Ext.grid.GridView({
+                autoFill: true,
+	            forceFit:true,
+	            ignoreAdd: true,
+	            emptyText: 'No Leads to display'
+	        })            
         });
         
         Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
