@@ -214,7 +214,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         return $treeNodes;
     }
     
-    public function saveAccount($accountData, $password)
+    public function saveAccount($accountData, $password, $password2)
     {
         $decodedAccountData = Zend_Json::decode($accountData);
         
@@ -231,7 +231,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
         
-        $saveAccount = Admin_Controller::getInstance()->saveAccount($account, $password, $password);
+        $saveAccount = Admin_Controller::getInstance()->saveAccount($account, $password, $password2);
         
         $result = $saveAccount->toArray();
         

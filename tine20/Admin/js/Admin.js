@@ -1203,7 +1203,8 @@ Egw.Admin.Accounts.EditDialog = function() {
 	                params: {
 	                    method: 'Admin.saveAccount', 
 	                    accountData: Ext.util.JSON.encode(this.accountRecord.data),
-	                    password: form.findField('accountPassword').getValue()
+	                    password: form.findField('accountPassword').getValue(),
+	                    password2: form.findField('accountPassword2').getValue()                        
 	                },
 	                success: function(_result, _request) {
 	                	window.opener.Egw.Admin.Accounts.Main.reload();
@@ -1261,6 +1262,12 @@ Egw.Admin.Accounts.EditDialog = function() {
                         xtype: 'textfield',
                         fieldLabel: 'Password',
                         name: 'accountPassword',
+                        inputType: 'password',
+                        emptyText: 'no password set'
+                    }, {
+                        xtype: 'textfield',
+                        fieldLabel: 'Password again',
+                        name: 'accountPassword2',
                         inputType: 'password',
                         emptyText: 'no password set'
                     }, {
