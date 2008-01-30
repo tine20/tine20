@@ -123,7 +123,15 @@ Egw.Egwbase.MainScreen = function() {
             items:[{
                 text: 'eGroupWare',
                 menu: systemMenu
-            }]
+            },
+            '->',
+            {
+                icon:    'images/oxygen/16x16/actions/system-log-out.png',
+                cls:     'x-btn-icon',
+                tooltip: {text:'Click this button to logout from eGroupWare'},
+                handler: _logoutButtonHandler
+            }
+            ]
 
 		});
 
@@ -132,13 +140,7 @@ Egw.Egwbase.MainScreen = function() {
             height: 26,
             items:[
                 'Current timezone: ' +  Egw.Egwbase.Registry.get('timeZone'), 
-                '->', 
-                {
-                    icon:    'images/oxygen/16x16/actions/system-log-out.png',
-                    cls:     'x-btn-icon',
-                    tooltip: {text:'Click this button to logout from eGroupWare'},
-                    handler: _logoutButtonHandler
-                }
+                ' | Current user: ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName
             ]
 
         });
@@ -272,41 +274,41 @@ Egw.Egwbase.MainScreen = function() {
     
     var _changePasswordHandler = function(_event) {
         
-        var oldPw = new Ext.form.TextField({
+        var oldPassword = new Ext.form.TextField({
             inputType: 'password',
             hideLabel: false,
-            id: 'oldPw',
+            id: 'oldPassword',
             fieldLabel:'old password', 
-            name:'oldPw',
+            name:'oldPassword',
             allowBlank: false,
             anchor: '100%',            
             selectOnFocus: true
         });
         
-        var newPw = new Ext.form.TextField({
+        var newPassword = new Ext.form.TextField({
             inputType: 'password',            
             hideLabel: false,
-            id: 'newPw',
+            id: 'newPassword',
             fieldLabel:'new password', 
-            name:'newPw',
+            name:'newPassword',
             allowBlank: false,
             anchor: '100%',
             selectOnFocus: true      
         });
         
-        var newPwSecondTime = new Ext.form.TextField({
+        var newPasswordSecondTime = new Ext.form.TextField({
             inputType: 'password',            
             hideLabel: false,
-            id: 'newPwSecondTime',
+            id: 'newPasswordSecondTime',
             fieldLabel:'new password again', 
-            name:'newPwSecondTime',
+            name:'newPasswordSecondTime',
             allowBlank: false,
             anchor: '100%',           
             selectOnFocus: true                  
         });   
 
         var changePasswordToolbar = new Ext.Toolbar({
-          	id: 'changePwToolbar',
+          	id: 'changePasswordToolbar',
 			split: false,
 			height: 26,
 			items: [
@@ -363,20 +365,61 @@ Egw.Egwbase.MainScreen = function() {
 			baseParams: {method :'Egwbase.changePassword'},
 		    labelAlign: 'top',
 			bodyStyle:'padding:5px',
-            tbar: changePasswordToolbar,
+      //      tbar: changePasswordToolbar,
             anchor:'100%',
 			region: 'center',
-            id: 'changePwPanel',
+            id: 'changePasswordPanel',
 			deferredRender: false,
 	        items: [
-                oldPw,
-                newPw,
-                newPwSecondTime
+                oldPassword,
+                newPassword,
+                newPasswordSecondTime
             ]
         });
 
+        _savePassword = function() {
+            if (changePasswordForm.getForm().isValid()) {
+     
+                if (changePasswordForm.getForm().getValues().newPassword == changePasswordForm.getForm().getValues().newPasswordSecondTime) {
+                    changePasswordForm.getForm().submit({
+                        waitTitle: 'Please wait!',
+                        waitMsg: 'changing password...',
+                        params: {
+                            jsonKey: Egw.Egwbase.jsonKey
+                        },
+                        success: function(form, action, o){
+                            Ext.getCmp('changePassword_window').hide(); 
+                            Ext.MessageBox.show({
+                                title: 'Success',
+                                msg: 'Your password has been changed.',
+                                buttons: Ext.MessageBox.OK,
+                                icon: Ext.MessageBox.SUCCESS  /*,
+                                fn: function() {} */
+                            });
+                        },
+                        failure: function(form, action){
+                            Ext.MessageBox.show({
+                                title: 'Failure',
+                                msg: 'Your old password is incorrect.',
+                                buttons: Ext.MessageBox.OK,
+                                icon: Ext.MessageBox.ERROR  /*,
+                                fn: function() {} */
+                            });
+                        }
+                    });
+                } else {
+                    Ext.MessageBox.show({
+                        title: 'Failure',
+                        msg: 'The new passwords mismatch, please correct them.',
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.ERROR  /*,
+                        fn: function() {} */
+                    });    
+                }
+            };
+          };
 
-        var pwDialog = new Ext.Window({
+        var passwordDialog = new Ext.Window({
     		title: 'Change password for ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName,
             id: 'changePassword_window',
 			modal: true,
@@ -386,12 +429,26 @@ Egw.Egwbase.MainScreen = function() {
 		    minHeight: 230,
 		    layout: 'fit',
 		    plain: true,
+            buttons: [
+                {
+                    text: 'Ok',
+             //       iconCls: 'action_saveAndClose',
+                    handler: _savePassword                    
+                } ,
+                {
+                    text: 'Cancel',
+//                    iconCls: 'action_saveAndClose',
+                    handler: function() {
+                        Ext.getCmp('changePassword_window').hide();
+                    }
+                }
+            ],
 		    bodyStyle: 'padding:5px;',
 		    buttonAlign: 'center'
         });
             
-        pwDialog.add(changePasswordForm);
-        pwDialog.show();            
+        passwordDialog.add(changePasswordForm);
+        passwordDialog.show();            
 	};    
     
     /**

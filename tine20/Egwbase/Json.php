@@ -100,14 +100,14 @@ class Egwbase_Json
      * @param string $newPw the new password
      * @return array
      */
-    public function changePassword($oldPw, $newPw)
+    public function changePassword($oldPassword, $newPassword)
     {
         $response = array(
             'success'      => TRUE
         );
         
         try {
-            Egwbase_Controller::getInstance()->changePassword($oldPw, $newPw, $newPw);
+            Egwbase_Controller::getInstance()->changePassword($oldPassword, $newPassword, $newPassword);
         } catch (Exception $e) {
             $response = array(
                 'success'      => FALSE,
