@@ -1195,7 +1195,8 @@ Egw.Admin.Accounts.EditDialog = function() {
 	            Ext.Ajax.request({
 	                params: {
 	                    method: 'Admin.saveAccount', 
-	                    accountData: Ext.util.JSON.encode(this.accountRecord.data)
+	                    accountData: Ext.util.JSON.encode(this.accountRecord.data),
+	                    password: form.findField('accountPassword').getValue()
 	                },
 	                success: function(_result, _request) {
 	                	window.opener.Egw.Admin.Accounts.Main.reload();
@@ -1289,7 +1290,8 @@ Egw.Admin.Accounts.EditDialog = function() {
                 defaults: {
                     anchor: '95%'
                 },
-                items: [{
+                items: [
+                    {
                         xtype: 'combo',
                         fieldLabel: 'Status',
                         name: 'accountStatus',
@@ -1308,14 +1310,13 @@ Egw.Admin.Accounts.EditDialog = function() {
                                 ]
                             }
                         )
-                    }, new Ext.ux.ClearableDateField(
-                        { 
-                            fieldLabel: 'Expires',
-                            name: 'accountExpires',
-                            format: "d.m.Y",
-                            emptyText: 'never'
-                        }),
-                      {
+                    }, 
+                    new Ext.ux.ClearableDateField({ 
+                        fieldLabel: 'Expires',
+                        name: 'accountExpires',
+                        format: "d.m.Y",
+                        emptyText: 'never'
+                    }), {
                         xtype: 'datefield',
                         fieldLabel: 'Last login at',
                         name: 'accountLastLogin',
