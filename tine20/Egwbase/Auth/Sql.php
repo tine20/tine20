@@ -50,7 +50,7 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
                 return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
             }
             
-            if($this->_resultRow['account_expires'] !== NULL && $this->_resultRow['account_expires'] < Zend_Date::now()->getTimestamp()) {
+            if(($this->_resultRow['account_expires'] !== NULL && $this->_resultRow['account_expires'] !== -1) && $this->_resultRow['account_expires'] < Zend_Date::now()->getTimestamp()) {
                 // account is expired
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account expired.';
