@@ -1,15 +1,21 @@
 <?php
 /**
+ * Tine 2.0
+ *
+ * @package     Admin
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+
+/**
  * backend class for Zend_Json_Server
  *
  * This class handles all Json requests for the admin application
  *
  * @package     Admin
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
- *
  */
 class Admin_Json extends Egwbase_Application_Json_Abstract
 {
@@ -208,7 +214,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         return $treeNodes;
     }
     
-    public function saveAccount($accountData)
+    public function saveAccount($accountData, $password)
     {
         $decodedAccountData = Zend_Json::decode($accountData);
         
@@ -225,7 +231,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
         
-        $saveAccount = Admin_Controller::getInstance()->saveAccount($account);
+        $saveAccount = Admin_Controller::getInstance()->saveAccount($account, $password, $password);
         
         $result = $saveAccount->toArray();
         

@@ -1,13 +1,19 @@
 <?php
 /**
- * controller for Admin
+ * Tine 2.0
  *
  * @package     Admin
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Controller.php 273 2007-11-08 22:51:16Z lkneschke $
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
+ */
+
+/**
+ * controller for Admin application
+ *
+ * @package     Admin
  */
 class Admin_Controller
 {
@@ -94,9 +100,15 @@ class Admin_Controller
         return $result;
     }
     
-    public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
+    public function saveAccount(Egwbase_Account_Model_FullAccount $_account, $_password1, $_password2)
     {
-        return Egwbase_Account::getInstance()->saveAccount($_account);
+        $result = Egwbase_Account::getInstance()->saveAccount($_account);
+        
+        if(!empty($_password1) && !empty($_password2)) {
+            Egwbase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
+        }
+        
+        return $result;
     }
 
     public function deleteAccounts(array $_accountIds)
