@@ -11,7 +11,10 @@
  */
 
 /**
- * defines the datatype for one application
+ * defines the datatype for simple account object
+ * 
+ * this account object contains only public informations
+ * its primary usecase are user selection interfaces
  * 
  * @package     Egwbase
  * @subpackage  Account

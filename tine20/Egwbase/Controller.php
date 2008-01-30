@@ -5,7 +5,7 @@
  * @package     Egwbase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -208,15 +208,13 @@ class Egwbase_Controller
 
     public function login($_username, $_password, $_ipAddress)
     {
-        $authAdapter = $this->_getAuthAdapter($_username, $_password);
-        
-        $result = Zend_Auth::getInstance()->authenticate($authAdapter);
+        $result = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
         
         if ($result->isValid()) {
             Zend_Registry::get('logger')->debug("authentication of $_username succeeded");
             $accountsController = Egwbase_Account::getInstance();
             try {
-                $account = $accountsController->getAccountByLoginName($result->getIdentity());
+                $account = $accountsController->getFullAccountByLoginName($result->getIdentity());
             } catch (Exception $e) {
                 Zend_Session::destroy();
                 
@@ -259,27 +257,17 @@ class Egwbase_Controller
         return $result;
     }
     
-    protected function _getAuthAdapter($_username, $_password)
+    public function changePassword($_oldPassword, $_newPassword1, $_newPassword2)
     {
-        $authAdapter = Egwbase_Auth::factory(Egwbase_Auth::SQL);
+        //error_log(print_r(Zend_Registry::get('currentAccount')->toArray(), true));
+        $loginName = Zend_Registry::get('currentAccount')->accountLoginName;
+        Zend_Registry::get('logger')->debug("change password for $loginName");
         
-        $authAdapter->setIdentity($_username);
-        $authAdapter->setCredential($_password);
-        
-        return $authAdapter;
-    }
-    
-    public function isValidPassword($_username, $_password)
-    {
-        $authAdapter = $this->_getAuthAdapter($_username, $_password);
-        
-        $result = $authAdapter->authenticate();
-        
-        if ($result->isValid()) {
-            return true;
+        if(!Egwbase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
+            throw new Exception('old password worng');
         }
         
-        return false;
+        Egwbase_Auth::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
     }
     
     /**

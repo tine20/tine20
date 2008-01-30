@@ -125,7 +125,15 @@ class Egwbase_Account
         return $result;
     }
     
-    public function setPassword($_accountId, $_password)
+    /**
+     * Enter description here...
+     *
+     * @param unknown_type $_accountId
+     * @param unknown_type $_password
+     * @deprecated moved to authentication class
+     * @return unknown
+     */
+    private function setPassword($_accountId, $_password)
     {
         $result = $this->_backend->setPassword($_accountId, $_password);
       

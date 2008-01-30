@@ -12,6 +12,8 @@
 
 /**
  * Account factory class
+ * 
+ * this class is responsible for returning the right account backend
  *
  * @package     Egwbase
  * @subpackage  Accounts

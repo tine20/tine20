@@ -247,6 +247,21 @@ class Egwbase_Container
         }
     }
     
+    public function addSharedContainer($application, $containerName)
+    {
+        $this->addContainer($application, $containerName, self::TYPE_SHARED, 'Sql');
+
+        // add admin grants to creator
+        $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
+        // add read grants to any other user
+        $egwbaseContainer->addGrants($addressbookId, NULL, array(Egwbase_Container::GRANT_READ));
+    }
+    
+    public function addPersonalContainer($application, $containerName)
+    {
+        $this->addContainer($application, $containerName, self::TYPE_PERSONAL, 'Sql');
+    }
+    
     /**
      * creates a new container
      *
@@ -468,7 +483,7 @@ class Egwbase_Container
      */
     public function getPersonalContainer($_application, $_owner)
     {
-error_log('EGWBASE :: CONTAINER :: getPersonalContainer : '.$_application.' | owner: '.$_owner);    	
+        //error_log('EGWBASE :: CONTAINER :: getPersonalContainer : '.$_application.' | owner: '.$_owner);    	
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');

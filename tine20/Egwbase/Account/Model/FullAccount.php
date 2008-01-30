@@ -11,7 +11,10 @@
  */
 
 /**
- * defines the datatype for one application
+ * defines the datatype for a full user account
+ * 
+ * this datatype contains all information about an account
+ * the usage of this datatype should be restricted to administrative tasks only
  * 
  * @package     Egwbase
  * @subpackage  Account
@@ -56,7 +59,7 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
         'accountLastName'       => array('presence' => 'required'),
         'accountFirstName'      => array('allowEmpty' => true),
         'accountFullName'       => array('presence' => 'required'),
-        'accountPassword'       => array('allowEmpty' => true),
+        //'accountPassword'       => array('allowEmpty' => true),
         'accountEmailAddress'   => array('allowEmpty' => true)
     );
 
@@ -72,6 +75,11 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
         'accountExpires'
     );
     
+    /**
+     * return the public informations of this account only
+     *
+     * @return Egwbase_Account_Model_Account
+     */
     public function getPublicAccount()
     {
         $result = new Egwbase_Account_Model_Account($this->toArray(), true);

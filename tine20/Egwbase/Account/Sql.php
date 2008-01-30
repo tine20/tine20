@@ -16,7 +16,6 @@
  * @package     Egwbase
  * @subpackage  Accounts
  */
-
 class Egwbase_Account_Sql implements Egwbase_Account_Interface
 {
     /**
@@ -159,10 +158,12 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL, $_accountClass = 'Egwbase_Account_Model_Account')
     {        
         $select = $this->_getAccountSelectObject()
-            ->where('(n_family LIKE ? OR n_given LIKE ?)', '%' . $_filter . '%')
             ->limit($_limit, $_start)
             ->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
 
+        if(!empty($_filter)) {
+            $select->where('(n_family LIKE ? OR n_given LIKE ? OR account_lid LIKE ?)', '%' . $_filter . '%');
+        }
         // return only active accounts, when searching for simple accounts
         if($_accountClass == 'Egwbase_Account_Model_Account') {
             $select->where('account_status = ?', 'A');
@@ -328,9 +329,10 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      *
      * @param int $_accountId
      * @param string $_password
+     * @deprecated moved to authentication class
      * @return void
      */
-    public function setPassword($_accountId, $_password)
+    private function setPassword($_accountId, $_password)
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
@@ -405,10 +407,10 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             'account_primary_group' => '-4'
         );
         
-        if(!empty($_account->accountPassword)) {
+/*        if(!empty($_account->accountPassword)) {
             $accountData['account_pwd']            = new Zend_Db_Expr("MD5('" . $_account->accountPassword . "')");
             $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
-        }
+        }*/
         
         $contactData = array(
             'n_family'      => $_account->accountLastName,

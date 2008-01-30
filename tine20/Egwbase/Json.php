@@ -5,7 +5,7 @@
  * @package     Egwbase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -23,7 +23,7 @@ class Egwbase_Json
      *
      * @return array list of countrys
      */
-    function getCountryList()
+    public function getCountryList()
     {
         $locale = Zend_Registry::get('locale');
 
@@ -43,7 +43,7 @@ class Egwbase_Json
         return $result;
     }
     
-    function getAccounts($filter, $sort, $dir, $start, $limit)
+    public function getAccounts($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
             'results'     => array(),
@@ -62,11 +62,10 @@ class Egwbase_Json
         return $result;
     }
 
-    function getContainer($application, $nodeType, $owner=NULL)
+    public function getContainer($application, $nodeType, $owner =  NULL)
     {    	
         switch($nodeType) {
             case 'Personal':
-                if (!$owner) throw new Exception('No owner given');
                 $container = Egwbase_Container::getInstance()->getPersonalContainer($application,$owner);
                 break;
             case 'Shared':
@@ -84,6 +83,15 @@ class Egwbase_Json
         exit;
     }
     
+    public function addContainer($application, $containerName, $containerType)
+    {
+        if($containerName === Egwbase_Container::TYPE_SHARED) {
+            $container = Egwbase_Container::getInstance()->addSharedContainer($application, $containerName);
+        } else {
+            $container = Egwbase_Container::getInstance()->addPersonalContainer($application, $containerName);
+        }
+    }
+    
     
     /**
      * change password of user 
@@ -92,8 +100,24 @@ class Egwbase_Json
      * @param string $newPw the new password
      * @return array
      */
-    function changePassword($oldPw, $newPw)
+    public function changePassword($oldPw, $newPw)
     {
+        $response = array(
+            'success'      => TRUE
+        );
+        
+        try {
+            Egwbase_Controller::getInstance()->changePassword($oldPw, $newPw, $newPw);
+        } catch (Exception $e) {
+            $response = array(
+                'success'      => FALSE,
+                'errorMessage' => "new password could not be set!"
+            );   
+        }
+        
+        return $response;
+        
+/*        
         $auth = Zend_Auth::getInstance();        
               
         $oldIsValid = Egwbase_Controller::getInstance()->isValidPassword($auth->getIdentity(), $oldPw);              
@@ -116,7 +140,7 @@ class Egwbase_Json
 				'errorMessage' => "old password is wrong!");
         }
         
-        return $res;
+        return $res;*/
     }    
     
     
@@ -127,7 +151,7 @@ class Egwbase_Json
      * @param string $password the password
      * @return array
      */
-    function login($username, $password)
+    public function login($username, $password)
     {
         $result = Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']);
         
@@ -158,7 +182,7 @@ class Egwbase_Json
      *
      * @return array
      */
-    function logout()
+    public function logout()
     {
         Egwbase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         

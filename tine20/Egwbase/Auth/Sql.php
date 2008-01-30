@@ -60,4 +60,35 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         
         return $result;
     }
+    
+    /**
+     * set the password for given account
+     *
+     * @param int $_accountId
+     * @param string $_password
+     * @return void
+     */
+    public function setPassword($_loginName, $_password)
+    {
+        if(empty($_loginName)) {
+            throw new InvalidArgumentException('$_loginName can not be empty');
+        }
+        
+        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        
+        $accountData['account_pwd'] = md5($_password);
+        $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
+        
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto('account_lid = ?', $_loginName)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        if ($result != 1) {
+            throw new Exception('Unable to update password! account not found in authentication backend.');
+        }
+        
+        return $result;
+    }
+    
 }

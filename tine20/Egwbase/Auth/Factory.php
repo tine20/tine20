@@ -1,0 +1,49 @@
+<?php
+/**
+ * Tine 2.0
+ * 
+ * @package     Egwbase
+ * @subpackage  Auth
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @version     $Id: Auth.php 390 2007-12-03 15:29:54Z nelius_weiss $
+ */
+
+/**
+ * authentication backend factory class
+ *  
+ * @package     Egwbase
+ * @subpackage  Auth
+ */
+
+class Egwbase_Auth_Factory
+{
+    /**
+     * constant for Sql contacts backend class
+     *
+     */
+    const SQL = 'Sql';
+    
+    /**
+     * constant for LDAP contacts backend class
+     *
+     */
+    const LDAP = 'Ldap';
+    
+    /**
+     * factory function to return a selected authentication backend class
+     *
+     * @param string $type
+     * @return object
+     */
+    static public function factory($type)
+    {
+        $className = 'Egwbase_Auth_'.$type;
+        $instance = new $className();
+        
+        //throw new Exception('unknown type');
+        
+        return $instance;
+    }
+}
