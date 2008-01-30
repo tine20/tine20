@@ -886,8 +886,8 @@ Egw.Admin.Accounts.Main = function() {
 	    },
 	    
 	    deleteButtonHandler: function(_button, _event) {
-	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected account(s)?', function(_button){
-	            if (_button == 'yes') {
+	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected account(s)?', function(_confirmButton){
+	            if (_confirmButton == 'yes') {
 	            
 	                var accountIds = new Array();
 	                var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
@@ -1067,6 +1067,13 @@ Egw.Admin.Accounts.Main = function() {
 	                //alert(e);
 	            }
 	        });
+	        
+	        grid_applications.on('keydown', function(e){
+                 if(e.getKey() == e.DELETE){
+                     this.deleteButtonHandler();
+                 }
+            }, this);
+	        
 	    },
 	    
 	    initComponent: function()
