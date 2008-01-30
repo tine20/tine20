@@ -85,5 +85,5 @@ Egw.Tasks.status.getStatus = function(identifier) {
 
 Egw.Tasks.status.getStatusIcon = function(identifier) {
     var status = Egw.Tasks.status.getStatus(identifier);
-    return '<img class="TasksMainGridStatus" src="' + status.data.status_icon + '" ext:qtip="' + name + '">';
+    return '<img class="TasksMainGridStatus" src="' + status.data.status_icon + '" ext:qtip="' + status.data.status_name + '">';
 };
