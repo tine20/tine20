@@ -15,6 +15,7 @@ Ext.namespace('Egw.widgets.dialog');
 Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	labelAlign: 'top',
     bodyStyle:'padding:5px',
+    layout: 'fit',
     anchor:'100%',
     region: 'center',
     deferredRender: false,
@@ -25,14 +26,14 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     initComponent: function(){
 		this.action_saveAndClose = new Ext.Action({
             text: 'save and close',
-            handler: this.handler_saveAndClose,
+            handler: this.handlerSaveAndClose,
             iconCls: 'action_saveAndClose',
             scope: this.handlerScope
         });
     
         this.action_applyChanges = new Ext.Action({
             text: 'apply changes',
-            handler: this.handler_applyChanges,
+            handler: this.handlerApplyChanges,
             iconCls: 'action_applyChanges',
             scope: this.handlerScope
             //disabled: true
@@ -40,7 +41,7 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     
         this.action_delete = new Ext.Action({
             text: 'delete',
-            handler: this.handler_pre_delete,
+            handler: this.handlerDelete,
             iconCls: 'action_delete',
             scope: this.handlerScope,
             disabled: true
