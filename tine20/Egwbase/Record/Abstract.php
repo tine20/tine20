@@ -212,7 +212,10 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
                         'msg' => $errorMessages[0]
                     );
                 }
-                throw new UnexpectedValueException('some fields have invalid content');
+                $e = new UnexpectedValueException('some fields have invalid content');
+                Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
+                    print_r($this->_validationErrors,true). $e);
+                throw $e;
             }
         }
     }
