@@ -1359,18 +1359,16 @@ Egw.Admin.Accounts.EditDialog = function() {
         
         display: function(_accountData) 
         {
-
             // Ext.FormPanel
 		    var dialog = new Egw.widgets.dialog.EditRecord({
 		        id : 'admin_editAccountForm',
 		        //title: 'the title',
-		        layout: 'fit',
 		        labelWidth: 120,
                 labelAlign: 'side',
                 handlerScope: this,
-                handler_applyChanges: this.applyChanges,
-                handler_saveAndClose: this.saveChanges,
-                handler_pre_delete: this.deleteAccount,
+                handlerApplyChanges: this.applyChanges,
+                handlerSaveAndClose: this.saveChanges,
+                handlerDelete: this.deleteAccount,
 		        items: this.editAccountDialog
 		    });
 
