@@ -714,7 +714,7 @@
                         fieldLabel: 'Priority',
                         name: 'priority'
                     }), 
-                    new Ext.form.DateField({
+                    new Ext.ux.ClearableDateField({
                         fieldLabel: 'Due date',
                         name: 'due',
                         format: "d.m.Y"

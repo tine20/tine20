@@ -28,6 +28,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            self::_appendFileTime("Egwbase/js/ExtUx.js"),
             self::_appendFileTime("Tasks/js/Widgets.js"),
             self::_appendFileTime("Tasks/js/Status.js"),
             self::_appendFileTime("Tasks/js/containerTree.js"),
