@@ -48,8 +48,9 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
         
         $view->title="edit account";
 
+        $view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('popup.php');
-        
+        echo $view->render('mainscreen.php');
     }
 }

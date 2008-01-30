@@ -78,8 +78,10 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
         
 		$view->title="edit contact";
 		
-		header('Content-Type: text/html; charset=utf-8');
-		echo $view->render('popup.php');
+		$view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
 	}
 
 	public function editList($_listId)
@@ -131,7 +133,9 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
 		$view->jsExecute = 'Egw.Addressbook.ListEditDialog.display();';
 
-		header('Content-Type: text/html; charset=utf-8');
-		echo $view->render('popup.php');
+		$view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
 	}
 }

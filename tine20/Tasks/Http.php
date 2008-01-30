@@ -28,10 +28,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            self::_appendFileTime("Egwbase/js/ExtUx.js"),
-            self::_appendFileTime("Tasks/js/Widgets.js"),
             self::_appendFileTime("Tasks/js/Status.js"),
-            self::_appendFileTime("Tasks/js/containerTree.js"),
             self::_appendFileTime("Tasks/js/Tasks.js"),
         );
     }
@@ -100,7 +97,10 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
             'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
+        
+        $view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('popup.php');
+        echo $view->render('mainscreen.php');
     }
 }

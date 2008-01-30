@@ -31,7 +31,6 @@
     		echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
     	}
     ?>
-    
     <script type="text/javascript" language="javascript">
         <?php
            foreach ($this->initialData as $appname => $data) {
@@ -45,7 +44,9 @@
 
         Ext.onReady(function(){
             Egw.Egwbase.initFramework();
-            Egw.Egwbase.MainScreen.display();
+            <?php if(empty($this->isPopup)) echo "Egw.Egwbase.MainScreen.display(); \n" ?>
+            <?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . "; \n" ?>
+            <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
             window.focus();
     	});
     </script>

@@ -28,7 +28,18 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('login.php');
     }
-
+    
+    public function getJsFilesToInclude()
+    {
+        return array(
+            self::_appendFileTime("Egwbase/js/ExtUx.js"),
+            self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
+            self::_appendFileTime("Egwbase/js/Widgets.js"),
+            self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
+            self::_appendFileTime("Egwbase/js/containerTree.js")
+        );
+    }
+    
     public function mainScreen()
     {
         $userApplications = Zend_Registry::get('currentAccount')->getApplications();
@@ -38,11 +49,7 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
         $view->setScriptPath('Egwbase/views');
 
         //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
-        $view->jsIncludeFiles = array(
-            self::_appendFileTime("Egwbase/js/ExtUx.js"),
-            self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
-            self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
-        );
+        $view->jsIncludeFiles = $this->getJsFilesToInclude();
         $view->cssIncludeFiles = array();
         $view->initialData = array();
         
