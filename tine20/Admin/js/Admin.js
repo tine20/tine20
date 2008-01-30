@@ -1069,7 +1069,7 @@ Egw.Admin.Accounts.Main = function() {
 	        });
 	        
 	        grid_applications.on('keydown', function(e){
-                 if(e.getKey() == e.DELETE){
+                 if(e.getKey() == e.DELETE && Ext.getCmp('AdminAccountsGrid').getSelectionModel().getCount() > 0){
                      this.deleteButtonHandler();
                  }
             }, this);
