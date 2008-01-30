@@ -31,3 +31,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/delete-user.png) !important;
 }
 
+.action_showArchived {
+    background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
+}
+
+.action_hideArchived {
+    background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
+}
