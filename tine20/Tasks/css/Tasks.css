@@ -13,32 +13,13 @@
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 
-.TasksMainGridStatus-DONE, TasksMainGridStatus-COMPLETED {
+.TasksMainGridStatus {
+    width: 12px;
+	height: 12px;
+}
+
+.TasksMainGridStatus-show_closed {
     background-image:url(../../images/oxygen/16x16/actions/checkmark-korganizer.png) !important;
-	background-repeat: no-repeat;
-	width: 16px;
-	height: 16px;
-}
-
-.TasksMainGridStatus-NOT-STARTED {
-    background-image:url(../../images/oxygen/16x16/actions/application-exit.png) !important;
-    background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
-}
-
-.TasksMainGridStatus-NEEDS-ACTION, .TasksMainGridStatus-IN-PROCESS {
-    background-image:url(../../images/oxygen/16x16/actions/tool.png) !important;
-    background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
-}
-
-.TasksMainGridStatus-CANCELLED {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
-    background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
 }
 
 #TasksMainGrid .x-grid3-header {

@@ -21,7 +21,7 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
     protected $_application = 'Tasks';
     
     protected $_validators = array(
-        'identifier'           => array('allowEmpty' => true, 'Int'    ),
+        'identifier'           => array('allowEmpty' => true,  'Int'   ),
         
         'start'                => array('allowEmpty' => true,  'Int'   ),
         'limit'                => array('allowEmpty' => true,  'Int'   ),
@@ -35,6 +35,7 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
         'query'                => array('allowEmpty' => true           ),
         'organizer'            => array('allowEmpty' => true           ),
         'status'               => array('allowEmpty' => true           ),
+        'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false)),
         'due'                  => array('allowEmpty' => true           ),
         'tag'                  => array('allowEmpty' => true           ),
         

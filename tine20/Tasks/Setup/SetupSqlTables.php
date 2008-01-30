@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 
@@ -51,9 +51,11 @@ class Tasks_Setup_SetupSqlTables
                 `is_deleted` BOOLEAN NOT NULL DEFAULT FALSE,
                 `deleted_time` DATETIME DEFAULT NULL,
                 `deleted_by` INT(11),
-                `status` VARCHAR(64) NOT NULL,
+                `status_name` VARCHAR(64) NOT NULL,
+                `status_is_open` BOOLEAN NOT NULL,
+                `status_icon` VARCHAR(64),
                 PRIMARY KEY  (`identifier`),
-                UNIQUE (`status`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+                UNIQUE (`status_name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
 
             $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "tasks (
@@ -137,23 +139,23 @@ class Tasks_Setup_SetupSqlTables
         
         // egw_tasks_status
         $db->getConnection()->exec("INSERT INTO `" . SQL_TABLE_PREFIX . "tasks_status` (
-            `created_by`, `creation_time`, `status` ) VALUES (
-            $accountId, $now, 'NEEDS-ACTION')"
+            `created_by`, `creation_time`, `status_name`, `status_is_open`, `status_icon` ) VALUES (
+            $accountId, $now, 'NEEDS-ACTION', 1, 'images/oxygen/16x16/actions/tool.png')"
         );
         
         $db->getConnection()->exec("INSERT INTO `" . SQL_TABLE_PREFIX . "tasks_status` (
-            `created_by`, `creation_time`, `status` ) VALUES (
-            $accountId, $now, 'COMPLETED')"
+            `created_by`, `creation_time`, `status_name`, `status_is_open`, `status_icon` ) VALUES (
+            $accountId, $now, 'COMPLETED', 0, 'images/oxygen/16x16/actions/checkmark-korganizer.png')"
         );
         
         $db->getConnection()->exec("INSERT INTO `" . SQL_TABLE_PREFIX . "tasks_status` (
-            `created_by`, `creation_time`, `status` ) VALUES (
-            $accountId, $now, 'IN-PROCESS')"
+            `created_by`, `creation_time`, `status_name`, `status_is_open`, `status_icon` ) VALUES (
+            $accountId, $now, 'IN-PROCESS', 1, 'images/oxygen/16x16/actions/view-refresh.png')"
         );
         
         $db->getConnection()->exec("INSERT INTO `" . SQL_TABLE_PREFIX . "tasks_status` (
-            `created_by`, `creation_time`, `status` ) VALUES (
-            $accountId, $now, 'CANCELLED')"
+            `created_by`, `creation_time`, `status_name`, `status_is_open`, `status_icon` ) VALUES (
+            $accountId, $now, 'CANCELLED', 0, 'images/oxygen/16x16/actions/dialog-cancel.png')"
         );
     }
     

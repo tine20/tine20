@@ -157,6 +157,7 @@
 	            filter.limit = options.params.limit;
 				
 				//filter.due
+				filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
 				filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
 				filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
 				filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
@@ -238,12 +239,22 @@
 				}
 			});
 			
+			var showClosedToggle = new Ext.Button({
+				id: 'TasksShowClosed',
+				enableToggle: true,
+				handler: function(){
+					store.load({params: paging});
+				},
+				scope: this,
+				text: 'show closed',
+				iconCls: 'action_showArchived'
+			})
 			var statusFilter = new Ext.ux.ClearableComboBox({
 				id: 'TasksStatusFilter',
 				//name: 'statusFilter',
 				hideLabel: true,
 				store: Egw.Tasks.status.getStore(),
-				displayField: 'status',
+				displayField: 'status_name',
 				valueField: 'identifier',
 				typeAhead: true,
 				mode: 'local',
@@ -280,8 +291,9 @@
 					actions.deleteSingle,
 					new Ext.Toolbar.Separator(),
 					'->',
+					showClosedToggle,
 					'Status: ',	' ', statusFilter,
-					'Organizer: ', ' ',	organizerFilter,
+					//'Organizer: ', ' ',	organizerFilter,
 					new Ext.Toolbar.Separator(),
 					'->',
 					'Search:', ' ', ' ', quickSearchField]

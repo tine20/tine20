@@ -19,7 +19,7 @@ class Tasks_Model_Status extends Egwbase_Record_Abstract
     protected $_identifier = 'identifier';
     
     protected $_validators = array(
-        'identifier'           => array('allowEmpty' => true, 'Int'  ),
+        'identifier'           => array('allowEmpty' => true,  'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
         'creation_time'        => array('allowEmpty' => true         ),
         'last_modified_by'     => array('allowEmpty' => true         ),
@@ -27,7 +27,9 @@ class Tasks_Model_Status extends Egwbase_Record_Abstract
         'is_deleted'           => array('allowEmpty' => true         ),
         'deleted_time'         => array('allowEmpty' => true         ),
         'deleted_by'           => array('allowEmpty' => true         ),
-        'status'               => array('allowEmpty' => false        ),
+        'status_name'          => array('allowEmpty' => false        ),
+        'status_is_open'       => array('allowEmpty' => false        ),
+        'status_icon'          => array('allowEmpty' => true         ),
     );
     
     protected $_datetimeFields = array(

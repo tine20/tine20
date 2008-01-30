@@ -19,7 +19,7 @@ Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	
 	fieldLabel: 'status',
     name: 'status',
-    displayField: 'status',
+    displayField: 'status_name',
     valueField: 'identifier',
     mode: 'local',
     triggerAction: 'all',
@@ -59,7 +59,9 @@ Egw.Tasks.status.getStore = function() {
                 { name: 'is_deleted'                                        }, 
                 { name: 'deleted_time',       type: 'date', dateFormat: 'c' }, 
                 { name: 'deleted_by'                                        },
-                { name: 'status'                                            }
+                { name: 'status_name'                                       },
+                { name: 'status_is_open'                                    },
+                { name: 'status_icon'                                       }
            ],
 		   // initial data from http request
            data: Egw.Tasks.AllStati,
@@ -71,17 +73,17 @@ Egw.Tasks.status.getStore = function() {
 };
 
 Egw.Tasks.status.getIdentifier = function(statusName) {
-	var index = Egw.Tasks.status.getStore().find('status', statusName);
+	var index = Egw.Tasks.status.getStore().find('status_name', statusName);
 	var status = Egw.Tasks.status.getStore().getAt(index);
 	return status.data.identifier;
 };
 
-Egw.Tasks.status.getStatusName = function(identifier) {
+Egw.Tasks.status.getStatus = function(identifier) {
 	var status = Egw.Tasks.status.getStore().getById(identifier);
-    return status ? status.data.status : identifier;
+    return status ? status : identifier;
 };
 
 Egw.Tasks.status.getStatusIcon = function(identifier) {
-    var name = Egw.Tasks.status.getStatusName(identifier);
-    return '<div class="TasksMainGridStatus-' + name + '" ext:qtip="' + name + '"></div>';
+    var status = Egw.Tasks.status.getStatus(identifier);
+    return '<img class="TasksMainGridStatus" src="' + status.data.status_icon + '" ext:qtip="' + name + '">';
 };

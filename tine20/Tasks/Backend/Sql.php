@@ -40,6 +40,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         'related'   => 'tasks_related',
         'contact'   => 'tasks_contact',
         'tag'       => 'tasks_tag',
+        'status'    => 'tasks_status',
     );
     
     /**
@@ -95,6 +96,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             return $TaskSet;
         }
         
+        error_log(print_r($_filter->toArray(),true));
         // build query
         // TODO: abstract filter2sql
         $select = $this->_getSelect()
@@ -114,6 +116,9 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
         if(!empty($_filter->organizer)){
             $select->where($this->_db->quoteInto('organizer = ?', (int)$_filter->organizer));
+        }
+        if(!$_filter->showClosed){
+            $select->where('status.status_is_open = TRUE');
         }
 
         $stmt = $this->_db->query($select);
@@ -171,13 +176,15 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     {
         return $this->_db->select()
             ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
-                'contact'    => 'GROUP_CONCAT(DISTINCT contact.contact_identifier)',
-                'related'    => 'GROUP_CONCAT(DISTINCT related.related_identifier)',
-                'tag' => 'GROUP_CONCAT(DISTINCT tag.tag_identifier)'
+                'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_identifier)',
+                'related' => 'GROUP_CONCAT(DISTINCT related.related_identifier)',
+                'tag'     => 'GROUP_CONCAT(DISTINCT tag.tag_identifier)',
+                'is_open' => 'status.status_is_open',
             ))
-            ->joinLeft(array('contact'    => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
-            ->joinLeft(array('related'    => $this->_tableNames['related']), 'tasks.identifier = related.task_identifier', array())
-            ->joinLeft(array('tag' => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
+            ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
+            ->joinLeft(array('related' => $this->_tableNames['related']), 'tasks.identifier = related.task_identifier', array())
+            ->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
+            ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status = status.identifier', array())
             ->where('tasks.is_deleted = FALSE')
             ->group('tasks.identifier');
     }
