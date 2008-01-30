@@ -33,7 +33,7 @@
     ?>
     <script type="text/javascript" language="javascript">
         <?php
-           foreach ($this->initialData as $appname => $data) {
+           foreach ((array)$this->initialData as $appname => $data) {
                if (!empty($data) ) {
                    foreach ($data as $var => $content) {
                        echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
