@@ -29,9 +29,20 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
         echo $view->render('login.php');
     }
     
+    /**
+     * Returns all JS files which must be included for Egwbase
+     *
+     * @todo refactor js stuff so that all js files could be included
+     * before regestry gets included!
+     * 
+     * @return array Array of filenames
+     */
     public function getJsFilesToInclude()
     {
         return array(
+            //self::_appendFileTime("extjs/adapter/ext/ext-base.js"),
+            //self::_appendFileTime("extjs/ext-all-debug.js"),
+            //self::_appendFileTime("Egwbase/js/Egwbase.js"),
             self::_appendFileTime("Egwbase/js/ExtUx.js"),
             self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
             self::_appendFileTime("Egwbase/js/Widgets.js"),
