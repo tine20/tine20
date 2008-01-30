@@ -312,7 +312,7 @@ Egw.Egwbase.MainScreen = function() {
 			items: [
                 '->',
 				{
-                    text: 'change password',
+                    text: 'Change password',
                     iconCls: 'action_saveAndClose',
                     handler: function() {
                     if (changePasswordForm.getForm().isValid()) {
@@ -377,17 +377,17 @@ Egw.Egwbase.MainScreen = function() {
 
 
         var pwDialog = new Ext.Window({
-    		title: 'change password',
+    		title: 'Change password for ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName,
             id: 'changePassword_window',
 			modal: true,
-		    width: 250,
-		    height: 300,
-		    minWidth: 250,
-		    minHeight: 300,
+		    width: 350,
+		    height: 230,
+		    minWidth: 350,
+		    minHeight: 230,
 		    layout: 'fit',
-		    plain:true,
-		    bodyStyle:'padding:5px;',
-		    buttonAlign:'center'
+		    plain: true,
+		    bodyStyle: 'padding:5px;',
+		    buttonAlign: 'center'
         });
             
         pwDialog.add(changePasswordForm);
