@@ -11,8 +11,22 @@
 Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 
 Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondialog, {
-    getPermsPanel: function() {
-        var _removeAccountHandler = function(_button, _event) {
+	/**
+	 * @cfg {Egw.Egwbase.container.models.container}
+	 * Container to manage grants for
+	 */
+	container: null,
+	
+	/**
+	 * @property {Object}
+	 * Models 
+	 */
+	models: {
+		containerGrant : Egw.Egwbase.container.models.containerGrant
+	},
+	// private
+	handlers: {
+        removeAccount: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Grants_Grid').getSelectionModel().getSelections();
             var grantsStore = Ext.getCmp('Addressbook_Grants_Grid').getStore();
             for (var i = 0; i < selectedRows.length; ++i) {
@@ -21,9 +35,8 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
     
             Ext.getCmp('Addressbook_Grants_SaveButton').enable();
             Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
-        };
-    
-        var _addAccountHandler = function(_button, _event) {
+        },
+        addAccount: function(_button, _event) {
             var grantsStore = Ext.getCmp('Addressbook_Grants_Grid').getStore();
             var grantsSelectionModel = Ext.getCmp('Addressbook_Grants_Grid').getSelectionModel();
             var accountsSelectionModel = Ext.getCmp('Egwbase_Accounts_Grid').getSelectionModel();
@@ -37,16 +50,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
                 currentRecordId = selectedRows[i].id;
                 if(grantsStore.getById(selectedRows[i].id) === undefined) {
                 
-                    var grantsRecord = Ext.data.Record.create(
-                        {name: 'accountId'},
-                        {name: 'accountName'},
-                        {name: 'readGrant'},
-                        {name: 'addGrant'},
-                        {name: 'editGrant'},
-                        {name: 'deleteGrant'}
-                    );
-                    
-                    grantsStore.addSorted(new grantsRecord({
+                    grantsStore.addSorted(new this.models.containerGrants({
                         accountId: selectedRows[i].data.accountId,
                         accountName: selectedRows[i].data.accountDisplayName,
                         readGrant: true,
@@ -65,52 +69,43 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
                 Ext.getCmp('Addressbook_Grants_SaveButton').enable();
                 Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
             }
-        };
-    
-    
-        var action_addAccount = new Ext.Action({
-            text: 'add account',
-            disabled: true,
-            handler: _addAccountHandler,
-            iconCls: 'action_addContact'
-        });
-    
-        var action_removeAccount = new Ext.Action({
-            text: 'remove account',
-            disabled: true,
-            handler: _removeAccountHandler,
-            iconCls: 'action_deleteContact'
-        });
-        
-        var dataStore = new Ext.data.JsonStore({
-            url: 'index.php',
+        }
+	},
+	//private
+    initComponent: function(){
+		this.actions = {
+	        addAccount: new Ext.Action({
+	            text: 'add account',
+	            disabled: true,
+	            handler: this.handlers.addAccount,
+	            iconCls: 'action_addContact'
+	        }),
+	        removeAccount: new Ext.Action({
+	            text: 'remove account',
+	            disabled: true,
+	            handler: this.handlers.removeAccount,
+	            iconCls: 'action_deleteContact'
+	        })
+		};
+		this.dataStore =  new Ext.data.JsonStore({
             baseParams: {
                 method: 'Egwbase.getContainerGrants',
-                containerId: ''
+                containerId: this.container.container_id
             },
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: [
-                {name: 'accountId'},
-                {name: 'accountName'},
-                {name: 'readGrant'},
-                {name: 'addGrant'},
-                {name: 'editGrant'},
-                {name: 'deleteGrant'}
-            ]
-            // turn off remote sorting
-            //remoteSort: false
+            fields: this.models.containerGrant
         });
+	        
+        this.dataStore.setDefaultSort('accountName', 'asc');
         
-        dataStore.setDefaultSort('accountName', 'asc');
+        this.dataStore.load();
         
-        dataStore.load();
-        
-        dataStore.on('update', function(_store){
-            Ext.getCmp('Addressbook_Grants_SaveButton').enable();
-            Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
-        });
+        this.dataStore.on('update', function(_store){
+            Ext.getCmp('AccountsActionSaveButton').enable();
+            Ext.getCmp('AccountsActionApplyButton').enable();
+        }, this);
         
         var readColumn = new Ext.grid.CheckColumn({
             header: 'Read',
@@ -148,12 +143,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             readColumn,
             addColumn,
             editColumn,
-            deleteColumn/*,
-            new Ext.grid.CheckColumn({
-                header: "Admin",
-                dataIndex: 'admin',
-                width: 55
-            }) */
+            deleteColumn
         ]);
 
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -162,28 +152,26 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
         
         var permissionsBottomToolbar = new Ext.Toolbar({
             items: [
-                action_removeAccount
+                this.actions.removeAccount
             ]
         });
         
-
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
             if(rowCount < 1) {
                 // no row selected
-                action_removeAccount.setDisabled(true);
+                this.actions.removeAccount.setDisabled(true);
             } else {
                 // only one row selected
-                action_removeAccount.setDisabled(false);
+                this.actions.removeAccount.setDisabled(false);
             }
-        });
+        }, this);
         
-        var gridPanel = new Ext.grid.EditorGridPanel({
+        this.GrantsGridPanel = new Ext.grid.EditorGridPanel({
             region: 'center',
-            id: 'Addressbook_Grants_Grid',
             title: 'Permissions',
-            store: dataStore,
+            store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,
             selModel: rowSelectionModel,
@@ -194,7 +182,10 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             bbar: permissionsBottomToolbar,
             border: false
         });
-        
-        return gridPanel;
+		
+		this.items = [
+		   this.GrantsGridPanel
+		];
+		Egw.widgets.container.grantDialog.superclass.initComponent.call(this);
     }
 })

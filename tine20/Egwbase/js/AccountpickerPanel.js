@@ -192,7 +192,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
              */
 			'accountselectionchange'
 		);
-		this.dataStore = new Ext.data.JsonStore({
+		this.accountsStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Egwbase.getAccounts'
             },
@@ -206,10 +206,10 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             remoteSort: true
         });
         
-        this.dataStore.setDefaultSort('accountDisplayName', 'asc');
+        this.accountsStore.setDefaultSort('accountDisplayName', 'asc');
 
-        this.dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.filter = Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue();
+        this.accountsStore.on('beforeload', function(_accountsStore) {
+            _accountsStore.baseParams.filter = Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue();
         });        
 
         var columnModel = new Ext.grid.ColumnModel([
@@ -268,7 +268,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 		this.searchPanel = new Ext.grid.GridPanel({
             title: 'Search',
             id: 'Egwbase_Accounts_Grid',
-            store: this.dataStore,
+            store: this.accountsStore,
             cm: columnModel,
 			enableColumnHide:false,
             enableColumnMove:false,
@@ -348,7 +348,7 @@ Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 		if (!this.buttons) {
 			this.buttons = [{
 				text: 'Save',
-				id: 'ContainerGrantsSaveButton',
+				id: 'AccountsActionSaveButton',
 				disabled: true,
 				scope: this,
 				handler: function(){
@@ -357,7 +357,7 @@ Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 				}
 			}, {
 				text: 'Apply',
-				id: 'ContainerGrantsApplyButton',
+				id: 'AccountsActionApplyButton',
 				disabled: true,
 				scope: this,
 				handler: function(){

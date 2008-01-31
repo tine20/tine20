@@ -57,5 +57,20 @@ Egw.Egwbase.container = {
     /**
      * type for shared container
      */
-    TYPE_SHARED: 'shared'
+    TYPE_SHARED: 'shared',
+	
+	/**
+	 * Models of Egwbase container
+	 * @property {Object}
+	 */
+	models: {
+		containerGrant: Ext.data.Record.create([
+            {name: 'accountId'},
+            {name: 'accountName'},
+            {name: 'readGrant'},
+            {name: 'addGrant'},
+            {name: 'editGrant'},
+            {name: 'deleteGrant'}
+        ])
+	}
 };

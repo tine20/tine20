@@ -143,6 +143,33 @@ class Egwbase_Json
     }
     
     /**
+     * returns container grants
+     * 
+     * @param int $containerId
+     * @return array
+     * @throws Exception
+     */
+    public function getContainerGrants($containerId) {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $result['results'] = Egwbase_Container::getInstance()->getAllGrants($containerId)->toArray();
+        $result['totalcount'] = count($result['results']);
+        
+        foreach($result['results'] as &$value) {
+            if($value['accountId'] === NULL) {
+                $value['accountName'] = array('accountDisplayName' => 'Anyone');
+            } else {
+                $value["accountName"] = Egwbase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * change password of user 
      *
      * @param string $oldPw the old password

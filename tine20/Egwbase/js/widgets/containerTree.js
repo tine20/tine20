@@ -264,11 +264,14 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 				}
             },
 			managePermissions: function() {
-				var win = new Egw.widgets.container.grantDialog({
-					
-				});
-				win.show();
-                //this.fireEvent('containerpermissionchange', '');
+				if (this.ctxNode) {
+					var node = this.ctxNode;
+					var win = new Egw.widgets.container.grantDialog({
+						container: node.attributes.container
+					});
+					win.show();
+				    //this.fireEvent('containerpermissionchange', '');
+				}
             },
 		};
 		
