@@ -1,4 +1,4 @@
-/**
+/*
  * egroupware 2.0
  * 
  * @package     Egwbase
@@ -9,8 +9,19 @@
  * @version     $Id$
  *
  */
+
 Ext.namespace('Egw.widgets');
 
+/**
+ * Account picker widget
+ * @class Egw.widgets.AccountpickerField
+ * @package Egwbase
+ * @subpackage Widgets
+ * @extends Ext.form.TwinTriggerField
+ * 
+ * <p> This widget supplies a generic account picker field. When the field is
+ triggered a {Egw.widgets.AccountpickerDialog} is showen, to select a account. </p>
+ */
 Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 	/**
      * @cfg {bool}
@@ -52,6 +63,7 @@ Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
     getValue: function(){
         return this.accountId;
     },
+	// private
 	onTrigger1Click: function(){
 		this.accountId = null;
 		this.setValue('');
@@ -59,7 +71,16 @@ Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		this.triggers[0].hide();
 	}
 });
-	
+
+/**
+ * Account picker widget
+ * @class Egw.widgets.AccountpickerDialog
+ * @package Egwbase
+ * @subpackage Widgets
+ * @extends Ext.Component
+ * 
+ * <p> This widget supplies a modal account picker dialog.</p>
+ */
 Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	/**
 	 * @cfg {Ext.form.field}
@@ -127,6 +148,15 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	}
 });
 
+/**
+ * Account picker pandel widget
+ * @class Egw.widgets.AccountpickerPanel
+ * @package Egwbase
+ * @subpackage Widgets
+ * @extends Ext.TabPanel
+ * 
+ * <p> This widget supplies a account picker panel to be used in related widgets.</p>
+ */
 Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 	/**
      * @cfg {Ext.Action}
@@ -281,6 +311,73 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
  * @constructor
  * @param {Object} config The configuration options
  */
-Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Component, {
+Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
+	/**
+	 * @cfg
+	 * {Ext.Toolbar} Toolbar to display in the bottom area of the user selection
+	 */
+	userSelectionBottomToolBar: null,
 	
+	modal: true,
+    layout:'border',
+    width:700,
+    height:450,
+    closeAction:'hide',
+    plain: true,
+
+    //private
+    initComponent: function(){
+		//this.addEvents()
+		
+		this.userSelection = new Egw.widgets.AccountpickerPanel({
+			region: 'west',
+			split: true,
+			bbar: this.userSelectionBottomToolBar,
+			selectAction: function() {
+				
+			}
+		});
+		
+		if (!this.items) {
+			this.items = [];
+			this.userSelection.region = 'center';
+		}
+		this.items.push(this.userSelection);
+		
+		// set standart buttons if no buttons are given
+		if (!this.buttons) {
+			this.buttons = [{
+				text: 'Save',
+				id: 'ContainerGrantsSaveButton',
+				disabled: true,
+				scope: this,
+				handler: function(){
+					this.close()
+
+				}
+			}, {
+				text: 'Apply',
+				id: 'ContainerGrantsApplyButton',
+				disabled: true,
+				scope: this,
+				handler: function(){
+
+				}
+			}, {
+				text: 'Close',
+				scope: this,
+				handler: function(){
+					this.close();
+				}
+			}];
+		}
+		Egw.widgets.AccountpickerActiondialog.superclass.initComponent.call(this);
+	},
+	/**
+	 * Returns user Selection Panel
+	 * @return {Egw.widgets.AccountpickerPanel}
+	 */
+	getUserSelection: function() {
+		return this.userSelection;
+	}
 });

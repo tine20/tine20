@@ -8,58 +8,18 @@
  *
  */
 
-Ext.namespace('Egw.Egwbase.container');
-Egw.Egwbase.container = {
-	/**
-     * constant for no grants
-     */
-	GRANT_NONE: 0,
-    /**
-     * constant for read grant
-     */
-    GRANT_READ: 1,
-    /**
-     * constant for add grant
-     */
-    GRANT_ADD: 2,
-    /**
-     * constant for edit grant
-     */
-    GRANT_EDIT: 4,
-    /**
-     * constant for delete grant
-     */
-    GRANT_DELETE: 8,
-    /**
-     * constant for admin grant
-     */
-    GRANT_ADMIN: 16,
-    /**
-     * constant for all grants
-     */
-    GRANT_ANY: 31,
-	/** 
-	 * type for internal contaier
-     * for example the internal addressbook
-     */
-    TYPE_INTERNAL: 'internal',
-    /**
-     * type for personal containers
-     */
-    TYPE_PERSONAL: 'personal',
-    /**
-     * type for shared container
-     */
-    TYPE_SHARED: 'shared'
-};
-
+Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 
  /**
   * @class Egw.containerTreePanel
   * @package     Egw
   * @subpackage  Widgets
-  * <p> Utility class for generating container trees as used in the 
+  * @extends     Ext.tree.TreePanel
+  * 
+  * <p>Utility class for generating container trees as used in the 
   * apps tree panel</p>
+  * <p>This widget handles all container related actions like add/rename/delte 
+  * and manager permissions<p>
   * <p>Example usage:</p>
   * <pre><code>
   var taskPanel =  new Egw.containerTreePanel({
@@ -67,11 +27,12 @@ Egw.Egwbase.container = {
         title: 'Tasks',
         itemName: 'Tasks',
         appName: 'Tasks',
+        folderName: 'Task Folder',
         border: false
     });
   </code></pre>
   */
- Egw.containerTreePanel = Ext.extend(Ext.tree.TreePanel, {
+ Egw.widgets.container.TreePanel = Ext.extend(Ext.tree.TreePanel, {
  	/**
      * @cfg {string} appName
      * name of application
@@ -88,15 +49,17 @@ Egw.Egwbase.container = {
      */
 	folderName: 'folder',
 	
+	// presets
 	iconCls: 'x-new-application',
 	rootVisible: false,
 	border: false,
 	
-	//private
-	//holds treenode which got a contextmenu
+	// holds treenode which got a contextmenu
 	ctxNode: null,
+	
+	// private
 	initComponent: function(){
-		Egw.containerTreePanel.superclass.initComponent.call(this);
+		Egw.widgets.container.TreePanel.superclass.initComponent.call(this);
 		this.addEvents(
             /**
              * @event containeradded
@@ -159,7 +122,7 @@ Egw.Egwbase.container = {
 	        }]
 	    }];
 	    
-	    this.loader = new Egw.containerTreeLoader({
+	    this.loader = new Egw.widgets.container.TreeLoader({
 	        dataUrl:'index.php',
 	        baseParams: {
 	            jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
@@ -204,11 +167,13 @@ Egw.Egwbase.container = {
 		
 		
 	},
+	// private
 	afterRender: function() {
-		Egw.containerTreePanel.superclass.afterRender.call(this);
+		Egw.widgets.container.TreePanel.superclass.afterRender.call(this);
 		//console.log(this);
 		this.expandPath('/root/all');
 	},
+	// private
 	initContextMenu: function() {
 		var handler = {
 			addContainer: function() {
@@ -299,7 +264,11 @@ Egw.Egwbase.container = {
 				}
             },
 			managePermissions: function() {
-                this.fireEvent('containerpermissionchange', '');
+				var win = new Egw.widgets.container.grantDialog({
+					
+				});
+				win.show();
+                //this.fireEvent('containerpermissionchange', '');
             },
 		};
 		
@@ -344,86 +313,17 @@ Egw.Egwbase.container = {
 	        ]
 	    });
 	},
-	addContainer: function(container_name) {
-		
-	}
+	
 		
  });
 
-Ext.namespace('Egw.widgets', 'Egw.widgets.container');
-Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
-	/**
-     * @cfg {array}
-     * default container
-     */
-    defaultContainer: false,
-	
-    allowBlank: false,
-    readOnly:true,
-	container_id: null,
-	
-	// private
-	initComponent: function(){
-		Egw.widgets.container.selectionComboBox.superclass.initComponent.call(this);
-        if (this.defaultContainer) {
-			this.container_id = this.defaultContainer.container_id;
-			this.value = this.defaultContainer.container_name;
-		}
-		this.onTriggerClick = function(e) {
-            var w = new Egw.widgets.container.selectionDialog({
-				TriggerField: this
-			});
-        };
-	},
-	//private
-	getValue: function(){
-		return this.container_id;
-	}
-});
-
-Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
-	title: 'please select a container',
-
-	// private
-    initComponent: function(){
-		Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
-
-		var w = new Ext.Window({
-			title: this.title,
-			modal: true,
-			width: 375,
-			height: 400,
-			minWidth: 375,
-			minHeight: 400,
-			layout: 'fit',
-			plain: true,
-			bodyStyle: 'padding:5px;',
-			buttonAlign: 'center'
-		});
-		
-		var tree = new Egw.containerTreePanel({
-			itemName: this.TriggerField.itemName,
-			appName: this.TriggerField.appName,
-			defaultContainer: this.TriggerField.defaultContainer
-		});
-		
-		tree.on('click', function(_node) {
-            if(_node.attributes.containerType == 'singleContainer') {
-				
-				this.TriggerField.container = _node.attributes.container;
-				this.TriggerField.setValue(_node.attributes.text);
-                w.hide();
-            }
-        }, this);
-			
-		w.add(tree);
-		w.show();
-	}
-});
-
-
-			
-Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
+/**
+ * Helper class for {Egw.widgets.container.TreePanel}
+ * 
+ * @extends {Ext.tree.TreeLoader}
+ * @param {Object} attr
+ */
+Egw.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	//private
  	createNode: function(attr)
  	{

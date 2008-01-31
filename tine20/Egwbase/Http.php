@@ -40,14 +40,20 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
+            // base framework
             //self::_appendFileTime("extjs/adapter/ext/ext-base.js"),
             //self::_appendFileTime("extjs/ext-all-debug.js"),
+            // Egwbase
             //self::_appendFileTime("Egwbase/js/Egwbase.js"),
+            self::_appendFileTime("Egwbase/js/container.js"),
+            // widgets
             self::_appendFileTime("Egwbase/js/ExtUx.js"),
             self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
             self::_appendFileTime("Egwbase/js/Widgets.js"),
             self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
-            self::_appendFileTime("Egwbase/js/containerTree.js")
+            self::_appendFileTime("Egwbase/js/widgets/containerSelect.js"),
+            self::_appendFileTime("Egwbase/js/widgets/containerGrants.js"),
+            self::_appendFileTime("Egwbase/js/widgets/containerTree.js")
         );
     }
     
