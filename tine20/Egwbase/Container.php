@@ -247,19 +247,38 @@ class Egwbase_Container
         }
     }
     
-    public function addSharedContainer($application, $containerName)
+    public function addSharedContainer($_application, $_containerName)
     {
-        $this->addContainer($application, $containerName, self::TYPE_SHARED, 'Sql');
+        $accountId   = Zend_Registry::get('currentAccount')->accountId;
+        $containerId = $this->addContainer($_application, $_containerName, self::TYPE_SHARED, 'Sql');
 
-        // add admin grants to creator
-        $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
+        // add all grants to creator
+        $this->addGrants($containerId, $accountId, array(
+            self::GRANT_READ, 
+            self::GRANT_ADD, 
+            self::GRANT_EDIT, 
+            self::GRANT_DELETE, 
+            self::GRANT_ADMIN
+        ));
         // add read grants to any other user
-        $egwbaseContainer->addGrants($addressbookId, NULL, array(Egwbase_Container::GRANT_READ));
+        $this->addGrants($containerId, NULL, array(Egwbase_Container::GRANT_READ));
+        return $this->getContainerById($containerId);
     }
     
-    public function addPersonalContainer($application, $containerName)
+    public function addPersonalContainer($_application, $_containerName)
     {
-        $this->addContainer($application, $containerName, self::TYPE_PERSONAL, 'Sql');
+        $accountId   = Zend_Registry::get('currentAccount')->accountId;
+        $containerId = $this->addContainer($_application, $_containerName, self::TYPE_PERSONAL, 'Sql');
+        
+        // add all grants to creator
+        $this->addGrants($containerId, $accountId, array(
+            self::GRANT_READ, 
+            self::GRANT_ADD, 
+            self::GRANT_EDIT, 
+            self::GRANT_DELETE, 
+            self::GRANT_ADMIN
+        ));
+        return $this->getContainerById($containerId);
     }
     
     /**
@@ -313,8 +332,6 @@ class Egwbase_Container
         } else {
             $accountId = NULL;
         }
-        
-        $grants = (int)$_grants;
         
         foreach($_grants as $grant) {
             $grant = (int)$grant;
@@ -513,7 +530,7 @@ class Egwbase_Container
             ->having('account_grants & ?', self::GRANT_READ)
             ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
-        error_log("getContainer:: " . $select->__toString());
+        //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
 
@@ -648,6 +665,7 @@ class Egwbase_Container
      * delete container if user has the required right
      *
      * @param int $_containerId
+     * @return void
      */
     public function deleteContainer($_containerId)
     {
@@ -688,6 +706,7 @@ class Egwbase_Container
         );
         
         $this->containerTable->update($data, $where);
+        return $this->getContainerById($_containerId);
     }
     
     /**

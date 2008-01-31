@@ -62,13 +62,23 @@ class Egwbase_Json
         return $result;
     }
 
-    public function getContainer($application, $nodeType, $owner =  NULL)
+    /**
+     * gets container / container folder
+     * 
+     * Backend function for containerTree widget
+     * 
+     * @param string $application
+     * @param string $containerType
+     * @param string $owner
+     * @return string JSON
+     */
+    public function getContainer($application, $containerType, $owner =  NULL)
     {    	
-        switch($nodeType) {
-            case 'Personal':
+        switch($containerType) {
+            case Egwbase_Container::TYPE_PERSONAL:
                 $container = Egwbase_Container::getInstance()->getPersonalContainer($application,$owner);
                 break;
-            case 'Shared':
+            case Egwbase_Container::TYPE_SHARED:
                 $container = Egwbase_Container::getInstance()->getSharedContainer($application);
                 break;
             case 'OtherUsers':
@@ -83,15 +93,54 @@ class Egwbase_Json
         exit;
     }
     
+    /**
+     * adds a container
+     * 
+     * @param string $application
+     * @param string $containerName
+     * $param string $containerType
+     * @return array new container
+     */
     public function addContainer($application, $containerName, $containerType)
     {
-        if($containerName === Egwbase_Container::TYPE_SHARED) {
-            $container = Egwbase_Container::getInstance()->addSharedContainer($application, $containerName);
-        } else {
-            $container = Egwbase_Container::getInstance()->addPersonalContainer($application, $containerName);
+        switch($containerType) {
+            case Egwbase_Container::TYPE_SHARED:
+                $container = Egwbase_Container::getInstance()->addSharedContainer($application, $containerName);
+                break;
+            case Egwbase_Container::TYPE_PERSONAL:
+                $container = Egwbase_Container::getInstance()->addPersonalContainer($application, $containerName);
+                break;
+            default:
+                throw new Exception('no such containerType');
         }
+        return $container->toArray();
     }
     
+    /**
+     * deletes a container
+     * 
+     * @param int $containerId
+     * @return string success
+     * @throws Exception
+     */
+    public function deleteContainer($containerId)
+    {
+        Egwbase_Container::getInstance()->deleteContainer($containerId);
+        return 'success';
+    }
+    
+    /**
+     * renames a container
+     * 
+     * @param int $containerId
+     * $param string $newName
+     * @return array updated container
+     */
+    public function renameContainer($containerId, $newName)
+    {
+        $container = Egwbase_Container::getInstance()->renameContainer($containerId, $newName);
+        return $container->toArray();
+    }
     
     /**
      * change password of user 

@@ -8,6 +8,52 @@
  *
  */
 
+Ext.namespace('Egw.Egwbase.container');
+Egw.Egwbase.container = {
+	/**
+     * constant for no grants
+     */
+	GRANT_NONE: 0,
+    /**
+     * constant for read grant
+     */
+    GRANT_READ: 1,
+    /**
+     * constant for add grant
+     */
+    GRANT_ADD: 2,
+    /**
+     * constant for edit grant
+     */
+    GRANT_EDIT: 4,
+    /**
+     * constant for delete grant
+     */
+    GRANT_DELETE: 8,
+    /**
+     * constant for admin grant
+     */
+    GRANT_ADMIN: 16,
+    /**
+     * constant for all grants
+     */
+    GRANT_ANY: 31,
+	/** 
+	 * type for internal contaier
+     * for example the internal addressbook
+     */
+    TYPE_INTERNAL: 'internal',
+    /**
+     * type for personal containers
+     */
+    TYPE_PERSONAL: 'personal',
+    /**
+     * type for shared container
+     */
+    TYPE_SHARED: 'shared'
+};
+
+
  /**
   * @class Egw.containerTreePanel
   * @package     Egw
@@ -36,15 +82,47 @@
      * name of containers items
      */
     itemName: 'item',
-    
+    /**
+     * @cfg {string} folderName
+     * name of folders
+     */
+	folderName: 'folder',
+	
 	iconCls: 'x-new-application',
 	rootVisible: false,
 	border: false,
 	
 	//private
+	//holds treenode which got a contextmenu
+	ctxNode: null,
 	initComponent: function(){
 		Egw.containerTreePanel.superclass.initComponent.call(this);
-		
+		this.addEvents(
+            /**
+             * @event containeradded
+             * Fires when a container was added
+             * @param {container} the new container
+             */
+            'containeradd',
+            /**
+             * @event containerdelete
+             * Fires when a container got deleted
+             * @param {container} the deleted container
+             */
+            'containerdelete',
+            /**
+             * @event containerrename
+             * Fires when a container got renamed
+             * @param {container} the renamed container
+             */
+            'containerrename',
+			/**
+             * @event containerpermissionchange
+             * Fires when a container got renamed
+             * @param {container} the container whose permissions where changed
+             */
+            'containerpermissionchange'
+        );
 		var treeRoot = new Ext.tree.TreeNode({
 	        text: 'root',
 	        draggable:false,
@@ -55,26 +133,26 @@
 	    var initialTree = [{
 	        text: 'All ' + this.itemName,
 	        cls: "treemain",
-	        nodeType: 'all',
+	        containerType: 'all',
 	        id: 'all',
 	        children: [{
 	            text: 'My ' + this.itemName,
 	            cls: 'file',
-	            nodeType: 'Personal',
+	            containerType: Egw.Egwbase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
-	            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
+	            owner: Egw.Egwbase.Registry.get('currentAccount')
 	        }, {
 	            text: 'Shared ' + this.itemName,
 	            cls: 'file',
-	            nodeType: 'Shared',
+	            containerType: Egw.Egwbase.container.TYPE_SHARED,
 	            children: null,
 	            leaf: null,
 				owner: null
 	        }, {
 	            text: 'Other Users ' + this.itemName,
 	            cls: 'file',
-	            nodeType: 'OtherUsers',
+	            containerType: 'OtherUsers',
 	            children: null,
 	            leaf: null,
 				owner: null
@@ -87,20 +165,37 @@
 	            jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
 				method: 'Egwbase.getContainer',
 				application: this.appName,
-				nodeType: 'Personal'
-				 
+				containerType: Egw.Egwbase.container.TYPE_PERSONAL
 	        }
 	    });
 		
 		this.loader.on("beforeload", function(loader, node) {
-			loader.baseParams.nodeType = node.attributes.nodeType;
-			loader.baseParams.owner    = node.attributes.owner;
+			loader.baseParams.containerType = node.attributes.containerType;
+			loader.baseParams.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
 	    }, this);
-
-        this.on("activate", function(){
-			this.expandPath('/root/all');
+        
+		this.initContextMenu();
+		
+	    this.on('contextmenu', function(node, event){
+			this.ctxNode = node;
+			var container = node.attributes.container;
+			var owner     = node.attributes.owner;
+			switch (node.attributes.containerType) {
+				case 'singleContainer':
+					if (container.account_grants & Egw.Egwbase.container.GRANT_ADMIN) {
+						//console.log('GRANT_ADMIN for this container');
+						this.contextMenuSingleContainer.showAt(event.getXY());
+					}
+					break;
+				case Egw.Egwbase.container.TYPE_PERSONAL:
+				    if (owner.accountId == Egw.Egwbase.Registry.get('currentAccount').accountId) {
+						//console.log('owner clicked his own folder');
+						this.contextMenuUserFolder.showAt(event.getXY());
+					}
+					break;
+			}
 		}, this);
-	    
+		
 		this.setRootNode(treeRoot);
 	   
 	    for(var i=0; i<initialTree.length; i++) {
@@ -113,6 +208,144 @@
 		Egw.containerTreePanel.superclass.afterRender.call(this);
 		//console.log(this);
 		this.expandPath('/root/all');
+	},
+	initContextMenu: function() {
+		var handler = {
+			addContainer: function() {
+				Ext.MessageBox.prompt('New ' + this.folderName, 'Please enter the name of the new ' + this.folderName + ':', function(_btn, _text) {
+                    if( this.ctxNode && _btn == 'ok') {
+						Ext.MessageBox.wait('Please wait', 'Creating ' + this.folderName+ '...');
+						var parentNode = this.ctxNode;
+						
+						Ext.Ajax.request({
+		                    params: {
+		                        method: 'Egwbase.addContainer',
+								application: this.appName,
+		                        containerName: _text,
+		                        containerType: parentNode.attributes.containerType,
+		                    },
+							scope: this,
+		                    success: function(_result, _request){
+	                            var container = Ext.util.JSON.decode(_result.responseText);
+								var newNode = this.loader.createNode(container);
+	                            parentNode.appendChild(newNode);
+								this.fireEvent('containeradd', container);
+								Ext.MessageBox.hide();
+		                    }
+		                });
+					    
+					}
+				}, this);
+			},
+			deleteContainer: function() {
+				if (this.ctxNode) {
+					var node = this.ctxNode;
+					Ext.MessageBox.confirm('Confirm','Do you really want to delete the ' + this.folderName + ': "' + node.text + '"?', function(_btn){
+						if ( _btn == 'yes') {
+							Ext.MessageBox.wait('Please wait', 'Deleting ' + this.folderName + ' "' + node.text + '"');
+							
+							Ext.Ajax.request({
+								params: {
+									method: 'Egwbase.deleteContainer',
+									containerId: node.attributes.container.container_id,
+								},
+								scope: this,
+								success: function(_result, _request){
+									if(node.isSelected()) {
+                                        this.getSelectionModel().select(node.parentNode);
+                                        this.fireEvent('click', node.parentNode);
+			                        }
+			                        node.remove();
+									this.fireEvent('containerdelete', node.attributes.container);
+									Ext.MessageBox.hide();
+								}
+							});
+						}
+					}, this);
+				}
+            },
+			renameContainer: function() {
+				if (this.ctxNode) {
+					var node = this.ctxNode;
+					Ext.MessageBox.show({
+						title: 'Rename ' + this.folderName,
+						msg: 'Please enter the new name of the ' + this.folderName + ':',
+						buttons: Ext.MessageBox.OKCANCEL,
+						value: node.text,
+						fn: function(_btn, _text){
+							if (_btn == 'ok') {
+								Ext.MessageBox.wait('Please wait', 'Updateing ' + this.folderName + ' "' + node.text + '"');
+								
+								Ext.Ajax.request({
+									params: {
+										method: 'Egwbase.renameContainer',
+										containerId: node.attributes.container.container_id,
+										newName: _text
+									},
+									scope: this,
+									success: function(_result, _request){
+										var container = Ext.util.JSON.decode(_result.responseText);
+										node.setText(_text);
+										this.fireEvent('containerrename', container);
+										Ext.MessageBox.hide();
+									}
+								});
+							}
+						},
+						scope: this,
+						prompt: true,
+						icon: Ext.MessageBox.QUESTION
+					});
+				}
+            },
+			managePermissions: function() {
+                this.fireEvent('containerpermissionchange', '');
+            },
+		};
+		
+		var actions = {
+			addContainer: new Ext.Action({
+				text: 'add ' + this.folderName,
+				iconCls: 'action_add',
+				handler: handler.addContainer,
+				scope: this
+			}),
+			deleteContainer: new Ext.Action({
+				text: 'delete ' + this.folderName,
+				iconCls: 'action_delete',
+				handler: handler.deleteContainer,
+				scope: this
+			}),
+			renameContainer: new Ext.Action({
+				text: 'rename ' + this.folderName,
+				iconCls: 'action_rename',
+				handler: handler.renameContainer,
+				scope: this
+			}),
+			grantsContainer: new Ext.Action({
+				text: 'manage permissions',
+				iconCls: 'action_managePermissions',
+				handler: handler.managePermissions,
+                scope: this
+			})
+		};
+		
+	    this.contextMenuUserFolder = new Ext.menu.Menu({
+	        items: [
+	            actions.addContainer
+	        ]
+	    });
+	    
+	    this.contextMenuSingleContainer= new Ext.menu.Menu({
+	        items: [
+	            actions.deleteContainer,
+	            actions.renameContainer,
+	            actions.grantsContainer
+	        ]
+	    });
+	},
+	addContainer: function(container_name) {
+		
 	}
 		
  });
@@ -175,7 +408,7 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 		});
 		
 		tree.on('click', function(_node) {
-            if(_node.attributes.nodeType == 'singleContainer') {
+            if(_node.attributes.containerType == 'singleContainer') {
 				
 				this.TriggerField.container = _node.attributes.container;
 				this.TriggerField.setValue(_node.attributes.text);
@@ -194,23 +427,23 @@ Egw.containerTreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	//private
  	createNode: function(attr)
  	{
+		// console.log(attr);
 		// map attributes from Egwbase_Container to attrs from ExtJS
 		if (attr.container_name) {
-            //console.log(this.baseParams);
             attr = {
-                nodeType: 'singleContainer',
-                container: attr.container_id,
+                containerType: 'singleContainer',
+                container: attr,
                 text: attr.container_name,
                 cls: 'file',
                 leaf: true
             };
         } else if (attr.accountDisplayName) {
             attr = {
-                nodeType: 'Personal',
+                containerType: Egw.Egwbase.container.TYPE_PERSONAL,
                 text: attr.accountDisplayName,
                 cls: 'folder',
                 leaf: false,
-                owner: attr.accountId
+                owner: attr
             };
         }
 		
