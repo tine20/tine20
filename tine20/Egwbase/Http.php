@@ -45,15 +45,15 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
             //self::_appendFileTime("extjs/ext-all-debug.js"),
             // Egwbase
             //self::_appendFileTime("Egwbase/js/Egwbase.js"),
-            self::_appendFileTime("Egwbase/js/container.js"),
+            self::_appendFileTime("Egwbase/js/Container.js"),
             // widgets
             self::_appendFileTime("Egwbase/js/ExtUx.js"),
             self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
             self::_appendFileTime("Egwbase/js/Widgets.js"),
             self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
-            self::_appendFileTime("Egwbase/js/widgets/containerSelect.js"),
-            self::_appendFileTime("Egwbase/js/widgets/containerGrants.js"),
-            self::_appendFileTime("Egwbase/js/widgets/containerTree.js")
+            self::_appendFileTime("Egwbase/js/widgets/ContainerSelect.js"),
+            self::_appendFileTime("Egwbase/js/widgets/ContainerGrants.js"),
+            self::_appendFileTime("Egwbase/js/widgets/ContainerTree.js")
         );
     }
     
