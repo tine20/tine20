@@ -102,7 +102,7 @@ Egw.Tasks.TaskGrid = function(){
 	// ------------- tree ----------
     
     
-	tree =  new Egw.containerTreePanel({
+	tree =  new Egw.widgets.container.TreePanel({
         id: 'TasksTreePanel',
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
