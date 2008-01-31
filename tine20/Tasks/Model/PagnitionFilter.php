@@ -28,7 +28,7 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
         'sort'                 => array('allowEmpty' => true,          ),
         'dir'                  => array('allowEmpty' => true,  'Alpha' ),
 
-        'nodeType'             => array('allowEmpty' => true           ),
+        'containerType'             => array('allowEmpty' => true           ),
         'owner'                => array('allowEmpty' => true           ),
         'container'            => array('allowEmpty' => true           ),
         
@@ -73,23 +73,23 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
         if (isset($this->_properties['container']) && is_array($this->_properties['container'])) {
             return;
         }
-        if (!$this->nodeType) {
-            throw new Exception('You need to set a nodeType.');
+        if (!$this->containerType) {
+            throw new Exception('You need to set a containerType.');
         }
-        if ($this->nodeType == 'Personal' && !$this->owner) {
-            throw new Exception('You need to set an owner when nodeType is "Personal".');
+        if ($this->containerType == 'Personal' && !$this->owner) {
+            throw new Exception('You need to set an owner when containerType is "Personal".');
         }
         
         $cc = Egwbase_Container::getInstance();
-        switch($this->nodeType) {
+        switch($this->containerType) {
             case 'all':
                 $accountId = Zend_Registry::get('currentAccount')->accountId;
                 $containers = $cc->getContainerByACL($accountId, $this->_application, Egwbase_Container::GRANT_READ);
                 break;
-            case 'Personal':
+            case 'personal':
                 $containers = $cc->getPersonalContainer($this->_application, $this->owner);
                 break;
-            case 'Shared':
+            case 'shared':
                 $containers = $cc->getSharedContainer($this->_application);
                 break;
             case 'OtherUsers':
@@ -99,7 +99,7 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
                 $this->_properties['container'] = array($this->_properties['container']);
                 return;
             default:
-                throw new Exception('nodeType not supported.');
+                throw new Exception('containerType not supported.');
         }
         $container = array();
         foreach ($containers as $singleContainer) {

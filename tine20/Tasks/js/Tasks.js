@@ -112,9 +112,9 @@ Egw.Tasks.TaskGrid = function(){
     });
     
     tree.on('click', function(node){
-        filter.nodeType = node.attributes.nodeType;
-        filter.owner = node.attributes.owner;
-        filter.container = node.attributes.container;
+        filter.containerType = node.attributes.containerType;
+        filter.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
+        filter.container = node.attributes.container ? node.attributes.container.container_id : null;
         
         store.load({
             params: paging
@@ -205,7 +205,7 @@ Egw.Tasks.TaskGrid = function(){
 		});
 		
 		filter = {
-            nodeType: 'Personal',
+            containerType: 'personal',
             owner: Egw.Egwbase.Registry.get('currentAccount').accountId,
             query: '',
             due: false,
@@ -637,10 +637,10 @@ Egw.Tasks.EditDialog = function(task) {
 							window.setTimeout("window.close()", 400);
 						}
 						dlg.action_delete.enable();
-							// override task with returned data
-							task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
-							// update form with this new data
-							form.loadRecord(task);                    
+						// override task with returned data
+						task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
+						// update form with this new data
+						form.loadRecord(task);                    
 						Ext.MessageBox.hide();
 		            },
 		            failure: function ( result, request) { 
