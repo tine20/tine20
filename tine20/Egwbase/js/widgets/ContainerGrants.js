@@ -69,7 +69,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             var cgd = Ext.getCmp('ContainerGrantsDialog');
 			if (cgd.grantContainer) {
 				var container = cgd.grantContainer;
-				Ext.MessageBox.wait('Please wait', 'Updateing Grants for "' + container.container_name + '"');
+				Ext.MessageBox.wait('Please wait', 'Updateing Grants');
 				
 				var grants = [];
 				var grantsStore = cgd.dataStore;

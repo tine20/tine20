@@ -48,7 +48,6 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
      * name of folders
      */
 	folderName: 'folder',
-	
 	// presets
 	iconCls: 'x-new-application',
 	rootVisible: false,
