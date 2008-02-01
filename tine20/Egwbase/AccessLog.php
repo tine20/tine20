@@ -39,7 +39,12 @@ class Egwbase_AccessLog
             $conf['primary'] = array('ip','li');
         }
         
-        $this->accessLogTable = new Egwbase_Db_Table($conf);
+        try {
+            $this->accessLogTable = new Egwbase_Db_Table($conf);
+        } catch (Zend_Db_Statement_Exception $e) {
+            Egwbase_Setup_SetupSqlTables::createAccessLogTable();
+            $this->accessLogTable = new Egwbase_Db_Table();
+        }
     }
     
     /**
