@@ -85,7 +85,8 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
              * @param {container} the container whose permissions where changed
              */
             'containerpermissionchange'
-        );
+		);
+			
 		var treeRoot = new Ext.tree.TreeNode({
 	        text: 'root',
 	        draggable:false,
@@ -191,7 +192,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 		                        method: 'Egwbase.addContainer',
 								application: this.appName,
 		                        containerName: _text,
-		                        containerType: parentNode.attributes.containerType,
+		                        containerType: parentNode.attributes.containerType
 		                    },
 							scope: this,
 		                    success: function(_result, _request){
@@ -216,7 +217,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 							Ext.Ajax.request({
 								params: {
 									method: 'Egwbase.deleteContainer',
-									containerId: node.attributes.container.container_id,
+									containerId: node.attributes.container.container_id
 								},
 								scope: this,
 								success: function(_result, _request){
@@ -277,7 +278,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 					win.show();
 				    //this.fireEvent('containerpermissionchange', '');
 				}
-            },
+            }
 		};
 		
 		var actions = {
@@ -320,10 +321,8 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 	            actions.grantsContainer
 	        ]
 	    });
-	},
-	
-		
- });
+	}
+});
 
 /**
  * Helper class for {Egw.widgets.container.TreePanel}

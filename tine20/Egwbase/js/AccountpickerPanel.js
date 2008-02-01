@@ -202,6 +202,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
              */
 			'accountselectionchange'
 		);
+		
 		this.actions = {
 			addAccount: new Ext.Action({
                 text: 'add account',
@@ -213,7 +214,8 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 				},
                 iconCls: 'action_addContact'
             })
-        }
+        };
+		
 		this.accountsStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Egwbase.getAccounts'
@@ -259,7 +261,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 			var lastValue = store.lastOptions ? store.lastOptions.params.filter : false;
 			if (lastValue != this.getRawValue()) {
 
-				if (Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue() == '') {
+				if (!Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue()) {
 					Ext.getCmp('Egwbase_Accounts_Grid').getStore().removeAll();
 				}
 				else {
@@ -309,7 +311,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 		
 		this.searchPanel.getSelectionModel().on('selectionchange', function(sm){
 			var account = sm.getSelected();
-			this.actions.addAccount.setDisabled(!account)
+			this.actions.addAccount.setDisabled(!account);
 			this.fireEvent('accountselectionchange', account);
 		}, this);
 		

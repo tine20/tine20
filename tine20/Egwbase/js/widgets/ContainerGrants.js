@@ -71,7 +71,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 				var container = cgd.grantContainer;
 				Ext.MessageBox.wait('Please wait', 'Updateing Grants for "' + container.container_name + '"');
 				
-				var grants = new Array();
+				var grants = [];
 				var grantsStore = cgd.dataStore;
 				
 				grantsStore.each(function(_record){
@@ -92,7 +92,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 						if (closeWindow){
 							cgd.close();
 						}
-					},
+					}
 				});
 				
 				Ext.getCmp('AccountsActionSaveButton').disable();
@@ -101,7 +101,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 		},
 		accountsActionSave: function(button, event) {
 			var cgd = Ext.getCmp('ContainerGrantsDialog');
-			cgd.handlers.accountsActionApply(button, event, true)
+			cgd.handlers.accountsActionApply(button, event, true);
 		}
 	},
 	//private
@@ -234,4 +234,4 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             this.handlers.addAccount(account);   
         }, this);
 	}
-})
+});
