@@ -296,7 +296,7 @@ Egw.Tasks.TaskGrid = function(){
 				new Ext.Toolbar.Separator(),
 				'->',
 				showClosedToggle,
-				'Status: ',	' ', statusFilter,
+				//'Status: ',	' ', statusFilter,
 				//'Organizer: ', ' ',	organizerFilter,
 				new Ext.Toolbar.Separator(),
 				'->',
@@ -532,11 +532,13 @@ Egw.Tasks.TaskGrid = function(){
 	
 		function syncFields(){
             var cm = grid.getColumnModel();
-            ntStatus.setSize(cm.getColumnWidth(0)-4);
-            ntPercent.setSize(cm.getColumnWidth(1)-4);
-            ntSummaray.setSize(cm.getColumnWidth(2)-2);
-            ntPriority.setSize(cm.getColumnWidth(3)-4);
-            ntDue.setSize(cm.getColumnWidth(4)-4);
+			var pxToSubstract = 2;
+			if (Ext.isSafari) {pxToSubstract = 11;}
+            ntStatus.setSize(cm.getColumnWidth(0)-pxToSubstract);
+            ntPercent.setSize(cm.getColumnWidth(1)-pxToSubstract);
+            ntSummaray.setSize(cm.getColumnWidth(2)-pxToSubstract);
+            ntPriority.setSize(cm.getColumnWidth(3)-pxToSubstract);
+            ntDue.setSize(cm.getColumnWidth(4)-pxToSubstract);
         }
         
 	    // when a field in the add bar is blurred, this determines
@@ -545,13 +547,16 @@ Egw.Tasks.TaskGrid = function(){
 	        if(editing && !focused){
 	            var summaray = ntSummaray.getValue();
 	            if(!Ext.isEmpty(summaray)){
+					var selectedNode = tree.getSelectionModel().getSelectedNode();
+					var containerId = selectedNode ? selectedNode.attributes.container.container_id : Egw.Tasks.DefaultContainer.container_id;
+									
 					task = new Egw.Tasks.Task({
 						status: ntStatus.getValue(),
 						percent: ntPercent.getValue(),
 						summaray: summaray,
                         priority: ntPriority.getValue(),
 						due: ntDue.getValue(),
-						container: Egw.Tasks.DefaultContainer.container_id
+						container: containerId
 					});
 					
 					Ext.Ajax.request({
@@ -593,6 +598,7 @@ Egw.Tasks.TaskGrid = function(){
     };
 	
 	return{
+		isRunning: function(){return grid ? true : false},
 		getTreePanel: function(){return tree;},
 		getToolbar: _getToolbar,        
 		getGrid: function() {initStore(); initGrid(); return grid;},
@@ -606,9 +612,20 @@ Egw.Tasks.EditDialog = function(task) {
 		var task = {};
 	}
     
+	// check if task app is running
+	var isTasks = window.opener.Egw.Tasks.TaskGrid.isRunning();
+	var MainScreen = isTasks ? window.opener.Egw.Tasks : null;
+	
 	// init task record    
     var task = new Egw.Tasks.Task(task);
-		
+	var DefaultContainer = Egw.Tasks.DefaultContainer;
+	if (isTasks) {
+		var selectedNode = MainScreen.TaskGrid.getTreePanel().getSelectionModel().getSelectedNode();
+		if (selectedNode) {
+			DefaultContainer = selectedNode.attributes.container;
+		}
+	}
+	
 	var handlers = {        
         applyChanges: function(_button, _event) {
 			var closeWindow = arguments[2] ? arguments[2] : false;
@@ -744,7 +761,7 @@ Egw.Tasks.EditDialog = function(task) {
                     name: 'container',
                     itemName: 'Tasks',
                     appName: 'Tasks',
-                    defaultContainer: Egw.Tasks.DefaultContainer
+                    defaultContainer: DefaultContainer
                 })
             ]
         }]
