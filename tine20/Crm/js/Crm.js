@@ -476,7 +476,7 @@ Egw.Crm = function() {
         var handler_add_task = function() 
         {
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _rowIndex[0].id, 280, 480);  
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _rowIndex[0].id, 700, 300);      
         };
         
 	   	var action_edit = new Ext.Action({
@@ -2830,7 +2830,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         var  _add_task = new Ext.Action({
         		text: 'add task',
         		handler: function(){
-                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 280, 480);
+                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 700, 300);
                 },
         		iconCls: 'action_add',
                 disabled: true
@@ -2863,7 +2863,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
             var record = _grid.getStore().getAt(_rowIndex);            
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+ record.data.identifier + '&linkingApp=&linkedId=', 280, 480);
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+ record.data.identifier + '&linkingApp=&linkedId=', 700, 300);
 
         });
                
@@ -3259,6 +3259,6 @@ Egw.Crm.LeadEditDialog.Main = function() {
             }
         }
         
-    }
+    };
     
 }(); // end of application
