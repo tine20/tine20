@@ -65,21 +65,26 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     // private
     initComponent: function(){
         Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
+        
+		var windowHeight = 400;
+		if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+			windowHeight = Ext.getBody().getHeight(true) * 0.7;
+		}
 
         var w = new Ext.Window({
             title: this.title,
             modal: true,
             width: 375,
-            height: 400,
+            height: windowHeight,
             minWidth: 375,
-            minHeight: 400,
+            minHeight: windowHeight,
             layout: 'fit',
             plain: true,
             bodyStyle: 'padding:5px;',
             buttonAlign: 'center'
         });
         
-        var tree = new Egw.containerTreePanel({
+        var tree = new Egw.widgets.container.TreePanel({
             itemName: this.TriggerField.itemName,
             appName: this.TriggerField.appName,
             defaultContainer: this.TriggerField.defaultContainer
