@@ -106,7 +106,8 @@ Egw.Tasks.TaskGrid = function(){
         id: 'TasksTreePanel',
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
-        itemName: 'Tasks',
+        itemName: 'to do lists',
+		folderName: 'to do list',
         appName: 'Tasks',
         border: false
     });

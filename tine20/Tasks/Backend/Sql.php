@@ -96,7 +96,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             return $TaskSet;
         }
         
-        error_log(print_r($_filter->toArray(),true));
+        //error_log(print_r($_filter->toArray(),true));
         // build query
         // TODO: abstract filter2sql
         $select = $this->_getSelect()
@@ -139,11 +139,17 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function getTotalCount($_filter)
     {
+        // temporay hack
+        unset($_filter->limit);
+        unset($_filter->start);
+        return count($this->searchTasks($_filter));
+        /*
         if(empty($_filter->container)) return 0;
         return $this->getTableInstance('tasks')->getTotalCount(array(
             $this->_db->quoteInto('container IN (?)', $_filter->container),
             'is_deleted = FALSE'
         ));
+        */
     }
     
     /**
