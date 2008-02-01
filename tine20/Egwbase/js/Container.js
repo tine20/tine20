@@ -66,7 +66,7 @@ Egw.Egwbase.container = {
 	models: {
 		containerGrant: Ext.data.Record.create([
             {name: 'accountId'},
-            {name: 'accountName'},
+            {name: 'accountName'}, // nasty namespace! need to be fixed when all apps use the grants widgets
             {name: 'readGrant'},
             {name: 'addGrant'},
             {name: 'editGrant'},

@@ -156,6 +156,10 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 						this.contextMenuUserFolder.showAt(event.getXY());
 					}
 					break;
+				case Egw.Egwbase.container.TYPE_SHARED:
+				    // anyone is allowd to add shared folders atm.
+				    this.contextMenuUserFolder.showAt(event.getXY());
+					break;
 			}
 		}, this);
 		
@@ -267,7 +271,8 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 				if (this.ctxNode) {
 					var node = this.ctxNode;
 					var win = new Egw.widgets.container.grantDialog({
-						container: node.attributes.container
+						folderName: this.folderName,
+						grantContainer: node.attributes.container
 					});
 					win.show();
 				    //this.fireEvent('containerpermissionchange', '');

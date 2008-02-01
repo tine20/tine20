@@ -168,6 +168,16 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
      * multiSelect
      */
 	multiSelect: false,
+	/**
+	 * @cfg {bool}
+	 * enable bottom toolbar
+	 */
+	enableBbar: false,
+    /**
+     * @cfg {Ext.Toolbar}
+     * optional bottom bar, defaults to 'add account' which fires 'accountdblclick' event
+     */	
+	bbar: null,
 	
 	activeTab: 0,
     defaults:{autoScroll:true},
@@ -192,6 +202,18 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
              */
 			'accountselectionchange'
 		);
+		this.actions = {
+			addAccount: new Ext.Action({
+                text: 'add account',
+                disabled: true,
+				scope: this,
+                handler: function(){
+					var account = this.searchPanel.getSelectionModel().getSelected();
+                    this.fireEvent('accountdblclick', account);
+				},
+                iconCls: 'action_addContact'
+            })
+        }
 		this.accountsStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Egwbase.getAccounts'
@@ -213,7 +235,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         });        
 
         var columnModel = new Ext.grid.ColumnModel([
-            {
+		    {
                 resizable: false,
 				sortable: false, 
                 id: 'accountDisplayName', 
@@ -257,13 +279,11 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             ]
         });
 
-
-        this.Toolbar2 = new Ext.Toolbar({
-            /*id: 'Addressbook_Contacts_Toolbar', */
-            items: [
-                //action_addAccount
-            ]
-        });
+        if (this.enableBbar && !this.bbar) {
+			this.bbar = new Ext.Toolbar({
+				items: [this.actions.addAccount]
+			});
+		}
 
 		this.searchPanel = new Ext.grid.GridPanel({
             title: 'Search',
@@ -289,8 +309,9 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 		
 		this.searchPanel.getSelectionModel().on('selectionchange', function(sm){
 			var account = sm.getSelected();
+			this.actions.addAccount.setDisabled(!account)
 			this.fireEvent('accountselectionchange', account);
-		}, this)
+		}, this);
 		
 		this.items = [this.searchPanel, {
            title: 'Browse',
@@ -330,6 +351,7 @@ Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 		//this.addEvents()
 		
 		this.userSelection = new Egw.widgets.AccountpickerPanel({
+			enableBbar: true,
 			region: 'west',
 			split: true,
 			bbar: this.userSelectionBottomToolBar,
@@ -351,24 +373,17 @@ Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 				id: 'AccountsActionSaveButton',
 				disabled: true,
 				scope: this,
-				handler: function(){
-					this.close()
-
-				}
+				handler: this.handlers.accountsActionSave
 			}, {
 				text: 'Apply',
 				id: 'AccountsActionApplyButton',
 				disabled: true,
 				scope: this,
-				handler: function(){
-
-				}
+				handler: this.handlers.accountsActionApply
 			}, {
 				text: 'Close',
 				scope: this,
-				handler: function(){
-					this.close();
-				}
+				handler: function(){this.close();}
 			}];
 		}
 		Egw.widgets.AccountpickerActiondialog.superclass.initComponent.call(this);

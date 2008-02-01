@@ -170,6 +170,22 @@ class Egwbase_Json
     }
     
     /**
+     * sets new grants for given container
+     * 
+     * @param int $containerId
+     * @param array $grants
+     * @return array, see getContainerGrants
+     */
+    public function setContainerGrants($containerId, $grants)
+    {
+        $newGrants = new Egwbase_Record_RecordSet(Zend_Json::decode($grants), 'Egwbase_Record_Grants');
+        
+        Egwbase_Container::getInstance()->setAllGrants($containerId, $newGrants);
+               
+        return $this->getContainerGrants($containerId);
+    }
+    
+    /**
      * change password of user 
      *
      * @param string $oldPw the old password
