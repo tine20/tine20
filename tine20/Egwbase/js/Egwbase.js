@@ -139,8 +139,8 @@ Egw.Egwbase.MainScreen = function() {
             id: 'egwFooter',
             height: 26,
             items:[
-                'Current timezone: ' +  Egw.Egwbase.Registry.get('timeZone'), 
-                ' | Current user: ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName
+                'Account name: ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName + ' ',
+                'Timezone: ' +  Egw.Egwbase.Registry.get('timeZone'), 
             ]
 
         });
