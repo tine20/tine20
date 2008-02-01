@@ -494,7 +494,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             Egwbase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
             
             $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
-        } elseif(Zend_Registry::get('currentAccount')) {
+        } elseif(count($ownerContainer) === 0) {
             return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
         }
         
@@ -507,7 +507,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $where = array(
             $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
         );
-
+        
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
          
         return $result;
