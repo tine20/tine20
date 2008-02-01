@@ -76,6 +76,8 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
             ), 
             Zend_Filter_Input::ALLOW_EMPTY => true
         ),*/
+        'contact_email'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_email_home'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_id'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     	'contact_note'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
