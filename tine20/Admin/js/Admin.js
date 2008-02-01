@@ -215,7 +215,7 @@ Egw.Admin.AccessLog.Main = function() {
             fields: [
                 {name: 'sessionid'},
                 {name: 'loginid'},
-                {name: 'accountName'},
+                {name: 'accountObject'},
                 {name: 'ip'},
                 {name: 'li', type: 'date', dateFormat: 'c'},
                 {name: 'lo', type: 'date', dateFormat: 'c'},
@@ -398,7 +398,7 @@ Egw.Admin.AccessLog.Main = function() {
         var columnModel = new Ext.grid.ColumnModel([
             {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
             {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
-            {resizable: true, header: 'Name', id: 'accountName', dataIndex: 'accountName', width: 170, renderer: Egw.Egwbase.Common.usernameRenderer},
+            {resizable: true, header: 'Name', id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Egw.Egwbase.Common.usernameRenderer},
             {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
             {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
             {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
