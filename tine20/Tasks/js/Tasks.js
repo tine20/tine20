@@ -599,6 +599,7 @@ Egw.Tasks.TaskGrid = function(){
 	
 	return{
 		isRunning: function(){return grid ? true : false},
+		paging: paging,
 		getTreePanel: function(){return tree;},
 		getToolbar: _getToolbar,        
 		getGrid: function() {initStore(); initGrid(); return grid;},
@@ -649,7 +650,9 @@ Egw.Tasks.EditDialog = function(task) {
 						//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
 		            },
 		            success: function(_result, _request) {
-		                //window.opener.Egw.Addressbook.reload();
+						if (isTasks) {
+							MainScreen.TaskGrid.getStore().load({params: {}});
+						}
 		                if (closeWindow) {
 							window.setTimeout("window.close()", 400);
 						}
@@ -681,6 +684,9 @@ Egw.Tasks.EditDialog = function(task) {
 	    					identifier: task.data.identifier
 	    				},
 	                    success: function(_result, _request) {
+							if (isTasks) {
+	                            MainScreen.TaskGrid.getStore().load({params: {}});
+	                        }
 	    					window.setTimeout("window.close()", 400);
 	                        //store.load({params: paging});
 	                    },
