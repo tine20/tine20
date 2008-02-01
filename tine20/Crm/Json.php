@@ -582,7 +582,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $getClosedLeads = ($getClosedLeads == 'true' ? TRUE : FALSE);
+   //     $getClosedLeads = ($getClosedLeads == 'true' ? TRUE : FALSE);
 
         if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']      = $rows->toArray();

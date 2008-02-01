@@ -642,8 +642,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;*/
     }    
     
-    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
-    {
+    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = NULL)
+    {    
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
@@ -890,7 +890,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 			$where[] = $this->leadTable->getAdapter()->quoteInto('lead_probability >= ?', $_probability);
 		}		
 
-		if($_getClosedLeads === FALSE) {
+		if($_getClosedLeads === FALSE  || $_getClosedLeads == 'false') {
 		    $where[] = 'lead_end IS NULL';
 		}
 
