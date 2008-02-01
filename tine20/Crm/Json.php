@@ -538,7 +538,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability, $getClosedLeads)
+    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -546,7 +546,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $dateFrom, $dateTo, $leadstate, $probability, $getClosedLeads);
+        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows;//->toArray();
