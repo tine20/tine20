@@ -2,85 +2,85 @@
 
 
 
-.crmThumbnailApplication {
+.Crm_thumbnail_application {
     background-image:url(../../images/oxygen/16x16/actions/paperbag.png) !important;
 }
 
-.actionPrev {
+.action_prev {
 	background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
 }
 
-.actionNext {
+.action_next {
 	background-image:url(../../images/oxygen/16x16/actions/arrow-right.png) !important;
 }
 
-.action1DayView {
+.action_1dayview {
 	background-image:url(../../images/oxygen/16x16/actions/1day.png) !important;
 }
 
-.action5DaysView {
+.action_5daysview {
 	background-image:url(../../images/oxygen/16x16/actions/5days.png) !important;
 }
 
-.action7DaysView {
+.action_7daysview {
 	background-image:url(../../images/oxygen/16x16/actions/7days.png) !important;
 }
 
-.actionMonthview {
+.action_monthview {
 	background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
 }
 
 
 
-.actionAdd {
+.action_add {
     background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
 }
 
-.actionAddTask {
+.action_add_task {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 
-.actionEdit {
+.action_edit {
 	background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
 
-.actionDelete {
+.action_delete {
 	background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
 
-.actionDisplayEvents {
+.action_displayEvents {
 	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
 }
 
-.actionSaveAndClose {
+.action_saveAndClose {
 	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
 }
 
-.actionApplyChanges {
+.action_applyChanges {
 	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
 }
 
-.filterSearch {
+.filter_search {
 	background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
 }
 
-.repeatAction {
+.repeat_action {
 	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
 }
 
-.showEndedLeadsAction {
+.showEndedLeads_action {
 	background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
 }
 
-.hideEndedLeadsAction {
+.hideEndedLeads_action {
 	background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
 }
 
-.showDetailsAction {
+.showDetails_action {
 	background-image:url(../../images/oxygen/16x16/actions/fileview-detailed.png) !important;
 }
 
-.hideDetailsAction {
+.hideDetails_action {
 	background-image:url(../../images/oxygen/16x16/actions/fileview-column.png) !important;
 }
 
