@@ -616,7 +616,7 @@ Egw.Tasks.EditDialog = function(task) {
 	}
     
 	// check if task app is running
-	var isTasks = window.opener.Egw.Tasks.TaskGrid.isRunning();
+	var isTasks = window.opener.Egw.Tasks && window.opener.Egw.Tasks.TaskGrid.isRunning();
 	var MainScreen = isTasks ? window.opener.Egw.Tasks : null;
 	
 	// init task record    
