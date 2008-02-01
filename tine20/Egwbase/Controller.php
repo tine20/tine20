@@ -211,7 +211,6 @@ class Egwbase_Controller
         $result = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
         
         if ($result->isValid()) {
-            Zend_Registry::get('logger')->debug("authentication of $_username succeeded");
             $accountsController = Egwbase_Account::getInstance();
             try {
                 $account = $accountsController->getFullAccountByLoginName($result->getIdentity());
@@ -236,7 +235,6 @@ class Egwbase_Controller
             );
             
         } else {
-            Zend_Registry::get('logger')->debug("authentication of $_username failed");
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $_username,

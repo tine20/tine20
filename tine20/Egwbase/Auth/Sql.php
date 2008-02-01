@@ -38,12 +38,15 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
      */
     public function authenticate()
     {
+        Zend_Registry::get('logger')->debug('trying to authenticate '. $this->_identity);
+        
         $result = parent::authenticate();
         
         if($result->isValid()) {
             // username and password are correct, let's do some additional tests
             
             if($this->_resultRow['account_status'] != 'A') {
+                Zend_Registry::get('logger')->debug('account: '. $this->_identity . ' is disabled');
                 // account is disabled
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account disabled.';
@@ -52,10 +55,15 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
             
             if(($this->_resultRow['account_expires'] !== NULL && $this->_resultRow['account_expires'] !== -1) && $this->_resultRow['account_expires'] < Zend_Date::now()->getTimestamp()) {
                 // account is expired
+                Zend_Registry::get('logger')->debug('account: '. $this->_identity . ' is expired');
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
                 $authResult['messages'][] = 'Account expired.';
                 return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
             }
+            
+            Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' succeeded');
+        } else {
+            Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' failed');
         }
         
         return $result;
