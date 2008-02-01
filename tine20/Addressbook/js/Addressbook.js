@@ -1078,7 +1078,14 @@ Egw.Addressbook.Contacts = function(){
             enableColLock:false,
             loadMask: true,
             autoExpandColumn: 'n_family',
-            border: false
+            border: false,
+            view: new Ext.grid.GridView({
+                autoFill: true,
+                forceFit:true,
+                ignoreAdd: true,
+                emptyText: 'No contacts to display'
+            })            
+            
         });
         
         Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
