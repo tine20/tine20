@@ -2629,7 +2629,7 @@ Egw.Addressbook.GrantsDialog = function() {
                     disabled:true,
                     handler: function(){
                         _sentGrants(_addressbookId, function(_result, _request) { 
-                        	win.close() 
+                        	win.close(); 
                         });
                     }
                 },{
