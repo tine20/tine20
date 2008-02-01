@@ -1,129 +1,86 @@
 @CHARSET "UTF-8";
 
-.x-form-item {
-    font-size: 11px;
-}
-
-body {
-	font-family: Tahoma,Arial,Helvetica,sans-serif;
-	font-size:12px;
-	color:#333;
-	padding: 20px;
-}
-h1 {
-	font-family: Georgia,"Times New Roman",Times,serif;
-	font-size:26px;
-	color:#083772;
-	letter-spacing:-1px;
-	font-weight:normal;
-}
-h2 {
-	font-size: 18px;
-	line-height:18px;
-	color:#083772;
-	margin-bottom:15px;
-	font-weight:normal;
-}
-p {
-	margin:8px 20px;
-	line-height:18px;
-}
-input {
-	margin: 8px 20px;
-}
-#myDiv {
-	border:2px solid #1F3E75;
-	background:#DFECFB;
-	margin:20px 50px;
-	padding:10px 20px;
-	width:200px;
-	text-align:center;
-}
-.red {
-	color: red;
-}
 
 
-
-.Crm_thumbnail_application {
+.crmThumbnailApplication {
     background-image:url(../../images/oxygen/16x16/actions/paperbag.png) !important;
 }
 
-.action_prev {
+.actionPrev {
 	background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
 }
 
-.action_next {
+.actionNext {
 	background-image:url(../../images/oxygen/16x16/actions/arrow-right.png) !important;
 }
 
-.action_1dayview {
+.action1DayView {
 	background-image:url(../../images/oxygen/16x16/actions/1day.png) !important;
 }
 
-.action_5daysview {
+.action5DaysView {
 	background-image:url(../../images/oxygen/16x16/actions/5days.png) !important;
 }
 
-.action_7daysview {
+.action7DaysView {
 	background-image:url(../../images/oxygen/16x16/actions/7days.png) !important;
 }
 
-.action_monthview {
+.actionMonthview {
 	background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
 }
 
 
 
-.action_add {
+.actionAdd {
     background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
 }
 
-.action_add_task {
+.actionAddTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 
-.action_edit {
+.actionEdit {
 	background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
 
-.action_delete {
+.actionDelete {
 	background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
 
-.action_displayEvents {
+.actionDisplayEvents {
 	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
 }
 
-.action_saveAndClose {
+.actionSaveAndClose {
 	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
 }
 
-.action_applyChanges {
+.actionApplyChanges {
 	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
 }
 
-.filter_search {
+.filterSearch {
 	background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
 }
 
-.repeat_action {
+.repeatAction {
 	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
 }
 
-.showEndedLeads_action {
+.showEndedLeadsAction {
 	background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
 }
 
-.hideEndedLeads_action {
+.hideEndedLeadsAction {
 	background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
 }
 
-.showDetails_action {
+.showDetailsAction {
 	background-image:url(../../images/oxygen/16x16/actions/fileview-detailed.png) !important;
 }
 
-.hideDetails_action {
+.hideDetailsAction {
 	background-image:url(../../images/oxygen/16x16/actions/fileview-column.png) !important;
 }
 
