@@ -252,7 +252,8 @@ Egw.Tasks.TaskGrid = function(){
 			scope: this,
 			text: 'show closed',
 			iconCls: 'action_showArchived'
-		})
+		});
+		
 		var statusFilter = new Ext.ux.ClearableComboBox({
 			id: 'TasksStatusFilter',
 			//name: 'statusFilter',
@@ -329,7 +330,7 @@ Egw.Tasks.TaskGrid = function(){
 	            '<td><div class="x-small-editor" id="new-task-due"></div></td>',
 	            '<td><div class="x-small-editor" id="new-task-organizer"></div></td>',
 	        '</tr></tbody>',
-	        "</table>"
+	        '</table>'
 	    );
 		
 		grid = new Ext.grid.EditorGridPanel({
@@ -342,6 +343,7 @@ Egw.Tasks.TaskGrid = function(){
             enableColumnMove:false,
             region:'center',
 			sm: new Ext.grid.RowSelectionModel(),
+			loadMask: true,
             columns: [
 				{
 					id: 'status',
@@ -598,8 +600,8 @@ Egw.Tasks.TaskGrid = function(){
     };
 	
 	return{
-		isRunning: function(){return grid ? true : false},
-		paging: paging,
+		isRunning: function(){return grid ? true : false;},
+		getPaging: function(){return paging;},
 		getTreePanel: function(){return tree;},
 		getToolbar: _getToolbar,        
 		getGrid: function() {initStore(); initGrid(); return grid;},
@@ -610,7 +612,7 @@ Egw.Tasks.TaskGrid = function(){
 
 Egw.Tasks.EditDialog = function(task) {
 	if (!arguments[0]) {
-		var task = {};
+		task = {};
 	}
     
 	// check if task app is running
@@ -618,7 +620,7 @@ Egw.Tasks.EditDialog = function(task) {
 	var MainScreen = isTasks ? window.opener.Egw.Tasks : null;
 	
 	// init task record    
-    var task = new Egw.Tasks.Task(task);
+    task = new Egw.Tasks.Task(task);
 	var DefaultContainer = Egw.Tasks.DefaultContainer;
 	if (isTasks) {
 		var selectedNode = MainScreen.TaskGrid.getTreePanel().getSelectionModel().getSelectedNode();
@@ -651,7 +653,7 @@ Egw.Tasks.EditDialog = function(task) {
 		            },
 		            success: function(_result, _request) {
 						if (isTasks) {
-							MainScreen.TaskGrid.getStore().load({params: {}});
+							MainScreen.TaskGrid.getStore().load({params: MainScreen.TaskGrid.getPaging()});
 						}
 		                if (closeWindow) {
 							window.setTimeout("window.close()", 400);
@@ -685,7 +687,7 @@ Egw.Tasks.EditDialog = function(task) {
 	    				},
 	                    success: function(_result, _request) {
 							if (isTasks) {
-	                            MainScreen.TaskGrid.getStore().load({params: {}});
+	                            MainScreen.TaskGrid.getStore().load({params: MainScreen.TaskGrid.getPaging()});
 	                        }
 	    					window.setTimeout("window.close()", 400);
 	                        //store.load({params: paging});
@@ -703,18 +705,10 @@ Egw.Tasks.EditDialog = function(task) {
 	var taskFormPanel = {
 		layout:'column',
 		labelWidth: 90,
-		//title: 'Edit Task',
 		border: false,
-		//bodyStyle: 'padding:15px',
-		//width: '100%',
-		//labelPad: 10,
-		//defaultType: 'textfield',
-		//defaults: {
-		//	width: 230,
-		//	msgTarget: 'side'
-		//},
+
 		items: [{
-            columnWidth:.65,
+            columnWidth: 0.65,
             border:false,
             layout: 'form',
             defaults: {
@@ -737,7 +731,7 @@ Egw.Tasks.EditDialog = function(task) {
 				height: 150
 			}]
 		}, {
-            columnWidth:.35,
+            columnWidth: 0.35,
             border:false,
             layout: 'form',
             defaults: {
