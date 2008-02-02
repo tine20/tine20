@@ -1,22 +1,28 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Egwbase
  * @subpackage  Auth
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
 /**
  * LDAP authentication backend
- * @todo implement LDAP authentication logic
- *
+ * 
+ * @package     Egwbase
+ * @subpackage  Auth
  */
 class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface 
 {    
+    /**
+     * the list of attributes to fetch from ldap
+     *
+     * @var array
+     */
     protected $accountAttributes = array(
         'uid',
         'dn',
@@ -49,14 +55,39 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      */
     protected $_resultRow = null;
     
+    /**
+     * the ldap host to connect to
+     *
+     * @var string
+     */
     protected $_host;
     
+    /**
+     * the adminDN to search the ldap tree
+     *
+     * @var string
+     */
     protected $_adminDN;
     
+    /**
+     * the password for the adminDN
+     *
+     * @var string
+     */
     protected $_adminPassword;
     
+    /**
+     * where to start searching for accounts
+     *
+     * @var string
+     */
     protected $_searchDN;
 
+    /**
+     * the contructor
+     *
+     * @param Zend_Config $_options
+     */
     public function __construct(Zend_Config $_options)
     {
         $this->_host            = $_options->get('host', 'localhost');
@@ -128,12 +159,24 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         return new Zend_Auth_Result($code, $this->_identity, $messages);
     }
     
+    /**
+     * set loginname
+     *
+     * @param string $_identity
+     * @return Egwbase_Auth_Ldap
+     */
     public function setIdentity($_identity)
     {
         $this->_identity = $_identity;
         return $this;
     }
     
+    /**
+     * set password
+     *
+     * @param string $_credential
+     * @return Egwbase_Auth_Ldap
+     */
     public function setCredential($_credential)
     {
         $this->_credential = $_credential;
@@ -152,7 +195,5 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         if(empty($_loginName)) {
             throw new InvalidArgumentException('$_loginName can not be empty');
         }
-        
-        return true;
     }
 }
