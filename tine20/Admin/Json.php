@@ -148,12 +148,12 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
     
     public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
     {
-        if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
+        /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
             throw new Exception('invalid date specified for $from');
         }
         if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
             throw new Exception('invalid date specified for $to');
-        }
+        }*/
         
         $result = array(
             'results'     => array(),
