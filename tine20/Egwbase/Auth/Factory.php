@@ -37,10 +37,10 @@ class Egwbase_Auth_Factory
      * @param string $type
      * @return object
      */
-    static public function factory($type)
+    static public function factory($_type, $_options)
     {
-        $className = 'Egwbase_Auth_'.$type;
-        $instance = new $className();
+        $className = 'Egwbase_Auth_' . ucfirst($_type);
+        $instance = new $className($_options);
         
         //throw new Exception('unknown type');
         

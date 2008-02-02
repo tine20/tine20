@@ -249,7 +249,7 @@ class Egwbase_Json
         
         $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 
-        if ($result->isValid()) {
+        if (Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
             $egwBaseNamespace->isAutenticated = TRUE;
 
             $response = array(

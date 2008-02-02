@@ -96,7 +96,18 @@ class Egwbase_Auth
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Egwbase_Auth_Factory::factory($this->_backendType);
+        try {
+            $authConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'authentication');
+            
+            $this->_backendType = $authConfig->get('backend', Egwbase_Auth_Factory::SQL);
+            
+        } catch (Zend_Config_Exception $e) {
+            $authConfig = new Zend_Config(array(
+                'backend'   => Egwbase_Auth_Factory::SQL
+            ));
+        }
+        Zend_Registry::get('logger')->debug('authentication backend: ' . $this->_backendType);
+        $this->_backend = Egwbase_Auth_Factory::factory($this->_backendType, $authConfig);
     }
     
     /**
@@ -133,7 +144,7 @@ class Egwbase_Auth
         $this->_backend->setCredential($_password);
         
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
-        
+                
         return $result;
     }
     

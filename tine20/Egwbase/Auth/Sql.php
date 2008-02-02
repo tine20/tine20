@@ -18,7 +18,7 @@
  */
 class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 {
-	public function __construct()
+	public function __construct(Zend_Config $_options)
 	{
 		$db = Zend_Registry::get('dbAdapter');
 		parent::__construct(

@@ -208,16 +208,16 @@ class Egwbase_Controller
 
     public function login($_username, $_password, $_ipAddress)
     {
-        $result = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
+        $authResult = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
         
-        if ($result->isValid()) {
+        if ($authResult->isValid()) {
             $accountsController = Egwbase_Account::getInstance();
             try {
-                $account = $accountsController->getFullAccountByLoginName($result->getIdentity());
+                $account = $accountsController->getFullAccountByLoginName($authResult->getIdentity());
             } catch (Exception $e) {
                 Zend_Session::destroy();
                 
-                throw new Exception('account ' . $result->getIdentity() . ' not found in account storage');
+                throw new Exception('account ' . $authResult->getIdentity() . ' not found in account storage');
             }
             
             Zend_Registry::set('currentAccount', $account);
@@ -228,18 +228,19 @@ class Egwbase_Controller
             
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
-                $result->getIdentity(),
+                $authResult->getIdentity(),
                 $_ipAddress,
-                $result->getCode(),
+                $authResult->getCode(),
                 Zend_Registry::get('currentAccount')->accountId
             );
             
+            $result = true;
         } else {
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $_username,
                 $_ipAddress,
-                $result->getCode()
+                $authResult->getCode()
             );
             
             Egwbase_AccessLog::getInstance()->addLogoutEntry(
@@ -250,6 +251,8 @@ class Egwbase_Controller
             Zend_Session::destroy();
             
             sleep(2);
+            
+            $result = false;
         }
         
         return $result;
