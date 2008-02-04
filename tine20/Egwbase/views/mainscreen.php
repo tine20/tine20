@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo $this->escape($this->title) ?></title>
     <!-- EXT JS -->
-    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="extjs/resources/css/xtheme-gray.css" />
+    <link rel="stylesheet" type="text/css" href="../ExtJS/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../ExtJS/resources/css/xtheme-gray.css" />
 	
-    <script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="extjs/ext-all-debug.js"></script>
+    <script type="text/javascript" src="../ExtJS/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../ExtJS/ext-all-debug.js"></script>
 
     <!-- eGW -->
     <link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>

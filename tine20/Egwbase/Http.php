@@ -41,8 +41,8 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
     {
         return array(
             // base framework
-            //self::_appendFileTime("extjs/adapter/ext/ext-base.js"),
-            //self::_appendFileTime("extjs/ext-all-debug.js"),
+            //self::_appendFileTime("../ExtJS/adapter/ext/ext-base.js"),
+            //self::_appendFileTime("../ExtJS/ext-all-debug.js"),
             // Egwbase
             //self::_appendFileTime("Egwbase/js/Egwbase.js"),
             self::_appendFileTime("Egwbase/js/Container.js"),
