@@ -90,10 +90,11 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      */
     public function __construct(Zend_Config $_options)
     {
-        $this->_host            = $_options->get('host', 'localhost');
-        $this->_adminDN         = $_options->get('admindn');
-        $this->_adminPassword   = $_options->get('adminpassword');
-        $this->_searchDN        = $_options->get('searchdn');
+        $this->_host                = $_options->get('host');
+        $this->_adminDN             = $_options->get('admindn');
+        $this->_adminPassword       = $_options->get('adminpassword');
+        $this->_searchDN            = $_options->get('searchdn');
+        $this->_updateShadowFields  = strtolower($_options->get('updateshadowfields', 'no')) === 'yes' ? true : false;
     }
     
     /**
@@ -113,9 +114,7 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         
         Zend_Registry::get('logger')->debug('Ldap.php trying to authenticate '. $this->_identity . ' against ' . $this->_host);
         
-        $ldapServer = new Egwbase_Ldap_LdapServer();
-        
-        $ldapServer->connect($this->_host);
+        $ldapServer = new Egwbase_Ldap_LdapServer($this->_host);
         
         try {
             $ldapServer->bind($this->_adminDN, $this->_adminPassword);
@@ -125,17 +124,21 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         
         $account = $ldapServer->fetchAll($this->_searchDN, 'uid=' . $this->_identity, $this->accountAttributes);
         
-        $ldapServer->disconnect();
-        
         if(count($account) < 1) {
+            $ldapServer->disconnect();
+        
             Zend_Registry::get('logger')->debug('Ldap.php account ' . $this->_identity . ' not found');
+
             $code = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
             $messages[] = 'No account" . $this->_identity . " found.';
             return new Zend_Auth_Result($code, $this->_identity, $messages);
         }
 
         if(count($account) > 1) {
+            $ldapServer->disconnect();
+        
             Zend_Registry::get('logger')->debug('Ldap.php multiple accounts for ' . $this->_identity . ' found');
+
             $code = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
             $messages[] = 'More than one account found.';
             return new Zend_Auth_Result($code, $this->_identity, $messages);
@@ -144,13 +147,17 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         try {
             $ldapServer->bind($account[0]['dn'], $this->_credential);
         } catch (Exception $e) {
+            $ldapServer->disconnect();
+            
             Zend_Registry::get('logger')->debug('Ldap.php invalid password for ' . $account[0]['dn']);
+            
             $code = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
             $messages[] = 'The supplied password is invalid.';
             return new Zend_Auth_Result($code, $this->_identity, $messages);
         }
-
         $this->_resultRow = $account[0];
+        
+        $ldapServer->disconnect();
         
         Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' succeeded');
         

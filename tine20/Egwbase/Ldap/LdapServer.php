@@ -13,18 +13,10 @@
 class Egwbase_Ldap_LdapServer
 {
     /**
-     * the constructor
-     */
-    public function __construct() {
-        
-    }
-    
-    /**
-     * don't clone. Use the singleton.
+     * the connection to the ldap server
      *
+     * @var resource the ldap connection
      */
-    private function __clone() {}
-
     protected $_ds = NULL;
     
     protected $_attrsOnly = 0;
@@ -34,18 +26,32 @@ class Egwbase_Ldap_LdapServer
     protected $_timeLimit = 0;
     
     /**
+     * the constructor
+     * 
+     * @param string $_host url( ldap(s)://ldapserver(:389) ) of the ldap server
+     */
+    public function __construct($_host = NULL) {
+        if($_host !== NULL) {
+            $this->connect($_host);
+        }
+    }
+    
+    /**
      * initiate connection to the ldap serer
      *
-     * @param string $_host hostname or url( ldap(s)://ldapserver(:389) ) of the ldap server
-     * @param int $_port
+     * @param string $_host url( ldap(s)://ldapserver(:389) ) of the ldap server
      * @todo set ldap_set_rebind_proc
      * @return void
      */
-    public function connect($_host, $_port = NULL)
+    public function connect($_host)
     {
-        $this->_ds = ldap_connect($_host, $_port);
+        if(empty($_host)) {
+            throw new Exception('$_host can not be empty');
+        }
         
-        ldap_set_option($this->_ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+        $this->_ds = ldap_connect($_host);
+            
+        ldap_set_option($this->_ds, LDAP_OPT_PROTOCOL_VERSION, 3);    
     }
     
     /**
