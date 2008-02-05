@@ -3,11 +3,13 @@
  * this is the general file any request should be routed trough
  *
  * @package     Egwbase
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
+
+$time_start = microtime(true);
 
 // check php environment
 $requiredIniSettings = array(
@@ -32,3 +34,15 @@ Zend_Loader::registerAutoload();
 $egwBase = Egwbase_Controller::getInstance();
 
 $egwBase->handle();
+
+// log profiling information
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+
+if(function_exists(memory_get_peak_usage)) {
+    $memory = memory_get_peak_usage(true);
+} else {
+    $memory = memory_get_usage(true);
+}
+
+Zend_Registry::get('logger')->debug('index.php::('. __LINE__ . ') TIME: ' . $time . ' seconds ' . $memory/1024/1024 . ' MBytes');
