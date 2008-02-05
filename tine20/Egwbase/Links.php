@@ -12,10 +12,16 @@
 
 /**
  * this class handles linking between applications
- * 
+ * @package     Egwbase
+ * @subpackage  Links
  */
 class Egwbase_Links
 {
+    /**
+     * instance of the egw_links table
+     *
+     * @var Egwbase_Db_Table
+     */
     protected $_linksTable;
     
     /**
@@ -53,6 +59,14 @@ class Egwbase_Links
         return self::$_instance;
     }
     
+    /**
+     * get links for a given application. Can be filtered by the application which is linked to.
+     *
+     * @param string $_applicationName1 the applicationname to get the links for
+     * @param int $_recordId the id of the record
+     * @param string $_applicationName2 the applicationname to filter by
+     * @return unknown
+     */
     public function getLinks($_applicationName1, $_recordId, $_applicationName2 = NULL)
     {
         $recordId = (int)$_recordId;
@@ -102,6 +116,14 @@ class Egwbase_Links
         return $result;
     }
     
+    /**
+     * delete links for a given applicatoon and recordId
+     *
+     * @param string $_applicationName1 name of the application
+     * @param int $_recordId id of the record
+     * @param string $_applicationName2 delete only links matching to this linked application
+     * @param string $_remark delete only links with a given remark
+     */
     public function deleteLinks($_applicationName1, $_recordId, $_applicationName2 = NULL, $_remark = NULL)
     {
         $recordId = (int)$_recordId;
@@ -133,7 +155,7 @@ class Egwbase_Links
     }
     
     /**
-     * Enter description here...
+     * add multiple links at once. Deletes all existing links. 
      *
      * @param string $_applicationName1
      * @param int $_recordId1
@@ -160,8 +182,17 @@ class Egwbase_Links
 		} else {
             $this->addLink($_applicationName1, $_recordId1, $_applicationName2, $_recordId2, $_remark);			
 		}   
-	 }
+	}
     
+	/**
+	 * add one link.
+	 *
+	 * @param string $_applicationName1
+	 * @param int $_recordId1
+	 * @param string $_applicationName2
+	 * @param int $_recordId2
+	 * @param string $_remark
+	 */
     public function addLink($_applicationName1, $_recordId1, $_applicationName2, $_recordId2, $_remark)
     {
         $data = array(
