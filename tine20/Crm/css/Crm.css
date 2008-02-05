@@ -2,86 +2,86 @@
 
 
 
-.Crm_thumbnail_application {
+.crmThumbnailApplication {
     background-image:url(../../images/oxygen/16x16/actions/paperbag.png) !important;
 }
 
-.action_prev {
-	background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
+.actionPrev {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-left.png) !important;
 }
 
-.action_next {
-	background-image:url(../../images/oxygen/16x16/actions/arrow-right.png) !important;
+.actionNext {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-right.png) !important;
 }
 
-.action_1dayview {
-	background-image:url(../../images/oxygen/16x16/actions/1day.png) !important;
+.action1DayView {
+    background-image:url(../../images/oxygen/16x16/actions/1day.png) !important;
 }
 
-.action_5daysview {
-	background-image:url(../../images/oxygen/16x16/actions/5days.png) !important;
+.action5DaysView {
+    background-image:url(../../images/oxygen/16x16/actions/5days.png) !important;
 }
 
-.action_7daysview {
-	background-image:url(../../images/oxygen/16x16/actions/7days.png) !important;
+.action7DaysView {
+    background-image:url(../../images/oxygen/16x16/actions/7days.png) !important;
 }
 
-.action_monthview {
-	background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
+.actionMonthview {
+    background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
 }
 
 
 
-.action_add {
+.actionAdd {
     background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
 }
 
-.action_add_task {
+.actionAddTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 
-.action_edit {
-	background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
+.actionEdit {
+    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
 
-.action_delete {
-	background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+.actionDelete {
+    background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
 
-.action_displayEvents {
-	background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+.actionDisplayEvents {
+    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
 }
 
-.action_saveAndClose {
-	background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+.actionSaveAndClose {
+    background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
 }
 
-.action_applyChanges {
-	background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+.actionApplyChanges {
+    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
 }
 
-.filter_search {
-	background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
+.filterSearch {
+    background-image:url(../../images/oxygen/16x16/actions/search-filter.png) !important;
 }
 
-.repeat_action {
-	background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
+.repeatAction {
+    background-image:url(../../images/oxygen/16x16/actions/xdays.png) !important;
 }
 
-.showEndedLeads_action {
-	background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
+.showEndedLeadsAction {
+    background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
 }
 
-.hideEndedLeads_action {
-	background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
+.hideEndedLeadsAction {
+    background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
 }
 
-.showDetails_action {
-	background-image:url(../../images/oxygen/16x16/actions/fileview-detailed.png) !important;
+.showDetailsAction {
+    background-image:url(../../images/oxygen/16x16/actions/fileview-detailed.png) !important;
 }
 
-.hideDetails_action {
-	background-image:url(../../images/oxygen/16x16/actions/fileview-column.png) !important;
+.hideDetailsAction {
+    background-image:url(../../images/oxygen/16x16/actions/fileview-column.png) !important;
 }
 
 
@@ -150,7 +150,7 @@
 }
 
 .contactType_partner_icon {
-	background-image:url(contact_partner.png) !important;
+    background-image:url(contact_partner.png) !important;
 }
 
 .contactType_internal_icon {
@@ -183,5 +183,5 @@
 }
 
 .x-view-over {
-				background-color: #efefef
-			}
+                background-color: #efefef
+            }

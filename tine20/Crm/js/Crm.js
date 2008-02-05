@@ -1,47 +1,21 @@
 Ext.namespace('Egw.Crm');
 
-Egw.Crm = function() {
 
-   var _treeNodeContextMenu = null;
+Egw.Crm.getPanel = function(){
+    return Egw.Crm.Tree.getPanel();
+};
 
-    /**
-     * the initial tree to be displayed in the left treePanel
-     */
-    var _initialTree = [{
-        text: 'All Leads',
-        cls: "treemain",
-        nodeType: 'allLeads',
-        id: 'allLeads',
-        children: [{
-            text: 'My Leads',
-            cls: 'file',
-            nodeType: 'userLeads',
-            id: 'userLeads',
-            leaf: null,
-            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
-        }, {
-            text: "Shared Leads",
-            cls: "file",
-            nodeType: "sharedLeads",
-            children: null,
-            leaf: null
-        }, {
-            text: "Other Users Leads",
-            cls: "file",
-            nodeType: "otherUsersLeads",
-            children: null,
-            leaf: null
-        }]
-    }];
-    
-    var _handler_addFolder = function(_button, _event) {
+Egw.Crm.Tree = function() {
+
+    var _treeNodeContextMenu = null;
+
+    var _handlerAddFolder = function(_button, _event) {
         Ext.MessageBox.prompt('New Folder', 'Please enter the name of the new folder:', function(_btn, _text) {
             if(_treeNodeContextMenu !== null && _btn == 'ok') {
-
                 //console.log(_treeNodeContextMenu);
                 var type = 'personal';
                 if(_treeNodeContextMenu.attributes.nodeType == 'sharedLeads') {
-                	type = 'shared';
+                    type = 'shared';
                 }
                 
                 Ext.Ajax.request({
@@ -58,17 +32,17 @@ Egw.Crm = function() {
                         //_treeNodeContextMenu.expand(false, false);
                         //console.log(_result);
                         if(_treeNodeContextMenu.isExpanded()) {
-                        	var responseData = Ext.util.JSON.decode(_result.responseText);
-	                        var newNode = new Ext.tree.TreeNode({
-	                            leaf: true,
-	                            cls: 'file',
-	                            nodeType: 'singleFolder',
-	                            folderId: responseData.folderId,
-	                            text: _text
-	                        });
+                            var responseData = Ext.util.JSON.decode(_result.responseText);
+                            var newNode = new Ext.tree.TreeNode({
+                                leaf: true,
+                                cls: 'file',
+                                nodeType: 'singleFolder',
+                                folderId: responseData.folderId,
+                                text: _text
+                            });
                             _treeNodeContextMenu.appendChild(newNode);
                         } else {
-                        	_treeNodeContextMenu.expand(false);
+                            _treeNodeContextMenu.expand(false);
                         }
                     },
                     failure: function(result, request){
@@ -79,7 +53,7 @@ Egw.Crm = function() {
         });
     };
 
-    var _handler_renameFolder = function(_button, _event) {
+    var _handlerRenameFolder = function(_button, _event) {
         var resulter = function(_btn, _text) {
             if(_treeNodeContextMenu !== null && _btn == 'ok') {
 
@@ -114,7 +88,7 @@ Egw.Crm = function() {
         
     };
 
-    var _handler_deleteFolder = function(_button, _event) {
+    var _handlerDeleteFolder = function(_button, _event) {
         Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the folder ' + _treeNodeContextMenu.text + ' ?', function(_button){
             if (_button == 'yes') {
             
@@ -141,43 +115,247 @@ Egw.Crm = function() {
         });
     };    
      
-   var _action_addFolder = new Ext.Action({
+   var _actionAddFolder = new Ext.Action({
         text: 'add folder',
-        handler: _handler_addFolder
+        handler: _handlerAddFolder
     });
 
-    var _action_deleteFolder = new Ext.Action({
+    var _actionDeleteFolder = new Ext.Action({
         text: 'delete folder',
-        iconCls: 'action_delete',
-        handler: _handler_deleteFolder
+        iconCls: 'actionDelete',
+        handler: _handlerDeleteFolder
     });
 
-    var _action_renameFolder = new Ext.Action({
+    var _actionRenameFolder = new Ext.Action({
         text: 'rename folder',
-        iconCls: 'action_rename',
-        handler: _handler_renameFolder
+        iconCls: 'actionRename',
+        handler: _handlerRenameFolder
     });
 
-    var _action_permisionsFolder = new Ext.Action({
-    	disabled: true,
+    var _actionPermisionsFolder = new Ext.Action({
+        disabled: true,
         text: 'permissions',
-        handler: _handler_deleteFolder
+        handler: _handlerDeleteFolder
     });
 
 
     var _contextMenuUserFolder = new Ext.menu.Menu({
         items: [
-            _action_addFolder
+            _actionAddFolder
         ]
     });
     
     var _contextMenuSingleFolder= new Ext.menu.Menu({
         items: [
-            _action_renameFolder,
-            _action_deleteFolder,
-            _action_permisionsFolder
+            _actionRenameFolder,
+            _actionDeleteFolder,
+            _actionPermisionsFolder
         ]
     });
+
+
+    /**
+     * the initial tree to be displayed in the left treePanel
+     */
+    var _initialTree = [{
+        text: 'All Leads',
+        cls: "treemain",
+        nodeType: 'allLeads',
+        id: 'allLeads',
+        children: [{
+            text: 'My Leads',
+            cls: 'file',
+            nodeType: 'userLeads',
+            id: 'userLeads',
+            leaf: null,
+            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
+        }, {
+            text: "Shared Leads",
+            cls: "file",
+            nodeType: "sharedLeads",
+            children: null,
+            leaf: null
+        }, {
+            text: "Other Users Leads",
+            cls: "file",
+            nodeType: "otherUsersLeads",
+            children: null,
+            leaf: null
+        }]
+    }];
+
+     /**
+     * creates the crm tree panel
+     *
+     */
+    var _getTreePanel = function() 
+    {
+        var treeLoader = new Ext.tree.TreeLoader({
+            dataUrl:'index.php',
+            baseParams: {
+                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                location: 'mainTree'
+            }
+        });
+        treeLoader.on("beforeload", function(_loader, _node) {
+            switch(_node.attributes.nodeType) {
+                case 'otherUsersLeads':
+                    _loader.baseParams.method   = 'Crm.getOtherUsers';
+                    break;
+                    
+                case 'sharedLeads':
+                    _loader.baseParams.method   = 'Crm.getSharedFolders';
+                    break;
+
+                case 'userLeads':
+                    _loader.baseParams.method   = 'Crm.getFoldersByOwner';
+                    _loader.baseParams.owner    = _node.attributes.owner;
+                    break;
+            }
+        }, this);
+
+        var treePanel = new Ext.tree.TreePanel({
+            title: 'CRM',
+            id: 'crmTree',
+            iconCls: 'crmThumbnailApplication',
+            loader: treeLoader,
+            rootVisible: false,
+            border: false
+        });
+        
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        treePanel.setRootNode(treeRoot);
+// tree vs. treepanel
+        for(var i=0; i< _initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
+        }
+        
+        treePanel.on('click', function(_node, _event) {
+            Egw.Crm.Main.show(_node);
+        }, this);
+
+        treePanel.on('beforeexpand', function(_panel) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
+                _panel.expandPath('/root/allLeads');
+                _panel.selectPath('/root/allLeads');
+            }
+            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
+        }, this);
+
+        treePanel.on('contextmenu', function(_node, _event) {
+            _event.stopEvent();
+            //_node.select();
+            //_node.getOwnerTree().fireEvent('click', _node);
+            _treeNodeContextMenu = _node;
+
+            switch(_node.attributes.nodeType) {
+                case 'userLeads':
+                case 'sharedLeads':
+                    _contextMenuUserFolder.showAt(_event.getXY());
+                    break;
+
+                case 'singleFolder':
+                    _contextMenuSingleFolder.showAt(_event.getXY());
+                    break;
+
+                default:
+                    break;
+            }
+        });
+        return treePanel;
+    };
+        
+      return {
+         getPanel: _getTreePanel,
+         initialTree: _initialTree
+     }
+}(); // end of application   
+    
+
+Ext.namespace('Egw.Crm.Main');
+Egw.Crm.Main = function(){
+
+    var handler = {
+        handlerEdit: function(){
+            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
+            Egw.Egwbase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 900, 700);
+        },
+        
+        handlerDelete: function(){
+            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this lead?', function(_button) {
+                if(_button == 'yes') {            
+                    var _rowIndexIds = Ext.getCmp('gridCrm').getSelectionModel().getSelections();            
+                    var toDelete_Ids = new Array();
+                
+                    for (var i = 0; i < _rowIndexIds.length; ++i) {
+                        toDelete_Ids.push(_rowIndexIds[i].id);
+                    }
+                    
+                    var leadIds = Ext.util.JSON.encode(toDelete_Ids);
+                
+                    Ext.Ajax.request({
+                        params: {
+                            method: 'Crm.deleteLeads',
+                            _leadIds: leadIds
+                        },
+                        text: 'Deleting lead...',
+                        success: function(_result, _request){
+                            Ext.getCmp('gridCrm').getStore().reload();
+                        },
+                        failure: function(result, request){
+                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
+                        }
+                    });
+                }
+            });
+        },
+        
+        handlerAddTask: function(){
+            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
+            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId=' + _rowIndex[0].id, 700, 300);
+        }    
+    };
+    
+    var actions = {
+        actionAdd: new Ext.Action({
+            text: 'add lead',
+            iconCls: 'actionAdd',
+            handler: function(){
+                //     var tree = Ext.getCmp('venues-tree');
+                //      var curSelNode = tree.getSelectionModel().getSelectedNode();
+                //  var RootNode   = tree.getRootNode();
+                
+                Egw.Egwbase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 900, 700);
+            }
+        }),
+        
+        actionEdit: new Ext.Action({
+            text: 'edit lead',
+            disabled: true,
+            handler: handler.handlerEdit,
+            iconCls: 'actionEdit'
+        }),
+        
+        actionDelete: new Ext.Action({
+            text: 'delete lead',
+            disabled: true,
+            handler: handler.handlerDelete,
+            iconCls: 'actionDelete'
+        }),
+        
+        actionAddTask: new Ext.Action({
+            text: 'add task',
+            handler: handler.handlerAddTask,
+            iconCls: 'actionAddTask',
+            disabled: true
+        })
+    };
 
 
     var _displayFolderSelectDialog = function(_fieldName){         
@@ -223,9 +401,9 @@ Egw.Crm = function() {
             }, this);
                             
             var tree = new Ext.tree.TreePanel({
-                title: 'CRM',
-                id: 'Crm_Tree',
-                iconCls: 'Crm_thumbnail_application',
+                title: 'Crm',
+                id: 'crmTree',
+                iconCls: 'crmThumbnailApplication',
                 loader: treeLoader,
                 rootVisible: false,
                 border: false
@@ -241,8 +419,8 @@ Egw.Crm = function() {
             tree.setRootNode(treeRoot);
             
             // add the initial tree nodes    
-            for(var i=0; i< _initialTree.length; i++) {
-                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
+            for(var i=0; i< Egw.Crm.Tree.initialTree.length; i++) {
+                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Egw.Crm.Tree.initialTree[i]));
             }
             
             tree.on('click', function(_node) {
@@ -261,101 +439,11 @@ Egw.Crm = function() {
             tree.expandPath('/root/allLeads');
     };
 
- 
-    
-     /**
-     * creates the crm tree panel
-     *
-     */
-    var _getTreePanel = function() 
-    {
-        var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php',
-            baseParams: {
-            	jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
-            	location: 'mainTree'
-            }
-        });
-        treeLoader.on("beforeload", function(_loader, _node) {
-            switch(_node.attributes.nodeType) {
-                case 'otherUsersLeads':
-                    _loader.baseParams.method   = 'Crm.getOtherUsers';
-                    break;
-                    
-                case 'sharedLeads':
-                    _loader.baseParams.method   = 'Crm.getSharedFolders';
-                    break;
-
-                case 'userLeads':
-                    _loader.baseParams.method   = 'Crm.getFoldersByOwner';
-                    _loader.baseParams.owner    = _node.attributes.owner;
-                    break;
-            }
-        }, this);
-
-        var treePanel = new Ext.tree.TreePanel({
-            title: 'CRM',
-            id: 'Crm_Tree',
-            iconCls: 'Crm_thumbnail_application',
-            loader: treeLoader,
-            rootVisible: false,
-            border: false
-        });
-        
-        // set the root node
-        var treeRoot = new Ext.tree.TreeNode({
-            text: 'root',
-            draggable:false,
-            allowDrop:false,
-            id:'root'
-        });
-        treePanel.setRootNode(treeRoot);
-// tree vs. treepanel
-        for(var i=0; i< _initialTree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
-        }
-        
-        treePanel.on('click', function(_node, _event) {
-            Egw.Crm.show(_node);
-        }, this);
-
-        treePanel.on('beforeexpand', function(_panel) {
-            if(_panel.getSelectionModel().getSelectedNode() === null) {
-                _panel.expandPath('/root/allLeads');
-                _panel.selectPath('/root/allLeads');
-            }
-            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
-        }, this);
-
-        treePanel.on('contextmenu', function(_node, _event) {
-            _event.stopEvent();
-            //_node.select();
-            //_node.getOwnerTree().fireEvent('click', _node);
-            _treeNodeContextMenu = _node;
-
-            switch(_node.attributes.nodeType) {
-                case 'userLeads':
-                case 'sharedLeads':
-                    _contextMenuUserFolder.showAt(_event.getXY());
-                    break;
-
-                case 'singleFolder':
-                    _contextMenuSingleFolder.showAt(_event.getXY());
-                    break;
-
-                default:
-                    break;
-            }
-        });
-        return treePanel;
-    };  
-    
-    
     
     var _createDataStore = function()
     {
 
-         var ds_crm = new Ext.data.JsonStore({
+         var storeCrm = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Crm.getLeadsByOwner',
                 owner: 'all'
@@ -399,111 +487,24 @@ Egw.Crm = function() {
         });
      
    
-        ds_crm.setDefaultSort('lead_name', 'asc');
+        storeCrm.setDefaultSort('lead_name', 'asc');
 
-        ds_crm.on('beforeload', function(_dataSource) {
-        	_dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
-            _dataSource.baseParams.leadstate        = Ext.getCmp('filter_leadstate').getValue();
-            _dataSource.baseParams.probability      = Ext.getCmp('filter_probability').getValue();
-            _dataSource.baseParams.getClosedLeads   = Ext.getCmp('crm_ShowClosedLeadsButton').pressed;
+        storeCrm.on('beforeload', function(_dataSource) {
+            _dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
+            _dataSource.baseParams.leadstate        = Ext.getCmp('filterLeadstate').getValue();
+            _dataSource.baseParams.probability      = Ext.getCmp('filterProbability').getValue();
+            _dataSource.baseParams.getClosedLeads   = Ext.getCmp('crmShowClosedLeadsButton').pressed;
         });        
         
-        ds_crm.load({params:{start:0, limit:50}});
+        storeCrm.load({params:{start:0, limit:50}});
         
-        return ds_crm;
+        return storeCrm;
     };
 
-
-	  	var action_add = new Ext.Action({
-			text: 'add lead',
-			iconCls: 'action_add',
-			handler: function () {
-           //     var tree = Ext.getCmp('venues-tree');
-		//		var curSelNode = tree.getSelectionModel().getSelectedNode();
-			//	var RootNode   = tree.getRootNode();
-            
-                Egw.Egwbase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 900, 700);
-             }
- 		}); 
-        
-        var handler_edit = function() 
-        {
-            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Egw.Egwbase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+_rowIndex[0].id, 900, 700);   
-
-        };
-
-    var handler_pre_delete = function(){
-        Ext.MessageBox.show({
-            title: 'Delete Lead?',
-            msg: 'Are you sure you want to delete this lead?',
-            buttons: Ext.MessageBox.YESNO,
-            fn: handler_delete,
-            icon: Ext.MessageBox.QUESTION
-        });
-    };
-
-        var handler_delete = function(btn) 
-        {
-            if (btn == 'yes') {
-                
-                var _rowIndexIds = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-
-                var toDelete_Ids = new Array();
-                
-                for (var i = 0; i < _rowIndexIds.length; ++i) {
-                         toDelete_Ids.push(_rowIndexIds[i].id);
-                } 
-                
-                var leadIds = Ext.util.JSON.encode(toDelete_Ids);
-
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Crm.deleteLeads',
-                        _leadIds: leadIds
-                    },
-                    text: 'Deleting lead...',
-                    success: function(_result, _request){
-                        Ext.getCmp('gridCrm').getStore().reload();
-                    },
-                    failure: function(result, request){
-                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
-                    }
-                });
-            } 
-        };
-
-        var handler_add_task = function() 
-        {
-            var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _rowIndex[0].id, 700, 300);      
-        };
-        
-	   	var action_edit = new Ext.Action({
-			text: 'edit lead',
-			disabled: true,
-			handler: handler_edit,
-			iconCls: 'action_edit'
-		});
-			
-	   	var action_delete = new Ext.Action({
-			text: 'delete lead',
-			disabled: true,
-			handler: handler_pre_delete,
-			iconCls: 'action_delete'
-		});	
-
-        var action_add_task = new Ext.Action({
-        		text: 'add task',
-        		handler: handler_add_task,
-        		iconCls: 'action_add_task',
-                disabled: true
-        });
-            
 
     var _showCrmToolbar = function(){
     
-        var st_probability = new Ext.data.SimpleStore({
+        var storeProbability = new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
                         ['0','0 %'],
@@ -520,7 +521,7 @@ Egw.Crm = function() {
                     ]
         });
         
-        var st_probability_withNone = new Ext.data.SimpleStore({
+        var storeProbabilityWithNone = new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
                         [null,'none'],
@@ -538,6 +539,27 @@ Egw.Crm = function() {
                     ]
         });
     
+       var storeLeadstate = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.getLeadstates',
+                    sort: 'lead_leadstate',
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'lead_leadstate_id',
+                fields: [
+                    {name: 'lead_leadstate_id'},
+                    {name: 'lead_leadstate'},
+                    {name: 'lead_leadstate_probability'},
+                    {name: 'lead_leadstate_endslead', type: 'boolean'}
+                ],
+                // turn on remote sorting
+                remoteSort: false
+            });
+            
+            storeLeadstate.load();    
+    
         var quickSearchField = new Ext.app.SearchField({
             id: 'quickSearchField',
             width: 200,
@@ -548,95 +570,32 @@ Egw.Crm = function() {
                 params: {
                     start: 0,
                     limit: 50
-					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					//probability: Ext.getCmp('filter_probability').getValue()					
+                    //leadstate: Ext.getCmp('filterLeadstate').getValue(),
+                    //probability: Ext.getCmp('filterProbability').getValue()                   
                 }
             });
         });
-        
-        var currentDate = new Date();
-        var oneWeekAgo = new Date(currentDate.getTime() - 604800000);
-       
-        var dateFrom = new Ext.form.DateField({
-            id: 'Crm_dateFrom',
-            allowBlank: false,
-            validateOnBlur: false,
-            value: oneWeekAgo
-        });
-        dateFrom.on('change', function(){
-            Ext.getCmp('gridCrm').getStore().load({
-                params: {
-                    //dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    //dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
-                    start: 0,
-                    limit: 50
-					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					//probability: Ext.getCmp('filter_probability').getValue()					
-                }
-            });        
-        });
-    
-        
-        var dateTo = new Ext.form.DateField({
-            id:             'Crm_dateTo',
-            allowBlank:     false,
-            validateOnBlur: false,
-            value:          currentDate
-        });
-        dateTo.on('change', function(){
-            Ext.getCmp('gridCrm').getStore().load({
-                params: {
-                    //dateFrom: Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    //dateTo: Ext.getCmp('Crm_dateTo').getRawValue(),
-                    start: 0,
-                    limit: 50
-					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					//probability: Ext.getCmp('filter_probability').getValue()					
-                }
-            });        
-        });        
-       
-	  
-	   var st_leadstate = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadstates',
-                    sort: 'lead_leadstate',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'lead_leadstate_id',
-                fields: [
-                    {name: 'lead_leadstate_id'},
-                    {name: 'lead_leadstate'},
-                    {name: 'lead_leadstate_probability'},
-                    {name: 'lead_leadstate_endslead', type: 'boolean'}
-                ],
-                // turn on remote sorting
-                remoteSort: false
-            });
+
             
-            st_leadstate.load();
-			
-	   var filter_combo_leadstate = new Ext.ux.ClearableComboBox({
-			fieldLabel:'Leadstate', 
-			id:'filter_leadstate',
-			name:'leadstate',
-			hideLabel: true,
-			width: 180,   
-			blankText: 'leadstate...',
-			hiddenName:'lead_leadstate_id',
-			store: st_leadstate,
-			displayField:'lead_leadstate',
-			valueField:'lead_leadstate_id',
-			typeAhead: true,
-	    	mode: 'local',
-			triggerAction: 'all',
-			emptyText:'leadstate...',
-			selectOnFocus:true,
-			editable: false 
-	   });          
-	   filter_combo_leadstate.on('select', function(combo, record, index) {
+       var filterComboLeadstate = new Ext.ux.ClearableComboBox({
+            fieldLabel:'Leadstate', 
+            id:'filterLeadstate',
+            name:'leadstate',
+            hideLabel: true,
+            width: 180,   
+            blankText: 'leadstate...',
+            hiddenName:'lead_leadstate_id',
+            store: storeLeadstate,
+            displayField:'lead_leadstate',
+            valueField:'lead_leadstate_id',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            emptyText:'leadstate...',
+            selectOnFocus:true,
+            editable: false 
+       });          
+       filterComboLeadstate.on('select', function(combo, record, index) {
            if (!record.data) {
                var _leadstate = '';       
            } else {
@@ -646,36 +605,34 @@ Egw.Crm = function() {
            combo.triggers[0].show();
            
            Ext.getCmp('gridCrm').getStore().load({
-               params: {
-                   dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
-                dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
+               params: {                
                 start: 0,
                 limit: 50,
                 leadstate: _leadstate,
-                probability: Ext.getCmp('filter_probability').getValue()
+                probability: Ext.getCmp('filterProbability').getValue()
                 }
             });
-	   });
+       });
       
-	   var filter_combo_probability = new Ext.ux.ClearableComboBox({
-			fieldLabel:'probability', 
-			id: 'filter_probability',
-			name:'lead_probability',
-			hideLabel: true,			
-			store: st_probability,
-			blankText: 'probability...',			
-			displayField:'value',
-			valueField:'key',
-			typeAhead: true,
-			mode: 'local',
-			triggerAction: 'all',
-			emptyText:'probability...',
-			selectOnFocus:true,
-			editable: false,
-			renderer: Ext.util.Format.percentage,
-			width:90    
-		});
-	   filter_combo_probability.on('select', function(combo, record, index) {
+       var filterComboProbability = new Ext.ux.ClearableComboBox({
+            fieldLabel:'probability', 
+            id: 'filterProbability',
+            name:'lead_probability',
+            hideLabel: true,            
+            store: storeProbability,
+            blankText: 'probability...',            
+            displayField:'value',
+            valueField:'key',
+            typeAhead: true,
+            mode: 'local',
+            triggerAction: 'all',
+            emptyText:'probability...',
+            selectOnFocus:true,
+            editable: false,
+            renderer: Ext.util.Format.percentage,
+            width:90    
+        });
+       filterComboProbability.on('select', function(combo, record, index) {
            if (!record.data) {
                var _probability = '';       
            } else {
@@ -684,35 +641,33 @@ Egw.Crm = function() {
            
            combo.triggers[0].show();           
            
-	       Ext.getCmp('gridCrm').getStore().load({
-                params: {
-                    //dateFrom: '', // Ext.getCmp('Crm_dateFrom').getRawValue(),
-                    //dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue(),                    
+           Ext.getCmp('gridCrm').getStore().load({
+                params: {                    
                     start: 0,
                     limit: 50
-					//leadstate: Ext.getCmp('filter_leadstate').getValue(),
-					//probability: _probability
+                    //leadstate: Ext.getCmp('filterLeadstate').getValue(),
+                    //probability: _probability
                 }
-            });	   		
-	   });		
-	    
+            });         
+       });      
+        
 
        function editLeadstate() {
            var Dialog = new Ext.Window({
-				title: 'Leadstates',
-                id: 'Leadstate_window',
-				modal: true,
-			    width: 350,
-			    height: 500,
-			    minWidth: 300,
-			    minHeight: 500,
-			    layout: 'fit',
-			    plain:true,
-			    bodyStyle:'padding:5px;',
-			    buttonAlign:'center'
-            });	
+                title: 'Leadstates',
+                id: 'leadstateWindow',
+                modal: true,
+                width: 350,
+                height: 500,
+                minWidth: 300,
+                minHeight: 500,
+                layout: 'fit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                buttonAlign:'center'
+            }); 
             
-            var st_leadstate = new Ext.data.JsonStore({
+            var storeLeadstate = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getLeadstates',
                     sort: 'lead_leadstate',
@@ -731,7 +686,7 @@ Egw.Crm = function() {
                 remoteSort: false
             });
             
-            st_leadstate.load();
+            storeLeadstate.load();
             
            var checkColumn = new Ext.grid.CheckColumn({
                header: "X Lead?",
@@ -739,8 +694,8 @@ Egw.Crm = function() {
                width: 50
             });
             
-            var cm_leadstate = new Ext.grid.ColumnModel([
-                	{ id:'lead_leadstate_id', 
+            var columnModelLeadstate = new Ext.grid.ColumnModel([
+                    { id:'lead_leadstate_id', 
                       header: "id", 
                       dataIndex: 'lead_leadstate_id', 
                       width: 25, 
@@ -765,7 +720,7 @@ Egw.Crm = function() {
                         name: 'probability',
                         id: 'leadstate_probability',
                         hiddenName: 'lead_leadstate_probability',
-                        store: st_probability_withNone, 
+                        store: storeProbabilityWithNone, 
                         displayField:'value', 
                         valueField: 'key',
                         allowBlank: true, 
@@ -788,7 +743,7 @@ Egw.Crm = function() {
                {name: 'lead_leadstate_endslead', type: 'boolean'}
             ]);
             
-            var handler_leadstate_add = function(){
+            var handlerLeadstateAdd = function(){
                 var p = new entry({
                     lead_leadstate_id: null,
                     lead_leadstate: '',
@@ -796,49 +751,48 @@ Egw.Crm = function() {
                     lead_leadstate_endslead: false
                 });
                 leadstateGridPanel.stopEditing();
-                st_leadstate.insert(0, p);
+                storeLeadstate.insert(0, p);
                 leadstateGridPanel.startEditing(0, 0);
                 leadstateGridPanel.fireEvent('celldblclick',this, 0, 1);
             };
                         
-            var handler_leadstate_delete = function(){
-               	var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
-        		var leadstateStore = leadstateGrid.getStore();
+            var handlerLeadstateDelete = function(){
+                var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
+                var leadstateStore = leadstateGrid.getStore();
                 
-        		var selectedRows = leadstateGrid.getSelectionModel().getSelections();
+                var selectedRows = leadstateGrid.getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     leadstateStore.remove(selectedRows[i]);
                 }   
             };                        
                         
           
-           var handler_leadstate_saveClose = function(){
-                var leadstate_store = Ext.getCmp('editLeadstateGrid').getStore();
-                
-                var leadstate_json = Egw.Egwbase.Common.getJSONdata(leadstate_store); 
+           var handlerLeadstateSaveClose = function(){
+                var leadstateStore = Ext.getCmp('editLeadstateGrid').getStore();
+                var leadstateJson = Egw.Egwbase.Common.getJSONdata(leadstateStore); 
 
                  Ext.Ajax.request({
                             params: {
                                 method: 'Crm.saveLeadstates',
-                                optionsData: leadstate_json
+                                optionsData: leadstateJson
                             },
                             text: 'Saving leadstates...',
                             success: function(_result, _request){
-                                    leadstate_store.reload();
-                                    leadstate_store.rejectChanges();
-                                    Ext.getCmp('filter_leadstate').store.reload();
+                                    leadstateStore.reload();
+                                    leadstateStore.rejectChanges();
+                                    Ext.getCmp('filterLeadstate').store.reload();
                                     
                                },
                             failure: function(form, action) {
-                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-                    			}
+                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+                                }
                         });          
             };          
             
             var leadstateGridPanel = new Ext.grid.EditorGridPanel({
-                store: st_leadstate,
+                store: storeLeadstate,
                 id: 'editLeadstateGrid',
-                cm: cm_leadstate,
+                cm: columnModelLeadstate,
                 autoExpandColumn:'lead_leadstate',
                 plugins:checkColumn,
                 frame:false,
@@ -849,16 +803,16 @@ Egw.Crm = function() {
                 clicksToEdit:2,
                 tbar: [{
                     text: 'new item',
-                    iconCls: 'action_add',
-                    handler : handler_leadstate_add
+                    iconCls: 'actionAdd',
+                    handler : handlerLeadstateAdd
                     },{
                     text: 'delete item',
-                    iconCls: 'action_delete',
-                    handler : handler_leadstate_delete
+                    iconCls: 'actionDelete',
+                    handler : handlerLeadstateDelete
                     },{
                     text: 'save',
-                    iconCls: 'action_saveAndClose',
-                    handler : handler_leadstate_saveClose 
+                    iconCls: 'actionSaveAndClose',
+                    handler : handlerLeadstateSaveClose 
                     }]  
                 });
 
@@ -896,25 +850,25 @@ Egw.Crm = function() {
             };                    
                         
           Dialog.add(leadstateGridPanel);
-          Dialog.show();		  
+          Dialog.show();          
         }
 
       function editLeadsource() {
            var Dialog = new Ext.Window({
-				title: 'Leadsources',
-                id: 'Leadsource_window',
-				modal: true,
-			    width: 350,
-			    height: 500,
-			    minWidth: 300,
-			    minHeight: 500,
-			    layout: 'fit',
-			    plain:true,
-			    bodyStyle:'padding:5px;',
-			    buttonAlign:'center'
-            });	
+                title: 'Leadsources',
+                id: 'leadsourceWindow',
+                modal: true,
+                width: 350,
+                height: 500,
+                minWidth: 300,
+                minHeight: 500,
+                layout: 'fit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                buttonAlign:'center'
+            }); 
             
-            var st_leadsource = new Ext.data.JsonStore({
+            var storeLeadsource = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getLeadsources',
                     sort: 'lead_leadsource',
@@ -931,10 +885,10 @@ Egw.Crm = function() {
                 remoteSort: false
             });
             
-            st_leadsource.load();
+            storeLeadsource.load();
             
-            var cm_leadsource = new Ext.grid.ColumnModel([
-                	{ id:'lead_leadsource_id', 
+            var columnModelLeadsource = new Ext.grid.ColumnModel([
+                    { id:'lead_leadsource_id', 
                       header: "id", 
                       dataIndex: 'lead_leadsource_id', 
                       width: 25, 
@@ -955,53 +909,53 @@ Egw.Crm = function() {
                {name: 'lead_leadsource', type: 'varchar'}
             ]);
             
-            var handler_leadsource_add = function(){
+            var handlerLeadsourceAdd = function(){
                 var p = new entry({
                     lead_leadsource_id: 'NULL',
                     lead_leadsource: ''
                 });
                 leadsourceGridPanel.stopEditing();
-                st_leadsource.insert(0, p);
+                storeLeadsource.insert(0, p);
                 leadsourceGridPanel.startEditing(0, 0);
                 leadsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
             };
                         
-            var handler_leadsource_delete = function(){
-               	var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
-        		var leadsourceStore = leadsourceGrid.getStore();
+            var handlerLeadsourceDelete = function(){
+                var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
+                var leadsourceStore = leadsourceGrid.getStore();
                 
-        		var selectedRows = leadsourceGrid.getSelectionModel().getSelections();
+                var selectedRows = leadsourceGrid.getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     leadsourceStore.remove(selectedRows[i]);
                 }   
             };                        
                         
           
-           var handler_leadsource_saveClose = function(){
-                var leadsource_store = Ext.getCmp('editLeadsourceGrid').getStore();
+           var handlerLeadsourceSaveClose = function(){
+                var leadsourceStore = Ext.getCmp('editLeadsourceGrid').getStore();
                 
-                var leadsource_json = Egw.Egwbase.Common.getJSONdata(leadsource_store); 
+                var leadsourceJson = Egw.Egwbase.Common.getJSONdata(leadsourceStore); 
 
                  Ext.Ajax.request({
                             params: {
                                 method: 'Crm.saveLeadsources',
-                                optionsData: leadsource_json
+                                optionsData: leadsourceJson
                             },
                             text: 'Saving leadsources...',
                             success: function(_result, _request){
-                                    leadsource_store.reload();
-                                    leadsource_store.rejectChanges();
+                                    leadsourceStore.reload();
+                                    leadsourceStore.rejectChanges();
                                },
                             failure: function(form, action) {
-                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-                    			}
+                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+                                }
                         });          
             };          
             
             var leadsourceGridPanel = new Ext.grid.EditorGridPanel({
-                store: st_leadsource,
+                store: storeLeadsource,
                 id: 'editLeadsourceGrid',
-                cm: cm_leadsource,
+                cm: columnModelLeadsource,
                 autoExpandColumn:'lead_leadsource',
                 frame:false,
                 viewConfig: {
@@ -1011,40 +965,40 @@ Egw.Crm = function() {
                 clicksToEdit:2,
                 tbar: [{
                     text: 'new item',
-                    iconCls: 'action_add',
-                    handler : handler_leadsource_add
+                    iconCls: 'actionAdd',
+                    handler : handlerLeadsourceAdd
                     },{
                     text: 'delete item',
-                    iconCls: 'action_delete',
-                    handler : handler_leadsource_delete
+                    iconCls: 'actionDelete',
+                    handler : handlerLeadsourceDelete
                     },{
                     text: 'save',
-                    iconCls: 'action_saveAndClose',
-                    handler : handler_leadsource_saveClose 
+                    iconCls: 'actionSaveAndClose',
+                    handler : handlerLeadsourceSaveClose 
                     }]  
                 });
                     
                         
           Dialog.add(leadsourceGridPanel);
-          Dialog.show();		  
+          Dialog.show();          
         }
   
      function editLeadtype() {
            var Dialog = new Ext.Window({
-				title: 'Leadtypes',
-                id: 'Leadtype_window',
-				modal: true,
-			    width: 350,
-			    height: 500,
-			    minWidth: 300,
-			    minHeight: 500,
-			    layout: 'fit',
-			    plain:true,
-			    bodyStyle:'padding:5px;',
-			    buttonAlign:'center'
-            });	
+                title: 'Leadtypes',
+                id: 'leadtypeWindow',
+                modal: true,
+                width: 350,
+                height: 500,
+                minWidth: 300,
+                minHeight: 500,
+                layout: 'fit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                buttonAlign:'center'
+            }); 
             
-            var st_leadtype = new Ext.data.JsonStore({
+            var storeLeadtype = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getLeadtypes',
                     sort: 'lead_leadtype',
@@ -1061,10 +1015,10 @@ Egw.Crm = function() {
                 remoteSort: false
             });
             
-            st_leadtype.load();
+            storeLeadtype.load();
             
-            var cm_leadtype = new Ext.grid.ColumnModel([
-                	{ id:'lead_leadtype_id', 
+            var columnModelLeadtype = new Ext.grid.ColumnModel([
+                    { id:'lead_leadtype_id', 
                       header: "id", 
                       dataIndex: 'lead_leadtype_id', 
                       width: 25, 
@@ -1085,53 +1039,53 @@ Egw.Crm = function() {
                {name: 'lead_leadtype', type: 'varchar'}
             ]);
             
-            var handler_leadtype_add = function(){
+            var handlerLeadtypeAdd = function(){
                 var p = new entry({
                     lead_leadtype_id: 'NULL',
                     lead_leadtype: ''
                 });
                 leadtypeGridPanel.stopEditing();
-                st_leadtype.insert(0, p);
+                storeLeadtype.insert(0, p);
                 leadtypeGridPanel.startEditing(0, 0);
                 leadtypeGridPanel.fireEvent('celldblclick',this, 0, 1);                
             };
                         
-            var handler_leadtype_delete = function(){
-               	var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
-        		var leadtypeStore = leadtypeGrid.getStore();
+            var handlerLeadtypeDelete = function(){
+                var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
+                var leadtypeStore = leadtypeGrid.getStore();
                 
-        		var selectedRows = leadtypeGrid.getSelectionModel().getSelections();
+                var selectedRows = leadtypeGrid.getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     leadtypeStore.remove(selectedRows[i]);
                 }   
             };                        
                         
           
-           var handler_leadtype_saveClose = function(){
-                var leadtype_store = Ext.getCmp('editLeadtypeGrid').getStore();
+           var handlerLeadtypeSaveClose = function(){
+                var leadtypeStore = Ext.getCmp('editLeadtypeGrid').getStore();
                 
-                var leadtype_json = Egw.Egwbase.Common.getJSONdata(leadtype_store); 
+                var leadtypeJson = Egw.Egwbase.Common.getJSONdata(leadtypeStore); 
 
                  Ext.Ajax.request({
                             params: {
                                 method: 'Crm.saveLeadtypes',
-                                optionsData: leadtype_json
+                                optionsData: leadtypeJson
                             },
                             text: 'Saving leadtypes...',
                             success: function(_result, _request){
-                                    leadtype_store.reload();
-                                    leadtype_store.rejectChanges();
+                                    leadtypeStore.reload();
+                                    leadtypeStore.rejectChanges();
                                },
                             failure: function(form, action) {
-                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-                    			}
+                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+                                }
                         });          
             };          
             
             var leadtypeGridPanel = new Ext.grid.EditorGridPanel({
-                store: st_leadtype,
+                store: storeLeadtype,
                 id: 'editLeadtypeGrid',
-                cm: cm_leadtype,
+                cm: columnModelLeadtype,
                 autoExpandColumn:'lead_leadtype',
                 frame:false,
                 viewConfig: {
@@ -1141,40 +1095,40 @@ Egw.Crm = function() {
                 clicksToEdit:2,
                 tbar: [{
                     text: 'new item',
-                    iconCls: 'action_add',
-                    handler : handler_leadtype_add
+                    iconCls: 'actionAdd',
+                    handler : handlerLeadtypeAdd
                     },{
                     text: 'delete item',
-                    iconCls: 'action_delete',
-                    handler : handler_leadtype_delete
+                    iconCls: 'actionDelete',
+                    handler : handlerLeadtypeDelete
                     },{
                     text: 'save',
-                    iconCls: 'action_saveAndClose',
-                    handler : handler_leadtype_saveClose 
+                    iconCls: 'actionSaveAndClose',
+                    handler : handlerLeadtypeSaveClose 
                     }]  
                 });
                     
                         
           Dialog.add(leadtypeGridPanel);
-          Dialog.show();		  
+          Dialog.show();          
         }
     
     function editProductsource() {
            var Dialog = new Ext.Window({
-				title: 'Products',
-                id: 'Product_window',
-				modal: true,
-			    width: 350,
-			    height: 500,
-			    minWidth: 300,
-			    minHeight: 500,
-			    layout: 'fit',
-			    plain:true,
-			    bodyStyle:'padding:5px;',
-			    buttonAlign:'center'
-            });	
+                title: 'Products',
+                id: 'productWindow',
+                modal: true,
+                width: 350,
+                height: 500,
+                minWidth: 300,
+                minHeight: 500,
+                layout: 'fit',
+                plain:true,
+                bodyStyle:'padding:5px;',
+                buttonAlign:'center'
+            }); 
             
-            var st_productsource = new Ext.data.JsonStore({
+            var storeProductsource = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getProductsource',
                     sort: 'lead_productsource',
@@ -1192,10 +1146,10 @@ Egw.Crm = function() {
                 remoteSort: false
             });
             
-            st_productsource.load();
+            storeProductsource.load();
             
-            var cm_productsource = new Ext.grid.ColumnModel([
-                	{ id:'lead_productsource_id', 
+            var columnModelProductsource = new Ext.grid.ColumnModel([
+                    { id:'lead_productsource_id', 
                       header: "id", 
                       dataIndex: 'lead_productsource_id', 
                       width: 25, 
@@ -1230,54 +1184,54 @@ Egw.Crm = function() {
                {name: 'lead_productsource_price', type: 'number'}
             ]);
             
-            var handler_productsource_add = function(){
+            var handlerProductsourceAdd = function(){
                 var p = new entry({
                     lead_productsource_id: 'NULL',
                     lead_productsource: '',
                     lead_productsource_price: '0,00'
                 });
                 productsourceGridPanel.stopEditing();
-                st_productsource.insert(0, p);
+                storeProductsource.insert(0, p);
                 productsourceGridPanel.startEditing(0, 0);
                 productsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
             };
                         
-            var handler_productsource_delete = function(){
-               	var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
-        		var productsourceStore = productsourceGrid.getStore();
+            var handlerProductsourceDelete = function(){
+                var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
+                var productsourceStore = productsourceGrid.getStore();
                 
-        		var selectedRows = productsourceGrid.getSelectionModel().getSelections();
+                var selectedRows = productsourceGrid.getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     productsourceStore.remove(selectedRows[i]);
                 }   
             };                        
                         
           
-           var handler_productsource_saveClose = function(){
-                var productsource_store = Ext.getCmp('editProductsourceGrid').getStore();
+           var handlerProductsourceSaveClose = function(){
+                var productsourceStore = Ext.getCmp('editProductsourceGrid').getStore();
                 
-                var productsource_json = Egw.Egwbase.Common.getJSONdata(productsource_store); 
+                var productsourceJson = Egw.Egwbase.Common.getJSONdata(productsourceStore); 
 
                  Ext.Ajax.request({
                             params: {
                                 method: 'Crm.saveProductsource',
-                                optionsData: productsource_json
+                                optionsData: productsourceJson
                             },
                             text: 'Saving productsource...',
                             success: function(_result, _request){
-                                    productsource_store.reload();
-                                    productsource_store.rejectChanges();
+                                    productsourceStore.reload();
+                                    productsourceStore.rejectChanges();
                                },
                             failure: function(form, action) {
-                    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-                    			}
+                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+                                }
                         });          
             };          
             
             var productsourceGridPanel = new Ext.grid.EditorGridPanel({
-                store: st_productsource,
+                store: storeProductsource,
                 id: 'editProductsourceGrid',
-                cm: cm_productsource,
+                cm: columnModelProductsource,
                 autoExpandColumn:'lead_productsource',
                 frame:false,
                 viewConfig: {
@@ -1287,25 +1241,24 @@ Egw.Crm = function() {
                 clicksToEdit:2,
                 tbar: [{
                     text: 'new item',
-                    iconCls: 'action_add',
-                    handler : handler_productsource_add
+                    iconCls: 'actionAdd',
+                    handler : handlerProductsourceAdd
                     },{
                     text: 'delete item',
-                    iconCls: 'action_delete',
-                    handler : handler_productsource_delete
+                    iconCls: 'actionDelete',
+                    handler : handlerProductsourceDelete
                     },{
                     text: 'save',
-                    iconCls: 'action_saveAndClose',
-                    handler : handler_productsource_saveClose 
+                    iconCls: 'actionSaveAndClose',
+                    handler : handlerProductsourceSaveClose 
                     }]  
                 });
-                    
-                        
+             
           Dialog.add(productsourceGridPanel);
-          Dialog.show();		  
+          Dialog.show();          
         }     
         
-        var settings_tb_menu = new Ext.menu.Menu({
+        var settingsToolbarMenu = new Ext.menu.Menu({
             id: 'crmSettingsMenu',
             items: [
                 {text: 'leadstate', handler: editLeadstate},
@@ -1414,26 +1367,26 @@ Egw.Crm = function() {
         };
         
         var toolbar = new Ext.Toolbar({
-            id: 'Crm_toolbar',
+            id: 'crmToolbar',
             split: false,
             height: 26,
             items: [
-                action_add,
-                action_edit,
-                action_delete,
-                action_add_task,
+                actions.actionAdd,
+                actions.actionEdit,
+                actions.actionDelete,
+                actions.actionAddTask,
                 new Ext.Toolbar.Separator(),
                 {
                     text:'Options',
-                    iconCls: 'action_edit', 
-                    menu: settings_tb_menu
+                    iconCls: 'actionEdit', 
+                    menu: settingsToolbarMenu
                 },
                 '->',
                 {
                     text: 'Show Details',
                     enableToggle: true,
-                    id: 'crm_ShowDetailsButton',
-                    iconCls: 'showDetails_action',
+                    id: 'crmShowDetailsButton',
+                    iconCls: 'showDetailsAction',
                     handler: handlerToggleDetails,                    
                     pressed: false
                     
@@ -1442,8 +1395,8 @@ Egw.Crm = function() {
                 {
                     text: 'Show closed leads',
                     enableToggle: true,
-                    iconCls: 'showEndedLeads_action',
-                    id: 'crm_ShowClosedLeadsButton',
+                    iconCls: 'showEndedLeadsAction',
+                    id: 'crmShowClosedLeadsButton',
                     handler: function(toggle) {                        
                         var dataStore = Ext.getCmp('gridCrm').getStore();
                         dataStore.reload();
@@ -1452,9 +1405,9 @@ Egw.Crm = function() {
                     
                 },
                 'Search:  ', ' ',                
-                filter_combo_leadstate,
-				' ',
-                filter_combo_probability,                
+                filterComboLeadstate,
+                ' ',
+                filterComboProbability,                
                 new Ext.Toolbar.Separator(),
                 '->',
                 ' ',
@@ -1495,8 +1448,7 @@ Egw.Crm = function() {
      * 
      */
     var _showGrid = function() 
-    {
-    	
+    { 
         var dataStore = _createDataStore();
         
         var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
@@ -1507,12 +1459,12 @@ Egw.Crm = function() {
             emptyMsg: "No leads to display"
         }); 
         
-      	var ctxMenuGrid = new Ext.menu.Menu({
+        var ctxMenuGrid = new Ext.menu.Menu({
         id:'ctxMenuGrid', 
         items: [
-            action_edit,
-            action_delete,
-            action_add_task
+            actions.actionEdit,
+            actions.actionDelete,
+            actions.actionAddTask
         ]
     });
 
@@ -1542,7 +1494,7 @@ Egw.Crm = function() {
               dataIndex: 'lead_leadstate_id', 
               sortable: false,
               renderer: function(leadstate_id) {
-                  var leadstates = Ext.getCmp('filter_leadstate').store;
+                  var leadstates = Ext.getCmp('filterLeadstate').store;
                   var leadstate_name = leadstates.getById(leadstate_id);
                   return leadstate_name.data.lead_leadstate;
               },
@@ -1559,18 +1511,18 @@ Egw.Crm = function() {
             var rowCount = _selectionModel.getCount();
 
             if(rowCount < 1) {
-                action_delete.setDisabled(true);
-                action_edit.setDisabled(true);
-                action_add_task.setDisabled(true);
+                actions.actionDelete.setDisabled(true);
+                actions.actionEdit.setDisabled(true);
+                actions.actionAddTask.setDisabled(true);
             } 
             if (rowCount == 1) {
-               action_edit.setDisabled(false);
-               action_delete.setDisabled(false);               
-               action_add_task.setDisabled(false);
+               actions.actionEdit.setDisabled(false);
+               actions.actionDelete.setDisabled(false);               
+               actions.actionAddTask.setDisabled(false);
             }    
             if(rowCount > 1) {                
-               action_edit.setDisabled(true);
-               action_add_task.setDisabled(true);
+               actions.actionEdit.setDisabled(true);
+               actions.actionAddTask.setDisabled(true);
             }
         });
         
@@ -1581,8 +1533,8 @@ Egw.Crm = function() {
             tbar: pagingToolbar, 
             stripeRows: true,  
             viewConfig: {
-                        forceFit:true
-                    },  
+                forceFit:true
+            },  
             plugins: expander,                    
             autoSizeColumns: false,
             selModel: rowSelectionModel,
@@ -1590,12 +1542,12 @@ Egw.Crm = function() {
             loadMask: true,
             autoExpandColumn: 'lead_name',
             border: false,
-			view: new Ext.grid.GridView({
+            view: new Ext.grid.GridView({
                 autoFill: true,
-	            forceFit:true,
-	            ignoreAdd: true,
-	            emptyText: 'No Leads to display'
-	        })            
+                forceFit:true,
+                ignoreAdd: true,
+                emptyText: 'No Leads to display'
+            })            
         });
         
         Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
@@ -1605,7 +1557,7 @@ Egw.Crm = function() {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
-                action_delete.setDisabled(false);
+                actions.action_delete.setDisabled(false);
             }
             ctxMenuGrid.showAt(_eventObject.getXY());
         });
@@ -1620,7 +1572,7 @@ Egw.Crm = function() {
     
 
    var _loadData = function(_node)
-    {
+    {       
         var dataStore = Ext.getCmp('gridCrm').getStore();
         
         // we set them directly, because this properties also need to be set when paging
@@ -1653,10 +1605,8 @@ Egw.Crm = function() {
             params:{
                 start:0, 
                 limit:50
-                //dateFrom: '',// Ext.getCmp('Crm_dateFrom').getRawValue(),
-                //dateTo: '', //Ext.getCmp('Crm_dateTo').getRawValue()
-                //leadstate: Ext.getCmp('filter_leadstate').getValue(),
-                //probability: Ext.getCmp('filter_probability').getValue()																                
+                //leadstate: Ext.getCmp('filterLeadstate').getValue(),
+                //probability: Ext.getCmp('filterProbability').getValue()                                                                               
             }
         });
     };    
@@ -1665,499 +1615,42 @@ Egw.Crm = function() {
     // public functions and variables
     return {
         displayFolderSelectDialog: _displayFolderSelectDialog,
-        show: function(_node) {          
-             var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
-            if (currentToolbar === false || currentToolbar.id != 'Crm_toolbar') {
-                _showCrmToolbar();
-                _showGrid(_node);
-            }
-            _loadData(_node);
-        },
-        
-        getPanel: _getTreePanel,
-
+        show:   function(_node) {          
+                    var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
+                    if (currentToolbar === false || currentToolbar.id != 'Crm_toolbar') {
+                        _showCrmToolbar();
+                        _showGrid(_node);
+                    }
+                    _loadData(_node);
+        },    
         reload: function() {
-            if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
-                setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
-            }
+                    if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
+                        setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
+                    }
         }
     };
-    
 }(); // end of application
+  
 
 Ext.namespace('Egw.Crm.LeadEditDialog');
-
-Egw.Crm.LeadEditDialog.Handler = function() {
-    // public functions and variables
-    return {
-	    removeContact: function(_button, _event) 
-	    {
-	    	var currentContactsTab = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab();
-	    	
-            var selectedRows = currentContactsTab.getSelectionModel().getSelections();
-	    	var currentContactsStore = currentContactsTab.getStore();
-
-	        for (var i = 0; i < selectedRows.length; ++i) {
-	            currentContactsStore.remove(selectedRows[i]);
-	        }
-	
-	        //Ext.getCmp('Addressbook_Grants_SaveButton').enable();
-	        //Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
-	    },
-
-	    addContact: function(_button, _event) 
-	    {
-            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
-	    },    
-	    
-	    addContactToList: function(_button, _event) 
-	    {
-	    	var selectedRows = Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().getSelections();
-            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
-
-	    	for (var i = 0; i < selectedRows.length; ++i) {
-	            if(currentContactsStore.getById(selectedRows[i].id) === undefined) {
-	                //console.log('record ' + record.id + 'not found');
-	                currentContactsStore.addSorted(selectedRows[i], selectedRows[i].id);
-	            }
-            }
-	    	
-            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
-            
-            selectionModel.selectRow(currentContactsStore.indexOfId(selectedRows[0].id));
-        }      
-    };
-}();
-
-Egw.Crm.LeadEditDialog.Elements = function() {
-    // public functions and variables
-    return {
-    	actionRemoveContact: new Ext.Action({
-	        text: 'remove contact from list',
-	        disabled: true,
-	        handler: Egw.Crm.LeadEditDialog.Handler.removeContact,
-	        iconCls: 'action_delete'
-	    }),
-        
-        actionAddContact: new Ext.Action({
-            text: 'create new contact',
-            handler: Egw.Crm.LeadEditDialog.Handler.addContact,
-            iconCls: 'action_add'
-        }),
-
-        actionAddContactToList: new Ext.Action({
-            text: 'add contact to list',
-            disabled: true,
-            handler: function(_button, _event) {
-            	Egw.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
-            },
-            iconCls: 'action_add'
-        }),
-	    
-    	columnModelDisplayContacts: new Ext.grid.ColumnModel([
-            {id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
-            {id:'n_fileas', header: 'Name / Address', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
-                function(val, meta, record) {
-                    var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : '&nbsp;';
-                    var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
-                    var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : '&nbsp;';
-                    var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : '&nbsp;';
-                    var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : '&nbsp;';                                       
-                    
-                    
-                    var formated_return = '<b>' + n_fileas + '</b><br />' + org_name + '<br  />' + 
-                        adr_one_street + '<br />' + 
-                        adr_one_postalcode + ' ' + adr_one_locality    ;                    
-                    
-                    return formated_return;
-                }
-            },
-            {id:'contact_one', header: "Phone", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
-                    var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? record.data.tel_work : '&nbsp;';
-                    var tel_fax            = Ext.isEmpty(record.data.tel_fax) === false ? record.data.tel_fax : '&nbsp;';
-                    var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? record.data.tel_cell : '&nbsp;'  ;                                      
-
-                var formated_return = '<table>' + 
-                    '<tr><td>Phone: </td><td>' + tel_work + '</td></tr>' + 
-                    '<tr><td>Fax: </td><td>' + tel_fax + '</td></tr>' + 
-                    '<tr><td>Cellphone: </td><td>' + tel_cell + '</td></tr>' + 
-                    '</table>';
-                
-                    return formated_return;
-                }
-            },
-            {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var contact_email      = Ext.isEmpty(record.data.contact_email) === false ? '<a href="mailto:'+record.data.contact_email+'">'+record.data.contact_email+'</a>' : '&nbsp;';
-                    var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '&nbsp;';                    
-
-                var formated_return = '<table>' + 
-                    '<tr><td>Email: </td><td>' + contact_email + '</td></tr>' + 
-                    '<tr><td>WWW: </td><td>' + contact_url + '</td></tr>' + 
-                    '</table>';
-                
-                    return formated_return;
-                }
-            }                                    
-        ]),
-        
-        columnModelSearchContacts: new Ext.grid.ColumnModel([
-            {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', sortable: true, renderer: 
-                function(val, meta, record) {
-                	var formated_return = null;
-                	
-                	if(Ext.isEmpty(record.data.n_fileas) === false) {
-                		formated_return = '<b>' + record.data.n_fileas + '</b><br />';
-                	}
-
-                    if(Ext.isEmpty(record.data.org_name) === false) {
-                    	if(formated_return === null) {
-                    		formated_return = '<b>' + record.data.org_name + '</b><br />';
-                    	} else {
-                            formated_return += record.data.org_name + '<br />';
-                    	}
-                    }
-
-                    if(Ext.isEmpty(record.data.adr_one_street) === false) {
-                        formated_return += record.data.adr_one_street + '<br />';
-                    }
-                    
-                    if( (Ext.isEmpty(record.data.adr_one_postalcode) === false)  && (Ext.isEmpty(record.data.adr_one_locality) === false) ) {
-                        formated_return += record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality + '<br />';
-                    } else if (Ext.isEmpty(record.data.adr_one_locality) === false) {
-                    	formated_return += record.data.adr_one_locality + '<br />';
-                    }
-                	                    
-                    return formated_return;
-                }
-            }
-        ]),
-    	
-    	getTabPanelManageContacts: function() {
-    		// why does this not work????
-    		var quickSearchField = new Ext.app.SearchField({
-            //var quickSearchField = new Ext.form.TriggerField({
-            //var quickSearchField = new Ext.form.TwinTriggerField({
-	            id: 'crm_editLead_SearchContactsField',
-	            width: 250,
-	            //autoWidth: true,
-	            emptyText: 'enter searchfilter'
-            });
-			quickSearchField.on('resize', function(){
-				quickSearchField.wrap.setWidth(280);
-			});
-            
-
-            var contactToolbar = new Ext.Toolbar({
-                items: [
-                    quickSearchField
-                ]
-            });
-
-    		var tabPanel = {
-	            title:'manage contacts',
-	            layout:'border',
-                //tbar: contactToolbar,
-	            //layoutOnTabChange:true,  
-                defaults: {
-                    //anchor: '100% 100%',
-                    border:false
-                    //frame:false
-                    //deferredRender:false,                
-	            },         
-	            items:[{
-	            	region: 'west',
-	            	xtype: 'tabpanel',
-	            	width: 300,
-	            	split: true,
-	            	activeTab: 0,
-	            	tbar: [
-                        Egw.Crm.LeadEditDialog.Elements.actionAddContactToList
-	            	],
-	            	items: [
-                        {
-                            xtype:'grid',
-                            id: 'crm_editLead_SearchContactsGrid',
-                            title:'Search',
-                            cm: this.columnModelSearchContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsSearch(),
-                            autoExpandColumn: 'n_fileas',
-                            tbar: contactToolbar
-                        }, {
-			               title: 'Browse',
-			               html: 'Browse',
-			               disabled: true
-			            }
-                        //searchPanel
-	               ]
-	            }, {
-	            	region: 'center',
-                    xtype: 'tabpanel',
-                    id: 'crm_editLead_ListContactsTabPanel',
-                    title:'contacts panel',
-                    activeTab: 0,
-	                tbar: [
-	                    Egw.Crm.LeadEditDialog.Elements.actionAddContact,                
-	                    Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
-	                ],                
-                    items: [
-                        {
-                            xtype:'grid',
-                            id: 'crm_gridCostumer',
-                            title:'Customer',
-                            cm: this.columnModelDisplayContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsCustomer(),
-                            autoExpandColumn: 'n_fileas'
-                        },{
-                            xtype:'grid',
-                            id: 'crm_gridPartner',
-                            title:'Partner',
-                            cm: this.columnModelDisplayContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsPartner(),
-                            autoExpandColumn: 'n_fileas'
-                        }, {
-                            xtype:'grid',
-                            id: 'crm_gridAccount',
-                            title:'Internal',
-                            cm: this.columnModelDisplayContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsInternal(),
-                            autoExpandColumn: 'n_fileas'
-                        }
-                    ]
-                }]         
-            };
-            return tabPanel;
-        }
-    };
-}();
-
-
-Egw.Crm.LeadEditDialog.Stores = function() {
-    var _storeContactsInternal = null;
-    
-    var _storeContactsCustomer = null;
-    
-    var _storeContactsPartner = null;
-
-    var _storeContactsSearch = null;
-    
-    // public functions and variables
-    return {
-    	contactFields: [
-            {name: 'link_id'},              
-            {name: 'link_remark'},                        
-            {name: 'contact_id'},
-            {name: 'contact_owner'},
-            {name: 'n_family'},
-            {name: 'n_given'},
-            {name: 'n_middle'},
-            {name: 'n_prefix'},
-            {name: 'n_suffix'},
-            {name: 'n_fn'},
-            {name: 'n_fileas'},
-            {name: 'org_name'},
-            {name: 'org_unit'},
-            {name: 'adr_one_street'},
-            {name: 'adr_one_locality'},
-            {name: 'adr_one_region'},
-            {name: 'adr_one_postalcode'},
-            {name: 'adr_one_countryname'},
-            {name: 'tel_work'},
-            {name: 'tel_cell'},
-            {name: 'tel_fax'},
-            {name: 'contact_email'}
-        ],
-        
-        getContactsCustomer: function (){
-        	if(_storeContactsCustomer === null) {
-	        	_storeContactsCustomer = new Ext.data.JsonStore({
-	                data: formData.values.contactsCustomer ? formData.values.contactsCustomer : {},
-		            autoLoad: formData.values.contactsCustomer ? true : false,
-		            id: 'contact_id',
-		            fields: this.contactFields
-		        });
-        	}
-        	
-	        return _storeContactsCustomer;
-        },
-        
-        getContactsPartner: function (){
-        	if(_storeContactsPartner === null) {
-		        _storeContactsPartner = new Ext.data.JsonStore({
-		            data: formData.values.contactsPartner ? formData.values.contactsPartner : {},
-		            autoLoad: formData.values.contactsPartner ? true : false,
-		            id: 'contact_id',
-		            fields: this.contactFields
-		        });
-        	}
-        	
-	        return _storeContactsPartner;
-        },
-        
-	    getContactsInternal: function (){
-	    	if(_storeContactsInternal === null) {
-		        _storeContactsInternal = new Ext.data.JsonStore({
-		            data: formData.values.contactsInternal ? formData.values.contactsInternal : {},
-		            autoLoad: formData.values.contactsInternal ? true : false,
-		            id: 'contact_id',
-		            fields: this.contactFields
-		        });     
-	    	}
-	        
-	        return _storeContactsInternal;
-	    },
-
-        getContactsSearch: function (){
-        	if(_storeContactsSearch === null) {
-			    _storeContactsSearch = new Ext.data.JsonStore({
-		            baseParams: {
-		                //method: 'Addressbook.getAllContacts',
-		                start: 0,
-		                sort: 'n_fileas',
-		                dir: 'asc',
-		                limit: 0
-		            },
-		            root: 'results',
-		            totalProperty: 'totalcount',
-		            id: 'contact_id',
-		            fields: this.contactFields,
-		            // turn on remote sorting
-		            remoteSort: true
-		        });
-		        
-		        _storeContactsSearch.setDefaultSort('n_fileas', 'asc');
-        	}
-        	
-	        return _storeContactsSearch;
-        },
-        
-        getLeadStatus: function (){
-	        var store = new Ext.data.JsonStore({
-	            data: formData.comboData.leadstates,
-	            autoLoad: true,         
-	            id: 'key',
-	            fields: [
-	                {name: 'key', mapping: 'lead_leadstate_id'},
-	                {name: 'value', mapping: 'lead_leadstate'},
-	                {name: 'probability', mapping: 'lead_leadstate_probability'},
-	                {name: 'endslead', mapping: 'lead_leadstate_endslead'}
-	            ]
-	        });
-	        
-	        return store;
-        },
-
-        getProductsAvailable: function (){        
-	        var store = new Ext.data.JsonStore({
-	            data: formData.comboData.productsource,
-	            autoLoad: true,
-	            id: 'lead_productsource_id',
-	            fields: [
-	                {name: 'lead_productsource_id'},
-	                {name: 'value', mapping: 'lead_productsource'},
-	                {name: 'lead_productsource_price'}
-	            ]
-	        });
-
-	        return store;
-        },
-
-        getLeadType: function (){
-	        var store = new Ext.data.JsonStore({
-	            data: formData.comboData.leadtypes,
-	            autoLoad: true,
-	            id: 'key',
-	            fields: [
-	                {name: 'key', mapping: 'lead_leadtype_id'},
-	                {name: 'value', mapping: 'lead_leadtype'}
-	
-	            ]
-	        });     
-	        
-	        return store;
-        },
-        
-        getActivities: function (){
-	        var store = new Ext.data.JsonStore({
-                data: formData.values.tasks,
-                autoLoad: true,
-                id: 'identifier',
-                fields: [
-                    {name: 'identifier'},
-                    {name: 'container'},
-                    {name: 'created_by'},
-                    {name: 'creation_time', type: 'date', dateFormat: 'c'},
-                    {name: 'last_modified_by'},
-                    {name: 'last_modified_time', type: 'date', dateFormat: 'c'},
-                    {name: 'is_deleted'},
-                    {name: 'deleted_time', type: 'date', dateFormat: 'c'},
-                    {name: 'deleted_by'},
-                    {name: 'percent'},
-                    {name: 'completed', type: 'date', dateFormat: 'c'},
-                    {name: 'due', type: 'date', dateFormat: 'c'},
-                    {name: 'class'},
-                    {name: 'description'},
-                    {name: 'geo'},
-                    {name: 'location'},
-                    {name: 'organizer'},
-                    {name: 'priority'},
-                    {name: 'status'},
-                    {name: 'summaray'},
-                    {name: 'url'},
-					
-					{name: 'creator'},
-					{name: 'modifier'},
-                    {name: 'status_realname'}
-                ]
-	        });
-
-	        return store;
-        },
-        
-        getProbability: function (){
-	        var store = new Ext.data.SimpleStore({
-	                fields: ['key','value'],
-	                data: [
-	                        ['0','0%'],
-	                        ['10','10%'],
-	                        ['20','20%'],
-	                        ['30','30%'],
-	                        ['40','40%'],
-	                        ['50','50%'],
-	                        ['60','60%'],
-	                        ['70','70%'],
-	                        ['80','80%'],
-	                        ['90','90%'],
-	                        ['100','100%']
-	                    ]
-	        });
-	        
-	        return store;
-        }
-    };
-}();
-
-Egw.Crm.LeadEditDialog.Main = function() {
+Egw.Crm.LeadEditDialog = function() {
     // private variables
     var dialog;
     var leadedit;
-    
+
     var _getAdditionalData = function()
     {
         var additionalData = {};
-
-        if(formData.values.lead_id) {
-            additionalData.lead_id = formData.values.lead_id;
-        }   
-        
-        var store_products         = Ext.getCmp('grid_choosenProducts').getStore();
+    
+        var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
         additionalData.products = Egw.Egwbase.Common.getJSONdata(store_products);
 
-        // the start date (can not be empty
-        var startDate = Ext.getCmp('_lead_start').getValue();
+        // the start date (can not be empty)
+        var startDate = Ext.getCmp('lead_start').getValue();
         additionalData.lead_start = startDate.format('c');
 
         // the end date
-        var endDate = Ext.getCmp('_lead_end').getValue();
+        var endDate = Ext.getCmp('lead_end').getValue();
         if(typeof endDate == 'object') {
             additionalData.lead_end = endDate.format('c');
         } else {
@@ -2165,7 +1658,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         }
 
         // the estimated end
-        var endScheduledDate = Ext.getCmp('_lead_end_scheduled').getValue();
+        var endScheduledDate = Ext.getCmp('lead_end_scheduled').getValue();
         if(typeof endScheduledDate == 'object') {
             additionalData.lead_end_scheduled = endScheduledDate.format('c');
         } else {
@@ -2213,149 +1706,31 @@ Egw.Crm.LeadEditDialog.Main = function() {
         
         additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
         
-        
         return additionalData;
     };
-
-    // private functions 
-    var handler_applyChanges = function(_button, _event) 
-    {
-        //var grid_products          = Ext.getCmp('grid_choosenProducts');
-       
-    	var leadForm = Ext.getCmp('leadDialog').getForm();
-    	
-    	if(leadForm.isValid()) {            
-			leadForm.submit({
-    			waitTitle:'Please wait!',
-    			waitMsg:'saving lead...',
-    			params:_getAdditionalData(),
-    			success:function(form, action, o) {
-                    //store_products.reload();
-                    //store_products.rejectChanges();
-                    if(window.opener.Egw.Crm) {
-    				    window.opener.Egw.Crm.reload();
-                    }
-    			},
-    			failure:function(form, action) {
-    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-    			}
-    		});
-    	} else {
-    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-    	}
-    };
- 
-
-    var handler_saveAndClose = function(_button, _event) 
-    {       
-    	var leadForm = Ext.getCmp('leadDialog').getForm();
-    	
-    	if(leadForm.isValid()) {
-			leadForm.submit({
-    			waitTitle:'Please wait!',
-    			waitMsg:'saving lead...',
-    			params:_getAdditionalData(),
-    			success:function(form, action, o) {
-                    //store_products.reload();       
-                    //store_products.rejectChanges();                            
-    				window.opener.Egw.Crm.reload();
-    				window.setTimeout("window.close()", 500);
-    			},
-    			failure:function(form, action) {
-    			//	Ext.MessageBox.alert("Error",action.result.errorMessage);
-    			}
-    		});
-    	} else {
-    		Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-    	}
-    };
-
-    var handler_pre_delete = function(){
-        Ext.MessageBox.show({
-            title: 'Delete Lead?',
-            msg: 'Are you sure you want to delete this lead?',
-            buttons: Ext.MessageBox.YESNO,
-            fn: handler_delete,
-//            animEl: 'mb4',
-            icon: Ext.MessageBox.QUESTION
-        });
-    };
-
-
-    var handler_delete = function(btn) 
-    {
-        if (btn == 'yes') {
-            var leadIds = Ext.util.JSON.encode([formData.values.lead_id]);
-            
-            Ext.Ajax.request({
-                params: {
-                    method: 'Crm.deleteLeads',
-                    _leadIds: leadIds
-                },
-                text: 'Deleting lead...',
-                success: function(_result, _request){
-                    window.opener.Egw.Crm.reload();
-                    window.setTimeout("window.close()", 400);
-                },
-                failure: function(result, request){
-                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
-                }
-            });
-        } 
-    };
-
-
-   	var action_saveAndClose = new Ext.Action({
-		text: 'save and close',
-		handler: handler_saveAndClose,
-		iconCls: 'action_saveAndClose'
-	});
-
-   	var action_applyChanges = new Ext.Action({
-		text: 'apply changes',
-		handler: handler_applyChanges,
-		iconCls: 'action_applyChanges',
-        disabled: true
-	});
-
-   	var action_delete = new Ext.Action({
-		text: 'delete lead',
-		handler: handler_pre_delete,
-		iconCls: 'action_delete',
-        disabled: true
-	});
 
     
     /**
      * display the event edit dialog
      *
      */
-    var _displayDialog = function() {
+    var _displayDialog = function(_leadData) {
         Ext.QuickTips.init();
 
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
 
-        
+        _leadData = new Egw.Crm.LeadEditDialog.Lead(_leadData);
+
         var disableButtons = true;
-        if(formData.values) {
+     /*   if(formData.values) {
             disableButtons = false;
         }       
-        
-        var leadToolbar = new Ext.Toolbar({
-        	region: 'south',
-          	id: 'applicationToolbar',
-			split: false,
-			height: 26,
-			items: [
-				action_saveAndClose,
-				action_applyChanges,
-				action_delete
-			]
-		});
+      */  
+      
 
-		var _setParameter = function(_dataSource)
-		{
+        var _setParameter = function(_dataSource)
+        {
             _dataSource.baseParams.method = 'Crm.getEvents';
             _dataSource.baseParams.options = Ext.encode({
             });
@@ -2366,7 +1741,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
         var _editHandler = function(_button, _event) {
         
             editWindow.show();
-            	
+                
         }; 
 
         function formatDate(value){
@@ -2377,7 +1752,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             text: 'editieren',
             //disabled: true,
             handler: _editHandler,
-            iconCls: 'action_edit'
+            iconCls: 'actionEdit'
         });
           
         var txtfld_leadName = new Ext.form.TextField({
@@ -2398,31 +1773,31 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 id:'leadstatus',
                 name:'leadstate',
                 hiddenName:'lead_leadstate_id',
-				store: Egw.Crm.LeadEditDialog.Stores.getLeadStatus(),
-				displayField:'value',
+                store: Egw.Crm.LeadEditDialog.Stores.getLeadStatus(),
+                displayField:'value',
                 valueField:'key',
-				//typeAhead: true,
-				mode: 'local',
-				triggerAction: 'all',
-				editable: false,
-				allowBlank: false,
+                //typeAhead: true,
+                mode: 'local',
+                triggerAction: 'all',
+                editable: false,
+                allowBlank: false,
                 listWidth: '25%',
-				forceSelection: true,
-				anchor:'95%'    
+                forceSelection: true,
+                anchor:'95%'    
         });
-	
-		combo_leadstatus.on('select', function(combo, record, index) {
+    
+        combo_leadstatus.on('select', function(combo, record, index) {
             if (record.data.probability !== null) {
                 var combo_probability = Ext.getCmp('combo_probability');
                 combo_probability.setValue(record.data.probability);
             }
 
-			if (record.data.endslead == '1') {
-				var combo_endDate = Ext.getCmp('_lead_end');
-				combo_endDate.setValue(new Date());
-			}
-		});
-		
+            if (record.data.endslead == '1') {
+                var combo_endDate = Ext.getCmp('_lead_end');
+                combo_endDate.setValue(new Date());
+            }
+        });
+        
         var combo_leadtyp = new Ext.form.ComboBox({
             fieldLabel:'leadtype', 
             id:'leadtype',
@@ -2444,92 +1819,94 @@ Egw.Crm.LeadEditDialog.Main = function() {
     
 
         var st_leadsource = new Ext.data.JsonStore({
-			data: formData.comboData.leadsources,
-			autoLoad: true,
+            data: formData.comboData.leadsources,
+            autoLoad: true,
             id: 'key',
             fields: [
                 {name: 'key', mapping: 'lead_leadsource_id'},
                 {name: 'value', mapping: 'lead_leadsource'}
 
             ]
-        }); 	
+        });     
 
-		var combo_leadsource = new Ext.form.ComboBox({
+        var combo_leadsource = new Ext.form.ComboBox({
                 fieldLabel:'leadsource', 
                 id:'leadsource',
                 name:'lead_leadsource',
                 hiddenName:'lead_leadsource_id',
-				store: st_leadsource,
-				displayField:'value',
+                store: st_leadsource,
+                displayField:'value',
                 valueField:'key',
-				typeAhead: true,
+                typeAhead: true,
                 listWidth: '25%',                
-				mode: 'local',
-				triggerAction: 'all',
+                mode: 'local',
+                triggerAction: 'all',
                 editable: false,
                 allowBlank: false,
                 forceSelection: true,
-				anchor:'95%'    
+                anchor:'95%'    
         });
-		combo_leadsource.setValue('1');
+        combo_leadsource.setValue('1');
 
-        var st_activities = Egw.Crm.LeadEditDialog.Stores.getActivities();
+        var st_activities = Egw.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
      
-	 	var combo_probability =  new Ext.form.ComboBox({
-			fieldLabel:'probability', 
-			id: 'combo_probability',
-			name:'lead_probability',
-			store: Egw.Crm.LeadEditDialog.Stores.getProbability(),
-			displayField:'value',
-			valueField:'key',
-			typeAhead: true,
-			mode: 'local',
+        var combo_probability =  new Ext.form.ComboBox({
+            fieldLabel:'probability', 
+            id: 'combo_probability',
+            name:'lead_probability',
+            store: Egw.Crm.LeadEditDialog.Stores.getProbability(),
+            displayField:'value',
+            valueField:'key',
+            typeAhead: true,
+            mode: 'local',
             listWidth: '25%',            
-			triggerAction: 'all',
-			emptyText:'',
-			selectOnFocus:true,
-			editable: false,
-			renderer: Ext.util.Format.percentage,
-			anchor:'95%'			
-		});
-		combo_probability.setValue('0');
-	         
-		var date_start = new Ext.form.DateField({
-	        fieldLabel:'start', 
-	        allowBlank:false,
-	        id:'_lead_start',
-	        //       format:formData.config.dateFormat, 
-	        format: 'd.m.Y',
-	        /*altFormat:'Y-m-d',
-	        altFormat:'c',*/
-	        anchor:'95%'
-		});
-		
-		var date_scheduledEnd = new Ext.form.DateField({
+            triggerAction: 'all',
+            emptyText:'',
+            selectOnFocus:true,
+            editable: false,
+            renderer: Ext.util.Format.percentage,
+            anchor:'95%'            
+        });
+        combo_probability.setValue('0');
+             
+        var date_start = new Ext.form.DateField({
+            fieldLabel:'start', 
+            allowBlank:false,
+            id:'lead_start',             
+            format: 'c',
+            altFormat:'Y-m-d',
+            altFormat:'d.m.Y',
+            anchor:'95%'
+        });
+
+        
+        var date_scheduledEnd = new Ext.form.DateField({
             fieldLabel:'estimated end', 
             //name:'lead_end_scheduled',
-            id:'_lead_end_scheduled',
+            id:'lead_end_scheduled',
             //    format:formData.config.dateFormat, 
-            format: 'd.m.Y',
-            //altFormat:'Y-m-d',
+            format: 'c',
+            altFormat:'Y-m-d',
+            altFormat:'d.m.Y',
             anchor:'95%'
-		});
-		
-		var date_end = new Ext.form.DateField({
+        });
+        
+        var date_end = new Ext.form.DateField({
             xtype:'datefield',
             fieldLabel:'end', 
             //name:'lead_end',
-            id:'_lead_end',
+            id:'lead_end',
             //       format:formData.config.dateFormat, 
-            format: 'd.m.Y',
+            format: 'c',
             altFormat:'Y-m-d',
+            altFormat:'d.m.Y',
             anchor:'95%'
-		});
+        });
 
-	activitiesGetStatusIcon = function(statusName) {   
-	    return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
-	};
-		
+    activitiesGetStatusIcon = function(statusName) {   
+        return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
+    };
+        
 
       var ActivitiesTpl = new Ext.XTemplate( 
         '<tpl for=".">',
@@ -2540,7 +1917,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             '{description}<br />',                     
             '</div></tpl>', {
                 setContactField: function(textValue){
-					alert(textValue);
+                    alert(textValue);
                     if ((textValue === null) || (textValue.length == 0)) {
                         return '';
                     }
@@ -2555,28 +1932,28 @@ Egw.Crm.LeadEditDialog.Main = function() {
             id: 'grid_activities_limited_panel',
             cls: 'contacts_background',                            
             layout:'fit',  
-	        autoScroll: true,
+            autoScroll: true,
             autoHeight: true,
-	        items: new Ext.DataView({
-	            tpl: ActivitiesTpl,       
+            items: new Ext.DataView({
+                tpl: ActivitiesTpl,       
                 autoHeight:true,                         
                 id: 'grid_activities_limited',
-	            store: st_activities,
+                store: st_activities,
                 overClass: 'x-view-over',
-	            itemSelector: 'activities-item-small'
-	        })
+                itemSelector: 'activities-item-small'
+            })
         });  
   */
   
-	   if (formData.values) {
-			var _lead_id = formData.values.lead_id;
-	   } else {
-			var _lead_id = 'NULL';
-	   }
+       if (_leadData.data) {                    
+            var _lead_id = _leadData.data.lead_id;
+       } else {
+            var _lead_id = 'NULL';
+       }
   
         var st_choosenProducts = new Ext.data.JsonStore({
-			data: formData.values.products,
-			autoLoad: true,
+            data: _leadData.data.products,
+            autoLoad: true,
             id: 'lead_id',
             fields: [
                 {name: 'lead_id'},
@@ -2666,24 +2043,24 @@ Egw.Crm.LeadEditDialog.Main = function() {
         
         var handler_remove_product = function(_button, _event)
         {
-    		var productGrid = Ext.getCmp('grid_choosenProducts');
-    		var productStore = productGrid.getStore();
+            var productGrid = Ext.getCmp('grid_choosenProducts');
+            var productStore = productGrid.getStore();
             
-    		var selectedRows = productGrid.getSelectionModel().getSelections();
+            var selectedRows = productGrid.getSelectionModel().getSelections();
             for (var i = 0; i < selectedRows.length; ++i) {
                 productStore.remove(selectedRows[i]);
-            }    	
+            }       
         }; 
 
         var handler_remove_task = function(_button, _event)
         {
-    		var taskGrid = Ext.getCmp('gridActivities');
-    		var taskStore = taskGrid.getStore();
+            var taskGrid = Ext.getCmp('gridActivities');
+            var taskStore = taskGrid.getStore();
             
-    		var selectedRows = taskGrid.getSelectionModel().getSelections();
+            var selectedRows = taskGrid.getSelectionModel().getSelections();
             for (var i = 0; i < selectedRows.length; ++i) {
                 taskStore.remove(selectedRows[i]);
-            }    	
+            }       
         };
         
         var product = Ext.data.Record.create([
@@ -2706,11 +2083,11 @@ Egw.Crm.LeadEditDialog.Main = function() {
             clicksToEdit:2,
             tbar: [{
                 text: 'add product',
-                iconCls: 'action_add',
+                iconCls: 'actionAdd',
                 handler : function(){
                     var p = new product({
                         lead_id: 'NULL',
-						lead_lead_id: _lead_id,
+                        lead_lead_id: _lead_id,
                         lead_product_id: '',                       
                         lead_product_desc:'',
                         lead_product_price: ''
@@ -2722,7 +2099,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 }
             } , {
                 text: 'delete product',
-                iconCls: 'action_delete',
+                iconCls: 'actionDelete',
                 handler : handler_remove_product 
             }]  
         });
@@ -2747,13 +2124,13 @@ Egw.Crm.LeadEditDialog.Main = function() {
  
 
         var cm_contacts = new Ext.grid.ColumnModel([
-            	{id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
-        //    	{id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },
+                {id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
+        //      {id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },
                 {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                     function(val, meta, record) {
-	                	var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
-	                	
-	                    var formated_return = '<b>' + record.data.n_fileas + '</b><br />' + org_name;
+                        var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
+                        
+                        var formated_return = '<b>' + record.data.n_fileas + '</b><br />' + org_name;
                         
                         return formated_return;
                     }
@@ -2779,46 +2156,46 @@ Egw.Crm.LeadEditDialog.Main = function() {
 
          
         var cm_activities = new Ext.grid.ColumnModel([
-            	{   id:'identifier', 
+                {   id:'identifier', 
                     header: "identifier", 
                     dataIndex: 'identifier', 
                     width: 5, 
                     sortable: true, 
                     hidden: true 
                 }, {
-					id: 'status',
-					header: "Status",
-					width: 40,
-					sortable: true,
-					dataIndex: 'status_realname',
-					renderer: activitiesGetStatusIcon
-				}, {
-					id: 'percent',
-					header: "Percent",
-					width: 50,
-					sortable: true,
-					dataIndex: 'percent'//,
-	//				renderer: Egw.widgets.Percent.renderer,
-				}, {
-					id: 'summaray',
-					header: "Summaray",
-					width: 200,
-					sortable: true,
-					dataIndex: 'summaray'
-				}, {
-					id: 'due',
-					header: "Due Date",
-					width: 80,
-					sortable: true,
-					dataIndex: 'due',
-					renderer: Egw.Egwbase.Common.dateRenderer
-				}, {
-					id: 'creator',
-					header: "Creator",
-					width: 130,
-					sortable: true,
-					dataIndex: 'creator'
-				}, {
+                    id: 'status',
+                    header: "Status",
+                    width: 40,
+                    sortable: true,
+                    dataIndex: 'status_realname',
+                    renderer: activitiesGetStatusIcon
+                }, {
+                    id: 'percent',
+                    header: "Percent",
+                    width: 50,
+                    sortable: true,
+                    dataIndex: 'percent'//,
+    //              renderer: Egw.widgets.Percent.renderer,
+                }, {
+                    id: 'summaray',
+                    header: "Summaray",
+                    width: 200,
+                    sortable: true,
+                    dataIndex: 'summaray'
+                }, {
+                    id: 'due',
+                    header: "Due Date",
+                    width: 80,
+                    sortable: true,
+                    dataIndex: 'due',
+                    renderer: Egw.Egwbase.Common.dateRenderer
+                }, {
+                    id: 'creator',
+                    header: "Creator",
+                    width: 130,
+                    sortable: true,
+                    dataIndex: 'creator'
+                }, {
                     id: 'description',
                     header: "Description",
                     width: 240,
@@ -2828,15 +2205,15 @@ Egw.Crm.LeadEditDialog.Main = function() {
         ]);               
       
         var  _add_task = new Ext.Action({
-        		text: 'add task',
-        		handler: function(){
-                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ formData.values.lead_id, 700, 300);
+                text: 'add task',
+                handler: function(){
+                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _leadData.data.lead_id, 700, 300);
                 },
-        		iconCls: 'action_add',
+                iconCls: 'actionAdd',
                 disabled: true
         });         
 
-       if(formData.values.lead_id !== null) {
+       if(_leadData.data.lead_id !== null) {
            _add_task.enable();
        }
       
@@ -2846,7 +2223,7 @@ Egw.Crm.LeadEditDialog.Main = function() {
             cm: cm_activities,
             tbar: [_add_task , {
                 text: 'delete task',
-                iconCls: 'action_delete',
+                iconCls: 'actionDelete',
                 handler : handler_remove_task 
             }],
             stripeRows: true,  
@@ -2867,25 +2244,31 @@ Egw.Crm.LeadEditDialog.Main = function() {
 
         });
                
-  		var folderTrigger = new Ext.form.TriggerField({
+        var folderTrigger = new Ext.form.TriggerField({
             fieldLabel:'folder (person in charge)', 
-			id: 'lead_container_name',
+            id: 'lead_container_name',
             anchor:'95%',
             allowBlank: false,
             editable: false,
             readOnly:true
         });
 
+        folderTrigger.on('render', function(comp) {
+            if(formData.config.folderName) {
+                comp.setValue(formData.config.folderName);
+            }
+        });
+
         folderTrigger.onTriggerClick = function() {
-            Egw.Crm.displayFolderSelectDialog('lead_container');
+            Egw.Crm.Main.displayFolderSelectDialog('lead_container');
         };
+
         
-        
-        
+   /*     
        if(formData.values.lead_id !== null) {
            _add_task.enable();
        }
-        
+ */       
         var tabPanelOverview = {
             title:'overview',
             layout:'border',
@@ -2895,16 +2278,16 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 frame: true            
             },
             items: [{
-		        title: 'last activities',
-		        region: 'east',
+                title: 'last activities',
+                region: 'east',
                 autoScroll: true,
-		        width: 300,
+                width: 300,
                 tbar: [
                     '->',
                     _add_task
                  ],
-		        items: [
-		          new Ext.DataView({
+                items: [
+                  new Ext.DataView({
                     tpl: ActivitiesTpl,       
                     autoHeight:true,                    
                     id: 'grid_activities_limited',
@@ -2913,9 +2296,9 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     itemSelector: 'activities-item-small'
                   })
                 ]
-		    },{
-		        region:'center',
-		        layout: 'form',
+            },{
+                region:'center',
+                layout: 'form',
                 autoHeight: true,
                 id: 'editCenterPanel',
                 items: [
@@ -2987,8 +2370,8 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     cls: 'productSummary',
                     disabled: true,
                     selectOnFocus: true,
-                    anchor:'100%',
-                    value: formData.values.productSummary
+                    anchor:'100%'//,
+//                    value: formData.values.productSummary
                 }, {
                     xtype: 'tabpanel',
                     id: 'contactsPanel',
@@ -2996,14 +2379,14 @@ Egw.Crm.LeadEditDialog.Main = function() {
                     activeTab: 0,
                     height: 273,
                     items: [
-	                    {
-		                    xtype:'grid',
-		                    //id: 'crm_gridCostumer',
-		                    title:'Customer',
-		                    cm: cm_contacts,
-		                    store: storeContactsCustomer,
-		                    autoExpandColumn: 'n_fileas'
-		                },{
+                        {
+                            xtype:'grid',
+                            //id: 'crm_gridCostumer',
+                            title:'Customer',
+                            cm: cm_contacts,
+                            store: storeContactsCustomer,
+                            autoExpandColumn: 'n_fileas'
+                        },{
                             xtype:'grid',
                             //id: 'crm_gridPartner',
                             title:'Partner',
@@ -3053,25 +2436,85 @@ Egw.Crm.LeadEditDialog.Main = function() {
             ]
         };
   
-		var leadedit = new Ext.FormPanel({
-			baseParams: {method :'Crm.saveLead'},
-		    labelAlign: 'top',
-			bodyStyle:'padding:5px',
-            anchor:'100%',
-			region: 'center',
-            id: 'leadDialog',
-			tbar: leadToolbar, 
-			deferredRender: false,
-            layoutOnTabChange:true,            
+// >>>  
+  
+      var handlerApplyChanges = function(_button, _event) 
+        {
+            //var grid_products          = Ext.getCmp('grid_choosenProducts');
+
+            var closeWindow = arguments[2] ? arguments[2] : false;
+            var leadForm = Ext.getCmp('leadDialog').getForm();
+            leadForm.render();
+            
+            if(leadForm.isValid()) {  
+                Ext.MessageBox.wait('please wait', 'saving lead...');                
+           
+                leadForm.updateRecord(_leadData);
+                
+                var additionalData = _getAdditionalData();
+                
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Crm.saveLead', 
+                        lead: Ext.util.JSON.encode(_leadData.data),
+                        linkedCustomer: additionalData.linkedCustomer,
+                        linkedPartner:  additionalData.linkedPartner,
+                        linkedAccount:  additionalData.linkedAccount,
+                        linkedTasks:    additionalData.linkedTasks,
+                        products:       additionalData.products
+                        //jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+                    },
+                    success: function(_result, _request) {
+                        if(window.opener.Egw.Crm) {
+                            window.opener.Egw.Crm.Main.reload();
+                        } 
+                        if (closeWindow) {
+                            window.setTimeout("window.close()", 400);
+                        }
+                        //dlg.action_delete.enable();
+                        // override task with returned data
+                        //task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
+                        // update form with this new data
+                        //form.loadRecord(task);                    
+                        Ext.MessageBox.hide();
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert('Failed', 'Could not save lead.'); 
+                    } 
+                });
+            } else {
+                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            }
+        };
+ 
+
+        var handlerSaveAndClose = function(_button, _event) 
+        {     
+            handlerApplyChanges(_button, _event, true);
+        };  
+  
+// <<<  
+        var leadEdit = new Egw.widgets.dialog.EditRecord({
+            id : 'leadDialog',
+            handlerApplyChanges: handlerApplyChanges,
+            handlerSaveAndClose: handlerSaveAndClose,
+            handlerDelete: Egw.Crm.LeadEditDialog.Handler.handlerDelete,
+            labelAlign: 'top',
+            layout: 'fit',
+                bodyStyle:'padding:5px',
+                anchor:'100%',
+                region: 'center',  
+                deferredRender: false,
+                layoutOnTabChange:true,           
             items: [{
                 xtype:'tabpanel',
-	            plain:true,
-	            activeTab: 0,
-				deferredRender:false,
+                plain:true,
+                activeTab: 0,
+                deferredRender:false,
                 layoutOnTabChange:true,  
                 anchor:'100% 100%',
-	            //defaults:{bodyStyle:'padding:10px'},
-	            items:[
+                //defaults:{bodyStyle:'padding:10px'},
+                items:[
                     tabPanelOverview, 
                     Egw.Crm.LeadEditDialog.Elements.getTabPanelManageContacts(),                    
                     tabPanelActivities, 
@@ -3079,13 +2522,24 @@ Egw.Crm.LeadEditDialog.Main = function() {
                 ]
             }]
         });
-        
-		var viewport = new Ext.Viewport({
-			layout: 'border',
-            id: 'editViewport',
-			items: leadedit
-		});
 
+
+        var viewport = new Ext.Viewport({
+            layout: 'border',
+            id: 'editViewport',
+            items: leadEdit
+        });
+   
+  //     Egw.Crm.LeadEditDialog.Handler.updateLeadRecord(_leadData);
+  //     this.updateToolbarButtons();  
+        Egw.Crm.LeadEditDialog.Stores.getContactsCustomer(_leadData.data.contactsCustomer);
+        Egw.Crm.LeadEditDialog.Stores.getContactsPartner(_leadData.data.contactsPartner);
+        Egw.Crm.LeadEditDialog.Stores.getContactsInternal(_leadData.data.contactsInternal);       
+        Egw.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
+        
+      
+        leadEdit.getForm().loadRecord(_leadData);
+            
         Ext.getCmp('editViewport').on('afterlayout',function(container) {
              var _dimension = container.getSize();
              var _offset = 125;
@@ -3101,13 +2555,13 @@ Egw.Crm.LeadEditDialog.Main = function() {
              Ext.getCmp('contactsPanel').setHeight(_heightContacts);
         }); 
 
-		
-		/*********************************
-		 * 
-		 * the UI logic
-		 * 
-		 *********************************/
-		var searchContacts = function(_field, _newValue, _oldValue) {
+        
+        /*********************************
+         * 
+         * the UI logic
+         * 
+         *********************************/
+        var searchContacts = function(_field, _newValue, _oldValue) {
             var currentContactsTabId = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getId();
             //console.log(currentContactsTabId);
             if(currentContactsTabId == 'crm_gridAccount') {
@@ -3133,22 +2587,22 @@ Egw.Crm.LeadEditDialog.Main = function() {
         };
 
         Ext.getCmp('crm_gridCostumer').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-        	var record = _grid.getStore().getAt(_rowIndex);
+            var record = _grid.getStore().getAt(_rowIndex);
             Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });
         
         Ext.getCmp('crm_gridPartner').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-        	var record = _grid.getStore().getAt(_rowIndex);
+            var record = _grid.getStore().getAt(_rowIndex);
             Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });
         
         Ext.getCmp('crm_gridAccount').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-        	var record = _grid.getStore().getAt(_rowIndex);
+            var record = _grid.getStore().getAt(_rowIndex);
             Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });                
          
-		Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
-		    
+        Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
+            
         Ext.getCmp('crm_editLead_SearchContactsGrid').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
             var record = _grid.getStore().getAt(_rowIndex);
             var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
@@ -3176,9 +2630,9 @@ Egw.Crm.LeadEditDialog.Main = function() {
         }; 
         
         var activateContactsSearch = function(_panel) {
-        	setRemoveContactButtonState(_panel.getSelectionModel());
-        	searchContacts(
-        	   Ext.getCmp('crm_editLead_SearchContactsField'), 
+            setRemoveContactButtonState(_panel.getSelectionModel());
+            searchContacts(
+               Ext.getCmp('crm_editLead_SearchContactsField'), 
                 Ext.getCmp('crm_editLead_SearchContactsField').getValue(),
                 Ext.getCmp('crm_editLead_SearchContactsField').getValue()
             );
@@ -3208,25 +2662,25 @@ Egw.Crm.LeadEditDialog.Main = function() {
         Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
         
     };
-
-    var setLeadDialogValues = function(_formData) {        
-    	var form = Ext.getCmp('leadDialog').getForm();
+/*
+    var _setLeadDialogValues = function(_formData) {        
+        var form = Ext.getCmp('leadDialog').getForm();
 
         var myReader = new Ext.data.JsonStore({
-        	root: 'rows',
-        	fields:[
-	            {name: 'lead_id', type: 'int'},
-	            {name: 'lead_name', type: 'string'},
-	            {name: 'lead_leadstate_id', type: 'int'},
-	            {name: 'lead_leadtype_id', type: 'int'},
-	            {name: 'lead_leadsource_id', type: 'int'},
-	            {name: 'lead_container', type: 'int'},
-	            {name: '_lead_start', mapping: 'lead_start', type: 'date', dateFormat: 'c'},
-	            {name: 'lead_description', type: 'string'},
-	            {name: '_lead_end', mapping: 'lead_end', type: 'date', dateFormat: 'c'},
-	            {name: 'lead_turnover', type: 'int'},
-	            {name: 'lead_probability', type: 'int'},
-	            {name: '_lead_end_scheduled', mapping: 'lead_end_scheduled', type: 'date', dateFormat: 'c'}
+            root: 'rows',
+            fields:[
+                {name: 'lead_id', type: 'int'},
+                {name: 'lead_name', type: 'string'},
+                {name: 'lead_leadstate_id', type: 'int'},
+                {name: 'lead_leadtype_id', type: 'int'},
+                {name: 'lead_leadsource_id', type: 'int'},
+                {name: 'lead_container', type: 'int'},
+                {name: '_lead_start', mapping: 'lead_start', type: 'date', dateFormat: 'c'},
+                {name: 'lead_description', type: 'string'},
+                {name: '_lead_end', mapping: 'lead_end', type: 'date', dateFormat: 'c'},
+                {name: 'lead_turnover', type: 'int'},
+                {name: 'lead_probability', type: 'int'},
+                {name: '_lead_end_scheduled', mapping: 'lead_end_scheduled', type: 'date', dateFormat: 'c'}
             ] 
         });
         
@@ -3235,10 +2689,10 @@ Egw.Crm.LeadEditDialog.Main = function() {
         var leadRecord = myReader.getAt(0);
         
         if(typeof(leadRecord.data._lead_start) != 'object') {
-        	leadRecord.data._lead_start = new Date();
+            leadRecord.data._lead_start = new Date();
         }
         
-    	form.setValues(leadRecord.data);
+        form.setValues(leadRecord.data);
 
         form.findField('lead_container_name').setValue(_formData.config.folderName);
         
@@ -3246,19 +2700,514 @@ Egw.Crm.LeadEditDialog.Main = function() {
             action_applyChanges.enable();
             action_delete.enable();
         }
-    	
-    	return;
+        
+        return;
     };
+*/
 
+        // public functions and variables
+    return {
+        displayDialog: function(_leadData) {
+            _displayDialog(_leadData);
+        }
+    }
+}(); // end of application
+
+Egw.Crm.LeadEditDialog.Handler = function() {
+    return { 
+        removeContact: function(_button, _event) 
+        {
+console.log('remove contact');           
+            var currentContactsTab = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab();
+            
+            var selectedRows = currentContactsTab.getSelectionModel().getSelections();
+            var currentContactsStore = currentContactsTab.getStore();
+
+            for (var i = 0; i < selectedRows.length; ++i) {
+                currentContactsStore.remove(selectedRows[i]);
+            }
+    
+            //Ext.getCmp('Addressbook_Grants_SaveButton').enable();
+            //Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
+        },
+
+        addContact: function(_button, _event) 
+        {
+            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+        },    
+        
+        addContactToList: function(_button, _event) 
+        {
+            var selectedRows = Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().getSelections();
+            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
+
+            for (var i = 0; i < selectedRows.length; ++i) {
+                if(currentContactsStore.getById(selectedRows[i].id) === undefined) {
+                    //console.log('record ' + record.id + 'not found');
+                    currentContactsStore.addSorted(selectedRows[i], selectedRows[i].id);
+                }
+            }
+            
+            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
+            
+            selectionModel.selectRow(currentContactsStore.indexOfId(selectedRows[0].id));
+        },  
+              
+        handlerDelete: function() 
+        {
+            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this lead?', function(_button) {
+                if(_button == 'yes') {      
+                    var leadIds;// = Ext.util.JSON.encode([formData.values.lead_id]);
+                    
+                    Ext.Ajax.request({
+                        params: {
+                            method: 'Crm.deleteLeads',
+                            _leadIds: leadIds
+                        },
+                        text: 'Deleting lead...',
+                        success: function(_result, _request){
+                            window.opener.Egw.Crm.reload();
+                            window.setTimeout("window.close()", 400);
+                        },
+                        failure: function(result, request){
+                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
+                        }
+                    });
+                } 
+            });
+        }
+    }
+}();
+
+Egw.Crm.LeadEditDialog.Elements = function() {
     // public functions and variables
     return {
-        display: function() {
-            var dialog = _displayDialog();
-            if(formData.values) {
-                setLeadDialogValues(formData);
-            }
-        }
+       actionRemoveContact: new Ext.Action({
+            text: 'remove contact from list',
+            disabled: true,
+            handler: Egw.Crm.LeadEditDialog.Handler.removeContact,
+            iconCls: 'actionDelete'
+        }),
         
+        actionAddContact: new Ext.Action({
+            text: 'create new contact',
+            handler: Egw.Crm.LeadEditDialog.Handler.addContact,
+            iconCls: 'actionAdd'
+        }),
+
+        actionAddContactToList: new Ext.Action({
+            text: 'add contact to list',
+            disabled: true,
+            handler: function(_button, _event) {
+                Egw.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
+            },
+            iconCls: 'actionAdd'
+        }),        
+        
+        columnModelDisplayContacts: new Ext.grid.ColumnModel([
+            {id:'contact_id', header: "contact_id", dataIndex: 'contact_id', width: 25, sortable: true, hidden: true },
+            {id:'n_fileas', header: 'Name / Address', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
+                function(val, meta, record) {
+                    var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : '&nbsp;';
+                    var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
+                    var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : '&nbsp;';
+                    var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : '&nbsp;';
+                    var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : '&nbsp;';                                       
+                    
+                    
+                    var formated_return = '<b>' + n_fileas + '</b><br />' + org_name + '<br  />' + 
+                        adr_one_street + '<br />' + 
+                        adr_one_postalcode + ' ' + adr_one_locality    ;                    
+                    
+                    return formated_return;
+                }
+            },
+            {id:'contact_one', header: "Phone", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
+                    var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? record.data.tel_work : '&nbsp;';
+                    var tel_fax            = Ext.isEmpty(record.data.tel_fax) === false ? record.data.tel_fax : '&nbsp;';
+                    var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? record.data.tel_cell : '&nbsp;'  ;                                      
+
+                var formated_return = '<table>' + 
+                    '<tr><td>Phone: </td><td>' + tel_work + '</td></tr>' + 
+                    '<tr><td>Fax: </td><td>' + tel_fax + '</td></tr>' + 
+                    '<tr><td>Cellphone: </td><td>' + tel_cell + '</td></tr>' + 
+                    '</table>';
+                
+                    return formated_return;
+                }
+            },
+            {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
+                    var contact_email      = Ext.isEmpty(record.data.contact_email) === false ? '<a href="mailto:'+record.data.contact_email+'">'+record.data.contact_email+'</a>' : '&nbsp;';
+                    var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '&nbsp;';                    
+
+                var formated_return = '<table>' + 
+                    '<tr><td>Email: </td><td>' + contact_email + '</td></tr>' + 
+                    '<tr><td>WWW: </td><td>' + contact_url + '</td></tr>' + 
+                    '</table>';
+                
+                    return formated_return;
+                }
+            }                                    
+        ]),
+        
+        columnModelSearchContacts: new Ext.grid.ColumnModel([
+            {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', sortable: true, renderer: 
+                function(val, meta, record) {
+                    var formated_return = null;
+                    
+                    if(Ext.isEmpty(record.data.n_fileas) === false) {
+                        formated_return = '<b>' + record.data.n_fileas + '</b><br />';
+                    }
+
+                    if(Ext.isEmpty(record.data.org_name) === false) {
+                        if(formated_return === null) {
+                            formated_return = '<b>' + record.data.org_name + '</b><br />';
+                        } else {
+                            formated_return += record.data.org_name + '<br />';
+                        }
+                    }
+
+                    if(Ext.isEmpty(record.data.adr_one_street) === false) {
+                        formated_return += record.data.adr_one_street + '<br />';
+                    }
+                    
+                    if( (Ext.isEmpty(record.data.adr_one_postalcode) === false)  && (Ext.isEmpty(record.data.adr_one_locality) === false) ) {
+                        formated_return += record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality + '<br />';
+                    } else if (Ext.isEmpty(record.data.adr_one_locality) === false) {
+                        formated_return += record.data.adr_one_locality + '<br />';
+                    }
+                                        
+                    return formated_return;
+                }
+            }
+        ]),
+        
+        getTabPanelManageContacts: function() {
+            // why does this not work????
+            var quickSearchField = new Ext.app.SearchField({
+            //var quickSearchField = new Ext.form.TriggerField({
+            //var quickSearchField = new Ext.form.TwinTriggerField({
+                id: 'crm_editLead_SearchContactsField',
+                width: 250,
+                //autoWidth: true,
+                emptyText: 'enter searchfilter'
+            });
+            quickSearchField.on('resize', function(){
+                quickSearchField.wrap.setWidth(280);
+            });
+            
+
+            var contactToolbar = new Ext.Toolbar({
+                items: [
+                    quickSearchField
+                ]
+            });
+
+            var tabPanel = {
+                title:'manage contacts',
+                layout:'border',
+                //tbar: contactToolbar,
+                //layoutOnTabChange:true,  
+                defaults: {
+                    //anchor: '100% 100%',
+                    border:false
+                    //frame:false
+                    //deferredRender:false,                
+                },         
+                items:[{
+                    region: 'west',
+                    xtype: 'tabpanel',
+                    width: 300,
+                    split: true,
+                    activeTab: 0,
+                    tbar: [
+                        Egw.Crm.LeadEditDialog.Elements.actionAddContactToList
+                    ],
+                    items: [
+                        {
+                            xtype:'grid',
+                            id: 'crm_editLead_SearchContactsGrid',
+                            title:'Search',
+                            cm: this.columnModelSearchContacts,
+                            store: Egw.Crm.LeadEditDialog.Stores.getContactsSearch(),
+                            autoExpandColumn: 'n_fileas',
+                            tbar: contactToolbar
+                        }, {
+                           title: 'Browse',
+                           html: 'Browse',
+                           disabled: true
+                        }
+                        //searchPanel
+                   ]
+                }, {
+                    region: 'center',
+                    xtype: 'tabpanel',
+                    id: 'crm_editLead_ListContactsTabPanel',
+                    title:'contacts panel',
+                    activeTab: 0,
+                    tbar: [
+                        Egw.Crm.LeadEditDialog.Elements.actionAddContact,                
+                        Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
+                    ],                
+                    items: [
+                        {
+                            xtype:'grid',
+                            id: 'crm_gridCostumer',
+                            title:'Customer',
+                            cm: this.columnModelDisplayContacts,
+                            store: Egw.Crm.LeadEditDialog.Stores.getContactsCustomer(),
+                            autoExpandColumn: 'n_fileas'
+                        },{
+                            xtype:'grid',
+                            id: 'crm_gridPartner',
+                            title:'Partner',
+                            cm: this.columnModelDisplayContacts,
+                            store: Egw.Crm.LeadEditDialog.Stores.getContactsPartner(),
+                            autoExpandColumn: 'n_fileas'
+                        }, {
+                            xtype:'grid',
+                            id: 'crm_gridAccount',
+                            title:'Internal',
+                            cm: this.columnModelDisplayContacts,
+                            store: Egw.Crm.LeadEditDialog.Stores.getContactsInternal(),
+                            autoExpandColumn: 'n_fileas'
+                        }
+                    ]
+                }]         
+            };
+            return tabPanel;
+        }
     };
+}();
+
+Egw.Crm.LeadEditDialog.Stores = function() {
+    var _storeContactsInternal = null;
     
-}(); // end of application
+    var _storeContactsCustomer = null;
+    
+    var _storeContactsPartner = null;
+
+    var _storeContactsSearch = null;
+    
+    // public functions and variables
+    return {
+        contactFields: [
+            {name: 'link_id'},              
+            {name: 'link_remark'},                        
+            {name: 'contact_id'},
+            {name: 'contact_owner'},
+            {name: 'n_family'},
+            {name: 'n_given'},
+            {name: 'n_middle'},
+            {name: 'n_prefix'},
+            {name: 'n_suffix'},
+            {name: 'n_fn'},
+            {name: 'n_fileas'},
+            {name: 'org_name'},
+            {name: 'org_unit'},
+            {name: 'adr_one_street'},
+            {name: 'adr_one_locality'},
+            {name: 'adr_one_region'},
+            {name: 'adr_one_postalcode'},
+            {name: 'adr_one_countryname'},
+            {name: 'tel_work'},
+            {name: 'tel_cell'},
+            {name: 'tel_fax'},
+            {name: 'contact_email'}
+        ],
+        
+        getContactsCustomer: function (_contactsCustomer){  
+                 
+            if(_storeContactsCustomer === null) {
+                _storeContactsCustomer = new Ext.data.JsonStore({
+                    id: 'contact_id',
+                    fields: this.contactFields
+                });
+            }                
+                
+            if(_contactsCustomer) {
+                _storeContactsCustomer.loadData(_contactsCustomer);    
+            }
+            
+            return _storeContactsCustomer;            
+        },
+        
+        getContactsPartner: function (_contactsPartner){
+  
+            if(_storeContactsPartner === null) {
+                _storeContactsPartner = new Ext.data.JsonStore({
+                    id: 'contact_id',
+                    fields: this.contactFields
+                });
+            }
+             
+            if(_contactsPartner) {                
+                _storeContactsPartner.loadData(_contactsPartner);
+            }
+                         
+            return _storeContactsPartner;
+        },
+        
+        getContactsInternal: function (_contactsInternal){
+
+            if(_storeContactsInternal === null) {
+                _storeContactsInternal = new Ext.data.JsonStore({
+                    id: 'contact_id',
+                    fields: this.contactFields
+                });
+            }    
+                
+            if(_contactsInternal) {
+                _storeContactsInternal.loadData(_contactsInternal);
+            }                 
+            
+            return _storeContactsInternal;
+        },
+
+        getContactsSearch: function (){
+            if(_storeContactsSearch === null) {
+                _storeContactsSearch = new Ext.data.JsonStore({
+                    baseParams: {
+                        method: 'Addressbook.getAllContacts',
+                        start: 0,
+                        sort: 'n_fileas',
+                        dir: 'asc',
+                        limit: 0
+                    },
+                    root: 'results',
+                    totalProperty: 'totalcount',
+                    id: 'contact_id',
+                    fields: this.contactFields,
+                    // turn on remote sorting
+                    remoteSort: true
+                });
+                
+                _storeContactsSearch.setDefaultSort('n_fileas', 'asc');
+            }
+            
+            return _storeContactsSearch;
+        },
+        
+        getLeadStatus: function (){
+            var store = new Ext.data.JsonStore({
+                data: formData.comboData.leadstates,
+                autoLoad: true,         
+                id: 'key',
+                fields: [
+                    {name: 'key', mapping: 'lead_leadstate_id'},
+                    {name: 'value', mapping: 'lead_leadstate'},
+                    {name: 'probability', mapping: 'lead_leadstate_probability'},
+                    {name: 'endslead', mapping: 'lead_leadstate_endslead'}
+                ]
+            });
+            
+            return store;
+        },
+
+        getProductsAvailable: function (){        
+            var store = new Ext.data.JsonStore({
+                data: formData.comboData.productsource,
+                autoLoad: true,
+                id: 'lead_productsource_id',
+                fields: [
+                    {name: 'lead_productsource_id'},
+                    {name: 'value', mapping: 'lead_productsource'},
+                    {name: 'lead_productsource_price'}
+                ]
+            });
+
+            return store;
+        },
+
+        getLeadType: function (){
+            var store = new Ext.data.JsonStore({
+                data: formData.comboData.leadtypes,
+                autoLoad: true,
+                id: 'key',
+                fields: [
+                    {name: 'key', mapping: 'lead_leadtype_id'},
+                    {name: 'value', mapping: 'lead_leadtype'}
+    
+                ]
+            });     
+            
+            return store;
+        },
+        
+        getActivities: function (_tasks){     
+            var store = new Ext.data.JsonStore({
+                id: 'identifier',
+                fields: [
+                    {name: 'identifier'},
+                    {name: 'container'},
+                    {name: 'created_by'},
+                    {name: 'creation_time', type: 'date', dateFormat: 'c'},
+                    {name: 'last_modified_by'},
+                    {name: 'last_modified_time', type: 'date', dateFormat: 'c'},
+                    {name: 'is_deleted'},
+                    {name: 'deleted_time', type: 'date', dateFormat: 'c'},
+                    {name: 'deleted_by'},
+                    {name: 'percent'},
+                    {name: 'completed', type: 'date', dateFormat: 'c'},
+                    {name: 'due', type: 'date', dateFormat: 'c'},
+                    {name: 'class'},
+                    {name: 'description'},
+                    {name: 'geo'},
+                    {name: 'location'},
+                    {name: 'organizer'},
+                    {name: 'priority'},
+                    {name: 'status'},
+                    {name: 'summaray'},
+                    {name: 'url'},
+                    
+                    {name: 'creator'},
+                    {name: 'modifier'},
+                    {name: 'status_realname'}
+                ]
+            });
+
+            if(_tasks) {                
+                store.loadData(_tasks);
+            }
+        
+            return store;
+        },
+        
+        getProbability: function (){
+            var store = new Ext.data.SimpleStore({
+                    fields: ['key','value'],
+                    data: [
+                            ['0','0%'],
+                            ['10','10%'],
+                            ['20','20%'],
+                            ['30','30%'],
+                            ['40','40%'],
+                            ['50','50%'],
+                            ['60','60%'],
+                            ['70','70%'],
+                            ['80','80%'],
+                            ['90','90%'],
+                            ['100','100%']
+                        ]
+            });
+            
+            return store;
+        }
+    };
+}();
+
+Egw.Crm.LeadEditDialog.Lead = Ext.data.Record.create([
+    // egw record fields
+    {name: 'lead_id', type: 'int'},
+    {name: 'lead_name', type: 'string'},
+    {name: 'lead_leadstate_id', type: 'int'},
+    {name: 'lead_leadtype_id', type: 'int'},
+    {name: 'lead_leadsource_id', type: 'int'},
+    {name: 'lead_container', type: 'int'},
+    {name: '_lead_start', mapping: 'lead_start', type: 'date', dateFormat: 'c'},
+    {name: 'lead_description', type: 'string'},
+    {name: '_lead_end', mapping: 'lead_end', type: 'date', dateFormat: 'c'},
+    {name: 'lead_turnover', type: 'int'},
+    {name: 'lead_probability', type: 'int'},
+    {name: '_lead_end_scheduled', mapping: 'lead_end_scheduled', type: 'date', dateFormat: 'c'} 
+]);

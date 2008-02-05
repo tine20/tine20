@@ -27,48 +27,48 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
      * @todo catch permission denied exceptions only
      * 
      */
-	public function editLead($_leadId)
-	{
+    public function editLead($_leadId)
+    {
          if(empty($_leadId)) {
             $_leadId = NULL;
         }
-	    
-	    $locale = Zend_Registry::get('locale');
-		$currentAccount = Zend_Registry::get('currentAccount');
-	    
-		$view = new Zend_View();
-		 
-		$view->setScriptPath('Egwbase/views');
-		$view->formData = array();
         
-		$list = $locale->getTranslationList('Dateformat');
-		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
+        $locale = Zend_Registry::get('locale');
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Egwbase/views');
+        $view->formData = array();
+        
+        $list = $locale->getTranslationList('Dateformat');
+        $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 
-		$crmJson = new Crm_Json;		
-//		$view->formData['config']['initialTree'] = $eventschedulerJson->getInitialTree('mainTree');
+        $crmJson = new Crm_Json;        
+//      $view->formData['config']['initialTree'] = $eventschedulerJson->getInitialTree('mainTree');
 
-		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
-		$view->cssIncludeFiles = array();
-		
-		$controller = Crm_Controller::getInstance();
-		$leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-		
-		if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
-		    $view->formData['values'] = $lead->toArray();
+        $view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
+        $view->cssIncludeFiles = array();
+        
+        $controller = Crm_Controller::getInstance();
+        $leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
+        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
+            $leadData = $lead->toArray();
             
-		    $contact_links = $controller->getLinks($_leadId, 'addressbook');
+            $contact_links = $controller->getLinks($_leadId, 'addressbook');
             foreach($contact_links as $contact_link) {
                 try {
                     $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
                     switch($contact_link['remark']) {
                         case 'customer':
-                            $view->formData['values']['contactsCustomer'][] = $contact->toArray();
+                            $leadData['contactsCustomer'][] = $contact->toArray();
                             break;
                         case 'partner':
-                            $view->formData['values']['contactsPartner'][] = $contact->toArray();
+                            $leadData['contactsPartner'][] = $contact->toArray();
                             break;
                         case 'account':
-                            $view->formData['values']['contactsInternal'][] = $contact->toArray();
+                            $leadData['contactsInternal'][] = $contact->toArray();
                             break;
                     }
                 } catch (Exception $e) {
@@ -79,93 +79,92 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
             $no_links = '1';
             $task_links = $controller->getLinks($_leadId, 'tasks');
             foreach($task_links as $task_link) {
-				try {
-	                $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
-					$_task = $task->toArray();
+                try {
+                    $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
+                    $_task = $task->toArray();
 
-					$creator = Egwbase_Account::getInstance()->getAccountById($_task['created_by']);
-					$_creator = $creator->toArray();
-					$_task['creator'] = $_creator['accountFullName'];
-					
-					if($_task['last_modified_by'] != NULL) {
-						$modifier = Egwbase_Account::getInstance()->getAccountById($_task['last_modified_by']);
-						$_modifier = $modifier->toArray();
-						$_task['modifier'] = $_modifier['accountFullName'];			
-					}
-					
-					$stati = Tasks_Controller::getInstance()->getStati()->toArray();
-					foreach($stati AS $status) {
-						if($status['identifier'] == $task['status']) {
-							$_task['status_realname'] = $status['status'];
-						}
-					}
-									
-					
-		            $view->formData['values']['tasks'][] = $_task;	
-					$no_links = '0';
+                    $creator = Egwbase_Account::getInstance()->getAccountById($_task['created_by']);
+                    $_creator = $creator->toArray();
+                    $_task['creator'] = $_creator['accountFullName'];
                     
-				} catch (Exception $e) {
-					// do nothing
-				}
-			}
+                    if($_task['last_modified_by'] != NULL) {
+                        $modifier = Egwbase_Account::getInstance()->getAccountById($_task['last_modified_by']);
+                        $_modifier = $modifier->toArray();
+                        $_task['modifier'] = $_modifier['accountFullName'];         
+                    }
+                    
+                    $stati = Tasks_Controller::getInstance()->getStati()->toArray();
+                    foreach($stati AS $status) {
+                        if($status['identifier'] == $task['status']) {
+                            $_task['status_realname'] = $status['status'];
+                        }
+                    }
+                                    
+                    
+                    $leadData['tasks'][] = $_task;  
+                    $no_links = '0';
+                    
+                } catch (Exception $e) {
+                    // do nothing
+                }
+            }
             
             if($no_links == '1') {
-                 $view->formData['values']['tasks'] = array();   
+                 $leadData['tasks'] = array();   
             }
-			
-		    $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
+            
+            $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
             $view->formData['config']['folderName']   = $folder->container_name;
             $view->formData['config']['folderRights'] = $folder->account_grants;
-		    
+            
             $products = $leads->getProductsById($_leadId);
-            $view->formData['values']['products'] = $products->toArray();
+            $leadData['products'] = $products->toArray();
 
-		    
-		} else {
-            $view->formData['values'] = $controller->getEmptyLead()->toArray();
-            $view->formData['values']['products'] = array();                
-            $view->formData['values']['contacts'] = array();   
-            $view->formData['values']['tasks'] = array();                                   
+            
+        } else {
+            $leadData = $controller->getEmptyLead()->toArray();
+            $leadData['products'] = array();                
+            $leadData['contacts'] = array();   
+            $leadData['tasks'] = array();                                   
             
             $personalFolders = $leads->getFoldersByOwner($currentAccount->accountId);
-		    foreach($personalFolders as $folder) {
-		        $view->formData['values']['lead_container']     = $folder->container_id;
-    		    $view->formData['config']['folderName']   = $folder->container_name;
-    		    $view->formData['config']['folderRights'] = 31;
+            foreach($personalFolders as $folder) {
+                $leadData['lead_container']     = $folder->container_id;
+                $view->formData['config']['folderName']   = $folder->container_name;
+                $view->formData['config']['folderRights'] = 31;
                 break;
-		    }
-		    
-		}
+            }
+            
+        }
 
-		$_leadTypes = $leads->getLeadtypes('lead_leadtype','ASC');
-		$view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
-		
-		$_leadStates =  $leads->getLeadStates('lead_leadstate','ASC');
-		$view->formData['comboData']['leadstates'] = $_leadStates->toArray();
-		
-		$_leadSources =  $leads->getLeadSources('lead_leadsource','ASC');
-		$view->formData['comboData']['leadsources'] = $_leadSources->toArray();
+        $_leadTypes = $leads->getLeadtypes('lead_leadtype','ASC');
+        $view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
+        
+        $_leadStates =  $leads->getLeadStates('lead_leadstate','ASC');
+        $view->formData['comboData']['leadstates'] = $_leadStates->toArray();
+        
+        $_leadSources =  $leads->getLeadSources('lead_leadsource','ASC');
+        $view->formData['comboData']['leadsources'] = $_leadSources->toArray();
 
-		$_productSource =  $leads->getProductsAvailable('lead_productsource','ASC');
-		$view->formData['comboData']['productsource'] = $_productSource->toArray();
+        $_productSource =  $leads->getProductsAvailable('lead_productsource','ASC');
+        $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
+        $view->jsIncludeFiles[] = 'Crm/js/Crm.js';
+        $view->cssIncludeFiles[] = 'Crm/css/Crm.css';
+        $view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';       
+        $view->jsExecute = 'Egw.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';
 
-		$view->jsIncludeFiles[] = 'Crm/js/Crm.js';
-		$view->cssIncludeFiles[] = 'Crm/css/Crm.css';
-		$view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';		
-		$view->jsExecute = 'Egw.Crm.LeadEditDialog.Main.display();';
-
-		$view->configData = array(
+        $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
         
-		$view->title="edit lead";
+        $view->title="edit lead";
 
-		$view->isPopup = true;
+        $view->isPopup = true;
         $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
-	}
+    }
 
 }

@@ -326,18 +326,11 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */	
-	public function saveLead($linkedCustomer, $linkedPartner, $linkedAccount, $linkedTasks)
+	public function saveLead($lead, $linkedAccount, $linkedCustomer, $linkedPartner, $linkedTasks, $products)
     {
-        //if(empty($_POST['lead_id'])) {
-        //    unset($_POST['lead_id']);
-        //}
-
-        // lead modifier
-        //$_POST['lead_modifier'] = Zend_Registry::get('currentAccount')->accountId;
-
         $leadData = new Crm_Model_Lead();
         try {
-            $leadData->setFromUserData($_POST);
+            $leadData->setFromUserData(Zend_Json::decode($lead));
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array(
@@ -368,9 +361,9 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         Crm_Controller::getInstance()->setLinkedTasks($savedLead->lead_id, $linkedTasks);
         
         
-        // products
-		if(strlen($_POST['products']) > 2) {	    
-            $this->saveProducts($_POST['products'], $savedLead->lead_id);
+        // products    
+		if(strlen($products) > 2) {	    
+            $this->saveProducts($products, $savedLead->lead_id);
 		} else {
             Crm_Controller::getInstance()->deleteProducts($savedLead->lead_id);    
         }         
