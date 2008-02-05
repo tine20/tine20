@@ -112,7 +112,7 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
             throw new Zend_Auth_Adapter_Exception('credential can not be empty');
         }        
         
-        Zend_Registry::get('logger')->debug('Ldap.php trying to authenticate '. $this->_identity . ' against ' . $this->_host);
+        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') trying to authenticate '. $this->_identity . ' against ' . $this->_host);
         
         $ldapServer = new Egwbase_Ldap_LdapServer($this->_host);
         
@@ -124,46 +124,61 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         
         $account = $ldapServer->fetchAll($this->_searchDN, 'uid=' . $this->_identity, $this->accountAttributes);
         
+        $result = NULL;
+        
         if(count($account) < 1) {
-            $ldapServer->disconnect();
-        
-            Zend_Registry::get('logger')->debug('Ldap.php account ' . $this->_identity . ' not found');
-
-            $code = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
-            $messages[] = 'No account" . $this->_identity . " found.';
-            return new Zend_Auth_Result($code, $this->_identity, $messages);
+            $result = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
+            Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') account ' . $this->_identity . ' not found');
+        } elseif(count($account) > 1) {
+            $result = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
+            Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') multiple accounts for ' . $this->_identity . ' found');
+        } else {
+            if(!$ldapServer->bind($account[0]['dn'], $this->_credential)) {
+                $result = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
+                Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') invalid password for ' . $account[0]['dn']);
+            }
         }
-
-        if(count($account) > 1) {
-            $ldapServer->disconnect();
-        
-            Zend_Registry::get('logger')->debug('Ldap.php multiple accounts for ' . $this->_identity . ' found');
-
-            $code = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
-            $messages[] = 'More than one account found.';
-            return new Zend_Auth_Result($code, $this->_identity, $messages);
-        }
-        
-        try {
-            $ldapServer->bind($account[0]['dn'], $this->_credential);
-        } catch (Exception $e) {
-            $ldapServer->disconnect();
-            
-            Zend_Registry::get('logger')->debug('Ldap.php invalid password for ' . $account[0]['dn']);
-            
-            $code = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
-            $messages[] = 'The supplied password is invalid.';
-            return new Zend_Auth_Result($code, $this->_identity, $messages);
-        }
-        $this->_resultRow = $account[0];
         
         $ldapServer->disconnect();
         
-        Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' succeeded');
-        
-        $code = Zend_Auth_Result::SUCCESS;
-        $messages[] = 'Ldap.php Authentication successful.';
-        return new Zend_Auth_Result($code, $this->_identity, $messages);
+        if($result !== NULL) {
+            return $this->_getAuthResult($result);
+        }
+
+        $this->_resultRow = $account[0];
+    
+        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') authentication of '. $this->_identity . ' succeeded');
+        return $this->_getAuthResult(Zend_Auth_Result::SUCCESS);
+    }
+    
+    protected function _getAuthResult($_code)
+    {
+        switch($_code) {
+            case Zend_Auth_Result::SUCCESS:
+                return new Zend_Auth_Result(
+                    $_code, 
+                    $this->_identity, 
+                    array('Ldap.php Authentication successful.'));
+                break;
+            case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+                return new Zend_Auth_Result(
+                    $_code, 
+                    $this->_identity, 
+                    array('The supplied password is invalid.'));
+                break;
+            case Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS:
+                return new Zend_Auth_Result(
+                    $_code, 
+                    $this->_identity, 
+                    array('More than one account found.'));
+                break;
+            case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+                return new Zend_Auth_Result(
+                    $_code, 
+                    $this->_identity, 
+                    array('No account' . $this->_identity . ' found.'));
+                break;
+        }
     }
     
     /**

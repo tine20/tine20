@@ -80,8 +80,10 @@ class Egwbase_Ldap_LdapServer
         }
         
         if(!@ldap_bind($this->_ds, $_rdn, $_password)) {
-             throw new Exception('bind failed: ' . ldap_error($this->_ds), ldap_errno($this->_ds));
+             return false;
         }
+        
+        return true;
     }
     
     /**
