@@ -245,8 +245,6 @@ class Egwbase_Json
      */
     public function login($username, $password)
     {
-        $result = Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']);
-        
         $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
 
         if (Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {

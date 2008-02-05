@@ -208,7 +208,9 @@ class Egwbase_Controller
 
     public function login($_username, $_password, $_ipAddress)
     {
+        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ')');
         $authResult = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
+        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ')');
         
         if ($authResult->isValid()) {
             $accountsController = Egwbase_Account::getInstance();
@@ -234,7 +236,7 @@ class Egwbase_Controller
                 Zend_Registry::get('currentAccount')->accountId
             );
             
-            $result = true;
+            return true;
         } else {
             Egwbase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
@@ -252,10 +254,8 @@ class Egwbase_Controller
             
             sleep(2);
             
-            $result = false;
+            return false;
         }
-        
-        return $result;
     }
     
     public function changePassword($_oldPassword, $_newPassword1, $_newPassword2)
