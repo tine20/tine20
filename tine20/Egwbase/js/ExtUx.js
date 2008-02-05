@@ -10,7 +10,7 @@ Ext.ux.ClearableDateField = Ext.extend(Ext.form.DateField, {
         Ext.ux.ClearableDateField.superclass.initComponent.call(this);
 
         this.triggerConfig = {
-            tag:'span', cls:'x-form-twin-triggers', style:'padding-right:2px',  // padding needed to prevent IE from clipping 2nd trigger button
+            tag:'span', cls:'x-form-twin-triggers',
             cn:[
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-clear-trigger"},            
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger"}                            
