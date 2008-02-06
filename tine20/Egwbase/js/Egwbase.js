@@ -1,4 +1,4 @@
-Ext.BLANK_IMAGE_URL = "../ExtJS/resources/images/default/s.gif";
+Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 
 Ext.QuickTips.init();
 
