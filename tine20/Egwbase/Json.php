@@ -245,24 +245,17 @@ class Egwbase_Json
      */
     public function login($username, $password)
     {
-        $egwBaseNamespace = new Zend_Session_Namespace('egwbase');
-
         if (Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
-            $egwBaseNamespace->isAutenticated = TRUE;
-
             $response = array(
 				'success'        => TRUE,
                 'welcomeMessage' => "Some welcome message!"
 			);
         } else {
-            $egwBaseNamespace->isAutenticated = FALSE;
-
             $response = array(
 				'success'      => FALSE,
 				'errorMessage' => "Wrong username or passord!"
 			);
         }
-
 
         return $response;
     }
