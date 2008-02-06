@@ -103,7 +103,7 @@ class Egwbase_Controller
 
             $server->setClass('Egwbase_Json', 'Egwbase');
 
-            if($auth->hasIdentity()) {
+            if(Zend_Auth::getInstance()->hasIdentity()) {
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
@@ -126,7 +126,7 @@ class Egwbase_Controller
     
             $server->setClass('Egwbase_Http', 'Egwbase');
     
-            if($auth->hasIdentity()) {
+            if(Zend_Auth::getInstance()->hasIdentity()) {
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
@@ -140,7 +140,7 @@ class Egwbase_Controller
             }
     
             if(empty($_REQUEST['method'])) {
-                if($auth->hasIdentity()) {
+                if(Zend_Auth::getInstance()->hasIdentity()) {
                     $_REQUEST['method'] = 'Egwbase.mainScreen';
                 } else {
                     $_REQUEST['method'] = 'Egwbase.login';
@@ -208,9 +208,7 @@ class Egwbase_Controller
 
     public function login($_username, $_password, $_ipAddress)
     {
-        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ')');
         $authResult = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
-        Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ')');
         
         if ($authResult->isValid()) {
             $accountsController = Egwbase_Account::getInstance();
