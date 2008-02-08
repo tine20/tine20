@@ -43,7 +43,7 @@ $egwBase->handle();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 
-if(function_exists(memory_get_peak_usage)) {
+if(function_exists('memory_get_peak_usage')) {
     $memory = memory_get_peak_usage(true);
 } else {
     $memory = memory_get_usage(true);
