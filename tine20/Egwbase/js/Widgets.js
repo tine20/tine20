@@ -184,5 +184,5 @@ Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
 Egw.widgets.Priority.renderer = function(priority) {
 	var s = Egw.widgets.Priority.store;
 	var idx = s.find('key', priority);
-	return idx > 0 ? s.getAt(idx).data.value : priority;
+	return idx !== undefined ? s.getAt(idx).data.value : priority;
 };
