@@ -12,10 +12,13 @@
 Ext.namespace('Ext.ux', 'Ext.ux.grid');
 
 /**
- * @class Ext.ux.grid.QuickaddGridPanel
+ * @class       Ext.ux.grid.QuickaddGridPanel
+ * @constructor
  * @package     Ext
  * @subpackage  ux
  * @extends     Ext.grid.EditorGridPanel
+ * @param       {Object} config Configuration options
+ * @description
  * 
  * <p>Class for creating a edittable grid with quick add row on top.</p>
  * <p>As form field for the quick add row, the quickaddField of the column definition is used.<p>
@@ -45,17 +48,13 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
  </code></pre>
  */
 Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
-	
 	/**
-	 * @cfg {string}
-	 * Mandatory field which must be set before quickadd fields will be enabled
+	 * @cfg {string} quickaddMandatory Mandatory field which must be set before quickadd fields will be enabled
 	 */
 	quickaddMandatory: false,
-	
-	// is quickadd row focused?
-	//quickaddFocused: false,
-	
-	// private
+    /**
+     * @private
+     */
     initComponent: function(){
         Ext.ux.grid.QuickaddGridPanel.superclass.initComponent.call(this);
         this.addEvents(
@@ -75,16 +74,11 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // init handlers
         this.quickaddHandlers = {
         	scope: this,
-        	//focus: function(){
-            //    this.quickaddFocused = true;
-            //},
             blur: function(){
-                //this.quickaddFocused = false;
                 this.doBlur.defer(250, this);
             },
             specialkey: function(f, e){
                 if(e.getKey()==e.ENTER){
-                    userTriggered = true;
                     e.stopEvent();
                     f.el.blur();
                     if(f.triggerBlur){
@@ -94,8 +88,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         };
     },
-    
-    // private
+    /**
+     * @private
+     */
     onRender : function(ct, position){
     	Ext.ux.grid.QuickaddGridPanel.superclass.onRender.apply(this, arguments);
     	
@@ -115,8 +110,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.colModel.getColumnById(this.quickaddMandatory).quickaddField.on('focus', this.onMandatoryFocus, this);
     },
-    
-    // private
+    /**
+     * @private
+     */
     doBlur: function(){
     	
     	// check if all quickadd fields are blured
@@ -128,21 +124,25 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     	}, this);
     	
     	// only fire a new record if no quickaddField is focused
-    	if (!hasFocus && this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
+    	if (!hasFocus) {
     		var data = {};
     		Ext.each(this.getVisibleCols(), function(item){
                 data[item.id] = item.quickaddField.getValue();
                 item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
             }, this);
             
-    		if (this.fireEvent('newentry', data)){
-    		    this.colModel.getColumnById(this.quickaddMandatory).quickaddField.setValue('');
-    		}
+            if (this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
+            	if (this.fireEvent('newentry', data)){
+                    this.colModel.getColumnById(this.quickaddMandatory).quickaddField.setValue('');
+                }
+            }
+    		
     	}
     	
     },
-    
-    // private
+    /**
+     * @private
+     */
     getVisibleCols: function(){
     	var enabledCols = [];
     	
@@ -156,8 +156,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         return enabledCols;
     },
-    
-    // private
+    /**
+     * @private
+     */
     makeHeaderTemplate: function() {
     	var newRows = '';
     	
@@ -174,8 +175,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             '</table>'
         );
     },
-    
-    // private
+    /**
+     * @private
+     */
     syncFields: function(){
         var pxToSubstract = 2;
         if (Ext.isSafari) {pxToSubstract = 11;}
@@ -187,14 +189,13 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, this);
     },
-    
-    // private
+    /**
+     * @private
+     */
     onMandatoryFocus: function() {
         Ext.each(this.getVisibleCols(), function(item){
             item.quickaddField.setDisabled(false);
         }, this);
-        //this.quickaddFocused = true;
     }
         
 });
-
