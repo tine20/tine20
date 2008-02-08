@@ -19,6 +19,7 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
  * 
  * <p>Class for creating a edittable grid with quick add row on top.</p>
  * <p>As form field for the quick add row, the quickaddField of the column definition is used.<p>
+ * <p>The event 'newentry' is fired after the user finished editing the new row.<p>
  * <p>Example usage:</p>
  * <pre><code>
  var g =  new Ext.ux.grid.QuickaddGridPanel({
