@@ -20,8 +20,6 @@ Egw.Tasks.getPanel = function() {
 Egw.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
-	var ntStatus, ntPercent, ntSummaray, ntPriority, ntDue, ntOrganizer;
-    var editing = false, focused = false, userTriggered = false;    
 	
 	// define handlers
 	var handlers = {
@@ -319,22 +317,7 @@ Egw.Tasks.TaskGrid = function(){
 	        emptyMsg: "No tasks to display"
 	    });
 		
-		// custom template for the grid header
-	    var headerTpl = new Ext.Template(
-	        '<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
-	        '<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
-	        '<tbody><tr class="new-task-row">',
-	            '<td><div class="x-small-editor" id="new-task-status"></div></td>',
-	            '<td><div class="x-small-editor" id="new-task-percent"></div></td>',
-	            '<td><div class="x-small-editor" id="new-task-summaray"></div></td>',
-	            '<td><div class="x-small-editor" id="new-task-priority"></div></td>',
-	            '<td><div class="x-small-editor" id="new-task-due"></div></td>',
-	            '<td><div class="x-small-editor" id="new-task-organizer"></div></td>',
-	        '</tr></tbody>',
-	        '</table>'
-	    );
-		
-		grid = new Ext.grid.EditorGridPanel({
+		grid = new Ext.ux.grid.QuickaddGridPanel({
             id: 'TasksMainGrid',
 			border: false,
             store: store,
@@ -356,7 +339,10 @@ Egw.Tasks.TaskGrid = function(){
                     editor: new Egw.Tasks.status.ComboBox({
 		                autoExpand: true,
 		                listClass: 'x-combo-list-small'
-		            })
+		            }),
+		            quickaddField: new Egw.Tasks.status.ComboBox({
+                        autoExpand: true,
+                    })
 				},
 				{
 					id: 'percent',
@@ -368,6 +354,9 @@ Egw.Tasks.TaskGrid = function(){
                     editor: new Egw.widgets.Percent.Combo({
 						autoExpand: true
                         //allowBlank: false
+                    }),
+                    quickaddField: new Egw.widgets.Percent.Combo({
+                        autoExpand: true,
                     })
 				},
 				{
@@ -375,10 +364,13 @@ Egw.Tasks.TaskGrid = function(){
 					header: "Summaray",
 					width: 400,
 					sortable: true,
-					dataIndex: 'summaray'
+					dataIndex: 'summaray',
 					//editor: new Ext.form.TextField({
 					//	allowBlank: false
-					//})
+					//}),
+					quickaddField: new Ext.form.TextField({
+                        emptyText: 'Add a task...'
+                    })
 				},
 				{
 					id: 'priority',
@@ -390,6 +382,9 @@ Egw.Tasks.TaskGrid = function(){
                     editor: new Egw.widgets.Priority.Combo({
                         allowBlank: false,
 						autoExpand: true
+                    }),
+                    quickaddField: new Egw.widgets.Priority.Combo({
+                        autoExpand: true,
                     })
 				},
 				{
@@ -399,22 +394,23 @@ Egw.Tasks.TaskGrid = function(){
 					sortable: true,
 					dataIndex: 'due',
 					renderer: Egw.Egwbase.Common.dateRenderer,
-					editor: new Ext.form.DateField({
+					editor: new Ext.ux.ClearableDateField({
                         format : 'd.m.Y'
+                    }),
+                    quickaddField: new Ext.ux.ClearableDateField({
+                        //value: new Date(),
+                        format : "d.m.Y"
                     })
 				}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
 		    ],
+		    quickaddMandatory: 'summaray',
 			autoExpandColumn: 'summaray',
 			view: new Ext.grid.GridView({
                 autoFill: true,
 	            forceFit:true,
 	            ignoreAdd: true,
 	            emptyText: 'No Tasks to display',
-	
-	            templates: {
-	                header: headerTpl
-	            }
 	        })
         });
 		
@@ -459,133 +455,29 @@ Egw.Tasks.TaskGrid = function(){
 	             handlers.deleteTaks();
 	         }
 	    });
-        
-		
-		grid.on('render', function(){
-			// The fields in the grid's header
-			ntStatus = new Egw.Tasks.status.ComboBox({
-                renderTo: 'new-task-status',
-				autoExpand: true,
-                disabled:true
-          //      listClass:'x-combo-list-small',
-            });
-			ntPercent = new Egw.widgets.Percent.Combo({
-				renderTo: 'new-task-percent',
-				autoExpand: true,
-				disabled: true
-			});
-			ntSummaray = new Ext.form.TextField({
-	            renderTo: 'new-task-summaray',
-	            emptyText: 'Add a task...'
-	        });
-			ntPriority = new Egw.widgets.Priority.Combo({
-                renderTo: 'new-task-priority',
-				autoExpand: true,
-                disabled: true
-            });
-            ntDue = new Ext.form.DateField({
-                renderTo: 'new-task-due',
-                value: new Date(),
-                disabled:true,
-                format : "d.m.Y"
-            });
+        		
+	    grid.on('newentry', function(taskData){
+	    	var selectedNode = tree.getSelectionModel().getSelectedNode();
+            taskData.container = selectedNode ? selectedNode.attributes.container.container_id : Egw.Tasks.DefaultContainer.container_id;
+	        task = new Egw.Tasks.Task(taskData);
 
-			grid.on('resize', syncFields);
-            grid.on('columnresize', syncFields);
-            syncFields();
-		
-	
-           var handlers = {
-                focus: function(){
-                    focused = true;
+	        Ext.Ajax.request({
+                params: {
+                    method: 'Tasks.saveTask', 
+                    task: Ext.util.JSON.encode(task.data),
+                    linkingApp: '',
+                    linkedId: ''
                 },
-                blur: function(){
-                    focused = false;
-                    doBlur.defer(250);
+                success: function(_result, _request) {
+                    Ext.StoreMgr.get('TaskGridStore').load({params: paging});
                 },
-                specialkey: function(f, e){
-                    if(e.getKey()==e.ENTER){
-                        userTriggered = true;
-                        e.stopEvent();
-                        f.el.blur();
-                        if(f.triggerBlur){
-                            f.triggerBlur();
-                        }
-                    }
-                }
-            };
-            ntStatus.on(handlers);
-            ntSummaray.on(handlers);
-            ntPercent.on(handlers);
-            ntPriority.on(handlers);
-            ntDue.on(handlers);
-            
-            ntSummaray.on('focus', function(){
-                focused = true;
-                if(!editing){
-                    ntStatus.enable();
-                    ntPercent.enable();
-                    ntPriority.enable();
-                    ntDue.enable();
-                    syncFields();
-                    editing = true;
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
                 }
             });
-		}, this);
-	
-		function syncFields(){
-            var cm = grid.getColumnModel();
-			var pxToSubstract = 2;
-			if (Ext.isSafari) {pxToSubstract = 11;}
-            ntStatus.setSize(cm.getColumnWidth(0)-pxToSubstract);
-            ntPercent.setSize(cm.getColumnWidth(1)-pxToSubstract);
-            ntSummaray.setSize(cm.getColumnWidth(2)-pxToSubstract);
-            ntPriority.setSize(cm.getColumnWidth(3)-pxToSubstract);
-            ntDue.setSize(cm.getColumnWidth(4)-pxToSubstract);
-        }
-        
-	    // when a field in the add bar is blurred, this determines
-	    // whether a new task should be created
-	    function doBlur(){
-	        if(editing && !focused){
-	            var summaray = ntSummaray.getValue();
-	            if(!Ext.isEmpty(summaray)){
-					var selectedNode = tree.getSelectionModel().getSelectedNode();
-					var containerId = selectedNode ? selectedNode.attributes.container.container_id : Egw.Tasks.DefaultContainer.container_id;
-									
-					task = new Egw.Tasks.Task({
-						status: ntStatus.getValue(),
-						percent: ntPercent.getValue(),
-						summaray: summaray,
-                        priority: ntPriority.getValue(),
-						due: ntDue.getValue(),
-						container: containerId
-					});
-					
-					Ext.Ajax.request({
-                        params: {
-                            method: 'Tasks.saveTask', 
-                            task: Ext.util.JSON.encode(task.data),
-							linkingApp: '',
-                            linkedId: ''
-                        },
-                        success: function(_result, _request) {
-                            ntSummaray.setValue('');
-		                    Ext.StoreMgr.get('TaskGridStore').load({params: paging});
-                        },
-                        failure: function ( result, request) { 
-                            Ext.MessageBox.alert('Failed', 'Could not save task.'); 
-                        }
-                    });
-	            }
-				ntStatus.disable();
-                ntPercent.disable();
-                ntPriority.disable();
-                ntDue.disable();
-	            editing = false;
-	        }
-	    }
-		
+            return true;
+	    }, this);
+	    
 		// hack to get percentage editor working
 		grid.on('rowclick', function(grid,row,e) {
 			var cell = Ext.get(grid.getView().getCell(row,1));
