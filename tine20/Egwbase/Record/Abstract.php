@@ -152,8 +152,8 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     public function getId()
     {
 
-		//return $this->_properties[$this->_identifier];
-		return $this->_identifier;
+		return $this->_properties[$this->_identifier];
+		
     }
     
     /**
