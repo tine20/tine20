@@ -9,6 +9,6 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-class Egwbase_Record_Exception_NotAllowed extends UnexpectedValueException {
+class Egwbase_Record_Exception_Validation extends BadFunctionCallException {
 
 }

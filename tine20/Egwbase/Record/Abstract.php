@@ -12,11 +12,26 @@
 
 /**
  * Abstract implemetation of  Egwbase_Record_Interface
+ * 
+ * @package     Egwbase
+ * @subpackage  Record
  */
-
-abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, ArrayAccess, IteratorAggregate
+abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
 {
-
+	/**
+     * should datas be validated on the fly(false) or only on demand(true)
+     *
+     * @var bool
+     */
+    public  $bypassFilters;
+    
+    /**
+     * should datetimeFields be converted from iso8601 strings to ZendDate objects and back 
+     *
+     * @var bool
+     */
+    public  $convertDates;
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -63,20 +78,6 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     protected $_datetimeFields = array();
     
     /**
-     * save state if data should be validated on the fly(false) or on demand(false)
-     *
-     * @var bool
-     */
-    protected $_bypassFilters = false;
-    
-    /**
-     * save state if datetimeFields should be converted from iso8601 strings to ZendDate objects and back 
-     *
-     * @var bool
-     */
-    protected $_convertDates = true;
-    
-    /**
      * save state if data are validated
      *
      * @var bool
@@ -98,75 +99,52 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * The default values must also be set, even if no filtering is done!
      * 
      * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param bool $_convertDates converts ISO 8801 to Zend_Date representation of $this->_datetimeFields
+     * @param bool $bypassFilters sets {@see this->bypassFilters}
+     * @param bool $convertDates sets {@see $this->convertDates}
      * @return void
-     * @throws Egwbase_Record_Exception
+     * @throws Egwbase_Record_Exception_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         if ($this->_identifier === NULL) {
-            throw new Egwbase_Record_Exception('$_identifier is not declared');
+            throw new Egwbase_Record_Exception_DefinitionFailure('$_identifier is not declared');
         }
         
-        $this->_bypassFilters = (bool)$_bypassFilters;
-        $this->_convertDates = (bool)$_convertDates;
+        $this->bypassFilters = (bool)$_bypassFilters;
+        $this->convertDates = (bool)$_convertDates;
         
         // try to set data only, when $_data is an array
         if(is_array($_data)) {
-            $this->setFromArray($_data, $this->_bypassFilters);
+            $this->setFromArray($_data, $this->bypassFilters);
         }
     }
     
     /**
      * sets identifier of record
      * 
-     * @string identifier
+     * @param int identifier
+     * @return void
      */
-    public function setId($_id, $_bypassFilters = NULL)
+    public function setId($_id)
     {
         // set internal state to "not validated"
         $this->_isValidated = false;
         
-        if($_bypassFilters === NULL) {
-            $bypassFilters = $this->_bypassFilters;
-        } else {
-            $bypassFilters = (bool)$_bypassFilters;
-        }
-        
-        if ($bypassFilters === true) {
+        if ($this->bypassFilters === true) {
             $this->_properties[$this->_identifier] = $_id;
         } else {
-            $newData = $this->_properties;
-            $newData[$this->_identifier] = $_id;
-            
-            $this->setFromUserData($newData);
+        	$this->$this->_identifier = $_id;
         }
     }
     
     /**
      * gets identifier of record
      * 
-     * @return string identifier
+     * @return int identifier
      */
     public function getId()
     {
-
 		return $this->_properties[$this->_identifier];
-		
-    }
-    
-    /**
-     * sets the record related properties from user generated input.
-     * 
-     * Input-filtering and validation by Zend_Filter_Input is always done
-     *
-     * @param array $_data the new data to set
-     * @throws Egwbase_Record_Exception when content contains invalid or missing data
-     */
-    public function setFromUserData(array $_data)
-    {
-        $this->setFromArray($_data, false);
     }
     
     /**
@@ -175,19 +153,18 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data the new data to set
-     * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
-     * @throws Egwbase_Record_Exception when content contains invalid or missing data
+     * @throws Egwbase_Record_Exception_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data, $_bypassFilters)
+    public function setFromArray(array $_data)
     {
-        if($this->_convertDates === true) {
+        if($this->convertDates === true) {
             $this->_convertISO8601ToZendDate($_data);
         }
         
         // set internal state to "not validated"
         $this->_isValidated = false;
         
-        if($_bypassFilters === true) {
+        if($this->bypassFilters === true) {
             // set data without validation
             foreach ($_data as $key => $value) {
                 if (array_key_exists ($key, $this->_validators)) {
@@ -227,6 +204,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * 
      * @see Zend_Date::setTimezone()
      * @param string $_timezone
+     * @throws Egwbase_Record_Exception_Validation
      * @return void
      */
     public function setTimezone($_timezone)
@@ -242,7 +220,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
 
             foreach ($toConvert as $field => &$value) {
                 if (! $value instanceof Zend_Date) {
-                    throw new Exception($toConvert[$field] . 'must be an Zend_Date'); 
+                    throw new Egwbase_Record_Exception_Validation($toConvert[$field] . 'must be an Zend_Date'); 
                 }
                 $value->setTimezone($_timezone);
             } 
@@ -262,19 +240,12 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     /**
      * returns array with record related properties 
      *
-     * @param bool $_convertDates set to NULL to use value set by the constructor
      * @return array
      */
-    public function toArray($_convertDates = NULL)
+    public function toArray()
     {
-        if($_convertDates === NULL) {
-            $convertDates = $this->_convertDates;
-        } else {
-            $convertDates = (bool)$_convertDates;
-        }
-
         $recordArray = $this->_properties;
-        if ($convertDates === true) {
+        if ($this->convertDates === true) {
             $this->_convertZendDateToISO8601($recordArray);
         }
         return $recordArray;
@@ -310,37 +281,29 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     }
     
     /**
-     * @todo implement a usefull __toString()
-     *
-     */
-    public function __toString(){
-        foreach ($this->_properties as $key => $value) {
-        }
-    }
-    
-    /**
      * sets record related properties
      * 
      * @param string _name of property
      * @param mixed _value of property
+     * @throws Egwbase_Record_Exception_NotDefined
      * @return void
      */
     public function __set($_name, $_value)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
+            throw new Egwbase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
         }
         
         // set internal state to "not validated"
         $this->_isValidated = false;
         
-        if ($this->_bypassFilters === true) {
+        if ($this->bypassFilters === true) {
             $this->_properties[$_name] = $_value;
         } else {
             $newData = $this->_properties;
             $newData[$_name] = $_value;
             
-            $this->setFromUserData($newData);
+            $this->setFromArray($newData);
         }
     }
     
@@ -359,12 +322,13 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * gets record related properties
      * 
      * @param string _name of property
+     * @throws Egwbase_Record_Exception_NotDefined
      * @return mixed value of property
      */
     public function __get($_name)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new UnexpectedValueException($_name . ' is no property of $this->_properties');
+            throw new Egwbase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
         }
         
         return $this->_properties[$_name];
@@ -388,7 +352,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
      * Converts Zend_Dates into ISO8601 representation
      *
      * @param array &$_toConvert
-     * @return 
+     * @return void
      */
     protected function _convertZendDateToISO8601(&$_toConvert)
     {
@@ -414,6 +378,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
             
             if(is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
+                	if ($dataValue instanceof Zend_Date) continue;
                     $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Zend_Date($dataValue, Zend_Date::ISO_8601);
                 }
             } else {
@@ -448,10 +413,11 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface//, Ar
     
     /**
      * required by ArrayAccess interface
+     * @throws Egwbase_Record_Exception_NotAllowed
      */
     public function offsetUnset($_offset)
     {
-        throw new Egwbase_Record_Exception('Unsetting of properties is not allowed');
+        throw new Egwbase_Record_Exception_NotAllowed('Unsetting of properties is not allowed');
     }
     
     /**

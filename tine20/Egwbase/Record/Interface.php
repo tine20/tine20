@@ -39,10 +39,9 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * sets identifier of record
      * 
-     * @string identifier
-     * @bool bypass Filter
+     * @param string identifier
      */
-    public function setId($_id, $_bypassFilters = NULL);
+    public function setId($_id);
     
     /**
      * gets identifier of record
@@ -68,6 +67,33 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function __get($_name);
     
     /**
+     * sets the record related properties from user generated input.
+     * 
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data the new data to set
+     * @throws Egwbase_Record_Exception_Validation when content contains invalid or missing data
+     */
+    public function setFromArray(array $_data);
+    
+    /**
+     * Sets timezone of $this->_datetimeFields
+     * 
+     * @see Zend_Date::setTimezone()
+     * @param string $_timezone
+     * @throws Egwbase_Record_Exception_Validation
+     * @return void
+     */
+    public function setTimezone($_timezone);
+    
+    /**
+     * validate the the internal data
+     *
+     * @return bool
+     */
+    public function isValid();
+    
+    /**
      * returns array of fields with validation errors 
      *
      * @return array
@@ -77,8 +103,8 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * returns array with record related properties 
      *
-     * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * @return array
      */
-    public function toArray($_convertDates = NULL);
+    public function toArray();
+     
 }
