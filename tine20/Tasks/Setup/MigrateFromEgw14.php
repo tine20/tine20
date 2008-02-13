@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 
@@ -126,7 +126,7 @@ class Tasks_Setup_MigrateFromEgw14
             error_log(print_r($Task,true));
             try {
                 $Task20 = new Tasks_Model_Task(NULL, true, true);
-                $Task20->setFromUserData($Task);
+                $Task20->setFromArray($Task);
                 
             } catch (Exception $e) {
                 $validation_errors = $Task20->getValidationErrors();

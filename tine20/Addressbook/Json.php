@@ -101,7 +101,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 
         $contact = new Addressbook_Model_Contact();
         try {
-            $contact->setFromUserData($_POST);
+            $contact->setFromArray($_POST);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,

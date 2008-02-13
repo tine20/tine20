@@ -198,7 +198,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
 
         try {
             $account = new $_accountClass();
-            $account->setFromUserData($row);
+            $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Egwbase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
@@ -237,7 +237,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
 
         try {
             $account = new $_accountClass();
-            $account->setFromUserData($row);
+            $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Egwbase_Account_Sql::_getAccountFromSQL: ' . $e->getMessage() . "\n" .

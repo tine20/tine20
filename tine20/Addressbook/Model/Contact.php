@@ -122,7 +122,7 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
      * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
      * @throws Egwbase_Record_Exception when content contains invalid or missing data
      */
-    public function setFromArray(array $_data, $_bypassFilters)
+    public function setFromArray(array $_data)
     {
         if(empty($_data['n_fileas'])) {
             $_data['n_fileas'] = $_data['n_family'];
@@ -131,6 +131,6 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
             }
         }
         
-        parent::setFromArray($_data, $_bypassFilters);
+        parent::setFromArray($_data);
     }
 }

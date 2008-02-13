@@ -221,7 +221,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $account = new Egwbase_Account_Model_FullAccount();
         
         try {
-            $account->setFromUserData($decodedAccountData);
+            $account->setFromArray($decodedAccountData);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,

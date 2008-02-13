@@ -330,7 +330,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     {
         $leadData = new Crm_Model_Lead();
         try {
-            $leadData->setFromUserData(Zend_Json::decode($lead));
+            $leadData->setFromArray(Zend_Json::decode($lead));
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array(

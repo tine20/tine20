@@ -63,7 +63,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
      * @throws Egwbase_Record_Exception when content contains invalid or missing data
      */
-    public function setFromArray(array $_data, $_bypassFilters)
+    public function setFromArray(array $_data)
     {
         if(empty($_data['accountDisplayName'])) {
             $_data['accountDisplayName'] = !empty($_data['accountDisplayName']) ? 
@@ -76,7 +76,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
                 $_data['accountFirstName'] . ' ' . $_data['accountLastName'] : 
                 $_data['accountLastName'];
         }
-        parent::setFromArray($_data, $_bypassFilters);
+        parent::setFromArray($_data);
     }
 
    /**
