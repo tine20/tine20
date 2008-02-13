@@ -9,6 +9,6 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-class Egwbase_Record_Exception_Validation extends DomainException {
+class Egwbase_Record_Exception_DefinitionFailure extends DomainException {
 
 }
