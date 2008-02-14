@@ -12,93 +12,144 @@
 
 /**
  * class to hold a list of records
+ * 
+ * records are held as a unsorted set with a autoasigned numeric index.
+ * NOTE: the index of an record is _not_ related to the record and/or its identifier!
  *
  */
 class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {
+	/**
+	 * class name of records this instance can hold
+	 * @var string
+	 */
+	protected $_recordClass;
+	
+	/**
+	 * Holds records
+	 * @var array
+	 */
     protected $_listOfRecords = array();
-    protected $_recordClass = NULL;
+    
+    /**
+     * Holds validation errors
+     * @var array
+     */
+    protected $_validationErrors = array();
 
 
     /**
-     * Enter description here...
+     * creates new Egwbase_Record_RecordSet
      *
      * @param array $_records array of record objects
-     * @param strin $_className the required classType
+     * @param string $_className the required classType
+     * @param bool $_bypassFilters {@see Egwbase_Record_Interface::__construct}
+     * @param bool $_convertDates {@see Egwbase_Record_Interface::__construct}
+     * @return void
      */
-    public function __construct(array $_records = array(), $_className = NULL)
+    public function __construct(array $_records, $_className,  $_bypassFilters = false, $_convertDates = true)
     {
-        if($this->_recordClass === NULL && $_className !== NULL) {
-            $this->_recordClass = $_className;
-        }
-        
-        foreach($_records as $record) {
-            if (is_array($record)) {
-                if($this->_recordClass === NULL) {
-                    throw new UnexpectedValueException('$_recordClass can not be NULL, when adding arrays');
-                }
-                $record = new $this->_recordClass($record, true);
-            }
-            
-            if($record instanceof $this->_recordClass) {
-                $this->_listOfRecords[$record->getId()] = $record;
-            } else {
-                throw new InvalidArgumentException('invalid datatype for Egwbase_Record_RecordSet');
-            }
-        }
-    }
+     
+        $this->_recordClass = $_className;
 
-    /**
-     * executes given function in all records
-     *
-     * @param string $_fname
-     * @param array $_arguments
-     * @return array array indentifier => return value
-     */
-    public function __call($_fname, $_arguments)
-    {
-        $returnValues = array();
-        foreach ($this->_listOfRecords as $id => $record) {
-            $return[$id] = call_user_func_array(array($record, $_fname), $_arguments);
+        foreach($_records as $record) {
+            if($record instanceof $this->_recordClass) {
+                $this->_listOfRecords[] = $record;
+            } else {
+                $this->_listOfRecords[] = new $this->_recordClass($record, $_bypassFilters, $_convertDates);
+            }
         }
-        
-        return $returnValues;
     }
     
     /**
-     * add Egwbase_Record_Interface like object to internal list, if an record
-     * with the records identifier allready exists, this record will be replaeced
+     * add Egwbase_Record_Interface like object to internal list
      *
      * @param Egwbase_Record_Interface $_record
+     * @return int index in set of inserted record
      */
     public function addRecord(Egwbase_Record_Interface $_record)
     {
-        $this->_listOfRecords[$_record->getId()] = $_record;
+        if (! $_record instanceof $this->_recordClass) {
+            throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+        }
+        $this->_listOfRecords[] = $_record;
+        return key(end($this->_listOfRecords));
     }
-
+    
+    
+    /**
+     * checks if each member record of this set is valid
+     * 
+     * @return bool
+     */
+    public function isValid()
+    {
+        foreach ($this->_listOfRecords as $index => $record) {
+            if (!$record->isValid()) {
+            	$this->_validationErrors[$index] = $record->getValidationErrors();
+            }
+        }
+        return (bool)count($this->_validationErrors);
+    }
+    
+    /**
+     * returns array of array of fields with validation errors 
+     *
+     * @return array index => validationErrors
+     */
+    public function getValidationErrors()
+    {
+    	return $this->_validationErrors;
+    }
+    
     /**
      * converts RecordSet to array
      * 
-     * param bool $_withKeys return array with keys when TRUE 
      * @return array identifier => recordarray
      */
-    public function toArray($_convertDates = NULL, $_withKeys = FALSE)
+    public function toArray()
     {
         $resultArray = array();
-        foreach($this->_listOfRecords as $id => $record) {
-            if($_withKeys === TRUE) {
-                $resultArray[$id] = $record->toArray($_convertDates);
-            } else {
-                $resultArray[] = $record->toArray($_convertDates);
-            }
+        foreach($this->_listOfRecords as $index => $record) {
+            $resultArray[$index] = $record->toArray();
         }
          
         return $resultArray;
     }
     
     /**
-     * Returns the number of elements in the recordSet.
+     * sets given property in all member records of this set
+     * 
+     * @param string $_name
+     * @param mixed $_value
+     * @return void
+     */
+    public function __set($_name, $_value)
+    {
+    	foreach ($this->_listOfRecords as $record) {
+    		$record->$_name = $_value;
+    	}
+    }
+    
+    /**
+     * executes given function in all records
      *
+     * @param string $_fname
+     * @param array $_arguments
+     * @return array array index => return value
+     */
+    public function __call($_fname, $_arguments)
+    {
+        $returnValues = array();
+        foreach ($this->_listOfRecords as $index => $record) {
+            $returnValues[$index] = call_user_func_array(array($record, $_fname), $_arguments);
+        }
+        
+        return $returnValues;
+    }
+    
+    /**
+     * Returns the number of elements in the recordSet.
      * required by interface Countable
      *
      * @return int
@@ -140,14 +191,14 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
     public function offsetSet($_offset, $_value)
     {
         if (! $_value instanceof $this->_recordClass) {
-            throw new Exception('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         
-        if ($_offset !== $_value->getID()) {
-            throw new Exception('Attempt to add/set record with wrong identifier. ' . $_offset . ' / ' . $_value->getID());
+        if (empty($_offset)) {
+        	$this->addRecord($_value);
+        } else {
+        	$this->_listOfRecords[$_offset] = $_value;
         }
-        
-        return $this->addRecord($_value);
     }
     
     /**
@@ -155,9 +206,7 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
      */
     public function offsetUnset($_offset)
     {
-        if (array_key_exists($_offset, $this->_listOfRecords)){
-            unset($this->_listOfRecords[$_offset]);
-        }
+        unset($this->_listOfRecords[$_offset]);
     }
 
 }

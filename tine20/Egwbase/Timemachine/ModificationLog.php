@@ -176,7 +176,9 @@ class Egwbase_Timemachine_ModificationLog
      */
     public function setModification( Egwbase_Timemachine_Model_ModificationLog $_modification ) {
         if ($_modification->isValid()) {
-            $modificationArray = $_modification->toArray(true);
+        	
+        	$_modification->convertDates = true;
+            $modificationArray = $_modification->toArray();
             
             $application = Egwbase_Application::getInstance()->getApplicationByName($_modification->application);
             $modificationArray['application'] = $application->getId();

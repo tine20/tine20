@@ -427,7 +427,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     protected function seperateTaskData($_task)
     {
-        $taskArray = $_task->toArray(array('part' => Zend_Date::ISO_8601));
+    	$_task->convertDates = true;
+        $taskArray = $_task->toArray();
         $TableDescr = $this->getTableInstance('tasks')->info();
         $taskparts['tasks'] = array_intersect_key($taskArray, array_flip($TableDescr['cols']));
         

@@ -103,7 +103,7 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
         }
         $container = array();
         foreach ($containers as $singleContainer) {
-            $container[] = $singleContainer->container_id;
+            $container[] = $singleContainer->getId();
         }
         
         $this->_properties['container'] = $container;

@@ -643,7 +643,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $rows = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Egwbase_Record_RecordSet($rows->toArray(), 'Addressbook_Model_Contact');
+        $result = new Egwbase_Record_RecordSet($rows->toArray(), 'Addressbook_Model_Contact', true);
         
         return $result;
     }

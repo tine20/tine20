@@ -705,7 +705,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function saveLead(Crm_Model_Lead $_lead)
     {
         // do not convert timestamps, until we have changed the table layout to store iso dates
-        //$leadData = $_lead->toArray(false);
         $leadData = $_lead->toArray();
                 
         //error_log(print_r($leadData, true));

@@ -115,7 +115,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
         
         // try to set data only, when $_data is an array
         if(is_array($_data)) {
-            $this->setFromArray($_data, $this->bypassFilters);
+            $this->setFromArray($_data);
         }
     }
     

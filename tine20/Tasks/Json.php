@@ -49,9 +49,10 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
         
         $tasks = $this->_controller->searchTasks($filter);
         $tasks->setTimezone($this->_userTimezone);
+        $tasks->convertDates = true;
         
         return array(
-            'results' => $tasks->toArray(array('part' => Zend_Date::ISO_8601)),
+            'results' => $tasks->toArray(),
             'totalcount' => $this->_controller->getTotalCount($filter)
         );
     }

@@ -28,7 +28,7 @@ class Tasks_Model_Status extends Egwbase_Record_Abstract
         'deleted_time'         => array('allowEmpty' => true         ),
         'deleted_by'           => array('allowEmpty' => true         ),
         'status_name'          => array('allowEmpty' => false        ),
-        'status_is_open'       => array('allowEmpty' => false        ),
+        'status_is_open'       => array('allowEmpty' => false, 'Int' ),
         'status_icon'          => array('allowEmpty' => true         ),
     );
     

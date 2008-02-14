@@ -81,7 +81,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
         //$classTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
         $statiTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
         //$this->_classes = new Egwbase_Record_RecordSet($classTable->fetchAll(), 'Egwbase_Record_Class');
-        $this->_stati = new Egwbase_Record_RecordSet($statiTable->fetchAll()->toArray(), 'Tasks_Model_Status');
+        $this->_stati = new Egwbase_Record_RecordSet($statiTable->fetchAll()->toArray(), 'Tasks_Model_Status', true);
         
         $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
@@ -238,7 +238,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     public function getDefaultContainer()
     {
         $containers = Egwbase_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
-        
+
         if($containers->count() == 0) {
             $allGrants = array(
                 Egwbase_Container::GRANT_ADD,
@@ -253,10 +253,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
             
             return Egwbase_Container::getInstance()->getContainerById($containerId);
         } else {
-            // autch! ugly hack, we need to rework the recordSet!
-            foreach ($containers as $container) {
-                return $container;
-            }
+            return $containers[0];
         }
     }
     
