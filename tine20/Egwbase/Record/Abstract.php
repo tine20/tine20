@@ -133,7 +133,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
         if ($this->bypassFilters === true) {
             $this->_properties[$this->_identifier] = $_id;
         } else {
-        	$this->$this->_identifier = $_id;
+        	$this->_identifier = $_id;
         }
     }
     
