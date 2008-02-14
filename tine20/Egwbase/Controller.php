@@ -193,7 +193,11 @@ class Egwbase_Controller
     
     protected function setupUserLocale()
     {
-        $locale = new Zend_Locale();
+    	try {
+            $locale = new Zend_Locale('auto');
+    	} catch (Zend_Locale_Exception $e) {
+    		$locale = new Zend_Locale('en_US');
+    	}
         Zend_Registry::set('locale', $locale);
     }
     
