@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Egwbase
- * @subpackage  Acl
+ * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -19,7 +19,7 @@
  * @package     Egwbase
  * @subpackage  Acl
  */
-class Egwbase_Container
+class Egwbase_Container_Container
 {
     /**
      * the table object for the egw_container table
@@ -181,19 +181,19 @@ class Egwbase_Container
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Container
+     * @var Egwbase_Container_Container
      */
     private static $instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Container
+     * @return Egwbase_Container_Container
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Container;
+            self::$instance = new Egwbase_Container_Container;
         }
         
         return self::$instance;
@@ -261,7 +261,7 @@ class Egwbase_Container
             self::GRANT_ADMIN
         ));
         // add read grants to any other user
-        $this->addGrants($containerId, NULL, array(Egwbase_Container::GRANT_READ));
+        $this->addGrants($containerId, NULL, array(Egwbase_Container_Container::GRANT_READ));
         return $this->getContainerById($containerId);
     }
     
@@ -286,7 +286,7 @@ class Egwbase_Container
      *
      * @param string $_application the name of the application
      * @param string $_name the name of the container
-     * @param int $_type the type of the container(Egwbase_Container::TYPE_SHARED, Egwbase_Container::TYPE_PERSONAL. Egwbase_Container::TYPE_INTERNAL)
+     * @param int $_type the type of the container(Egwbase_Container_Container::TYPE_SHARED, Egwbase_Container_Container::TYPE_PERSONAL. Egwbase_Container_Container::TYPE_INTERNAL)
      * @param string $_backend type of the backend. for eaxmple: sql, ldap, ...
      * @return int the id of the newly create container
      */
@@ -358,7 +358,7 @@ class Egwbase_Container
      * returns the internal conatainer for a given application
      *
      * @param string $_application name of the application
-     * @return Egwbase_Record_Container the internal container
+     * @return Egwbase_Container_Model_Container the internal container
      */
     public function getInternalContainer($_application)
     {
@@ -380,7 +380,7 @@ class Egwbase_Container
         //error_log("getInternalContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
+        $result = new Egwbase_Container_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
         
         if(empty($result)) {
             throw new Exception('internal container not found or not accessible');
@@ -436,7 +436,7 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
         
         return $result;
     }
@@ -445,7 +445,7 @@ class Egwbase_Container
      * return a container by containerId
      *
      * @param int $_containerId the id of the container
-     * @return Egwbase_Record_Container
+     * @return Egwbase_Container_Model_Container
      */
     public function getContainerById($_containerId)
     {
@@ -481,7 +481,7 @@ class Egwbase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Record_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
+        $result = new Egwbase_Container_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
         
         if(empty($result)) {
             throw new UnderflowException('container not found');
@@ -496,7 +496,7 @@ class Egwbase_Container
      *
      * @param string $_application the name of the application
      * @param int $_owner the numeric account id of the owner
-     * @return Egwbase_Record_RecordSet set of Egwbase_Record_Container
+     * @return Egwbase_Record_RecordSet set of Egwbase_Container_Model_Container
      */
     public function getPersonalContainer($_application, $_owner)
     {
@@ -534,7 +534,7 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
         
         return $result;
     }
@@ -543,7 +543,7 @@ class Egwbase_Container
      * returns the shared container for a given application accessible by the current user
      *
      * @param string $_application the name of the application
-     * @return Egwbase_Record_RecordSet set of Egwbase_Record_Container
+     * @return Egwbase_Record_RecordSet set of Egwbase_Container_Model_Container
      */
     public function getSharedContainer($_application)
     {
@@ -568,7 +568,7 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
         
         return $result;
     }
@@ -623,7 +623,7 @@ class Egwbase_Container
      * return set of all personal container of other users made accessible to the current account 
      *
      * @param string $_application the name of the application
-     * @return Egwbase_Record_RecordSet set of Egwbase_Record_Container
+     * @return Egwbase_Record_RecordSet set of Egwbase_Container_Model_Container
      */
     public function getOtherUsersContainer($_application)
     {
@@ -656,7 +656,7 @@ class Egwbase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
         
         return $result;
     }
@@ -784,48 +784,46 @@ class Egwbase_Container
         
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Record_Grants');
+        $resultArray = array();
 
         $egwBaseAccounts = Egwbase_Account::getInstance();
         
         foreach($rows as $row) {
-            if(!isset($result[$row['account_id']])) {
-                if($row['account_id'] === NULL) {
-                    $displayName = 'Anyone';
-                } else {
-                    $account = $egwBaseAccounts->getAccountById($row['account_id']);
-                    $displayName = $account->accountDisplayName;
-                }
-                
-                $result[$row['account_id']] = new Egwbase_Record_Grants(
-                    array(
-                        'accountId'     => $row['account_id'],
-                        'accountName'   => $displayName
-                    ), 
-                    true
-                );
-            }
-            
+        	if (! isset($resultArray[$row['account_id']])) {
+	            if($row['account_id'] === NULL) {
+	                $displayName = 'Anyone';
+	            } else {
+	                $account = $egwBaseAccounts->getAccountById($row['account_id']);
+	                $displayName = $account->accountDisplayName;
+	            }
+	                
+	            $containerGrant = new Egwbase_Record_Grants( array(
+	                'accountId'     => $row['account_id'],
+	                'accountName'   => $displayName
+	            ), true);
+                $resultArray[$row['account_id']] = $containerGrant;
+        	}
+        	
             switch($row['account_grant']) {
                 case self::GRANT_READ:
-                    $result[$row['account_id']]->readGrant = TRUE; 
+                    $containerGrant->readGrant = TRUE; 
                     break;
                 case self::GRANT_ADD:
-                    $result[$row['account_id']]->addGrant = TRUE; 
+                    $containerGrant->addGrant = TRUE; 
                     break;
                 case self::GRANT_EDIT:
-                    $result[$row['account_id']]->editGrant = TRUE; 
+                    $containerGrant->editGrant = TRUE; 
                     break;
                 case self::GRANT_DELETE:
-                    $result[$row['account_id']]->deleteGrant = TRUE; 
+                    $containerGrant->deleteGrant = TRUE; 
                     break;
                 case self::GRANT_ADMIN:
-                    $result[$row['account_id']]->adminGrant = TRUE; 
+                    $containerGrant->adminGrant = TRUE; 
                     break;
             }
         }
         
-        return $result;
+        return  new Egwbase_Record_RecordSet($resultArray, 'Egwbase_Record_Grants', true);;
     }
     
     public function setAllGrants($_containerId, Egwbase_Record_RecordSet $_grants) 
@@ -842,7 +840,7 @@ class Egwbase_Container
         }
         
         $container = $this->getContainerById($containerId);
-        if($container->container_type === Egwbase_Container::TYPE_PERSONAL) {
+        if($container->container_type === Egwbase_Container_Container::TYPE_PERSONAL) {
             // make sure that only the current user has admin rights
             foreach($_grants as $key => $recordGrants) {
                 $_grants[$key]->adminGrant = false;
@@ -879,19 +877,19 @@ class Egwbase_Container
                 'account_id'    => $recordGrants['accountId'],
             );
             if($recordGrants->readGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_READ));
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_READ));
             }
             if($recordGrants->addGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_ADD));
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_ADD));
             }
             if($recordGrants->editGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_EDIT));
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_EDIT));
             }
             if($recordGrants->deleteGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_DELETE));
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_DELETE));
             }
             if($recordGrants->adminGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container::GRANT_ADMIN));
+                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_ADMIN));
             }
         }
         

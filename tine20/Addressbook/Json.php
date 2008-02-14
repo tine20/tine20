@@ -162,7 +162,7 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 
     public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
-        $internalContainer = Egwbase_Container::getInstance()->getInternalContainer('addressbook');
+        $internalContainer = Egwbase_Container_Container::getInstance()->getInternalContainer('addressbook');
         
         $addressbookId = $internalContainer->container_id;
         

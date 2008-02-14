@@ -46,7 +46,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$addresses = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 			$view->formData['values'] = $contact->toArray();
-			$addressbook = Egwbase_Container::getInstance()->getContainerById($contact->contact_owner);
+			$addressbook = Egwbase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
 			
 			$view->formData['config']['addressbookName']   = $addressbook->container_name;
 			$view->formData['config']['addressbookRights'] = $addressbook->account_grants;

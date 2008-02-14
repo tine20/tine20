@@ -495,7 +495,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function saveProducts(Egwbase_Record_Recordset $_productData)
     {
-        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->lead_container, Egwbase_Container::GRANT_EDIT)) {
+        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->lead_container, Egwbase_Container_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead->product denied');
         }    
     */   
@@ -623,7 +623,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         $lead = new Crm_Model_Lead($row);
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->lead_container, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->lead_container, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('permission to lead denied');
         }
         
@@ -635,7 +635,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new UnderFlowExecption('lead not found');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($result->lead_container, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($result->lead_container, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('permission to lead denied');
         }
         
@@ -648,7 +648,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('crm', $owner);
+        $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('crm', $owner);
         
         if($ownerContainer->count() === 0) {
             return false;
@@ -675,7 +675,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('crm', $owner);
+        $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('crm', $owner);
         
         $containerIds = array();
         
@@ -713,7 +713,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new UnderflowException('lead_container can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($leadData['lead_container'], Egwbase_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($leadData['lead_container'], Egwbase_Container_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead denied');
         }
 
@@ -746,7 +746,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $oldLeadData = $this->getLeadById($_leadId);
 
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->lead_container, Egwbase_Container::GRANT_DELETE)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->lead_container, Egwbase_Container_Container::GRANT_DELETE)) {
             throw new Exception('delete access to CRM denied');
         }
 
@@ -788,25 +788,25 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function addFolder($_name, $_type) 
     {
     	
-        $egwbaseContainer = Egwbase_Container::getInstance();
+        $egwbaseContainer = Egwbase_Container_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $allGrants = array(
-            Egwbase_Container::GRANT_ADD,
-            Egwbase_Container::GRANT_ADMIN,
-            Egwbase_Container::GRANT_DELETE,
-            Egwbase_Container::GRANT_EDIT,
-            Egwbase_Container::GRANT_READ
+            Egwbase_Container_Container::GRANT_ADD,
+            Egwbase_Container_Container::GRANT_ADMIN,
+            Egwbase_Container_Container::GRANT_DELETE,
+            Egwbase_Container_Container::GRANT_EDIT,
+            Egwbase_Container_Container::GRANT_READ
         );
         
-        if($_type == Egwbase_Container::TYPE_SHARED) {
-            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container::TYPE_SHARED, Crm_Backend_Factory::SQL);
+        if($_type == Egwbase_Container_Container::TYPE_SHARED) {
+            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container_Container::TYPE_SHARED, Crm_Backend_Factory::SQL);
 
             // add admin grants to creator
             $egwbaseContainer->addGrants($folderId, $accountId, $allGrants);
             // add read grants to any other user
-            $egwbaseContainer->addGrants($folderId, NULL, array(Egwbase_Container::GRANT_READ));
+            $egwbaseContainer->addGrants($folderId, NULL, array(Egwbase_Container_Container::GRANT_READ));
         } else {
-            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container::TYPE_PERSONAL, Crm_Backend_Factory::SQL);
+            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container_Container::TYPE_PERSONAL, Crm_Backend_Factory::SQL);
         
             // add admin grants to creator
             $egwbaseContainer->addGrants($folderId, $accountId, $allGrants);
@@ -817,7 +817,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function deleteFolder($_folderId)
     {
-        $egwbaseContainer = Egwbase_Container::getInstance();
+        $egwbaseContainer = Egwbase_Container_Container::getInstance();
         
         $egwbaseContainer->deleteContainer($_folderId);
         
@@ -832,7 +832,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function renameFolder($_folderId, $_name)
     {
-        $egwbaseContainer = Egwbase_Container::getInstance();
+        $egwbaseContainer = Egwbase_Container_Container::getInstance();
         
         $egwbaseContainer->renameContainer($_folderId, $_name);
                 
@@ -842,20 +842,20 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      
     public function getFoldersByOwner($_owner) 
     {
-        $personalFolders = Egwbase_Container::getInstance()->getPersonalContainer('crm', $_owner);
+        $personalFolders = Egwbase_Container_Container::getInstance()->getPersonalContainer('crm', $_owner);
                 
         return $personalFolders;
     }   
  
     public function getSharedFolders() {
-        $sharedFolders = Egwbase_Container::getInstance()->getSharedContainer('crm');
+        $sharedFolders = Egwbase_Container_Container::getInstance()->getSharedContainer('crm');
                 
         return $sharedFolders;
     }
     
     public function getOtherUsers() 
     {
-        $rows = Egwbase_Container::getInstance()->getOtherUsers('crm');
+        $rows = Egwbase_Container_Container::getInstance()->getOtherUsers('crm');
 
         //$accountData = array();
         
@@ -1020,11 +1020,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getAllLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
         
         if(count($allContainer) === 0) {
             $this->createPersonalContainer();
-            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
+            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
         }        
         $containerIds = array();
         
@@ -1049,7 +1049,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getCountOfAllLeads($_filter)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
         
         $containerIds = array();
         
@@ -1077,7 +1077,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_folderId must be integer');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_folderId, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_folderId, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('read access denied to folder');
         }
         
@@ -1097,7 +1097,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_folderId must be integer');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($folderId, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($folderId, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('read access denied to folder');
         }
         
@@ -1115,7 +1115,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE) 
     {
-        $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('crm');
+        $sharedContainer = Egwbase_Container_Container::getInstance()->getSharedContainer('crm');
         
         if($sharedContainer->count() === 0) {
             return false;
@@ -1161,7 +1161,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
    
    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads) 
     {
-        $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('crm');
+        $otherPeoplesContainer = Egwbase_Container_Container::getInstance()->getOtherUsersContainer('crm');
         
         $containerIds = array();
         $containerIdsPresent = "0";
@@ -1216,7 +1216,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function createPersonalContainer()
     {
-        $this->addFolder('Personal Leads', Egwbase_Container::TYPE_PERSONAL);
+        $this->addFolder('Personal Leads', Egwbase_Container_Container::TYPE_PERSONAL);
     } 
     
 }

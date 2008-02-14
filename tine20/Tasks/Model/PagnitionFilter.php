@@ -80,11 +80,11 @@ class Tasks_Model_PagnitionFilter extends Egwbase_Record_Abstract
             throw new Exception('You need to set an owner when containerType is "Personal".');
         }
         
-        $cc = Egwbase_Container::getInstance();
+        $cc = Egwbase_Container_Container::getInstance();
         switch($this->containerType) {
             case 'all':
                 $accountId = Zend_Registry::get('currentAccount')->accountId;
-                $containers = $cc->getContainerByACL($accountId, $this->_application, Egwbase_Container::GRANT_READ);
+                $containers = $cc->getContainerByACL($accountId, $this->_application, Egwbase_Container_Container::GRANT_READ);
                 break;
             case 'personal':
                 $containers = $cc->getPersonalContainer($this->_application, $this->owner);

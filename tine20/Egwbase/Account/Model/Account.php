@@ -190,7 +190,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function getContainerByACL($_application, $_right)
     {
-        $container = Egwbase_Container::getInstance();
+        $container = Egwbase_Container_Container::getInstance();
         
         $result = $container->getContainerByACL($this->accountId, $_application, $_right);
         
@@ -206,7 +206,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function hasGrant($_containerId, $_grant)
     {
-        $container = Egwbase_Container::getInstance();
+        $container = Egwbase_Container_Container::getInstance();
         
         $result = $container->hasGrant($this->accountId, $_containerId, $_grant);
         

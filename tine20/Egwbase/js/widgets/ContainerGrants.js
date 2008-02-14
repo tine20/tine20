@@ -80,7 +80,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 				
 				Ext.Ajax.request({
 					params: {
-						method: 'Egwbase.setContainerGrants',
+						method: 'Egwbase_Container.setContainerGrants',
 						containerId: container.container_id,
 						grants: Ext.util.JSON.encode(grants)
 					},
@@ -125,7 +125,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 		};
 		this.dataStore =  new Ext.data.JsonStore({
             baseParams: {
-                method: 'Egwbase.getContainerGrants',
+                method: 'Egwbase_Container.getContainerGrants',
                 containerId: this.grantContainer.container_id
             },
             root: 'results',

@@ -113,7 +113,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
                  $leadData['tasks'] = array();   
             }
             
-            $folder = Egwbase_Container::getInstance()->getContainerById($lead->lead_container);
+            $folder = Egwbase_Container_Container::getInstance()->getContainerById($lead->lead_container);
             $view->formData['config']['folderName']   = $folder->container_name;
             $view->formData['config']['folderRights'] = $folder->account_grants;
             

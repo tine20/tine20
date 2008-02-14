@@ -57,7 +57,7 @@ class Addressbook_Controller
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        $result = Egwbase_Container::getInstance()->getAllGrants($addressbookId);
+        $result = Egwbase_Container_Container::getInstance()->getAllGrants($addressbookId);
                 
         return $result;
     }
@@ -69,14 +69,14 @@ class Addressbook_Controller
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        $result = Egwbase_Container::getInstance()->setAllGrants($addressbookId, $_grants);
+        $result = Egwbase_Container_Container::getInstance()->setAllGrants($addressbookId, $_grants);
                 
         return $result;
     }
     
     public function getOtherUsers() 
     {
-        $result = Egwbase_Container::getInstance()->getOtherUsers('addressbook');
+        $result = Egwbase_Container_Container::getInstance()->getOtherUsers('addressbook');
         
         return $result;
     }

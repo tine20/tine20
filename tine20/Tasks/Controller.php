@@ -124,7 +124,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     protected function _checkContainerACL($_filter)
     {
         foreach ($_filter->container as $containerId) {
-            if ($this->_currentAccount->hasGrant($containerId, Egwbase_Container::GRANT_READ)) {
+            if ($this->_currentAccount->hasGrant($containerId, Egwbase_Container_Container::GRANT_READ)) {
                 $container[] = $containerId;
             }
         }
@@ -140,7 +140,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     public function getTask($_uid)
     {
         $Task = $this->_backend->getTask($_uid);
-        if (! $this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_READ)) {
+        if (! $this->_currentAccount->hasGrant($Task->container, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('Not allowed!');
         }
         
@@ -155,7 +155,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
      */
     public function createTask(Tasks_Model_Task $_task)
     {
-        if (! $this->_currentAccount->hasGrant($_task->container, Egwbase_Container::GRANT_ADD)) {
+        if (! $this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
         }
         return $this->_backend->createTask($_task);
@@ -177,15 +177,15 @@ class Tasks_Controller implements Tasks_Backend_Interface
         // mamage acl
         if ($oldtask->container != $_task->container) {
             
-            if (!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container::GRANT_ADD)) {
+            if (!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_ADD)) {
                 throw new Exception('Not allowed!');
             }
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-            if (!$this->_currentAccount->hasGrant($oldtask->container, Egwbase_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($oldtask->container, Egwbase_Container_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
             
-        } elseif(!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container::GRANT_EDIT))  {
+        } elseif(!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_EDIT))  {
             throw new Exception('Not allowed!');
         }
         
@@ -203,7 +203,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         $Task = $this->getTask($_identifier);
         
-        if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_DELETE)) {
+        if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container_Container::GRANT_DELETE)) {
             throw new Exception('Not allowed!');
         }
         $this->_backend->deleteTask($_identifier);
@@ -222,7 +222,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         foreach ($_identifiers as $identifier) {
             $Task = $this->getTask($identifier);
-            if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
         }
@@ -233,25 +233,25 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * temporaray function to get a default container
      * 
-     * @return Egwbase_Record_Container container
+     * @return Egwbase_Container_Model_Container container
      */
     public function getDefaultContainer()
     {
-        $containers = Egwbase_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
+        $containers = Egwbase_Container_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
 
         if($containers->count() == 0) {
             $allGrants = array(
-                Egwbase_Container::GRANT_ADD,
-                Egwbase_Container::GRANT_ADMIN,
-                Egwbase_Container::GRANT_DELETE,
-                Egwbase_Container::GRANT_EDIT,
-                Egwbase_Container::GRANT_READ
+                Egwbase_Container_Container::GRANT_ADD,
+                Egwbase_Container_Container::GRANT_ADMIN,
+                Egwbase_Container_Container::GRANT_DELETE,
+                Egwbase_Container_Container::GRANT_EDIT,
+                Egwbase_Container_Container::GRANT_READ
             );
             
-            $containerId = Egwbase_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Egwbase_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
-            Egwbase_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
+            $containerId = Egwbase_Container_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Egwbase_Container_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
+            Egwbase_Container_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
             
-            return Egwbase_Container::getInstance()->getContainerById($containerId);
+            return Egwbase_Container_Container::getInstance()->getContainerById($containerId);
         } else {
             return $containers[0];
         }

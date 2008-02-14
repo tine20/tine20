@@ -13,7 +13,7 @@
 /**
  * defines the datatype for one container
  */
-class Egwbase_Record_Container extends Egwbase_Record_Abstract
+class Egwbase_Container_Model_Container extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter

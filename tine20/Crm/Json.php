@@ -698,7 +698,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
 /*    public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
-        $internalContainer = Egwbase_Container::getInstance()->getInternalContainer('crm');
+        $internalContainer = Egwbase_Container_Container::getInstance()->getInternalContainer('crm');
         
         $folderId = $internalContainer->container_id;
         

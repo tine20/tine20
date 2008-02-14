@@ -55,7 +55,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new UnderflowException('contact_owner can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_contactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_contactData->contact_owner, Egwbase_Container_Container::GRANT_EDIT)) {
             throw new Exception('write access to new addressbook denied');
         }
         
@@ -77,7 +77,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             } else {
                 // update existing contact
                 $oldContactData = $this->getContactById($_contactData->contact_id);
-                if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_EDIT)) {
+                if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container_Container::GRANT_EDIT)) {
                     throw new Exception('write access to old addressbook denied');
                 }
                 
@@ -175,7 +175,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $oldContactData = $this->getContactById($_contactId);
 
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container::GRANT_DELETE)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Egwbase_Container_Container::GRANT_DELETE)) {
             throw new Exception('delete access to addressbook denied');
         }
         
@@ -197,25 +197,25 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function addAddressbook($_name, $_type) 
     {
-        $egwbaseContainer = Egwbase_Container::getInstance();
+        $egwbaseContainer = Egwbase_Container_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $allGrants = array(
-            Egwbase_Container::GRANT_ADD,
-            Egwbase_Container::GRANT_ADMIN,
-            Egwbase_Container::GRANT_DELETE,
-            Egwbase_Container::GRANT_EDIT,
-            Egwbase_Container::GRANT_READ
+            Egwbase_Container_Container::GRANT_ADD,
+            Egwbase_Container_Container::GRANT_ADMIN,
+            Egwbase_Container_Container::GRANT_DELETE,
+            Egwbase_Container_Container::GRANT_EDIT,
+            Egwbase_Container_Container::GRANT_READ
         );
         
-        if($_type == Egwbase_Container::TYPE_SHARED) {
-            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_SHARED, Addressbook_Backend_Factory::SQL);
+        if($_type == Egwbase_Container_Container::TYPE_SHARED) {
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container_Container::TYPE_SHARED, Addressbook_Backend_Factory::SQL);
 
             // add admin grants to creator
             $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
             // add read grants to any other user
-            $egwbaseContainer->addGrants($addressbookId, NULL, array(Egwbase_Container::GRANT_READ));
+            $egwbaseContainer->addGrants($addressbookId, NULL, array(Egwbase_Container_Container::GRANT_READ));
         } else {
-            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+            $addressbookId = $egwbaseContainer->addContainer('addressbook', $_name, Egwbase_Container_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
         
             // add admin grants to creator
             $egwbaseContainer->addGrants($addressbookId, $accountId, $allGrants);
@@ -232,7 +232,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function deleteAddressbook($_addressbookId)
     {
-        $egwbaseContainer = Egwbase_Container::getInstance();
+        $egwbaseContainer = Egwbase_Container_Container::getInstance();
         
         $egwbaseContainer->deleteContainer($_addressbookId);
         
@@ -254,7 +254,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function renameAddressbook($_addressbookId, $_name)
     {
-        $egwbaseContainer = Egwbase_Container::getInstance();
+        $egwbaseContainer = Egwbase_Container_Container::getInstance();
         
         $egwbaseContainer->renameContainer($_addressbookId, $_name);
                 
@@ -273,7 +273,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
-        $otherPeoplesContainer = Egwbase_Container::getInstance()->getOtherUsersContainer('addressbook');
+        $otherPeoplesContainer = Egwbase_Container_Container::getInstance()->getOtherUsersContainer('addressbook');
         
         if(count($otherPeoplesContainer) === 0) {
             return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
@@ -329,7 +329,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Egwbase_Container_Container::GRANT_READ);
         
         $containerIds = array();
         
@@ -354,7 +354,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getCountOfAllContacts($_filter)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Egwbase_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Egwbase_Container_Container::GRANT_READ);
         
         $containerIds = array();
         
@@ -385,7 +385,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
-        $sharedContainer = Egwbase_Container::getInstance()->getSharedContainer('addressbook');
+        $sharedContainer = Egwbase_Container_Container::getInstance()->getSharedContainer('addressbook');
         
         if(count($sharedContainer) === 0) {
             return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
@@ -453,7 +453,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new UnderFlowExecption('contact not found');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($row->contact_owner, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($row->contact_owner, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('permission to contact denied');
         }
         
@@ -479,21 +479,21 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+        $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('addressbook', $owner);
         
         if(count($ownerContainer) === 0 && $owner == Zend_Registry::get('currentAccount')->accountId) {
             $allGrants = array(
-                Egwbase_Container::GRANT_ADD,
-                Egwbase_Container::GRANT_ADMIN,
-                Egwbase_Container::GRANT_DELETE,
-                Egwbase_Container::GRANT_EDIT,
-                Egwbase_Container::GRANT_READ
+                Egwbase_Container_Container::GRANT_ADD,
+                Egwbase_Container_Container::GRANT_ADMIN,
+                Egwbase_Container_Container::GRANT_DELETE,
+                Egwbase_Container_Container::GRANT_EDIT,
+                Egwbase_Container_Container::GRANT_READ
             );
             
-            $containerId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-            Egwbase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
+            $containerId = Egwbase_Container_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+            Egwbase_Container_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
             
-            $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+            $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('addressbook', $owner);
         } elseif(count($ownerContainer) === 0) {
             return new Egwbase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
         }
@@ -519,7 +519,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+        $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('addressbook', $owner);
         
         $containerIds = array();
         
@@ -546,7 +546,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_addressbookId, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_addressbookId, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('read access denied to addressbook');
         }
         
@@ -566,7 +566,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($addressbookId, Egwbase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($addressbookId, Egwbase_Container_Container::GRANT_READ)) {
             throw new Exception('read access denied to addressbook');
         }
         
@@ -582,14 +582,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     public function getSharedAddressbooks() {
-        $sharedAddressbooks = Egwbase_Container::getInstance()->getSharedContainer('addressbook');
+        $sharedAddressbooks = Egwbase_Container_Container::getInstance()->getSharedContainer('addressbook');
                 
         return $sharedAddressbooks;
     }
     
     public function getOtherUsers() 
     {
-        $rows = Egwbase_Container::getInstance()->getOtherUsers('addressbook');
+        $rows = Egwbase_Container_Container::getInstance()->getOtherUsers('addressbook');
 
         $accountData = array();
 
@@ -608,21 +608,21 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
     public function getAddressbooksByOwner($_owner) 
     {
-        $personalAddressbooks = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
+        $personalAddressbooks = Egwbase_Container_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
 
         if(count($personalAddressbooks) === 0 && $_owner == Zend_Registry::get('currentAccount')->accountId) {
             $allGrants = array(
-                Egwbase_Container::GRANT_ADD,
-                Egwbase_Container::GRANT_ADMIN,
-                Egwbase_Container::GRANT_DELETE,
-                Egwbase_Container::GRANT_EDIT,
-                Egwbase_Container::GRANT_READ
+                Egwbase_Container_Container::GRANT_ADD,
+                Egwbase_Container_Container::GRANT_ADMIN,
+                Egwbase_Container_Container::GRANT_DELETE,
+                Egwbase_Container_Container::GRANT_EDIT,
+                Egwbase_Container_Container::GRANT_READ
             );
             
-            $containerId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-            Egwbase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
+            $containerId = Egwbase_Container_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+            Egwbase_Container_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
             
-            $personalAddressbooks = Egwbase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
+            $personalAddressbooks = Egwbase_Container_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
         }
         
         return $personalAddressbooks;

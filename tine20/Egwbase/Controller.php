@@ -104,6 +104,9 @@ class Egwbase_Controller
             $server->setClass('Egwbase_Json', 'Egwbase');
 
             if(Zend_Auth::getInstance()->hasIdentity()) {
+            	// register addidional Egwbase Json servers
+            	Egwbase_Json::setJsonServers($server);
+            	
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {

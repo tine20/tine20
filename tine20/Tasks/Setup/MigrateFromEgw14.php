@@ -159,21 +159,21 @@ class Tasks_Setup_MigrateFromEgw14
      * ??? what about loose coupling in this case???
      * 
      * @param int $_owner
-     * @return int Egwbase_Container::container_id
+     * @return int Egwbase_Container_Container::container_id
      */
     protected static function getOwnersContainer($_owner)
     {
         static $containers = array();
         
         if (!isset($containers[$_owner])) {
-            $containers[$_owner] = Egwbase_Container::getInstance()->addContainer(
+            $containers[$_owner] = Egwbase_Container_Container::getInstance()->addContainer(
                 'Tasks',
                 'My Tasks (from egw 1.4 migration)',
-                Egwbase_Container::TYPE_PERSONAL,
+                Egwbase_Container_Container::TYPE_PERSONAL,
                 Tasks_Backend_Factory::SQL
             );
-            Egwbase_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
-                Egwbase_Container::GRANT_ANY
+            Egwbase_Container_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
+                Egwbase_Container_Container::GRANT_ANY
             ));
         }
         return $containers[$_owner];  

@@ -127,7 +127,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 	        dataUrl:'index.php',
 	        baseParams: {
 	            jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
-				method: 'Egwbase.getContainer',
+				method: 'Egwbase_Container.getContainer',
 				application: this.appName,
 				containerType: Egw.Egwbase.container.TYPE_PERSONAL
 	        }
@@ -189,7 +189,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 						
 						Ext.Ajax.request({
 		                    params: {
-		                        method: 'Egwbase.addContainer',
+		                        method: 'Egwbase_Container.addContainer',
 								application: this.appName,
 		                        containerName: _text,
 		                        containerType: parentNode.attributes.containerType
@@ -216,7 +216,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 							
 							Ext.Ajax.request({
 								params: {
-									method: 'Egwbase.deleteContainer',
+									method: 'Egwbase_Container.deleteContainer',
 									containerId: node.attributes.container.container_id
 								},
 								scope: this,
@@ -248,7 +248,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 								
 								Ext.Ajax.request({
 									params: {
-										method: 'Egwbase.renameContainer',
+										method: 'Egwbase_Container.renameContainer',
 										containerId: node.attributes.container.container_id,
 										newName: _text
 									},
