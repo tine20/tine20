@@ -11,11 +11,12 @@
 Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 
  /**
-  * @class Egw.containerTreePanel
+  * @class       Egw.containerTreePanel
   * @package     Egw
   * @subpackage  Widgets
   * @extends     Ext.tree.TreePanel
-  * 
+  * @param       {Object} config Configuration options
+  * @description
   * <p>Utility class for generating container trees as used in the 
   * apps tree panel</p>
   * <p>This widget handles all container related actions like add/rename/delte 

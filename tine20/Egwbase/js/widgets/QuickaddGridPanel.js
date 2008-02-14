@@ -13,14 +13,10 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
 
 /**
  * @class       Ext.ux.grid.QuickaddGridPanel
- * @constructor
  * @package     Ext
  * @subpackage  ux
  * @extends     Ext.grid.EditorGridPanel
- * @param       {Object} config Configuration options
- * @description
- * 
- * <p>Class for creating a edittable grid with quick add row on top.</p>
+ * Class for creating a edittable grid with quick add row on top.
  * <p>As form field for the quick add row, the quickaddField of the column definition is used.<p>
  * <p>The event 'newentry' is fired after the user finished editing the new row.<p>
  * <p>Example usage:</p>
@@ -46,10 +42,12 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
      ]
  });
  </code></pre>
+ * @constructor
+ * @param       {Object} config Configuration options
  */
 Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 	/**
-	 * @cfg {string} quickaddMandatory Mandatory field which must be set before quickadd fields will be enabled
+	 * @cfg {String} quickaddMandatory Mandatory field which must be set before quickadd fields will be enabled
 	 */
 	quickaddMandatory: false,
     /**
