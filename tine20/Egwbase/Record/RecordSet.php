@@ -73,7 +73,9 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
             throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         $this->_listOfRecords[] = $_record;
-        return key(end($this->_listOfRecords));
+		
+		end($this->_listOfRecords);
+        return key($this->_listOfRecords);
     }
     
     
@@ -89,7 +91,7 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
             	$this->_validationErrors[$index] = $record->getValidationErrors();
             }
         }
-        return (bool)count($this->_validationErrors);
+        return !(bool)count($this->_validationErrors);
     }
     
     /**
