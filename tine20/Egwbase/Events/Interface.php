@@ -12,5 +12,5 @@
 
 interface Egwbase_Events_Interface
 {
-    public function handleEvents(Egwbase_Events_Object $_eventObject);
+    public function handleEvents(Egwbase_Events_Abstract $_eventObject);
 }
