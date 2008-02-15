@@ -1,15 +1,19 @@
 <?php
 /**
- * backend class for Egwbase_Http_Server
+ * Tine 2.0
  *
+ * @package     Admin
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+
+/**
  * This class handles all Http requests for the admin application
  *
  * @package     Admin
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
- *
  */
 class Admin_Http extends Egwbase_Application_Http_Abstract
 {
@@ -32,12 +36,10 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
          
         $view->setScriptPath('Egwbase/views');
         $view->formData = array();
-        $view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
+        $view->jsIncludeFiles = array();
         $view->cssIncludeFiles = array();
         
-        $view->jsIncludeFiles[] = 'Egwbase/js/ExtUx.js';                
         $view->jsIncludeFiles[] = 'Admin/js/Admin.js';
-        $view->jsIncludeFiles[] = 'Tasks/js/Widgets.js';
         $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
         $view->jsExecute = 'Egw.Admin.Accounts.EditDialog.display(' . $account . ');';
 
