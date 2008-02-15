@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
-class Egwbase_Events_Object
+/**
+ * base class for all events
+ *
+ * @package     Egwbase
+ * @subpackage  Events
+ */
+abstract class Egwbase_Events_Abstract
 {
 }
