@@ -125,6 +125,26 @@ class Egwbase_Application
     }    
     
     /**
+     * get enabled or disabled applications
+     *
+     * @param int $_state can be Egwbase_Application::ENABLED or Egwbase_Application::DISABLED
+     * @return Egwbase_Record_RecordSet list of applications
+     */
+    public function getApplicationsByState($_state)
+    {
+        if($_state !== Egwbase_Application::ENABLED && $_applicationName !== Egwbase_Application::DISABLED) {
+            throw new InvalidArgumentException('$_state can be only Egwbase_Application::ENABLED or Egwbase_Application::DISABLED');
+        }
+        $where[] = $this->applicationTable->getAdapter()->quoteInto('app_enabled = ?', $_state);
+        
+        $rowSet = $this->applicationTable->fetchAll($where);
+
+        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Record_Application');
+
+        return $result;
+    }    
+    
+    /**
      * return the total number of applications installed
      *
      * @return int
