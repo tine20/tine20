@@ -23,7 +23,7 @@ class Egwbase_Events
      *
      * @param Egwbase_Events_Object $_eventObject the event object
      */
-    static public function fireEvent(Egwbase_Events_Object $_eventObject)
+    static public function fireEvent(Egwbase_Events_Abstract $_eventObject)
     {
         foreach(Egwbase_Application::getInstance()->getApplicationsByState(Egwbase_Application::ENABLED) as $application) {
             $controllerName = ucfirst($application->app_name) . '_Controller';
