@@ -51,4 +51,4 @@ if(function_exists('memory_get_peak_usage')) {
     $memory = memory_get_usage(true);
 }
 
-Zend_Registry::get('logger')->debug('index.php::('. __LINE__ . ') TIME: ' . $time . ' seconds ' . $memory/1024/1024 . ' MBytes');
+Zend_Registry::get('logger')->debug('index.php ('. __LINE__ . ') TIME: ' . $time . ' seconds ' . $memory/1024/1024 . ' MBytes');
