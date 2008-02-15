@@ -99,10 +99,19 @@ class Admin_Controller
         return $result;
     }
     
+    /**
+     * save or update account
+     *
+     * @param Egwbase_Account_Model_FullAccount $_account the account
+     * @param string $_password1 the new password
+     * @param string $_password2 the new password again
+     * @return Egwbase_Account_Model_FullAccount
+     */
     public function saveAccount(Egwbase_Account_Model_FullAccount $_account, $_password1, $_password2)
     {
         $account = Egwbase_Account::getInstance()->saveAccount($_account);
         
+        // fire needed events
         if(isset($_account->accountId)) {
             $event = new Admin_Event_UpdateAccount;
             $event->account = $account;
