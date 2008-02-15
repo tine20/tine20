@@ -137,7 +137,7 @@ class Egwbase_Acl_Rights
      * returns list of applications the user is able to use
      *
      * this function takes group memberships into account. Applications the accounts is able to use
-     * must have the 'run' right set 
+     * must have the 'run' right set and the application must be enabled
      * 
      * @param int $_accountId the numeric account id
      * @return array list of enabled applications for this account
@@ -159,6 +159,7 @@ class Egwbase_Acl_Rights
             ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.app_id')
             ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_right = ?', Egwbase_Acl_Rights::RUN)
+            ->where(SQL_TABLE_PREFIX . 'applications.app_enabled = ?', Egwbase_Application::ENABLED)
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
         $stmt = $db->query($select);
