@@ -10,7 +10,18 @@
  * @version     $Id$
  */
 
+/**
+ * interface for all classes which can handle events
+ *
+ * @package     Egwbase
+ * @subpackage  Events
+ */
 interface Egwbase_Events_Interface
 {
+    /**
+     * this functions handles the events
+     *
+     * @param Egwbase_Events_Abstract $_eventObject the eventobject
+     */
     public function handleEvents(Egwbase_Events_Abstract $_eventObject);
 }
