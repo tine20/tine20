@@ -147,6 +147,12 @@ class Egwbase_Account
         return $result;
     }
     
+    /**
+     * add or updates an account
+     *
+     * @param Egwbase_Account_Model_FullAccount $_account
+     * @return Egwbase_Account_Model_FullAccount
+     */
     public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
     {
         $result = $this->_backend->saveAccount($_account);
