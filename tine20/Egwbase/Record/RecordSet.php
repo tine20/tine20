@@ -55,8 +55,10 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
         foreach($_records as $record) {
             if($record instanceof $this->_recordClass) {
                 $this->_listOfRecords[] = $record;
-            } else {
+            } elseif (is_array($record)) {
                 $this->_listOfRecords[] = new $this->_recordClass($record, $_bypassFilters, $_convertDates);
+            } else {
+            	throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
             }
         }
     }
