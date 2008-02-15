@@ -7,7 +7,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
  */
 
 /**
@@ -102,13 +101,22 @@ class Admin_Controller
     
     public function saveAccount(Egwbase_Account_Model_FullAccount $_account, $_password1, $_password2)
     {
-        $result = Egwbase_Account::getInstance()->saveAccount($_account);
+        $account = Egwbase_Account::getInstance()->saveAccount($_account);
+        
+        if(isset($_account->accountId)) {
+            $event = new Admin_Event_UpdateAccount;
+            $event->account = $account;
+        } else {
+            $event = new Admin_Event_AddAccount;
+            $event->account = $account;
+        }
+        Egwbase_Events::fireEvent($event);
         
         if(!empty($_password1) && !empty($_password2)) {
             Egwbase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
         }
         
-        return $result;
+        return $account;
     }
 
     public function deleteAccounts(array $_accountIds)
