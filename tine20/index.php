@@ -31,6 +31,8 @@ if(!extension_loaded('pdo_mysql')) {
     die("Sorry, your environment is not supported. You need to enable the module pdo_mysql.");
 }
 
+set_include_path(dirname(__FILE__) .'/Zend' . PATH_SEPARATOR . get_include_path());
+
 require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
