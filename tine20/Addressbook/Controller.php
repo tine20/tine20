@@ -14,7 +14,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Controller
+class Addressbook_Controller implements Egwbase_Events_Interface
 {
     /**
      * the constructor
@@ -113,5 +113,56 @@ class Addressbook_Controller
         $result = $backend->getContactById($_contactId);
         
         return $result;
+    }
+    
+    public function handleEvents(Egwbase_Events_Abstract $_eventObject)
+    {
+        error_log("handle event: " . get_class($_eventObject));
+        switch(get_class($_eventObject)) {
+            case 'Admin_Event_AddAccount':
+                //$this->createUserFolder($_eventObject->account->accountId);
+                break;
+            case 'Admin_Event_DeleteAccount':
+                //$this->deleteUserFolder($_eventObject->account->accountId);
+                break;
+        }
+    }
+    
+    public function deleteUserFolder($_accountId)
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+/*        $addressbookId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+    
+        $allGrants = array(
+            Egwbase_Container::GRANT_ADD,
+            Egwbase_Container::GRANT_ADMIN,
+            Egwbase_Container::GRANT_DELETE,
+            Egwbase_Container::GRANT_EDIT,
+            Egwbase_Container::GRANT_READ
+        );
+        Egwbase_Container::getInstance()->addGrants($addressbookId, $accountId, $allGrants);
+*/  
+    }
+    
+    public function createUserFolder($_accountId)
+    {
+        $accountId = (int)$_accountId;
+        if($accountId != $_accountId) {
+            throw new InvalidArgumentException('$_accountId must be integer');
+        }
+        $addressbookId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
+    
+        $allGrants = array(
+            Egwbase_Container::GRANT_ADD,
+            Egwbase_Container::GRANT_ADMIN,
+            Egwbase_Container::GRANT_DELETE,
+            Egwbase_Container::GRANT_EDIT,
+            Egwbase_Container::GRANT_READ
+        );
+        Egwbase_Container::getInstance()->addGrants($addressbookId, $accountId, $allGrants);
+    
     }
 }
