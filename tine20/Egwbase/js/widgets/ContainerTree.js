@@ -49,6 +49,11 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
      * name of folders
      */
 	folderName: 'folder',
+    /**
+     * @cfg {array} extraItems
+     * additional items to display under all
+     */
+    extraItems: null,
 	// presets
 	iconCls: 'x-new-application',
 	rootVisible: false,
@@ -123,6 +128,12 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 	        }]
 	    }];
 	    
+        if(this.extraItems !== null) {
+            Ext.each(this.extraItems, function(_item){
+            	initialTree[0].children.push(_item);
+            });
+        }
+	    
 	    this.loader = new Egw.widgets.container.TreeLoader({
 	        dataUrl:'index.php',
 	        baseParams: {
@@ -170,13 +181,13 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
            treeRoot.appendChild( new Ext.tree.AsyncTreeNode(initialTree[i]) );
         }
 		
-		
 	},
 	// private
 	afterRender: function() {
 		Egw.widgets.container.TreePanel.superclass.afterRender.call(this);
 		//console.log(this);
 		this.expandPath('/root/all');
+		this.selectPath('/root/all');
 	},
 	// private
 	initContextMenu: function() {
