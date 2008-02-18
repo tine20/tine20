@@ -1207,7 +1207,9 @@ Egw.Admin.Accounts.EditDialog = function() {
 	                    password2: form.findField('accountPassword2').getValue()                        
 	                },
 	                success: function(_result, _request) {
-	                	window.opener.Egw.Admin.Accounts.Main.reload();
+	                	if(window.opener.Egw.Admin.Accounts) {
+                            window.opener.Egw.Admin.Accounts.Main.reload();
+	                	}
                         if(_closeWindow === true) {
                             window.close();
                         } else {
