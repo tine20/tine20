@@ -183,7 +183,7 @@ class Egwbase_Container_Container
      *
      * @var Egwbase_Container_Container
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     /**
      * the singleton pattern
@@ -192,11 +192,11 @@ class Egwbase_Container_Container
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Container_Container;
+        if (self::$_instance === NULL) {
+            self::$_instance = new Egwbase_Container_Container;
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
 
     /**
@@ -247,13 +247,20 @@ class Egwbase_Container_Container
         }
     }
     
-    public function addSharedContainer($_application, $_containerName)
+    /**
+     * creates a shared container and gives all rights to the owner and read rights to anyone
+     *
+     * @param int $_accountId the accountId of the owner of the newly created container
+     * @param string $_application name of the application
+     * @param string $_containerName displayname of the container
+     * @return Egwbase_Container_Model_Container
+     */
+    public function addSharedContainer($_accountId, $_application, $_containerName)
     {
-        $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $containerId = $this->addContainer($_application, $_containerName, self::TYPE_SHARED, 'Sql');
 
         // add all grants to creator
-        $this->addGrants($containerId, $accountId, array(
+        $this->addGrants($containerId, $_accountId, array(
             self::GRANT_READ, 
             self::GRANT_ADD, 
             self::GRANT_EDIT, 
@@ -261,17 +268,26 @@ class Egwbase_Container_Container
             self::GRANT_ADMIN
         ));
         // add read grants to any other user
-        $this->addGrants($containerId, NULL, array(Egwbase_Container_Container::GRANT_READ));
+        $this->addGrants($containerId, NULL, array(
+            self::GRANT_READ
+        ));
         return $this->getContainerById($containerId);
     }
     
-    public function addPersonalContainer($_application, $_containerName)
+    /**
+     * creates a personal container and gives all rights to the owner
+     *
+     * @param int $_accountId the accountId of the owner of the newly created container
+     * @param string $_application name of the application
+     * @param string $_containerName displayname of the container
+     * @return Egwbase_Container_Model_Container
+     */
+    public function addPersonalContainer($_accountId, $_application, $_containerName)
     {
-        $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $containerId = $this->addContainer($_application, $_containerName, self::TYPE_PERSONAL, 'Sql');
         
         // add all grants to creator
-        $this->addGrants($containerId, $accountId, array(
+        $this->addGrants($containerId, $_accountId, array(
             self::GRANT_READ, 
             self::GRANT_ADD, 
             self::GRANT_EDIT, 

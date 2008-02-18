@@ -53,12 +53,13 @@ class Egwbase_Container_Json
      */
     public function addContainer($application, $containerName, $containerType)
     {
+        $accountId = Zend_Registry::get('currentAccount')->accountId;
         switch($containerType) {
             case Egwbase_Container_Container::TYPE_SHARED:
-                $container = Egwbase_Container_Container::getInstance()->addSharedContainer($application, $containerName);
+                $container = Egwbase_Container_Container::getInstance()->addSharedContainer($accountId, $application, $containerName);
                 break;
             case Egwbase_Container_Container::TYPE_PERSONAL:
-                $container = Egwbase_Container_Container::getInstance()->addPersonalContainer($application, $containerName);
+                $container = Egwbase_Container_Container::getInstance()->addPersonalContainer($accountId, $application, $containerName);
                 break;
             default:
                 throw new Exception('no such containerType');
