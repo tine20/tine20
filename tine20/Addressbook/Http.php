@@ -34,33 +34,29 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->setScriptPath('Egwbase/views');
 		$view->formData = array();
 
-		$list = $locale->getTranslationList('Dateformat');
-		$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
-
-		$addressbookJson = new Addressbook_Json;		
-		//$view->formData['config']['initialTree'] = $addressbookJson->getSelectFolderTree();
-
-		$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
+		$view->jsIncludeFiles = array();
 		$view->cssIncludeFiles = array();
 		
 		$addresses = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
-			$view->formData['values'] = $contact->toArray();
-			$addressbook = Egwbase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
+		    $encodedContact = $contact->toArray();
+
+		    $addressbook = Egwbase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
 			
 			$view->formData['config']['addressbookName']   = $addressbook->container_name;
 			$view->formData['config']['addressbookRights'] = $addressbook->account_grants;
 
 			if(!empty($contact->adr_one_countryname)) {
-			    $view->formData['config']['oneCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
+			    $encodedContact['adr_one_countrydisplayname'] = $locale->getCountryTranslation($contact->adr_one_countryname);
 			}
 			if(!empty($contact->adr_two_countryname)) {
-			    $view->formData['config']['twoCountryName'] = $locale->getCountryTranslation($contact->adr_one_countryname);
+			    $encodedContact['adr_two_countrydisplayname'] = $locale->getCountryTranslation($contact->adr_two_countryname);
 			}
+            $encodedContact = Zend_Json::encode($encodedContact);
 		} else {
 		    $personalAddressbooks = $addresses->getAddressbooksByOwner($currentAccount->accountId);
 		    foreach($personalAddressbooks as $addressbook) {
-    		    $view->formData['values'] = array('contact_owner' => $addressbook->container_id);
+    		    $encodedContact = Zend_Json::encode(array('contact_owner' => $addressbook->container_id));
     		    $view->formData['config']['addressbookName']   = $addressbook->container_name;
     		    $view->formData['config']['addressbookRights'] = 31;
                 break;
@@ -69,7 +65,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		
 		$view->jsIncludeFiles[] = 'Addressbook/js/Addressbook.js';
 		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
-		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display();';
+		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         
 		$view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

@@ -80,28 +80,18 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
      *
      * @return array
      */
-    public function saveContact()
+    public function saveContact($contactData)
     {
-        // convert birthday back to yyyy-mm-dd
-        if(isset($_POST['contact_bday'])) {
-            $locale = Zend_Registry::get('locale');
-            $dateFormat = $locale->getTranslationList('Dateformat');
-            try {
-                $date = new Zend_Date($_POST['contact_bday'], $dateFormat['long'], 'en');
-                $_POST['contact_bday'] = $date->toString('yyyy-MM-dd');
-            } catch (Exception $e) {
-                unset($_POST['contact_bday']);
-            }
-        }
-
+        $contactData = Zend_Json::decode($contactData);
+        
         // unset if empty
-        if(empty($_POST['contact_id'])) {
-            unset($_POST['contact_id']);
+        if(empty($contactData['contact_id'])) {
+            unset($contactData['contact_id']);
         }
 
         $contact = new Addressbook_Model_Contact();
         try {
-            $contact->setFromArray($_POST);
+            $contact->setFromArray($contactData);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,

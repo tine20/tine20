@@ -27,7 +27,7 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'                     => 'StringTrim',
+        //'*'                     => 'StringTrim',
         'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
         'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
     	'contact_email'         => array('StringTrim', 'StringToLower'),
@@ -109,9 +109,9 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
      *
      * @var array list of datetime fields
      */
-    //protected $_datetimeFields = array(
-    //    'modification_time'
-    //);
+    protected $_datetimeFields = array(
+        'contact_bday'
+    );
     
     /**
      * sets the record related properties from user generated input.
