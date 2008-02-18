@@ -194,6 +194,11 @@ class Egwbase_Controller
         Zend_Registry::set('dbAdapter', $db);
     }
     
+    /**
+     * sets the user locale
+     *
+     * @todo $locale = new Zend_Locale('auto');
+     */
     protected function setupUserLocale()
     {
     	try {
