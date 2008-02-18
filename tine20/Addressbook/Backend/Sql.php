@@ -47,7 +47,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @param int $_contactId the contact to update, if NULL the contact gets added
      * @todo check acl when adding contact
-     * @return unknown
+     * @return Addressbook_Model_Contact
      */
     public function saveContact(Addressbook_Model_Contact $_contactData)
     {
@@ -157,7 +157,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw($e);
         }
 
-        return $_contactData;
+        return $this->getContactById($_contactData->contact_id);
     }
 
     /**

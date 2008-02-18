@@ -21,39 +21,10 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
 {
     protected $_appname = 'Addressbook';
     
-    public function addAddressbook($name, $type)
-    {
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-
-        $id = $backend->addAddressbook($name, $type);
-        
-        $result = array('addressbookId' => $id);
-        
-        return $result;
-    }
-    
-    public function deleteAddressbook($addressbookId)
-    {
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-
-        $backend->deleteAddressbook($addressbookId);
-            
-        return TRUE;
-    }
-    
-    public function renameAddressbook($addressbookId, $name)
-    {
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-
-        $backend->renameAddressbook($addressbookId, $name);
-            
-        return TRUE;
-    }
-    
     /**
-     * delete a array of contacts
+     * delete multiple contacts
      *
-     * @param array $_contactIDs
+     * @param array $_contactIDs list of contactId's to delete
      * @return array
      */
     public function deleteContacts($_contactIds)
@@ -76,8 +47,9 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
     /**
      * save one contact
      *
-     * if $_contactId is 0 the contact gets added, otherwise it gets updated
+     * if $contactData['contact_id'] is empty the contact gets added, otherwise it gets updated
      *
+     * @param string $contactData a JSON encoded array of contact properties
      * @return array
      */
     public function saveContact($contactData)
@@ -101,12 +73,11 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
             return $result;
         }
 
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-         
         try {
-            $backend->saveContact($contact);
+            $updatedContact = Addressbook_Controller::getInstance()->saveContact($contact);
             $result = array('success'           => true,
-                            'welcomeMessage'    => 'Entry updated');
+                            'welcomeMessage'    => 'Entry updated',
+                            'updatedData'       => $updatedContact->toArray());
         } catch (Exception $e) {
             $result = array('success'           => false,
         					'errorMessage'      => $e->getMessage());
@@ -180,75 +151,6 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         
         return $result;
     }
-
-    public function getAddressbooksByOwner($owner)
-    {
-        $treeNodes = array();
-        
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        if($rows = $backend->getAddressbooksByOwner($owner)) {
-            foreach($rows as $addressbookData) {
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'addressbook-' . $addressbookData->container_id, $addressbookData->container_name, TRUE);
-                $childNode->addressbookId = $addressbookData->container_id;
-                $childNode->nodeType = 'singleAddressbook';
-                $treeNodes[] = $childNode;
-            }
-        }
-        
-        echo Zend_Json::encode($treeNodes);
-
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-    }    
-
-    public function getSharedAddressbooks()
-    {
-        $treeNodes = array();
-        
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        if($rows = $backend->getSharedAddressbooks()) {
-            foreach($rows as $addressbookData) {
-                $childNode = new Egwbase_Ext_Treenode('Addressbook', 'contacts', 'shared-' . $addressbookData->container_id, $addressbookData->container_name, TRUE);
-                $childNode->addressbookId = $addressbookData->container_id;
-                $childNode->nodeType = 'singleAddressbook';
-                $treeNodes[] = $childNode;
-            }
-        }
-        
-        echo Zend_Json::encode($treeNodes);
-
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-    }    
-    
-    /**
-     * returns a list a accounts who gave current account at least read access to 1 personal addressbook 
-     *
-     */
-    public function getOtherUsers()
-    {
-        $treeNodes = array();
-        
-        $rows = Addressbook_Controller::getInstance()->getOtherUsers();
-        
-        foreach($rows as $accountData) {
-            $treeNode = new Egwbase_Ext_Treenode(
-                'Addressbook',
-                'contacts',
-                'otheraddressbook_'. $accountData->accountId, 
-                $accountData->accountDisplayName,
-                false
-            );
-            $treeNode->owner  = $accountData->accountId;
-            $treeNode->nodeType = 'userAddressbooks';
-            $treeNodes[] = $treeNode;
-        }
-
-        echo Zend_Json::encode($treeNodes);
-
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-    }    
 
     /**
      * get data for the overview
@@ -343,33 +245,4 @@ class Addressbook_Json extends Egwbase_Application_Json_Abstract
         return $result;
     }
     
-    public function getGrants($addressbookId)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $result['results'] = Addressbook_Controller::getInstance()->getGrants($addressbookId)->toArray();
-        $result['totalcount'] = count($result['results']);
-        
-        foreach($result['results'] as &$value) {
-            if($value['accountId'] === NULL) {
-                $value['accountName'] = array('accountDisplayName' => 'Anyone');
-            } else {
-                $value["accountName"] = Egwbase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
-            }
-        }
-        
-        return $result;
-    }
-    
-    public function setGrants($addressbookId, $grants)
-    {
-        $newGrants = new Egwbase_Record_RecordSet(Zend_Json::decode($grants), 'Egwbase_Record_Grants');
-        
-        $result = Addressbook_Controller::getInstance()->setGrants($addressbookId, $newGrants);
-               
-        return $result;
-    }
 }

@@ -115,54 +115,67 @@ class Addressbook_Controller implements Egwbase_Events_Interface
         return $result;
     }
     
+    /**
+     * save one contact
+     *
+     * @param Addressbook_Model_Contact $_contact the contact object
+     * @return Addressbook_Model_Contact the updated contact
+     */
+    public function saveContact(Addressbook_Model_Contact $_contact)
+    {
+        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        $updatedContact = $backend->saveContact($_contact);
+        
+        return $updatedContact;
+    }
+    
+    /**
+     * event handler function
+     * 
+     * all events get routed through this function
+     *
+     * @param Egwbase_Events_Abstract $_eventObject the eventObject
+     */
     public function handleEvents(Egwbase_Events_Abstract $_eventObject)
     {
-        error_log("handle event: " . get_class($_eventObject));
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
-                //$this->createUserFolder($_eventObject->account->accountId);
+                $this->createUserFolder($_eventObject->account->accountId);
                 break;
             case 'Admin_Event_DeleteAccount':
-                //$this->deleteUserFolder($_eventObject->account->accountId);
+                $this->deleteUserFolder($_eventObject->account->accountId);
                 break;
         }
     }
-    
+
+    /**
+     * delete all personal user folders and the contacts associated with these folders
+     *
+     * @param int $_accountId the accountId
+     */
     public function deleteUserFolder($_accountId)
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
             throw new InvalidArgumentException('$_accountId must be integer');
         }
-/*        $addressbookId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-    
-        $allGrants = array(
-            Egwbase_Container::GRANT_ADD,
-            Egwbase_Container::GRANT_ADMIN,
-            Egwbase_Container::GRANT_DELETE,
-            Egwbase_Container::GRANT_EDIT,
-            Egwbase_Container::GRANT_READ
-        );
-        Egwbase_Container::getInstance()->addGrants($addressbookId, $accountId, $allGrants);
-*/  
     }
     
+    /**
+     * creates the initial folder for new accounts
+     *
+     * @param int $_accountId the accountdId
+     * @return Egwbase_Container_Model_Container
+     */
     public function createUserFolder($_accountId)
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
             throw new InvalidArgumentException('$_accountId must be integer');
         }
-        $addressbookId = Egwbase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Egwbase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-    
-        $allGrants = array(
-            Egwbase_Container::GRANT_ADD,
-            Egwbase_Container::GRANT_ADMIN,
-            Egwbase_Container::GRANT_DELETE,
-            Egwbase_Container::GRANT_EDIT,
-            Egwbase_Container::GRANT_READ
-        );
-        Egwbase_Container::getInstance()->addGrants($addressbookId, $accountId, $allGrants);
-    
+        $container = Egwbase_Container_Container::getInstance()->addPersonalContainer($accountId, 'addressbook', 'Personal Contacts');
+        
+        return $container;
     }
 }
