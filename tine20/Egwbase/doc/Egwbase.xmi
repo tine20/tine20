@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-02-21T16:23:20" xmi.version="1.2" >
+<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2008-02-21T17:32:25" xmi.version="1.2" >
  <XMI.header>
   <XMI.documentation>
    <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
@@ -506,7 +506,7 @@
         <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2ENFBjJFPvbB" aggregation="none" type="YMiy0mHQZQ3W" name="" />
        </UML:Association.connection>
       </UML:Association>
-      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="EBIRPPob28E0" isRoot="false" isAbstract="false" name="Egwbase_Record_PersistantObserver" >
+      <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="EBIRPPob28E0" isRoot="false" isAbstract="false" name="Egwbase_Record_PersistentObserver" >
        <UML:Classifier.feature>
         <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="m309AaPrCF77" isRoot="false" isAbstract="false" isQuery="false" name="fireEvent" >
          <UML:BehavioralFeature.parameter>
@@ -516,12 +516,12 @@
         </UML:Operation>
         <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="S07y1KBFPkFM" isRoot="false" isAbstract="false" isQuery="false" name="addObserver" >
          <UML:BehavioralFeature.parameter>
-          <UML:Parameter isSpecification="false" visibility="private" xmi.id="uugU808sLUlW" value="" type="zcRdP4BEe71R" name="_persistantObserver" />
+          <UML:Parameter isSpecification="false" visibility="private" xmi.id="uugU808sLUlW" value="" type="zcRdP4BEe71R" name="_persistentObserver" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
         <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="BgYHU7EBOhze" isRoot="false" isAbstract="false" isQuery="false" name="removeObserver" >
          <UML:BehavioralFeature.parameter>
-          <UML:Parameter isSpecification="false" visibility="private" xmi.id="GSR77OwCOsAC" value="" type="zcRdP4BEe71R" name="_persistantObserver" />
+          <UML:Parameter isSpecification="false" visibility="private" xmi.id="GSR77OwCOsAC" value="" type="zcRdP4BEe71R" name="_persistentObserver" />
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
         <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="aNppYEUVql65" isRoot="false" isAbstract="false" isQuery="false" name="removeAllObservables" >
@@ -551,7 +551,7 @@
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class stereotype="datatype" isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="zcRdP4BEe71R" isRoot="false" isAbstract="false" name="Egwbase_Model_PersistantObserver" >
+      <UML:Class stereotype="datatype" isSpecification="false" isLeaf="false" visibility="public" namespace="Logical View" xmi.id="zcRdP4BEe71R" isRoot="false" isAbstract="false" name="Egwbase_Model_PersistentObserver" >
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="ZKQbl0whx0SJ" />
        </UML:GeneralizableElement.generalization>
@@ -865,7 +865,7 @@
   </UML:Model>
  </XMI.content>
  <XMI.extensions xmi.extender="umbrello" >
-  <docsettings viewid="NrJc03tFSoqd" documentation="" uniqueid="PrvBmZAESiuo" />
+  <docsettings viewid="lrraXpVTOJXr" documentation="" uniqueid="PrvBmZAESiuo" />
   <listview>
    <listitem open="1" type="800" label="Ansichten" >
     <listitem open="1" type="801" id="Logical View" >
