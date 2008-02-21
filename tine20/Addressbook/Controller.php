@@ -166,7 +166,7 @@ class Addressbook_Controller implements Egwbase_Events_Interface
      * creates the initial folder for new accounts
      *
      * @param int $_accountId the accountdId
-     * @return Egwbase_Container_Model_Container
+     * @return Egwbase_Model_Container
      */
     public function createUserFolder($_accountId)
     {

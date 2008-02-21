@@ -129,7 +129,7 @@ class Egwbase_Container_Json
      */
     public function setContainerGrants($containerId, $grants)
     {
-        $newGrants = new Egwbase_Record_RecordSet(Zend_Json::decode($grants), 'Egwbase_Record_Grants');
+        $newGrants = new Egwbase_Record_RecordSet(Zend_Json::decode($grants), 'Egwbase_Model_Grants');
         
         Egwbase_Container_Container::getInstance()->setAllGrants($containerId, $newGrants);
                

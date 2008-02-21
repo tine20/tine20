@@ -164,7 +164,7 @@ class Egwbase_Acl_Rights
             
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Record_Application');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Application');
         
         return $result;
     }

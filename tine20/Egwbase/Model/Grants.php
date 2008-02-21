@@ -13,7 +13,7 @@
 /**
  * defines the datatype for one application
  */
-class Egwbase_Record_Grants extends Egwbase_Record_Abstract
+class Egwbase_Model_Grants extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter

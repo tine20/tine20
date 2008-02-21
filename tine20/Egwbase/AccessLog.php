@@ -172,7 +172,7 @@ class Egwbase_AccessLog
             $arrayRowSet[$rowId] = $row;
         }
 
-        $result = new Egwbase_Record_RecordSet($arrayRowSet, 'Egwbase_Record_AccessLog');
+        $result = new Egwbase_Record_RecordSet($arrayRowSet, 'Egwbase_Model_AccessLog');
 
         return $result;
     }

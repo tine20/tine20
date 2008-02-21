@@ -11,9 +11,9 @@
  */
 
 /**
- * defines the datatype for one container
+ * defines the datatype for one access log entry
  */
-class Egwbase_Container_Model_Container extends Egwbase_Record_Abstract
+class Egwbase_Model_AccessLog extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -34,19 +34,21 @@ class Egwbase_Container_Model_Container extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'container_id'      => array('Digits', 'presence' => 'required'),
-        'container_name'    => array('presence' => 'required'),
-        'container_type'    => array('presence' => 'required'),
-        'container_backend' => array('presence' => 'required'),
-        'application_id'    => array('Digits', 'presence' => 'required'),
-        'account_grants'    => array('Digits', 'presence' => 'required')
+        'sessionid'  => array('presence' => 'required'),
+        'loginid'    => array('presence' => 'required'),
+        'ip'         => array('presence' => 'required'),
+        'li'         => array('presence' => 'required'),
+        'lo'         => array('presence' => 'required'),
+        'log_id'     => array('presence' => 'required'),
+        'result'     => array('presence' => 'required'),
+        'account_id' => array('presence' => 'required')
     );
-
-   /**
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'container_id';
+    protected $_identifier = 'log_id';
 }

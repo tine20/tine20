@@ -233,7 +233,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * temporaray function to get a default container
      * 
-     * @return Egwbase_Container_Model_Container container
+     * @return Egwbase_Model_Container container
      */
     public function getDefaultContainer()
     {

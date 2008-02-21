@@ -11,9 +11,9 @@
  */
 
 /**
- * defines the datatype for one application
+ * defines the datatype for one container
  */
-class Egwbase_Record_Application extends Egwbase_Record_Abstract
+class Egwbase_Model_Container extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -34,12 +34,12 @@ class Egwbase_Record_Application extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'app_id'      => array('Digits', 'presence' => 'required'),
-        'app_name'    => array('presence' => 'required'),
-        'app_enabled' => array('Digits', 'presence' => 'required'),
-        'app_order'   => array('Digits', 'presence' => 'required'),
-        'app_tables'  => array('allowEmpty' => true),
-        'app_version' => array('presence' => 'required')
+        'container_id'      => array('Digits', 'presence' => 'required'),
+        'container_name'    => array('presence' => 'required'),
+        'container_type'    => array('presence' => 'required'),
+        'container_backend' => array('presence' => 'required'),
+        'application_id'    => array('Digits', 'presence' => 'required'),
+        'account_grants'    => array('Digits', 'presence' => 'required')
     );
 
    /**
@@ -48,5 +48,5 @@ class Egwbase_Record_Application extends Egwbase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'app_id';
+    protected $_identifier = 'container_id';
 }

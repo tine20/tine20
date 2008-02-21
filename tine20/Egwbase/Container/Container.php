@@ -253,7 +253,7 @@ class Egwbase_Container_Container
      * @param int $_accountId the accountId of the owner of the newly created container
      * @param string $_application name of the application
      * @param string $_containerName displayname of the container
-     * @return Egwbase_Container_Model_Container
+     * @return Egwbase_Model_Container
      */
     public function addSharedContainer($_accountId, $_application, $_containerName)
     {
@@ -280,7 +280,7 @@ class Egwbase_Container_Container
      * @param int $_accountId the accountId of the owner of the newly created container
      * @param string $_application name of the application
      * @param string $_containerName displayname of the container
-     * @return Egwbase_Container_Model_Container
+     * @return Egwbase_Model_Container
      */
     public function addPersonalContainer($_accountId, $_application, $_containerName)
     {
@@ -374,7 +374,7 @@ class Egwbase_Container_Container
      * returns the internal conatainer for a given application
      *
      * @param string $_application name of the application
-     * @return Egwbase_Container_Model_Container the internal container
+     * @return Egwbase_Model_Container the internal container
      */
     public function getInternalContainer($_application)
     {
@@ -396,7 +396,7 @@ class Egwbase_Container_Container
         //error_log("getInternalContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Container_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
+        $result = new Egwbase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
         
         if(empty($result)) {
             throw new Exception('internal container not found or not accessible');
@@ -452,7 +452,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
         
         return $result;
     }
@@ -461,7 +461,7 @@ class Egwbase_Container_Container
      * return a container by containerId
      *
      * @param int $_containerId the id of the container
-     * @return Egwbase_Container_Model_Container
+     * @return Egwbase_Model_Container
      */
     public function getContainerById($_containerId)
     {
@@ -497,7 +497,7 @@ class Egwbase_Container_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Container_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
+        $result = new Egwbase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
         
         if(empty($result)) {
             throw new UnderflowException('container not found');
@@ -512,7 +512,7 @@ class Egwbase_Container_Container
      *
      * @param string $_application the name of the application
      * @param int $_owner the numeric account id of the owner
-     * @return Egwbase_Record_RecordSet set of Egwbase_Container_Model_Container
+     * @return Egwbase_Record_RecordSet set of Egwbase_Model_Container
      */
     public function getPersonalContainer($_application, $_owner)
     {
@@ -550,7 +550,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
         
         return $result;
     }
@@ -559,7 +559,7 @@ class Egwbase_Container_Container
      * returns the shared container for a given application accessible by the current user
      *
      * @param string $_application the name of the application
-     * @return Egwbase_Record_RecordSet set of Egwbase_Container_Model_Container
+     * @return Egwbase_Record_RecordSet set of Egwbase_Model_Container
      */
     public function getSharedContainer($_application)
     {
@@ -584,7 +584,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
         
         return $result;
     }
@@ -639,7 +639,7 @@ class Egwbase_Container_Container
      * return set of all personal container of other users made accessible to the current account 
      *
      * @param string $_application the name of the application
-     * @return Egwbase_Record_RecordSet set of Egwbase_Container_Model_Container
+     * @return Egwbase_Record_RecordSet set of Egwbase_Model_Container
      */
     public function getOtherUsersContainer($_application)
     {
@@ -672,7 +672,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Container_Model_Container');
+        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
         
         return $result;
     }
@@ -813,7 +813,7 @@ class Egwbase_Container_Container
 	                $displayName = $account->accountDisplayName;
 	            }
 	                
-	            $containerGrant = new Egwbase_Record_Grants( array(
+	            $containerGrant = new Egwbase_Model_Grants( array(
 	                'accountId'     => $row['account_id'],
 	                'accountName'   => $displayName
 	            ), true);
@@ -839,7 +839,7 @@ class Egwbase_Container_Container
             }
         }
         
-        return  new Egwbase_Record_RecordSet($resultArray, 'Egwbase_Record_Grants', true);;
+        return  new Egwbase_Record_RecordSet($resultArray, 'Egwbase_Model_Grants', true);;
     }
     
     public function setAllGrants($_containerId, Egwbase_Record_RecordSet $_grants) 
@@ -869,7 +869,7 @@ class Egwbase_Container_Container
                 $_grants[$currentAccountId]->deleteGrant = true;
                 $_grants[$currentAccountId]->adminGrant = true;
             } else {
-                $_grants[$currentAccountId] = new Egwbase_Record_Grants(
+                $_grants[$currentAccountId] = new Egwbase_Model_Grants(
                     array(
                         'accountId'     => $currentAccountId,
                         'accountName'   => 'not used',

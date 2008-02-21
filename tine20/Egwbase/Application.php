@@ -60,7 +60,7 @@ class Egwbase_Application
      * @param int $_applicationId the id of the application
      * @todo code still needs some testing
      * @throws Exception if $_applicationId is not integer and not greater 0
-     * @return Egwbase_Record_Application the information about the application
+     * @return Egwbase_Model_Application the information about the application
      */
     public function getApplicationById($_applicationId)
     {
@@ -71,7 +71,7 @@ class Egwbase_Application
         
         $row = $this->applicationTable->fetchRow('app_id = ' . $applicationId);
         
-        $result = new Egwbase_Record_Application($row->toArray());
+        $result = new Egwbase_Model_Application($row->toArray());
         
         return $result;
     }
@@ -82,7 +82,7 @@ class Egwbase_Application
      * @param string $$_applicationName the name of the application
      * @todo code still needs some testing
      * @throws InvalidArgumentException, Exception
-     * @return Egwbase_Record_Application the information about the application
+     * @return Egwbase_Model_Application the information about the application
      */
     public function getApplicationByName($_applicationName)
     {
@@ -95,7 +95,7 @@ class Egwbase_Application
             throw new Exception("application $_applicationName not found");
         }
         
-        $result = new Egwbase_Record_Application($row->toArray());
+        $result = new Egwbase_Model_Application($row->toArray());
         
         return $result;
     }
@@ -119,7 +119,7 @@ class Egwbase_Application
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Record_Application');
+        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Model_Application');
 
         return $result;
     }    
@@ -139,7 +139,7 @@ class Egwbase_Application
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
-        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Record_Application');
+        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Model_Application');
 
         return $result;
     }    

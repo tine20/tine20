@@ -11,9 +11,9 @@
  */
 
 /**
- * defines the datatype for one access log entry
+ * defines the datatype for one application
  */
-class Egwbase_Record_AccessLog extends Egwbase_Record_Abstract
+class Egwbase_Model_Application extends Egwbase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -34,21 +34,19 @@ class Egwbase_Record_AccessLog extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'sessionid'  => array('presence' => 'required'),
-        'loginid'    => array('presence' => 'required'),
-        'ip'         => array('presence' => 'required'),
-        'li'         => array('presence' => 'required'),
-        'lo'         => array('presence' => 'required'),
-        'log_id'     => array('presence' => 'required'),
-        'result'     => array('presence' => 'required'),
-        'account_id' => array('presence' => 'required')
+        'app_id'      => array('Digits', 'presence' => 'required'),
+        'app_name'    => array('presence' => 'required'),
+        'app_enabled' => array('Digits', 'presence' => 'required'),
+        'app_order'   => array('Digits', 'presence' => 'required'),
+        'app_tables'  => array('allowEmpty' => true),
+        'app_version' => array('presence' => 'required')
     );
-    
-    /**
+
+   /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'log_id';
+    protected $_identifier = 'app_id';
 }
