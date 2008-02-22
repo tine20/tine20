@@ -154,6 +154,9 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      */
     public function getId()
     {
+    	if (! isset($this->_properties[$this->_identifier])) {
+    		$this->setId(NULL);
+    	}
 		return $this->_properties[$this->_identifier];
     }
     
@@ -164,7 +167,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      */
     public function getApplication()
     {
-    	
+    	return $this->_application;
     }
     
     /**
@@ -183,6 +186,11 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
         
         // set internal state to "not validated"
         $this->_isValidated = false;
+        
+        // convinience for new records
+        if (! isset($_data[$this->_identifier])) {
+            $_data[$this->_identifier] = NULL;
+        }
         
         if($this->bypassFilters === true) {
             // set data without validation
