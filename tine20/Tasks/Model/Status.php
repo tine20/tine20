@@ -16,7 +16,20 @@
  */
 class Tasks_Model_Status extends Egwbase_Record_Abstract
 {
+	/**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */
     protected $_identifier = 'identifier';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Tasks';
     
     protected $_validators = array(
         'identifier'           => array('allowEmpty' => true,  'Int' ),

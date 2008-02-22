@@ -35,10 +35,19 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
+     * NOTE: _Must_ be set by the derived classes!
      * 
      * @var string
      */
     protected $_identifier = NULL;
+    
+    /**
+     * application the record belongs to
+     * NOTE: _Must_ be set by the derived classes!
+     *
+     * @var string
+     */
+    protected $_application = NULL;
     
     /**
      * holds properties of record
@@ -57,7 +66,8 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
     /**
      * Defintion of properties. All properties of record _must_ be declared here!
      * This validators get used when validating user generated content with Zend_Input_Filter
-     *
+     * NOTE: _Must_ be set by the derived classes!
+     * 
      * @var array list of zend validator
      */
     protected $_validators = array();
@@ -145,6 +155,16 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
     public function getId()
     {
 		return $this->_properties[$this->_identifier];
+    }
+    
+    /**
+     * gets application the records belongs to
+     * 
+     * @return string application
+     */
+    public function getApplication()
+    {
+    	
     }
     
     /**

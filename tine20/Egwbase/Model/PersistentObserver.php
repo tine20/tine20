@@ -18,6 +18,13 @@ class Egwbase_Model_PersistentObserver extends Egwbase_Record_Abstract
 
 	protected $_identifier = 'identifier';
 	
+	/**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Egwbase';
+	
     protected $_validators = array(
         'identifier'             => array('presence' => 'required', 'allowEmpty' => false, 'Int' ),
         'created_by'             => array('allowEmpty' => true,  'Int' ),

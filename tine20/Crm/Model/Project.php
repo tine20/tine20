@@ -12,6 +12,21 @@
 class Crm_Model_Project extends Egwbase_Record_Abstract
 {
     /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'lead_id';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Crm';
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -61,16 +76,7 @@ class Crm_Model_Project extends Egwbase_Record_Abstract
         'lead_end',
         'lead_end_scheduled'
     );
-    
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'lead_id';    
-    
-    
+        
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier

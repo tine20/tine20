@@ -11,7 +11,20 @@
  */
 class Calendar_Event extends Egwbase_Record_Abstract
 {
+	/**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */ 
     protected $_identifier = 'cal_id';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Calendar';
     
     protected $_validators = array(
         'cal_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),

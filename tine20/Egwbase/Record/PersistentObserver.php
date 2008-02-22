@@ -150,26 +150,46 @@ class Egwbase_Record_PersistentObserver
     } // end of member function getAllObservables
 
     /**
-     *
+     * returns all observables of a given event and observer
+     * 
      * @param Egwbase_Record_Interface $_observer 
      * @param string _event 
      * @return Egwbase_Record_RecordSet
      */
     public function getObservablesByEvent( $_observer,  $_event ) {
     	if (!$_observer->getApplication() || !$_observer->getId()) {
-    		
-    	}
+    		throw new Egwbase_Record_Exception_DefinitionFailure();
+    	} 
+    	
+    	$where = array(
+    	    'observer_application' => $_observer->getApplication(),
+            'observer_identifier'  => $_observer->getId(),
+    	    'observed_event'       => $_event
+    	);
+    	
+    	return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true);
     } // end of member function getObservablesByEvent
 
 
     /**
-     *
+     * returns all observers of a given observable and event
+     * 
      * @param Egwbase_Record_Interface $_observable 
      * @param string _event 
      * @return Egwbase_Record_RecordSet
      */
     protected function getObserversByEvent( $_observable,  $_event ) {
+        if (!$_observer->getApplication() || !$_observer->getId()) {
+            throw new Egwbase_Record_Exception_DefinitionFailure();
+        }
         
+        $where = array(
+            'observable_application' => $_observable->getApplication(),
+            'observable_identifier'  => $_observable->getId(),
+            'observed_event'         => $_event
+        );
+        
+        return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true);
     } // end of member function getObserversByEvent
 
 

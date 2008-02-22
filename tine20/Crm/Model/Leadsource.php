@@ -12,6 +12,21 @@
 class Crm_Model_Leadsource extends Egwbase_Record_Abstract
 {
     /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'lead_leadsource_id';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Crm';
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -33,13 +48,5 @@ class Crm_Model_Leadsource extends Egwbase_Record_Abstract
         'lead_leadsource_id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'lead_leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
-    
-   /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'lead_leadsource_id';
     
 }

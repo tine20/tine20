@@ -16,6 +16,21 @@
 class Egwbase_Model_Application extends Egwbase_Record_Abstract
 {
     /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'app_id';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Egwbase';
+    
+	/**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -42,11 +57,4 @@ class Egwbase_Model_Application extends Egwbase_Record_Abstract
         'app_version' => array('presence' => 'required')
     );
 
-   /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'app_id';
 }

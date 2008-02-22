@@ -15,6 +15,21 @@
  */
 class Egwbase_Model_AccessLog extends Egwbase_Record_Abstract
 {
+	/**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'log_id';
+
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Egwbase';
+    
     /**
      * list of zend inputfilter
      * 
@@ -44,11 +59,4 @@ class Egwbase_Model_AccessLog extends Egwbase_Record_Abstract
         'account_id' => array('presence' => 'required')
     );
     
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'log_id';
 }

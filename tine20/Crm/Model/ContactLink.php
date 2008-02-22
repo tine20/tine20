@@ -12,6 +12,21 @@
 class Crm_Model_ContactLink extends Egwbase_Record_Abstract
 {
     /**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'link_id';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Crm';
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -39,12 +54,4 @@ class Crm_Model_ContactLink extends Egwbase_Record_Abstract
         'link_lastmod' => array(Zend_Filter_Input::ALLOW_EMPTY => true),        
         'link_owner'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
     );
-    
-   /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'link_id';
 }

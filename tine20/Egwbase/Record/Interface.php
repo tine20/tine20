@@ -51,6 +51,13 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function getId();
     
     /**
+     * gets application the records belongs to
+     * 
+     * @return string application
+     */
+    public function getApplication();
+    
+    /**
      * sets record related properties
      * 
      * @param string name of property

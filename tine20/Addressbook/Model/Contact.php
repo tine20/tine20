@@ -20,6 +20,13 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
     protected $_identifier = 'contact_id';
     
     /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Addressbook';
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter

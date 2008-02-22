@@ -15,6 +15,21 @@
  */
 class Egwbase_Model_Grants extends Egwbase_Record_Abstract
 {
+	/**
+     * key in $_validators/$_properties array for the filed which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'accountId';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Egwbase';
+    
     /**
      * list of zend inputfilter
      * 
@@ -35,14 +50,6 @@ class Egwbase_Model_Grants extends Egwbase_Record_Abstract
      */
     protected $_validators = array();
 
-   /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'accountId';
-    
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
     {
         $this->_validators = array(
