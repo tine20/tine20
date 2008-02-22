@@ -16,7 +16,7 @@
  * 
  * Fired when a observed record gets updated
  */
-class Egwbase_Record_Event_Update extends Egwbase_Events_Abstract 
+class Egwbase_Record_Event_Update extends Egwbase_Record_Event_Abstract 
 {
 
 } // end of Egwbase_Record_Event_Update

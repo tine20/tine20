@@ -16,7 +16,7 @@
  * 
  * Fired, when an oberved record is about to be deleted
  */
-class Egwbase_Record_Event_Predelete extends Egwbase_Events_Abstract 
+class Egwbase_Record_Event_Predelete extends Egwbase_Record_Event_Abstract 
 {
 
 } // end of Egwbase_Record_Event_Predelete

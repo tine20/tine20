@@ -26,7 +26,7 @@ class Egwbase_Model_PersistentObserver extends Egwbase_Record_Abstract
     protected $_application = 'Egwbase';
 	
     protected $_validators = array(
-        'identifier'             => array('presence' => 'required', 'allowEmpty' => false, 'Int' ),
+        'identifier'             => array('presence' => 'required', 'allowEmpty' => true, 'Int' ),
         'created_by'             => array('allowEmpty' => true,  'Int' ),
         'creation_time'          => array('allowEmpty' => true         ),
         'last_modified_by'       => array('allowEmpty' => true         ),
@@ -34,9 +34,9 @@ class Egwbase_Model_PersistentObserver extends Egwbase_Record_Abstract
         'is_deleted'             => array('allowEmpty' => true         ),
         'deleted_time'           => array('allowEmpty' => true         ),
         'deleted_by'             => array('allowEmpty' => true         ),
-	    'observable_application' => array('presence' => 'required', 'allowEmpty' => false, 'Alpha'),
+	    'observable_application' => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
 	    'observable_identifier'  => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
-	    'observer_application'   => array('presence' => 'required', 'allowEmpty' => false, 'Alpha'),
+	    'observer_application'   => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
 	    'observer_identifier'    => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
 	    'observed_event'         => array('presence' => 'required', 'allowEmpty' => false, )
 	);

@@ -64,8 +64,8 @@ class Egwbase_Setup_SetupSqlTables
                 `observer_identifier` INT(11) NOT NULL,
                 `observed_event` VARCHAR(64) NOT NULL,
                 PRIMARY KEY  (`identifier`),
-                KEY `" . SQL_TABLE_PREFIX . "record_persistentobserver` (`observer_application`),
-                KEY `" . SQL_TABLE_PREFIX . "record_persistentobserver` (`observer_identifier`),
+                KEY  (`observer_application`),
+                KEY  (`observer_identifier`),
                 UNIQUE (`observable_application`, `observable_identifier`, `observer_application`, `observer_identifier`, `observed_event`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }

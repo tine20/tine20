@@ -16,7 +16,7 @@
  * 
  * Fired, when an observed record has a relation change
  */
-class Egwbase_Record_Event_Relationchange extends Egwbase_Events_Abstract 
+class Egwbase_Record_Event_Relationchange extends Egwbase_Record_Event_Abstract 
 {
 
 } // end of Egwbase_Record_Event_Relationchange

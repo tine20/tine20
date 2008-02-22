@@ -38,7 +38,10 @@ class Egwbase_Record_PersistentObserver
     {
     	// temporary on the fly creation of table
     	Egwbase_Setup_SetupSqlTables::createPersistentObserverTable();
-    	$this->_db = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'record_persistentobserver'));
+    	$this->_db = new Egwbase_Db_Table(array(
+    	    'name' => SQL_TABLE_PREFIX . 'record_persistentobserver',
+    	    'primary' => 'identifier'
+    	));
     	
     }
     
@@ -63,25 +66,65 @@ class Egwbase_Record_PersistentObserver
      * @return 
      */
     public function fireEvent( $_observable,  $_event ) {
-        
+        $observers = $this->getObserversByEvent($_observable, $_event);
+        foreach ($observers as $observer) {
+        	$controllerName = $observer->observer_application . '_Controller';
+        	
+            if(!class_exists($controllerName)) {
+                Zend_Registry::get('logger')->debug("No such application controller: '$controllerName'");
+                continue;
+            }
+            
+            if(!class_exists($_event)) {
+                Zend_Registry::get('logger')->debug("No such event: '$_event'");
+                continue;
+            }
+            
+            try {
+                $controller = call_user_func(array($controllerName, 'getInstance'));
+            } catch (Exception $e) {
+                // application has no controller or is not useable at all
+                Zend_Registry::get('logger')->debug("can't get instance of $controllerName : $e");
+                continue;
+            }
+            
+            $eventObject = new $_event();
+            
+            // Egwbase_Model_PersistentObserver holds observer and observable
+            $eventObject->observable = $observer;
+            
+            $controller->handleEvents($eventObject);
+        }
     } // end of member function fireEvent
 
     /**
      * registers new persistent observer
      * 
      * @param Egwbase_Model_PersistentObserver $_persistentObserver 
-     * @return void
+     * @return Egwbase_Model_PersistentObserver the new persistentObserver
      */
     public function addObserver( $_persistentObserver ) {
     	if ($_persistentObserver->getId()) {
     		throw new Egwbase_Record_Exception_NotAllowed('Could not add existing observer');
     	}
     	
-    	$_persistentObserver->creator = Zend_Registry::get('currentAccount')->getId();
+    	$_persistentObserver->created_by = Zend_Registry::get('currentAccount')->getId();
     	$_persistentObserver->creation_time = Zend_Date::now();
     	
     	if ($_persistentObserver->isValid()) {
-            $this->_db->createRow($_persistentObserver->toArray());
+    		$data = $_persistentObserver->toArray();
+    		
+    		// resolve apps
+    		$application = Egwbase_Application::getInstance();
+    		$data['observable_application'] = $application->getApplicationByName($_persistentObserver->observable_application)->app_id;
+    		$data['observer_application']   = $application->getApplicationByName($_persistentObserver->observer_application)->app_id;
+            
+    		$identifier = $this->_db->insert($data);
+
+    		$persistentObserver = $this->_db->fetchRow( "identifier = $identifier");
+    		
+    		return new Egwbase_Model_PersistentObserver($persistentObserver->toArray(), true);
+    		
     	} else {
     		throw new Egwbase_Record_Exception_Validation('some fields have invalid content');
     	}
