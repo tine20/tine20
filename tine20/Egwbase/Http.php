@@ -48,6 +48,7 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
             self::_appendFileTime("Egwbase/js/Container.js"),
             // widgets
             self::_appendFileTime("Egwbase/js/ExtUx.js"),
+            self::_appendFileTime("Egwbase/js/ux/grid/CheckColumn.js"),
             self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
             self::_appendFileTime("Egwbase/js/Widgets.js"),
             self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),

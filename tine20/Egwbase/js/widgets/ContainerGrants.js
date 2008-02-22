@@ -145,25 +145,25 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             Ext.getCmp('AccountsActionApplyButton').enable();
         }, this);
         
-        var readColumn = new Ext.grid.CheckColumn({
+        var readColumn = new Ext.ux.grid.CheckColumn({
             header: 'Read',
             dataIndex: 'readGrant',
             width: 55
         });
 
-        var addColumn = new Ext.grid.CheckColumn({
+        var addColumn = new Ext.ux.grid.CheckColumn({
             header: 'Add',
             dataIndex: 'addGrant',
             width: 55
         });
         
-        var editColumn = new Ext.grid.CheckColumn({
+        var editColumn = new Ext.ux.grid.CheckColumn({
             header: "Edit",
             dataIndex: 'editGrant',
             width: 55
         });
         
-        var deleteColumn = new Ext.grid.CheckColumn({
+        var deleteColumn = new Ext.ux.grid.CheckColumn({
             header: "Delete",
             dataIndex: 'deleteGrant',
             width: 55

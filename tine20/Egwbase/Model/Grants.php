@@ -38,7 +38,7 @@ class Egwbase_Model_Grants extends Egwbase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'      => 'StringTrim'
+        //'*'      => 'StringTrim'
     );
 
     /**
