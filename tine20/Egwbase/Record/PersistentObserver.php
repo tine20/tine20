@@ -139,7 +139,7 @@ class Egwbase_Record_PersistentObserver
     public function removeObserver( $_persistentObserver ) {
         if ($_persistentObserver->getId() && $_persistentObserver->isValid()) {
         	$where = array(
-        	    'identifier' => $_persistentObserver->getId()
+        	    'identifier = ' . $_persistentObserver->getId()
         	);
         	
         	$this->_db->update(array(
@@ -159,8 +159,8 @@ class Egwbase_Record_PersistentObserver
     public function removeAllObservables( $_observer ) {
     	if ($_observer->getApplication() && $_observer->getId()) {
 	        $where = array(
-	            'observer_application' => $_observer->getApplication(),
-	            'observer_identifier'  => $_observer->getId()
+	            'observer_application =' . $_observer->getApplication(),
+	            'observer_identifier  =' . $_observer->getId()
 	        );
 	        
             $this->_db->update(array(
@@ -182,8 +182,8 @@ class Egwbase_Record_PersistentObserver
     public function getAllObservables( $_observer ) {
     	if ($_observer->getApplication() && $_observer->getId()) {
     		$where = array(
-    		    'observer_application' => $_observer->getApplication(),
-                'observer_identifier'  => $_observer->getId()
+    		    'observer_application =' . $_observer->getApplication(),
+                'observer_identifier  =' . $_observer->getId()
     		);
     		
     		return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true); 
@@ -205,9 +205,9 @@ class Egwbase_Record_PersistentObserver
     	} 
     	
     	$where = array(
-    	    'observer_application' => $_observer->getApplication(),
-            'observer_identifier'  => $_observer->getId(),
-    	    'observed_event'       => $_event
+    	    'observer_application =' . $_observer->getApplication(),
+            'observer_identifier  =' . $_observer->getId(),
+    	    'observed_event       =' . $this->_db->getAdapter()->quote($_event)
     	);
     	
     	return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true);
@@ -227,9 +227,9 @@ class Egwbase_Record_PersistentObserver
         }
         
         $where = array(
-            'observable_application' => $_observable->getApplication(),
-            'observable_identifier'  => $_observable->getId(),
-            'observed_event'         => $_event
+            'observable_application =' . $_observable->getApplication(),
+            'observable_identifier  =' . $_observable->getId(),
+            'observed_event         =' . $this->_db->getAdapter()->quote($_event)
         );
         
         return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true);

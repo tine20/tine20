@@ -95,8 +95,7 @@ class Egwbase_Record_Relation
     		$data['related_application']   = $application->getApplicationByName($_relation->related_application)->app_id;
             
     		$identifier = $this->_db->insert($data);
-
-    		return new Egwbase_Model_Relation($this->getRelationById($identifier), true);
+    		return $this->getRelationById($identifier);
     		
     	} else {
     		throw new Egwbase_Record_Exception_Validation('some fields have invalid content');
@@ -112,7 +111,7 @@ class Egwbase_Record_Relation
     public function breakRelation( $_relation ) {
         if ($_relation->getId() && $_relation->isValid()) {
         	$where = array(
-        	    'identifier' => $_relation->getId()
+        	    'identifier = ' . $_relation->getId()
         	);
         	
         	$this->_db->update(array(
@@ -136,8 +135,8 @@ class Egwbase_Record_Relation
         }
         
         $where = array(
-            'own_application' => Egwbase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
-            'own_identifier'  => $_record->getId()
+            'own_application = ' . Egwbase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
+            'own_identifier  = ' . $_record->getId()
         );
         if ($_role) {
         	$where['own_role'] = $_role;
@@ -163,27 +162,35 @@ class Egwbase_Record_Relation
         }
         
     	$where = array(
-    	    'own_application' => Egwbase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
-            'own_identifier'  => $_record->getId()
+    	    'own_application = ' . Egwbase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
+            'own_identifier  =' . $_record->getId(),
+    	    'is_deleted      = FALSE'
     	);
     	if ($_role) {
             $where['own_role'] = $_role;
         }
         
-   		return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_Relation', true); 
+        $relations = new Egwbase_Record_RecordSet(array(), 'Egwbase_Model_Relation');
+        foreach ($this->_db->fetchAll($where) as $relation) {
+        	$relations->addRecord(new Egwbase_Model_Relation($relation->toArray(), true));
+        }
+   		return $relations; 
     } // end of member function getAllRelations
     
     /**
      * returns a relation spechified by a given identifier
      *
      * @param int $_identifier
+     * @param bool $_returnDeleted
      * @return Egwbase_Record_Relation
      */
-    public function getRelationById($_identifier)
+    public function getRelationById($_identifier, $_returnDeleted = false)
     {
-    	$relation = new Egwbase_Record_Relation($this->_db->fetchRow( "identifier = $_identifier")->toArray(), true);
-    	if($relation->getId()) {
-    		return $relation;
+    	$where = "identifier = $_identifier" . ( $_returnDeleted ? '' : ' AND is_deleted = FALSE' );
+    	$relationRow = $this->_db->fetchRow($where);
+    	
+    	if($relationRow) {
+    		return new Egwbase_Model_Relation($relationRow->toArray(), true);
     	} else {
     		throw new Egwbase_Record_Exception_NotDefined("No relation with idenditier: '$_identifier' found.");
     	}
