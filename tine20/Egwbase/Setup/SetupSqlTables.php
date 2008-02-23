@@ -71,5 +71,37 @@ class Egwbase_Setup_SetupSqlTables
         }
     }
     
+    /**
+     * temporary function to create the SQL_TABLE_PREFIX . record_relations table on demand
+     *
+     */
+    public static function createRelationTable() {
+        $db = Zend_Registry::get('dbAdapter');
+        
+        try {
+            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'record_relations');
+        } catch (Zend_Db_Statement_Exception $e) {
+            // table does not exist
+            $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "record_relations (
+                `identifier` INT(11) NOT NULL auto_increment,
+                `created_by` INT(11) NOT NULL,
+                `creation_time` DATETIME NOT NULL,
+                `last_modified_by` INT(11),
+                `last_modified_time` DATETIME DEFAULT NULL,
+                `is_deleted` BOOLEAN NOT NULL DEFAULT FALSE,
+                `deleted_time` DATETIME DEFAULT NULL,
+                `deleted_by` INT(11),
+                `own_application` INT(11) NOT NULL,
+                `own_identifier` INT(11) NOT NULL,
+                `own_role` VARCHAR(16) NOT NULL,
+                `related_application` INT(11) NOT NULL,
+                `related_identifier` INT(11) NOT NULL,
+                PRIMARY KEY  (`identifier`),
+                KEY (`own_identifier`),
+                UNIQUE  (`own_application`, `own_identifier`, `own_role`, `related_application`, `related_identifier` ))
+                ENGINE=InnoDB DEFAULT CHARSET=utf8"
+            );
+        }
+    }
  }
  ?>

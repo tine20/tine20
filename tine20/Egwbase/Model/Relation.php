@@ -11,9 +11,9 @@
  */
 
 /**
- * class Egwbase_Model_PersistentObserver
+ * class Egwbase_Model_Relation
  */
-class Egwbase_Model_PersistentObserver extends Egwbase_Record_Abstract 
+class Egwbase_Model_Relation extends Egwbase_Record_Abstract 
 {
 
 	protected $_identifier = 'identifier';
@@ -34,13 +34,13 @@ class Egwbase_Model_PersistentObserver extends Egwbase_Record_Abstract
         'is_deleted'             => array('allowEmpty' => true         ),
         'deleted_time'           => array('allowEmpty' => true         ),
         'deleted_by'             => array('allowEmpty' => true         ),
-	    'observable_application' => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
-	    'observable_identifier'  => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
-	    'observer_application'   => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
-	    'observer_identifier'    => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
-	    'observed_event'         => array('presence' => 'required', 'allowEmpty' => false, )
+	    'own_application'        => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
+	    'own_identifier'         => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
+        'own_role'               => array('presence' => 'required', 'allowEmpty' => false, 'Alpha'),
+	    'related_application'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
+	    'related_identifier'     => array('presence' => 'required', 'allowEmpty' => false, 'Int')
 	);
     
 
-} // end of Egwbase_Model_PersistentObserver
+} // end of Egwbase_Model_Relation
 ?>
