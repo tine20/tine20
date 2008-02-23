@@ -101,15 +101,7 @@ class Tasks_Setup_SetupSqlTables
                 PRIMARY KEY  (`task_identifier`, `contact_identifier`),
                 FOREIGN KEY (`task_identifier`) REFERENCES " . SQL_TABLE_PREFIX . "tasks(`identifier`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
-            
-            $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "tasks_related (
-                `task_identifier` INT(11) NOT NULL,
-                `related_identifier` INT(11) NOT NULL,
-                PRIMARY KEY  (`task_identifier`, `related_identifier`),
-                FOREIGN KEY (`task_identifier`) REFERENCES " . SQL_TABLE_PREFIX . "tasks(`identifier`) ON DELETE CASCADE,
-                FOREIGN KEY (`related_identifier`) REFERENCES " . SQL_TABLE_PREFIX . "tasks(`identifier`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
-            );
-        }
+        }    
     }
     
     /**
