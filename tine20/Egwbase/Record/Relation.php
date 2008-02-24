@@ -139,7 +139,7 @@ class Egwbase_Record_Relation
             'own_identifier  = ' . $_record->getId()
         );
         if ($_role) {
-        	$where['own_role'] = $_role;
+        	$where['related_role'] = $_role;
         }
         
         $this->_db->update(array(
@@ -167,7 +167,7 @@ class Egwbase_Record_Relation
     	    'is_deleted      = FALSE'
     	);
     	if ($_role) {
-            $where['own_role'] = $_role;
+            $where['related_role'] = $_role;
         }
         
         $relations = new Egwbase_Record_RecordSet(array(), 'Egwbase_Model_Relation');

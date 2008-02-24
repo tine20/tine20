@@ -93,12 +93,12 @@ class Egwbase_Setup_SetupSqlTables
                 `deleted_by` INT(11),
                 `own_application` INT(11) NOT NULL,
                 `own_identifier` INT(11) NOT NULL,
-                `own_role` VARCHAR(16) NOT NULL,
                 `related_application` INT(11) NOT NULL,
                 `related_identifier` INT(11) NOT NULL,
+                `related_role` VARCHAR(16) NOT NULL,
                 PRIMARY KEY  (`identifier`),
                 KEY (`own_identifier`),
-                UNIQUE  (`own_application`, `own_identifier`, `own_role`, `related_application`, `related_identifier` ))
+                UNIQUE  (`own_application`, `own_identifier`, `related_role`, `related_application`, `related_identifier` ))
                 ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }

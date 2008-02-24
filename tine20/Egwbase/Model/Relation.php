@@ -36,9 +36,9 @@ class Egwbase_Model_Relation extends Egwbase_Record_Abstract
         'deleted_by'             => array('allowEmpty' => true         ),
 	    'own_application'        => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
 	    'own_identifier'         => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
-        'own_role'               => array('presence' => 'required', 'allowEmpty' => false, 'Alpha'),
 	    'related_application'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
-	    'related_identifier'     => array('presence' => 'required', 'allowEmpty' => false, 'Int')
+	    'related_identifier'     => array('presence' => 'required', 'allowEmpty' => false, 'Int'),
+        'related_role'           => array('presence' => 'required', 'allowEmpty' => false, 'Alpha')
 	);
     
 
