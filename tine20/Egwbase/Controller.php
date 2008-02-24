@@ -41,6 +41,8 @@ class Egwbase_Controller
         Zend_Session::start();
 
         $this->setupLogger();
+        
+        $this->setupMailer();
 
         $this->setupDatabaseConnection();
 
@@ -58,7 +60,6 @@ class Egwbase_Controller
         if(isset($this->session->currentAccount)) {
             Zend_Registry::set('currentAccount', $this->session->currentAccount);
         }
-
     }
     
     /**
@@ -300,4 +301,25 @@ class Egwbase_Controller
         
         Zend_Session::destroy();
     }   
+    
+    /**
+     * function to initialize the smtp connection
+     *
+     */
+    public function setupMailer()
+    {
+        try {
+            $mailConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'mail');
+        } catch (Zend_Config_Exception $e) {
+            $mailConfig = new Zend_Config(array(
+                'smtpserver' => 'localhost', 
+                'ssl' => 'tls', 
+                'port' => 25
+            ));
+        }
+        Zend_Registry::set('mailConfig', $mailConfig);
+        
+        $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
+        Zend_Mail::setDefaultTransport($transport);
+    }
 }
