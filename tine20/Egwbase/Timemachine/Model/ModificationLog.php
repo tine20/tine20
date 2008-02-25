@@ -37,7 +37,7 @@ class Egwbase_Timemachine_Model_ModificationLog extends Egwbase_Record_Abstract
      * @var array list of zend validator
      */
     protected $_validators = array(
-        'identifier'           => array('allowEmpty' => false, 'Int' ),
+        'identifier'           => array('allowEmpty' => true, 'Int' ),
         'application'          => array('allowEmpty' => false        ),
         'record_identifier'    => array('allowEmpty' => false, 'Int' ),
         'record_type'          => array('allowEmpty' => true         ),
