@@ -35,7 +35,7 @@ class Egwbase_AccessLog
     private function __construct()
     {
         $conf = array('name' => SQL_TABLE_PREFIX . 'access_log');
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
+        if(Zend_Registry::get('configFile')->database->get('egw14compat') == 1) {
             $conf['primary'] = array('ip','li');
         }
         
@@ -83,7 +83,7 @@ class Egwbase_AccessLog
             $data['account_id'] = $_accountId;
         }
         
-        if(Zend_Registry::get('dbConfig')->get('egw14compat') == 1) {
+        if(Zend_Registry::get('configFile')->database->get('egw14compat') == 1) {
             unset($data['result']);
         }
         
