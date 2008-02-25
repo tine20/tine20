@@ -46,10 +46,12 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
             // Egwbase
             //self::_appendFileTime("Egwbase/js/Egwbase.js"),
             self::_appendFileTime("Egwbase/js/Container.js"),
-            // widgets
+            // Ext user extensions
             self::_appendFileTime("Egwbase/js/ExtUx.js"),
+            self::_appendFileTime("Egwbase/js/ux/PopupWindow.js"),
             self::_appendFileTime("Egwbase/js/ux/grid/CheckColumn.js"),
             self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
+            // Tine 2.0 specific widgets
             self::_appendFileTime("Egwbase/js/Widgets.js"),
             self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
             self::_appendFileTime("Egwbase/js/widgets/ContainerSelect.js"),
