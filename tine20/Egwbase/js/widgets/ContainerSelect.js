@@ -27,13 +27,13 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     
     allowBlank: false,
     readOnly:true,
-    container_id: null,
+    container: null,
     
     // private
     initComponent: function(){
         Egw.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         if (this.defaultContainer) {
-            this.container_id = this.defaultContainer.container_id;
+            this.container = this.defaultContainer;
             this.value = this.defaultContainer.container_name;
         }
         this.onTriggerClick = function(e) {
@@ -44,8 +44,16 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     //private
     getValue: function(){
-        return this.container_id;
+        return this.container.container_id;
+    },
+    //private
+    setValue: function(container){
+    	this.container = container;
+    	this.setRawValue(container.container_name);
+    	//Egw.widgets.container.selectionComboBox.superclass.setValue(container.container_name);
+    	//console.log(container);
     }
+    
 });
 
 /**
@@ -93,8 +101,8 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         tree.on('click', function(_node) {
             if(_node.attributes.containerType == 'singleContainer') {
                 
-                this.TriggerField.container = _node.attributes.container;
-                this.TriggerField.setValue(_node.attributes.text);
+            	//this.TriggerField.container = _node.attributes.container;
+                this.TriggerField.setValue(_node.attributes.container);
                 w.hide();
             }
         }, this);
