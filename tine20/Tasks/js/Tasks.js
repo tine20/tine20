@@ -91,7 +91,7 @@ Egw.Tasks.TaskGrid = function(){
 			actionType: 'add',
             text: 'add task',
             handler: handlers.editInPopup,
-            iconCls: 'action_add'
+            iconCls: 'TasksTreePanel'
         }),
         deleteSingle: new Ext.Action({
             text: 'delete task',
