@@ -32,6 +32,8 @@ class Egwbase_Controller
      */
     protected $session;
     
+    protected $_config;
+    
     /**
      * the constructor
      *
@@ -39,7 +41,13 @@ class Egwbase_Controller
     private function __construct()
     {
         Zend_Session::start();
-
+        try {
+            $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
+            Zend_Registry::set('configFile', $this->_config);
+        } catch (Zend_Config_Exception $e) {
+            die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+        }
+        
         $this->setupLogger();
         
         $this->setupMailer();
@@ -156,13 +164,16 @@ class Egwbase_Controller
         }
     }
     
-    
+    /**
+     * initializes the logger
+     *
+     */
     protected function setupLogger()
     {
         $logger = new Zend_Log();
         
-        try {
-            $loggerConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'logger');
+        if(isset($this->_config->logger)) {
+            $loggerConfig = $this->_config->logger;
             
             $filename = $loggerConfig->filename;
             $priority = (int)$loggerConfig->priority;
@@ -173,26 +184,34 @@ class Egwbase_Controller
             $filter = new Zend_Log_Filter_Priority($priority);
             $logger->addFilter($filter);
 
-        } catch (Exception $e) {
+        } else {
             $writer = new Zend_Log_Writer_Null;
             $logger->addWriter($writer);
         }
 
         Zend_Registry::set('logger', $logger);
 
-        Zend_Registry::get('logger')->debug('logger initialized');
+        Zend_Registry::get('logger')->debug(__METHOD__ . ' logger initialized');
     }
     
+    /**
+     * initializes the database connection
+     *
+     */
     protected function setupDatabaseConnection()
     {
-        $dbConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'database');
-        Zend_Registry::set('dbConfig', $dbConfig);
+        if(isset($this->_config->database)) {
+            $dbConfig = $this->_config->database;
+            
+            define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'egw_');
         
-        define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'egw_');
-    
-        $db = Zend_Db::factory('PDO_MYSQL', Zend_Registry::get('dbConfig')->toArray());
-        Zend_Db_Table_Abstract::setDefaultAdapter($db);
-        Zend_Registry::set('dbAdapter', $db);
+            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+            Zend_Db_Table_Abstract::setDefaultAdapter($db);
+
+            Zend_Registry::set('dbAdapter', $db);
+        } else {
+            die ('database section not found in central configuration file');
+        }
     }
     
     /**
@@ -210,6 +229,10 @@ class Egwbase_Controller
         Zend_Registry::set('locale', $locale);
     }
     
+    /**
+     * intializes the timezone handling
+     *
+     */
     protected function setupTimezones()
     {
         // All server operations are done in UTC
@@ -219,6 +242,14 @@ class Egwbase_Controller
         Zend_Registry::set('userTimeZone', 'Europe/Berlin');
     }
 
+    /**
+     * create new user seesion
+     *
+     * @param string $_username
+     * @param string $_password
+     * @param string $_ipAddress
+     * @return bool
+     */
     public function login($_username, $_password, $_ipAddress)
     {
         $authResult = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
@@ -306,18 +337,16 @@ class Egwbase_Controller
      * function to initialize the smtp connection
      *
      */
-    public function setupMailer()
+    protected function setupMailer()
     {
-        try {
-            $mailConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'mail');
-        } catch (Zend_Config_Exception $e) {
+        if(isset($this->_config->mail)) {
+            $mailConfig = $this->_config->mail;
+        } else {
             $mailConfig = new Zend_Config(array(
                 'smtpserver' => 'localhost', 
-                'ssl' => 'tls', 
                 'port' => 25
             ));
         }
-        Zend_Registry::set('mailConfig', $mailConfig);
         
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
