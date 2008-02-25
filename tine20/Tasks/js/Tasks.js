@@ -707,7 +707,7 @@ Egw.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    width: 700,
    height: 300,
    initComponent: function(){
-        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.identifier + '&linkingApp='+ this.relatedApp + 'crm&linkedId=' + this.relatedId;
+        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.identifier + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId;
         Egw.Tasks.EditPopup.superclass.initComponent.call(this);
    }
 });
