@@ -33,7 +33,7 @@ class Tasks_Model_Task extends Egwbase_Record_Abstract
     
     protected $_validators = array(
         // egw record fields
-        'container'            => array('presence' => 'required', 'allowEmpty' => false, 'Int' ),
+        'container'            => array('allowEmpty' => true,  'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
         'creation_time'        => array('allowEmpty' => true         ),
         'last_modified_by'     => array('allowEmpty' => true         ),

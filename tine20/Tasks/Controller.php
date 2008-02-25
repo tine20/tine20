@@ -155,6 +155,9 @@ class Tasks_Controller implements Tasks_Backend_Interface
      */
     public function createTask(Tasks_Model_Task $_task)
     {
+    	if ((int)$_task->container < 0) {
+    		$_task->container = $this->getDefaultContainer()->getId();
+    	}
         if (! $this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
         }

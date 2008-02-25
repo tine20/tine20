@@ -67,14 +67,34 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     /**
      * Supplies HTML for edit tasks dialog
      * 
+     * @param int    $taskId
+     * @param string $linkingApp
+     * @param int    $linkedId
      */
-    public function editTask($taskId, $linkingApp=NULL, $linkedId=NULL)
+    public function editTask($taskId=-1, $linkingApp='', $linkedId=-1)
     {
-        if($taskId > 0) {
+        if($taskId >= 0) {
             $tjs = new Tasks_Json();
             $task = Zend_Json::encode($tjs->getTask($taskId));
         } else {
-            $task = 'null';
+        	// prepare initial data (temporary, this should become part of json interface)
+        	$newTask = new Tasks_Model_Task(array(), true);
+        	$defaultContainer = Tasks_Controller::getInstance()->getDefaultContainer();
+        	
+        	// prefs to be implemented :-)
+        	$containerPref = array(
+        	    'tasks'       => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
+        	    'addressbook' => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
+        	    'calendar'    => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
+        	    'crm'         => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
+        	);
+        	
+        	$app = $linkingApp ? $linkingApp : 'tasks';
+        	$defaultContainer = array_key_exists($app, $containerPref) ? $containerPref[$app] : $defaultContainer;
+            $newTask->container = Zend_Json::encode($defaultContainer->toArray());
+            
+            $task = Zend_Json::encode($newTask->toArray());
+            
         }
         $view = new Zend_View();
          

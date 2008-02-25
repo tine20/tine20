@@ -468,7 +468,7 @@ Egw.Tasks.TaskGrid = function(){
         		
 	    grid.on('newentry', function(taskData){
 	    	var selectedNode = tree.getSelectionModel().getSelectedNode();
-            taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.container_id : Egw.Tasks.DefaultContainer.container_id;
+            taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.container_id : -1;
 	        task = new Egw.Tasks.Task(taskData);
 
 	        Ext.Ajax.request({
@@ -518,22 +518,11 @@ Egw.Tasks.EditDialog = function(task) {
 	if (!arguments[0]) {
 		task = {};
 	}
-	// check if task app is running
-	var isTasks = window.opener.Egw.Tasks && window.opener.Egw.Tasks.TaskGrid.isRunning();
-	var MainScreen = isTasks ? window.opener.Egw.Tasks : null;
 	
 	// init task record 
     task = new Egw.Tasks.Task(task);
     Egw.Tasks.fixTask(task);
     
-	var DefaultContainer = Egw.Tasks.DefaultContainer;
-	if (isTasks) {
-		var selectedNode = MainScreen.TaskGrid.getTreePanel().getSelectionModel().getSelectedNode();
-		if (selectedNode) {
-			DefaultContainer = selectedNode.attributes.container;
-		}
-	}
-	
 	var handlers = {        
         applyChanges: function(_button, _event) {
 			var closeWindow = arguments[2] ? arguments[2] : false;
@@ -668,7 +657,6 @@ Egw.Tasks.EditDialog = function(task) {
                     name: 'container',
                     itemName: 'Tasks',
                     appName: 'Tasks',
-                    defaultContainer: DefaultContainer
                 })
             ]
         }]
@@ -699,9 +687,9 @@ Egw.Tasks.EditDialog = function(task) {
 
 // generalised popup
 Egw.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
-   relatedApp: null,
-   relatedId: null,
-   identifier: null,
+   relatedApp: '',
+   relatedId: -1,
+   identifier: -1,
    
    name: 'TasksEditWindow',
    width: 700,
