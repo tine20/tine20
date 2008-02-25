@@ -50,8 +50,6 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     setValue: function(container){
     	this.container = container;
     	this.setRawValue(container.container_name);
-    	//Egw.widgets.container.selectionComboBox.superclass.setValue(container.container_name);
-    	//console.log(container);
     }
     
 });
@@ -100,8 +98,6 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         
         tree.on('click', function(_node) {
             if(_node.attributes.containerType == 'singleContainer') {
-                
-            	//this.TriggerField.container = _node.attributes.container;
                 this.TriggerField.setValue(_node.attributes.container);
                 w.hide();
             }
