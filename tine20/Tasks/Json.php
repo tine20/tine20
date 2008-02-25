@@ -145,6 +145,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     protected function _task2json($_task)
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_task->bypassFilters = true;
         $_task->container = Zend_Json::encode(Egwbase_Container_Container::getInstance()->getContainerById($_task->container)->toArray());
         return $_task->toArray();
     }

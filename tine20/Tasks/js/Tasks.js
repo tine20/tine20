@@ -21,6 +21,17 @@ Egw.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
 	
+    
+    // called after popups native onLoad
+	var setupPopupEvents = function(popup){
+		popup.Ext.onReady(function() {
+			popup.Egw.Tasks.EditPopupEventProxy.on('update', function(task) {
+				store.load({params: paging});
+			}, this);
+		}, this);
+	}
+	
+    
 	// define handlers
 	var handlers = {
 		editInPopup: function(_button, _event){
@@ -30,7 +41,15 @@ Egw.Tasks.TaskGrid = function(){
                 var task = selectedRows[0];
 				taskId = task.data.identifier;
 			}
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
+            var popup = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
+            
+            if (popup.addEventListener) {
+            	popup.addEventListener('load', function() {setupPopupEvents(popup);}, true);
+            } else if (popup.attachEvent) {
+            	popup.attachEvent('onload', function() {setupPopupEvents(popup);});
+            } else {
+            	popup.onload = function() {setupPopupEvents(popup);};
+            }
         },
 		deleteTaks: function(_button, _event){
 			Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected task(s)', function(_button) {
@@ -458,7 +477,7 @@ Egw.Tasks.TaskGrid = function(){
         		
 	    grid.on('newentry', function(taskData){
 	    	var selectedNode = tree.getSelectionModel().getSelectedNode();
-            taskData.container = selectedNode ? selectedNode.attributes.container.container_id : Egw.Tasks.DefaultContainer.container_id;
+            taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.container_id : Egw.Tasks.DefaultContainer.container_id;
 	        task = new Egw.Tasks.Task(taskData);
 
 	        Ext.Ajax.request({
@@ -504,6 +523,9 @@ Egw.Tasks.TaskGrid = function(){
 
 
 Egw.Tasks.EditDialog = function(task) {
+	// initialize event proxy
+	Egw.Tasks.EditPopupEventProxy = new Ext.ux.PopupEventProxy();
+	
 	if (!arguments[0]) {
 		task = {};
 	}
@@ -546,12 +568,7 @@ Egw.Tasks.EditDialog = function(task) {
 						//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
 		            },
 		            success: function(_result, _request) {
-						if (isTasks) {
-							MainScreen.TaskGrid.getStore().load({params: MainScreen.TaskGrid.getPaging()});
-						}
-		                if (closeWindow) {
-							window.setTimeout("window.close()", 400);
-						}
+		                
 						dlg.action_delete.enable();
 						// override task with returned data
 						task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
@@ -559,7 +576,14 @@ Egw.Tasks.EditDialog = function(task) {
 						
 						// update form with this new data
 						form.loadRecord(task);                    
-						Ext.MessageBox.hide();
+						Egw.Tasks.EditPopupEventProxy.fireEvent('update', task);
+
+						if (closeWindow) {
+							Egw.Tasks.EditPopupEventProxy.purgeListeners();
+                            window.setTimeout("window.close()", 1000);
+                        } else {
+                        	Ext.MessageBox.hide();
+                        }
 		            },
 		            failure: function ( result, request) { 
 		                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
@@ -582,11 +606,9 @@ Egw.Tasks.EditDialog = function(task) {
 	    					identifier: task.data.identifier
 	    				},
 	                    success: function(_result, _request) {
-							if (isTasks) {
-	                            MainScreen.TaskGrid.getStore().load({params: MainScreen.TaskGrid.getPaging()});
-	                        }
-	    					window.setTimeout("window.close()", 400);
-	                        //store.load({params: paging});
+	    					Egw.Tasks.EditPopupEventProxy.fireEvent('update', null);
+	    					Egw.Tasks.EditPopupEventProxy.purgeListeners();
+	    					window.setTimeout("window.close()", 1000);
 	                    },
 	                    failure: function ( result, request) { 
 	                        Ext.MessageBox.alert('Failed', 'Could not delete task(s).');
@@ -685,6 +707,15 @@ Egw.Tasks.EditDialog = function(task) {
         dlg.action_delete.enable();
     }
 };
+
+
+Ext.ux.PopupEventProxy = function() {
+    this.addEvents({
+        "update" : true,
+        "close" : true
+    });
+}
+Ext.extend(Ext.ux.PopupEventProxy, Ext.util.Observable);
 
 // fixes a task
 Egw.Tasks.fixTask = function(task) {
