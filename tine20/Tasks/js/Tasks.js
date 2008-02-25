@@ -21,17 +21,6 @@ Egw.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
 	
-    
-    // called after popups native onLoad
-	var setupPopupEvents = function(popup){
-		popup.Ext.onReady(function() {
-			popup.Egw.Tasks.EditPopupEventProxy.on('update', function(task) {
-				store.load({params: paging});
-			}, this);
-		}, this);
-	}
-	
-    
 	// define handlers
 	var handlers = {
 		editInPopup: function(_button, _event){
@@ -41,15 +30,17 @@ Egw.Tasks.TaskGrid = function(){
                 var task = selectedRows[0];
 				taskId = task.data.identifier;
 			}
-            var popup = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
+			popupWindow = new Egw.Tasks.EditPopup({
+				identifier: taskId
+                //relatedApp: 'tasks',
+                //relatedId: 
+            });
             
-            if (popup.addEventListener) {
-            	popup.addEventListener('load', function() {setupPopupEvents(popup);}, true);
-            } else if (popup.attachEvent) {
-            	popup.attachEvent('onload', function() {setupPopupEvents(popup);});
-            } else {
-            	popup.onload = function() {setupPopupEvents(popup);};
-            }
+            popupWindow.on('update', function(task) {
+            	store.load({params: paging});
+            }, this);
+            //var popup = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
+            
         },
 		deleteTaks: function(_button, _event){
 			Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected task(s)', function(_button) {
@@ -523,8 +514,6 @@ Egw.Tasks.TaskGrid = function(){
 
 
 Egw.Tasks.EditDialog = function(task) {
-	// initialize event proxy
-	Egw.Tasks.EditPopupEventProxy = new Ext.ux.PopupEventProxy();
 	
 	if (!arguments[0]) {
 		task = {};
@@ -576,10 +565,10 @@ Egw.Tasks.EditDialog = function(task) {
 						
 						// update form with this new data
 						form.loadRecord(task);                    
-						Egw.Tasks.EditPopupEventProxy.fireEvent('update', task);
+						window.ParentEventProxy.fireEvent('update', task);
 
 						if (closeWindow) {
-							Egw.Tasks.EditPopupEventProxy.purgeListeners();
+							window.ParentEventProxy.purgeListeners();
                             window.setTimeout("window.close()", 1000);
                         } else {
                         	Ext.MessageBox.hide();
@@ -606,8 +595,8 @@ Egw.Tasks.EditDialog = function(task) {
 	    					identifier: task.data.identifier
 	    				},
 	                    success: function(_result, _request) {
-	    					Egw.Tasks.EditPopupEventProxy.fireEvent('update', null);
-	    					Egw.Tasks.EditPopupEventProxy.purgeListeners();
+	    					window.ParentEventProxy.fireEvent('update', task);
+	    					window.ParentEventProxy.purgeListeners();
 	    					window.setTimeout("window.close()", 1000);
 	                    },
 	                    failure: function ( result, request) { 
@@ -708,14 +697,20 @@ Egw.Tasks.EditDialog = function(task) {
     }
 };
 
-
-Ext.ux.PopupEventProxy = function() {
-    this.addEvents({
-        "update" : true,
-        "close" : true
-    });
-}
-Ext.extend(Ext.ux.PopupEventProxy, Ext.util.Observable);
+// generalised popup
+Egw.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
+   relatedApp: null,
+   relatedId: null,
+   identifier: null,
+   
+   name: 'TasksEditWindow',
+   width: 700,
+   height: 300,
+   initComponent: function(){
+        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.identifier + '&linkingApp='+ this.relatedApp + 'crm&linkedId=' + this.relatedId;
+        Egw.Tasks.EditPopup.superclass.initComponent.call(this);
+   }
+});
 
 // fixes a task
 Egw.Tasks.fixTask = function(task) {

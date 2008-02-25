@@ -115,7 +115,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
             
         // temporary linking stuff
         if( !empty($linkingApp) && is_numeric($linkedId) ) {
-            Egwbase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), '');
+            Egwbase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), 'activity');
         }
 
         return $this->_task2json($outTask);
