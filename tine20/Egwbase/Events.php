@@ -37,7 +37,11 @@ class Egwbase_Events
                 }
                 if($controller instanceof Egwbase_Events_Interface) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . "calling eventhandler of $controllerName");
-                    $controller->handleEvents($_eventObject);
+                    try {
+                        $controller->handleEvents($_eventObject);
+                    } catch (Exception $e) {
+                        Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . "$controllerName throwed an exception");
+                    }
                 }
             }
         }
