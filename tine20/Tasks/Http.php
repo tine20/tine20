@@ -70,7 +70,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
      */
     public function editTask($taskId, $linkingApp=NULL, $linkedId=NULL)
     {
-        if($taskId) {
+        if($taskId > 0) {
             $tjs = new Tasks_Json();
             $task = Zend_Json::encode($tjs->getTask($taskId));
         } else {
