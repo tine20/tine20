@@ -704,28 +704,29 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function saveLead(Crm_Model_Lead $_lead)
     {
-        // do not convert timestamps, until we have changed the table layout to store iso dates
-        $leadData = $_lead->toArray();
-                
-        //error_log(print_r($leadData, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_lead->toArray(), true));
 
-        if(empty($leadData['lead_container'])) {
+        if(empty($_lead->lead_container)) {
             throw new UnderflowException('lead_container can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($leadData['lead_container'], Egwbase_Container_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->lead_container, Egwbase_Container_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead denied');
         }
 
-        if($leadData['lead_id'] === NULL) {
-            $result = $this->leadTable->insert($leadData);
-            $_lead->lead_id = $this->leadTable->getAdapter()->lastInsertId();
+        $leadArray = $_lead->toArray();
+        unset($leadArray['lead_id']);
+        
+        if(empty($_lead->lead_id)) {
+            $_lead->lead_id = $this->leadTable->insert($leadArray);
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new lead ' . $_lead->lead_id);
         } else {      
             $where  = array(
-                $this->leadTable->getAdapter()->quoteInto('lead_id = (?)', $leadData['lead_id']),
+                $this->leadTable->getAdapter()->quoteInto('lead_id = ?', $_lead->lead_id),
             );
 
-            $result = $this->leadTable->update($leadData, $where);
+            $result = $this->leadTable->update($_lead->toArray(), $where);
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' updated lead ' . $_lead->lead_id);
         }
 
         return $_lead;
