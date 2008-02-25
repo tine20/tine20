@@ -41,8 +41,8 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
         $view->setScriptPath('Egwbase/views');
         $view->formData = array();
         
-        $list = $locale->getTranslationList('Dateformat');
-        $view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
+        //$list = $locale->getTranslationList('dateformat');
+        //$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
 
         $crmJson = new Crm_Json;        
 //      $view->formData['config']['initialTree'] = $eventschedulerJson->getInitialTree('mainTree');
@@ -149,7 +149,8 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
         $_productSource =  $leads->getProductsAvailable('lead_productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
-        $view->jsIncludeFiles[] = 'Crm/js/Crm.js';
+        $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/Crm.js');
+        $view->jsIncludeFiles[] = self::_appendFileTime('Tasks/js/Tasks.js');
         $view->cssIncludeFiles[] = 'Crm/css/Crm.css';
         $view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';       
         $view->jsExecute = 'Egw.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';

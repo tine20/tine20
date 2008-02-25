@@ -318,7 +318,11 @@ Egw.Crm.Main = function(){
         
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId=' + _rowIndex[0].id, 700, 300);
+            
+            popupWindow = new Egw.Tasks.EditPopup({
+                relatedApp: 'crm',
+                relatedId: _rowIndex[0].id
+            });
         }    
     };
     
@@ -353,7 +357,8 @@ Egw.Crm.Main = function(){
             text: 'add task',
             handler: handler.handlerAddTask,
             iconCls: 'actionAddTask',
-            disabled: true
+            disabled: true,
+            scope: this
         })
     };
 
@@ -1270,6 +1275,7 @@ Egw.Crm.Main = function(){
         
         
         var handlerToggleDetails = function(toggle) {
+        	console.log(toggle.pressed);
             var gridView         = Ext.getCmp('gridCrm').getView();
             var gridColumnModell = Ext.getCmp('gridCrm').getColumnModel();
             
@@ -1382,17 +1388,15 @@ Egw.Crm.Main = function(){
                     menu: settingsToolbarMenu
                 },
                 '->',
-                {
+                new Ext.Button({
                     text: 'Show Details',
                     enableToggle: true,
                     id: 'crmShowDetailsButton',
                     iconCls: 'showDetailsAction',
-                    handler: handlerToggleDetails,                    
-                    pressed: false
-                    
-                },                    
+                    handler: handlerToggleDetails,
+                }),                    
                 ' ',
-                {
+                new Ext.Button({
                     text: 'Show closed leads',
                     enableToggle: true,
                     iconCls: 'showEndedLeadsAction',
@@ -1401,9 +1405,7 @@ Egw.Crm.Main = function(){
                         var dataStore = Ext.getCmp('gridCrm').getStore();
                         dataStore.reload();
                     },                    
-                    pressed: false
-                    
-                },
+                }),
                 'Search:  ', ' ',                
                 filterComboLeadstate,
                 ' ',
@@ -2207,9 +2209,17 @@ Egw.Crm.LeadEditDialog = function() {
         var  _add_task = new Ext.Action({
                 text: 'add task',
                 handler: function(){
-                    Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId=&linkingApp=crm&linkedId='+ _leadData.data.lead_id, 700, 300);
+                	popupWindow = new Egw.Tasks.EditPopup({
+                        relatedApp: 'crm',
+                        relatedId: _leadData.data.lead_id
+                	});
+                	
+                	popupWindow.on('update', function(task) {
+                		var index = st_activities.getCount();
+                		st_activities.insert(index, [task]);
+                	}, this);
                 },
-                iconCls: 'actionAdd',
+                iconCls: 'actionAddTask',
                 disabled: true
         });         
 
@@ -2239,9 +2249,22 @@ Egw.Crm.LeadEditDialog = function() {
         });               
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
-            var record = _grid.getStore().getAt(_rowIndex);            
-            Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+ record.data.identifier + '&linkingApp=&linkedId=', 700, 300);
-
+            var record = _grid.getStore().getAt(_rowIndex); 
+            popupWindow = new Egw.Tasks.EditPopup({
+                identifier: record.data.identifier
+            });
+            
+            popupWindow.on('update', function(task) {
+                // this is major bullshit!
+            	// it only works one time. The problem begind begins with the different record 
+            	// definitions here and in tasks...
+                var record = st_activities.getById(task.data.identifier);
+                var index = st_activities.indexOf(record);
+                st_activities.remove(record);
+                st_activities.insert(index, [task]);
+                st_activities.commitChanges();
+                
+            }, this);
         });
                
         var folderTrigger = new Ext.form.TriggerField({
@@ -2282,10 +2305,6 @@ Egw.Crm.LeadEditDialog = function() {
                 region: 'east',
                 autoScroll: true,
                 width: 300,
-                tbar: [
-                    '->',
-                    _add_task
-                 ],
                 items: [
                   new Ext.DataView({
                     tpl: ActivitiesTpl,       
@@ -2496,6 +2515,7 @@ Egw.Crm.LeadEditDialog = function() {
 // <<<  
         var leadEdit = new Egw.widgets.dialog.EditRecord({
             id : 'leadDialog',
+            tbarItems: [new Ext.Toolbar.Separator(), _add_task],
             handlerApplyChanges: handlerApplyChanges,
             handlerSaveAndClose: handlerSaveAndClose,
             handlerDelete: Egw.Crm.LeadEditDialog.Handler.handlerDelete,
@@ -2522,8 +2542,7 @@ Egw.Crm.LeadEditDialog = function() {
                 ]
             }]
         });
-
-
+        
         var viewport = new Ext.Viewport({
             layout: 'border',
             id: 'editViewport',
