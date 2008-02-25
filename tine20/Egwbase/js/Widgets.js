@@ -13,6 +13,10 @@ Ext.namespace('Egw.widgets');
 
 Ext.namespace('Egw.widgets.dialog');
 Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
+	/**
+	 * @cfg {array} additional toolbar items
+	 */
+	tbarItems: [],
 	labelAlign: 'top',
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -47,19 +51,26 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             disabled: true
         });
         
+        var genericButtons = [
+            this.action_saveAndClose,
+            this.action_applyChanges,
+            this.action_delete
+        ];
+        
+        this.tbarItems = genericButtons.concat(this.tbarItems);
+        
         this.tbar = new Ext.Toolbar({
             region: 'south',
             id: 'applicationToolbar',
             split: false,
             height: 26,
-            items: [
-                this.action_saveAndClose,
-                this.action_applyChanges,
-                this.action_delete
-            ]
+            items: this.tbarItems
         });
 		
 		Egw.widgets.dialog.EditRecord.superclass.initComponent.call(this);
+	},
+	getToolbar: function() {
+		return this.getTopToolbar();
 	}
 });
 
