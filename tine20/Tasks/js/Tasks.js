@@ -507,13 +507,14 @@ Egw.Tasks.EditDialog = function(task) {
 	if (!arguments[0]) {
 		task = {};
 	}
-    
 	// check if task app is running
 	var isTasks = window.opener.Egw.Tasks && window.opener.Egw.Tasks.TaskGrid.isRunning();
 	var MainScreen = isTasks ? window.opener.Egw.Tasks : null;
 	
-	// init task record    
+	// init task record 
     task = new Egw.Tasks.Task(task);
+    Egw.Tasks.fixTask(task);
+    
 	var DefaultContainer = Egw.Tasks.DefaultContainer;
 	if (isTasks) {
 		var selectedNode = MainScreen.TaskGrid.getTreePanel().getSelectionModel().getSelectedNode();
@@ -554,6 +555,8 @@ Egw.Tasks.EditDialog = function(task) {
 						dlg.action_delete.enable();
 						// override task with returned data
 						task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
+						Egw.Tasks.fixTask(task);
+						
 						// update form with this new data
 						form.loadRecord(task);                    
 						Ext.MessageBox.hide();
@@ -677,11 +680,21 @@ Egw.Tasks.EditDialog = function(task) {
     
     // load form with initial data
     dlg.getForm().loadRecord(task);
+    
     if(task.get('identifier') > 0) {
         dlg.action_delete.enable();
     }
 };
 
+// fixes a task
+Egw.Tasks.fixTask = function(task) {
+	if (task.data.container) {
+        task.data.container = Ext.util.JSON.decode(task.data.container);
+    }
+    if (task.data.due) {
+        task.data.due = Date.parseDate(task.data.due, 'c');
+    }
+}
 
 // Task model
 Egw.Tasks.Task = Ext.data.Record.create([

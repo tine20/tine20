@@ -65,8 +65,8 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
      */
     public function getTask($uid)
     {
-        
-        return $this->_backend->getTask($uid)->toArray();
+        $task = $this->_controller->getTask($uid);
+        return $this->_task2json($task);
     }
     
     /**
@@ -81,8 +81,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
         
         //error_log(print_r($newTask->toArray(),true));
         $outTask = $this->_controller->createTask($inTask);
-        $outTask->setTimezone($this->_userTimezone);
-        return $outTask->toArray();
+        return $this->_task2json($outTask);
     }
     
     /**
@@ -97,8 +96,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
         
         //error_log(print_r($newTask->toArray(),true));
         $outTask = $this->_controller->updateTask($inTask);
-        $outTask->setTimezone($this->_userTimezone);
-        return $outTask->toArray();
+        return $this->_task2json($outTask);
     }
     
     /**
@@ -110,20 +108,17 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     public function saveTask($task, $linkingApp, $linkedId)
     {
         $inTask = $this->_json2task($task);
-        
         //error_log(print_r($inTask->toArray(),true));
         $outTask = $inTask->getId() > 0 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
             
-        $outTask->setTimezone($this->_userTimezone);
-
         // temporary linking stuff
         if( !empty($linkingApp) && is_numeric($linkedId) ) {
             Egwbase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), '');
         }
 
-        return $outTask->toArray();
+        return $this->_task2json($outTask);
     }
     
     /**
@@ -132,13 +127,26 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
      * @param string JSON encoded task
      * @return Tasks_Model_Task task
      */
-    protected function _json2task($json) {
+    protected function _json2task($json)
+    {
         date_default_timezone_set($this->_userTimezone);
         $inTask = new Tasks_Model_Task(Zend_Json::decode($json));
         $inTask->setTimezone($this->_serverTimezone);
         date_default_timezone_set($this->_serverTimezone);
         
         return $inTask;
+    }
+    
+    /**
+     * returns task perpared for json transport
+     *
+     * @param Tasks_Model_Task $_task
+     */
+    protected function _task2json($_task)
+    {
+        $_task->setTimezone(Zend_Registry::get('userTimeZone'));
+        $_task->container = Zend_Json::encode(Egwbase_Container_Container::getInstance()->getContainerById($_task->container)->toArray());
+        return $_task->toArray();
     }
     
     /**

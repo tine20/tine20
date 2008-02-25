@@ -37,7 +37,6 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     protected $_tableNames = array(
         'tasks'     => 'tasks',
-        'related'   => 'tasks_related',
         'contact'   => 'tasks_contact',
         'tag'       => 'tasks_tag',
         'status'    => 'tasks_status',
@@ -183,12 +182,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         return $this->_db->select()
             ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
                 'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_identifier)',
-                'related' => 'GROUP_CONCAT(DISTINCT related.related_identifier)',
                 'tag'     => 'GROUP_CONCAT(DISTINCT tag.tag_identifier)',
                 'is_open' => 'status.status_is_open',
             ))
             ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
-            ->joinLeft(array('related' => $this->_tableNames['related']), 'tasks.identifier = related.task_identifier', array())
             ->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
             ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status = status.identifier', array())
             ->where('tasks.is_deleted = FALSE')
@@ -282,8 +279,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
 
             // modification log
             $modLogEntry = new Egwbase_Timemachine_Model_ModificationLog(array(
-                'application'          => 'Tasks',
-                'record_identifier'    => $_task->identifier,
+                'application'          => 'tasks',
+                'record_identifier'    => $_task->getId(),
                 'record_type'          => 'Tasks_Model_Task',
                 'record_backend'       => Tasks_Backend_Factory::SQL,
                 'modification_time'    => $taskParts['tasks']['last_modified_time'],
@@ -389,7 +386,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     protected function deleteDependentRows($_parentTaskId)
     {
         $deletedRows = 0;
-        foreach (array('contact', 'related', 'tag') as $table) {
+        foreach (array('contact', 'tag') as $table) {
             $TableObject = $this->getTableInstance($table);
             $deletedRows += $TableObject->delete(
                 $this->_db->quoteInto('task_identifier = ?', $_parentTaskId)
@@ -405,7 +402,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     protected function insertDependentRows($_taskParts)
     {
-        foreach (array('contact', 'related', 'tag') as $table) {
+        foreach (array('contact', 'tag') as $table) {
             if (!empty($_taskParts[$table])) {
                 $items = explode(',', $_taskParts[$table]);
                 $TableObject = $this->getTableInstance($table);
@@ -432,7 +429,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         $TableDescr = $this->getTableInstance('tasks')->info();
         $taskparts['tasks'] = array_intersect_key($taskArray, array_flip($TableDescr['cols']));
         
-        foreach (array('contact', 'related', 'tag') as $table) {
+        foreach (array('contact', 'tag') as $table) {
             if (!empty($taskArray[$table])) {
                 $taksparts[$table] = $taskArray[$table];
             }
