@@ -184,9 +184,47 @@ class Crm_Controller
         $result = $backend->getLeadstates($_sort, $_dir);
 
         return $result;    
-    }     
+    }
 
+    /**
+     * get one leadstate identified by id
+     *
+     * @return Crm_Model_Leadstate
+     */
+    public function getLeadState($_id)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
+        $result = $backend->getLeadState($_id);
 
+        return $result;    
+    }
+
+    /**
+     * get one leadsource identified by id
+     *
+     * @return Crm_Model_Leadsource
+     */
+    public function getLeadSource($_sourceId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
+        $result = $backend->getLeadSource($_sourceId);
+
+        return $result;    
+    }
+    
+    /**
+     * get one leadtype identified by id
+     *
+     * @return Crm_Model_Leadtype
+     */
+    public function getLeadType($_typeId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);       
+        $result = $backend->getLeadType($_typeId);
+
+        return $result;    
+    }
+    
     /**
      * delete products (belonging to one lead)
      *
@@ -262,14 +300,37 @@ class Crm_Controller
      */ 
     public function saveLead(Crm_Model_Lead $_lead)
     {
-        //$data = $_leadData->toArray();
-          
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         
-        $result = $backend->saveLead($_lead);
+        $updatedLead = $backend->saveLead($_lead);
         
-        return $result;
+        $this->sendNotifications((empty($_lead->lead_id) ? false : true), $updatedLead);
+        
+        return $updatedLead;
     }     
+    
+    protected function sendNotifications($_isUpdate, Crm_Model_Lead $_lead)
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Crm/views');
+        
+        $view->lead = $_lead;
+        $view->leadState = $this->getLeadState($_lead->lead_leadstate_id);
+        $view->leadType = $this->getLeadType($_lead->lead_leadtype_id);
+        $view->leadSource = $this->getLeadSource($_lead->lead_leadsource_id);
+        
+        $plain = $view->render('newLeadPlain.php');
+        $html = $view->render('newLeadHtml.php');
+        
+        if($_isUpdate === true) {
+            $subject = 'Lead updated: ' . $_lead->lead_name;
+        } else {
+            $subject = 'Lead added: ' . $_lead->lead_name;
+        }
+        
+        $notification = new Egwbase_Notification_Backend_Smtp();
+        $notification->send(Zend_Registry::get('currentAccount'), $subject, $plain, $html);
+    }
     
     public function getLead($_leadId)
     {

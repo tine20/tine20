@@ -365,7 +365,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
   
   
   
-	// handle LEADSTATES    
 	/**
 	* get Leadstates
 	*
@@ -377,7 +376,73 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
    
         return $result;
 	}    
-  
+
+	/**
+    * get leadstate identified by id
+    *
+    * @return Crm_Model_Leadstate
+    */
+    public function getLeadState($_stateId)
+    {   
+        $stateId = (int)$_stateId;
+        if($stateId != $_stateId) {
+            throw new InvalidArgumentException('$_stateId must be integer');
+        }
+        $rowSet = $this->leadStateTable->find($stateId);
+        
+        if(count($rowSet) == 0) {
+            // something bad happend
+        }
+        
+        $result = new Crm_Model_Leadstate($rowSet->current()->toArray());
+   
+        return $result;
+    }
+        
+    /**
+    * get leadtype identified by id
+    *
+    * @return Crm_Model_Leadtype
+    */
+    public function getLeadType($_typeId)
+    {   
+        $typeId = (int)$_typeId;
+        if($typeId != $_typeId) {
+            throw new InvalidArgumentException('$_typeId must be integer');
+        }
+        $rowSet = $this->leadTypeTable->find($typeId);
+        
+        if(count($rowSet) == 0) {
+            // something bad happend
+        }
+        
+        $result = new Crm_Model_Leadtype($rowSet->current()->toArray());
+   
+        return $result;
+    }
+        
+    /**
+    * get leadsource identified by id
+    *
+    * @return Crm_Model_Leadsource
+    */
+    public function getLeadSource($_sourceId)
+    {   
+        $sourceId = (int)$_sourceId;
+        if($sourceId != $_sourceId) {
+            throw new InvalidArgumentException('$_sourceId must be integer');
+        }
+        $rowSet = $this->leadSourceTable->find($sourceId);
+        
+        if(count($rowSet) == 0) {
+            // something bad happend
+        }
+        
+        $result = new Crm_Model_Leadsource($rowSet->current()->toArray());
+   
+        return $result;
+    }    
+    
 	/**
 	* add or updates an option
 	*
