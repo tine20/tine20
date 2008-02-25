@@ -341,8 +341,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             
             return $result;
         }
-            
-        //error_log(print_r($leadData->toArray(), true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
         
         $savedLead = Crm_Controller::getInstance()->saveLead($leadData);
         
