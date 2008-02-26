@@ -55,7 +55,8 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 					readGrant: true,
 					addGrant: false,
 					editGrant: false,
-					deleteGrant: false
+					deleteGrant: false,
+					adminGrant: false
 				}, account.data.accountId);
 				dataStore.addSorted(record);
 			}
@@ -145,29 +146,36 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             Ext.getCmp('AccountsActionApplyButton').enable();
         }, this);
         
-        var readColumn = new Ext.ux.grid.CheckColumn({
-            header: 'Read',
-            dataIndex: 'readGrant',
-            width: 55
-        });
-
-        var addColumn = new Ext.ux.grid.CheckColumn({
-            header: 'Add',
-            dataIndex: 'addGrant',
-            width: 55
-        });
+        var columns = [
+            new Ext.ux.grid.CheckColumn({
+                header: 'Read',
+                dataIndex: 'readGrant',
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: 'Add',
+                dataIndex: 'addGrant',
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: "Edit",
+                dataIndex: 'editGrant',
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: "Delete",
+                dataIndex: 'deleteGrant',
+                width: 55
+            })
+        ];
         
-        var editColumn = new Ext.ux.grid.CheckColumn({
-            header: "Edit",
-            dataIndex: 'editGrant',
-            width: 55
-        });
-        
-        var deleteColumn = new Ext.ux.grid.CheckColumn({
-            header: "Delete",
-            dataIndex: 'deleteGrant',
-            width: 55
-        });
+        if (this.grantContainer.container_type == 'shared') {
+            columns.push(new Ext.ux.grid.CheckColumn({
+                header: "Admin",
+                dataIndex: 'adminGrant',
+                width: 55
+            }));
+        }
         
         var columnModel = new Ext.grid.ColumnModel([
             {
@@ -177,13 +185,10 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
                 dataIndex: 'accountName', 
                 renderer: Egw.Egwbase.Common.usernameRenderer,
                 width: 70
-            },
-            readColumn,
-            addColumn,
-            editColumn,
-            deleteColumn
-        ]);
+            }].concat(columns)
+        );
 
+        
         columnModel.defaultSortable = true; // by default columns are sortable
         
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
@@ -215,7 +220,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            plugins:[readColumn, addColumn, editColumn, deleteColumn],
+            plugins: columns, // [readColumn, addColumn, editColumn, deleteColumn],
             autoExpandColumn: 'accountName',
             bbar: permissionsBottomToolbar,
             border: false
