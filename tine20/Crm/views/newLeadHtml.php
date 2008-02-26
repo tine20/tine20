@@ -1,8 +1,7 @@
-<h1> Leadname: <?php echo $this->lead->lead_name ?> </h1>
-<h2>Description:</h2>
+<h1><?php echo $this->lead->lead_name ?></h1>
 <?php echo nl2br($this->lead->lead_description) ?>
 
-<br><br>
+<br>
 
 <table>
   <tr>
@@ -19,15 +18,15 @@
   </tr>
   <tr>
     <td>Start</td>
-    <td><?php echo $this->lead->lead_start ?></td>
+    <td><?php echo $this->leadStart ?></td>
   </tr>
   <tr>
     <td>Scheduled end</td>
-    <td><?php echo $this->lead->lead_end_scheduled ?></td>
+    <td><?php echo $this->leadScheduledEnd ?></td>
   </tr>
   <tr>
     <td>End</td>
-    <td><?php echo $this->lead->lead_end ?></td>
+    <td><?php echo $this->leadEnd ?></td>
   </tr>
   <tr>
     <td>Turnover</td>
@@ -35,10 +34,10 @@
   </tr>
   <tr>
     <td>Probability</td>
-    <td><?php echo $this->lead->lead_probability ?></td>
+    <td><?php echo $this->lead->lead_probability ?>%</td>
   </tr>
   <tr>
     <td>Folder</td>
-    <td><?php echo $this->lead->lead_container ?></td>
+    <td><?php echo $this->container->container_name ?></td>
   </tr>
 </table>

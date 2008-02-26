@@ -31,7 +31,7 @@ class Crm_Controller
      *
      * @var Crm_Controller
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     /**
      * the singleton pattern
@@ -40,11 +40,11 @@ class Crm_Controller
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Crm_Controller;
+        if (self::$_instance === NULL) {
+            self::$_instance = new Crm_Controller;
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
 
 
@@ -309,6 +309,12 @@ class Crm_Controller
         return $updatedLead;
     }     
     
+    /**
+     * creates notification text and sends out notifications
+     *
+     * @param bool $_isUpdate set to true(lead got updated) or false(lead got added)
+     * @param Crm_Model_Lead $_lead
+     */
     protected function sendNotifications($_isUpdate, Crm_Model_Lead $_lead)
     {
         $view = new Zend_View();
@@ -318,6 +324,25 @@ class Crm_Controller
         $view->leadState = $this->getLeadState($_lead->lead_leadstate_id);
         $view->leadType = $this->getLeadType($_lead->lead_leadtype_id);
         $view->leadSource = $this->getLeadSource($_lead->lead_leadsource_id);
+        $view->container = Egwbase_Container_Container::getInstance()->getContainerById($_lead->lead_container);
+        
+        if(is_a($_lead->lead_start, 'Zend_Date')) {
+            $view->leadStart = $_lead->lead_start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        } else {
+            $view->leadStart = '-';
+        }
+        
+        if(is_a($_lead->lead_end, 'Zend_Date')) {
+            $view->leadEnd = $_lead->lead_end->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        } else {
+            $view->leadEnd = '-';
+        }
+        
+        if(is_a($_lead->lead_end_scheduled, 'Zend_Date')) {
+            $view->leadScheduledEnd = $_lead->lead_end_scheduled->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        } else {
+            $view->leadScheduledEnd = '-';
+        }
         
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
@@ -328,10 +353,16 @@ class Crm_Controller
             $subject = 'Lead added: ' . $_lead->lead_name;
         }
         
-        $notification = new Egwbase_Notification_Backend_Smtp();
+        $notification = Egwbase_Notification_Factory::getBackend(Egwbase_Notification_Factory::SMTP);
         $notification->send(Zend_Registry::get('currentAccount'), $subject, $plain, $html);
     }
     
+    /**
+     * get lead identified by leadId
+     *
+     * @param int $_leadId
+     * @return Crm_Model_Lead
+     */
     public function getLead($_leadId)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
