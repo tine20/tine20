@@ -450,7 +450,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $row = $this->contactsTable->fetchRow($where);
         
         if($row === NULL) {
-            throw new UnderFlowExecption('contact not found');
+            throw new UnderflowExecption('contact not found');
         }
         
         if(!Zend_Registry::get('currentAccount')->hasGrant($row->contact_owner, Egwbase_Container_Container::GRANT_READ)) {
