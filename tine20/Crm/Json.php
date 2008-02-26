@@ -508,7 +508,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                //$result['totalcount'] = $backend->getCountOfSharedLeads();
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $leadstate, $probability, $getClosedLeads);
             }
         }
 
@@ -536,13 +536,17 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-                
+        
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows;//->toArray();
-            //$result['totalcount'] = $backend->getCountOfOtherPeopleLeads();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfOtherPeopleLeads($filter, $leadstate, $probability, $getClosedLeads);
+            }
         }
 
         $this->getLinkedContacts($result['results']);
@@ -557,14 +561,10 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
      *
      * returns the data to be displayed in a ExtJS grid
      *
-     * @todo implement correc total count for lists
      * @param int $start
      * @param int $sort
      * @param string $dir
      * @param int $limit
-     * @param string $dateFrom
-     * @param string $datenTo
-     * @param string $options json encoded array of additional options
      * @return array
      */
     public function getAllLeads($filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
@@ -574,11 +574,13 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-   //     $getClosedLeads = ($getClosedLeads == 'true' ? TRUE : FALSE);
-
         if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']      = $rows->toArray();
-            $result['totalcount']   = count($result['results']);
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfAllLeads($filter, $leadstate, $probability, $getClosedLeads);
+            }
         }
 
         $this->getLinkedContacts($result['results']);
@@ -587,7 +589,12 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
   
     } 
     
-    public function getLinkedContacts(array &$_leads)
+    /**
+     * resolve contactIds to contactObjects
+     *
+     * @param array $_leads
+     */
+    protected function getLinkedContacts(array &$_leads)
     {
         $controller = Crm_Controller::getInstance();
         

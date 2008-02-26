@@ -941,23 +941,46 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }
 
+    /**
+     * create search filter
+     *
+     * @param string $_filter
+     * @param int $_leadstate
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return array
+     */
+    protected function _getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    {
+        $where = array();
+        
+        if(!empty($_filter)) {
+            $search_values = explode(" ", $_filter);
+            
+            foreach($search_values AS $search_value) {
+                $where[] = Zend_Registry::get('dbAdapter')->quoteInto('(lead_name LIKE ? OR lead_description LIKE ?)', '%' . $search_value . '%');                            
+            }
+        }
+        
+        if( is_numeric($_leadstate) && $_leadstate > 0 ) {
+            $where[] = $db->quoteInto('lead.lead_leadstate_id = ?', (int)$_leadstate);
+        }
+        
+        if( is_numeric($_probability) && $_probability > 0 ) {
+            $where[] = $db->quoteInto('lead_probability >= ?', (int)$_probability);
+        }       
 
+        if($_getClosedLeads === FALSE  || $_getClosedLeads == 'false') {
+            $where[] = 'lead_end IS NULL';
+        }
+        
+        return $where;
+    }
+    
     //handle for FOLDER->LEADS functions
     protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $where = $this->_addQuickSearchFilter($_where, $_filter);
-
-        if( is_numeric($_leadstate) && ($_leadstate > 0) ) {
-			$where[] = $this->leadTable->getAdapter()->quoteInto('lead.lead_leadstate_id = ?', $_leadstate);
-		}
-		
-		if( is_numeric($_probability) && ($_probability > 0) ) {
-			$where[] = $this->leadTable->getAdapter()->quoteInto('lead_probability >= ?', $_probability);
-		}		
-
-		if($_getClosedLeads === FALSE  || $_getClosedLeads == 'false') {
-		    $where[] = 'lead_end IS NULL';
-		}
+        $where = array_merge($_where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
 
         $db = Zend_Registry::get('dbAdapter');
 
@@ -965,11 +988,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             ->order($_sort.' '.$_dir)
             ->limit($_limit, $_start);
 
-        if(is_array($where)) {
-             foreach($where as $_where) {
-                  $select->where($_where);
-             }               
-        }
+         foreach($where as $whereStatement) {
+              $select->where($whereStatement);
+         }               
         //error_log($select->__toString());
        
         $stmt = $db->query($select);
@@ -977,14 +998,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $leads = new Egwbase_Record_RecordSet($rows, 'Crm_Model_Lead');
-
-
-
-        //$leadContacts = $this->getLeadContacts($leads);
-
-        //$leads->setContactData($leadContacts);
-
-        //error_log(print_r($leads));            
         
         return $leads;
     }   
@@ -992,6 +1005,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
      * get the basic select object to fetch contacts from the database 
      *
+     * @todo do we still need this function
      * @return Zend_Db_Select
      */
     protected function _getContactsSelectObject()
@@ -999,29 +1013,30 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-        ->from(array('links' => SQL_TABLE_PREFIX . 'links'), array(
-            'link_remark',
-            'link_id')
-        )
-        ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), 
+            ->from(array('links' => SQL_TABLE_PREFIX . 'links'), array(
+                'link_remark',
+                'link_id')
+            )
+            ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), 
                 'links.link_id2 = contacts.contact_id', array(
-                                    'contact_id',
-                                    'contact_owner',
-                                    'n_family',
-                                    'n_given',
-                                    'n_middle',
-                                    'n_prefix',
-                                    'n_suffix',
-                                    'n_fn',
-                                    'n_fileas',
-                                    'org_name',
-                                    'org_unit',
-                                    'adr_one_street',
-                                    'adr_one_locality',
-                                    'adr_one_region',
-                                    'adr_one_postalcode',
-                                    'adr_one_countryname')
-                );
+                    'contact_id',
+                    'contact_owner',
+                    'n_family',
+                    'n_given',
+                    'n_middle',
+                    'n_prefix',
+                    'n_suffix',
+                    'n_fn',
+                    'n_fileas',
+                    'org_name',
+                    'org_unit',
+                    'adr_one_street',
+                    'adr_one_locality',
+                    'adr_one_region',
+                    'adr_one_postalcode',
+                    'adr_one_countryname'
+                )
+            );
         
         return $select;
     }    
@@ -1029,31 +1044,32 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
      * get the basic select object to fetch leads from the database 
      *
+     * @todo do we need this join here
      * @return Zend_Db_Select
      */
     protected function _getLeadSelectObject()
     {
         $db = Zend_Registry::get('dbAdapter');
 
-        $select = $db->select()
-        ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
-            'lead_id',
-            'lead_name',
-            'lead_leadstate_id',
-            'lead_leadtype_id',
-            'lead_leadsource_id',
-            'lead_container',
-            'lead_start',
-            'lead_description',
-            'lead_end',
-            'lead_turnover',
-            'lead_probability',
-            'lead_end_scheduled')
-        )
-        ->join(array('state' => SQL_TABLE_PREFIX . 'metacrm_leadstate'), 
-                'lead.lead_leadstate_id = state.lead_leadstate_id');
-        
-        return $select;
+        $selectObject = $db->select()
+            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
+                'lead_id',
+                'lead_name',
+                'lead_leadstate_id',
+                'lead_leadtype_id',
+                'lead_leadsource_id',
+                'lead_container',
+                'lead_start',
+                'lead_description',
+                'lead_end',
+                'lead_turnover',
+                'lead_probability',
+                'lead_end_scheduled')
+            )
+            ->join(array('state' => SQL_TABLE_PREFIX . 'metacrm_leadstate'), 
+                    'lead.lead_leadstate_id = state.lead_leadstate_id');
+
+        return $selectObject;
     }
 
     protected function _addQuickSearchFilter($_where, $_filter)
@@ -1105,7 +1121,29 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
          
         return $result;
     }
+    
+    public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    {
+        $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
+        
+        
+        $containerIds = array();
+        
+        foreach($containers as $container) {
+            $containerIds[] = $container->container_id;
+        }
+        
+        $where = array(
+            $this->leadTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+        );
+        
+        $where = $this->_addQuickSearchFilter($where, $_filter);
+        
+        $result = $this->contactsTable->getTotalCount($where);
 
+        return $result;
+    }
+    
     /**
      * get total count of all leads from shared folders
      *
@@ -1113,9 +1151,13 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      *
      * @return int count of all other users leads
      */
-    public function getCountOfAllLeads($_filter)
+    public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
+
+        if(empty($allContainer)) {
+            return 0;
+        }
         
         $containerIds = array();
         
@@ -1127,7 +1169,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
         );
         
-        $where = $this->_addQuickSearchFilter($where, $_filter);
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
@@ -1207,19 +1249,27 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      *
      * @return int count of all other users leads
      */
-    public function getCountOfSharedLeads()
+    public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $allContainer = Egwbase_Container_Container::getInstance()->getSharedContainer('crm');
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->accountId, 'crm', Egwbase_Acl::READ, Egwbase_Acl::GROUP_GRANTS);
-
-        if(empty($acl)) {
-            return false;
+        if(empty($allContainer)) {
+            return 0;
         }
-
-        $groupIds = array_keys($acl);
-
-        $result = $this->leadTable->getCountByAcl($groupIds);
+        
+        $containerIds = array();
+        
+        foreach($allContainer as $container) {
+            $containerIds[] = $container->container_id;
+        }
+        
+        $where = array(
+            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+        );
+        
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        
+        $result = $this->leadTable->getTotalCount($where);
 
         return $result;
     }        
@@ -1259,19 +1309,27 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @return int count of all other users leads
      * 
      */
-    public function getCountOfOtherPeopleLeads()
+    public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $currentAccount = Zend_Registry::get('currentAccount');
+        $allContainer = Egwbase_Container_Container::getInstance()->getOtherUsersContainer('crm');
 
-        $acl = $this->egwbaseAcl->getGrants($currentAccount->accountId, 'crm', Egwbase_Acl::READ, Egwbase_Acl::ACCOUNT_GRANTS);
-
-        if(empty($acl)) {
-            return false;
+        if(empty($allContainer)) {
+            return 0;
         }
-
-        $groupIds = array_keys($acl);
-
-        $result = $this->leadTable->getCountByAcl($groupIds);
+        
+        $containerIds = array();
+        
+        foreach($allContainer as $container) {
+            $containerIds[] = $container->container_id;
+        }
+        
+        $where = array(
+            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+        );
+        
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        
+        $result = $this->leadTable->getTotalCount($where);
 
         return $result;
     }   
@@ -1283,6 +1341,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function createPersonalContainer()
     {
         $this->addFolder('Personal Leads', Egwbase_Container_Container::TYPE_PERSONAL);
-    } 
+    }
+     
     
 }

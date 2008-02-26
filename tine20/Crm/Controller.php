@@ -411,5 +411,41 @@ class Crm_Controller
     public function setLinkedTasks($_leadId, array $_taskIds)
     {
         Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'tasks', $_taskIds, '');
-    }    
+    }
+    
+    /**
+     * get total count of all leads
+     *
+     * @return int count of all leads
+     */
+    public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
+        return $backend->getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+    }
+
+    /**
+     * get total count of leads from shared folders
+     *
+     * @return int count of shared leads
+     */
+    public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
+        return $backend->getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+    }
+
+    /**
+     * get total count of leads from other users
+     *
+     * @return int count of shared leads
+     */
+    public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
+        return $backend->getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+    }
 }
