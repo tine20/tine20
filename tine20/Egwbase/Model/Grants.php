@@ -53,7 +53,7 @@ class Egwbase_Model_Grants extends Egwbase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
     {
         $this->_validators = array(
-            'accountId'   => array('Digits', 'presence' => 'required'),
+            'accountId'   => array('presence' => 'required', 'allowEmpty' => true),
             'accountName' => array('presence' => 'required'),
             'readGrant'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
