@@ -1659,12 +1659,9 @@ Egw.Crm.LeadEditDialog = function() {
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
         
-        // work arround nasty ext date bug
-        _leadData.lead_start         = _leadData.lead_start         ? Date.parseDate(_leadData.lead_start, 'c')         : _leadData.lead_start;
-        _leadData.lead_end           = _leadData.lead_end           ? Date.parseDate(_leadData.lead_end, 'c')           : _leadData.lead_end;
-        _leadData.lead_end_scheduled = _leadData.lead_end_scheduled ? Date.parseDate(_leadData.lead_end_scheduled, 'c') : _leadData.lead_end_scheduled;
-        
+
         _leadData = new Egw.Crm.Model.Lead(_leadData);
+        Egw.Crm.Model.Lead.FixDates(_leadData);
         
         var disableButtons = true;
 
@@ -1697,16 +1694,13 @@ Egw.Crm.LeadEditDialog = function() {
             //selectOnFocus:true            
         }); 
  
- 
         var combo_leadstatus = new Ext.form.ComboBox({
                 fieldLabel:'leadstate', 
                 id:'leadstatus',
-                name:'leadstate',
-                hiddenName:'lead_leadstate_id',
+                name:'lead_leadstate_id',
                 store: Egw.Crm.LeadEditDialog.Stores.getLeadStatus(),
                 displayField:'value',
                 valueField:'key',
-                //typeAhead: true,
                 mode: 'local',
                 triggerAction: 'all',
                 editable: false,
@@ -1715,7 +1709,7 @@ Egw.Crm.LeadEditDialog = function() {
                 forceSelection: true,
                 anchor:'95%'    
         });
-    
+        
         combo_leadstatus.on('select', function(combo, record, index) {
             if (record.data.probability !== null) {
                 var combo_probability = Ext.getCmp('combo_probability');
@@ -1723,7 +1717,7 @@ Egw.Crm.LeadEditDialog = function() {
             }
 
             if (record.data.endslead == '1') {
-                var combo_endDate = Ext.getCmp('_lead_end');
+                var combo_endDate = Ext.getCmp('lead_end');
                 combo_endDate.setValue(new Date());
             }
         });
@@ -1731,8 +1725,7 @@ Egw.Crm.LeadEditDialog = function() {
         var combo_leadtyp = new Ext.form.ComboBox({
             fieldLabel:'leadtype', 
             id:'leadtype',
-            name:'lead_leadtyp',
-            hiddenName:'lead_leadtype_id',
+            name:'lead_leadtype_id',
             store: Egw.Crm.LeadEditDialog.Stores.getLeadType(),
             mode: 'local',
             displayField:'value',
@@ -1745,7 +1738,6 @@ Egw.Crm.LeadEditDialog = function() {
             forceSelection: true,
             anchor:'95%'    
         });
-        combo_leadtyp.setValue('1');
     
 
         var st_leadsource = new Ext.data.JsonStore({
@@ -1762,8 +1754,7 @@ Egw.Crm.LeadEditDialog = function() {
         var combo_leadsource = new Ext.form.ComboBox({
                 fieldLabel:'leadsource', 
                 id:'leadsource',
-                name:'lead_leadsource',
-                hiddenName:'lead_leadsource_id',
+                name:'lead_leadsource_id',
                 store: st_leadsource,
                 displayField:'value',
                 valueField:'key',
@@ -1776,7 +1767,6 @@ Egw.Crm.LeadEditDialog = function() {
                 forceSelection: true,
                 anchor:'95%'    
         });
-        combo_leadsource.setValue('1');
 
         var st_activities = Egw.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
      
@@ -1810,9 +1800,7 @@ Egw.Crm.LeadEditDialog = function() {
         
         var date_scheduledEnd = new Ext.form.DateField({
             fieldLabel:'estimated end', 
-            //name:'lead_end_scheduled',
             id:'lead_end_scheduled',
-            //    format:formData.config.dateFormat, 
             format: 'd.m.Y',
             anchor:'95%'
         });
@@ -1820,9 +1808,7 @@ Egw.Crm.LeadEditDialog = function() {
         var date_end = new Ext.form.DateField({
             xtype:'datefield',
             fieldLabel:'end', 
-            //name:'lead_end',
             id:'lead_end',
-            //       format:formData.config.dateFormat, 
             format: 'd.m.Y',
             anchor:'95%'
         });
@@ -2311,8 +2297,7 @@ Egw.Crm.LeadEditDialog = function() {
                     cls: 'productSummary',
                     disabled: true,
                     selectOnFocus: true,
-                    anchor:'100%'//,
-//                    value: formData.values.productSummary
+                    anchor:'100%'
                 }, {
                     xtype: 'tabpanel',
                     id: 'contactsPanel',
@@ -2377,19 +2362,15 @@ Egw.Crm.LeadEditDialog = function() {
             ]
         };
   
-// >>>  
-  
       var handlerApplyChanges = function(_button, _event) 
         {
             //var grid_products          = Ext.getCmp('grid_choosenProducts');
 
             var closeWindow = arguments[2] ? arguments[2] : false;
             var leadForm = Ext.getCmp('leadDialog').getForm();
-            leadForm.render();
             
             if(leadForm.isValid()) {  
                 Ext.MessageBox.wait('please wait', 'saving lead...');                
-           
                 leadForm.updateRecord(_leadData);
                 
                 var additionalData = _getAdditionalData();
@@ -2412,11 +2393,14 @@ Egw.Crm.LeadEditDialog = function() {
                         if (closeWindow) {
                             window.setTimeout("window.close()", 400);
                         }
+                        
+                        // fill form with returned lead
+                        _leadData = new Egw.Crm.Model.Lead(Ext.util.JSON.decode(_result.responseText));
+                        Egw.Crm.Model.Lead.FixDates(_leadData);
+                        leadForm.loadRecord(_leadData);
+                        
                         //dlg.action_delete.enable();
-                        // override task with returned data
-                        //task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
-                        // update form with this new data
-                        //form.loadRecord(task);                    
+                        _add_task.enable();
                         Ext.MessageBox.hide();
                     },
                     failure: function ( result, request) { 
@@ -2434,7 +2418,6 @@ Egw.Crm.LeadEditDialog = function() {
             handlerApplyChanges(_button, _event, true);
         };  
   
-// <<<  
         var leadEdit = new Egw.widgets.dialog.EditRecord({
             id : 'leadDialog',
             tbarItems: [new Ext.Toolbar.Separator(), _add_task],
@@ -2478,7 +2461,6 @@ Egw.Crm.LeadEditDialog = function() {
         Egw.Crm.LeadEditDialog.Stores.getContactsInternal(_leadData.data.contactsInternal);       
         Egw.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
         
-      
         leadEdit.getForm().loadRecord(_leadData);
             
         Ext.getCmp('editViewport').on('afterlayout',function(container) {
@@ -2603,48 +2585,6 @@ Egw.Crm.LeadEditDialog = function() {
         Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
         
     };
-/*
-    var _setLeadDialogValues = function(_formData) {        
-        var form = Ext.getCmp('leadDialog').getForm();
-
-        var myReader = new Ext.data.JsonStore({
-            root: 'rows',
-            fields:[
-                {name: 'lead_id', type: 'int'},
-                {name: 'lead_name', type: 'string'},
-                {name: 'lead_leadstate_id', type: 'int'},
-                {name: 'lead_leadtype_id', type: 'int'},
-                {name: 'lead_leadsource_id', type: 'int'},
-                {name: 'lead_container', type: 'int'},
-                {name: '_lead_start', mapping: 'lead_start', type: 'date', dateFormat: 'c'},
-                {name: 'lead_description', type: 'string'},
-                {name: '_lead_end', mapping: 'lead_end', type: 'date', dateFormat: 'c'},
-                {name: 'lead_turnover', type: 'int'},
-                {name: 'lead_probability', type: 'int'},
-                {name: '_lead_end_scheduled', mapping: 'lead_end_scheduled', type: 'date', dateFormat: 'c'}
-            ] 
-        });
-        
-        myReader.loadData({'rows': [_formData.values]});
-        
-        var leadRecord = myReader.getAt(0);
-        
-        if(typeof(leadRecord.data._lead_start) != 'object') {
-            leadRecord.data._lead_start = new Date();
-        }
-        
-        form.setValues(leadRecord.data);
-
-        form.findField('lead_container_name').setValue(_formData.config.folderName);
-        
-        if (formData.values.lead_id > 0) {
-            action_applyChanges.enable();
-            action_delete.enable();
-        }
-        
-        return;
-    };
-*/
 
         // public functions and variables
     return {
@@ -2658,7 +2598,7 @@ Egw.Crm.LeadEditDialog.Handler = function() {
     return { 
         removeContact: function(_button, _event) 
         {
-console.log('remove contact');           
+            //console.log('remove contact');           
             var currentContactsTab = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab();
             
             var selectedRows = currentContactsTab.getSelectionModel().getSelections();
@@ -3078,6 +3018,7 @@ Egw.Crm.LeadEditDialog.Stores = function() {
         getActivities: function (_tasks){     
             var store = new Ext.data.JsonStore({
                 id: 'identifier',
+                //fields: Egw.Tasks.Task
                 fields: [
                     {name: 'identifier'},
                     {name: 'container'},
@@ -3101,6 +3042,7 @@ Egw.Crm.LeadEditDialog.Stores = function() {
                     {name: 'summaray'},
                     {name: 'url'},
                     
+                    // temporary extra props
                     {name: 'creator'},
                     {name: 'modifier'},
                     {name: 'status_realname'}
@@ -3168,3 +3110,10 @@ Egw.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'lead_customer'},
     {name: 'lead_lead_detail'}  
 ]);
+// work arround nasty ext date bug
+Egw.Crm.Model.Lead.FixDates = function(lead) {
+    lead.data.lead_start         = lead.data.lead_start         ? Date.parseDate(lead.data.lead_start, 'c')         : lead.data.lead_start;
+    lead.data.lead_end           = lead.data.lead_end           ? Date.parseDate(lead.data.lead_end, 'c')           : lead.data.lead_end;
+    lead.data.lead_end_scheduled = lead.data.lead_end_scheduled ? Date.parseDate(lead.data.lead_end_scheduled, 'c') : lead.data.lead_end_scheduled;
+}
+        
