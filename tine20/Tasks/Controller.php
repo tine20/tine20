@@ -234,30 +234,41 @@ class Tasks_Controller implements Tasks_Backend_Interface
     }
     
     /**
-     * temporaray function to get a default container
+     * temporaray function to get a default container]
      * 
+     * @param string $_referingApplication
      * @return Egwbase_Model_Container container
      */
-    public function getDefaultContainer()
+    public function getDefaultContainer($_referingApplication = 'tasks')
     {
-        $containers = Egwbase_Container_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
-
-        if($containers->count() == 0) {
-            $allGrants = array(
-                Egwbase_Container_Container::GRANT_ADD,
-                Egwbase_Container_Container::GRANT_ADMIN,
-                Egwbase_Container_Container::GRANT_DELETE,
-                Egwbase_Container_Container::GRANT_EDIT,
-                Egwbase_Container_Container::GRANT_READ
-            );
-            
-            $containerId = Egwbase_Container_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Egwbase_Container_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
-            Egwbase_Container_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
-            
-            return Egwbase_Container_Container::getInstance()->getContainerById($containerId);
+        $taskConfig = Zend_Registry::get('configFile')->tasks;
+        $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
+        
+        if (isset($taskConfig->$configString)) {
+            $defaultContainer = Egwbase_Container_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
-            return $containers[0];
+            
+            $containers = Egwbase_Container_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
+
+            if($containers->count() > 0) {
+            	$defaultContainer = $containers[0];
+            
+            } else {
+	            $allGrants = array(
+	                Egwbase_Container_Container::GRANT_ADD,
+	                Egwbase_Container_Container::GRANT_ADMIN,
+	                Egwbase_Container_Container::GRANT_DELETE,
+	                Egwbase_Container_Container::GRANT_EDIT,
+	                Egwbase_Container_Container::GRANT_READ
+	            );
+	            
+	            $containerId = Egwbase_Container_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Egwbase_Container_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
+	            Egwbase_Container_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
+	            
+	            $defaultContainer = Egwbase_Container_Container::getInstance()->getContainerById($containerId);
+            }
         }
+    return $defaultContainer;
     }
     
     /**

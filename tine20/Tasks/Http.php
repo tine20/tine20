@@ -79,23 +79,12 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
         } else {
         	// prepare initial data (temporary, this should become part of json interface)
         	$newTask = new Tasks_Model_Task(array(), true);
-        	$defaultContainer = Tasks_Controller::getInstance()->getDefaultContainer();
+        	$newTask->container = Zend_Json::encode(Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray());
         	
-        	// prefs to be implemented :-)
-        	$containerPref = array(
-        	    'tasks'       => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
-        	    'addressbook' => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
-        	    'calendar'    => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
-        	    'crm'         => Egwbase_Container_Container::getInstance()->getContainerById($defaultContainer->getId()),
-        	);
-        	
-        	$app = $linkingApp ? $linkingApp : 'tasks';
-        	$defaultContainer = array_key_exists($app, $containerPref) ? $containerPref[$app] : $defaultContainer;
-            $newTask->container = Zend_Json::encode($defaultContainer->toArray());
-            
-            $task = Zend_Json::encode($newTask->toArray());
-            
+        	$task = Zend_Json::encode($newTask->toArray());
         }
+        
+        
         $view = new Zend_View();
          
         $view->setScriptPath('Egwbase/views');

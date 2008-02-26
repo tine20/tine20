@@ -24,7 +24,7 @@ Egw.Tasks.TaskGrid = function(){
 	// define handlers
 	var handlers = {
 		editInPopup: function(_button, _event){
-			var taskId = '';
+			var taskId = -1;
 			if (_button.actionType == 'edit') {
 			    var selectedRows = grid.getSelectionModel().getSelections();
                 var task = selectedRows[0];
