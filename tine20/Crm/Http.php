@@ -41,9 +41,6 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
         $view->setScriptPath('Egwbase/views');
         $view->formData = array();
         
-        //$list = $locale->getTranslationList('dateformat');
-        //$view->formData['config']['dateFormat'] = str_replace(array('dd', 'MMMM', 'MMM','MM','yyyy','yy'), array('d','F','M','m','Y','y'), $list['long']);
-
         $crmJson = new Crm_Json;        
 //      $view->formData['config']['initialTree'] = $eventschedulerJson->getInitialTree('mainTree');
 

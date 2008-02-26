@@ -456,37 +456,7 @@ Egw.Crm.Main = function(){
             root: 'results',
             totalProperty: 'totalcount',
             id: 'lead_id',
-            fields: [
-                {name: 'lead_id'},            
-                {name: 'lead_name'},
-                {name: 'lead_leadstate_id'},
-                {name: 'lead_leadtype_id'},
-                {name: 'lead_leadsource_id'},
-                {name: 'lead_container'},
-                {name: 'lead_modifier'},
-                {name: 'lead_start'},
-                {name: 'lead_modified'},
-                {name: 'lead_description'},
-                {name: 'lead_end'},
-                {name: 'lead_turnover'},
-                {name: 'lead_probability'},
-                {name: 'lead_end_scheduled'},
-                {name: 'lead_lastread'},
-                {name: 'lead_lastreader'},
-                
-                {name: 'lead_leadstate'},
-                {name: 'lead_leadtype'},
-                {name: 'lead_leadsource'},
-                
-                {name: 'lead_partner_linkId'},
-                {name: 'lead_partner'},
-                {name: 'lead_partner_detail'},                
-                {name: 'lead_lead_linkId'},
-                {name: 'lead_customer'},
-                {name: 'lead_lead_detail'}               
-
-  
-            ],
+            fields: Egw.Crm.Model.Lead,
             // turn on remote sorting
             remoteSort: true
         });
@@ -1688,35 +1658,26 @@ Egw.Crm.LeadEditDialog = function() {
 
         // turn on validation errors beside the field globally
         Ext.form.Field.prototype.msgTarget = 'side';
-
-        _leadData = new Egw.Crm.LeadEditDialog.Lead(_leadData);
-
+        
+        // work arround nasty ext date bug
+        _leadData.lead_start         = _leadData.lead_start         ? Date.parseDate(_leadData.lead_start, 'c')         : _leadData.lead_start;
+        _leadData.lead_end           = _leadData.lead_end           ? Date.parseDate(_leadData.lead_end, 'c')           : _leadData.lead_end;
+        _leadData.lead_end_scheduled = _leadData.lead_end_scheduled ? Date.parseDate(_leadData.lead_end_scheduled, 'c') : _leadData.lead_end_scheduled;
+        
+        _leadData = new Egw.Crm.Model.Lead(_leadData);
+        
         var disableButtons = true;
-     /*   if(formData.values) {
-            disableButtons = false;
-        }       
-      */  
-      
 
-        var _setParameter = function(_dataSource)
-        {
+        var _setParameter = function(_dataSource) {
             _dataSource.baseParams.method = 'Crm.getEvents';
             _dataSource.baseParams.options = Ext.encode({
             });
         };
-  
-  
  
         var _editHandler = function(_button, _event) {
-        
             editWindow.show();
-                
         }; 
 
-        function formatDate(value){
-            return value ? value.dateFormat('M d, Y') : '';
-        }
-    
         var _action_edit = new Ext.Action({
             text: 'editieren',
             //disabled: true,
@@ -1842,9 +1803,7 @@ Egw.Crm.LeadEditDialog = function() {
             fieldLabel:'start', 
             allowBlank:false,
             id:'lead_start',             
-            format: 'c',
-            altFormat:'Y-m-d',
-            altFormat:'d.m.Y',
+            format: 'd.m.Y',
             anchor:'95%'
         });
 
@@ -1854,9 +1813,7 @@ Egw.Crm.LeadEditDialog = function() {
             //name:'lead_end_scheduled',
             id:'lead_end_scheduled',
             //    format:formData.config.dateFormat, 
-            format: 'c',
-            altFormat:'Y-m-d',
-            altFormat:'d.m.Y',
+            format: 'd.m.Y',
             anchor:'95%'
         });
         
@@ -1866,9 +1823,7 @@ Egw.Crm.LeadEditDialog = function() {
             //name:'lead_end',
             id:'lead_end',
             //       format:formData.config.dateFormat, 
-            format: 'c',
-            altFormat:'Y-m-d',
-            altFormat:'d.m.Y',
+            format: 'd.m.Y',
             anchor:'95%'
         });
 
@@ -3182,18 +3137,34 @@ Egw.Crm.LeadEditDialog.Stores = function() {
     };
 }();
 
-Egw.Crm.LeadEditDialog.Lead = Ext.data.Record.create([
-    // egw record fields
-    {name: 'lead_id', type: 'int'},
-    {name: 'lead_name', type: 'string'},
-    {name: 'lead_leadstate_id', type: 'int'},
-    {name: 'lead_leadtype_id', type: 'int'},
+// models
+Egw.Crm.Model = {};
+
+// lead
+Egw.Crm.Model.Lead = Ext.data.Record.create([
+    {name: 'lead_id',            type: 'int'},
+    {name: 'lead_name',          type: 'string'},
+    {name: 'lead_leadstate_id',  type: 'int'},
+    {name: 'lead_leadtype_id',   type: 'int'},
     {name: 'lead_leadsource_id', type: 'int'},
-    {name: 'lead_container', type: 'int'},
-    {name: '_lead_start', mapping: 'lead_start', type: 'date', dateFormat: 'c'},
-    {name: 'lead_description', type: 'string'},
-    {name: '_lead_end', mapping: 'lead_end', type: 'date', dateFormat: 'c'},
-    {name: 'lead_turnover', type: 'int'},
-    {name: 'lead_probability', type: 'int'},
-    {name: '_lead_end_scheduled', mapping: 'lead_end_scheduled', type: 'date', dateFormat: 'c'} 
+    {name: 'lead_container',     type: 'int'},
+    {name: 'lead_modifier',      type: 'int'},
+    {name: 'lead_start',         type: 'date', dateFormat: 'c'},
+    {name: 'lead_modified'},
+    {name: 'lead_description',   type: 'string'},
+    {name: 'lead_end',           type: 'date', dateFormat: 'c'},
+    {name: 'lead_turnover',      type: 'int'},
+    {name: 'lead_probability',   type: 'int'},
+    {name: 'lead_end_scheduled', type: 'date', dateFormat: 'c'},
+    {name: 'lead_lastread'},
+    {name: 'lead_lastreader'},
+    {name: 'lead_leadstate'},
+    {name: 'lead_leadtype'},
+    {name: 'lead_leadsource'},
+    {name: 'lead_partner_linkId'},
+    {name: 'lead_partner'},
+    {name: 'lead_partner_detail'},                
+    {name: 'lead_lead_linkId'},
+    {name: 'lead_customer'},
+    {name: 'lead_lead_detail'}  
 ]);
