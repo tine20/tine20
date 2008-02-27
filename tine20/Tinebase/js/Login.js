@@ -37,7 +37,7 @@ TINENameSpace.Login = function() {
                 inputType: 'password',
                 fieldLabel: 'Password',
                 name: 'password',
-                allowBlank:false,
+                //allowBlank: false,
                 value: _defaultPassword,
                 width:225
             }],
