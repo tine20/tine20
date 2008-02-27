@@ -1334,7 +1334,7 @@ Tine.Crm.Main = function(){
                 }),                    
                 ' ',
                 new Ext.Button({
-                    text: 'Show closed leads',
+                    text: 'Show closed',
                     enableToggle: true,
                     iconCls: 'showEndedLeadsAction',
                     id: 'crmShowClosedLeadsButton',
