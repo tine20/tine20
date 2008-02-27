@@ -42,9 +42,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		    $encodedContact = $contact->toArray();
 
 		    $addressbook = Egwbase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
-			
-			$view->formData['config']['addressbookName']   = $addressbook->container_name;
-			$view->formData['config']['addressbookRights'] = $addressbook->account_grants;
+			$encodedContact['contact_owner'] = $addressbook->toArray();
 
 			if(!empty($contact->adr_one_countryname)) {
 			    $encodedContact['adr_one_countrydisplayname'] = $locale->getCountryTranslation($contact->adr_one_countryname);
@@ -56,15 +54,13 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		} else {
 		    $personalAddressbooks = $addresses->getAddressbooksByOwner($currentAccount->accountId);
 		    foreach($personalAddressbooks as $addressbook) {
-    		    $encodedContact = Zend_Json::encode(array('contact_owner' => $addressbook->container_id));
-    		    $view->formData['config']['addressbookName']   = $addressbook->container_name;
-    		    $view->formData['config']['addressbookRights'] = 31;
+    		    $encodedContact = Zend_Json::encode(array('contact_owner' => $addressbook->toArray()));
                 break;
 		    }
 		}
 		
-		$view->jsIncludeFiles[] = 'Addressbook/js/Addressbook.js';
-		$view->cssIncludeFiles[] = 'Addressbook/css/Addressbook.css';
+		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/Addressbook.js');
+		$view->cssIncludeFiles[] = self::_appendFileTime('Addressbook/css/Addressbook.css');
 		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         
 		$view->configData = array(

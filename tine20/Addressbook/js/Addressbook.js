@@ -35,50 +35,6 @@ Egw.Addressbook = {
     }
 }
 
-Egw.Addressbook.Shared = {
-    /**
-     * displays the addressbook select dialog
-     */
-    displayAddressbookSelectDialog: function(_fieldName){         
-            
-        var addressBookDialog = new Ext.Window({
-            title: 'please select addressbook',
-            modal: true,
-            width: 375,
-            height: 400,
-            minWidth: 375,
-            minHeight: 400,
-            layout: 'fit',
-            plain:true,
-            bodyStyle:'padding:5px;',
-            buttonAlign:'center'
-        });         
-        
-        var treePanel =  new Egw.widgets.container.TreePanel({
-            id: 'Addressbook_Tree',
-            iconCls: 'AddressbookTreePanel',
-            title: 'Contacts',
-            itemName: 'contacts',
-            folderName: 'addressbook',
-            appName: 'Addressbook',
-            border: false
-        });
-        
-        treePanel.on('click', function(_node) {
-            //console.log(_node);
-            if(_node.attributes.containerType == 'singleContainer') {                
-                Ext.getCmp(_fieldName).setValue(_node.attributes.container.container_id);
-                Ext.getCmp(_fieldName + '_name').setValue(_node.text);
-                addressBookDialog.hide();
-            }
-        }, this);
-
-        addressBookDialog.add(treePanel);
-
-        addressBookDialog.show();
-    }
-}; // end of application
-
 Egw.Addressbook.Main = {
 	actions: {
 	    addContact: null,
@@ -521,14 +477,14 @@ Egw.Addressbook.ContactEditDialog = {
                 fieldLabel:'Suffix', 
                 name:'n_suffix',
                 anchor:'95%'
-            }, 
-            new Ext.form.TriggerField({
-	            fieldLabel:'Addressbook', 
-	            id: 'contact_owner_name',
-	            anchor:'95%',
-	            allowBlank: false,
-	            readOnly:true
-	        })]
+            },
+            new Egw.widgets.container.selectionComboBox({
+                fieldLabel:'Addressbook',
+                name: 'contact_owner',
+                anchor:'95%',
+                itemName: 'Addressbook',
+                appName: 'Addressbook'
+            })]
         }, {
             columnWidth:.4,
             layout: 'form',
@@ -827,10 +783,6 @@ Egw.Addressbook.ContactEditDialog = {
             items: this.editContactDialog
         });
 
-        Ext.getCmp('contact_owner_name').onTriggerClick = function(_eventObject) {
-            Egw.Addressbook.Shared.displayAddressbookSelectDialog('contact_owner');
-        };
-        
         var viewport = new Ext.Viewport({
             layout: 'border',
             frame: true,
@@ -838,11 +790,10 @@ Egw.Addressbook.ContactEditDialog = {
         });
 
         this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(formData.config.addressbookRights);
+        this.updateToolbarButtons(_contactData.contact_owner.account_grants);
+        
         dialog.getForm().loadRecord(this.contactRecord);
         
-        dialog.getForm().findField('contact_owner_name').setRawValue(formData.config.addressbookName);
-
         if(this.contactRecord.data.adr_one_countrydisplayname) {
             //console.log('set adr_one_countryname to ' + this.contactRecord.data.adr_one_countrydisplayname);
             dialog.getForm().findField('adr_one_countryname').setRawValue(this.contactRecord.data.adr_one_countrydisplayname);
