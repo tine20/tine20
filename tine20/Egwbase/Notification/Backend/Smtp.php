@@ -36,8 +36,10 @@ class Egwbase_Notification_Backend_Smtp
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         
         $mail->setFrom($this->_fromAddress, $this->_fromName);
-        
-        if($_recipient->accountEmailAddress) {
+
+        if(!empty($_recipient->accountEmailAddress)) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->accountEmailAddress);
+
             $mail->addTo($_recipient->accountEmailAddress, $_recipient->accountDisplayName);
         
             $mail->send();
