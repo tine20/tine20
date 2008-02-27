@@ -49,10 +49,10 @@ class Egwbase_Notification
         return self::$_instance;
     }
     
-    public function send(Egwbase_Record_RecordSet $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Egwbase_Account_Model_FullAccount $_updater, Egwbase_Record_RecordSet $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
         foreach($_recipients as $recipient) {
-            $this->_smtpBackend->send($recipient, $_subject, $_messagePlain, $_messageHtml);
+            $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml);
         }
     }
 }
