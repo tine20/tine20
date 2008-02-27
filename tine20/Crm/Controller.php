@@ -356,7 +356,7 @@ class Crm_Controller
         
         // send notifications to all accounts in the first step
         $accounts = Egwbase_Account::getInstance()->getFullAccounts();
-        Egwbase_Notification::getInstance()->send($accounts, $subject, $plain, $html);
+        Egwbase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
     }
     
     /**
