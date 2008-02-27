@@ -191,7 +191,7 @@ class Egwbase_Controller
 
         Zend_Registry::set('logger', $logger);
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . ' logger initialized');
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
     }
     
     /**
