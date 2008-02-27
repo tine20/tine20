@@ -21,9 +21,9 @@ class Egwbase_Notification_Backend_Smtp
         $this->_fromAddress = 'webmaster@tine20.org';
     }
     
-    public function send($_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send($_updater, $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
-        $mail = new Zend_Mail('UTF-8');
+        $mail = new Egwbase_Mail('UTF-8');
         
         $mail->setSubject($_subject);
         
@@ -35,7 +35,12 @@ class Egwbase_Notification_Backend_Smtp
         
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         
-        $mail->setFrom($this->_fromAddress, $this->_fromName);
+        if(!empty($_updater->accountEmailAddress)) {
+            $mail->setFrom($_updater->accountEmailAddress, $_updater->accountDisplayName);
+            $mail->setSender($this->_fromAddress, $this->_fromName);
+        } else {
+            $mail->setFrom($this->_fromAddress, $this->_fromName);
+        }
 
         if(!empty($_recipient->accountEmailAddress)) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->accountEmailAddress);
