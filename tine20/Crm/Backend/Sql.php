@@ -963,11 +963,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         if( is_numeric($_leadstate) && $_leadstate > 0 ) {
-            $where[] = $db->quoteInto('lead.lead_leadstate_id = ?', (int)$_leadstate);
+            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('lead.lead_leadstate_id = ?', (int)$_leadstate);
         }
         
         if( is_numeric($_probability) && $_probability > 0 ) {
-            $where[] = $db->quoteInto('lead_probability >= ?', (int)$_probability);
+            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('lead_probability >= ?', (int)$_probability);
         }       
 
         if($_getClosedLeads === FALSE  || $_getClosedLeads == 'false') {
