@@ -76,14 +76,14 @@ class Egwbase_Account
         return $result;
     }
     
-    public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
     {
         $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Egwbase_Account_Model_Account');
         
         return $result;
     }
     
-    public function getFullAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function getFullAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
     {
         $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Egwbase_Account_Model_FullAccount');
         
