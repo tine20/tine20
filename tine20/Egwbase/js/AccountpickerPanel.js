@@ -1,7 +1,7 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -10,19 +10,19 @@
  *
  */
 
-Ext.namespace('Egw.widgets');
+Ext.namespace('Tine.widgets');
 
 /**
  * Account picker widget
- * @class Egw.widgets.AccountpickerField
- * @package Egwbase
+ * @class Tine.widgets.AccountpickerField
+ * @package Tinebase
  * @subpackage Widgets
  * @extends Ext.form.TwinTriggerField
  * 
  * <p> This widget supplies a generic account picker field. When the field is
- triggered a {Egw.widgets.AccountpickerDialog} is showen, to select a account. </p>
+ triggered a {Tine.widgets.AccountpickerDialog} is showen, to select a account. </p>
  */
-Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
+Tine.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 	/**
      * @cfg {bool}
      * selectOnFocus
@@ -40,7 +40,7 @@ Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 	
 	//private
     initComponent: function(){
-	    Egw.widgets.AccountpickerField.superclass.initComponent.call(this);
+	    Tine.widgets.AccountpickerField.superclass.initComponent.call(this);
 		
 		if (this.selectOnFocus) {
 			this.on('focus', function(){
@@ -49,7 +49,7 @@ Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 		}
 		
 		this.onTrigger2Click = function(e) {
-            this.dlg = new Egw.widgets.AccountpickerDialog({
+            this.dlg = new Tine.widgets.AccountpickerDialog({
                 TriggerField: this
             });
         };
@@ -74,14 +74,14 @@ Egw.widgets.AccountpickerField = Ext.extend(Ext.form.TwinTriggerField, {
 
 /**
  * Account picker widget
- * @class Egw.widgets.AccountpickerDialog
- * @package Egwbase
+ * @class Tine.widgets.AccountpickerDialog
+ * @package Tinebase
  * @subpackage Widgets
  * @extends Ext.Component
  * 
  * <p> This widget supplies a modal account picker dialog.</p>
  */
-Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
+Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	/**
 	 * @cfg {Ext.form.field}
 	 * TriggerField
@@ -98,7 +98,7 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 	
     // private
     initComponent: function(){
-		Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
+		Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
 		
 		var ok_button = new Ext.Button({
             disabled: true,
@@ -121,7 +121,7 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
             buttonAlign: 'center'
         });
 		
-		this.accountPicker = new Egw.widgets.AccountpickerPanel({
+		this.accountPicker = new Tine.widgets.AccountpickerPanel({
 			'buttons': this.buttons
 		});
 		
@@ -150,14 +150,14 @@ Egw.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
 
 /**
  * Account picker pandel widget
- * @class Egw.widgets.AccountpickerPanel
- * @package Egwbase
+ * @class Tine.widgets.AccountpickerPanel
+ * @package Tinebase
  * @subpackage Widgets
  * @extends Ext.TabPanel
  * 
  * <p> This widget supplies a account picker panel to be used in related widgets.</p>
  */
-Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
+Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 	/**
      * @cfg {Ext.Action}
      * selectAction
@@ -218,7 +218,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 		
 		this.accountsStore = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Egwbase.getAccounts'
+                method: 'Tinebase.getAccounts'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -233,7 +233,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         this.accountsStore.setDefaultSort('accountDisplayName', 'asc');
 
         this.accountsStore.on('beforeload', function(_accountsStore) {
-            _accountsStore.baseParams.filter = Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue();
+            _accountsStore.baseParams.filter = Ext.getCmp('Tinebase_Accounts_SearchField').getRawValue();
         });        
 
         var columnModel = new Ext.grid.ColumnModel([
@@ -252,20 +252,20 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         //var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 
         this.quickSearchField = new Ext.app.SearchField({
-            id: 'Egwbase_Accounts_SearchField',
+            id: 'Tinebase_Accounts_SearchField',
             width: 290,
             emptyText: 'enter searchfilter'
         }); 
         this.quickSearchField.on('change', function(){
-			var store = Ext.getCmp('Egwbase_Accounts_Grid').getStore();
+			var store = Ext.getCmp('Tinebase_Accounts_Grid').getStore();
 			var lastValue = store.lastOptions ? store.lastOptions.params.filter : false;
 			if (lastValue != this.getRawValue()) {
 
-				if (!Ext.getCmp('Egwbase_Accounts_SearchField').getRawValue()) {
-					Ext.getCmp('Egwbase_Accounts_Grid').getStore().removeAll();
+				if (!Ext.getCmp('Tinebase_Accounts_SearchField').getRawValue()) {
+					Ext.getCmp('Tinebase_Accounts_Grid').getStore().removeAll();
 				}
 				else {
-					Ext.getCmp('Egwbase_Accounts_Grid').getStore().load({
+					Ext.getCmp('Tinebase_Accounts_Grid').getStore().load({
 						params: {
 							start: 0,
 							limit: 50
@@ -289,7 +289,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 
 		this.searchPanel = new Ext.grid.GridPanel({
             title: 'Search',
-            id: 'Egwbase_Accounts_Grid',
+            id: 'Tinebase_Accounts_Grid',
             store: this.accountsStore,
             cm: columnModel,
 			enableColumnHide:false,
@@ -321,12 +321,12 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
            disabled: true
         }];
 		
-	    Egw.widgets.AccountpickerPanel.superclass.initComponent.call(this);
+	    Tine.widgets.AccountpickerPanel.superclass.initComponent.call(this);
 	}
 });
 
 /**
- * @class Egw.widgets.AccountpickerActiondialog
+ * @class Tine.widgets.AccountpickerActiondialog
  * <p>A baseclass for assembling dialogs with actions related to accounts</p>
  * <p>This class should be extended by its users and normaly not be instanciated
  * using the new keyword.</p>
@@ -334,7 +334,7 @@ Egw.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
  * @constructor
  * @param {Object} config The configuration options
  */
-Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
+Tine.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 	/**
 	 * @cfg
 	 * {Ext.Toolbar} Toolbar to display in the bottom area of the user selection
@@ -352,7 +352,7 @@ Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
     initComponent: function(){
 		//this.addEvents()
 		
-		this.userSelection = new Egw.widgets.AccountpickerPanel({
+		this.userSelection = new Tine.widgets.AccountpickerPanel({
 			enableBbar: true,
 			region: 'west',
 			split: true,
@@ -388,11 +388,11 @@ Egw.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 				handler: function(){this.close();}
 			}];
 		}
-		Egw.widgets.AccountpickerActiondialog.superclass.initComponent.call(this);
+		Tine.widgets.AccountpickerActiondialog.superclass.initComponent.call(this);
 	},
 	/**
 	 * Returns user Selection Panel
-	 * @return {Egw.widgets.AccountpickerPanel}
+	 * @return {Tine.widgets.AccountpickerPanel}
 	 */
 	getUserSelection: function() {
 		return this.userSelection;

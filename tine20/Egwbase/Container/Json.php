@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Egwbase_Container_Json
+class Tinebase_Container_Json
 {
    /**
      * gets container / container folder
@@ -25,14 +25,14 @@ class Egwbase_Container_Json
     public function getContainer($application, $containerType, $owner =  NULL)
     {       
         switch($containerType) {
-            case Egwbase_Container_Container::TYPE_PERSONAL:
-                $container = Egwbase_Container_Container::getInstance()->getPersonalContainer($application,$owner);
+            case Tinebase_Container_Container::TYPE_PERSONAL:
+                $container = Tinebase_Container_Container::getInstance()->getPersonalContainer($application,$owner);
                 break;
-            case Egwbase_Container_Container::TYPE_SHARED:
-                $container = Egwbase_Container_Container::getInstance()->getSharedContainer($application);
+            case Tinebase_Container_Container::TYPE_SHARED:
+                $container = Tinebase_Container_Container::getInstance()->getSharedContainer($application);
                 break;
             case 'OtherUsers':
-                $container = Egwbase_Container_Container::getInstance()->getOtherUsers($application);
+                $container = Tinebase_Container_Container::getInstance()->getOtherUsers($application);
                 break;
             default:
                 throw new Exception('no such NodeType');
@@ -55,11 +55,11 @@ class Egwbase_Container_Json
     {
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         switch($containerType) {
-            case Egwbase_Container_Container::TYPE_SHARED:
-                $container = Egwbase_Container_Container::getInstance()->addSharedContainer($accountId, $application, $containerName);
+            case Tinebase_Container_Container::TYPE_SHARED:
+                $container = Tinebase_Container_Container::getInstance()->addSharedContainer($accountId, $application, $containerName);
                 break;
-            case Egwbase_Container_Container::TYPE_PERSONAL:
-                $container = Egwbase_Container_Container::getInstance()->addPersonalContainer($accountId, $application, $containerName);
+            case Tinebase_Container_Container::TYPE_PERSONAL:
+                $container = Tinebase_Container_Container::getInstance()->addPersonalContainer($accountId, $application, $containerName);
                 break;
             default:
                 throw new Exception('no such containerType');
@@ -76,7 +76,7 @@ class Egwbase_Container_Json
      */
     public function deleteContainer($containerId)
     {
-        Egwbase_Container_Container::getInstance()->deleteContainer($containerId);
+        Tinebase_Container_Container::getInstance()->deleteContainer($containerId);
         return 'success';
     }
     
@@ -89,7 +89,7 @@ class Egwbase_Container_Json
      */
     public function renameContainer($containerId, $newName)
     {
-        $container = Egwbase_Container_Container::getInstance()->renameContainer($containerId, $newName);
+        $container = Tinebase_Container_Container::getInstance()->renameContainer($containerId, $newName);
         return $container->toArray();
     }
     
@@ -106,14 +106,14 @@ class Egwbase_Container_Json
             'totalcount'  => 0
         );
         
-        $result['results'] = Egwbase_Container_Container::getInstance()->getAllGrants($containerId)->toArray();
+        $result['results'] = Tinebase_Container_Container::getInstance()->getAllGrants($containerId)->toArray();
         $result['totalcount'] = count($result['results']);
         
         foreach($result['results'] as &$value) {
             if($value['accountId'] === NULL) {
                 $value['accountName'] = array('accountDisplayName' => 'Anyone');
             } else {
-                $value["accountName"] = Egwbase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
+                $value["accountName"] = Tinebase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
             }
         }
         
@@ -129,9 +129,9 @@ class Egwbase_Container_Json
      */
     public function setContainerGrants($containerId, $grants)
     {
-        $newGrants = new Egwbase_Record_RecordSet(Zend_Json::decode($grants), 'Egwbase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet(Zend_Json::decode($grants), 'Tinebase_Model_Grants');
         
-        Egwbase_Container_Container::getInstance()->setAllGrants($containerId, $newGrants);
+        Tinebase_Container_Container::getInstance()->setAllGrants($containerId, $newGrants);
                
         return $this->getContainerGrants($containerId);
     }

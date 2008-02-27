@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -25,7 +25,7 @@
  * - Provide datas for record history investigations.
  * - Provide datas for desaster recovery.
  * 
- * Egwbase_Timemachine interfaces/classes build a framework, which needs to be 
+ * Tinebase_Timemachine interfaces/classes build a framework, which needs to be 
  * implemented/extended by the backends of an application.
  * 
  * As Timemachine could be invoked for sync, but also for concurrency issues, it
@@ -39,10 +39,10 @@
  * NOTE: Records _at_ a given point in history include changes which contingently
  * where made _at_ the end of time resolution of this point
  * 
- * @package Egwbase
+ * @package Tinebase
  * @subpackage Timemachine
  */
-interface Egwbase_Timemachine_Interface
+interface Tinebase_Timemachine_Interface
 {
     
     /**
@@ -50,36 +50,36 @@ interface Egwbase_Timemachine_Interface
      * 
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, included point itself
-     * @param Egwbase_Record_Filter _filter
+     * @param Tinebase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
      * @access public
      */
-    public function getCreated( Zend_Date $_from, Zend_Date $_until, Egwbase_Record_Filter $_filter, $_returnUIDs = FALSE );
+    public function getCreated( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter, $_returnUIDs = FALSE );
     
     /**
      * Returns ids(int)/uids(strings) of records which where modified in a given timespan.
      * 
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, included point itself
-     * @param Egwbase_Record_Filter _filter
+     * @param Tinebase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
      * @access public
      */
-    public function getModified( Zend_Date $_from, Zend_Date $_until, Egwbase_Record_Filter $_filter, $_returnUIDs = FALSE );
+    public function getModified( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter, $_returnUIDs = FALSE );
     
     /**
      * Returns ids(int)/uids(strings) of records which where deleted in a given timespan.
      * 
      * @param Zend_Date _from beginning point of timespan, including point itself
      * @param Zend_Date _until end point of timespan, included point itself
-     * @param Egwbase_Record_Filter _filter
+     * @param Tinebase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
      * @access public
      */
-    public function getDeleted( Zend_Date $_from, Zend_Date $_until, Egwbase_Record_Filter $_filter, $_returnUIDs = FALSE );
+    public function getDeleted( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter, $_returnUIDs = FALSE );
     
     /**
      * Returns a record as it was at a given point in history
@@ -87,7 +87,7 @@ interface Egwbase_Timemachine_Interface
      * @param [string|int] _id 
      * @param Zend_Date _at 
      * @param bool _idIsUID wether global (string) or local (int) identifiers are given as _id
-     * @return Egwbase_Record
+     * @return Tinebase_Record
      * @access public
      */
     public function getRecord( $_id,  Zend_Date $_at, $_idIsUID = FALSE);
@@ -98,10 +98,10 @@ interface Egwbase_Timemachine_Interface
      * @param array _ids array of [string|int] 
      * @param Zend_Date _at 
      * @param bool _idsAreUIDs wether global (string) or local (int) identifiers are given as _ids
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      * @access public
      */
     public function getRecords( array $_ids,  Zend_Date $_at, $_idsAreUIDs = FALSE );
 
-} // end of Egwbase_Timemachine_Interface
+} // end of Tinebase_Timemachine_Interface
 ?>

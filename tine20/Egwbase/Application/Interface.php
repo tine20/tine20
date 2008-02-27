@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,10 +11,10 @@
  */
 
 /**
- * Interface for an EGW2.0 application
+ * Interface for an Tine 2.0 application
  *
  */
-interface Egwbase_Application_Interface
+interface Tinebase_Application_Interface
 {
     /**
      * Returns application name

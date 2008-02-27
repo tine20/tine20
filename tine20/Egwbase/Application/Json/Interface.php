@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,12 +12,12 @@
 
 
 /**
- * Abstract class for an EGW2.0 application with Json interface
- * Each egw application must extend this class to gain an native egw2.0 user
+ * Abstract class for an Tine 2.0 application with Json interface
+ * Each tine application must extend this class to gain an native tine 2.0 user
  * interface.
  *
  */
-Interface Egwbase_Application_Json_Interface extends Egwbase_Application_Interface
+Interface Tinebase_Application_Json_Interface extends Tinebase_Application_Interface
 {
 
 }

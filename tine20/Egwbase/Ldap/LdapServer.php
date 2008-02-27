@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Egwbase_Ldap_LdapServer
+class Tinebase_Ldap_LdapServer
 {
     /**
      * the connection to the ldap server

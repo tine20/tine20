@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     CRM
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -11,11 +11,11 @@
  */
 
 /**
- * Tables setup for Egwbase
- * @package Egwbase
+ * Tables setup for Tinebase
+ * @package Tinebase
  * @subpackage  Setup
  */
-class Egwbase_Setup_SetupSqlTables
+class Tinebase_Setup_SetupSqlTables
 {    
     /**
      * temporary function to create the egw_metacrm_lead table on demand

@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,10 +13,10 @@
 /**
  * SQL authentication backend
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth 
  */
-class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
+class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 {
 	public function __construct(Zend_Config $_options)
 	{
@@ -82,7 +82,7 @@ class Egwbase_Auth_Sql extends Zend_Auth_Adapter_DbTable
             throw new InvalidArgumentException('$_loginName can not be empty');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['account_pwd'] = md5($_password);
         $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();

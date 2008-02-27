@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,15 +11,15 @@
  */
 
 /**
- * Interface class for an EGW2.0 application with Http interface
+ * Interface class for an Tine 2.0 application with Http interface
  * 
- * Note, that the Http inerface in egw 2.0 is used to generate the base layouts
+ * Note, that the Http inerface in tine 2.0 is used to generate the base layouts
  * in new browser windows.
  * 
- * Each egw application must extend this class to gain an native egw2.0 user
+ * Each tine application must extend this class to gain an native tine 2.0 user
  * interface.
  */
-Interface Egwbase_Application_Http_Interface extends Egwbase_Application_Interface
+Interface Tinebase_Application_Http_Interface extends Tinebase_Application_Interface
 {
     /**
      * Returns all JS files which must be included for this app
@@ -38,7 +38,7 @@ Interface Egwbase_Application_Http_Interface extends Egwbase_Application_Interfa
     /**
      * Returns initial data which is send to the app at createon time.
      *
-     * When the mainScreen is created, Egwbase_Http_Controler queries this function
+     * When the mainScreen is created, Tinebase_Http_Controler queries this function
      * to get the initial datas for this app. This pattern prevents that any app needs
      * to make an server-request for its initial datas.
      * 
@@ -46,7 +46,7 @@ Interface Egwbase_Application_Http_Interface extends Egwbase_Application_Interfa
      * 
      * The returned data have to be an array with the variable names as keys and
      * the datas as values. The datas will be JSON encoded later. Note that the
-     * varialbe names get prefixed with Egw.<applicationname>
+     * varialbe names get prefixed with Tine.<applicationname>
      * 
      * @return mixed array 'variable name' => 'data'
      */

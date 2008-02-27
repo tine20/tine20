@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -17,7 +17,7 @@
  * NOTE: the index of an record is _not_ related to the record and/or its identifier!
  *
  */
-class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
+class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {
 	/**
 	 * class name of records this instance can hold
@@ -39,12 +39,12 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
 
 
     /**
-     * creates new Egwbase_Record_RecordSet
+     * creates new Tinebase_Record_RecordSet
      *
      * @param array $_records array of record objects
      * @param string $_className the required classType
-     * @param bool $_bypassFilters {@see Egwbase_Record_Interface::__construct}
-     * @param bool $_convertDates {@see Egwbase_Record_Interface::__construct}
+     * @param bool $_bypassFilters {@see Tinebase_Record_Interface::__construct}
+     * @param bool $_convertDates {@see Tinebase_Record_Interface::__construct}
      * @return void
      */
     public function __construct(array $_records, $_className,  $_bypassFilters = false, $_convertDates = true)
@@ -58,21 +58,21 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
             } elseif (is_array($record)) {
                 $this->_listOfRecords[] = new $this->_recordClass($record, $_bypassFilters, $_convertDates);
             } else {
-            	throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            	throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
             }
         }
     }
     
     /**
-     * add Egwbase_Record_Interface like object to internal list
+     * add Tinebase_Record_Interface like object to internal list
      *
-     * @param Egwbase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_record
      * @return int index in set of inserted record
      */
-    public function addRecord(Egwbase_Record_Interface $_record)
+    public function addRecord(Tinebase_Record_Interface $_record)
     {
         if (! $_record instanceof $this->_recordClass) {
-            throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         $this->_listOfRecords[] = $_record;
 		
@@ -195,7 +195,7 @@ class Egwbase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAcc
     public function offsetSet($_offset, $_value)
     {
         if (! $_value instanceof $this->_recordClass) {
-            throw new Egwbase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         
         if (empty($_offset)) {

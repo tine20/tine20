@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Links
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,15 +12,15 @@
 
 /**
  * this class handles linking between applications
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Links
  */
-class Egwbase_Links
+class Tinebase_Links
 {
     /**
-     * instance of the egw_links table
+     * instance of the SQL_TABLE_PREFIX . links table
      *
-     * @var Egwbase_Db_Table
+     * @var Tinebase_Db_Table
      */
     protected $_linksTable;
     
@@ -33,7 +33,7 @@ class Egwbase_Links
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Links
+     * @var Tinebase_Links
      */
     private static $_instance = NULL;
     
@@ -42,18 +42,18 @@ class Egwbase_Links
      * 
      */
     private function __construct() {
-        $this->_linksTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
+        $this->_linksTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
     }
     
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Links
+     * @return Tinebase_Links
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Egwbase_Links;
+            self::$_instance = new Tinebase_Links;
         }
         
         return self::$_instance;

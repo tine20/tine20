@@ -1,5 +1,5 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -8,17 +8,17 @@
  *
  */
 
-Ext.namespace('Egw.widgets', 'Egw.widgets.container');
+Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 
 /**
- * @class Egw.widgets.container.selectionComboBox
- * @package Egwbase
+ * @class Tine.widgets.container.selectionComboBox
+ * @package Tinebase
  * @subpackage Widgets
  * @extends Ext.form.ComboBox
  * 
  * Container select ComboBox widget
  */
-Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
+Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {array}
      * default container
@@ -31,13 +31,13 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     
     // private
     initComponent: function(){
-        Egw.widgets.container.selectionComboBox.superclass.initComponent.call(this);
+        Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         if (this.defaultContainer) {
             this.container = this.defaultContainer;
             this.value = this.defaultContainer.container_name;
         }
         this.onTriggerClick = function(e) {
-            var w = new Egw.widgets.container.selectionDialog({
+            var w = new Tine.widgets.container.selectionDialog({
                 TriggerField: this
             });
         };
@@ -56,12 +56,12 @@ Egw.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 
 /**
  * This widget shows a modal container selection dialog
- * @class Egw.widgets.container.selectionDialog
+ * @class Tine.widgets.container.selectionDialog
  * @extends Ext.Component
- * @package Egwbase
+ * @package Tinebase
  * @subpackage Widgets
  */
-Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
+Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 	/**
 	 * @cfg {string}
 	 * title of dialog
@@ -70,7 +70,7 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
 
     // private
     initComponent: function(){
-        Egw.widgets.container.selectionDialog.superclass.initComponent.call(this);
+        Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
         
 		var windowHeight = 400;
 		if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
@@ -90,7 +90,7 @@ Egw.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             buttonAlign: 'center'
         });
         
-        var tree = new Egw.widgets.container.TreePanel({
+        var tree = new Tine.widgets.container.TreePanel({
             itemName: this.TriggerField.itemName,
             appName: this.TriggerField.appName,
             defaultContainer: this.TriggerField.defaultContainer

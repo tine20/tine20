@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Events
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,9 +13,9 @@
 /**
  * base class for all events
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Events
  */
-abstract class Egwbase_Events_Abstract
+abstract class Tinebase_Events_Abstract
 {
 }

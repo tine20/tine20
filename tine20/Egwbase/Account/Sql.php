@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,12 +11,12 @@
  */
 
 /**
- * sql implementation of the eGW SQL accounts interface
+ * sql implementation of the SQL accounts interface
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  */
-class Egwbase_Account_Sql implements Egwbase_Account_Interface
+class Tinebase_Account_Sql implements Tinebase_Account_Interface
 {
     /**
      * the constructor
@@ -34,7 +34,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Account_Sql
+     * @var Tinebase_Account_Sql
      */
     private static $_instance = NULL;
     
@@ -58,12 +58,12 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Account_Sql
+     * @return Tinebase_Account_Sql
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Egwbase_Account_Sql;
+            self::$_instance = new Tinebase_Account_Sql;
         }
         
         return self::$_instance;
@@ -89,7 +89,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $aclTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'acl'));
+        $aclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'acl'));
         
         $groupMemberShips = array();
         
@@ -122,7 +122,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_groupId must be integer');
         }
         
-        $aclTable = new Egwbase_Acl_Sql();
+        $aclTable = new Tinebase_Acl_Sql();
         $members = array();
         
         $where = array(
@@ -153,9 +153,9 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Egwbase_Record_RecordSet with record class Egwbase_Account_Model_Account
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
      */
-    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL, $_accountClass = 'Egwbase_Account_Model_Account')
+    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
     {        
         $select = $this->_getAccountSelectObject()
             ->limit($_limit, $_start);
@@ -168,7 +168,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             $select->where('(n_family LIKE ? OR n_given LIKE ? OR account_lid LIKE ?)', '%' . $_filter . '%');
         }
         // return only active accounts, when searching for simple accounts
-        if($_accountClass == 'Egwbase_Account_Model_Account') {
+        if($_accountClass == 'Tinebase_Account_Model_Account') {
             $select->where('account_status = ?', 'A');
         }
         //error_log("getAccounts:: " . $select->__toString());
@@ -177,18 +177,18 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Egwbase_Record_RecordSet($rows, $_accountClass);
+        $result = new Tinebase_Record_RecordSet($rows, $_accountClass);
         
         return $result;
     }
     
     /**
-     * get eGW account by login name
+     * get account by login name
      *
      * @param string $_loginName the loginname of the account
-     * @return Egwbase_Account_Model_Account the account object
+     * @return Tinebase_Account_Model_Account the account object
      */
-    public function getAccountByLoginName($_loginName, $_accountClass = 'Egwbase_Account_Model_Account')
+    public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
         $select = $this->_getAccountSelectObject()
             ->where(SQL_TABLE_PREFIX . 'accounts.account_lid = ?', $_loginName);
@@ -204,8 +204,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Egwbase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
-                "Egwbase_Account_Model_Account::validation_errors: \n" .
+            Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
+                "Tinebase_Account_Model_Account::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
         }
@@ -214,12 +214,12 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
     }
     
     /**
-     * get eGW account by accountId
+     * get account by accountId
      *
      * @param int $_accountId the account id
-     * @return Egwbase_Account_Model_Account the account object
+     * @return Tinebase_Account_Model_Account the account object
      */
-    public function getAccountById($_accountId, $_accountClass = 'Egwbase_Account_Model_Account')
+    public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
@@ -243,8 +243,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Egwbase_Account_Sql::_getAccountFromSQL: ' . $e->getMessage() . "\n" .
-                "Egwbase_Account_Model_Account::validation_errors: \n" .
+            Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::_getAccountFromSQL: ' . $e->getMessage() . "\n" .
+                "Tinebase_Account_Model_Account::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
         }
@@ -316,7 +316,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
                 break;
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
             $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
@@ -342,7 +342,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['account_pwd'] = md5($_password);
         $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
@@ -373,7 +373,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['account_lastloginfrom'] = $_ipAddress;
         $accountData['account_lastlogin'] = Zend_Date::now()->getTimestamp();
@@ -392,16 +392,16 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * 
      * this function creates or updates an account 
      *
-     * @param Egwbase_Account_Model_FullAccount $_account
-     * @return Egwbase_Account_Model_FullAccount
+     * @param Tinebase_Account_Model_FullAccount $_account
+     * @return Tinebase_Account_Model_FullAccount
      */
-    public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
+    public function saveAccount(Tinebase_Account_Model_FullAccount $_account)
     {
         if(!$_account->isValid()) {
             throw(new Exception('invalid account object'));
         }
 
-        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
             'account_lid'       => $_account->accountLoginName,
@@ -427,8 +427,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
             
-            $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-            $contactsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
+            $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+            $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
             
             if(!empty($_account->accountId)) {
                 $accountId = $_account->accountId;
@@ -461,7 +461,7 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw($e);
         }
         
-        return $this->getAccountById($accountId, 'Egwbase_Account_Model_FullAccount');
+        return $this->getAccountById($accountId, 'Tinebase_Account_Model_FullAccount');
     }
     
     /**
@@ -476,8 +476,8 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $accountsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        $contactsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         
         $where  = array(
             Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),

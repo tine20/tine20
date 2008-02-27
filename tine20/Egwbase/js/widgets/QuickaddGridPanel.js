@@ -1,5 +1,5 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Ext
  * @subpackage  ux

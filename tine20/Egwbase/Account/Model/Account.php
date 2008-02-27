@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -16,10 +16,10 @@
  * this account object contains only public informations
  * its primary usecase are user selection interfaces
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Account
  */
-class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
+class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -61,7 +61,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      *
      * @param array $_data the new data to set
      * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
-     * @throws Egwbase_Record_Exception when content contains invalid or missing data
+     * @throws Tinebase_Record_Exception when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
@@ -96,7 +96,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function hasRight($_application, $_right)
     {
-        $rights = Egwbase_Acl_Rights::getInstance();
+        $rights = Tinebase_Acl_Rights::getInstance();
         
         $result = $rights->hasRight($_application, $this->accountId, $_right);
         
@@ -111,7 +111,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function getRights($_application)
     {
-        $rights = Egwbase_Acl_Rights::getInstance();
+        $rights = Tinebase_Acl_Rights::getInstance();
         
         $result = $rights->getRights($_application, $this->accountId);
         
@@ -125,7 +125,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function getGroupMemberships()
     {
-        $backend = Egwbase_Account::getInstance();
+        $backend = Tinebase_Account::getInstance();
         
         $result = $backend->getGroupMemberships($this->accountId);
         
@@ -140,7 +140,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function setLoginTime($_ipAddress)
     {
-        $backend = Egwbase_Account::getInstance();
+        $backend = Tinebase_Account::getInstance();
         
         $result = $backend->setLoginTime($this->accountId, $_ipAddress);
         
@@ -155,7 +155,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function setPassword($_password)
     {
-        $backend = Egwbase_Account::getInstance();
+        $backend = Tinebase_Account::getInstance();
         
         $result = $backend->setPassword($this->accountId, $_password);
         
@@ -172,7 +172,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function getApplications()
     {
-        $rights = Egwbase_Acl_Rights::getInstance();
+        $rights = Tinebase_Acl_Rights::getInstance();
         
         $result = $rights->getApplications($this->accountId);
         
@@ -186,11 +186,11 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      * 
      * @param string $_application the application name
      * @param int $_right the required right
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function getContainerByACL($_application, $_right)
     {
-        $container = Egwbase_Container_Container::getInstance();
+        $container = Tinebase_Container_Container::getInstance();
         
         $result = $container->getContainerByACL($this->accountId, $_application, $_right);
         
@@ -206,7 +206,7 @@ class Egwbase_Account_Model_Account extends Egwbase_Record_Abstract
      */
     public function hasGrant($_containerId, $_grant)
     {
-        $container = Egwbase_Container_Container::getInstance();
+        $container = Tinebase_Container_Container::getInstance();
         
         $result = $container->hasGrant($this->accountId, $_containerId, $_grant);
         

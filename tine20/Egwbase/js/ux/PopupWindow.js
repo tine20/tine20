@@ -1,5 +1,5 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -23,7 +23,7 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         });
         
         // open popup window
-        this.popup = Egw.Egwbase.Common.openWindow(
+        this.popup = Tine.Tinebase.Common.openWindow(
             this.name, 
             this.url,
             this.width,

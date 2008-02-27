@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,12 +11,12 @@
  */
 
 /**
- * Json interface to Egwbase
+ * Json interface to Tinebase
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Server
  */
-class Egwbase_Json
+class Tinebase_Json
 {
 	
 	/**
@@ -24,7 +24,7 @@ class Egwbase_Json
 	 */
 	public static function setJsonServers($_server)
 	{
-	    $_server->setClass('Egwbase_Container_Json', 'Egwbase_Container');
+	    $_server->setClass('Tinebase_Container_Json', 'Tinebase_Container');
 	}
 	
     /**
@@ -59,7 +59,7 @@ class Egwbase_Json
             'totalcount'  => 0
         );
         
-        if($rows = Egwbase_Account::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit)) {
+        if($rows = Tinebase_Account::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -85,7 +85,7 @@ class Egwbase_Json
         );
         
         try {
-            Egwbase_Controller::getInstance()->changePassword($oldPassword, $newPassword, $newPassword);
+            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword, $newPassword);
         } catch (Exception $e) {
             $response = array(
                 'success'      => FALSE,
@@ -98,10 +98,10 @@ class Egwbase_Json
 /*        
         $auth = Zend_Auth::getInstance();        
               
-        $oldIsValid = Egwbase_Controller::getInstance()->isValidPassword($auth->getIdentity(), $oldPw);              
+        $oldIsValid = Tinebase_Controller::getInstance()->isValidPassword($auth->getIdentity(), $oldPw);              
 
         if ($oldIsValid === true) {
-            $_account   = Egwbase_Account::getInstance();
+            $_account   = Tinebase_Account::getInstance();
             $result     = $_account->setPassword(Zend_Registry::get('currentAccount')->accountId, $newPw);
             
             if($result == 1) {
@@ -131,7 +131,7 @@ class Egwbase_Json
      */
     public function login($username, $password)
     {
-        if (Egwbase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
+        if (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
             $response = array(
 				'success'        => TRUE,
                 'welcomeMessage' => "Some welcome message!"
@@ -153,7 +153,7 @@ class Egwbase_Json
      */
     public function logout()
     {
-        Egwbase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
+        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         
         $result = array(
 			'success'=> true,

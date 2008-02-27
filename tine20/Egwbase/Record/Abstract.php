@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,12 +11,12 @@
  */
 
 /**
- * Abstract implemetation of  Egwbase_Record_Interface
+ * Abstract implemetation of  Tinebase_Record_Interface
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  */
-abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
+abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 {
 	/**
      * should datas be validated on the fly(false) or only on demand(true)
@@ -112,12 +112,12 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      * @param bool $bypassFilters sets {@see this->bypassFilters}
      * @param bool $convertDates sets {@see $this->convertDates}
      * @return void
-     * @throws Egwbase_Record_Exception_DefinitionFailure
+     * @throws Tinebase_Record_Exception_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         if ($this->_identifier === NULL) {
-            throw new Egwbase_Record_Exception_DefinitionFailure('$_identifier is not declared');
+            throw new Tinebase_Record_Exception_DefinitionFailure('$_identifier is not declared');
         }
         
         $this->bypassFilters = (bool)$_bypassFilters;
@@ -176,7 +176,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data the new data to set
-     * @throws Egwbase_Record_Exception_Validation when content contains invalid or missing data
+     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
@@ -219,7 +219,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
                         'msg' => $errorMessages[0]
                     );
                 }
-                $e = new Egwbase_Record_Exception_Validation('some fields have invalid content');
+                $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
                 Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
                     print_r($this->_validationErrors,true). $e);
                 throw $e;
@@ -232,7 +232,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      * 
      * @see Zend_Date::setTimezone()
      * @param string $_timezone
-     * @throws Egwbase_Record_Exception_Validation
+     * @throws Tinebase_Record_Exception_Validation
      * @return void
      */
     public function setTimezone($_timezone)
@@ -248,7 +248,7 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
 
             foreach ($toConvert as $field => &$value) {
                 if (! $value instanceof Zend_Date) {
-                    throw new Egwbase_Record_Exception_Validation($toConvert[$field] . 'must be an Zend_Date'); 
+                    throw new Tinebase_Record_Exception_Validation($toConvert[$field] . 'must be an Zend_Date'); 
                 }
                 $value->setTimezone($_timezone);
             } 
@@ -313,13 +313,13 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      * 
      * @param string _name of property
      * @param mixed _value of property
-     * @throws Egwbase_Record_Exception_NotDefined
+     * @throws Tinebase_Record_Exception_NotDefined
      * @return void
      */
     public function __set($_name, $_value)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new Egwbase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
         }
         
         // set internal state to "not validated"
@@ -350,13 +350,13 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
      * gets record related properties
      * 
      * @param string _name of property
-     * @throws Egwbase_Record_Exception_NotDefined
+     * @throws Tinebase_Record_Exception_NotDefined
      * @return mixed value of property
      */
     public function __get($_name)
     {
         if (!array_key_exists ($_name, $this->_validators)) {
-            throw new Egwbase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
         }
         
         return $this->_properties[$_name];
@@ -441,11 +441,11 @@ abstract class Egwbase_Record_Abstract implements Egwbase_Record_Interface
     
     /**
      * required by ArrayAccess interface
-     * @throws Egwbase_Record_Exception_NotAllowed
+     * @throws Tinebase_Record_Exception_NotAllowed
      */
     public function offsetUnset($_offset)
     {
-        throw new Egwbase_Record_Exception_NotAllowed('Unsetting of properties is not allowed');
+        throw new Tinebase_Record_Exception_NotAllowed('Unsetting of properties is not allowed');
     }
     
     /**

@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,9 +12,9 @@
 
 
 /**
- * class Egwbase_Record_Relation
+ * class Tinebase_Record_Relation
  * 
- * Egwbase_Record_Relation enables records to define cross application relations to other records.
+ * Tinebase_Record_Relation enables records to define cross application relations to other records.
  * It acts as a gneralised storage backend for the records relation property of these records.
  * 
  * Relations between records have a certain role. The standart roles are PARENT, CHILD and SIBLING.
@@ -27,19 +27,19 @@
  * So users could relate records as they like, w.o spamming in global relations scope. With this, 
  * apps would define their real (for all) relations for a global scope to have them visible for anyone.
  */
-class Egwbase_Record_Relation
+class Tinebase_Record_Relation
 {
 
 	/**
 	 * Holds instance for SQL_TABLE_PREFIX . 'record_relations' table
 	 * 
-	 * @var Egwbase_Db_Table
+	 * @var Tinebase_Db_Table
 	 */
 	protected $_db;
 	
 	/* holdes the instance of the singleton
      *
-     * @var Egwbase_Record_Relation
+     * @var Tinebase_Record_Relation
      */
     private static $instance = NULL;
     
@@ -50,8 +50,8 @@ class Egwbase_Record_Relation
     private function __construct()
     {
     	// temporary on the fly creation of table
-    	Egwbase_Setup_SetupSqlTables::createRelationTable();
-    	$this->_db = new Egwbase_Db_Table(array(
+    	Tinebase_Setup_SetupSqlTables::createRelationTable();
+    	$this->_db = new Tinebase_Db_Table(array(
     	    'name' => SQL_TABLE_PREFIX . 'record_relations',
     	    'primary' => 'identifier'
     	));
@@ -61,12 +61,12 @@ class Egwbase_Record_Relation
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Record_Relation
+     * @return Tinebase_Record_Relation
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Record_Relation();
+            self::$instance = new Tinebase_Record_Relation();
         }
         
         return self::$instance;
@@ -75,12 +75,12 @@ class Egwbase_Record_Relation
     /**
      * adds a new relation
      * 
-     * @param Egwbase_Model_Relation $_relation 
-     * @return Egwbase_Model_Relation the new relation
+     * @param Tinebase_Model_Relation $_relation 
+     * @return Tinebase_Model_Relation the new relation
      */
     public function addRelation( $_relation ) {
     	if ($_relation->getId()) {
-    		throw new Egwbase_Record_Exception_NotAllowed('Could not add existing relation');
+    		throw new Tinebase_Record_Exception_NotAllowed('Could not add existing relation');
     	}
     	
     	$_relation->created_by = Zend_Registry::get('currentAccount')->getId();
@@ -90,7 +90,7 @@ class Egwbase_Record_Relation
     		$data = $_relation->toArray();
     		
     		// resolve apps
-    		$application = Egwbase_Application::getInstance();
+    		$application = Tinebase_Application::getInstance();
     		$data['own_application'] = $application->getApplicationByName($_relation->own_application)->app_id;
     		$data['related_application']   = $application->getApplicationByName($_relation->related_application)->app_id;
             
@@ -98,14 +98,14 @@ class Egwbase_Record_Relation
     		return $this->getRelationById($identifier);
     		
     	} else {
-    		throw new Egwbase_Record_Exception_Validation('some fields have invalid content');
+    		throw new Tinebase_Record_Exception_Validation('some fields have invalid content');
     	}
     } // end of member function addRelation
 
     /**
      * breaks a relation
      * 
-     * @param Egwbase_Model_Relation $_relation 
+     * @param Tinebase_Model_Relation $_relation 
      * @return void 
      */
     public function breakRelation( $_relation ) {
@@ -125,17 +125,17 @@ class Egwbase_Record_Relation
     /**
      * breaks all relations, optionally only of given role
      * 
-     * @param Egwbase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_role only breaks relations of given role
      * @return void
      */
     public function breakAllRelations( $_record, $_role = NULL ) {
         if (!$_record->getApplication() || !$_record->getId()) {
-            throw new Egwbase_Record_Exception_DefinitionFailure();
+            throw new Tinebase_Record_Exception_DefinitionFailure();
         }
         
         $where = array(
-            'own_application = ' . Egwbase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
+            'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
             'own_identifier  = ' . $_record->getId()
         );
         if ($_role) {
@@ -152,17 +152,17 @@ class Egwbase_Record_Relation
     /**
      * returns all relations of a given record and optionally only of given role
      * 
-     * @param Egwbase_Record_Interface $_record 
+     * @param Tinebase_Record_Interface $_record 
      * @param string $_role filter by role
-     * @return Egwbase_Record_RecordSet of Egwbase_Model_Relation
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
     public function getAllRelations( $_record, $_role = NULL ) {
         if (!$_record->getApplication() || !$_record->getId()) {
-            throw new Egwbase_Record_Exception_DefinitionFailure();
+            throw new Tinebase_Record_Exception_DefinitionFailure();
         }
         
     	$where = array(
-    	    'own_application = ' . Egwbase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
+    	    'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
             'own_identifier  =' . $_record->getId(),
     	    'is_deleted      = FALSE'
     	);
@@ -170,9 +170,9 @@ class Egwbase_Record_Relation
             $where['related_role'] = $_role;
         }
         
-        $relations = new Egwbase_Record_RecordSet(array(), 'Egwbase_Model_Relation');
+        $relations = new Tinebase_Record_RecordSet(array(), 'Tinebase_Model_Relation');
         foreach ($this->_db->fetchAll($where) as $relation) {
-        	$relations->addRecord(new Egwbase_Model_Relation($relation->toArray(), true));
+        	$relations->addRecord(new Tinebase_Model_Relation($relation->toArray(), true));
         }
    		return $relations; 
     } // end of member function getAllRelations
@@ -182,7 +182,7 @@ class Egwbase_Record_Relation
      *
      * @param int $_identifier
      * @param bool $_returnDeleted
-     * @return Egwbase_Record_Relation
+     * @return Tinebase_Record_Relation
      */
     public function getRelationById($_identifier, $_returnDeleted = false)
     {
@@ -190,12 +190,12 @@ class Egwbase_Record_Relation
     	$relationRow = $this->_db->fetchRow($where);
     	
     	if($relationRow) {
-    		return new Egwbase_Model_Relation($relationRow->toArray(), true);
+    		return new Tinebase_Model_Relation($relationRow->toArray(), true);
     	} else {
-    		throw new Egwbase_Record_Exception_NotDefined("No relation with idenditier: '$_identifier' found.");
+    		throw new Tinebase_Record_Exception_NotDefined("No relation with idenditier: '$_identifier' found.");
     	}
     	
     } // end of member function getRelationById
     
-} // end of Egwbase_Record_Relation
+} // end of Tinebase_Record_Relation
 ?>

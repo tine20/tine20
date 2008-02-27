@@ -2,17 +2,17 @@ Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 
 Ext.QuickTips.init();
 
-Ext.namespace('Egw.Egwbase');
+Ext.namespace('Tine.Tinebase');
 
 /**
  * generic storage class helps to manage global data
  */
-Egw.Egwbase.Registry = new Ext.util.MixedCollection(true);
+Tine.Tinebase.Registry = new Ext.util.MixedCollection(true);
 
 /**
- * Initialise eGroupWare 2.0 ExtJs framework
+ * Initialise Tine 2.0 ExtJs framework
  */
-Egw.Egwbase.initFramework = function() {
+Tine.Tinebase.initFramework = function() {
 	
 	/**
      * Ajax reuest proxy
@@ -28,7 +28,7 @@ Egw.Egwbase.initFramework = function() {
     var initAjax = function(){
         Ext.Ajax.on('beforerequest', function(connection, options){
             options.url = 'index.php';
-            options.params.jsonKey = Egw.Egwbase.Registry.get('jsonKey');
+            options.params.jsonKey = Tine.Tinebase.Registry.get('jsonKey');
         }, this);
         
 		
@@ -99,9 +99,9 @@ Egw.Egwbase.initFramework = function() {
 };
 
 /**
- * eGroupWare 2.0 ExtJS client Mainscreen.
+ * Tine 2.0 ExtJS client Mainscreen.
  */
-Egw.Egwbase.MainScreen = function() {
+Tine.Tinebase.MainScreen = function() {
 
     var _displayMainScreen = function() {
 
@@ -117,30 +117,30 @@ Egw.Egwbase.MainScreen = function() {
 			}]
 		});
 
-		var egwMenu = new Ext.Toolbar({
-			id: 'egwMenu',
+		var tineMenu = new Ext.Toolbar({
+			id: 'tineMenu',
 			height: 26,
             items:[{
-                text: 'eGroupWare',
+                text: 'Tine 2.0',
                 menu: systemMenu
             },
             '->',
             {
                 icon:    'images/oxygen/16x16/actions/system-log-out.png',
                 cls:     'x-btn-icon',
-                tooltip: {text:'Click this button to logout from eGroupWare'},
+                tooltip: {text:'Click this button to logout from Tine 2.0'},
                 handler: _logoutButtonHandler
             }
             ]
 
 		});
 
-        var egwFooter = new Ext.Toolbar({
-            id: 'egwFooter',
+        var tineFooter = new Ext.Toolbar({
+            id: 'tineFooter',
             height: 26,
             items:[
-                'Account name: ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName + ' ',
-                'Timezone: ' +  Egw.Egwbase.Registry.get('timeZone'), 
+                'Account name: ' + Tine.Tinebase.Registry.get('currentAccount').accountDisplayName + ' ',
+                'Timezone: ' +  Tine.Tinebase.Registry.get('timeZone'), 
             ]
 
         });
@@ -167,7 +167,7 @@ Egw.Egwbase.MainScreen = function() {
                     border: false,
                     id:     'north-panel-1',
                     items: [
-                        egwMenu
+                        tineMenu
                     ]
                 },{
                     region: 'center',
@@ -186,7 +186,7 @@ Egw.Egwbase.MainScreen = function() {
 				height: 26,
 				initialSize: 26,
 				items:[
-				    egwFooter
+				    tineFooter
 				]
 /*			}, {
  				region: 'east',
@@ -236,17 +236,17 @@ Egw.Egwbase.MainScreen = function() {
 		});
 		
 		/*var centerPanel = Ext.getCmp('north-panel-1');
-        centerPanel.add(egwMenu);
+        centerPanel.add(tineMenu);
         centerPanel.show();
         centerPanel.doLayout();*/
 
-/*        egwMenu.add({
-            text: 'eGroupWare',
+/*        tineMenu.add({
+            text: 'Tine 2.0',
             menu: systemMenu
         }, '->', {
             icon: 'images/oxygen/16x16/actions/system-log-out.png',
             cls: 'x-btn-icon',
-            tooltip: {text:'Click this button to logout from eGroupWare'},
+            tooltip: {text:'Click this button to logout from Tine 2.0'},
             handler: _logoutButtonHandler
         }); */
     };
@@ -258,9 +258,9 @@ Egw.Egwbase.MainScreen = function() {
 		
     	var panels = [];
         
-        for(_application in Egw) {
+        for(_application in Tine) {
         	try{
-                panels.push(Egw[_application].getPanel());
+                panels.push(Tine[_application].getPanel());
                 
         	} catch(e) {
         		//console.log(_application + ' failed');
@@ -324,7 +324,7 @@ Egw.Egwbase.MainScreen = function() {
                                 waitTitle: 'Please wait!',
                                 waitMsg: 'changing password...',
                                 params: {
-                                    jsonKey: Egw.Egwbase.jsonKey
+                                    jsonKey: Tine.Tinebase.jsonKey
                                 },
                                 success: function(form, action, o){
                                     Ext.getCmp('changePassword_window').hide(); 
@@ -362,7 +362,7 @@ Egw.Egwbase.MainScreen = function() {
 		});
 
         var changePasswordForm = new Ext.FormPanel({
-			baseParams: {method :'Egwbase.changePassword'},
+			baseParams: {method :'Tinebase.changePassword'},
 		    labelAlign: 'top',
 			bodyStyle:'padding:5px',
       //      tbar: changePasswordToolbar,
@@ -385,7 +385,7 @@ Egw.Egwbase.MainScreen = function() {
                         waitTitle: 'Please wait!',
                         waitMsg: 'changing password...',
                         params: {
-                            jsonKey: Egw.Egwbase.jsonKey
+                            jsonKey: Tine.Tinebase.jsonKey
                         },
                         success: function(form, action, o){
                             Ext.getCmp('changePassword_window').hide(); 
@@ -420,7 +420,7 @@ Egw.Egwbase.MainScreen = function() {
           };
 
         var passwordDialog = new Ext.Window({
-    		title: 'Change password for ' + Egw.Egwbase.Registry.get('currentAccount').accountDisplayName,
+    		title: 'Change password for ' + Tine.Tinebase.Registry.get('currentAccount').accountDisplayName,
             id: 'changePassword_window',
 			modal: true,
 		    width: 350,
@@ -460,7 +460,7 @@ Egw.Egwbase.MainScreen = function() {
 				Ext.MessageBox.wait('Loging you out...', 'Please wait!');
 				Ext.Ajax.request( {
 					params : {
-						method : 'Egwbase.logout'
+						method : 'Tinebase.logout'
 					},
 					callback : function(options, bSuccess, response) {
 						// remove the event handler
@@ -525,7 +525,7 @@ Egw.Egwbase.MainScreen = function() {
 /**
  * static common helpers
  */
-Egw.Egwbase.Common = function(){
+Tine.Tinebase.Common = function(){
 	
 	/**
 	 * Open browsers native popup
@@ -668,12 +668,12 @@ Egw.Egwbase.Common = function(){
 	};
 }();
 
-Ext.namespace('Egw.Egwbase.Models');
+Ext.namespace('Tine.Tinebase.Models');
 
 /**
- * Model of the egw account
+ * Model of the tine account
  */
-Egw.Egwbase.Models.Account = Ext.data.Record.create([
+Tine.Tinebase.Models.Account = Ext.data.Record.create([
     { name: 'account_id' },
 	{ name: 'account_lid' },
 	{ name: 'account_pwd' },

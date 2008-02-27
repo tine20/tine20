@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,7 +11,7 @@
  */
 
 /**
- * Egwbase_Record_Interface
+ * Tinebase_Record_Interface
  * 
  * This a the abstract interface of an record.
  * A record is e.g. a single address or or single event.
@@ -20,7 +20,7 @@
  * A record is identified by a identifier. As we are a Webapp and want to 
  * deal with the objects in the browser, identifier should be a string!
  */
-interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate 
+interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate 
 {
     /**
      * Default constructor
@@ -32,7 +32,7 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $_convertDates array with Zend_Date constructor parameters part and locale
      * 
      * @return void
-     * @throws Egwbase_Record_Exception
+     * @throws Tinebase_Record_Exception
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
     
@@ -79,7 +79,7 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data the new data to set
-     * @throws Egwbase_Record_Exception_Validation when content contains invalid or missing data
+     * @throws Tinebase_Record_Exception_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data);
     
@@ -88,7 +88,7 @@ interface Egwbase_Record_Interface extends ArrayAccess, IteratorAggregate
      * 
      * @see Zend_Date::setTimezone()
      * @param string $_timezone
-     * @throws Egwbase_Record_Exception_Validation
+     * @throws Tinebase_Record_Exception_Validation
      * @return void
      */
     public function setTimezone($_timezone);

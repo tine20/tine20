@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,11 +13,11 @@
 /**
  * main authentication class
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth 
  */
 
-class Egwbase_Auth
+class Tinebase_Auth
 {
     /**
      * constant for Sql contacts backend class
@@ -81,12 +81,12 @@ class Egwbase_Auth
      *
      * @var string
      */
-    protected $_backendType = Egwbase_Auth_Factory::SQL;
+    protected $_backendType = Tinebase_Auth_Factory::SQL;
     
 /**
      * the instance of the authenticationbackend
      *
-     * @var Egwbase_Auth_Sql
+     * @var Tinebase_Auth_Sql
      */
     protected $_backend;
     
@@ -99,15 +99,15 @@ class Egwbase_Auth
         try {
             $authConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'authentication');
             
-            $this->_backendType = $authConfig->get('backend', Egwbase_Auth_Factory::SQL);
+            $this->_backendType = $authConfig->get('backend', Tinebase_Auth_Factory::SQL);
             
         } catch (Zend_Config_Exception $e) {
             $authConfig = new Zend_Config(array(
-                'backend'   => Egwbase_Auth_Factory::SQL
+                'backend'   => Tinebase_Auth_Factory::SQL
             ));
         }
         Zend_Registry::get('logger')->debug('authentication backend: ' . $this->_backendType);
-        $this->_backend = Egwbase_Auth_Factory::factory($this->_backendType, $authConfig);
+        $this->_backend = Tinebase_Auth_Factory::factory($this->_backendType, $authConfig);
     }
     
     /**
@@ -119,7 +119,7 @@ class Egwbase_Auth
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Auth
+     * @var Tinebase_Auth
      */
     private static $_instance = NULL;
     
@@ -127,12 +127,12 @@ class Egwbase_Auth
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Auth
+     * @return Tinebase_Auth
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Egwbase_Auth;
+            self::$_instance = new Tinebase_Auth;
         }
         
         return self::$_instance;

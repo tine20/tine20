@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,10 +13,10 @@
 /**
  * LDAP authentication backend
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth
  */
-class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface 
+class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface 
 {    
     /**
      * the list of attributes to fetch from ldap
@@ -114,7 +114,7 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
         
         Zend_Registry::get('logger')->debug(__CLASS__ . '::' . __FUNCTION__ . '('. __LINE__ . ') trying to authenticate '. $this->_identity . ' against ' . $this->_host);
         
-        $ldapServer = new Egwbase_Ldap_LdapServer($this->_host);
+        $ldapServer = new Tinebase_Ldap_LdapServer($this->_host);
         
         try {
             $ldapServer->bind($this->_adminDN, $this->_adminPassword);
@@ -185,7 +185,7 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      * set loginname
      *
      * @param string $_identity
-     * @return Egwbase_Auth_Ldap
+     * @return Tinebase_Auth_Ldap
      */
     public function setIdentity($_identity)
     {
@@ -197,7 +197,7 @@ class Egwbase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      * set password
      *
      * @param string $_credential
-     * @return Egwbase_Auth_Ldap
+     * @return Tinebase_Auth_Ldap
      */
     public function setCredential($_credential)
     {

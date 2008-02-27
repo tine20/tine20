@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -23,9 +23,9 @@
  * general, the sub field approach offers most felxibility, the complete field 
  * solution is an adequate compromise for usage and performace.
  * 
- * ModificationLog is used by Egwbase_Timemachine_Abstract. If an application
- * backened extends Egwbase_Timemachine_Abstract, it MUST use 
- * Egwbase_Timemachine_ModificationLog to track modifications
+ * ModificationLog is used by Tinebase_Timemachine_Abstract. If an application
+ * backened extends Tinebase_Timemachine_Abstract, it MUST use 
+ * Tinebase_Timemachine_ModificationLog to track modifications
  * 
  * NOTE: Maximum time resolution is one second. If there are more than one
  * modifications in a second, they are distinguished by the accounts which made
@@ -37,10 +37,10 @@
  * entries. Throw exceptions when times are requested which are not in the 
  * log anymore!
  * 
- * @package Egwbase
+ * @package Tinebase
  * @subpackage Timemachine
  */
-class Egwbase_Timemachine_ModificationLog
+class Tinebase_Timemachine_ModificationLog
 {
     /**
      * Tablename SQL_TABLE_PREFIX . timemachine_modificationlog
@@ -52,7 +52,7 @@ class Egwbase_Timemachine_ModificationLog
     /**
      * Holds table instance for timemachine_history table
      *
-     * @var Egwbase_Db_Table
+     * @var Tinebase_Db_Table
      */
     protected $_table = NULL;
     
@@ -60,19 +60,19 @@ class Egwbase_Timemachine_ModificationLog
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Timemachine_ModificationLog
+     * @var Tinebase_Timemachine_ModificationLog
      */
     private static $instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Timemachine_ModificationLog
+     * @return Tinebase_Timemachine_ModificationLog
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Timemachine_ModificationLog();
+            self::$instance = new Tinebase_Timemachine_ModificationLog();
         }
         
         return self::$instance;
@@ -88,13 +88,13 @@ class Egwbase_Timemachine_ModificationLog
         
         // temporaray setup
         try {
-            $this->_table = new Egwbase_Db_Table(array('name' => $this->_tablename));
-            $this->_table->setRowClass('Egwbase_Timemachine_Model_ModificationLog');
+            $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
+            $this->_table->setRowClass('Tinebase_Timemachine_Model_ModificationLog');
             
         } catch (Exception $e) {
             $this->setupTable();
-            $this->_table = new Egwbase_Db_Table(array('name' => $this->_tablename));
-            $this->_table->setRowClass('Egwbase_Timemachine_Model_ModificationLog');
+            $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
+            $this->_table->setRowClass('Tinebase_Timemachine_Model_ModificationLog');
         }
     }
     
@@ -108,10 +108,10 @@ class Egwbase_Timemachine_ModificationLog
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, including point itself 
      * @param int _modifierId optional
-     * @return Egwbase_Record_RecordSet RecordSet of Egwbase_Timemachine_Model_ModificationLog
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Timemachine_Model_ModificationLog
      */
     public function getModifications( $_application,  $_identifier, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $isoDef = 'YYYY-MM-ddTHH:mm:ss';
         
@@ -131,7 +131,7 @@ class Egwbase_Timemachine_ModificationLog
        $stmt = $db->query($select);
        $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
        
-       $modifications = new Egwbase_Record_RecordSet($resultArray, 'Egwbase_Timemachine_Model_ModificationLog');
+       $modifications = new Tinebase_Record_RecordSet($resultArray, 'Tinebase_Timemachine_Model_ModificationLog');
        return $modifications;
     } // end of member function getModifications
 
@@ -142,10 +142,10 @@ class Egwbase_Timemachine_ModificationLog
      * properties of the last change to the attribute, besides the 
      * 'modified_from', which holds the modified_from of the first change.
      * 
-     * @param Egwbase_Record_RecordSet _modifications
-     * @return Egwbase_Record_RecordSet differences
+     * @param Tinebase_Record_RecordSet _modifications
+     * @return Tinebase_Record_RecordSet differences
      */
-    public function computeDiff(Egwbase_Record_RecordSet $_modifications) {
+    public function computeDiff(Tinebase_Record_RecordSet $_modifications) {
         $diff = array();
         foreach ($_modifications as $modification) {
             if (array_key_exists($modification->modified_attribute, $diff)) {
@@ -153,14 +153,14 @@ class Egwbase_Timemachine_ModificationLog
             }
             $diff[$modification->modified_attribute] = $modification;
         }
-        return new Egwbase_Record_RecordSet($diff, 'Egwbase_Timemachine_Model_ModificationLog');
+        return new Tinebase_Record_RecordSet($diff, 'Tinebase_Timemachine_Model_ModificationLog');
     }
     
     /**
      * Returns a single logbook entry identified by an logbook identifier
      * 
      * @param int _identifier 
-     * @return Egwbase_Timemachine_Model_ModificationLog
+     * @return Tinebase_Timemachine_Model_ModificationLog
      */
     public function getModification( $_identifier ) {
         
@@ -171,16 +171,16 @@ class Egwbase_Timemachine_ModificationLog
     /**
      * Saves a logbook record
      * 
-     * @param Egwbase_Timemachine_Model_ModificationLog _modification 
+     * @param Tinebase_Timemachine_Model_ModificationLog _modification 
      * @return void
      */
-    public function setModification( Egwbase_Timemachine_Model_ModificationLog $_modification ) {
+    public function setModification( Tinebase_Timemachine_Model_ModificationLog $_modification ) {
         if ($_modification->isValid()) {
         	
         	$_modification->convertDates = true;
             $modificationArray = $_modification->toArray();
             
-            $application = Egwbase_Application::getInstance()->getApplicationByName($_modification->application);
+            $application = Tinebase_Application::getInstance()->getApplicationByName($_modification->application);
             $modificationArray['application'] = $application->getId();
             
             $modificationId = $this->_table->insert($modificationArray);
@@ -218,5 +218,5 @@ class Egwbase_Timemachine_ModificationLog
             ENGINE=MyISAM DEFAULT CHARSET=utf8"
         );
     }
-} // end of Egwbase_Timemachine_ModificationLog
+} // end of Tinebase_Timemachine_ModificationLog
 ?>

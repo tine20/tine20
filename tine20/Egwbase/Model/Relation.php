@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,9 +11,9 @@
  */
 
 /**
- * class Egwbase_Model_Relation
+ * class Tinebase_Model_Relation
  */
-class Egwbase_Model_Relation extends Egwbase_Record_Abstract 
+class Tinebase_Model_Relation extends Tinebase_Record_Abstract 
 {
 
 	protected $_identifier = 'identifier';
@@ -23,7 +23,7 @@ class Egwbase_Model_Relation extends Egwbase_Record_Abstract
      *
      * @var string
      */
-    protected $_application = 'Egwbase';
+    protected $_application = 'Tinebase';
 	
     protected $_validators = array(
         'identifier'             => array('presence' => 'required', 'allowEmpty' => true, 'Int' ),
@@ -42,5 +42,5 @@ class Egwbase_Model_Relation extends Egwbase_Record_Abstract
 	);
     
 
-} // end of Egwbase_Model_Relation
+} // end of Tinebase_Model_Relation
 ?>

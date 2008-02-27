@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Notification
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Egwbase_Notification_Backend_Smtp
+class Tinebase_Notification_Backend_Smtp
 {
     protected $_fromAddress;
     
@@ -23,7 +23,7 @@ class Egwbase_Notification_Backend_Smtp
     
     public function send($_updater, $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
-        $mail = new Egwbase_Mail('UTF-8');
+        $mail = new Tinebase_Mail('UTF-8');
         
         $mail->setSubject($_subject);
         

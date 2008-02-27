@@ -11,19 +11,19 @@
 	<script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script>     
 	<script type="text/javascript" src="ExtJS/ext-all.js"></script>
 
-	<!-- eGW -->
-	<link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-	<script type="text/javascript" language="javascript" src="Egwbase/js/Login.js"></script>
+	<!-- Tine -->
+	<link rel="stylesheet" type="text/css" href="Tinebase/css/tinebase.css"/>
+	<script type="text/javascript" language="javascript" src="Tinebase/js/Login.js"></script>
 	<!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">
             <?php
-                echo "Egw.Egwbase.jsonKey = '" . Zend_Registry::get('jsonKey') . "';\n";
+                echo "Tine.Tinebase.jsonKey = '" . Zend_Registry::get('jsonKey') . "';\n";
             ?>
     </script>
 	
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function() {
-			EGWNameSpace.Login.showLoginDialog(<?php echo "'{$this->defaultUsername}', '{$this->defaultPassword}'"?>);
+			TINENameSpace.Login.showLoginDialog(<?php echo "'{$this->defaultUsername}', '{$this->defaultPassword}'"?>);
 		});
 	</script>
 </head>

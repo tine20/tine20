@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -12,17 +12,17 @@
 /**
  * this class provides functions to get, add and remove entries from/to the access log
  */
-class Egwbase_AccessLog
+class Tinebase_AccessLog
 {
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_AccessLog
+     * @var Tinebase_AccessLog
      */
     private static $instance = NULL;
     
     /**
-     * the table object for the egw_applications table
+     * the table object for the SQL_TABLE_PREFIX . applications table
      *
      * @var Zend_Db_Table_Abstract
      */
@@ -40,22 +40,22 @@ class Egwbase_AccessLog
         }
         
         try {
-            $this->accessLogTable = new Egwbase_Db_Table($conf);
+            $this->accessLogTable = new Tinebase_Db_Table($conf);
         } catch (Zend_Db_Statement_Exception $e) {
-            Egwbase_Setup_SetupSqlTables::createAccessLogTable();
-            $this->accessLogTable = new Egwbase_Db_Table();
+            Tinebase_Setup_SetupSqlTables::createAccessLogTable();
+            $this->accessLogTable = new Tinebase_Db_Table();
         }
     }
     
     /**
      * the singleton pattern
      *
-     * @return Egwbase_AccessLog
+     * @return Tinebase_AccessLog
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_AccessLog;
+            self::$instance = new Tinebase_AccessLog;
         }
         
         return self::$instance;
@@ -140,7 +140,7 @@ class Egwbase_AccessLog
      * @param int $_limit OPTIONAL how many applications to return
      * @param int $_start OPTIONAL offset for applications
      * 
-     * @return Egwbase_RecordSet_AccessLog set of matching access log entries
+     * @return Tinebase_RecordSet_AccessLog set of matching access log entries
      */
     public function getEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
     {
@@ -172,7 +172,7 @@ class Egwbase_AccessLog
             $arrayRowSet[$rowId] = $row;
         }
 
-        $result = new Egwbase_Record_RecordSet($arrayRowSet, 'Egwbase_Model_AccessLog');
+        $result = new Tinebase_Record_RecordSet($arrayRowSet, 'Tinebase_Model_AccessLog');
 
         return $result;
     }

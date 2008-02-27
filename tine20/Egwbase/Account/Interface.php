@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,9 +13,9 @@
 /**
  * interface for the accounts class
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  */
-interface Egwbase_Account_Interface
+interface Tinebase_Account_Interface
 {
 }

@@ -11,16 +11,16 @@
     <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="ExtJS/ext-all-debug.js"></script>
 
-    <!-- eGW -->
-    <link rel="stylesheet" type="text/css" href="Egwbase/css/egwbase.css"/>
-    <script type="text/javascript" language="javascript" src="Egwbase/js/Egwbase.js"></script>
+    <!-- Tine 2.0 -->
+    <link rel="stylesheet" type="text/css" href="Tinebase/css/tinebase.css"/>
+    <script type="text/javascript" language="javascript" src="Tinebase/js/Tinebase.js"></script>
     <!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">
             <?php
                 foreach ((array)$this->configData as $index => $value) {
-                    echo "Egw.Egwbase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
+                    echo "Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
                 }
-                echo "Egw.Egwbase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');\n";
+                echo "Tine.Tinebase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');\n";
             ?>
     </script>
     <?php 
@@ -36,15 +36,15 @@
            foreach ((array)$this->initialData as $appname => $data) {
                if (!empty($data) ) {
                    foreach ($data as $var => $content) {
-                       echo "Egw.$appname.$var = ". Zend_Json::encode($content). ';';
+                       echo "Tine.$appname.$var = ". Zend_Json::encode($content). ';';
                    }
                }
            }
         ?>
 
         Ext.onReady(function(){
-            Egw.Egwbase.initFramework();
-            <?php if(empty($this->isPopup)) echo "Egw.Egwbase.MainScreen.display(); \n" ?>
+            Tine.Tinebase.initFramework();
+            <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen.display(); \n" ?>
             <?php if(isset($this->formData)) echo "formData=" . Zend_Json::encode($this->formData) . "; \n" ?>
             <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
             window.focus();

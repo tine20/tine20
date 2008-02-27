@@ -1,14 +1,14 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-class Egwbase_Record_Exception_NotAllowed extends BadFunctionCallException {
+class Tinebase_Record_Exception_NotAllowed extends BadFunctionCallException {
 
 }

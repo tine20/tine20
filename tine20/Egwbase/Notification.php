@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Egwbase_Notification
+class Tinebase_Notification
 {
     protected $_smtpBackend;
     /**
@@ -19,7 +19,7 @@ class Egwbase_Notification
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_smtpBackend = Egwbase_Notification_Factory::getBackend(Egwbase_Notification_Factory::SMTP);
+        $this->_smtpBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
     }
     
     /**
@@ -38,21 +38,21 @@ class Egwbase_Notification
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Notification
+     * @return Tinebase_Notification
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Egwbase_Notification;
+            self::$_instance = new Tinebase_Notification;
         }
         
         return self::$_instance;
     }
     
-    public function send(Egwbase_Account_Model_FullAccount $_updater, Egwbase_Record_RecordSet $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Tinebase_Record_RecordSet $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
         foreach($_recipients as $recipient) {
-            $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml);
+            $this->_smtpBackend->send($recipient, $_subject, $_messagePlain, $_messageHtml);
         }
     }
 }

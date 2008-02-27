@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,19 +12,19 @@
 
 
 /**
- * class Egwbase_Record_Event_Abstract
+ * class Tinebase_Record_Event_Abstract
  * 
  * Abstract event for record related events
  */
-class Egwbase_Record_Event_Abstract extends Egwbase_Events_Abstract 
+class Tinebase_Record_Event_Abstract extends Tinebase_Events_Abstract 
 {
     /**
      * hold definition of observable
      *
-     * @var Egwbase_Model_PersistentObserver
+     * @var Tinebase_Model_PersistentObserver
      */
 	public $observable;
 
     
-} // end of Egwbase_Record_Event_Abstract
+} // end of Tinebase_Record_Event_Abstract
 ?>

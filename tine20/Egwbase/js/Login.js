@@ -1,4 +1,4 @@
-    /*
+/*
  * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
@@ -6,11 +6,11 @@
  * http://www.extjs.com/license
  */
 
-var EGWNameSpace = EGWNameSpace || {};
+var TINENameSpace = TINENameSpace || {};
 
-Ext.namespace('Egw.Egwbase.Registry');
+Ext.namespace('Tine.Tinebase.Registry');
 
-EGWNameSpace.Login = function() {
+TINENameSpace.Login = function() {
     // turn on validation errors beside the field globally
     Ext.form.Field.prototype.msgTarget = 'side';
     
@@ -20,7 +20,7 @@ EGWNameSpace.Login = function() {
             id: 'loginDialog',
             labelWidth: 75,
 			url:'index.php',
-            baseParams:{method: 'Egwbase.login'},
+            baseParams:{method: 'Tinebase.login'},
             frame:true,
             title: 'Please enter your login data',
             bodyStyle:'padding:5px 5px 0',
@@ -49,7 +49,7 @@ EGWNameSpace.Login = function() {
                             waitTitle: 'Please wait!', 
                             waitMsg:'Logging you in...',
                             params: {
-                            	jsonKey: Egw.Egwbase.jsonKey
+                            	jsonKey: Tine.Tinebase.jsonKey
                             },
                             success:function(form, action, o) {
                                 Ext.MessageBox.wait('Login successful. Loading eGroupWare...', 'Please wait!');

@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,21 +12,21 @@
 
 
 /**
- * class Egwbase_Record_PersistentObserver
+ * class Tinebase_Record_PersistentObserver
  */
-class Egwbase_Record_PersistentObserver
+class Tinebase_Record_PersistentObserver
 {
 
 	/**
 	 * Holds instance for SQL_TABLE_PREFIX . 'record_persistentobserver' table
 	 * 
-	 * @var Egwbase_Db_Table
+	 * @var Tinebase_Db_Table
 	 */
 	protected $_db;
 	
 	/* holdes the instance of the singleton
      *
-     * @var Egwbase_Record_PersistentObserver
+     * @var Tinebase_Record_PersistentObserver
      */
     private static $instance = NULL;
     
@@ -37,8 +37,8 @@ class Egwbase_Record_PersistentObserver
     private function __construct()
     {
     	// temporary on the fly creation of table
-    	Egwbase_Setup_SetupSqlTables::createPersistentObserverTable();
-    	$this->_db = new Egwbase_Db_Table(array(
+    	Tinebase_Setup_SetupSqlTables::createPersistentObserverTable();
+    	$this->_db = new Tinebase_Db_Table(array(
     	    'name' => SQL_TABLE_PREFIX . 'record_persistentobserver',
     	    'primary' => 'identifier'
     	));
@@ -48,12 +48,12 @@ class Egwbase_Record_PersistentObserver
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Record_PersistentObserver
+     * @return Tinebase_Record_PersistentObserver
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Record_PersistentObserver();
+            self::$instance = new Tinebase_Record_PersistentObserver();
         }
         
         return self::$instance;
@@ -61,8 +61,8 @@ class Egwbase_Record_PersistentObserver
     
     /**
      *
-     * @param Egwbase_Record_Interface $_observable 
-     * @param Egwbase_Events_Abstract $_event 
+     * @param Tinebase_Record_Interface $_observable 
+     * @param Tinebase_Events_Abstract $_event 
      * @return 
      */
     public function fireEvent( $_observable,  $_event ) {
@@ -90,7 +90,7 @@ class Egwbase_Record_PersistentObserver
             
             $eventObject = new $_event();
             
-            // Egwbase_Model_PersistentObserver holds observer and observable
+            // Tinebase_Model_PersistentObserver holds observer and observable
             $eventObject->observable = $observer;
             
             $controller->handleEvents($eventObject);
@@ -100,12 +100,12 @@ class Egwbase_Record_PersistentObserver
     /**
      * registers new persistent observer
      * 
-     * @param Egwbase_Model_PersistentObserver $_persistentObserver 
-     * @return Egwbase_Model_PersistentObserver the new persistentObserver
+     * @param Tinebase_Model_PersistentObserver $_persistentObserver 
+     * @return Tinebase_Model_PersistentObserver the new persistentObserver
      */
     public function addObserver( $_persistentObserver ) {
     	if ($_persistentObserver->getId()) {
-    		throw new Egwbase_Record_Exception_NotAllowed('Could not add existing observer');
+    		throw new Tinebase_Record_Exception_NotAllowed('Could not add existing observer');
     	}
     	
     	$_persistentObserver->created_by = Zend_Registry::get('currentAccount')->getId();
@@ -115,7 +115,7 @@ class Egwbase_Record_PersistentObserver
     		$data = $_persistentObserver->toArray();
     		
     		// resolve apps
-    		$application = Egwbase_Application::getInstance();
+    		$application = Tinebase_Application::getInstance();
     		$data['observable_application'] = $application->getApplicationByName($_persistentObserver->observable_application)->app_id;
     		$data['observer_application']   = $application->getApplicationByName($_persistentObserver->observer_application)->app_id;
             
@@ -123,17 +123,17 @@ class Egwbase_Record_PersistentObserver
 
     		$persistentObserver = $this->_db->fetchRow( "identifier = $identifier");
     		
-    		return new Egwbase_Model_PersistentObserver($persistentObserver->toArray(), true);
+    		return new Tinebase_Model_PersistentObserver($persistentObserver->toArray(), true);
     		
     	} else {
-    		throw new Egwbase_Record_Exception_Validation('some fields have invalid content');
+    		throw new Tinebase_Record_Exception_Validation('some fields have invalid content');
     	}
     } // end of member function addObserver
 
     /**
      * unregisters a persistaent observer
      * 
-     * @param Egwbase_Model_PersistentObserver $_persistentObserver 
+     * @param Tinebase_Model_PersistentObserver $_persistentObserver 
      * @return void 
      */
     public function removeObserver( $_persistentObserver ) {
@@ -153,7 +153,7 @@ class Egwbase_Record_PersistentObserver
     /**
      * unregisters all observables of a given observer 
      * 
-     * @param Egwbase_Record_Interface $_observer 
+     * @param Tinebase_Record_Interface $_observer 
      * @return void
      */
     public function removeAllObservables( $_observer ) {
@@ -169,15 +169,15 @@ class Egwbase_Record_PersistentObserver
                 'deleted_time' => Zend_Date::now()->getIso()
             ), $where);
     	} else {
-    		throw new Egwbase_Record_Exception_DefinitionFailure();
+    		throw new Tinebase_Record_Exception_DefinitionFailure();
     	}
     } // end of member function removeAllObservables
 
     /**
      * returns all observables of a given observer
      * 
-     * @param Egwbase_Record_Interface $_observer 
-     * @return Egwbase_Record_RecordSet of Egwbase_Model_PersitentObserver
+     * @param Tinebase_Record_Interface $_observer 
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_PersitentObserver
      */
     public function getAllObservables( $_observer ) {
     	if ($_observer->getApplication() && $_observer->getId()) {
@@ -186,22 +186,22 @@ class Egwbase_Record_PersistentObserver
                 'observer_identifier  =' . $_observer->getId()
     		);
     		
-    		return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true); 
+    		return new Tinebase_Record_RecordSet($this->_db->fetchAll($where), 'Tinebase_Model_PersistentObserver', true); 
     	} else {
-    		throw new Egwbase_Record_Exception_DefinitionFailure(); 
+    		throw new Tinebase_Record_Exception_DefinitionFailure(); 
     	}
     } // end of member function getAllObservables
 
     /**
      * returns all observables of a given event and observer
      * 
-     * @param Egwbase_Record_Interface $_observer 
+     * @param Tinebase_Record_Interface $_observer 
      * @param string _event 
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function getObservablesByEvent( $_observer,  $_event ) {
     	if (!$_observer->getApplication() || !$_observer->getId()) {
-    		throw new Egwbase_Record_Exception_DefinitionFailure();
+    		throw new Tinebase_Record_Exception_DefinitionFailure();
     	} 
     	
     	$where = array(
@@ -210,20 +210,20 @@ class Egwbase_Record_PersistentObserver
     	    'observed_event       =' . $this->_db->getAdapter()->quote($_event)
     	);
     	
-    	return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true);
+    	return new Tinebase_Record_RecordSet($this->_db->fetchAll($where), 'Tinebase_Model_PersistentObserver', true);
     } // end of member function getObservablesByEvent
 
 
     /**
      * returns all observers of a given observable and event
      * 
-     * @param Egwbase_Record_Interface $_observable 
+     * @param Tinebase_Record_Interface $_observable 
      * @param string _event 
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     protected function getObserversByEvent( $_observable,  $_event ) {
         if (!$_observer->getApplication() || !$_observer->getId()) {
-            throw new Egwbase_Record_Exception_DefinitionFailure();
+            throw new Tinebase_Record_Exception_DefinitionFailure();
         }
         
         $where = array(
@@ -232,11 +232,11 @@ class Egwbase_Record_PersistentObserver
             'observed_event         =' . $this->_db->getAdapter()->quote($_event)
         );
         
-        return new Egwbase_Record_RecordSet($this->_db->fetchAll($where), 'Egwbase_Model_PersistentObserver', true);
+        return new Tinebase_Record_RecordSet($this->_db->fetchAll($where), 'Tinebase_Model_PersistentObserver', true);
     } // end of member function getObserversByEvent
 
 
 
 
-} // end of Egwbase_Record_PersistentObserver
+} // end of Tinebase_Record_PersistentObserver
 ?>

@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Ext
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Egwbase_Ext_Treenode
+class Tinebase_Ext_Treenode
 {
 	public $text;
 	
@@ -47,7 +47,7 @@ class Egwbase_Ext_Treenode
         }
 	}
 	
-	public function addChildren(Egwbase_Ext_Treenode $_children)
+	public function addChildren(Tinebase_Ext_Treenode $_children)
 	{
 		$this->children[] = $_children;
 	}

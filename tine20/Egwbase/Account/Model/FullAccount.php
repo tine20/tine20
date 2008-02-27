@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -16,10 +16,10 @@
  * this datatype contains all information about an account
  * the usage of this datatype should be restricted to administrative tasks only
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Account
  */
-class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
+class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
 {
     /**
      * list of zend inputfilter
@@ -78,11 +78,11 @@ class Egwbase_Account_Model_FullAccount extends Egwbase_Account_Model_Account
     /**
      * return the public informations of this account only
      *
-     * @return Egwbase_Account_Model_Account
+     * @return Tinebase_Account_Model_Account
      */
     public function getPublicAccount()
     {
-        $result = new Egwbase_Account_Model_Account($this->toArray(), true);
+        $result = new Tinebase_Account_Model_Account($this->toArray(), true);
         
         return $result;
     }

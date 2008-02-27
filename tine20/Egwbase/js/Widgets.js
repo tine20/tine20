@@ -1,7 +1,7 @@
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
- * @package     Egw
+ * @package     Tine
  * @subpackage  Widgets
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -9,10 +9,10 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Egw.widgets');
+Ext.namespace('Tine.widgets');
 
-Ext.namespace('Egw.widgets.dialog');
-Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
+Ext.namespace('Tine.widgets.dialog');
+Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	/**
 	 * @cfg {array} additional toolbar items
 	 */
@@ -67,15 +67,15 @@ Egw.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             items: this.tbarItems
         });
 		
-		Egw.widgets.dialog.EditRecord.superclass.initComponent.call(this);
+		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
 	getToolbar: function() {
 		return this.getTopToolbar();
 	}
 });
 
-Ext.namespace('Egw.widgets.Percent');
-Egw.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
+Ext.namespace('Tine.widgets.Percent');
+Tine.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
 	/**
 	 * @cfs {bool} autoExpand
 	 * Autoexpand comboBox on focus.
@@ -94,7 +94,7 @@ Egw.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
 	
     //private
     initComponent: function(){
-        Egw.widgets.Percent.Combo.superclass.initComponent.call(this);
+        Tine.widgets.Percent.Combo.superclass.initComponent.call(this);
 		// allways set a default
 		if(!this.value) {
 		    this.value = 0;
@@ -125,12 +125,12 @@ Egw.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
         }
 		
 		this.on('select', function(){
-			//this.el = Egw.widgets.Percent.ComboBox.progressBar(this.value);
+			//this.el = Tine.widgets.Percent.ComboBox.progressBar(this.value);
 		});
     }
 });
 
-Egw.widgets.Percent.renderer = function(percent) {
+Tine.widgets.Percent.renderer = function(percent) {
     return '<div class="x-progress-wrap TasksProgress">' +
             '<div class="x-progress-inner TasksProgress">' +
                 '<div class="x-progress-bar TasksProgress" style="width:' + percent + '%">' +
@@ -145,8 +145,8 @@ Egw.widgets.Percent.renderer = function(percent) {
         '</div>';
 };
 
-Ext.namespace('Egw.widgets.Priority');
-Egw.widgets.Priority.store = new Ext.data.SimpleStore({
+Ext.namespace('Tine.widgets.Priority');
+Tine.widgets.Priority.store = new Ext.data.SimpleStore({
 	storeId: 'Priorities',
 	id: 'key',
     fields: ['key','value', 'icon'],
@@ -158,7 +158,7 @@ Egw.widgets.Priority.store = new Ext.data.SimpleStore({
         ]
 });
 
-Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
+Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
 	/**
      * @cfs {bool} autoExpand
      * Autoexpand comboBox on focus.
@@ -175,13 +175,13 @@ Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
     
     //private
     initComponent: function(){
-        Egw.widgets.Priority.Combo.superclass.initComponent.call(this);
+        Tine.widgets.Priority.Combo.superclass.initComponent.call(this);
         // allways set a default
         if(!this.value) {
             this.value = 1;
         }
             
-        this.store = Egw.widgets.Priority.store;
+        this.store = Tine.widgets.Priority.store;
         
         if (this.autoExpand) {
             this.on('focus', function(){
@@ -192,8 +192,8 @@ Egw.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
     }
 });
 
-Egw.widgets.Priority.renderer = function(priority) {
-	var s = Egw.widgets.Priority.store;
+Tine.widgets.Priority.renderer = function(priority) {
+	var s = Tine.widgets.Priority.store;
 	var idx = s.find('key', priority);
 	return idx !== undefined ? s.getAt(idx).data.value : priority;
 };

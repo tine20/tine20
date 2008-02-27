@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tine
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,10 +10,10 @@
  * @version     $Id$
 
 /**
- * HTTP interface to Egwbase
+ * HTTP interface to Tine
  *
  */
-class Egwbase_Http extends Egwbase_Application_Http_Abstract
+class Tinebase_Http extends Tinebase_Application_Http_Abstract
 {
     /**
      * displays the login dialog
@@ -23,7 +23,7 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
     {
         $view = new Zend_View();
 
-        $view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Tinebase/views');
 
         try {
             $loginConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'login');
@@ -39,7 +39,7 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
     }
     
     /**
-     * Returns all JS files which must be included for Egwbase
+     * Returns all JS files which must be included for Tinebase
      *
      * @todo refactor js stuff so that all js files could be included
      * before regestry gets included!
@@ -52,21 +52,21 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
             // base framework
             //self::_appendFileTime("../ExtJS/adapter/ext/ext-base.js"),
             //self::_appendFileTime("../ExtJS/ext-all-debug.js"),
-            // Egwbase
-            //self::_appendFileTime("Egwbase/js/Egwbase.js"),
-            self::_appendFileTime("Egwbase/js/Container.js"),
+            // Tinebase
+            //self::_appendFileTime("Tinebase/js/Tinebase.js"),
+            self::_appendFileTime("Tinebase/js/Container.js"),
             // Ext user extensions
-            self::_appendFileTime("Egwbase/js/ExtUx.js"),
-            self::_appendFileTime("Egwbase/js/ux/PopupWindow.js"),
-            self::_appendFileTime("Egwbase/js/ux/grid/CheckColumn.js"),
-            self::_appendFileTime("Egwbase/js/DatepickerRange.js"),
+            self::_appendFileTime("Tinebase/js/ExtUx.js"),
+            self::_appendFileTime("Tinebase/js/ux/PopupWindow.js"),
+            self::_appendFileTime("Tinebase/js/ux/grid/CheckColumn.js"),
+            self::_appendFileTime("Tinebase/js/DatepickerRange.js"),
             // Tine 2.0 specific widgets
-            self::_appendFileTime("Egwbase/js/Widgets.js"),
-            self::_appendFileTime("Egwbase/js/AccountpickerPanel.js"),
-            self::_appendFileTime("Egwbase/js/widgets/ContainerSelect.js"),
-            self::_appendFileTime("Egwbase/js/widgets/ContainerGrants.js"),
-            self::_appendFileTime("Egwbase/js/widgets/ContainerTree.js"),
-            self::_appendFileTime("Egwbase/js/widgets/QuickaddGridPanel.js")
+            self::_appendFileTime("Tinebase/js/Widgets.js"),
+            self::_appendFileTime("Tinebase/js/AccountpickerPanel.js"),
+            self::_appendFileTime("Tinebase/js/widgets/ContainerSelect.js"),
+            self::_appendFileTime("Tinebase/js/widgets/ContainerGrants.js"),
+            self::_appendFileTime("Tinebase/js/widgets/ContainerTree.js"),
+            self::_appendFileTime("Tinebase/js/widgets/QuickaddGridPanel.js")
         );
     }
     
@@ -76,7 +76,7 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
 
         $view = new Zend_View();
 
-        $view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Tinebase/views');
 
         //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
         $view->jsIncludeFiles = $this->getJsFilesToInclude();

@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,11 +13,11 @@
 /**
  * authentication backend factory class
  *  
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Auth
  */
 
-class Egwbase_Auth_Factory
+class Tinebase_Auth_Factory
 {
     /**
      * constant for Sql contacts backend class
@@ -39,7 +39,7 @@ class Egwbase_Auth_Factory
      */
     static public function factory($_type, $_options)
     {
-        $className = 'Egwbase_Auth_' . ucfirst($_type);
+        $className = 'Tinebase_Auth_' . ucfirst($_type);
         $instance = new $className($_options);
         
         //throw new Exception('unknown type');

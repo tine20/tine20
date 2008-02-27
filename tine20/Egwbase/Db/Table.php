@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Db
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
  * the class provides functions to handle applications
  * 
  */
-class Egwbase_Db_Table extends Zend_Db_Table_Abstract
+class Tinebase_Db_Table extends Zend_Db_Table_Abstract
 {
     /**
      * wrapper around Zend_Db_Table_Abstract::fetchAll

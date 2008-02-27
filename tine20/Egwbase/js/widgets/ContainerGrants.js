@@ -1,5 +1,5 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -8,11 +8,11 @@
  *
  */
 
-Ext.namespace('Egw.widgets', 'Egw.widgets.container');
+Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 
-Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondialog, {
+Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerActiondialog, {
 	/**
-	 * @cfg {Egw.Egwbase.container.models.container}
+	 * @cfg {Tine.Tinebase.container.models.container}
 	 * Container to manage grants for
 	 */
 	grantContainer: null,
@@ -26,7 +26,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 	 * Models 
 	 */
 	models: {
-		containerGrant : Egw.Egwbase.container.models.containerGrant
+		containerGrant : Tine.Tinebase.container.models.containerGrant
 	},
 	
 	id: 'ContainerGrantsDialog',
@@ -81,7 +81,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 				
 				Ext.Ajax.request({
 					params: {
-						method: 'Egwbase_Container.setContainerGrants',
+						method: 'Tinebase_Container.setContainerGrants',
 						containerId: container.container_id,
 						grants: Ext.util.JSON.encode(grants)
 					},
@@ -126,7 +126,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 		};
 		this.dataStore =  new Ext.data.JsonStore({
             baseParams: {
-                method: 'Egwbase_Container.getContainerGrants',
+                method: 'Tinebase_Container.getContainerGrants',
                 containerId: this.grantContainer.container_id
             },
             root: 'results',
@@ -183,7 +183,7 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
                 id: 'accountName', 
                 header: 'Name', 
                 dataIndex: 'accountName', 
-                renderer: Egw.Egwbase.Common.usernameRenderer,
+                renderer: Tine.Tinebase.Common.usernameRenderer,
                 width: 70
             }].concat(columns)
         );
@@ -229,11 +229,11 @@ Egw.widgets.container.grantDialog = Ext.extend(Egw.widgets.AccountpickerActiondi
 		this.items = [
 		   this.GrantsGridPanel
 		];
-		Egw.widgets.container.grantDialog.superclass.initComponent.call(this);
+		Tine.widgets.container.grantDialog.superclass.initComponent.call(this);
     },
 	// private
 	onRender: function(ct, position){
-		Egw.widgets.container.grantDialog.superclass.onRender.call(this, ct, position);
+		Tine.widgets.container.grantDialog.superclass.onRender.call(this, ct, position);
 		
 		this.getUserSelection().on('accountdblclick', function(account){
             this.handlers.addAccount(account);   

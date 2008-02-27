@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,20 +13,20 @@
 /**
  * the class provides functions to handle applications
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Server
  */
-class Egwbase_Controller
+class Tinebase_Controller
 {
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Controller
+     * @var Tinebase_Controller
      */
     private static $instance = NULL;
     
     /**
-     * stores the egwbase session namespace
+     * stores the tinebase session namespace
      *
      * @var Zend_Session_Namespace
      */
@@ -58,7 +58,7 @@ class Egwbase_Controller
 
         $this->setupTimezones();
         
-        $this->session = new Zend_Session_Namespace('egwbase');
+        $this->session = new Zend_Session_Namespace('tinebase');
         
         if(!isset($this->session->jsonKey)) {
             $this->session->jsonKey = md5(mktime());
@@ -73,12 +73,12 @@ class Egwbase_Controller
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Controller
+     * @return Tinebase_Controller
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Controller;
+            self::$instance = new Tinebase_Controller;
         }
         
         return self::$instance;
@@ -110,11 +110,11 @@ class Egwbase_Controller
 
             $server = new Zend_Json_Server();
 
-            $server->setClass('Egwbase_Json', 'Egwbase');
+            $server->setClass('Tinebase_Json', 'Tinebase');
 
             if(Zend_Auth::getInstance()->hasIdentity()) {
-            	// register addidional Egwbase Json servers
-            	Egwbase_Json::setJsonServers($server);
+            	// register addidional Tinebase Json servers
+            	Tinebase_Json::setJsonServers($server);
             	
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
@@ -134,9 +134,9 @@ class Egwbase_Controller
             Zend_Registry::get('logger')->debug('is http request. method: ' . ( isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY' ) );
             // HTTP request
     
-            $server = new Egwbase_Http_Server();
+            $server = new Tinebase_Http_Server();
     
-            $server->setClass('Egwbase_Http', 'Egwbase');
+            $server->setClass('Tinebase_Http', 'Tinebase');
     
             if(Zend_Auth::getInstance()->hasIdentity()) {
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
@@ -153,9 +153,9 @@ class Egwbase_Controller
     
             if(empty($_REQUEST['method'])) {
                 if(Zend_Auth::getInstance()->hasIdentity()) {
-                    $_REQUEST['method'] = 'Egwbase.mainScreen';
+                    $_REQUEST['method'] = 'Tinebase.mainScreen';
                 } else {
-                    $_REQUEST['method'] = 'Egwbase.login';
+                    $_REQUEST['method'] = 'Tinebase.login';
                 }
             }
     
@@ -252,10 +252,10 @@ class Egwbase_Controller
      */
     public function login($_username, $_password, $_ipAddress)
     {
-        $authResult = Egwbase_Auth::getInstance()->authenticate($_username, $_password);
+        $authResult = Tinebase_Auth::getInstance()->authenticate($_username, $_password);
         
         if ($authResult->isValid()) {
-            $accountsController = Egwbase_Account::getInstance();
+            $accountsController = Tinebase_Account::getInstance();
             try {
                 $account = $accountsController->getFullAccountByLoginName($authResult->getIdentity());
             } catch (Exception $e) {
@@ -270,7 +270,7 @@ class Egwbase_Controller
             
             $account->setLoginTime($_ipAddress);
             
-            Egwbase_AccessLog::getInstance()->addLoginEntry(
+            Tinebase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $authResult->getIdentity(),
                 $_ipAddress,
@@ -280,14 +280,14 @@ class Egwbase_Controller
             
             return true;
         } else {
-            Egwbase_AccessLog::getInstance()->addLoginEntry(
+            Tinebase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $_username,
                 $_ipAddress,
                 $authResult->getCode()
             );
             
-            Egwbase_AccessLog::getInstance()->addLogoutEntry(
+            Tinebase_AccessLog::getInstance()->addLogoutEntry(
                 session_id(),
                 $_ipAddress
             );
@@ -306,11 +306,11 @@ class Egwbase_Controller
         $loginName = Zend_Registry::get('currentAccount')->accountLoginName;
         Zend_Registry::get('logger')->debug("change password for $loginName");
         
-        if(!Egwbase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
+        if(!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
             throw new Exception('old password worng');
         }
         
-        Egwbase_Auth::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
+        Tinebase_Auth::getInstance()->setPassword($loginName, $_newPassword1, $_newPassword2);
     }
     
     /**
@@ -323,7 +323,7 @@ class Egwbase_Controller
         if (Zend_Registry::isRegistered('currentAccount')) {
             $currentAccount = Zend_Registry::get('currentAccount');
     
-            Egwbase_AccessLog::getInstance()->addLogoutEntry(
+            Tinebase_AccessLog::getInstance()->addLogoutEntry(
                 session_id(),
                 $_ipAddress,
                 $currentAccount->accountId

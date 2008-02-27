@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,23 +13,23 @@
 /**
  * this class handles access rights(grants) to containers
  * 
- * any record in eGroupWare 2.0 is tied to a container. the rights of an account on a record gets 
+ * any record in Tine 2.0 is tied to a container. the rights of an account on a record gets 
  * calculated by the grants given to this account on the container holding the record (if you know what i mean ;-))
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Acl
  */
-class Egwbase_Container_Container
+class Tinebase_Container_Container
 {
     /**
-     * the table object for the egw_container table
+     * the table object for the SQL_TABLE_PREFIX .container table
      *
      * @var Zend_Db_Table_Abstract
      */
     protected $containerTable;
 
     /**
-     * the table object for the egw_container_acl table
+     * the table object for the SQL_TABLE_PREFIX . container_acl table
      *
      * @var Zend_Db_Table_Abstract
      */
@@ -105,12 +105,12 @@ class Egwbase_Container_Container
      */
     private function __construct() {
         try {
-            $this->containerTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
+            $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createContainerTable();
-            $this->containerTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
+            $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
 
-            $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
+            $application = Tinebase_Application::getInstance()->getApplicationByName('addressbook');
             
             $data = array(
                 'container_name'    => 'Internal Contacts',
@@ -138,12 +138,12 @@ class Egwbase_Container_Container
         }
         
         try {
-            $this->containerAclTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
+            $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createContainerAclTable();
-            $this->containerAclTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
+            $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
 
-            $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
+            $application = Tinebase_Application::getInstance()->getApplicationByName('addressbook');
             $accountId = Zend_Registry::get('currentAccount')->accountId;
             
             $data = array(
@@ -181,26 +181,26 @@ class Egwbase_Container_Container
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Container_Container
+     * @var Tinebase_Container_Container
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Container_Container
+     * @return Tinebase_Container_Container
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Egwbase_Container_Container;
+            self::$_instance = new Tinebase_Container_Container;
         }
         
         return self::$_instance;
     }
 
     /**
-     * temporary function to create the egw_container table on demand
+     * temporary function to create the SQL_TABLE_PREFIX . container table on demand
      *
      */
     protected function createContainerTable() {
@@ -224,7 +224,7 @@ class Egwbase_Container_Container
     }
 
     /**
-     * temporary function to create the egw_container_acl table on demand
+     * temporary function to create the SQL_TABLE_PREFIX . container_acl table on demand
      *
      */
     protected function createContainerAclTable() {
@@ -253,7 +253,7 @@ class Egwbase_Container_Container
      * @param int $_accountId the accountId of the owner of the newly created container
      * @param string $_application name of the application
      * @param string $_containerName displayname of the container
-     * @return Egwbase_Model_Container
+     * @return Tinebase_Model_Container
      */
     public function addSharedContainer($_accountId, $_application, $_containerName)
     {
@@ -280,7 +280,7 @@ class Egwbase_Container_Container
      * @param int $_accountId the accountId of the owner of the newly created container
      * @param string $_application name of the application
      * @param string $_containerName displayname of the container
-     * @return Egwbase_Model_Container
+     * @return Tinebase_Model_Container
      */
     public function addPersonalContainer($_accountId, $_application, $_containerName)
     {
@@ -302,13 +302,13 @@ class Egwbase_Container_Container
      *
      * @param string $_application the name of the application
      * @param string $_name the name of the container
-     * @param int $_type the type of the container(Egwbase_Container_Container::TYPE_SHARED, Egwbase_Container_Container::TYPE_PERSONAL. Egwbase_Container_Container::TYPE_INTERNAL)
+     * @param int $_type the type of the container(Tinebase_Container_Container::TYPE_SHARED, Tinebase_Container_Container::TYPE_PERSONAL. Tinebase_Container_Container::TYPE_INTERNAL)
      * @param string $_backend type of the backend. for eaxmple: sql, ldap, ...
      * @return int the id of the newly create container
      */
     public function addContainer($_application, $_name, $_type, $_backend)
     {
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $data = array(
             'container_name'    => $_name,
@@ -374,12 +374,12 @@ class Egwbase_Container_Container
      * returns the internal conatainer for a given application
      *
      * @param string $_application name of the application
-     * @return Egwbase_Model_Container the internal container
+     * @return Tinebase_Model_Container the internal container
      */
     public function getInternalContainer($_application)
     {
         $accountId   = Zend_Registry::get('currentAccount')->accountId;
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $db = Zend_Registry::get('dbAdapter');
 
@@ -396,7 +396,7 @@ class Egwbase_Container_Container
         //error_log("getInternalContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
+        $result = new Tinebase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
         
         if(empty($result)) {
             throw new Exception('internal container not found or not accessible');
@@ -414,7 +414,7 @@ class Egwbase_Container_Container
      * @param int $_accountId
      * @param string $_application the application name
      * @param int $_right the required right
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function getContainerByACL($_accountId, $_application, $_right)
     {
@@ -428,10 +428,10 @@ class Egwbase_Container_Container
             throw new InvalidArgumentException('$_right must be integer');
         }
         
-        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
+        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
                
         $db = Zend_Registry::get('dbAdapter');
         
@@ -452,7 +452,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
+        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
         
         return $result;
     }
@@ -461,7 +461,7 @@ class Egwbase_Container_Container
      * return a container by containerId
      *
      * @param int $_containerId the id of the container
-     * @return Egwbase_Model_Container
+     * @return Tinebase_Model_Container
      */
     public function getContainerById($_containerId)
     {
@@ -497,7 +497,7 @@ class Egwbase_Container_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
-        $result = new Egwbase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
+        $result = new Tinebase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
         
         if(empty($result)) {
             throw new UnderflowException('container not found');
@@ -512,11 +512,11 @@ class Egwbase_Container_Container
      *
      * @param string $_application the name of the application
      * @param int $_owner the numeric account id of the owner
-     * @return Egwbase_Record_RecordSet set of Egwbase_Model_Container
+     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getPersonalContainer($_application, $_owner)
     {
-        //error_log('EGWBASE :: CONTAINER :: getPersonalContainer : '.$_application.' | owner: '.$_owner);    	
+        //error_log('TINEBASE :: CONTAINER :: getPersonalContainer : '.$_application.' | owner: '.$_owner);    	
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
@@ -527,7 +527,7 @@ class Egwbase_Container_Container
         
         $db = Zend_Registry::get('dbAdapter');
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
@@ -550,7 +550,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
+        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
         
         return $result;
     }
@@ -559,7 +559,7 @@ class Egwbase_Container_Container
      * returns the shared container for a given application accessible by the current user
      *
      * @param string $_application the name of the application
-     * @return Egwbase_Record_RecordSet set of Egwbase_Model_Container
+     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getSharedContainer($_application)
     {
@@ -568,7 +568,7 @@ class Egwbase_Container_Container
         
         $db = Zend_Registry::get('dbAdapter');
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
@@ -584,7 +584,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
+        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
         
         return $result;
     }
@@ -604,7 +604,7 @@ class Egwbase_Container_Container
         
         $db = Zend_Registry::get('dbAdapter');
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
@@ -624,8 +624,8 @@ class Egwbase_Container_Container
         $stmt = $db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Egwbase_Record_RecordSet(array(), 'Egwbase_Account_Model_Account');
-        $accountsBackend = Egwbase_Account::getInstance();
+        $result = new Tinebase_Record_RecordSet(array(), 'Tinebase_Account_Model_Account');
+        $accountsBackend = Tinebase_Account::getInstance();
         
         foreach($rows as $row) {
             $account = $accountsBackend->getAccountById($row['account_id']);
@@ -639,7 +639,7 @@ class Egwbase_Container_Container
      * return set of all personal container of other users made accessible to the current account 
      *
      * @param string $_application the name of the application
-     * @return Egwbase_Record_RecordSet set of Egwbase_Model_Container
+     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getOtherUsersContainer($_application)
     {
@@ -650,7 +650,7 @@ class Egwbase_Container_Container
         
         $db = Zend_Registry::get('dbAdapter');
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
         $select = $db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
@@ -672,7 +672,7 @@ class Egwbase_Container_Container
 
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Container');
+        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
         
         return $result;
     }
@@ -750,7 +750,7 @@ class Egwbase_Container_Container
             throw new InvalidArgumentException('$_grant must be integer');
         }
         
-        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
+        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');
@@ -802,18 +802,18 @@ class Egwbase_Container_Container
         
         $resultArray = array();
 
-        $egwBaseAccounts = Egwbase_Account::getInstance();
+        $tineBaseAccounts = Tinebase_Account::getInstance();
         
         foreach($rows as $row) {
         	if (! isset($resultArray[$row['account_id']])) {
 	            if($row['account_id'] === NULL) {
 	                $displayName = 'Anyone';
 	            } else {
-	                $account = $egwBaseAccounts->getAccountById($row['account_id']);
+	                $account = $tineBaseAccounts->getAccountById($row['account_id']);
 	                $displayName = $account->accountDisplayName;
 	            }
 	                
-	            $containerGrant = new Egwbase_Model_Grants( array(
+	            $containerGrant = new Tinebase_Model_Grants( array(
 	                'accountId'     => $row['account_id'],
 	                'accountName'   => $displayName
 	            ), true);
@@ -839,10 +839,10 @@ class Egwbase_Container_Container
             }
         }
         
-        return  new Egwbase_Record_RecordSet($resultArray, 'Egwbase_Model_Grants', true);;
+        return  new Tinebase_Record_RecordSet($resultArray, 'Tinebase_Model_Grants', true);;
     }
     
-    public function setAllGrants($_containerId, Egwbase_Record_RecordSet $_grants) 
+    public function setAllGrants($_containerId, Tinebase_Record_RecordSet $_grants) 
     {
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
@@ -856,7 +856,7 @@ class Egwbase_Container_Container
         }
         
         $container = $this->getContainerById($containerId);
-        if($container->container_type === Egwbase_Container_Container::TYPE_PERSONAL) {
+        if($container->container_type === Tinebase_Container_Container::TYPE_PERSONAL) {
             // make sure that only the current user has admin rights
             foreach($_grants as $key => $recordGrants) {
                 $_grants[$key]->adminGrant = false;
@@ -869,7 +869,7 @@ class Egwbase_Container_Container
                 $_grants[$currentAccountId]->deleteGrant = true;
                 $_grants[$currentAccountId]->adminGrant = true;
             } else {
-                $_grants[$currentAccountId] = new Egwbase_Model_Grants(
+                $_grants[$currentAccountId] = new Tinebase_Model_Grants(
                     array(
                         'accountId'     => $currentAccountId,
                         'accountName'   => 'not used',
@@ -893,19 +893,19 @@ class Egwbase_Container_Container
                 'account_id'    => $recordGrants['accountId'],
             );
             if($recordGrants->readGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_READ));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_READ));
             }
             if($recordGrants->addGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_ADD));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_ADD));
             }
             if($recordGrants->editGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_EDIT));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_EDIT));
             }
             if($recordGrants->deleteGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_DELETE));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_DELETE));
             }
             if($recordGrants->adminGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Egwbase_Container_Container::GRANT_ADMIN));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_ADMIN));
             }
         }
         

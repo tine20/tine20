@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -17,10 +17,10 @@
  * NOTE: record_type is a freeform field, which could be used by the application
  * to distinguish different tables, mask multible keys and so on.
  * 
- * @package Egwbase
+ * @package Tinebase
  * @subpackage Timemachine
  */
-class Egwbase_Timemachine_Model_ModificationLog extends Egwbase_Record_Abstract
+class Tinebase_Timemachine_Model_ModificationLog extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 

@@ -1,5 +1,5 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -8,15 +8,15 @@
  *
  */
 
-Ext.namespace('Egw.Egwbase.container');
+Ext.namespace('Tine.Tinebase.container');
 
 /**
- * Egwbase container class
+ * Tinebase container class
  * 
  * @todo add generic container model
  * @todo internal cache (store)
  */
-Egw.Egwbase.container = {
+Tine.Tinebase.container = {
     /**
      * constant for no grants
      */
@@ -60,7 +60,7 @@ Egw.Egwbase.container = {
     TYPE_SHARED: 'shared',
 	
 	/**
-	 * Models of Egwbase container
+	 * Models of Tinebase container
 	 * @property {Object}
 	 */
 	models: {

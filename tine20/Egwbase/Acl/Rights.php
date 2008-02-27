@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -16,10 +16,10 @@
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Acl
  */
-class Egwbase_Acl_Rights
+class Tinebase_Acl_Rights
 {
     /**
      * the right to be an administrative account for an application
@@ -36,7 +36,7 @@ class Egwbase_Acl_Rights
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Acl_Rights
+     * @var Tinebase_Acl_Rights
      */
     private static $instance = NULL;
     
@@ -55,38 +55,38 @@ class Egwbase_Acl_Rights
      */
     private function __construct() {
         try {
-            $this->rightsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
+            $this->rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
         } catch (Zend_Db_Statement_Exception $e) {
             $this->createApplicationAclTable();
-            $this->rightsTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
+            $this->rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
 
             $accountId = Zend_Registry::get('currentAccount')->accountId;
             
-            $application = Egwbase_Application::getInstance()->getApplicationByName('addressbook');
+            $application = Tinebase_Application::getInstance()->getApplicationByName('addressbook');
             $data = array(
-                'application_right'  => Egwbase_Acl_Rights::ADMIN,
+                'application_right'  => Tinebase_Acl_Rights::ADMIN,
                 'account_id'     => $accountId,
                 'application_id' => $application->app_id
             );
             $this->rightsTable->insert($data);
 
             $data = array(
-                'application_right'  => Egwbase_Acl_Rights::RUN,
+                'application_right'  => Tinebase_Acl_Rights::RUN,
                 'account_id'     => NULL,
                 'application_id' => $application->app_id
             );
             $this->rightsTable->insert($data);
 
-            $application = Egwbase_Application::getInstance()->getApplicationByName('admin');
+            $application = Tinebase_Application::getInstance()->getApplicationByName('admin');
             $data = array(
-                'application_right'  => Egwbase_Acl_Rights::ADMIN,
+                'application_right'  => Tinebase_Acl_Rights::ADMIN,
                 'account_id'     => $accountId,
                 'application_id' => $application->app_id
             );
             $this->rightsTable->insert($data);
 
             $data = array(
-                'application_right'  => Egwbase_Acl_Rights::RUN,
+                'application_right'  => Tinebase_Acl_Rights::RUN,
                 'account_id'     => NULL,
                 'application_id' => $application->app_id
             );
@@ -97,19 +97,19 @@ class Egwbase_Acl_Rights
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Acl_Rights
+     * @return Tinebase_Acl_Rights
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Acl_Rights;
+            self::$instance = new Tinebase_Acl_Rights;
         }
         
         return self::$instance;
     }
     
     /**
-     * temporary function to create the egw_application_rights table on demand
+     * temporary function to create the SQL_TABLE_PREFIX . application_rights table on demand
      *
      */
     protected function createApplicationAclTable() {
@@ -149,7 +149,7 @@ class Egwbase_Acl_Rights
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
+        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
 
         $db = Zend_Registry::get('dbAdapter');
@@ -158,13 +158,13 @@ class Egwbase_Acl_Rights
             ->from(SQL_TABLE_PREFIX . 'application_rights', array())
             ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.app_id')
             ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
-            ->where(SQL_TABLE_PREFIX . 'application_rights.application_right = ?', Egwbase_Acl_Rights::RUN)
-            ->where(SQL_TABLE_PREFIX . 'applications.app_enabled = ?', Egwbase_Application::ENABLED)
+            ->where(SQL_TABLE_PREFIX . 'application_rights.application_right = ?', Tinebase_Acl_Rights::RUN)
+            ->where(SQL_TABLE_PREFIX . 'applications.app_enabled = ?', Tinebase_Application::ENABLED)
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
         $stmt = $db->query($select);
 
-        $result = new Egwbase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Egwbase_Model_Application');
+        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Application');
         
         return $result;
     }
@@ -183,12 +183,12 @@ class Egwbase_Acl_Rights
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         if($application->app_enabled == 0) {
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
+        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
         $db = Zend_Registry::get('dbAdapter');
@@ -230,12 +230,12 @@ class Egwbase_Acl_Rights
             throw new InvalidArgumentException('$_right must be integer');
         }
         
-        $application = Egwbase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         if($application->app_enabled == 0) {
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Egwbase_Account::getInstance()->getGroupMemberships($accountId);
+        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
         $groupMemberships[] = $accountId;
         
 

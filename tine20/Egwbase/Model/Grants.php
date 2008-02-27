@@ -2,7 +2,7 @@
 /**
  * class to handle grantss
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
 /**
  * defines the datatype for one application
  */
-class Egwbase_Model_Grants extends Egwbase_Record_Abstract
+class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -28,7 +28,7 @@ class Egwbase_Model_Grants extends Egwbase_Record_Abstract
      *
      * @var string
      */
-    protected $_application = 'Egwbase';
+    protected $_application = 'Tinebase';
     
     /**
      * list of zend inputfilter

@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,17 +13,17 @@
 /**
  * Account Class
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  */
-class Egwbase_Account
+class Tinebase_Account
 {
     /**
      * the name of the accountsbackend
      *
      * @var string
      */
-    protected $_backendType = Egwbase_Account_Factory::SQL;
+    protected $_backendType = Tinebase_Account_Factory::SQL;
     
     /**
      * the constructor
@@ -31,7 +31,7 @@ class Egwbase_Account
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Egwbase_Account_Factory::getBackend($this->_backendType);
+        $this->_backend = Tinebase_Account_Factory::getBackend($this->_backendType);
     }
     
     /**
@@ -43,7 +43,7 @@ class Egwbase_Account
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Account
+     * @var Tinebase_Account
      */
     private static $_instance = NULL;
     
@@ -51,12 +51,12 @@ class Egwbase_Account
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Account
+     * @return Tinebase_Account
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Egwbase_Account;
+            self::$_instance = new Tinebase_Account;
         }
         
         return self::$_instance;
@@ -78,42 +78,42 @@ class Egwbase_Account
     
     public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
     {
-        $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Egwbase_Account_Model_Account');
+        $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Tinebase_Account_Model_Account');
         
         return $result;
     }
     
     public function getFullAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
     {
-        $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Egwbase_Account_Model_FullAccount');
+        $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Tinebase_Account_Model_FullAccount');
         
         return $result;
     }
     
     public function getAccountByLoginName($_loginName)
     {     
-        $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Egwbase_Account_Model_Account');
+        $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account');
         
         return $result;
     }
 
     public function getFullAccountByLoginName($_loginName)
     {
-        $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Egwbase_Account_Model_FullAccount');
+        $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_FullAccount');
         
         return $result;
     }
     
     public function getAccountById($_accountId)
     {
-        $result = $this->_backend->getAccountById($_accountId, 'Egwbase_Account_Model_Account');
+        $result = $this->_backend->getAccountById($_accountId, 'Tinebase_Account_Model_Account');
         
         return $result;
     }
 
     public function getFullAccountById($_accountId)
     {
-        $result = $this->_backend->getAccountById($_accountId, 'Egwbase_Account_Model_FullAccount');
+        $result = $this->_backend->getAccountById($_accountId, 'Tinebase_Account_Model_FullAccount');
         
         return $result;
     }
@@ -150,10 +150,10 @@ class Egwbase_Account
     /**
      * add or updates an account
      *
-     * @param Egwbase_Account_Model_FullAccount $_account
-     * @return Egwbase_Account_Model_FullAccount
+     * @param Tinebase_Account_Model_FullAccount $_account
+     * @return Tinebase_Account_Model_FullAccount
      */
-    public function saveAccount(Egwbase_Account_Model_FullAccount $_account)
+    public function saveAccount(Tinebase_Account_Model_FullAccount $_account)
     {
         $result = $this->_backend->saveAccount($_account);
         

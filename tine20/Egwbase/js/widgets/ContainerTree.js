@@ -1,5 +1,5 @@
 /*
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -8,11 +8,11 @@
  *
  */
 
-Ext.namespace('Egw.widgets', 'Egw.widgets.container');
+Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 
  /**
-  * @class       Egw.containerTreePanel
-  * @package     Egw
+  * @class       Tine.containerTreePanel
+  * @package     Tine
   * @subpackage  Widgets
   * @extends     Ext.tree.TreePanel
   * @param       {Object} config Configuration options
@@ -23,7 +23,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
   * and manager permissions<p>
   * <p>Example usage:</p>
   * <pre><code>
-  var taskPanel =  new Egw.containerTreePanel({
+  var taskPanel =  new Tine.containerTreePanel({
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
         itemName: 'Tasks',
@@ -33,7 +33,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
     });
   </code></pre>
   */
- Egw.widgets.container.TreePanel = Ext.extend(Ext.tree.TreePanel, {
+ Tine.widgets.container.TreePanel = Ext.extend(Ext.tree.TreePanel, {
  	/**
      * @cfg {string} appName
      * name of application
@@ -64,7 +64,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 	
 	// private
 	initComponent: function(){
-		Egw.widgets.container.TreePanel.superclass.initComponent.call(this);
+		Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
 		this.addEvents(
             /**
              * @event containeradded
@@ -107,14 +107,14 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 	        children: [{
 	            text: 'My ' + this.itemName,
 	            cls: 'file',
-	            containerType: Egw.Egwbase.container.TYPE_PERSONAL,
+	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
-	            owner: Egw.Egwbase.Registry.get('currentAccount')
+	            owner: Tine.Tinebase.Registry.get('currentAccount')
 	        }, {
 	            text: 'Shared ' + this.itemName,
 	            cls: 'file',
-	            containerType: Egw.Egwbase.container.TYPE_SHARED,
+	            containerType: Tine.Tinebase.container.TYPE_SHARED,
 	            children: null,
 	            leaf: null,
 				owner: null
@@ -134,13 +134,13 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
             });
         }
 	    
-	    this.loader = new Egw.widgets.container.TreeLoader({
+	    this.loader = new Tine.widgets.container.TreeLoader({
 	        dataUrl:'index.php',
 	        baseParams: {
-	            jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
-				method: 'Egwbase_Container.getContainer',
+	            jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
+				method: 'Tinebase_Container.getContainer',
 				application: this.appName,
-				containerType: Egw.Egwbase.container.TYPE_PERSONAL
+				containerType: Tine.Tinebase.container.TYPE_PERSONAL
 	        }
 	    });
 		
@@ -157,18 +157,18 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 			var owner     = node.attributes.owner;
 			switch (node.attributes.containerType) {
 				case 'singleContainer':
-					if (container.account_grants & Egw.Egwbase.container.GRANT_ADMIN) {
+					if (container.account_grants & Tine.Tinebase.container.GRANT_ADMIN) {
 						//console.log('GRANT_ADMIN for this container');
 						this.contextMenuSingleContainer.showAt(event.getXY());
 					}
 					break;
-				case Egw.Egwbase.container.TYPE_PERSONAL:
-				    if (owner.accountId == Egw.Egwbase.Registry.get('currentAccount').accountId) {
+				case Tine.Tinebase.container.TYPE_PERSONAL:
+				    if (owner.accountId == Tine.Tinebase.Registry.get('currentAccount').accountId) {
 						//console.log('owner clicked his own folder');
 						this.contextMenuUserFolder.showAt(event.getXY());
 					}
 					break;
-				case Egw.Egwbase.container.TYPE_SHARED:
+				case Tine.Tinebase.container.TYPE_SHARED:
 				    // anyone is allowd to add shared folders atm.
 				    this.contextMenuUserFolder.showAt(event.getXY());
 					break;
@@ -184,7 +184,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 	},
 	// private
 	afterRender: function() {
-		Egw.widgets.container.TreePanel.superclass.afterRender.call(this);
+		Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
 		//console.log(this);
 		this.expandPath('/root/all');
 		this.selectPath('/root/all');
@@ -200,7 +200,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 						
 						Ext.Ajax.request({
 		                    params: {
-		                        method: 'Egwbase_Container.addContainer',
+		                        method: 'Tinebase_Container.addContainer',
 								application: this.appName,
 		                        containerName: _text,
 		                        containerType: parentNode.attributes.containerType
@@ -227,7 +227,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 							
 							Ext.Ajax.request({
 								params: {
-									method: 'Egwbase_Container.deleteContainer',
+									method: 'Tinebase_Container.deleteContainer',
 									containerId: node.attributes.container.container_id
 								},
 								scope: this,
@@ -259,7 +259,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 								
 								Ext.Ajax.request({
 									params: {
-										method: 'Egwbase_Container.renameContainer',
+										method: 'Tinebase_Container.renameContainer',
 										containerId: node.attributes.container.container_id,
 										newName: _text
 									},
@@ -282,7 +282,7 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 			managePermissions: function() {
 				if (this.ctxNode) {
 					var node = this.ctxNode;
-					var win = new Egw.widgets.container.grantDialog({
+					var win = new Tine.widgets.container.grantDialog({
 						folderName: this.folderName,
 						grantContainer: node.attributes.container
 					});
@@ -336,17 +336,17 @@ Ext.namespace('Egw.widgets', 'Egw.widgets.container');
 });
 
 /**
- * Helper class for {Egw.widgets.container.TreePanel}
+ * Helper class for {Tine.widgets.container.TreePanel}
  * 
  * @extends {Ext.tree.TreeLoader}
  * @param {Object} attr
  */
-Egw.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
+Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	//private
  	createNode: function(attr)
  	{
 		// console.log(attr);
-		// map attributes from Egwbase_Container to attrs from ExtJS
+		// map attributes from Tinebase_Container to attrs from ExtJS
 		if (attr.container_name) {
             attr = {
                 containerType: 'singleContainer',
@@ -357,7 +357,7 @@ Egw.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
             };
         } else if (attr.accountDisplayName) {
             attr = {
-                containerType: Egw.Egwbase.container.TYPE_PERSONAL,
+                containerType: Tine.Tinebase.container.TYPE_PERSONAL,
                 text: attr.accountDisplayName,
                 cls: 'folder',
                 leaf: false,

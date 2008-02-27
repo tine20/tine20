@@ -51,7 +51,7 @@ require_once 'Zend/Json.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Egwbase_Http_Server extends Zend_Server_Abstract implements Zend_Server_Interface {
+class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_Interface {
 	/**
 	 * @var Zend_Server_Reflection
 	 */

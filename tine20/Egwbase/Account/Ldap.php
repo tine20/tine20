@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,10 +13,10 @@
 /**
  * Account ldap backend
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Accounts
  */
-class Egwbase_Account_Ldap implements Egwbase_Account_Interface
+class Tinebase_Account_Ldap implements Tinebase_Account_Interface
 {
     /**
      * the constructor
@@ -34,19 +34,19 @@ class Egwbase_Account_Ldap implements Egwbase_Account_Interface
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Account_Ldap
+     * @var Tinebase_Account_Ldap
      */
     private static $instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Egwbase_Account_Ldap
+     * @return Tinebase_Account_Ldap
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Account_Ldap;
+            self::$instance = new Tinebase_Account_Ldap;
         }
         
         return self::$instance;

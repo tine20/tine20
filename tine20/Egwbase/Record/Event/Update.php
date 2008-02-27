@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,12 +12,12 @@
 
 
 /**
- * class Egwbase_Record_Event_Update
+ * class Tinebase_Record_Event_Update
  * 
  * Fired when a observed record gets updated
  */
-class Egwbase_Record_Event_Update extends Egwbase_Record_Event_Abstract 
+class Tinebase_Record_Event_Update extends Tinebase_Record_Event_Abstract 
 {
 
-} // end of Egwbase_Record_Event_Update
+} // end of Tinebase_Record_Event_Update
 ?>

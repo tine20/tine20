@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,40 +14,40 @@
  * the class provides functions to handle applications
  * 
  */
-class Egwbase_Application
+class Tinebase_Application
 {
     const ENABLED  = 1;
     
     const DISABLED = 0;
     
     /**
-     * the table object for the egw_applications table
+     * the table object for the SQL_TABLE_PREFIX . applications table
      *
      * @var Zend_Db_Table_Abstract
      */
     protected $applicationTable;
 
     private function __construct() {
-        $this->applicationTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'applications'));
+        $this->applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'applications'));
     }
     private function __clone() {}
 
     /**
      * holdes the instance of the singleton
      *
-     * @var Egwbase_Application
+     * @var Tinebase_Application
      */
     private static $instance = NULL;
     
     /**
-     * Returns instance of Egwbase_Application
+     * Returns instance of Tinebase_Application
      *
-     * @return Egwbase_Application
+     * @return Tinebase_Application
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Egwbase_Application;
+            self::$instance = new Tinebase_Application;
         }
         
         return self::$instance;
@@ -60,7 +60,7 @@ class Egwbase_Application
      * @param int $_applicationId the id of the application
      * @todo code still needs some testing
      * @throws Exception if $_applicationId is not integer and not greater 0
-     * @return Egwbase_Model_Application the information about the application
+     * @return Tinebase_Model_Application the information about the application
      */
     public function getApplicationById($_applicationId)
     {
@@ -71,7 +71,7 @@ class Egwbase_Application
         
         $row = $this->applicationTable->fetchRow('app_id = ' . $applicationId);
         
-        $result = new Egwbase_Model_Application($row->toArray());
+        $result = new Tinebase_Model_Application($row->toArray());
         
         return $result;
     }
@@ -82,7 +82,7 @@ class Egwbase_Application
      * @param string $$_applicationName the name of the application
      * @todo code still needs some testing
      * @throws InvalidArgumentException, Exception
-     * @return Egwbase_Model_Application the information about the application
+     * @return Tinebase_Model_Application the information about the application
      */
     public function getApplicationByName($_applicationName)
     {
@@ -95,7 +95,7 @@ class Egwbase_Application
             throw new Exception("application $_applicationName not found");
         }
         
-        $result = new Egwbase_Model_Application($row->toArray());
+        $result = new Tinebase_Model_Application($row->toArray());
         
         return $result;
     }
@@ -108,7 +108,7 @@ class Egwbase_Application
      * @param string $_filter optional search parameter
      * @param int $_limit optional how many applications to return
      * @param int $_start optional offset for applications
-     * @return Egwbase_RecordSet_Application
+     * @return Tinebase_RecordSet_Application
      */
     public function getApplications($_filter = NULL, $_sort = 'app_id', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
@@ -119,7 +119,7 @@ class Egwbase_Application
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Model_Application');
+        $result = new Tinebase_Record_RecordSet($rowSet->toArray(), 'Tinebase_Model_Application');
 
         return $result;
     }    
@@ -127,19 +127,19 @@ class Egwbase_Application
     /**
      * get enabled or disabled applications
      *
-     * @param int $_state can be Egwbase_Application::ENABLED or Egwbase_Application::DISABLED
-     * @return Egwbase_Record_RecordSet list of applications
+     * @param int $_state can be Tinebase_Application::ENABLED or Tinebase_Application::DISABLED
+     * @return Tinebase_Record_RecordSet list of applications
      */
     public function getApplicationsByState($_state)
     {
-        if($_state !== Egwbase_Application::ENABLED && $_applicationName !== Egwbase_Application::DISABLED) {
-            throw new InvalidArgumentException('$_state can be only Egwbase_Application::ENABLED or Egwbase_Application::DISABLED');
+        if($_state !== Tinebase_Application::ENABLED && $_applicationName !== Tinebase_Application::DISABLED) {
+            throw new InvalidArgumentException('$_state can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
         $where[] = $this->applicationTable->getAdapter()->quoteInto('app_enabled = ?', $_state);
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
-        $result = new Egwbase_Record_RecordSet($rowSet->toArray(), 'Egwbase_Model_Application');
+        $result = new Tinebase_Record_RecordSet($rowSet->toArray(), 'Tinebase_Model_Application');
 
         return $result;
     }    
@@ -162,8 +162,8 @@ class Egwbase_Application
     
     public function setApplicationState(array $_applicationIds, $_state)
     {
-        if($_state != Egwbase_Application::DISABLED && $_state != Egwbase_Application::ENABLED) {
-            throw new OutOfRangeException('$_state can be only ' . Egwbase_Application::DISABLED . ' or ' . Egwbase_Application::ENABLED);
+        if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
+            throw new OutOfRangeException('$_state can be only ' . Tinebase_Application::DISABLED . ' or ' . Tinebase_Application::ENABLED);
         }
         
         $where = array(

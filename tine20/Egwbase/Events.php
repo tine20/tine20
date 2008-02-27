@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Events
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,19 +13,19 @@
 /**
  * class to handle events between the applications
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Events
  */
-class Egwbase_Events
+class Tinebase_Events
 {
     /**
      * calls the handleEvents function in the controller of all enabled applications 
      *
-     * @param Egwbase_Events_Object $_eventObject the event object
+     * @param Tinebase_Events_Object $_eventObject the event object
      */
-    static public function fireEvent(Egwbase_Events_Abstract $_eventObject)
+    static public function fireEvent(Tinebase_Events_Abstract $_eventObject)
     {
-        foreach(Egwbase_Application::getInstance()->getApplicationsByState(Egwbase_Application::ENABLED) as $application) {
+        foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
             $controllerName = ucfirst($application->app_name) . '_Controller';
             
             if(class_exists($controllerName)) {
@@ -35,7 +35,7 @@ class Egwbase_Events
                     // application has no controller or is not useable at all
                     continue;
                 }
-                if($controller instanceof Egwbase_Events_Interface) {
+                if($controller instanceof Tinebase_Events_Interface) {
                     Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . "calling eventhandler of $controllerName");
                     try {
                         $controller->handleEvents($_eventObject);

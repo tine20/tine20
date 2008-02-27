@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Mail
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,10 +13,10 @@
 /**
  * This class extends the Zend_Mail class 
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Mail
  */
-class Egwbase_Mail extends Zend_Mail
+class Tinebase_Mail extends Zend_Mail
 {
     /**
      * Sender: address

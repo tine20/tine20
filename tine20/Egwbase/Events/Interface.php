@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Events
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,15 +13,15 @@
 /**
  * interface for all classes which can handle events
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Events
  */
-interface Egwbase_Events_Interface
+interface Tinebase_Events_Interface
 {
     /**
      * this functions handles the events
      *
-     * @param Egwbase_Events_Abstract $_eventObject the eventobject
+     * @param Tinebase_Events_Abstract $_eventObject the eventobject
      */
-    public function handleEvents(Egwbase_Events_Abstract $_eventObject);
+    public function handleEvents(Tinebase_Events_Abstract $_eventObject);
 }

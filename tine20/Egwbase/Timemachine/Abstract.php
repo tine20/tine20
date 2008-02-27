@@ -1,8 +1,8 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
- * @package     Egwbase
+ * @package     Tinebase
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -25,7 +25,7 @@
  * - Provide datas for record history investigations.
  * - Provide datas for desaster recovery.
  * 
- * Egwbase_Timemachine interfaces/classes build a framework, which needs to be 
+ * Tinebase_Timemachine interfaces/classes build a framework, which needs to be 
  * implemented/extended by the backends of an application.
  * 
  * As Timemachine could be invoked for sync, but also for concurrency issues, it
@@ -39,10 +39,10 @@
  * NOTE: Records _at_ a given point in history include changes which contingently
  * where made _at_ the end of time resolution of this point
  * 
- * @package Egwbase
+ * @package Tinebase
  * @subpackage Timemachine
  */
-abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Interface
+abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Interface
 {
     /**
      * Table name for the application with the following columns:
@@ -54,14 +54,14 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
     /**
      * Holds an instance of the corresponding table
      * 
-     * @var Egwbase_Db_Table
+     * @var Tinebase_Db_Table
      */
     protected $_timemachine_table;
     
     /**
      * Holds ModificationLog instance
      * 
-     * @var Egwbase_Timemachine_ModificationLog
+     * @var Tinebase_Timemachine_ModificationLog
      */
     private $_modificationLog;
     
@@ -70,7 +70,7 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
      */
     public function __construct()
     {
-        $this->_timemachine_table = new Egwbase_Db_Table(array(
+        $this->_timemachine_table = new Tinebase_Db_Table(array(
             'name' => $this->_timemachine_tablename
         ));
     }
@@ -80,12 +80,12 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
      * 
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, included point itself
-     * @param Egwbase_Record_Filter _filter
+     * @param Tinebase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
      * @access public
      */
-    public function getCreated( Zend_Date $_from, Zend_Date $_until, Egwbase_Record_Filter $_filter, $_returnUIDs = FALSE )
+    public function getCreated( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter, $_returnUIDs = FALSE )
     {
         
     }
@@ -95,12 +95,12 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
      * 
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, included point itself
-     * @param Egwbase_Record_Filter _filter
+     * @param Tinebase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
      * @access public
      */
-    public function getModified( Zend_Date $_from, Zend_Date $_until, Egwbase_Record_Filter $_filter, $_returnUIDs = FALSE )
+    public function getModified( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter, $_returnUIDs = FALSE )
     {
         
     }
@@ -110,12 +110,12 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
      * 
      * @param Zend_Date _from beginning point of timespan, excluding point itself
      * @param Zend_Date _until end point of timespan, included point itself
-     * @param Egwbase_Record_Filter _filter
+     * @param Tinebase_Record_Filter _filter
      * @param bool _returnUIDs wether to use global (string) or local (int) identifiers
      * @return array array of identifiers
      * @access public
      */
-    public function getDeleted( Zend_Date $_from, Zend_Date $_until, Egwbase_Record_Filter $_filter, $_returnUIDs = FALSE )
+    public function getDeleted( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter, $_returnUIDs = FALSE )
     {
         
     }
@@ -126,7 +126,7 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
      * @param [string|int] _id 
      * @param Zend_Date _at 
      * @param bool _idIsUID wether global (string) or local (int) identifiers are given as _id
-     * @return Egwbase_Record
+     * @return Tinebase_Record
      * @access public
      */
     public function getRecord( $_id,  Zend_Date $_at, $_idIsUID = FALSE);
@@ -137,25 +137,25 @@ abstract class Egwbase_Timemachine_Abstract implements Egwbase_Timemachine_Inter
      * @param array _ids array of [string|int] 
      * @param Zend_Date _at 
      * @param bool _idsAreUIDs wether global (string) or local (int) identifiers are given as _ids
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      * @access public
      */
     public function getRecords( array $_ids,  Zend_Date $_at, $_idsAreUIDs = FALSE );
     
     /**
-     * Returns instance of Egwbase_Timemachine_ModificationLog
+     * Returns instance of Tinebase_Timemachine_ModificationLog
      * (only create instace on demand)
      * 
-     * @return Egwbase_Timemachine_ModificationLog
+     * @return Tinebase_Timemachine_ModificationLog
      */
     protected function getModificationLog()
     {
         if (!$this->_modificationLog) {
-            $this->_modificationLog = Egwbase_Timemachine_ModificationLog::getInstance();
+            $this->_modificationLog = Tinebase_Timemachine_ModificationLog::getInstance();
         }
         
         return $this->_modificationLog;
     }
     
-} // end of Egwbase_Timemachine_Interface
+} // end of Tinebase_Timemachine_Interface
 ?>
