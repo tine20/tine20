@@ -15,7 +15,7 @@ EGWNameSpace.Login = function() {
     Ext.form.Field.prototype.msgTarget = 'side';
     
 	// private functions
-	var _createLoginDialog = function(_layout) {
+	var _createLoginDialog = function(_defaultUsername, _defaultPassword) {
 		var loginDialog = new Ext.FormPanel({
             id: 'loginDialog',
             labelWidth: 75,
@@ -31,14 +31,14 @@ EGWNameSpace.Login = function() {
                 fieldLabel: 'Username',
                 name: 'username',
                 name: 'username',
-                value:'egwdemo',
+                value: _defaultUsername,
                 width:225
             }, {
                 inputType: 'password',
                 fieldLabel: 'Password',
                 name: 'password',
                 allowBlank:false,
-                value:'demo',
+                value: _defaultPassword,
                 width:225
             }],
             buttons: [{

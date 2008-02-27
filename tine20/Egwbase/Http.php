@@ -25,6 +25,15 @@ class Egwbase_Http extends Egwbase_Application_Http_Abstract
 
         $view->setScriptPath('Egwbase/views');
 
+        try {
+            $loginConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'login');
+            $view->defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
+            $view->defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
+        } catch (Zend_Config_Exception $e) {
+            $view->defaultUsername = '';
+            $view->defaultPassword = '';
+        }
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('login.php');
     }

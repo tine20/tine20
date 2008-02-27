@@ -23,7 +23,7 @@
 	
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function() {
-			EGWNameSpace.Login.showLoginDialog();
+			EGWNameSpace.Login.showLoginDialog(<?php echo "'{$this->defaultUsername}', '{$this->defaultPassword}'"?>);
 		});
 	</script>
 </head>
