@@ -155,13 +155,16 @@ class Egwbase_Account_Sql implements Egwbase_Account_Interface
      * @param int $_limit
      * @return Egwbase_Record_RecordSet with record class Egwbase_Account_Model_Account
      */
-    public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL, $_accountClass = 'Egwbase_Account_Model_Account')
+    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL, $_accountClass = 'Egwbase_Account_Model_Account')
     {        
         $select = $this->_getAccountSelectObject()
-            ->limit($_limit, $_start)
-            ->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+            ->limit($_limit, $_start);
+            
+        if($_sort !== NULL) {
+            $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+        }
 
-        if(!empty($_filter)) {
+        if($_filter !== NULL) {
             $select->where('(n_family LIKE ? OR n_given LIKE ? OR account_lid LIKE ?)', '%' . $_filter . '%');
         }
         // return only active accounts, when searching for simple accounts
