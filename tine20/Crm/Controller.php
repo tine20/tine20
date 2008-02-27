@@ -353,8 +353,9 @@ class Crm_Controller
             $subject = 'Lead added: ' . $_lead->lead_name;
         }
         
-        $notification = Egwbase_Notification_Factory::getBackend(Egwbase_Notification_Factory::SMTP);
-        $notification->send(Zend_Registry::get('currentAccount'), $subject, $plain, $html);
+        // send notifications to all accounts in the first step
+        $accounts = Egwbase_Account::getInstance()->getFullAccounts();
+        Egwbase_Notification::getInstance()->send($accounts, $subject, $plain, $html);
     }
     
     /**
@@ -392,7 +393,7 @@ class Crm_Controller
             'lead_start'          => new Zend_Date(),
             'lead_probability'    => 0
         );
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
         $emptyLead = new Crm_Model_Lead($defaultData, true);
         
         return $emptyLead;
