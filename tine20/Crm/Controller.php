@@ -381,13 +381,18 @@ class Crm_Controller
     
     public function getEmptyLead()
     {
+        $defaultState  = (isset(Zend_Registry::get('configFile')->crm->defaultstate) ? Zend_Registry::get('configFile')->crm->defaultstate : 1);
+        $defaultType   = (isset(Zend_Registry::get('configFile')->crm->defaulttype) ? Zend_Registry::get('configFile')->crm->defaulttype : 1);
+        $defaultSource = (isset(Zend_Registry::get('configFile')->crm->defaultsource) ? Zend_Registry::get('configFile')->crm->defaultsource : 1);
+        
         $defaultData = array(
-            'lead_leadstate_id'   => 1,
-            'lead_leadtype_id'    => 1,
-            'lead_leadsource_id'  => 1,
+            'lead_leadstate_id'   => $defaultState,
+            'lead_leadtype_id'    => $defaultType,
+            'lead_leadsource_id'  => $defaultSource,
             'lead_start'          => new Zend_Date(),
             'lead_probability'    => 0
         );
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
         $emptyLead = new Crm_Model_Lead($defaultData, true);
         
         return $emptyLead;
