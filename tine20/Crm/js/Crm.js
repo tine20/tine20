@@ -1212,7 +1212,7 @@ Egw.Crm.Main = function(){
         
         
         var handlerToggleDetails = function(toggle) {
-        	console.log(toggle.pressed);
+        	//console.log(toggle.pressed);
             var gridView         = Ext.getCmp('gridCrm').getView();
             var gridColumnModell = Ext.getCmp('gridCrm').getColumnModel();
             
