@@ -1,6 +1,6 @@
 <?php
 /**
- * backend class for Egwbase_Http_Server
+ * backend class for Tinebase_Http_Server
  *
  * This class handles all Http requests for the calendar application
  *
@@ -11,7 +11,7 @@
  * @version     $Id$
  *
  */
-class Calendar_Http extends Egwbase_Application_Http_Abstract
+class Calendar_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Calendar';
     

@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-class Calendar_Event extends Egwbase_Record_Abstract
+class Calendar_Event extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 

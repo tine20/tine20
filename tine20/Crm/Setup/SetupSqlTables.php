@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     CRM
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -72,7 +72,7 @@ class Crm_Setup_SetupSqlTables
             );
         }
         
-        $leadSourceTable   = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
+        $leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         
         $leadSourceTable->insert(array(
             'lead_leadsource_id'    => 1,
@@ -112,7 +112,7 @@ class Crm_Setup_SetupSqlTables
             );
         }
         
-        $leadTypeTable   = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+        $leadTypeTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         
         $leadTypeTable->insert(array(
             'lead_leadtype_id'    => 1,
@@ -150,7 +150,7 @@ class Crm_Setup_SetupSqlTables
             );
         }
         
-        $leadStateTable   = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
+        $leadStateTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
         
         $leadStateTable->insert(array(
             'lead_leadstate_id'           => 1,

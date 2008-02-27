@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @subpackage  Setup
@@ -113,7 +113,7 @@ class Tasks_Setup_SetupSqlTables
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         $now = $db->quote(Zend_Date::now()->getIso());
         
-        // egw_class
+        // tine_class
         $db->getConnection()->exec("INSERT INTO `" . SQL_TABLE_PREFIX . "class` (
             `created_by`, `creation_time`, `class` ) VALUES (
             $accountId, $now, 'PUBLIC')"
@@ -129,7 +129,7 @@ class Tasks_Setup_SetupSqlTables
             $accountId, $now ,'CONFIDENTIAL')"
         );
         
-        // egw_tasks_status
+        // tine_tasks_status
         $db->getConnection()->exec("INSERT INTO `" . SQL_TABLE_PREFIX . "tasks_status` (
             `created_by`, `creation_time`, `status_name`, `status_is_open`, `status_icon` ) VALUES (
             $accountId, $now, 'NEEDS-ACTION', 1, 'images/oxygen/16x16/actions/tool.png')"

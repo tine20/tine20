@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @subpackage  Backend
@@ -23,7 +23,7 @@ interface Tasks_Backend_Interface
      * Search for tasks matching given filter
      *
      * @param Tasks_Model_PagnitionFilter $_filter
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function searchTasks($_filter);
     

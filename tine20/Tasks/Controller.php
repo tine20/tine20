@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -52,7 +52,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * Holds instance of current account
      *
-     * @var Egwbase_Account_Model_Account
+     * @var Tinebase_Account_Model_Account
      */
     protected $_currentAccount;
     
@@ -78,10 +78,10 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
         
-        //$classTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
-        $statiTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
-        //$this->_classes = new Egwbase_Record_RecordSet($classTable->fetchAll(), 'Egwbase_Record_Class');
-        $this->_stati = new Egwbase_Record_RecordSet($statiTable->fetchAll()->toArray(), 'Tasks_Model_Status', true);
+        //$classTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
+        $statiTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
+        //$this->_classes = new Tinebase_Record_RecordSet($classTable->fetchAll(), 'Tinebase_Record_Class');
+        $this->_stati = new Tinebase_Record_RecordSet($statiTable->fetchAll()->toArray(), 'Tasks_Model_Status', true);
         
         $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
@@ -90,14 +90,14 @@ class Tasks_Controller implements Tasks_Backend_Interface
      * Search for tasks matching given filter
      *
      * @param Tasks_Model_PagnitionFilter $_filter
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function searchTasks($_filter)
     {
         $this->_checkContainerACL($_filter);
         
         $tasks =  $this->_backend->searchTasks($_filter);
-        //Egwbase_Account::getBackend()->getPublicAccountProperties();
+        //Tinebase_Account::getBackend()->getPublicAccountProperties();
         //foreach ($tasks as $task) {
             //$taks->organizer = 
         //}
@@ -124,7 +124,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     protected function _checkContainerACL($_filter)
     {
         foreach ($_filter->container as $containerId) {
-            if ($this->_currentAccount->hasGrant($containerId, Egwbase_Container_Container::GRANT_READ)) {
+            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container_Container::GRANT_READ)) {
                 $container[] = $containerId;
             }
         }
@@ -140,7 +140,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     public function getTask($_uid)
     {
         $Task = $this->_backend->getTask($_uid);
-        if (! $this->_currentAccount->hasGrant($Task->container, Egwbase_Container_Container::GRANT_READ)) {
+        if (! $this->_currentAccount->hasGrant($Task->container, Tinebase_Container_Container::GRANT_READ)) {
             throw new Exception('Not allowed!');
         }
         
@@ -158,7 +158,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     	if ((int)$_task->container < 0) {
     		$_task->container = $this->getDefaultContainer()->getId();
     	}
-        if (! $this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_ADD)) {
+        if (! $this->_currentAccount->hasGrant($_task->container, Tinebase_Container_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
         }
         return $this->_backend->createTask($_task);
@@ -180,15 +180,15 @@ class Tasks_Controller implements Tasks_Backend_Interface
         // mamage acl
         if ($oldtask->container != $_task->container) {
             
-            if (!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_ADD)) {
+            if (!$this->_currentAccount->hasGrant($_task->container, Tinebase_Container_Container::GRANT_ADD)) {
                 throw new Exception('Not allowed!');
             }
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-            if (!$this->_currentAccount->hasGrant($oldtask->container, Egwbase_Container_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($oldtask->container, Tinebase_Container_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
             
-        } elseif(!$this->_currentAccount->hasGrant($_task->container, Egwbase_Container_Container::GRANT_EDIT))  {
+        } elseif(!$this->_currentAccount->hasGrant($_task->container, Tinebase_Container_Container::GRANT_EDIT))  {
             throw new Exception('Not allowed!');
         }
         
@@ -206,7 +206,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         $Task = $this->getTask($_identifier);
         
-        if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container_Container::GRANT_DELETE)) {
+        if (!$this->_currentAccount->hasGrant($Task->container, Tinebase_Container_Container::GRANT_DELETE)) {
             throw new Exception('Not allowed!');
         }
         $this->_backend->deleteTask($_identifier);
@@ -225,7 +225,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         foreach ($_identifiers as $identifier) {
             $Task = $this->getTask($identifier);
-            if (!$this->_currentAccount->hasGrant($Task->container, Egwbase_Container_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($Task->container, Tinebase_Container_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
         }
@@ -237,7 +237,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
      * temporaray function to get a default container]
      * 
      * @param string $_referingApplication
-     * @return Egwbase_Model_Container container
+     * @return Tinebase_Model_Container container
      */
     public function getDefaultContainer($_referingApplication = 'tasks')
     {
@@ -245,27 +245,27 @@ class Tasks_Controller implements Tasks_Backend_Interface
         $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
         
         if (isset($taskConfig->$configString)) {
-            $defaultContainer = Egwbase_Container_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
+            $defaultContainer = Tinebase_Container_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
             
-            $containers = Egwbase_Container_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
+            $containers = Tinebase_Container_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
 
             if($containers->count() > 0) {
             	$defaultContainer = $containers[0];
             
             } else {
 	            $allGrants = array(
-	                Egwbase_Container_Container::GRANT_ADD,
-	                Egwbase_Container_Container::GRANT_ADMIN,
-	                Egwbase_Container_Container::GRANT_DELETE,
-	                Egwbase_Container_Container::GRANT_EDIT,
-	                Egwbase_Container_Container::GRANT_READ
+	                Tinebase_Container_Container::GRANT_ADD,
+	                Tinebase_Container_Container::GRANT_ADMIN,
+	                Tinebase_Container_Container::GRANT_DELETE,
+	                Tinebase_Container_Container::GRANT_EDIT,
+	                Tinebase_Container_Container::GRANT_READ
 	            );
 	            
-	            $containerId = Egwbase_Container_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Egwbase_Container_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
-	            Egwbase_Container_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
+	            $containerId = Tinebase_Container_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Tinebase_Container_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
+	            Tinebase_Container_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
 	            
-	            $defaultContainer = Egwbase_Container_Container::getInstance()->getContainerById($containerId);
+	            $defaultContainer = Tinebase_Container_Container::getInstance()->getContainerById($containerId);
             }
         }
     return $defaultContainer;
@@ -274,7 +274,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     /**
      * retruns all possible task stati
      * 
-     * @return Egwbase_Record_RecordSet of Tasks_Model_Status
+     * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
     public function getStati() {
         return $this->_stati;

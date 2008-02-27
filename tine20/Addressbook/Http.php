@@ -10,13 +10,13 @@
  */
 
 /**
- * backend class for Egwbase_Http_Server
+ * backend class for Tinebase_Http_Server
  *
  * This class handles all Http requests for the addressbook application
  *
  * @package     Addressbook
  */
-class Addressbook_Http extends Egwbase_Application_Http_Abstract
+class Addressbook_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Addressbook';
     
@@ -31,7 +31,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 	    
 		$view = new Zend_View();
 		 
-		$view->setScriptPath('Egwbase/views');
+		$view->setScriptPath('Tinebase/views');
 		$view->formData = array();
 
 		$view->jsIncludeFiles = array();
@@ -41,7 +41,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 		    $encodedContact = $contact->toArray();
 
-		    $addressbook = Egwbase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
+		    $addressbook = Tinebase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
 			$encodedContact['contact_owner'] = $addressbook->toArray();
 
 			if(!empty($contact->adr_one_countryname)) {
@@ -61,7 +61,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		
 		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/Addressbook.js');
 		$view->cssIncludeFiles[] = self::_appendFileTime('Addressbook/css/Addressbook.css');
-		$view->jsExecute = 'Egw.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
+		$view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         
 		$view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -71,7 +71,7 @@ class Addressbook_Http extends Egwbase_Application_Http_Abstract
 		$view->title="edit contact";
 		
 		$view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
 	}

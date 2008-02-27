@@ -14,12 +14,12 @@
  *
  * @package     Admin
  */
-class Admin_Event_UpdateAccount extends Egwbase_Events_Abstract 
+class Admin_Event_UpdateAccount extends Tinebase_Events_Abstract 
 {
     /**
      * the just added account
      *
-     * @var Egwbase_Account_Model_FullAccount
+     * @var Tinebase_Account_Model_FullAccount
      */
     public $account;
 }

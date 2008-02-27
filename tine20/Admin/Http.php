@@ -15,14 +15,14 @@
  *
  * @package     Admin
  */
-class Admin_Http extends Egwbase_Application_Http_Abstract
+class Admin_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Admin';
     
     public function editAccountDialog($accountId)
     {
         if(!empty($accountId)) {
-            $account = Egwbase_Account::getInstance()->getFullAccountById($accountId);
+            $account = Tinebase_Account::getInstance()->getFullAccountById($accountId);
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
             $account = Zend_Json::encode($account->toArray());
         } else {
@@ -34,14 +34,14 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
         
         $view = new Zend_View();
          
-        $view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         $view->jsIncludeFiles = array();
         $view->cssIncludeFiles = array();
         
         $view->jsIncludeFiles[] = 'Admin/js/Admin.js';
         $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
-        $view->jsExecute = 'Egw.Admin.Accounts.EditDialog.display(' . $account . ');';
+        $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $account . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -51,7 +51,7 @@ class Admin_Http extends Egwbase_Application_Http_Abstract
         $view->title="edit account";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

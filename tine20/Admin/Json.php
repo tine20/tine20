@@ -17,7 +17,7 @@
  *
  * @package     Admin
  */
-class Admin_Json extends Egwbase_Application_Json_Abstract
+class Admin_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Admin';
     
@@ -28,7 +28,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $accounts = Egwbase_Account::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
+        $accounts = Tinebase_Account::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
             if($account['account_lastlogin'] !== NULL) {
@@ -53,7 +53,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         try {
             $logIds = Zend_Json::decode($logIds);
 
-            Egwbase_AccessLog::getInstance()->deleteEntries($logIds);
+            Tinebase_AccessLog::getInstance()->deleteEntries($logIds);
 
             $result = array(
                 'success' => TRUE
@@ -69,9 +69,9 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
     
     public function getApplication($applicationId)
     {
-        $egwApplications = new Egwbase_Application();
+        $tineApplications = new Tinebase_Application();
         
-        $application = $egwApplications->getApplicationById($applicationId);
+        $application = $tineApplications->getApplicationById($applicationId);
         
         return $application->toArray();
     }
@@ -87,15 +87,15 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $egwApplications = Egwbase_Application::getInstance();
+        $tineApplications = Tinebase_Application::getInstance();
         
-        $applicationSet = $egwApplications->getApplications($filter, $sort, $dir, $start, $limit);
+        $applicationSet = $tineApplications->getApplications($filter, $sort, $dir, $start, $limit);
 
         $result['results']    = $applicationSet->toArray();
         if($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
-            $result['totalcount'] = $egwApplications->getTotalApplicationCount($filter);
+            $result['totalcount'] = $tineApplications->getTotalApplicationCount($filter);
         }
         
         return $result;
@@ -105,7 +105,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
     {
         $applicationIds = Zend_Json::decode($applicationIds);
 
-        Egwbase_Application::getInstance()->setApplicationState($applicationIds, $state);
+        Tinebase_Application::getInstance()->setApplicationState($applicationIds, $state);
 
         $result = array(
             'success' => TRUE
@@ -163,18 +163,18 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
         $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
         $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
         
-        $accessLogSet = Egwbase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
+        $accessLogSet = Tinebase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
         
         $result['results']    = $accessLogSet->toArray();
         if($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
-            $result['totalcount'] = Egwbase_AccessLog::getInstance()->getTotalCount($fromDateObject, $toDateObject, $filter);
+            $result['totalcount'] = Tinebase_AccessLog::getInstance()->getTotalCount($fromDateObject, $toDateObject, $filter);
         }
         
         foreach($result['results'] as $key => $value) {
             try {
-                $result['results'][$key]['accountObject'] = Egwbase_Account::getInstance()->getAccountById($value['account_id'])->toArray();
+                $result['results'][$key]['accountObject'] = Tinebase_Account::getInstance()->getAccountById($value['account_id'])->toArray();
             } catch (Exception $e) {
                 // account not found
                 // do nothing so far
@@ -197,14 +197,14 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
 
-/*        $treeNode = new Egwbase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
+/*        $treeNode = new Tinebase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
         //$treeNode->setIcon('apps/kaddressbook.png');
         $treeNode->cls = 'treemain';
         $treeNode->jsonMethod = 'Admin.getApplications';
         $treeNode->dataPanelType = 'applications';
         $treeNodes[] = $treeNode;
 
-        $treeNode = new Egwbase_Ext_Treenode('Admin', 'accesslog', 'accesslog', 'Access Log', TRUE);
+        $treeNode = new Tinebase_Ext_Treenode('Admin', 'accesslog', 'accesslog', 'Access Log', TRUE);
         //$treeNode->setIcon('apps/kaddressbook.png');
         $treeNode->cls = 'treemain';
         $treeNode->jsonMethod = 'Admin.getAccessLog';
@@ -218,7 +218,7 @@ class Admin_Json extends Egwbase_Application_Json_Abstract
     {
         $decodedAccountData = Zend_Json::decode($accountData);
         
-        $account = new Egwbase_Account_Model_FullAccount();
+        $account = new Tinebase_Account_Model_FullAccount();
         
         try {
             $account->setFromArray($decodedAccountData);

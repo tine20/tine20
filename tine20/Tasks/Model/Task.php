@@ -1,6 +1,6 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -14,7 +14,7 @@
  * Task-Record Class
  * @package Tasks
  */
-class Tasks_Model_Task extends Egwbase_Record_Abstract
+class Tasks_Model_Task extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
@@ -32,7 +32,7 @@ class Tasks_Model_Task extends Egwbase_Record_Abstract
     protected $_application = 'Tasks';
     
     protected $_validators = array(
-        // egw record fields
+        // tine record fields
         'container'            => array('allowEmpty' => true,  'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
         'creation_time'        => array('allowEmpty' => true         ),

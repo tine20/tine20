@@ -1,4 +1,4 @@
-Ext.namespace('Egw.Calendar');
+Ext.namespace('Tine.Calendar');
 
 Date.Const = {
     msMINUTE : 60*1000,
@@ -6,7 +6,7 @@ Date.Const = {
 	msDAY    : 24*60*60*1000,
 }
 
-Egw.Calendar.today = function()
+Tine.Calendar.today = function()
 {
 	// calculate start of today
 	if (!today) {
@@ -23,11 +23,11 @@ Egw.Calendar.today = function()
  * Calendar Request singelton
  * gets instantiated by getPanel()!
  */
-Egw.Calendar.Request = function(){
+Tine.Calendar.Request = function(){
 	this.view = 'day';                                                // {day|month|planer}
     this.viewMultiplier = 1;
-    this.start = Egw.Calendar.today;                                  // start Date
-    this.end = Egw.Calendar.today.add(Date.MILLI,
+    this.start = Tine.Calendar.today;                                  // start Date
+    this.end = Tine.Calendar.today.add(Date.MILLI,
 	   this.viewMultiplier*Date.Const.msDAY-1                         // end Date
 	);
     this.calendars = 5;                                               // calendars to present
@@ -42,25 +42,25 @@ Egw.Calendar.Request = function(){
 		if (newView.selectedView != this.view || newView.selectedViewMultiplier != this.viewMultiplier) {
 			this.view = newView.selectedView;
 			this.viewMultiplier = newView.selectedViewMultiplier;
-			this.end = Egw.Calendar.today.add(Date.MILLI,
+			this.end = Tine.Calendar.today.add(Date.MILLI,
 		        this.viewMultiplier*Date.Const.msDAY-1
 		    );
 			this.fireEvent('requestchange', this);
 		}
     }
 	
-	Egw.Calendar.Request.superclass.constructor.call(this);
+	Tine.Calendar.Request.superclass.constructor.call(this);
 }
-Ext.extend(Egw.Calendar.Request, Ext.util.Observable);
-Egw.Calendar.Request = new Egw.Calendar.Request();
+Ext.extend(Tine.Calendar.Request, Ext.util.Observable);
+Tine.Calendar.Request = new Tine.Calendar.Request();
 
-Egw.Calendar.Preferences = {
+Tine.Calendar.Preferences = {
 	workDayStart: new Date(Date.Const.msHOUR*9),// + new Date().getTimezoneOffset()),
 	workDayEnd: new Date(Date.Const.msHOUR*18)// + new Date().getTimezoneOffset())
 };
 
-// entry point, required by egwbase
-Egw.Calendar.getPanel = function() {
+// entry point, required by tinebase
+Tine.Calendar.getPanel = function() {
     
     var calPanel =  new Ext.Panel({
 		iconCls: 'CalendarTreePanel',
@@ -71,15 +71,15 @@ Egw.Calendar.getPanel = function() {
     });
     
     calPanel.on('beforeexpand', function(_calPanel) {
-        Egw.Egwbase.MainScreen.setActiveContentPanel(Egw.Calendar.MainScreen.getMainScreen(Egw.Calendar.Request));
-        Egw.Egwbase.MainScreen.setActiveToolbar(Egw.Calendar.ToolBar.getToolBar());
+        Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Calendar.MainScreen.getMainScreen(Tine.Calendar.Request));
+        Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Calendar.ToolBar.getToolBar());
     });
     
     return calPanel;
 }
 
 
-Egw.Calendar.MainScreen = function() {
+Tine.Calendar.MainScreen = function() {
 	
 	/**
 	 * @var {Ext.data.Store} events store
@@ -117,7 +117,7 @@ Egw.Calendar.MainScreen = function() {
     };
 	
 	/**
-     * @param {Egw.Calendar.Request} request
+     * @param {Tine.Calendar.Request} request
      */
 	var initStore = function(request)
 	{
@@ -145,7 +145,7 @@ Egw.Calendar.MainScreen = function() {
 			DisplayCalendarEvents(s);
 		});
 		
-		with (Egw.Calendar.Request) {
+		with (Tine.Calendar.Request) {
 			store.load({
 				params: {
 					start: start.format('c'),
@@ -158,7 +158,7 @@ Egw.Calendar.MainScreen = function() {
 	};
 	
 	/**
-	 * @param {Egw.Calendar.Request} request
+	 * @param {Tine.Calendar.Request} request
 	 */
 	var initTimeGrid = function(request)
 	{
@@ -187,7 +187,7 @@ Egw.Calendar.MainScreen = function() {
 			
 			for (var i = 1; i <= nDays; i++) {
 				columns.push({
-					//header: includeHeader ? Egw.Egwbase.Common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
+					//header: includeHeader ? Tine.Tinebase.Common.dateRenderer(request.start.add(Date.DAY, i-1)) : '',
 					header: includeHeader ? request.start.add(Date.DAY, i-1).format('l, \\t\\he jS \\o\\f F') : '',
 					sortable: false,
 					fixed: true,
@@ -205,7 +205,7 @@ Egw.Calendar.MainScreen = function() {
 			}),
 			columns: mkDayColumns(false),
 			sm: new Ext.grid.CellSelectionModel({}),
-			//view: new Egw.Calendar.GridView_Days({}),
+			//view: new Tine.Calendar.GridView_Days({}),
 			iconCls: 'icon-grid',
 			border: false
 		});
@@ -241,7 +241,7 @@ Egw.Calendar.MainScreen = function() {
                 //'data': [['Gantaegig']]
 			}),
 			sm: new Ext.grid.CellSelectionModel({}),
-            //view: new Egw.Calendar.GridView_Days({}),
+            //view: new Tine.Calendar.GridView_Days({}),
             iconCls: 'icon-grid',
             border: false,
             columns: mkDayColumns(true)
@@ -307,12 +307,12 @@ Egw.Calendar.MainScreen = function() {
 		
 		var SimultaneousRegistryGranularity = 5*Date.Const.msMINUTE;
 		var SimultaneousRegistryMaxColumns = 10;
-		var SimultaneousRegistry = mkTimeGridData(Egw.Calendar.Request.viewMultiplier, SimultaneousRegistryGranularity);
+		var SimultaneousRegistry = mkTimeGridData(Tine.Calendar.Request.viewMultiplier, SimultaneousRegistryGranularity);
 		
 		eventsStore.each(function(event){
 			// timestamp based calculations are far more easy!
-			var rStart = Egw.Calendar.Request.start.getTime();
-			var rEnd = Egw.Calendar.Request.end.getTime();
+			var rStart = Tine.Calendar.Request.start.getTime();
+			var rEnd = Tine.Calendar.Request.end.getTime();
 			var eStart = event.data.cal_start.getTime();
 			var eEnd = event.data.cal_end.getTime();
 			
@@ -432,7 +432,7 @@ Egw.Calendar.MainScreen = function() {
         // scroll to wday start
 		TimeGrid.getView().scroller.setStyle('overflow-x', 'hidden');
         TimeGrid.getView().scroller.dom.scrollTop = 
-            Egw.Calendar.Preferences.workDayStart.getTime() * dpdt;
+            Tine.Calendar.Preferences.workDayStart.getTime() * dpdt;
     };
 		
     var eventTpl = new Ext.XTemplate(
@@ -461,10 +461,10 @@ Egw.Calendar.MainScreen = function() {
 		getMainScreen: function(request){
 			initStore(request);
 			initTimeGrid(request);
-			Egw.Calendar.Request.on('requestchange', function(request){
+			Tine.Calendar.Request.on('requestchange', function(request){
 		        initStore(request);
 		        initTimeGrid(request);
-		        Egw.Egwbase.MainScreen.setActiveContentPanel(dayViewLayout);
+		        Tine.Tinebase.MainScreen.setActiveContentPanel(dayViewLayout);
 		    },this);
 			//return TimeGrid;
 			return dayViewLayout;
@@ -475,20 +475,20 @@ Egw.Calendar.MainScreen = function() {
 /**
  * Toolbar Object
  */
-Egw.Calendar.ToolBar = function() {
+Tine.Calendar.ToolBar = function() {
 	
-	// parsing Egw.Calendar.Request.changeView as handler directly
+	// parsing Tine.Calendar.Request.changeView as handler directly
 	// does't work for scopeing ishues!
 	var changeView = function(requestedView) {
-		Egw.Calendar.Request.changeView(requestedView);
+		Tine.Calendar.Request.changeView(requestedView);
 	}
 	
-	// we generate a new toolbar on each request as egwbase throws our
+	// we generate a new toolbar on each request as tinebase throws our
 	// toolbar away when changing apps
 	var _generateToolBar = function()
 	{
 		
-		Egw.Calendar.Request.on('requestchange', function(request){
+		Tine.Calendar.Request.on('requestchange', function(request){
             console.log(request.view);
             //console.log(request.viewMultiplier);
         },this);

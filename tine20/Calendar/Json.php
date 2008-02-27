@@ -1,6 +1,6 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -13,7 +13,7 @@
  * json interface for calendar
  * @package     Calendar
  */
-class Calendar_Json extends Egwbase_Application_Json_Abstract
+class Calendar_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Calendar';
     
@@ -85,7 +85,7 @@ class Calendar_Json extends Egwbase_Application_Json_Abstract
     {
         $treeNodes = array();
 
-        $treeNode = new Egwbase_Ext_Treenode('Calendar', 'mycalendar', 'mycalendar', 'My Calendar', TRUE);
+        $treeNode = new Tinebase_Ext_Treenode('Calendar', 'mycalendar', 'mycalendar', 'My Calendar', TRUE);
         $treeNode->cls = 'treemain';
         $treeNode->jsonMethod = 'Admin.getApplications';
         $treeNode->dataPanelType = 'applications';

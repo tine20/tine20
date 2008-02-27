@@ -10,13 +10,13 @@
  */
 
 /**
- * backend class for Egwbase_Http_Server
+ * backend class for Tinebase_Http_Server
  *
  * This class handles all Http requests for the Crm application
  *
  * @package     Crm
  */
-class Crm_Http extends Egwbase_Application_Http_Abstract
+class Crm_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Crm';
       
@@ -38,7 +38,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
         
         $view = new Zend_View();
          
-        $view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         
         $crmJson = new Crm_Json;        
@@ -80,12 +80,12 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
                     $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
                     $_task = $task->toArray();
 
-                    $creator = Egwbase_Account::getInstance()->getAccountById($_task['created_by']);
+                    $creator = Tinebase_Account::getInstance()->getAccountById($_task['created_by']);
                     $_creator = $creator->toArray();
                     $_task['creator'] = $_creator['accountFullName'];
                     
                     if($_task['last_modified_by'] != NULL) {
-                        $modifier = Egwbase_Account::getInstance()->getAccountById($_task['last_modified_by']);
+                        $modifier = Tinebase_Account::getInstance()->getAccountById($_task['last_modified_by']);
                         $_modifier = $modifier->toArray();
                         $_task['modifier'] = $_modifier['accountFullName'];         
                     }
@@ -110,7 +110,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
                  $leadData['tasks'] = array();   
             }
             
-            $folder = Egwbase_Container_Container::getInstance()->getContainerById($lead->lead_container);
+            $folder = Tinebase_Container_Container::getInstance()->getContainerById($lead->lead_container);
             $view->formData['config']['folderName']   = $folder->container_name;
             $view->formData['config']['folderRights'] = $folder->account_grants;
             
@@ -150,7 +150,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
         $view->jsIncludeFiles[] = self::_appendFileTime('Tasks/js/Tasks.js');
         $view->cssIncludeFiles[] = 'Crm/css/Crm.css';
         $view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';       
-        $view->jsExecute = 'Egw.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';
+        $view->jsExecute = 'Tine.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -160,7 +160,7 @@ class Crm_Http extends Egwbase_Application_Http_Abstract
         $view->title="edit lead";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

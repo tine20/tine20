@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-class Addressbook_Model_Contact extends Egwbase_Record_Abstract
+class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -127,7 +127,7 @@ class Addressbook_Model_Contact extends Egwbase_Record_Abstract
      *
      * @param array $_data the new data to set
      * @param bool $_bypassFilters enabled/disable validation of data. set to NULL to use state set by the constructor 
-     * @throws Egwbase_Record_Exception when content contains invalid or missing data
+     * @throws Tinebase_Record_Exception when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {

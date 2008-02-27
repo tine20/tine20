@@ -1,6 +1,6 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -14,7 +14,7 @@
  * Task-Status Record Class
  * @package Tasks
  */
-class Tasks_Model_Status extends Egwbase_Record_Abstract
+class Tasks_Model_Status extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 

@@ -25,7 +25,7 @@ require_once 'Calendar/Backend/Sql/User.php';
  * The calendars SQL Backend is to complicated to just work on the standart
  * Zend_DB_Table and Zend_DB_TableRow classes.
  * 
- * Each eGroupWare installation has a calendar property called horizont. This
+ * Each Tine 2.0 installation has a calendar property called horizont. This
  * is the time, up to all repitions of recouring events are explicitly stored in
  * the SQL DB. This horinzont is pushed to later times, if _one_ user of the
  * installation looks at his calendar for these later times. However, there is

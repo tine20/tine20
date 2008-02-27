@@ -67,7 +67,7 @@ class Crm_Controller
      * @param int $_leadstate
      * @param int $_probability
      * @param bool $_getClosedLeads
-     * @return Egwbase_Record_RecordSet subclass Crm_Model_Lead
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
     public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
@@ -101,7 +101,7 @@ class Crm_Controller
      *
      * @return array
      */ 
-    public function saveLeadsources(Egwbase_Record_Recordset $_leadSources)
+    public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
     {
           $daten = $_leadSources->toArray();
           
@@ -132,7 +132,7 @@ class Crm_Controller
      *
      * @return array
      */ 
-    public function saveLeadtypes(Egwbase_Record_Recordset $_leadTypes)
+    public function saveLeadtypes(Tinebase_Record_Recordset $_leadTypes)
     {
           $daten = $_leadTypes->toArray();
           
@@ -163,7 +163,7 @@ class Crm_Controller
      *
      * @return array
      */ 
-    public function saveProductSource(Egwbase_Record_Recordset $_productSource)
+    public function saveProductSource(Tinebase_Record_Recordset $_productSource)
     {
           $daten = $_productSource->toArray();
           
@@ -249,7 +249,7 @@ class Crm_Controller
      *
      * @return array
      */ 
-    public function saveLeadstates(Egwbase_Record_Recordset $_leadStates)
+    public function saveLeadstates(Tinebase_Record_Recordset $_leadStates)
     {
           $daten = $_leadStates->toArray();
           
@@ -281,7 +281,7 @@ class Crm_Controller
      *
      * @return array
      */ 
-    public function saveProducts(Egwbase_Record_Recordset $_productData)
+    public function saveProducts(Tinebase_Record_Recordset $_productData)
     {
           $daten = $_productData->toArray();
           
@@ -325,7 +325,7 @@ class Crm_Controller
         $view->leadState = $this->getLeadState($_lead->lead_leadstate_id);
         $view->leadType = $this->getLeadType($_lead->lead_leadtype_id);
         $view->leadSource = $this->getLeadSource($_lead->lead_leadsource_id);
-        $view->container = Egwbase_Container_Container::getInstance()->getContainerById($_lead->lead_container);
+        $view->container = Tinebase_Container_Container::getInstance()->getContainerById($_lead->lead_container);
         
         if(is_a($_lead->lead_start, 'Zend_Date')) {
             $view->leadStart = $_lead->lead_start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
@@ -355,8 +355,8 @@ class Crm_Controller
         }
         
         // send notifications to all accounts in the first step
-        $accounts = Egwbase_Account::getInstance()->getFullAccounts();
-        Egwbase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
+        $accounts = Tinebase_Account::getInstance()->getFullAccounts();
+        Tinebase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
     }
     
     /**
@@ -376,7 +376,7 @@ class Crm_Controller
     
     public function getLinks($_leadId, $_application = NULL)
     {
-        $links = Egwbase_Links::getInstance()->getLinks('crm', $_leadId, $_application);
+        $links = Tinebase_Links::getInstance()->getLinks('crm', $_leadId, $_application);
         
         return $links;
     }
@@ -402,22 +402,22 @@ class Crm_Controller
     
     public function setLinkedCustomer($_leadId, array $_contactIds)
     {
-        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'customer');
+        Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'customer');
     }
 
     public function setLinkedPartner($_leadId, array $_contactIds)
     {
-        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'partner');
+        Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'partner');
     }
 
     public function setLinkedAccount($_leadId, array $_contactIds)
     {
-        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
+        Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
     }
     
     public function setLinkedTasks($_leadId, array $_taskIds)
     {
-        Egwbase_Links::getInstance()->setLinks('crm', $_leadId, 'tasks', $_taskIds, '');
+        Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'tasks', $_taskIds, '');
     }
     
     /**

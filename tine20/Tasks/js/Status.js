@@ -1,5 +1,5 @@
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -8,9 +8,9 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Egw.Tasks', 'Egw.Tasks.status');
+Ext.namespace('Tine.Tasks', 'Tine.Tasks.status');
 
-Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
+Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	/**
      * @cfs {bool} autoExpand
      * Autoexpand comboBox on focus.
@@ -31,9 +31,9 @@ Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	
 	//private
     initComponent: function(){
-		this.store = Egw.Tasks.status.getStore();
+		this.store = Tine.Tasks.status.getStore();
 		if (!this.value) {
-			this.value = Egw.Tasks.status.getIdentifier('IN-PROCESS');
+			this.value = Tine.Tasks.status.getIdentifier('IN-PROCESS');
 		}
 		if (this.autoExpand) {
 			this.on('focus', function(){
@@ -42,12 +42,12 @@ Egw.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
             });
 		}
 		//this.on('select', function(){console.log(this.value)});
-	    Egw.Tasks.status.ComboBox.superclass.initComponent.call(this);
+	    Tine.Tasks.status.ComboBox.superclass.initComponent.call(this);
 	}
         
 });
 
-Egw.Tasks.status.getStore = function() {
+Tine.Tasks.status.getStore = function() {
 	if (!store) {
 		var store = new Ext.data.JsonStore({
             fields: [ 
@@ -64,7 +64,7 @@ Egw.Tasks.status.getStore = function() {
                 { name: 'status_icon'                                       }
            ],
 		   // initial data from http request
-           data: Egw.Tasks.AllStati,
+           data: Tine.Tasks.AllStati,
            autoLoad: true,
            id: 'identifier'
        });
@@ -72,18 +72,18 @@ Egw.Tasks.status.getStore = function() {
 	return store;
 };
 
-Egw.Tasks.status.getIdentifier = function(statusName) {
-	var index = Egw.Tasks.status.getStore().find('status_name', statusName);
-	var status = Egw.Tasks.status.getStore().getAt(index);
+Tine.Tasks.status.getIdentifier = function(statusName) {
+	var index = Tine.Tasks.status.getStore().find('status_name', statusName);
+	var status = Tine.Tasks.status.getStore().getAt(index);
 	return status.data.identifier;
 };
 
-Egw.Tasks.status.getStatus = function(identifier) {
-	var status = Egw.Tasks.status.getStore().getById(identifier);
+Tine.Tasks.status.getStatus = function(identifier) {
+	var status = Tine.Tasks.status.getStore().getById(identifier);
     return status ? status : identifier;
 };
 
-Egw.Tasks.status.getStatusIcon = function(identifier) {
-    var status = Egw.Tasks.status.getStatus(identifier);
+Tine.Tasks.status.getStatusIcon = function(identifier) {
+    var status = Tine.Tasks.status.getStatus(identifier);
     return '<img class="TasksMainGridStatus" src="' + status.data.status_icon + '" ext:qtip="' + status.data.status_name + '">';
 };

@@ -1,5 +1,5 @@
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -8,16 +8,16 @@
  * @version     $Id$
  *
  */
-Ext.namespace('Egw.Tasks');
+Ext.namespace('Tine.Tasks');
 
-// entry point, required by egwbase
-Egw.Tasks.getPanel = function() {
-    return Egw.Tasks.TaskGrid.getTreePanel();
+// entry point, required by tinebase
+Tine.Tasks.getPanel = function() {
+    return Tine.Tasks.TaskGrid.getTreePanel();
 };
 
 
 // Tasks main screen
-Egw.Tasks.TaskGrid = function(){
+Tine.Tasks.TaskGrid = function(){
     
     var sm, grid, store, tree, paging, filter;
 	
@@ -30,7 +30,7 @@ Egw.Tasks.TaskGrid = function(){
                 var task = selectedRows[0];
 				taskId = task.data.identifier;
 			}
-			popupWindow = new Egw.Tasks.EditPopup({
+			popupWindow = new Tine.Tasks.EditPopup({
 				identifier: taskId
                 //relatedApp: 'tasks',
                 //relatedId: 
@@ -39,7 +39,7 @@ Egw.Tasks.TaskGrid = function(){
             popupWindow.on('update', function(task) {
             	store.load({params: paging});
             }, this);
-            //var popup = Egw.Egwbase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
+            //var popup = Tine.Tinebase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
             
         },
 		deleteTaks: function(_button, _event){
@@ -110,7 +110,7 @@ Egw.Tasks.TaskGrid = function(){
 	// ------------- tree ----------
     
     
-	tree =  new Egw.widgets.container.TreePanel({
+	tree =  new Tine.widgets.container.TreePanel({
         id: 'TasksTreePanel',
         iconCls: 'TasksTreePanel',
         title: 'Tasks',
@@ -134,8 +134,8 @@ Egw.Tasks.TaskGrid = function(){
     tree.on('beforeexpand', function(panel) {
 		initStore(); 
 		initGrid();
-		Egw.Egwbase.MainScreen.setActiveToolbar(_getToolbar());
-        Egw.Egwbase.MainScreen.setActiveContentPanel(grid);
+		Tine.Tinebase.MainScreen.setActiveToolbar(_getToolbar());
+        Tine.Tinebase.MainScreen.setActiveContentPanel(grid);
     });
 	
 	// ----------- store --------------    
@@ -145,7 +145,7 @@ Egw.Tasks.TaskGrid = function(){
             root: 'results',
             totalProperty: 'totalcount',
 			successProperty: 'status',
-			fields: Egw.Tasks.Task,
+			fields: Tine.Tasks.Task,
 			remoteSort: true,
 			baseParams: {
                 method: 'Tasks.searchTasks'
@@ -215,7 +215,7 @@ Egw.Tasks.TaskGrid = function(){
 		
 		filter = {
             containerType: 'personal',
-            owner: Egw.Egwbase.Registry.get('currentAccount').accountId,
+            owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
             query: '',
             due: false,
             container: false,
@@ -239,7 +239,7 @@ Egw.Tasks.TaskGrid = function(){
 	
     // --------- toolbar -------------
 	// toolbar must be generated each time this fn is called, 
-	// as egwbase destroys the old toolbar when setting a new one.
+	// as tinebase destroys the old toolbar when setting a new one.
 	var _getToolbar = function(){
 		var quickSearchField = new Ext.app.SearchField({
 			id: 'quickSearchField',
@@ -267,7 +267,7 @@ Egw.Tasks.TaskGrid = function(){
 			id: 'TasksStatusFilter',
 			//name: 'statusFilter',
 			hideLabel: true,
-			store: Egw.Tasks.status.getStore(),
+			store: Tine.Tasks.status.getStore(),
 			displayField: 'status_name',
 			valueField: 'identifier',
 			typeAhead: true,
@@ -284,7 +284,7 @@ Egw.Tasks.TaskGrid = function(){
 			combo.triggers[0].show();
 		});
 		
-		var organizerFilter = new Egw.widgets.AccountpickerField({
+		var organizerFilter = new Tine.widgets.AccountpickerField({
 			id: 'TasksorganizerFilter',
 			width: 200,
 		    emptyText: 'any'
@@ -345,12 +345,12 @@ Egw.Tasks.TaskGrid = function(){
 					width: 40,
 					sortable: true,
 					dataIndex: 'status',
-					renderer: Egw.Tasks.status.getStatusIcon,
-                    editor: new Egw.Tasks.status.ComboBox({
+					renderer: Tine.Tasks.status.getStatusIcon,
+                    editor: new Tine.Tasks.status.ComboBox({
 		                autoExpand: true,
 		                listClass: 'x-combo-list-small'
 		            }),
-		            quickaddField: new Egw.Tasks.status.ComboBox({
+		            quickaddField: new Tine.Tasks.status.ComboBox({
                         autoExpand: true,
                     })
 				},
@@ -360,12 +360,12 @@ Egw.Tasks.TaskGrid = function(){
 					width: 50,
 					sortable: true,
 					dataIndex: 'percent',
-					renderer: Egw.widgets.Percent.renderer,
-                    editor: new Egw.widgets.Percent.Combo({
+					renderer: Tine.widgets.Percent.renderer,
+                    editor: new Tine.widgets.Percent.Combo({
 						autoExpand: true
                         //allowBlank: false
                     }),
-                    quickaddField: new Egw.widgets.Percent.Combo({
+                    quickaddField: new Tine.widgets.Percent.Combo({
                         autoExpand: true,
                     })
 				},
@@ -388,12 +388,12 @@ Egw.Tasks.TaskGrid = function(){
 					width: 30,
 					sortable: true,
 					dataIndex: 'priority',
-					renderer: Egw.widgets.Priority.renderer,
-                    editor: new Egw.widgets.Priority.Combo({
+					renderer: Tine.widgets.Priority.renderer,
+                    editor: new Tine.widgets.Priority.Combo({
                         allowBlank: false,
 						autoExpand: true
                     }),
-                    quickaddField: new Egw.widgets.Priority.Combo({
+                    quickaddField: new Tine.widgets.Priority.Combo({
                         autoExpand: true,
                     })
 				},
@@ -403,7 +403,7 @@ Egw.Tasks.TaskGrid = function(){
 					width: 50,
 					sortable: true,
 					dataIndex: 'due',
-					renderer: Egw.Egwbase.Common.dateRenderer,
+					renderer: Tine.Tinebase.Common.dateRenderer,
 					editor: new Ext.ux.ClearableDateField({
                         format : 'd.m.Y'
                     }),
@@ -469,7 +469,7 @@ Egw.Tasks.TaskGrid = function(){
 	    grid.on('newentry', function(taskData){
 	    	var selectedNode = tree.getSelectionModel().getSelectedNode();
             taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.container_id : -1;
-	        task = new Egw.Tasks.Task(taskData);
+	        task = new Tine.Tasks.Task(taskData);
 
 	        Ext.Ajax.request({
                 params: {
@@ -513,15 +513,15 @@ Egw.Tasks.TaskGrid = function(){
 }();
 
 
-Egw.Tasks.EditDialog = function(task) {
+Tine.Tasks.EditDialog = function(task) {
 	
 	if (!arguments[0]) {
 		task = {};
 	}
 	
 	// init task record 
-    task = new Egw.Tasks.Task(task);
-    Egw.Tasks.fixTask(task);
+    task = new Tine.Tasks.Task(task);
+    Tine.Tasks.fixTask(task);
     
 	var handlers = {        
         applyChanges: function(_button, _event) {
@@ -543,14 +543,14 @@ Egw.Tasks.EditDialog = function(task) {
 		                task: Ext.util.JSON.encode(task.data),
 						linkingApp: formData.linking.link_app1,
 						linkedId: formData.linking.link_id1 //,
-						//jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+						//jsonKey: Tine.Tinebase.Registry.get('jsonKey')
 		            },
 		            success: function(_result, _request) {
 		                
 						dlg.action_delete.enable();
 						// override task with returned data
-						task = new Egw.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
-						Egw.Tasks.fixTask(task);
+						task = new Tine.Tasks.Task(Ext.util.JSON.decode(_result.responseText));
+						Tine.Tasks.fixTask(task);
 						
 						// update form with this new data
 						form.loadRecord(task);                    
@@ -634,16 +634,16 @@ Egw.Tasks.EditDialog = function(task) {
                 anchor: '95%'
             },
             items:[ 
-                new Egw.widgets.Percent.Combo({
+                new Tine.widgets.Percent.Combo({
                     fieldLabel: 'Percentage',
                     editable: false,
                     name: 'percent'
                 }), 
-                new Egw.Tasks.status.ComboBox({
+                new Tine.Tasks.status.ComboBox({
                     fieldLabel: 'Status',
                     name: 'status'
                 }), 
-                new Egw.widgets.Priority.Combo({
+                new Tine.widgets.Priority.Combo({
                     fieldLabel: 'Priority',
                     name: 'priority'
                 }), 
@@ -652,7 +652,7 @@ Egw.Tasks.EditDialog = function(task) {
                     name: 'due',
                     format: "d.m.Y"
                 }), 
-                new Egw.widgets.container.selectionComboBox({
+                new Tine.widgets.container.selectionComboBox({
                     fieldLabel: 'Folder',
                     name: 'container',
                     itemName: 'Tasks',
@@ -662,7 +662,7 @@ Egw.Tasks.EditDialog = function(task) {
         }]
 	};
 	
-	var dlg = new Egw.widgets.dialog.EditRecord({
+	var dlg = new Tine.widgets.dialog.EditRecord({
         id : 'TasksEditFormPanel',
         handlerApplyChanges: handlers.applyChanges,
         handlerSaveAndClose: handlers.saveAndClose,
@@ -686,7 +686,7 @@ Egw.Tasks.EditDialog = function(task) {
 };
 
 // generalised popup
-Egw.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
+Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    relatedApp: '',
    relatedId: -1,
    identifier: -1,
@@ -696,12 +696,12 @@ Egw.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    height: 300,
    initComponent: function(){
         this.url = 'index.php?method=Tasks.editTask&taskId=' + this.identifier + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId;
-        Egw.Tasks.EditPopup.superclass.initComponent.call(this);
+        Tine.Tasks.EditPopup.superclass.initComponent.call(this);
    }
 });
 
 // fixes a task
-Egw.Tasks.fixTask = function(task) {
+Tine.Tasks.fixTask = function(task) {
 	if (task.data.container) {
         task.data.container = Ext.util.JSON.decode(task.data.container);
     }
@@ -711,8 +711,8 @@ Egw.Tasks.fixTask = function(task) {
 }
 
 // Task model
-Egw.Tasks.Task = Ext.data.Record.create([
-    // egw record fields
+Tine.Tasks.Task = Ext.data.Record.create([
+    // tine record fields
     { name: 'container' },
     { name: 'created_by' },
     { name: 'creation_time', type: 'date', dateFormat: 'c' },

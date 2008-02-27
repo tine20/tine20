@@ -15,7 +15,7 @@
  *
  * @package     Crm
  */
-class Crm_Json extends Egwbase_Application_Json_Abstract
+class Crm_Json extends Tinebase_Application_Json_Abstract
 {
     /**
      * the internal name of the application
@@ -60,7 +60,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $leadSources = Zend_Json::decode($optionsData);
          
         try {
-            $leadSources = new Egwbase_Record_RecordSet($leadSources, 'Crm_Model_Leadsource');
+            $leadSources = new Tinebase_Record_RecordSet($leadSources, 'Crm_Model_Leadsource');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -116,7 +116,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $leadTypes = Zend_Json::decode($optionsData);
          
         try {
-            $leadTypes = new Egwbase_Record_RecordSet($leadTypes, 'Crm_Model_Leadtype');
+            $leadTypes = new Tinebase_Record_RecordSet($leadTypes, 'Crm_Model_Leadtype');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -171,7 +171,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $leadStates = Zend_Json::decode($optionsData);
          
         try {
-            $leadStates = new Egwbase_Record_RecordSet($leadStates, 'Crm_Model_Leadstate');
+            $leadStates = new Tinebase_Record_RecordSet($leadStates, 'Crm_Model_Leadstate');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -227,7 +227,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $productSource = Zend_Json::decode($optionsData);
          
         try {
-            $productSource = new Egwbase_Record_RecordSet($productSource, 'Crm_Model_Productsource');
+            $productSource = new Tinebase_Record_RecordSet($productSource, 'Crm_Model_Productsource');
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -296,7 +296,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
     	    }
            
             try {
-                $_productsData = new Egwbase_Record_RecordSet($_productsData, 'Crm_Model_Product');
+                $_productsData = new Tinebase_Record_RecordSet($_productsData, 'Crm_Model_Product');
             } catch (Exception $e) {
                 // invalid data in some fields sent from client
                 $result = array('success'           => false,
@@ -629,7 +629,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getFoldersByOwner($owner)) {
             foreach($rows as $folderData) {
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
+                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
                 $childNode->folderId = $folderData->container_id;
                 $childNode->nodeType = 'singleFolder';
                 $treeNodes[] = $childNode;
@@ -650,7 +650,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         if($rows = $backend->getSharedFolders()) {
             foreach($rows as $folderData) {
-                $childNode = new Egwbase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
+                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
                 $childNode->folderId = $folderData->container_id;
                 $childNode->nodeType = 'singleFolder';
                 $treeNodes[] = $childNode;
@@ -676,7 +676,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
             $rows = $backend->getOtherUsers();
         
             foreach($rows as $accountData) {
-                $treeNode = new Egwbase_Ext_Treenode(
+                $treeNode = new Tinebase_Ext_Treenode(
                     'Crm',
                     'leads',
                     'otherfolder_'. $accountData->accountId, 
@@ -700,7 +700,7 @@ class Crm_Json extends Egwbase_Application_Json_Abstract
 
 /*    public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
-        $internalContainer = Egwbase_Container_Container::getInstance()->getInternalContainer('crm');
+        $internalContainer = Tinebase_Container_Container::getInstance()->getInternalContainer('crm');
         
         $folderId = $internalContainer->container_id;
         

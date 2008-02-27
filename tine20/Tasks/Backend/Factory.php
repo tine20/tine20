@@ -1,13 +1,13 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: $
+ * @version     $Id$
  *
  */
 

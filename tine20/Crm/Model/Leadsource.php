@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-class Crm_Model_Leadsource extends Egwbase_Record_Abstract
+class Crm_Model_Leadsource extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 

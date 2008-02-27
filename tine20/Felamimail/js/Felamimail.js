@@ -1,13 +1,13 @@
-Ext.namespace('Egw.Felamimail');
+Ext.namespace('Tine.Felamimail');
 
-Egw.Felamimail = function() {
+Tine.Felamimail = function() {
     
     var _getFolderPanel = function() 
     {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php',
             baseParams: {
-                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
                 method: 'Felamimail.getSubTree',
                 location: 'mainTree'
             }
@@ -35,12 +35,12 @@ Egw.Felamimail = function() {
         });
         treePanel.setRootNode(treeRoot);
 
-        for(var i=0; i<Egw.Felamimail.initialTree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Egw.Felamimail.initialTree[i]));
+        for(var i=0; i<Tine.Felamimail.initialTree.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Tine.Felamimail.initialTree[i]));
         }
         
         treePanel.on('click', function(_node, _event) {
-            Egw.Felamimail.Email.show(_node);
+            Tine.Felamimail.Email.show(_node);
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
@@ -78,7 +78,7 @@ Egw.Felamimail = function() {
 /**
  * the class which handles the email part
  */
-Egw.Felamimail.Email = function() {
+Tine.Felamimail.Email = function() {
 
     /**
      * onclick handler for edit action
@@ -226,7 +226,7 @@ Egw.Felamimail.Email = function() {
             url: 'index.php',
             baseParams: {
                 method:     'Felamimail.getEmailOverview',
-                jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+                jsonKey: Tine.Tinebase.Registry.get('jsonKey')
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -306,7 +306,7 @@ Egw.Felamimail.Email = function() {
             ]
         });
         
-        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
     };
     
     var _renderDateTime = function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
@@ -408,7 +408,7 @@ Egw.Felamimail.Email = function() {
             border: false
         });
         
-        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -446,7 +446,7 @@ Egw.Felamimail.Email = function() {
     // public functions and variables
     return {
         show: function(_node) {
-            var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
+            var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
             if(currentToolbar === false || currentToolbar.id != 'toolbarFelamimail') {
                 _showToolbar();

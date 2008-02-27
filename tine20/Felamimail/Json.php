@@ -11,7 +11,7 @@
  * @version     $Id$
  *
  */
-class Felamimail_Json extends Egwbase_Application_Json_Abstract
+class Felamimail_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Felamimail';
     
@@ -57,7 +57,7 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
 			//error_log(print_r($folder, true));
 			
 			foreach($folder as $folderArray) {
-				$treeNode = new Egwbase_Ext_Treenode(
+				$treeNode = new Tinebase_Ext_Treenode(
 					'Felamimail', 
 					'email', 
 					$folderArray['globalName'], 
@@ -97,7 +97,7 @@ class Felamimail_Json extends Egwbase_Application_Json_Abstract
         $treeNodes = array();
         
         foreach($accounts as $id => $accountData) {
-            $treeNode = new Egwbase_Ext_Treenode('Felamimail', 'email', $id, $accountData->name, FALSE);
+            $treeNode = new Tinebase_Ext_Treenode('Felamimail', 'email', $id, $accountData->name, FALSE);
             $treeNode->accountId = $id;
             $treeNode->folderName = '';
             $treeNodes[] = $treeNode;

@@ -60,52 +60,52 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function __construct()
     {
         try {
-            $this->leadTable      = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
+            $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
         } catch (Zend_Db_Statement_Exception $e) {
             Crm_Setup_SetupSqlTables::createLeadTable();
-            $this->leadTable      = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
+            $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
         }
 
         try {
-            $this->leadSourceTable   = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
+            $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         } catch (Zend_Db_Statement_Exception $e) {
             Crm_Setup_SetupSqlTables::createLeadSourceTable();
-            $this->leadSourceTable   = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
+            $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         }
         
         try {
-            $this->leadTypeTable     = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+            $this->leadTypeTable     = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         } catch (Zend_Db_Statement_Exception $e) {
             Crm_Setup_SetupSqlTables::createLeadTypeTable();
-            $this->leadTypeTable     = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+            $this->leadTypeTable     = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         }
         
         try {
-            $this->leadStateTable    = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
+            $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             Crm_Setup_SetupSqlTables::createLeadStateTable();
-            $this->leadStateTable    = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
+            $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
         }
         
         try {
-            $this->productSourceTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
+            $this->productSourceTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             Crm_Setup_SetupSqlTables::createProductSourceTable();
-            $this->productSourceTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
+            $this->productSourceTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         }
 
         try {
-            $this->productsTable      = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
+            $this->productsTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
             Crm_Setup_SetupSqlTables::createProductTable();
-            $this->productsTable      = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
+            $this->productsTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
         }
         
         
-        $this->linksTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
+        $this->linksTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
         
     }
     
@@ -124,10 +124,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
     * add or updates an option
     *
-    * @param Egwbase_Record_Recordset $_leadSources list of lead sources
+    * @param Tinebase_Record_Recordset $_leadSources list of lead sources
     * @return unknown
     */
-    public function saveLeadsources(Egwbase_Record_Recordset $_leadSources)
+    public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
     {
         $db = Zend_Registry::get('dbAdapter');
   
@@ -192,7 +192,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param Crm_Leadtype $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveLeadtypes(Egwbase_Record_Recordset $_optionData)
+    public function saveLeadtypes(Tinebase_Record_Recordset $_optionData)
     {
 
         $_daten = $_optionData->toArray();
@@ -260,7 +260,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param Crm_Productsource $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveProductsource(Egwbase_Record_Recordset $_optionData)
+    public function saveProductsource(Tinebase_Record_Recordset $_optionData)
     {
 
         $_daten = $_optionData->toArray();
@@ -314,7 +314,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @return unknown
 	*/  
-    public function getLeadContacts(Egwbase_Record_Recordset $_leads)
+    public function getLeadContacts(Tinebase_Record_Recordset $_leads)
     {    
         $leads = $_leads->toArray();
         
@@ -358,7 +358,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $stmt = $select->query();
     
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        $contacts = new Egwbase_Record_RecordSet($rows, 'Crm_Model_Contact');
+        $contacts = new Tinebase_Record_RecordSet($rows, 'Crm_Model_Contact');
         
         return $contacts;
     }
@@ -449,7 +449,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param Crm_Leadstate $_optionData the optiondata
 	* @return unknown
 	*/
-    public function saveLeadstates(Egwbase_Record_Recordset $_optionData)
+    public function saveLeadstates(Tinebase_Record_Recordset $_optionData)
     {
 
         $_daten = $_optionData->toArray();
@@ -558,9 +558,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @param int $_leadId the lead id
 	* @return unknown
 	*/
-    public function saveProducts(Egwbase_Record_Recordset $_productData)
+    public function saveProducts(Tinebase_Record_Recordset $_productData)
     {
-        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->lead_container, Egwbase_Container_Container::GRANT_EDIT)) {
+        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->lead_container, Tinebase_Container_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead->product denied');
         }    
     */   
@@ -619,7 +619,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
     * adds contacts
     *
-    * @param Egwbase_Record_Recordset $_leadSources list of lead sources
+    * @param Tinebase_Record_Recordset $_leadSources list of lead sources
     * @return unknown
     */
 /*    public function saveContacts(array $_contacts, $_id)
@@ -688,7 +688,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         $lead = new Crm_Model_Lead($row);
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->lead_container, Egwbase_Container_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->lead_container, Tinebase_Container_Container::GRANT_READ)) {
             throw new Exception('permission to lead denied');
         }
         
@@ -700,7 +700,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new UnderFlowExecption('lead not found');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($result->lead_container, Egwbase_Container_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($result->lead_container, Tinebase_Container_Container::GRANT_READ)) {
             throw new Exception('permission to lead denied');
         }
         
@@ -713,7 +713,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('crm', $owner);
+        $ownerContainer = Tinebase_Container_Container::getInstance()->getPersonalContainer('crm', $owner);
         
         if($ownerContainer->count() === 0) {
             return false;
@@ -740,7 +740,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Egwbase_Container_Container::getInstance()->getPersonalContainer('crm', $owner);
+        $ownerContainer = Tinebase_Container_Container::getInstance()->getPersonalContainer('crm', $owner);
         
         $containerIds = array();
         
@@ -775,7 +775,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new UnderflowException('lead_container can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->lead_container, Egwbase_Container_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->lead_container, Tinebase_Container_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead denied');
         }
 
@@ -812,7 +812,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $oldLeadData = $this->getLeadById($_leadId);
 
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->lead_container, Egwbase_Container_Container::GRANT_DELETE)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->lead_container, Tinebase_Container_Container::GRANT_DELETE)) {
             throw new Exception('delete access to CRM denied');
         }
 
@@ -854,28 +854,28 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     public function addFolder($_name, $_type) 
     {
     	
-        $egwbaseContainer = Egwbase_Container_Container::getInstance();
+        $tinebaseContainer = Tinebase_Container_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->accountId;
         $allGrants = array(
-            Egwbase_Container_Container::GRANT_ADD,
-            Egwbase_Container_Container::GRANT_ADMIN,
-            Egwbase_Container_Container::GRANT_DELETE,
-            Egwbase_Container_Container::GRANT_EDIT,
-            Egwbase_Container_Container::GRANT_READ
+            Tinebase_Container_Container::GRANT_ADD,
+            Tinebase_Container_Container::GRANT_ADMIN,
+            Tinebase_Container_Container::GRANT_DELETE,
+            Tinebase_Container_Container::GRANT_EDIT,
+            Tinebase_Container_Container::GRANT_READ
         );
         
-        if($_type == Egwbase_Container_Container::TYPE_SHARED) {
-            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container_Container::TYPE_SHARED, Crm_Backend_Factory::SQL);
+        if($_type == Tinebase_Container_Container::TYPE_SHARED) {
+            $folderId = $tinebaseContainer->addContainer('crm', $_name, Tinebase_Container_Container::TYPE_SHARED, Crm_Backend_Factory::SQL);
 
             // add admin grants to creator
-            $egwbaseContainer->addGrants($folderId, $accountId, $allGrants);
+            $tinebaseContainer->addGrants($folderId, $accountId, $allGrants);
             // add read grants to any other user
-            $egwbaseContainer->addGrants($folderId, NULL, array(Egwbase_Container_Container::GRANT_READ));
+            $tinebaseContainer->addGrants($folderId, NULL, array(Tinebase_Container_Container::GRANT_READ));
         } else {
-            $folderId = $egwbaseContainer->addContainer('crm', $_name, Egwbase_Container_Container::TYPE_PERSONAL, Crm_Backend_Factory::SQL);
+            $folderId = $tinebaseContainer->addContainer('crm', $_name, Tinebase_Container_Container::TYPE_PERSONAL, Crm_Backend_Factory::SQL);
         
             // add admin grants to creator
-            $egwbaseContainer->addGrants($folderId, $accountId, $allGrants);
+            $tinebaseContainer->addGrants($folderId, $accountId, $allGrants);
         }
         
         return $folderId;
@@ -883,9 +883,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function deleteFolder($_folderId)
     {
-        $egwbaseContainer = Egwbase_Container_Container::getInstance();
+        $tinebaseContainer = Tinebase_Container_Container::getInstance();
         
-        $egwbaseContainer->deleteContainer($_folderId);
+        $tinebaseContainer->deleteContainer($_folderId);
         
         $where = array(
             $this->leadTable->getAdapter()->quoteInto('lead_container = ?', (int)$_folderId)
@@ -898,9 +898,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function renameFolder($_folderId, $_name)
     {
-        $egwbaseContainer = Egwbase_Container_Container::getInstance();
+        $tinebaseContainer = Tinebase_Container_Container::getInstance();
         
-        $egwbaseContainer->renameContainer($_folderId, $_name);
+        $tinebaseContainer->renameContainer($_folderId, $_name);
                 
         return true;
     }    
@@ -908,24 +908,24 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      
     public function getFoldersByOwner($_owner) 
     {
-        $personalFolders = Egwbase_Container_Container::getInstance()->getPersonalContainer('crm', $_owner);
+        $personalFolders = Tinebase_Container_Container::getInstance()->getPersonalContainer('crm', $_owner);
                 
         return $personalFolders;
     }   
  
     public function getSharedFolders() {
-        $sharedFolders = Egwbase_Container_Container::getInstance()->getSharedContainer('crm');
+        $sharedFolders = Tinebase_Container_Container::getInstance()->getSharedContainer('crm');
                 
         return $sharedFolders;
     }
     
     public function getOtherUsers() 
     {
-        $rows = Egwbase_Container_Container::getInstance()->getOtherUsers('crm');
+        $rows = Tinebase_Container_Container::getInstance()->getOtherUsers('crm');
 
         //$accountData = array();
         
-        $result = new Egwbase_Record_RecordSet(NULL, 'Egwbase_Account_Model_Account');
+        $result = new Tinebase_Record_RecordSet(NULL, 'Tinebase_Account_Model_Account');
 
         foreach($rows as $account) {
             $accountData = array(
@@ -936,7 +936,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $result->addRecord($accountData);
         }
 
-        //$result = new Egwbase_Record_RecordSet($accountData, 'Egwbase_Account_Model_Account');
+        //$result = new Tinebase_Record_RecordSet($accountData, 'Tinebase_Account_Model_Account');
         
         return $result;
     }
@@ -997,7 +997,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $leads = new Egwbase_Record_RecordSet($rows, 'Crm_Model_Lead');
+        $leads = new Tinebase_Record_RecordSet($rows, 'Crm_Model_Lead');
         
         return $leads;
     }   
@@ -1098,15 +1098,15 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param int $_leadstate
      * @param int $_probability
      * @param bool $_getClosedLeads
-     * @return Egwbase_Record_RecordSet subclass Crm_Model_Lead
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
     public function getAllLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container_Container::GRANT_READ);
         
         if(count($allContainer) === 0) {
             $this->createPersonalContainer();
-            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
+            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container_Container::GRANT_READ);
         }        
         $containerIds = array();
         
@@ -1124,7 +1124,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
+        $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container_Container::GRANT_READ);
         
         
         $containerIds = array();
@@ -1153,7 +1153,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Egwbase_Container_Container::GRANT_READ);
+        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container_Container::GRANT_READ);
 
         if(empty($allContainer)) {
             return 0;
@@ -1185,7 +1185,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_folderId must be integer');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_folderId, Egwbase_Container_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_folderId, Tinebase_Container_Container::GRANT_READ)) {
             throw new Exception('read access denied to folder');
         }
         
@@ -1205,7 +1205,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_folderId must be integer');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($folderId, Egwbase_Container_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($folderId, Tinebase_Container_Container::GRANT_READ)) {
             throw new Exception('read access denied to folder');
         }
         
@@ -1223,7 +1223,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE) 
     {
-        $sharedContainer = Egwbase_Container_Container::getInstance()->getSharedContainer('crm');
+        $sharedContainer = Tinebase_Container_Container::getInstance()->getSharedContainer('crm');
         
         if($sharedContainer->count() === 0) {
             return false;
@@ -1251,7 +1251,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $allContainer = Egwbase_Container_Container::getInstance()->getSharedContainer('crm');
+        $allContainer = Tinebase_Container_Container::getInstance()->getSharedContainer('crm');
 
         if(empty($allContainer)) {
             return 0;
@@ -1277,7 +1277,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
    
    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads) 
     {
-        $otherPeoplesContainer = Egwbase_Container_Container::getInstance()->getOtherUsersContainer('crm');
+        $otherPeoplesContainer = Tinebase_Container_Container::getInstance()->getOtherUsersContainer('crm');
         
         $containerIds = array();
         $containerIdsPresent = "0";
@@ -1311,7 +1311,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
-        $allContainer = Egwbase_Container_Container::getInstance()->getOtherUsersContainer('crm');
+        $allContainer = Tinebase_Container_Container::getInstance()->getOtherUsersContainer('crm');
 
         if(empty($allContainer)) {
             return 0;
@@ -1340,7 +1340,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function createPersonalContainer()
     {
-        $this->addFolder('Personal Leads', Egwbase_Container_Container::TYPE_PERSONAL);
+        $this->addFolder('Personal Leads', Tinebase_Container_Container::TYPE_PERSONAL);
     }
      
     

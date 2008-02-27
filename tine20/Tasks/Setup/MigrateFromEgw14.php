@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @subpackage  Backend
@@ -31,16 +31,16 @@
  *   -contact is info_from, if info_addr is not an email.
  *   -duration is info_enddate - info_startdate
  */
-class Tasks_Setup_MigrateFromEgw14 
+class Tasks_Setup_MigrateFromTine14 
 {
 
     /**
-     * Mapping Tasks Model / Egw 1.4 Infolog Table
+     * Mapping Tasks Model / Tine 1.4 Infolog Table
      *
      * @var array
      */
     protected static $_mapping = array(
-        // egw record fields
+        // tine record fields
         'container'            => '',
         'created_by'           => 'info_owner',
         'creation_time'        => 'info_datemodified',
@@ -132,7 +132,7 @@ class Tasks_Setup_MigrateFromEgw14
                 $validation_errors = $Task20->getValidationErrors();
                 Zend_Registry::get('logger')->debug( 
                     'Could not migrate Infolog with info_id ' . $infolog->info_id . "\n" . 
-                    'Tasks_Setup_MigrateFromEgw14::infolog2Task: ' . $e->getMessage() . "\n" .
+                    'Tasks_Setup_MigrateFromTine14::infolog2Task: ' . $e->getMessage() . "\n" .
                     "Tasks_Model_Task::validation_errors: \n" .
                     print_r($validation_errors,true));
                     continue;
@@ -159,21 +159,21 @@ class Tasks_Setup_MigrateFromEgw14
      * ??? what about loose coupling in this case???
      * 
      * @param int $_owner
-     * @return int Egwbase_Container_Container::container_id
+     * @return int Tinebase_Container_Container::container_id
      */
     protected static function getOwnersContainer($_owner)
     {
         static $containers = array();
         
         if (!isset($containers[$_owner])) {
-            $containers[$_owner] = Egwbase_Container_Container::getInstance()->addContainer(
+            $containers[$_owner] = Tinebase_Container_Container::getInstance()->addContainer(
                 'Tasks',
                 'My Tasks (from egw 1.4 migration)',
-                Egwbase_Container_Container::TYPE_PERSONAL,
+                Tinebase_Container_Container::TYPE_PERSONAL,
                 Tasks_Backend_Factory::SQL
             );
-            Egwbase_Container_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
-                Egwbase_Container_Container::GRANT_ANY
+            Tinebase_Container_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
+                Tinebase_Container_Container::GRANT_ANY
             ));
         }
         return $containers[$_owner];  
@@ -192,7 +192,7 @@ class Tasks_Setup_MigrateFromEgw14
         $oldclass = strtoupper($_egw14Class);
         
         if (!isset($classes[$oldclass])) {
-            $classTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
+            $classTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
             $class = $classTable->fetchRow($classTable->getAdapter()->quoteInto('class LIKE ?', $oldclass));
             if (!$class) {
                 $identifier = $classTable->insert(array(
@@ -222,7 +222,7 @@ class Tasks_Setup_MigrateFromEgw14
         $oldstatus = strtoupper($_egw14Status);
         
         if (!isset($stati[$oldstatus])) {
-            $statusTable = new Egwbase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
+            $statusTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
             $status = $statusTable->fetchRow($statusTable->getAdapter()->quoteInto('status LIKE ?', $oldstatus));
             if (!$status) {
                 $identifier = $statusTable->insert(array(

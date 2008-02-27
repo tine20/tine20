@@ -1,11 +1,11 @@
-Ext.namespace('Egw.Crm');
+Ext.namespace('Tine.Crm');
 
 
-Egw.Crm.getPanel = function(){
-    return Egw.Crm.Tree.getPanel();
+Tine.Crm.getPanel = function(){
+    return Tine.Crm.Tree.getPanel();
 };
 
-Egw.Crm.Tree = function() {
+Tine.Crm.Tree = function() {
 
     var _treeNodeContextMenu = null;
 
@@ -168,7 +168,7 @@ Egw.Crm.Tree = function() {
             nodeType: 'userLeads',
             id: 'userLeads',
             leaf: null,
-            owner: Egw.Egwbase.Registry.get('currentAccount').accountId
+            owner: Tine.Tinebase.Registry.get('currentAccount').accountId
         }, {
             text: "Shared Leads",
             cls: "file",
@@ -193,7 +193,7 @@ Egw.Crm.Tree = function() {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php',
             baseParams: {
-                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
                 location: 'mainTree'
             }
         });
@@ -237,7 +237,7 @@ Egw.Crm.Tree = function() {
         }
         
         treePanel.on('click', function(_node, _event) {
-            Egw.Crm.Main.show(_node);
+            Tine.Crm.Main.show(_node);
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
@@ -278,13 +278,13 @@ Egw.Crm.Tree = function() {
 }(); // end of application   
     
 
-Ext.namespace('Egw.Crm.Main');
-Egw.Crm.Main = function(){
+Ext.namespace('Tine.Crm.Main');
+Tine.Crm.Main = function(){
 
     var handler = {
         handlerEdit: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Egw.Egwbase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 900, 700);
+            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 900, 700);
         },
         
         handlerDelete: function(){
@@ -319,7 +319,7 @@ Egw.Crm.Main = function(){
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             
-            popupWindow = new Egw.Tasks.EditPopup({
+            popupWindow = new Tine.Tasks.EditPopup({
                 relatedApp: 'crm',
                 relatedId: _rowIndex[0].id
             });
@@ -335,7 +335,7 @@ Egw.Crm.Main = function(){
                 //      var curSelNode = tree.getSelectionModel().getSelectedNode();
                 //  var RootNode   = tree.getRootNode();
                 
-                Egw.Egwbase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 900, 700);
+                Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 900, 700);
             }
         }),
         
@@ -383,7 +383,7 @@ Egw.Crm.Main = function(){
             var treeLoader = new Ext.tree.TreeLoader({
                 dataUrl:'index.php',
                 baseParams: {
-                    jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                    jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
                     location: 'mainTree'
                 }
                 
@@ -424,8 +424,8 @@ Egw.Crm.Main = function(){
             tree.setRootNode(treeRoot);
             
             // add the initial tree nodes    
-            for(var i=0; i< Egw.Crm.Tree.initialTree.length; i++) {
-                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Egw.Crm.Tree.initialTree[i]));
+            for(var i=0; i< Tine.Crm.Tree.initialTree.length; i++) {
+                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Tine.Crm.Tree.initialTree[i]));
             }
             
             tree.on('click', function(_node) {
@@ -456,7 +456,7 @@ Egw.Crm.Main = function(){
             root: 'results',
             totalProperty: 'totalcount',
             id: 'lead_id',
-            fields: Egw.Crm.Model.Lead,
+            fields: Tine.Crm.Model.Lead,
             // turn on remote sorting
             remoteSort: true
         });
@@ -744,7 +744,7 @@ Egw.Crm.Main = function(){
           
            var handlerLeadstateSaveClose = function(){
                 var leadstateStore = Ext.getCmp('editLeadstateGrid').getStore();
-                var leadstateJson = Egw.Egwbase.Common.getJSONdata(leadstateStore); 
+                var leadstateJson = Tine.Tinebase.Common.getJSONdata(leadstateStore); 
 
                  Ext.Ajax.request({
                             params: {
@@ -876,7 +876,7 @@ Egw.Crm.Main = function(){
            var handlerLeadsourceSaveClose = function(){
                 var leadsourceStore = Ext.getCmp('editLeadsourceGrid').getStore();
                 
-                var leadsourceJson = Egw.Egwbase.Common.getJSONdata(leadsourceStore); 
+                var leadsourceJson = Tine.Tinebase.Common.getJSONdata(leadsourceStore); 
 
                  Ext.Ajax.request({
                             params: {
@@ -1006,7 +1006,7 @@ Egw.Crm.Main = function(){
            var handlerLeadtypeSaveClose = function(){
                 var leadtypeStore = Ext.getCmp('editLeadtypeGrid').getStore();
                 
-                var leadtypeJson = Egw.Egwbase.Common.getJSONdata(leadtypeStore); 
+                var leadtypeJson = Tine.Tinebase.Common.getJSONdata(leadtypeStore); 
 
                  Ext.Ajax.request({
                             params: {
@@ -1152,7 +1152,7 @@ Egw.Crm.Main = function(){
            var handlerProductsourceSaveClose = function(){
                 var productsourceStore = Ext.getCmp('editProductsourceGrid').getStore();
                 
-                var productsourceJson = Egw.Egwbase.Common.getJSONdata(productsourceStore); 
+                var productsourceJson = Tine.Tinebase.Common.getJSONdata(productsourceStore); 
 
                  Ext.Ajax.request({
                             params: {
@@ -1354,7 +1354,7 @@ Egw.Crm.Main = function(){
             ]
         });
         
-        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
     };
     
     var _renderResult = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
@@ -1489,7 +1489,7 @@ Egw.Crm.Main = function(){
             })            
         });
         
-        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
 
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
@@ -1503,7 +1503,7 @@ Egw.Crm.Main = function(){
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Egw.Egwbase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.lead_id, 900, 700);            
+            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.lead_id, 900, 700);            
         });
        
        return;
@@ -1555,7 +1555,7 @@ Egw.Crm.Main = function(){
     return {
         displayFolderSelectDialog: _displayFolderSelectDialog,
         show:   function(_node) {          
-                    var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
+                    var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
                     if (currentToolbar === false || currentToolbar.id != 'Crm_toolbar') {
                         _showCrmToolbar();
                         _showGrid(_node);
@@ -1571,8 +1571,8 @@ Egw.Crm.Main = function(){
 }(); // end of application
   
 
-Ext.namespace('Egw.Crm.LeadEditDialog');
-Egw.Crm.LeadEditDialog = function() {
+Ext.namespace('Tine.Crm.LeadEditDialog');
+Tine.Crm.LeadEditDialog = function() {
     // private variables
     var dialog;
     var leadedit;
@@ -1582,7 +1582,7 @@ Egw.Crm.LeadEditDialog = function() {
         var additionalData = {};
     
         var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
-        additionalData.products = Egw.Egwbase.Common.getJSONdata(store_products);
+        additionalData.products = Tine.Tinebase.Common.getJSONdata(store_products);
 
         // the start date (can not be empty)
         var startDate = Ext.getCmp('lead_start').getValue();
@@ -1607,7 +1607,7 @@ Egw.Crm.LeadEditDialog = function() {
         
         // collect data of assosicated contacts
         var linksContactsCustomer = new Array();
-        var storeContactsCustomer = Egw.Crm.LeadEditDialog.Stores.getContactsCustomer();
+        var storeContactsCustomer = Tine.Crm.LeadEditDialog.Stores.getContactsCustomer();
         
         storeContactsCustomer.each(function(record) {
             linksContactsCustomer.push(record.id);          
@@ -1617,7 +1617,7 @@ Egw.Crm.LeadEditDialog = function() {
         
 
         var linksContactsPartner = new Array();
-        var storeContactsPartner = Egw.Crm.LeadEditDialog.Stores.getContactsPartner();
+        var storeContactsPartner = Tine.Crm.LeadEditDialog.Stores.getContactsPartner();
         
         storeContactsPartner.each(function(record) {
             linksContactsPartner.push(record.id);          
@@ -1627,7 +1627,7 @@ Egw.Crm.LeadEditDialog = function() {
 
 
         var linksContactsInternal = new Array();
-        var storeContactsInternal = Egw.Crm.LeadEditDialog.Stores.getContactsInternal();
+        var storeContactsInternal = Tine.Crm.LeadEditDialog.Stores.getContactsInternal();
         
         storeContactsInternal.each(function(record) {
             linksContactsInternal.push(record.id);          
@@ -1660,8 +1660,8 @@ Egw.Crm.LeadEditDialog = function() {
         Ext.form.Field.prototype.msgTarget = 'side';
         
 
-        _leadData = new Egw.Crm.Model.Lead(_leadData);
-        Egw.Crm.Model.Lead.FixDates(_leadData);
+        _leadData = new Tine.Crm.Model.Lead(_leadData);
+        Tine.Crm.Model.Lead.FixDates(_leadData);
         
         var disableButtons = true;
 
@@ -1698,7 +1698,7 @@ Egw.Crm.LeadEditDialog = function() {
                 fieldLabel:'leadstate', 
                 id:'leadstatus',
                 name:'lead_leadstate_id',
-                store: Egw.Crm.LeadEditDialog.Stores.getLeadStatus(),
+                store: Tine.Crm.LeadEditDialog.Stores.getLeadStatus(),
                 displayField:'value',
                 valueField:'key',
                 mode: 'local',
@@ -1726,7 +1726,7 @@ Egw.Crm.LeadEditDialog = function() {
             fieldLabel:'leadtype', 
             id:'leadtype',
             name:'lead_leadtype_id',
-            store: Egw.Crm.LeadEditDialog.Stores.getLeadType(),
+            store: Tine.Crm.LeadEditDialog.Stores.getLeadType(),
             mode: 'local',
             displayField:'value',
             valueField:'key',
@@ -1768,13 +1768,13 @@ Egw.Crm.LeadEditDialog = function() {
                 anchor:'95%'    
         });
 
-        var st_activities = Egw.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
+        var st_activities = Tine.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
      
         var combo_probability =  new Ext.form.ComboBox({
             fieldLabel:'probability', 
             id: 'combo_probability',
             name:'lead_probability',
-            store: Egw.Crm.LeadEditDialog.Stores.getProbability(),
+            store: Tine.Crm.LeadEditDialog.Stores.getProbability(),
             displayField:'value',
             valueField:'key',
             typeAhead: true,
@@ -1877,13 +1877,13 @@ Egw.Crm.LeadEditDialog = function() {
         st_choosenProducts.on('update', function(store, record, index) {
           //  if(record.data.lead_id == 'NULL' && record.data.lead_product_id) {
             if(record.data.lead_product_id) {          
-                var st_productsAvailable = Egw.Crm.LeadEditDialog.Stores.getProductsAvailable();
+                var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable();
                 var preset_price = st_productsAvailable.getById(record.data.lead_product_id);
                 record.data.lead_product_price = preset_price.data.lead_productsource_price;
             }
         });
 
-        var st_productsAvailable = Egw.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
+        var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
         
         var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
                 header: "lead_id",
@@ -2024,13 +2024,13 @@ Egw.Crm.LeadEditDialog = function() {
             //_ctxMenuGrid.showAt(_eventObject.getXY());
         });
 
-        var storeContactsCustomer = Egw.Crm.LeadEditDialog.Stores.getContactsCustomer();
+        var storeContactsCustomer = Tine.Crm.LeadEditDialog.Stores.getContactsCustomer();
              
-        var storeContactsPartner = Egw.Crm.LeadEditDialog.Stores.getContactsPartner();
+        var storeContactsPartner = Tine.Crm.LeadEditDialog.Stores.getContactsPartner();
              
-        var storeContactsInternal = Egw.Crm.LeadEditDialog.Stores.getContactsInternal();     
+        var storeContactsInternal = Tine.Crm.LeadEditDialog.Stores.getContactsInternal();     
      
-        var store_contactSearch = Egw.Crm.LeadEditDialog.Stores.getContactsSearch();   
+        var store_contactSearch = Tine.Crm.LeadEditDialog.Stores.getContactsSearch();   
  
 
         var cm_contacts = new Ext.grid.ColumnModel([
@@ -2085,7 +2085,7 @@ Egw.Crm.LeadEditDialog = function() {
                     width: 50,
                     sortable: true,
                     dataIndex: 'percent'//,
-    //              renderer: Egw.widgets.Percent.renderer,
+    //              renderer: Tine.widgets.Percent.renderer,
                 }, {
                     id: 'summaray',
                     header: "Summaray",
@@ -2098,7 +2098,7 @@ Egw.Crm.LeadEditDialog = function() {
                     width: 80,
                     sortable: true,
                     dataIndex: 'due',
-                    renderer: Egw.Egwbase.Common.dateRenderer
+                    renderer: Tine.Tinebase.Common.dateRenderer
                 }, {
                     id: 'creator',
                     header: "Creator",
@@ -2117,7 +2117,7 @@ Egw.Crm.LeadEditDialog = function() {
         var  _add_task = new Ext.Action({
                 text: 'add task',
                 handler: function(){
-                	popupWindow = new Egw.Tasks.EditPopup({
+                	popupWindow = new Tine.Tasks.EditPopup({
                         relatedApp: 'crm',
                         relatedId: _leadData.data.lead_id
                 	});
@@ -2158,7 +2158,7 @@ Egw.Crm.LeadEditDialog = function() {
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
             var record = _grid.getStore().getAt(_rowIndex); 
-            popupWindow = new Egw.Tasks.EditPopup({
+            popupWindow = new Tine.Tasks.EditPopup({
                 identifier: record.data.identifier
             });
             
@@ -2191,7 +2191,7 @@ Egw.Crm.LeadEditDialog = function() {
         });
 
         folderTrigger.onTriggerClick = function() {
-            Egw.Crm.Main.displayFolderSelectDialog('lead_container');
+            Tine.Crm.Main.displayFolderSelectDialog('lead_container');
         };
 
         
@@ -2384,19 +2384,19 @@ Egw.Crm.LeadEditDialog = function() {
                         linkedAccount:  additionalData.linkedAccount,
                         linkedTasks:    additionalData.linkedTasks,
                         products:       additionalData.products
-                        //jsonKey: Egw.Egwbase.Registry.get('jsonKey')
+                        //jsonKey: Tine.Tinebase.Registry.get('jsonKey')
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Egw.Crm) {
-                            window.opener.Egw.Crm.Main.reload();
+                        if(window.opener.Tine.Crm) {
+                            window.opener.Tine.Crm.Main.reload();
                         } 
                         if (closeWindow) {
                             window.setTimeout("window.close()", 400);
                         }
                         
                         // fill form with returned lead
-                        _leadData = new Egw.Crm.Model.Lead(Ext.util.JSON.decode(_result.responseText));
-                        Egw.Crm.Model.Lead.FixDates(_leadData);
+                        _leadData = new Tine.Crm.Model.Lead(Ext.util.JSON.decode(_result.responseText));
+                        Tine.Crm.Model.Lead.FixDates(_leadData);
                         leadForm.loadRecord(_leadData);
                         
                         //dlg.action_delete.enable();
@@ -2418,12 +2418,12 @@ Egw.Crm.LeadEditDialog = function() {
             handlerApplyChanges(_button, _event, true);
         };  
   
-        var leadEdit = new Egw.widgets.dialog.EditRecord({
+        var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
             tbarItems: [new Ext.Toolbar.Separator(), _add_task],
             handlerApplyChanges: handlerApplyChanges,
             handlerSaveAndClose: handlerSaveAndClose,
-            handlerDelete: Egw.Crm.LeadEditDialog.Handler.handlerDelete,
+            handlerDelete: Tine.Crm.LeadEditDialog.Handler.handlerDelete,
             labelAlign: 'top',
             layout: 'fit',
                 bodyStyle:'padding:5px',
@@ -2441,7 +2441,7 @@ Egw.Crm.LeadEditDialog = function() {
                 //defaults:{bodyStyle:'padding:10px'},
                 items:[
                     tabPanelOverview, 
-                    Egw.Crm.LeadEditDialog.Elements.getTabPanelManageContacts(),                    
+                    Tine.Crm.LeadEditDialog.Elements.getTabPanelManageContacts(),                    
                     tabPanelActivities, 
                     tabPanelProducts
                 ]
@@ -2454,12 +2454,12 @@ Egw.Crm.LeadEditDialog = function() {
             items: leadEdit
         });
    
-  //     Egw.Crm.LeadEditDialog.Handler.updateLeadRecord(_leadData);
+  //     Tine.Crm.LeadEditDialog.Handler.updateLeadRecord(_leadData);
   //     this.updateToolbarButtons();  
-        Egw.Crm.LeadEditDialog.Stores.getContactsCustomer(_leadData.data.contactsCustomer);
-        Egw.Crm.LeadEditDialog.Stores.getContactsPartner(_leadData.data.contactsPartner);
-        Egw.Crm.LeadEditDialog.Stores.getContactsInternal(_leadData.data.contactsInternal);       
-        Egw.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
+        Tine.Crm.LeadEditDialog.Stores.getContactsCustomer(_leadData.data.contactsCustomer);
+        Tine.Crm.LeadEditDialog.Stores.getContactsPartner(_leadData.data.contactsPartner);
+        Tine.Crm.LeadEditDialog.Stores.getContactsInternal(_leadData.data.contactsInternal);       
+        Tine.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
         
         leadEdit.getForm().loadRecord(_leadData);
             
@@ -2495,10 +2495,10 @@ Egw.Crm.LeadEditDialog = function() {
             
             if(_newValue == '') {
                 //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().removeAll();
-                Egw.Crm.LeadEditDialog.Stores.getContactsSearch().removeAll();
+                Tine.Crm.LeadEditDialog.Stores.getContactsSearch().removeAll();
             } else {
                 //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().load({
-                Egw.Crm.LeadEditDialog.Stores.getContactsSearch().load({
+                Tine.Crm.LeadEditDialog.Stores.getContactsSearch().load({
                     params: {
                         start: 0,
                         limit: 50,
@@ -2511,17 +2511,17 @@ Egw.Crm.LeadEditDialog = function() {
 
         Ext.getCmp('crm_gridCostumer').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
             var record = _grid.getStore().getAt(_rowIndex);
-            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });
         
         Ext.getCmp('crm_gridPartner').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
             var record = _grid.getStore().getAt(_rowIndex);
-            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });
         
         Ext.getCmp('crm_gridAccount').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
             var record = _grid.getStore().getAt(_rowIndex);
-            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });                
          
         Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
@@ -2545,10 +2545,10 @@ Egw.Crm.LeadEditDialog = function() {
 
             if(rowCount < 1) {
                 // no row selected
-                Egw.Crm.LeadEditDialog.Elements.actionRemoveContact.setDisabled(true);
+                Tine.Crm.LeadEditDialog.Elements.actionRemoveContact.setDisabled(true);
             } else {
                 // at least one row selected
-                Egw.Crm.LeadEditDialog.Elements.actionRemoveContact.setDisabled(false);
+                Tine.Crm.LeadEditDialog.Elements.actionRemoveContact.setDisabled(false);
             }
         }; 
         
@@ -2575,10 +2575,10 @@ Egw.Crm.LeadEditDialog = function() {
 
             if(rowCount < 1) {
                 // no row selected
-                Egw.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(true);
+                Tine.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(true);
             } else {
                 // at least one row selected
-                Egw.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(false);
+                Tine.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(false);
             }
         }; 
         
@@ -2594,7 +2594,7 @@ Egw.Crm.LeadEditDialog = function() {
     }
 }(); // end of application
 
-Egw.Crm.LeadEditDialog.Handler = function() {
+Tine.Crm.LeadEditDialog.Handler = function() {
     return { 
         removeContact: function(_button, _event) 
         {
@@ -2614,7 +2614,7 @@ Egw.Crm.LeadEditDialog.Handler = function() {
 
         addContact: function(_button, _event) 
         {
-            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
         },    
         
         addContactToList: function(_button, _event) 
@@ -2647,7 +2647,7 @@ Egw.Crm.LeadEditDialog.Handler = function() {
                         },
                         text: 'Deleting lead...',
                         success: function(_result, _request){
-                            window.opener.Egw.Crm.reload();
+                            window.opener.Tine.Crm.reload();
                             window.setTimeout("window.close()", 400);
                         },
                         failure: function(result, request){
@@ -2660,19 +2660,19 @@ Egw.Crm.LeadEditDialog.Handler = function() {
     }
 }();
 
-Egw.Crm.LeadEditDialog.Elements = function() {
+Tine.Crm.LeadEditDialog.Elements = function() {
     // public functions and variables
     return {
        actionRemoveContact: new Ext.Action({
             text: 'remove contact from list',
             disabled: true,
-            handler: Egw.Crm.LeadEditDialog.Handler.removeContact,
+            handler: Tine.Crm.LeadEditDialog.Handler.removeContact,
             iconCls: 'actionDelete'
         }),
         
         actionAddContact: new Ext.Action({
             text: 'create new contact',
-            handler: Egw.Crm.LeadEditDialog.Handler.addContact,
+            handler: Tine.Crm.LeadEditDialog.Handler.addContact,
             iconCls: 'actionAdd'
         }),
 
@@ -2680,7 +2680,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
             text: 'add contact to list',
             disabled: true,
             handler: function(_button, _event) {
-                Egw.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
+                Tine.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
             },
             iconCls: 'actionAdd'
         }),        
@@ -2802,7 +2802,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     split: true,
                     activeTab: 0,
                     tbar: [
-                        Egw.Crm.LeadEditDialog.Elements.actionAddContactToList
+                        Tine.Crm.LeadEditDialog.Elements.actionAddContactToList
                     ],
                     items: [
                         {
@@ -2810,7 +2810,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                             id: 'crm_editLead_SearchContactsGrid',
                             title:'Search',
                             cm: this.columnModelSearchContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsSearch(),
+                            store: Tine.Crm.LeadEditDialog.Stores.getContactsSearch(),
                             autoExpandColumn: 'n_fileas',
                             tbar: contactToolbar
                         }, {
@@ -2827,8 +2827,8 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                     title:'contacts panel',
                     activeTab: 0,
                     tbar: [
-                        Egw.Crm.LeadEditDialog.Elements.actionAddContact,                
-                        Egw.Crm.LeadEditDialog.Elements.actionRemoveContact
+                        Tine.Crm.LeadEditDialog.Elements.actionAddContact,                
+                        Tine.Crm.LeadEditDialog.Elements.actionRemoveContact
                     ],                
                     items: [
                         {
@@ -2836,21 +2836,21 @@ Egw.Crm.LeadEditDialog.Elements = function() {
                             id: 'crm_gridCostumer',
                             title:'Customer',
                             cm: this.columnModelDisplayContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsCustomer(),
+                            store: Tine.Crm.LeadEditDialog.Stores.getContactsCustomer(),
                             autoExpandColumn: 'n_fileas'
                         },{
                             xtype:'grid',
                             id: 'crm_gridPartner',
                             title:'Partner',
                             cm: this.columnModelDisplayContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsPartner(),
+                            store: Tine.Crm.LeadEditDialog.Stores.getContactsPartner(),
                             autoExpandColumn: 'n_fileas'
                         }, {
                             xtype:'grid',
                             id: 'crm_gridAccount',
                             title:'Internal',
                             cm: this.columnModelDisplayContacts,
-                            store: Egw.Crm.LeadEditDialog.Stores.getContactsInternal(),
+                            store: Tine.Crm.LeadEditDialog.Stores.getContactsInternal(),
                             autoExpandColumn: 'n_fileas'
                         }
                     ]
@@ -2861,7 +2861,7 @@ Egw.Crm.LeadEditDialog.Elements = function() {
     };
 }();
 
-Egw.Crm.LeadEditDialog.Stores = function() {
+Tine.Crm.LeadEditDialog.Stores = function() {
     var _storeContactsInternal = null;
     
     var _storeContactsCustomer = null;
@@ -3018,7 +3018,7 @@ Egw.Crm.LeadEditDialog.Stores = function() {
         getActivities: function (_tasks){     
             var store = new Ext.data.JsonStore({
                 id: 'identifier',
-                //fields: Egw.Tasks.Task
+                //fields: Tine.Tasks.Task
                 fields: [
                     {name: 'identifier'},
                     {name: 'container'},
@@ -3080,10 +3080,10 @@ Egw.Crm.LeadEditDialog.Stores = function() {
 }();
 
 // models
-Egw.Crm.Model = {};
+Tine.Crm.Model = {};
 
 // lead
-Egw.Crm.Model.Lead = Ext.data.Record.create([
+Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'lead_id',            type: 'int'},
     {name: 'lead_name',          type: 'string'},
     {name: 'lead_leadstate_id',  type: 'int'},
@@ -3111,7 +3111,7 @@ Egw.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'lead_lead_detail'}  
 ]);
 // work arround nasty ext date bug
-Egw.Crm.Model.Lead.FixDates = function(lead) {
+Tine.Crm.Model.Lead.FixDates = function(lead) {
     lead.data.lead_start         = lead.data.lead_start         ? Date.parseDate(lead.data.lead_start, 'c')         : lead.data.lead_start;
     lead.data.lead_end           = lead.data.lead_end           ? Date.parseDate(lead.data.lead_end, 'c')           : lead.data.lead_end;
     lead.data.lead_end_scheduled = lead.data.lead_end_scheduled ? Date.parseDate(lead.data.lead_end_scheduled, 'c') : lead.data.lead_end_scheduled;

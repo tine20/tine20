@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-class Calendar_EventSet extends Egwbase_Record_RecordSet
+class Calendar_EventSet extends Tinebase_Record_RecordSet
 {
     //protected $_recordClass = 'Calendar_Event';
     

@@ -103,26 +103,26 @@ class Asterisk_Json
 
 	public function getMainTree() 
 	{
-		$treeNode = new Egwbase_Ext_Treenode('Asterisk', 'overview', 'asterisk', 'Asterisk', FALSE);
+		$treeNode = new Tinebase_Ext_Treenode('Asterisk', 'overview', 'asterisk', 'Asterisk', FALSE);
 		$treeNode->setIcon('apps/kcall.png');
 		$treeNode->cls = 'treemain';
 
-		$childNode = new Egwbase_Ext_Treenode('Asterisk', 'phones', 'phones', 'Phones', TRUE);
+		$childNode = new Tinebase_Ext_Treenode('Asterisk', 'phones', 'phones', 'Phones', TRUE);
 		$treeNode->addChildren($childNode);
 
-		$childNode = new Egwbase_Ext_Treenode('Asterisk', 'lines', 'lines', 'Lines', TRUE);
+		$childNode = new Tinebase_Ext_Treenode('Asterisk', 'lines', 'lines', 'Lines', TRUE);
 		$treeNode->addChildren($childNode);
 		
-		$childNode = new Egwbase_Ext_Treenode('Asterisk', 'classes', 'classes', 'Classes', TRUE);
+		$childNode = new Tinebase_Ext_Treenode('Asterisk', 'classes', 'classes', 'Classes', TRUE);
 		$treeNode->addChildren($childNode);
 		
-		$childNode = new Egwbase_Ext_Treenode('Asterisk', 'config', 'config', 'Config', TRUE);
+		$childNode = new Tinebase_Ext_Treenode('Asterisk', 'config', 'config', 'Config', TRUE);
 		$treeNode->addChildren($childNode);
 		
-		$childNode = new Egwbase_Ext_Treenode('Asterisk', 'settings', 'settings', 'Settings', TRUE);
+		$childNode = new Tinebase_Ext_Treenode('Asterisk', 'settings', 'settings', 'Settings', TRUE);
 		$treeNode->addChildren($childNode);
 		
-		$childNode = new Egwbase_Ext_Treenode('Asterisk', 'software', 'software', 'Software', TRUE);
+		$childNode = new Tinebase_Ext_Treenode('Asterisk', 'software', 'software', 'Software', TRUE);
 		$treeNode->addChildren($childNode);
 		
 		return $treeNode;

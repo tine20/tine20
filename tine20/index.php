@@ -2,7 +2,7 @@
 /**
  * this is the general file any request should be routed trough
  *
- * @package     Egwbase
+ * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -37,9 +37,9 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-$egwBase = Egwbase_Controller::getInstance();
+$tineBase = Tinebase_Controller::getInstance();
 
-$egwBase->handle();
+$tineBase->handle();
 
 // log profiling information
 $time_end = microtime(true);

@@ -1,6 +1,6 @@
-Ext.namespace('Egw.Admin');
+Ext.namespace('Tine.Admin');
 
-Egw.Admin = function() {
+Tine.Admin = function() {
 
     var _initialTree = [{
         text: 'Accounts',
@@ -48,7 +48,7 @@ Egw.Admin = function() {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php',
             baseParams: {
-                jsonKey: Egw.Egwbase.Registry.get('jsonKey'),
+                jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
                 method: 'Admin.getSubTree',
                 location: 'mainTree'
             }
@@ -80,14 +80,14 @@ Egw.Admin = function() {
         }
         
         treePanel.on('click', function(_node, _event) {
-        	var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
+        	var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         	switch(_node.attributes.dataPanelType) {
                 case 'accesslog':
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminAccessLog') {
                         Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Egw.Admin.AccessLog.Main.show();
+                        Tine.Admin.AccessLog.Main.show();
                     }
                     
                     break;
@@ -96,7 +96,7 @@ Egw.Admin = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'AdminAccountsToolbar') {
                         Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Egw.Admin.Accounts.Main.show();
+                        Tine.Admin.Accounts.Main.show();
                     }
                     
                     break;
@@ -105,7 +105,7 @@ Egw.Admin = function() {
                     if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminApplications') {
                     	Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
                     } else {
-                    	Egw.Admin.Applications.Main.show();
+                    	Tine.Admin.Applications.Main.show();
                     }
                     
                     break;
@@ -142,8 +142,8 @@ Egw.Admin = function() {
     
 }();
 
-Ext.namespace('Egw.Admin.AccessLog');
-Egw.Admin.AccessLog.Main = function() {
+Ext.namespace('Tine.Admin.AccessLog');
+Tine.Admin.AccessLog.Main = function() {
 
     /**
      * onclick handler for edit action
@@ -310,7 +310,7 @@ Egw.Admin.AccessLog.Main = function() {
             ]
         });
         
-        Egw.Egwbase.MainScreen.setActiveToolbar(toolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
 
         dateFrom.on('valid', function(_dateField) {
             var from = Date.parseDate(
@@ -398,10 +398,10 @@ Egw.Admin.AccessLog.Main = function() {
         var columnModel = new Ext.grid.ColumnModel([
             {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
             {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
-            {resizable: true, header: 'Name', id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Egw.Egwbase.Common.usernameRenderer},
+            {resizable: true, header: 'Name', id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.Common.usernameRenderer},
             {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
-            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+            {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
             {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
             {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);
@@ -433,7 +433,7 @@ Egw.Admin.AccessLog.Main = function() {
             border: false
         });
         
-        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
 
         gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -459,8 +459,8 @@ Egw.Admin.AccessLog.Main = function() {
     
 }();
 
-Ext.namespace('Egw.Admin.Applications');
-Egw.Admin.Applications.Main = function() {
+Ext.namespace('Tine.Admin.Applications');
+Tine.Admin.Applications.Main = function() {
 
     /**
      * onclick handler for edit action
@@ -469,7 +469,7 @@ Egw.Admin.Applications.Main = function() {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
-        Egw.Egwbase.Common.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
+        Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.getApplication&appId=' + applicationId, 800, 450);
     };
     
     var _enableDisableButtonHandler = function(_button, _event) {
@@ -604,7 +604,7 @@ Egw.Admin.Applications.Main = function() {
             ]
         });
         
-        Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar);
     };
     
     var _renderEnabled = function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
@@ -693,7 +693,7 @@ Egw.Admin.Applications.Main = function() {
             border: false
         });
         
-        Egw.Egwbase.MainScreen.setActiveContentPanel(grid_applications);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications);
 
         grid_applications.on('rowclick', function(gridP, rowIndexP, eventP) {
             var rowCount = gridP.getSelectionModel().getCount();
@@ -726,7 +726,7 @@ Egw.Admin.Applications.Main = function() {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.contact_id);
             try {
-                Egw.Egwbase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+                Tine.Tinebase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
             } catch(e) {
             //  alert(e);
             }
@@ -745,8 +745,8 @@ Egw.Admin.Applications.Main = function() {
     
 }();
 
-Ext.namespace('Egw.Admin.Accounts');
-Egw.Admin.Accounts.Main = function() {
+Ext.namespace('Tine.Admin.Accounts');
+Tine.Admin.Accounts.Main = function() {
 
     var _createDataStore = function()
     {
@@ -760,7 +760,7 @@ Egw.Admin.Accounts.Main = function() {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: Egw.Admin.Accounts.Account,
+            fields: Tine.Admin.Accounts.Account,
             // turn on remote sorting
             remoteSort: true
         });
@@ -814,18 +814,18 @@ Egw.Admin.Accounts.Main = function() {
         openAccountEditWindow: function(_accountId) 
         {
         	var accountId = (_accountId ? _accountId : '');
-        	Egw.Egwbase.Common.openWindow('accountEditWindow', 'index.php?method=Admin.editAccountDialog&accountId=' + accountId, 800, 450);
+        	Tine.Tinebase.Common.openWindow('accountEditWindow', 'index.php?method=Admin.editAccountDialog&accountId=' + accountId, 800, 450);
         },
 
 	    addButtonHandler: function(_button, _event) {
-	        Egw.Admin.Accounts.Main.openAccountEditWindow();
+	        Tine.Admin.Accounts.Main.openAccountEditWindow();
 	    },
 
 	    editButtonHandler: function(_button, _event) {
 	        var selectedRows = Ext.getCmp('AdminAccountsGrid').getSelectionModel().getSelections();
 	        var accountId = selectedRows[0].id;
 	        
-	        Egw.Admin.Accounts.Main.openAccountEditWindow(accountId);
+	        Tine.Admin.Accounts.Main.openAccountEditWindow(accountId);
 	    },
     
 	    enableDisableButtonHandler: function(_button, _event) {
@@ -959,7 +959,7 @@ Egw.Admin.Accounts.Main = function() {
 	            ]
 	        });
 	        
-	        Egw.Egwbase.MainScreen.setActiveToolbar(applicationToolbar);
+	        Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar);
 	    },
 	    
 	    showMainGrid: function() 
@@ -995,10 +995,10 @@ Egw.Admin.Accounts.Main = function() {
 	            {resizable: true, header: 'Last name', id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
 	            {resizable: true, header: 'First name', id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
 	            {resizable: true, header: 'Email', id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-	            {resizable: true, header: 'Last login at', id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
+	            {resizable: true, header: 'Last login at', id: 'accountLastLogin', dataIndex: 'accountLastLogin', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
 	            {resizable: true, header: 'Last login from', id: 'accountLastLoginfrom', dataIndex: 'accountLastLoginfrom'},
-	            {resizable: true, header: 'Password changed', id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer},
-	            {resizable: true, header: 'Expires', id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Egw.Egwbase.Common.dateTimeRenderer}
+	            {resizable: true, header: 'Password changed', id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
+	            {resizable: true, header: 'Expires', id: 'accountExpires', dataIndex: 'accountExpires', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer}
 	        ]);
 	        
 	        columnModel.defaultSortable = true; // by default columns are sortable
@@ -1045,7 +1045,7 @@ Egw.Admin.Accounts.Main = function() {
 	            border: false
 	        });
 	        
-	        Egw.Egwbase.MainScreen.setActiveContentPanel(grid_applications);
+	        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications);
 	
 	        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
 	            _eventObject.stopEvent();
@@ -1062,7 +1062,7 @@ Egw.Admin.Accounts.Main = function() {
 	        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
 	            var record = _gridPar.getStore().getAt(_rowIndexPar);
 	            try {
-	                Egw.Admin.Accounts.Main.openAccountEditWindow(record.id);
+	                Tine.Admin.Accounts.Main.openAccountEditWindow(record.id);
 	            } catch(e) {
 	                //alert(e);
 	            }
@@ -1141,7 +1141,7 @@ Egw.Admin.Accounts.Main = function() {
     
 }();
 
-Egw.Admin.Accounts.EditDialog = function() {
+Tine.Admin.Accounts.EditDialog = function() {
     // public functions and variables
     return {
     	accountRecord: null,
@@ -1161,7 +1161,7 @@ Egw.Admin.Accounts.EditDialog = function() {
             	_accountData.accountPassword = null;
             }
 
-            this.accountRecord = new Egw.Admin.Accounts.Account(_accountData);
+            this.accountRecord = new Tine.Admin.Accounts.Account(_accountData);
     	},
     	
     	deleteAccount: function(_button, _event)
@@ -1176,7 +1176,7 @@ Egw.Admin.Accounts.EditDialog = function() {
 	            },
 	            text: 'Deleting account...',
 	            success: function(_result, _request) {
-	                window.opener.Egw.Admin.Accounts.Main.reload();
+	                window.opener.Tine.Admin.Accounts.Main.reload();
 	                window.close();
 	            },
 	            failure: function ( result, request) { 
@@ -1207,8 +1207,8 @@ Egw.Admin.Accounts.EditDialog = function() {
 	                    password2: form.findField('accountPassword2').getValue()                        
 	                },
 	                success: function(_result, _request) {
-	                	if(window.opener.Egw.Admin.Accounts) {
-                            window.opener.Egw.Admin.Accounts.Main.reload();
+	                	if(window.opener.Tine.Admin.Accounts) {
+                            window.opener.Tine.Admin.Accounts.Main.reload();
 	                	}
                         if(_closeWindow === true) {
                             window.close();
@@ -1369,7 +1369,7 @@ Egw.Admin.Accounts.EditDialog = function() {
         display: function(_accountData) 
         {
             // Ext.FormPanel
-		    var dialog = new Egw.widgets.dialog.EditRecord({
+		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'admin_editAccountForm',
 		        //title: 'the title',
 		        labelWidth: 120,
@@ -1396,8 +1396,8 @@ Egw.Admin.Accounts.EditDialog = function() {
     };
 }();
 
-Egw.Admin.Accounts.Account = Ext.data.Record.create([
-    // egw record fields
+Tine.Admin.Accounts.Account = Ext.data.Record.create([
+    // tine record fields
     { name: 'accountId' },
     { name: 'accountFirstName' },
     { name: 'accountLastName' },

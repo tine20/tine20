@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -11,12 +11,12 @@
  */
 
 /**
- * backend class for Egwbase_Http_Server
+ * backend class for Tinebase_Http_Server
  * This class handles all Http requests for the calendar application
  * 
  * @package Tasks
  */
-class Tasks_Http extends Egwbase_Application_Http_Abstract
+class Tasks_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Tasks';
     
@@ -37,7 +37,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
     /**
      * Returns initial data which is send to the app at createon time.
      *
-     * When the mainScreen is created, Egwbase_Http_Controler queries this function
+     * When the mainScreen is created, Tinebase_Http_Controler queries this function
      * to get the initial datas for this app. This pattern prevents that any app needs
      * to make an server-request for its initial datas.
      * 
@@ -45,7 +45,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
      * 
      * The returned data have to be an array with the variable names as keys and
      * the datas as values. The datas will be JSON encoded later. Note that the
-     * varialbe names get prefixed with Egw.<applicationname>
+     * varialbe names get prefixed with Tine.<applicationname>
      * 
      * @return mixed array 'variable name' => 'data'
      */
@@ -87,7 +87,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
         
         $view = new Zend_View();
          
-        $view->setScriptPath('Egwbase/views');
+        $view->setScriptPath('Tinebase/views');
         $view->formData = array();
 		$view->formData['linking']['link_app1'] = $linkingApp;
 		$view->formData['linking']['link_id1'] = $linkedId;		
@@ -98,7 +98,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
         $view->cssIncludeFiles = $this->getCssFilesToInclude();
         $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
 
-        $view->jsExecute = 'Egw.Tasks.EditDialog(' . $task . ');';
+        $view->jsExecute = 'Tine.Tasks.EditDialog(' . $task . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -106,7 +106,7 @@ class Tasks_Http extends Egwbase_Application_Http_Abstract
         );
         
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Egwbase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

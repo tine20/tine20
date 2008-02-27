@@ -1,6 +1,6 @@
 <?php
 /**
- * eGroupWare 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -13,7 +13,7 @@
  * json interface for tasks
  * @package     Tasks
  */
-class Tasks_Json extends Egwbase_Application_Json_Abstract
+class Tasks_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Tasks';
     
@@ -115,7 +115,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
             
         // temporary linking stuff
         if( !empty($linkingApp) && is_numeric($linkedId) ) {
-            Egwbase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), 'activity');
+            Tinebase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), 'activity');
         }
 
         return $this->_task2json($outTask);
@@ -146,7 +146,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
-        $_task->container = Zend_Json::encode(Egwbase_Container_Container::getInstance()->getContainerById($_task->container)->toArray());
+        $_task->container = Zend_Json::encode(Tinebase_Container_Container::getInstance()->getContainerById($_task->container)->toArray());
         return $_task->toArray();
     }
     
@@ -193,7 +193,7 @@ class Tasks_Json extends Egwbase_Application_Json_Abstract
     /**
      * retruns all possible task stati
      * 
-     * @return Egwbase_Record_RecordSet of Tasks_Model_Status
+     * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
     public function getStati() {
         return $this->_controller->getStati()->toArray();

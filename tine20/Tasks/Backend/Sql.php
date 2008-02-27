@@ -1,6 +1,6 @@
 <?php
 /**
- * egroupware 2.0
+ * Tine 2.0
  * 
  * @package     Tasks
  * @subpackage  Backend
@@ -32,7 +32,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * table calss needs to implement it its own.
      * 
      * @see http://framework.zend.com/issues/browse/ZF-827
-     * @todo solve table prefix in Egwbase_Db (quite a bit of work)
+     * @todo solve table prefix in Tinebase_Db (quite a bit of work)
      * @var array
      */
     protected $_tableNames = array(
@@ -59,7 +59,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Holds instance of current account
      *
-     * @var Egwbase_Account_Model_Account
+     * @var Tinebase_Account_Model_Account
      */
     protected $_currentAccount;
     
@@ -85,11 +85,11 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * Search for tasks matching given filter
      *
      * @param Tasks_Model_PagnitionFilter $_filter
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function searchTasks($_filter)
     {
-        $TaskSet = new Egwbase_Record_RecordSet(array(), 'Tasks_Model_Task');
+        $TaskSet = new Tinebase_Record_RecordSet(array(), 'Tasks_Model_Task');
         
         if(empty($_filter->container)){
             return $TaskSet;
@@ -235,7 +235,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $oldTask = $this->getTask($_task->identifier);
             
             $dbMods = array_diff_assoc($_task->toArray(), $oldTask->toArray());
-            $modLog = Egwbase_Timemachine_ModificationLog::getInstance();
+            $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
             
             if (empty($dbMods)) {
                 // nothing canged!
@@ -278,7 +278,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $this->insertDependentRows($taskParts);
 
             // modification log
-            $modLogEntry = new Egwbase_Timemachine_Model_ModificationLog(array(
+            $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
                 'application'          => 'tasks',
                 'record_identifier'    => $_task->getId(),
                 'record_type'          => 'Tasks_Model_Task',
@@ -355,7 +355,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * @param [string|int] _id 
      * @param Zend_Date _at 
      * @param bool _idIsUID wether global (string) or local (int) identifiers are given as _id
-     * @return Egwbase_Record
+     * @return Tinebase_Record
      * @access public
      */
     public function getRecord( $_id,  Zend_Date $_at, $_idIsUID = FALSE)
@@ -369,7 +369,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * @param array _ids array of [string|int] 
      * @param Zend_Date _at 
      * @param bool _idsAreUIDs wether global (string) or local (int) identifiers are given as _ids
-     * @return Egwbase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet
      * @access public
      */
     public function getRecords( array $_ids,  Zend_Date $_at, $_idsAreUIDs = FALSE )
@@ -443,20 +443,20 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      *
      * @todo Move Migration to setup class once we have one!
      * @param string $_tablename
-     * @return Egwbase_Db_Table
+     * @return Tinebase_Db_Table
      */
     protected function getTableInstance($_tablename)
     {
         
         if (!isset($this->_tables[$_tablename])) {
             try {
-                $this->_tables[$_tablename] = new Egwbase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
+                $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
             } catch (Zend_Db_Statement_Exception $e) {
                 Tasks_Setup_SetupSqlTables::createTasksTables();
                 Tasks_Setup_SetupSqlTables::insertDefaultRecords();
-                $this->_tables[$_tablename] = new Egwbase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
+                $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
 
-                Tasks_Setup_MigrateFromEgw14::MigrateInfolog2Tasks();
+                Tasks_Setup_MigrateFromTine14::MigrateInfolog2Tasks();
             }
         }
         return $this->_tables[$_tablename];

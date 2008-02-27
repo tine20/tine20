@@ -14,7 +14,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Controller implements Egwbase_Events_Interface
+class Addressbook_Controller implements Tinebase_Events_Interface
 {
     /**
      * the constructor
@@ -57,26 +57,26 @@ class Addressbook_Controller implements Egwbase_Events_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        $result = Egwbase_Container_Container::getInstance()->getAllGrants($addressbookId);
+        $result = Tinebase_Container_Container::getInstance()->getAllGrants($addressbookId);
                 
         return $result;
     }
     
-    public function setGrants($_addressbookId, Egwbase_Record_RecordSet $_grants)
+    public function setGrants($_addressbookId, Tinebase_Record_RecordSet $_grants)
     {
         $addressbookId = (int)$_addressbookId;
         if($addressbookId != $_addressbookId) {
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        $result = Egwbase_Container_Container::getInstance()->setAllGrants($addressbookId, $_grants);
+        $result = Tinebase_Container_Container::getInstance()->setAllGrants($addressbookId, $_grants);
                 
         return $result;
     }
     
     public function getOtherUsers() 
     {
-        $result = Egwbase_Container_Container::getInstance()->getOtherUsers('addressbook');
+        $result = Tinebase_Container_Container::getInstance()->getOtherUsers('addressbook');
         
         return $result;
     }
@@ -135,9 +135,9 @@ class Addressbook_Controller implements Egwbase_Events_Interface
      * 
      * all events get routed through this function
      *
-     * @param Egwbase_Events_Abstract $_eventObject the eventObject
+     * @param Tinebase_Events_Abstract $_eventObject the eventObject
      */
-    public function handleEvents(Egwbase_Events_Abstract $_eventObject)
+    public function handleEvents(Tinebase_Events_Abstract $_eventObject)
     {
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
@@ -166,7 +166,7 @@ class Addressbook_Controller implements Egwbase_Events_Interface
      * creates the initial folder for new accounts
      *
      * @param int $_accountId the accountdId
-     * @return Egwbase_Model_Container
+     * @return Tinebase_Model_Container
      */
     public function createUserFolder($_accountId)
     {
@@ -174,7 +174,7 @@ class Addressbook_Controller implements Egwbase_Events_Interface
         if($accountId != $_accountId) {
             throw new InvalidArgumentException('$_accountId must be integer');
         }
-        $container = Egwbase_Container_Container::getInstance()->addPersonalContainer($accountId, 'addressbook', 'Personal Contacts');
+        $container = Tinebase_Container_Container::getInstance()->addPersonalContainer($accountId, 'addressbook', 'Personal Contacts');
         
         return $container;
     }

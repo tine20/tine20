@@ -1,10 +1,10 @@
-Ext.namespace('Egw.Addressbook');
+Ext.namespace('Tine.Addressbook');
 
-Egw.Addressbook = {
+Tine.Addressbook = {
 
     getPanel: function()
     {
-        var treePanel =  new Egw.widgets.container.TreePanel({
+        var treePanel =  new Tine.widgets.container.TreePanel({
             id: 'Addressbook_Tree',
             iconCls: 'AddressbookTreePanel',
             title: 'Contacts',
@@ -24,7 +24,7 @@ Egw.Addressbook = {
         });
         
         treePanel.on('click', function(_node, _event) {
-            Egw.Addressbook.Main.show(_node);
+            Tine.Addressbook.Main.show(_node);
         }, this);
 
         treePanel.on('beforeexpand', function(_panel) {
@@ -35,7 +35,7 @@ Egw.Addressbook = {
     }
 }
 
-Egw.Addressbook.Main = {
+Tine.Addressbook.Main = {
 	actions: {
 	    addContact: null,
 	    editContact: null,
@@ -47,7 +47,7 @@ Egw.Addressbook.Main = {
 	     * onclick handler for addBtn
 	     */
 	    addContact: function(_button, _event) {
-	        Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+	        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
 	    },
 
         /**
@@ -57,7 +57,7 @@ Egw.Addressbook.Main = {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
-            Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
         },
     
 	    /**
@@ -160,7 +160,7 @@ Egw.Addressbook.Main = {
             ]
         });
 
-        Egw.Egwbase.MainScreen.setActiveToolbar(contactToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(contactToolbar);
     },
 
     displayContactsGrid: function() 
@@ -170,7 +170,7 @@ Egw.Addressbook.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'contact_id',
-            fields: Egw.Addressbook.Model.Contact,
+            fields: Tine.Addressbook.Model.Contact,
             // turn on remote sorting
             remoteSort: true
         });
@@ -295,14 +295,14 @@ Egw.Addressbook.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.contact_id);
             try {
-                Egw.Egwbase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
+                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         // add the grid to the layout
-        Egw.Egwbase.MainScreen.setActiveContentPanel(gridPanel);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
     },
     
     /**
@@ -318,7 +318,7 @@ Egw.Addressbook.Main = {
                 dataStore.baseParams.method = 'Addressbook.getAccounts';
                 break;
 
-            case Egw.Egwbase.container.TYPE_SHARED:
+            case Tine.Tinebase.container.TYPE_SHARED:
                 dataStore.baseParams.method = 'Addressbook.getSharedContacts';
                 break;
 
@@ -331,7 +331,7 @@ Egw.Addressbook.Main = {
                 break;
 
 
-            case Egw.Egwbase.container.TYPE_PERSONAL:
+            case Tine.Tinebase.container.TYPE_PERSONAL:
                 dataStore.baseParams.method = 'Addressbook.getContactsByOwner';
                 dataStore.baseParams.owner  = _node.attributes.owner.accountId;
                 break;
@@ -354,7 +354,7 @@ Egw.Addressbook.Main = {
     {
     	this.initComponent();
     	
-        var currentToolbar = Egw.Egwbase.MainScreen.getActiveToolbar();
+        var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Addressbook_Contacts_Toolbar') {
             this.displayContactsToolbar();
@@ -371,23 +371,23 @@ Egw.Addressbook.Main = {
     }
 }
 
-Egw.Addressbook.ContactEditDialog = {
+Tine.Addressbook.ContactEditDialog = {
 	handlers: {
 	    applyChanges: function(_button, _event, _closeWindow) 
 	    {
             var form = Ext.getCmp('contactDialog').getForm();
 
             if(form.isValid()) {
-                form.updateRecord(Egw.Addressbook.ContactEditDialog.contactRecord);
+                form.updateRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
         
                 Ext.Ajax.request({
                     params: {
                         method: 'Addressbook.saveContact', 
-                        contactData: Ext.util.JSON.encode(Egw.Addressbook.ContactEditDialog.contactRecord.data),
+                        contactData: Ext.util.JSON.encode(Tine.Addressbook.ContactEditDialog.contactRecord.data),
                     },
                     success: function(_result, _request) {
-                    	if(window.opener.Egw.Addressbook) {
-                            window.opener.Egw.Addressbook.Main.reload();
+                    	if(window.opener.Tine.Addressbook) {
+                            window.opener.Tine.Addressbook.Main.reload();
                     	}
                         if(_closeWindow === true) {
                             window.close();
@@ -424,8 +424,8 @@ Egw.Addressbook.ContactEditDialog = {
 	            },
 	            text: 'Deleting contact...',
 	            success: function(_result, _request) {
-                    if(window.opener.Egw.Addressbook) {
-	                   window.opener.Egw.Addressbook.reload();
+                    if(window.opener.Tine.Addressbook) {
+	                   window.opener.Tine.Addressbook.reload();
                     }
                     window.close();
 	            },
@@ -478,7 +478,7 @@ Egw.Addressbook.ContactEditDialog = {
                 name:'n_suffix',
                 anchor:'95%'
             },
-            new Egw.widgets.container.selectionComboBox({
+            new Tine.widgets.container.selectionComboBox({
                 fieldLabel:'Addressbook',
                 name: 'contact_owner',
                 anchor:'95%',
@@ -554,7 +554,7 @@ Egw.Addressbook.ContactEditDialog = {
                     hiddenName:'adr_one_countryname',
                     store: new Ext.data.JsonStore({
 			            baseParams: {
-			            	method:'Egwbase.getCountryList'
+			            	method:'Tinebase.getCountryList'
 			            },
 			            root: 'results',
 			            id: 'shortName',
@@ -684,7 +684,7 @@ Egw.Addressbook.ContactEditDialog = {
                     hiddenName:'adr_two_countryname',
                     store: new Ext.data.JsonStore({
 			            baseParams: {
-			            	method:'Egwbase.getCountryList'
+			            	method:'Tinebase.getCountryList'
 			            },
 			            root: 'results',
 			            id: 'shortName',
@@ -753,7 +753,7 @@ Egw.Addressbook.ContactEditDialog = {
             _contactData.contact_bday = Date.parseDate(_contactData.contact_bday, 'c');
         }
 
-        this.contactRecord = new Egw.Addressbook.Model.Contact(_contactData);
+        this.contactRecord = new Tine.Addressbook.Model.Contact(_contactData);
     },
 
     updateToolbarButtons: function(_rights)
@@ -771,7 +771,7 @@ Egw.Addressbook.ContactEditDialog = {
     display: function(_contactData) 
     {
         // Ext.FormPanel
-        var dialog = new Egw.widgets.dialog.EditRecord({
+        var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'contactDialog',
             //title: 'the title',
             labelWidth: 120,
@@ -807,9 +807,9 @@ Egw.Addressbook.ContactEditDialog = {
     
 }
 
-Ext.namespace('Egw.Addressbook.Model');
+Ext.namespace('Tine.Addressbook.Model');
 
-Egw.Addressbook.Model.Contact = Ext.data.Record.create([
+Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'contact_id'},
     {name: 'contact_tid'},
     {name: 'contact_owner'},
