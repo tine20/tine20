@@ -15,3 +15,5 @@ Turnover: <?php echo $this->lead->lead_turnover . "\n" ?>
 Probability: <?php echo $this->lead->lead_probability . "%\n" ?>
 
 Folder: <?php echo $this->container->container_name . "\n" ?>
+
+Updated by: <?php echo $this->updater->accountDisplayName . "\n" ?>

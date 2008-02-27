@@ -40,4 +40,8 @@
     <td>Folder</td>
     <td><?php echo $this->container->container_name ?></td>
   </tr>
+  <tr>
+    <td>Updated by</td>
+    <td><?php echo $this->updater->accountDisplayName ?></td>
+  </tr>
 </table>

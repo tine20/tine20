@@ -320,6 +320,7 @@ class Crm_Controller
         $view = new Zend_View();
         $view->setScriptPath('Crm/views');
         
+        $view->updater = Zend_Registry::get('currentAccount');
         $view->lead = $_lead;
         $view->leadState = $this->getLeadState($_lead->lead_leadstate_id);
         $view->leadType = $this->getLeadType($_lead->lead_leadtype_id);
