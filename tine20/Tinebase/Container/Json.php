@@ -25,14 +25,14 @@ class Tinebase_Container_Json
     public function getContainer($application, $containerType, $owner =  NULL)
     {       
         switch($containerType) {
-            case Tinebase_Container_Container::TYPE_PERSONAL:
-                $container = Tinebase_Container_Container::getInstance()->getPersonalContainer($application,$owner);
+            case Tinebase_Container::TYPE_PERSONAL:
+                $container = Tinebase_Container::getInstance()->getPersonalContainer($application,$owner);
                 break;
-            case Tinebase_Container_Container::TYPE_SHARED:
-                $container = Tinebase_Container_Container::getInstance()->getSharedContainer($application);
+            case Tinebase_Container::TYPE_SHARED:
+                $container = Tinebase_Container::getInstance()->getSharedContainer($application);
                 break;
             case 'OtherUsers':
-                $container = Tinebase_Container_Container::getInstance()->getOtherUsers($application);
+                $container = Tinebase_Container::getInstance()->getOtherUsers($application);
                 break;
             default:
                 throw new Exception('no such NodeType');
@@ -55,11 +55,11 @@ class Tinebase_Container_Json
     {
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         switch($containerType) {
-            case Tinebase_Container_Container::TYPE_SHARED:
-                $container = Tinebase_Container_Container::getInstance()->addSharedContainer($accountId, $application, $containerName);
+            case Tinebase_Container::TYPE_SHARED:
+                $container = Tinebase_Container::getInstance()->addSharedContainer($accountId, $application, $containerName);
                 break;
-            case Tinebase_Container_Container::TYPE_PERSONAL:
-                $container = Tinebase_Container_Container::getInstance()->addPersonalContainer($accountId, $application, $containerName);
+            case Tinebase_Container::TYPE_PERSONAL:
+                $container = Tinebase_Container::getInstance()->addPersonalContainer($accountId, $application, $containerName);
                 break;
             default:
                 throw new Exception('no such containerType');
@@ -76,7 +76,7 @@ class Tinebase_Container_Json
      */
     public function deleteContainer($containerId)
     {
-        Tinebase_Container_Container::getInstance()->deleteContainer($containerId);
+        Tinebase_Container::getInstance()->deleteContainer($containerId);
         return 'success';
     }
     
@@ -89,7 +89,7 @@ class Tinebase_Container_Json
      */
     public function renameContainer($containerId, $newName)
     {
-        $container = Tinebase_Container_Container::getInstance()->renameContainer($containerId, $newName);
+        $container = Tinebase_Container::getInstance()->renameContainer($containerId, $newName);
         return $container->toArray();
     }
     
@@ -106,7 +106,7 @@ class Tinebase_Container_Json
             'totalcount'  => 0
         );
         
-        $result['results'] = Tinebase_Container_Container::getInstance()->getAllGrants($containerId)->toArray();
+        $result['results'] = Tinebase_Container::getInstance()->getAllGrants($containerId)->toArray();
         $result['totalcount'] = count($result['results']);
         
         foreach($result['results'] as &$value) {
@@ -131,7 +131,7 @@ class Tinebase_Container_Json
     {
         $newGrants = new Tinebase_Record_RecordSet(Zend_Json::decode($grants), 'Tinebase_Model_Grants');
         
-        Tinebase_Container_Container::getInstance()->setAllGrants($containerId, $newGrants);
+        Tinebase_Container::getInstance()->setAllGrants($containerId, $newGrants);
                
         return $this->getContainerGrants($containerId);
     }

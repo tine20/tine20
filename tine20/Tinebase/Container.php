@@ -19,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Tinebase_Container_Container
+class Tinebase_Container
 {
     /**
      * the table object for the SQL_TABLE_PREFIX .container table
@@ -181,19 +181,19 @@ class Tinebase_Container_Container
     /**
      * holdes the instance of the singleton
      *
-     * @var Tinebase_Container_Container
+     * @var Tinebase_Container
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Tinebase_Container_Container
+     * @return Tinebase_Container
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Container_Container;
+            self::$_instance = new Tinebase_Container;
         }
         
         return self::$_instance;
@@ -302,7 +302,7 @@ class Tinebase_Container_Container
      *
      * @param string $_application the name of the application
      * @param string $_name the name of the container
-     * @param int $_type the type of the container(Tinebase_Container_Container::TYPE_SHARED, Tinebase_Container_Container::TYPE_PERSONAL. Tinebase_Container_Container::TYPE_INTERNAL)
+     * @param int $_type the type of the container(Tinebase_Container::TYPE_SHARED, Tinebase_Container::TYPE_PERSONAL. Tinebase_Container::TYPE_INTERNAL)
      * @param string $_backend type of the backend. for eaxmple: sql, ldap, ...
      * @return int the id of the newly create container
      */
@@ -856,7 +856,7 @@ class Tinebase_Container_Container
         }
         
         $container = $this->getContainerById($containerId);
-        if($container->container_type === Tinebase_Container_Container::TYPE_PERSONAL) {
+        if($container->container_type === Tinebase_Container::TYPE_PERSONAL) {
             // make sure that only the current user has admin rights
             foreach($_grants as $key => $recordGrants) {
                 $_grants[$key]->adminGrant = false;
@@ -893,19 +893,19 @@ class Tinebase_Container_Container
                 'account_id'    => $recordGrants['accountId'],
             );
             if($recordGrants->readGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_READ));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_READ));
             }
             if($recordGrants->addGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_ADD));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_ADD));
             }
             if($recordGrants->editGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_EDIT));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_EDIT));
             }
             if($recordGrants->deleteGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_DELETE));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_DELETE));
             }
             if($recordGrants->adminGrant === true) {
-                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container_Container::GRANT_ADMIN));
+                $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_ADMIN));
             }
         }
         
