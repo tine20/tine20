@@ -102,7 +102,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         );
         
         
-        $view->title="eGroupWare 2.0";
+        $view->title="Tine 2.0";
 
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');

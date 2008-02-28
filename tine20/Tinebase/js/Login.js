@@ -52,7 +52,7 @@ TINENameSpace.Login = function() {
                             	jsonKey: Tine.Tinebase.jsonKey
                             },
                             success:function(form, action, o) {
-                                Ext.MessageBox.wait('Login successful. Loading eGroupWare...', 'Please wait!');
+                                Ext.MessageBox.wait('Login successful. Loading Tine...', 'Please wait!');
                                 window.location.reload();
                             },
                             failure:function(form, action) {
