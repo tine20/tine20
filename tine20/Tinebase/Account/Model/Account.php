@@ -190,9 +190,26 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function getContainerByACL($_application, $_right)
     {
-        $container = Tinebase_Container_Container::getInstance();
+        $container = Tinebase_Container::getInstance();
         
         $result = $container->getContainerByACL($this->accountId, $_application, $_right);
+        
+        return $result;
+    }
+
+    /**
+     * return all personal container of the current user
+     *
+     * used to get a list of all personal containers accesssible by the current user
+     * 
+     * @param string $_application the application name
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getPersonalContainer($_application)
+    {
+        $container = Tinebase_Container::getInstance();
+        
+        $result = $container->getPersonalContainer($_application, $this->accountId);
         
         return $result;
     }
@@ -206,7 +223,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function hasGrant($_containerId, $_grant)
     {
-        $container = Tinebase_Container_Container::getInstance();
+        $container = Tinebase_Container::getInstance();
         
         $result = $container->hasGrant($this->accountId, $_containerId, $_grant);
         
