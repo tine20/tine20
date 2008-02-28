@@ -325,7 +325,7 @@ class Crm_Controller
         $view->leadState = $this->getLeadState($_lead->lead_leadstate_id);
         $view->leadType = $this->getLeadType($_lead->lead_leadtype_id);
         $view->leadSource = $this->getLeadSource($_lead->lead_leadsource_id);
-        $view->container = Tinebase_Container_Container::getInstance()->getContainerById($_lead->lead_container);
+        $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->lead_container);
         
         if(is_a($_lead->lead_start, 'Zend_Date')) {
             $view->leadStart = $_lead->lead_start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));

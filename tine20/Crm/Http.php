@@ -110,7 +110,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                  $leadData['tasks'] = array();   
             }
             
-            $folder = Tinebase_Container_Container::getInstance()->getContainerById($lead->lead_container);
+            $folder = Tinebase_Container::getInstance()->getContainerById($lead->lead_container);
             $view->formData['config']['folderName']   = $folder->container_name;
             $view->formData['config']['folderRights'] = $folder->account_grants;
             

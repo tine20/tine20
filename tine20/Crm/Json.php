@@ -700,7 +700,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
 /*    public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
-        $internalContainer = Tinebase_Container_Container::getInstance()->getInternalContainer('crm');
+        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer('crm');
         
         $folderId = $internalContainer->container_id;
         
