@@ -124,7 +124,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     protected function _checkContainerACL($_filter)
     {
         foreach ($_filter->container as $containerId) {
-            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container_Container::GRANT_READ)) {
+            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
                 $container[] = $containerId;
             }
         }
@@ -140,7 +140,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     public function getTask($_uid)
     {
         $Task = $this->_backend->getTask($_uid);
-        if (! $this->_currentAccount->hasGrant($Task->container, Tinebase_Container_Container::GRANT_READ)) {
+        if (! $this->_currentAccount->hasGrant($Task->container, Tinebase_Container::GRANT_READ)) {
             throw new Exception('Not allowed!');
         }
         
@@ -158,7 +158,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     	if ((int)$_task->container < 0) {
     		$_task->container = $this->getDefaultContainer()->getId();
     	}
-        if (! $this->_currentAccount->hasGrant($_task->container, Tinebase_Container_Container::GRANT_ADD)) {
+        if (! $this->_currentAccount->hasGrant($_task->container, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
         }
         return $this->_backend->createTask($_task);
@@ -180,15 +180,15 @@ class Tasks_Controller implements Tasks_Backend_Interface
         // mamage acl
         if ($oldtask->container != $_task->container) {
             
-            if (!$this->_currentAccount->hasGrant($_task->container, Tinebase_Container_Container::GRANT_ADD)) {
+            if (!$this->_currentAccount->hasGrant($_task->container, Tinebase_Container::GRANT_ADD)) {
                 throw new Exception('Not allowed!');
             }
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-            if (!$this->_currentAccount->hasGrant($oldtask->container, Tinebase_Container_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($oldtask->container, Tinebase_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
             
-        } elseif(!$this->_currentAccount->hasGrant($_task->container, Tinebase_Container_Container::GRANT_EDIT))  {
+        } elseif(!$this->_currentAccount->hasGrant($_task->container, Tinebase_Container::GRANT_EDIT))  {
             throw new Exception('Not allowed!');
         }
         
@@ -206,7 +206,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         $Task = $this->getTask($_identifier);
         
-        if (!$this->_currentAccount->hasGrant($Task->container, Tinebase_Container_Container::GRANT_DELETE)) {
+        if (!$this->_currentAccount->hasGrant($Task->container, Tinebase_Container::GRANT_DELETE)) {
             throw new Exception('Not allowed!');
         }
         $this->_backend->deleteTask($_identifier);
@@ -225,7 +225,7 @@ class Tasks_Controller implements Tasks_Backend_Interface
     {
         foreach ($_identifiers as $identifier) {
             $Task = $this->getTask($identifier);
-            if (!$this->_currentAccount->hasGrant($Task->container, Tinebase_Container_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($Task->container, Tinebase_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
         }
@@ -245,27 +245,27 @@ class Tasks_Controller implements Tasks_Backend_Interface
         $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
         
         if (isset($taskConfig->$configString)) {
-            $defaultContainer = Tinebase_Container_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
+            $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
             
-            $containers = Tinebase_Container_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
 
             if($containers->count() > 0) {
             	$defaultContainer = $containers[0];
             
             } else {
 	            $allGrants = array(
-	                Tinebase_Container_Container::GRANT_ADD,
-	                Tinebase_Container_Container::GRANT_ADMIN,
-	                Tinebase_Container_Container::GRANT_DELETE,
-	                Tinebase_Container_Container::GRANT_EDIT,
-	                Tinebase_Container_Container::GRANT_READ
+	                Tinebase_Container::GRANT_ADD,
+	                Tinebase_Container::GRANT_ADMIN,
+	                Tinebase_Container::GRANT_DELETE,
+	                Tinebase_Container::GRANT_EDIT,
+	                Tinebase_Container::GRANT_READ
 	            );
 	            
-	            $containerId = Tinebase_Container_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Tinebase_Container_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
-	            Tinebase_Container_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
+	            $containerId = Tinebase_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Tinebase_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
+	            Tinebase_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
 	            
-	            $defaultContainer = Tinebase_Container_Container::getInstance()->getContainerById($containerId);
+	            $defaultContainer = Tinebase_Container::getInstance()->getContainerById($containerId);
             }
         }
     return $defaultContainer;

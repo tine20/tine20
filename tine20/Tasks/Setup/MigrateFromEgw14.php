@@ -159,21 +159,21 @@ class Tasks_Setup_MigrateFromTine14
      * ??? what about loose coupling in this case???
      * 
      * @param int $_owner
-     * @return int Tinebase_Container_Container::container_id
+     * @return int Tinebase_Container::container_id
      */
     protected static function getOwnersContainer($_owner)
     {
         static $containers = array();
         
         if (!isset($containers[$_owner])) {
-            $containers[$_owner] = Tinebase_Container_Container::getInstance()->addContainer(
+            $containers[$_owner] = Tinebase_Container::getInstance()->addContainer(
                 'Tasks',
                 'My Tasks (from egw 1.4 migration)',
-                Tinebase_Container_Container::TYPE_PERSONAL,
+                Tinebase_Container::TYPE_PERSONAL,
                 Tasks_Backend_Factory::SQL
             );
-            Tinebase_Container_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
-                Tinebase_Container_Container::GRANT_ANY
+            Tinebase_Container::getInstance()->addGrants($containers[$_owner], $_owner, array(
+                Tinebase_Container::GRANT_ANY
             ));
         }
         return $containers[$_owner];  
