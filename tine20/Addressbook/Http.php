@@ -41,7 +41,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
 		    $encodedContact = $contact->toArray();
 
-		    $addressbook = Tinebase_Container_Container::getInstance()->getContainerById($contact->contact_owner);
+		    $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->contact_owner);
 			$encodedContact['contact_owner'] = $addressbook->toArray();
 
 			if(!empty($contact->adr_one_countryname)) {

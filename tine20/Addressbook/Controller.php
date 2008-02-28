@@ -57,7 +57,7 @@ class Addressbook_Controller implements Tinebase_Events_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        $result = Tinebase_Container_Container::getInstance()->getAllGrants($addressbookId);
+        $result = Tinebase_Container::getInstance()->getAllGrants($addressbookId);
                 
         return $result;
     }
@@ -69,14 +69,14 @@ class Addressbook_Controller implements Tinebase_Events_Interface
             throw new InvalidArgumentException('$_addressbookId must be integer');
         }
         
-        $result = Tinebase_Container_Container::getInstance()->setAllGrants($addressbookId, $_grants);
+        $result = Tinebase_Container::getInstance()->setAllGrants($addressbookId, $_grants);
                 
         return $result;
     }
     
     public function getOtherUsers() 
     {
-        $result = Tinebase_Container_Container::getInstance()->getOtherUsers('addressbook');
+        $result = Tinebase_Container::getInstance()->getOtherUsers('addressbook');
         
         return $result;
     }
@@ -174,7 +174,7 @@ class Addressbook_Controller implements Tinebase_Events_Interface
         if($accountId != $_accountId) {
             throw new InvalidArgumentException('$_accountId must be integer');
         }
-        $container = Tinebase_Container_Container::getInstance()->addPersonalContainer($accountId, 'addressbook', 'Personal Contacts');
+        $container = Tinebase_Container::getInstance()->addPersonalContainer($accountId, 'addressbook', 'Personal Contacts');
         
         return $container;
     }
