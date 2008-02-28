@@ -22,6 +22,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public function login()
     {
         $view = new Zend_View();
+        $view->title="Tine 2.0";
 
         $view->setScriptPath('Tinebase/views');
 
