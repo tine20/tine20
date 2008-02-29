@@ -24,15 +24,17 @@ class Tinebase_Container_Json
      */
     public function getContainer($application, $containerType, $owner =  NULL)
     {       
+        $application = Tinebase_Controller::getApplicationInstance($application);
+        
         switch($containerType) {
             case Tinebase_Container::TYPE_PERSONAL:
-                $container = Tinebase_Container::getInstance()->getPersonalContainer($application,$owner);
+                $container = $application->getPersonalContainer(Zend_Registry::get('currentAccount'), $owner, Tinebase_Container::GRANT_READ);
                 break;
             case Tinebase_Container::TYPE_SHARED:
-                $container = Tinebase_Container::getInstance()->getSharedContainer($application);
+                $container = $application->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
                 break;
             case 'OtherUsers':
-                $container = Tinebase_Container::getInstance()->getOtherUsers($application);
+                $container = $application->getOtherUsersContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
                 break;
             default:
                 throw new Exception('no such NodeType');
@@ -100,7 +102,8 @@ class Tinebase_Container_Json
      * @return array
      * @throws Exception
      */
-    public function getContainerGrants($containerId) {
+    public function getContainerGrants($containerId) 
+    {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
