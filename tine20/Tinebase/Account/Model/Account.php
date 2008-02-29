@@ -205,11 +205,29 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      * @param string $_application the application name
      * @return Tinebase_Record_RecordSet
      */
-    public function getPersonalContainer($_application)
+    public function getPersonalContainer($_application, $_owner, $_grant)
     {
         $container = Tinebase_Container::getInstance();
         
-        $result = $container->getPersonalContainer($_application, $this->accountId);
+        $result = $container->getPersonalContainer($this, $_application, $_owner, $_grant);
+        
+        return $result;
+    }
+    
+    public function getSharedContainer($_application, $_grant)
+    {
+        $container = Tinebase_Container::getInstance();
+        
+        $result = $container->getSharedContainer($this, $_application, $_grant);
+        
+        return $result;
+    }
+    
+    public function getOtherUsersContainer($_application, $_grant)
+    {
+        $container = Tinebase_Container::getInstance();
+        
+        $result = $container->getOtherUsersContainer($this, $_application, $_grant);
         
         return $result;
     }
