@@ -52,7 +52,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 			}
             $encodedContact = Zend_Json::encode($encodedContact);
 		} else {
-		    $personalAddressbooks = $addresses->getAddressbooksByOwner($currentAccount->accountId);
+		    $personalAddressbooks = Addressbook_Controller::getInstance()->getPersonalContainer($currentAccount, $currentAccount->accountId, Tinebase_Container::GRANT_READ);
 		    foreach($personalAddressbooks as $addressbook) {
     		    $encodedContact = Zend_Json::encode(array('contact_owner' => $addressbook->toArray()));
                 break;
