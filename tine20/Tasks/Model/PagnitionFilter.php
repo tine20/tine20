@@ -98,13 +98,13 @@ class Tasks_Model_PagnitionFilter extends Tinebase_Record_Abstract
                 $containers = $cc->getContainerByACL($accountId, $this->_application, Tinebase_Container::GRANT_READ);
                 break;
             case 'personal':
-                $containers = $cc->getPersonalContainer($this->_application, $this->owner);
+                $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Container::GRANT_READ);
                 break;
             case 'shared':
-                $containers = $cc->getSharedContainer($this->_application);
+                $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Container::GRANT_READ);
                 break;
             case 'OtherUsers':
-                $containers = $cc->getOtherUsersContainer($this->_application);
+                $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Container::GRANT_READ);
                 break;
             case 'singleContainer':
                 $this->_properties['container'] = array($this->_properties['container']);
