@@ -334,7 +334,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*
 	* @return unknown
 	*/  
-    public function getContactsById($_id)
+/*    public function getContactsById($_id)
     {
         $id = (int) $_id;
         if($id != $_id) {
@@ -361,7 +361,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $contacts = new Tinebase_Record_RecordSet($rows, 'Crm_Model_Contact');
         
         return $contacts;
-    }
+    } */
   
   
   
@@ -713,9 +713,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Tinebase_Container::getInstance()->getPersonalContainer('crm', $owner);
+        $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('crm', $owner, Tinebase_Container::GRANT_READ);
         
-        if($ownerContainer->count() === 0) {
+        if(count($ownerContainer) === 0) {
             return false;
         }
         
@@ -740,7 +740,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Tinebase_Container::getInstance()->getPersonalContainer('crm', $owner);
+        $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('crm', $owner, Tinebase_Container::GRANT_READ);
+        
+        if(count($ownerContainer) === 0) {
+            return 0;
+        }
         
         $containerIds = array();
         
@@ -905,7 +909,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return true;
     }    
      
-    public function getOtherUsers() 
+/*    public function getOtherUsers() 
     {
         $rows = Tinebase_Container::getInstance()->getOtherUsers('crm');
 
@@ -925,7 +929,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         //$result = new Tinebase_Record_RecordSet($accountData, 'Tinebase_Account_Model_Account');
         
         return $result;
-    }
+    } */
 
     /**
      * create search filter
@@ -994,7 +998,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @todo do we still need this function
      * @return Zend_Db_Select
      */
-    protected function _getContactsSelectObject()
+/*    protected function _getContactsSelectObject()
     {
         $db = Zend_Registry::get('dbAdapter');
 
@@ -1025,7 +1029,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             );
         
         return $select;
-    }    
+    }*/    
     
     /**
      * get the basic select object to fetch leads from the database 
@@ -1072,7 +1076,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
 
 
-// handle FOLDER->LEADS overview
     /**
      * get list of leads from all shared folders the current user has access to
      *
@@ -1108,10 +1111,13 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }
     
-    public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+/*    public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
         $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
+        if(count($containers) === 0) {
+            return 0;
+        }
         
         $containerIds = array();
         
@@ -1128,7 +1134,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $result = $this->contactsTable->getTotalCount($where);
 
         return $result;
-    }
+    } */
     
     /**
      * get total count of all leads from shared folders
@@ -1141,7 +1147,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
 
-        if(empty($allContainer)) {
+        if(count($allContainer) === 0) {
             return 0;
         }
         
@@ -1192,7 +1198,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         if(!Zend_Registry::get('currentAccount')->hasGrant($folderId, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access denied to folder');
+            return 0;
         }
         
         $where = array(
@@ -1209,10 +1215,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE) 
     {
-        $sharedContainer = Tinebase_Container::getInstance()->getSharedContainer('crm');
+        $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
         
         if($sharedContainer->count() === 0) {
-            return false;
+            return new Tinebase_Record_RecordSet(array(), 'Crm_Model_Lead');
         }
         
         $containerIds = array();
@@ -1239,7 +1245,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $allContainer = Tinebase_Container::getInstance()->getSharedContainer('crm');
 
-        if(empty($allContainer)) {
+        if(count($allContainer) === 0) {
             return 0;
         }
         
@@ -1261,25 +1267,20 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }        
  
    
-   public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads) 
+    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads) 
     {
-        $otherPeoplesContainer = Tinebase_Container::getInstance()->getOtherUsersContainer('crm');
+        $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
+        
+        if(count($otherPeoplesContainer) === 0) {
+            return new Tinebase_Record_RecordSet(array(), 'Crm_Model_Lead');
+        }
         
         $containerIds = array();
-        $containerIdsPresent = "0";
 
         foreach($otherPeoplesContainer as $container) {
             $containerIds[] = $container->container_id;
-            
-            if(is_numeric($container->container_id)) {
-                  $containerIdsPresent = "1";
-            }            
         }
 
-        if($containerIdsPresent == "0") {
-             return false;   
-        }
-        
         $where = array(
             $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
         );
@@ -1299,7 +1300,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         $allContainer = Tinebase_Container::getInstance()->getOtherUsersContainer('crm');
 
-        if(empty($allContainer)) {
+        if(count($allContainer) === 0) {
             return 0;
         }
         

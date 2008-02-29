@@ -537,7 +537,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
-            $result['results']    = $rows;//->toArray();
+            $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -669,26 +669,22 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $treeNodes = array();
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        try {
-            $rows = $backend->getOtherUsers();
+        $controller = Crm_Controller::getInstance();
+        $accounts = $controller->getOtherUsers(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
         
-            foreach($rows as $accountData) {
-                $treeNode = new Tinebase_Ext_Treenode(
-                    'Crm',
-                    'leads',
-                    'otherfolder_'. $accountData->accountId, 
-                    $accountData->accountDisplayName,
-                    false
-                );
-                $treeNode->owner  = $accountData->accountId;
-                $treeNode->nodeType = 'userFolders';
-                $treeNodes[] = $treeNode;
-            }
-        } catch (Exception $e) {
-            // do nothing
-            // or throw Execption???
+        foreach($accounts as $accountData) {
+            $treeNode = new Tinebase_Ext_Treenode(
+                'Crm',
+                'leads',
+                'otherfolder_'. $accountData->accountId, 
+                $accountData->accountDisplayName,
+                false
+            );
+            $treeNode->owner  = $accountData->accountId;
+            $treeNode->nodeType = 'userFolders';
+            $treeNodes[] = $treeNode;
         }
+
         echo Zend_Json::encode($treeNodes);
 
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
