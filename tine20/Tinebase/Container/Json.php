@@ -34,7 +34,7 @@ class Tinebase_Container_Json
                 $container = $application->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
                 break;
             case 'OtherUsers':
-                $container = $application->getOtherUsersContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
+                $container = $application->getOtherUsers(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
                 break;
             default:
                 throw new Exception('no such NodeType');
