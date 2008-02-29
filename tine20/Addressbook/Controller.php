@@ -74,12 +74,12 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         return $result;
     }
     
-    public function getOtherUsers() 
+/*    public function getOtherUsers() 
     {
         $result = Tinebase_Container::getInstance()->getOtherUsers('addressbook');
         
         return $result;
-    }
+    }*/
         
     /**
      * get list of shared contacts

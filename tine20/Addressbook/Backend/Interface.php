@@ -118,15 +118,6 @@ interface Addressbook_Backend_Interface
      * @return Zend_Db_Table_Rowset returns false if user has no access to shared addressbooks
      */
     public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL); 
-    
-    /**
-     * rename an addressbook
-     *
-     * @param int $_addressbookId id of the addressbook
-     * @param string $_name new name of the addressbook
-     * @return unknown
-     */
-    public function renameAddressbook($_addressbookId, $_name);    
 
     /**
      * add or updates a contact

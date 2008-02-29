@@ -246,22 +246,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     /**
-     * rename an addressbook
-     *
-     * @param int $_addressbookId id of the addressbook
-     * @param string $_name new name of the addressbook
-     * @return unknown
-     */
-    public function renameAddressbook($_addressbookId, $_name)
-    {
-        $tinebaseContainer = Tinebase_Container::getInstance();
-        
-        $tinebaseContainer->renameContainer($_addressbookId, $_name);
-                
-        return true;
-    }
-    
-    /**
      * get contacts of other people, takes acl of current owner into account
      *
      * @param string $_filter the search filter
@@ -273,7 +257,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
-        $otherPeoplesContainer = Tinebase_Container::getInstance()->getOtherUsersContainer('addressbook');
+        $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('addressbook', Tinebase_Container::GRANT_READ);
         
         if(count($otherPeoplesContainer) === 0) {
             return new Tinebase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
@@ -385,7 +369,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
     {
-        $sharedContainer = Tinebase_Container::getInstance()->getSharedContainer('addressbook');
+        $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('addressbook', Tinebase_Container::GRANT_READ);
         
         if(count($sharedContainer) === 0) {
             return new Tinebase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
@@ -408,7 +392,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     
     /**
      * get total count of all contacts from shared addressbooks
-     *
+     * @todo rework this function
      * @return int count of all other users contacts
      */
     public function getCountOfSharedContacts()
@@ -479,22 +463,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Tinebase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+        $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
         
-        if(count($ownerContainer) === 0 && $owner == Zend_Registry::get('currentAccount')->accountId) {
-            $allGrants = array(
-                Tinebase_Container::GRANT_ADD,
-                Tinebase_Container::GRANT_ADMIN,
-                Tinebase_Container::GRANT_DELETE,
-                Tinebase_Container::GRANT_EDIT,
-                Tinebase_Container::GRANT_READ
-            );
-            
-            $containerId = Tinebase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Tinebase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-            Tinebase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
-            
-            $ownerContainer = Tinebase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
-        } elseif(count($ownerContainer) === 0) {
+        if(count($ownerContainer) === 0) {
             return new Tinebase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
         }
         
@@ -513,13 +484,24 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     
+    /**
+     * get count of messages readable be current account of other owners
+     *
+     * @param int $_owner
+     * @param strin $_filter
+     * @return int the total count
+     */
     public function getCountByOwner($_owner, $_filter)
     {
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
-        $ownerContainer = Tinebase_Container::getInstance()->getPersonalContainer('addressbook', $owner);
+        $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
+        
+        if(count($ownerContainer) === 0) {
+            return 0;
+        }
         
         $containerIds = array();
         
@@ -579,53 +561,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $result = $this->contactsTable->getTotalCount($where);
 
         return $result;
-    }
-    
-    public function getSharedAddressbooks() {
-        $sharedAddressbooks = Tinebase_Container::getInstance()->getSharedContainer('addressbook');
-                
-        return $sharedAddressbooks;
-    }
-    
-    public function getOtherUsers() 
-    {
-        $rows = Tinebase_Container::getInstance()->getOtherUsers('addressbook');
-
-        $accountData = array();
-
-        foreach($rows as $account) {
-            $accountData[] = array(
-                'account_id'      => $account['account_id'],
-                'account_loginid' => 'loginid',
-                'account_name'    => 'Account ' . $account['account_id']
-            );
-        }
-
-        $result = new Tinebase_Record_RecordSet($accountData, 'Tinebase_Account_Model_Account');
-        
-        return $result;
-    }
-        
-    public function getAddressbooksByOwner($_owner) 
-    {
-        $personalAddressbooks = Tinebase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
-
-        if(count($personalAddressbooks) === 0 && $_owner == Zend_Registry::get('currentAccount')->accountId) {
-            $allGrants = array(
-                Tinebase_Container::GRANT_ADD,
-                Tinebase_Container::GRANT_ADMIN,
-                Tinebase_Container::GRANT_DELETE,
-                Tinebase_Container::GRANT_EDIT,
-                Tinebase_Container::GRANT_READ
-            );
-            
-            $containerId = Tinebase_Container::getInstance()->addContainer('addressbook', 'Personal Contacts', Tinebase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-            Tinebase_Container::getInstance()->addGrants($containerId, Zend_Registry::get('currentAccount')->accountId, $allGrants);
-            
-            $personalAddressbooks = Tinebase_Container::getInstance()->getPersonalContainer('addressbook', $_owner);
-        }
-        
-        return $personalAddressbooks;
     }
     
     protected function _addQuickSearchFilter($_where, $_filter)
