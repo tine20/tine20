@@ -81,7 +81,7 @@ class Tinebase_Record_RelationTest extends PHPUnit_Framework_TestCase
         require_once 'PHPUnit/TextUI/TestRunner.php';
 
         $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Record_RelationTest');
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
+        PHPUnit_TextUI_TestRunner::run($suite);
     }
 
     /**

@@ -62,7 +62,7 @@ class Tine20_Tinebase_Record_RecordTest extends Tine20_Tinebase_Record_AbstractT
 	 	$this->objects['TestRecord']->setFromArray(array('test_id'=>'2', 'test_2'=>NULL, ), NULL);
 		
 		// date management
-		$date = new Zend_Date();
+		$date = Zend_Date::now();
 		$this->objects['TestRecord']->date_single = clone($date);
 		$this->objects['TestRecord']->date_multiple = array( $date ) ;
 		
@@ -86,7 +86,7 @@ class Tine20_Tinebase_Record_RecordTest extends Tine20_Tinebase_Record_AbstractT
     	$dummy = array(
 					'test_id'=>2, 
 					'test_2'=>'',
-					'date_single' => '01.01.1970 11:00:00', 
+					'date_single' => $date->getIso(), 
 					'date_multiple'=>'');
   	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
   	  	

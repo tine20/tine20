@@ -72,8 +72,8 @@ abstract class Tine20_Tinebase_Record_AbstractTest extends PHPUnit_Framework_Tes
     }
 
 	/*
-	* 
-	*/
+	 * 
+	 */
 	public function testConstructorException() {
 		$this->setExpectedException('Exception');
 	    try {
@@ -86,9 +86,9 @@ abstract class Tine20_Tinebase_Record_AbstractTest extends PHPUnit_Framework_Tes
     }
     
 	/*
-	* 
-	* @covers Tinebase_Record_Abstract::setId
-	*/
+	 * 
+	 * @covers Tinebase_Record_Abstract::setId
+	 */
     public function testSetId() {
     	
     	if (isset($this->expectFailure['TestRecord']['testSetId'])) {
@@ -324,9 +324,6 @@ abstract class Tine20_Tinebase_Record_AbstractTest extends PHPUnit_Framework_Tes
     		$this->markTestIncomplete('This test has not been implemented yet.');
     	}
 	}
-		
-
-
 		
 	/*
 	* @covers Tinebase_Abstract_Record::__get
