@@ -515,7 +515,7 @@ class Tinebase_Container
      * @todo remove this function
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
-    public function getPersonalContainer($_application, $_owner)
+    public function _getPersonalContainer($_application, $_owner)
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' depricated use');
         
@@ -532,7 +532,7 @@ class Tinebase_Container
      * @todo rename this function to getPersonalContainer
      * @return unknown
      */
-    public function getPersonalContainer2(Tinebase_Account_Model_Account $_account, $_application, $_owner, $_grant)
+    public function getPersonalContainer(Tinebase_Account_Model_Account $_account, $_application, $_owner, $_grant)
     {
         $owner = (int)$_owner;
         if($owner != $_owner) {
@@ -579,7 +579,7 @@ class Tinebase_Container
      * @todo remove this functions
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
-    public function getSharedContainer($_application)
+    public function _getSharedContainer($_application)
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' depricated use');
         
@@ -593,7 +593,7 @@ class Tinebase_Container
      * @todo rename this function to getSharedContainer
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
-    public function getSharedContainer2(Tinebase_Account_Model_Account $_account, $_application, $_grant)
+    public function getSharedContainer(Tinebase_Account_Model_Account $_account, $_application, $_grant)
     {
         $groupMemberships   = $_account->getGroupMemberships();
         $groupMemberships[] = $_account->accountId;
@@ -628,7 +628,7 @@ class Tinebase_Container
      * @todo remove this function
      * @return array list of accountids
      */
-    public function getOtherUsers($_application)
+    public function _getOtherUsers($_application)
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' depricated use');
         
@@ -640,9 +640,9 @@ class Tinebase_Container
      *
      * @param string $_application the name of the application
      * @todo rename this function to getOtherUsers
-     * @return array list of accountids
+     * @return Tinebase_Record_RecordSet set of Tinebase_Account_Model_Account
      */
-    public function getOtherUsers2(Tinebase_Account_Model_Account $_account, $_application, $_grant)
+    public function getOtherUsers(Tinebase_Account_Model_Account $_account, $_application, $_grant)
     {
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         
@@ -688,12 +688,12 @@ class Tinebase_Container
      * @param string $_application the name of the application
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
-    public function getOtherUsersContainer($_application)
+    public function getOtherUsersContainer(Tinebase_Account_Model_Account $_account, $_application, $_grant)
     {
-        $accountId = Zend_Registry::get('currentAccount')->accountId;
+        $accountId = $_account->accountId;
         
-        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->accountId;
+        $groupMemberships   = $_account->getGroupMemberships();
+        $groupMemberships[] = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -712,7 +712,7 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
             ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_PERSONAL)
             ->group(SQL_TABLE_PREFIX . 'container.container_id')
-            ->having('account_grants & ?', self::GRANT_READ)
+            ->having('account_grants & ?', $_grant)
             ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
