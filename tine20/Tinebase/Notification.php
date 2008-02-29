@@ -49,6 +49,15 @@ class Tinebase_Notification
         return self::$_instance;
     }
     
+    /**
+     * send notifications to a list a receipients
+     *
+     * @param Tinebase_Account_Model_FullAccount $_updater
+     * @param Tinebase_Record_RecordSet $_recipients
+     * @param string $_subject
+     * @param string $_messagePlain
+     * @param string $_messageHtml
+     */
     public function send(Tinebase_Account_Model_FullAccount $_updater, Tinebase_Record_RecordSet $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
         foreach($_recipients as $recipient) {
