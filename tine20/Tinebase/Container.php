@@ -512,18 +512,35 @@ class Tinebase_Container
      *
      * @param string $_application the name of the application
      * @param int $_owner the numeric account id of the owner
+     * @todo remove this function
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getPersonalContainer($_application, $_owner)
     {
-        //error_log('TINEBASE :: CONTAINER :: getPersonalContainer : '.$_application.' | owner: '.$_owner);    	
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' depricated use');
+        
+        return $this->getPersonalContainer2(Zend_Registry::get('currentAccount'), $_application, $_owner, self::GRANT_READ);
+    }
+    
+    /**
+     * returns the personal container of a given account accessible by a another given account
+     *
+     * @param Tinebase_Account_Model_Account $_account
+     * @param unknown_type $_application
+     * @param unknown_type $_owner
+     * @param unknown_type $_grant
+     * @todo rename this function to getPersonalContainer
+     * @return unknown
+     */
+    public function getPersonalContainer2(Tinebase_Account_Model_Account $_account, $_application, $_owner, $_grant)
+    {
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
         }
         
-        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->accountId;
+        $groupMemberships   = $_account->getGroupMemberships();
+        $groupMemberships[] = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -543,7 +560,7 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
             ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_PERSONAL)
             ->group(SQL_TABLE_PREFIX . 'container.container_id')
-            ->having('account_grants & ?', self::GRANT_READ)
+            ->having('account_grants & ?', $_grant)
             ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
@@ -559,12 +576,27 @@ class Tinebase_Container
      * returns the shared container for a given application accessible by the current user
      *
      * @param string $_application the name of the application
+     * @todo remove this functions
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getSharedContainer($_application)
     {
-        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->accountId;
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' depricated use');
+        
+        return $this->getSharedContainer2(Zend_Registry::get('currentAccount'), $_application, self::GRANT_READ);
+    }
+    
+    /**
+     * returns the shared container for a given application accessible by the current user
+     *
+     * @param string $_application the name of the application
+     * @todo rename this function to getSharedContainer
+     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     */
+    public function getSharedContainer2(Tinebase_Account_Model_Account $_account, $_application, $_grant)
+    {
+        $groupMemberships   = $_account->getGroupMemberships();
+        $groupMemberships[] = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -577,7 +609,7 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
             ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_SHARED)
             ->group(SQL_TABLE_PREFIX . 'container.container_id')
-            ->having('account_grants & ?', self::GRANT_READ)
+            ->having('account_grants & ?', $_grant)
             ->order(SQL_TABLE_PREFIX . 'container.container_name');
             
         //error_log("getContainer:: " . $select->__toString());
@@ -593,14 +625,29 @@ class Tinebase_Container
      * return users which made personal containers accessible to current account
      *
      * @param string $_application the name of the application
+     * @todo remove this function
      * @return array list of accountids
      */
     public function getOtherUsers($_application)
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' depricated use');
+        
+        return $this->getOtherUsers2(Zend_Registry::get('currentAccount'), $_application, self::GRANT_READ);
+    }
+    
+    /**
+     * return users which made personal containers accessible to current account
+     *
+     * @param string $_application the name of the application
+     * @todo rename this function to getOtherUsers
+     * @return array list of accountids
+     */
+    public function getOtherUsers2(Tinebase_Account_Model_Account $_account, $_application, $_grant)
+    {
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         
-        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = Zend_Registry::get('currentAccount')->accountId;
+        $groupMemberships   = $_account->getGroupMemberships();
+        $groupMemberships[] = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -613,7 +660,7 @@ class Tinebase_Container
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
             ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
-            ->where('user.account_grant = ?', self::GRANT_READ)
+            ->where('user.account_grant = ?', $_grant)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->app_id)
             ->where(SQL_TABLE_PREFIX . 'container.container_type = ?', self::TYPE_PERSONAL)
             ->order(SQL_TABLE_PREFIX . 'container.container_name')
