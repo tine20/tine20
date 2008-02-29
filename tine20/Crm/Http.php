@@ -124,7 +124,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             $leadData['contacts'] = array();   
             $leadData['tasks'] = array();                                   
             
-            $personalFolders = $leads->getFoldersByOwner($currentAccount->accountId);
+            $personalFolders = $controller->getPersonalContainer($currentAccount, $currentAccount->accountId, Tinebase_Container::GRANT_READ);
             foreach($personalFolders as $folder) {
                 $leadData['lead_container']     = $folder->container_id;
                 $view->formData['config']['folderName']   = $folder->container_name;

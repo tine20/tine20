@@ -905,20 +905,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return true;
     }    
      
-     
-    public function getFoldersByOwner($_owner) 
-    {
-        $personalFolders = Tinebase_Container::getInstance()->getPersonalContainer('crm', $_owner);
-                
-        return $personalFolders;
-    }   
- 
-    public function getSharedFolders() {
-        $sharedFolders = Tinebase_Container::getInstance()->getSharedContainer('crm');
-                
-        return $sharedFolders;
-    }
-    
     public function getOtherUsers() 
     {
         $rows = Tinebase_Container::getInstance()->getOtherUsers('crm');

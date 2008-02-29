@@ -618,16 +618,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             }
         }
     }
-  
-   
           
-// handle FOLDERS
     public function getFoldersByOwner($owner)
     {
         $treeNodes = array();
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getFoldersByOwner($owner)) {
+        $controller = Crm_Controller::getInstance();
+
+        if($rows = $controller->getPersonalContainer(Zend_Registry::get('currentAccount'), $owner, Tinebase_Container::GRANT_READ)) {
             foreach($rows as $folderData) {
                 $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
                 $childNode->folderId = $folderData->container_id;
@@ -642,13 +640,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         exit;
     }    
 
-
     public function getSharedFolders()
     {
         $treeNodes = array();
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getSharedFolders()) {
+        $controller = Crm_Controller::getInstance();
+        
+        if($rows = $controller->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ)) {
             foreach($rows as $folderData) {
                 $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
                 $childNode->folderId = $folderData->container_id;

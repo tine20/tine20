@@ -11,7 +11,7 @@
  * @version     $Id$
  *
  */
-class Crm_Controller
+class Crm_Controller extends Tinebase_Container_Abstract
 {
     /**
      * the constructor
@@ -454,5 +454,20 @@ class Crm_Controller
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         
         return $backend->getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+    }
+    
+    /**
+     * creates the initial folder for new accounts
+     *
+     * @param Tinebase_Account_Model_Account $_account the accountd object
+     * @return Tinebase_Record_RecordSet of type Tinebase_Model_Container
+     */
+    public function createPersonalFolder(Tinebase_Account_Model_Account $_account)
+    {
+        $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'crm', 'Personal Leads');
+        
+        $container = new Tinebase_Record_RecordSet(array($personalContainer), 'Tinebase_Model_Container');
+        
+        return $container;
     }
 }
