@@ -1,0 +1,5 @@
+<phpunit>
+	<logging>
+		<log type='coverage-html' target='C:\xampp\htdocs\writeable' />
+	</logging>
+</phpunit>
