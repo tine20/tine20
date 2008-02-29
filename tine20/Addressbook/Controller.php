@@ -14,7 +14,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Controller implements Tinebase_Events_Interface
+class Addressbook_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
 {
     /**
      * the constructor
@@ -141,10 +141,10 @@ class Addressbook_Controller implements Tinebase_Events_Interface
     {
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
-                $this->createUserFolder($_eventObject->account->accountId);
+                $this->createPersonalFolder($_eventObject->account);
                 break;
             case 'Admin_Event_DeleteAccount':
-                $this->deleteUserFolder($_eventObject->account->accountId);
+                $this->deletePersonalFolder($_eventObject->account);
                 break;
         }
     }
@@ -152,29 +152,23 @@ class Addressbook_Controller implements Tinebase_Events_Interface
     /**
      * delete all personal user folders and the contacts associated with these folders
      *
-     * @param int $_accountId the accountId
+     * @param Tinebase_Account_Model_Account $_account the accountd object
      */
-    public function deleteUserFolder($_accountId)
+    public function deletePersonalFolder($_account)
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
     }
     
     /**
      * creates the initial folder for new accounts
      *
-     * @param int $_accountId the accountdId
+     * @param Tinebase_Account_Model_Account $_account the accountd object
      * @return Tinebase_Model_Container
      */
-    public function createUserFolder($_accountId)
+    public function createPersonalFolder(Tinebase_Account_Model_Account $_account)
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-        $container = Tinebase_Container::getInstance()->addPersonalContainer($accountId, 'addressbook', 'Personal Contacts');
+        $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'addressbook', 'Personal Contacts');
+        
+        $container = new Tinebase_Record_RecordSet(array($personalContainer), 'Tinebase_Model_Container');
         
         return $container;
     }
