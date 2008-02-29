@@ -18,7 +18,7 @@
  * 
  * @package Tasks
  */
-class Tasks_Controller implements Tasks_Backend_Interface
+class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Backend_Interface
 {
     
     /**
@@ -247,28 +247,11 @@ class Tasks_Controller implements Tasks_Backend_Interface
         if (isset($taskConfig->$configString)) {
             $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
-            
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer('Tasks', $this->_currentAccount->accountId);
-
-            if($containers->count() > 0) {
-            	$defaultContainer = $containers[0];
-            
-            } else {
-	            $allGrants = array(
-	                Tinebase_Container::GRANT_ADD,
-	                Tinebase_Container::GRANT_ADMIN,
-	                Tinebase_Container::GRANT_DELETE,
-	                Tinebase_Container::GRANT_EDIT,
-	                Tinebase_Container::GRANT_READ
-	            );
-	            
-	            $containerId = Tinebase_Container::getInstance()->addContainer('tasks', 'Personal Tasks', Tinebase_Container::TYPE_PERSONAL, Tasks_Backend_Factory::SQL);
-	            Tinebase_Container::getInstance()->addGrants($containerId, $this->_currentAccount->accountId, $allGrants);
-	            
-	            $defaultContainer = Tinebase_Container::getInstance()->getContainerById($containerId);
-            }
+            $containers = $this->getPersonalContainer($this->_currentAccount, $this->_currentAccount->accountId, Tinebase_Container::GRANT_READ);
+            $defaultContainer = $containers[0];
         }
-    return $defaultContainer;
+        
+        return $defaultContainer;
     }
     
     /**
@@ -278,5 +261,20 @@ class Tasks_Controller implements Tasks_Backend_Interface
      */
     public function getStati() {
         return $this->_stati;
+    }
+    
+    /**
+     * creates the initial folder for new accounts
+     *
+     * @param Tinebase_Account_Model_Account $_account the accountd object
+     * @return Tinebase_Record_RecordSet of type Tinebase_Model_Container
+     */
+    public function createPersonalFolder(Tinebase_Account_Model_Account $_account)
+    {
+        $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'tasks', 'Personal Tasks');
+        
+        $container = new Tinebase_Record_RecordSet(array($personalContainer), 'Tinebase_Model_Container');
+        
+        return $container;
     }
 }
