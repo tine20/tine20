@@ -85,6 +85,25 @@ class Tinebase_Controller
     }
     
     /**
+     * returns an instance of the controller of an application
+     *
+     * @param string $_applicationName
+     * @return object the controller of the application
+     */
+    public static function getApplicationInstance($_applicationName)
+    {
+        $controllerName = ucfirst($_applicationName) . '_Controller';
+        
+        if(!class_exists($controllerName)) {
+            throw new Exception('class '. $controllerName . ' not found');
+        }
+        
+        $controller = call_user_func(array($controllerName, 'getInstance'));
+        
+        return $controller;
+    }
+    
+    /**
      * Enter description here...
      * 
      * @todo implement json key check
