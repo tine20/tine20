@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 CRM\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2008-03-01 19:35+0100\n"
+"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: /home/lkneschke/workspace\n"
+"X-Poedit-SearchPath-0: Tine 2.0\n"
+
+#: Tine 2.0/Crm/Controller.php:349
+msgid "State"
+msgstr "Status"
+
+#: Tine 2.0/Crm/Controller.php:350
+msgid "Type"
+msgstr "Typ"
+
+#: Tine 2.0/Crm/Controller.php:351
+msgid "Source"
+msgstr "Quelle"
+
+#: Tine 2.0/Crm/Controller.php:352
+msgid "Start"
+msgstr "Start"
+
+#: Tine 2.0/Crm/Controller.php:353
+msgid "Scheduled end"
+msgstr "geplantes Ende"
+
+#: Tine 2.0/Crm/Controller.php:354
+msgid "End"
+msgstr "Ende"
+
+#: Tine 2.0/Crm/Controller.php:355
+msgid "Turnover"
+msgstr "Umsatz"
+
+#: Tine 2.0/Crm/Controller.php:356
+msgid "Probability"
+msgstr "Wahrscheinlichkeit"
+
+#: Tine 2.0/Crm/Controller.php:357
+msgid "Folder"
+msgstr "Ordner"
+
+#: Tine 2.0/Crm/Controller.php:358
+msgid "Updated by"
+msgstr "Aktualisiert von"
+
+#: Tine 2.0/Crm/Controller.php:364
+msgid "Lead updated"
+msgstr "Hinweis aktualisiert"
+
+#: Tine 2.0/Crm/Controller.php:366
+msgid "Lead added"
+msgstr "Hinweis hinzugefügt"
+

@@ -5,43 +5,43 @@
 
 <table>
   <tr>
-    <td>State</td>
+    <td><?php echo $this->lang_state ?></td>
     <td><?php echo $this->leadState->lead_leadstate ?></td>
   </tr>
   <tr>
-    <td>Type</td>
+    <td><?php echo $this->lang_type ?></td>
     <td><?php echo $this->leadType->lead_leadtype ?></td>
   </tr>
   <tr>
-    <td>Source</td>
+    <td><?php echo $this->lang_source ?></td>
     <td><?php echo $this->leadSource->lead_leadsource ?></td>
   </tr>
   <tr>
-    <td>Start</td>
+    <td><?php echo $this->lang_start ?></td>
     <td><?php echo $this->leadStart ?></td>
   </tr>
   <tr>
-    <td>Scheduled end</td>
+    <td><?php echo $this->lang_scheduledEnd ?></td>
     <td><?php echo $this->leadScheduledEnd ?></td>
   </tr>
   <tr>
-    <td>End</td>
+    <td><?php echo $this->lang_end ?></td>
     <td><?php echo $this->leadEnd ?></td>
   </tr>
   <tr>
-    <td>Turnover</td>
+    <td><?php echo $this->lang_turnover ?></td>
     <td><?php echo $this->lead->lead_turnover ?></td>
   </tr>
   <tr>
-    <td>Probability</td>
+    <td><?php echo $this->lang_probability ?></td>
     <td><?php echo $this->lead->lead_probability ?>%</td>
   </tr>
   <tr>
-    <td>Folder</td>
+    <td><?php echo $this->lang_folder ?></td>
     <td><?php echo $this->container->container_name ?></td>
   </tr>
   <tr>
-    <td>Updated by</td>
+    <td><?php echo $this->lang_updatedBy ?></td>
     <td><?php echo $this->updater->accountDisplayName ?></td>
   </tr>
 </table>

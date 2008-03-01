@@ -345,13 +345,26 @@ class Crm_Controller extends Tinebase_Container_Abstract
             $view->leadScheduledEnd = '-';
         }
         
+        #$translate = new Zend_Translate('gettext', 'Crm/translations/de.mo', 'de');
+        $translate = new Zend_Translate('gettext', 'Crm/translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+        $view->lang_state = $translate->_('State');
+        $view->lang_type = $translate->_('Type');
+        $view->lang_source = $translate->_('Source');
+        $view->lang_start = $translate->_('Start');
+        $view->lang_scheduledEnd = $translate->_('Scheduled end');
+        $view->lang_end = $translate->_('End');
+        $view->lang_turnover = $translate->_('Turnover');
+        $view->lang_probability = $translate->_('Probability');
+        $view->lang_folder = $translate->_('Folder');
+        $view->lang_updatedBy = $translate->_('Updated by');
+        
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
         
         if($_isUpdate === true) {
-            $subject = 'Lead updated: ' . $_lead->lead_name;
+            $subject = $translate->_('Lead updated') . ': ' . $_lead->lead_name;
         } else {
-            $subject = 'Lead added: ' . $_lead->lead_name;
+            $subject = $translate->_('Lead added') . ': ' . $_lead->lead_name;
         }
         
         // send notifications to all accounts in the first step
