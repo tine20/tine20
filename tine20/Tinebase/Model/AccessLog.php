@@ -4,14 +4,17 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
 /**
  * defines the datatype for one access log entry
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
 {
@@ -38,7 +41,7 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'      => 'StringTrim'
+        //'*'      => 'StringTrim'
     );
     
     /**
@@ -51,12 +54,12 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
     protected $_validators = array(
         'sessionid'  => array('presence' => 'required'),
         'loginid'    => array('presence' => 'required'),
-        'ip'         => array('presence' => 'required'),
-        'li'         => array('presence' => 'required'),
-        'lo'         => array('presence' => 'required'),
+        'ip'         => array('presence' => 'required', 'allowEmpty' => true),
+        'li'         => array('presence' => 'required', 'allowEmpty' => true),
+        'lo'         => array('presence' => 'required', 'allowEmpty' => true),
         'log_id'     => array('presence' => 'required'),
         'result'     => array('presence' => 'required'),
-        'account_id' => array('presence' => 'required')
+        'account_id' => array('presence' => 'required', 'allowEmpty' => true)
     );
     
 }
