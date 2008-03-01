@@ -131,13 +131,20 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
-    public function resetPassword($accountId, $password)
+    /**
+     * reset password for given account
+     *
+     * @param string $account JSON encoded Tinebase_Account_Model_FullAccount
+     * @param string $password the new password
+     * @return array
+     */
+    public function resetPassword($account, $password)
     {
-        $accountIds = Zend_Json::decode($accountIds);
+        $account = new Tinebase_Account_Model_FullAccount(Zend_Json::decode($account));
         
         $controller = Admin_Controller::getInstance();
 
-        $controller->setAccountPassword($accountId, $password, $password);
+        $controller->setAccountPassword($account, $password, $password);
         
         $result = array(
             'success' => TRUE

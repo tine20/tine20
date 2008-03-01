@@ -49,16 +49,17 @@ class Admin_Controller
         
         return self::$instance;
     }
-    
-    public function getAccount($_accountId)
-    {
-        $backend = Tinebase_Account::getInstance();
 
-        $result = $backend->getAccount($_accountId);
-        
-        return $result;
-    }
-    
+    /**
+     * get list of accounts
+     *
+     * @param string $_filter string to search accounts for
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
+     */
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $backend = Tinebase_Account::getInstance();
@@ -77,15 +78,21 @@ class Admin_Controller
         return $result;
     }
 
-    public function setAccountPassword($_accountId, $_password1, $_password2)
+    /**
+     * set the password for a given account
+     *
+     * @param Tinebase_Account_Model_FullAccount $_account the account
+     * @param string $_password1 the new password
+     * @param string $_password2 the new password again
+     * @return unknown
+     */
+    public function setAccountPassword(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
     {
-        $backend = Tinebase_Account::getInstance();
-        
         if($_password1 != $_password2) {
             throw new Exception("passwords don't match");
         }
         
-        $result = $backend->setPassword($_accountId, $_password1);
+        $result = Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
         
         return $result;
     }
