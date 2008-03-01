@@ -76,9 +76,19 @@ class Tinebase_Account
         return $result;
     }
     
+    /**
+     * get list of accounts with NO internal informations
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
+     */
     public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
     {
-        $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Tinebase_Account_Model_Account');
+        $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Account_Model_Account');
         
         return $result;
     }
