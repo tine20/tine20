@@ -66,7 +66,6 @@ class Tinebase_Record_PersistentObserver
      *
      * @param Tinebase_Record_Interface $_observable 
      * @param Tinebase_Events_Abstract $_event 
-     * @return 
      */
     public function fireEvent( $_observable,  $_event ) {
         $observers = $this->getObserversByEvent($_observable, $_event);

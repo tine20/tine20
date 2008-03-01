@@ -366,7 +366,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * returns a Zend_Filter for the $_filters and $_validators of this record class.
      * we just create an instance of Filter if we really need it.
      * 
-     * @retrun Zend_Filter
+     * @return Zend_Filter
      */
     protected function _getFilter()
     {
