@@ -13,6 +13,8 @@
 /**
  * the class provides functions to handle applications
  * 
+ * @package     Tinebase
+ * @subpackage  Application
  */
 class Tinebase_Application
 {
