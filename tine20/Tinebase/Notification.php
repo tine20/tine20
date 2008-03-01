@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * primary class to handle notifications
+ *
+ * @package     Tinebase
+ * @subpackage  Server
+ */
 class Tinebase_Notification
 {
     protected $_smtpBackend;

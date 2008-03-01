@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * notifications smtp backend class
+ *
+ * @package     Tinebase
+ * @subpackage  Notification
+ */
 class Tinebase_Notification_Backend_Smtp
 {
     protected $_fromAddress;
