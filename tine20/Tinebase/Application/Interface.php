@@ -13,6 +13,8 @@
 /**
  * Interface for an Tine 2.0 application
  *
+ * @package     Tinebase
+ * @subpackage  Application
  */
 interface Tinebase_Application_Interface
 {

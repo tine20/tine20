@@ -18,6 +18,8 @@
  * 
  * Each tine application must extend this class to gain an native tine 2.0 user
  * interface.
+ * @package     Tinebase
+ * @subpackage  Application
  */
 Interface Tinebase_Application_Http_Interface extends Tinebase_Application_Interface
 {

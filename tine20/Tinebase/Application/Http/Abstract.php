@@ -14,8 +14,10 @@
  * Abstract class for an Tine 2.0 application with Http interface
  * 
  * Note, that the Http inerface in tine 2.0 is used to generate the base layouts
- * in new browser windows.
+ * in new browser windows. 
  * 
+ * @package     Tinebase
+ * @subpackage  Application
  */
 abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_Abstract implements Tinebase_Application_Http_Interface
 {

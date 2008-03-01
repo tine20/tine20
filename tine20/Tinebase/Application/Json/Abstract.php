@@ -15,6 +15,9 @@
  * Abstract class for an Tine 2.0 application with Json interface
  * Each tine application must extend this class to gain an native tine 2.0 user
  * interface.
+ * 
+ * @package     Tinebase
+ * @subpackage  Application
  */
 abstract class Tinebase_Application_Json_Abstract extends Tinebase_Application_Abstract implements Tinebase_Application_Json_Interface
 {
