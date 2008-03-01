@@ -15,6 +15,9 @@
  * 
  * records are held as a unsorted set with a autoasigned numeric index.
  * NOTE: the index of an record is _not_ related to the record and/or its identifier!
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  *
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess

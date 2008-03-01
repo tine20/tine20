@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -19,6 +19,9 @@
  * having a common interface.
  * A record is identified by a identifier. As we are a Webapp and want to 
  * deal with the objects in the browser, identifier should be a string!
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate 
 {

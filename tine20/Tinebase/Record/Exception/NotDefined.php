@@ -9,6 +9,13 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
+
+/**
+ * not defined expection
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
+ */
 class Tinebase_Record_Exception_NotDefined extends UnexpectedValueException {
 
 }

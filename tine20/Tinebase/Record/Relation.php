@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -26,6 +26,9 @@
  * @todo rethink: should be handle relations simmular to tags and give them basic acl's?
  * So users could relate records as they like, w.o spamming in global relations scope. With this, 
  * apps would define their real (for all) relations for a global scope to have them visible for anyone.
+ *
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Record_Relation
 {

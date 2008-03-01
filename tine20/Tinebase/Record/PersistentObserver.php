@@ -13,6 +13,9 @@
 
 /**
  * class Tinebase_Record_PersistentObserver
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Record_PersistentObserver
 {
