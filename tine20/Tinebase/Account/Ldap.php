@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Accounts
+ * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -14,7 +14,7 @@
  * Account ldap backend
  * 
  * @package     Tinebase
- * @subpackage  Accounts
+ * @subpackage  Account
  */
 class Tinebase_Account_Ldap implements Tinebase_Account_Interface
 {
