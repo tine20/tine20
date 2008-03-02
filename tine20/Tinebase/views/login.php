@@ -23,7 +23,7 @@
 	
 	<script type="text/javascript" language="javascript">
 		Ext.onReady(function() {
-			TINENameSpace.Login.showLoginDialog(<?php echo "'{$this->defaultUsername}', '{$this->defaultPassword}'"?>);
+			Tine.Login.showLoginDialog(<?php echo "'{$this->defaultUsername}', '{$this->defaultPassword}'"?>);
 		});
 	</script>
 </head>
