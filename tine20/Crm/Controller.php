@@ -347,6 +347,8 @@ class Crm_Controller extends Tinebase_Container_Abstract
         
         #$translate = new Zend_Translate('gettext', 'Crm/translations/de.mo', 'de');
         $translate = new Zend_Translate('gettext', 'Crm/translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+        $translate->setLocale(Zend_Registry::get('locale'));
+        
         $view->lang_state = $translate->_('State');
         $view->lang_type = $translate->_('Type');
         $view->lang_source = $translate->_('Source');
