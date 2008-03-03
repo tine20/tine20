@@ -61,7 +61,7 @@ class Tinebase_Controller
         $this->session = new Zend_Session_Namespace('tinebase');
         
         if(!isset($this->session->jsonKey)) {
-            $this->session->jsonKey = md5(mktime());
+            $this->session->jsonKey = md5(time());
         }
         Zend_Registry::set('jsonKey', $this->session->jsonKey);
 
