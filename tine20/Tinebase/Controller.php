@@ -48,6 +48,9 @@ class Tinebase_Controller
             die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
         }
         
+        // Timezones must be setup before logger, as logger has timehandling!
+        $this->setupTimezones();
+        
         $this->setupLogger();
         
         $this->setupMailer();
@@ -55,8 +58,6 @@ class Tinebase_Controller
         $this->setupDatabaseConnection();
 
         $this->setupUserLocale();
-
-        $this->setupTimezones();
         
         $this->session = new Zend_Session_Namespace('tinebase');
         
