@@ -48,7 +48,9 @@ $_SERVER['DOCUMENT_ROOT'] = '/Applications/xampp/htdocs';
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 $tinebaseController = Tinebase_Controller::getInstance();
-$tinebaseController->login('tinedemo', 'demo', '127.0.0.1');
+if (!$tinebaseController->login('tinedemo', 'demo', '127.0.0.1')){
+    throw new Exception("could't login, user session required for tests! \n");
+}
 
 //Zend_Registry::set('logger', new Zend_Log(new Zend_Log_Writer_Null));
  
