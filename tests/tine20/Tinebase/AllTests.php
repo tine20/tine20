@@ -26,15 +26,11 @@ class Tine20_Tinebase_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
         $suite->addTestSuite('Tine20_Tinebase_Record_RecordTest');
-        //$suite->addTestSuite('Tinebase_Record_RelationTest');
-        //$suite->addTestSuite('Tine20_Tinebase_Record_RecordSetTest');
-        //$suite->addTestSuite('Addressbook_ControllerTest');
-        //$suite->addTestSuite('Crm_ControllerTest');
-        //$suite->addTestSuite('Admin_ControllerTest');
+        $suite->addTestSuite('Tine20_Tinebase_Record_RecordSetTest');
+        //$suite->addTestSuite('Tine20_Tinebase_Record_RelationTest');
+        
         //$suite->addTestSuite('Tine20_Tinebase_Record_AbstractRecordTest');
         //$suite->addTestSuite('Tine20_Tinebase_Record_ContainerTest');
-        //$suite->addTest(ControllerTest::suite());
-        //$suite->addTestSuite('Tasks_ControllerTest');
         return $suite;
     }
 }
