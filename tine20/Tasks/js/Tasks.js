@@ -10,34 +10,77 @@
  */
 Ext.namespace('Tine.Tasks');
 
-// entry point, required by tinebase
-Tine.Tasks.getPanel = function() {
-    return Tine.Tasks.TaskGrid.getTreePanel();
+/**
+ * entry point, required by tinebase
+ */
+Tine.Tasks.getPanel =  function() {
+	var tree = Tine.Tasks.mainGrid.getTree();
+    tree.on('beforeexpand', function(panel) {
+        Tine.Tasks.mainGrid.initComponent();
+        Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Tasks.mainGrid.getToolbar());
+        Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Tasks.mainGrid.grid);
+    }, this);
+    
+    return tree;
 };
 
 
 // Tasks main screen
-Tine.Tasks.TaskGrid = function(){
-    
-    var sm, grid, store, tree, paging, filter;
-	
-	// define handlers
-	var handlers = {
+Tine.Tasks.mainGrid = {
+	/**
+     * holds instance of application tree
+     */
+    tree: null,
+    /**
+     * holds grid
+     */
+    grid: null,
+    /**
+     * holds selection model of grid
+     */
+    sm: null,
+    /**
+     * holds underlaying store
+     */
+    store: null,
+    /**
+     * holds paging information
+     */
+    paging: {
+        start: 0,
+        limit: 50,
+        sort: 'due',
+        dir: 'ASC'
+    },
+    /**
+     * holds current filters
+     */
+    filter: {
+        containerType: 'personal',
+        owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
+        query: '',
+        due: false,
+        container: false,
+        organizer: false,
+        tag: false
+    },
+
+    handlers: {
 		editInPopup: function(_button, _event){
 			var taskId = -1;
 			if (_button.actionType == 'edit') {
-			    var selectedRows = grid.getSelectionModel().getSelections();
+			    var selectedRows = this.grid.getSelectionModel().getSelections();
                 var task = selectedRows[0];
 				taskId = task.data.identifier;
 			}
-			popupWindow = new Tine.Tasks.EditPopup({
+			var popupWindow = new Tine.Tasks.EditPopup({
 				identifier: taskId
                 //relatedApp: 'tasks',
                 //relatedId: 
             });
             
             popupWindow.on('update', function(task) {
-            	store.load({params: paging});
+            	this.store.load({params: this.paging});
             }, this);
             //var popup = Tine.Tinebase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
             
@@ -45,7 +88,7 @@ Tine.Tasks.TaskGrid = function(){
 		deleteTaks: function(_button, _event){
 			Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected task(s)', function(_button) {
                 if(_button == 'yes') {
-				    var selectedRows = grid.getSelectionModel().getSelections();
+				    var selectedRows = this.grid.getSelectionModel().getSelections();
 				    if (selectedRows.length < 1) {
 				        return;
 				    }
@@ -66,81 +109,59 @@ Tine.Tasks.TaskGrid = function(){
 					}
 				    
 					Ext.Ajax.request({
+						scope: this,
 		                params: params,
 		                success: function(_result, _request) {
-		                    store.load({params: paging});
+		                    this.store.load({params: this.paging});
 		                },
 		                failure: function ( result, request) { 
 		                    Ext.MessageBox.alert('Failed', 'Could not delete task(s).'); 
 		                }
 		            });
 				}
-			});
+			}, this);
 		}
-	};
-	// define actions
-	var actions = {
-        editInPopup: new Ext.Action({
-            text: 'edit task',
-			disabled: true,
-			actionType: 'edit',
-            handler: handlers.editInPopup,
-            iconCls: 'action_edit'
-        }),
-        addInPopup: new Ext.Action({
-			actionType: 'add',
-            text: 'add task',
-            handler: handlers.editInPopup,
-            iconCls: 'TasksTreePanel'
-        }),
-        deleteSingle: new Ext.Action({
-            text: 'delete task',
-            handler: handlers.deleteTaks,
-			disabled: true,
-            iconCls: 'action_delete'
-        }),
-		deleteMultiple: new Ext.Action({
-            text: 'delete tasks',
-            handler: handlers.deleteTaks,
-			disabled: true,
-            iconCls: 'action_delete'
-        })
-    };
-	
-	// ------------- tree ----------
+	},
     
-    
-	tree =  new Tine.widgets.container.TreePanel({
-        id: 'TasksTreePanel',
-        iconCls: 'TasksTreePanel',
-        title: 'Tasks',
-        itemName: 'to do lists',
-		folderName: 'to do list',
-        appName: 'Tasks',
-        border: false
-    });
-    
-    tree.on('click', function(node){
-        filter.containerType = node.attributes.containerType;
-        filter.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
-        filter.container = node.attributes.container ? node.attributes.container.container_id : null;
         
-        store.load({
-            params: paging
-       });
-    });
-    
-	// init of Tasks app
-    tree.on('beforeexpand', function(panel) {
-		initStore(); 
-		initGrid();
-		Tine.Tinebase.MainScreen.setActiveToolbar(_getToolbar());
-        Tine.Tinebase.MainScreen.setActiveContentPanel(grid);
-    });
+	initComponent: function() {
+    	this.actions = {
+            editInPopup: new Ext.Action({
+                text: 'edit task',
+    			disabled: true,
+    			actionType: 'edit',
+                handler: this.handlers.editInPopup,
+                iconCls: 'action_edit',
+                scope: this
+            }),
+            addInPopup: new Ext.Action({
+    			actionType: 'add',
+                text: 'add task',
+                handler: this.handlers.editInPopup,
+                iconCls: 'TasksTreePanel',
+                scope: this
+            }),
+            deleteSingle: new Ext.Action({
+                text: 'delete task',
+                handler: this.handlers.deleteTaks,
+    			disabled: true,
+                iconCls: 'action_delete',
+                scope: this
+            }),
+    		deleteMultiple: new Ext.Action({
+                text: 'delete tasks',
+                handler: this.handlers.deleteTaks,
+    			disabled: true,
+                iconCls: 'action_delete',
+                scope: this
+            })
+        };
+        this.initStore();
+        this.initGrid();
+	},
 	
-	// ----------- store --------------    
-	var initStore = function(){
-	    store = new Ext.data.JsonStore({
+	initStore: function(){
+	    this.store = new Ext.data.JsonStore({
 			idProperty: 'identifier',
             root: 'results',
             totalProperty: 'totalcount',
@@ -153,110 +174,109 @@ Tine.Tasks.TaskGrid = function(){
         });
 		
 		// register store
-		Ext.StoreMgr.add('TaskGridStore', store);
+		Ext.StoreMgr.add('TaskGridStore', this.store);
 		
 		// prepare filter
-		store.on('beforeload', function(store, options){
+		this.store.on('beforeload', function(store, options){
 			// console.log(options);
 			// for some reasons, paging toolbar eats sort and dir
 			if (store.getSortState()) {
-				filter.sort = store.getSortState().field;
-				filter.dir = store.getSortState().direction;
+				this.filter.sort = store.getSortState().field;
+				this.filter.dir = store.getSortState().direction;
 			} else {
-				filter.sort = paging.sort;
-                filter.dir = paging.dir;
+				this.filter.sort = this.store.sort;
+                this.filter.dir = this.store.dir;
 			}
-			filter.start = options.params.start;
-            filter.limit = options.params.limit;
+			this.filter.start = options.params.start;
+            this.filter.limit = options.params.limit;
 			
-			//filter.due
-			filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
-			filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
-			filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
-			filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
-			//filter.tag
-			options.params.filter = Ext.util.JSON.encode(filter);
-		});
+			//this.filter.due
+			this.filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
+			this.filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
+			this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
+			this.filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
+			//this.filter.tag
+			options.params.filter = Ext.util.JSON.encode(this.filter);
+		}, this);
 		
-		store.on('update', function(store, task, operation) {
+		this.store.on('update', function(store, task, operation) {
 			switch (operation) {
 				case Ext.data.Record.EDIT:
 					Ext.Ajax.request({
-	                params: {
-	                    method: 'Tasks.saveTask', 
-	                    task: Ext.util.JSON.encode(task.data),
-						linkingApp: '',
-						linkedId: ''					
-	                },
-	                success: function(_result, _request) {
-						store.commitChanges();
-
-						// we need to reload store, cause filters might be 
-						// affected by the change!
-						store.load({params: paging});
-	                },
-	                failure: function ( result, request) { 
-	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
-	                }
-				});
+    					scope: this,
+    	                params: {
+    	                    method: 'Tasks.saveTask', 
+    	                    task: Ext.util.JSON.encode(task.data),
+    						linkingApp: '',
+    						linkedId: ''					
+    	                },
+    	                success: function(_result, _request) {
+    						store.commitChanges();
+    
+    						// we need to reload store, cause this.filters might be 
+    						// affected by the change!
+    						store.load({params: this.paging});
+    	                },
+    	                failure: function ( result, request) { 
+    	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+    	                }
+    				});
 				break;
 				case Ext.data.Record.COMMIT:
 				    //nothing to do, as we need to reload the store anyway.
 				break;
 			}
-			
-			
-			//store.commitChanges();
-			//if (operation == Ext.data.Record.COMMIT) {
-			//	console.log(task);
-			//}
-			
+		}, this);
+	   
+		this.store.load({
+			params: this.store
 		});
-		
-		filter = {
-            containerType: 'personal',
-            owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
-            query: '',
-            due: false,
-            container: false,
-            organizer: false,
-            tag: false
-        };
-		
-		paging = {
-			start: 0,
-			limit: 50,
-			sort: 'due',
-			dir: 'ASC'
-		};
-		
-		store.load({
-			params: paging
-		});
-		
-	};
+	},
 
-	
-    // --------- toolbar -------------
+	getTree: function() {
+        this.tree =  new Tine.widgets.container.TreePanel({
+            id: 'TasksTreePanel',
+            iconCls: 'TasksTreePanel',
+            title: 'Tasks',
+            itemName: 'to do lists',
+            folderName: 'to do list',
+            appName: 'Tasks',
+            border: false
+        });
+        
+        
+        this.tree.on('click', function(node){
+            this.filter.containerType = node.attributes.containerType;
+            this.filter.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
+            this.filter.container = node.attributes.container ? node.attributes.container.container_id : null;
+            
+            this.store.load({
+                params: this.paging
+            });
+        }, this);
+        
+        return this.tree;
+    },
+    
 	// toolbar must be generated each time this fn is called, 
 	// as tinebase destroys the old toolbar when setting a new one.
-	var _getToolbar = function(){
+	getToolbar: function(){
 		var quickSearchField = new Ext.app.SearchField({
 			id: 'quickSearchField',
 			width: 200,
 			emptyText: 'enter searchfilter'
 		});
-		quickSearchField.on('change', function(){
-			if(filter.query != this.getValue()){
-				store.load({params: paging});
+		quickSearchField.on('change', function(field){
+			if(this.filter.query != field.getValue()){
+				this.store.load({params: this.paging});
 			}
-		});
+		}, this);
 		
 		var showClosedToggle = new Ext.Button({
 			id: 'TasksShowClosed',
 			enableToggle: true,
 			handler: function(){
-				store.load({params: paging});
+				this.store.load({params: this.paging});
 			},
 			scope: this,
 			text: 'show closed',
@@ -280,9 +300,9 @@ Tine.Tasks.TaskGrid = function(){
 		});
 		
 		statusFilter.on('select', function(combo, record, index){
-			store.load({params: paging});
+			this.store.load({params: this.paging});
 			combo.triggers[0].show();
-		});
+		},this);
 		
 		var organizerFilter = new Tine.widgets.AccountpickerField({
 			id: 'TasksorganizerFilter',
@@ -291,18 +311,18 @@ Tine.Tasks.TaskGrid = function(){
 		});
 		
 		organizerFilter.on('select', function(combo, record, index){
-            store.load({params: paging});
+            this.store.load({params: this.paging});
             //combo.triggers[0].show();
-        });
+        }, this);
 		
 		var toolbar = new Ext.Toolbar({
 			id: 'Tasks_Toolbar',
 			split: false,
 			height: 26,
 			items: [
-			    actions.addInPopup,
-				actions.editInPopup,
-				actions.deleteSingle,
+			    this.actions.addInPopup,
+				this.actions.editInPopup,
+				this.actions.deleteSingle,
 				new Ext.Toolbar.Separator(),
 				'->',
 				showClosedToggle,
@@ -314,23 +334,22 @@ Tine.Tasks.TaskGrid = function(){
 		});
 	   
 	    return toolbar;
-	};
+	},
 	
-	// --------- grid ----------    
-    var initGrid = function(){
-        //sm = new Ext.grid.CheckboxSelectionModel();
+    initGrid: function(){
+        //this.sm = new Ext.grid.CheckboxSelectionModel();
         var pagingToolbar = new Ext.PagingToolbar({
 	        pageSize: 50,
-	        store: store,
+	        store: this.store,
 	        displayInfo: true,
 	        displayMsg: 'Displaying tasks {0} - {1} of {2}',
 	        emptyMsg: "No tasks to display"
 	    });
 		
-		grid = new Ext.ux.grid.QuickaddGridPanel({
+		this.grid = new Ext.ux.grid.QuickaddGridPanel({
             id: 'TasksMainGrid',
 			border: false,
-            store: store,
+            store: this.store,
 			tbar: pagingToolbar,
 			clicksToEdit: 'auto',
             enableColumnHide:false,
@@ -424,18 +443,18 @@ Tine.Tasks.TaskGrid = function(){
 	        })
         });
 		
-		grid.on('rowdblclick', function(grid, row, event){
-			handlers.editInPopup({actionType: 'edit'});
+		this.grid.on('rowdblclick', function(grid, row, event){
+			this.handlers.editInPopup.call(this, {actionType: 'edit'});
 		}, this);
 		
-		grid.getSelectionModel().on('selectionchange', function(sm){
+		this.grid.getSelectionModel().on('selectionchange', function(sm){
 			var disabled = sm.getCount() != 1;
-			actions.editInPopup.setDisabled(disabled);
-			actions.deleteSingle.setDisabled(disabled);
-			actions.deleteMultiple.setDisabled(!disabled);
+			this.actions.editInPopup.setDisabled(disabled);
+			this.actions.deleteSingle.setDisabled(disabled);
+			this.actions.deleteMultiple.setDisabled(!disabled);
 		}, this);
 		
-		grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+		this.grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
 			_eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
@@ -446,11 +465,11 @@ Tine.Tasks.TaskGrid = function(){
 			//	return;
 			//}
 			
-			var items = numSelected > 1 ? [actions.deleteMultiple] : [
-			    actions.editInPopup,
-                actions.deleteSingle,
+			var items = numSelected > 1 ? [this.actions.deleteMultiple] : [
+			    this.actions.editInPopup,
+                this.actions.deleteSingle,
                 '-',
-                actions.addInPopup
+                this.actions.addInPopup
 			];
             
 			var ctxMenu = new Ext.menu.Menu({
@@ -458,20 +477,21 @@ Tine.Tasks.TaskGrid = function(){
 		        items: items
 		    });
             ctxMenu.showAt(_eventObject.getXY());
-        });
+        }, this);
 		
-		grid.on('keydown', function(e){
-	         if(e.getKey() == e.DELETE && !grid.editing){
-	             handlers.deleteTaks();
+		this.grid.on('keydown', function(e){
+	         if(e.getKey() == e.DELETE && !this.grid.editing){
+	             this.handlers.deleteTaks.call(this);
 	         }
-	    });
+	    }, this);
         		
-	    grid.on('newentry', function(taskData){
-	    	var selectedNode = tree.getSelectionModel().getSelectedNode();
+	    this.grid.on('newentry', function(taskData){
+	    	var selectedNode = this.tree.getSelectionModel().getSelectedNode();
             taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.container_id : -1;
-	        task = new Tine.Tasks.Task(taskData);
+	        var task = new Tine.Tasks.Task(taskData);
 
 	        Ext.Ajax.request({
+	        	scope: this,
                 params: {
                     method: 'Tasks.saveTask', 
                     task: Ext.util.JSON.encode(task.data),
@@ -479,7 +499,7 @@ Tine.Tasks.TaskGrid = function(){
                     linkedId: ''
                 },
                 success: function(_result, _request) {
-                    Ext.StoreMgr.get('TaskGridStore').load({params: paging});
+                    Ext.StoreMgr.get('TaskGridStore').load({params: this.paging});
                 },
                 failure: function ( result, request) { 
                     Ext.MessageBox.alert('Failed', 'Could not save task.'); 
@@ -489,7 +509,7 @@ Tine.Tasks.TaskGrid = function(){
 	    }, this);
 	    
 		// hack to get percentage editor working
-		grid.on('rowclick', function(grid,row,e) {
+		this.grid.on('rowclick', function(grid,row,e) {
 			var cell = Ext.get(grid.getView().getCell(row,1));
 			var dom = cell.child('div:last');
 			while (cell.first()) {
@@ -499,18 +519,9 @@ Tine.Tasks.TaskGrid = function(){
 					grid.fireEvent('celldblclick', grid, row, 1, e);
 				});
 			}
-		});
-    };
-	
-	return{
-		isRunning: function(){return grid ? true : false;},
-		getPaging: function(){return paging;},
-		getTreePanel: function(){return tree;},
-		getToolbar: _getToolbar,        
-		getGrid: function() {initStore(); initGrid(); return grid;},
-		getStore: function() {return store;}
-	};    
-}();
+		}, this);
+    }    
+};
 
 
 Tine.Tasks.EditDialog = function(task) {
