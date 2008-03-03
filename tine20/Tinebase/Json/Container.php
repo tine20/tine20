@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Tinebase_Container_Json
+class Tinebase_Json_Container
 {
    /**
      * gets container / container folder

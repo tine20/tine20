@@ -24,7 +24,7 @@ class Tinebase_Json
 	 */
 	public static function setJsonServers($_server)
 	{
-	    $_server->setClass('Tinebase_Container_Json', 'Tinebase_Container');
+	    $_server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
 	}
 	
     /**
