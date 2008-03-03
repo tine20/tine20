@@ -164,7 +164,7 @@ class Tinebase_Acl_Rights
             
         $stmt = $db->query($select);
 
-        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Application');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
         return $result;
     }

@@ -60,7 +60,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $leadSources = Zend_Json::decode($optionsData);
          
         try {
-            $leadSources = new Tinebase_Record_RecordSet($leadSources, 'Crm_Model_Leadsource');
+            $leadSources = new Tinebase_Record_RecordSet('Crm_Model_Leadsource', $leadSources);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -116,7 +116,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $leadTypes = Zend_Json::decode($optionsData);
          
         try {
-            $leadTypes = new Tinebase_Record_RecordSet($leadTypes, 'Crm_Model_Leadtype');
+            $leadTypes = new Tinebase_Record_RecordSet('Crm_Model_Leadtype', $leadTypes);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -171,7 +171,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $leadStates = Zend_Json::decode($optionsData);
          
         try {
-            $leadStates = new Tinebase_Record_RecordSet($leadStates, 'Crm_Model_Leadstate');
+            $leadStates = new Tinebase_Record_RecordSet('Crm_Model_Leadstate', $leadStates);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -227,7 +227,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $productSource = Zend_Json::decode($optionsData);
          
         try {
-            $productSource = new Tinebase_Record_RecordSet($productSource, 'Crm_Model_Productsource');
+            $productSource = new Tinebase_Record_RecordSet('Crm_Model_Productsource', $productSource);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
@@ -296,7 +296,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     	    }
            
             try {
-                $_productsData = new Tinebase_Record_RecordSet($_productsData, 'Crm_Model_Product');
+                $_productsData = new Tinebase_Record_RecordSet('Crm_Model_Product', $_productsData);
             } catch (Exception $e) {
                 // invalid data in some fields sent from client
                 $result = array('success'           => false,

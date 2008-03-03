@@ -131,7 +131,7 @@ class Tinebase_Timemachine_ModificationLog
        $stmt = $db->query($select);
        $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
        
-       $modifications = new Tinebase_Record_RecordSet($resultArray, 'Tinebase_Timemachine_Model_ModificationLog');
+       $modifications = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', $resultArray);
        return $modifications;
     } // end of member function getModifications
 
@@ -153,7 +153,7 @@ class Tinebase_Timemachine_ModificationLog
             }
             $diff[$modification->modified_attribute] = $modification;
         }
-        return new Tinebase_Record_RecordSet($diff, 'Tinebase_Timemachine_Model_ModificationLog');
+        return new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', $diff);
     }
     
     /**

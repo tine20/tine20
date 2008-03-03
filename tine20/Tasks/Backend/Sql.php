@@ -89,7 +89,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function searchTasks($_filter)
     {
-        $TaskSet = new Tinebase_Record_RecordSet(array(), 'Tasks_Model_Task');
+        $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
         if(empty($_filter->container)){
             return $TaskSet;

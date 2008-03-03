@@ -481,7 +481,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
     {
         $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'crm', 'Personal Leads');
         
-        $container = new Tinebase_Record_RecordSet(array($personalContainer), 'Tinebase_Model_Container');
+        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
     }

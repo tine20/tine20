@@ -44,25 +44,19 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * creates new Tinebase_Record_RecordSet
      *
-     * @param array $_records array of record objects
      * @param string $_className the required classType
+     * @param array $_records array of record objects
      * @param bool $_bypassFilters {@see Tinebase_Record_Interface::__construct}
      * @param bool $_convertDates {@see Tinebase_Record_Interface::__construct}
      * @return void
      */
-    public function __construct(array $_records, $_className,  $_bypassFilters = false, $_convertDates = true)
+    public function __construct($_className, array $_records = array(),  $_bypassFilters = false, $_convertDates = true)
     {
-     
         $this->_recordClass = $_className;
 
         foreach($_records as $record) {
-            if($record instanceof $this->_recordClass) {
-                $this->_listOfRecords[] = $record;
-            } elseif (is_array($record)) {
-                $this->_listOfRecords[] = new $this->_recordClass($record, $_bypassFilters, $_convertDates);
-            } else {
-            	throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
-            }
+        	$toAdd = is_array($record) ? new $this->_recordClass($record, $_bypassFilters, $_convertDates) : $record;
+        	$this->addRecord($toAdd);
         }
     }
     
@@ -82,7 +76,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 		end($this->_listOfRecords);
         return key($this->_listOfRecords);
     }
-    
     
     /**
      * checks if each member record of this set is valid

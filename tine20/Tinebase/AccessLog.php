@@ -172,7 +172,7 @@ class Tinebase_AccessLog
             $arrayRowSet[$rowId] = $row;
         }
 
-        $result = new Tinebase_Record_RecordSet($arrayRowSet, 'Tinebase_Model_AccessLog');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_AccessLog', $arrayRowSet);
 
         return $result;
     }

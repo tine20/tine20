@@ -121,7 +121,7 @@ class Tinebase_Application
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Tinebase_Record_RecordSet($rowSet->toArray(), 'Tinebase_Model_Application');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rowSet->toArray());
 
         return $result;
     }    
@@ -141,7 +141,7 @@ class Tinebase_Application
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
-        $result = new Tinebase_Record_RecordSet($rowSet->toArray(), 'Tinebase_Model_Application');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rowSet->toArray());
 
         return $result;
     }    

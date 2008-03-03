@@ -132,7 +132,7 @@ class Tinebase_Container_Json
      */
     public function setContainerGrants($containerId, $grants)
     {
-        $newGrants = new Tinebase_Record_RecordSet(Zend_Json::decode($grants), 'Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', Zend_Json::decode($grants));
         
         Tinebase_Container::getInstance()->setAllGrants($containerId, $newGrants);
                

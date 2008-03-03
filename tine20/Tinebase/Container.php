@@ -452,7 +452,7 @@ class Tinebase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
         return $result;
     }
@@ -567,7 +567,7 @@ class Tinebase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
         return $result;
     }
@@ -616,7 +616,7 @@ class Tinebase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
         return $result;
     }
@@ -671,7 +671,7 @@ class Tinebase_Container
         $stmt = $db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Tinebase_Record_RecordSet(array(), 'Tinebase_Account_Model_Account');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Account_Model_Account');
         $accountsBackend = Tinebase_Account::getInstance();
         
         foreach($rows as $row) {
@@ -719,7 +719,7 @@ class Tinebase_Container
 
         $stmt = $db->query($select);
 
-        $result = new Tinebase_Record_RecordSet($stmt->fetchAll(Zend_Db::FETCH_ASSOC), 'Tinebase_Model_Container');
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
         return $result;
     }
@@ -886,7 +886,7 @@ class Tinebase_Container
             }
         }
         
-        return  new Tinebase_Record_RecordSet($resultArray, 'Tinebase_Model_Grants', true);;
+        return  new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $resultArray, true);;
     }
     
     public function setAllGrants($_containerId, Tinebase_Record_RecordSet $_grants) 

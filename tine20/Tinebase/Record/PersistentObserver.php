@@ -188,7 +188,7 @@ class Tinebase_Record_PersistentObserver
                 'observer_identifier  =' . $_observer->getId()
     		);
     		
-    		return new Tinebase_Record_RecordSet($this->_db->fetchAll($where), 'Tinebase_Model_PersistentObserver', true); 
+    		return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true); 
     	} else {
     		throw new Tinebase_Record_Exception_DefinitionFailure(); 
     	}
@@ -212,7 +212,7 @@ class Tinebase_Record_PersistentObserver
     	    'observed_event       =' . $this->_db->getAdapter()->quote($_event)
     	);
     	
-    	return new Tinebase_Record_RecordSet($this->_db->fetchAll($where), 'Tinebase_Model_PersistentObserver', true);
+    	return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);
     } // end of member function getObservablesByEvent
 
 
@@ -234,7 +234,7 @@ class Tinebase_Record_PersistentObserver
             'observed_event         =' . $this->_db->getAdapter()->quote($_event)
         );
         
-        return new Tinebase_Record_RecordSet($this->_db->fetchAll($where), 'Tinebase_Model_PersistentObserver', true);
+        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);
     } // end of member function getObserversByEvent
 
 

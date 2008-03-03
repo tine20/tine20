@@ -260,7 +260,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('addressbook', Tinebase_Container::GRANT_READ);
         
         if(count($otherPeoplesContainer) === 0) {
-            return new Tinebase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
+            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         }
         
         $containerIds = array();
@@ -372,7 +372,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('addressbook', Tinebase_Container::GRANT_READ);
         
         if(count($sharedContainer) === 0) {
-            return new Tinebase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
+            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         }
         
         $containerIds = array();
@@ -466,7 +466,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
         
         if(count($ownerContainer) === 0) {
-            return new Tinebase_Record_RecordSet(array(), 'Addressbook_Model_Contact');
+            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         }
         
         $containerIds = array();
@@ -578,7 +578,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $rows = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Tinebase_Record_RecordSet($rows->toArray(), 'Addressbook_Model_Contact', true);
+        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows->toArray(),  true);
         
         return $result;
     }

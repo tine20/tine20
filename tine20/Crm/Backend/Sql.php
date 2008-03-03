@@ -987,7 +987,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $leads = new Tinebase_Record_RecordSet($rows, 'Crm_Model_Lead');
+        $leads = new Tinebase_Record_RecordSet('Crm_Model_Lead', $rows);
         
         return $leads;
     }   
@@ -1218,7 +1218,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
         
         if($sharedContainer->count() === 0) {
-            return new Tinebase_Record_RecordSet(array(), 'Crm_Model_Lead');
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
         }
         
         $containerIds = array();
@@ -1272,7 +1272,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
         
         if(count($otherPeoplesContainer) === 0) {
-            return new Tinebase_Record_RecordSet(array(), 'Crm_Model_Lead');
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
         }
         
         $containerIds = array();

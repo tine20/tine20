@@ -80,8 +80,8 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
         
         //$classTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'class'));
         $statiTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks_status'));
-        //$this->_classes = new Tinebase_Record_RecordSet($classTable->fetchAll(), 'Tinebase_Record_Class');
-        $this->_stati = new Tinebase_Record_RecordSet($statiTable->fetchAll()->toArray(), 'Tasks_Model_Status', true);
+        //$this->_classes = new Tinebase_Record_RecordSet('Tinebase_Record_Class', $classTable->fetchAll());
+        $this->_stati = new Tinebase_Record_RecordSet('Tasks_Model_Status', $statiTable->fetchAll()->toArray(),  true);
         
         $this->_currentAccount = Zend_Registry::get('currentAccount');
     }
@@ -273,7 +273,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     {
         $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'tasks', 'Personal Tasks');
         
-        $container = new Tinebase_Record_RecordSet(array($personalContainer), 'Tinebase_Model_Container');
+        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
     }

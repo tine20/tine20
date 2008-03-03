@@ -178,7 +178,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Tinebase_Record_RecordSet($rows, $_accountClass);
+        $result = new Tinebase_Record_RecordSet($_accountClass, $rows);
         
         return $result;
     }

@@ -173,7 +173,7 @@ class Tinebase_Record_Relation
             $where['related_role'] = $_role;
         }
         
-        $relations = new Tinebase_Record_RecordSet(array(), 'Tinebase_Model_Relation');
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         foreach ($this->_db->fetchAll($where) as $relation) {
         	$relations->addRecord(new Tinebase_Model_Relation($relation->toArray(), true));
         }
