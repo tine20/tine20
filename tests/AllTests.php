@@ -9,26 +9,30 @@
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $$
  */
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tine20_AllTests::main');
+if (! defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'AllTests::main');
 }
-
 /**
  * Test helper
  */
 require_once 'TestHelper.php';
-
-require_once 'tine20/AllTests.php';
-
 class AllTests
 {
+    
+    public static function main()
+    {
+        PHPUnit_TextUI_TestRunner::run(self::suite());
+    }
+    
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('AllTests');
-
+        $suite = new PHPUnit_Framework_TestSuite('Tine Project All Tests');
         $suite->addTest(Tine20_AllTests::suite());
-
         return $suite;
     }
 }
+
+if (PHPUnit_MAIN_METHOD == 'AllTests::main') {
+    AllTests::main();
+}
+?>
