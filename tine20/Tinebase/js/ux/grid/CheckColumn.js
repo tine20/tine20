@@ -11,6 +11,21 @@
  */
 Ext.namespace('Ext.ux', 'Ext.ux.grid');
 
+/**
+ * Class for having a checkbox in a girds column.
+ * <p>Example usage:</p>
+ * <pre><code>
+ var cm = new Ext.grid.ColumnModel([
+    new Ext.ux.grid.CheckColumn({
+        header: 'Read',
+        dataIndex: 'readGrant',
+        width: 55
+    }),
+    ...
+ ]);
+ * </code></pre>
+ * @class Ext.ux.grid.CheckColumn
+ */
 Ext.ux.grid.CheckColumn = function(config){
     Ext.apply(this, config);
     if(!this.id){
@@ -20,6 +35,9 @@ Ext.ux.grid.CheckColumn = function(config){
 };
 
 Ext.ux.grid.CheckColumn.prototype ={
+	/**
+	 * @private
+	 */
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -27,7 +45,9 @@ Ext.ux.grid.CheckColumn.prototype ={
             view.mainBody.on('mousedown', this.onMouseDown, this);
         }, this);
     },
-
+    /**
+     * @private
+     */
     onMouseDown : function(e, t){
         if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
             e.stopEvent();
@@ -36,7 +56,9 @@ Ext.ux.grid.CheckColumn.prototype ={
             record.set(this.dataIndex, !record.data[this.dataIndex]);
         }
     },
-
+    /**
+     * @private
+     */
     renderer : function(v, p, record){
         p.css += ' x-grid3-check-col-td';
         return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';

@@ -10,15 +10,54 @@
  
 Ext.namespace('Ext.ux');
 
+/**
+ * Class for handling of native browser popup window.
+ * <p>This class is intended to make the usage of a native popup window as easy as dealing with a modal window.<p>
+ * <p>Example usage:</p>
+ * <pre><code>
+ var win = new Ext.ux.PopupWindow({
+     name: 'TasksEditWindow',
+     width: 700,
+     height: 300,
+     url:index.php?method=Tasks.editTask&taskId=5
+ });
+ * </code></pre>
+ */
 Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
+	/**
+	 * @cfg 
+	 * @param {String} url
+	 * @desc  url to open
+	 */
 	url: null,
+	/**
+	 * @cfg {String} internal name of new window
+	 */
 	name: 'new window',
+	/**
+	 * @cfg {Int} width of new window
+	 */
 	width: 500,
+	/**
+	 * @cfg {Int} height of new window
+	 */
 	height: 500,
+	/**
+	 * @private
+	 */
 	initComponent: function(){
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
         this.addEvents({
+        	/**
+             * @event update
+             * @desc  Fired when a record in the window got updated
+             * @param {Ext.data.record} data data of the new entry
+             */
             "update" : true,
+            /**
+             * @event close
+             * @desc  Fired, when the window got closed
+             */
             "close" : true
         });
         
@@ -43,7 +82,10 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         }
         */
 	},
-	// called after this.popups native onLoad
+	/**
+	 * @private
+	 * called after this.popups native onLoad
+	 */
 	setupPopupEvents: function(){
 		// Attention, complicated stuff!
 		// 'this' references the popup, whereas window references the parent
