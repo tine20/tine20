@@ -1,20 +1,14 @@
 <?php
 /**
- * Tine 2.0
+ * Tine 2.0 - http://www.tine20.org
  * 
- * @package     tests
- * @subpackage  tinebase_record
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @package     Tinebase
+ * @subpackage  Record
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @version     $$
+ * @version     $Id$
  */
- 
- 
-require_once 'Zend/Loader.php';
-
-Zend_Loader::registerAutoload();
-
 
 class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
 {   

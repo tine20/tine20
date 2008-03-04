@@ -1,22 +1,22 @@
 <?php
 /**
- * Tine 2.0
+ * Tine 2.0 - http://www.tine20.org
  * 
- * @package     tests
- * @subpackage  tinebase
- * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @package     Tinebase
+ * @subpackage  Record
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @version     $$
+ * @version     $Id$
  */
 
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tine20_Tinebase_Record_RecordTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_Record_RecordTest::main');
 }
 
 require_once 'DummyRecord.php';
@@ -26,7 +26,7 @@ require_once 'DummyRecordBroken.php';
 /**
  * Test class for Tinebase_Record
  */
-class Tine20_Tinebase_Record_RecordTest extends Tine20_Tinebase_Record_AbstractTest
+class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
 {
     /**
      * @var array test objects
@@ -41,7 +41,7 @@ class Tine20_Tinebase_Record_RecordTest extends Tine20_Tinebase_Record_AbstractT
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine20_Tinebase_Record_RecordTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Record_RecordTest');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -114,7 +114,7 @@ class Tine20_Tinebase_Record_RecordTest extends Tine20_Tinebase_Record_AbstractT
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Tine20_Tinebase_Record_RecordTest::main') {
-    Tine20_Tinebase_Record_AbstractRecordTest::main();
+if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordTest::main') {
+    Tinebase_Record_AbstractRecordTest::main();
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
  * @subpackage  Record
@@ -13,7 +13,7 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 // Call Tinebase_Record_PersistentObserverTest::main() if this source file is executed directly.
 if (!defined('PHPUnit_MAIN_METHOD')) {
