@@ -121,7 +121,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	        }, {
 	            text: 'Other Users ' + this.itemName,
 	            cls: 'file',
-	            containerType: 'OtherUsers',
+	            containerType: 'otherUsers',
 	            children: null,
 	            leaf: null,
 				owner: null
