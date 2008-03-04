@@ -103,7 +103,7 @@ class Tasks_Model_PagnitionFilter extends Tinebase_Record_Abstract
             case 'shared':
                 $containers = Zend_Registry::get('currentAccount')->getSharedContainer($this->_application, Tinebase_Container::GRANT_READ);
                 break;
-            case 'OtherUsers':
+            case 'otherUsers':
                 $containers = Zend_Registry::get('currentAccount')->getOtherUsersContainer($this->_application, Tinebase_Container::GRANT_READ);
                 break;
             case 'singleContainer':
