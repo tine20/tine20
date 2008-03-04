@@ -33,7 +33,7 @@ class Tinebase_Json_Container
             case Tinebase_Container::TYPE_SHARED:
                 $container = $application->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
                 break;
-            case 'OtherUsers':
+            case 'otherUsers':
                 $container = $application->getOtherUsers(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
                 break;
             default:
