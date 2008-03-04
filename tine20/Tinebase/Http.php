@@ -60,6 +60,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             self::_appendFileTime("Tinebase/js/ExtUx.js"),
             self::_appendFileTime("Tinebase/js/ux/PopupWindow.js"),
             self::_appendFileTime("Tinebase/js/ux/grid/CheckColumn.js"),
+            self::_appendFileTime("Tinebase/js/ux/grid/QuickaddGridPanel.js"),
             self::_appendFileTime("Tinebase/js/DatepickerRange.js"),
             // Tine 2.0 specific widgets
             self::_appendFileTime("Tinebase/js/Widgets.js"),
@@ -67,7 +68,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             self::_appendFileTime("Tinebase/js/widgets/ContainerSelect.js"),
             self::_appendFileTime("Tinebase/js/widgets/ContainerGrants.js"),
             self::_appendFileTime("Tinebase/js/widgets/ContainerTree.js"),
-            self::_appendFileTime("Tinebase/js/widgets/QuickaddGridPanel.js")
         );
     }
     

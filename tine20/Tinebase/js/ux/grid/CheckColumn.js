@@ -1,13 +1,14 @@
 /*
  * Tine 2.0
  * 
+ * @package     Ext
+ * @subpackage  ux
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
- 
 Ext.namespace('Ext.ux', 'Ext.ux.grid');
 
 Ext.ux.grid.CheckColumn = function(config){

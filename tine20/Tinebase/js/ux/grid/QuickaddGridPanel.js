@@ -13,8 +13,6 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
 
 /**
  * @class       Ext.ux.grid.QuickaddGridPanel
- * @package     Ext
- * @subpackage  ux
  * @extends     Ext.grid.EditorGridPanel
  * Class for creating a edittable grid with quick add row on top.
  * <p>As form field for the quick add row, the quickaddField of the column definition is used.<p>
@@ -41,9 +39,7 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
          }
      ]
  });
- </code></pre>
- * @constructor
- * @param       {Object} config Configuration options
+ * </code></pre>
  */
 Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 	/**
