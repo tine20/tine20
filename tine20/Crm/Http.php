@@ -111,8 +111,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             }
             
             $folder = Tinebase_Container::getInstance()->getContainerById($lead->lead_container);
-            $view->formData['config']['folderName']   = $folder->container_name;
-            $view->formData['config']['folderRights'] = $folder->account_grants;
+            $leadData['lead_container'] = $folder->toArray();
             
             $products = $leads->getProductsById($_leadId);
             $leadData['products'] = $products->toArray();
@@ -126,9 +125,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             
             $personalFolders = $controller->getPersonalContainer($currentAccount, $currentAccount->accountId, Tinebase_Container::GRANT_READ);
             foreach($personalFolders as $folder) {
-                $leadData['lead_container']     = $folder->container_id;
-                $view->formData['config']['folderName']   = $folder->container_name;
-                $view->formData['config']['folderRights'] = 31;
+                $leadData['lead_container']     = $folder->toArray();
                 break;
             }
             

@@ -1,284 +1,36 @@
 Ext.namespace('Tine.Crm');
 
-
+/**
+ * entry point, required by tinebase
+ * creates and returnes app tree panel
+ */
 Tine.Crm.getPanel = function(){
-    return Tine.Crm.Tree.getPanel();
+	var tree = new Tine.widgets.container.TreePanel({
+        id: 'crmTree',
+        iconCls: 'crmThumbnailApplication',
+        title: 'CRM',
+        itemName: 'Leads',
+        folderName: 'Leads',
+        appName: 'crm',
+        border: false
+    });
+
+    
+    tree.on('click', function(node){
+        Tine.Crm.Main.show(node);
+    }, this);
+        
+    tree.on('beforeexpand', function(panel) {
+        if(panel.getSelectionModel().getSelectedNode() === null) {
+            panel.expandPath('/root/all');
+            panel.selectPath('/root/all');
+        }
+        panel.fireEvent('click', panel.getSelectionModel().getSelectedNode());
+    }, this);
+    
+    return tree;
 };
 
-Tine.Crm.Tree = function() {
-
-    var _treeNodeContextMenu = null;
-
-    var _handlerAddFolder = function(_button, _event) {
-        Ext.MessageBox.prompt('New Folder', 'Please enter the name of the new folder:', function(_btn, _text) {
-            if(_treeNodeContextMenu !== null && _btn == 'ok') {
-                //console.log(_treeNodeContextMenu);
-                var type = 'personal';
-                if(_treeNodeContextMenu.attributes.nodeType == 'sharedLeads') {
-                    type = 'shared';
-                }
-                
-                Ext.Ajax.request({
-                    url: 'index.php',
-                    params: {
-                        method: 'Crm.addFolder',
-                        name: _text,
-                        type: type,
-                        owner: _treeNodeContextMenu.attributes.owner
-                    },
-                    text: 'Creating new folder...',
-                    success: function(_result, _request){
-                        //Ext.getCmp('Crm_Leads_Grid').getStore().reload();
-                        //_treeNodeContextMenu.expand(false, false);
-                        //console.log(_result);
-                        if(_treeNodeContextMenu.isExpanded()) {
-                            var responseData = Ext.util.JSON.decode(_result.responseText);
-                            var newNode = new Ext.tree.TreeNode({
-                                leaf: true,
-                                cls: 'file',
-                                nodeType: 'singleFolder',
-                                folderId: responseData.folderId,
-                                text: _text
-                            });
-                            _treeNodeContextMenu.appendChild(newNode);
-                        } else {
-                            _treeNodeContextMenu.expand(false);
-                        }
-                    },
-                    failure: function(result, request){
-                        //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
-                    }
-                });
-            }
-        });
-    };
-
-    var _handlerRenameFolder = function(_button, _event) {
-        var resulter = function(_btn, _text) {
-            if(_treeNodeContextMenu !== null && _btn == 'ok') {
-
-                //console.log(_treeNodeContextMenu);
-                Ext.Ajax.request({
-                    url: 'index.php',
-                    params: {
-                        method: 'Crm.renameFolder',
-                        folderId: _treeNodeContextMenu.attributes.folderId,
-                        name: _text
-                    },
-                    text: 'Renamimg folder...',
-                    success: function(_result, _request){
-                        _treeNodeContextMenu.setText(_text);
-                    },
-                    failure: function(result, request){
-                        //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
-                    }
-                });
-            }
-        };
-        
-        Ext.MessageBox.show({
-            title: 'Rename folder',
-            msg: 'Please enter the new name of the folder:',
-            buttons: Ext.MessageBox.OKCANCEL,
-            value: _treeNodeContextMenu.text,
-            fn: resulter,
-            prompt: true,
-            icon: Ext.MessageBox.QUESTION
-        });
-        
-    };
-
-    var _handlerDeleteFolder = function(_button, _event) {
-        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the folder ' + _treeNodeContextMenu.text + ' ?', function(_button){
-            if (_button == 'yes') {
-            
-                //console.log(_treeNodeContextMenu);
-                Ext.Ajax.request({
-                    url: 'index.php',
-                    params: {
-                        method: 'Crm.deleteFolder',
-                        folderId: _treeNodeContextMenu.attributes.folderId
-                    },
-                    text: 'Deleting Folder...',
-                    success: function(_result, _request){
-                        if(_treeNodeContextMenu.isSelected()) {
-                            Ext.getCmp('Crm_Tree').getSelectionModel().select(_treeNodeContextMenu.parentNode);
-                            Ext.getCmp('Crm_Tree').fireEvent('click', _treeNodeContextMenu.parentNode);
-                        }
-                        _treeNodeContextMenu.remove();
-                    },
-                    failure: function(_result, _request){
-                        Ext.MessageBox.alert('Failed', 'The folder could not be deleted.');
-                    }
-                });
-            }
-        });
-    };    
-     
-   var _actionAddFolder = new Ext.Action({
-        text: 'add folder',
-        handler: _handlerAddFolder
-    });
-
-    var _actionDeleteFolder = new Ext.Action({
-        text: 'delete folder',
-        iconCls: 'actionDelete',
-        handler: _handlerDeleteFolder
-    });
-
-    var _actionRenameFolder = new Ext.Action({
-        text: 'rename folder',
-        iconCls: 'actionRename',
-        handler: _handlerRenameFolder
-    });
-
-    var _actionPermisionsFolder = new Ext.Action({
-        disabled: true,
-        text: 'permissions',
-        handler: _handlerDeleteFolder
-    });
-
-
-    var _contextMenuUserFolder = new Ext.menu.Menu({
-        items: [
-            _actionAddFolder
-        ]
-    });
-    
-    var _contextMenuSingleFolder= new Ext.menu.Menu({
-        items: [
-            _actionRenameFolder,
-            _actionDeleteFolder,
-            _actionPermisionsFolder
-        ]
-    });
-
-
-    /**
-     * the initial tree to be displayed in the left treePanel
-     */
-    var _initialTree = [{
-        text: 'All Leads',
-        cls: "treemain",
-        nodeType: 'allLeads',
-        id: 'allLeads',
-        children: [{
-            text: 'My Leads',
-            cls: 'file',
-            nodeType: 'userLeads',
-            id: 'userLeads',
-            leaf: null,
-            owner: Tine.Tinebase.Registry.get('currentAccount').accountId
-        }, {
-            text: "Shared Leads",
-            cls: "file",
-            nodeType: "sharedLeads",
-            children: null,
-            leaf: null
-        }, {
-            text: "Other Users Leads",
-            cls: "file",
-            nodeType: "otherUsersLeads",
-            children: null,
-            leaf: null
-        }]
-    }];
-
-     /**
-     * creates the crm tree panel
-     *
-     */
-    var _getTreePanel = function() 
-    {
-        var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:'index.php',
-            baseParams: {
-                jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
-                location: 'mainTree'
-            }
-        });
-        treeLoader.on("beforeload", function(_loader, _node) {
-            switch(_node.attributes.nodeType) {
-                case 'otherUsersLeads':
-                    _loader.baseParams.method   = 'Crm.getOtherUsers';
-                    break;
-                    
-                case 'sharedLeads':
-                    _loader.baseParams.method   = 'Crm.getSharedFolders';
-                    break;
-
-                case 'userLeads':
-                    _loader.baseParams.method   = 'Crm.getFoldersByOwner';
-                    _loader.baseParams.owner    = _node.attributes.owner;
-                    break;
-            }
-        }, this);
-
-        var treePanel = new Ext.tree.TreePanel({
-            title: 'CRM',
-            id: 'crmTree',
-            iconCls: 'crmThumbnailApplication',
-            loader: treeLoader,
-            rootVisible: false,
-            border: false
-        });
-        
-        // set the root node
-        var treeRoot = new Ext.tree.TreeNode({
-            text: 'root',
-            draggable:false,
-            allowDrop:false,
-            id:'root'
-        });
-        treePanel.setRootNode(treeRoot);
-// tree vs. treepanel
-        for(var i=0; i< _initialTree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
-        }
-        
-        treePanel.on('click', function(_node, _event) {
-            Tine.Crm.Main.show(_node);
-        }, this);
-
-        treePanel.on('beforeexpand', function(_panel) {
-            if(_panel.getSelectionModel().getSelectedNode() === null) {
-                _panel.expandPath('/root/allLeads');
-                _panel.selectPath('/root/allLeads');
-            }
-            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
-        }, this);
-
-        treePanel.on('contextmenu', function(_node, _event) {
-            _event.stopEvent();
-            //_node.select();
-            //_node.getOwnerTree().fireEvent('click', _node);
-            _treeNodeContextMenu = _node;
-
-            switch(_node.attributes.nodeType) {
-                case 'userLeads':
-                case 'sharedLeads':
-                    _contextMenuUserFolder.showAt(_event.getXY());
-                    break;
-
-                case 'singleFolder':
-                    _contextMenuSingleFolder.showAt(_event.getXY());
-                    break;
-
-                default:
-                    break;
-            }
-        });
-        return treePanel;
-    };
-        
-      return {
-         getPanel: _getTreePanel,
-         initialTree: _initialTree
-     }
-}(); // end of application   
-    
-
-Ext.namespace('Tine.Crm.Main');
 Tine.Crm.Main = function(){
 
     var handler = {
@@ -361,89 +113,6 @@ Tine.Crm.Main = function(){
             scope: this
         })
     };
-
-
-    var _displayFolderSelectDialog = function(_fieldName){         
-               
-            //################## listView #################
-
-            var folderDialog = new Ext.Window({
-                title: 'please select folder',
-                modal: true,
-                width: 375,
-                height: 400,
-                minWidth: 375,
-                minHeight: 400,
-                layout: 'fit',
-                plain:true,
-                bodyStyle:'padding:5px;',
-                buttonAlign:'center'
-            });         
-            
-            var treeLoader = new Ext.tree.TreeLoader({
-                dataUrl:'index.php',
-                baseParams: {
-                    jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
-                    location: 'mainTree'
-                }
-                
-            });
-             treeLoader.on("beforeload", function(_loader, _node) {
-                switch(_node.attributes.nodeType) {
-                    case 'otherUsersLeads':
-                        _loader.baseParams.method   = 'Crm.getOtherUsers';
-                        break;
-                        
-                    case 'sharedLeads':
-                        _loader.baseParams.method   = 'Crm.getSharedFolders';
-                        break;
-    
-                    case 'userLeads':
-                        _loader.baseParams.method   = 'Crm.getFoldersByOwner';
-                        _loader.baseParams.owner    = _node.attributes.owner;
-                        break;
-                }
-            }, this);
-                            
-            var tree = new Ext.tree.TreePanel({
-                title: 'Crm',
-                id: 'crmTree',
-                iconCls: 'crmThumbnailApplication',
-                loader: treeLoader,
-                rootVisible: false,
-                border: false
-            });
-            
-            // set the root node
-            var treeRoot = new Ext.tree.TreeNode({
-                text: 'root',
-                draggable:false,
-                allowDrop:false,
-                id:'root'
-            });            
-            tree.setRootNode(treeRoot);
-            
-            // add the initial tree nodes    
-            for(var i=0; i< Tine.Crm.Tree.initialTree.length; i++) {
-                treeRoot.appendChild(new Ext.tree.AsyncTreeNode(Tine.Crm.Tree.initialTree[i]));
-            }
-            
-            tree.on('click', function(_node) {
-                //console.log(_node);
-                    if(_node.attributes.nodeType == 'singleFolder') {                
-                        Ext.getCmp(_fieldName).setValue(_node.attributes.folderId);
-                        Ext.getCmp(_fieldName + '_name').setValue(_node.text);
-                        folderDialog.hide();
-                    }
-            }, this);
-
-            folderDialog.add(tree);
-    
-            folderDialog.show();
-                           
-            tree.expandPath('/root/allLeads');
-    };
-
     
     var _createDataStore = function()
     {
@@ -1515,28 +1184,27 @@ Tine.Crm.Main = function(){
         var dataStore = Ext.getCmp('gridCrm').getStore();
         
         // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.nodeType) {
-            case 'sharedLeads':
+        switch(_node.attributes.containerType) {
+            case 'shared':
                 dataStore.baseParams.method = 'Crm.getSharedLeads';
                 break;
                   
-            case 'otherUsersLeads':
+            case 'otherUsers':
                 dataStore.baseParams.method = 'Crm.getOtherPeopleLeads';
                 break;
 
-            case 'allLeads':
+            case 'all':
                 dataStore.baseParams.method = 'Crm.getAllLeads';
                 break;
 
-
-            case 'userLeads':
+            case 'personal':
                 dataStore.baseParams.method = 'Crm.getLeadsByOwner';
-                dataStore.baseParams.owner  = _node.attributes.owner;
+                dataStore.baseParams.owner  = _node.attributes.owner.accountId;
                 break;
 
-            case 'singleFolder':
+            case 'singleContainer':
                 dataStore.baseParams.method        = 'Crm.getLeadsByFolder';
-                dataStore.baseParams.folderId = _node.attributes.folderId;
+                dataStore.baseParams.folderId = _node.attributes.container.container_id;
                 break;
         }
         
@@ -1553,7 +1221,6 @@ Tine.Crm.Main = function(){
         
     // public functions and variables
     return {
-        displayFolderSelectDialog: _displayFolderSelectDialog,
         show:   function(_node) {          
                     var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
                     if (currentToolbar === false || currentToolbar.id != 'Crm_toolbar') {
@@ -2085,7 +1752,7 @@ Tine.Crm.LeadEditDialog = function() {
                     width: 50,
                     sortable: true,
                     dataIndex: 'percent'//,
-    //              renderer: Tine.widgets.Percent.renderer,
+                    //renderer: Tine.widgets.Percent.renderer,
                 }, {
                     id: 'summaray',
                     header: "Summaray",
@@ -2174,32 +1841,15 @@ Tine.Crm.LeadEditDialog = function() {
                 
             }, this);
         });
-               
-        var folderTrigger = new Ext.form.TriggerField({
-            fieldLabel:'folder (person in charge)', 
-            id: 'lead_container_name',
-            anchor:'95%',
-            allowBlank: false,
-            editable: false,
-            readOnly:true
-        });
-
-        folderTrigger.on('render', function(comp) {
-            if(formData.config.folderName) {
-                comp.setValue(formData.config.folderName);
-            }
-        });
-
-        folderTrigger.onTriggerClick = function() {
-            Tine.Crm.Main.displayFolderSelectDialog('lead_container');
-        };
-
         
-   /*     
-       if(formData.values.lead_id !== null) {
-           _add_task.enable();
-       }
- */       
+        var folderTrigger = new Tine.widgets.container.selectionComboBox({
+            fieldLabel: 'folder (person in charge)',
+            name: 'lead_container',
+            itemName: 'Leads',
+            appName: 'crm',
+            anchor:'95%',
+        });
+     
         var tabPanelOverview = {
             title:'overview',
             layout:'border',
@@ -2282,10 +1932,6 @@ Tine.Crm.LeadEditDialog = function() {
                                 date_end   
                             ]
                         }]
-                    },{
-                        xtype: 'hidden',
-                        name: 'lead_container',
-                        id: 'lead_container'
                     }]
                 }, {
                     xtype: 'textfield',
