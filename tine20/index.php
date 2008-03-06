@@ -22,7 +22,7 @@ foreach ($requiredIniSettings as $variable => $newValue) {
     $oldValue = ini_get($variable);
     if ($oldValue != $newValue) {
         if (ini_set($variable, $newValue) === false) {
-            die("Sorry, your environment is not supported. You need set $variable from $oldValue to $newValue.");
+            die("Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.");
         }
     }
 }
