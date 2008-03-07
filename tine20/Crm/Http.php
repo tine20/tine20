@@ -19,7 +19,20 @@
 class Crm_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Crm';
-      
+    
+    /**
+     * Returns all JS files which must be included for this app
+     *
+     * @return array Array of filenames
+     */
+    public function getJsFilesToInclude()
+    {
+        return array(
+            self::_appendFileTime("Crm/js/Crm.js"),
+            self::_appendFileTime("Crm/js/LeadState.js"),
+        );
+    }
+    
     /**
      * create edit lead dialog
      *
@@ -144,6 +157,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
         $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/Crm.js');
+        $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/LeadState.js');
         $view->jsIncludeFiles[] = self::_appendFileTime('Tasks/js/Tasks.js');
         $view->cssIncludeFiles[] = 'Crm/css/Crm.css';
         $view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';       

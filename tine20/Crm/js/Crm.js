@@ -1,3 +1,13 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     Crm
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
 Ext.namespace('Tine.Crm');
 
 /**
@@ -38,7 +48,6 @@ Tine.Crm.Main = function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 900, 700);
         },
-        
         handlerDelete: function(){
             Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this lead?', function(_button) {
                 if(_button == 'yes') {            
@@ -67,7 +76,6 @@ Tine.Crm.Main = function(){
                 }
             });
         },
-        
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             
@@ -83,28 +91,24 @@ Tine.Crm.Main = function(){
             text: 'add lead',
             iconCls: 'actionAdd',
             handler: function(){
-                //     var tree = Ext.getCmp('venues-tree');
-                //      var curSelNode = tree.getSelectionModel().getSelectedNode();
+                //  var tree = Ext.getCmp('venues-tree');
+                //  var curSelNode = tree.getSelectionModel().getSelectedNode();
                 //  var RootNode   = tree.getRootNode();
-                
                 Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 900, 700);
             }
         }),
-        
         actionEdit: new Ext.Action({
             text: 'edit lead',
             disabled: true,
             handler: handler.handlerEdit,
             iconCls: 'actionEdit'
         }),
-        
         actionDelete: new Ext.Action({
             text: 'delete lead',
             disabled: true,
             handler: handler.handlerDelete,
             iconCls: 'actionDelete'
         }),
-        
         actionAddTask: new Ext.Action({
             text: 'add task',
             handler: handler.handlerAddTask,
@@ -116,8 +120,7 @@ Tine.Crm.Main = function(){
     
     var _createDataStore = function()
     {
-
-         var storeCrm = new Ext.data.JsonStore({
+        var storeCrm = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Crm.getLeadsByOwner',
                 owner: 'all'
@@ -129,8 +132,7 @@ Tine.Crm.Main = function(){
             // turn on remote sorting
             remoteSort: true
         });
-     
-   
+        
         storeCrm.setDefaultSort('lead_name', 'asc');
 
         storeCrm.on('beforeload', function(_dataSource) {
@@ -165,45 +167,6 @@ Tine.Crm.Main = function(){
                     ]
         });
         
-        var storeProbabilityWithNone = new Ext.data.SimpleStore({
-                fields: ['key','value'],
-                data: [
-                        [null,'none'],
-                        ['0','0 %'],
-                        ['10','10 %'],
-                        ['20','20 %'],
-                        ['30','30 %'],
-                        ['40','40 %'],
-                        ['50','50 %'],
-                        ['60','60 %'],
-                        ['70','70 %'],
-                        ['80','80 %'],
-                        ['90','90 %'],
-                        ['100','100 %']
-                    ]
-        });
-    
-       var storeLeadstate = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadstates',
-                    sort: 'lead_leadstate',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'lead_leadstate_id',
-                fields: [
-                    {name: 'lead_leadstate_id'},
-                    {name: 'lead_leadstate'},
-                    {name: 'lead_leadstate_probability'},
-                    {name: 'lead_leadstate_endslead', type: 'boolean'}
-                ],
-                // turn on remote sorting
-                remoteSort: false
-            });
-            
-            storeLeadstate.load();    
-    
         var quickSearchField = new Ext.app.SearchField({
             id: 'quickSearchField',
             width: 200,
@@ -229,7 +192,7 @@ Tine.Crm.Main = function(){
             width: 180,   
             blankText: 'leadstate...',
             hiddenName:'lead_leadstate_id',
-            store: storeLeadstate,
+            store: Tine.Crm.LeadState.getStore(),
             displayField:'lead_leadstate',
             valueField:'lead_leadstate_id',
             typeAhead: true,
@@ -295,175 +258,6 @@ Tine.Crm.Main = function(){
             });         
        });      
         
-
-       function editLeadstate() {
-           var Dialog = new Ext.Window({
-                title: 'Leadstates',
-                id: 'leadstateWindow',
-                modal: true,
-                width: 350,
-                height: 500,
-                minWidth: 300,
-                minHeight: 500,
-                layout: 'fit',
-                plain:true,
-                bodyStyle:'padding:5px;',
-                buttonAlign:'center'
-            }); 
-            
-            var storeLeadstate = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadstates',
-                    sort: 'lead_leadstate',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'lead_leadstate_id',
-                fields: [
-                    {name: 'lead_leadstate_id'},
-                    {name: 'lead_leadstate'},
-                    {name: 'lead_leadstate_probability'},
-                    {name: 'lead_leadstate_endslead', type: 'boolean'}
-                ],
-                // turn on remote sorting
-                remoteSort: false
-            });
-            
-            storeLeadstate.load();
-            
-           var checkColumn = new Ext.ux.grid.CheckColumn({
-               header: "X Lead?",
-               dataIndex: 'lead_leadstate_endslead',
-               width: 50
-            });
-            
-            var columnModelLeadstate = new Ext.grid.ColumnModel([
-                    { id:'lead_leadstate_id', 
-                      header: "id", 
-                      dataIndex: 'lead_leadstate_id', 
-                      width: 25, 
-                      hidden: true 
-                    },
-                    { id:'lead_leadstate', 
-                      header: 'entries', 
-                      dataIndex: 'lead_leadstate', 
-                      width: 170, 
-                      hideable: false, 
-                      sortable: false, 
-                      editor: new Ext.form.TextField({allowBlank: false}) 
-                    },
-                    { id:'lead_leadstate_probability', 
-                      header: 'probability', 
-                      dataIndex: 'lead_leadstate_probability', 
-                      width: 50, 
-                      hideable: false, 
-                      sortable: false, 
-                      renderer: Ext.util.Format.percentage,
-                      editor: new Ext.form.ComboBox({
-                        name: 'probability',
-                        id: 'leadstate_probability',
-                        hiddenName: 'lead_leadstate_probability',
-                        store: storeProbabilityWithNone, 
-                        displayField:'value', 
-                        valueField: 'key',
-                        allowBlank: true, 
-                        editable: false,
-                        selectOnFocus:true,
-                        forceSelection: true, 
-                        triggerAction: "all", 
-                        mode: 'local', 
-                        lazyRender:true,
-                        listClass: 'x-combo-list-small'
-                        }) 
-                    }, 
-                    checkColumn                    
-            ]);            
-            
-             var entry = Ext.data.Record.create([
-               {name: 'lead_leadstate_id', type: 'int'},
-               {name: 'lead_leadstate', type: 'varchar'},
-               {name: 'lead_leadstate_probability', type: 'int'},
-               {name: 'lead_leadstate_endslead', type: 'boolean'}
-            ]);
-            
-            var handlerLeadstateAdd = function(){
-                var p = new entry({
-                    lead_leadstate_id: null,
-                    lead_leadstate: '',
-                    lead_leadstate_probability: null,
-                    lead_leadstate_endslead: false
-                });
-                leadstateGridPanel.stopEditing();
-                storeLeadstate.insert(0, p);
-                leadstateGridPanel.startEditing(0, 0);
-                leadstateGridPanel.fireEvent('celldblclick',this, 0, 1);
-            };
-                        
-            var handlerLeadstateDelete = function(){
-                var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
-                var leadstateStore = leadstateGrid.getStore();
-                
-                var selectedRows = leadstateGrid.getSelectionModel().getSelections();
-                for (var i = 0; i < selectedRows.length; ++i) {
-                    leadstateStore.remove(selectedRows[i]);
-                }   
-            };                        
-                        
-          
-           var handlerLeadstateSaveClose = function(){
-                var leadstateStore = Ext.getCmp('editLeadstateGrid').getStore();
-                var leadstateJson = Tine.Tinebase.Common.getJSONdata(leadstateStore); 
-
-                 Ext.Ajax.request({
-                            params: {
-                                method: 'Crm.saveLeadstates',
-                                optionsData: leadstateJson
-                            },
-                            text: 'Saving leadstates...',
-                            success: function(_result, _request){
-                                    leadstateStore.reload();
-                                    leadstateStore.rejectChanges();
-                                    Ext.getCmp('filterLeadstate').store.reload();
-                                    
-                               },
-                            failure: function(form, action) {
-                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
-                                }
-                        });          
-            };          
-            
-            var leadstateGridPanel = new Ext.grid.EditorGridPanel({
-                store: storeLeadstate,
-                id: 'editLeadstateGrid',
-                cm: columnModelLeadstate,
-                autoExpandColumn:'lead_leadstate',
-                plugins:checkColumn,
-                frame:false,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
-                clicksToEdit:2,
-                tbar: [{
-                    text: 'new item',
-                    iconCls: 'actionAdd',
-                    handler : handlerLeadstateAdd
-                    },{
-                    text: 'delete item',
-                    iconCls: 'actionDelete',
-                    handler : handlerLeadstateDelete
-                    },{
-                    text: 'save',
-                    iconCls: 'actionSaveAndClose',
-                    handler : handlerLeadstateSaveClose 
-                    }]  
-                });
-
-          Dialog.add(leadstateGridPanel);
-          Dialog.show();          
-        }
-
       function editLeadsource() {
            var Dialog = new Ext.Window({
                 title: 'Leadsources',
@@ -872,7 +666,7 @@ Tine.Crm.Main = function(){
         var settingsToolbarMenu = new Ext.menu.Menu({
             id: 'crmSettingsMenu',
             items: [
-                {text: 'leadstate', handler: editLeadstate},
+                {text: 'leadstate', handler: Tine.Crm.LeadState.EditStatesDialog},
                 {text: 'leadsource', handler: editLeadsource},
                 {text: 'leadtype', handler: editLeadtype},
                 {text: 'product', handler: editProductsource}
