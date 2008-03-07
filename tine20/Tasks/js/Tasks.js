@@ -229,7 +229,7 @@ Tine.Tasks.mainGrid = {
 		}, this);
 	   
 		this.store.load({
-			params: this.store
+			params: this.paging
 		});
 	},
 
