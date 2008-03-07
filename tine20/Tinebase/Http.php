@@ -8,13 +8,14 @@
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ */
 
 /**
  * HTTP interface to Tine
  *
  * @package     Tinebase
  * @subpackage  Server
- *  */
+ */
 class Tinebase_Http extends Tinebase_Application_Http_Abstract
 {
     /**

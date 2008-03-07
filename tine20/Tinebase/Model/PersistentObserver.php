@@ -12,6 +12,9 @@
 
 /**
  * class Tinebase_Model_PersistentObserver
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Model_PersistentObserver extends Tinebase_Record_Abstract 
 {

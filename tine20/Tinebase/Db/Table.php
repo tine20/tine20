@@ -8,10 +8,13 @@
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ */
 
 /**
  * the class provides functions to handle applications
  * 
+ * @package     Tinebase
+ * @subpackage  Db
  */
 class Tinebase_Db_Table extends Zend_Db_Table_Abstract
 {

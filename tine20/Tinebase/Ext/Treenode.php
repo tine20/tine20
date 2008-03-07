@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * ext treenode class
+ * 
+ * @package     Tinebase
+ * @subpackage  Ext
+ */
 class Tinebase_Ext_Treenode
 {
 	public $text;

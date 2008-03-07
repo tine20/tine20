@@ -47,6 +47,8 @@ require_once 'Calendar/Backend/Sql/User.php';
  * ical standart does not support different participants and participants stati
  * for different recurences of the same event, whereas this backend is capable
  * to handle this.
+ * 
+ * @package     Calendar
  */
 class Calendar_Backend_Sql implements Calendar_Backend_Interface
 {
@@ -142,7 +144,7 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
      * @param Zend_Date $_start
      * @param Zend_Date $_end
      * @param Calendar_UserSet 
-     * @param 
+     * @param filters
      * @return array of events
      */
     public function getEvents( Zend_Date $_start, Zend_Date $_end, $_users, $_filters )
@@ -201,7 +203,7 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
      * @todo Arlarms
      * @todo custom fileds
      * @param int $_id
-     * @retrun Calendar_Event
+     * @return Calendar_Event
      */
     public function getEventById( $_id )
     {
@@ -521,7 +523,7 @@ class Calendar_Backend_Sql implements Calendar_Backend_Interface
      * @param Zend_Date $_start
      * @param Zend_Date $_end
      * @param Calendar_UserSet 
-     * @param  
+     * @param filters
      */
     function getRepitions( Zend_Date $_start, Zend_Date $_end, $_users, $_filters )
     {

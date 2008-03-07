@@ -11,6 +11,11 @@
  *
  */
 
+/**
+ * the class needs to access the backend interface
+ *
+ * @see Tasks_Backend_Interface
+ */
 require_once('Interface.php');
 
 /**

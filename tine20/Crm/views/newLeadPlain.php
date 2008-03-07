@@ -1,3 +1,16 @@
+<?php
+/**
+ * new lead plain view
+ * 
+ * @package     CRM
+ * @subpackage  Views
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author      ?
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+?>
 ** <?php echo $this->lead->lead_name . " **\n" ?>
 
 <?php echo $this->lead->lead_description ?>

@@ -12,6 +12,9 @@
 
 /**
  * class Tinebase_Model_Relation
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Model_Relation extends Tinebase_Record_Abstract 
 {

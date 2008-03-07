@@ -10,6 +10,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * this classes provides access to the sql table <prefix>_cal_repeats
+ * 
+ * @package     Calendar
+ */
 class Calendar_Backend_Sql_Repeats extends Zend_Db_Table_Abstract
 {
     protected $_referenceMap = array(

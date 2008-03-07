@@ -1,5 +1,4 @@
 <?php
-
 /**
  * this classes provides access to the sql table <prefix>_cal_user
  * 
@@ -9,6 +8,12 @@
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * this classes provides access to the sql table <prefix>_cal_user
+ * 
+ * @package     Calendar
  */
 class Calendar_Backend_Sql_User extends Zend_Db_Table_Abstract
 {

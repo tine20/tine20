@@ -9,6 +9,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * class to hold product data
+ * 
+ * @package     CRM
+ */
 class Crm_Model_Product extends Tinebase_Record_Abstract
 {
     /**

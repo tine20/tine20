@@ -9,6 +9,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * class to hold project data
+ * 
+ * @package     CRM
+ */
 class Crm_Model_Project extends Tinebase_Record_Abstract
 {
     /**
