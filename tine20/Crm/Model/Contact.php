@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold Contact data
+ * Tine 2.0
  * 
  * @package     CRM
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -8,6 +8,13 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * class to hold contact data
+ * 
+ * @package     CRM
+ * @todo		check if one contact class (in Addressbook) is enough
  */
 class Crm_Model_Contact extends Tinebase_Record_Abstract
 {

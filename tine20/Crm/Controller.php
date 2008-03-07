@@ -11,6 +11,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * controller class for CRM application
+ * 
+ * @package     Crm
+ */
 class Crm_Controller extends Tinebase_Container_Abstract
 {
     /**

@@ -11,6 +11,11 @@
  *
  */
 
+/**
+ * interface for calendar backends
+ * 
+ * @package     Calendar
+ */
 interface Calendar_Backend_Interface
 {
     /**

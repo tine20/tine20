@@ -9,6 +9,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * class to hold option data
+ * 
+ * @package     CRM
+ */
 class Crm_Model_Leadsource extends Tinebase_Record_Abstract
 {
     /**

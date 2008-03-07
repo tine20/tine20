@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * Json Container class
+ * 
+ * @package     Tinebase
+ * @subpackage  Container
+ */
 class Tinebase_Json_Container
 {
    /**

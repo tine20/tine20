@@ -9,6 +9,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * class to hold lead data
+ * 
+ * @package     CRM
+ */
 class Crm_Model_Lead extends Tinebase_Record_Abstract
 {
     /**

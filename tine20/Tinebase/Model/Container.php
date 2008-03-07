@@ -12,6 +12,9 @@
 
 /**
  * defines the datatype for one container
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {

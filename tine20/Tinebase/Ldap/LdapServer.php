@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * LDAP server class
+ * 
+ * @package     Tinebase
+ * @subpackage  Ldap
+ */
 class Tinebase_Ldap_LdapServer
 {
     /**

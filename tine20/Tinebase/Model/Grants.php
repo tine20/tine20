@@ -1,6 +1,6 @@
 <?php
 /**
- * class to handle grantss
+ * class to handle grants
  * 
  * @package     Tinebase
  * @subpackage  Record
@@ -12,7 +12,10 @@
 
 /**
  * defines the datatype for one application
- */
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
+ *  */
 class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 {
 	/**

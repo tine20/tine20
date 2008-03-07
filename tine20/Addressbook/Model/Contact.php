@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold contact data
+ * Tine 2.0
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -8,6 +8,12 @@
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * class to hold contact data
+ * 
+ * @package     Addressbook
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {

@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Tine
+ * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,7 +12,9 @@
 /**
  * HTTP interface to Tine
  *
- */
+ * @package     Tinebase
+ * @subpackage  Server
+ *  */
 class Tinebase_Http extends Tinebase_Application_Http_Abstract
 {
     /**

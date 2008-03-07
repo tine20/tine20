@@ -2,7 +2,17 @@
 /**
  * backend factory class for the addressbook
  * 
- * a instance of the addressbook backendclass should be created using this class
+ * @package     Addressbook
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$ *
+ */
+
+/**
+ * backend factory class for the addressbook
+ * 
+ * an instance of the addressbook backendclass should be created using this class
  * 
  * $contacts = Addressbook_Backend_Factory::factory(Addressbook_Backend::$type);
  * 
@@ -11,10 +21,6 @@
  * currently planned backend classed: Addressbook_Backend_Factory::Ldap
  * 
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/agpl.html
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$ *
  */
 class Addressbook_Backend_Factory
 {

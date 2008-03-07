@@ -10,6 +10,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * interface for lead class
+ * 
+ * @package     CRM
+ */
 interface Crm_Backend_Interface
 {
    

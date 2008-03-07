@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold ContactLink data
+ * Tine 2.0
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -8,6 +8,12 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * class to hold ContactLink data
+ * 
+ * @package     Crm
  */
 class Crm_Model_ContactLink extends Tinebase_Record_Abstract
 {

@@ -1,3 +1,16 @@
+<?php
+/**
+ * login view
+ * 
+ * @package     Tinebase
+ * @subpackage  Views
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author      ?
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     
+ *
+ */
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 

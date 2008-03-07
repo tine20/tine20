@@ -1,6 +1,6 @@
 <?php
 /**
- * Implemetation of an eventet
+ * Implemetation of an event set
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -8,6 +8,12 @@
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * Implemetation of an event set
+ * 
+ * @package     Calendar
  */
 class Calendar_EventSet extends Tinebase_Record_RecordSet
 {

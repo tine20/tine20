@@ -2,18 +2,23 @@
 /**
  * backend factory class for the Crm
  * 
- * a instance of the Crm backendclass should be created using this class
- * 
- * $contacts = Crm_Backend::factory(Crm_Backend::$type);
- * 
- * currently implemented backend classes: Crm_Backend::Sql
- * 
- * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ *
+ */
+
+/**
+ * backend factory class for the Crm
+ * 
+ * an instance of the Crm backendclass should be created using this class
+ * 
+ * $contacts = Crm_Backend::factory(Crm_Backend::$type);
+ * 
+ * currently implemented backend classes: Crm_Backend::Sql
+ * 
+ * @package     Crm
  */
 class Crm_Backend_Factory
 {

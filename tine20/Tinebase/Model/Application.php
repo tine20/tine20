@@ -12,6 +12,9 @@
 
 /**
  * defines the datatype for one application
+ * 
+ * @package     Tinebase
+ * @subpackage  Record
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
 {

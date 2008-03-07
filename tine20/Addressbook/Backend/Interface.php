@@ -10,6 +10,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * interface for contacs class
+ * 
+ * @package     Addressbook
+ */
 interface Addressbook_Backend_Interface
 {
     /**

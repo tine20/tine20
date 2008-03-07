@@ -1,7 +1,7 @@
 <?php
 
 /**
- * contacts ldap backend (not yet implemented)
+ * contacts ldap backend
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/license/gpl GPL
@@ -9,6 +9,13 @@
  * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ */
+
+/**
+ * contacts ldap backend (not yet implemented)
+ * 
+ * @package     Addressbook
+ * @todo		implement ldap backend
  */
 class Addressbook_Backend_Ldap implements Addressbook_Backend_Interface
 {

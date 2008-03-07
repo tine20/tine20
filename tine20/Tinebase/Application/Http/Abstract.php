@@ -13,7 +13,7 @@
 /**
  * Abstract class for an Tine 2.0 application with Http interface
  * 
- * Note, that the Http inerface in tine 2.0 is used to generate the base layouts
+ * Note, that the Http interface in tine 2.0 is used to generate the base layouts
  * in new browser windows. 
  * 
  * @package     Tinebase

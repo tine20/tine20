@@ -11,6 +11,8 @@
 
 /**
  * this class provides functions to get, add and remove entries from/to the access log
+ * 
+ * @package     Tinebase
  */
 class Tinebase_AccessLog
 {

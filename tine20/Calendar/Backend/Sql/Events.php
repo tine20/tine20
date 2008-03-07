@@ -10,6 +10,12 @@
  * @version     $Id$
  *
  */
+
+/**
+ * this classes provides access to the sql table <prefix>_cal
+ * 
+ * @package     Calendar
+ */
 class Calendar_Backend_Sql_Events extends Zend_Db_Table_Abstract
 {
     protected $_primary = 'cal_id';
