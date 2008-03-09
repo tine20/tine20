@@ -1,101 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tables>
-	<table name="addressbook">
-		<application>Addressbook</application>
-		<version>0.1</version>
-		<fields>
-			<field name="contact_id" type="int(11)" NULL="NOT NULL" extra="auto_increment" />
-			<field name="contact_tid" type="varchar(1)" default="'n'" />
-			<field name="contact_owner" type="bigint(20)" NULL="NOT NULL" />
-			<field name="contact_private" type="tinyint(4)" default="'0'" />
-			<field name="cat_id" type="varchar(255)" NULL="NULL" />
-			<field name="n_family" type="varchar(64)" NULL="NULL" />
-			<field name="n_given" type="varchar(64)" NULL="NULL" />
-			<field name="n_middle" type="varchar(64)" NULL="NULL" />
-			<field name="n_prefix" type="varchar(64)" NULL="NULL" />
-			<field name="n_suffix" type="varchar(64)" NULL="NULL" />
-			<field name="n_fn" type="varchar(128)" NULL="NULL" />
-			<field name="n_fileas" type="varchar(255)" NULL="NULL" />
-			<field name="contact_bday" type="varchar(12)" NULL="NULL" />
-			<field name="org_name" type="varchar(64)" NULL="NULL" />
-			<field name="org_unit" type="varchar(64)" NULL="NULL" />
-			<field name="contact_title" type="varchar(64)" NULL="NULL" />
-			<field name="contact_role" type="varchar(64)" NULL="NULL" />
-			<field name="contact_assistent" type="varchar(64)" NULL="NULL" />
-			<field name="contact_room" type="varchar(64)" NULL="NULL" />
-			<field name="adr_one_street" type="varchar(64)" NULL="NULL" />
-			<field name="adr_one_street2" type="varchar(64)" NULL="NULL" />
-			<field name="adr_one_locality" type="varchar(64)" NULL="NULL" />
-			<field name="adr_one_region" type="varchar(64)" NULL="NULL" />
-			<field name="adr_one_postalcode" type="varchar(64)" NULL="NULL" />
-			<field name="adr_one_countryname" type="varchar(64)" NULL="NULL" />
-			<field name="contact_label" type="text" />
-			<field name="adr_two_street" type="varchar(64)" NULL="NULL" />
-			<field name="adr_two_street2" type="varchar(64)" NULL="NULL" />
-			<field name="adr_two_locality" type="varchar(64)" NULL="NULL" />
-			<field name="adr_two_region" type="varchar(64)" NULL="NULL" />
-			<field name="adr_two_postalcode" type="varchar(64)" NULL="NULL" />
-			<field name="adr_two_countryname" type="varchar(64)" NULL="NULL" />
-			<field name="tel_work" type="varchar(40)" NULL="NULL" />
-			<field name="tel_cell" type="varchar(40)" NULL="NULL" />
-			<field name="tel_fax" type="varchar(40)" NULL="NULL" />
-			<field name="tel_assistent" type="varchar(40)" NULL="NULL" />
-			<field name="tel_car" type="varchar(40)" NULL="NULL" />
-			<field name="tel_pager" type="varchar(40)" NULL="NULL" />
-			<field name="tel_home" type="varchar(40)" NULL="NULL" />
-			<field name="tel_fax_home" type="varchar(40)" NULL="NULL" />
-			<field name="tel_cell_private" type="varchar(40)" NULL="NULL" />
-			<field name="tel_other" type="varchar(40)" NULL="NULL" />
-			<field name="tel_prefer" type="varchar(32)" NULL="NULL" />
-			<field name="contact_email" type="varchar(64)" NULL="NULL" />
-			<field name="contact_email_home" type="varchar(64)" NULL="NULL" />
-			<field name="contact_url" type="varchar(128)" NULL="NULL" />
-			<field name="contact_url_home" type="varchar(128)" NULL="NULL" />
-			<field name="contact_freebusy_uri" type="varchar(128)" NULL="NULL" />
-			<field name="contact_calendar_uri" type="varchar(128)" NULL="NULL" />
-			<field name="contact_note" type="text" />
-			<field name="contact_tz" type="varchar(8)" NULL="NULL" />
-			<field name="contact_geo" type="varchar(32)" NULL="NULL" />
-			<field name="contact_pubkey" type="text" />
-			<field name="contact_created" type="bigint(20)" NULL="NULL" />
-			<field name="contact_creator" type="int(11)" NULL="NOT NULL" />
-			<field name="contact_modified" type="bigint(20)" NULL="NOT NULL" />
-			<field name="contact_modifier" type="int(11)" NULL="NULL" />
-			<field name="contact_jpegphoto" type="longblob" />
-			<field name="account_id" type="int(11)" NULL="NULL" />
-		</fields>
-		<keys>
-			<key type="PRIMARY KEY" name="contact_id">
-				<keyfield>contact_id</keyfield>
-			</key>
-			<key type="UNIQUE KEY" name="addressbook_account_id">
-				<keyfield>account_id</keyfield>
-			</key>
-			<key type="KEY" name="addressbook_contact_owner">
-				<keyfield>contact_owner</keyfield>
-			</key>
-			<key type="KEY" name="addressbook_cat_id">
-				<keyfield>cat_id</keyfield>
-			</key>
-			<key type="KEY" name="addressbook_n_fileas">
-				<keyfield>n_fileas</keyfield>
-			</key>
-			<key type="KEY" name="addressbook_n_family_n_given">
-				<keyfield>n_family</keyfield>
-				<keyfield>n_given</keyfield>
-			</key>
-			<key type="KEY" name="addressbook_n_given_n_family">
-				<keyfield>n_given</keyfield>
-				<keyfield>n_family</keyfield>
-			</key>
-			<key type="KEY"
-				name="addressbook_org_name_n_given_n_family">
-				<keyfield>org_name</keyfield>
-				<keyfield>n_given</keyfield>
-				<keyfield>n_family</keyfield>
-			</key>
-		</keys>
-		<engine>InnoDB</engine>
-		<charset>utf8</charset>
-	</table>
-</tables>
+<application>
+	<name>Addressbook</name>
+	<version>0.1</version>
+	<tables>
+		<table name="addressbook">
+			<fields>
+				<field name="contact_id" type="int(11)" NULL="NOT NULL" extra="auto_increment" />
+				<field name="contact_tid" type="varchar(1)" default="'n'" />
+				<field name="contact_owner" type="bigint(20)" NULL="NOT NULL" />
+				<field name="contact_private" type="tinyint(4)" default="'0'" />
+				<field name="cat_id" type="varchar(255)" NULL="NULL" />
+				<field name="n_family" type="varchar(64)" NULL="NULL" />
+				<field name="n_given" type="varchar(64)" NULL="NULL" />
+				<field name="n_middle" type="varchar(64)" NULL="NULL" />
+				<field name="n_prefix" type="varchar(64)" NULL="NULL" />
+				<field name="n_suffix" type="varchar(64)" NULL="NULL" />
+				<field name="n_fn" type="varchar(128)" NULL="NULL" />
+				<field name="n_fileas" type="varchar(255)" NULL="NULL" />
+				<field name="contact_bday" type="varchar(12)" NULL="NULL" />
+				<field name="org_name" type="varchar(64)" NULL="NULL" />
+				<field name="org_unit" type="varchar(64)" NULL="NULL" />
+				<field name="contact_title" type="varchar(64)" NULL="NULL" />
+				<field name="contact_role" type="varchar(64)" NULL="NULL" />
+				<field name="contact_assistent" type="varchar(64)" NULL="NULL" />
+				<field name="contact_room" type="varchar(64)" NULL="NULL" />
+				<field name="adr_one_street" type="varchar(64)" NULL="NULL" />
+				<field name="adr_one_street2" type="varchar(64)" NULL="NULL" />
+				<field name="adr_one_locality" type="varchar(64)" NULL="NULL" />
+				<field name="adr_one_region" type="varchar(64)" NULL="NULL" />
+				<field name="adr_one_postalcode" type="varchar(64)" NULL="NULL" />
+				<field name="adr_one_countryname" type="varchar(64)" NULL="NULL" />
+				<field name="contact_label" type="text" />
+				<field name="adr_two_street" type="varchar(64)" NULL="NULL" />
+				<field name="adr_two_street2" type="varchar(64)" NULL="NULL" />
+				<field name="adr_two_locality" type="varchar(64)" NULL="NULL" />
+				<field name="adr_two_region" type="varchar(64)" NULL="NULL" />
+				<field name="adr_two_postalcode" type="varchar(64)" NULL="NULL" />
+				<field name="adr_two_countryname" type="varchar(64)" NULL="NULL" />
+				<field name="tel_work" type="varchar(40)" NULL="NULL" />
+				<field name="tel_cell" type="varchar(40)" NULL="NULL" />
+				<field name="tel_fax" type="varchar(40)" NULL="NULL" />
+				<field name="tel_assistent" type="varchar(40)" NULL="NULL" />
+				<field name="tel_car" type="varchar(40)" NULL="NULL" />
+				<field name="tel_pager" type="varchar(40)" NULL="NULL" />
+				<field name="tel_home" type="varchar(40)" NULL="NULL" />
+				<field name="tel_fax_home" type="varchar(40)" NULL="NULL" />
+				<field name="tel_cell_private" type="varchar(40)" NULL="NULL" />
+				<field name="tel_other" type="varchar(40)" NULL="NULL" />
+				<field name="tel_prefer" type="varchar(32)" NULL="NULL" />
+				<field name="contact_email" type="varchar(64)" NULL="NULL" />
+				<field name="contact_email_home" type="varchar(64)" NULL="NULL" />
+				<field name="contact_url" type="varchar(128)" NULL="NULL" />
+				<field name="contact_url_home" type="varchar(128)" NULL="NULL" />
+				<field name="contact_freebusy_uri" type="varchar(128)" NULL="NULL" />
+				<field name="contact_calendar_uri" type="varchar(128)" NULL="NULL" />
+				<field name="contact_note" type="text" />
+				<field name="contact_tz" type="varchar(8)" NULL="NULL" />
+				<field name="contact_geo" type="varchar(32)" NULL="NULL" />
+				<field name="contact_pubkey" type="text" />
+				<field name="contact_created" type="bigint(20)" NULL="NULL" />
+				<field name="contact_creator" type="int(11)" NULL="NOT NULL" />
+				<field name="contact_modified" type="bigint(20)" NULL="NOT NULL" />
+				<field name="contact_modifier" type="int(11)" NULL="NULL" />
+				<field name="contact_jpegphoto" type="longblob" />
+				<field name="account_id" type="int(11)" NULL="NULL" />
+			</fields>
+			<keys>
+				<key type="PRIMARY KEY" name="contact_id">
+					<keyfield>contact_id</keyfield>
+				</key>
+				<key type="UNIQUE KEY" name="addressbook_account_id">
+					<keyfield>account_id</keyfield>
+				</key>
+				<key type="KEY" name="addressbook_contact_owner">
+					<keyfield>contact_owner</keyfield>
+				</key>
+				<key type="KEY" name="addressbook_cat_id">
+					<keyfield>cat_id</keyfield>
+				</key>
+				<key type="KEY" name="addressbook_n_fileas">
+					<keyfield>n_fileas</keyfield>
+				</key>
+				<key type="KEY" name="addressbook_n_family_n_given">
+					<keyfield>n_family</keyfield>
+					<keyfield>n_given</keyfield>
+				</key>
+				<key type="KEY" name="addressbook_n_given_n_family">
+					<keyfield>n_given</keyfield>
+					<keyfield>n_family</keyfield>
+				</key>
+				<key type="KEY"
+					name="addressbook_org_name_n_given_n_family">
+					<keyfield>org_name</keyfield>
+					<keyfield>n_given</keyfield>
+					<keyfield>n_family</keyfield>
+				</key>
+			</keys>
+			<engine>InnoDB</engine>
+			<charset>utf8</charset>
+		</table>
+	</tables>
+</application>

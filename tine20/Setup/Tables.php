@@ -65,7 +65,7 @@ class Setup_Tables
     {
         $xml = simplexml_load_file($_file);
         
-        foreach ($xml->table as $table) {
+        foreach ($xml->tables[0] as $table) {
               $tableName = $this->_prefix . $table['name'];
               if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
                 $this->_backend->createTable($table);
