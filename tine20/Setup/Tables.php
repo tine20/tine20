@@ -31,7 +31,7 @@ class Setup_Tables
 
         $this->setupDatabaseConnection();
 
-        $this->_backend = new Setup_Backend_Mysql();
+        $this->_backend = new Setup_Backend_Mysql($this->_prefix);
     }
 
     /**
