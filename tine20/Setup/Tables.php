@@ -17,8 +17,8 @@
  */
 class Setup_Tables
 {
-    private $tineExtDb;
-    private $prefix;
+    private $_backend;
+    private $_prefix;
     private $_config;
 
     public function __construct()
@@ -30,6 +30,8 @@ class Setup_Tables
         }
 
         $this->setupDatabaseConnection();
+
+        $this->_backend = new Setup_Backend_Mysql();
     }
 
     /**
@@ -41,9 +43,9 @@ class Setup_Tables
         if(isset($this->_config->database)) {
             $dbConfig = $this->_config->database;
 
-            $this->prefix = $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_';
+            $this->_prefix = $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_';
 
-            echo "setting table prefix to: {$this->prefix} <hr>";
+            echo "setting table prefix to: {$this->_prefix} <hr>";
 
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
@@ -54,50 +56,22 @@ class Setup_Tables
         }
     }
 
-    public function createTable($_table)
-    {
-        $statement = "CREATE TABLE IF NOT EXISTS `" . $this->prefix . $_table['name'] . "` (\n";
-
-        foreach ($_table->fields[0] as $field) {
-            if($field['name'] != '') {
-                $statement .= "`" . $field['name'] . "` " . $field['type'] . " " . $field['NULL'];
-                if (isset($field['extra'])) {
-                    $statement .= " " . $field['extra'];
-                }
-                $statement .=",\n";
-            }
-        }
-
-        foreach ($_table->keys[0] as $key) {
-            $statement .= " " . $key['type'] . " `" . $this->prefix . $key['name'] . "` (" ;
-
-            foreach ($key->keyfield as $keyfield) {
-                $statement .= "`"  . (string)$keyfield . "`,";
-            }
-            	
-            $statement = substr($statement, 0, (strlen($statement)-1)) . "),";
-        }
-
-        $statement = substr($statement, 0, (strlen($statement)-1)) ;
-        $statement .= ")";
-
-        $statement .= 	"\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
-
-        //echo $statement . "<hr>";
-
-        Zend_Registry::get('dbAdapter')->query($statement);
-    }
-
-
-
+    /**
+     * parses the xml stream and creates the tables if needed
+     *
+     * @param string $_file path to xml file
+     */
     public function parseFile($_file)
     {
         $xml = simplexml_load_file($_file);
-
-        foreach ($xml->applications[0] as $application) {
-            foreach ($application->table as $table) {
-                $this->createTable($table);
-            }
+        
+        foreach ($xml->table as $table) {
+              $tableName = $this->_prefix . $table['name'];
+              if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
+                $this->_backend->createTable($table);
+              } else {
+                echo "skipped table {$tableName}. Table exists already.<br>";
+              }
         }
     }
 }
