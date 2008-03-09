@@ -1,35 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tables>
-	<table name="groups">
-		<application>Tinebase</application>
-		<version>0.1</version>
-		<fields>
-			<field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
-			<field name="name" type="varchar(128)" NULL="NOT NULL" />
-			<field name="description" type="varchar(256)" NULL="NOT NULL" />
-		</fields>
-		<keys>
-			<key type="PRIMARY KEY" name="groups_id">
-				<keyfield>id</keyfield>
-			</key>
-		</keys>
-		<engine>InnoDB</engine>
-		<charset>utf8</charset>
-	</table>
-	<table name="group_members">
-		<application>Tinebase</application>
-		<version>0.1</version>
-		<fields>
-			<field name="groupid" type="int(11) unsigned" NULL="NOT NULL" />
-			<field name="accountid" type="int(11) unsigned" NULL="NOT NULL" />
-		</fields>
-		<keys>
-			<key type="UNIQUE KEY" name="groupmembers_uniqueid">
-				<keyfield>groupid</keyfield>
-				<keyfield>accountid</keyfield>
-			</key>
-		</keys>
-		<engine>InnoDB</engine>
-		<charset>utf8</charset>
-	</table>
-</tables>
+<application>
+	<name>Tinebase</name>
+	<version>0.1</version>
+	<tables>
+        <table name="applications">
+            <fields>
+                <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment"/>
+                <field name="name" type="varchar(25)" NULL="NOT NULL" />
+                <field name="status" type="enum('enabled','disabled')" NULL="NOT NULL" extra="default 'disabled'"/>
+                <field name="order" type="int(11) unsigned" NULL="NOT NULL" />
+                <field name="version" type="varchar(20)" NULL="NOT NULL" />
+            </fields>
+            <keys>
+                <key type="PRIMARY KEY" name="applications_id">
+                    <keyfield>id</keyfield>
+                </key>
+                <key type="UNIQUE KEY" name="applications_name">
+                    <keyfield>name</keyfield>
+                </key>
+            </keys>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+        </table>
+        <table name="application_tables">
+            <fields>
+                <field name="application_id" type="int(11) unsigned" NULL="NOT NULL" />
+                <field name="name" type="varchar(128)" NULL="NOT NULL" />
+            </fields>
+            <keys>
+                <key type="PRIMARY KEY" name="application_id">
+                    <keyfield>application_id</keyfield>
+                </key>
+            </keys>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+        </table>
+		<table name="groups">
+			<fields>
+				<field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
+				<field name="name" type="varchar(128)" NULL="NOT NULL" />
+				<field name="description" type="varchar(256)" NULL="NOT NULL" />
+			</fields>
+			<keys>
+				<key type="PRIMARY KEY" name="groups_id">
+					<keyfield>id</keyfield>
+				</key>
+			</keys>
+			<engine>InnoDB</engine>
+			<charset>utf8</charset>
+		</table>
+		<table name="group_members">
+			<fields>
+				<field name="groupid" type="int(11) unsigned" NULL="NOT NULL" />
+				<field name="accountid" type="int(11) unsigned" NULL="NOT NULL" />
+			</fields>
+			<keys>
+				<key type="UNIQUE KEY" name="groupmembers_uniqueid">
+					<keyfield>groupid</keyfield>
+					<keyfield>accountid</keyfield>
+				</key>
+			</keys>
+			<engine>InnoDB</engine>
+			<charset>utf8</charset>
+		</table>
+	</tables>
+</application>
