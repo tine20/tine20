@@ -84,7 +84,7 @@ Tine.Login = {
                 failure:function(form, action) {
                     Ext.MessageBox.show({
                         title: 'Login failure',
-                        msg: 'You username and/or your password are wrong!!!',
+                        msg: 'Your username and/or your password are wrong!!!',
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR /*,
                         fn: function() {} */
