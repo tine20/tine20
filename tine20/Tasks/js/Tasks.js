@@ -379,12 +379,12 @@ Tine.Tasks.mainGrid = {
 					width: 50,
 					sortable: true,
 					dataIndex: 'percent',
-					renderer: Tine.widgets.Percent.renderer,
-                    editor: new Tine.widgets.Percent.Combo({
-						autoExpand: true
-                        //allowBlank: false
+					renderer: Ext.ux.PercentRenderer,
+                    editor: new Ext.ux.PercentCombo({
+						autoExpand: true,
+                        blurOnSelect: true
                     }),
-                    quickaddField: new Tine.widgets.Percent.Combo({
+                    quickaddField: new Ext.ux.PercentCombo({
                         autoExpand: true,
                     })
 				},
@@ -645,7 +645,7 @@ Tine.Tasks.EditDialog = function(task) {
                 anchor: '95%'
             },
             items:[ 
-                new Tine.widgets.Percent.Combo({
+                new Ext.ux.PercentCombo({
                     fieldLabel: 'Percentage',
                     editable: false,
                     name: 'percent'
