@@ -74,76 +74,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	}
 });
 
-Ext.namespace('Tine.widgets.Percent');
-Tine.widgets.Percent.Combo = Ext.extend(Ext.form.ComboBox, {
-	/**
-	 * @cfs {bool} autoExpand
-	 * Autoexpand comboBox on focus.
-	 */
-	autoExpand: false,
-	
-    displayField: 'value',
-    valueField: 'key',
-    //typeAhead: true,
-    mode: 'local',
-    triggerAction: 'all',
-    emptyText: 'percent ...',
-    //selectOnFocus: true,
-    //editable: false,
-	lazyInit: false,
-	
-    //private
-    initComponent: function(){
-        Tine.widgets.Percent.Combo.superclass.initComponent.call(this);
-		// allways set a default
-		if(!this.value) {
-		    this.value = 0;
-		}
-			
-		this.store = new Ext.data.SimpleStore({
-	        fields: ['key','value'],
-	        data: [
-	                ['0',    '0%'],
-	                ['10',  '10%'],
-	                ['20',  '20%'],
-	                ['30',  '30%'],
-	                ['40',  '40%'],
-	                ['50',  '50%'],
-	                ['60',  '60%'],
-	                ['70',  '70%'],
-	                ['80',  '80%'],
-	                ['90',  '90%'],
-	                ['100','100%']
-	            ]
-	    });
-		
-		if (this.autoExpand) {
-            this.on('focus', function(){
-                this.lazyInit = false;
-                this.expand();
-            });
-        }
-		
-		this.on('select', function(){
-			//this.el = Tine.widgets.Percent.ComboBox.progressBar(this.value);
-		});
-    }
-});
 
-Tine.widgets.Percent.renderer = function(percent) {
-    return '<div class="x-progress-wrap TasksProgress">' +
-            '<div class="x-progress-inner TasksProgress">' +
-                '<div class="x-progress-bar TasksProgress" style="width:' + percent + '%">' +
-                    '<div class="TasksProgressText TasksProgress">' +
-                        '<div>'+ percent +'%</div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="x-progress-text x-progress-text-back TasksProgress">' +
-                    '<div>&#160;</div>' +
-                '</div>' +
-            '</div>' +
-        '</div>';
-};
 
 Ext.namespace('Tine.widgets.Priority');
 Tine.widgets.Priority.store = new Ext.data.SimpleStore({
