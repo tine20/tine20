@@ -91,10 +91,13 @@ Tine.widgets.Priority.store = new Ext.data.SimpleStore({
 
 Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
 	/**
-     * @cfs {bool} autoExpand
-     * Autoexpand comboBox on focus.
+     * @cfg {bool} autoExpand Autoexpand comboBox on focus.
      */
     autoExpand: false,
+    /**
+     * @cfg {bool} blurOnSelect blurs combobox when item gets selected
+     */
+    blurOnSelect: false,
     
     displayField: 'value',
     valueField: 'key',
@@ -119,6 +122,11 @@ Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
                 this.lazyInit = false;
                 this.expand();
             });
+        }
+        if (this.blurOnSelect){
+            this.on('select', function(){
+                this.fireEvent('blur', this);
+            }, this);
         }
     }
 });
