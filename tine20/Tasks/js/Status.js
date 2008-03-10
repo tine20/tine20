@@ -12,11 +12,14 @@ Ext.namespace('Tine.Tasks', 'Tine.Tasks.status');
 
 Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	/**
-     * @cfs {bool} autoExpand
-     * Autoexpand comboBox on focus.
+     * @cfg {bool} autoExpand Autoexpand comboBox on focus.
      */
     autoExpand: false,
-	
+	/**
+     * @cfg {bool} blurOnSelect blurs combobox when item gets selected
+     */
+    blurOnSelect: false,
+    
 	fieldLabel: 'status',
     name: 'status',
     displayField: 'status_name',
@@ -41,6 +44,11 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
                 this.expand();
             });
 		}
+		if (this.blurOnSelect){
+            this.on('select', function(){
+                this.fireEvent('blur', this);
+            }, this);
+        }
 		//this.on('select', function(){console.log(this.value)});
 	    Tine.Tasks.status.ComboBox.superclass.initComponent.call(this);
 	}

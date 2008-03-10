@@ -367,10 +367,11 @@ Tine.Tasks.mainGrid = {
 					renderer: Tine.Tasks.status.getStatusIcon,
                     editor: new Tine.Tasks.status.ComboBox({
 		                autoExpand: true,
+                        blurOnSelect: true,
 		                listClass: 'x-combo-list-small'
 		            }),
 		            quickaddField: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true,
+                        autoExpand: true
                     })
 				},
 				{
@@ -385,7 +386,7 @@ Tine.Tasks.mainGrid = {
                         blurOnSelect: true
                     }),
                     quickaddField: new Ext.ux.PercentCombo({
-                        autoExpand: true,
+                        autoExpand: true
                     })
 				},
 				{
@@ -410,10 +411,11 @@ Tine.Tasks.mainGrid = {
 					renderer: Tine.widgets.Priority.renderer,
                     editor: new Tine.widgets.Priority.Combo({
                         allowBlank: false,
-						autoExpand: true
+						autoExpand: true,
+						blurOnSelect: true
                     }),
                     quickaddField: new Tine.widgets.Priority.Combo({
-                        autoExpand: true,
+                        autoExpand: true
                     })
 				},
 				{
@@ -428,6 +430,7 @@ Tine.Tasks.mainGrid = {
                     }),
                     quickaddField: new Ext.ux.ClearableDateField({
                         //value: new Date(),
+                    	blurOnSelect: true,
                         format : "d.m.Y"
                     })
 				}
@@ -439,7 +442,7 @@ Tine.Tasks.mainGrid = {
                 autoFill: true,
 	            forceFit:true,
 	            ignoreAdd: true,
-	            emptyText: 'No Tasks to display',
+	            emptyText: 'No Tasks to display'
 	        })
         });
 		
