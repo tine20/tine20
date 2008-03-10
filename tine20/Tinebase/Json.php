@@ -25,6 +25,7 @@ class Tinebase_Json
 	public static function setJsonServers($_server)
 	{
 	    $_server->setClass('Tinebase_Json_Container', 'Tinebase_Container');
+	    $_server->setClass('Tinebase_Json_UserRegistration', 'Tinebase_UserRegistration');
 	}
 	
     /**
@@ -139,7 +140,7 @@ class Tinebase_Json
         } else {
             $response = array(
 				'success'      => FALSE,
-				'errorMessage' => "Wrong username or passord!"
+				'errorMessage' => "Wrong username or password!"
 			);
         }
 
