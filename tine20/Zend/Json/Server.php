@@ -116,7 +116,7 @@ class Zend_Json_Server extends Zend_Server_Abstract implements Zend_Server_Inter
 					}
 					
 					if (sizeof($calling_args) < sizeof($func_args)) {
-						throw new Zend_Json_Server_Exception('Invalid Method Call to ' .$method. '. Requires ' .sizeof($func_args). ', ' .sizeof($calling_args). ' given.', 400);
+						throw new Zend_Json_Server_Exception('Invalid Method Call to ' .$this->_method. '. Requires ' .sizeof($func_args). ', ' .sizeof($calling_args). ' given.', 400);
 					}
 					
 					if ($this->_functions[$this->_method] instanceof Zend_Server_Reflection_Method) {
