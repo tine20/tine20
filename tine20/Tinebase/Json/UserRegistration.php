@@ -24,26 +24,26 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * suggests a username
 	 *
-	 * @param array $_regData
-	 * @return string
+	 * @param 	array $_regData
+	 * @return 	string
 	 * 
-	 * @todo add other methods for building username
+	 * @todo 	add other methods for building username
 	 */
 	public function suggestUsername ( $_regData ) 
 	{
 		//-- get method from config (email, firstname+lastname, other strings)
 		
 		// build username from firstname (first char) & lastname
-		return substr($_regData['firstname'],0,1).$_regData['lastname'];
+		return substr($_regData['accountFirstName'],0,1).$_regData['accountLastName'];
 	}
 
 	/**
 	 * checks if username is unique
 	 *
-	 * @param string $username
-	 * @return bool
+	 * @param 	string $username
+	 * @return 	bool
 	 * 
-	 * @todo test function
+	 * @todo 	test function
 	 */
 	public function checkUniqueUsername ( $_username ) 
 	{
@@ -62,10 +62,10 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * registers a new user
 	 *
-	 * @param array $_regData
-	 * @return bool
+	 * @param 	array $_regData
+	 * @return 	bool
 	 * 
-	 * @todo test function
+	 * @todo 	test function
 	 */
 	public function registerUser ( $_regData ) 
 	{
@@ -75,10 +75,12 @@ class Tinebase_Json_UserRegistration
 
 		// save user data (account & contact) via the Account and Addressbook controllers
 		Tinebase_Account::getInstance()->saveAccount ( $account );		
+
+		//-- set account id in contact first
  		Addressbook_Controller::getInstance()->saveContact ( $contact );
  		
 		// send mail
-		this.sendRegistrationMail( $_regData );
+		$this->sendRegistrationMail( $_regData );
 	}
 	
 	/**
@@ -98,7 +100,7 @@ class Tinebase_Json_UserRegistration
         
         $mail->setSubject("Welcome to Tine 2.0");
         
-        $recipientName = $_regData['firstname']." ".$_regData['lastname'];
+        $recipientName = $_regData['accountFirstName']." ".$_regData['accountLastName'];
 
         // get plain and html message from views
         //-- translate text and insert correct link
@@ -135,16 +137,65 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * send lost password mail
 	 *
-	 * @param array $_regData
-	 * @return bool
+	 * @param 	string $_username
+	 * @return 	bool
 	 * 
-	 * @todo implement function
+	 * @todo 	add password generator
+	 * @todo	translate mails
+	 * @todo 	test!
 	 */
-	public function sendLostPasswordMail ($_regData) 
+	public function sendLostPasswordMail ($_username) 
 	{
+		// get full account
+		$fullAccount = Tinebase_Account::getInstance()->getFullAccountByLoginName($_username);
+				
 		//-- generate new password
-		//-- send lost password mail		
-		//-- add generic sendMail function ?
+		$newPassword = "xxxxx";
+		
+		// save new password in account
+		Tinebase_Auth::getInstance()->setPassword($_username, $newPassword, $newPassword);
+		
+		// send lost password mail		
+		$mail = new Tinebase_Mail('UTF-8');        
+        $mail->setSubject("New password for Tine 2.0");
+        
+        // get name from account
+        //$recipientName = $fullAccount->accountFirstName." ".$fullAccount->accountLastName;
+        $recipientName = $fullAccount->accountFullName;
+        
+        // get email from account
+        $recipientEmail = $fullAccount->accountEmailAddress;
+
+        // get plain and html message from views
+        //-- translate text and insert correct link
+       	$view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+        
+        $view->mailTextWelcome = "We generated a new password for you ...";
+        $view->newPassword = $newPassword;
+        
+        $messagePlain = $view->render('lostpwMailPlain.php');       
+        $mail->setBodyText($messagePlain);
+
+        $messageHtml = $view->render('lostpwMailHtml.php');
+        if($messageHtml !== NULL) {
+            $mail->setBodyHtml($messageHtml);
+        }
+        
+        $mail->addHeader('X-MailGenerator', 'Tine 2.0');
+        $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
+
+        if( !empty($recipientEmail) ) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send lost password email to ' . $recipientEmail);
+
+            $mail->addTo($recipientEmail, $recipientName);
+        
+            $mail->send();
+            
+            return true;
+        }
+		
+        return false;
 	}
 	
 }
