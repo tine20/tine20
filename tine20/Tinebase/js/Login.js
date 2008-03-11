@@ -1,9 +1,13 @@
 /*
- * Ext JS Library 1.0.1
- * Copyright(c) 2006-2007, Ext JS, LLC.
- * licensing@extjs.com
+ * Tine 2.0
  * 
- * http://www.extjs.com/license
+ * @package     Tine
+ * @subpackage  Tinebase
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
  */
 
 Ext.namespace('Tine.Tinebase.Registry');

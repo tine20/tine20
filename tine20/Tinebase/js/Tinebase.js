@@ -1,3 +1,15 @@
+/*
+ * Tine 2.0
+ * 
+ * @package     Tine
+ * @subpackage  Tinebase
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2007 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
+ */
+ 
 Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 
 Ext.QuickTips.init();
