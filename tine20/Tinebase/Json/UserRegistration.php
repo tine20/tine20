@@ -20,7 +20,7 @@
  */
 class Tinebase_Json_UserRegistration
 {
-	
+		
 	/**
 	 * suggests a username
 	 *
@@ -84,10 +84,12 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * send registration mail
 	 *
-	 * @param array $_regData
-	 * @return bool
+	 * @param 	array $_regData
+	 * @return 	bool
 	 * 
-	 * @todo testen
+	 * @todo 	add more texts to mail views
+	 * @todo	set correct activation link
+	 * @todo	translate mails
 	 */
 	protected function sendRegistrationMail ( $_regData ) 
 	{
@@ -98,14 +100,20 @@ class Tinebase_Json_UserRegistration
         
         $recipientName = $_regData['firstname']." ".$_regData['lastname'];
 
-        //-- get plain and html message from ??
-        $messagePlain = "Welcome $recipientName to Tine 2.0\n";
-        $messageHtml = NULL;
+        // get plain and html message from views
+        //-- translate text and insert correct link
+       	$view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
         
+        $view->mailTextWelcome = "Welcome to Tine 2.0";
+        $view->mailActivationLink = '<a href="http://www.tine20.org">activate!</a>';
+        
+        $messagePlain = $view->render('registrationMailPlain.php');       
         $mail->setBodyText($messagePlain);
 
-        if($_messageHtml !== NULL) {
-            $mail->setBodyHtml($_messageHtml);
+        $messageHtml = $view->render('registrationMailHtml.php');
+        if($messageHtml !== NULL) {
+            $mail->setBodyHtml($messageHtml);
         }
         
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
