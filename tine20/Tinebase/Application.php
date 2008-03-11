@@ -195,7 +195,7 @@ class Tinebase_Application
         
         $applicationId = $this->applicationTable->insert($data);
         
-        $_application->app_id = $applicationId;
+        $_application->id = $applicationId;
         
         return $_application;
     }
