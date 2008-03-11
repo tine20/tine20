@@ -13,7 +13,7 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 
 Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     name: 'userRegistration',
-    //title: 'User Registration Wizzard',
+    title: 'Registration Wizzard',
     //layout: 'card',
     //activeItem: 0,
     layout: 'fit',
@@ -44,6 +44,10 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     },
     /**
      * First card, all about names
+     * @todo Ajax validation of accountLoginName is a bit complex, as ExtJS don't support syncrous requests.
+     * As such, we have to introduce a valid flag. If the user presses the next button, and the valid flag is not
+     * set, we have to ask the ajax-request if it's running, if yes, display a waitbar, if no ask the user to change the name.
+     * Therefore we also need to add a on-change listener to the filed.
      */
     cardNames: function () {
         
@@ -63,13 +67,16 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             fieldLabel: 'Login name',
             name: 'accountLoginName',
             id: 'accountLoginName',
+            //validator: function(accountLoginName) {
+            //    
+            //}
             allowBlank: false
         });
         
         // sugest an accountLoginName
         accountLoginName.on('focus', function(accountLoginName) {
             if (!accountLoginName.getValue()) {
-                var cardNamesValues = console.log(Ext.getCmp('cardNames').getForm().getValues());
+                var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
                 Ext.Ajax.request({
                     url: 'index.php',
                     //method: POST, (should not be required)
@@ -77,14 +84,22 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                         method: 'Tinebase_UserRegistration.suggestUsername',
                         regData: Ext.util.JSON.encode(cardNamesValues)
                     },
-                    success: function(_result, _request) {
-                    	accountLoginName.setValue( Ext.util.JSON.decode(_result.responseText));
+                    success: function(result, request) {
+                    	accountLoginName.setValue( Ext.util.JSON.decode(result.responseText));
+                        // hack to detect user change
+                        accountLoginName.originalValue = accountLoginName.getValue();
+                        this.accountLoginName = accountLoginName.getValue();
                     },
-                    failure: function ( result, request) { 
+                    failure: function (result, request) { 
                         
-                    }
+                    },
+                    scope: this
                 });
             }
+        }, this);
+        
+        accountLoginName.on('change', function(accountLoginName) {
+            //console.log('hallo');
         }, this);
         
         var cardNamesPanel = new Ext.form.FormPanel({
@@ -113,7 +128,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     
             this.wizard = new Ext.ux.Wizard({
                 id: 'myWizard',
-                title: 'My Example Wizard',
+                //title: 'My Example Wizard',
                 mandatorySteps: 2, // at least two steps are required
     
                 // the panels (or "cards") within the layout
