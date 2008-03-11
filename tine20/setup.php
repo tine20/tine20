@@ -15,16 +15,19 @@ Zend_Loader::registerAutoload();
 
 $setup = new Setup_Tables();
 
-try{
-	foreach ( new DirectoryIterator('./') as $item ) {
-		if($item->isDir()) {
-			$fileName = $item->getFileName() . '/setup/tables.xml';
-			if(file_exists($fileName)) {
-				echo "Processing tables definitions from <b>$fileName</b><br>";
-				$setup->parseFile($fileName);
-			}
+$fileName = 'Tinebase/setup.xml';
+if(file_exists($fileName)) {
+    echo "Processing tables definitions from <b>$fileName</b><br>";
+    $setup->parseFile($fileName);
+}
+
+
+foreach ( new DirectoryIterator('./') as $item ) {
+	if($item->isDir() && $item->getFileName() != 'Tinebase') {
+		$fileName = $item->getFileName() . '/setup.xml';
+		if(file_exists($fileName)) {
+			echo "Processing tables definitions from <b>$fileName</b><br>";
+			$setup->parseFile($fileName);
 		}
 	}
-} catch(Exception $e) {
-	echo 'No files Found!<br />';
 }
