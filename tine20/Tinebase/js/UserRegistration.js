@@ -42,7 +42,11 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         console.log(cl);
         //this.getRegForm().setActiveItem(this.regFrom.activeItem + direction);
     },
+    /**
+     * First card, all about names
+     */
     cardNames: function () {
+        
         var accountFirstName = new Ext.form.TextField({
             fieldLabel: 'Given name',
             name: 'accountFirstName',
@@ -65,17 +69,13 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         // sugest an accountLoginName
         accountLoginName.on('focus', function(accountLoginName) {
             if (!accountLoginName.getValue()) {
-                //var accountFirstName = Ext.getCmp('accountFirstName').getValue();
-                //var accountLastName = Ext.getCmp('accountLastName').getValue();
+                var cardNamesValues = console.log(Ext.getCmp('cardNames').getForm().getValues());
                 Ext.Ajax.request({
                     url: 'index.php',
                     //method: POST, (should not be required)
                     params: {
                         method: 'Tinebase_UserRegistration.suggestUsername',
-                        regData: Ext.util.JSON.encode({
-                            accountFirstName: Ext.getCmp('accountFirstName').getValue(),
-                            accountLastName:  Ext.getCmp('accountLastName').getValue()
-                        })
+                        regData: Ext.util.JSON.encode(cardNamesValues)
                     },
                     success: function(_result, _request) {
                     	accountLoginName.setValue( Ext.util.JSON.decode(_result.responseText));
@@ -87,11 +87,23 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             }
         }, this);
         
-        return [
-            accountFirstName,
-            accountLastName,
-            accountLoginName
-        ]
+        var cardNamesPanel = new Ext.form.FormPanel({
+            id: 'cardNames',
+            layout: 'form',
+            bodyStyle: 'paddingLeft:15px',
+            anchor:'100%',
+            defaults: {
+                anchor: '95%',
+                xtype: 'textfield'
+            },
+            items: [
+                accountFirstName,
+                accountLastName,
+                accountLoginName
+            ]
+        });
+        
+        return cardNamesPanel;
     },
     /**
      * @private 
@@ -105,16 +117,9 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                 mandatorySteps: 2, // at least two steps are required
     
                 // the panels (or "cards") within the layout
-                items: [{
-                    id: 'card-0',
-                    style: {'padding': '5px'},
-                    layout: 'form',
-                    defaults: {
-                        anchor: '95%',
-                        xtype: 'textfield'
-                    },
-                    items: this.cardNames()
-                },{
+                items: [
+                    this.cardNames(),
+                {
                     id: 'card-1',
                     style: {'padding': '5px'},
                     html: '<p>Step 2 of 5</p>'
@@ -137,6 +142,21 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             this.wizard.on({
                 'leave': {
                     fn: function(currentItem, nextItem, forward) {
+                        switch(currentItem.id) {
+                            case 'cardNames':
+                                if (!this.accountLoginName) {
+                                    Ext.Msg.show({
+                                       title:'Login name',
+                                       msg: 'The login name you chosse is not valid. Please choose a valid login name.',
+                                       buttons: Ext.Msg.OK,
+                                       //fn: processResult,
+                                       animEl: 'elId',
+                                       icon: Ext.MessageBox.INFO
+                                    });
+                                    return false;
+                                }
+                        }
+                        //console.log(currentItem);
                             //var msg = 'Leaving ' + currentItem.id + ', entering ' + nextItem.id
                             //        + '\nAre you sure you want to do that?';
                              
