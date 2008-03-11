@@ -190,11 +190,18 @@ Tine.Tasks.mainGrid = {
 			this.filter.start = options.params.start;
             this.filter.limit = options.params.limit;
 			
-			//this.filter.due
+			// container
+            var nodeAttributes = Ext.getCmp('TasksTreePanel').attributes || {};
+            this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
+            this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
+            this.filter.container = nodeAttributes.container ? nodeAttributes.container.container_id : null;
+            
+            // toolbar
 			this.filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
 			this.filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
 			this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
 			this.filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
+			//this.filter.due
 			//this.filter.tag
 			options.params.filter = Ext.util.JSON.encode(this.filter);
 		}, this);
@@ -213,9 +220,10 @@ Tine.Tasks.mainGrid = {
     	                success: function(_result, _request) {
     						store.commitChanges();
     
-    						// we need to reload store, cause this.filters might be 
-    						// affected by the change!
-    						store.load({params: this.paging});
+    						// reloading the store feels like 1.x
+    						// maybe we should reload if the sort critera changed, 
+    						// but even this might be confusing
+    						//store.load({params: this.paging});
     	                },
     	                failure: function ( result, request) { 
     	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
@@ -246,13 +254,7 @@ Tine.Tasks.mainGrid = {
         
         
         this.tree.on('click', function(node){
-            this.filter.containerType = node.attributes.containerType;
-            this.filter.owner = node.attributes.owner ? node.attributes.owner.accountId : null;
-            this.filter.container = node.attributes.container ? node.attributes.container.container_id : null;
-            
-            this.store.load({
-                params: this.paging
-            });
+            this.store.load({params: this.paging});
         }, this);
         
         return this.tree;
@@ -430,7 +432,6 @@ Tine.Tasks.mainGrid = {
                     }),
                     quickaddField: new Ext.ux.ClearableDateField({
                         //value: new Date(),
-                    	blurOnSelect: true,
                         format : "d.m.Y"
                     })
 				}
