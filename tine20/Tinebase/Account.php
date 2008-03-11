@@ -62,20 +62,6 @@ class Tinebase_Account
         return self::$_instance;
     }
     
-    public function getGroupMemberships($_accountId)
-    {
-        $result = $this->_backend->getGroupMemberships($_accountId);
-        
-        return $result;
-    }
-    
-    public function getGroupMembers($_groupId)
-    {
-        $result = $this->_backend->getGroupMembers($_groupId);
-        
-        return $result;
-    }
-    
     /**
      * get list of accounts with NO internal informations
      *

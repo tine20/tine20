@@ -24,7 +24,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'app_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -41,7 +41,8 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'      => 'StringTrim'
+        'name'      => 'StringTrim',
+        'version'   => 'StringTrim'
     );
     
     /**
@@ -51,13 +52,23 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_validators = array(
-        'app_id'      => array('Digits', 'presence' => 'required'),
-        'app_name'    => array('presence' => 'required'),
-        'app_enabled' => array('Digits', 'presence' => 'required'),
-        'app_order'   => array('Digits', 'presence' => 'required'),
-        'app_tables'  => array('allowEmpty' => true),
-        'app_version' => array('presence' => 'required')
-    );
+    protected $_validators = array();
 
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_validators = array(
+            'id'        => array('Digits', 'allowEmpty' => true),
+            'name'      => array('presence' => 'required'),
+            'status'    => array(new Zend_Validate_InArray(array('enabled', 'disabled'))),
+            'order'     => array('Digits', 'presence' => 'required'),
+            'tables'    => array('allowEmpty' => true),
+            'version'   => array('presence' => 'required')
+        );
+        
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
 }

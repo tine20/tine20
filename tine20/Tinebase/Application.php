@@ -18,9 +18,9 @@
  */
 class Tinebase_Application
 {
-    const ENABLED  = 1;
+    const ENABLED  = 'enabled';
     
-    const DISABLED = 0;
+    const DISABLED = 'disabled';
     
     /**
      * the table object for the SQL_TABLE_PREFIX . applications table
@@ -71,7 +71,7 @@ class Tinebase_Application
             throw new InvalidArgumentException('$_applicationId must be integer');
         }
         
-        $row = $this->applicationTable->fetchRow('app_id = ' . $applicationId);
+        $row = $this->applicationTable->fetchRow('`id` = ' . $applicationId);
         
         $result = new Tinebase_Model_Application($row->toArray());
         
@@ -92,7 +92,7 @@ class Tinebase_Application
             throw new InvalidArgumentException('$_applicationName can not be empty');
         }
         
-        $where = $this->applicationTable->getAdapter()->quoteInto('app_name = ?', $_applicationName);
+        $where = $this->applicationTable->getAdapter()->quoteInto('`name` = ?', $_applicationName);
         if(!$row = $this->applicationTable->fetchRow($where)) {
             throw new Exception("application $_applicationName not found");
         }
@@ -116,7 +116,7 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $where[] = $this->applicationTable->getAdapter()->quoteInto('app_name LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->applicationTable->getAdapter()->quoteInto('`name` LIKE ?', '%' . $_filter . '%');
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -132,12 +132,12 @@ class Tinebase_Application
      * @param int $_state can be Tinebase_Application::ENABLED or Tinebase_Application::DISABLED
      * @return Tinebase_Record_RecordSet list of applications
      */
-    public function getApplicationsByState($_state)
+    public function getApplicationsByState($_status)
     {
-        if($_state !== Tinebase_Application::ENABLED && $_applicationName !== Tinebase_Application::DISABLED) {
-            throw new InvalidArgumentException('$_state can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
+        if($_status !== Tinebase_Application::ENABLED && $_status !== Tinebase_Application::DISABLED) {
+            throw new InvalidArgumentException('$_status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
-        $where[] = $this->applicationTable->getAdapter()->quoteInto('app_enabled = ?', $_state);
+        $where[] = $this->applicationTable->getAdapter()->quoteInto('`status` = ?', $_status);
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
@@ -155,7 +155,7 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $where[] = $this->applicationTable->getAdapter()->quoteInto('app_name LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->applicationTable->getAdapter()->quoteInto('`name` LIKE ?', '%' . $_filter . '%');
         }
         $count = $this->applicationTable->getTotalCount($where);
         
@@ -165,19 +165,38 @@ class Tinebase_Application
     public function setApplicationState(array $_applicationIds, $_state)
     {
         if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
-            throw new OutOfRangeException('$_state can be only ' . Tinebase_Application::DISABLED . ' or ' . Tinebase_Application::ENABLED);
+            throw new OutOfRangeException('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
         
         $where = array(
-            $this->applicationTable->getAdapter()->quoteInto('app_id IN (?)', $_applicationIds)
+            $this->applicationTable->getAdapter()->quoteInto('`id` IN (?)', $_applicationIds)
         );
         
         $data = array(
-            'app_enabled' => $_state
+            'status' => $_state
         );
         
         $affectedRows = $this->applicationTable->update($data, $where);
         
-        error_log("AFFECTED:: $affectedRows");
+        //error_log("AFFECTED:: $affectedRows");
+    }
+    
+    /**
+     * add new appliaction 
+     *
+     * @param Tinebase_Model_Application $_application the new application object
+     * @return Tinebase_Model_Application the new application with the applicationId set
+     */
+    public function addApplication(Tinebase_Model_Application $_application)
+    {
+        $data = $_application->toArray();
+        unset($data['id']);
+        unset($data['tables']);
+        
+        $applicationId = $this->applicationTable->insert($data);
+        
+        $_application->app_id = $applicationId;
+        
+        return $_application;
     }
 }
