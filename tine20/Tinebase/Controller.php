@@ -132,9 +132,10 @@ class Tinebase_Controller
 
             $server->setClass('Tinebase_Json', 'Tinebase');
 
+            // register addidional Tinebase Json servers (i.e. UserRegistration)
+            Tinebase_Json::setJsonServers($server);
+            
             if(Zend_Auth::getInstance()->hasIdentity()) {
-            	// register addidional Tinebase Json servers
-            	Tinebase_Json::setJsonServers($server);
             	
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 

@@ -13,5 +13,6 @@
  */
 ?>
 
-<h1><?php echo $this->mailTextWelcome ?></h1>
-<p><?php echo $this->newPassword ?></p>
+<?php echo $this->mailTextWelcome ?>
+
+<?php echo $this->newPassword ?>

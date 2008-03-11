@@ -69,6 +69,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                 //var accountLastName = Ext.getCmp('accountLastName').getValue();
                 Ext.Ajax.request({
                     url: 'index.php',
+                    //method: POST, (should not be required)
                     params: {
                         method: 'Tinebase_UserRegistration.suggestUsername',
                         regData: Ext.util.JSON.encode({
@@ -77,7 +78,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                         })
                     },
                     success: function(_result, _request) {
-                        accountLoginName.setValue(accountFirstName + ' ' + accountLastName);
+                    	accountLoginName.setValue( Ext.util.JSON.decode(_result.responseText));
                     },
                     failure: function ( result, request) { 
                         

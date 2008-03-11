@@ -24,23 +24,26 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * suggests a username
 	 *
-	 * @param 	array $_regData
+	 * @param 	array $regData
 	 * @return 	string
 	 * 
 	 * @todo 	add other methods for building username
 	 */
-	public function suggestUsername ( $_regData ) 
+	public function suggestUsername ( $regData ) 
 	{
 		//-- get method from config (email, firstname+lastname, other strings)
+		$regData = Zend_Json_Decoder::decode($regData);
 		
 		// build username from firstname (first char) & lastname
-		return substr($_regData['accountFirstName'],0,1).$_regData['accountLastName'];
+		$suggestedUsername = substr($regData['accountFirstName'],0,1).$regData['accountLastName'];
+		
+		return $suggestedUsername;
 	}
 
 	/**
 	 * checks if username is unique
 	 *
-	 * @param 	string $username
+	 * @param 	string $_username
 	 * @return 	bool
 	 * 
 	 * @todo 	test function
@@ -140,7 +143,7 @@ class Tinebase_Json_UserRegistration
 	 * @param 	string $_username
 	 * @return 	bool
 	 * 
-	 * @todo 	add password generator
+	 * @todo 	add more texts to mail views
 	 * @todo	translate mails
 	 * @todo 	test!
 	 */
@@ -149,8 +152,8 @@ class Tinebase_Json_UserRegistration
 		// get full account
 		$fullAccount = Tinebase_Account::getInstance()->getFullAccountByLoginName($_username);
 				
-		//-- generate new password
-		$newPassword = "xxxxx";
+		// generate new password
+		$newPassword = $this->generatePassword();
 		
 		// save new password in account
 		Tinebase_Auth::getInstance()->setPassword($_username, $newPassword, $newPassword);
@@ -197,6 +200,20 @@ class Tinebase_Json_UserRegistration
 		
         return false;
 	}
-	
+
+	/**
+	 * generate new random password
+	 *
+	 * @param	int	$length
+	 * @return 	string
+	 * 
+	 * @todo 	test!
+	 */
+	private function generatePassword ( $length = 8 ) 
+	{
+		$somestring = md5(uniqid());
+		
+		$begin = rand(0,strlen($somestring)-$length);
+		return ( substr($somestring, $begin, $length) );
+	}
 }
-?>
