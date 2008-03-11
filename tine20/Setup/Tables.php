@@ -18,7 +18,6 @@
 class Setup_Tables
 {
     private $_backend;
-    private $_prefix;
     private $_config;
 
     public function __construct()
@@ -31,7 +30,7 @@ class Setup_Tables
 
         $this->setupDatabaseConnection();
 
-        $this->_backend = new Setup_Backend_Mysql($this->_prefix);
+        $this->_backend = new Setup_Backend_Mysql();
     }
 
     /**
@@ -43,9 +42,9 @@ class Setup_Tables
         if(isset($this->_config->database)) {
             $dbConfig = $this->_config->database;
 
-            $this->_prefix = $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_';
+            define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
 
-            echo "setting table prefix to: {$this->_prefix} <hr>";
+            echo "setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
 
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
@@ -63,15 +62,37 @@ class Setup_Tables
      */
     public function parseFile($_file)
     {
+        $createdTables = array();
+        
         $xml = simplexml_load_file($_file);
         
-        foreach ($xml->tables[0] as $table) {
-              $tableName = $this->_prefix . $table['name'];
-              if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
-                $this->_backend->createTable($table);
-              } else {
-                echo "skipped table {$tableName}. Table exists already.<br>";
-              }
+        if(is_array($xml->tables[0])) {
+            foreach ($xml->tables[0] as $table) {
+                  $tableName = SQL_TABLE_PREFIX . $table['name'];
+                  if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
+                    $this->_backend->createTable($table);
+                    $createdTables[] = $table;
+                  } else {
+                    echo "skipped table {$tableName}. Table exists already.<br>";
+                  }
+            }
+        }
+        
+        try {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
+        } catch (Exception $e) {
+            $application = new Tinebase_Model_Application(array(
+                'name'      => $xml->name,
+                'status'    => Tinebase_Application::ENABLED,
+                'order'     => $xml->order ? $xml->order : 99,
+                'version'   => $xml->version
+            ));
+            
+            $application = Tinebase_Application::getInstance()->addApplication($application);
+        }
+        
+        foreach($createdTables as $tableName) {
+            #$this->addTableToApplication($applicationId, $table['name']);
         }
     }
 }

@@ -17,13 +17,6 @@
  */
 class Setup_Backend_Mysql
 {
-    protected $_prefix;
-    
-    public function __construct($_prefix)
-    {
-        $this->_prefix = $_prefix;
-    }
-    
     /**
      * takes the xml stream and creates a table
      *
@@ -31,7 +24,7 @@ class Setup_Backend_Mysql
      */
     public function createTable($_table)
     {
-        $statement = "CREATE TABLE IF NOT EXISTS `" . $this->_prefix . $_table['name'] . "` (\n";
+        $statement = "CREATE TABLE IF NOT EXISTS `" . SQL_TABLE_PREFIX . $_table['name'] . "` (\n";
 
         foreach ($_table->fields[0] as $field) {
             if($field['name'] != '') {
@@ -44,7 +37,7 @@ class Setup_Backend_Mysql
         }
 
         foreach ($_table->keys[0] as $key) {
-            $statement .= " " . $key['type'] . " `" . $this->_prefix . $key['name'] . "` (" ;
+            $statement .= " " . $key['type'] . " `" . SQL_TABLE_PREFIX . $key['name'] . "` (" ;
 
             foreach ($key->keyfield as $keyfield) {
                 $statement .= "`"  . (string)$keyfield . "`,";
