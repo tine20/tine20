@@ -18,6 +18,17 @@ Ext.form.Field.prototype.msgTarget = 'side';
 Tine.Login = {
 
     showLoginDialog: function(_defaultUsername, _defaultPassword) {
+    	var loginButtons = [{
+            text: 'Login',
+            handler: Tine.Login.loginHandler 
+        }];
+        if (true) {
+            loginButtons.push({
+                text: 'Register',
+                handler: Tine.Login.UserRegistrationHandler
+            });
+        }
+        
         var loginDialog = new Ext.FormPanel({
             id: 'loginDialog',
             labelWidth: 75,
@@ -48,10 +59,7 @@ Tine.Login = {
                 value: _defaultPassword,
                 width:225
             }],
-            buttons: [{
-                text: 'Login',
-                handler: Tine.Login.loginHandler 
-            }]
+            buttons: loginButtons
         });
         
         loginDialog.render(document.body);
@@ -96,5 +104,10 @@ Tine.Login = {
                 }
             });
         };
+    },
+    
+    UserRegistrationHandler: function () {
+        var regWindow = new Tine.Tinebase.UserRegistration();
+        regWindow.show();
     }
 }
