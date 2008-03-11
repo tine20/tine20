@@ -2,6 +2,7 @@
 <application>
 	<name>Addressbook</name>
 	<version>0.1</version>
+	<order>10</order>
 	<tables>
 		<table name="addressbook">
 			<fields>
