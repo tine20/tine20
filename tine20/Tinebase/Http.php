@@ -135,8 +135,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	{
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activate account for ' . $_username);
        	
-		//echo "user $_username activated his account!";
-		
 		//-- set activation flag in DB
 		
 		$view = new Zend_View();

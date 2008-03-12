@@ -208,12 +208,14 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                                     return false;
                                 } else {
                                 	// register new user!
-                                	//-- just testing -> this is going to happen in step/card 2-4
+                                	// just for testing -> this is going to happen in step/card 2-4
                                 	//-- with ajax request??
                                 	
-                                	// get values in array 
+                                	// uncomment the following to do some testing with the user registration
+									/*
+                                	// get values in array
                                 	//-- we need more values here (i.e. email address)
-                                	var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
+									var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
 					                Ext.Ajax.request({
 					                    url: 'index.php',
 					                    params: {
@@ -229,6 +231,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
 					                    },
 					                    scope: this
 					                });
+					                */
                                 }
                         }
                         //console.log(currentItem);
