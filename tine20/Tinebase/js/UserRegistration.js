@@ -73,7 +73,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             allowBlank: false
         });
         
-        // sugest an accountLoginName
+        // suggest an accountLoginName
         accountLoginName.on('focus', function(accountLoginName) {
             if (!accountLoginName.getValue()) {
                 var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
@@ -138,7 +138,8 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                     id: 'card-1',
                     style: {'padding': '5px'},
                     html: '<p>Step 2 of 5</p>'
-                },{
+                },
+                {
                     id: 'card-2',
                     style: {'padding': '5px'},
                     html: '<p>Step 3 of 5</p>'
@@ -159,10 +160,43 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                     fn: function(currentItem, nextItem, forward) {
                         switch(currentItem.id) {
                             case 'cardNames':
-                                if (!this.accountLoginName) {
+                            	// check valid username
+                            	console.log('checking username .... ' + this.accountLoginName );
+                            	//-- i'll set it to true for the moment (till the synchronous ajax function works)                            	
+								//var validUsername = false;
+                            	var validUsername = true;
+                            	
+								if ( this.accountLoginName ) {
+					                Ext.Ajax.request({
+					                    url: 'index.php',
+					                    params: {
+					                        method: 'Tinebase_UserRegistration.checkUniqueUsername',
+					                        username: Ext.util.JSON.encode(this.accountLoginName)
+					                    },
+					                    success: function(result, request) {
+					                    	console.log('username check result: ' + Ext.util.JSON.decode(result.responseText));
+					                    	// get result
+					                    	if ( Ext.util.JSON.decode(result.responseText) == true ) {
+					                    		validUsername = true;
+					                    	}
+					                    	console.log ( 'validUsername = ' + validUsername );
+					                    },
+					                    failure: function (result, request) { 
+					                        
+					                    },
+					                    scope: this
+					                });
+								}
+
+								console.log ( 'validUsername before check = ' + validUsername );
+								
+								//-- wait for ajax request to finish or use callback function
+								// see: http://extjs.com/forum/showthread.php?t=27427
+								
+                				if ( !this.accountLoginName || !validUsername ) {
                                     Ext.Msg.show({
                                        title:'Login name',
-                                       msg: 'The login name you chosse is not valid. Please choose a valid login name.',
+                                       msg: 'The login name you chose is not valid. Please choose a valid login name.',
                                        buttons: Ext.Msg.OK,
                                        //fn: processResult,
                                        animEl: 'elId',

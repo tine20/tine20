@@ -24,18 +24,19 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * suggests a username
 	 *
-	 * @param 	array $regData
+	 * @param 	array $regData		json data from registration frontend
 	 * @return 	string
 	 * 
 	 * @todo 	add other methods for building username
 	 */
 	public function suggestUsername ( $regData ) 
 	{
+		$regDataArray = Zend_Json_Decoder::decode($regData);
+
 		//-- get method from config (email, firstname+lastname, other strings)
-		$regData = Zend_Json_Decoder::decode($regData);
 		
 		// build username from firstname (first char) & lastname
-		$suggestedUsername = substr($regData['accountFirstName'],0,1).$regData['accountLastName'];
+		$suggestedUsername = substr($regDataArray['accountFirstName'],0,1).$regDataArray['accountLastName'];
 		
 		return $suggestedUsername;
 	}
@@ -43,16 +44,17 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * checks if username is unique
 	 *
-	 * @param 	string $_username
+	 * @param 	string $username
 	 * @return 	bool
 	 * 
 	 * @todo 	test function
 	 */
-	public function checkUniqueUsername ( $_username ) 
+	public function checkUniqueUsername ( $username ) 
 	{
-		// get account with this username from db
-		$accountsController = Tinebase_Account::getInstance();
-		$account = $accountsController->getAccountByLoginName($_username);
+		$username = Zend_Json_Decoder::decode($username);
+		
+		//-- get account with this username from db
+		//$account = Tinebase_Account::getInstance()->getAccountByLoginName($username);
 		
 		// if exists -> return false
 		if ( empty($account) ) {
@@ -65,25 +67,36 @@ class Tinebase_Json_UserRegistration
 	/**
 	 * registers a new user
 	 *
-	 * @param 	array $_regData
+	 * @param 	array $regData 		json data from registration frontend
 	 * @return 	bool
 	 * 
 	 * @todo 	test function
 	 */
-	public function registerUser ( $_regData ) 
+	public function registerUser ( $regData ) 
 	{
+
+		$regData = Zend_Json_Decoder::decode($regData);
+		
 		// get models
-		$account = new Tinebase_Account_Model_FullAccount($_regData);
-		$contact = new Addressbook_Model_Contact($_regData);
+		$account = new Tinebase_Account_Model_FullAccount($regData);
+		$contact = new Addressbook_Model_Contact($regData);
 
 		// save user data (account & contact) via the Account and Addressbook controllers
-		Tinebase_Account::getInstance()->saveAccount ( $account );		
+		//Tinebase_Account::getInstance()->saveAccount ( $account );
+		// use new function: addAccount	(saves the contact as well)
+		Tinebase_Account::getInstance()->addAccount ( $account );
 
+		//-- no longer needed?
 		//-- set account id in contact first
- 		Addressbook_Controller::getInstance()->saveContact ( $contact );
+ 		//Addressbook_Controller::getInstance()->saveContact ( $contact );
  		
 		// send mail
-		$this->sendRegistrationMail( $_regData );
+		if ( $this->sendRegistrationMail( $regData ) ) {
+			return true;			
+		} else {
+			return false;
+		}
+		
 	}
 	
 	/**
