@@ -29,7 +29,6 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $account = Zend_Json::encode(array('accountStatus' => 'A'));
         }
         
-        $locale = Zend_Registry::get('locale');
         $currentAccount = Zend_Registry::get('currentAccount');
         
         $view = new Zend_View();
