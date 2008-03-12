@@ -47,8 +47,6 @@ class Tinebase_Json_UserRegistration
 	 * @param 	string $username
 	 * @return 	bool
 	 * 
-	 * @todo 	test function
-	 * @todo	getAccountByLoginName not working yet (error if account doesn't exist)
 	 */
 	public function checkUniqueUsername ( $username ) 
 	{
@@ -80,32 +78,39 @@ class Tinebase_Json_UserRegistration
 	 * @param 	array $regData 		json data from registration frontend
 	 * @return 	bool
 	 * 
-	 * @todo 	test function
+	 * @todo	activate registration mail
+	 * @todo	save default account values elsewhere (where?)
+	 * @todo	use new addAccount function ?
 	 */
 	public function registerUser ( $regData ) 
 	{
 
 		$regData = Zend_Json_Decoder::decode($regData);
 		
-		// get models
+		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call registerUser with regData: '. print_r($regData, true));
+		
+		// add more required fields to regData
+		//-- change that later on ?
+		$regData['accountStatus'] = 'A'; 
+		$regData['accountPrimaryGroup'] = '-4'; 
+		$regData['accountDisplayName'] = $regData['accountFirstName'].' '.$regData['accountLastName']; 
+		$regData['accountFullName'] = $regData['accountDisplayName']; 
+		
+		// get model
 		$account = new Tinebase_Account_Model_FullAccount($regData);
-		$contact = new Addressbook_Model_Contact($regData);
 
 		// save user data (account & contact) via the Account and Addressbook controllers
-		//Tinebase_Account::getInstance()->saveAccount ( $account );
-		// use new function: addAccount	(saves the contact as well)
-		Tinebase_Account::getInstance()->addAccount ( $account );
-
-		//-- no longer needed?
-		//-- set account id in contact first
- 		//Addressbook_Controller::getInstance()->saveContact ( $contact );
+		Tinebase_Account::getInstance()->saveAccount ( $account );
+		
+		//-- use new function: addAccount	(saves the contact as well) ?
+		//Tinebase_Account::getInstance()->addAccount ( $account );
  		
 		// send mail
-		if ( $this->sendRegistrationMail( $regData ) ) {
+		/*if ( $this->sendRegistrationMail( $regData ) ) {
 			return true;			
 		} else {
 			return false;
-		}
+		}*/
 		
 	}
 	
@@ -118,6 +123,7 @@ class Tinebase_Json_UserRegistration
 	 * @todo 	add more texts to mail views
 	 * @todo	set correct activation link
 	 * @todo	translate mails
+	 * @todo 	test function
 	 */
 	protected function sendRegistrationMail ( $_regData ) 
 	{

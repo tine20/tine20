@@ -206,6 +206,29 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                                        icon: Ext.MessageBox.INFO
                                     });
                                     return false;
+                                } else {
+                                	// register new user!
+                                	//-- just testing -> this is going to happen in step/card 2-4
+                                	//-- with ajax request??
+                                	
+                                	// get values in array 
+                                	//-- we need more values here (i.e. email address)
+                                	var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
+					                Ext.Ajax.request({
+					                    url: 'index.php',
+					                    params: {
+					                        method: 'Tinebase_UserRegistration.registerUser',
+					                        regData: Ext.util.JSON.encode(cardNamesValues)
+					                    },
+					                    success: function(result, request) {
+					                    	console.log('creating new user account...' );
+					                    	// get result
+					                    },
+					                    failure: function (result, request) { 
+					                        
+					                    },
+					                    scope: this
+					                });
                                 }
                         }
                         //console.log(currentItem);
