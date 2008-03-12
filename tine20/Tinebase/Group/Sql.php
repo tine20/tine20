@@ -19,11 +19,28 @@
 class Tinebase_Group_Sql implements Tinebase_Group_Interface
 {
     /**
+     * the groups table
+     *
+     * @var Tinebase_Db_Table
+     */
+    protected $groupsTable;
+    
+    /**
+     * the groupmembers table
+     *
+     * @var Tinebase_Db_Table
+     */
+    protected $groupMembersTable;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() {
+        $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'groups'));
+        $this->groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -65,9 +82,6 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         } else {
             $accountId = (int) $_accountId;
         }
-        $result = $this->_backend->getGroupMemberships($accountId);
-        
-        return $result;
     }
     
     /**
@@ -78,9 +92,6 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMembers($_groupId)
     {
-        $result = $this->_backend->getGroupMembers($_groupId);
-        
-        return $result;
     }
     
     /**
@@ -92,9 +103,6 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
-        $result = $this->_backend->setGroupMembers($_groupId, $_groupMembers);
-        
-        return $result;
     }
 
     /**
@@ -102,13 +110,16 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
+     * @return void
      */
     public function addGroupMember($_groupId, $_accountId)
     {
-        $result = $this->_backend->addGroupMember($_groupId, $_accountId);
+        $data = array(
+            'group_id'      => $_groupId,
+            'account_id'    => $_accountId
+        );
         
-        return $result;
+        $this->groupMembersTable->insert($data);
     }
 
     /**
@@ -116,13 +127,16 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
+     * @return void
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
-        $result = $this->_backend->removeGroupMember($_groupId, $_accountId);
+        $where = array(
+            'group_id'      => $_groupId,
+            'account_id'    => $_accountId
+        );
         
-        return $result;
+        $this->groupMembersTable->delete($where);
     }
     
     /**
@@ -131,11 +145,21 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      * @param string $_groupName
      * @return unknown
      */
-    public function addGroup($_groupName)
+    public function addGroup(Tinebase_Group_Model_Group $_group)
     {
-        $result = $this->_backend->addGroup($_groupName);
+        $data = $_group->toArray();
         
-        return $result;
+        if(empty($data['id'])) {
+            unset($data['id']);
+        }
+        
+        $groupId = $this->groupsTable->insert($data);
+        
+        if(!isset($data['id'])) {
+            $_group->id = $groupId;
+        }
+        
+        return $_group;
     }
     
     /**
@@ -146,8 +170,5 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function deleteGroup($_groupId)
     {
-        $result = $this->_backend->deleteGroup($_groupId);
-        
-        return $result;
     }
 }
