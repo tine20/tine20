@@ -41,7 +41,7 @@
 			<fields>
 				<field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
 				<field name="name" type="varchar(128)" NULL="NOT NULL" />
-				<field name="description" type="varchar(256)" NULL="NOT NULL" />
+				<field name="description" type="varchar(256)" NULL="NULL" />
 			</fields>
 			<keys>
 				<key type="PRIMARY KEY" name="groups_id">
@@ -53,17 +53,43 @@
 		</table>
 		<table name="group_members">
 			<fields>
-				<field name="groupid" type="int(11) unsigned" NULL="NOT NULL" />
-				<field name="accountid" type="int(11) unsigned" NULL="NOT NULL" />
+				<field name="group_id" type="int(11) unsigned" NULL="NOT NULL" />
+				<field name="account_id" type="int(11) unsigned" NULL="NOT NULL" />
 			</fields>
 			<keys>
 				<key type="UNIQUE KEY" name="groupmembers_uniqueid">
-					<keyfield>groupid</keyfield>
-					<keyfield>accountid</keyfield>
+					<keyfield>group_id</keyfield>
+					<keyfield>account_id</keyfield>
 				</key>
 			</keys>
 			<engine>InnoDB</engine>
 			<charset>utf8</charset>
 		</table>
+        <table name="accounts">
+            <fields>
+                <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
+                <field name="login_name" type="varchar(64)" NULL="NOT NULL" />
+                <field name="password" type="varchar(100)" NULL="NOT NULL" />
+                <field name="last_login" type="datetime" NULL="NULL" />
+                <field name="last_login_from" type="varchar(20)" NULL="NULL" />
+                <field name="last_password_change" type="datetime" NULL="NULL" />
+                <field name="status" type="enum('enabled','disabled')" NULL="NOT NULL" />
+                <field name="expires_at" type="datetime" NULL="NULL" />
+                <field name="blocked_until" type="datetime" NULL="NULL" />
+                <field name="login_failures" type="int(11) unsigned" NULL="NULL" />
+                <field name="last_login_failure_at" type="datetime" NULL="NULL" />
+                <field name="primary_group" type="int(11) unsigned" NULL="NOT NULL" />
+            </fields>
+            <keys>
+                <key type="PRIMARY KEY" name="account_id">
+                    <keyfield>id</keyfield>
+                </key>
+                <key type="UNIQUE KEY" name="login_name">
+                    <keyfield>login_name</keyfield>
+                </key>
+            </keys>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+        </table>
 	</tables>
 </application>
