@@ -78,9 +78,9 @@ class Tinebase_Json_UserRegistration
 	 * @param 	array $regData 		json data from registration frontend
 	 * @return 	bool
 	 * 
-	 * @todo	activate registration mail
 	 * @todo	save default account values elsewhere (where?)
 	 * @todo	use new addAccount function ?
+	 * @todo	remove testing email address
 	 */
 	public function registerUser ( $regData ) 
 	{
@@ -95,22 +95,23 @@ class Tinebase_Json_UserRegistration
 		$regData['accountPrimaryGroup'] = '-4'; 
 		$regData['accountDisplayName'] = $regData['accountFirstName'].' '.$regData['accountLastName']; 
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
-		
-		// get model
-		$account = new Tinebase_Account_Model_FullAccount($regData);
 
-		// save user data (account & contact) via the Account and Addressbook controllers
+		//-- save email address in the regData (only for testing)
+		$regData['accountEmailAddress'] = 'p.schuele@metaways.de';
+		
+		// get model & save user data (account & contact) via the Account and Addressbook controllers
+		$account = new Tinebase_Account_Model_FullAccount($regData);
 		Tinebase_Account::getInstance()->saveAccount ( $account );
 		
 		//-- use new function: addAccount	(saves the contact as well) ?
 		//Tinebase_Account::getInstance()->addAccount ( $account );
  		
 		// send mail
-		/*if ( $this->sendRegistrationMail( $regData ) ) {
+		if ( $this->sendRegistrationMail( $regData ) ) {
 			return true;			
 		} else {
 			return false;
-		}*/
+		}
 		
 	}
 	
@@ -121,7 +122,7 @@ class Tinebase_Json_UserRegistration
 	 * @return 	bool
 	 * 
 	 * @todo 	add more texts to mail views
-	 * @todo	set correct activation link
+	 * @todo 	encrypt username in activation link
 	 * @todo	translate mails
 	 * @todo 	test function
 	 */
@@ -132,7 +133,8 @@ class Tinebase_Json_UserRegistration
         
         $mail->setSubject("Welcome to Tine 2.0");
         
-        $recipientName = $_regData['accountFirstName']." ".$_regData['accountLastName'];
+        $recipientName = $_regData['accountDisplayName'];
+        $recipientEmail = $_regData['accountEmailAddress'];
 
         // get plain and html message from views
         //-- translate text and insert correct link
@@ -140,7 +142,8 @@ class Tinebase_Json_UserRegistration
         $view->setScriptPath('Tinebase/views');
         
         $view->mailTextWelcome = "Welcome to Tine 2.0";
-        $view->mailActivationLink = '<a href="http://www.tine20.org">activate!</a>';
+        $view->mailActivationLink = '<a href="http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
+        	'?method=Tinebase.activateAccount&_username='.$_regData['accountLoginName'].'">activate!</a>';
         
         $messagePlain = $view->render('registrationMailPlain.php');       
         $mail->setBodyText($messagePlain);
@@ -153,10 +156,10 @@ class Tinebase_Json_UserRegistration
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
 
-        if( !empty($_regData['email']) ) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send registration email to ' . $_regData['email']);
+        if( !empty($recipientEmail) ) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send registration email to ' . $recipientEmail);
 
-            $mail->addTo($_regData['email'], $recipientName);
+            $mail->addTo($recipientEmail, $recipientName);
         
             $mail->send();
             
@@ -165,7 +168,7 @@ class Tinebase_Json_UserRegistration
 		
         return false;
 	}
-
+		
 	/**
 	 * send lost password mail
 	 *

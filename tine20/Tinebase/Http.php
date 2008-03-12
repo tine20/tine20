@@ -121,4 +121,33 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
+
+	/**
+	 * activate user account
+	 *
+	 * @param 	string $_username
+	 * 
+	 * @todo 	update account data in DB
+	 * @todo 	decrypt username 
+	 * @todo 	test function
+	 */
+	public function activateAccount ( $_username ) 
+	{
+		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activate account for ' . $_username);
+       	
+		//echo "user $_username activated his account!";
+		
+		//-- set activation flag in DB
+		
+		$view = new Zend_View();
+        $view->title="Tine 2.0 User Activation";
+        $view->username = $_username;
+        $view->loginUrl = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
+
+        $view->setScriptPath('Tinebase/views');
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('activate.php');
+	
+	}
 }
