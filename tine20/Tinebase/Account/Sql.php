@@ -466,6 +466,75 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     }
     
     /**
+     * add an account
+     * 
+     * this function adds an account 
+     *
+     * @param Tinebase_Account_Model_FullAccount $_account
+     * @return Tinebase_Account_Model_FullAccount
+     */
+    public function addAccount(Tinebase_Account_Model_FullAccount $_account)
+    {
+        if(!$_account->isValid()) {
+            throw(new Exception('invalid account object'));
+        }
+
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+
+        $accountData = array(
+            'login_name'    => $_account->accountLoginName,
+            'status'        => $_account->accountStatus,
+            'expires_at'    => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
+            'primary_group' => $_account->accountPrimaryGroup,
+        );
+        if(!empty($_account->accountId)) {
+            $accountData['id'] = $_account->accountId;
+        }
+        
+        $contactData = array(
+            'n_family'      => $_account->accountLastName,
+            'n_given'       => $_account->accountFirstName,
+            'n_fn'          => $_account->accountFullName,
+            'n_fileas'      => $_account->accountDisplayName,
+            'contact_email' => $_account->accountEmailAddress
+        );
+
+        try {
+            Zend_Registry::get('dbAdapter')->beginTransaction();
+            
+            $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+            $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
+            
+            // add new account
+            $accountId = $accountsTable->insert($accountData);
+            
+            // if we insert an account without an accountId, we need to get back one
+            if(empty($_account->accountId) && $accountId == 0) {
+                throw new Exception("returned accountId is 0");
+            }
+            
+            // if the account had no accountId set, set the id now
+            if(empty($_account->accountId)) {
+                $_account->accountId = $accountId;
+            }
+            
+            $contactData['account_id'] = $accountId;
+            $contactData['contact_tid'] = 'n';
+            $contactData['contact_owner'] = 1;
+            
+            $contactsTable->insert($contactData);
+            
+            Zend_Registry::get('dbAdapter')->commit();
+            
+        } catch (Exception $e) {
+            Zend_Registry::get('dbAdapter')->rollBack();
+            throw($e);
+        }
+        
+        return $_account;
+    }
+    
+    /**
      * delete a account
      *
      * @param int $_accountId
