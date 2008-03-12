@@ -5,9 +5,10 @@
     <order>10</order>
     <tables>
         <table>
-            <name>egw_addressbook</name>
+            <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
+            <version>0.0.1</version>
             <declaration>
                 <field>
                     <name>account_id</name>
@@ -300,26 +301,26 @@
                     <length>40</length>
                 </field>
                 <index>
-                    <name>egw_addressbook_account_id</name>
+                    <name>addressbook_account_id</name>
                     <unique>true</unique>
                     <field>
                         <name>account_id</name>
                     </field>
                 </index>
                 <index>
-                    <name>egw_addressbook_cat_id</name>
+                    <name>addressbook_cat_id</name>
                     <field>
                         <name>cat_id</name>
                     </field>
                 </index>
                 <index>
-                    <name>egw_addressbook_contact_owner</name>
+                    <name>addressbook_contact_owner</name>
                     <field>
                         <name>contact_owner</name>
                     </field>
                 </index>
                 <index>
-                    <name>egw_addressbook_n_family_n_given</name>
+                    <name>addressbook_n_family_n_given</name>
                     <field>
                         <name>n_family</name>
                     </field>
@@ -328,13 +329,13 @@
                     </field>
                 </index>
                 <index>
-                    <name>egw_addressbook_n_fileas</name>
+                    <name>addressbook_n_fileas</name>
                     <field>
                         <name>n_fileas</name>
                     </field>
                 </index>
                 <index>
-                    <name>egw_addressbook_n_given_n_family</name>
+                    <name>addressbook_n_given_n_family</name>
                     <field>
                         <name>n_family</name>
                     </field>
@@ -343,7 +344,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>egw_addressbook_org_name_n_family_n_given</name>
+                    <name>addressbook_org_name_n_family_n_given</name>
                     <field>
                         <name>n_family</name>
                     </field>
@@ -360,129 +361,6 @@
                     <unique>true</unique>
                     <field>
                         <name>contact_id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        <table>
-            <name>egw_addressbook2list</name>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-            <declaration>
-                <field>
-                    <name>contact_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>list_added</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>list_added_by</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>list_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>primary</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>contact_id</name>
-                    </field>
-                    <field>
-                        <name>list_id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        <table>
-            <name>egw_addressbook_extra</name>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-            <declaration>
-                <field>
-                    <name>contact_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>contact_name</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>contact_owner</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>contact_value</name>
-                    <type>clob</type>
-                </field>
-                <index>
-                    <name>primary</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>contact_id</name>
-                    </field>
-                    <field>
-                        <name>contact_name</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        <table>
-            <name>egw_addressbook_lists</name>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-            <declaration>
-                <field>
-                    <name>list_created</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>list_creator</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>list_id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>list_name</name>
-                    <type>text</type>
-                    <length>80</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>list_owner</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>egw_addressbook_lists_list_owner_list_name</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>list_name</name>
-                    </field>
-                    <field>
-                        <name>list_owner</name>
-                    </field>
-                </index>
-                <index>
-                    <name>primary</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>list_id</name>
                     </field>
                 </index>
             </declaration>
