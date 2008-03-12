@@ -1,6 +1,6 @@
 <?php
 /**
- * new lead plain view
+ * new lead email text (plain)
  * 
  * @package     CRM
  * @subpackage  Views
