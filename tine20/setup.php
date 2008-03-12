@@ -31,3 +31,6 @@ foreach ( new DirectoryIterator('./') as $item ) {
 		}
 	}
 }
+
+#$import = new Setup_Import_Egw14();
+#$import->import();
