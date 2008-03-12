@@ -66,7 +66,7 @@ class Setup_Tables
         
         $xml = simplexml_load_file($_file);
         
-        if(is_array($xml->tables[0])) {
+        if(isset($xml->tables)) {
             foreach ($xml->tables[0] as $table) {
                   $tableName = SQL_TABLE_PREFIX . $table['name'];
                   if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
@@ -91,8 +91,23 @@ class Setup_Tables
             $application = Tinebase_Application::getInstance()->addApplication($application);
         }
         
-        foreach($createdTables as $tableName) {
-            #$this->addTableToApplication($applicationId, $table['name']);
+        foreach($createdTables as $table) {
+            $this->addTable($application, SQL_TABLE_PREFIX . $table['name'], '0.0.1');
         }
+    }
+    
+    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
+    {
+        $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
+
+        $applicationData = array(
+            'application_id'    => $_application->id,
+            'name'              => $_name,
+            'version'           => $_version
+        );
+
+        $applicationID = $applicationTable->insert($applicationData);
+
+        return $applicationID;
     }
 }
