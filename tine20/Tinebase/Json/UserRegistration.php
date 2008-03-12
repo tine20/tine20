@@ -36,7 +36,7 @@ class Tinebase_Json_UserRegistration
 		//-- get method from config (email, firstname+lastname, other strings)
 		
 		// build username from firstname (first char) & lastname
-		$suggestedUsername = substr($regDataArray['accountFirstName'],0,1).$regDataArray['accountLastName'];
+		$suggestedUsername = strtolower(substr($regDataArray['accountFirstName'],0,1).$regDataArray['accountLastName']);
 		
 		return $suggestedUsername;
 	}
@@ -97,11 +97,11 @@ class Tinebase_Json_UserRegistration
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
 
 		//-- save email address in the regData (only for testing)
-		$regData['accountEmailAddress'] = 'p.schuele@metaways.de';
+		$regData['accountEmailAddress'] = $regData['accountEmailaddress'];
 		
 		// get model & save user data (account & contact) via the Account and Addressbook controllers
 		$account = new Tinebase_Account_Model_FullAccount($regData);
-		Tinebase_Account::getInstance()->saveAccount ( $account );
+		Tinebase_Account::getInstance()->saveAccount($account);
 		
 		//-- use new function: addAccount	(saves the contact as well) ?
 		//Tinebase_Account::getInstance()->addAccount ( $account );

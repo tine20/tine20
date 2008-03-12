@@ -23,6 +23,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
      * holds reg form (card layout)
      */
     regForm: false,
+    registrationData: {},
     
     /**
      * @private
@@ -32,6 +33,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         Tine.Tinebase.UserRegistration.superclass.initComponent.call(this);
         
     },
+    
     navHandler: function(button) {
         var direction = 1;
         if (button.id == 'move-prev') {
@@ -42,6 +44,29 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         console.log(cl);
         //this.getRegForm().setActiveItem(this.regFrom.activeItem + direction);
     },
+    
+    getSuggestedUsername: function() {
+        Ext.Ajax.request({
+            url: 'index.php',
+            //method: POST, (should not be required)
+            params: {
+                method: 'Tinebase_UserRegistration.suggestUsername',
+                regData: Ext.util.JSON.encode(this.registrationData)
+            },
+            
+            success: function(result, request) {
+            	Ext.getCmp('accountLoginName').setValue(Ext.util.JSON.decode(result.responseText));
+            	this.registrationData.accountLoginName = Ext.util.JSON.decode(result.responseText);
+                //accountLoginName.setValue( Ext.util.JSON.decode(result.responseText));
+                // hack to detect user change
+                //accountLoginName.originalValue = accountLoginName.getValue();
+                //this.accountLoginName = accountLoginName.getValue();
+            },
+            
+            scope: this
+        });
+    },
+    
     /**
      * First card, all about names
      * 
@@ -60,49 +85,44 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             id: 'accountFirstName',
             allowBlank: true
         });
+        accountFirstName.on('blur', function(textField){
+        	this.registrationData.accountFirstName = textField.getValue();
+        	this.getSuggestedUsername();
+        }, this);
+        
         var accountLastName = new Ext.form.TextField({
             fieldLabel: 'Family name',
             name: 'accountLastName',
             id: 'accountLastName',
             allowBlank: false
         });
+        accountLastName.on('blur', function(textField){
+            this.registrationData.accountLastName = textField.getValue();
+            this.getSuggestedUsername();
+        }, this);
+        
         var accountLoginName = new Ext.form.TextField({
             fieldLabel: 'Login name',
             name: 'accountLoginName',
             id: 'accountLoginName',
-            //validator: function(accountLoginName) {
-            //    
-            //}
             allowBlank: false
         });
-        
-        // suggest an accountLoginName
-        accountLoginName.on('focus', function(accountLoginName) {
-            if (!accountLoginName.getValue()) {
-                var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
-                Ext.Ajax.request({
-                    url: 'index.php',
-                    //method: POST, (should not be required)
-                    params: {
-                        method: 'Tinebase_UserRegistration.suggestUsername',
-                        regData: Ext.util.JSON.encode(cardNamesValues)
-                    },
-                    success: function(result, request) {
-                    	accountLoginName.setValue( Ext.util.JSON.decode(result.responseText));
-                        // hack to detect user change
-                        accountLoginName.originalValue = accountLoginName.getValue();
-                        this.accountLoginName = accountLoginName.getValue();
-                    },
-                    failure: function (result, request) { 
-                        
-                    },
-                    scope: this
-                });
-            }
+        accountLoginName.on('blur', function(textField){
+            this.registrationData.accountLoginName = textField.getValue();
         }, this);
-        
         accountLoginName.on('change', function(accountLoginName) {
             //console.log('hallo');
+        }, this);        
+
+        var accountEmailaddress = new Ext.form.TextField({
+            fieldLabel: 'Emailaddress',
+            name: 'accountEmailaddress',
+            id: 'accountEmailaddress',
+            vtype: 'email',
+            allowBlank: false
+        });
+        accountEmailaddress.on('blur', function(textField){
+            this.registrationData.accountEmailaddress = textField.getValue();
         }, this);
         
         var cardNamesPanel = new Ext.form.FormPanel({
@@ -117,6 +137,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             items: [
                 accountFirstName,
                 accountLastName,
+                accountEmailaddress,
                 accountLoginName
             ]
         });
@@ -140,9 +161,8 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                 {
                     id: 'card-1',
                     style: {'padding': '5px'},
-                    html: '<p>Step 2 of 5</p>'
-                },
-                {
+                    html: '<h1>Congratulations!</h1><p>You have entered all needed information. If you press the Finish button we will send you the registration email.</p>'
+                }/*,{
                     id: 'card-2',
                     style: {'padding': '5px'},
                     html: '<p>Step 3 of 5</p>'
@@ -154,7 +174,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                     id: 'card-4',
                     style: {'padding': '5px'},
                     html: '<h1>Congratulations!</h1><p>Step 5 of 5 - Complete</p>'
-                }]
+                }*/]
             });
             
             
@@ -164,100 +184,77 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                         switch(currentItem.id) {
                             case 'cardNames':
                             	// check valid username
-                            	console.log('checking username .... ' + this.accountLoginName );
+                            	//console.log('checking username .... ' + this.accountLoginName );
                             	//-- i'll set it to true for the moment (till the synchronous ajax function works)                            	
 								//var validUsername = false;
                             	var validUsername = true;
                             	
-								if ( this.accountLoginName ) {
+/*								if ( this.registrationData.accountLoginName ) {
 					                Ext.Ajax.request({
 					                    url: 'index.php',
 					                    params: {
 					                        method: 'Tinebase_UserRegistration.checkUniqueUsername',
-					                        username: Ext.util.JSON.encode(this.accountLoginName)
+					                        username: Ext.util.JSON.encode(this.registrationData.accountLoginName)
 					                    },
+
 					                    success: function(result, request) {
-					                    	console.log('username check result: ' + Ext.util.JSON.decode(result.responseText));
 					                    	// get result
 					                    	if ( Ext.util.JSON.decode(result.responseText) == true ) {
 					                    		validUsername = true;
 					                    	}
-					                    	console.log ( 'validUsername = ' + validUsername );
 					                    },
-					                    failure: function (result, request) { 
-					                        
-					                    },
+
 					                    scope: this
 					                });
 								}
 
-								console.log ( 'validUsername before check = ' + validUsername );
-								
-								//-- wait for ajax request to finish or use callback function
-								// see: http://extjs.com/forum/showthread.php?t=27427
-								
-                				if ( !this.accountLoginName || !validUsername ) {
+                				if ( !this.registrationData.accountLoginName || validUsername !== true) {
                                     Ext.Msg.show({
-                                       title:'Login name',
-                                       msg: 'The login name you chose is not valid. Please choose a valid login name.',
-                                       buttons: Ext.Msg.OK,
-                                       //fn: processResult,
-                                       animEl: 'elId',
-                                       icon: Ext.MessageBox.INFO
+										title:'Login name',
+										msg: 'The login name you chose is not valid. Please choose a valid login name.',
+										buttons: Ext.Msg.OK,
+										//fn: processResult,
+										animEl: 'elId',
+										icon: Ext.MessageBox.INFO
                                     });
                                     return false;
-                                } else {
-                                	// register new user!
-                                	// just for testing -> this is going to happen in step/card 2-4
-                                	//-- with ajax request??
-                                	
-                                	// uncomment the following to do some testing with the user registration
-									/*
-                                	// get values in array
-                                	//-- we need more values here (i.e. email address)
-									var cardNamesValues = Ext.getCmp('cardNames').getForm().getValues();
-					                Ext.Ajax.request({
-					                    url: 'index.php',
-					                    params: {
-					                        method: 'Tinebase_UserRegistration.registerUser',
-					                        regData: Ext.util.JSON.encode(cardNamesValues)
-					                    },
-					                    success: function(result, request) {
-					                    	console.log('creating new user account...' );
-					                    	// get result
-					                    },
-					                    failure: function (result, request) { 
-					                        
-					                    },
-					                    scope: this
-					                });
-					                */
-                                }
+                                }*/
                         }
-                        //console.log(currentItem);
-                            //var msg = 'Leaving ' + currentItem.id + ', entering ' + nextItem.id
-                            //        + '\nAre you sure you want to do that?';
-                             
-                            //return forward ? window.confirm(msg) : true;
-                          },
+                    },
                     scope: this 
                 },
+                
                 'activate': {
                     fn: function(currentItem) {
-                            //Ext.MessageBox.alert('Wizard', 'Entering ' + currentItem.id);
-                          },
-                    scope: this
-                }, 
-                'cancel': {
-                    fn: function() {
-                        this.close();
-                            //Ext.MessageBox.alert('Wizard', 'Cancel');
+                        //Ext.MessageBox.alert('Wizard', 'Entering ' + currentItem.id);
                     },
                     scope: this
                 },
+                 
+                'cancel': {
+                    fn: function() {
+                        this.close();
+                        //Ext.MessageBox.alert('Wizard', 'Cancel');
+                    },
+                    scope: this
+                },
+                
                 'finish': {
                     fn: function() {
-                            //Ext.MessageBox.alert('Wizard', 'Finish');
+                        Ext.Ajax.request({
+                            url: 'index.php',
+                            params: {
+                                method: 'Tinebase_UserRegistration.registerUser',
+                                regData: Ext.util.JSON.encode(this.registrationData)
+                            },
+
+                            success: function(result, request) {
+                                //console.log('creating new user account...' );
+                                this.close();
+                                // get result
+                            },
+                            scope: this
+                        });
                     },
                     scope: this
                 }    
