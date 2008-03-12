@@ -48,20 +48,30 @@ class Tinebase_Json_UserRegistration
 	 * @return 	bool
 	 * 
 	 * @todo 	test function
+	 * @todo	getAccountByLoginName not working yet (error if account doesn't exist)
 	 */
 	public function checkUniqueUsername ( $username ) 
 	{
 		$username = Zend_Json_Decoder::decode($username);
 		
-		//-- get account with this username from db
-		//$account = Tinebase_Account::getInstance()->getAccountByLoginName($username);
-		
 		// if exists -> return false
-		if ( empty($account) ) {
+		//-- is it ok to use the try/catch mechanism or should we implement a accountExists-function in the account controller/model?
+		try {
+			Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call getAccountByLoginName with username '.$username);
+			
+			// get account with this username from db
+			//-- still an error if account doesn't exist
+			$account = Tinebase_Account::getInstance()->getAccountByLoginName($username);
+			return false;
+		} catch ( Exception $e ) {
+			return true;
+		}
+		
+		/*if ( empty($account) ) {
 			return true;
 		} else {
-			return false;
-		}
+			return false;	
+		}*/
 	}
 
 	/**

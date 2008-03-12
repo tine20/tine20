@@ -44,10 +44,13 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     },
     /**
      * First card, all about names
+     * 
      * @todo Ajax validation of accountLoginName is a bit complex, as ExtJS don't support syncrous requests.
      * As such, we have to introduce a valid flag. If the user presses the next button, and the valid flag is not
      * set, we have to ask the ajax-request if it's running, if yes, display a waitbar, if no ask the user to change the name.
      * Therefore we also need to add a on-change listener to the filed.
+     * 
+     * @todo username change is not working yet
      */
     cardNames: function () {
         

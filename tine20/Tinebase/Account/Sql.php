@@ -188,6 +188,8 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      *
      * @param string $_loginName the loginname of the account
      * @return Tinebase_Account_Model_Account the account object
+     *
+     * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
@@ -195,16 +197,28 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             ->where(SQL_TABLE_PREFIX . 'accounts.account_lid = ?', $_loginName);
 
         //error_log("getAccounts:: " . $select->__toString());
+ 		//Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName select stmt: '.$select->__toString() );        
 
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+	   	// throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
+	   	// because of the wrong type that is not catched by the block below)
+	   	//-- is it ok to throw this exception here? 
+    	if ( !is_array($row) ) {
+			$e = new Tinebase_Record_Exception_NotDefined('row is empty');
+            Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
+            throw $e;    	
+    	}        
 
         try {
             $account = new $_accountClass();
+            //Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName try block 1 / row: '. print_r( $row) );
             $account->setFromArray($row);
+            //Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName try block 2' );
         } catch (Exception $e) {
-            $validation_errors = $account->getValidationErrors();
+        	$validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
                 "Tinebase_Account_Model_Account::validation_errors: \n" .
                 print_r($validation_errors,true));
