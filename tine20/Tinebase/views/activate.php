@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: login.php 1008 2008-03-11 15:27:21Z nelius_weiss $
+ * @version     $Id$
  *
  * @todo		style it some more ... ;)
  */
