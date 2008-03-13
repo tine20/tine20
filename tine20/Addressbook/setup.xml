@@ -97,6 +97,7 @@
                 <field>
                     <name>contact_created</name>
                     <type>integer</type>
+                    <length>20</length>
                 </field>
                 <field>
                     <name>contact_creator</name>
@@ -140,6 +141,7 @@
                 <field>
                     <name>contact_modified</name>
                     <type>integer</type>
+                    <length>20</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -159,6 +161,7 @@
                     <name>contact_private</name>
                     <type>integer</type>
                     <default>0</default>
+                    <length>4</length>
                 </field>
                 <field>
                     <name>contact_pubkey</name>
@@ -361,6 +364,132 @@
                     <unique>true</unique>
                     <field>
                         <name>contact_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>egw_addressbook2list</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>contact_id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_added</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>list_added_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>list_id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>primary</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>egw_addressbook_extra</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>contact_id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_owner</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>contact_value</name>
+                    <type>clob</type>
+                </field>
+                <index>
+                    <name>primary</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                    <field>
+                        <name>contact_name</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>egw_addressbook_lists</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>list_created</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>list_creator</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>list_id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_name</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_owner</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>egw_addressbook_lists_list_owner_list_name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>list_name</name>
+                    </field>
+                    <field>
+                        <name>list_owner</name>
+                    </field>
+                </index>
+                <index>
+                    <name>list_id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>list_id</name>
                     </field>
                 </index>
             </declaration>
