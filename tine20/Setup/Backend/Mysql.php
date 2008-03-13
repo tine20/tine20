@@ -24,34 +24,31 @@ class Setup_Backend_Mysql
      */
     public function createTable($_table)
     {
-        $statement = "CREATE TABLE IF NOT EXISTS `" . SQL_TABLE_PREFIX . $_table['name'] . "` (\n";
+        $statement = "CREATE TABLE IF NOT EXISTS `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
 
-        foreach ($_table->fields[0] as $field) {
-            if($field['name'] != '') {
-                $statement .= "`" . $field['name'] . "` " . $field['type'] . " " . $field['NULL'];
-                if (isset($field['extra'])) {
-                    $statement .= " " . $field['extra'];
-                }
-                $statement .=",\n";
+        foreach ($_table->declaration->field as $field) {
+            if(isset($field->name)) {
+               $statement .= $this->_getMysqlDeclarations($field) . ",\n";
             }
         }
 
-        foreach ($_table->keys[0] as $key) {
-            $statement .= " " . $key['type'] . " `" . SQL_TABLE_PREFIX . $key['name'] . "` (" ;
+        foreach ($_table->declaration->index as $key) {
+        
+            $statement .= $this->_getMysqlIndexDeclarations($key) . " `" . SQL_TABLE_PREFIX . $key->name . "` (" ;
 
-            foreach ($key->keyfield as $keyfield) {
-                $statement .= "`"  . (string)$keyfield . "`,";
+            foreach ($key->field as $keyfield) {
+                $statement .= "`"  . (string)$keyfield->name . "`,";
             }
-            	
-            $statement = substr($statement, 0, (strlen($statement)-1)) . "),";
+                
+            $statement = substr($statement, 0, (strlen($statement)-1)) . "),\n";
         }
 
-        $statement = substr($statement, 0, (strlen($statement)-1)) ;
+        $statement = substr($statement, 0, (strlen($statement)-2)) ;
         $statement .= ")";
 
-        $statement .= 	"\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
+        $statement .=     "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
 
-        echo "<pre>$statement</pre>";
+       // echo "<pre>$statement</pre>";
 
         Zend_Registry::get('dbAdapter')->query($statement);
     }
@@ -80,4 +77,106 @@ class Setup_Backend_Mysql
       
         return true;
     }
+    
+    private function _getMysqlDeclarations($_field)
+    {
+        $definition = '`' . $_field->name . '`';
+
+        switch ($_field->type)
+        {
+            case('text'):
+            {
+                if (isset($_field->length))
+                {
+                    $definition .= ' varchar(' . $_field->length . ') ';
+                }
+                else
+                {
+                    $definition .= ' ' . $_field->type . ' ';
+                }
+                break;
+            }
+            case ('integer'):
+            {
+                if (isset($_field->length))
+                {
+                    if ($_field->length > 19)
+                    {
+                        $definition .= ' bigint(' . $_field->length . ') ';}
+                    else if($_field->length < 5)
+                    {
+                        $definition .= ' tinyint(' . $_field->length . ') ';
+                    }
+                    else
+                    {
+                        $definition .= ' int(' . $_field->length . ') ';
+                    }
+                }
+                else
+                {
+                    $definition .= ' int(11) ';
+                }
+                break;
+            }
+            case ('clob'):
+            {
+                $definition .= ' text ';
+                break;
+            }
+            case ('blob'):
+            {
+                $definition .= ' longblob ';
+                break;
+            }
+        }
+        
+        if (isset($_field->autoincrement))    
+        {
+            $definition .= ' auto_increment';
+        }
+        
+        if (isset($_field->default))
+        {
+            $definition .= "default '" . $_field->default . "'";
+        }
+        
+        if (isset($_field->notnull))
+        {
+            if ($_field->notnull)
+            {
+                $definition .= ' NOT NULL ';
+            }
+        }
+        else
+        {
+            $definition .= ' default NULL ';
+        }
+        
+        return $definition;
+    }
+    
+    private function _getMysqlIndexDeclarations($_key)
+    {
+        $definition = '';
+        if (isset($_key->primary))
+        {
+            if ($_key->primary)
+            {
+                $definition = 'PRIMARY KEY';
+            }
+        } 
+        else if (isset($_key->unique))
+        {
+            if ($_key->unique)
+            {
+                $definition = 'UNIQUE KEY';
+            }
+        }
+        else 
+        {
+            $definition = 'KEY';
+        }
+        return $definition;
+    }
+    
 }
