@@ -147,4 +147,38 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         echo $view->render('activate.php');
 	
 	}
+	
+	/**
+	 * generate captcha
+	 *
+	 * @todo	add to user registration
+	 * @todo 	save security code in db/session
+	 */
+	public function generateCaptcha () 
+	{	
+		$security_code = substr(md5(uniqid()), 4, 4);
+		
+       	//Set the image width and height
+        $width = 120;
+        $height = 20;
+
+        // Create the image resource
+        $image = ImageCreate($width, $height);  
+		
+        // get colors, black background, set security code, add some lines
+        $white = ImageColorAllocate($image, 255, 255, 255);
+        $black = ImageColorAllocate($image, 0, 0, 0);
+        $grey = ImageColorAllocate($image, 204, 204, 204);
+        ImageFill($image, 0, 0, $black);
+        ImageString($image, 4, 40, 4, $security_code, $white);
+        ImageRectangle($image,0,0,$width-1,$height-1,$grey);
+        imageline($image, 0, $height/2, $width, $height/2, $grey);
+        imageline($image, $width/2, 0, $width/2, $height, $grey);
+
+        //Tell the browser what kind of file is come in
+        header("Content-Type: image/jpeg");
+
+        //Output the newly created image in jpeg format
+        ImageJpeg($image);		
+	}
 }
