@@ -91,5 +91,24 @@
             <engine>InnoDB</engine>
             <charset>utf8</charset>
         </table>
+        <table name="registrations">
+            <fields>
+                <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
+                <field name="login_name" type="varchar(64)" NULL="NOT NULL" />
+                <field name="reg_date" type="datetime" NULL="NULL" />
+                <field name="status" type="enum('deactivated','activated')" NULL="NOT NULL" />
+                <field name="expires_at" type="datetime" NULL="NULL" />
+            </fields>
+            <keys>
+                <key type="PRIMARY KEY" name="account_id">
+                    <keyfield>id</keyfield>
+                </key>
+                <key type="UNIQUE KEY" name="login_name">
+                    <keyfield>login_name</keyfield>
+                </key>
+            </keys>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+        </table>
 	</tables>
 </application>
