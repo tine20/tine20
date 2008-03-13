@@ -9,10 +9,16 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo		fill with more text
  */
 ?>
 
 <?php echo $this->mailTextWelcome ?>
 
+You have successfully registered to the new groupware system Tine 2.0. Please click on the activation link below to activate your account.
+
 <?php echo $this->mailActivationLink ?>
+
+Your username and password are: <?= $this->username ?> / <?= $this->password ?>
+
+Sincerly yours,
+   The Tine 2.0 Team

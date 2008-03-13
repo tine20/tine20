@@ -114,15 +114,15 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             //console.log('hallo');
         }, this);        
 
-        var accountEmailaddress = new Ext.form.TextField({
+        var accountEmailAddress = new Ext.form.TextField({
             fieldLabel: 'Emailaddress',
-            name: 'accountEmailaddress',
-            id: 'accountEmailaddress',
+            name: 'accountEmailAddress',
+            id: 'accountEmailAddress',
             vtype: 'email',
             allowBlank: false
         });
-        accountEmailaddress.on('blur', function(textField){
-            this.registrationData.accountEmailaddress = textField.getValue();
+        accountEmailAddress.on('blur', function(textField){
+            this.registrationData.accountEmailAddress = textField.getValue();
         }, this);
         
         var cardNamesPanel = new Ext.form.FormPanel({
@@ -137,7 +137,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             items: [
                 accountFirstName,
                 accountLastName,
-                accountEmailaddress,
+                accountEmailAddress,
                 accountLoginName
             ]
         });

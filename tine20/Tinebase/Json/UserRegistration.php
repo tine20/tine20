@@ -27,14 +27,14 @@ class Tinebase_Json_UserRegistration
 	 * @param 	array $regData		json data from registration frontend
 	 * @return 	string
 	 * 
-	 * @todo 	add other methods for building username
+	 * @todo 	add other methods for building username (move to js later on)
+	 * 			get method from config (email, firstname+lastname, other strings)?
+	 * @todo 	replace special chars in username
 	 */
 	public function suggestUsername ( $regData ) 
 	{
 		$regDataArray = Zend_Json_Decoder::decode($regData);
 
-		//-- get method from config (email, firstname+lastname, other strings)
-		
 		// build username from firstname (first char) & lastname
 		$suggestedUsername = strtolower(substr($regDataArray['accountFirstName'],0,1).$regDataArray['accountLastName']);
 		
@@ -78,9 +78,8 @@ class Tinebase_Json_UserRegistration
 	 * @param 	array $regData 		json data from registration frontend
 	 * @return 	bool
 	 * 
-	 * @todo	save default account values elsewhere (where?)
-	 * @todo	use new addAccount function ?
-	 * @todo	remove testing email address
+	 * @todo 	test email address validation 
+	 * @todo	save default account values elsewhere (where?) ?
 	 */
 	public function registerUser ( $regData ) 
 	{
@@ -88,24 +87,44 @@ class Tinebase_Json_UserRegistration
 		$regData = Zend_Json_Decoder::decode($regData);
 		
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call registerUser with regData: '. print_r($regData, true));
-		
+
+		// validate email address
+		require_once 'Zend/Validate/EmailAddress.php';
+		$validator = new Zend_Validate_EmailAddress();
+		if ( $validator->isValid($regData['accountEmailAddress']) == false ) {
+		    // email is invalid; print the reasons
+		    $debugMessage = __METHOD__ . '::' . __LINE__ . ' invalid registration email address: '. $regData['accountEmailAddress']."\n";
+		    foreach ($validator->getMessages() as $message) {
+		        $debugMessage .= "$message\n";
+		    }
+		    Zend_Registry::get('logger')->debug($debugMessage);
+		    
+		    // @todo throw exception?
+		    return false;
+		}
+				
 		// add more required fields to regData
-		//-- change that later on ?
 		$regData['accountStatus'] = 'A'; 
-		$regData['accountPrimaryGroup'] = '-4'; 
+		$regData['accountPrimaryGroup'] = '-4'; //-- ?
 		$regData['accountDisplayName'] = $regData['accountFirstName'].' '.$regData['accountLastName']; 
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
 
-		//-- save email address in the regData (only for testing)
-		$regData['accountEmailAddress'] = $regData['accountEmailaddress'];
+		// add expire date (user has 1 day to click on the activation link)
+		$regData['accountExpires'] = new Zend_Date ();
+		//  add 1 day
+		$regData['accountExpires']->add('24:00:00', Zend_Date::TIMES);
 		
 		// get model & save user data (account & contact) via the Account and Addressbook controllers
 		$account = new Tinebase_Account_Model_FullAccount($regData);
 		Tinebase_Account::getInstance()->saveAccount($account);
+
+		// generate password and save it
+		$regData['password'] = $this->generatePassword();
+		Tinebase_Auth::getInstance()->setPassword($regData['accountLoginName'], $regData['password'], $regData['password']);
 		
-		//-- use new function: addAccount	(saves the contact as well) ?
+		// @todo use new function: addAccount	(saves the contact as well) ?
 		//Tinebase_Account::getInstance()->addAccount ( $account );
- 		
+ 				
 		// send mail
 		if ( $this->sendRegistrationMail( $regData ) ) {
 			return true;			
@@ -121,9 +140,6 @@ class Tinebase_Json_UserRegistration
 	 * @param 	array $_regData
 	 * @return 	bool
 	 * 
-	 * @todo 	add more texts to mail views
-	 * @todo 	encrypt username in activation link
-	 * @todo	translate mails
 	 * @todo 	test function
 	 */
 	protected function sendRegistrationMail ( $_regData ) 
@@ -137,13 +153,19 @@ class Tinebase_Json_UserRegistration
         $recipientEmail = $_regData['accountEmailAddress'];
 
         // get plain and html message from views
-        //-- translate text and insert correct link
+        // @todo translate mail texts
        	$view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
         
+        // create hash from username
+        $hashed_username = md5($_regData['accountLoginName']);
+        
+        // set texts and values
         $view->mailTextWelcome = "Welcome to Tine 2.0";
-        $view->mailActivationLink = '<a href="http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
-        	'?method=Tinebase.activateAccount&_username='.$_regData['accountLoginName'].'">activate!</a>';
+        $view->mailActivationLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
+        	'?method=Tinebase.activateAccount&id='.$hashed_username;
+        $view->username = $_regData['accountLoginName'];
+        $view->password = $_regData['password'];
         
         $messagePlain = $view->render('registrationMailPlain.php');       
         $mail->setBodyText($messagePlain);
@@ -162,6 +184,9 @@ class Tinebase_Json_UserRegistration
             $mail->addTo($recipientEmail, $recipientName);
         
             $mail->send();
+            
+            // @todo save in registrations table 
+            //Tinebase_Account::getInstance()->saveRegistration($_regData['accountLoginName'], $hashed_username, $recipientEmail);
             
             return true;
         }
@@ -234,7 +259,7 @@ class Tinebase_Json_UserRegistration
 	}
 
 	/**
-	 * generate new random password
+	 * generate new random password [a-zA-z0-9]
 	 *
 	 * @param	int	$length
 	 * @return 	string
@@ -243,9 +268,17 @@ class Tinebase_Json_UserRegistration
 	 */
 	private function generatePassword ( $length = 8 ) 
 	{
-		$somestring = md5(uniqid());
-		
-		$begin = rand(0,strlen($somestring)-$length);
-		return ( substr($somestring, $begin, $length) );
+		$password = "";
+		for ($i = 0; $i < $length; $i++) {
+	    	$rdnum = mt_rand(0,61);
+		    if ($rdnum < 10) {
+		        $password .= $rdnum;
+		    } else if ($rdnum < 36) {
+		        $password .= chr($rdnum+55);
+		    } else {
+		        $password .= chr($rdnum+61);
+		    }
+		}		
+		return $password;
 	}
 }
