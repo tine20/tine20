@@ -95,6 +95,8 @@
             <fields>
                 <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
                 <field name="login_name" type="varchar(64)" NULL="NOT NULL" />
+                <field name="login_hash" type="varchar(32)" NULL="NOT NULL" />
+                <field name="email" type="varchar(128)" NULL="NOT NULL" />
                 <field name="reg_date" type="datetime" NULL="NULL" />
                 <field name="status" type="enum('deactivated','activated')" NULL="NOT NULL" />
                 <field name="expires_at" type="datetime" NULL="NULL" />
