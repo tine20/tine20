@@ -24,11 +24,11 @@ class Setup_Backend_Mysql
      */
     public function createTable($_table)
     {
-        $statement = "CREATE TABLE IF NOT EXISTS `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
+        $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
 
         foreach ($_table->declaration->field as $field) {
             if(isset($field->name)) {
-				print_r($field);
+                print_r($field);
                $statement .= $this->_getMysqlDeclarations($field) . ",\n";
             }
         }
@@ -47,8 +47,15 @@ class Setup_Backend_Mysql
         $statement = substr($statement, 0, (strlen($statement)-2)) ;
         $statement .= ")";
 
-        $statement .=     "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
-
+        if (isset($_table->engine))
+        {
+            $statement .=     "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
+        }
+        else
+        {
+            $statement .=     "\n ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        }
+        
         echo "<pre>$statement</pre>";
 
         Zend_Registry::get('dbAdapter')->query($statement);
@@ -129,23 +136,37 @@ class Setup_Backend_Mysql
                 $definition .= ' longblob ';
                 break;
             }
-			case ('enum'):
-			{
-				foreach ($_field->value as $value)
-				{
-					$values[] = $value;
-				}
-				$definition .= " enum('" . implode("','", $values) . "') ";
-			
-				break;
-			}
-			case ('datetime'):
-			{
-				$definition .= ' datetime ';
-				break;
-			}
+            case ('enum'):
+            {
+                foreach ($_field->value as $value)
+                {
+                    $values[] = $value;
+                }
+                $definition .= " enum('" . implode("','", $values) . "') ";
+            
+                break;
+            }
+            case ('datetime'):
+            {
+                $definition .= ' datetime ';
+                break;
+            }
+            case ('double'):
+            {
+                $definition .= ' double ';
+                break;
+            }
+            case ('decimal'):
+            {
+                $definition .= " decimal (" . $_field->value . ")" ;
+            }
         }
-			
+            
+        if (isset($_field->unsigned))    
+        {
+            $definition .= ' unsigned ';
+        }
+        
         
         if (isset($_field->autoincrement))    
         {
@@ -189,7 +210,13 @@ class Setup_Backend_Mysql
                 $definition = 'UNIQUE KEY';
             }
         }
-        else 
+        else if (isset($_key->foreign))
+        {
+            if ($_key->foreign)
+            {
+                $definition = 'FOREIGN KEY';
+            }
+        }
         {
             $definition = 'KEY';
         }
