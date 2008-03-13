@@ -369,7 +369,7 @@
             </declaration>
         </table>
         <table>
-            <name>egw_addressbook2list</name>
+            <name>addressbook2list</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>0.0.1</version>
@@ -406,7 +406,7 @@
             </declaration>
         </table>
         <table>
-            <name>egw_addressbook_extra</name>
+            <name>addressbook_extra</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>0.0.1</version>
@@ -444,7 +444,7 @@
             </declaration>
         </table>
         <table>
-            <name>egw_addressbook_lists</name>
+            <name>addressbook_lists</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>0.0.1</version>

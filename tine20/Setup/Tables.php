@@ -68,7 +68,7 @@ class Setup_Tables
         
         if(isset($xml->tables)) {
             foreach ($xml->tables[0] as $table) {
-                  $tableName = SQL_TABLE_PREFIX . $table['name'];
+                  $tableName = SQL_TABLE_PREFIX . $table->name;
                   if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
                     $this->_backend->createTable($table);
                     $createdTables[] = $table;
@@ -92,7 +92,7 @@ class Setup_Tables
         }
         
         foreach($createdTables as $table) {
-            $this->addTable($application, SQL_TABLE_PREFIX . $table['name'], '0.0.1');
+            $this->addTable($application, SQL_TABLE_PREFIX . $table->name, $table->version);
         }
     }
     

@@ -28,6 +28,7 @@ class Setup_Backend_Mysql
 
         foreach ($_table->declaration->field as $field) {
             if(isset($field->name)) {
+				print_r($field);
                $statement .= $this->_getMysqlDeclarations($field) . ",\n";
             }
         }
@@ -48,7 +49,7 @@ class Setup_Backend_Mysql
 
         $statement .=     "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
 
-       // echo "<pre>$statement</pre>";
+        echo "<pre>$statement</pre>";
 
         Zend_Registry::get('dbAdapter')->query($statement);
     }
@@ -128,7 +129,23 @@ class Setup_Backend_Mysql
                 $definition .= ' longblob ';
                 break;
             }
+			case ('enum'):
+			{
+				foreach ($_field->value as $value)
+				{
+					$values[] = $value;
+				}
+				$definition .= " enum('" . implode("','", $values) . "') ";
+			
+				break;
+			}
+			case ('datetime'):
+			{
+				$definition .= ' datetime ';
+				break;
+			}
         }
+			
         
         if (isset($_field->autoincrement))    
         {
@@ -149,7 +166,7 @@ class Setup_Backend_Mysql
         }
         else
         {
-            $definition .= ' default NULL ';
+         //   $definition .= ' default NULL ';
         }
         
         return $definition;

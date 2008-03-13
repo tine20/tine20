@@ -3,114 +3,305 @@
 	<name>Tinebase</name>
 	<version>0.1</version>
 	<tables>
-        <table name="applications">
-            <fields>
-                <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment"/>
-                <field name="name" type="varchar(25)" NULL="NOT NULL" />
-                <field name="status" type="enum('enabled','disabled')" NULL="NOT NULL" extra="default 'disabled'"/>
-                <field name="order" type="int(11) unsigned" NULL="NOT NULL" />
-                <field name="version" type="varchar(20)" NULL="NOT NULL" />
-            </fields>
-            <keys>
-                <key type="PRIMARY KEY" name="applications_id">
-                    <keyfield>id</keyfield>
-                </key>
-                <key type="UNIQUE KEY" name="applications_name">
-                    <keyfield>name</keyfield>
-                </key>
-            </keys>
+        <table>
+            <name>applications</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-        </table>
-        <table name="application_tables">
-            <fields>
-                <field name="application_id" type="int(11) unsigned" NULL="NOT NULL" />
-                <field name="name" type="varchar(128)" NULL="NOT NULL" />
-                <field name="version" type="varchar(20)" NULL="NOT NULL" />
-            </fields>
-            <keys>
-                <key type="PRIMARY KEY" name="application_id">
-                    <keyfield>application_id</keyfield>
-                    <keyfield>name</keyfield>
-                </key>
-            </keys>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-        </table>
-		<table name="groups">
-			<fields>
-				<field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
-				<field name="name" type="varchar(128)" NULL="NOT NULL" />
-				<field name="description" type="varchar(256)" NULL="NULL" />
-			</fields>
-			<keys>
-				<key type="PRIMARY KEY" name="groups_id">
-					<keyfield>id</keyfield>
-				</key>
-			</keys>
-			<engine>InnoDB</engine>
-			<charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+					<autoincrement>true</autoincrement>
+					<unsigned>true</unsigned>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>25</length>
+					<notnull>true</notnull>
+                </field>
+                <field>
+                    <name>status</name>
+                    <type>enum</type>
+					<value>enable</value>
+					<value>disable</value>
+					<default>disable</default>
+                </field>
+                <field>
+                    <name>order</name>
+                    <type>integer</type>
+                    <length>11</length>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>version</name>
+                    <type>text</type>
+                    <length>20</length>
+					<notnull>true</notnull>
+				</field>
+                <index>
+                    <name>applications_id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>applications_name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+			</declaration>
 		</table>
-		<table name="group_members">
-			<fields>
-				<field name="group_id" type="int(11) unsigned" NULL="NOT NULL" />
-				<field name="account_id" type="int(11) unsigned" NULL="NOT NULL" />
-			</fields>
-			<keys>
-				<key type="UNIQUE KEY" name="groupmembers_uniqueid">
-					<keyfield>group_id</keyfield>
-					<keyfield>account_id</keyfield>
-				</key>
-			</keys>
-			<engine>InnoDB</engine>
-			<charset>utf8</charset>
-		</table>
-        <table name="accounts">
-            <fields>
-                <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
-                <field name="login_name" type="varchar(64)" NULL="NOT NULL" />
-                <field name="password" type="varchar(100)" NULL="NOT NULL" />
-                <field name="last_login" type="datetime" NULL="NULL" />
-                <field name="last_login_from" type="varchar(20)" NULL="NULL" />
-                <field name="last_password_change" type="datetime" NULL="NULL" />
-                <field name="status" type="enum('enabled','disabled')" NULL="NOT NULL" />
-                <field name="expires_at" type="datetime" NULL="NULL" />
-                <field name="blocked_until" type="datetime" NULL="NULL" />
-                <field name="login_failures" type="int(11) unsigned" NULL="NULL" />
-                <field name="last_login_failure_at" type="datetime" NULL="NULL" />
-                <field name="primary_group" type="int(11) unsigned" NULL="NOT NULL" />
-            </fields>
-            <keys>
-                <key type="PRIMARY KEY" name="account_id">
-                    <keyfield>id</keyfield>
-                </key>
-                <key type="UNIQUE KEY" name="login_name">
-                    <keyfield>login_name</keyfield>
-                </key>
-            </keys>
+		<table>
+			<name>application_tables</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+                </field>
+				<field>
+					<name>name</name>
+					<type>text</type>
+					<length>128</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>version</name>
+					<type>text</type>
+					<length>20</length>
+					<notnull>true</notnull>
+				</field>
+				<index>
+                    <name>application_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+            </declaration>
         </table>
-        <table name="registrations">
-            <fields>
-                <field name="id" type="int(11) unsigned" NULL="NOT NULL" extra="auto_increment" />
-                <field name="login_name" type="varchar(64)" NULL="NOT NULL" />
-                <field name="login_hash" type="varchar(32)" NULL="NOT NULL" />
-                <field name="email" type="varchar(128)" NULL="NOT NULL" />
-                <field name="reg_date" type="datetime" NULL="NULL" />
-                <field name="status" type="enum('justregistered','activated')" NULL="NOT NULL" />
-                <field name="expires_at" type="datetime" NULL="NULL" />
-            </fields>
-            <keys>
-                <key type="PRIMARY KEY" name="account_id">
-                    <keyfield>id</keyfield>
-                </key>
-                <key type="UNIQUE KEY" name="login_name">
-                    <keyfield>login_name</keyfield>
-                </key>
-            </keys>
+		<table>
+			<name>groups</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+					<autoincrement>true</autoincrement>
+                </field>
+				<field>
+					<name>name</name>
+					<type>text</type>
+					<length>128</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>description</name>
+					<type>text</type>
+					<length>255</length>
+				</field>				
+				<index>
+                    <name>groups_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>				
+			</declaration>
+		</table>
+		<table>
+			<name>group_members</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>group_id</name>
+                    <type>integer</type>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+                </field>
+				<field>
+					<name>account_id</name>
+					<type>integer</type>
+					<length>11</length>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+				</field>
+				<index>
+                    <name>groupmembers_uniqueid</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>group_id</name>
+                    </field>
+					<field>
+                        <name>account_id</name>
+                    </field>
+                </index>				
+			</declaration>
+		</table>
+        <table>
+			<name>accounts</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+					<autoincrement>true</autoincrement>
+                </field>
+				<field>
+					<name>login_name</name>
+					<type>text</type>
+					<length>64</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>password</name>
+					<type>text</type>
+					<length>100</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>last_login</name>
+					<type>datetime</type>
+				</field>
+				<field>
+					<name>last_login_from</name>
+					<type>text</type>
+					<length>20</length>
+				</field>
+				<field>
+					<name>last_password_change</name>
+					<type>datetime</type>
+				</field>				
+				<field>
+                    <name>status</name>
+                    <type>enum</type>
+					<value>enable</value>
+					<value>disable</value>
+					<default>disable</default>
+                </field>
+				<field>
+					<name>expires_at</name>
+					<type>datetime</type>
+				</field>
+				<field>
+					<name>blocked_until</name>
+					<type>datetime</type>
+				</field>
+				<field>
+					<name>login_failures</name>
+					<type>integer</type>
+					<length>11</length>
+					<unsigned>true</unsigned>
+				</field>	
+				<field>
+					<name>last_login_failure_at</name>
+					<type>datetime</type>
+				</field>
+				<field>
+					<name>primary_group</name>
+					<type>integer</type>
+					<length>11</length>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+				</field>
+				<index>
+                    <name>account_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+				<index>
+					<name>login_name</name>
+					<unique>true</unique>
+					<field>
+						<name>login_name</name>
+					</field>
+				</index>
+			</declaration>
+		</table>
+        <table>
+			<name>registrations</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+					<unsigned>true</unsigned>
+					<notnull>true</notnull>
+					<autoincrement>true</autoincrement>
+                </field>
+				<field>
+					<name>login_name</name>
+					<type>text</type>
+					<length>64</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>login_hash</name>
+					<type>text</type>
+					<length>32</length>
+					<notnull>true</notnull>
+				</field>				
+				<field>
+					<name>email</name>
+					<type>text</type>
+					<length>128</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>reg_date</name>
+					<type>datetime</type>
+				</field>
+                <field>
+                    <name>status</name>
+                    <type>enum</type>
+					<value>justregistered</value>
+					<value>activated</value>
+					<notnull>true</notnull>
+                </field>
+				<field>
+					<name>expires_at</name>
+					<type>datetime</type>
+				</field>
+				<index>
+                    <name>account_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+				<index>
+					<name>login_name</name>
+					<unique>true</unique>
+					<field>
+						<name>login_name</name>
+					</field>
+				</index>
+			</declaration>
         </table>
 	</tables>
 </application>
