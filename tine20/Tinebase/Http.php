@@ -125,21 +125,20 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	/**
 	 * activate user account
 	 *
-	 * @param 	string $_username
+	 * @param 	string $id
 	 * 
-	 * @todo 	update account data in DB
-	 * @todo 	decrypt username 
-	 * @todo 	test function
+	 * @todo	update tables
 	 */
-	public function activateAccount ( $_username ) 
+	public function activateAccount ( $id ) 
 	{
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activate account for ' . $_username);
        	
-		//-- set activation flag in DB
+		//@todo set new expire_date in DB
+		//@todo update registration table and get username
 		
 		$view = new Zend_View();
         $view->title="Tine 2.0 User Activation";
-        $view->username = $_username;
+        //$view->username = $_username;
         $view->loginUrl = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
 
         $view->setScriptPath('Tinebase/views');
