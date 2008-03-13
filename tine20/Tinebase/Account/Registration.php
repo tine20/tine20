@@ -197,8 +197,11 @@ class Tinebase_Account_Registration
         
             $mail->send();
             
-            // @todo save in registrations table 
-            //Tinebase_Account::getInstance()->saveRegistration($_regData['accountLoginName'], $hashed_username, $recipientEmail);
+            // save in registrations table 
+            $registration = new Tinebase_Account_Model_Registration ( array( "registrationLoginName" => $_regData['accountLoginName'],
+            																 "registrationHash" => $hashed_username,
+            																 "registrationEmail" =>  $recipientEmail ) );
+            $this->addRegistration($registration);
             
             return true;
         }
@@ -268,6 +271,42 @@ class Tinebase_Account_Registration
         }
 		
         return false;
+	}
+
+	/**
+	 * add new registration
+	 *
+	 * @param	Tinebase_Account_Model_Registration	$_registration
+	 * 
+	 * @todo 	test function
+	 */
+	protected function addRegistration ( $_registration ) 
+	{
+
+        if(!$_registration->isValid()) {
+            throw(new Exception('invalid registration object'));
+        }
+
+        // @todo revert to table prefix constant
+        //$registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
+        $registrationsTable = new Tinebase_Db_Table(array('name' => 'tine20_registrations'));
+
+        // @todo set reg_date & expire date (with zend_date add 24 hours)
+        // @todo find out how mysql date functions can be called in (zend) pdo
+        $registrationData = array (
+        	"login_name" 	=> $_registration->registrationLoginName,
+            "login_hash" 	=> $_registration->registrationHash,
+            "email" 		=> $_registration->registrationEmail,
+        //	"reg_date" 		=> 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'registrations`.`reg_date`)'
+        	"reg_date" 		=> 'NOW()',
+        	"status"		=> "justregistered",
+        );
+        
+        // add new account
+        $registrationId = $registrationsTable->insert($registrationData);          
+
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->registrationHash);
+		
 	}
 
 	/**

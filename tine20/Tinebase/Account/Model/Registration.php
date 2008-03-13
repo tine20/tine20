@@ -29,13 +29,10 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @todo 	fill with other fields
      */
     protected $_filters = array(
-        'registrationId'             => 'Digits',
-        /*
-        'accountDisplayName'    => 'StringTrim',
-        'accountLastName'       => 'StringTrim',
-        'accountFirstName'      => 'StringTrim',
-        'accountFullName'       => 'StringTrim',
-		*/
+        'registrationId'         => 'Digits',
+        'registrationLoginName'  => 'StringTrim',
+        'registrationHash'       => 'StringTrim',
+        'registrationEmail'      => 'StringTrim',
     );
     
     /**
@@ -47,13 +44,12 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @todo 	fill with other fields
      */
     protected $_validators = array(
-        'registrationId'             => array('Digits', 'presence' => 'required'),
-        /*
-        'accountDisplayName'    => array('presence' => 'required'),
-        'accountLastName'       => array('presence' => 'required'),
-        'accountFirstName'      => array('allowEmpty' => true),
-        'accountFullName'       => array('presence' => 'required'),
-    	*/
+        'registrationId'         => array('allowEmpty' => true),
+        'registrationLoginName'  => array('presence' => 'required'),
+        'registrationHash'       => array('presence' => 'required'),
+        'registrationEmail'      => array('presence' => 'required'),
+    	'registrationDate'		 => array('allowEmpty' => true),
+    	'registrationExpires'	 => array('allowEmpty' => true),
     );
     
    /**
@@ -63,5 +59,16 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @var 	string
      */    
     protected $_identifier = 'registrationId';
+
     
+    /**
+     * name of fields containing datetime or or an array of datetime
+     * information
+     *
+     * @var array list of datetime fields
+     */    
+    protected $_datetimeFields = array(
+        'registrationDate',
+        'registrationExpires',
+    );    
 }
