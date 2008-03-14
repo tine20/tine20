@@ -193,33 +193,24 @@ class Setup_Backend_Mysql
         return $definition;
     }
     
+    /**
+     * get the type of index to create
+     *
+     * @param object $_key the xml index definition
+     * @return string
+     */
     private function _getMysqlIndexDeclarations($_key)
     {
         $definition = '';
-        if (isset($_key->primary))
-        {
-            if ($_key->primary)
-            {
-                $definition = 'PRIMARY KEY';
-            }
-        } 
-        else if (isset($_key->unique))
-        {
-            if ($_key->unique)
-            {
-                $definition = 'UNIQUE KEY';
-            }
+
+        if (isset($_key->primary) && $_key->primary == 'true') {
+            $definition = 'PRIMARY KEY';
+        } else if (isset($_key->unique) && $_key->unique == 'true') {
+            $definition = 'UNIQUE KEY';
+        } else if (isset($_key->foreign) && $_key->foreign == 'true') {
+            $definition = 'FOREIGN KEY';
         }
-        else if (isset($_key->foreign))
-        {
-            if ($_key->foreign)
-            {
-                $definition = 'FOREIGN KEY';
-            }
-        }
-        {
-            $definition = 'KEY';
-        }
+
         return $definition;
     }
     
