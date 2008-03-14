@@ -137,40 +137,7 @@ class Tinebase_Container
             $this->containerTable->insert($data);
         }
         
-        try {
-            $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
-        } catch (Zend_Db_Statement_Exception $e) {
-            $this->createContainerAclTable();
-            $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
-
-            $application = Tinebase_Application::getInstance()->getApplicationByName('addressbook');
-            $accountId = Zend_Registry::get('currentAccount')->accountId;
-            
-            $data = array(
-                'container_id'   => 1,
-                'account_id'     => NULL,
-                'account_grant'  => self::GRANT_READ
-            );
-            $this->containerAclTable->insert($data);
-
-            foreach(array(self::GRANT_ADD, self::GRANT_ADMIN, self::GRANT_DELETE, self::GRANT_EDIT, self::GRANT_READ) as $grant) {
-                $data = array(
-                    'container_id'   => 2,
-                    'account_id'     => $accountId,
-                    'account_grant'  => $grant
-                );
-                $this->containerAclTable->insert($data);
-            }
-            
-            foreach(array(self::GRANT_ADD, self::GRANT_ADMIN, self::GRANT_DELETE, self::GRANT_EDIT, self::GRANT_READ) as $grant) {
-                $data = array(
-                    'container_id'   => 3,
-                    'account_id'     => $accountId,
-                    'account_grant'  => $grant
-                );
-                $this->containerAclTable->insert($data);
-            }
-        }
+        $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
     }
     /**
      * don't clone. Use the singleton.
@@ -219,30 +186,6 @@ class Tinebase_Container
             	PRIMARY KEY  (`container_id`),
             	KEY `" . SQL_TABLE_PREFIX . "container_container_type` (`container_type`),
             	KEY `" . SQL_TABLE_PREFIX . "container_container_application_id` (`application_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
-            );
-        }
-    }
-
-    /**
-     * temporary function to create the SQL_TABLE_PREFIX . container_acl table on demand
-     *
-     */
-    protected function createContainerAclTable() {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        try {
-            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'container_acl');
-        } catch (Zend_Db_Statement_Exception $e) {
-            // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "container_acl (
-                acl_id int(11) NOT NULL auto_increment,
-            	container_id int(11) NOT NULL, 
-            	account_id int(11),
-            	account_grant int(11) NOT NULL,
-            	PRIMARY KEY (`acl_id`),
-            	UNIQUE KEY `" . SQL_TABLE_PREFIX . "container_acl_primary` (`container_id`, `account_id`, `account_grant`),
-            	KEY `" . SQL_TABLE_PREFIX . "container_acl_account_id` (`account_id`)
-            	) ENGINE=InnoDB DEFAULT CHARSET=utf8"
             );
         }
     }
