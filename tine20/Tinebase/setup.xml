@@ -22,9 +22,9 @@
                 <field>
                     <name>status</name>
                     <type>enum</type>
-                    <value>enable</value>
-                    <value>disable</value>
-                    <default>disable</default>
+                    <value>enabled</value>
+                    <value>disabled</value>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>order</name>
@@ -350,6 +350,63 @@
             </declaration>
         </table>
 
+        <table>
+            <name>container</name>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>enum</type>
+                    <value>personal</value>
+                    <value>shared</value>
+                    <value>internal</value>
+                </field>
+                <field>
+                    <name>backend</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>type</name>
+                    <field>
+                        <name>type</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
 
 
     </tables>

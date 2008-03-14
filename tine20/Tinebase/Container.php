@@ -104,39 +104,7 @@ class Tinebase_Container
      * needed tables in this class on demand
      */
     private function __construct() {
-        try {
-            $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
-        } catch (Zend_Db_Statement_Exception $e) {
-            $this->createContainerTable();
-            $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
-
-            $application = Tinebase_Application::getInstance()->getApplicationByName('addressbook');
-            
-            $data = array(
-                'container_name'    => 'Internal Contacts',
-                'container_type'    => self::TYPE_INTERNAL,
-                'container_backend' => Addressbook_Backend::SQL,
-                'application_id'    => $application->app_id
-            );
-            $this->containerTable->insert($data);
-
-            $data = array(
-                'container_name'    => 'Personal Contacts',
-                'container_type'    => self::TYPE_PERSONAL,
-                'container_backend' => Addressbook_Backend::SQL,
-                'application_id'    => $application->app_id
-            );
-            $this->containerTable->insert($data);
-            
-            $data = array(
-                'container_name'    => 'Shared Contacts',
-                'container_type'    => self::TYPE_SHARED,
-                'container_backend' => Addressbook_Backend::SQL,
-                'application_id'    => $application->app_id
-            );
-            $this->containerTable->insert($data);
-        }
-        
+        $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
         $this->containerAclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container_acl'));
     }
     /**
@@ -166,30 +134,6 @@ class Tinebase_Container
         return self::$_instance;
     }
 
-    /**
-     * temporary function to create the SQL_TABLE_PREFIX . container table on demand
-     *
-     */
-    protected function createContainerTable() {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        try {
-            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'container');
-        } catch (Zend_Db_Statement_Exception $e) {
-            // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "container (
-            	container_id int(11) NOT NULL auto_increment, 
-            	container_name varchar(256), 
-            	container_type enum('personal', 'shared', 'internal') NOT NULL,
-            	container_backend varchar(64) NOT NULL,
-            	application_id int(11) NOT NULL,
-            	PRIMARY KEY  (`container_id`),
-            	KEY `" . SQL_TABLE_PREFIX . "container_container_type` (`container_type`),
-            	KEY `" . SQL_TABLE_PREFIX . "container_container_application_id` (`application_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
-            );
-        }
-    }
-    
     /**
      * creates a shared container and gives all rights to the owner and read rights to anyone
      *
