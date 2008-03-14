@@ -246,15 +246,9 @@ class Setup_Backend_Mysql
             $definition .= "default '" . $_field->default . "'";
         }
         
-        if (isset($_field->notnull))
-        {
-            if ($_field->notnull)
-            {
+        if (isset($_field->notnull) && $_field->notnull == 'true') {
                 $definition .= ' NOT NULL ';
-            }
-        }
-        else
-        {
+        } else {
          //   $definition .= ' default NULL ';
         }
         
