@@ -323,7 +323,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
                 break;
                 
             case 'unlimited':
-                $accountData['account_expires'] = -1;
+                $accountData['account_expires'] = NULL;
                 break;
                 
             case 'expired':
