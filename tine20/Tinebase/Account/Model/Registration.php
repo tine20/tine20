@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo 		add more functions
  */
 
 /**
@@ -26,7 +25,6 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * this filter get used when validating user generated content with Zend_Input_Filter
      *
      * @var 	array
-     * @todo 	fill with other fields
      */
     protected $_filters = array(
         'registrationId'         => 'Digits',
@@ -41,7 +39,6 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var 	array
-     * @todo 	fill with other fields
      */
     protected $_validators = array(
         'registrationId'        => array('allowEmpty' => true),

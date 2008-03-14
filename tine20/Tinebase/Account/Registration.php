@@ -9,10 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo		finish class
- * @todo		test it!
- * @todo		add functions from Tinebase_Http
- * @todo 		create model class for registrations table
  */
 
 /**
@@ -64,7 +60,7 @@ class Tinebase_Account_Registration
 	 * @param 	string $_username
 	 * @return 	bool
 	 * 
-	 * @todo 	test function
+	 * @todo 	test & include function
 	 */
 	public function checkUniqueUsername ( $_username ) 
 	{		
@@ -302,7 +298,6 @@ class Tinebase_Account_Registration
 	 * @param 	string $_registrationHash
 	 * @return	Tinebase_Account_Model_FullAccount
 	 * 
-	 * @todo	update tables
 	 */
 	public function activateAccount ( $_registrationHash ) 
 	{		
@@ -310,9 +305,9 @@ class Tinebase_Account_Registration
        	// get registration by id / hash
        	$registration = $this->getRegistrationByHash ( $_registrationHash );
 		
-		// set new expire_date and status in DB (registration)
-		$registration['registrationStatus'] = "activated";
-		$this->updateRegistration ( $registration, array ( 'status' => 'activated' ) );
+		//@todo set new expire_date?
+		// set new status in DB (registration)
+       	$this->updateRegistration ( $registration, array ( 'status' => 'activated' ) );
 
        	// get account by username
 		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
@@ -400,7 +395,6 @@ class Tinebase_Account_Registration
 	 * @param	Tinebase_Account_Model_Registration	$_registration
 	 * @param	array	data to update
 	 * 
-	 * @todo 	test function
 	 */
 	protected function updateRegistration ( $_registration, $_data ) 
 	{
