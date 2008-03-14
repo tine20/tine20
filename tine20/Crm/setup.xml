@@ -234,6 +234,7 @@
                 <field>
                     <name>lead_id</name>
                     <type>integer</type>
+					<unsigned>true</unsigned>
                     <length>11</length>
                     <notnull>true</notnull>
                 </field>
@@ -264,13 +265,18 @@
                         <name>id</name>
                     </field>
                 </index>
-                <index>
+				<index>
                     <name>lead_lead_id</name>
-                    <foreign>true</foreign>
+					<foreign>true</foreign>
+					<reference>
+						<table>metacrm_lead</table>
+						<field>id</field>
+						<action>ON DELETE CASCADE</action>
+					</reference>
                     <field>
                         <name>lead_id</name>
-                    </field>    
-                </index>
+                    </field>
+                </index>   
             </declaration>
         </table>
     </tables>

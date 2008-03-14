@@ -11,8 +11,15 @@
             <version>0.0.1</version>
             <declaration>
                 <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>account_id</name>
                     <type>integer</type>
+					<comment>unsure, whether this is a foreign key, or not</comment>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>
@@ -80,126 +87,99 @@
                     <length>255</length>
                 </field>
                 <field>
-                    <name>contact_assistent</name>
+                    <name>assistent</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>contact_bday</name>
-                    <type>text</type>
-                    <length>12</length>
+                    <name>bday</name>
+                    <type>datetime</type>
                 </field>
                 <field>
-                    <name>contact_calendar_uri</name>
+                    <name>calendar_uri</name>
                     <type>text</type>
                     <length>128</length>
                 </field>
                 <field>
-                    <name>contact_created</name>
-                    <type>integer</type>
-                    <length>20</length>
-                </field>
-                <field>
-                    <name>contact_creator</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>contact_email</name>
+                    <name>email</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>contact_email_home</name>
+                    <name>email_home</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>contact_freebusy_uri</name>
+                    <name>freebusy_uri</name>
                     <type>text</type>
                     <length>128</length>
                 </field>
                 <field>
-                    <name>contact_geo</name>
+                    <name>geo</name>
                     <type>text</type>
                     <length>32</length>
                 </field>
                 <field>
-                    <name>contact_id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>contact_jpegphoto</name>
+                    <name>jpegphoto</name>
                     <type>blob</type>
                 </field>
                 <field>
-                    <name>contact_label</name>
+                    <name>label</name>
                     <type>clob</type>
                 </field>
                 <field>
-                    <name>contact_modified</name>
-                    <type>integer</type>
-                    <length>20</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>contact_modifier</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>contact_note</name>
+                    <name>note</name>
                     <type>clob</type>
                 </field>
                 <field>
-                    <name>contact_owner</name>
+                    <name>owner</name>
                     <type>integer</type>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>contact_private</name>
+                    <name>private</name>
                     <type>integer</type>
                     <default>0</default>
                     <length>4</length>
                 </field>
                 <field>
-                    <name>contact_pubkey</name>
+                    <name>pubkey</name>
                     <type>clob</type>
                 </field>
                 <field>
-                    <name>contact_role</name>
+                    <name>role</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>contact_room</name>
+                    <name>room</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>contact_tid</name>
+                    <name>tid</name>
                     <type>text</type>
                     <length>1</length>
                     <default>n</default>
                 </field>
                 <field>
-                    <name>contact_title</name>
+                    <name>title</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
                 <field>
-                    <name>contact_tz</name>
+                    <name>tz</name>
                     <type>text</type>
                     <length>8</length>
                 </field>
                 <field>
-                    <name>contact_url</name>
+                    <name>url</name>
                     <type>text</type>
                     <length>128</length>
                 </field>
                 <field>
-                    <name>contact_url_home</name>
+                    <name>url_home</name>
                     <type>text</type>
                     <length>128</length>
                 </field>
@@ -303,6 +283,41 @@
                     <type>text</type>
                     <length>40</length>
                 </field>
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>            
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
                 <index>
                     <name>addressbook_account_id</name>
                     <unique>true</unique>
@@ -319,7 +334,7 @@
                 <index>
                     <name>addressbook_contact_owner</name>
                     <field>
-                        <name>contact_owner</name>
+                        <name>owner</name>
                     </field>
                 </index>
                 <index>
@@ -359,11 +374,11 @@
                     </field>
                 </index>
                 <index>
-                    <name>primary</name>
+                    <name>contact_id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
-                        <name>contact_id</name>
+                        <name>id</name>
                     </field>
                 </index>
             </declaration>
@@ -423,11 +438,11 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>contact_owner</name>
+                    <name>owner</name>
                     <type>integer</type>
                 </field>
                 <field>
-                    <name>contact_value</name>
+                    <name>value</name>
                     <type>clob</type>
                 </field>
                 <index>
@@ -450,27 +465,29 @@
             <version>0.0.1</version>
             <declaration>
                 <field>
-                    <name>list_created</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>list_creator</name>
-                    <type>integer</type>
-                </field>
-                <field>
-                    <name>list_id</name>
+                    <name>id</name>
                     <type>integer</type>
                     <autoincrement>true</autoincrement>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>list_name</name>
+                    <name>created_by</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>  
+                <field>
+                    <name>name</name>
                     <type>text</type>
                     <length>80</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>list_owner</name>
+                    <name>owner</name>
                     <type>integer</type>
                     <notnull>true</notnull>
                 </field>
@@ -478,10 +495,10 @@
                     <name>egw_addressbook_lists_list_owner_list_name</name>
                     <unique>true</unique>
                     <field>
-                        <name>list_name</name>
+                        <name>name</name>
                     </field>
                     <field>
-                        <name>list_owner</name>
+                        <name>owner</name>
                     </field>
                 </index>
                 <index>
@@ -489,7 +506,7 @@
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
-                        <name>list_id</name>
+                        <name>id</name>
                     </field>
                 </index>
             </declaration>

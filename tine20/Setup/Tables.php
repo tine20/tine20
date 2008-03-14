@@ -78,6 +78,14 @@ class Setup_Tables
             }
         }
         
+        if(isset($xml->defaultRecords)) 
+        {
+            foreach ($xml->defaultRecords[0] as $record) 
+            {
+                $this->_backend->execInsertStatement($record);
+            }
+        }
+        
         try {
             $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
         } catch (Exception $e) {
