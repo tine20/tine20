@@ -28,11 +28,42 @@ class Setup_Tables
             die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
         }
 
+        $this->setupLogger();
         $this->setupDatabaseConnection();
 
         $this->_backend = new Setup_Backend_Mysql();
     }
+    
+    /**
+     * initializes the logger
+     *
+     */
+    protected function setupLogger()
+    {
+        $logger = new Zend_Log();
+        
+        if(isset($this->_config->logger)) {
+            $loggerConfig = $this->_config->logger;
+            
+            $filename = $loggerConfig->filename;
+            $priority = (int)$loggerConfig->priority;
 
+            $writer = new Zend_Log_Writer_Stream($filename);
+            $logger->addWriter($writer);
+
+            $filter = new Zend_Log_Filter_Priority($priority);
+            $logger->addFilter($filter);
+
+        } else {
+            $writer = new Zend_Log_Writer_Null;
+            $logger->addWriter($writer);
+        }
+
+        Zend_Registry::set('logger', $logger);
+
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
+    }
+    
     /**
      * initializes the database connection
      *
@@ -78,14 +109,6 @@ class Setup_Tables
             }
         }
         
-        if(isset($xml->defaultRecords)) 
-        {
-            foreach ($xml->defaultRecords[0] as $record) 
-            {
-                $this->_backend->execInsertStatement($record);
-            }
-        }
-        
         try {
             $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
         } catch (Exception $e) {
@@ -102,6 +125,13 @@ class Setup_Tables
         foreach($createdTables as $table) {
             $this->addTable($application, SQL_TABLE_PREFIX . $table->name, $table->version);
         }
+
+        if(isset($xml->defaultRecords)) {
+            foreach ($xml->defaultRecords[0] as $record) {
+                $this->_backend->execInsertStatement($record);
+            }
+        }
+        
     }
     
     public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
