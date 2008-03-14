@@ -44,12 +44,13 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @todo 	fill with other fields
      */
     protected $_validators = array(
-        'registrationId'         => array('allowEmpty' => true),
-        'registrationLoginName'  => array('presence' => 'required'),
-        'registrationHash'       => array('presence' => 'required'),
-        'registrationEmail'      => array('presence' => 'required'),
-    	'registrationDate'		 => array('allowEmpty' => true),
-    	'registrationExpires'	 => array('allowEmpty' => true),
+        'registrationId'        => array('allowEmpty' => true),
+        'registrationLoginName' => array('presence' => 'required'),
+        'registrationHash'      => array('presence' => 'required'),
+        'registrationEmail'     => array('presence' => 'required'),
+    	'registrationDate'		=> array('allowEmpty' => true),
+    	'registrationExpires'	=> array('allowEmpty' => true),
+    	'registrationStatus'	=> array('allowEmpty' => true),
     );
     
    /**

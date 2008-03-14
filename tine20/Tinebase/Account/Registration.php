@@ -310,9 +310,9 @@ class Tinebase_Account_Registration
        	// get registration by id / hash
        	$registration = $this->getRegistrationByHash ( $_registrationHash );
 		
-		//@todo set new expire_date in DB (registration)
-		//$registration['registrationExpires'] = "";
-		//$this->updateRegistration ();
+		// set new expire_date and status in DB (registration)
+		$registration['registrationStatus'] = "activated";
+		$this->updateRegistration ( $registration, array ( 'status' => 'activated' ) );
 
        	// get account by username
 		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
@@ -331,7 +331,7 @@ class Tinebase_Account_Registration
 	 */
 	public function generateCaptcha () 
 	{	
-		// get security code (user password generator)
+		// get security code (use password generator)
 		$security_code = $this->generatePassword(4);
 		
        	//Set the image width and height
@@ -364,7 +364,6 @@ class Tinebase_Account_Registration
 	 *
 	 * @param	Tinebase_Account_Model_Registration	$_registration
 	 * 
-	 * @todo 	test function
 	 */
 	protected function addRegistration ( $_registration ) 
 	{
@@ -395,6 +394,28 @@ class Tinebase_Account_Registration
 		
 	}
 	
+	/**
+	 * update registration
+	 *
+	 * @param	Tinebase_Account_Model_Registration	$_registration
+	 * @param	array	data to update
+	 * 
+	 * @todo 	test function
+	 */
+	protected function updateRegistration ( $_registration, $_data ) 
+	{
+		//@todo set prefix again
+        $registrationsTable = new Tinebase_Db_Table(array('name' => 'tine20_registrations'));
+		
+        $where = array(
+            $registrationsTable->getAdapter()->quoteInto('id = ?', $_registration['registrationId'])
+        );
+        
+        $result = $registrationsTable->update($_data, $where);
+		
+	}
+	
+		
 	/**
      * get registration by hash
      *
