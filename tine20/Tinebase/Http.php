@@ -46,7 +46,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
      * Returns all JS files which must be included for Tinebase
      *
      * @todo refactor js stuff so that all js files could be included
-     * before regestry gets included!
+     * before registry gets included!
      * 
      * @return array Array of filenames
      */
@@ -138,7 +138,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 *
 	 * @param 	string $id
 	 * 
-	 * @todo	testing
 	 */
 	public function activateAccount ( $id ) 
 	{

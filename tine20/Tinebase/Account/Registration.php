@@ -305,14 +305,14 @@ class Tinebase_Account_Registration
        	// get registration by id / hash
        	$registration = $this->getRegistrationByHash ( $_registrationHash );
 		
-		//@todo set new expire_date?
 		// set new status in DB (registration)
        	$this->updateRegistration ( $registration, array ( 'status' => 'activated' ) );
 
        	// get account by username
 		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
 
-		//@todo set new expire_date in DB (account)
+		// set new expire_date in DB (account)
+		Tinebase_Account::getInstance()->setStatus($account['accountId'], 'unlimited');
 		
 		return $account;	
 	}

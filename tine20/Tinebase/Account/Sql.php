@@ -322,12 +322,16 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
                 $accountData['account_status'] = 'D';
                 break;
                 
+            case 'unlimited':
+                $accountData['account_expires'] = -1;
+                break;
+                
             case 'expired':
                 $accountData['account_expires'] = Zend_Date::getTimestamp();
                 break;
             
             default:
-                throw new InvalidArgumentException('$_status can be only enabled, disabled or epxired');
+                throw new InvalidArgumentException('$_status can be only enabled, disabled, unlimited or expired');
                 break;
         }
         
