@@ -319,26 +319,34 @@
                     <type>datetime</type>
                 </field>
                 <index>
-                    <name>addressbook_account_id</name>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id</name>
                     <unique>true</unique>
                     <field>
                         <name>account_id</name>
                     </field>
                 </index>
                 <index>
-                    <name>addressbook_cat_id</name>
+                    <name>cat_id</name>
                     <field>
                         <name>cat_id</name>
                     </field>
                 </index>
                 <index>
-                    <name>addressbook_contact_owner</name>
+                    <name>owner</name>
                     <field>
                         <name>owner</name>
                     </field>
                 </index>
                 <index>
-                    <name>addressbook_n_family_n_given</name>
+                    <name>n_family-n_given</name>
                     <field>
                         <name>n_family</name>
                     </field>
@@ -347,22 +355,22 @@
                     </field>
                 </index>
                 <index>
-                    <name>addressbook_n_fileas</name>
+                    <name>n_fileas</name>
                     <field>
                         <name>n_fileas</name>
                     </field>
                 </index>
                 <index>
-                    <name>addressbook_n_given_n_family</name>
-                    <field>
-                        <name>n_family</name>
-                    </field>
+                    <name>n_given_n_family</name>
                     <field>
                         <name>n_given</name>
                     </field>
+                    <field>
+                        <name>n_family</name>
+                    </field>
                 </index>
                 <index>
-                    <name>addressbook_org_name_n_family_n_given</name>
+                    <name>org_name-n_family-n_given</name>
                     <field>
                         <name>n_family</name>
                     </field>
@@ -373,17 +381,9 @@
                         <name>org_name</name>
                     </field>
                 </index>
-                <index>
-                    <name>contact_id</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
             </declaration>
         </table>
-        <table>
+<!--    <table>
             <name>addressbook2list</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
@@ -510,6 +510,6 @@
                     </field>
                 </index>
             </declaration>
-        </table>
+        </table>  -->
     </tables>    
 </application>
