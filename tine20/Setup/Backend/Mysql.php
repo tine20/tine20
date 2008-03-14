@@ -28,36 +28,50 @@ class Setup_Backend_Mysql
 
         foreach ($_table->declaration->field as $field) {
             if(isset($field->name)) {
-                print_r($field);
+                
                $statement .= $this->_getMysqlDeclarations($field) . ",\n";
             }
         }
 
-        foreach ($_table->declaration->index as $key) {
-        
-            $statement .= $this->_getMysqlIndexDeclarations($key) . " `" . SQL_TABLE_PREFIX . $key->name . "` (" ;
-
-            foreach ($key->field as $keyfield) {
-                $statement .= "`"  . (string)$keyfield->name . "`,";
-            }
-                
-            $statement = substr($statement, 0, (strlen($statement)-1)) . "),\n";
-        }
+        foreach ($_table->declaration->index as $key) 
+		{
+			if (!$key->foreign)
+			{
+            	$statement .= $this->_getMysqlIndexDeclarations($key) . " `" . SQL_TABLE_PREFIX . $key->name . "` (" ;
+				foreach ($key->field as $keyfield) {
+					$statement .= "`"  . (string)$keyfield->name . "`,";
+	            }
+	            $statement = substr($statement, 0, (strlen($statement)-1)) . "),\n";
+			}
+			else 
+			{
+				$statement .= $this->_getMysqlIndexDeclarations($key);
+			}
+		}
 
         $statement = substr($statement, 0, (strlen($statement)-2)) ;
         $statement .= ")";
 
         if (isset($_table->engine))
         {
-            $statement .=     "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
+            $statement .= "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
         }
         else
         {
-            $statement .=     "\n ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8";
         }
         
-        echo "<pre>$statement</pre>";
-
+		if (isset($_table->comment))
+		{
+			if ($_table->comment)
+			{
+				$statement .= " COMMENT '" .  $_table->comment . "'";
+			}
+		}
+		$statement .= ";";
+		
+       // echo "<pre>$statement</pre>";
+		
         Zend_Registry::get('dbAdapter')->query($statement);
     }
 
@@ -85,7 +99,43 @@ class Setup_Backend_Mysql
       
         return true;
     }
-    
+    	
+	public function execInsertStatement($_record)
+	{
+		$statement = '';
+		$statement .= 'INSERT INTO `' . SQL_TABLE_PREFIX . $_record->table->name . '` (';
+
+		foreach ($_record->field as $field)
+		{
+			$fields[] = '`' . $field->name . '`';
+			if ($field->value == 'NOW')
+			{
+				$values[] = Zend_Registry::get('dbAdapter')->quote(Zend_Date::now()->getIso());
+			} 
+			else if ($field->value == 'ACCOUNT_ID')
+			{
+			//	if (isset(Zend_Registry::get('currentAccount')->accountId))
+			//	{
+			//		$values[] = "'" . Zend_Registry::get('currentAccount')->accountId . "'";
+			//	}
+			//	else
+			//	{
+					$values[] = "''";
+			//	}
+			}
+			else
+			{
+				$values[] = "'" . $field->value . "'";
+			}
+			
+		}
+		
+		$statement .= implode(',', $fields) . ") VALUES (" . implode(',', $values) . ");"; 
+		
+       // Zend_Registry::get('dbAdapter')->query($statement);
+		return true;
+	}
+	
     private function _getMysqlDeclarations($_field)
     {
         $definition = '`' . $_field->name . '`';
@@ -156,6 +206,24 @@ class Setup_Backend_Mysql
                 $definition .= ' double ';
                 break;
             }
+            case ('float'):
+            {
+                $definition .= ' float ';
+                break;
+            }
+			case ('boolean'):
+            {
+                $definition .= ' tinyint(1) ';
+				if ($_field->default == 'false')
+				{
+					$_field->default = 0;
+				}
+				else
+				{
+					$_field->default = 1;
+				}
+                break;
+            }
             case ('decimal'):
             {
                 $definition .= " decimal (" . $_field->value . ")" ;
@@ -190,6 +258,14 @@ class Setup_Backend_Mysql
          //   $definition .= ' default NULL ';
         }
         
+		if (isset($_field->comment))
+		{
+			if ($_field->comment)
+			{
+				$definition .= "COMMENT '" .  $_field->comment . "'";
+			}
+		}
+		
         return $definition;
     }
     
@@ -201,17 +277,27 @@ class Setup_Backend_Mysql
      */
     private function _getMysqlIndexDeclarations($_key)
     {
-        $definition = '';
-
-        if (isset($_key->primary) && $_key->primary == 'true') {
-            $definition = 'PRIMARY KEY';
-        } else if (isset($_key->unique) && $_key->unique == 'true') {
+        $definition = ' KEY ';
+        if (!empty($_key->primary))
+        {
+			$definition = 'PRIMARY KEY';
+        } 
+        else if (!empty($_key->unique))
+        {
             $definition = 'UNIQUE KEY';
-        } else if (isset($_key->foreign) && $_key->foreign == 'true') {
-            $definition = 'FOREIGN KEY';
         }
+        else if (!empty($_key->foreign))
+        {
+            $definition = 'FOREIGN KEY';
+			
+			$definition .= '(`' .$_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
+						. $_key->reference->table . "`(`" . $_key->reference->field . "`) "
+						. $_key->reference->action . ', ';
+        }
+		
 
         return $definition;
     }
+
     
 }
