@@ -37,7 +37,7 @@ class Setup_Backend_Mysql
 		{
 			if (!$key->foreign)
 			{
-            	$statement .= $this->_getMysqlIndexDeclarations($key) . " `" . SQL_TABLE_PREFIX . $key->name . "` (" ;
+            	$statement .= $this->_getMysqlIndexDeclarations($key) . " `" . $key->name . "` (" ;
 				foreach ($key->field as $keyfield) {
 					$statement .= "`"  . (string)$keyfield->name . "`,";
 	            }
@@ -102,38 +102,43 @@ class Setup_Backend_Mysql
     	
 	public function execInsertStatement($_record)
 	{
-		$statement = '';
-		$statement .= 'INSERT INTO `' . SQL_TABLE_PREFIX . $_record->table->name . '` (';
+	    $table = new Tinebase_Db_Table(array(
+	       'name' => SQL_TABLE_PREFIX . $_record->table->name
+	    ));
+	    
+		foreach ($_record->field as $field) {
+		    if(isset($field->value['special'])) {
+		        switch(strtolower($field->value['special'])) {
+		            case 'now':
+		                $value = Zend_Registry::get('dbAdapter')->quote(Zend_Date::now()->getIso());
+		                
+		                break;
+		                
+		            case 'account_id':
+		                
+		                break;
+		                
+                    case 'application_id':
+                        $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
+                        
+                        $value = $application->id;
 
-		foreach ($_record->field as $field)
-		{
-			$fields[] = '`' . $field->name . '`';
-			if ($field->value == 'NOW')
-			{
-				$values[] = Zend_Registry::get('dbAdapter')->quote(Zend_Date::now()->getIso());
-			} 
-			else if ($field->value == 'ACCOUNT_ID')
-			{
-			//	if (isset(Zend_Registry::get('currentAccount')->accountId))
-			//	{
-			//		$values[] = "'" . Zend_Registry::get('currentAccount')->accountId . "'";
-			//	}
-			//	else
-			//	{
-					$values[] = "''";
-			//	}
+                        break;
+                        
+		            default:
+		                throw new Exception('unsuported special type ' . strtolower($field->value['special']));
+		                
+		                break;
+		        }
+			} else {
+				$value = $field->value;
 			}
-			else
-			{
-				$values[] = "'" . $field->value . "'";
-			}
+
+			$data[(string)$field->name] = $value;
 			
 		}
-		
-		$statement .= implode(',', $fields) . ") VALUES (" . implode(',', $values) . ");"; 
-		
-       // Zend_Registry::get('dbAdapter')->query($statement);
-		return true;
+
+		$table->insert($data);
 	}
 	
     private function _getMysqlDeclarations($_field)
