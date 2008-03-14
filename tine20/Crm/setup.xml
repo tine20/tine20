@@ -59,7 +59,7 @@
                     <type>double</type>
                 </field>
                 <field>
-                    <name>propability</name>
+                    <name>probability</name>
                     <type>decimal</type>
                     <value>3,0</value>
                 </field>
@@ -417,7 +417,7 @@
                 <value>open</value>
             </field>
             <field>
-                <name>propability</name>
+                <name>probability</name>
                 <value>0</value>
             </field>
         </record>		
@@ -434,7 +434,7 @@
                 <value>contacted</value>
             </field>
             <field>
-                <name>propability</name>
+                <name>probability</name>
                 <value>10</value>
             </field>
         </record>			
@@ -451,7 +451,7 @@
                 <value>waiting for feedback</value>
             </field>
             <field>
-                <name>propability</name>
+                <name>probability</name>
                 <value>30</value>
             </field>
         </record>			
@@ -468,7 +468,7 @@
                 <value>quote sent</value>
             </field>
             <field>
-                <name>propability</name>
+                <name>probability</name>
                 <value>50</value>
             </field>
         </record>		
@@ -485,7 +485,7 @@
                 <value>accepted</value>
             </field>
             <field>
-                <name>propability</name>
+                <name>probability</name>
                 <value>100</value>
             </field>
 			<field>
@@ -506,7 +506,7 @@
                 <value>lost</value>
             </field>
             <field>
-                <name>propability</name>
+                <name>probability</name>
                 <value>0</value>
             </field>
 			<field>
