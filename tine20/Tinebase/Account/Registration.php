@@ -274,42 +274,6 @@ class Tinebase_Account_Registration
 	}
 
 	/**
-	 * add new registration
-	 *
-	 * @param	Tinebase_Account_Model_Registration	$_registration
-	 * 
-	 * @todo 	test function
-	 */
-	protected function addRegistration ( $_registration ) 
-	{
-
-        if(!$_registration->isValid()) {
-            throw(new Exception('invalid registration object'));
-        }
-
-        // @todo revert to table prefix constant
-        //$registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
-        $registrationsTable = new Tinebase_Db_Table(array('name' => 'tine20_registrations'));
-
-        // @todo set reg_date & expire date (with zend_date add 24 hours)
-        // @todo find out how mysql date functions can be called in (zend) pdo
-        $registrationData = array (
-        	"login_name" 	=> $_registration->registrationLoginName,
-            "login_hash" 	=> $_registration->registrationHash,
-            "email" 		=> $_registration->registrationEmail,
-        //	"reg_date" 		=> 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'registrations`.`reg_date`)'
-        	"reg_date" 		=> 'NOW()',
-        	"status"		=> "justregistered",
-        );
-        
-        // add new account
-        $registrationId = $registrationsTable->insert($registrationData);          
-
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->registrationHash);
-		
-	}
-
-	/**
 	 * generate new random password [a-zA-z0-9]
 	 *
 	 * @param	int	$length
@@ -343,15 +307,15 @@ class Tinebase_Account_Registration
 	public function activateAccount ( $_registrationHash ) 
 	{		
 		
-       	//@todo get registration by id / hash
-       	//$registration = $this->getRegistrationByHash ( $_registrationHash );
+       	// get registration by id / hash
+       	$registration = $this->getRegistrationByHash ( $_registrationHash );
 		
 		//@todo set new expire_date in DB (registration)
 		//$registration['registrationExpires'] = "";
 		//$this->updateRegistration ();
 
-       	//@todo get account by username
-		//$account = Tinebase_Account::getInstance()->getAccountByLoginName($registration['registrationLoginName']);
+       	// get account by username
+		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
 
 		//@todo set new expire_date in DB (account)
 		
@@ -390,4 +354,88 @@ class Tinebase_Account_Registration
         return $image;
 	}
 	
+	
+	/********************************************************************
+	 * SQL functions follow
+	 */
+	
+	/**
+	 * add new registration
+	 *
+	 * @param	Tinebase_Account_Model_Registration	$_registration
+	 * 
+	 * @todo 	test function
+	 */
+	protected function addRegistration ( $_registration ) 
+	{
+
+        if(!$_registration->isValid()) {
+            throw(new Exception('invalid registration object'));
+        }
+
+        // @todo revert to table prefix constant
+        //$registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
+        $registrationsTable = new Tinebase_Db_Table(array('name' => 'tine20_registrations'));
+
+        // @todo set reg_date & expire date (with zend_date add 24 hours)
+        // @todo find out how mysql date functions can be called in (zend) pdo
+        $registrationData = array (
+        	"login_name" 	=> $_registration->registrationLoginName,
+            "login_hash" 	=> $_registration->registrationHash,
+            "email" 		=> $_registration->registrationEmail,
+        //	"reg_date" 		=> 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'registrations`.`reg_date`)'
+        	"reg_date" 		=> 'NOW()',
+        	"status"		=> "justregistered",
+        );
+        
+        // add new account
+        $registrationId = $registrationsTable->insert($registrationData);          
+
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->registrationHash);
+		
+	}
+	
+	/**
+     * get registration by hash
+     *
+     * @param string $_hash the hash (md5 coded username) from the registration mail
+     * @return Tinebase_Account_Model_Registration the registration object
+     *
+     */
+    public function getRegistrationByHash($_hash)
+    {
+       	$db = Zend_Registry::get('dbAdapter');
+       	//@todo add correct table with prefix later on
+       	$select = $db->select()
+       				->from('tine20_registrations',
+       					array(
+       						    "registrationLoginName"	=> "login_name",
+       						    "registrationHash"	=> "login_hash",
+       					       	"registrationEmail"	=> "email",
+       							"registrationId"	=> "id",
+	       					)
+       					)
+       				->where('login_hash = ?', $_hash );
+    	
+        $stmt = $select->query();
+
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+		Zend_Registry::get('logger')->debug( __METHOD__ . '::' . __LINE__ . "Tinebase_Account_Model_Registration::row values: \n" .
+                print_r($row,true));
+        
+        try {
+            $registration = new Tinebase_Account_Model_Registration();
+            $registration->setFromArray($row);
+        } catch (Exception $e) {
+        	$validation_errors = $registration->getValidationErrors();
+            Zend_Registry::get('logger')->debug( __METHOD__ . '::' . __LINE__ . $e->getMessage() . "\n" .
+                "Tinebase_Account_Model_Registration::validation_errors: \n" .
+                print_r($validation_errors,true));
+            throw ($e);
+        }
+        
+        return $registration;
+    }
+    
 }
