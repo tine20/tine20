@@ -331,4 +331,63 @@ class Tinebase_Account_Registration
 		}		
 		return $password;
 	}
+	
+	/**
+	 * activate user account
+	 *
+	 * @param 	string $_registrationHash
+	 * @return	Tinebase_Account_Model_FullAccount
+	 * 
+	 * @todo	update tables
+	 */
+	public function activateAccount ( $_registrationHash ) 
+	{		
+		
+       	//@todo get registration by id / hash
+       	//$registration = $this->getRegistrationByHash ( $_registrationHash );
+		
+		//@todo set new expire_date in DB (registration)
+		//$registration['registrationExpires'] = "";
+		//$this->updateRegistration ();
+
+       	//@todo get account by username
+		//$account = Tinebase_Account::getInstance()->getAccountByLoginName($registration['registrationLoginName']);
+
+		//@todo set new expire_date in DB (account)
+		
+		return $account;	
+	}
+	
+	/**
+	 * generate captcha
+	 *
+	 * @return 	image	the captcha image
+	 * 
+	 * @todo 	save security code in db/session
+	 */
+	public function generateCaptcha () 
+	{	
+		// get security code (user password generator)
+		$security_code = $this->generatePassword(4);
+		
+       	//Set the image width and height
+        $width = 120;
+        $height = 20;
+
+        // Create the image resource
+        $image = ImageCreate($width, $height);  
+		
+        // get colors, black background, set security code, add some lines
+        $white = ImageColorAllocate($image, 255, 255, 255);
+        $black = ImageColorAllocate($image, 0, 0, 0);
+        $grey = ImageColorAllocate($image, 204, 204, 204);
+        ImageFill($image, 0, 0, $black);
+        ImageString($image, 4, 40, 4, $security_code, $white);
+        ImageRectangle($image,0,0,$width-1,$height-1,$grey);
+        imageline($image, 0, $height/2, $width, $height/2, $grey);
+        imageline($image, $width/2, 0, $width/2, $height, $grey);
+
+        return $image;
+	}
+	
 }

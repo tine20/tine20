@@ -76,6 +76,12 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         );
     }
     
+	/**
+	 * returns the css include files for Tinebase 
+	 *
+	 * @return array Array of filenames
+	 *  
+	 */
     public function getCssFilesToInclude()
     {
     	return array(
@@ -84,6 +90,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	);
     }
     
+	/**
+	 * renders the tine main screen 
+	 *
+	 * 
+	 */
     public function mainScreen()
     {
         $userApplications = Zend_Registry::get('currentAccount')->getApplications();
@@ -127,18 +138,19 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 *
 	 * @param 	string $id
 	 * 
-	 * @todo	update tables
+	 * @todo	testing
 	 */
 	public function activateAccount ( $id ) 
 	{
-		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activate account for ' . $_username);
-       	
-		//@todo set new expire_date in DB
-		//@todo update registration table and get username
+				
+		// update registration table and get username / account values
+		$account = Tinebase_Account_Registration::getInstance()->activateAccount ( $id );
+
+		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
 		
 		$view = new Zend_View();
         $view->title="Tine 2.0 User Activation";
-        //$view->username = $_username;
+        $view->username = $account['accountLoginName'];
         $view->loginUrl = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
 
         $view->setScriptPath('Tinebase/views');
@@ -149,36 +161,19 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	}
 	
 	/**
-	 * generate captcha
+	 * show captcha
 	 *
-	 * @todo	add to user registration
-	 * @todo 	save security code in db/session
+	 * @todo	add to user registration process
 	 */
-	public function generateCaptcha () 
+	public function showCaptcha () 
 	{	
-		$security_code = substr(md5(uniqid()), 4, 4);
+		$captcha = Tinebase_Account_Registration::getInstance()->generateCaptcha();
 		
-       	//Set the image width and height
-        $width = 120;
-        $height = 20;
-
-        // Create the image resource
-        $image = ImageCreate($width, $height);  
-		
-        // get colors, black background, set security code, add some lines
-        $white = ImageColorAllocate($image, 255, 255, 255);
-        $black = ImageColorAllocate($image, 0, 0, 0);
-        $grey = ImageColorAllocate($image, 204, 204, 204);
-        ImageFill($image, 0, 0, $black);
-        ImageString($image, 4, 40, 4, $security_code, $white);
-        ImageRectangle($image,0,0,$width-1,$height-1,$grey);
-        imageline($image, 0, $height/2, $width, $height/2, $grey);
-        imageline($image, $width/2, 0, $width/2, $height, $grey);
-
         //Tell the browser what kind of file is come in
         header("Content-Type: image/jpeg");
 
         //Output the newly created image in jpeg format
-        ImageJpeg($image);		
+        ImageJpeg($captcha);		
+		
 	}
 }
