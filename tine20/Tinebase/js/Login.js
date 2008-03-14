@@ -22,7 +22,7 @@ Tine.Login = {
             text: 'Login',
             handler: Tine.Login.loginHandler 
         }];
-        if (true) {
+        if ( userRegistration == true ) {
             loginButtons.push({
                 text: 'Register',
                 handler: Tine.Login.UserRegistrationHandler

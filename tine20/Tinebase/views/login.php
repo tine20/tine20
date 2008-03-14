@@ -29,8 +29,15 @@
     <link rel="stylesheet" type="text/css" href="Tinebase/css/tinebase.css"/>
     <link rel="stylesheet" type="text/css" href="Tinebase/css/ux/Wizard.css"/>
     <script type="text/javascript" language="javascript" src="Tinebase/js/ux/Wizard.js"></script>
+    <script type="text/javascript" language="javascript">
+            <?php
+                echo "var userRegistration = " . (($this->userRegistration) ? "true" : "false") . ";\n";
+            ?>
+    </script>
     <script type="text/javascript" language="javascript" src="Tinebase/js/Login.js"></script>
-    <script type="text/javascript" language="javascript" src="Tinebase/js/UserRegistration.js"></script>
+    <?php if ( $this->userRegistration ) { ?>
+    	<script type="text/javascript" language="javascript" src="Tinebase/js/UserRegistration.js"></script>
+    <? } ?>
     <!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">
             <?php

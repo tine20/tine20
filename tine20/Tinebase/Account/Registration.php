@@ -19,13 +19,27 @@
  */
 class Tinebase_Account_Registration
 {
+	
+	/**
+     * the config
+     *
+     * @var Zend_Config_Ini 
+     */
+	private $_config = NULL;
 
 	/**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() {
+        // get config
+        try {
+            $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
+        } catch (Zend_Config_Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
+        }
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -48,7 +62,7 @@ class Tinebase_Account_Registration
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Account_Registration;
+            self::$_instance = new Tinebase_Account_Registration;            
         }
         
         return self::$_instance;
@@ -119,9 +133,16 @@ class Tinebase_Account_Registration
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
 
 		// add expire date (user has 1 day to click on the activation link)
-		$regData['accountExpires'] = new Zend_Date ();
-		//  add 1 day
-		$regData['accountExpires']->add('24:00:00', Zend_Date::TIMES);
+		if ( isset($this->_config->expires) && $this->_config->expires > 0 ) {
+			$regData['accountExpires'] = new Zend_Date ();
+			// add 'expires' from config hours
+			$timeToAdd = $this->_config->expires.":00:00";
+			Zend_Registry::get('logger')->debug("this account expires in $timeToAdd hours ...");
+			$regData['accountExpires']->add($timeToAdd, Zend_Date::TIMES);
+		} else {
+			Zend_Registry::get('logger')->debug("this account never expires.");
+			$regData['accountExpires'] = NULL;
+		}
 		
 		// get model & save user data (account & contact) via the Account and Addressbook controllers
 		$account = new Tinebase_Account_Model_FullAccount($regData);
@@ -135,12 +156,15 @@ class Tinebase_Account_Registration
 		//Tinebase_Account::getInstance()->addAccount ( $account );
  				
 		// send mail
+		//@todo uncomment after testing
+		return true;
+		/*
 		if ( $this->sendRegistrationMail( $regData ) ) {
 			return true;			
 		} else {
 			return false;
 		}
-		
+		*/
 	}
 	
 	/**

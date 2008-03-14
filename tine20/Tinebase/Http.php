@@ -37,6 +37,14 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             $view->defaultUsername = '';
             $view->defaultPassword = '';
         }
+
+        // check if registration is active
+        try {
+            $registrationConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
+            $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
+        } catch (Zend_Config_Exception $e) {
+            $view->userRegistration = 0;
+        }
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('login.php');
