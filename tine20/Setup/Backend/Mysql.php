@@ -70,7 +70,7 @@ class Setup_Backend_Mysql
 		}
 		$statement .= ";";
 		
-       // echo "<pre>$statement</pre>";
+        //echo "<pre>$statement</pre>";
 		
         Zend_Registry::get('dbAdapter')->query($statement);
     }
@@ -287,11 +287,18 @@ class Setup_Backend_Mysql
         }
         else if (!empty($_key->foreign))
         {
-            $definition = 'FOREIGN KEY';
+            $definition = 'CONSTRAINT `' . $_key->name . '` FOREIGN KEY';
 			
 			$definition .= '(`' .$_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
-						. $_key->reference->table . "`(`" . $_key->reference->field . "`) "
-						. $_key->reference->action . ', ';
+						. $_key->reference->table . "` (`" . $_key->reference->field . "`) ";
+			if(!empty($_key->reference->ondelete)) {
+			    $definition .= "ON DELETE " . strtoupper($_key->reference->ondelete);
+			}
+            if(!empty($_key->reference->onupdate)) {
+                $definition .= "ON UPDATE " . strtoupper($_key->reference->onupdate);
+            }
+			
+			$definition .= ', ';
         }
 		
 
