@@ -36,17 +36,7 @@ class Tinebase_AccessLog
      */
     private function __construct()
     {
-        $conf = array('name' => SQL_TABLE_PREFIX . 'access_log');
-        if(Zend_Registry::get('configFile')->database->get('egw14compat') == 1) {
-            $conf['primary'] = array('ip','li');
-        }
-        
-        try {
-            $this->accessLogTable = new Tinebase_Db_Table($conf);
-        } catch (Zend_Db_Statement_Exception $e) {
-            Tinebase_Setup_SetupSqlTables::createAccessLogTable();
-            $this->accessLogTable = new Tinebase_Db_Table();
-        }
+        $this->accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
     }
     
     /**
