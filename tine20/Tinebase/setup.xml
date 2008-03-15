@@ -101,6 +101,7 @@
                 </index>
             </declaration>
         </table>
+        
         <table>
             <name>groups</name>
             <version>0.0.1</version>
@@ -132,6 +133,7 @@
                 </index>                
             </declaration>
         </table>
+        
         <table>
             <name>accounts</name>
             <version>0.0.1</version>
@@ -228,6 +230,7 @@
                 </index>
             </declaration>
         </table>
+        
         <table>
             <name>group_members</name>
             <version>0.0.1</version>
@@ -283,6 +286,7 @@
 
             </declaration>
         </table>
+        
         <table>
             <name>registrations</name>
             <version>0.0.1</version>
@@ -345,64 +349,6 @@
         </table>
 
         <table>
-            <name>container_acl</name>
-            <version>0.0.1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>container_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>account_grant</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>id-account_id-account_grant</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>id</name>
-                    </field>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                    <field>
-                        <name>account_grant</name>
-                    </field>
-                </index>
-                <index>
-                    <name>account_id</name>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-
-        <table>
             <name>container</name>
             <version>0.0.1</version>
             <declaration>
@@ -459,6 +405,75 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+
+        <table>
+            <name>container_acl</name>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>container_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_id-account_grant</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>container_id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
                         <field>id</field>
                     </reference>
                 </index>
