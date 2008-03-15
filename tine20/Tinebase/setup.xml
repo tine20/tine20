@@ -174,7 +174,6 @@
                     <value>enable</value>
                     <value>disable</value>
                     <notnull>true</notnull>
-                    <!-- <default>disable</default>  -->
                 </field>
                 <field>
                     <name>expires_at</name>
