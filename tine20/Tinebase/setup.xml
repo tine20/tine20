@@ -56,6 +56,7 @@
                 </index>
             </declaration>
         </table>
+        
         <table>
             <name>application_tables</name>
             <version>0.0.1</version>
@@ -480,6 +481,64 @@
             </declaration>
         </table>
 
+        <table>
+            <name>access_log</name>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>sessionid</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>login_name</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>ip</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>li</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>lo</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                </field>
+                <field>
+                    <name>result</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
 
     </tables>
 </application>
