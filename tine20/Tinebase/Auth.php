@@ -94,6 +94,7 @@ class Tinebase_Auth
      * the constructor
      *
      * don't use the constructor. use the singleton 
+     * @todo use the config setting from the registry
      */
     private function __construct() {
         try {
