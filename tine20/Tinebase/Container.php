@@ -99,9 +99,6 @@ class Tinebase_Container
     
     /**
      * the constructor
-     *
-     * until we have finnished the table setup infrastructure, we also create the 
-     * needed tables in this class on demand
      */
     private function __construct() {
         $this->containerTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'container'));
