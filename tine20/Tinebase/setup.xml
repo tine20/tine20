@@ -540,5 +540,75 @@
             </declaration>
         </table>
 
+        <table>
+            <name>application_rights</name>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>right</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id-right-account_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>right</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>right</name>
+                    <field>
+                        <name>right</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+
     </tables>
 </application>

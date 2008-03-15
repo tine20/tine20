@@ -54,44 +54,7 @@ class Tinebase_Acl_Rights
      * temporarly the constructor also creates the needed tables on demand and fills them with some initial values
      */
     private function __construct() {
-        try {
-            $this->rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
-        } catch (Zend_Db_Statement_Exception $e) {
-            $this->createApplicationAclTable();
-            $this->rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
-
-            $accountId = Zend_Registry::get('currentAccount')->accountId;
-            
-            $application = Tinebase_Application::getInstance()->getApplicationByName('addressbook');
-            $data = array(
-                'application_right'  => Tinebase_Acl_Rights::ADMIN,
-                'account_id'     => $accountId,
-                'application_id' => $application->app_id
-            );
-            $this->rightsTable->insert($data);
-
-            $data = array(
-                'application_right'  => Tinebase_Acl_Rights::RUN,
-                'account_id'     => NULL,
-                'application_id' => $application->app_id
-            );
-            $this->rightsTable->insert($data);
-
-            $application = Tinebase_Application::getInstance()->getApplicationByName('admin');
-            $data = array(
-                'application_right'  => Tinebase_Acl_Rights::ADMIN,
-                'account_id'     => $accountId,
-                'application_id' => $application->app_id
-            );
-            $this->rightsTable->insert($data);
-
-            $data = array(
-                'application_right'  => Tinebase_Acl_Rights::RUN,
-                'account_id'     => NULL,
-                'application_id' => $application->app_id
-            );
-            $this->rightsTable->insert($data);
-        }
+        $this->rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
     }    
     
     /**
@@ -107,31 +70,6 @@ class Tinebase_Acl_Rights
         
         return self::$instance;
     }
-    
-    /**
-     * temporary function to create the SQL_TABLE_PREFIX . application_rights table on demand
-     *
-     */
-    protected function createApplicationAclTable() {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        try {
-            $tableData = $db->describeTable(SQL_TABLE_PREFIX . 'application_rights');
-        } catch (Zend_Db_Statement_Exception $e) {
-            // table does not exist
-            $result = $db->getConnection()->exec("CREATE TABLE " . SQL_TABLE_PREFIX . "application_rights (
-                acl_id int(11) NOT NULL auto_increment,
-                application_id int(11) NOT NULL,
-                application_right int(11) NOT NULL,
-                account_id int(11),
-                PRIMARY KEY  (`acl_id`),
-                UNIQUE KEY `' . SQL_TABLE_PREFIX . 'application_rightsid` (`application_id`, `application_right`, `account_id`),
-                KEY `' . SQL_TABLE_PREFIX . 'application_rights_application_right` (`application_right`),
-                KEY `' . SQL_TABLE_PREFIX . 'application_rights_account_id` (`account_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8"
-            );
-        }
-    }
-    
         
     /**
      * returns list of applications the user is able to use
