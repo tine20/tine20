@@ -404,6 +404,11 @@
                     <field>
                         <name>application_id</name>
                     </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>
