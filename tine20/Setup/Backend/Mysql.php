@@ -287,8 +287,9 @@ class Setup_Backend_Mysql
         }
         else if (!empty($_key->foreign))
         {
-            $definition = 'CONSTRAINT `' . $_key->name . '` FOREIGN KEY';
-			
+            //$definition = 'CONSTRAINT `' . $_key->name . '` FOREIGN KEY';
+            $definition = 'FOREIGN KEY';
+            
 			$definition .= '(`' .$_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
 						. $_key->reference->table . "` (`" . $_key->reference->field . "`) ";
 			if(!empty($_key->reference->ondelete)) {
