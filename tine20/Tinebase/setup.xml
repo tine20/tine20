@@ -40,7 +40,7 @@
                     <notnull>true</notnull>
                 </field>
                 <index>
-                    <name>applications_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
@@ -48,7 +48,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>applications_name</name>
+                    <name>name</name>
                     <unique>true</unique>
                     <field>
                         <name>name</name>
@@ -79,11 +79,25 @@
                     <notnull>true</notnull>
                 </field>
                 <index>
-                    <name>application_id</name>
+                    <name>name-application_id</name>
                     <primary>true</primary>
                     <field>
                         <name>name</name>
                     </field>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>
@@ -110,39 +124,10 @@
                     <length>255</length>
                 </field>                
                 <index>
-                    <name>groups_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <field>
                         <name>id</name>
-                    </field>
-                </index>                
-            </declaration>
-        </table>
-        <table>
-            <name>group_members</name>
-            <version>0.0.1</version>
-            <declaration>
-                <field>
-                    <name>group_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_id</name>
-                    <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>groupmembers_uniqueid</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>group_id</name>
-                    </field>
-                    <field>
-                        <name>account_id</name>
                     </field>
                 </index>                
             </declaration>
@@ -188,7 +173,8 @@
                     <type>enum</type>
                     <value>enable</value>
                     <value>disable</value>
-                    <default>disable</default>
+                    <notnull>true</notnull>
+                    <!-- <default>disable</default>  -->
                 </field>
                 <field>
                     <name>expires_at</name>
@@ -209,7 +195,7 @@
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>primary_group</name>
+                    <name>primary_group_id</name>
                     <type>integer</type>
                     <length>11</length>
                     <unsigned>true</unsigned>
@@ -229,6 +215,73 @@
                         <name>login_name</name>
                     </field>
                 </index>
+
+                <index>
+                    <name>primary_group_id</name>
+                    <field>
+                        <name>primary_group_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>groups</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>group_members</name>
+            <version>0.0.1</version>
+            <declaration>
+                <field>
+                    <name>group_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+
+                <index>
+                    <name>group_id-account_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>group_id</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>                
+
+                <index>
+                    <name>group_id</name>
+                    <field>
+                        <name>group_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>groups</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+
+                <index>
+                    <name>account_id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+
             </declaration>
         </table>
         <table>
