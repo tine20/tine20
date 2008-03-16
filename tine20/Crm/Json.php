@@ -627,8 +627,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
         if($rows = $controller->getPersonalContainer(Zend_Registry::get('currentAccount'), $owner, Tinebase_Container::GRANT_READ)) {
             foreach($rows as $folderData) {
-                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->container_id, $folderData->container_name, TRUE);
-                $childNode->folderId = $folderData->container_id;
+                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->id, $folderData->name, TRUE);
+                $childNode->folderId = $folderData->id;
                 $childNode->nodeType = 'singleFolder';
                 $treeNodes[] = $childNode;
             }
@@ -648,8 +648,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         if($rows = $controller->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ)) {
             foreach($rows as $folderData) {
-                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->container_id, $folderData->container_name, TRUE);
-                $childNode->folderId = $folderData->container_id;
+                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->id, $folderData->name, TRUE);
+                $childNode->folderId = $folderData->id;
                 $childNode->nodeType = 'singleFolder';
                 $treeNodes[] = $childNode;
             }
@@ -696,7 +696,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $internalContainer = Tinebase_Container::getInstance()->getInternalContainer('crm');
         
-        $folderId = $internalContainer->container_id;
+        $folderId = $internalContainer->id;
         
         $result = $this->getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit);
 

@@ -998,7 +998,7 @@ Tine.Crm.Main = function(){
 
             case 'singleContainer':
                 dataStore.baseParams.method        = 'Crm.getLeadsByFolder';
-                dataStore.baseParams.folderId = _node.attributes.container.container_id;
+                dataStore.baseParams.folderId = _node.attributes.container.id;
                 break;
         }
         
@@ -2158,11 +2158,11 @@ Tine.Crm.LeadEditDialog.Elements = function() {
                 }
             },
             {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var contact_email      = Ext.isEmpty(record.data.contact_email) === false ? '<a href="mailto:'+record.data.contact_email+'">'+record.data.contact_email+'</a>' : '&nbsp;';
+                    var email      = Ext.isEmpty(record.data.email) === false ? '<a href="mailto:'+record.data.email+'">'+record.data.email+'</a>' : '&nbsp;';
                     var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '&nbsp;';                    
 
                 var formated_return = '<table>' + 
-                    '<tr><td>Email: </td><td>' + contact_email + '</td></tr>' + 
+                    '<tr><td>Email: </td><td>' + email + '</td></tr>' + 
                     '<tr><td>WWW: </td><td>' + contact_url + '</td></tr>' + 
                     '</table>';
                 
@@ -2316,7 +2316,7 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             {name: 'link_id'},              
             {name: 'link_remark'},                        
             {name: 'contact_id'},
-            {name: 'contact_owner'},
+            {name: 'owner'},
             {name: 'n_family'},
             {name: 'n_given'},
             {name: 'n_middle'},
@@ -2334,7 +2334,7 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             {name: 'tel_work'},
             {name: 'tel_cell'},
             {name: 'tel_fax'},
-            {name: 'contact_email'}
+            {name: 'email'}
         ],
         
         getContactsCustomer: function (_contactsCustomer){  

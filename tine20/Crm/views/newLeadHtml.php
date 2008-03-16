@@ -51,7 +51,7 @@
   </tr>
   <tr>
     <td><?php echo $this->lang_folder ?></td>
-    <td><?php echo $this->container->container_name ?></td>
+    <td><?php echo $this->container->name ?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_updatedBy ?></td>

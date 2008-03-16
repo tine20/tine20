@@ -722,7 +722,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
 
         foreach($ownerContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
 
         $where = array(
@@ -749,7 +749,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($ownerContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
@@ -1010,7 +1010,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), 
                 'links.link_id2 = contacts.contact_id', array(
                     'contact_id',
-                    'contact_owner',
+                    'owner',
                     'n_family',
                     'n_given',
                     'n_middle',
@@ -1100,7 +1100,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($allContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
@@ -1122,11 +1122,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($containers as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -1154,7 +1154,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($allContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
@@ -1224,7 +1224,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($sharedContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
@@ -1252,7 +1252,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($allContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
@@ -1278,7 +1278,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
 
         foreach($otherPeoplesContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
 
         $where = array(
@@ -1307,7 +1307,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $containerIds = array();
         
         foreach($allContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(

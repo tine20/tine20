@@ -27,6 +27,6 @@
 <?php echo $this->lang_turnover ?>: <?php echo $this->lead->lead_turnover . "\n" ?>
 <?php echo $this->lang_probability ?>: <?php echo $this->lead->lead_probability . "%\n" ?>
 
-<?php echo $this->lang_folder ?>: <?php echo $this->container->container_name . "\n" ?>
+<?php echo $this->lang_folder ?>: <?php echo $this->container->name . "\n" ?>
 
 <?php echo $this->lang_updatedBy ?>: <?php echo $this->updater->accountDisplayName . "\n" ?>

@@ -55,7 +55,7 @@ class Crm_Model_Contact extends Tinebase_Record_Abstract
         'link_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'link_remark'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),         
         'contact_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'contact_owner'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
+        'owner'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
         'n_family'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),      
         'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),     
         'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),      
@@ -73,7 +73,7 @@ class Crm_Model_Contact extends Tinebase_Record_Abstract
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_fax'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_email'         => array(Zend_Filter_Input::ALLOW_EMPTY => true)         
+        'email'         => array(Zend_Filter_Input::ALLOW_EMPTY => true)         
     );
 
 }
