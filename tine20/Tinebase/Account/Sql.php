@@ -274,14 +274,14 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
                 array(
-                    'accountId' => $this->rowNameMapping['accountId'],
-                    'accountLoginName' => $this->rowNameMapping['accountLoginName'],
-                    'accountLastLogin' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`last_login`)',
-                    'accountLastLoginfrom' => $this->rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`last_password_change`)',
-                    'accountStatus' => $this->rowNameMapping['accountStatus'],
-                    'accountExpires' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`expires_at`)',
-                    'accountPrimaryGroup' => $this->rowNameMapping['accountPrimaryGroup']
+                    'accountId'             => $this->rowNameMapping['accountId'],
+                    'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
+                    'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
+                    'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
+                    'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
+                    'accountStatus'         => $this->rowNameMapping['accountStatus'],
+                    'accountExpires'        => $this->rowNameMapping['accountExpires'],
+                    'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup']
                 )
             )
             ->join(
@@ -392,7 +392,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['last_login_from'] = $_ipAddress;
-        $accountData['last_login'] = Zend_Date::now()->getTimestamp();
+        $accountData['last_login'] = Zend_Date::now()->getIso();
         
         $where = array(
             $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
