@@ -43,7 +43,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         //'*'                     => 'StringTrim',
         'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
         'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
-    	'contact_email'         => array('StringTrim', 'StringToLower'),
+    	'email'         => array('StringTrim', 'StringToLower'),
         'contact_email_home'    => array('StringTrim', 'StringToLower'),
         'contact_url'           => array('StringTrim', 'StringToLower'),
         'contact_url_home'      => array('StringTrim', 'StringToLower'),
@@ -75,7 +75,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'adr_two_street2'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_assistent'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_bday'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
- /*       'contact_email'     => array(
+ /*       'email'     => array(
             array(
                 'Regex', 
                 '/^[^0-9][a-z0-9_]+([.][a-z0-9_]+)*[@][a-z0-9_]+([.][a-z0-9_]+)*[.][a-z]{2,4}$/'
@@ -89,11 +89,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ), 
             Zend_Filter_Input::ALLOW_EMPTY => true
         ),*/
-        'contact_email'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'email'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_email_home'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_id'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     	'contact_note'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'contact_role'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_title'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_url'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),

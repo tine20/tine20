@@ -125,7 +125,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     {
         $internalContainer = Tinebase_Container::getInstance()->getInternalContainer('addressbook');
         
-        $addressbookId = $internalContainer->container_id;
+        $addressbookId = $internalContainer->id;
         
         $result = $this->getContactsByAddressbookId($addressbookId, $filter, $start, $sort, $dir, $limit);
 

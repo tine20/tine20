@@ -51,11 +51,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function saveContact(Addressbook_Model_Contact $_contactData)
     {
-        if((int)$_contactData->contact_owner < 0) {
-            throw new UnderflowException('contact_owner can not be empty');
+        if((int)$_contactData->owner < 0) {
+            throw new UnderflowException('owner can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_contactData->contact_owner, Tinebase_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_contactData->owner, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('write access to new addressbook denied');
         }
         
@@ -63,7 +63,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $currentAccount = Zend_Registry::get('currentAccount');
 
         $contactData = $_contactData->toArray();
-        $contactData['contact_tid'] = 'n';
+        $contactData['tid'] = 'n';
         unset($contactData['contact_id']);
         
         $db = $this->contactsTable->getAdapter();
@@ -77,7 +77,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             } else {
                 // update existing contact
                 $oldContactData = $this->getContactById($_contactData->contact_id);
-                if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Tinebase_Container::GRANT_EDIT)) {
+                if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->owner, Tinebase_Container::GRANT_EDIT)) {
                     throw new Exception('write access to old addressbook denied');
                 }
                 
@@ -175,7 +175,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $oldContactData = $this->getContactById($_contactId);
 
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->contact_owner, Tinebase_Container::GRANT_DELETE)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->owner, Tinebase_Container::GRANT_DELETE)) {
             throw new Exception('delete access to addressbook denied');
         }
         
@@ -237,7 +237,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $tinebaseContainer->deleteContainer($_addressbookId);
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', (int)$_addressbookId)
+            $this->contactsTable->getAdapter()->quoteInto('owner = ?', (int)$_addressbookId)
         );
         
         //$this->contactsTable->delete($where);
@@ -266,11 +266,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $containerIds = array();
         
         foreach($otherPeoplesContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -318,11 +318,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $containerIds = array();
         
         foreach($allContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -343,11 +343,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $containerIds = array();
         
         foreach($allContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -378,11 +378,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $containerIds = array();
         
         foreach($sharedContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -437,7 +437,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new UnderflowException('contact not found');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($row->contact_owner, Tinebase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($row->owner, Tinebase_Container::GRANT_READ)) {
             throw new Exception('permission to contact denied');
         }
         
@@ -472,11 +472,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $containerIds = array();
         
         foreach($ownerContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
         
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -506,11 +506,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $containerIds = array();
         
         foreach($ownerContainer as $container) {
-            $containerIds[] = $container->container_id;
+            $containerIds[] = $container->id;
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -533,7 +533,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $addressbookId)
+            $this->contactsTable->getAdapter()->quoteInto('owner = ?', $addressbookId)
         );
 
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
@@ -553,7 +553,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_owner = ?', $addressbookId)
+            $this->contactsTable->getAdapter()->quoteInto('owner = ?', $addressbookId)
         );
                 
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -566,7 +566,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     protected function _addQuickSearchFilter($_where, $_filter)
     {
         if(!empty($_filter)) {
-            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or contact_email LIKE ?)', '%' . trim($_filter) . '%');
+            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter) . '%');
         }
         
         return $_where;

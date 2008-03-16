@@ -192,12 +192,12 @@ Tine.Addressbook.Main = {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'contact_tid', header: 'Type', dataIndex: 'contact_tid', width: 30, renderer: this.renderer.contactTid },
+            { resizable: true, id: 'tid', header: 'Type', dataIndex: 'tid', width: 30, renderer: this.renderer.contactTid },
             { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family' },
             { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80 },
             { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
             { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true },
-            { resizable: true, id: 'contact_email', header: 'eMail', dataIndex: 'contact_email', width: 150, hidden: false },
+            { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150, hidden: false },
             { resizable: true, id: 'contact_bday', header: 'Birthday', dataIndex: 'contact_bday', hidden: true },
             { resizable: true, id: 'org_name', header: 'Organisation', dataIndex: 'org_name', width: 200 },
             { resizable: true, id: 'org_unit', header: 'Unit', dataIndex: 'org_unit' , hidden: true },
@@ -338,7 +338,7 @@ Tine.Addressbook.Main = {
 
             case 'singleContainer':
                 dataStore.baseParams.method        = 'Addressbook.getContactsByAddressbookId';
-                dataStore.baseParams.addressbookId = _node.attributes.container.container_id;
+                dataStore.baseParams.addressbookId = _node.attributes.container.id;
                 break;                
         }
         
@@ -480,7 +480,7 @@ Tine.Addressbook.ContactEditDialog = {
             },
             new Tine.widgets.container.selectionComboBox({
                 fieldLabel:'Addressbook',
-                name: 'contact_owner',
+                name: 'owner',
                 anchor:'95%',
                 itemName: 'Addressbook',
                 appName: 'Addressbook'
@@ -602,7 +602,7 @@ Tine.Addressbook.ContactEditDialog = {
                 },{
                     xtype:'textfield',
                     fieldLabel:'Email', 
-                    name:'contact_email', 
+                    name:'email', 
                     vtype:'email',
                     anchor:'95%'
                 },{
@@ -790,7 +790,7 @@ Tine.Addressbook.ContactEditDialog = {
         });
 
         this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(_contactData.contact_owner.account_grants);
+        this.updateToolbarButtons(_contactData.owner.account_grants);
         
         dialog.getForm().loadRecord(this.contactRecord);
         
@@ -811,8 +811,8 @@ Ext.namespace('Tine.Addressbook.Model');
 
 Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'contact_id'},
-    {name: 'contact_tid'},
-    {name: 'contact_owner'},
+    {name: 'tid'},
+    {name: 'owner'},
     {name: 'contact_private'},
     {name: 'cat_id'},
     {name: 'n_family'},
@@ -853,7 +853,7 @@ Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'tel_cell_private'},
     {name: 'tel_other'},
     {name: 'tel_prefer'},
-    {name: 'contact_email'},
+    {name: 'email'},
     {name: 'contact_email_home'},
     {name: 'contact_url'},
     {name: 'contact_url_home'},
