@@ -32,7 +32,8 @@ class Tinebase_Account_Registration
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct() 
+    {
         // get config
         try {
             $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
@@ -104,7 +105,6 @@ class Tinebase_Account_Registration
 	 * @param 	array $regData 		json data from registration frontend
 	 * @return 	bool
 	 * 
-	 * @todo	save default account values elsewhere (where?) ?
 	 */
 	public function registerUser ( $regData ) 
 	{
@@ -127,8 +127,12 @@ class Tinebase_Account_Registration
 		}
 				
 		// add more required fields to regData
-		$regData['accountStatus'] = 'A'; 
-		$regData['accountPrimaryGroup'] = '-4'; //-- ?
+		// get default values from config.ini if available
+		/*$regData['accountStatus'] = 'A'; 
+		$regData['accountPrimaryGroup'] = '-4'; //-- ?*/
+		$regData['accountStatus'] = ( isset($this->_config->accountStatus) ) ? $this->_config->accountStatus : 'A'; 
+		$regData['accountPrimaryGroup'] = ( isset($this->_config->accountPrimaryGroup) ) ? $this->_config->accountPrimaryGroup : '-4'; 
+		
 		$regData['accountDisplayName'] = $regData['accountFirstName'].' '.$regData['accountLastName']; 
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
 
@@ -156,19 +160,16 @@ class Tinebase_Account_Registration
 		//Tinebase_Account::getInstance()->addAccount ( $account );
  				
 		// send mail
-		//@todo uncomment after testing
-		return true;
-		/*
 		if ( $this->sendRegistrationMail( $regData ) ) {
 			return true;			
 		} else {
 			return false;
 		}
-		*/
+		
 	}
 	
 	/**
-	 * send registration mail
+	 * create user hash, send registration mail and save registration in database
 	 *
 	 * @param 	array $_regData
 	 * @return 	bool
