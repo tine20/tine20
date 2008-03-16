@@ -37,7 +37,7 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-if(Zend_Version::compareVersion('1.5.0') === 1) {
+if(Zend_Version::compareVersion('1.4.999') === 1) {
     die('Sorry, your version of the Zend Framework is to old. You have version ' . Zend_Version::VERSION . ' and require at least version 1.5.0.');
 }
 
