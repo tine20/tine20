@@ -19,11 +19,20 @@
 class Tinebase_Group
 {
     /**
+     * instance of the group backend
+     *
+     * @var Tinebase_Group_Interface
+     */
+    protected $_backend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() {
+        $this->_backend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -60,12 +69,7 @@ class Tinebase_Group
      */
     public function getGroupMemberships($_accountId)
     {
-        if($_account instanceof Tinebase_Account_Model_Account) {
-            $accountId = $_account->accountId;
-        } else {
-            $accountId = (int) $_accountId;
-        }
-        $result = $this->_backend->getGroupMemberships($accountId);
+        $result = $this->_backend->getGroupMemberships($_accountId);
         
         return $result;
     }
@@ -151,4 +155,27 @@ class Tinebase_Group
         return $result;
     }
     
+    /**
+     * converts a int, string or Tinebase_Group_Model_Group to a groupid
+     *
+     * @param int|string|Tinebase_Group_Model_Group $_groupId the groupid to convert
+     * @return int
+     */
+    static public function convertGroupIdToInt($_groupId)
+    {
+        if($_groupId instanceof Tinebase_Group_Model_Group) {
+            if(empty($_groupId->id)) {
+                throw new Exception('no group id set');
+            }
+            $groupId = (int) $_groupId->id;
+        } else {
+            $groupId = (int) $_groupId;
+        }
+        
+        if($groupId === 0) {
+            throw new Exception('group id can not be 0');
+        }
+        
+        return $groupId;
+    }
 }

@@ -82,7 +82,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 				Ext.Ajax.request({
 					params: {
 						method: 'Tinebase_Container.setContainerGrants',
-						containerId: container.container_id,
+						containerId: container.id,
 						grants: Ext.util.JSON.encode(grants)
 					},
 					success: function(_result, _request){
@@ -107,7 +107,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	},
 	//private
     initComponent: function(){
-        this.title = 'Manage permissions for ' + this.folderName + ': "' + this.grantContainer.container_name + '"';
+        this.title = 'Manage permissions for ' + this.folderName + ': "' + this.grantContainer.name + '"';
 		this.actions = {
 	        addAccount: new Ext.Action({
 	            text: 'add account',
@@ -127,7 +127,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 		this.dataStore =  new Ext.data.JsonStore({
             baseParams: {
                 method: 'Tinebase_Container.getContainerGrants',
-                containerId: this.grantContainer.container_id
+                containerId: this.grantContainer.id
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -169,7 +169,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             })
         ];
         
-        if (this.grantContainer.container_type == 'shared') {
+        if (this.grantContainer.type == 'shared') {
             columns.push(new Ext.ux.grid.CheckColumn({
                 header: "Admin",
                 dataIndex: 'adminGrant',

@@ -77,11 +77,20 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMemberships($_accountId)
     {
-        if($_account instanceof Tinebase_Account_Model_Account) {
-            $accountId = $_account->accountId;
-        } else {
-            $accountId = (int) $_accountId;
+        $accountId = $this->getAccountId($_accountId);
+        
+        $memberships = array();
+        
+        $select = $this->groupMembersTable->select();
+        $select->where('account_id = ?', $accountId);
+        
+        $rows = $this->groupMembersTable->fetchAll($select);
+        
+        foreach($rows as $membership) {
+            $memberships[] = $membership->group_id;
         }
+
+        return $memberships;
     }
     
     /**
@@ -114,14 +123,51 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function addGroupMember($_groupId, $_accountId)
     {
+        $groupId = $this->getGroupId($_groupId);
+        $accountId = $this->getAccountId($_accountId);
+
         $data = array(
-            'group_id'      => $_groupId,
-            'account_id'    => $_accountId
+            'group_id'      => $groupId,
+            'account_id'    => $accountId
         );
         
         $this->groupMembersTable->insert($data);
     }
+    
+    /**
+     * get the accountid from different data types
+     *
+     * @param int|Tinebase_Account_Model_Account $_accountId
+     * @return unknown
+     */
+    private function getAccountId($_accountId)
+    {
+        if($_accountId instanceof Tinebase_Account_Model_Account) {
+            $accountId = $_accountId->accountId;
+        } else {
+            $accountId = (int) $_accountId;
+        }
+        
+        return $accountId;
+    }
 
+    /**
+     * get the groupid from different data types
+     *
+     * @param int|Tinebase_Group_Model_Group $_groupId
+     * @return unknown
+     */
+    private function getGroupId($_groupId)
+    {
+        if($_groupId instanceof Tinebase_Group_Model_Group) {
+            $groupId = $_groupId->id;
+        } else {
+            $groupId = (int) $_groupId;
+        }
+        
+        return $groupId;
+    }
+    
     /**
      * remove one groupmember from the group
      *

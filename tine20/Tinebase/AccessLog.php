@@ -65,11 +65,11 @@ class Tinebase_AccessLog
     public function addLoginEntry($_sessionId, $_loginId, $_ipAddress, $_result, $_accountId = NULL)
     {
         $data = array(
-            'sessionid'  => $_sessionId,
-            'loginid'    => $_loginId,
-            'ip'         => $_ipAddress,
-            'li'         => time(),
-            'result'     => $_result
+            'sessionid'     => $_sessionId,
+            'login_name'    => $_loginId,
+            'ip'            => $_ipAddress,
+            'li'            => time(),
+            'result'        => $_result
         );
         if($_accountId !== NULL) {
             $data['account_id'] = $_accountId;
@@ -147,7 +147,7 @@ class Tinebase_AccessLog
         }
         
         if(!empty($_filter)) {
-            $where[] = $this->accessLogTable->getAdapter()->quoteInto('loginid LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
         }
 
         $rowSet = $this->accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -180,7 +180,7 @@ class Tinebase_AccessLog
             'li BETWEEN ' . $_from->getTimestamp() . ' AND ' . $_to->getTimestamp()
         );
         if(!empty($_filter)) {
-            $where[] = $this->accessLogTable->getAdapter()->quoteInto('loginid LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
         }
 
         $count = $this->accessLogTable->getTotalCount($where);

@@ -94,8 +94,8 @@ class Tinebase_Record_Relation
     		
     		// resolve apps
     		$application = Tinebase_Application::getInstance();
-    		$data['own_application'] = $application->getApplicationByName($_relation->own_application)->app_id;
-    		$data['related_application']   = $application->getApplicationByName($_relation->related_application)->app_id;
+    		$data['own_application'] = $application->getApplicationByName($_relation->own_application)->id;
+    		$data['related_application']   = $application->getApplicationByName($_relation->related_application)->id;
             
     		$identifier = $this->_db->insert($data);
     		return $this->getRelationById($identifier);
@@ -138,7 +138,7 @@ class Tinebase_Record_Relation
         }
         
         $where = array(
-            'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
+            'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->id,
             'own_identifier  = ' . $_record->getId()
         );
         if ($_role) {
@@ -165,7 +165,7 @@ class Tinebase_Record_Relation
         }
         
     	$where = array(
-    	    'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->app_id,
+    	    'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->id,
             'own_identifier  =' . $_record->getId(),
     	    'is_deleted      = FALSE'
     	);

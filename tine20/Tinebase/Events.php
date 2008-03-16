@@ -26,7 +26,7 @@ class Tinebase_Events
     static public function fireEvent(Tinebase_Events_Abstract $_eventObject)
     {
         foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
-            $controllerName = ucfirst($application->app_name) . '_Controller';
+            $controllerName = ucfirst($application->name) . '_Controller';
             
             if(class_exists($controllerName)) {
                 try {

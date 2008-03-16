@@ -174,8 +174,8 @@
                 <field>
                     <name>status</name>
                     <type>enum</type>
-                    <value>enable</value>
-                    <value>disable</value>
+                    <value>enabled</value>
+                    <value>disabled</value>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -204,7 +204,7 @@
                     <notnull>true</notnull>
                 </field>
                 <index>
-                    <name>account_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <field>
                         <name>id</name>
@@ -567,7 +567,13 @@
                     <name>account_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>group_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>false</notnull>
                 </field>
                 
                 <index>
@@ -578,16 +584,19 @@
                     </field>
                 </index>
                 <index>
-                    <name>application_id-right-account_id</name>
+                    <name>account_id-group_id-application_id-right</name>
                     <unique>true</unique>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>group_id</name>
+                    </field>
                     <field>
                         <name>application_id</name>
                     </field>
                     <field>
                         <name>right</name>
-                    </field>
-                    <field>
-                        <name>account_id</name>
                     </field>
                 </index>
                 <index>

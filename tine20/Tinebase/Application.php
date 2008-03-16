@@ -57,7 +57,7 @@ class Tinebase_Application
     
     
     /**
-     * returns one application identified by app_id
+     * returns one application identified by id
      *
      * @param int $_applicationId the id of the application
      * @todo code still needs some testing
@@ -112,7 +112,7 @@ class Tinebase_Application
      * @param int $_start optional offset for applications
      * @return Tinebase_RecordSet_Application
      */
-    public function getApplications($_filter = NULL, $_sort = 'app_id', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getApplications($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
         $where = array();
         if($_filter !== NULL) {
@@ -199,4 +199,28 @@ class Tinebase_Application
         
         return $_application;
     }
+    
+    /**
+     * converts a int, string or Tinebase_Model_Application to an accountid
+     *
+     * @param int|string|Tinebase_Model_Application $_accountId the accountid to convert
+     * @return int
+     */
+    static public function convertApplicationIdToInt($_applicationId)
+    {
+        if($_applicationId instanceof Tinebase_Model_Application) {
+            if(empty($_applicationId->id)) {
+                throw new Exception('no application id set');
+            }
+            $applicationId = (int) $_applicationId->id;
+        } else {
+            $applicationId = (int) $_applicationId;
+        }
+        
+        if($applicationId === 0) {
+            throw new Exception('applicaiton id can not be 0');
+        }
+        
+        return $applicationId;
+    }    
 }

@@ -24,8 +24,8 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
 		parent::__construct(
 			$db,
 			SQL_TABLE_PREFIX . 'accounts',
-			'account_lid',
-			'account_pwd',
+			'login_name',
+			'password',
 			'MD5(?)'
 		);
 	}
@@ -45,7 +45,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         if($result->isValid()) {
             // username and password are correct, let's do some additional tests
             
-            if($this->_resultRow['account_status'] != 'A') {
+            if($this->_resultRow['status'] != 'enabled') {
                 Zend_Registry::get('logger')->debug('account: '. $this->_identity . ' is disabled');
                 // account is disabled
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
@@ -53,7 +53,8 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
                 return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
             }
             
-            if(($this->_resultRow['account_expires'] !== NULL && $this->_resultRow['account_expires'] != -1) && $this->_resultRow['account_expires'] < Zend_Date::now()->getTimestamp()) {
+            //if(($this->_resultRow['expires_at'] !== NULL) && $this->_resultRow['expires_at'] < Zend_Date::now()->getTimestamp()) {
+            if(($this->_resultRow['expires_at'] !== NULL) && Zend_Date::now()->isLater($this->_resultRow['expires_at'])) {
                 // account is expired
                 Zend_Registry::get('logger')->debug('account: '. $this->_identity . ' is expired');
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
@@ -84,11 +85,11 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        $accountData['account_pwd'] = md5($_password);
-        $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
+        $accountData['password'] = md5($_password);
+        $accountData['last_password_change'] = Zend_Date::now()->getIso();
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('account_lid = ?', $_loginName)
+            $accountsTable->getAdapter()->quoteInto('login_name = ?', $_loginName)
         );
         
         $result = $accountsTable->update($accountData, $where);

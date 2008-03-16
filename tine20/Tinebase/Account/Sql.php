@@ -39,19 +39,19 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     private static $_instance = NULL;
     
     protected $rowNameMapping = array(
-        'accountId'             => 'account_id',
+        'accountId'             => 'id',
         'accountDisplayName'    => 'n_fileas',
         'accountFullName'       => 'n_fn',
         'accountFirstName'      => 'n_given',
         'accountLastName'       => 'n_family',
-        'accountLoginName'      => 'account_lid',
-        'accountLastLogin'      => 'account_lastlogin',
-        'accountLastLoginfrom'  => 'account_lastloginfrom',
-        'accountLastPasswordChange' => 'account_lastpwd_change',
-        'accountStatus'         => 'account_status',
-        'accountExpires'        => 'account_expires',
-        'accountPrimaryGroup'   => 'account_primary_group',
-        'accountEmailAddress'   => 'contact_email'
+        'accountLoginName'      => 'login_name',
+        'accountLastLogin'      => 'last_login',
+        'accountLastLoginfrom'  => 'last_login_from',
+        'accountLastPasswordChange' => 'last_password_change',
+        'accountStatus'         => 'status',
+        'accountExpires'        => 'expires_at',
+        'accountPrimaryGroup'   => 'primary_group_id',
+        'accountEmailAddress'   => 'email'
     );
     
     
@@ -166,11 +166,11 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         }
 
         if($_filter !== NULL) {
-            $select->where('(n_family LIKE ? OR n_given LIKE ? OR account_lid LIKE ?)', '%' . $_filter . '%');
+            $select->where('(n_family LIKE ? OR n_given LIKE ? OR login_name LIKE ?)', '%' . $_filter . '%');
         }
         // return only active accounts, when searching for simple accounts
         if($_accountClass == 'Tinebase_Account_Model_Account') {
-            $select->where('account_status = ?', 'A');
+            $select->where('status = ?', 'enabled');
         }
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -194,7 +194,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
         $select = $this->_getAccountSelectObject()
-            ->where(SQL_TABLE_PREFIX . 'accounts.account_lid = ?', $_loginName);
+            ->where(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName);
 
         //error_log("getAccounts:: " . $select->__toString());
  		//Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName select stmt: '.$select->__toString() );        
@@ -242,7 +242,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         }
         
         $select = $this->_getAccountSelectObject()
-            ->where(SQL_TABLE_PREFIX . 'accounts.account_id = ?', $accountId);
+            ->where(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId);
 
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -276,17 +276,17 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
                 array(
                     'accountId' => $this->rowNameMapping['accountId'],
                     'accountLoginName' => $this->rowNameMapping['accountLoginName'],
-                    'accountLastLogin' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`account_lastlogin`)',
+                    'accountLastLogin' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`last_login`)',
                     'accountLastLoginfrom' => $this->rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`account_lastpwd_change`)',
+                    'accountLastPasswordChange' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`last_password_change`)',
                     'accountStatus' => $this->rowNameMapping['accountStatus'],
-                    'accountExpires' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`account_expires`)',
+                    'accountExpires' => 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'accounts`.`expires_at`)',
                     'accountPrimaryGroup' => $this->rowNameMapping['accountPrimaryGroup']
                 )
             )
             ->join(
                 SQL_TABLE_PREFIX . 'addressbook',
-                SQL_TABLE_PREFIX . 'accounts.account_id = ' . SQL_TABLE_PREFIX . 'addressbook.account_id',
+                SQL_TABLE_PREFIX . 'accounts.id = ' . SQL_TABLE_PREFIX . 'addressbook.account_id',
                 array(
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
@@ -315,19 +315,16 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         switch($_status) {
             case 'enabled':
-                $accountData['account_status'] = 'A';
-                break;
-                
             case 'disabled':
-                $accountData['account_status'] = 'D';
+                $accountData['status'] = $_status;
                 break;
-                
+
             case 'unlimited':
                 $accountData['account_expires'] = NULL;
                 break;
                 
             case 'expired':
-                $accountData['account_expires'] = Zend_Date::getTimestamp();
+                $accountData['expires_at'] = Zend_Date::getTimestamp();
                 break;
             
             default:
@@ -338,7 +335,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
+            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -363,11 +360,11 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        $accountData['account_pwd'] = md5($_password);
-        $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
+        $accountData['password'] = md5($_password);
+        $accountData['last_password_change'] = Zend_Date::now()->getTimestamp();
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
+            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -394,11 +391,11 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        $accountData['account_lastloginfrom'] = $_ipAddress;
-        $accountData['account_lastlogin'] = Zend_Date::now()->getTimestamp();
+        $accountData['last_login_from'] = $_ipAddress;
+        $accountData['last_login'] = Zend_Date::now()->getTimestamp();
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('account_id = ?', $accountId)
+            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -423,15 +420,15 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
-            'account_lid'       => $_account->accountLoginName,
-            'account_status'    => $_account->accountStatus,
-            'account_expires'   => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
+            'login_name'        => $_account->accountLoginName,
+            'status'            => $_account->accountStatus,
+            'expires_at'   => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
             'account_primary_group' => '-4'
         );
         
 /*        if(!empty($_account->accountPassword)) {
-            $accountData['account_pwd']            = new Zend_Db_Expr("MD5('" . $_account->accountPassword . "')");
-            $accountData['account_lastpwd_change'] = Zend_Date::now()->getTimestamp();
+            $accountData['password']            = new Zend_Db_Expr("MD5('" . $_account->accountPassword . "')");
+            $accountData['last_password_change'] = Zend_Date::now()->getTimestamp();
         }*/
         
         $contactData = array(
@@ -439,8 +436,8 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             'n_given'       => $_account->accountFirstName,
             'n_fn'          => $_account->accountFullName,
             'n_fileas'      => $_account->accountDisplayName,
-            'contact_email' => $_account->accountEmailAddress
-            #'account_id' 8
+            'email' => $_account->accountEmailAddress
+            #'id' 8
         );
 
         try {
@@ -452,7 +449,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             if(!empty($_account->accountId)) {
                 $accountId = $_account->accountId;
                 $where = array(
-                    Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId)
+                    Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId)
                 );
                 
                 $accountsTable->update($accountData, $where);
@@ -467,8 +464,8 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
                 }
                 
                 $contactData['account_id'] = $accountId;
-                $contactData['contact_tid'] = 'n';
-                $contactData['contact_owner'] = 1;
+                $contactData['tid'] = 'n';
+                $contactData['owner'] = 1;
                 
                 $contactsTable->insert($contactData);
             }
@@ -500,10 +497,10 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
-            'login_name'    => $_account->accountLoginName,
-            'status'        => $_account->accountStatus,
-            'expires_at'    => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
-            'primary_group' => $_account->accountPrimaryGroup,
+            'login_name'        => $_account->accountLoginName,
+            'status'            => $_account->accountStatus,
+            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
+            'primary_group_id'  => $_account->accountPrimaryGroup,
         );
         if(!empty($_account->accountId)) {
             $accountData['id'] = $_account->accountId;
@@ -514,7 +511,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             'n_given'       => $_account->accountFirstName,
             'n_fn'          => $_account->accountFullName,
             'n_fileas'      => $_account->accountDisplayName,
-            'contact_email' => $_account->accountEmailAddress
+            'email' => $_account->accountEmailAddress
         );
 
         try {
@@ -537,8 +534,8 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             }
             
             $contactData['account_id'] = $accountId;
-            $contactData['contact_tid'] = 'n';
-            $contactData['contact_owner'] = 1;
+            $contactData['tid'] = 'n';
+            $contactData['owner'] = 1;
             
             $contactsTable->insert($contactData);
             
@@ -568,7 +565,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         
         $where  = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
+            Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId),
         );
         
         try {

@@ -140,7 +140,7 @@ class Tinebase_Controller
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
-                    $applicationName = ucfirst($application->app_name);
+                    $applicationName = ucfirst($application->name);
                     try {
                         $server->setClass($applicationName.'_Json', $applicationName);
                     } catch (Exception $e) {
@@ -163,7 +163,7 @@ class Tinebase_Controller
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
-                    $applicationName = ucfirst($application->app_name);
+                    $applicationName = ucfirst($application->name);
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
                     } catch (Exception $e) {

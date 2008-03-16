@@ -119,7 +119,7 @@ class Tinebase_Timemachine_ModificationLog
         $select = $db->select()
             ->from($this->_tablename)
             ->order('modification_time ASC')
-            ->where('application = ' . $application->app_id)
+            ->where('application = ' . $application->id)
             ->where($db->quoteInto('record_identifier = ?', $_identifier))
             ->where($db->quoteInto('modification_time > ?', $_from->toString($isoDef)))
             ->where($db->quoteInto('modification_time <= ?', $_until->toString($isoDef)));

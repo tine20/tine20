@@ -118,8 +118,8 @@ class Tinebase_Record_PersistentObserver
     		
     		// resolve apps
     		$application = Tinebase_Application::getInstance();
-    		$data['observable_application'] = $application->getApplicationByName($_persistentObserver->observable_application)->app_id;
-    		$data['observer_application']   = $application->getApplicationByName($_persistentObserver->observer_application)->app_id;
+    		$data['observable_application'] = $application->getApplicationByName($_persistentObserver->observable_application)->id;
+    		$data['observer_application']   = $application->getApplicationByName($_persistentObserver->observer_application)->id;
             
     		$identifier = $this->_db->insert($data);
 

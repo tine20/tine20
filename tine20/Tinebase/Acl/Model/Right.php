@@ -59,11 +59,11 @@ class Tinebase_Acl_Model_Right extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
     {
         $this->_validators = array(
-            'id'                => array('presence' => 'required', 'allowEmpty' => true),
+            'id'                => array('allowEmpty' => true),
             'application_id'    => array('presence' => 'required'),
-            'account_id'        => array('presence' => 'required'),
+            'account_id'        => array('presence' => 'required', 'allowEmpty' => true),
             'account_type'      => array(
-                new Zend_Validate_InArray(array('account', 'group', 'anyone'), FALSE) 
+                new Zend_Validate_InArray(array('account', 'group', 'anyone')) 
             ),
             'right'             => array('presence' => 'required')
         );

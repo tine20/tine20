@@ -686,14 +686,14 @@ Ext.namespace('Tine.Tinebase.Models');
  * Model of the tine account
  */
 Tine.Tinebase.Models.Account = Ext.data.Record.create([
-    { name: 'account_id' },
-	{ name: 'account_lid' },
-	{ name: 'account_pwd' },
-	{ name: 'account_lastlogin' },
-	{ name: 'account_lastloginfrom' },
-	{ name: 'account_lastpwd_change' },
-	{ name: 'account_status' },
-	{ name: 'account_expires' },
+    { name: 'id' },
+	{ name: 'login_name' },
+	{ name: 'password' },
+	{ name: 'last_login' },
+	{ name: 'last_login_from' },
+	{ name: 'last_password_change' },
+	{ name: 'status' },
+	{ name: 'expires_at' },
 	{ name: 'account_type' },
 	{ name: 'account_primary_group' },
 	{ name: 'account_challenge' },

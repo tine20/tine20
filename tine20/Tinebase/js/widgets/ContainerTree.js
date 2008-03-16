@@ -228,7 +228,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 							Ext.Ajax.request({
 								params: {
 									method: 'Tinebase_Container.deleteContainer',
-									containerId: node.attributes.container.container_id
+									containerId: node.attributes.container.id
 								},
 								scope: this,
 								success: function(_result, _request){
@@ -260,7 +260,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 								Ext.Ajax.request({
 									params: {
 										method: 'Tinebase_Container.renameContainer',
-										containerId: node.attributes.container.container_id,
+										containerId: node.attributes.container.id,
 										newName: _text
 									},
 									scope: this,
@@ -347,11 +347,11 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
  	{
 		// console.log(attr);
 		// map attributes from Tinebase_Container to attrs from ExtJS
-		if (attr.container_name) {
+		if (attr.name) {
             attr = {
                 containerType: 'singleContainer',
                 container: attr,
-                text: attr.container_name,
+                text: attr.name,
                 cls: 'file',
                 leaf: true
             };

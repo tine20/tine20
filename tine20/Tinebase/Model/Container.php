@@ -24,7 +24,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'container_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -52,10 +52,10 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'container_id'      => array('Digits', 'presence' => 'required'),
-        'container_name'    => array('presence' => 'required'),
-        'container_type'    => array('presence' => 'required'),
-        'container_backend' => array('presence' => 'required'),
+        'id'      => array('Digits', 'presence' => 'required'),
+        'name'    => array('presence' => 'required'),
+        'type'    => array('presence' => 'required'),
+        'backend' => array('presence' => 'required'),
         'application_id'    => array('Digits', 'presence' => 'required'),
         'account_grants'    => array('Digits', 'presence' => 'required')
     );

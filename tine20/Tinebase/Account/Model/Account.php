@@ -125,7 +125,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function getGroupMemberships()
     {
-        $backend = Tinebase_Account::getInstance();
+        $backend = Tinebase_Group::getInstance();
         
         $result = $backend->getGroupMemberships($this->accountId);
         

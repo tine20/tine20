@@ -45,6 +45,7 @@ class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
+     * @todo add valid values for status
      */
     protected $_validators = array(
         'accountId'             => array('Digits', 'allowEmpty' => true),

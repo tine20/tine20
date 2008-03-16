@@ -34,7 +34,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         if (this.defaultContainer) {
             this.container = this.defaultContainer;
-            this.value = this.defaultContainer.container_name;
+            this.value = this.defaultContainer.name;
         }
         this.onTriggerClick = function(e) {
             var w = new Tine.widgets.container.selectionDialog({
@@ -44,12 +44,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     //private
     getValue: function(){
-        return this.container.container_id;
+        return this.container.id;
     },
     //private
     setValue: function(container){
     	this.container = container;
-    	this.setRawValue(container.container_name);
+    	this.setRawValue(container.name);
     }
     
 });
