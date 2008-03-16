@@ -13,7 +13,7 @@ Tine.Admin = function() {
         leaf: null,
         expanded: true,
         dataPanelType: 'accounts'
-    },{
+/*    },{
         text: 'Groups',
         cls: 'treemain',
         allowDrag: false,
@@ -23,7 +23,7 @@ Tine.Admin = function() {
         children: [],
         leaf: null,
         expanded: true,
-        dataPanelType: 'groups'
+        dataPanelType: 'groups' */
     },{
         "text":"Applications",
 		"cls":"treemain",
@@ -493,9 +493,9 @@ Tine.Admin.Applications.Main = function() {
     var _enableDisableButtonHandler = function(_button, _event) {
     	//console.log(_button);
     	
-    	var state = 0;
+    	var state = 'disabled';
     	if(_button.id == 'Admin_Accesslog_Action_Enable') {
-    		state = 1;
+    		state = 'enabled';
     	}
     	
         var applicationIds = new Array();
@@ -629,22 +629,11 @@ Tine.Admin.Applications.Main = function() {
         var gridValue;
         
     	switch(_value) {
-            case '0':
-              gridValue = 'disabled';
-              break;
-              
-    		case '1':
-    		  gridValue = 'enabled';
+            case 'disabled':
+    		case 'enabled':
+    		  gridValue = _value;
     		  break;
     		  
-            case '2':
-              gridValue = 'enabled (but hidden)';
-              break;
-              
-            case '3':
-              gridValue = 'enabled (new window)';
-              break;
-              
     		default:
     		  gridValue = 'unknown status (' + _value + ')';
     		  break;
