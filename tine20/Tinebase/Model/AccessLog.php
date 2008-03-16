@@ -24,7 +24,7 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'log_id';
+    protected $_identifier = 'id';
 
     /**
      * application the record belongs to
@@ -41,7 +41,7 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        //'*'      => 'StringTrim'
+        'login_name'    => 'StringTrim'
     );
     
     /**
@@ -52,14 +52,14 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'sessionid'  => array('presence' => 'required'),
+        'sessionid'     => array('presence' => 'required'),
         'login_name'    => array('presence' => 'required'),
-        'ip'         => array('presence' => 'required', 'allowEmpty' => true),
-        'li'         => array('presence' => 'required', 'allowEmpty' => true),
-        'lo'         => array('presence' => 'required', 'allowEmpty' => true),
-        'log_id'     => array('presence' => 'required'),
-        'result'     => array('presence' => 'required'),
-        'id' => array('presence' => 'required', 'allowEmpty' => true)
+        'ip'            => array('presence' => 'required', 'allowEmpty' => true),
+        'li'            => array('presence' => 'required', 'allowEmpty' => true),
+        'lo'            => array('presence' => 'required', 'allowEmpty' => true),
+        'id'            => array('presence' => 'required'),
+        'result'        => array('presence' => 'required'),
+        'account_id'    => array('presence' => 'required', 'allowEmpty' => true)
     );
     
 }

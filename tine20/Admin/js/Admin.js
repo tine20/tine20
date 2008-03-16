@@ -229,7 +229,7 @@ Tine.Admin.AccessLog.Main = function() {
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'log_id',
+            id: 'id',
             fields: [
                 {name: 'sessionid'},
                 {name: 'login_name'},
@@ -237,8 +237,8 @@ Tine.Admin.AccessLog.Main = function() {
                 {name: 'ip'},
                 {name: 'li', type: 'date', dateFormat: 'c'},
                 {name: 'lo', type: 'date', dateFormat: 'c'},
-                {name: 'log_id'},
                 {name: 'id'},
+                {name: 'account_id'},
                 {name: 'result'}
             ],
             // turn on remote sorting
@@ -420,7 +420,7 @@ Tine.Admin.AccessLog.Main = function() {
             {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
             {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
             {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Account ID', id: 'id', dataIndex: 'id', width: 70, hidden: true},
+            {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
             {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);
         
@@ -799,11 +799,11 @@ Tine.Admin.Accounts.Main = function() {
         var gridValue;
         
         switch(_value) {
-            case 'A':
+            case 'enabled':
               gridValue = "<img src='images/oxygen/16x16/actions/dialog-apply.png' width='12' height='12'/>";
               break;
               
-            case 'D':
+            case 'disabled':
               gridValue = "<img src='images/oxygen/16x16/actions/dialog-cancel.png' width='12' height='12'/>";
               break;
               
