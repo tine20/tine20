@@ -14,13 +14,23 @@ Tine.Admin = function() {
         expanded: true,
         dataPanelType: 'accounts'
     },{
+        text: 'Groups',
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'groupss',
+        icon: false,
+        children: [],
+        leaf: null,
+        expanded: true,
+        dataPanelType: 'groups'
+    },{
         "text":"Applications",
 		"cls":"treemain",
 		"allowDrag":false,
 		"allowDrop":true,
 		"id":"applications",
 		"icon":false,
-      /*"application":"Admin", */
 		"children":[],
 		"leaf":null,
 		"expanded":true,
@@ -32,7 +42,6 @@ Tine.Admin = function() {
 		"allowDrop":true,
 		"id":"accesslog",
 		"icon":false,
-	  /*"application":"Admin",*/
 		"children":[],
 		"leaf":null,
 		"expanded":true,
@@ -97,6 +106,15 @@ Tine.Admin = function() {
                         Ext.getCmp('AdminAccountsGrid').getStore().load({params:{start:0, limit:50}});
                     } else {
                         Tine.Admin.Accounts.Main.show();
+                    }
+                    
+                    break;
+                    
+                case 'groups':
+                    if(currentToolbar !== false && currentToolbar.id == 'AdminGroupsToolbar') {
+                        Ext.getCmp('AdminGroupsGrid').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Admin.Groups.Main.show();
                     }
                     
                     break;
@@ -214,13 +232,13 @@ Tine.Admin.AccessLog.Main = function() {
             id: 'log_id',
             fields: [
                 {name: 'sessionid'},
-                {name: 'loginid'},
+                {name: 'login_name'},
                 {name: 'accountObject'},
                 {name: 'ip'},
                 {name: 'li', type: 'date', dateFormat: 'c'},
                 {name: 'lo', type: 'date', dateFormat: 'c'},
                 {name: 'log_id'},
-                {name: 'account_id'},
+                {name: 'id'},
                 {name: 'result'}
             ],
             // turn on remote sorting
@@ -397,12 +415,12 @@ Tine.Admin.AccessLog.Main = function() {
         
         var columnModel = new Ext.grid.ColumnModel([
             {resizable: true, header: 'Session ID', id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
-            {resizable: true, header: 'Login Name', id: 'loginid', dataIndex: 'loginid'},
+            {resizable: true, header: 'Login Name', id: 'login_name', dataIndex: 'login_name'},
             {resizable: true, header: 'Name', id: 'accountObject', dataIndex: 'accountObject', width: 170, sortable: false, renderer: Tine.Tinebase.Common.usernameRenderer},
             {resizable: true, header: 'IP Address', id: 'ip', dataIndex: 'ip', width: 150},
             {resizable: true, header: 'Login Time', id: 'li', dataIndex: 'li', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
             {resizable: true, header: 'Logout Time', id: 'lo', dataIndex: 'lo', width: 130, renderer: Tine.Tinebase.Common.dateTimeRenderer},
-            {resizable: true, header: 'Account ID', id: 'account_id', dataIndex: 'account_id', width: 70, hidden: true},
+            {resizable: true, header: 'Account ID', id: 'id', dataIndex: 'id', width: 70, hidden: true},
             {resizable: true, header: 'Result', id: 'result', dataIndex: 'result', width: 110, renderer: _renderResult}
         ]);
         
@@ -429,7 +447,7 @@ Tine.Admin.AccessLog.Main = function() {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'loginid',
+            autoExpandColumn: 'login_name',
             border: false
         });
         
@@ -541,20 +559,20 @@ Tine.Admin.Applications.Main = function() {
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'app_id',
+            id: 'id',
             fields: [
-                {name: 'app_id'},
-                {name: 'app_name'},
-                {name: 'app_enabled'},
-                {name: 'app_order'},
+                {name: 'id'},
+                {name: 'name'},
+                {name: 'status'},
+                {name: 'order'},
                 {name: 'app_tables'},
-                {name: 'app_version'}
+                {name: 'version'}
             ],
             // turn on remote sorting
             remoteSort: true
         });
         
-        ds_applications.setDefaultSort('app_name', 'asc');
+        ds_applications.setDefaultSort('name', 'asc');
 
         ds_applications.on('beforeload', function(_dataSource) {
             _dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
@@ -652,10 +670,10 @@ Tine.Admin.Applications.Main = function() {
         }); 
         
         var cm_applications = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'order', id: 'app_order', dataIndex: 'app_order', width: 50},
-            {resizable: true, header: 'name', id: 'app_name', dataIndex: 'app_name'},
-            {resizable: true, header: 'status', id: 'app_enabled', dataIndex: 'app_enabled', width: 150, renderer: _renderEnabled},
-            {resizable: true, header: 'version', id: 'app_version', dataIndex: 'app_version', width: 70}
+            {resizable: true, header: 'order', id: 'order', dataIndex: 'order', width: 50},
+            {resizable: true, header: 'name', id: 'name', dataIndex: 'name'},
+            {resizable: true, header: 'status', id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
+            {resizable: true, header: 'version', id: 'version', dataIndex: 'version', width: 70}
         ]);
         
         cm_applications.defaultSortable = true; // by default columns are sortable
@@ -689,7 +707,7 @@ Tine.Admin.Applications.Main = function() {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'app_name',
+            autoExpandColumn: 'name',
             border: false
         });
         

@@ -31,14 +31,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $accounts = Tinebase_Account::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
-            if($account['account_lastlogin'] !== NULL) {
-                 $accounts[$key]['account_lastlogin'] = $account['account_lastlogin']->get(Zend_Date::ISO_8601);
+            if($account['last_login'] !== NULL) {
+                 $accounts[$key]['last_login'] = $account['last_login']->get(Zend_Date::ISO_8601);
             }
-            if($account['account_lastpwd_change'] !== NULL) {
-                 $accounts[$key]['account_lastpwd_change'] = $account['account_lastpwd_change']->get(Zend_Date::ISO_8601);
+            if($account['last_password_change'] !== NULL) {
+                 $accounts[$key]['last_password_change'] = $account['last_password_change']->get(Zend_Date::ISO_8601);
             }
-            if($account['account_expires'] !== NULL) {
-                 $accounts[$key]['account_expires'] = $account['account_expires']->get(Zend_Date::ISO_8601);
+            if($account['expires_at'] !== NULL) {
+                 $accounts[$key]['expires_at'] = $account['expires_at']->get(Zend_Date::ISO_8601);
             }
         }*/
         
@@ -181,7 +181,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         foreach($result['results'] as $key => $value) {
             try {
-                $result['results'][$key]['accountObject'] = Tinebase_Account::getInstance()->getAccountById($value['account_id'])->toArray();
+                $result['results'][$key]['accountObject'] = Tinebase_Account::getInstance()->getAccountById($value['id'])->toArray();
             } catch (Exception $e) {
                 // account not found
                 // do nothing so far
