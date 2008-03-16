@@ -159,7 +159,7 @@ class Tasks_Setup_MigrateFromTine14
      * ??? what about loose coupling in this case???
      * 
      * @param int $_owner
-     * @return int Tinebase_Container::container_id
+     * @return int Tinebase_Container::id
      */
     protected static function getOwnersContainer($_owner)
     {

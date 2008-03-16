@@ -194,7 +194,7 @@ Tine.Tasks.mainGrid = {
             var nodeAttributes = Ext.getCmp('TasksTreePanel').attributes || {};
             this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
             this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
-            this.filter.container = nodeAttributes.container ? nodeAttributes.container.container_id : null;
+            this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
             
             // toolbar
 			this.filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
@@ -491,7 +491,7 @@ Tine.Tasks.mainGrid = {
         		
 	    this.grid.on('newentry', function(taskData){
 	    	var selectedNode = this.tree.getSelectionModel().getSelectedNode();
-            taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.container_id : -1;
+            taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
 	        var task = new Tine.Tasks.Task(taskData);
 
 	        Ext.Ajax.request({
