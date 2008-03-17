@@ -59,7 +59,7 @@ Tine.Tinebase.initFramework = function() {
 
             // if communication is lost, we can't create a nice ext window.
             if (response.status == 0) {
-                alert('Conection lost, please check your network!');
+                alert('Connection lost, please check your network!');
             }
             
             var data = Ext.util.JSON.decode(response.responseText);
