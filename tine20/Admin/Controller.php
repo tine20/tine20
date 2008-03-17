@@ -116,7 +116,11 @@ class Admin_Controller
      */
     public function saveAccount(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
     {
-        $account = Tinebase_Account::getInstance()->saveAccount($_account);
+        if(empty($_account->accountId)) {
+            $account = Tinebase_Account::getInstance()->addAccount($_account);
+        } else {
+            $account = Tinebase_Account::getInstance()->updateAccount($_account);
+        }
         
         // fire needed events
         if(isset($_account->accountId)) {
