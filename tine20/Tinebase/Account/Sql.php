@@ -355,7 +355,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
             'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
-            'primary_group'     => $_account->accountPrimaryGroup
+            'primary_group_id'  => $_account->accountPrimaryGroup
         );
         
         $contactData = array(
