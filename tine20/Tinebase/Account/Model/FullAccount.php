@@ -47,22 +47,7 @@ class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
      * @var array
      * @todo add valid values for status
      */
-    protected $_validators = array(
-        'accountId'             => array('Digits', 'allowEmpty' => true),
-        'accountLoginName'      => array('presence' => 'required'),
-        'accountLastLogin'      => array('allowEmpty' => true),
-        'accountLastLoginfrom'  => array('allowEmpty' => true),
-        'accountLastPasswordChange' => array('allowEmpty' => true),
-        'accountStatus'         => array('presence' => 'required'),
-        'accountExpires'        => array('allowEmpty' => true),
-        'accountPrimaryGroup'   => array('presence' => 'required'),
-        'accountDisplayName'    => array('presence' => 'required'),
-        'accountLastName'       => array('presence' => 'required'),
-        'accountFirstName'      => array('allowEmpty' => true),
-        'accountFullName'       => array('presence' => 'required'),
-        //'accountPassword'       => array('allowEmpty' => true),
-        'accountEmailAddress'   => array('allowEmpty' => true)
-    );
+    protected $_validators;
 
     /**
      * name of fields containing datetime or or an array of datetime
@@ -75,6 +60,30 @@ class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
         'accountLastPasswordChange',
         'accountExpires'
     );
+    
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_validators = array(
+            'accountId'             => array('Digits', 'allowEmpty' => true),
+            'accountLoginName'      => array('presence' => 'required'),
+            'accountLastLogin'      => array('allowEmpty' => true),
+            'accountLastLoginfrom'  => array('allowEmpty' => true),
+            'accountLastPasswordChange' => array('allowEmpty' => true),
+            'accountStatus'         => array(new Zend_Validate_InArray(array('enabled', 'disabled'))),
+            'accountExpires'        => array('allowEmpty' => true),
+            'accountPrimaryGroup'   => array('presence' => 'required'),
+            'accountDisplayName'    => array('presence' => 'required'),
+            'accountLastName'       => array('presence' => 'required'),
+            'accountFirstName'      => array('allowEmpty' => true),
+            'accountFullName'       => array('presence' => 'required'),
+            'accountEmailAddress'   => array('allowEmpty' => true)
+        );
+        
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * return the public informations of this account only
