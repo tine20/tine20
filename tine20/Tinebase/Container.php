@@ -262,15 +262,21 @@ class Tinebase_Container
      */
     public function getInternalContainer($_application)
     {
-        $accountId   = Zend_Registry::get('currentAccount')->accountId;
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $accountId          = Zend_Registry::get('currentAccount')->accountId;
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        $application        = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $accountId)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_INTERNAL)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
             ->group(SQL_TABLE_PREFIX . 'container.id')
@@ -302,23 +308,20 @@ class Tinebase_Container
      */
     public function getContainerByACL($_accountId, $_application, $_right)
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         $right = (int)$_right;
         if($right != $_right) {
             throw new InvalidArgumentException('$_right must be integer');
         }
         
-        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        #$groupMemberships[] = $accountId;
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
                
         $db = Zend_Registry::get('dbAdapter');
-        
+
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
@@ -327,7 +330,12 @@ class Tinebase_Container
                 array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+            
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->having('account_grants & ?', $right)
             ->order(SQL_TABLE_PREFIX . 'container.name');
@@ -357,7 +365,7 @@ class Tinebase_Container
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         
         $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
-        $groupMemberships[] = $accountId;
+        #$groupMemberships[] = $accountId;
         
 
         if(!$this->hasGrant($accountId, $containerId, self::GRANT_READ)) {
@@ -374,7 +382,12 @@ class Tinebase_Container
                 array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
             ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
 
@@ -424,7 +437,7 @@ class Tinebase_Container
         }
         
         $groupMemberships   = $_account->getGroupMemberships();
-        $groupMemberships[] = $_account->accountId;
+        $accountId          = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -440,7 +453,12 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
             ->where('owner.account_id = ?', $_owner)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
-            ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(user.account_id = ? AND user.container_acl.account_type =`account`', $accountId)
+            ->orWhere('user.account_id IN (?) AND user.account_type =`group`', $groupMemberships)
+            ->orWhere('user.account_type = ?)', 'anyone')
+            
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_PERSONAL)
             ->group(SQL_TABLE_PREFIX . 'container.id')
@@ -480,7 +498,7 @@ class Tinebase_Container
     public function getSharedContainer(Tinebase_Account_Model_Account $_account, $_application, $_grant)
     {
         $groupMemberships   = $_account->getGroupMemberships();
-        $groupMemberships[] = $_account->accountId;
+        $accountId          = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -489,7 +507,12 @@ class Tinebase_Container
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_SHARED)
             ->group(SQL_TABLE_PREFIX . 'container.id')
@@ -531,7 +554,7 @@ class Tinebase_Container
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         
         $groupMemberships   = $_account->getGroupMemberships();
-        $groupMemberships[] = $_account->accountId;
+        #$groupMemberships[] = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -543,7 +566,12 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array())
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
-            ->where('user.account_id IN (?) OR user.account_id IS NULL', $groupMemberships)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(user.account_id = ? AND user.container_acl.account_type =`account`', $accountId)
+            ->orWhere('user.account_id IN (?) AND user.account_type =`group`', $groupMemberships)
+            ->orWhere('user.account_type = ?)', 'anyone')
+            
             ->where('user.account_grant = ?', $_grant)
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_PERSONAL)
@@ -577,7 +605,7 @@ class Tinebase_Container
         $accountId = $_account->accountId;
         
         $groupMemberships   = $_account->getGroupMemberships();
-        $groupMemberships[] = $_account->accountId;
+        #$groupMemberships[] = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -592,7 +620,12 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', 'user.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
             ->where('owner.account_id != ?', $accountId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
-            ->where('user.account_id IN (?) or user.account_id IS NULL', $groupMemberships)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(user.account_id = ? AND user.container_acl.account_type =`account`', $accountId)
+            ->orWhere('user.account_id IN (?) AND user.account_type =`group`', $groupMemberships)
+            ->orWhere('user.account_type = ?)', 'anyone')
+            
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_PERSONAL)
             ->group(SQL_TABLE_PREFIX . 'container.id')
@@ -669,11 +702,8 @@ class Tinebase_Container
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-        
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
             throw new InvalidArgumentException('$_containerId must be integer');
@@ -692,14 +722,12 @@ class Tinebase_Container
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container_acl', array())
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
-            
+
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships = array(1,2))
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
-            
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'container_acl.account_id IS NULL', $groupMemberships)
             ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
             ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
                     

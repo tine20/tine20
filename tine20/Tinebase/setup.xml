@@ -430,6 +430,14 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>account</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>account_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
@@ -441,6 +449,7 @@
                     <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
+                
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -449,10 +458,13 @@
                     </field>
                 </index>
                 <index>
-                    <name>id-account_id-account_grant</name>
+                    <name>id-account-type-account_id-account_grant</name>
                     <unique>true</unique>
                     <field>
                         <name>id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
                     </field>
                     <field>
                         <name>account_id</name>
@@ -462,7 +474,10 @@
                     </field>
                 </index>
                 <index>
-                    <name>account_id</name>
+                    <name>account_type-account_id</name>
+                    <field>
+                        <name>account_type</name>
+                    </field>
                     <field>
                         <name>account_id</name>
                     </field>
