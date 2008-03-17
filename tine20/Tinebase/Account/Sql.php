@@ -437,7 +437,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             throw($e);
         }
         
-        return $_account;
+        return $this->getAccountById($accountId, 'Tinebase_Account_Model_FullAccount');
     }
     
     /**

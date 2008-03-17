@@ -175,14 +175,14 @@ class Tinebase_Account
     }
     
     /**
-     * add or updates an account
+     * updates an existing account
      *
      * @param Tinebase_Account_Model_FullAccount $_account
      * @return Tinebase_Account_Model_FullAccount
      */
-    public function saveAccount(Tinebase_Account_Model_FullAccount $_account)
+    public function updateAccount(Tinebase_Account_Model_FullAccount $_account)
     {
-        $result = $this->_backend->saveAccount($_account);
+        $result = $this->_backend->updateAccount($_account);
         
         return $result;
     }
