@@ -95,6 +95,7 @@ class Tinebase_Acl_Rights
 
         $db = Zend_Registry::get('dbAdapter');
 
+        //@todo what should happen if user is in no groups? getGroupMemberships() doesn't fetch the primary group at the moment ...
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'application_rights', array())
             ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')
@@ -109,7 +110,7 @@ class Tinebase_Acl_Rights
 
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $db->query($select);
         

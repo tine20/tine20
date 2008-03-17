@@ -79,7 +79,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * return the group ids a account is member of
      *
      * @param int $accountId the accountid of a account
-     * @todo the group info do not belong into the ACL table, there should be a separate group table
+     * @todo	get primary group (from account table) as well?
      * @return array list of group ids
      */
     public function getGroupMemberships($_accountId)
@@ -89,19 +89,18 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             throw new InvalidArgumentException('$_accountId must be integer');
         }
         
-        $aclTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'acl'));
+        $membershipTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
         
         $groupMemberShips = array();
         
         $where = array(
-            $aclTable->getAdapter()->quoteInto('acl_appname = ?', 'phpgw_group'),
-            $aclTable->getAdapter()->quoteInto('acl_account = ?', $_accountId)
+            $membershipTable->getAdapter()->quoteInto('account_id = ?', $_accountId)
         );
         
-        $rowSet = $aclTable->fetchAll($where);
+        $rowSet = $membershipTable->fetchAll($where);
         
         foreach($rowSet as $row) {
-            $groupMemberShips[] = $row->acl_location;
+            $groupMemberShips[] = $row->group_id;
         }
         
         return $groupMemberShips;
