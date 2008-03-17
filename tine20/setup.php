@@ -62,12 +62,17 @@ $account = new Tinebase_Account_Model_FullAccount(array(
 ));
 Tinebase_Account_Sql::getInstance()->addAccount($account);
 
+Zend_Registry::set('currentAccount', $account);
+
 # set the password for the tine20admin account
 Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
 
+# add the admin account to all groups
 Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
 Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
 
+# enable the applications for the user group
+# give admin rights to the admin group for all applications
 foreach(Tinebase_Application::getInstance()->getApplications() as $application) {
     $right = new Tinebase_Acl_Model_Right(array(
         'application_id'    => $application,
@@ -85,3 +90,8 @@ foreach(Tinebase_Application::getInstance()->getApplications() as $application) 
     ));
     Tinebase_Acl_Rights::getInstance()->addRight($right);
 }
+
+# give Users group read rights to the internal addressbook
+# give Adminstrators group read/write rights to the internal addressbook
+$internalAddressbook = Tinebase_Container::getInstance()->getInternalContainer('Addressbook');
+Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(Tinebase_Container::GRANT_READ)); 
