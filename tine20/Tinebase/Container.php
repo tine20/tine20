@@ -171,7 +171,7 @@ class Tinebase_Container
         $containerId = $this->addContainer($_application, $_containerName, self::TYPE_PERSONAL, 'Sql');
         
         // add all grants to creator
-        $this->addGrants($containerId, $_accountId, array(
+        $this->addGrants($containerId, 'account', $_accountId, array(
             self::GRANT_READ, 
             self::GRANT_ADD, 
             self::GRANT_EDIT, 
