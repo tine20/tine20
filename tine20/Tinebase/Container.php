@@ -243,7 +243,7 @@ class Tinebase_Container
             $grant = (int)$grant;
             
             if($grant === 0 || $grant > self::GRANT_ADMIN) {
-                throw new InvalidArgumentException('$_grant must be integer and can not be greater then ' . self::GRANT_ADMIN);
+                throw new InvalidArgumentException('$_grant must be integer and can not be greater than ' . self::GRANT_ADMIN);
             }
             if($grant > 1 && $grant % 2 !== 0) {
                 throw new InvalidArgumentException('you can only set one grant(1,2,4,8,...) at once');
