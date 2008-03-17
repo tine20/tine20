@@ -131,7 +131,11 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
             'account_id'    => $accountId
         );
         
-        $this->groupMembersTable->insert($data);
+        try {
+            $this->groupMembersTable->insert($data);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // account is already member of this group
+        }
     }
     
     /**
