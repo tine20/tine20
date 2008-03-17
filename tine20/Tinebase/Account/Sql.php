@@ -284,7 +284,30 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         return $result;
     }
-    
+
+    /**
+     * sets/unsets expiry date 
+     *
+     * @param 	int 		$_accountId
+     * @param 	Zend_Date 	$_expiryDate
+    */
+    public function setExpiryDate($_accountId, $_expiryDate)
+    {
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        
+        $accountData['expires_at'] = $_expiryDate;
+        
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        
+        return $result;
+	}
+        
     /**
      * update the lastlogin time of account
      *
@@ -436,6 +459,9 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             Zend_Registry::get('dbAdapter')->rollBack();
             throw($e);
         }
+        
+        // add group membership (primary group)
+        Tinebase_Group::getInstance()->addGroupMember($_account->accountPrimaryGroup,$accountId);
         
         return $this->getAccountById($accountId, 'Tinebase_Account_Model_FullAccount');
     }

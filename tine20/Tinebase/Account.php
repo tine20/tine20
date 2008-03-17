@@ -144,6 +144,7 @@ class Tinebase_Account
      * blocks the account (calls backend class with the same name)
      *
      * @param 	int $_accountId
+     * @todo 	make it work!
     */
 	public function setBlocked($_accountId /* more params ? */)
     {

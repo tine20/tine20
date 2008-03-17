@@ -336,7 +336,7 @@ class Tinebase_Account_Registration
 		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
 
 		// set new expire_date in DB (account)
-		Tinebase_Account::getInstance()->setStatus($account['accountId'], 'unlimited');
+		Tinebase_Account::getInstance()->setExpiryDate($account['accountId'], NULL);
 		
 		return $account;	
 	}
