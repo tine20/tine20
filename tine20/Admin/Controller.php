@@ -121,6 +121,7 @@ class Admin_Controller
         } else {
             $account = Tinebase_Account::getInstance()->updateAccount($_account);
         }
+        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         // fire needed events
         if(isset($_account->accountId)) {
