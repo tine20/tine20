@@ -112,18 +112,21 @@ class Tinebase_Account_Registration
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call registerUser with regData: '. print_r($regData, true));
 
 		// validate email address
-		require_once 'Zend/Validate/EmailAddress.php';
-		$validator = new Zend_Validate_EmailAddress();
-		if ( $validator->isValid($regData['accountEmailAddress']) == false ) {
-		    // email is invalid; print the reasons
-		    $debugMessage = __METHOD__ . '::' . __LINE__ . ' invalid registration email address: '. $regData['accountEmailAddress']."\n";
-		    foreach ($validator->getMessages() as $message) {
-		        $debugMessage .= "$message\n";
-		    }
-		    Zend_Registry::get('logger')->debug($debugMessage);
-		    
-		    // @todo throw exception?
-		    return false;
+		if ( isset($this->_config->emailValidation) && $this->_config->emailValidation == 'zend' ) {
+			// zend email validation isn't working on a 64bit os at the moment (v1.5.0RC3)
+			require_once 'Zend/Validate/EmailAddress.php';
+			$validator = new Zend_Validate_EmailAddress();
+			if ( $validator->isValid($regData['accountEmailAddress']) == false ) {
+			    // email is invalid; print the reasons
+			    $debugMessage = __METHOD__ . '::' . __LINE__ . ' invalid registration email address: '. $regData['accountEmailAddress']."\n";
+			    foreach ($validator->getMessages() as $message) {
+			        $debugMessage .= "$message\n";
+			    }
+			    Zend_Registry::get('logger')->debug($debugMessage);
+			    
+			    // @todo throw exception?
+			    return false;
+			}
 		}
 				
 		// add more required fields to regData
