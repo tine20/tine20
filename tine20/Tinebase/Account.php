@@ -114,15 +114,46 @@ class Tinebase_Account
         return $result;
     }
     
+    /**
+     * update account status
+     *
+     * @param 	int 		$_accountId
+     * @param 	string 		$_status
+    */
     public function setStatus($_accountId, $_status)
     {
         $result = $this->_backend->setStatus($_accountId, $_status);
         
         return $result;
     }
+
+    /**
+     * sets/unsets expiry date (calls backend class with the same name)
+     *
+     * @param 	int 		$_accountId
+     * @param 	Zend_Date 	$_expiryDate
+    */
+    public function setExpiryDate($_accountId, $_expiryDate)
+    {
+        $result = $this->_backend->setExpiryDate($_accountId, $_expiryDate);
+        
+        return $result;
+    }
+
+    /**
+     * blocks the account (calls backend class with the same name)
+     *
+     * @param 	int $_accountId
+    */
+	public function setBlocked($_accountId /* more params ? */)
+    {
+        /*$result = $this->_backend->setBlocked($_accountId);
+        
+        return $result;*/
+    }
     
     /**
-     * Enter description here...
+     * sets the password
      *
      * @param unknown_type $_accountId
      * @param unknown_type $_password
