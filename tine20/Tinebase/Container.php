@@ -217,20 +217,26 @@ class Tinebase_Container
      * @param array $_grants list of grants to add
      * @return boolean
      */
-    public function addGrants($_containerId, $_accountId, array $_grants)
+    public function addGrants($_containerId, $_accountType, $_accountId, array $_grants)
     {
         $containerId = (int)$_containerId;
         if($containerId != $_containerId) {
             throw new InvalidArgumentException('$_containerId must be integer');
         }
         
-        if($_accountId !== NULL) {
-            $accountId = (int)$_accountId;
-            if($accountId != $_accountId) {
-                throw new InvalidArgumentException('$_accountId must be integer or NULL');
-            }
-        } else {
-            $accountId = NULL;
+        switch($_accountType) {
+            case 'account':
+                $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+                break;
+            case 'group':
+                $accountId = Tinebase_Group::convertGroupIdToInt($_accountId);
+                break;
+            case 'anyone':
+                $accountId = NULL;
+                break;
+            default:
+                throw new InvalidArgumentException('invalid $_accountType');
+                break;
         }
         
         foreach($_grants as $grant) {
@@ -244,9 +250,10 @@ class Tinebase_Container
             }
             
             $data = array(
-                'container_id'   => $containerId,
-                'account_id'     => $accountId,
-                'account_grant'  => $grant
+                'container_id'  => $containerId,
+                'account_type'  => $_accountType,
+                'account_id'    => $accountId,
+                'account_grant' => $grant
             );
             $this->containerAclTable->insert($data);
         }
@@ -455,8 +462,8 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(user.account_id = ? AND user.container_acl.account_type =`account`', $accountId)
-            ->orWhere('user.account_id IN (?) AND user.account_type =`group`', $groupMemberships)
+            ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
@@ -568,8 +575,8 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(user.account_id = ? AND user.container_acl.account_type =`account`', $accountId)
-            ->orWhere('user.account_id IN (?) AND user.account_type =`group`', $groupMemberships)
+            ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
             ->where('user.account_grant = ?', $_grant)
@@ -622,8 +629,8 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(user.account_id = ? AND user.container_acl.account_type =`account`', $accountId)
-            ->orWhere('user.account_id IN (?) AND user.account_type =`group`', $groupMemberships)
+            ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
+            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
