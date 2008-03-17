@@ -23,7 +23,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * 
      * @var string
      */
-    protected $_identifier = 'contact_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -91,7 +91,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         ),*/
         'email'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_email_home'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_id'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     	'contact_note'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'owner'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'contact_role'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),

@@ -169,7 +169,7 @@ Tine.Addressbook.Main = {
         var dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'contact_id',
+            id: 'id',
             fields: Tine.Addressbook.Model.Contact,
             // turn on remote sorting
             remoteSort: true
@@ -293,9 +293,9 @@ Tine.Addressbook.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            //console.log('id: ' + record.data.contact_id);
+            //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.contact_id, 850, 600);
+                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 850, 600);
             } catch(e) {
                 // alert(e);
             }
@@ -414,7 +414,7 @@ Tine.Addressbook.ContactEditDialog = {
 
 	    deleteContact: function(_button, _event) 
 	    {
-	        var contactIds = Ext.util.JSON.encode([formData.values.contact_id]);
+	        var contactIds = Ext.util.JSON.encode([formData.values.id]);
 	            
 	        Ext.Ajax.request({
 	            url: 'index.php',
@@ -810,7 +810,7 @@ Tine.Addressbook.ContactEditDialog = {
 Ext.namespace('Tine.Addressbook.Model');
 
 Tine.Addressbook.Model.Contact = Ext.data.Record.create([
-    {name: 'contact_id'},
+    {name: 'id'},
     {name: 'tid'},
     {name: 'owner'},
     {name: 'contact_private'},

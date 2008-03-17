@@ -47,7 +47,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * save one contact
      *
-     * if $contactData['contact_id'] is empty the contact gets added, otherwise it gets updated
+     * if $contactData['id'] is empty the contact gets added, otherwise it gets updated
      *
      * @param string $contactData a JSON encoded array of contact properties
      * @return array
@@ -57,8 +57,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $contactData = Zend_Json::decode($contactData);
         
         // unset if empty
-        if(empty($contactData['contact_id'])) {
-            unset($contactData['contact_id']);
+        if(empty($contactData['id'])) {
+            unset($contactData['id']);
         }
 
         $contact = new Addressbook_Model_Contact();

@@ -64,19 +64,19 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         $contactData = $_contactData->toArray();
         $contactData['tid'] = 'n';
-        unset($contactData['contact_id']);
+        unset($contactData['id']);
         
         $db = $this->contactsTable->getAdapter();
         
         try {
             $db->beginTransaction();
             
-            if($_contactData->contact_id === NULL) {
+            if($_contactData->id === NULL) {
                 // create new contact
-                $_contactData->contact_id = $this->contactsTable->insert($contactData);
+                $_contactData->id = $this->contactsTable->insert($contactData);
             } else {
                 // update existing contact
-                $oldContactData = $this->getContactById($_contactData->contact_id);
+                $oldContactData = $this->getContactById($_contactData->id);
                 if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->owner, Tinebase_Container::GRANT_EDIT)) {
                     throw new Exception('write access to old addressbook denied');
                 }
@@ -103,7 +103,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                     //   [$dbMod & $logedMods, values not equal] -> not resolvable -> real conflict
                     $from  = new Zend_Date($_contactData->contact_modified, Zend_Date::TIMESTAMP);
                     $until = new Zend_Date($oldContactData->contact_modified, Zend_Date::TIMESTAMP);
-                    $logedMods = $modLog->getModifications('Addressbook', $_contactData->contact_id,
+                    $logedMods = $modLog->getModifications('Addressbook', $_contactData->id,
                             'Addressbook_Model_Contact', Addressbook_Backend_Factory::SQL, $from, $until);
                     $diffs = $modLog->computeDiff($logedMods);
                             
@@ -129,14 +129,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
                 $contactData['contact_modifier'] = $this->_currentAccount->getId();
                 
                 $where  = array(
-                    $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $_contactData->contact_id),
+                    $this->contactsTable->getAdapter()->quoteInto('id = ?', $_contactData->id),
                 );
                 $result = $this->contactsTable->update($contactData, $where);
                 
                 // modification logging
                 $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
                     'application'          => 'Addressbook',
-                    'record_identifier'    => $_contactData->contact_id,
+                    'record_identifier'    => $_contactData->id,
                     'record_type'          => 'Addressbook_Model_Contact',
                     'record_backend'       => Addressbook_Backend_Factory::SQL,
                     'modification_time'    => $now,
@@ -157,7 +157,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw($e);
         }
 
-        return $this->getContactById($_contactData->contact_id);
+        return $this->getContactById($_contactData->id);
     }
 
     /**
@@ -180,7 +180,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         
         $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $contactId),
+            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),
         );
          
         $result = $this->contactsTable->delete($where);
@@ -428,7 +428,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $accountId = Zend_Registry::get('currentAccount')->accountId;
 
         $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('contact_id = ?', $contactId)
+            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId)
         );
 
         $row = $this->contactsTable->fetchRow($where);
