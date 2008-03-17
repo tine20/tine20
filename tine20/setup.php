@@ -39,20 +39,24 @@ foreach ( new DirectoryIterator('./') as $item ) {
 # or initialize the database ourself
 
 # add the admin group
+$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
+
 $adminGroup = new Tinebase_Group_Model_Group(array(
     'name'          => 'Adminstrators',
     'description'   => 'Group of administrative accounts'
 ));
-Tinebase_Group_Sql::getInstance()->addGroup($adminGroup);
+$groupsBackend->addGroup($adminGroup);
 
 # add the user group
 $userGroup = new Tinebase_Group_Model_Group(array(
     'name'          => 'Users',
     'description'   => 'Group of user accounts'
 ));
-Tinebase_Group_Sql::getInstance()->addGroup($userGroup);
+$groupsBackend->addGroup($userGroup);
 
 # add the admin account
+$accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
+
 $account = new Tinebase_Account_Model_FullAccount(array(
     'accountLoginName'      => 'tine20admin',
     'accountStatus'         => 'enabled',
@@ -60,7 +64,8 @@ $account = new Tinebase_Account_Model_FullAccount(array(
     'accountLastName'       => 'Account',
     'accountFirstName'      => 'Tine 2.0 Admin'
 ));
-Tinebase_Account_Sql::getInstance()->addAccount($account);
+
+$accountsBackend->addAccount($account);
 
 Zend_Registry::set('currentAccount', $account);
 
