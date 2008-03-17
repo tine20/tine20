@@ -399,7 +399,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>application_id</name>
+                    <name>container_application_id</name>
                     <field>
                         <name>application_id</name>
                     </field>
@@ -621,7 +621,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>application_id</name>
+                    <name>application_rights-application_id</name>
                     <field>
                         <name>application_id</name>
                     </field>

@@ -25,32 +25,29 @@ class Setup_Backend_Mysql
     public function createTable($_table)
     {
         $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
+        $statementSnippets = array();
 
-        foreach ($_table->declaration->field as $field) {
-            if(isset($field->name)) {
-                
-               $statement .= $this->_getMysqlDeclarations($field) . ",\n";
+        foreach ($_table->declaration->field as $field) 
+        {
+            if(isset($field->name)) 
+            {
+               $statementSnippets[] = $this->_getMysqlDeclarations($field);
             }
         }
-
+        
         foreach ($_table->declaration->index as $key) 
-		{
-			if (!$key->foreign)
-			{
-            	$statement .= $this->_getMysqlIndexDeclarations($key) . " `" . $key->name . "` (" ;
-				foreach ($key->field as $keyfield) {
-					$statement .= "`"  . (string)$keyfield->name . "`,";
-	            }
-	            $statement = substr($statement, 0, (strlen($statement)-1)) . "),\n";
-			}
-			else 
-			{
-				$statement .= $this->_getMysqlIndexDeclarations($key);
-			}
-		}
-
-        $statement = substr($statement, 0, (strlen($statement)-2)) ;
-        $statement .= ")";
+        {
+            if (!$key->foreign)
+            {
+                $statementSnippets[] = $this->_getMysqlIndexDeclarations($key);
+            }
+            else 
+            {
+                $statementSnippets[] = $this->_getMysqlForeignKeyDeclarations($key);
+            }
+        }
+        
+        $statement .= implode(",\n", $statementSnippets) . ")";
 
         if (isset($_table->engine))
         {
@@ -58,21 +55,27 @@ class Setup_Backend_Mysql
         }
         else
         {
-            $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8;";
         }
         
-		if (isset($_table->comment))
-		{
-			if ($_table->comment)
-			{
-				$statement .= " COMMENT '" .  $_table->comment . "'";
-			}
-		}
-		$statement .= ";";
-		
-        //echo "<pre>$statement</pre>";
-		
-        Zend_Registry::get('dbAdapter')->query($statement);
+        if (isset($_table->comment))
+        {
+            if ($_table->comment)
+            {
+                $statement .= " COMMENT '" .  $_table->comment . "';";
+            }
+        }
+        
+        echo "<pre>$statement</pre>";
+        try 
+        {
+            Zend_Registry::get('dbAdapter')->query($statement);
+        }
+        catch (Zend_Db_Exception $e) 
+        {
+            var_dump($e);
+            exit;
+        }
     }
 
     /**
@@ -99,48 +102,49 @@ class Setup_Backend_Mysql
       
         return true;
     }
-    	
-	public function execInsertStatement($_record)
-	{
-	    $table = new Tinebase_Db_Table(array(
-	       'name' => SQL_TABLE_PREFIX . $_record->table->name
-	    ));
-	    
-		foreach ($_record->field as $field) {
-		    if(isset($field->value['special'])) {
-		        switch(strtolower($field->value['special'])) {
-		            case 'now':
-		                $value = Zend_Registry::get('dbAdapter')->quote(Zend_Date::now()->getIso());
-		                
-		                break;
-		                
-		            case 'account_id':
-		                
-		                break;
-		                
+        
+    public function execInsertStatement($_record)
+    {
+        $table = new Tinebase_Db_Table(array(
+           'name' => SQL_TABLE_PREFIX . $_record->table->name
+        ));
+        
+        foreach ($_record->field as $field) {
+            if(isset($field->value['special'])) {
+                switch(strtolower($field->value['special'])) {
+                    case 'now':
+                    {
+                        $value = Zend_Registry::get('dbAdapter')->quote(Zend_Date::now()->getIso());
+                        break;
+                    }   
+                    case 'account_id':
+                    {   
+                        break;
+                    }    
                     case 'application_id':
+                    { 
                         $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
                         
                         $value = $application->id;
 
                         break;
-                        
-		            default:
-		                throw new Exception('unsuported special type ' . strtolower($field->value['special']));
-		                
-		                break;
-		        }
-			} else {
-				$value = $field->value;
-			}
+                    }    
+                    default:
+                    {
+                        throw new Exception('unsuported special type ' . strtolower($field->value['special']));
+                        break;
+                    }    
+                }
+            } else {
+                $value = $field->value;
+            }
 
-			$data[(string)$field->name] = $value;
-			
-		}
+            $data[(string)$field->name] = $value;
+        }
 
-		$table->insert($data);
-	}
-	
+        $table->insert($data);
+    }
+    
     private function _getMysqlDeclarations($_field)
     {
         $definition = '`' . $_field->name . '`';
@@ -216,17 +220,17 @@ class Setup_Backend_Mysql
                 $definition .= ' float ';
                 break;
             }
-			case ('boolean'):
+            case ('boolean'):
             {
                 $definition .= ' tinyint(1) ';
-				if ($_field->default == 'false')
-				{
-					$_field->default = 0;
-				}
-				else
-				{
-					$_field->default = 1;
-				}
+                if ($_field->default == 'false')
+                {
+                    $_field->default = 0;
+                }
+                else
+                {
+                    $_field->default = 1;
+                }
                 break;
             }
             case ('decimal'):
@@ -239,7 +243,6 @@ class Setup_Backend_Mysql
         {
             $definition .= ' unsigned ';
         }
-        
         
         if (isset($_field->autoincrement))    
         {
@@ -257,54 +260,70 @@ class Setup_Backend_Mysql
          //   $definition .= ' default NULL ';
         }
         
-		if (isset($_field->comment))
-		{
-			if ($_field->comment)
-			{
-				$definition .= "COMMENT '" .  $_field->comment . "'";
-			}
-		}
-		
+        if (isset($_field->comment))
+        {
+            if ($_field->comment)
+            {
+                $definition .= "COMMENT '" .  $_field->comment . "'";
+            }
+        }
+        
         return $definition;
     }
     
     /**
-     * get the type of index to create
+     * create the right mysql-statement-snippet for keys
      *
      * @param object $_key the xml index definition
      * @return string
      */
     private function _getMysqlIndexDeclarations($_key)
     {
-        $definition = ' KEY ';
+        $snippet = '';
+        $definition = ' KEY';
         if (!empty($_key->primary))
         {
-			$definition = 'PRIMARY KEY';
+            $definition = ' PRIMARY KEY';
         } 
         else if (!empty($_key->unique))
         {
-            $definition = 'UNIQUE KEY';
+            $definition = ' UNIQUE KEY';
         }
-        else if (!empty($_key->foreign))
-        {
-            //$definition = 'CONSTRAINT `' . $_key->name . '` FOREIGN KEY';
-            $definition = 'FOREIGN KEY';
-            
-			$definition .= '(`' .$_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
-						. $_key->reference->table . "` (`" . $_key->reference->field . "`) ";
-			if(!empty($_key->reference->ondelete)) {
-			    $definition .= "ON DELETE " . strtoupper($_key->reference->ondelete);
-			}
-            if(!empty($_key->reference->onupdate)) {
-                $definition .= "ON UPDATE " . strtoupper($_key->reference->onupdate);
-            }
-			
-			$definition .= ', ';
+       
+        $snippet .= $definition . " `" . $_key->name . "`" ;
+        
+        foreach ($_key->field as $keyfield) {
+            $keys[] = (string)$keyfield->name;
         }
-		
-
-        return $definition;
+                
+        $snippet .= " (`" . implode("`,`", $keys) . "`) ";            
+        
+        return $snippet;
     }
-
     
+    /**
+     *  create the right mysql-statement-snippet for foreign keys
+     *
+     * @param object $_key the xml index definition
+     * @return string
+     */
+     
+    private function _getMysqlForeignKeyDeclarations($_key)
+    {
+        $snippet = '';
+        $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX . $_key->name . '` FOREIGN KEY';
+        
+        $snippet .= '(`' .$_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
+                    . $_key->reference->table . "` (`" . $_key->reference->field . "`) ";
+        
+        if(!empty($_key->reference->ondelete)) {
+            $snippet .= "ON DELETE " . strtoupper($_key->reference->ondelete);
+        }
+        if(!empty($_key->reference->onupdate)) {
+            $snippet .= "ON UPDATE " . strtoupper($_key->reference->onupdate);
+        }
+        
+        return $snippet;
+    }
+                
 }

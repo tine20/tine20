@@ -364,7 +364,7 @@
                     </field>
                 </index>
                <index>
-                    <name>task_id</name>
+                    <name>task_contact-task_id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>tasks</table>

@@ -252,8 +252,8 @@
                     </field>
                 </index>
             </declaration>
-        </table>        		
-		<table>
+        </table>                
+        <table>
             <name>metacrm_product</name>
             <version>0.0.1</version>
             <declaration>
@@ -266,7 +266,7 @@
                 <field>
                     <name>lead_id</name>
                     <type>integer</type>
-					<unsigned>true</unsigned>
+                    <unsigned>true</unsigned>
                     <length>11</length>
                     <notnull>true</notnull>
                 </field>
@@ -297,14 +297,14 @@
                         <name>id</name>
                     </field>
                 </index>
-				<index>
+                <index>
                     <name>lead_lead_id</name>
-					<foreign>true</foreign>
-					<reference>
-						<table>metacrm_lead</table>
-						<field>id</field>
-						<action>ON DELETE CASCADE</action>
-					</reference>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>metacrm_lead</table>
+                        <field>id</field>
+                        <action>ON DELETE CASCADE</action>
+                    </reference>
                     <field>
                         <name>lead_id</name>
                     </field>
@@ -312,7 +312,7 @@
             </declaration>
         </table>
     </tables>
-	 <defaultRecords>
+     <defaultRecords>
        <record>
             <table>
                 <name>metacrm_leadsource</name>
@@ -364,8 +364,8 @@
                 <name>leadsource</name>
                 <value>fair</value>
             </field>
-        </record>		
-		<record>
+        </record>        
+        <record>
             <table>
                 <name>metacrm_leadtype</name>
             </table>
@@ -391,7 +391,7 @@
                 <value>partner</value>
             </field>
         </record>
-	    <record>
+        <record>
             <table>
                 <name>metacrm_leadtype</name>
             </table>
@@ -404,7 +404,7 @@
                 <value>reseller</value>
             </field>
         </record>
-	    <record>
+        <record>
             <table>
                 <name>metacrm_leadstate</name>
             </table>
@@ -420,8 +420,8 @@
                 <name>probability</name>
                 <value>0</value>
             </field>
-        </record>		
-	    <record>
+        </record>        
+        <record>
             <table>
                 <name>metacrm_leadstate</name>
             </table>
@@ -437,8 +437,8 @@
                 <name>probability</name>
                 <value>10</value>
             </field>
-        </record>			
-	    <record>
+        </record>            
+        <record>
             <table>
                 <name>metacrm_leadstate</name>
             </table>
@@ -454,8 +454,8 @@
                 <name>probability</name>
                 <value>30</value>
             </field>
-        </record>			
-	    <record>
+        </record>            
+        <record>
             <table>
                 <name>metacrm_leadstate</name>
             </table>
@@ -471,8 +471,8 @@
                 <name>probability</name>
                 <value>50</value>
             </field>
-        </record>		
-	    <record>
+        </record>        
+        <record>
             <table>
                 <name>metacrm_leadstate</name>
             </table>
@@ -488,12 +488,12 @@
                 <name>probability</name>
                 <value>100</value>
             </field>
-			<field>
-				<name>endslead</name>
-				<value>1</value>
-			</field>	
-        </record>			
-	    <record>
+            <field>
+                <name>endslead</name>
+                <value>1</value>
+            </field>    
+        </record>            
+        <record>
             <table>
                 <name>metacrm_leadstate</name>
             </table>
@@ -509,10 +509,10 @@
                 <name>probability</name>
                 <value>0</value>
             </field>
-			<field>
-				<name>endslead</name>
-				<value>1</value>
-			</field>			
-        </record>		
-    </defaultRecords>	
+            <field>
+                <name>endslead</name>
+                <value>1</value>
+            </field>            
+        </record>        
+    </defaultRecords>    
 </application>
