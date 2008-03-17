@@ -98,9 +98,9 @@ Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $use
     Tinebase_Container::GRANT_READ
 )); 
 Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
-    self::GRANT_READ, 
-    self::GRANT_ADD, 
-    self::GRANT_EDIT, 
-    self::GRANT_DELETE, 
-    self::GRANT_ADMIN
+    Tinebase_Container::GRANT_READ, 
+    Tinebase_Container::GRANT_ADD, 
+    Tinebase_Container::GRANT_EDIT, 
+    Tinebase_Container::GRANT_DELETE, 
+    Tinebase_Container::GRANT_ADMIN
 )); 
