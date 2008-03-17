@@ -79,10 +79,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     private function getGroupMemberships($_accountId)
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         $membershipTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
         
@@ -100,45 +97,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         return $groupMemberShips;
     }
-    
-    /**
-     * return a list of group members account id's
-     *
-     * @param int $groupId
-     * @todo the group info do not belong into the ACL table, there should be a separate group table
-     * @deprecated 
-     * @return array list of group members account id's
-     */
-    private function getGroupMembers($_groupId)
-    {
-        $groupId = (int)$_groupId;
-        if($groupId != $_groupId) {
-            throw new InvalidArgumentException('$_groupId must be integer');
-        }
-        
-        $aclTable = new Tinebase_Acl_Sql();
-        $members = array();
-        
-        $where = array(
-            "acl_appname = 'phpgw_group'",
-            $aclTable->getAdapter()->quoteInto('acl_location = ?', $groupId)
-        );
-        
-        $rowSet = $aclTable->fetchAll($where);
-        
-        foreach($rowSet as $row) {
-            $members[] = $row->acl_account;
-        }
-        
-        return $members;
-    }
-    
-    /**
-     * 
-     * public account data handling
-     * 
-     */
-    
+
     /**
      * get list of accounts
      *
