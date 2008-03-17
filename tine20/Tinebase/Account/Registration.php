@@ -148,15 +148,13 @@ class Tinebase_Account_Registration
 		
 		// get model & save user data (account & contact) via the Account and Addressbook controllers
 		$account = new Tinebase_Account_Model_FullAccount($regData);
-		Tinebase_Account::getInstance()->saveAccount($account);
-
+		Tinebase_Account::getInstance()->addAccount ( $account );
+		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' saved user account '.$regData['accountLoginName']);
+		
 		// generate password and save it
 		$regData['password'] = $this->generatePassword();
 		Tinebase_Auth::getInstance()->setPassword($regData['accountLoginName'], $regData['password'], $regData['password']);
 		
-		// @todo use new function: addAccount ?
-		//Tinebase_Account::getInstance()->addAccount ( $account );
- 				
 		// send mail
 		if ( $this->sendRegistrationMail( $regData ) ) {
 			return true;			

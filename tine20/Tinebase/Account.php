@@ -156,6 +156,19 @@ class Tinebase_Account
         return $result;
     }
 
+    /**
+     * adds a new account
+     *
+     * @param Tinebase_Account_Model_FullAccount $_account
+     * @return Tinebase_Account_Model_FullAccount
+     */
+    public function addAccount(Tinebase_Account_Model_FullAccount $_account)
+    {
+        $result = $this->_backend->addAccount($_account);
+        
+        return $result;
+    }
+    
     public function deleteAccount($_accountId)
     {
         $result = $this->_backend->deleteAccount($_accountId);
