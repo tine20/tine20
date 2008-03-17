@@ -128,10 +128,8 @@ class Tinebase_Account_Registration
 				
 		// add more required fields to regData
 		// get default values from config.ini if available
-		/*$regData['accountStatus'] = 'A'; 
-		$regData['accountPrimaryGroup'] = '-4'; //-- ?*/
-		$regData['accountStatus'] = ( isset($this->_config->accountStatus) ) ? $this->_config->accountStatus : 'A'; 
-		$regData['accountPrimaryGroup'] = ( isset($this->_config->accountPrimaryGroup) ) ? $this->_config->accountPrimaryGroup : '-4'; 
+		$regData['accountStatus'] = ( isset($this->_config->accountStatus) ) ? $this->_config->accountStatus : 'enabled'; 
+		$regData['accountPrimaryGroup'] = ( isset($this->_config->accountPrimaryGroup) ) ? $this->_config->accountPrimaryGroup : '2'; 
 		
 		$regData['accountDisplayName'] = $regData['accountFirstName'].' '.$regData['accountLastName']; 
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
@@ -195,8 +193,11 @@ class Tinebase_Account_Registration
         
         // set texts and values
         $view->mailTextWelcome = "Welcome to Tine 2.0";
-        $view->mailActivationLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
-        	'?method=Tinebase.activateAccount&id='.$hashed_username;
+        // if expires = 0 -> no activation link in email
+        if ( isset($this->_config->expires) && $this->_config->expires > 0 ) {
+        	$view->mailActivationLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
+        		'?method=Tinebase.activateAccount&id='.$hashed_username;
+        }
         $view->username = $_regData['accountLoginName'];
         $view->password = $_regData['password'];
         
