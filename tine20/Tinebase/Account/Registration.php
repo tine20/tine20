@@ -392,9 +392,7 @@ class Tinebase_Account_Registration
             throw(new Exception('invalid registration object'));
         }
 
-        // @todo revert to table prefix constant
-        //$registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
-        $registrationsTable = new Tinebase_Db_Table(array('name' => 'tine20_registrations'));
+        $registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
 
         // @todo set reg_date & expire date (with zend_date add 24 hours)
         // @todo find out how mysql date functions can be called in (zend) pdo
@@ -402,8 +400,7 @@ class Tinebase_Account_Registration
         	"login_name" 	=> $_registration->registrationLoginName,
             "login_hash" 	=> $_registration->registrationHash,
             "email" 		=> $_registration->registrationEmail,
-        //	"reg_date" 		=> 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'registrations`.`reg_date`)'
-        	"reg_date" 		=> 'NOW()',
+        	"reg_date" 		=> 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'registrations`.`reg_date`)',
         	"status"		=> "justregistered",
         );
         
@@ -423,8 +420,7 @@ class Tinebase_Account_Registration
 	 */
 	protected function updateRegistration ( $_registration, $_data ) 
 	{
-		//@todo set prefix again
-        $registrationsTable = new Tinebase_Db_Table(array('name' => 'tine20_registrations'));
+        $registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
 		
         $where = array(
             $registrationsTable->getAdapter()->quoteInto('id = ?', $_registration['registrationId'])
@@ -445,9 +441,8 @@ class Tinebase_Account_Registration
     public function getRegistrationByHash($_hash)
     {
        	$db = Zend_Registry::get('dbAdapter');
-       	//@todo add correct table with prefix later on
        	$select = $db->select()
-       				->from('tine20_registrations',
+       				->from(SQL_TABLE_PREFIX . 'registrations',
        					array(
        						    "registrationLoginName"	=> "login_name",
        						    "registrationHash"	=> "login_hash",
