@@ -469,7 +469,7 @@ Tine.Tinebase.MainScreen = function() {
     var _logoutButtonHandler = function(_event) {
 		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to logout?', function(btn, text) {
 			if (btn == 'yes') {
-				Ext.MessageBox.wait('Loging you out...', 'Please wait!');
+				Ext.MessageBox.wait('Logging you out...', 'Please wait!');
 				Ext.Ajax.request( {
 					params : {
 						method : 'Tinebase.logout'
