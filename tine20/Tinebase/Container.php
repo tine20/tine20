@@ -152,7 +152,7 @@ class Tinebase_Container
             self::GRANT_ADMIN
         ));
         // add read grants to any other user
-        $this->addGrants($containerId, NULL, array(
+        $this->addGrants($containerId, 'anyone', NULL, array(
             self::GRANT_READ
         ));
         return $this->getContainerById($containerId);
