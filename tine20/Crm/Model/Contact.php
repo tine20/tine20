@@ -24,7 +24,7 @@ class Crm_Model_Contact extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'contact_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

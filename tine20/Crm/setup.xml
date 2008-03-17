@@ -15,13 +15,13 @@
                     <unsigned>true</unsigned>
                 </field>
                 <field>
-                    <name>lead</name>
+                    <name>description_ld</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>leadstate_id</name>
+                    <name>id</name>
                     <type>integer</type>
                     <length>11</length>
                     <unsigned>true</unsigned>
@@ -105,7 +105,7 @@
                     <type>datetime</type>
                 </field>                    
                 <index>
-                    <name>lead_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
@@ -157,7 +157,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <field>
-                    <name>leadstate</name>
+                    <name>state</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
@@ -180,7 +180,7 @@
                     <default>1</default>
                 </field>
                 <index>
-                    <name>leadstate_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
@@ -264,7 +264,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <field>
-                    <name>lead_id</name>
+                    <name>zumleadkey</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
                     <length>11</length>
@@ -282,7 +282,7 @@
                     <length>255</length>
                 </field>
                 <field>
-                    <name>product</name>
+                    <name>product_price</name>
                     <type>decimal</type>
                     <value>12,2</value>
                     <unsigned>true</unsigned>
@@ -290,7 +290,7 @@
                     <notnull>true</notnull>
                 </field>
                 <index>
-                    <name>lead_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
@@ -298,7 +298,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>lead_lead_id</name>
+                    <name>zumleadkey</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>metacrm_lead</table>
@@ -306,7 +306,7 @@
                         <action>ON DELETE CASCADE</action>
                     </reference>
                     <field>
-                        <name>lead_id</name>
+                        <name>zumleadkey</name>
                     </field>
                 </index>   
             </declaration>
@@ -413,7 +413,7 @@
                 <value>1</value>
             </field>
             <field>
-                <name>leadstate</name>
+                <name>state</name>
                 <value>open</value>
             </field>
             <field>
@@ -430,7 +430,7 @@
                 <value>2</value>
             </field>
             <field>
-                <name>leadstate</name>
+                <name>state</name>
                 <value>contacted</value>
             </field>
             <field>
@@ -447,7 +447,7 @@
                 <value>3</value>
             </field>
             <field>
-                <name>leadstate</name>
+                <name>state</name>
                 <value>waiting for feedback</value>
             </field>
             <field>
@@ -464,7 +464,7 @@
                 <value>4</value>
             </field>
             <field>
-                <name>leadstate</name>
+                <name>state</name>
                 <value>quote sent</value>
             </field>
             <field>
@@ -481,7 +481,7 @@
                 <value>5</value>
             </field>
             <field>
-                <name>leadstate</name>
+                <name>state</name>
                 <value>accepted</value>
             </field>
             <field>
@@ -502,7 +502,7 @@
                 <value>6</value>
             </field>
             <field>
-                <name>leadstate</name>
+                <name>state</name>
                 <value>lost</value>
             </field>
             <field>

@@ -23,7 +23,7 @@ class Crm_Model_Leadsource extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'lead_leadsource_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -51,8 +51,8 @@ class Crm_Model_Leadsource extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'lead_leadsource_id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
     
 }

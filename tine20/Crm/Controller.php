@@ -70,15 +70,15 @@ class Crm_Controller extends Tinebase_Container_Abstract
      * @param string $_dir
      * @param int $_limit
      * @param int $_start
-     * @param int $_leadstate
+     * @param int $_state
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
+    public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $result = $backend->getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
+        $result = $backend->getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
 
         return $result;
     }
@@ -193,7 +193,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
     }
 
     /**
-     * get one leadstate identified by id
+     * get one state identified by id
      *
      * @return Crm_Model_Leadstate
      */
@@ -310,7 +310,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         
         $updatedLead = $backend->saveLead($_lead);
         
-        $this->sendNotifications((empty($_lead->lead_id) ? false : true), $updatedLead);
+        $this->sendNotifications((empty($_lead->id) ? false : true), $updatedLead);
         
         return $updatedLead;
     }     
@@ -328,27 +328,27 @@ class Crm_Controller extends Tinebase_Container_Abstract
         
         $view->updater = Zend_Registry::get('currentAccount');
         $view->lead = $_lead;
-        $view->leadState = $this->getLeadState($_lead->lead_leadstate_id);
-        $view->leadType = $this->getLeadType($_lead->lead_leadtype_id);
-        $view->leadSource = $this->getLeadSource($_lead->lead_leadsource_id);
-        $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->lead_container);
+        $view->leadState = $this->getLeadState($_lead->id);
+        $view->leadType = $this->getLeadType($_lead->leadtype_id);
+        $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
+        $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container);
         
-        if(is_a($_lead->lead_start, 'Zend_Date')) {
-            $view->leadStart = $_lead->lead_start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        if(is_a($_lead->Start, 'Zend_Date')) {
+            $view->Start = $_lead->Start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
-            $view->leadStart = '-';
+            $view->Start = '-';
         }
         
-        if(is_a($_lead->lead_end, 'Zend_Date')) {
-            $view->leadEnd = $_lead->lead_end->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        if(is_a($_lead->end, 'Zend_Date')) {
+            $view->leadEnd = $_lead->end->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
             $view->leadEnd = '-';
         }
         
-        if(is_a($_lead->lead_end_scheduled, 'Zend_Date')) {
-            $view->leadScheduledEnd = $_lead->lead_end_scheduled->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        if(is_a($_lead->end_scheduled, 'Zend_Date')) {
+            $view->ScheduledEnd = $_lead->end_scheduled->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
-            $view->leadScheduledEnd = '-';
+            $view->ScheduledEnd = '-';
         }
         
         #$translate = new Zend_Translate('gettext', 'Crm/translations/de.mo', 'de');
@@ -370,9 +370,9 @@ class Crm_Controller extends Tinebase_Container_Abstract
         $html = $view->render('newLeadHtml.php');
         
         if($_isUpdate === true) {
-            $subject = $translate->_('Lead updated') . ': ' . $_lead->lead_name;
+            $subject = $translate->_('Lead updated') . ': ' . $_lead->description_ld;
         } else {
-            $subject = $translate->_('Lead added') . ': ' . $_lead->lead_name;
+            $subject = $translate->_('Lead added') . ': ' . $_lead->description_ld;
         }
         
         // send notifications to all accounts in the first step
@@ -409,11 +409,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
         $defaultSource = (isset(Zend_Registry::get('configFile')->crm->defaultsource) ? Zend_Registry::get('configFile')->crm->defaultsource : 1);
         
         $defaultData = array(
-            'lead_leadstate_id'   => $defaultState,
-            'lead_leadtype_id'    => $defaultType,
-            'lead_leadsource_id'  => $defaultSource,
-            'lead_start'          => new Zend_Date(),
-            'lead_probability'    => 0
+            'leadstate_id'   => $defaultState,
+            'leadtype_id'    => $defaultType,
+            'leadsource_id'  => $defaultSource,
+            'start'          => new Zend_Date(),
+            'probability'    => 0
         );
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaultData, true));
         $emptyLead = new Crm_Model_Lead($defaultData, true);
@@ -446,11 +446,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
      *
      * @return int count of all leads
      */
-    public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    public function getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         
-        return $backend->getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+        return $backend->getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads);
     }
 
     /**
@@ -458,11 +458,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
      *
      * @return int count of shared leads
      */
-    public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    public function getCountOfSharedLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         
-        return $backend->getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+        return $backend->getCountOfSharedLeads($_filter, $_state, $_probability, $_getClosedLeads);
     }
 
     /**
@@ -470,11 +470,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
      *
      * @return int count of shared leads
      */
-    public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    public function getCountOfOtherPeopleLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         
-        return $backend->getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads);
+        return $backend->getCountOfOtherPeopleLeads($_filter, $_state, $_probability, $_getClosedLeads);
     }
     
     /**

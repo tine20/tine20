@@ -23,7 +23,7 @@ class Crm_Model_Leadstate extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'lead_leadstate_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -51,10 +51,10 @@ class Crm_Model_Leadstate extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'lead_leadstate_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_leadstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_leadstate_probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),      
-        'lead_leadstate_endslead'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
+        'id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'leadstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),      
+        'endslead'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
     );
     
 }

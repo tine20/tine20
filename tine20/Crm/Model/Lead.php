@@ -23,7 +23,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'lead_id';    
+    protected $_identifier = 'id';    
     
     /**
      * application the record belongs to
@@ -40,9 +40,9 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'lead_id'                       => 'Digits',
-        'lead_name'                     => 'StringTrim',
-        'lead_probability'              => 'Digits'
+        'id'                       => 'Digits',
+        'description_ld'                     => 'StringTrim',
+        'probability'              => 'Digits'
     );
     
     /**
@@ -53,26 +53,26 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'lead_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_name'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_container'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lead_end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lead_probability'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'lead_end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        #'lead_partner'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_customer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_account'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_modified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        #'lead_created'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_modifier'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_lastread'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        #'lead_lastreader'     => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
+        'id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'description_ld'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'container'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'Start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'probability'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        #'leadpartner'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'leadcustomer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'leadaccount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'leadmodified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        #'leadcreated'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'leadmodifier'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'leadlastread'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        #'leadlastreader'     => array(Zend_Filter_Input::ALLOW_EMPTY => true)  
     );
 
     /**
@@ -82,9 +82,9 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'lead_start',
-        'lead_end',
-        'lead_end_scheduled'
+        'Start',
+        'end',
+        'end_scheduled'
     );
     
     /**
@@ -95,7 +95,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      */    
     public function setContactData($_contactData)
     {
-        $_key = $this->_properties['lead_id'];
+        $_key = $this->_properties['id'];
         $_contact = $_contactData[$_key];
         $this->_properties['contacts'] = $_contact;
     }

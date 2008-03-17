@@ -23,7 +23,7 @@ class Crm_Model_Productsource extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'lead_productsource_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -51,9 +51,9 @@ class Crm_Model_Productsource extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'lead_productsource_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_productsource'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'lead_productsource_price'   => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
+        'id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'productsource'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'price'   => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
     );
 
 }

@@ -127,17 +127,17 @@ Tine.Crm.Main = function(){
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'lead_id',
+            id: 'id',
             fields: Tine.Crm.Model.Lead,
             // turn on remote sorting
             remoteSort: true
         });
         
-        storeCrm.setDefaultSort('lead_name', 'asc');
+        storeCrm.setDefaultSort('description_ld', 'asc');
 
         storeCrm.on('beforeload', function(_dataSource) {
             _dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
-            _dataSource.baseParams.leadstate        = Ext.getCmp('filterLeadstate').getValue();
+            _dataSource.baseParams.state        = Ext.getCmp('filterLeadstate').getValue();
             _dataSource.baseParams.probability      = Ext.getCmp('filterProbability').getValue();
             _dataSource.baseParams.getClosedLeads   = Ext.getCmp('crmShowClosedLeadsButton').pressed;
         });        
@@ -177,7 +177,7 @@ Tine.Crm.Main = function(){
                 params: {
                     start: 0,
                     limit: 50
-                    //leadstate: Ext.getCmp('filterLeadstate').getValue(),
+                    //state: Ext.getCmp('filterLeadstate').getValue(),
                     //probability: Ext.getCmp('filterProbability').getValue()                   
                 }
             });
@@ -191,10 +191,10 @@ Tine.Crm.Main = function(){
             hideLabel: true,
             width: 180,   
             blankText: 'leadstate...',
-            hiddenName:'lead_leadstate_id',
+            hiddenName:'id',
             store: Tine.Crm.LeadState.getStore(),
-            displayField:'lead_leadstate',
-            valueField:'lead_leadstate_id',
+            displayField:'leadstate',
+            valueField:'leadstate',
             typeAhead: true,
             mode: 'local',
             triggerAction: 'all',
@@ -204,9 +204,9 @@ Tine.Crm.Main = function(){
        });          
        filterComboLeadstate.on('select', function(combo, record, index) {
            if (!record.data) {
-               var _leadstate = '';       
+               var _state = '';       
            } else {
-               var _leadstate = record.data.lead_leadstate_id;
+               var _state = record.data.id;
            }
            
            combo.triggers[0].show();
@@ -215,8 +215,8 @@ Tine.Crm.Main = function(){
                params: {                
                 start: 0,
                 limit: 50,
-                leadstate: _leadstate,
-                probability: Ext.getCmp('filterProbability').getValue()
+          //      state: _state,
+           //     probability: Ext.getCmp('filterLeadstate').getValue()
                 }
             });
        });
@@ -224,7 +224,7 @@ Tine.Crm.Main = function(){
        var filterComboProbability = new Ext.ux.ClearableComboBox({
             fieldLabel:'probability', 
             id: 'filterProbability',
-            name:'lead_probability',
+            name:'probability',
             hideLabel: true,            
             store: storeProbability,
             blankText: 'probability...',            
@@ -252,7 +252,7 @@ Tine.Crm.Main = function(){
                 params: {                    
                     start: 0,
                     limit: 50
-                    //leadstate: Ext.getCmp('filterLeadstate').getValue(),
+                    //state: Ext.getCmp('filterLeadstate').getValue(),
                     //probability: _probability
                 }
             });         
@@ -276,15 +276,15 @@ Tine.Crm.Main = function(){
             var storeLeadsource = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getLeadsources',
-                    sort: 'lead_leadsource',
+                    sort: 'leadsource',
                     dir: 'ASC'
                 },
                 root: 'results',
                 totalProperty: 'totalcount',
-                id: 'lead_leadsource_id',
+                id: 'leadsource_id',
                 fields: [
-                    {name: 'lead_leadsource_id'},
-                    {name: 'lead_leadsource'}
+                    {name: 'leadsource_id'},
+                    {name: 'leadsource'}
                 ],
                 // turn on remote sorting
                 remoteSort: false
@@ -293,15 +293,15 @@ Tine.Crm.Main = function(){
             storeLeadsource.load();
             
             var columnModelLeadsource = new Ext.grid.ColumnModel([
-                    { id:'lead_leadsource_id', 
+                    { id:'leadsource_id', 
                       header: "id", 
-                      dataIndex: 'lead_leadsource_id', 
+                      dataIndex: 'leadsource_id', 
                       width: 25, 
                       hidden: true 
                     },
-                    { id:'lead_leadsource', 
+                    { id:'leadsource', 
                       header: 'entries', 
-                      dataIndex: 'lead_leadsource', 
+                      dataIndex: 'leadsource', 
                       width: 170, 
                       hideable: false, 
                       sortable: false, 
@@ -310,14 +310,14 @@ Tine.Crm.Main = function(){
             ]);            
             
              var entry = Ext.data.Record.create([
-               {name: 'lead_leadsource_id', type: 'int'},
-               {name: 'lead_leadsource', type: 'varchar'}
+               {name: 'leadsource_id', type: 'int'},
+               {name: 'leadsource', type: 'varchar'}
             ]);
             
             var handlerLeadsourceAdd = function(){
                 var p = new entry({
-                    lead_leadsource_id: 'NULL',
-                    lead_leadsource: ''
+                    leadsource_id: 'NULL',
+                    leadsource: ''
                 });
                 leadsourceGridPanel.stopEditing();
                 storeLeadsource.insert(0, p);
@@ -361,7 +361,7 @@ Tine.Crm.Main = function(){
                 store: storeLeadsource,
                 id: 'editLeadsourceGrid',
                 cm: columnModelLeadsource,
-                autoExpandColumn:'lead_leadsource',
+                autoExpandColumn:'leadsource',
                 frame:false,
                 viewConfig: {
                     forceFit: true
@@ -406,15 +406,15 @@ Tine.Crm.Main = function(){
             var storeLeadtype = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getLeadtypes',
-                    sort: 'lead_leadtype',
+                    sort: 'leadtype',
                     dir: 'ASC'
                 },
                 root: 'results',
                 totalProperty: 'totalcount',
-                id: 'lead_leadtype_id',
+                id: 'leadtype_id',
                 fields: [
-                    {name: 'lead_leadtype_id'},
-                    {name: 'lead_leadtype'}
+                    {name: 'leadtype_id'},
+                    {name: 'leadtype'}
                 ],
                 // turn on remote sorting
                 remoteSort: false
@@ -423,15 +423,15 @@ Tine.Crm.Main = function(){
             storeLeadtype.load();
             
             var columnModelLeadtype = new Ext.grid.ColumnModel([
-                    { id:'lead_leadtype_id', 
+                    { id:'leadtype_id', 
                       header: "id", 
-                      dataIndex: 'lead_leadtype_id', 
+                      dataIndex: 'leadtype_id', 
                       width: 25, 
                       hidden: true 
                     },
-                    { id:'lead_leadtype', 
+                    { id:'leadtype', 
                       header: 'entries', 
-                      dataIndex: 'lead_leadtype', 
+                      dataIndex: 'leadtype', 
                       width: 170, 
                       hideable: false, 
                       sortable: false, 
@@ -440,14 +440,14 @@ Tine.Crm.Main = function(){
             ]);            
             
              var entry = Ext.data.Record.create([
-               {name: 'lead_leadtype_id', type: 'int'},
-               {name: 'lead_leadtype', type: 'varchar'}
+               {name: 'leadtype_id', type: 'int'},
+               {name: 'leadtype', type: 'varchar'}
             ]);
             
             var handlerLeadtypeAdd = function(){
                 var p = new entry({
-                    lead_leadtype_id: 'NULL',
-                    lead_leadtype: ''
+                    leadtype_id: 'NULL',
+                    leadtype: ''
                 });
                 leadtypeGridPanel.stopEditing();
                 storeLeadtype.insert(0, p);
@@ -491,7 +491,7 @@ Tine.Crm.Main = function(){
                 store: storeLeadtype,
                 id: 'editLeadtypeGrid',
                 cm: columnModelLeadtype,
-                autoExpandColumn:'lead_leadtype',
+                autoExpandColumn:'leadtype',
                 frame:false,
                 viewConfig: {
                     forceFit: true
@@ -536,16 +536,16 @@ Tine.Crm.Main = function(){
             var storeProductsource = new Ext.data.JsonStore({
                 baseParams: {
                     method: 'Crm.getProductsource',
-                    sort: 'lead_productsource',
+                    sort: 'productsource',
                     dir: 'ASC'
                 },
                 root: 'results',
                 totalProperty: 'totalcount',
-                id: 'lead_productsource_id',
+                id: 'id',
                 fields: [
-                    {name: 'lead_productsource_id'},
-                    {name: 'lead_productsource'},
-                    {name: 'lead_productsource_price'}
+                    {name: 'id'},
+                    {name: 'productsource'},
+                    {name: 'productsource_price'}
                 ],
                 // turn on remote sorting
                 remoteSort: false
@@ -554,24 +554,24 @@ Tine.Crm.Main = function(){
             storeProductsource.load();
             
             var columnModelProductsource = new Ext.grid.ColumnModel([
-                    { id:'lead_productsource_id', 
+                    { id:'id', 
                       header: "id", 
-                      dataIndex: 'lead_productsource_id', 
+                      dataIndex: 'id', 
                       width: 25, 
                       hidden: true 
                     },
-                    { id:'lead_productsource', 
+                    { id:'productsource', 
                       header: 'entries', 
-                      dataIndex: 'lead_productsource', 
+                      dataIndex: 'productsource', 
                       width: 170, 
                       hideable: false, 
                       sortable: false, 
                       editor: new Ext.form.TextField({allowBlank: false}) 
                     }, 
                     {
-                      id: 'lead_productsource_price',  
+                      id: 'price',  
                       header: "price",
-                      dataIndex: 'lead_productsource_price',
+                      dataIndex: 'price',
                       width: 80,
                       align: 'right',
                       editor: new Ext.form.NumberField({
@@ -584,16 +584,16 @@ Tine.Crm.Main = function(){
             ]);            
             
              var entry = Ext.data.Record.create([
-               {name: 'lead_productsource_id', type: 'int'},
-               {name: 'lead_productsource', type: 'varchar'},
-               {name: 'lead_productsource_price', type: 'number'}
+               {name: 'id', type: 'int'},
+               {name: 'productsource', type: 'varchar'},
+               {name: 'price', type: 'number'}
             ]);
             
             var handlerProductsourceAdd = function(){
                 var p = new entry({
-                    lead_productsource_id: 'NULL',
-                    lead_productsource: '',
-                    lead_productsource_price: '0,00'
+                    productsource_id: 'NULL',
+                    productsource: '',
+                    productsource_price: '0,00'
                 });
                 productsourceGridPanel.stopEditing();
                 storeProductsource.insert(0, p);
@@ -637,7 +637,7 @@ Tine.Crm.Main = function(){
                 store: storeProductsource,
                 id: 'editProductsourceGrid',
                 cm: columnModelProductsource,
-                autoExpandColumn:'lead_productsource',
+                autoExpandColumn:'productsource',
                 frame:false,
                 viewConfig: {
                     forceFit: true
@@ -682,7 +682,7 @@ Tine.Crm.Main = function(){
             if(toggle.pressed === true) {
                 
                 gridColumnModell.setRenderer(1, function(value, meta, record) {
-                    return '<b>' + value + '</b><br /><br />' + record.data.lead_description;
+                    return '<b>' + value + '</b><br /><br />' + record.data.description;
                 } );                
                 
                 gridColumnModell.setRenderer(2, function(_leadPartner) {                   
@@ -873,36 +873,36 @@ Tine.Crm.Main = function(){
         var expander = new Ext.grid.RowExpander({
             enableCaching: false,
             tpl : new Ext.Template(
-                '<b>Notes:</b> {lead_description}</div></td>',
+                '<b>Notes:</b> {description}</div></td>',
                 '<td class="x-grid3-col x-grid3-cell"><b>Activities:</b> </td>')
         });
         
         var columnModel = new Ext.grid.ColumnModel([
-            {resizable: true, header: 'projekt ID', id: 'lead_id', dataIndex: 'lead_id', width: 20, hidden: true},
-            {resizable: true, header: 'lead name', id: 'lead_name', dataIndex: 'lead_name', width: 200},
-            {resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: function(_leadPartner) {
+            {resizable: true, header: 'projekt ID', id: 'id', dataIndex: 'id', width: 20, hidden: true},
+            {resizable: true, header: 'lead name', id: 'description_ld', dataIndex: 'description_ld', width: 200},
+            {resizable: true, header: 'Partner', id: 'leadpartner', dataIndex: 'leadpartner', width: 175, sortable: false, renderer: function(_leadPartner) {
                 if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
                     return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
                 }
             }},
-            {resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: function(_leadCustomer) {
+            {resizable: true, header: 'Customer', id: 'leadcustomer', dataIndex: 'leadcustomer', width: 175, sortable: false, renderer: function(_leadCustomer) {
                 if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
                     return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
                 }
             }},
             {resizable: true, 
-              header: 'state', 
-              id: 'lead_leadstate_id', 
-              dataIndex: 'lead_leadstate_id', 
+              header: 'leadstate', 
+              id: 'id', 
+              dataIndex: 'leadstate', 
               sortable: false,
-              renderer: function(leadstate_id) {
-                  var leadstates = Ext.getCmp('filterLeadstate').store;
-                  var leadstate_name = leadstates.getById(leadstate_id);
-                  return leadstate_name.data.lead_leadstate;
+              renderer: function(id) {
+                  var states = Ext.getCmp('filterLeadstate').store;
+                  var state_name = states.getById(id);
+                  return state_name.data.state;
               },
               width: 100},
-            {resizable: true, header: 'probability', id: 'lead_probability', dataIndex: 'lead_probability', width: 50, renderer: Ext.util.Format.percentage},
-            {resizable: true, header: 'turnover', id: 'lead_turnover', dataIndex: 'lead_turnover', width: 100, renderer: Ext.util.Format.euMoney }
+            {resizable: true, header: 'probability', id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage},
+            {resizable: true, header: 'turnover', id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -942,7 +942,7 @@ Tine.Crm.Main = function(){
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'lead_name',
+            autoExpandColumn: 'description_ld',
             border: false,
             view: new Ext.grid.GridView({
                 autoFill: true,
@@ -966,7 +966,7 @@ Tine.Crm.Main = function(){
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.lead_id, 900, 700);            
+            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 900, 700);            
         });
        
        return;
@@ -1006,7 +1006,7 @@ Tine.Crm.Main = function(){
             params:{
                 start:0, 
                 limit:50
-                //leadstate: Ext.getCmp('filterLeadstate').getValue(),
+                //state: Ext.getCmp('filterLeadstate').getValue(),
                 //probability: Ext.getCmp('filterProbability').getValue()                                                                               
             }
         });
@@ -1046,23 +1046,23 @@ Tine.Crm.LeadEditDialog = function() {
         additionalData.products = Tine.Tinebase.Common.getJSONdata(store_products);
 
         // the start date (can not be empty)
-        var startDate = Ext.getCmp('lead_start').getValue();
-        additionalData.lead_start = startDate.format('c');
+        var startDate = Ext.getCmp('Start').getValue();
+        additionalData.Start = startDate.format('c');
 
         // the end date
-        var endDate = Ext.getCmp('lead_end').getValue();
+        var endDate = Ext.getCmp('end').getValue();
         if(typeof endDate == 'object') {
-            additionalData.lead_end = endDate.format('c');
+            additionalData.end = endDate.format('c');
         } else {
-            additionalData.lead_end = null;
+            additionalData.end = null;
         }
 
         // the estimated end
-        var endScheduledDate = Ext.getCmp('lead_end_scheduled').getValue();
+        var endScheduledDate = Ext.getCmp('end_scheduled').getValue();
         if(typeof endScheduledDate == 'object') {
-            additionalData.lead_end_scheduled = endScheduledDate.format('c');
+            additionalData.end_scheduled = endScheduledDate.format('c');
         } else {
-            additionalData.lead_end_scheduled = null;
+            additionalData.end_scheduled = null;
         }
         
         
@@ -1145,10 +1145,10 @@ Tine.Crm.LeadEditDialog = function() {
           
         var txtfld_leadName = new Ext.form.TextField({
             hideLabel: true,
-            id: 'lead_name',
+            id: 'description_ld',
             //fieldLabel:'Projektname', 
             emptyText: 'enter short name',
-            name:'lead_name',
+            name:'description_ld',
             allowBlank: false,
             selectOnFocus: true,
             anchor:'100%'
@@ -1157,8 +1157,8 @@ Tine.Crm.LeadEditDialog = function() {
  
         var combo_leadstatus = new Ext.form.ComboBox({
                 fieldLabel:'leadstate', 
-                id:'leadstatus',
-                name:'lead_leadstate_id',
+                id:'id',
+                name:'leadstate',
                 store: Tine.Crm.LeadEditDialog.Stores.getLeadStatus(),
                 displayField:'value',
                 valueField:'key',
@@ -1178,7 +1178,7 @@ Tine.Crm.LeadEditDialog = function() {
             }
 
             if (record.data.endslead == '1') {
-                var combo_endDate = Ext.getCmp('lead_end');
+                var combo_endDate = Ext.getCmp('end');
                 combo_endDate.setValue(new Date());
             }
         });
@@ -1186,7 +1186,7 @@ Tine.Crm.LeadEditDialog = function() {
         var combo_leadtyp = new Ext.form.ComboBox({
             fieldLabel:'leadtype', 
             id:'leadtype',
-            name:'lead_leadtype_id',
+            name:'leadtype_id',
             store: Tine.Crm.LeadEditDialog.Stores.getLeadType(),
             mode: 'local',
             displayField:'value',
@@ -1206,8 +1206,8 @@ Tine.Crm.LeadEditDialog = function() {
             autoLoad: true,
             id: 'key',
             fields: [
-                {name: 'key', mapping: 'lead_leadsource_id'},
-                {name: 'value', mapping: 'lead_leadsource'}
+                {name: 'key', mapping: 'leadsource_id'},
+                {name: 'value', mapping: 'leadsource'}
 
             ]
         });     
@@ -1215,7 +1215,7 @@ Tine.Crm.LeadEditDialog = function() {
         var combo_leadsource = new Ext.form.ComboBox({
                 fieldLabel:'leadsource', 
                 id:'leadsource',
-                name:'lead_leadsource_id',
+                name:'leadsource_id',
                 store: st_leadsource,
                 displayField:'value',
                 valueField:'key',
@@ -1234,7 +1234,7 @@ Tine.Crm.LeadEditDialog = function() {
         var combo_probability =  new Ext.form.ComboBox({
             fieldLabel:'probability', 
             id: 'combo_probability',
-            name:'lead_probability',
+            name:'probability',
             store: Tine.Crm.LeadEditDialog.Stores.getProbability(),
             displayField:'value',
             valueField:'key',
@@ -1253,7 +1253,7 @@ Tine.Crm.LeadEditDialog = function() {
         var date_start = new Ext.form.DateField({
             fieldLabel:'start', 
             allowBlank:false,
-            id:'lead_start',             
+            id:'Start',             
             format: 'd.m.Y',
             anchor:'95%'
         });
@@ -1261,7 +1261,7 @@ Tine.Crm.LeadEditDialog = function() {
         
         var date_scheduledEnd = new Ext.form.DateField({
             fieldLabel:'estimated end', 
-            id:'lead_end_scheduled',
+            id:'end_scheduled',
             format: 'd.m.Y',
             anchor:'95%'
         });
@@ -1269,7 +1269,7 @@ Tine.Crm.LeadEditDialog = function() {
         var date_end = new Ext.form.DateField({
             xtype:'datefield',
             fieldLabel:'end', 
-            id:'lead_end',
+            id:'end',
             format: 'd.m.Y',
             anchor:'95%'
         });
@@ -1317,38 +1317,38 @@ Tine.Crm.LeadEditDialog = function() {
   */
   
        if (_leadData.data) {                    
-            var _lead_id = _leadData.data.lead_id;
+            var _id = _leadData.data.id;
        } else {
-            var _lead_id = 'NULL';
+            var _id = 'NULL';
        }
   
         var st_choosenProducts = new Ext.data.JsonStore({
             data: _leadData.data.products,
             autoLoad: true,
-            id: 'lead_id',
+            id: 'id',
             fields: [
-                {name: 'lead_id'},
-                {name: 'lead_product_id'},
-                {name: 'lead_product_desc'},
-                {name: 'lead_product_price'}
+                {name: 'id'},
+                {name: 'product_id'},
+                {name: 'product_desc'},
+                {name: 'product_price'}
             ]
         });
 
 
         st_choosenProducts.on('update', function(store, record, index) {
-          //  if(record.data.lead_id == 'NULL' && record.data.lead_product_id) {
-            if(record.data.lead_product_id) {          
+          //  if(record.data.id == 'NULL' && record.data.product_id) {
+            if(record.data.product_id) {          
                 var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable();
-                var preset_price = st_productsAvailable.getById(record.data.lead_product_id);
-                record.data.lead_product_price = preset_price.data.lead_productsource_price;
+                var preset_price = st_productsAvailable.getById(record.data.product_id);
+                record.data.product_price = preset_price.data.productsource_price;
             }
         });
 
         var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
         
         var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
-                header: "lead_id",
-                dataIndex: 'lead_id',
+                header: "id",
+                dataIndex: 'id',
                 width: 1,
                 hidden: true,
                 sortable: false,
@@ -1356,15 +1356,15 @@ Tine.Crm.LeadEditDialog = function() {
                 } , {
                 header: "product",
                 id: 'cm_product',
-                dataIndex: 'lead_product_id',
+                dataIndex: 'product_id',
                 width: 300,
                 editor: new Ext.form.ComboBox({
                     name: 'product_combo',
                     id: 'product_combo',
-                    hiddenName: 'lead_productsource_id', //lead_product_id',
+                    hiddenName: 'id', //product_id',
                     store: st_productsAvailable, 
                     displayField:'value', 
-                    valueField: 'lead_productsource_id',
+                    valueField: 'id',
                     allowBlank: false, 
                     typeAhead: true,
                     editable: true,
@@ -1388,14 +1388,14 @@ Tine.Crm.LeadEditDialog = function() {
                   }
                 } , { 
                 header: "serialnumber",
-                dataIndex: 'lead_product_desc',
+                dataIndex: 'product_desc',
                 width: 300,
                 editor: new Ext.form.TextField({
                     allowBlank: false
                     })
                 } , {
                 header: "price",
-                dataIndex: 'lead_product_price',
+                dataIndex: 'product_price',
                 width: 150,
                 align: 'right',
 /*                editor: new Ext.form.NumberField({
@@ -1435,11 +1435,11 @@ Tine.Crm.LeadEditDialog = function() {
         };
         
         var product = Ext.data.Record.create([
-           {name: 'lead_id', type: 'int'},
-           {name: 'lead_lead_id', type: 'int'},
-           {name: 'lead_product_id', type: 'int'},
-           {name: 'lead_product_desc', type: 'string'},
-           {name: 'lead_product_price', type: 'float'}
+           {name: 'id', type: 'int'},
+           {name: 'zumleadkey', type: 'int'},
+           {name: 'product_id', type: 'int'},
+           {name: 'product_desc', type: 'string'},
+           {name: 'product_price', type: 'float'}
         ]);
         
         var grid_choosenProducts = new Ext.grid.EditorGridPanel({
@@ -1457,11 +1457,11 @@ Tine.Crm.LeadEditDialog = function() {
                 iconCls: 'actionAdd',
                 handler : function(){
                     var p = new product({
-                        lead_id: 'NULL',
-                        lead_lead_id: _lead_id,
-                        lead_product_id: '',                       
-                        lead_product_desc:'',
-                        lead_product_price: ''
+                        id: 'NULL',
+                        zumleadkey: _id,
+                        product_id: '',                       
+                        product_desc:'',
+                        product_price: ''
                     });
                     grid_choosenProducts.stopEditing();
                     st_choosenProducts.insert(0, p);
@@ -1580,7 +1580,7 @@ Tine.Crm.LeadEditDialog = function() {
                 handler: function(){
                 	popupWindow = new Tine.Tasks.EditPopup({
                         relatedApp: 'crm',
-                        relatedId: _leadData.data.lead_id
+                        relatedId: _leadData.data.id
                 	});
                 	
                 	popupWindow.on('update', function(task) {
@@ -1592,7 +1592,7 @@ Tine.Crm.LeadEditDialog = function() {
                 disabled: true
         });         
 
-       if(_leadData.data.lead_id !== null) {
+       if(_leadData.data.id !== null) {
            _add_task.enable();
        }
       
@@ -1638,7 +1638,7 @@ Tine.Crm.LeadEditDialog = function() {
         
         var folderTrigger = new Tine.widgets.container.selectionComboBox({
             fieldLabel: 'folder (person in charge)',
-            name: 'lead_container',
+            name: 'container',
             itemName: 'Leads',
             appName: 'crm',
             anchor:'95%',
@@ -1677,16 +1677,16 @@ Tine.Crm.LeadEditDialog = function() {
                 {
                     xtype:'textarea',
                     //fieldLabel:'Notizen',
-                    id: 'lead_notes',
+                    id: 'leadnotes',
                     hideLabel: true,
-                    name:'lead_description',
+                    name:'description',
                     height: 120,
                     anchor:'100%',
                     emptyText: 'enter description'
                 }, {
                     layout:'column',
                     height: 140,
-                    id: 'lead_combos',
+                    id: 'leadcombos',
                     anchor:'100%',                        
                     items: [{
                         columnWidth: .33,
@@ -1707,7 +1707,7 @@ Tine.Crm.LeadEditDialog = function() {
                             {
                                 xtype:'numberfield',
                                 fieldLabel:'expected turnover', 
-                                name:'lead_turnover',
+                                name:'turnover',
                                 selectOnFocus: true,
                                 anchor:'95%'
                             },  
@@ -1909,9 +1909,9 @@ Tine.Crm.LeadEditDialog = function() {
              if(Ext.isIE7) {
                  var _offset = 142;
              }
-             var _heightContacts = _dimension.height - Ext.getCmp('lead_name').getSize().height 
-                                                     - Ext.getCmp('lead_notes').getSize().height
-                                                     - Ext.getCmp('lead_combos').getSize().height
+             var _heightContacts = _dimension.height - Ext.getCmp('description_ld').getSize().height 
+                                                     - Ext.getCmp('leadnotes').getSize().height
+                                                     - Ext.getCmp('leadcombos').getSize().height
                                                      - Ext.getCmp('productSummary').getSize().height
                                                      - _offset;
 
@@ -1925,7 +1925,7 @@ Tine.Crm.LeadEditDialog = function() {
          * 
          *********************************/
         var searchContacts = function(_field, _newValue, _oldValue) {
-            var currentContactsTabId = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getId();
+            var currentContactsTabId = Ext.getCmp('crm_editleadListContactsTabPanel').getActiveTab().getId();
             //console.log(currentContactsTabId);
             if(currentContactsTabId == 'crm_gridAccount') {
                 var method = 'Addressbook.getAccounts';
@@ -1934,10 +1934,10 @@ Tine.Crm.LeadEditDialog = function() {
             }
             
             if(_newValue == '') {
-                //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().removeAll();
+                //Ext.getCmp('crm_editleadSearchContactsGrid').getStore().removeAll();
                 Tine.Crm.LeadEditDialog.Stores.getContactsSearch().removeAll();
             } else {
-                //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().load({
+                //Ext.getCmp('crm_editleadSearchContactsGrid').getStore().load({
                 Tine.Crm.LeadEditDialog.Stores.getContactsSearch().load({
                     params: {
                         start: 0,
@@ -1964,18 +1964,18 @@ Tine.Crm.LeadEditDialog = function() {
             Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
         });                
          
-        Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
+        Ext.getCmp('crm_editleadSearchContactsField').on('change', searchContacts);
             
-        Ext.getCmp('crm_editLead_SearchContactsGrid').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
+        Ext.getCmp('crm_editleadSearchContactsGrid').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
             var record = _grid.getStore().getAt(_rowIndex);
-            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
+            var currentContactsStore = Ext.getCmp('crm_editleadListContactsTabPanel').getActiveTab().getStore();
             
             if(currentContactsStore.getById(record.id) == undefined) {
                 //console.log('record ' + record.id + 'not found');
                 currentContactsStore.addSorted(record, record.id);
             }
             
-            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
+            var selectionModel = Ext.getCmp('crm_editleadListContactsTabPanel').getActiveTab().getSelectionModel();
             
             selectionModel.selectRow(currentContactsStore.indexOfId(record.id));
         });
@@ -1995,9 +1995,9 @@ Tine.Crm.LeadEditDialog = function() {
         var activateContactsSearch = function(_panel) {
             setRemoveContactButtonState(_panel.getSelectionModel());
             searchContacts(
-               Ext.getCmp('crm_editLead_SearchContactsField'), 
-                Ext.getCmp('crm_editLead_SearchContactsField').getValue(),
-                Ext.getCmp('crm_editLead_SearchContactsField').getValue()
+               Ext.getCmp('crm_editleadSearchContactsField'), 
+                Ext.getCmp('crm_editleadSearchContactsField').getValue(),
+                Ext.getCmp('crm_editleadSearchContactsField').getValue()
             );
         };
         
@@ -2022,7 +2022,7 @@ Tine.Crm.LeadEditDialog = function() {
             }
         }; 
         
-        Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
+        Ext.getCmp('crm_editleadSearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
         
     };
 
@@ -2039,7 +2039,7 @@ Tine.Crm.LeadEditDialog.Handler = function() {
         removeContact: function(_button, _event) 
         {
             //console.log('remove contact');           
-            var currentContactsTab = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab();
+            var currentContactsTab = Ext.getCmp('crm_editleadListContactsTabPanel').getActiveTab();
             
             var selectedRows = currentContactsTab.getSelectionModel().getSelections();
             var currentContactsStore = currentContactsTab.getStore();
@@ -2059,8 +2059,8 @@ Tine.Crm.LeadEditDialog.Handler = function() {
         
         addContactToList: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().getSelections();
-            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
+            var selectedRows = Ext.getCmp('crm_editleadSearchContactsGrid').getSelectionModel().getSelections();
+            var currentContactsStore = Ext.getCmp('crm_editleadListContactsTabPanel').getActiveTab().getStore();
 
             for (var i = 0; i < selectedRows.length; ++i) {
                 if(currentContactsStore.getById(selectedRows[i].id) === undefined) {
@@ -2069,7 +2069,7 @@ Tine.Crm.LeadEditDialog.Handler = function() {
                 }
             }
             
-            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
+            var selectionModel = Ext.getCmp('crm_editleadListContactsTabPanel').getActiveTab().getSelectionModel();
             
             selectionModel.selectRow(currentContactsStore.indexOfId(selectedRows[0].id));
         },  
@@ -2078,7 +2078,7 @@ Tine.Crm.LeadEditDialog.Handler = function() {
         {
             Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this lead?', function(_button) {
                 if(_button == 'yes') {      
-                    var leadIds;// = Ext.util.JSON.encode([formData.values.lead_id]);
+                    var leadIds;// = Ext.util.JSON.encode([formData.values.id]);
                     
                     Ext.Ajax.request({
                         params: {
@@ -2120,7 +2120,7 @@ Tine.Crm.LeadEditDialog.Elements = function() {
             text: 'add contact to list',
             disabled: true,
             handler: function(_button, _event) {
-                Tine.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
+                Tine.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editleadSearchContactsGrid'));
             },
             iconCls: 'actionAdd'
         }),        
@@ -2208,7 +2208,7 @@ Tine.Crm.LeadEditDialog.Elements = function() {
             var quickSearchField = new Ext.app.SearchField({
             //var quickSearchField = new Ext.form.TriggerField({
             //var quickSearchField = new Ext.form.TwinTriggerField({
-                id: 'crm_editLead_SearchContactsField',
+                id: 'crm_editleadSearchContactsField',
                 width: 250,
                 //autoWidth: true,
                 emptyText: 'enter searchfilter'
@@ -2247,7 +2247,7 @@ Tine.Crm.LeadEditDialog.Elements = function() {
                     items: [
                         {
                             xtype:'grid',
-                            id: 'crm_editLead_SearchContactsGrid',
+                            id: 'crm_editleadSearchContactsGrid',
                             title:'Search',
                             cm: this.columnModelSearchContacts,
                             store: Tine.Crm.LeadEditDialog.Stores.getContactsSearch(),
@@ -2263,7 +2263,7 @@ Tine.Crm.LeadEditDialog.Elements = function() {
                 }, {
                     region: 'center',
                     xtype: 'tabpanel',
-                    id: 'crm_editLead_ListContactsTabPanel',
+                    id: 'crm_editleadListContactsTabPanel',
                     title:'contacts panel',
                     activeTab: 0,
                     tbar: [
@@ -2411,14 +2411,14 @@ Tine.Crm.LeadEditDialog.Stores = function() {
         
         getLeadStatus: function (){
             var store = new Ext.data.JsonStore({
-                data: formData.comboData.leadstates,
+                data: formData.comboData.states,
                 autoLoad: true,         
                 id: 'key',
                 fields: [
-                    {name: 'key', mapping: 'lead_leadstate_id'},
-                    {name: 'value', mapping: 'lead_leadstate'},
-                    {name: 'probability', mapping: 'lead_leadstate_probability'},
-                    {name: 'endslead', mapping: 'lead_leadstate_endslead'}
+                    {name: 'key', mapping: 'id'},
+                    {name: 'value', mapping: 'leadstate'},
+                    {name: 'probability', mapping: 'leadstate_probability'},
+                    {name: 'endslead', mapping: 'leadstate_endslead'}
                 ]
             });
             
@@ -2429,11 +2429,11 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             var store = new Ext.data.JsonStore({
                 data: formData.comboData.productsource,
                 autoLoad: true,
-                id: 'lead_productsource_id',
+                id: 'id',
                 fields: [
-                    {name: 'lead_productsource_id'},
-                    {name: 'value', mapping: 'lead_productsource'},
-                    {name: 'lead_productsource_price'}
+                    {name: 'id'},
+                    {name: 'value', mapping: 'productsource'},
+                    {name: 'price'}
                 ]
             });
 
@@ -2446,8 +2446,8 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                 autoLoad: true,
                 id: 'key',
                 fields: [
-                    {name: 'key', mapping: 'lead_leadtype_id'},
-                    {name: 'value', mapping: 'lead_leadtype'}
+                    {name: 'key', mapping: 'leadtype_id'},
+                    {name: 'value', mapping: 'leadtype'}
     
                 ]
             });     
@@ -2524,36 +2524,36 @@ Tine.Crm.Model = {};
 
 // lead
 Tine.Crm.Model.Lead = Ext.data.Record.create([
-    {name: 'lead_id',            type: 'int'},
-    {name: 'lead_name',          type: 'string'},
-    {name: 'lead_leadstate_id',  type: 'int'},
-    {name: 'lead_leadtype_id',   type: 'int'},
-    {name: 'lead_leadsource_id', type: 'int'},
-    {name: 'lead_container',     type: 'int'},
-    {name: 'lead_modifier',      type: 'int'},
-    {name: 'lead_start',         type: 'date', dateFormat: 'c'},
-    {name: 'lead_modified'},
-    {name: 'lead_description',   type: 'string'},
-    {name: 'lead_end',           type: 'date', dateFormat: 'c'},
-    {name: 'lead_turnover',      type: 'int'},
-    {name: 'lead_probability',   type: 'int'},
-    {name: 'lead_end_scheduled', type: 'date', dateFormat: 'c'},
-    {name: 'lead_lastread'},
-    {name: 'lead_lastreader'},
-    {name: 'lead_leadstate'},
-    {name: 'lead_leadtype'},
-    {name: 'lead_leadsource'},
-    {name: 'lead_partner_linkId'},
-    {name: 'lead_partner'},
-    {name: 'lead_partner_detail'},                
-    {name: 'lead_lead_linkId'},
-    {name: 'lead_customer'},
-    {name: 'lead_lead_detail'}  
+    {name: 'id',            type: 'int'},
+    {name: 'description_ld',          type: 'string'},
+    {name: 'leadstate_id',  type: 'int'},
+    {name: 'leadtype_id',   type: 'int'},
+    {name: 'leadsource_id', type: 'int'},
+    {name: 'container',     type: 'int'},
+    {name: 'leadmodifier',      type: 'int'},
+    {name: 'Start',         type: 'date', dateFormat: 'c'},
+    {name: 'leadmodified'},
+    {name: 'description',   type: 'string'},
+    {name: 'end',           type: 'date', dateFormat: 'c'},
+    {name: 'turnover',      type: 'int'},
+    {name: 'probability',   type: 'int'},
+    {name: 'end_scheduled', type: 'date', dateFormat: 'c'},
+    {name: 'leadlastread'},
+    {name: 'leadlastreader'},
+    {name: 'leadstate'},
+    {name: 'leadtype'},
+    {name: 'leadsource'},
+    {name: 'leadpartner_linkId'},
+    {name: 'leadpartner'},
+    {name: 'leadpartner_detail'},                
+    {name: 'leadlinkId'},
+    {name: 'leadcustomer'},
+    {name: 'leaddetail'}  
 ]);
 // work arround nasty ext date bug
 Tine.Crm.Model.Lead.FixDates = function(lead) {
-    lead.data.lead_start         = lead.data.lead_start         ? Date.parseDate(lead.data.lead_start, 'c')         : lead.data.lead_start;
-    lead.data.lead_end           = lead.data.lead_end           ? Date.parseDate(lead.data.lead_end, 'c')           : lead.data.lead_end;
-    lead.data.lead_end_scheduled = lead.data.lead_end_scheduled ? Date.parseDate(lead.data.lead_end_scheduled, 'c') : lead.data.lead_end_scheduled;
+    lead.data.Start         = lead.data.Start         ? Date.parseDate(lead.data.Start, 'c')         : lead.data.Start;
+    lead.data.end           = lead.data.end           ? Date.parseDate(lead.data.end, 'c')           : lead.data.end;
+    lead.data.end_scheduled = lead.data.end_scheduled ? Date.parseDate(lead.data.end_scheduled, 'c') : lead.data.end_scheduled;
 }
         

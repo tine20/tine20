@@ -159,7 +159,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     }  
 
     /**
-	 * save leadstates
+	 * save states
 	 *
 	 * if $_Id is -1 the options element gets added, otherwise it gets updated
 	 * this function handles insert and updates as well as deleting vanished items
@@ -277,18 +277,18 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */
-   public function saveProducts($products, $lead_id) {	
+   public function saveProducts($products, $id) {	
    
         $_products = Zend_Json::decode($products);
         $_productsData = array();
 
        	if(is_array($_products)) {
     		foreach($_products AS $_product) {
-    			if($_product['lead_id'] == "NULL") {
-    				unset($_product['lead_id']);
+    			if($_product['id'] == "NULL") {
+    				unset($_product['id']);
     			}
-                if($_product['lead_lead_id'] == "-1" || empty($_product['lead_lead_id'])) {
-    				$_product['lead_lead_id'] = $lead_id;
+                if($_product['zumleadkey'] == "-1" || empty($_product['zumleadkey'])) {
+    				$_product['zumleadkey'] = $id;
     
     			}			
                 
@@ -347,24 +347,24 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         // set linked contacts
         $linkedCustomer = Zend_Json::decode($linkedCustomer);
-        Crm_Controller::getInstance()->setLinkedCustomer($savedLead->lead_id, $linkedCustomer);
+        Crm_Controller::getInstance()->setLinkedCustomer($savedLead->id, $linkedCustomer);
 
         $linkedPartner = Zend_Json::decode($linkedPartner);
-        Crm_Controller::getInstance()->setLinkedPartner($savedLead->lead_id, $linkedPartner);
+        Crm_Controller::getInstance()->setLinkedPartner($savedLead->id, $linkedPartner);
 
         $linkedAccount = Zend_Json::decode($linkedAccount);
-        Crm_Controller::getInstance()->setLinkedAccount($savedLead->lead_id, $linkedAccount);
+        Crm_Controller::getInstance()->setLinkedAccount($savedLead->id, $linkedAccount);
 
         // set linked tasks
         $linkedTasks = Zend_Json::decode($linkedTasks);
-        Crm_Controller::getInstance()->setLinkedTasks($savedLead->lead_id, $linkedTasks);
+        Crm_Controller::getInstance()->setLinkedTasks($savedLead->id, $linkedTasks);
         
         
         // products    
 		if(strlen($products) > 2) {	    
-            $this->saveProducts($products, $savedLead->lead_id);
+            $this->saveProducts($products, $savedLead->id);
 		} else {
-            Crm_Controller::getInstance()->deleteProducts($savedLead->lead_id);    
+            Crm_Controller::getInstance()->deleteProducts($savedLead->id);    
         }         
 
         return $savedLead->toArray();  
@@ -427,7 +427,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
  
 
      
-    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
+    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $state, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -439,7 +439,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -453,7 +453,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
         
-     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
+     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $state, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -461,7 +461,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -489,7 +489,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
+    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -497,14 +497,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
+        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $leadstate, $probability, $getClosedLeads);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $state, $probability, $getClosedLeads);
             }
         }
 
@@ -526,7 +526,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
+    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -534,14 +534,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
+        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfOtherPeopleLeads($filter, $leadstate, $probability, $getClosedLeads);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfOtherPeopleLeads($filter, $state, $probability, $getClosedLeads);
             }
         }
 
@@ -563,19 +563,19 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param int $limit
      * @return array
      */
-    public function getAllLeads($filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
+    public function getAllLeads($filter, $start, $sort, $dir, $limit, $state, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)) {
             $result['results']      = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfAllLeads($filter, $leadstate, $probability, $getClosedLeads);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfAllLeads($filter, $state, $probability, $getClosedLeads);
             }
         }
 
@@ -595,13 +595,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $controller = Crm_Controller::getInstance();
         
         foreach($_leads as $id => $lead) {
-            $links = $controller->getLinks($lead['lead_id'], 'addressbook');
+            $links = $controller->getLinks($lead['id'], 'addressbook');
             foreach($links as $link) {
                 switch($link['remark']) {
                     case 'partner':
                         try {
                             $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
-                            $_leads[$id]['lead_partner'][] = $contact->toArray();
+                            $_leads[$id]['leadpartner'][] = $contact->toArray();
                         } catch (Exception $e) {
                             // do nothing
                         }
@@ -609,7 +609,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
                     case 'customer':
                         try {
                             $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
-                            $_leads[$id]['lead_customer'][] = $contact->toArray();
+                            $_leads[$id]['leadcustomer'][] = $contact->toArray();
                         } catch (Exception $e) {
                             // do nothing
                         }

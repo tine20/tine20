@@ -12,10 +12,10 @@
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadState');
 
 Tine.Crm.LeadState.Model = Ext.data.Record.create([
-    {name: 'lead_leadstate_id'},
-    {name: 'lead_leadstate'},
-    {name: 'lead_leadstate_probability'},
-    {name: 'lead_leadstate_endslead', type: 'boolean'}
+    {name: 'id'},
+    {name: 'leadstate'},
+    {name: 'probability'},
+    {name: 'endslead', type: 'boolean'}
 ]);
 
 Tine.Crm.LeadState.getStore = function() {
@@ -25,12 +25,12 @@ Tine.Crm.LeadState.getStore = function() {
 		store = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Crm.getLeadstates',
-                sort: 'lead_leadstate',
+                sort: 'leadstate',
                 dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'lead_leadstate_id',
+            id: 'id',
             fields: Tine.Crm.LeadState.Model,
             remoteSort: false
         });
@@ -43,39 +43,39 @@ Tine.Crm.LeadState.getStore = function() {
 Tine.Crm.LeadState.EditStatesDialog = function() {
     var isXlead = new Ext.ux.grid.CheckColumn({
         header: "X Lead?",
-        dataIndex: 'lead_leadstate_endslead',
+        dataIndex: 'endslead',
         width: 50
     });
     
     var columnModelLeadstate = new Ext.grid.ColumnModel([
         { 
-            id:'lead_leadstate_id', 
-            header: "id", 
-            dataIndex: 'lead_leadstate_id', 
+            id:'id', 
+            header: 'id', 
+            dataIndex: 'id', 
             width: 25, 
             hidden: true 
         },
         { 
-            id:'lead_leadstate', 
-            header: 'entries', 
-            dataIndex: 'lead_leadstate', 
+            id:'leadstate', 
+            header: 'leadstate', 
+            dataIndex: 'leadstate', 
             width: 170, 
             hideable: false, 
             sortable: false, 
             editor: new Ext.form.TextField({allowBlank: false}) 
         },
         { 
-            id:'lead_leadstate_probability', 
+            id:'probability', 
             header: 'probability', 
-            dataIndex: 'lead_leadstate_probability', 
+            dataIndex: 'probability', 
             width: 50, 
             hideable: false, 
             sortable: false, 
             renderer: Ext.util.Format.percentage,
             editor: new Ext.form.ComboBox({
                 name: 'probability',
-                id: 'leadstate_probability',
-                hiddenName: 'lead_leadstate_probability',
+                id: 'probability',
+                hiddenName: 'probability',
                 store:  new Ext.data.SimpleStore({
                     fields: ['key','value'],
                     data: [
@@ -110,10 +110,10 @@ Tine.Crm.LeadState.EditStatesDialog = function() {
 
     var handlerLeadstateAdd = function(){
         var p = new Tine.Crm.LeadState.Model({
-            lead_leadstate_id: null,
-            lead_leadstate: '',
-            lead_leadstate_probability: null,
-            lead_leadstate_endslead: false
+            id: null,
+            leadstate: '',
+            probability: null,
+            endslead: false
         });
         leadstateGridPanel.stopEditing();
         Tine.Crm.LeadState.getStore().insert(0, p);
@@ -157,7 +157,7 @@ Tine.Crm.LeadState.EditStatesDialog = function() {
         store: Tine.Crm.LeadState.getStore(),
         id: 'editLeadstateGrid',
         cm: columnModelLeadstate,
-        autoExpandColumn:'lead_leadstate',
+        autoExpandColumn:'leadstate',
         plugins: isXlead,
         frame:false,
         viewConfig: {

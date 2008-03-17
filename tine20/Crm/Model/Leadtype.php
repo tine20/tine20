@@ -23,7 +23,7 @@ class Crm_Model_Leadtype extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'lead_leadtype_id';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -51,7 +51,7 @@ class Crm_Model_Leadtype extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'lead_leadtype_id' 	  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_leadtype'         => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'id' 	  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'leadtype'         => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
 }

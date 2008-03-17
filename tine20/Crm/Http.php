@@ -123,8 +123,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                  $leadData['tasks'] = array();   
             }
             
-            $folder = Tinebase_Container::getInstance()->getContainerById($lead->lead_container);
-            $leadData['lead_container'] = $folder->toArray();
+            $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
+            $leadData['container'] = $folder->toArray();
             
             $products = $leads->getProductsById($_leadId);
             $leadData['products'] = $products->toArray();
@@ -138,22 +138,22 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             
             $personalFolders = $controller->getPersonalContainer($currentAccount, $currentAccount->accountId, Tinebase_Container::GRANT_READ);
             foreach($personalFolders as $folder) {
-                $leadData['lead_container']     = $folder->toArray();
+                $leadData['container']     = $folder->toArray();
                 break;
             }
             
         }
 
-        $_leadTypes = $leads->getLeadtypes('lead_leadtype','ASC');
+        $_leadTypes = $leads->getLeadtypes('leadtype','ASC');
         $view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
         
-        $_leadStates =  $leads->getLeadStates('lead_leadstate','ASC');
+        $_leadStates =  $leads->getLeadStates('leadstate','ASC');
         $view->formData['comboData']['leadstates'] = $_leadStates->toArray();
         
-        $_leadSources =  $leads->getLeadSources('lead_leadsource','ASC');
+        $_leadSources =  $leads->getLeadSources('leadsource','ASC');
         $view->formData['comboData']['leadsources'] = $_leadSources->toArray();
 
-        $_productSource =  $leads->getProductsAvailable('lead_productsource','ASC');
+        $_productSource =  $leads->getProductsAvailable('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
         $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/Crm.js');

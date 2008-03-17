@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- */
+ */
 
 /**
  * interface for leads class
@@ -59,32 +59,33 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function __construct()
     {
+	         /*
         try {
-            $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
+             $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
         } catch (Zend_Db_Statement_Exception $e) {
-            Crm_Setup_SetupSqlTables::createLeadTable();
-            $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
-        }
+       //     Crm_Setup_SetupSqlTables::createLeadTable()
+            $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'))
+        
 
         try {
             $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
-        } catch (Zend_Db_Statement_Exception $e) {
-            Crm_Setup_SetupSqlTables::createLeadSourceTable();
-            $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
-        }
+         } catch (Zend_Db_Statement_Exception $e) {
+         //   Crm_Setup_SetupSqlTables::createLeadSourceTable()
+            $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'))
+        
         
         try {
             $this->leadTypeTable     = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         } catch (Zend_Db_Statement_Exception $e) {
-            Crm_Setup_SetupSqlTables::createLeadTypeTable();
+         //   Crm_Setup_SetupSqlTables::createLeadTypeTable();
             $this->leadTypeTable     = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
         }
         
         try {
-            $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
-        } catch (Zend_Db_Statement_Exception $e) {
+             $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
+         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
-            Crm_Setup_SetupSqlTables::createLeadStateTable();
+          //  Crm_Setup_SetupSqlTables::createLeadStateTable();
             $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
         }
         
@@ -92,7 +93,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->productSourceTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
-            Crm_Setup_SetupSqlTables::createProductSourceTable();
+          //  Crm_Setup_SetupSqlTables::createProductSourceTable();
             $this->productSourceTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         }
 
@@ -100,12 +101,17 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->productsTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
         } catch (Zend_Db_Statement_Exception $e) {
             // temporary hack, until setup is available
-            Crm_Setup_SetupSqlTables::createProductTable();
+          //  Crm_Setup_SetupSqlTables::createProductTable();
             $this->productsTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
         }
-        
-        
-        $this->linksTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
+		*/
+        $this->leadTable      		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
+        $this->leadSourceTable   	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
+        $this->leadTypeTable     	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+		$this->productSourceTable 	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
+        $this->leadStateTable    	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
+        $this->productsTable   		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
+        $this->linksTable 			= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         
     }
     
@@ -165,7 +171,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where  = array(
-            $this->leadSourceTable->getAdapter()->quoteInto('lead_leadsource_id = ?', $Id),
+            $this->leadSourceTable->getAdapter()->quoteInto('leadsource_id = ?', $Id),
         );
              
         $result = $this->leadSourceTable->delete($where);
@@ -233,7 +239,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }
             $where  = array(
-                $this->leadTypeTable->getAdapter()->quoteInto('lead_leadtype_id = ?', $Id),
+                $this->leadTypeTable->getAdapter()->quoteInto('leadtype_id = ?', $Id),
             );
              
             $result = $this->leadTypeTable->delete($where);
@@ -300,7 +306,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }      
             $where  = array(
-                $this->linksTable->getAdapter()->quoteInto('lead_productsource_id = ?', $Id),
+                $this->linksTable->getAdapter()->quoteInto('leadsource_id = ?', $Id),
             );
              
             $result = $this->productSourceTable->delete($where);
@@ -320,7 +326,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         foreach($leads AS $lead)
         {
-            $_id = $lead['lead_id'];
+            $_id = $lead['id'];
             $_contact = $this->getContactsById($_id);
             $leadContacts[$_id] = $_contact;
         }
@@ -378,7 +384,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	}    
 
 	/**
-    * get leadstate identified by id
+    * get state identified by id
     *
     * @return Crm_Model_Leadstate
     */
@@ -490,7 +496,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }      
             $where  = array(
-                $this->leadStateTable->getAdapter()->quoteInto('lead_leadstate_id = ?', $Id),
+                $this->leadStateTable->getAdapter()->quoteInto('leadstate_id = ?', $Id),
             );
              
             $result = $this->leadStateTable->delete($where);
@@ -516,7 +522,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $where  = array(
-            $this->productsTable->getAdapter()->quoteInto('lead_lead_id = ?', $_id)
+            $this->productsTable->getAdapter()->quoteInto('zumleadkey = ?', $_id)
         );
 
         $result = $this->productsTable->fetchAll($where);
@@ -541,7 +547,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');      
         
         try {          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_lead_id = ' . $id);      
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'zumleadkey = ' . $id);      
         } catch (Exception $e) {
             error_log($e->getMessage());
         }      
@@ -560,14 +566,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function saveProducts(Tinebase_Record_Recordset $_productData)
     {
-        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->lead_container, Tinebase_Container::GRANT_EDIT)) {
+        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->container, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead->product denied');
         }    
     */   
     
         $_daten = $_productData->toArray();
     
-        $lead_id = $_daten[0]['lead_lead_id'];
+        $lead_id = $_daten[0]['zumleadkey'];
 
 
         if(!(int)$lead_id) {
@@ -580,7 +586,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_lead_id = '.$lead_id);
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'zumleadkey = '.$lead_id);
 
             foreach($_daten as $_data) {
                 $db->insert(SQL_TABLE_PREFIX . 'metacrm_product', $_data);                
@@ -600,12 +606,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
          
         $productData = $_productData->toArray();
 
-        if($_productData->lead_id === NULL) {
+        if($_productData->product_id === NULL) {
             $result = $this->productsTable->insert($productData);
-            $_productData->lead_id = $this->productsTable->getAdapter()->lastInsertId();
+            $_productData->product_id = $this->productsTable->getAdapter()->lastInsertId();
         } else {
             $where  = array(
-                $this->productsTable->getAdapter()->quoteInto('lead_id = (?)', $_productData->lead_id),
+                $this->productsTable->getAdapter()->quoteInto('product_id = (?)', $_productData->id),
             );
 
             $result = $this->productsTable->update($productData, $where);
@@ -672,7 +678,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $select = $this->_getLeadSelectObject()
-            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead_id = ?', $id));
+            ->where(Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $id));
 
         //error_log($select->__toString());
        
@@ -688,7 +694,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         $lead = new Crm_Model_Lead($row);
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->lead_container, Tinebase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
             throw new Exception('permission to lead denied');
         }
         
@@ -700,7 +706,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new UnderFlowExecption('lead not found');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($result->lead_container, Tinebase_Container::GRANT_READ)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($result->container, Tinebase_Container::GRANT_READ)) {
             throw new Exception('permission to lead denied');
         }
         
@@ -726,7 +732,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
 
         $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
@@ -753,7 +759,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -775,34 +781,34 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_lead->toArray(), true));
 
-        if(empty($_lead->lead_container)) {
-            throw new UnderflowException('lead_container can not be empty');
+        if(empty($_lead->container)) {
+            throw new UnderflowException('container can not be empty');
         }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->lead_container, Tinebase_Container::GRANT_EDIT)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('write access to lead denied');
         }
 
         $leadArray = $_lead->toArray();
-        unset($leadArray['lead_id']);
+        unset($leadArray['id']);
         
-        if(empty($_lead->lead_id)) {
-            $_lead->lead_id = $this->leadTable->insert($leadArray);
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new lead ' . $_lead->lead_id);
+        if(empty($_lead->id)) {
+            $_lead->id = $this->leadTable->insert($leadArray);
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new lead ' . $_lead->id);
         } else {      
             $where  = array(
-                $this->leadTable->getAdapter()->quoteInto('lead_id = ?', $_lead->lead_id),
+                $this->leadTable->getAdapter()->quoteInto('id = ?', $_lead->id),
             );
 
             $result = $this->leadTable->update($_lead->toArray(), $where);
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' updated lead ' . $_lead->lead_id);
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' updated lead ' . $_lead->id);
         }
 
         return $_lead;
     }
 
     /**
-     * delete lead identified by lead_id
+     * delete lead identified by id
      *
      * @param int $_leads lead ids
      * @return int the number of rows deleted
@@ -816,7 +822,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $oldLeadData = $this->getLeadById($_leadId);
 
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->lead_container, Tinebase_Container::GRANT_DELETE)) {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->container, Tinebase_Container::GRANT_DELETE)) {
             throw new Exception('delete access to CRM denied');
         }
 
@@ -825,8 +831,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $where_lead    = $db->quoteInto('lead_id = ?', $leadId);
-            $where_product = $db->quoteInto('lead_lead_id = ?', $leadId);          
+            $where_lead    = $db->quoteInto('id = ?', $leadId);
+            $where_product = $db->quoteInto('zumleadkey = ?', $leadId);          
             $where_links[] = $db->quoteInto('link_app1 = ?', 'crm');          
             $where_links[] = $db->quoteInto('link_id1 = ?', $leadId);                      
             $where_links[] = $db->quoteInto('link_app2 = ?', 'addressbook');                                  
@@ -845,7 +851,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
        
         $where  = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_id = ?', $leadId),
+            $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),
         );
 
         $result = $this->leadTable->delete($where);
@@ -892,7 +898,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $tinebaseContainer->deleteContainer($_folderId);
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container = ?', (int)$_folderId)
+            $this->leadTable->getAdapter()->quoteInto('container = ?', (int)$_folderId)
         );
         
         $this->leadTable->delete($where);
@@ -935,7 +941,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * create search filter
      *
      * @param string $_filter
-     * @param int $_leadstate
+     * @param int $_state
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return array
@@ -948,27 +954,27 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $search_values = explode(" ", $_filter);
             
             foreach($search_values AS $search_value) {
-                $where[] = Zend_Registry::get('dbAdapter')->quoteInto('(lead_name LIKE ? OR lead_description LIKE ?)', '%' . $search_value . '%');                            
+                $where[] = Zend_Registry::get('dbAdapter')->quoteInto('(description_ld LIKE ? OR description LIKE ?)', '%' . $search_value . '%');                            
             }
         }
         
         if( is_numeric($_leadstate) && $_leadstate > 0 ) {
-            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('lead.lead_leadstate_id = ?', (int)$_leadstate);
+            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('lead.leadstate_id = ?', (int)$_leadstate);
         }
         
         if( is_numeric($_probability) && $_probability > 0 ) {
-            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('lead_probability >= ?', (int)$_probability);
+            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('probability >= ?', (int)$_probability);
         }       
 
         if($_getClosedLeads === FALSE  || $_getClosedLeads == 'false') {
-            $where[] = 'lead_end IS NULL';
+            $where[] = 'end IS NULL';
         }
         
         return $where;
     }
     
     //handle for FOLDER->LEADS functions
-    protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
+    protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
     {
         $where = array_merge($_where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
 
@@ -1040,24 +1046,24 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     protected function _getLeadSelectObject()
     {
         $db = Zend_Registry::get('dbAdapter');
-
-        $selectObject = $db->select()
-            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
-                'lead_id',
-                'lead_name',
-                'lead_leadstate_id',
-                'lead_leadtype_id',
-                'lead_leadsource_id',
-                'lead_container',
-                'lead_start',
-                'lead_description',
-                'lead_end',
-                'lead_turnover',
-                'lead_probability',
-                'lead_end_scheduled')
+		$selectObject = $db->select()
+            ->from(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
+                'id',
+                'description_ld',
+                'leadstate_id',
+                'leadtype_id',
+                'leadsource_id',
+                'container',
+                'start',
+                'description',
+                'end',
+                'turnover',
+                'probability',
+                'end_scheduled')
             )
-            ->join(array('state' => SQL_TABLE_PREFIX . 'metacrm_leadstate'), 
-                    'lead.lead_leadstate_id = state.lead_leadstate_id');
+            ->join(array('leadstate' => SQL_TABLE_PREFIX . 'metacrm_leadstate'),
+				'leadstate_id = leadstate.id')     ;            
+				// 'lead.id = leadstate.id');
 
         return $selectObject;
     }
@@ -1068,7 +1074,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $search_values = explode(" ", $_filter);
             
             foreach($search_values AS $search_value) {
-                $_where[] = $this->leadTable->getAdapter()->quoteInto('(lead_name LIKE ? OR lead_description LIKE ?)', '%' . $search_value . '%');                            
+                $_where[] = $this->leadTable->getAdapter()->quoteInto('(description_ld LIKE ? OR description LIKE ?)', '%' . $search_value . '%');                            
             }
         }
         
@@ -1084,7 +1090,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many leads to display
      * @param unknown_type $_start how many leads to skip
-     * @param int $_leadstate
+     * @param int $_state
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
@@ -1104,14 +1110,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('lead_container IN (?)', $containerIds)
+            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $containerIds)
         );
         $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
     
-/*    public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+/*    public function _getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
@@ -1143,7 +1149,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      *
      * @return int count of all other users leads
      */
-    public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    public function getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
 
@@ -1158,10 +1164,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
         
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_state, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
@@ -1169,7 +1175,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
    
    
-    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
+    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_state = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         // convert to int
         $folderId = (int)$_folderId;
@@ -1182,10 +1188,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container = ?', $folderId)
+            $this->leadTable->getAdapter()->quoteInto('container = ?', $folderId)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1202,7 +1208,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container = ?', $folderId)
+            $this->leadTable->getAdapter()->quoteInto('container = ?', $folderId)
         );
                 
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -1213,7 +1219,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     } 
 
     
-    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE) 
+    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_state = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
         
@@ -1228,10 +1234,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1241,7 +1247,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      *
      * @return int count of all other users leads
      */
-    public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    public function getCountOfSharedLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $allContainer = Tinebase_Container::getInstance()->getSharedContainer('crm');
 
@@ -1256,10 +1262,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
         
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_state, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
@@ -1267,7 +1273,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }        
  
    
-    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads) 
+    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_state, $_probability, $_getClosedLeads)
     {
         $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
         
@@ -1282,10 +1288,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1296,7 +1302,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @return int count of all other users leads
      * 
      */
-    public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
+    public function getCountOfOtherPeopleLeads($_filter, $_state, $_probability, $_getClosedLeads)
     {
         $allContainer = Tinebase_Container::getInstance()->getOtherUsersContainer('crm');
 
@@ -1311,10 +1317,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         $where = array(
-            $this->leadTable->getAdapter()->quoteInto('lead_container IN (?)', $containerIds)
+            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)	
         );
         
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_state, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
