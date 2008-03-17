@@ -70,19 +70,14 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     }
     
     /**
-     * 
-     * groupmembership handling
-     * 
-     */
-
-    /**
      * return the group ids a account is member of
      *
      * @param int $accountId the accountid of a account
      * @todo	get primary group (from account table) as well?
+     * @deprecated 
      * @return array list of group ids
      */
-    public function getGroupMemberships($_accountId)
+    private function getGroupMemberships($_accountId)
     {
         $accountId = (int)$_accountId;
         if($accountId != $_accountId) {
@@ -114,7 +109,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * @deprecated 
      * @return array list of group members account id's
      */
-    public function getGroupMembers($_groupId)
+    private function getGroupMembers($_groupId)
     {
         $groupId = (int)$_groupId;
         if($groupId != $_groupId) {
@@ -195,9 +190,6 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         $select = $this->_getAccountSelectObject()
             ->where(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName);
 
-        //error_log("getAccounts:: " . $select->__toString());
- 		//Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName select stmt: '.$select->__toString() );        
-
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
@@ -235,15 +227,10 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         $select = $this->_getAccountSelectObject()
             ->where(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId);
-
-        //error_log("getAccounts:: " . $select->__toString());
 
         $stmt = $select->query();
 
@@ -307,10 +294,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function setStatus($_accountId, $_status)
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         switch($_status) {
             case 'enabled':
@@ -343,38 +327,6 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     }
     
     /**
-     * set the password for given account
-     *
-     * @param int $_accountId
-     * @param string $_password
-     * @deprecated moved to authentication class
-     * @return void
-     */
-    private function setPassword($_accountId, $_password)
-    {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-        
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        
-        $accountData['password'] = md5($_password);
-        $accountData['last_password_change'] = Zend_Date::now()->getTimestamp();
-        
-        $where = array(
-            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
-        );
-        
-        $result = $accountsTable->update($accountData, $where);
-        if ($result != 1) {
-            throw new Exception('Unable to update password');
-        }
-        
-        return $result;
-    }
-    
-    /**
      * update the lastlogin time of account
      *
      * @param int $_accountId
@@ -383,15 +335,12 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['last_login_from'] = $_ipAddress;
-        $accountData['last_login'] = Zend_Date::now()->getIso();
+        $accountData['last_login']      = Zend_Date::now()->getIso();
         
         $where = array(
             $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
@@ -403,40 +352,36 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     }
     
     /**
-     * save a account
+     * updates an account
      * 
-     * this function creates or updates an account 
+     * this function updates an account 
      *
      * @param Tinebase_Account_Model_FullAccount $_account
      * @return Tinebase_Account_Model_FullAccount
      */
-    public function saveAccount(Tinebase_Account_Model_FullAccount $_account)
+    public function updateAccount(Tinebase_Account_Model_FullAccount $_account)
     {
         if(!$_account->isValid()) {
             throw(new Exception('invalid account object'));
         }
+
+        $accountId = Tinebase_Account::convertAccountIdToInt($_account);
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
-            'expires_at'   => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
-            'account_primary_group' => '-4'
+            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getTimestamp() : NULL),
+            'primary_group'     => $_account->accountPrimaryGroup
         );
-        
-/*        if(!empty($_account->accountPassword)) {
-            $accountData['password']            = new Zend_Db_Expr("MD5('" . $_account->accountPassword . "')");
-            $accountData['last_password_change'] = Zend_Date::now()->getTimestamp();
-        }*/
         
         $contactData = array(
             'n_family'      => $_account->accountLastName,
             'n_given'       => $_account->accountFirstName,
             'n_fn'          => $_account->accountFullName,
             'n_fileas'      => $_account->accountDisplayName,
-            'email' => $_account->accountEmailAddress
-            #'id' 8
+            'email'         => $_account->accountEmailAddress
         );
 
         try {
@@ -445,29 +390,16 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
             
-            if(!empty($_account->accountId)) {
-                $accountId = $_account->accountId;
-                $where = array(
-                    Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId)
-                );
-                
-                $accountsTable->update($accountData, $where);
-                $contactsTable->update($contactData, $where);
-            } else {
-                // add new account
-                $accountData['account_type']    = 'u';
-                $accountId = $accountsTable->insert($accountData);
-                
-                if($accountId == 0) {
-                    throw new Exception("returned accountId is 0");
-                }
-                
-                $contactData['account_id'] = $accountId;
-                $contactData['tid'] = 'n';
-                $contactData['owner'] = 1;
-                
-                $contactsTable->insert($contactData);
-            }
+            
+            $where = array(
+                Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId)
+            );
+            $accountsTable->update($accountData, $where);
+            
+            $where = array(
+                Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId)
+            );
+            $contactsTable->update($contactData, $where);
             
             Zend_Registry::get('dbAdapter')->commit();
             
@@ -485,6 +417,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * this function adds an account 
      *
      * @param Tinebase_Account_Model_FullAccount $_account
+     * @todo fix $contactData['owner'] = 1;
      * @return Tinebase_Account_Model_FullAccount
      */
     public function addAccount(Tinebase_Account_Model_FullAccount $_account)
@@ -510,7 +443,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             'n_given'       => $_account->accountFirstName,
             'n_fn'          => $_account->accountFullName,
             'n_fileas'      => $_account->accountDisplayName,
-            'email' => $_account->accountEmailAddress
+            'email'         => $_account->accountEmailAddress
         );
 
         try {
@@ -555,22 +488,22 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function deleteAccount($_accountId)
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         
-        $where  = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId),
-        );
-        
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
             
+            $where  = array(
+                Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
+            );
             $contactsTable->delete($where);
+
+            $where  = array(
+                Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId),
+            );
             $accountsTable->delete($where);
             
             Zend_Registry::get('dbAdapter')->commit();
