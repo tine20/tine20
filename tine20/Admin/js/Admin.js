@@ -1329,8 +1329,8 @@ Tine.Admin.Accounts.EditDialog = function() {
                             {
                                 fields: ['key','status'],
                                 data: [
-                                    ['A','enabled'],
-                                    ['D','disabled']
+                                    ['enabled','enabled'],
+                                    ['disabled','disabled']
                                 ]
                             }
                         )

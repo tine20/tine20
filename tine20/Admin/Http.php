@@ -26,7 +26,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
             $account = Zend_Json::encode($account->toArray());
         } else {
-            $account = Zend_Json::encode(array('accountStatus' => 'A'));
+            $account = Zend_Json::encode(array('accountStatus' => 'enabled'));
         }
         
         $currentAccount = Zend_Registry::get('currentAccount');
