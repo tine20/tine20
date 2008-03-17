@@ -224,7 +224,7 @@ class Tinebase_Controller
         if(isset($this->_config->database)) {
             $dbConfig = $this->_config->database;
             
-            define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'egw_');
+            define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
