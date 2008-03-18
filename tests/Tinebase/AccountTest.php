@@ -239,9 +239,9 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testSetBlocked()
     {
-    	$date = new Zend_Date();
+    	$date = Zend_Date::now();
     	$date->add ( '12:00:00' );
-        Tinebase_Account::getInstance()->setBlocked($this->objects['initialAccount'], $date );
+        Tinebase_Account::getInstance()->setBlockedDate($this->objects['initialAccount'], $date );
     }
  
     /**
