@@ -111,7 +111,12 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     
     public function testAddAccount()
     {
-        echo "testAddAccount\n";
+        Tinebase_Account_Sql::getInstance()->addAccount($this->objects['TestAccount']);
+    }
+    
+    public function testDeleteAccount()
+    {
+        Tinebase_Account_Sql::getInstance()->deleteAccount($this->objects['TestAccount']);
     }
 }		
 	
