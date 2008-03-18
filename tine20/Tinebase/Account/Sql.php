@@ -126,18 +126,14 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
 	   	// throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
 	   	// because of the wrong type that is not catched by the block below)
-	   	//-- is it ok to throw this exception here? 
-    	if ( !is_array($row) ) {
-			$e = new Tinebase_Record_Exception_NotDefined('row is empty');
+    	if ( $row === NULL ) {
             Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
-            throw $e;    	
+            throw ( new Tinebase_Record_Exception_NotDefined('row is empty') );    	
     	}        
 
         try {
             $account = new $_accountClass();
-            //Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName try block 1 / row: '. print_r( $row) );
             $account->setFromArray($row);
-            //Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName try block 2' );
         } catch (Exception $e) {
         	$validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
@@ -231,17 +227,13 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             case 'disabled':
                 $accountData['status'] = $_status;
                 break;
-
-            case 'unlimited':
-                $accountData['expires_at'] = NULL;
-                break;
                 
             case 'expired':
                 $accountData['expires_at'] = Zend_Date::getTimestamp();
                 break;
             
             default:
-                throw new InvalidArgumentException('$_status can be only enabled, disabled, unlimited or expired');
+                throw new InvalidArgumentException('$_status can be only enabled, disabled or expired');
                 break;
         }
         
