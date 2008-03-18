@@ -179,6 +179,27 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     }
     
     /**
+     * create a new group
+     *
+     * @param string $_groupName
+     * @return unknown
+     */
+    public function updateGroup(Tinebase_Group_Model_Group $_group)
+    {
+        $groupId = Tinebase_Group::convertGroupIdToInt($_group);
+        
+        $data = array(
+            'name'          => $_group->name,
+            'description'   => $_group->description
+        );
+        $where = Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $groupId);
+        
+        $this->groupsTable->update($data, $where);
+        
+        return $this->getGroupById($groupId);
+    }
+    
+    /**
      * delete group
      *
      * @param int|Tinebase_Group_Model_Group $_groupId
@@ -251,7 +272,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $row = $this->groupsTable->fetchRow($select);
 
         if($row === NULL) {
-            Tinebase_Record_Exception_NotDefined('group not found');
+            new Tinebase_Record_Exception_NotDefined('group not found');
         }
         
         $result = new Tinebase_Group_Model_Group($row->toArray());
@@ -276,7 +297,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $row = $this->groupsTable->fetchRow($select);
         
         if($row === NULL) {
-            Tinebase_Record_Exception_NotDefined('group not found');
+            new Tinebase_Record_Exception_NotDefined('group not found');
         }
 
         $result = new Tinebase_Group_Model_Group($row->toArray());
