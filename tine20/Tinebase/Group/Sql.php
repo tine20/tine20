@@ -186,7 +186,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function deleteGroup($_groupId)
     {
-        $groupdId = Tinebase_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
 
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
