@@ -163,6 +163,10 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function addGroup(Tinebase_Group_Model_Group $_group)
     {
+        if(!$_group->isValid()) {
+            throw(new Exception('invalid group object'));
+        }
+        
         $data = $_group->toArray();
         
         if(empty($data['id'])) {
