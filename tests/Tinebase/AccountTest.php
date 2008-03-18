@@ -215,6 +215,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     /**
      * try to update the logintimestamp
      *
+     * @todo	check if set correctly
      */
     public function testSetLoginTime()
     {
@@ -224,12 +225,25 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     /**
      * try to set the expirydate
      *
+     * @todo	check if set correctly
      */
     public function testSetExpiryDate()
     {
         Tinebase_Account::getInstance()->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
     }
-    
+
+   /**
+     * try to set the blocked until date
+     *
+     * @todo	check if set correctly
+     */
+    public function testSetBlocked()
+    {
+    	$date = new Zend_Date();
+    	$date->add ( '12:00:00' );
+        Tinebase_Account::getInstance()->setBlocked($this->objects['initialAccount'], $date );
+    }
+ 
     /**
      * try to delete an accout
      *
