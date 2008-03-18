@@ -79,6 +79,16 @@ class Tinebase_Account
         return $result;
     }
     
+    /**
+     * get list of accounts
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_FullAccount
+     */
     public function getFullAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
     {
         $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Tinebase_Account_Model_FullAccount');
@@ -86,6 +96,12 @@ class Tinebase_Account
         return $result;
     }
     
+    /**
+     * get account by id
+     *
+     * @param 	string 		$_loginName
+     * @return 	Tinebase_Account_Model_Account full account
+     */
     public function getAccountByLoginName($_loginName)
     {     
         $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account');
@@ -93,6 +109,12 @@ class Tinebase_Account
         return $result;
     }
 
+    /**
+     * get full account by id
+     *
+     * @param 	string 		$_loginName
+     * @return 	Tinebase_Account_Model_FullAccount full account
+     */
     public function getFullAccountByLoginName($_loginName)
     {
         $result = $this->_backend->getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_FullAccount');
@@ -100,6 +122,12 @@ class Tinebase_Account
         return $result;
     }
     
+    /**
+     * get account by id
+     *
+     * @param 	int 		$_accountId
+     * @return 	Tinebase_Account_Model_Account full account
+     */
     public function getAccountById($_accountId)
     {
         $result = $this->_backend->getAccountById($_accountId, 'Tinebase_Account_Model_Account');
@@ -107,6 +135,12 @@ class Tinebase_Account
         return $result;
     }
 
+    /**
+     * get full account by id
+     *
+     * @param 	int 		$_accountId
+     * @return 	Tinebase_Account_Model_FullAccount full account
+     */
     public function getFullAccountById($_accountId)
     {
         $result = $this->_backend->getAccountById($_accountId, 'Tinebase_Account_Model_FullAccount');
@@ -154,20 +188,11 @@ class Tinebase_Account
     }
     
     /**
-     * sets the password
+     * set login time for account (with ip address)
      *
-     * @param unknown_type $_accountId
-     * @param unknown_type $_password
-     * @deprecated moved to authentication class
-     * @return unknown
+     * @param int $_accountId
+     * @param string $_ipAddress
      */
-    private function setPassword($_accountId, $_password)
-    {
-        $result = $this->_backend->setPassword($_accountId, $_password);
-      
-        return $result;
-    }
-    
     public function setLoginTime($_accountId, $_ipAddress) 
     {
         $result = $this->_backend->setLoginTime($_accountId, $_ipAddress);
@@ -201,6 +226,11 @@ class Tinebase_Account
         return $result;
     }
     
+    /**
+     * delete an account
+     *
+     * @param int $_accountId
+     */
     public function deleteAccount($_accountId)
     {
         $result = $this->_backend->deleteAccount($_accountId);
@@ -208,6 +238,11 @@ class Tinebase_Account
         return $result;
     }
 
+    /**
+     * delete multiple accounts
+     *
+     * @param array $_accountIds
+     */
     public function deleteAccounts(array $_accountIds)
     {
         foreach($_accountIds as $accountId) {
