@@ -120,6 +120,10 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
 	
     }
     
+    /**
+     * try to add an account
+     *
+     */
     public function testAddAccount()
     {
         $account = Tinebase_Account_Sql::getInstance()->addAccount($this->objects['initialAccount']);
@@ -127,6 +131,10 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, $account->accountId);
     }
 
+    /**
+     * try to update an account
+     *
+     */
     public function testUpdateAccount()
     {
         $account = Tinebase_Account_Sql::getInstance()->updateAccount($this->objects['updatedAccount']);
@@ -135,6 +143,10 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('disabled', $account->accountStatus);
     }
     
+    /**
+     * try to enable an account
+     *
+     */
     public function testSetStatusEnabled()
     {
         Tinebase_Account_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'enabled');
@@ -144,6 +156,10 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('enabled', $account->accountStatus);
     }
     
+    /**
+     * try to disable an account
+     *
+     */
     public function testSetStatusDisabled()
     {
         Tinebase_Account_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'disabled');
@@ -153,19 +169,35 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('disabled', $account->accountStatus);
     }
     
+    /**
+     * try to update the logintimestamp
+     *
+     */
     public function testSetLoginTime()
     {
         Tinebase_Account_Sql::getInstance()->setLoginTime($this->objects['initialAccount'], '127.0.0.1');
     }
     
+    /**
+     * try to set the expirydate
+     *
+     */
     public function testSetExpiryDate()
     {
         Tinebase_Account_Sql::getInstance()->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
     }
     
+    /**
+     * try to delete an accout
+     *
+     */
     public function testDeleteAccount()
     {
+        $this->setExpectedException('Exception');
+
         Tinebase_Account_Sql::getInstance()->deleteAccount($this->objects['initialAccount']);
+
+        $account = Tinebase_Account_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
     }
 }		
 	
