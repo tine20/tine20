@@ -261,7 +261,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      * @param string $_name
      * @return Tinebase_Group_Model_Group
      */
-    public function getGroupByName($_groupId)
+    public function getGroupById($_groupId)
     {   
         $groupdId = Tinebase_Group::convertGroupIdToInt($_groupId);     
         
