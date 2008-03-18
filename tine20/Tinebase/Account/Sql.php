@@ -409,7 +409,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         }
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-
+        
         $accountData = array(
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
@@ -477,6 +477,8 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
+        $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+        
         
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
@@ -486,6 +488,11 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             );
             $contactsTable->delete($where);
 
+            $where  = array(
+                Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
+            );
+            $groupMembersTable->delete($where);
+            
             $where  = array(
                 Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId),
             );
