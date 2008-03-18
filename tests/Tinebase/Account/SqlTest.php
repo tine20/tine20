@@ -137,7 +137,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccounts()
     {
-        $accounts = Tinebase_Account_Sql::getInstance()->getAccounts('phpunit');
+        $accounts = Tinebase_Account_Sql::getInstance()->getAccounts('phpunit', 'status');
         
         $this->assertEquals(1, count($accounts));
     }
