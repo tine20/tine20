@@ -63,12 +63,12 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $this->objects['updatedAccount'] = new Tinebase_Account_Model_FullAccount(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit-updated',
-            'accountStatus'         => 'enabled',
+            'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
             'accountPrimaryGroup'   => 2,
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountLastName'       => 'Tine 2.0 Updated',
+            'accountFirstName'      => 'PHPUnit Updated',
+            'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
         
         return;
@@ -132,6 +132,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $account = Tinebase_Account_Sql::getInstance()->updateAccount($this->objects['updatedAccount']);
         
         $this->assertEquals('tine20phpunit-updated', $account->accountLoginName);
+        $this->assertEquals('disabled', $account->accountStatus);
     }
     
     public function testSetStatus()
