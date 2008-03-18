@@ -16,7 +16,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Account_AccountTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_Account_SqlTest::main');
 }
 
 /**
@@ -225,6 +225,6 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordTest::main') {
-    Tinebase_Record_AbstractRecordTest::main();
+if (PHPUnit_MAIN_METHOD == 'Tinebase_Account_SqlTest::main') {
+    Tinebase_Account_SqlTest::main();
 }
