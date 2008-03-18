@@ -106,6 +106,11 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
         $accounts = Tinebase_Account::getInstance()->getAccounts('phpunit', 'accountStatus');
         
         $this->assertEquals(1, count($accounts));
+
+        // test with sort dir
+        $accounts = Tinebase_Account::getInstance()->getFullAccounts('phpunit', 'accountStatus', 'DESC');
+        
+        $this->assertEquals(1, count($accounts));
     }
 
     /**
@@ -117,6 +122,11 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
         $accounts = Tinebase_Account::getInstance()->getFullAccounts('phpunit', 'accountStatus');
         
         $this->assertEquals(1, count($accounts));
+
+        // test with sort dir
+        $accounts = Tinebase_Account::getInstance()->getFullAccounts('phpunit', 'accountStatus', 'ASC');
+        
+        $this->assertEquals(1, count($accounts));
     }
  
     /**
@@ -125,7 +135,19 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccountByLoginName()
     {
-        $account = Tinebase_Account::getInstance()->getAccountByLoginName('tine20phpunit', 'Tinebase_Account_Model_FullAccount');
+        $account = Tinebase_Account::getInstance()->getAccountByLoginName('tine20phpunit');
+        
+        // Tinebase_Account_Model_Account has no accountLoginName
+        $this->assertEquals('10', $account->accountId);
+    }
+    
+	/**
+     * try to get the full account with the loginName tine20phpunit
+     *
+     */
+    public function testGetFullAccountByLoginName()
+    {
+        $account = Tinebase_Account::getInstance()->getFullAccountByLoginName('tine20phpunit');
         
         $this->assertEquals('tine20phpunit', $account->accountLoginName);
     }
