@@ -269,7 +269,29 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
         return $result;
 	}
+
+    /**
+     * sets blocked until date 
+     *
+     * @param 	int 		$_accountId
+     * @param 	Zend_Date 	$_blockedUntilDate
+    */
+    public function setBlockedDate($_accountId, Zend_Date $_blockedUntilDate)
+    {
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
+        $accountData['blocked_until'] = $_blockedUntilDate->getIso();
+        
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+        );
+        
+        $result = $accountsTable->update($accountData, $where);
+        
+        return $result;
+	}	
     /**
      * update the lastlogin time of account
      *

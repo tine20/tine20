@@ -126,7 +126,7 @@ class Tinebase_Account
      * get account by id
      *
      * @param 	int 		$_accountId
-     * @return 	Tinebase_Account_Model_Account full account
+     * @return 	Tinebase_Account_Model_Account account
      */
     public function getAccountById($_accountId)
     {
@@ -178,13 +178,13 @@ class Tinebase_Account
      * blocks the account (calls backend class with the same name)
      *
      * @param 	int $_accountId
-     * @todo 	make it work!
+     * @param 	Zend_Date 	$_blockedUntilDate
     */
-	public function setBlocked($_accountId /* more params ? */)
+	public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
-        /*$result = $this->_backend->setBlocked($_accountId);
+        $result = $this->_backend->setBlockedDate($_accountId, $_blockedUntilDate);
         
-        return $result;*/
+        return $result;
     }
     
     /**
