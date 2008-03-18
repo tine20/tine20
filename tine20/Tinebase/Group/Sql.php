@@ -236,4 +236,43 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         return $result;
     }
     
+    /**
+     * get group by name
+     *
+     * @param string $_name
+     * @return Tinebase_Group_Model_Group
+     */
+    public function getGroupByName($_name)
+    {        
+        $select = $this->groupsTable->select();
+        
+        $select->where('name = ?', $_name);
+        
+        $row = $this->groupsTable->fetch($select);
+
+        $result = new Tinebase_Group_Model_Group($row->toArray());
+        
+        return $result;
+    }
+    
+    /**
+     * get group by id
+     *
+     * @param string $_name
+     * @return Tinebase_Group_Model_Group
+     */
+    public function getGroupByName($_groupId)
+    {   
+        $groupdId = Tinebase_Group::convertGroupIdToInt($_groupId);     
+        
+        $select = $this->groupsTable->select();
+        
+        $select->where('id = ?', $groupdId);
+        
+        $row = $this->groupsTable->fetch($select);
+
+        $result = new Tinebase_Group_Model_Group($row->toArray());
+        
+        return $result;
+    }
 }
