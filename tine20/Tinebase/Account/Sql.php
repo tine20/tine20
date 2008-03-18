@@ -126,9 +126,8 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         
 	   	// throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
 	   	// because of the wrong type that is not catched by the block below)
-    	if ( $row === NULL ) {
-            Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
-            throw ( new Tinebase_Record_Exception_NotDefined('row is empty') );    	
+    	if ( $row === false ) {
+             throw new Exception('account not found');
     	}        
 
         try {
