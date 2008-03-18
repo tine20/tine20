@@ -130,6 +130,11 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         Tinebase_Account_Sql::getInstance()->setLoginTime($this->objects['TestAccount'], '127.0.0.1');
     }
     
+    public function testSetExpiryDate()
+    {
+        Tinebase_Account_Sql::getInstance()->setExpiryDate($this->objects['TestAccount'], Zend_Date::now());
+    }
+    
     public function testDeleteAccount()
     {
         Tinebase_Account_Sql::getInstance()->deleteAccount($this->objects['TestAccount']);
