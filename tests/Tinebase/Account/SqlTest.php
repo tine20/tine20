@@ -50,7 +50,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objects['initialAccount'] = new Tinebase_Account_Model_FullAccount(array(
-            'accountId'             => 10,
+            'accountId'             => 100,
             'accountLoginName'      => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
@@ -61,7 +61,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         )); 
         
         $this->objects['updatedAccount'] = new Tinebase_Account_Model_FullAccount(array(
-            'accountId'             => 10,
+            'accountId'             => 100,
             'accountLoginName'      => 'tine20phpunit-updated',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
@@ -128,7 +128,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     {
         $account = Tinebase_Account_Sql::getInstance()->addAccount($this->objects['initialAccount']);
         
-        $this->assertEquals(10, $account->accountId);
+        $this->assertEquals($this->objects['initialAccount']['accountId'], $account->accountId);
     }
     
     /**
@@ -150,7 +150,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     {
         $account = Tinebase_Account_Sql::getInstance()->getAccountByLoginName('tine20phpunit', 'Tinebase_Account_Model_FullAccount');
         
-        $this->assertEquals('tine20phpunit', $account->accountLoginName);
+        $this->assertEquals($this->objects['initialAccount']['accountLoginName'], $account->accountLoginName);
     }
 
     
@@ -162,7 +162,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     {
         $account = Tinebase_Account_Sql::getInstance()->updateAccount($this->objects['updatedAccount']);
         
-        $this->assertEquals('tine20phpunit-updated', $account->accountLoginName);
+        $this->assertEquals($this->objects['updatedAccount']['accountLoginName'], $account->accountLoginName);
         $this->assertEquals('disabled', $account->accountStatus);
     }
     
