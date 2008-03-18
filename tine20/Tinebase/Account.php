@@ -175,7 +175,7 @@ class Tinebase_Account
     }
 
     /**
-     * blocks the account (calls backend class with the same name)
+     * blocks/unblocks the account (calls backend class with the same name)
      *
      * @param 	int $_accountId
      * @param 	Zend_Date 	$_blockedUntilDate

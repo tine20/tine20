@@ -251,13 +251,17 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * sets/unsets expiry date 
      *
      * @param 	int 		$_accountId
-     * @param 	Zend_Date 	$_expiryDate
+     * @param 	Zend_Date 	$_expiryDate set to NULL to disable expirydate
     */
-    public function setExpiryDate($_accountId, Zend_Date $_expiryDate)
+    public function setExpiryDate($_accountId, $_expiryDate)
     {
         $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
-        $accountData['expires_at'] = $_expiryDate->getIso();
+        if($_blockedUntilDate instanceof Zend_Date) {
+            $accountData['expires_at'] = $_expiryDate->getIso();
+        } else {
+            $accountData['expires_at'] = NULL;
+        }
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
@@ -274,13 +278,17 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * sets blocked until date 
      *
      * @param 	int 		$_accountId
-     * @param 	Zend_Date 	$_blockedUntilDate
+     * @param 	Zend_Date 	$_blockedUntilDate set to NULL to disable blockedDate
     */
-    public function setBlockedDate($_accountId, Zend_Date $_blockedUntilDate)
+    public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
         $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
-        $accountData['blocked_until'] = $_blockedUntilDate->getIso();
+        if($_blockedUntilDate instanceof Zend_Date) {
+            $accountData['blocked_until'] = $_blockedUntilDate->getIso();
+        } else {
+            $accountData['blocked_until'] = NULL;
+        }
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
