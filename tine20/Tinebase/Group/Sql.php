@@ -250,6 +250,10 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         
         $row = $this->groupsTable->fetchRow($select);
 
+        if($row === NULL) {
+            Tinebase_Record_Exception_NotDefined('group not found');
+        }
+        
         $result = new Tinebase_Group_Model_Group($row->toArray());
         
         return $result;
@@ -270,6 +274,10 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $select->where('id = ?', $groupdId);
         
         $row = $this->groupsTable->fetchRow($select);
+        
+        if($row === NULL) {
+            Tinebase_Record_Exception_NotDefined('group not found');
+        }
 
         $result = new Tinebase_Group_Model_Group($row->toArray());
         
