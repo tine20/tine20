@@ -383,7 +383,7 @@ Tine.Addressbook.ContactEditDialog = {
                 Ext.Ajax.request({
                     params: {
                         method: 'Addressbook.saveContact', 
-                        contactData: Ext.util.JSON.encode(Tine.Addressbook.ContactEditDialog.contactRecord.data),
+                        contactData: Ext.util.JSON.encode(Tine.Addressbook.ContactEditDialog.contactRecord.data)
                     },
                     success: function(_result, _request) {
                     	if(window.opener.Tine.Addressbook) {

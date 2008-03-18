@@ -671,7 +671,7 @@ Tine.Tasks.EditDialog = function(task) {
                     fieldLabel: 'Folder',
                     name: 'container',
                     itemName: 'Tasks',
-                    appName: 'Tasks',
+                    appName: 'Tasks'
                 })
             ]
         }]

@@ -795,7 +795,7 @@ Tine.Crm.Main = function(){
                     enableToggle: true,
                     id: 'crmShowDetailsButton',
                     iconCls: 'showDetailsAction',
-                    handler: handlerToggleDetails,
+                    handler: handlerToggleDetails
                 }),                    
                 ' ',
                 new Ext.Button({
@@ -806,7 +806,7 @@ Tine.Crm.Main = function(){
                     handler: function(toggle) {                        
                         var dataStore = Ext.getCmp('gridCrm').getStore();
                         dataStore.reload();
-                    },                    
+                    }                    
                 }),
                 'Search:  ', ' ',                
                 filterComboLeadstate,
@@ -1644,7 +1644,7 @@ Tine.Crm.LeadEditDialog = function() {
             name: 'container',
             itemName: 'Leads',
             appName: 'crm',
-            anchor:'95%',
+            anchor:'95%'
         });
      
         var tabPanelOverview = {
