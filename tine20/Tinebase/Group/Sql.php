@@ -235,7 +235,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         
         $rows = $this->groupsTable->fetchAll($select);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group', $rows);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group', $rows->toArray());
         
         return $result;
     }
