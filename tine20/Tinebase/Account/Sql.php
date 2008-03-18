@@ -257,7 +257,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     {
         $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
-        if($_blockedUntilDate instanceof Zend_Date) {
+        if($_expiryDate instanceof Zend_Date) {
             $accountData['expires_at'] = $_expiryDate->getIso();
         } else {
             $accountData['expires_at'] = NULL;
