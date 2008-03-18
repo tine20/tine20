@@ -96,7 +96,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         if($_accountClass == 'Tinebase_Account_Model_Account') {
             $select->where('status = ?', 'enabled');
         }
-        error_log("getAccounts:: " . $select->__toString());
+        //error_log("getAccounts:: " . $select->__toString());
 
         $stmt = $select->query();
 
