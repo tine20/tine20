@@ -155,6 +155,16 @@ class Tinebase_Group
         return $result;
     }
     
+    public function getGroupById($_groupId)
+    {
+        
+    }
+    
+    public function getGroupByName($_groupName)
+    {
+        
+    }
+    
     /**
      * converts a int, string or Tinebase_Group_Model_Group to a groupid
      *

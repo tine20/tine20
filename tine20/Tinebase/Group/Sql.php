@@ -77,7 +77,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMemberships($_accountId)
     {
-        $accountId = $this->getAccountId($_accountId);
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
         $memberships = array();
         
@@ -115,7 +115,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     }
 
     /**
-     * add a new groupmember to the group
+     * add a new groupmember to a group
      *
      * @param int $_groupId
      * @param int $_accountId
@@ -123,8 +123,8 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function addGroupMember($_groupId, $_accountId)
     {
-        $groupId = $this->getGroupId($_groupId);
-        $accountId = $this->getAccountId($_accountId);
+        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
 
         $data = array(
             'group_id'      => $groupId,
@@ -137,41 +137,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
             // account is already member of this group
         }
     }
-    
-    /**
-     * get the accountid from different data types
-     *
-     * @param int|Tinebase_Account_Model_Account $_accountId
-     * @return unknown
-     */
-    private function getAccountId($_accountId)
-    {
-        if($_accountId instanceof Tinebase_Account_Model_Account) {
-            $accountId = $_accountId->accountId;
-        } else {
-            $accountId = (int) $_accountId;
-        }
         
-        return $accountId;
-    }
-
-    /**
-     * get the groupid from different data types
-     *
-     * @param int|Tinebase_Group_Model_Group $_groupId
-     * @return unknown
-     */
-    private function getGroupId($_groupId)
-    {
-        if($_groupId instanceof Tinebase_Group_Model_Group) {
-            $groupId = $_groupId->id;
-        } else {
-            $groupId = (int) $_groupId;
-        }
-        
-        return $groupId;
-    }
-    
     /**
      * remove one groupmember from the group
      *
@@ -213,12 +179,33 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     }
     
     /**
-     * remove group
+     * delete group
      *
-     * @param int $_groupId
-     * @return unknown
+     * @param int|Tinebase_Group_Model_Group $_groupId
+     * @return void
      */
     public function deleteGroup($_groupId)
     {
+        $groupdId = Tinebase_Group::convertGroupIdToInt($_groupId);
+
+        try {
+            Zend_Registry::get('dbAdapter')->beginTransaction();
+
+            $where = array(
+                'group_id' => $groupId,
+            );
+            $this->groupMembersTable->delete($where);
+            
+            $where = array(
+                'id' => $groupId,
+            );
+            $this->groupsTable->delete($where);
+            
+            Zend_Registry::get('dbAdapter')->commit();
+        } catch (Exception $e) {
+            Zend_Registry::get('dbAdapter')->rollBack();
+            
+            throw($e);
+        }
     }
 }
