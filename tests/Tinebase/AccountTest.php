@@ -107,7 +107,18 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, count($accounts));
     }
-    
+
+    /**
+     * try to get all full accounts containing phpunit in there name
+     *
+     */
+    public function testGetFullAccounts()
+    {
+        $accounts = Tinebase_Account::getInstance()->getFullAccounts('phpunit', 'accountStatus');
+        
+        $this->assertEquals(1, count($accounts));
+    }
+ 
     /**
      * try to get the account with the loginName tine20phpunit
      *
