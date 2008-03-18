@@ -152,6 +152,27 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('tine20phpunit', $account->accountLoginName);
     }
 
+    /**
+     * try to get the account with the id 10
+     *
+     */
+    public function testGetAccountById()
+    {
+        $account = Tinebase_Account::getInstance()->getAccountById(10);
+        
+        $this->assertEquals('10', $account->accountId);
+    }
+
+    /**
+     * try to get the full account with the id 10
+     *
+     */
+    public function testGetFullAccountById()
+    {
+        $account = Tinebase_Account::getInstance()->getFullAccountById(10);
+        
+        $this->assertEquals('10', $account->accountId);
+    }
     
     /**
      * try to update an account
@@ -173,7 +194,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Account::getInstance()->setStatus($this->objects['initialAccount'], 'enabled');
         
-        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        $account = Tinebase_Account::getInstance()->getFullAccountById($this->objects['initialAccount']);
         
         $this->assertEquals('enabled', $account->accountStatus);
     }
@@ -186,7 +207,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Account::getInstance()->setStatus($this->objects['initialAccount'], 'disabled');
 
-        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        $account = Tinebase_Account::getInstance()->getFullAccountById($this->objects['initialAccount']);
         
         $this->assertEquals('disabled', $account->accountStatus);
     }
