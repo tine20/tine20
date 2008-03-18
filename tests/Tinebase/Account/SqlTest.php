@@ -208,6 +208,23 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     public function testSetExpiryDate()
     {
         Tinebase_Account_Sql::getInstance()->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
+        
+        $account = Tinebase_Account_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        
+        $this->assertType('Zend_Date', $account->accountExpires);
+    }
+    
+    /**
+     * try to unset the expirydate
+     *
+     */
+    public function testUnsetExpiryDate()
+    {
+        Tinebase_Account_Sql::getInstance()->setExpiryDate($this->objects['initialAccount'], NULL);
+        
+        $account = Tinebase_Account_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        
+        $this->assertEquals(NULL, $account->accountExpires);
     }
     
     /**
