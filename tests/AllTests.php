@@ -25,6 +25,7 @@ class AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
         $suite->addTestSuite('Tinebase_AllTests');
+        $suite->addTest(Tinebase_Account_AllTests::suite());
         //  $suite->addTestSuite('Crm_ControllerTest');
         //  $suite->addTest(Asterisk_AllTests::suite());
         //  $suite->addTest(Admin_AllTests::suite());
@@ -37,4 +38,3 @@ class AllTests
 if (PHPUnit_MAIN_METHOD == 'AllTests::main') {
     AllTests::main();
 }
-?>
