@@ -208,4 +208,36 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
             throw($e);
         }
     }
+    
+    /**
+     * get list of groups
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     */
+    public function getGroups($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    {        
+        $select = $this->groupsTable->select();
+        
+        if($_filter !== NULL) {
+            $select->where('`name` LIKE ?', '%' . $_filter . '%');
+        }
+        if($_sort !== NULL) {
+            $select->order("$_sort $_dir");
+        }
+        if($_start !== NULL) {
+            $select->limit($_limit, $_start);
+        }
+        
+        $rows = $this->groupsTable->fetchAll($select);
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group', $rows);
+        
+        return $result;
+    }
+    
 }
