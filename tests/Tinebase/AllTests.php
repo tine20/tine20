@@ -31,7 +31,6 @@ class Tinebase_AllTests
         
         //$suite->addTestSuite('Tinebase_Record_AbstractRecordTest');
         //$suite->addTestSuite('Tinebase_Record_ContainerTest');
-        $suite->addTestSuite('Tinebase_Account_SqlTest');
         return $suite;
     }
 }
