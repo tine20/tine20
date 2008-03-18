@@ -72,7 +72,7 @@ class Tinebase_Account
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
      */
-    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
+    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
         $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Account_Model_Account');
         
@@ -89,7 +89,7 @@ class Tinebase_Account
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_FullAccount
      */
-    public function getFullAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL)
+    public function getFullAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
         $result = $this->_backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, $_accountClass = 'Tinebase_Account_Model_FullAccount');
         
