@@ -148,7 +148,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccountByLoginName()
     {
-        $account = Tinebase_Account_Sql::getInstance()->getAccountByLoginName('tine20phpunit');
+        $account = Tinebase_Account_Sql::getInstance()->getAccountByLoginName('tine20phpunit', 'Tinebase_Account_Model_FullAccount');
         
         $this->assertEquals('tine20phpunit', $account->accountLoginName);
     }
