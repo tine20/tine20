@@ -191,14 +191,10 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
 
-            $where = array(
-                'group_id' => $groupId,
-            );
+            $where = Zend_Registry::get('dbAdapter')->quoteInto('group_id = ?', $groupId);
             $this->groupMembersTable->delete($where);
             
-            $where = array(
-                'id' => $groupId,
-            );
+            $where = Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $groupId);
             $this->groupsTable->delete($where);
             
             Zend_Registry::get('dbAdapter')->commit();
