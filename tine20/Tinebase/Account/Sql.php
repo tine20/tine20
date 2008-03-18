@@ -70,35 +70,6 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     }
     
     /**
-     * return the group ids a account is member of
-     *
-     * @param int $accountId the accountid of a account
-     * @todo	get primary group (from account table) as well?
-     * @deprecated 
-     * @return array list of group ids
-     */
-    private function getGroupMemberships($_accountId)
-    {
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
-        
-        $membershipTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
-        
-        $groupMemberShips = array();
-        
-        $where = array(
-            $membershipTable->getAdapter()->quoteInto('account_id = ?', $_accountId)
-        );
-        
-        $rowSet = $membershipTable->fetchAll($where);
-        
-        foreach($rowSet as $row) {
-            $groupMemberShips[] = $row->group_id;
-        }
-        
-        return $groupMemberShips;
-    }
-
-    /**
      * get list of accounts
      *
      * @param string $_filter
