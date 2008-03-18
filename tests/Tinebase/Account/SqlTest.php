@@ -130,6 +130,17 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(10, $account->accountId);
     }
+    
+    /**
+     * try to get all accounts cotaining phpunit in there name
+     *
+     */
+    public function testGetAccounts()
+    {
+        $accounts = Tinebase_Account_Sql::getInstance()->getAccounts('phpunit');
+        
+        $this->assertEquals(1, count($accounts));
+    }
 
     /**
      * try to update an account
