@@ -97,7 +97,7 @@ class Tinebase_Account
     }
     
     /**
-     * get account by id
+     * get account by login name
      *
      * @param 	string 		$_loginName
      * @return 	Tinebase_Account_Model_Account full account
@@ -110,7 +110,7 @@ class Tinebase_Account
     }
 
     /**
-     * get full account by id
+     * get full account by login name
      *
      * @param 	string 		$_loginName
      * @return 	Tinebase_Account_Model_FullAccount full account
