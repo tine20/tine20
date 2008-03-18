@@ -291,11 +291,11 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * @param 	int 		$_accountId
      * @param 	Zend_Date 	$_expiryDate
     */
-    public function setExpiryDate($_accountId, $_expiryDate)
+    public function setExpiryDate($_accountId, Zend_Date $_expiryDate)
     {
         $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
         
-        $accountData['expires_at'] = $_expiryDate;
+        $accountData['expires_at'] = $_expiryDate->getIso();
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
