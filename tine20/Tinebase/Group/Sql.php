@@ -248,7 +248,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         
         $select->where('name = ?', $_name);
         
-        $row = $this->groupsTable->fetch($select);
+        $row = $this->groupsTable->fetchRow($select);
 
         $result = new Tinebase_Group_Model_Group($row->toArray());
         
@@ -269,7 +269,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         
         $select->where('id = ?', $groupdId);
         
-        $row = $this->groupsTable->fetch($select);
+        $row = $this->groupsTable->fetchRow($select);
 
         $result = new Tinebase_Group_Model_Group($row->toArray());
         
