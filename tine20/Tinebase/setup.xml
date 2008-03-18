@@ -850,5 +850,93 @@
                 </index>
             </declaration>
         </table>
+		
+		<table>
+			<name>links</name>
+			<version>0.0.1</version>
+			<declaration>
+				<field>
+					<name>link_	id</name>
+					<type>integer</type>
+					<autoincrement>true</autoincrement>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>link_app1</name>
+					<type>text</type>
+					<length>25</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>link_app2</name>
+					<type>text</type>
+					<length>25</length>
+					<notnull>true</notnull>
+				</field>
+
+				<field>
+					<name>link_id1</name>
+					<type>text</type>
+					<length>50</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>link_id2</name>
+					<type>text</type>
+					<length>50</length>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>link_lastmod</name>
+					<type>integer</type>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>link_owner</name>
+					<type>integer</type>
+					<notnull>true</notnull>
+				</field>
+				<field>
+					<name>link_remark</name>
+					<type>text</type>
+					<length>100</length>
+				</field>
+				<index>
+					<name>egw_links_app1_id1_lastmod</name>
+					<field>
+						<name>link_app1</name>
+					</field>
+					<field>
+						<name>link_id1</name>
+					</field>
+					<field>
+						<name>link_lastmod</name>
+					</field>
+				</index>
+				<index>
+					<name>egw_links_app2_id2_lastmod</name>
+					<field>
+						<name>link_app2</name>
+					</field>
+					<field>
+						<name>link_id2</name>
+					</field>
+					<field>
+						<name>link_lastmod</name>
+					</field>
+				</index>
+				<index>
+					<name>primary</name>
+					<primary>true</primary>
+					<unique>true</unique>
+					<field>
+						<name>link_id</name>
+					</field>
+				</index>
+			</declaration>
+		</table>
+		<table>
+		
+		
     </tables>
 </application>
