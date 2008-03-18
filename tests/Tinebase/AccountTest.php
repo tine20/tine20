@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
- * @subpackage  Record
+ * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -49,54 +49,30 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objects['initialGroup'] = new Tinebase_Group_Model_Group(array(
-            'id'            => 10,
-            'name'          => 'tine20phpunit',
-            'description'   => 'initial group'
+       $this->objects['initialAccount'] = new Tinebase_Account_Model_FullAccount(array(
+            'accountId'             => 10,
+            'accountLoginName'      => 'tine20phpunit',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => 2,
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['updatedGroup'] = new Tinebase_Group_Model_Group(array(
-            'id'            => 10,
-            'name'          => 'tine20phpunit updated',
-            'description'   => 'updated group'
+        $this->objects['updatedAccount'] = new Tinebase_Account_Model_FullAccount(array(
+            'accountId'             => 10,
+            'accountLoginName'      => 'tine20phpunit-updated',
+            'accountStatus'         => 'disabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => 2,
+            'accountLastName'       => 'Tine 2.0 Updated',
+            'accountFirstName'      => 'PHPUnit Updated',
+            'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
-        
+    	
         return;
         
-		$this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
-		$this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
-		
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','3');
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
-		
-		$this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
-		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Record_Exception_Validation', array('test_2' => 'string'), );
-		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
-		
-    	$dummy = array(
-					'test_id'=>2, 
-					'test_2'=>'',
-					'date_single' => $date->getIso(), 
-					'date_multiple'=>'');
-  	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
-  	  	
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__set'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['test__isset'][] = array('test_id');
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__isset'][] = array('string');
-  	  	
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__setException'][] = array( 'UnexpectedValueException', 'test_100',);
-		$this->expectFailure['TestRecord']['test__getException'][] = array( 'UnexpectedValueException', 'test_100',);
-		
-  	  	
-  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Record_Exception_NotAllowed', 'test_2',);
     }
 
     /**
@@ -110,73 +86,107 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
 	
     }
     
-    /**
-     * try to add a group
+     /**
+     * try to add an account
      *
      */
-    public function testAddGroup()
+    public function testAddAccount()
     {
-        $group = Tinebase_Group_Sql::getInstance()->addGroup($this->objects['initialGroup']);
+        $account = Tinebase_Account::getInstance()->addAccount($this->objects['initialAccount']);
         
-        $this->assertEquals($this->objects['initialGroup']->id, $group->id);
+        $this->assertEquals(10, $account->accountId);
     }
     
     /**
-     * try to get all groups containing phpunit in their name
+     * try to get all accounts containing phpunit in there name
      *
      */
-    public function testGetGroups()
+    public function testGetAccounts()
     {
-        $groups = Tinebase_Group_Sql::getInstance()->getGroups('phpunit');
+        $accounts = Tinebase_Account::getInstance()->getAccounts('phpunit', 'accountStatus');
         
-        $this->assertEquals(1, count($groups));
+        $this->assertEquals(1, count($accounts));
     }
     
     /**
-     * try to get the group with the name tine20phpunit
+     * try to get the account with the loginName tine20phpunit
      *
      */
-    public function testGetGroupByName()
+    public function testGetAccountByLoginName()
     {
-        $group = Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit');
+        $account = Tinebase_Account::getInstance()->getAccountByLoginName('tine20phpunit', 'Tinebase_Account_Model_FullAccount');
         
-        $this->assertEquals($this->objects['initialGroup']->name, $group->name);
+        $this->assertEquals('tine20phpunit', $account->accountLoginName);
     }
-    
-    /**
-     * try to get a group by
-     *
-     */
-    public function testGetGroupById()
-    {
-        $group = Tinebase_Group_Sql::getInstance()->getGroupById($this->objects['initialGroup']->id);
-        
-        $this->assertEquals($this->objects['initialGroup']->id, $group->id);
-    }
-        
-    /**
-     * try to update a group
-     *
-     */
-    public function testUpdateGroup()
-    {
-        $group = Tinebase_Group_Sql::getInstance()->updateGroup($this->objects['updatedGroup']);
-        
-        $this->assertEquals($this->objects['updatedGroup']->name, $group->name);
-        $this->assertEquals($this->objects['updatedGroup']->description, $group->description);
-    }
-    
-    /**
-     * try to delete a group
-     *
-     */
-    public function testDeleteGroup()
-    {
-        Tinebase_Group_Sql::getInstance()->deleteGroup($this->objects['initialGroup']);
 
+    
+    /**
+     * try to update an account
+     *
+     */
+    public function testUpdateAccount()
+    {
+        $account = Tinebase_Account::getInstance()->updateAccount($this->objects['updatedAccount']);
+        
+        $this->assertEquals('tine20phpunit-updated', $account->accountLoginName);
+        $this->assertEquals('disabled', $account->accountStatus);
+    }
+    
+    /**
+     * try to enable an account
+     *
+     */
+    public function testSetStatusEnabled()
+    {
+        Tinebase_Account::getInstance()->setStatus($this->objects['initialAccount'], 'enabled');
+        
+        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        
+        $this->assertEquals('enabled', $account->accountStatus);
+    }
+    
+    /**
+     * try to disable an account
+     *
+     */
+    public function testSetStatusDisabled()
+    {
+        Tinebase_Account::getInstance()->setStatus($this->objects['initialAccount'], 'disabled');
+
+        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        
+        $this->assertEquals('disabled', $account->accountStatus);
+    }
+    
+    /**
+     * try to update the logintimestamp
+     *
+     */
+    public function testSetLoginTime()
+    {
+        Tinebase_Account::getInstance()->setLoginTime($this->objects['initialAccount'], '127.0.0.1');
+    }
+    
+    /**
+     * try to set the expirydate
+     *
+     */
+    public function testSetExpiryDate()
+    {
+        Tinebase_Account::getInstance()->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
+    }
+    
+    /**
+     * try to delete an accout
+     *
+     */
+    public function testDeleteAccount()
+    {
         $this->setExpectedException('Exception');
 
-        $account = Tinebase_Group_Sql::getInstance()->getGroupById($this->objects['initialGroup']);
+        Tinebase_Account::getInstance()->deleteAccount($this->objects['initialAccount']);
+
+        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
     }
 }		
 	
