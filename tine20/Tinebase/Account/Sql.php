@@ -109,7 +109,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
      * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
      */
-    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = NULL, $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
+    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
     {        
         $select = $this->_getAccountSelectObject()
             ->limit($_limit, $_start);
