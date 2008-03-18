@@ -135,10 +135,22 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('disabled', $account->accountStatus);
     }
     
-    public function testSetStatus()
+    public function testSetStatusEnabled()
+    {
+        Tinebase_Account_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'enabled');
+        
+        $account = Tinebase_Account_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        
+        $this->assertEquals('enabled', $account->accountStatus);
+    }
+    
+    public function testSetStatusDisabled()
     {
         Tinebase_Account_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'disabled');
-        Tinebase_Account_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'enabled');
+
+        $account = Tinebase_Account_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+        
+        $this->assertEquals('disabled', $account->accountStatus);
     }
     
     public function testSetLoginTime()
