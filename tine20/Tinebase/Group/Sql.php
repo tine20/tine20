@@ -272,7 +272,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $row = $this->groupsTable->fetchRow($select);
 
         if($row === NULL) {
-            new Tinebase_Record_Exception_NotDefined('group not found');
+            throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
         
         $result = new Tinebase_Group_Model_Group($row->toArray());
@@ -297,7 +297,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $row = $this->groupsTable->fetchRow($select);
         
         if($row === NULL) {
-            new Tinebase_Record_Exception_NotDefined('group not found');
+            throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
 
         $result = new Tinebase_Group_Model_Group($row->toArray());
