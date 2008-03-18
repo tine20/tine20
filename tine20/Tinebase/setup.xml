@@ -856,7 +856,7 @@
 			<version>0.0.1</version>
 			<declaration>
 				<field>
-					<name>link_	id</name>
+					<name>link_id</name>
 					<type>integer</type>
 					<autoincrement>true</autoincrement>
 					<notnull>true</notnull>
@@ -926,7 +926,7 @@
 					</field>
 				</index>
 				<index>
-					<name>primary</name>
+					<name>link_id</name>
 					<primary>true</primary>
 					<unique>true</unique>
 					<field>
@@ -935,8 +935,5 @@
 				</index>
 			</declaration>
 		</table>
-		<table>
-		
-		
     </tables>
 </application>
