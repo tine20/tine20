@@ -176,7 +176,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Exception');
 
-        $account = Tinebase_Group_Sql::getInstance()->getGroupById($this->objects['initialGroup']);
+        $group = Tinebase_Group_Sql::getInstance()->getGroupById($this->objects['initialGroup']);
     }
 }		
 	
