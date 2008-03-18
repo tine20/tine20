@@ -132,7 +132,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get all accounts cotaining phpunit in there name
+     * try to get all accounts containing phpunit in there name
      *
      */
     public function testGetAccounts()
@@ -141,7 +141,19 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, count($accounts));
     }
+    
+    /**
+     * try to get the account with the loginName tine20phpunit
+     *
+     */
+    public function testGetAccountByLoginName()
+    {
+        $account = Tinebase_Account_Sql::getInstance()->getAccountByLoginName('tine20phpunit');
+        
+        $this->assertEquals('tine20phpunit', $account->accountLoginName);
+    }
 
+    
     /**
      * try to update an account
      *
