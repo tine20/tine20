@@ -57,7 +57,7 @@ Tine.Crm.LeadState.EditStatesDialog = function() {
         },
         { 
             id:'leadstate', 
-            header: 'leadstate', 
+            header: 'entries', 
             dataIndex: 'leadstate', 
             width: 170, 
             hideable: false, 

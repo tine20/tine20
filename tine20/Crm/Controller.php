@@ -333,10 +333,10 @@ class Crm_Controller extends Tinebase_Container_Abstract
         $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container);
         
-        if(is_a($_lead->Start, 'Zend_Date')) {
-            $view->Start = $_lead->Start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
+        if(is_a($_lead->start, 'Zend_Date')) {
+            $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
-            $view->Start = '-';
+            $view->start = '-';
         }
         
         if(is_a($_lead->end, 'Zend_Date')) {

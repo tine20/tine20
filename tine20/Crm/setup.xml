@@ -21,7 +21,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>id</name>
+                    <name>leadstate_id</name>
                     <type>integer</type>
                     <length>11</length>
                     <unsigned>true</unsigned>
@@ -157,7 +157,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <field>
-                    <name>state</name>
+                    <name>leadstate</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
@@ -413,7 +413,7 @@
                 <value>1</value>
             </field>
             <field>
-                <name>state</name>
+                <name>leadstate</name>
                 <value>open</value>
             </field>
             <field>
@@ -430,7 +430,7 @@
                 <value>2</value>
             </field>
             <field>
-                <name>state</name>
+                <name>leadstate</name>
                 <value>contacted</value>
             </field>
             <field>
@@ -447,7 +447,7 @@
                 <value>3</value>
             </field>
             <field>
-                <name>state</name>
+                <name>leadstate</name>
                 <value>waiting for feedback</value>
             </field>
             <field>
@@ -464,7 +464,7 @@
                 <value>4</value>
             </field>
             <field>
-                <name>state</name>
+                <name>leadstate</name>
                 <value>quote sent</value>
             </field>
             <field>
@@ -481,7 +481,7 @@
                 <value>5</value>
             </field>
             <field>
-                <name>state</name>
+                <name>leadstate</name>
                 <value>accepted</value>
             </field>
             <field>
@@ -502,7 +502,7 @@
                 <value>6</value>
             </field>
             <field>
-                <name>state</name>
+                <name>leadstate</name>
                 <value>lost</value>
             </field>
             <field>

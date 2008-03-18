@@ -427,7 +427,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
  
 
      
-    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $state, $probability, $getClosedLeads)
+    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -439,7 +439,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)) {
+        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -453,7 +453,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
         
-     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $state, $probability, $getClosedLeads)
+     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -461,7 +461,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)) {
+        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -489,7 +489,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)
+    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -497,14 +497,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
                 
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads);
+        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $state, $probability, $getClosedLeads);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $leadstate, $probability, $getClosedLeads);
             }
         }
 
@@ -526,7 +526,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)
+    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -534,14 +534,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads);
+        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfOtherPeopleLeads($filter, $state, $probability, $getClosedLeads);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfOtherPeopleLeads($filter, $leadstate, $probability, $getClosedLeads);
             }
         }
 
@@ -563,19 +563,19 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param int $limit
      * @return array
      */
-    public function getAllLeads($filter, $start, $sort, $dir, $limit, $state, $probability, $getClosedLeads)
+    public function getAllLeads($filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $state, $probability, $getClosedLeads)) {
+        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
             $result['results']      = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfAllLeads($filter, $state, $probability, $getClosedLeads);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfAllLeads($filter, $leadstate, $probability, $getClosedLeads);
             }
         }
 

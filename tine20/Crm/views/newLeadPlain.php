@@ -20,7 +20,7 @@
 <?php echo $this->lang_type ?>: <?php echo $this->leadType->leadtype. "\n" ?>
 <?php echo $this->lang_source ?>: <?php echo $this->leadSource->leadsource . "\n" ?>
 
-<?php echo $this->lang_start ?>: <?php echo $this->Start . "\n" ?>
+<?php echo $this->lang_start ?>: <?php echo $this->start . "\n" ?>
 <?php echo $this->lang_scheduledEnd ?>: <?php echo $this->ScheduledEnd . "\n" ?>
 <?php echo $this->lang_end ?>: <?php echo $this->leadEnd . "\n" ?>
 

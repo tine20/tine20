@@ -31,7 +31,7 @@
   </tr>
   <tr>
     <td><?php echo $this->lang_start ?></td>
-    <td><?php echo $this->Start ?></td>
+    <td><?php echo $this->start ?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_scheduledEnd ?></td>

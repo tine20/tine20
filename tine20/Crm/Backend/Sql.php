@@ -111,7 +111,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 		$this->productSourceTable 	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
         $this->leadStateTable    	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
         $this->productsTable   		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
-        $this->linksTable 			= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
+        $this->linksTable 			= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
         
     }
     
@@ -388,11 +388,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     *
     * @return Crm_Model_Leadstate
     */
-    public function getLeadState($_stateId)
+    public function getLeadState($_leadstateId)
     {   
-        $stateId = (int)$_stateId;
-        if($stateId != $_stateId) {
-            throw new InvalidArgumentException('$_stateId must be integer');
+        $stateId = (int)$_leadstateId;
+        if($stateId != $_leadstateId) {
+            throw new InvalidArgumentException('$_leadstateId must be integer');
         }
         $rowSet = $this->leadStateTable->find($stateId);
         
@@ -678,9 +678,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $select = $this->_getLeadSelectObject()
-            ->where(Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $id));
+            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
 
-        //error_log($select->__toString());
+      // echo $select->__toString();
        
         $stmt = $select->query();
 
@@ -941,7 +941,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * create search filter
      *
      * @param string $_filter
-     * @param int $_state
+     * @param int $_leadstate
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return array
@@ -963,18 +963,17 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
         
         if( is_numeric($_probability) && $_probability > 0 ) {
-            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('probability >= ?', (int)$_probability);
+            $where[] = Zend_Registry::get('dbAdapter')->quoteInto('lead.probability >= ?', (int)$_probability);
         }       
 
         if($_getClosedLeads === FALSE  || $_getClosedLeads == 'false') {
             $where[] = 'end IS NULL';
         }
-        
         return $where;
     }
     
     //handle for FOLDER->LEADS functions
-    protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
+    protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
         $where = array_merge($_where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
 
@@ -987,7 +986,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
          foreach($where as $whereStatement) {
               $select->where($whereStatement);
          }               
-        //error_log($select->__toString());
+       // $select->__toString();
        
         $stmt = $db->query($select);
 
@@ -1045,9 +1044,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     protected function _getLeadSelectObject()
     {
+		
         $db = Zend_Registry::get('dbAdapter');
 		$selectObject = $db->select()
-            ->from(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
+            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
                 'id',
                 'description_ld',
                 'leadstate_id',
@@ -1062,9 +1062,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                 'end_scheduled')
             )
             ->join(array('leadstate' => SQL_TABLE_PREFIX . 'metacrm_leadstate'),
-				'leadstate_id = leadstate.id')     ;            
+				'lead.leadstate_id = leadstate.id')     ;            
 				// 'lead.id = leadstate.id');
-
+				
+		//echo $selectObject->__toString();		
+				
         return $selectObject;
     }
 
@@ -1090,7 +1092,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many leads to display
      * @param unknown_type $_start how many leads to skip
-     * @param int $_state
+     * @param int $_leadstate
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
@@ -1117,7 +1119,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }
     
-/*    public function _getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads)
+/*    public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
         $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
@@ -1149,7 +1151,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      *
      * @return int count of all other users leads
      */
-    public function getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads)
+    public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
 
@@ -1167,7 +1169,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
         
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_state, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
@@ -1175,7 +1177,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
    
    
-    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_state = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
+    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         // convert to int
         $folderId = (int)$_folderId;
@@ -1191,7 +1193,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('container = ?', $folderId)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1219,7 +1221,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     } 
 
     
-    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_state = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
+    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
         
@@ -1237,7 +1239,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1247,7 +1249,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      *
      * @return int count of all other users leads
      */
-    public function getCountOfSharedLeads($_filter, $_state, $_probability, $_getClosedLeads)
+    public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
         $allContainer = Tinebase_Container::getInstance()->getSharedContainer('crm');
 
@@ -1265,7 +1267,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
         
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_state, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
@@ -1273,7 +1275,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }        
  
    
-    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_state, $_probability, $_getClosedLeads)
+    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
     {
         $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
         
@@ -1291,7 +1293,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
         );
 
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
     }
@@ -1302,7 +1304,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @return int count of all other users leads
      * 
      */
-    public function getCountOfOtherPeopleLeads($_filter, $_state, $_probability, $_getClosedLeads)
+    public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
         $allContainer = Tinebase_Container::getInstance()->getOtherUsersContainer('crm');
 
@@ -1320,7 +1322,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)	
         );
         
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_state, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 

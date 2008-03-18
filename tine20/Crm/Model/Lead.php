@@ -59,7 +59,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'container'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'Start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -82,7 +82,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'Start',
+        'start',
         'end',
         'end_scheduled'
     );
