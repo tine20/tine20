@@ -101,6 +101,20 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMembers($_groupId)
     {
+        $groupId = Tinebase_Account::convertGroupIdToInt($_groupId);
+        
+        $members = array();
+        
+        $select = $this->groupMembersTable->select();
+        $select->where('group_id = ?', $groupId);
+        
+        $rows = $this->groupMembersTable->fetchAll($select);
+        
+        foreach($rows as $member) {
+            $members[] = $members->account_id;
+        }
+
+        return $members;
     }
     
     /**
@@ -112,6 +126,15 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
+    	// remove old members
+        $where = Zend_Registry::get('dbAdapter')->quoteInto('group_id = ?', $_groupId);
+        $this->groupMembersTable->delete($where);
+    	
+    	// add new members
+    	foreach ( $_groupMembers as $accountId ) {
+    		$this->addGroupMember($_groupId, $accountId);
+    	}
+    	
     }
 
     /**
