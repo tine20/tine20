@@ -198,12 +198,12 @@ Tine.Addressbook.Main = {
             { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
             { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true },
             { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150, hidden: false },
-            { resizable: true, id: 'contact_bday', header: 'Birthday', dataIndex: 'contact_bday', hidden: true },
+            { resizable: true, id: 'bday', header: 'Birthday', dataIndex: 'bday', hidden: true },
             { resizable: true, id: 'org_name', header: 'Organisation', dataIndex: 'org_name', width: 200 },
             { resizable: true, id: 'org_unit', header: 'Unit', dataIndex: 'org_unit' , hidden: true },
-            { resizable: true, id: 'contact_title', header: 'Title', dataIndex: 'contact_title', hidden: true },
-            { resizable: true, id: 'contact_role', header: 'Role', dataIndex: 'contact_role', hidden: true },
-            { resizable: true, id: 'contact_room', header: 'Room', dataIndex: 'contact_room', hidden: true },
+            { resizable: true, id: 'title', header: 'Title', dataIndex: 'title', hidden: true },
+            { resizable: true, id: 'role', header: 'Role', dataIndex: 'role', hidden: true },
+            { resizable: true, id: 'room', header: 'Room', dataIndex: 'room', hidden: true },
             { resizable: true, id: 'adr_one_street', header: 'Street', dataIndex: 'adr_one_street', hidden: true },
             { resizable: true, id: 'adr_one_locality', header: 'Locality', dataIndex: 'adr_one_locality', width: 150, hidden: false },
             { resizable: true, id: 'adr_one_region', header: 'Region', dataIndex: 'adr_one_region', hidden: true },
@@ -222,12 +222,12 @@ Tine.Addressbook.Main = {
             { resizable: true, id: 'tel_home', header: 'Phone (private)', dataIndex: 'tel_home', hidden: true },
             { resizable: true, id: 'tel_fax_home', header: 'Fax (private)', dataIndex: 'tel_fax_home', hidden: true },
             { resizable: true, id: 'tel_cell_private', header: 'Cellphone (private)', dataIndex: 'tel_cell_private', hidden: true },
-            { resizable: true, id: 'contact_email_home', header: 'eMail (private)', dataIndex: 'contact_email_home', hidden: true },
-            { resizable: true, id: 'contact_url', header: 'URL', dataIndex: 'contact_url', hidden: true },
-            { resizable: true, id: 'contact_url_home', header: 'URL (private)', dataIndex: 'contact_url_home', hidden: true },
-            { resizable: true, id: 'contact_note', header: 'Note', dataIndex: 'contact_note', hidden: true },
-            { resizable: true, id: 'contact_tz', header: 'Timezone', dataIndex: 'contact_tz', hidden: true },
-            { resizable: true, id: 'contact_geo', header: 'Geo', dataIndex: 'contact_geo', hidden: true }
+            { resizable: true, id: 'email_home', header: 'eMail (private)', dataIndex: 'email_home', hidden: true },
+            { resizable: true, id: 'url', header: 'URL', dataIndex: 'url', hidden: true },
+            { resizable: true, id: 'url_home', header: 'URL (private)', dataIndex: 'url_home', hidden: true },
+            { resizable: true, id: 'note', header: 'Note', dataIndex: 'note', hidden: true },
+            { resizable: true, id: 'tz', header: 'Timezone', dataIndex: 'tz', hidden: true },
+            { resizable: true, id: 'geo', header: 'Geo', dataIndex: 'geo', hidden: true }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -491,7 +491,7 @@ Tine.Addressbook.ContactEditDialog = {
             border:false,
             items: [{
                 xtype:'textarea',
-                name: 'contact_note',
+                name: 'note',
                 fieldLabel: 'Notes',
                 grow: false,
                 preventScrollbars:false,
@@ -608,7 +608,7 @@ Tine.Addressbook.ContactEditDialog = {
                 },{
                     xtype:'textfield',
                     fieldLabel:'URL', 
-                    name:'contact_url', 
+                    name:'url', 
                     vtype:'url',
                     anchor:'95%'
                 }]
@@ -624,22 +624,22 @@ Tine.Addressbook.ContactEditDialog = {
                 }, {
                     xtype:'textfield',
                     fieldLabel:'Role', 
-                    name:'contact_role',
+                    name:'role',
                     anchor:'95%'
                 }, {
                     xtype:'textfield',
                     fieldLabel:'Title', 
-                    name:'contact_title',
+                    name:'title',
                     anchor:'95%'
                 }, {
                     xtype:'textfield',
                     fieldLabel:'Room', 
-                    name:'contact_room',
+                    name:'room',
                     anchor:'95%'
                 },{
                     xtype:'textfield',
                     fieldLabel:'Name Assistent', 
-                    name:'contact_assistent',
+                    name:'assistent',
                     anchor:'95%'
                 },{
                     xtype:'textfield',
@@ -707,7 +707,7 @@ Tine.Addressbook.ContactEditDialog = {
                 items: [
                     new Ext.form.DateField({
                             fieldLabel:'Birthday', 
-                            name:'contact_bday', 
+                            name:'bday', 
                             format:'d.m.Y', 
                             anchor: '95%'
                 }), {
@@ -724,11 +724,11 @@ Tine.Addressbook.ContactEditDialog = {
                     anchor:'95%'
                 },{
                     xtype:'textfield',
-                    fieldLabel:'Email', name:'contact_email_home', vtype:'email',
+                    fieldLabel:'Email', name:'email_home', vtype:'email',
                     anchor:'95%'
                 },{
                     xtype:'textfield',
-                    fieldLabel:'URL', name:'contact_url_home', vtype:'url',
+                    fieldLabel:'URL', name:'url_home', vtype:'url',
                     anchor:'95%'
                 }]
             },{
@@ -749,8 +749,8 @@ Tine.Addressbook.ContactEditDialog = {
     
     updateContactRecord: function(_contactData)
     {
-        if(_contactData.contact_bday && _contactData.contact_bday !== null) {
-            _contactData.contact_bday = Date.parseDate(_contactData.contact_bday, 'c');
+        if(_contactData.bday && _contactData.bday !== null) {
+            _contactData.bday = Date.parseDate(_contactData.bday, 'c');
         }
 
         this.contactRecord = new Tine.Addressbook.Model.Contact(_contactData);
@@ -813,7 +813,7 @@ Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'id'},
     {name: 'tid'},
     {name: 'owner'},
-    {name: 'contact_private'},
+    {name: 'private'},
     {name: 'cat_id'},
     {name: 'n_family'},
     {name: 'n_given'},
@@ -822,20 +822,20 @@ Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'n_suffix'},
     {name: 'n_fn'},
     {name: 'n_fileas'},
-    {name: 'contact_bday', type: 'date', dateFormat: 'c' },
+    {name: 'bday', type: 'date', dateFormat: 'c' },
     {name: 'org_name'},
     {name: 'org_unit'},
-    {name: 'contact_title'},
-    {name: 'contact_role'},
-    {name: 'contact_assistent'},
-    {name: 'contact_room'},
+    {name: 'title'},
+    {name: 'role'},
+    {name: 'assistent'},
+    {name: 'room'},
     {name: 'adr_one_street'},
     {name: 'adr_one_street2'},
     {name: 'adr_one_locality'},
     {name: 'adr_one_region'},
     {name: 'adr_one_postalcode'},
     {name: 'adr_one_countryname'},
-    {name: 'contact_label'},
+    {name: 'label'},
     {name: 'adr_two_street'},
     {name: 'adr_two_street2'},
     {name: 'adr_two_locality'},
@@ -854,19 +854,19 @@ Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'tel_other'},
     {name: 'tel_prefer'},
     {name: 'email'},
-    {name: 'contact_email_home'},
-    {name: 'contact_url'},
-    {name: 'contact_url_home'},
-    {name: 'contact_freebusy_uri'},
-    {name: 'contact_calendar_uri'},
-    {name: 'contact_note'},
-    {name: 'contact_tz'},
-    {name: 'contact_geo'},
-    {name: 'contact_pubkey'},
-    {name: 'contact_created'},
-    {name: 'contact_creator'},
-    {name: 'contact_modified'},
-    {name: 'contact_modifier'},
-    {name: 'contact_jpegphoto'},
+    {name: 'email_home'},
+    {name: 'url'},
+    {name: 'url_home'},
+    {name: 'freebusy_uri'},
+    {name: 'calendar_uri'},
+    {name: 'note'},
+    {name: 'tz'},
+    {name: 'geo'},
+    {name: 'pubkey'},
+    {name: 'created'},
+    {name: 'creator'},
+    {name: 'modified'},
+    {name: 'modifier'},
+    {name: 'jpegphoto'},
     {name: 'account_id'}
 ]);
