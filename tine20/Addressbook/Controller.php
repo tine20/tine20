@@ -17,11 +17,20 @@
 class Addressbook_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
 {
     /**
+     * the contacts backend
+     *
+     * @var Addressbook_Backend_Sql
+     */
+    protected $_backend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() {
+        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -171,6 +180,28 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
+    }
+    
+    /**
+     * delete one or multiple contacts
+     *
+     * @param mixed $_contactId
+     * @throws Exception 
+     */
+    public function deleteContact($_contactId)
+    {
+        if(is_array($_contactId) or $_contactId instanceof Tinebase_Record_RecordSet) {
+            foreach($_contactId as $contactId) {
+                $this->deleteContact($contactId);
+            }
+        } else {
+            $contact = $this->_backend->getContact($_contactId);
+            if(Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE)) {
+                $this->_backend->deleteContact($_contactId);
+            } else {
+                throw new Exception('delete access to contacts in container ' . $contact->owner . ' denied');
+            }
+        }
     }
     
     /**

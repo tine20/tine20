@@ -29,17 +29,13 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      */
     public function deleteContacts($_contactIds)
     {
+        $result = array(
+            'success'   => TRUE
+        );
+        
         $contactIds = Zend_Json::decode($_contactIds);
-        if(is_array($contactIds)) {
-            $contacts = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-            foreach($contactIds as $contactId) {
-                $contacts->deleteContactById($contactId);
-            }
-
-            $result = array('success'   => TRUE, 'ids' => $contactIds);
-        } else {
-            $result = array('success'   => FALSE);
-        }
+        
+        Addressbook_Controller::getInstance()->deleteContact($contactIds);
 
         return $result;
     }
