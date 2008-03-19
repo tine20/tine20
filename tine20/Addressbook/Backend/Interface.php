@@ -40,7 +40,7 @@ interface Addressbook_Backend_Interface
      *
      * @param int $contacts contactid
      */
-    public function deleteContactById($_contactId);
+    public function deleteContact($_contactId);
     
     /**
      * get list of contacts from all shared addressbooks the current user has access to
