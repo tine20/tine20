@@ -609,4 +609,43 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         return $result;
     }
+    
+/**
+ * reworked functions
+ */    
+    
+    
+    /**
+     * add a contact
+     *
+     * @param Addressbook_Model_Contact $_contactData the contactdata
+     * @return Addressbook_Model_Contact
+     */
+    public function addContact(Addressbook_Model_Contact $_contactData)
+    {
+        if(!$_contactData->isValid()) {
+            throw new Exception('invalid contact');
+        }
+        
+        $contactData = $_contactData->toArray();
+        
+        if(empty($_contactData->id)) {
+            unset($contactData['id']);
+        }
+        
+        $id = $this->contactsTable->insert($contactData);
+
+        // if we insert a contact without an id, we need to get back one
+        if(empty($_contactData->id) && $id == 0) {
+            throw new Exception("returned contact id is 0");
+        }
+        
+        // if the account had no accountId set, set the id now
+        if(empty($_contactData->id)) {
+            $_contactData->id = $id;
+        }
+        
+        return $this->getContactById($_contactData->id);
+    }
+    
 }
