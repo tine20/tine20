@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf8"?>
+<essential>
+	<enviroment name="PHP" version="5.2.3"/>
+	<enviroment name="Zend" version="1.5.0"/>
+	<enviroment name="MySQL" version="5.1.0"/>
+	<extensions>	
+		<extension name="mysql" />
+		<extension name="json" />
+		<extension name="date" />
+		<extension name="PDO" />
+		<extension name="pdo_mysql" />
+	</extensions>	
+</essential>	
