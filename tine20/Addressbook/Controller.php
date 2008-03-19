@@ -181,7 +181,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         $contact = $this->_backend->addContact($_contact);
         
-        return;
+        return $contact;
     }
     
     /**
