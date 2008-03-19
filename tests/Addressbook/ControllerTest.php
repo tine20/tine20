@@ -172,8 +172,21 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller::getInstance()->addContact($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
+        $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
     }
-
+    
+    /**
+     * try to get a contact
+     *
+     */
+    public function testGetContact()
+    {
+        $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['initialContact']);
+        
+        $this->assertEquals($this->objects['initialContact']->id, $contact->id);
+        $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+    }
+    
     /**
      * try to update a contact
      *
@@ -181,6 +194,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testUpdateContact()
     {
         $contact = Addressbook_Controller::getInstance()->updateContact($this->objects['updatedContact']);
+        
+        $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
     }
 
     /**
@@ -190,8 +205,12 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testDeleteContact()
     {
         Addressbook_Controller::getInstance()->deleteContact($this->objects['initialContact']);
+
+        $this->setExpectedException('UnderflowException');
+        
+        $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
     }
-    }		
+}		
 	
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_ControllerTest::main') {
