@@ -178,7 +178,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
             'account_id'    => $accountId
         );*/
         
-        $where = $table->getAdapter()->quoteInto('group_id = ? and account_id = ?', $groupId, $accountId);
+        $where = $this->groupMembersTable->getAdapter()->quoteInto('group_id = ? and account_id = ?', $groupId, $accountId);
         
         $this->groupMembersTable->delete($where);
     }
