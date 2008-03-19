@@ -188,34 +188,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * delete contact identified by contact id
-     *
-     * @param int $_contacts contact ids
-     * @return int the number of rows deleted
-     */
-    public function deleteContactById($_contactId)
-    {
-        $contactId = (int)$_contactId;
-        if($contactId != $_contactId) {
-            throw new InvalidArgumentException('$_contactId must be integer');
-        }
-
-        $oldContactData = $this->getContactById($_contactId);
-
-        if(!Zend_Registry::get('currentAccount')->hasGrant($oldContactData->owner, Tinebase_Container::GRANT_DELETE)) {
-            throw new Exception('delete access to addressbook denied');
-        }
-        
-        $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),
-        );
-         
-        $result = $this->contactsTable->delete($where);
-
-        return $result;
-    }
-    
-    /**
      * add a new addressbook
      *
      * @param string $_name the name of the addressbook
