@@ -439,7 +439,7 @@ class Tinebase_Container
     public function getPersonalContainer(Tinebase_Account_Model_Account $_account, $_application, $_owner, $_grant)
     {
         $accountId  = Tinebase_Account::convertAccountIdToInt($_account);
-        $owner      = Tinebase_Account::convertAccountIdToInt($_owner);
+        $ownerId    = Tinebase_Account::convertAccountIdToInt($_owner);
         
         $groupMemberships   = $_account->getGroupMemberships();
         
@@ -455,7 +455,7 @@ class Tinebase_Container
                 array('account_grants' => 'BIT_OR(user.account_grant)')
             )
             ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-            ->where('owner.account_id = ?', $_owner)
+            ->where('owner.account_id = ?', $ownerId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
