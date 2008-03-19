@@ -649,6 +649,32 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     /**
+     * update an existing contact
+     *
+     * @param Addressbook_Model_Contact $_contactData the contactdata
+     * @return Addressbook_Model_Contact
+     */
+    public function updateContact(Addressbook_Model_Contact $_contactData)
+    {
+        if(!$_contactData->isValid()) {
+            throw new Exception('invalid contact');
+        }
+        
+        $contactId = Addressbook_Controller::convertContactIdToInt($_contactData);
+        
+        $contactData = $_contactData->toArray();
+        unset($contactData['id']);
+        
+        $where  = array(
+            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),
+        );
+        
+        $id = $this->contactsTable->update($contactData, $where);
+        
+        return $this->getContact($contactId);
+    }
+    
+    /**
      * delete contact identified by contact id
      *
      * @param int $_contacts contact ids
@@ -656,10 +682,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function deleteContact($_contactId)
     {
-        $contactId = (int)$_contactId;
-        if($contactId != $_contactId) {
-            throw new InvalidArgumentException('$_contactId must be integer');
-        }
+        $contactId = Addressbook_Controller::convertContactIdToInt($_contactId);
 
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),
@@ -678,10 +701,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getContact($_contactId)
     {
-        $contactId = (int)$_contactId;
-        if($contactId != $_contactId) {
-            throw new InvalidArgumentException('$_contactId must be integer');
-        }
+        $contactId = Addressbook_Controller::convertContactIdToInt($_contactId);
         
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId)
