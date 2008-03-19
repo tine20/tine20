@@ -165,7 +165,10 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoveGroupMember()
     {
-		Tinebase_Group::getInstance()->removeGroupMember($this->objects['initialGroup']->id, 3);
+    	$setGroupMembersArray = array ( 1, 2, 3 );
+        Tinebase_Group::getInstance()->setGroupMembers($this->objects['initialGroup']->id, $setGroupMembersArray );
+
+        Tinebase_Group::getInstance()->removeGroupMember($this->objects['initialGroup']->id, 3);
 		
 		$getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
 		
