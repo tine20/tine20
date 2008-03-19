@@ -21,7 +21,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() {
+        $this->contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
+        $this->_currentAccount = Zend_Registry::get('currentAccount');
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -63,16 +66,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @var Tinebase_Account_Model_Account
      */
     protected $_currentAccount;
-    
-    /**
-     * the constructor
-     *
-     */
-    public function __construct()
-    {
-        $this->contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
-    }
 
     /**
      * add or updates a contact
