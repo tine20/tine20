@@ -274,7 +274,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAccounts()
     {
-        //$this->setExpectedException('Exception');
+        $this->setExpectedException('Exception');
         
         $todelete = array ( 10, 11 );
 
@@ -289,7 +289,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testConvertAccountIdToInt()
     {
-        //$this->setExpectedException('Exception');
+        $this->setExpectedException('Exception');
     	
         Tinebase_Account::getInstance()->convertAccountIdToInt (0);
   
