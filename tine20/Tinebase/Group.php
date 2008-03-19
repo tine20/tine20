@@ -168,14 +168,32 @@ class Tinebase_Group
         return $result;
     }
     
+    /**
+     * get group by id
+     *
+     * @param int $_groupId
+     * @return Tinebase_Group_Model_Group
+     */
     public function getGroupById($_groupId)
     {
+        $result = $this->_backend->getGroupById($_groupId);
         
+        return $result;
+    	
     }
     
+    /**
+     * get group by name
+     *
+     * @param string $_groupName
+     * @return Tinebase_Group_Model_Group
+     */
     public function getGroupByName($_groupName)
     {
+        $result = $this->_backend->getGroupByName($_groupName);
         
+        return $result;
+    	
     }
     
     /**
