@@ -50,13 +50,13 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objects['initialGroup'] = new Tinebase_Group_Model_Group(array(
-            'id'            => 10,
+            'id'            => 12,
             'name'          => 'tine20phpunit',
             'description'   => 'initial group'
         )); 
         
         $this->objects['updatedGroup'] = new Tinebase_Group_Model_Group(array(
-            'id'            => 10,
+            'id'            => 12,
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
         )); 
