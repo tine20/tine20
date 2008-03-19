@@ -126,13 +126,18 @@ interface Addressbook_Backend_Interface
     public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL); 
 
     /**
-     * add or updates a contact
+     * add a contact
      *
-     * @param int $_contactOwner the owner of the addressbook entry
      * @param Addressbook_Model_Contact $_contactData the contactdata
-     * @param int $_contactId the contact to update, if NULL the contact gets added
-     * @todo check acl when adding contact
-     * @return unknown
+     * @return Addressbook_Model_Contact
      */
-    public function saveContact(Addressbook_Model_Contact $_contactData);
+    public function addContact(Addressbook_Model_Contact $_contactData);
+
+    /**
+     * update a contact
+     *
+     * @param Addressbook_Model_Contact $_contactData the contactdata
+     * @return Addressbook_Model_Contact
+     */
+    public function updateContact(Addressbook_Model_Contact $_contactData);
 }
