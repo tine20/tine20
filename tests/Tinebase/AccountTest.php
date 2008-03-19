@@ -81,7 +81,17 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
             'accountFirstName'      => 'PHPUnit delete',
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
-    	
+
+        $this->objects['noIdAccount'] = new Tinebase_Account_Model_FullAccount(array(
+            'accountLoginName'      => 'tine20phpunit-noid',
+            'accountStatus'         => 'disabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => 2,
+            'accountLastName'       => 'Tine 2.0 noid',
+            'accountFirstName'      => 'PHPUnit noid',
+            'accountEmailAddress'   => 'phpunit@tine20.org'
+        )); 
+ 
         return;
         
     }
@@ -284,7 +294,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     }
 
    /**
-     * try to convert account ids and check if correct exceptions are thrown 
+     * try to convert account id and check if correct exceptions are thrown 
      *
      */
     public function testConvertAccountIdToInt()
@@ -292,6 +302,18 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
     	
         Tinebase_Account::getInstance()->convertAccountIdToInt (0);
+  
+    }
+
+  	/**
+     * try to convert id of account object and check if correct exceptions are thrown 
+     *
+     */
+    public function testConvertAccountIdToIntWithAccount()
+    {
+        //$this->setExpectedException('Exception');
+    	
+        Tinebase_Account::getInstance()->convertAccountIdToInt ( $this->objects['noIdAccount'] );
   
     }
 }		
