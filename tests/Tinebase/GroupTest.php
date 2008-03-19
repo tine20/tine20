@@ -60,6 +60,11 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
         )); 
+
+        $this->objects['noIdGroup'] = new Tinebase_Group_Model_Group(array(
+            'name'          => 'tine20phpunit noid',
+            'description'   => 'noid group'
+        )); 
         
         return;
         
@@ -186,7 +191,30 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
 
         $group = Tinebase_Group::getInstance()->getGroupById($this->objects['initialGroup']);
     }
-    
+
+  /**
+     * try to convert group id and check if correct exceptions are thrown 
+     *
+     */
+    public function testConvertGroupIdToInt()
+    {
+        $this->setExpectedException('Exception');
+    	
+        Tinebase_Group::getInstance()->convertGroupIdToInt (0);
+  
+    }
+
+  	/**
+     * try to convert id of group object and check if correct exceptions are thrown 
+     *
+     */
+    public function testConvertGroupIdToIntWithGroup()
+    {
+        $this->setExpectedException('Exception');
+    	
+        Tinebase_Group::getInstance()->convertGroupIdToInt ( $this->objects['noIdGroup'] );
+  
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_GroupTest::main') {
