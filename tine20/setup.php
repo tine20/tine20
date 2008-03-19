@@ -13,6 +13,17 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
+$check = new Setup_ExtCheck('Setup/essentials.xml');
+$output = $check->getOutput();
+
+echo $output;
+
+if (strstr($output,'FAILURE'))
+{
+	exit;
+}
+
+
 $setup = new Setup_Tables();
 
 $fileName = 'Tinebase/setup.xml';
