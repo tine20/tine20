@@ -144,8 +144,47 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
 
         $group = Tinebase_Group::getInstance()->getGroupById($this->objects['initialGroup']);
     }
-}		
-	
+
+    /**
+     * try to set/get group members
+     *
+     */
+    public function testSetGroupMembers()
+    {
+    	$setGroupMembersArray = array ( 1, 2 );
+        Tinebase_Group::getInstance()->setGroupMembers($this->objects['initialGroup']->id, $setGroupMembersArray );
+    	
+    	$getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
+        
+    	$this->assertEquals($setGroupMembersArray, $getGroupMembersArray);
+    }		
+
+    /**
+     * try to add a group member
+     *
+     */
+    public function testAddGroupMember()
+    {
+		Tinebase_Group::getInstance()->addGroupMember($this->objects['initialGroup']->id, 3);
+
+		$getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
+		
+		$this->assertEquals ( array(1,2,3), $getGroupMembersArray);
+    }		
+    
+    /**
+     * try to remove a group member
+     *
+     */
+    public function testRemoveGroupMember()
+    {
+		Tinebase_Group::getInstance()->removeGroupMember($this->objects['initialGroup']->id, 3);
+		
+		$getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
+		
+		$this->assertEquals ( array(1,2), $getGroupMembersArray);
+    }		
+}
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_GroupTest::main') {
     Tinebase_GroupTest::main();
