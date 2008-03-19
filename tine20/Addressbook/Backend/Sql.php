@@ -645,6 +645,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $_contactData->id = $id;
         }
         
+        return $_contactData;
         return $this->getContactById($_contactData->id);
     }
     
