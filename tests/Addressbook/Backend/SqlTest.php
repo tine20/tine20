@@ -200,6 +200,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateContact()
     {
+        $contact = Addressbook_Backend_Sql::getInstance()->updateContact($this->objects['updatedContact']);
     }
 
     /**
@@ -208,6 +209,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContact()
     {
+        Addressbook_Backend_Sql::getInstance()->deleteContact($this->objects['initialContact']);
     }
 }		
 	
