@@ -185,7 +185,7 @@ Tine.Crm.Main = function(){
 
             
        var filterComboLeadstate = new Ext.ux.ClearableComboBox({
-            fieldLabel:'Leadstate', 
+            fieldLabel:'leadstate', 
             id:'filterLeadstate',
            //id:'id',
             name:'leadstate',
@@ -442,7 +442,7 @@ Tine.Crm.Main = function(){
             ]);            
             
              var entry = Ext.data.Record.create([
-               {name: 'leadtype_id', type: 'int'},
+               {name: 'id', type: 'int'},
                {name: 'leadtype', type: 'varchar'}
             ]);
             
@@ -894,7 +894,7 @@ Tine.Crm.Main = function(){
                 }
             }},*/
             {resizable: true, 
-              header: 'state', 
+              header: 'leadstate', 
               id: 'leadstate_id', 
               dataIndex: 'leadstate_id', 
               sortable: false,
@@ -1161,7 +1161,7 @@ Tine.Crm.LeadEditDialog = function() {
         var combo_leadstatus = new Ext.form.ComboBox({
                 fieldLabel:'leadstate', 
                 id:'leadstatus',
-                name:'id',
+                name:'leadstate_id',
                 store: Tine.Crm.LeadEditDialog.Stores.getLeadStatus(),
                 displayField:'value',
                 valueField:'key',
@@ -1218,7 +1218,7 @@ Tine.Crm.LeadEditDialog = function() {
         var combo_leadsource = new Ext.form.ComboBox({
                 fieldLabel:'leadsource', 
                 id:'leadsource',
-                name:'id',
+                name:'leadsource_id',
                 store: st_leadsource,
                 displayField:'value',
                 valueField:'key',
