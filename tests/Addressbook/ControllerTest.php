@@ -37,7 +37,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Addressbook_ControllerTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
