@@ -19,7 +19,7 @@ $output = $check->getOutput();
 echo $output;
 if (strpos($output, "FAILURE"))
 {
-	echo "egal";
+	echo "Unsufficent server system.";
 	exit;
 }
 
