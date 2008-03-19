@@ -101,7 +101,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMembers($_groupId)
     {
-        $groupId = Tinebase_Account::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
         
         $members = array();
         
