@@ -179,6 +179,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         );*/
         
         $where = $this->groupMembersTable->getAdapter()->quoteInto('group_id = ? and account_id = ?', $groupId, $accountId);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' where clause: '. $where->__toString());
         
         $this->groupMembersTable->delete($where);
     }
