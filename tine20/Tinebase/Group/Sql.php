@@ -111,7 +111,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $rows = $this->groupMembersTable->fetchAll($select);
         
         foreach($rows as $member) {
-            $members[] = $members->account_id;
+            $members[] = $member->account_id;
         }
 
         return $members;
