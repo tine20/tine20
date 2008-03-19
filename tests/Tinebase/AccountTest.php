@@ -71,6 +71,17 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
     	
+        $this->objects['deleteAccount'] = new Tinebase_Account_Model_FullAccount(array(
+            'accountId'             => 11,
+            'accountLoginName'      => 'tine20phpunit-delete',
+            'accountStatus'         => 'disabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => 2,
+            'accountLastName'       => 'Tine 2.0 delete',
+            'accountFirstName'      => 'PHPUnit delete',
+            'accountEmailAddress'   => 'phpunit@tine20.org'
+        )); 
+    	
         return;
         
     }
@@ -237,7 +248,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      *
      * @todo	check if set correctly
      */
-    public function testSetBlocked()
+    public function testSetBlockedDate()
     {
     	$date = Zend_Date::now();
     	$date->add ( '12:00:00' );
@@ -245,7 +256,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     }
  
     /**
-     * try to delete an accout
+     * try to delete an account
      *
      */
     public function testDeleteAccount()
@@ -255,6 +266,21 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
         Tinebase_Account::getInstance()->deleteAccount($this->objects['initialAccount']);
 
         $account = Tinebase_Account::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_Account_Model_FullAccount');
+    }
+
+   /**
+     * try to delete multiple accounts
+     *
+     */
+    public function testDeleteAccounts()
+    {
+        $this->setExpectedException('Exception');
+        
+        $todelete = array ( 10, 11 );
+
+        Tinebase_Account::getInstance()->deleteAccounts( $todelete );
+
+        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['deleteAccount'], 'Tinebase_Account_Model_FullAccount');
     }
 }		
 	
