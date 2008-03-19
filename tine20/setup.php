@@ -1,12 +1,12 @@
 <?php
 /**
  * Tine 2.0 - this file starts the setup process
- * 
+ *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$ 
+ * @version     $Id$
  *
  */
 require_once 'Zend/Loader.php';
@@ -17,9 +17,9 @@ $check = new Setup_ExtCheck('Setup/essentials.xml');
 $output = $check->getOutput();
 
 echo $output;
-
-if (strstr($output,'FAILURE'))
+if (strpos($output, "FAILURE"))
 {
+	echo "egal";
 	exit;
 }
 
@@ -112,11 +112,11 @@ foreach(Tinebase_Application::getInstance()->getApplications() as $application) 
 $internalAddressbook = Tinebase_Container::getInstance()->getInternalContainer('Addressbook');
 Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
     Tinebase_Container::GRANT_READ
-)); 
+));
 Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
-    Tinebase_Container::GRANT_READ, 
-    Tinebase_Container::GRANT_ADD, 
-    Tinebase_Container::GRANT_EDIT, 
-    Tinebase_Container::GRANT_DELETE, 
+    Tinebase_Container::GRANT_READ,
+    Tinebase_Container::GRANT_ADD,
+    Tinebase_Container::GRANT_EDIT,
+    Tinebase_Container::GRANT_DELETE,
     Tinebase_Container::GRANT_ADMIN
-)); 
+));
