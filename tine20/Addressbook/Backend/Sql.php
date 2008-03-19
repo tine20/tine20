@@ -649,4 +649,26 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $this->getContactById($_contactData->id);
     }
     
+    /**
+     * delete contact identified by contact id
+     *
+     * @param int $_contacts contact ids
+     * @return int the number of rows deleted
+     */
+    public function deleteContact($_contactId)
+    {
+        $contactId = (int)$_contactId;
+        if($contactId != $_contactId) {
+            throw new InvalidArgumentException('$_contactId must be integer');
+        }
+
+        $where  = array(
+            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),
+        );
+         
+        $result = $this->contactsTable->delete($where);
+
+        return $result;
+    }
+    
 }
