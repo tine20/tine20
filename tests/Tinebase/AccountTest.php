@@ -274,13 +274,25 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAccounts()
     {
-        $this->setExpectedException('Exception');
+        //$this->setExpectedException('Exception');
         
         $todelete = array ( 10, 11 );
 
         Tinebase_Account::getInstance()->deleteAccounts( $todelete );
 
         $account = Tinebase_Account::getInstance()->getAccountById($this->objects['deleteAccount'], 'Tinebase_Account_Model_FullAccount');
+    }
+
+   /**
+     * try to convert account ids and check if correct exceptions are thrown 
+     *
+     */
+    public function testConvertAccountIdToInt()
+    {
+        //$this->setExpectedException('Exception');
+    	
+        Tinebase_Account::getInstance()->convertAccountIdToInt (0);
+  
     }
 }		
 	
