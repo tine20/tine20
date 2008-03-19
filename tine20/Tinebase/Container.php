@@ -438,13 +438,10 @@ class Tinebase_Container
      */
     public function getPersonalContainer(Tinebase_Account_Model_Account $_account, $_application, $_owner, $_grant)
     {
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
+        $accountId  = Tinebase_Account::convertAccountIdToInt($_account);
+        $owner      = Tinebase_Account::convertAccountIdToInt($_owner);
         
         $groupMemberships   = $_account->getGroupMemberships();
-        $accountId          = $_account->accountId;
         
         $db = Zend_Registry::get('dbAdapter');
         
