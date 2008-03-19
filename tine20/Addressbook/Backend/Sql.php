@@ -17,6 +17,40 @@
 class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 {
     /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct() {}
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() {}
+
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Addressbook_Backend_Sql
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Addressbook_Backend_Sql
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Addressbook_Backend_Sql;
+        }
+        
+        return self::$_instance;
+    }
+    
+    /**
      * Instance of Addressbook_Backend_Sql_Contacts
      *
      * @var Addressbook_Backend_Sql_Contacts

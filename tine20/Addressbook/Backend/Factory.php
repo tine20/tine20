@@ -46,9 +46,11 @@ class Addressbook_Backend_Factory
     {
         switch($type) {
             case self::SQL:
+                $instance = Addressbook_Backend_Sql::getInstance();
+                break;
+                
             case self::LDAP:
-                $className = 'Addressbook_Backend_' . ucfirst($type);
-                $instance = new $className();
+                $instance = Addressbook_Backend_Ldap::getInstance();
                 break;
                 
             default:
