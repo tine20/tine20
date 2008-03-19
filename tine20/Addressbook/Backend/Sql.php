@@ -70,13 +70,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * add or updates a contact
      *
-     * @param int $_contactOwner the owner of the addressbook entry
+     * This functions gets removed, when Cornelius move the history stuff to it's final location
+     * 
      * @param Addressbook_Model_Contact $_contactData the contactdata
-     * @param int $_contactId the contact to update, if NULL the contact gets added
-     * @todo check acl when adding contact
+     * @deprecated
      * @return Addressbook_Model_Contact
      */
-    public function saveContact(Addressbook_Model_Contact $_contactData)
+    private function saveContact(Addressbook_Model_Contact $_contactData)
     {
         if((int)$_contactData->owner < 0) {
             throw new UnderflowException('owner can not be empty');
