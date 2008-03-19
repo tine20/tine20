@@ -143,6 +143,19 @@ class Tinebase_Group
     }
     
     /**
+     * updates an existing group
+     *
+     * @param Tinebase_Group_Model_Group $_account
+     * @return Tinebase_Group_Model_Group
+     */
+    public function updateGroup(Tinebase_Group_Model_Group $_group)
+    {
+        $result = $this->_backend->updateGroup($_group);
+        
+        return $result;
+    }
+
+    /**
      * remove group
      *
      * @param int $_groupId
@@ -166,6 +179,23 @@ class Tinebase_Group
     }
     
     /**
+     * get list of groups
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     */
+    public function getGroups($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    {
+   		$result = $this->_backend->getGroups($_filter, $_sort, $_dir, $_start, $_limit);
+        
+        return $result;
+    }
+    
+	/**
      * converts a int, string or Tinebase_Group_Model_Group to a groupid
      *
      * @param int|string|Tinebase_Group_Model_Group $_groupId the groupid to convert
