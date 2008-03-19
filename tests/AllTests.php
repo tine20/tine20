@@ -27,11 +27,11 @@ class AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
-        $suite->addTestSuite('Tinebase_AllTests');
+        $suite->addTest(Tinebase_AllTests::suite());
         //  $suite->addTestSuite('Crm_ControllerTest');
         //  $suite->addTest(Asterisk_AllTests::suite());
         //  $suite->addTest(Admin_AllTests::suite());
-        //  $suite->addTest(Addressbook_AllTests::suite());
+        $suite->addTest(Addressbook_AllTests::suite());
         //  $suite->addTest(Calendar_AllTests::suite());
         //  $suite->addTestSuite('Tasks_ControllerTest');
         return $suite;
