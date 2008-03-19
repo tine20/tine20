@@ -133,19 +133,6 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to delete a group
-     *
-     */
-    public function testDeleteGroup()
-    {
-        Tinebase_Group::getInstance()->deleteGroup($this->objects['initialGroup']);
-
-        $this->setExpectedException('Exception');
-
-        $group = Tinebase_Group::getInstance()->getGroupById($this->objects['initialGroup']);
-    }
-
-    /**
      * try to set/get group members
      *
      */
@@ -183,7 +170,21 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
 		$getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
 		
 		$this->assertEquals ( array(1,2), $getGroupMembersArray);
-    }		
+    }
+
+    /**
+     * try to delete a group
+     *
+     */
+    public function testDeleteGroup()
+    {
+        Tinebase_Group::getInstance()->deleteGroup($this->objects['initialGroup']);
+
+        $this->setExpectedException('Exception');
+
+        $group = Tinebase_Group::getInstance()->getGroupById($this->objects['initialGroup']);
+    }
+    
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_GroupTest::main') {
