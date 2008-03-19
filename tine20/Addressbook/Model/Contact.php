@@ -44,9 +44,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
         'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
         'email'                 => array('StringTrim', 'StringToLower'),
-        'contact_email_home'    => array('StringTrim', 'StringToLower'),
-        'contact_url'           => array('StringTrim', 'StringToLower'),
-        'contact_url_home'      => array('StringTrim', 'StringToLower'),
+        'email_home'    => array('StringTrim', 'StringToLower'),
+        'url'           => array('StringTrim', 'StringToLower'),
+        'url_home'      => array('StringTrim', 'StringToLower'),
     );
     
     /**
@@ -57,10 +57,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        //'contact_created'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'contact_creator'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_modified'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'contact_modifier'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'created'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'creator'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'modified'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'modifier'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -73,8 +73,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'adr_two_region'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_two_street'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adr_two_street2'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_assistent'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_bday'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'assistent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'bday'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
  /*       'email'     => array(
             array(
                 'Regex', 
@@ -82,39 +82,39 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ), 
             Zend_Filter_Input::ALLOW_EMPTY => true
         ),
-        'contact_email_home'     => array(
+        'email_home'     => array(
             array(
                 'Regex', 
                 '/^[^0-9][a-z0-9_]+([.][a-z0-9_]+)*[@][a-z0-9_]+([.][a-z0-9_]+)*[.][a-z]{2,4}$/'
             ), 
             Zend_Filter_Input::ALLOW_EMPTY => true
         ),*/
-        'email'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_email_home'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-    	'contact_note'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'owner'             => array('Digits', array('GreaterThan', 0)),
-    	'contact_role'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_title'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_url'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_url_home'	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'		    => array(),
-        'n_fileas'          => array(),
-        'n_given'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_middle'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_prefix'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_suffix'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'org_name'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'org_unit'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_assistent'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_car'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell_private'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_fax'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_fax_home'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_pager'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_work'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'owner'                 => array('Digits', array('GreaterThan', 0)),
+        'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_family'		        => array(),
+        'n_fileas'              => array(),
+        'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_prefix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_suffix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell_private'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**
@@ -123,7 +123,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */
     protected $_datetimeFields = array(
-        'contact_bday'
+        'bday'
     );
     
     /**
