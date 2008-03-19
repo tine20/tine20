@@ -48,6 +48,19 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'), 
+            'Addressbook', 
+            Zend_Registry::get('currentAccount'), 
+            Tinebase_Container::GRANT_EDIT
+        );
+        
+        if($personalContainer->count() === 0) {
+            $container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Addressbook', 'PHPUNIT');
+        } else {
+            $container = $personalContainer[0];
+        }
+        
         $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
             'adr_one_locality'      => 'Hamburg',
@@ -67,7 +80,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 120,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => 120,
+            'owner'                 => $container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -110,7 +123,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 120,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => 120,
+            'owner'                 => $container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
