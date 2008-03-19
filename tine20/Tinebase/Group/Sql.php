@@ -174,13 +174,10 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
         $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
     	
         $where = array(
-            'group_id'      => $groupId,
-            'account_id'    => $accountId
+            $this->groupMembersTable->getAdapter()->quoteInto('group_id = ?', $groupId),
+            $this->groupMembersTable->getAdapter()->quoteInto('account_id = ?', $accountId),
         );
-        
-        //$where = $this->groupMembersTable->getAdapter()->quoteInto('group_id = ? and account_id = ?', $groupId, $accountId);
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' where clause: '. print_r($where,true));
-        
+         
         $this->groupMembersTable->delete($where);
     }
     
