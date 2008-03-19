@@ -20,6 +20,13 @@
 class Tinebase_Account_Registration
 {
 	
+   /**
+     * the registrations table
+     *
+     * @var Tinebase_Db_Table
+     */
+    protected $registrationsTable;
+    	
 	/**
      * the config
      *
@@ -40,6 +47,9 @@ class Tinebase_Account_Registration
         } catch (Zend_Config_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
         }
+        
+        // create table object
+        $this->registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
     }
     
     /**
@@ -102,11 +112,12 @@ class Tinebase_Account_Registration
 	/**
 	 * registers a new user
 	 *
-	 * @param 	array $regData 		json data from registration frontend
+	 * @param 	array 	$regData 		json data from registration frontend
+	 * @param	bool	$_sendMail		send registration mail
 	 * @return 	bool
 	 * 
 	 */
-	public function registerUser ( $regData ) 
+	public function registerUser ( $regData, $_sendMail = true ) 
 	{
 		
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call registerUser with regData: '. print_r($regData, true));
@@ -158,12 +169,16 @@ class Tinebase_Account_Registration
 		$regData['password'] = $this->generatePassword();
 		Tinebase_Auth::getInstance()->setPassword($regData['accountLoginName'], $regData['password'], $regData['password']);
 		
-		// send mail
-		if ( $this->sendRegistrationMail( $regData ) ) {
-			return true;			
+		//@todo put hash generation and save registration here
+		
+		// send mail?
+		if ( $_sendMail ) {
+			$result = $this->sendRegistrationMail( $regData );
 		} else {
-			return false;
+			$result = true;
 		}
+		
+		return $result;
 		
 	}
 	
@@ -172,7 +187,10 @@ class Tinebase_Account_Registration
 	 *
 	 * @param 	array $_regData
 	 * @return 	bool
+	 *
+	 * @access	protected
 	 * 
+	 * @todo	put hash generation and save registration in registerUser
 	 */
 	protected function sendRegistrationMail ( $_regData ) 
 	{
@@ -195,7 +213,7 @@ class Tinebase_Account_Registration
         // set texts and values
         $view->mailTextWelcome = "Welcome to Tine 2.0";
         // if expires = 0 -> no activation link in email
-        if ( isset($this->_config->expires) && $this->_config->expires > 0 ) {
+        if ( isset($this->_config->expires) && $this->_config->expires > 0 && isset($_SERVER['SERVER_NAME']) ) {        	
         	$view->mailActivationLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
         		'?method=Tinebase.activateAccount&id='.$hashed_username;
         }
@@ -302,6 +320,7 @@ class Tinebase_Account_Registration
 	 * @param	int	$length
 	 * @return 	string
 	 * 
+	 * @access	private
 	 */
 	private function generatePassword ( $length = 8 ) 
 	{
@@ -386,6 +405,7 @@ class Tinebase_Account_Registration
 	 *
 	 * @param	Tinebase_Account_Model_Registration	$_registration
 	 * 
+	 * @access	protected
 	 */
 	protected function addRegistration ( $_registration ) 
 	{
@@ -393,8 +413,6 @@ class Tinebase_Account_Registration
         if(!$_registration->isValid()) {
             throw(new Exception('invalid registration object'));
         }
-
-        $registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
 
         // @todo set reg_date & expire date (with zend_date add 24 hours)
         // @todo find out how mysql date functions can be called in (zend) pdo
@@ -407,7 +425,7 @@ class Tinebase_Account_Registration
         );
         
         // add new account
-        $registrationId = $registrationsTable->insert($registrationData);          
+        $registrationId = $this->registrationsTable->insert($registrationData);          
 
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->registrationHash);
 		
@@ -419,17 +437,32 @@ class Tinebase_Account_Registration
 	 * @param	Tinebase_Account_Model_Registration	$_registration
 	 * @param	array	data to update
 	 * 
+	 * @access	protected
 	 */
 	protected function updateRegistration ( $_registration, $_data ) 
 	{
-        $registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
-		
         $where = array(
-            $registrationsTable->getAdapter()->quoteInto('id = ?', $_registration['registrationId'])
+            $this->registrationsTable->getAdapter()->quoteInto('id = ?', $_registration['registrationId'])
         );
         
-        $result = $registrationsTable->update($_data, $where);
+        $result = $this->registrationsTable->update($_data, $where);
 		
+	}
+
+	/**
+	 * delete registration by username
+	 *
+	 * @param	string $_username
+	 * @return	int		number of rows affected
+	 */
+	public function deleteRegistrationByLoginName ( $_username ) 
+	{
+		
+        $where = Zend_Registry::get('dbAdapter')->quoteInto('login_name = ?', $_username);
+        
+        $result = $this->registrationsTable->delete($where);
+
+        return $result;
 	}
 	
 		
