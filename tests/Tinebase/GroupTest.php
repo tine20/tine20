@@ -91,12 +91,12 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
      * try to get all groups containing phpunit in their name
      *
      */
-    /*public function testGetGroups()
+    public function testGetGroups()
     {
         $groups = Tinebase_Group::getInstance()->getGroups('phpunit');
         
         $this->assertEquals(1, count($groups));
-    }*/
+    }
     
     /**
      * try to get the group with the name tine20phpunit
