@@ -91,7 +91,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         )); 
         
-        $this->objects['updatedAccount'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['updatedAccount'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
             'adr_one_locality'      => 'Hamburg',
             'adr_one_postalcode'    => '24xxx',
