@@ -108,22 +108,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         return $rows;
     }
-    
-    /**
-     * save one contact
-     *
-     * @param Addressbook_Model_Contact $_contact the contact object
-     * @return Addressbook_Model_Contact the updated contact
-     */
-    public function saveContact(Addressbook_Model_Contact $_contact)
-    {
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
-        $updatedContact = $backend->saveContact($_contact);
-        
-        return $updatedContact;
-    }
-    
     /**
      * event handler function
      * 

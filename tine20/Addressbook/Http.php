@@ -37,8 +37,8 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		$view->jsIncludeFiles = array();
 		$view->cssIncludeFiles = array();
 		
-		$addresses = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-		if($_contactId !== NULL && $contact = $addresses->getContactById($_contactId)) {
+		$addresses = Addressbook_Controller::getInstance();
+		if($_contactId !== NULL && $contact = $addresses->getContact($_contactId)) {
 		    $encodedContact = $contact->toArray();
 
 		    $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->owner);
