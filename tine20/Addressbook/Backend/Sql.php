@@ -645,8 +645,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             $_contactData->id = $id;
         }
         
-        return $_contactData;
-        return $this->getContactById($_contactData->id);
+        return $this->getContact($_contactData->id);
     }
     
     /**
@@ -667,6 +666,34 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         );
          
         $result = $this->contactsTable->delete($where);
+
+        return $result;
+    }
+    
+    /**
+     * fetch one contact identified by contactid
+     *
+     * @param int $_contactId
+     * @return Addressbook_Model_Contact 
+     */
+    public function getContact($_contactId)
+    {
+        $contactId = (int)$_contactId;
+        if($contactId != $_contactId) {
+            throw new InvalidArgumentException('$_contactId must be integer');
+        }
+        
+        $where  = array(
+            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId)
+        );
+
+        $row = $this->contactsTable->fetchRow($where);
+        
+        if($row === NULL) {
+            throw new UnderflowException('contact not found');
+        }
+        
+        $result = new Addressbook_Model_Contact($row->toArray());
 
         return $result;
     }
