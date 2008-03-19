@@ -110,21 +110,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     }
     
     /**
-     * fetch one contact identified by contactid
-     *
-     * @param int $_contactId
-     * @return Addressbook_Model_Contact
-     */
-    public function getContact($_contactId)
-    {
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        
-        $result = $backend->getContactById($_contactId);
-        
-        return $result;
-    }
-    
-    /**
      * save one contact
      *
      * @param Addressbook_Model_Contact $_contact the contact object
@@ -183,6 +168,58 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     }
     
     /**
+     * add one contact
+     *
+     * @param Addressbook_Model_Contact $_contact
+     * @return  Addressbook_Model_Contact
+     */
+    public function addContact(Addressbook_Model_Contact $_contact)
+    {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        
+        $contact = $this->_backend->addContact($_contact);
+        
+        return;
+    }
+    
+    /**
+     * fetch one contact identified by contactid
+     *
+     * @param int $_contactId
+     * @return Addressbook_Model_Contact
+     */
+    public function getContact($_contactId)
+    {
+        $contact = $this->_backend->getContact($_contactId);
+
+        if(!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access to contact denied');
+        }
+        
+        return $contact;            
+    }
+    
+    
+    /**
+     * update one contact
+     *
+     * @param Addressbook_Model_Contact $_contact
+     * @return  Addressbook_Model_Contact
+     */
+    public function updateContact(Addressbook_Model_Contact $_contact)
+    {
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        
+        $contact = $this->_backend->updateContact($_contact);
+        
+        return;
+    }
+    
+    /**
      * delete one or multiple contacts
      *
      * @param mixed $_contactId
@@ -199,7 +236,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             if(Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE)) {
                 $this->_backend->deleteContact($_contactId);
             } else {
-                throw new Exception('delete access to contacts in container ' . $contact->owner . ' denied');
+                throw new Exception('delete access to contact denied');
             }
         }
     }
