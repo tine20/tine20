@@ -522,7 +522,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         $where  = array(
-            $this->productsTable->getAdapter()->quoteInto('zumleadkey = ?', $_id)
+            $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $_id)
         );
 
         $result = $this->productsTable->fetchAll($where);
@@ -547,7 +547,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');      
         
         try {          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'zumleadkey = ' . $id);      
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = ' . $id);      
         } catch (Exception $e) {
             error_log($e->getMessage());
         }      
@@ -573,7 +573,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
         $_daten = $_productData->toArray();
     
-        $lead_id = $_daten[0]['zumleadkey'];
+        $lead_id = $_daten[0]['lead_id'];
 
 
         if(!(int)$lead_id) {
@@ -586,7 +586,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'zumleadkey = '.$lead_id);
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = '.$lead_id);
 
             foreach($_daten as $_data) {
                 $db->insert(SQL_TABLE_PREFIX . 'metacrm_product', $_data);                
@@ -833,7 +833,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         try {
             $where_lead    = $db->quoteInto('id = ?', $leadId);
-            $where_product = $db->quoteInto('zumleadkey = ?', $leadId);          
+            $where_product = $db->quoteInto('lead_id = ?', $leadId);          
             $where_links[] = $db->quoteInto('link_app1 = ?', 'crm');          
             $where_links[] = $db->quoteInto('link_id1 = ?', $leadId);                      
             $where_links[] = $db->quoteInto('link_app2 = ?', 'addressbook');                                  
@@ -955,7 +955,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $search_values = explode(" ", $_filter);
             
             foreach($search_values AS $search_value) {
-                $where[] = Zend_Registry::get('dbAdapter')->quoteInto('(description_ld LIKE ? OR description LIKE ?)', '%' . $search_value . '%');                            
+                $where[] = Zend_Registry::get('dbAdapter')->quoteInto('(lead_name LIKE ? OR description LIKE ?)', '%' . $search_value . '%');                            
             }
         }
         
@@ -1051,7 +1051,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 		$selectObject = $db->select()
             ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
                 'id',
-                'description_ld',
+                'lead_name',
                 'leadstate_id',
                 'leadtype_id',
                 'leadsource_id',
@@ -1078,7 +1078,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $search_values = explode(" ", $_filter);
             
             foreach($search_values AS $search_value) {
-                $_where[] = $this->leadTable->getAdapter()->quoteInto('(description_ld LIKE ? OR description LIKE ?)', '%' . $search_value . '%');                            
+                $_where[] = $this->leadTable->getAdapter()->quoteInto('(lead_name LIKE ? OR description LIKE ?)', '%' . $search_value . '%');                            
             }
         }
         

@@ -11,7 +11,7 @@
  *
  */
 ?>
-** <?php echo $this->lead->description_ld . " **\n" ?>
+**<?php echo $this->lead->lead_name . " **\n" ?>
 
 <?php echo $this->lead->description ?>
 

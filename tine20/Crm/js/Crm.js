@@ -133,7 +133,7 @@ Tine.Crm.Main = function(){
             remoteSort: true
         });
         
-        storeCrm.setDefaultSort('description_ld', 'asc');
+        storeCrm.setDefaultSort('lead_name', 'asc');
 
         storeCrm.on('beforeload', function(_dataSource) {
             _dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
@@ -422,6 +422,7 @@ Tine.Crm.Main = function(){
                 remoteSort: false
             });
             
+			
             storeLeadtype.load();
             
             var columnModelLeadtype = new Ext.grid.ColumnModel([
@@ -882,7 +883,7 @@ Tine.Crm.Main = function(){
         var columnModel = new Ext.grid.ColumnModel([
             
 			{resizable: true, header: 'projekt ID', id: 'id', dataIndex: 'id', width: 20, hidden: true},
-            {resizable: true, header: 'lead name', id: 'description_ld', dataIndex: 'description_ld', width: 200},
+            {resizable: true, header: 'lead name', id: 'lead_name', dataIndex: 'lead_name', width: 200},
             //{resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: function(_leadPartner) {
             //    if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
             //        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
@@ -945,7 +946,7 @@ Tine.Crm.Main = function(){
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'description_ld',
+            autoExpandColumn: 'lead_name',
             border: false,
             view: new Ext.grid.GridView({
                 autoFill: true,
@@ -1148,10 +1149,10 @@ Tine.Crm.LeadEditDialog = function() {
           
         var txtfld_leadName = new Ext.form.TextField({
             hideLabel: true,
-            id: 'description_ld',
+            id: 'lead_name',
             //fieldLabel:'Projektname', 
             emptyText: 'enter short name',
-            name:'description_ld',
+            name:'lead_name',
             allowBlank: false,
             selectOnFocus: true,
             anchor:'100%'
@@ -1439,7 +1440,7 @@ Tine.Crm.LeadEditDialog = function() {
         
         var product = Ext.data.Record.create([
            {name: 'id', type: 'int'},
-           {name: 'zumleadkey', type: 'int'},
+           {name: 'lead_id', type: 'int'},
            {name: 'product_id', type: 'int'},
            {name: 'product_desc', type: 'string'},
            {name: 'product_price', type: 'float'}
@@ -1461,7 +1462,7 @@ Tine.Crm.LeadEditDialog = function() {
                 handler : function(){
                     var p = new product({
                         id: 'NULL',
-                        zumleadkey: _lead_id,
+                        lead_id: _lead_id,
                         product_id: '',                       
                         product_desc:'',
                         product_price: ''
@@ -1912,7 +1913,7 @@ Tine.Crm.LeadEditDialog = function() {
              if(Ext.isIE7) {
                  var _offset = 142;
              }
-             var _heightContacts = _dimension.height - Ext.getCmp('description_ld').getSize().height 
+             var _heightContacts = _dimension.height - Ext.getCmp('lead_name').getSize().height 
                                                      - Ext.getCmp('lead_notes').getSize().height
                                                      - Ext.getCmp('lead_combos').getSize().height
                                                      - Ext.getCmp('productSummary').getSize().height
@@ -2528,7 +2529,7 @@ Tine.Crm.Model = {};
 // lead
 Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'id',            type: 'int'},
-    {name: 'description_ld',          type: 'string'},
+    {name: 'lead_name',          type: 'string'},
     {name: 'leadstate_id',  type: 'int'},
     {name: 'leadtype_id',   type: 'int'},
     {name: 'leadsource_id', type: 'int'},

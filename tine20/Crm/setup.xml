@@ -15,7 +15,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <field>
-                    <name>description_ld</name>
+                    <name>lead_name</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
@@ -264,7 +264,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <field>
-                    <name>zumleadkey</name>
+                    <name>lead_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
                     <length>11</length>
@@ -298,7 +298,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>zumleadkey</name>
+                    <name>lead_id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>metacrm_lead</table>
@@ -306,7 +306,7 @@
                         <action>ON DELETE CASCADE</action>
                     </reference>
                     <field>
-                        <name>zumleadkey</name>
+                        <name>lead_id</name>
                     </field>
                 </index>   
             </declaration>

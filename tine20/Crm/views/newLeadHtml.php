@@ -11,7 +11,7 @@
  *
  */
 ?>
-<h1><?php echo $this->lead->description_ld ?></h1>
+<h1><?php echo $this->lead->lead_name ?></h1>
 <?php echo nl2br($this->lead->description) ?>
 
 <br>

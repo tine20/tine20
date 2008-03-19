@@ -52,7 +52,7 @@ class Crm_Model_Product extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id' 				    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'zumleadkey'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'lead_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
 		'product_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
 		'product_desc'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 		'product_price'          => array(Zend_Filter_Input::ALLOW_EMPTY => true)

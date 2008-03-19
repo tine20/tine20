@@ -41,7 +41,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      */
     protected $_filters = array(
         'id'                       => 'Digits',
-        'description_ld'                     => 'StringTrim',
+        'lead_name'                     => 'StringTrim',
         'probability'              => 'Digits'
     );
     
@@ -54,7 +54,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'description_ld'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'lead_name' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),

@@ -15,8 +15,7 @@ Tine.Crm.LeadState.Model = Ext.data.Record.create([
     {name: 'id'},
     {name: 'leadstate'},
     {name: 'probability'},
-    {name: 'endslead', type: 'boolean'},
-	{name: 'leadstate_id'}
+    {name: 'endslead', type: 'boolean'}
 ]);
 
 Tine.Crm.LeadState.getStore = function() {

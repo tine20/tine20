@@ -328,7 +328,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         
         $view->updater = Zend_Registry::get('currentAccount');
         $view->lead = $_lead;
-        $view->leadState = $this->getLeadState($_lead->id);
+        $view->leadState = $this->getLeadState($_lead->leadstate_id);
         $view->leadType = $this->getLeadType($_lead->leadtype_id);
         $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container);
@@ -370,9 +370,9 @@ class Crm_Controller extends Tinebase_Container_Abstract
         $html = $view->render('newLeadHtml.php');
         
         if($_isUpdate === true) {
-            $subject = $translate->_('Lead updated') . ': ' . $_lead->description_ld;
+            $subject = $translate->_('Lead updated') . ': ' . $_lead->lead_name;
         } else {
-            $subject = $translate->_('Lead added') . ': ' . $_lead->description_ld;
+            $subject = $translate->_('Lead added') . ': ' . $_lead->lead_name;
         }
         
         // send notifications to all accounts in the first step

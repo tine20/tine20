@@ -287,8 +287,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     			if($_product['id'] == "NULL") {
     				unset($_product['id']);
     			}
-                if($_product['zumleadkey'] == "-1" || empty($_product['zumleadkey'])) {
-    				$_product['zumleadkey'] = $id;
+                if($_product['lead_id'] == "-1" || empty($_product['lead_id'])) {
+    				$_product['lead_id'] = $id;
     
     			}			
                 
