@@ -170,6 +170,9 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
+        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
+        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+    	
         $where = array(
             'group_id'      => $_groupId,
             'account_id'    => $_accountId
