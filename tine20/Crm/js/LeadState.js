@@ -15,7 +15,8 @@ Tine.Crm.LeadState.Model = Ext.data.Record.create([
     {name: 'id'},
     {name: 'leadstate'},
     {name: 'probability'},
-    {name: 'endslead', type: 'boolean'}
+    {name: 'endslead', type: 'boolean'},
+	{name: 'leadstate_id'}
 ]);
 
 Tine.Crm.LeadState.getStore = function() {
@@ -49,7 +50,7 @@ Tine.Crm.LeadState.EditStatesDialog = function() {
     
     var columnModelLeadstate = new Ext.grid.ColumnModel([
         { 
-            id:'id', 
+            id:'leadstate_id', 
             header: 'id', 
             dataIndex: 'id', 
             width: 25, 

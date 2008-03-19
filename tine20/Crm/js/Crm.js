@@ -431,7 +431,7 @@ Tine.Crm.Main = function(){
                       width: 25, 
                       hidden: true 
                     },
-                    { id:'leadtype', 
+                    { id:'leadtype_id', 
                       header: 'leadtype', 
                       dataIndex: 'leadtype', 
                       width: 170, 
@@ -880,19 +880,19 @@ Tine.Crm.Main = function(){
         });
         
         var columnModel = new Ext.grid.ColumnModel([
-            /*
+            
 			{resizable: true, header: 'projekt ID', id: 'id', dataIndex: 'id', width: 20, hidden: true},
             {resizable: true, header: 'lead name', id: 'description_ld', dataIndex: 'description_ld', width: 200},
-            {resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: function(_leadPartner) {
-                if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
-                    return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
-                }
-            }},
-            {resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: function(_leadCustomer) {
-                if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
-                    return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
-                }
-            }},*/
+            //{resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: function(_leadPartner) {
+            //    if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
+            //        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
+            //    }
+            //}},
+            //{resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: function(_leadCustomer) {
+            //    if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
+            //        return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
+            //    }
+            //}},
             {resizable: true, 
               header: 'leadstate', 
               id: 'leadstate_id', 
@@ -2042,7 +2042,7 @@ Tine.Crm.LeadEditDialog.Handler = function() {
         removeContact: function(_button, _event) 
         {
             //console.log('remove contact');           
-            var currentContactsTab = Ext.getCmp('crm_editLeadL_istContactsTabPanel').getActiveTab();
+            var currentContactsTab = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab();
             
             var selectedRows = currentContactsTab.getSelectionModel().getSelections();
             var currentContactsStore = currentContactsTab.getStore();

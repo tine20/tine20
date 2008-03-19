@@ -715,6 +715,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
     public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = NULL)
     {    
+		
         $owner = (int)$_owner;
         if($owner != $_owner) {
             throw new InvalidArgumentException('$_owner must be integer');
@@ -975,6 +976,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     //handle for FOLDER->LEADS functions
     protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
+		
         $where = array_merge($_where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
 
         $db = Zend_Registry::get('dbAdapter');
@@ -986,14 +988,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
          foreach($where as $whereStatement) {
               $select->where($whereStatement);
          }               
-       // $select->__toString();
+       //echo  $select->__toString();
        
         $stmt = $db->query($select);
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $leads = new Tinebase_Record_RecordSet('Crm_Model_Lead', $rows);
-        
+        		
         return $leads;
     }   
     
@@ -1062,10 +1064,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                 'end_scheduled')
             )
             ->join(array('leadstate' => SQL_TABLE_PREFIX . 'metacrm_leadstate'),
-				'lead.leadstate_id = leadstate.id')     ;            
+				'lead.leadstate_id = leadstate.id', array( 'leadstate') );        
 				// 'lead.id = leadstate.id');
 				
-		//echo $selectObject->__toString();		
+			//echo $selectObject->__toString();		
 				
         return $selectObject;
     }
