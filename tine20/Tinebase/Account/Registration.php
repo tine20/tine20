@@ -181,11 +181,11 @@ class Tinebase_Account_Registration
 	            														 "login_hash" => $regData['accountLoginNameHash'],
 	            														 "email" =>  $regData['accountEmailAddress'],
         																  ) );
-        $this->addRegistration($registration);
+        $registration = $this->addRegistration($registration);
         
 		// send mail?
 		if ( $_sendMail ) {
-			$result = $this->sendRegistrationMail( $regData );
+			$result = $this->sendRegistrationMail( $regData, $registration );
 		} else {
 			$result = true;
 		}
@@ -221,8 +221,8 @@ class Tinebase_Account_Registration
         // get plain and html message from views
         // @todo translate mail texts
        	$view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-                
+        $view->setScriptPath(dirname(dirname(__FILE__)). DIRECTORY_SEPARATOR .'views');
+       	       	                
         // set texts and values
         $view->mailTextWelcome = "Welcome to Tine 2.0";
         // if expires = 0 -> no activation link in email
@@ -248,18 +248,21 @@ class Tinebase_Account_Registration
         $mail->addHeader('X-MailGenerator', 'Tine 2.0');
         $mail->setFrom('webmaster@tine20.org', 'Tine 2.0 Webmaster');
 
+        $result = false;
+        
         if( !empty($recipientEmail) ) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send registration email to ' . $recipientEmail);
 
             $mail->addTo($recipientEmail, $recipientName);
         
-            $mail->send();
+            if ( $mail->send() ) {
             
-            // update registration table with "mail sent"
-           	$registration->email_sent = 1;
-            $updateRegistration = true;
-           	
-            return true;
+	            // update registration table with "mail sent"
+	           	$registration->email_sent = 1;
+	            $updateRegistration = true;
+	           	
+            	$result = true;
+            }
         }
         
         if ( $updateRegistration ) {
@@ -303,8 +306,8 @@ class Tinebase_Account_Registration
         // get plain and html message from views
         //-- translate text and insert correct link
        	$view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        
+        $view->setScriptPath(dirname(dirname(__FILE__)). DIRECTORY_SEPARATOR .'views');
+       	        
         $view->mailTextWelcome = "We generated a new password for you ...";
         $view->newPassword = $newPassword;
         
@@ -423,6 +426,7 @@ class Tinebase_Account_Registration
 	 * add new registration
 	 *
 	 * @param	Tinebase_Account_Model_Registration	$_registration
+	 * @return 	Tinebase_Account_Model_Registration the new registration object
 	 * 
 	 * @access	protected
 	 */
@@ -442,9 +446,11 @@ class Tinebase_Account_Registration
         );
         
         // add new account
-        $id = $this->registrationsTable->insert($registrationData);          
+        $this->registrationsTable->insert($registrationData);          
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->login_hash);
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->login_hash);
+        
+        return $this->getRegistrationByHash($_registration->login_hash);
 		
 	}
 
