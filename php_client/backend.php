@@ -14,7 +14,7 @@ require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
 $client = new Zend_Http_Client(
-    $_POST['hostname'],
+    $_POST['url'],
     array('keepalive' => true)
 );
 
