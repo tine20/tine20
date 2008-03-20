@@ -85,7 +85,7 @@ class Tinebase_Account_Registration
 	 * @param 	string $_username
 	 * @return 	bool
 	 * 
-	 * @todo 	test & include function
+	 * @todo 	include function
 	 */
 	public function checkUniqueUsername ( $_username ) 
 	{		
@@ -129,24 +129,29 @@ class Tinebase_Account_Registration
 			$validator = new Zend_Validate_EmailAddress();
 			if ( $validator->isValid($regData['accountEmailAddress']) == false ) {
 			    // email is invalid; print the reasons
-			    $debugMessage = __METHOD__ . '::' . __LINE__ . ' invalid registration email address: '. $regData['accountEmailAddress']."\n";
+			    //$debugMessage = __METHOD__ . '::' . __LINE__ . ' invalid registration email address: '. $regData['accountEmailAddress']."\n";
+			    $debugMessage = 'Invalid registration email address: '. $regData['accountEmailAddress']. '( ';
 			    foreach ($validator->getMessages() as $message) {
-			        $debugMessage .= "$message\n";
+			        $debugMessage .= $message." ";
 			    }
-			    Zend_Registry::get('logger')->debug($debugMessage);
+			    $debugMessage .= ')';
+			    //Zend_Registry::get('logger')->debug($debugMessage);
 			    
-			    // @todo throw exception?
-			    return false;
+			    // throw exception
+			    throw ( new Exception('invalid registration email address: '.$debugMessage) );  
 			}
 		}
 				
 		// add more required fields to regData
 		// get default values from config.ini if available
 		$regData['accountStatus'] = ( isset($this->_config->accountStatus) ) ? $this->_config->accountStatus : 'enabled'; 
-		$regData['accountPrimaryGroup'] = ( isset($this->_config->accountPrimaryGroup) ) ? $this->_config->accountPrimaryGroup : '2'; 
-		
 		$regData['accountDisplayName'] = $regData['accountFirstName'].' '.$regData['accountLastName']; 
 		$regData['accountFullName'] = $regData['accountDisplayName']; 
+		
+		// get groupbyname
+		$primaryGroupName = ( isset($this->_config->accountPrimaryGroup) ) ? $this->_config->accountPrimaryGroup : 'Users';
+		$primaryGroup = Tinebase_Group::getInstance()->getGroupByName( $primaryGroupName );
+		$regData['accountPrimaryGroup'] = $primaryGroup->getId();
 
 		// add expire date (user has 1 day to click on the activation link)
 		if ( isset($this->_config->expires) && $this->_config->expires > 0 ) {
@@ -169,8 +174,15 @@ class Tinebase_Account_Registration
 		$regData['password'] = $this->generatePassword();
 		Tinebase_Auth::getInstance()->setPassword($regData['accountLoginName'], $regData['password'], $regData['password']);
 		
-		//@todo put hash generation and save registration here
-		
+        // create hash from username
+        $regData['accountLoginNameHash'] = md5($regData['accountLoginName']);
+
+        // save in registrations table 
+        $registration = new Tinebase_Account_Model_Registration ( array( "registrationLoginName" => $regData['accountLoginName'],
+	            														 "registrationHash" => $regData['accountLoginNameHash'],
+	            														 "registrationEmail" =>  $regData['accountEmailAddress'] ) );
+        $this->addRegistration($registration);
+        
 		// send mail?
 		if ( $_sendMail ) {
 			$result = $this->sendRegistrationMail( $regData );
@@ -190,7 +202,6 @@ class Tinebase_Account_Registration
 	 *
 	 * @access	protected
 	 * 
-	 * @todo	put hash generation and save registration in registerUser
 	 */
 	protected function sendRegistrationMail ( $_regData ) 
 	{
@@ -201,21 +212,19 @@ class Tinebase_Account_Registration
         
         $recipientName = $_regData['accountDisplayName'];
         $recipientEmail = $_regData['accountEmailAddress'];
-
+        $hashedUsername = $_regData['accountLoginNameHash'];
+        
         // get plain and html message from views
         // @todo translate mail texts
        	$view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
-        
-        // create hash from username
-        $hashed_username = md5($_regData['accountLoginName']);
-        
+                
         // set texts and values
         $view->mailTextWelcome = "Welcome to Tine 2.0";
         // if expires = 0 -> no activation link in email
         if ( isset($this->_config->expires) && $this->_config->expires > 0 && isset($_SERVER['SERVER_NAME']) ) {        	
         	$view->mailActivationLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
-        		'?method=Tinebase.activateAccount&id='.$hashed_username;
+        		'?method=Tinebase.activateAccount&id='.$hashedUsername;
         }
         $view->username = $_regData['accountLoginName'];
         $view->password = $_regData['password'];
@@ -238,12 +247,8 @@ class Tinebase_Account_Registration
         
             $mail->send();
             
-            // save in registrations table 
-            $registration = new Tinebase_Account_Model_Registration ( array( "registrationLoginName" => $_regData['accountLoginName'],
-            																 "registrationHash" => $hashed_username,
-            																 "registrationEmail" =>  $recipientEmail ) );
-            $this->addRegistration($registration);
-            
+            //@todo update registration table with "mail sent"
+                        
             return true;
         }
 		
@@ -258,7 +263,6 @@ class Tinebase_Account_Registration
 	 * 
 	 * @todo 	add more texts to mail views
 	 * @todo	translate mails
-	 * @todo 	test!
 	 */
 	public function sendLostPasswordMail ($_username) 
 	{
@@ -414,13 +418,11 @@ class Tinebase_Account_Registration
             throw(new Exception('invalid registration object'));
         }
 
-        // @todo set reg_date & expire date (with zend_date add 24 hours)
-        // @todo find out how mysql date functions can be called in (zend) pdo
         $registrationData = array (
         	"login_name" 	=> $_registration->registrationLoginName,
             "login_hash" 	=> $_registration->registrationHash,
             "email" 		=> $_registration->registrationEmail,
-        	"reg_date" 		=> 'FROM_UNIXTIME(`' . SQL_TABLE_PREFIX . 'registrations`.`reg_date`)',
+        	"reg_date" 		=> Zend_Date::now()->getIso(),
         	"status"		=> "justregistered",
         );
         
@@ -429,6 +431,35 @@ class Tinebase_Account_Registration
 
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->registrationHash);
 		
+	}
+
+	/**
+	 * update registration
+	 *
+	 * @param	Tinebase_Account_Model_Registration	$_registration
+	 * 
+	 * @access	protected
+	 * 
+	 * @todo 	implement function
+	 */
+	protected function updateRegistration ( $_registration ) 
+	{
+
+        /*if(!$_registration->isValid()) {
+            throw(new Exception('invalid registration object'));
+        }
+
+        $registrationData = array (
+        	"login_name" 	=> $_registration->registrationLoginName,
+            "login_hash" 	=> $_registration->registrationHash,
+            "email" 		=> $_registration->registrationEmail,
+        	"reg_date" 		=> Zend_Date::now()->getIso(),
+        	"status"		=> "justregistered",
+        );
+        
+        // add new account
+        $registrationId = $this->registrationsTable->insert($registrationData);          
+		*/
 	}
 	
 	/**
