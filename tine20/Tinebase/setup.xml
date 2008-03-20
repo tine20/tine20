@@ -332,6 +332,13 @@
                     <name>expires_at</name>
                     <type>datetime</type>
                 </field>
+                <field>
+                    <name>email_sent</name>
+                    <type>integer</type>
+                    <length>1</length>
+                    <unsigned>true</unsigned>
+                    <default>0</default>
+                </field>
                 <index>
                     <name>account_id</name>
                     <primary>true</primary>
