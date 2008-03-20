@@ -318,7 +318,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>reg_date</name>
+                    <name>date</name>
                     <type>datetime</type>
                 </field>
                 <field>
