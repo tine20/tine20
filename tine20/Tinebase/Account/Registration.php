@@ -510,15 +510,9 @@ class Tinebase_Account_Registration
     public function getRegistrationByHash($_hash)
     {
        	$db = Zend_Registry::get('dbAdapter');
+
        	$select = $db->select()
-       				->from(SQL_TABLE_PREFIX . 'registrations',
-       					array(
-       						    "registrationLoginName"	=> "login_name",
-       						    "registrationHash"	=> "login_hash",
-       					       	"registrationEmail"	=> "email",
-       							"registrationId"	=> "id",
-	       					)
-       					)
+       				->from(SQL_TABLE_PREFIX . 'registrations', Tinebase_Account_Model_Registration::$_databaseMapping )
        				->where('login_hash = ?', $_hash );
     	
         $stmt = $select->query();
@@ -526,7 +520,7 @@ class Tinebase_Account_Registration
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
 
     	if ( !is_array($row) ) {
-			$e = new Tinebase_Record_Exception_NotDefined('entry not found error');
+			$e = new Tinebase_Record_Exception_NotDefined('registration entry not found error');
             Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
             throw $e;    	
     	}        
@@ -544,7 +538,7 @@ class Tinebase_Account_Registration
                 print_r($validation_errors,true));
             throw ($e);
         }
-        
+
         return $registration;
     }
     

@@ -71,5 +71,21 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
     protected $_datetimeFields = array(
         'registrationDate',
         'registrationExpires',
+    );   
+
+    /**
+     * database field mapping
+     *
+     * @var array list of database field mapping
+     */    
+    static public $_databaseMapping = array(
+        "registrationLoginName"	=> "login_name",
+        "registrationHash"	=> "login_hash",
+        "registrationEmail"	=> "email",
+       	"registrationId"	=> "id",
+       	"registrationEmailSent" => "email_sent",
+       	"registrationStatus" => "status",
     );    
+
+ 
 }
