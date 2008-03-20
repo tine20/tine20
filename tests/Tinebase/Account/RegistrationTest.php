@@ -144,6 +144,23 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     	$this->assertEquals(  $registration->email_sent,1 );
     	    	
     }
+
+   /**
+     * try to update a registration
+     *
+     */
+    public function testUpdateRegistration()
+    {
+    	
+    	// check registration update
+    	$registration = Tinebase_Account_Registration::getInstance()->getRegistrationByHash(md5($this->userData['accountLoginName']));
+    	
+    	$updatedRegistration = Tinebase_Account_Registration::getInstance()->updateRegistration($registration);
+    	
+    	$this->assertEquals(  $registration->date,$updatedRegistration->date );
+    	$this->assertEquals(  $registration->status,$updatedRegistration->status );
+    	
+    }
     
     /**
      * try to check if a username is unique
