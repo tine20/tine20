@@ -29,10 +29,10 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @todo 	add more filters
      */
     protected $_filters = array(
-        'registrationId'         => 'Digits',
-        'registrationLoginName'  => 'StringTrim',
-        'registrationHash'       => 'StringTrim',
-        'registrationEmail'      => 'StringTrim',
+        'id'         => 'Digits',
+        'login_name'  => 'StringTrim',
+        'login_hash'       => 'StringTrim',
+        'email'      => 'StringTrim',
     );
     
     /**
@@ -43,14 +43,14 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @var 	array
      */
     protected $_validators = array(
-        'registrationId'        => array('allowEmpty' => true),
-        'registrationLoginName' => array('presence' => 'required'),
-        'registrationHash'      => array('presence' => 'required'),
-        'registrationEmail'     => array('presence' => 'required'),
-    	'registrationDate'		=> array('allowEmpty' => true),
-    	'registrationExpires'	=> array('allowEmpty' => true),
-    	'registrationStatus'	=> array('allowEmpty' => true),
-    	'registrationEmailSent' => array('allowEmpty' => true),
+        'id'        => array('allowEmpty' => true),
+        'login_name' => array('presence' => 'required'),
+        'login_hash'      => array('presence' => 'required'),
+        'email'     => array('presence' => 'required'),
+    	'date'		=> array('allowEmpty' => true),
+    	'expires_at'	=> array('allowEmpty' => true),
+    	'status'	=> array('allowEmpty' => true),
+    	'email_sent' => array('allowEmpty' => true),
     );
     
    /**
@@ -59,7 +59,7 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * 
      * @var 	string
      */    
-    protected $_identifier = 'registrationId';
+    protected $_identifier = 'id';
 
     
     /**
@@ -69,23 +69,9 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'registrationDate',
-        'registrationExpires',
+        'date',
+        'expires_at',
     );   
-
-    /**
-     * database field mapping
-     *
-     * @var array list of database field mapping
-     */    
-    static public $_databaseMapping = array(
-        "registrationLoginName"	=> "login_name",
-        "registrationHash"	=> "login_hash",
-        "registrationEmail"	=> "email",
-       	"registrationId"	=> "id",
-       	"registrationEmailSent" => "email_sent",
-       	"registrationStatus" => "status",
-    );    
 
  
 }

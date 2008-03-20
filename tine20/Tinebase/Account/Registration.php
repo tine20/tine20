@@ -177,9 +177,9 @@ class Tinebase_Account_Registration
         $regData['accountLoginNameHash'] = md5($regData['accountLoginName']);
 
         // save in registrations table 
-        $registration = new Tinebase_Account_Model_Registration ( array( "registrationLoginName" => $regData['accountLoginName'],
-	            														 "registrationHash" => $regData['accountLoginNameHash'],
-	            														 "registrationEmail" =>  $regData['accountEmailAddress'],
+        $registration = new Tinebase_Account_Model_Registration ( array( "login_name" => $regData['accountLoginName'],
+	            														 "login_hash" => $regData['accountLoginNameHash'],
+	            														 "email" =>  $regData['accountEmailAddress'],
         																  ) );
         $this->addRegistration($registration);
         
@@ -231,7 +231,7 @@ class Tinebase_Account_Registration
         		'?method=Tinebase.activateAccount&id='.$hashedUsername;
             
         	// deactivate registration
-            $registration->registrationStatus = 'waitingforactivation';
+            $registration->status = 'waitingforactivation';
             $updateRegistration = true;
         }
         $view->username = $_regData['accountLoginName'];
@@ -256,7 +256,7 @@ class Tinebase_Account_Registration
             $mail->send();
             
             // update registration table with "mail sent"
-           	$registration->registrationEmailSent = 1;
+           	$registration->email_sent = 1;
             $updateRegistration = true;
            	
             return true;
@@ -359,22 +359,22 @@ class Tinebase_Account_Registration
 	/**
 	 * activate user account
 	 *
-	 * @param 	string $_registrationHash
+	 * @param 	string $_login_hash
 	 * @return	Tinebase_Account_Model_FullAccount
 	 * 
 	 */
-	public function activateAccount ( $_registrationHash ) 
+	public function activateAccount ( $_login_hash ) 
 	{		
 		
        	// get registration by hash
-       	$registration = $this->getRegistrationByHash ( $_registrationHash );
+       	$registration = $this->getRegistrationByHash ( $_login_hash );
 		
 		// set new status in DB (registration)
-		$registration->registrationStatus = 'activated';
+		$registration->status = 'activated';
        	$this->updateRegistration ( $registration );
 
        	// get account by username
-		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
+		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['login_name']);
 
 		// set new expire_date in DB (account)
 		Tinebase_Account::getInstance()->setExpiryDate($account['accountId'], NULL);
@@ -434,17 +434,17 @@ class Tinebase_Account_Registration
         }
 
         $registrationData = array (
-        	"login_name" 	=> $_registration->registrationLoginName,
-            "login_hash" 	=> $_registration->registrationHash,
-            "email" 		=> $_registration->registrationEmail,
-        	"reg_date" 		=> Zend_Date::now()->getIso(),
+        	"login_name" 	=> $_registration->login_name,
+            "login_hash" 	=> $_registration->login_hash,
+            "email" 		=> $_registration->email,
+        	"date" 		=> Zend_Date::now()->getIso(),
         	"status"		=> "justregistered",
         );
         
         // add new account
-        $registrationId = $this->registrationsTable->insert($registrationData);          
+        $id = $this->registrationsTable->insert($registrationData);          
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->registrationHash);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new registration entry with hash ' . $_registration->login_hash);
 		
 	}
 
@@ -463,16 +463,16 @@ class Tinebase_Account_Registration
         }
 
         $registrationData = array (
-        	"login_name" 	=> $_registration->registrationLoginName,
-            "login_hash" 	=> $_registration->registrationHash,
-            "email" 		=> $_registration->registrationEmail,
-        	"reg_date" 		=> ($_registration->registrationDate instanceof Zend_Date ? $_registration->registrationDate->getTimestamp() : NULL),
-        	"status"		=> $_registration->registrationStatus,
-        	"email_sent"	=> $_registration->registrationEmailSent,
+        	"login_name" 	=> $_registration->login_name,
+            "login_hash" 	=> $_registration->login_hash,
+            "email" 		=> $_registration->email,
+        	"date" 		=> ($_registration->date instanceof Zend_Date ? $_registration->date->getTimestamp() : NULL),
+        	"status"		=> $_registration->status,
+        	"email_sent"	=> $_registration->email_sent,
         );
         //--   
         $where = array(
-            $this->registrationsTable->getAdapter()->quoteInto('id = ?', $_registration->registrationId)
+            $this->registrationsTable->getAdapter()->quoteInto('id = ?', $_registration->id)
         );
         
         $result = $this->registrationsTable->update($registrationData, $where);
@@ -512,7 +512,7 @@ class Tinebase_Account_Registration
        	$db = Zend_Registry::get('dbAdapter');
 
        	$select = $db->select()
-       				->from(SQL_TABLE_PREFIX . 'registrations', Tinebase_Account_Model_Registration::$_databaseMapping )
+       				->from(SQL_TABLE_PREFIX . 'registrations' )
        				->where('login_hash = ?', $_hash );
     	
         $stmt = $select->query();
