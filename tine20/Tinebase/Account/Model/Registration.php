@@ -25,6 +25,8 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * this filter get used when validating user generated content with Zend_Input_Filter
      *
      * @var 	array
+     * 
+     * @todo 	add more filters
      */
     protected $_filters = array(
         'registrationId'         => 'Digits',
@@ -48,6 +50,7 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
     	'registrationDate'		=> array('allowEmpty' => true),
     	'registrationExpires'	=> array('allowEmpty' => true),
     	'registrationStatus'	=> array('allowEmpty' => true),
+    	'registrationEmailSent' => array('allowEmpty' => true),
     );
     
    /**

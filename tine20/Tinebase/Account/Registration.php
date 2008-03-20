@@ -247,7 +247,10 @@ class Tinebase_Account_Registration
         
             $mail->send();
             
-            //@todo update registration table with "mail sent"
+            // update registration table with "mail sent"
+           	$registration = $this->getRegistrationByHash ( $hashedUsername );
+           	$registration->registrationEmailSent = 1;
+           	$this->updateRegistration( $registration );
                         
             return true;
         }
@@ -352,11 +355,12 @@ class Tinebase_Account_Registration
 	public function activateAccount ( $_registrationHash ) 
 	{		
 		
-       	// get registration by id / hash
+       	// get registration by hash
        	$registration = $this->getRegistrationByHash ( $_registrationHash );
 		
 		// set new status in DB (registration)
-       	$this->updateRegistration ( $registration, array ( 'status' => 'activated' ) );
+		$registration->registrationStatus = 'activated';
+       	$this->updateRegistration ( $registration );
 
        	// get account by username
 		$account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['registrationLoginName']);
@@ -439,13 +443,11 @@ class Tinebase_Account_Registration
 	 * @param	Tinebase_Account_Model_Registration	$_registration
 	 * 
 	 * @access	protected
-	 * 
-	 * @todo 	implement function
 	 */
-	protected function updateRegistration ( $_registration ) 
+	protected function updateRegistration ( Tinebase_Account_Model_Registration $_registration ) 
 	{
 
-        /*if(!$_registration->isValid()) {
+        if(!$_registration->isValid()) {
             throw(new Exception('invalid registration object'));
         }
 
@@ -453,33 +455,23 @@ class Tinebase_Account_Registration
         	"login_name" 	=> $_registration->registrationLoginName,
             "login_hash" 	=> $_registration->registrationHash,
             "email" 		=> $_registration->registrationEmail,
-        	"reg_date" 		=> Zend_Date::now()->getIso(),
-        	"status"		=> "justregistered",
+        	"reg_date" 		=> ($_registration->registrationDate instanceof Zend_Date ? $_registration->registrationDate->getTimestamp() : NULL),
+        	"status"		=> $_registration->registrationStatus,
+        	"email_sent"	=> $_registration->registrationEmailSent,
+        );
+        //--   
+        $where = array(
+            $this->registrationsTable->getAdapter()->quoteInto('id = ?', $_registration->registrationId)
         );
         
-        // add new account
-        $registrationId = $this->registrationsTable->insert($registrationData);          
-		*/
+        $result = $this->registrationsTable->update($registrationData, $where);
+                
+        return $result;
+        
+        //@todo	add function
+       // return $this->getRegistrationById($accountId, 'Tinebase_Account_Model_FullAccount');
 	}
 	
-	/**
-	 * update registration
-	 *
-	 * @param	Tinebase_Account_Model_Registration	$_registration
-	 * @param	array	data to update
-	 * 
-	 * @access	protected
-	 */
-	protected function updateRegistration ( $_registration, $_data ) 
-	{
-        $where = array(
-            $this->registrationsTable->getAdapter()->quoteInto('id = ?', $_registration['registrationId'])
-        );
-        
-        $result = $this->registrationsTable->update($_data, $where);
-		
-	}
-
 	/**
 	 * delete registration by username
 	 *
