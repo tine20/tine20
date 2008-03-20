@@ -62,9 +62,15 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
         ); 
 
         $this->objects['registration'] = new Tinebase_Account_Model_Registration ( array(
-        	'registrationEmail' => $this->userData['accountEmailAddress'],
-        	'registrationHash' => md5($this->userData['accountEmailAddress']),
-            'registrationLoginName' => $this->userData['accountLoginName'],
+        	'email' => $this->userData['accountEmailAddress'],
+        	'login_hash' => md5($this->userData['accountLoginName']),
+            'login_name' => $this->userData['accountLoginName'],
+        )); 
+
+        $this->objects['registrationDummy'] = new Tinebase_Account_Model_Registration ( array(
+        	'email' => 'test@example.org',
+        	'login_hash' => md5('dummy_test'),
+            'login_name' => 'dummy_test',
         )); 
         
         return;
@@ -83,25 +89,54 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to check if a username is unique
-     *
-     * @todo 	activate & add a user with the same username to db first
-     */
-    public function testCheckUniqueUsername()
-    {
-     	//$result = Tinebase_Account_Registration::getInstance()->checkUniqueUsername($this->objects['registration']->registrationLoginName);
-    } 
-
-    /**
      * try to register a user
      *
      * @todo 	check result
      */
     public function testRegisterUser()
     {
+
     	// don't send mail
     	$result = Tinebase_Account_Registration::getInstance()->registerUser ( $this->userData, false );
+    	
+    	// check account
+    	$account = Tinebase_Account::getInstance()->getFullAccountByLoginName ( $this->userData['accountLoginName'] );
+    	
+    	$this->assertEquals( $account->accountLastName,  $this->userData['accountLastName'] );
+    	
+    	// check registration
+    	$registration = Tinebase_Account_Registration::getInstance()->getRegistrationByHash($this->objects['registration']->login_hash);
+
+    	$this->assertEquals( $registration->email,  $this->objects['registration']->email );
+   		$this->assertEquals( $registration->email_sent,  0 );
+    	// check config settings
+   		
     }    
+
+    /**
+     * try to register a user with email
+     *
+     * @todo 	activate & check result
+     */
+    public function testRegisterUserSendMail()
+    {
+  		//-- with mail sending
+    }
+    
+    /**
+     * try to check if a username is unique
+     *
+     */
+    public function testCheckUniqueUsername()
+    {
+     	$result = Tinebase_Account_Registration::getInstance()->checkUniqueUsername($this->objects['registration']->login_name);
+     	
+     	$this->assertEquals( $result, false );
+
+     	$result = Tinebase_Account_Registration::getInstance()->checkUniqueUsername($this->objects['registrationDummy']->login_name);
+     	
+     	$this->assertEquals( $result, true );
+    } 
 
     
     /**
@@ -111,7 +146,7 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
      */
     public function testSendLostPasswordMail()
     {
-    	//$result = Tinebase_Account_Registration::getInstance()->sendLostPasswordMail ( $this->objects['registration']->registrationLoginName );
+    	//$result = Tinebase_Account_Registration::getInstance()->sendLostPasswordMail ( $this->objects['registration']->login_name );
     }    
     
     /**
@@ -121,7 +156,7 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
      */
     public function testActivateAccount()
     {
-    	// $result = Tinebase_Account_Registration::getInstance()->activateAccount ( $this->objects['registration']->registrationHash );
+    	// $result = Tinebase_Account_Registration::getInstance()->activateAccount ( $this->objects['registration']->login_hash );
     }    
 
     
@@ -133,11 +168,11 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     public function testDeleteRegistrationByLoginName()
     {
     	// delete registration
-		Tinebase_Account_Registration::getInstance()->deleteRegistrationByLoginName ( $this->objects['registration']->registrationLoginName );
+		Tinebase_Account_Registration::getInstance()->deleteRegistrationByLoginName ( $this->objects['registration']->login_name );
 
     	// delete account afterwards
     	//@todo		put into a seperate test?
-		$account = Tinebase_Account::getInstance()->getAccountByLoginName($this->objects['registration']->registrationLoginName, 'Tinebase_Account_Model_FullAccount');
+		$account = Tinebase_Account::getInstance()->getAccountByLoginName($this->objects['registration']->login_name, 'Tinebase_Account_Model_FullAccount');
 		Tinebase_Account::getInstance()->deleteAccount( $account );
     }
 }		
