@@ -33,6 +33,11 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
      * @var user data for registration
      */
     protected $userData = array();
+
+    /**
+     * @var user data for registration with email
+     */
+    protected $userDataMail = array();
     
     /**
      * Runs the test methods of this class.
@@ -61,6 +66,14 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
             'accountLoginName' => 'ptest',
         ); 
 
+        $this->userDataMail =  array(
+        	//'accountEmailAddress' => 'p.schuele@metaways.de',
+        	'accountEmailAddress' => 'test@example.org',
+        	'accountFirstName' => 'Philippo',
+            'accountLastName' => 'Testet',
+            'accountLoginName' => 'ptestet',
+        ); 
+        
         $this->objects['registration'] = new Tinebase_Account_Model_Registration ( array(
         	'email' => $this->userData['accountEmailAddress'],
         	'login_hash' => md5($this->userData['accountLoginName']),
@@ -120,7 +133,16 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
      */
     public function testRegisterUserSendMail()
     {
-  		//-- with mail sending
+    	// send mail
+    	$result = Tinebase_Account_Registration::getInstance()->registerUser ( $this->userDataMail );
+
+    	$this->assertEquals(  $result, true );
+    	
+    	// check registration
+    	$registration = Tinebase_Account_Registration::getInstance()->getRegistrationByHash(md5($this->userDataMail['accountLoginName']));
+
+    	$this->assertEquals(  $registration->email_sent,1 );
+    	    	
     }
     
     /**
@@ -171,9 +193,17 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
 		Tinebase_Account_Registration::getInstance()->deleteRegistrationByLoginName ( $this->objects['registration']->login_name );
 
     	// delete account afterwards
-    	//@todo		put into a seperate test?
 		$account = Tinebase_Account::getInstance()->getAccountByLoginName($this->objects['registration']->login_name, 'Tinebase_Account_Model_FullAccount');
 		Tinebase_Account::getInstance()->deleteAccount( $account );
+		
+		// delete email account
+   		// delete registration
+		Tinebase_Account_Registration::getInstance()->deleteRegistrationByLoginName ( $this->userDataMail['accountLoginName'] );
+
+    	// delete account afterwards
+		$account = Tinebase_Account::getInstance()->getAccountByLoginName($this->userDataMail['accountLoginName'], 'Tinebase_Account_Model_FullAccount');
+		Tinebase_Account::getInstance()->deleteAccount( $account );
+		
     }
 }		
 	
