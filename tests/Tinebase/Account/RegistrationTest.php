@@ -104,7 +104,6 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     /**
      * try to register a user
      *
-     * @todo 	check result
      */
     public function testRegisterUser()
     {
@@ -116,6 +115,8 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     	$account = Tinebase_Account::getInstance()->getFullAccountByLoginName ( $this->userData['accountLoginName'] );
     	
     	$this->assertEquals( $account->accountLastName,  $this->userData['accountLastName'] );
+    	//@todo check if "expires" in config.ini set to 0 before this check 
+    	$this->assertNotEquals( $account->accountExpires, NULL );
     	
     	// check registration
     	$registration = Tinebase_Account_Registration::getInstance()->getRegistrationByHash($this->objects['registration']->login_hash);
@@ -129,7 +130,6 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     /**
      * try to register a user with email
      *
-     * @todo 	activate & check result
      */
     public function testRegisterUserSendMail()
     {
@@ -164,28 +164,32 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     /**
      * try to register a user
      *
-     * @todo 	activate & check result
+     * @todo 	implement & activate & check result
      */
     public function testSendLostPasswordMail()
     {
     	//$result = Tinebase_Account_Registration::getInstance()->sendLostPasswordMail ( $this->objects['registration']->login_name );
+    	$this->markTestIncomplete('This test has not been implemented yet.');
     }    
     
     /**
      * try to activate an account
      *
-     * @todo 	activate & check result
      */
     public function testActivateAccount()
     {
-    	// $result = Tinebase_Account_Registration::getInstance()->activateAccount ( $this->objects['registration']->login_hash );
+    	$result = Tinebase_Account_Registration::getInstance()->activateAccount ( $this->objects['registration']->login_hash );
+
+    	// check account
+    	$account = Tinebase_Account::getInstance()->getFullAccountByLoginName ( $this->userData['accountLoginName'] );
+    	
+    	$this->assertEquals( $account->accountExpires, NULL );
     }    
 
     
     /**
      * try to delete a registration
      *
-     * @todo 	check result
      */
     public function testDeleteRegistrationByLoginName()
     {
@@ -205,6 +209,18 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
 		Tinebase_Account::getInstance()->deleteAccount( $account );
 		
     }
+    
+    /**
+     * try to fetch a non-existant registration
+     *
+     */
+    public function testGetNonExistantRegistration()
+    {
+    	$this->setExpectedException('Tinebase_Record_Exception_NotDefined');
+    	
+    	$registration = Tinebase_Account_Registration::getInstance()->getRegistrationByHash(md5($this->userData['accountLoginName']));
+    }
+    
 }		
 	
 
