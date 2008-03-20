@@ -273,6 +273,10 @@ class Tinebase_Container
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $application        = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
+        
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
@@ -443,6 +447,10 @@ class Tinebase_Container
         
         $groupMemberships   = $_account->getGroupMemberships();
         
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
+        
         $db = Zend_Registry::get('dbAdapter');
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -504,6 +512,10 @@ class Tinebase_Container
         $groupMemberships   = $_account->getGroupMemberships();
         $accountId          = $_account->accountId;
         
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
+        
         $db = Zend_Registry::get('dbAdapter');
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -558,7 +570,10 @@ class Tinebase_Container
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         
         $groupMemberships   = $_account->getGroupMemberships();
-        #$groupMemberships[] = $_account->accountId;
+
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -609,7 +624,10 @@ class Tinebase_Container
         $accountId = $_account->accountId;
         
         $groupMemberships   = $_account->getGroupMemberships();
-        #$groupMemberships[] = $_account->accountId;
+
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
         
         $db = Zend_Registry::get('dbAdapter');
         
