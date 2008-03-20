@@ -58,7 +58,7 @@ Tine.Tinebase.initFramework = function() {
 			//connection.purgeListeners();
 
             // if communication is lost, we can't create a nice ext window.
-            if (response.status == 0) {
+            if (response.status === 0) {
                 alert('Connection lost, please check your network!');
             }
             
@@ -152,7 +152,7 @@ Tine.Tinebase.MainScreen = function() {
             height: 26,
             items:[
                 'Account name: ' + Tine.Tinebase.Registry.get('currentAccount').accountDisplayName + ' ',
-                'Timezone: ' +  Tine.Tinebase.Registry.get('timeZone'), 
+                'Timezone: ' +  Tine.Tinebase.Registry.get('timeZone')
             ]
 
         });
@@ -367,7 +367,7 @@ Tine.Tinebase.MainScreen = function() {
                                 fn: function() {} */
                             });    
                         }
-                    };
+                    }
                   }                    
                 }
 			]
@@ -428,7 +428,7 @@ Tine.Tinebase.MainScreen = function() {
                         fn: function() {} */
                     });    
                 }
-            };
+            }
           };
 
         var passwordDialog = new Ext.Window({
@@ -562,10 +562,10 @@ Tine.Tinebase.Common = function(){
 				x = window.screenX;
 				y = window.screenY;
 			}
-		var leftPos = ((w - _width) / 2) + y;
-		var topPos = ((h - _height) / 2) + x;
+		leftPos = ((w - _width) / 2) + y;
+		topPos = ((h - _height) / 2) + x;
 		
-		var popup = window.open(_url, _windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
+		popup = window.open(_url, _windowName, 'width=' + _width + ',height=' + _height + ',top=' + topPos + ',left=' + leftPos +
 		',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
 		
 		return popup;
@@ -626,14 +626,16 @@ Tine.Tinebase.Common = function(){
 			return false;
 		}
 			
-		var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array();		
+		var data = _dataSrc.data;
+		var dataLen = data.getCount();
+		var jsonData = [];		
 		for(i=0; i < dataLen; i++) {
 			var curRecData = data.itemAt(i).data;
 			jsonData.push(curRecData);
 		}	
 
 		return Ext.util.JSON.encode(jsonData);
-	}
+	};
        
     /** 
      * returns json coded data from given data source
@@ -649,7 +651,9 @@ Tine.Tinebase.Common = function(){
 			return false;
 		}
 			
-		var data = _dataSrc.data, dataLen = data.getCount(), jsonData = new Array(), keysLen = _switchKeys.length;		
+		var data = _dataSrc.data, dataLen = data.getCount();
+		var jsonData = [];
+		var keysLen = _switchKeys.length;		
         
         if(keysLen < 1) {
             return false;
@@ -657,8 +661,8 @@ Tine.Tinebase.Common = function(){
         
 		for(var i=0; i < dataLen; i++) {
 
-                var curRecData = new Array();
-                curRecData[0] = new Object();
+                var curRecData = [];
+                curRecData[0] = {};
                 curRecData[0][_switchKeys[0]] = data.itemAt(i).data.key;
                 curRecData[0][_switchKeys[1]] = data.itemAt(i).data.value;                
 
@@ -666,7 +670,7 @@ Tine.Tinebase.Common = function(){
 		}	
 
 		return Ext.util.JSON.encode(jsonData);
-	}       
+	}    ;   
        
     
 	return {
