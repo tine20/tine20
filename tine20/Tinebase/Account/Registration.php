@@ -90,23 +90,16 @@ class Tinebase_Account_Registration
 	public function checkUniqueUsername ( $_username ) 
 	{		
 		// if exists -> return false
-		//-- is it ok to use the try/catch mechanism or should we implement a accountExists-function in the account controller/model?
 		try {
 			Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call getAccountByLoginName with username '.$_username);
 			
 			// get account with this username from db
-			//-- still an error if account doesn't exist
 			$account = Tinebase_Account::getInstance()->getAccountByLoginName($_username);
 			return false;
 		} catch ( Exception $e ) {
 			return true;
 		}
 		
-		/*if ( empty($account) ) {
-			return true;
-		} else {
-			return false;	
-		}*/
 	}
 
 	/**
@@ -122,9 +115,15 @@ class Tinebase_Account_Registration
 		
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' call registerUser with regData: '. print_r($regData, true));
 
+		// validate unique username
+		//@todo 	move to frontend later on
+		if ( !$this->checkUniqueUsername ($regData['accountLoginName']) ) {
+			throw ( new Exception('username already exists') );
+		}
+		
 		// validate email address
 		if ( isset($this->_config->emailValidation) && $this->_config->emailValidation == 'zend' ) {
-			// zend email validation isn't working on a 64bit os at the moment (v1.5.0RC3)
+			// zend email validation isn't working on a 64bit os at the moment (v1.5.0)
 			require_once 'Zend/Validate/EmailAddress.php';
 			$validator = new Zend_Validate_EmailAddress();
 			if ( $validator->isValid($regData['accountEmailAddress']) == false ) {
@@ -180,7 +179,8 @@ class Tinebase_Account_Registration
         // save in registrations table 
         $registration = new Tinebase_Account_Model_Registration ( array( "registrationLoginName" => $regData['accountLoginName'],
 	            														 "registrationHash" => $regData['accountLoginNameHash'],
-	            														 "registrationEmail" =>  $regData['accountEmailAddress'] ) );
+	            														 "registrationEmail" =>  $regData['accountEmailAddress'],
+        																  ) );
         $this->addRegistration($registration);
         
 		// send mail?
@@ -198,14 +198,18 @@ class Tinebase_Account_Registration
 	 * create user hash, send registration mail and save registration in database
 	 *
 	 * @param 	array $_regData
+	 * @param 	Tinebase_Account_Model_Registration $_registration
 	 * @return 	bool
 	 *
 	 * @access	protected
 	 * 
 	 */
-	protected function sendRegistrationMail ( $_regData ) 
-	{
+	protected function sendRegistrationMail ( $_regData, $_registration ) 
+	{		
 
+        $registration = $_registration;
+        $updateRegistration = false;
+		
 		$mail = new Tinebase_Mail('UTF-8');
         
         $mail->setSubject("Welcome to Tine 2.0");
@@ -225,6 +229,10 @@ class Tinebase_Account_Registration
         if ( isset($this->_config->expires) && $this->_config->expires > 0 && isset($_SERVER['SERVER_NAME']) ) {        	
         	$view->mailActivationLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].
         		'?method=Tinebase.activateAccount&id='.$hashedUsername;
+            
+        	// deactivate registration
+            $registration->registrationStatus = 'waitingforactivation';
+            $updateRegistration = true;
         }
         $view->username = $_regData['accountLoginName'];
         $view->password = $_regData['password'];
@@ -248,14 +256,17 @@ class Tinebase_Account_Registration
             $mail->send();
             
             // update registration table with "mail sent"
-           	$registration = $this->getRegistrationByHash ( $hashedUsername );
            	$registration->registrationEmailSent = 1;
-           	$this->updateRegistration( $registration );
-                        
+            $updateRegistration = true;
+           	
             return true;
         }
+        
+        if ( $updateRegistration ) {
+	        $this->updateRegistration( $registration );
+        }    
 		
-        return false;
+        return $result;
 	}
 		
 	/**

@@ -325,7 +325,8 @@
                     <name>status</name>
                     <type>enum</type>
                     <value>justregistered</value>
-                    <value>activated</value>
+                    <value>waitingforactivation</value>
+                    <value>activated</value>                    
                     <notnull>true</notnull>
                 </field>
                 <field>
