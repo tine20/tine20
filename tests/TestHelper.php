@@ -32,7 +32,7 @@ $path = array(
     PATH_TO_REAL_DIR,
     get_include_path(),
 	PATH_TO_TEST_DIR,
-    );
+);
 	
 set_include_path(implode(PATH_SEPARATOR, $path));
 
