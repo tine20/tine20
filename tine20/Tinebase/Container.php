@@ -281,7 +281,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_INTERNAL)
@@ -340,7 +340,7 @@ class Tinebase_Container
             
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
             ->group(SQL_TABLE_PREFIX . 'container.id')
@@ -392,7 +392,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
             ->group(SQL_TABLE_PREFIX . 'container.id')
@@ -460,7 +460,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
@@ -514,7 +514,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
@@ -573,7 +573,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
             ->where('user.account_grant = ?', $_grant)
@@ -627,7 +627,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
-            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
@@ -729,7 +729,7 @@ class Tinebase_Container
 
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", !empty($groupMemberships) ? $groupMemberships : '')
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
             ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $grant)
