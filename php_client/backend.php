@@ -15,7 +15,6 @@ Zend_Loader::registerAutoload();
 
 $client = new Zend_Http_Client(
     $_POST['hostname'],
-    'http://demo.tine20.org/index.php', 
     array('keepalive' => true)
 );
 
