@@ -5,7 +5,7 @@
  * the main logic of the CRM application
  *
  * @package     Crm
- * @license     http://www.gnu.org/licenses/agpl.html
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$

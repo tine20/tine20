@@ -3,7 +3,7 @@
  * this is the general file any request should be routed trough
  *
  * @package     Tinebase
- * @license     http://www.gnu.org/licenses/agpl.html
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
