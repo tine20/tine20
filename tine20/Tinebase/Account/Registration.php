@@ -458,9 +458,8 @@ class Tinebase_Account_Registration
 	 * @param	Tinebase_Account_Model_Registration	$_registration
 	 * @return 	Tinebase_Account_Model_Registration the updated registration object
 	 * 
-	 * @access	protected
 	 */
-	protected function updateRegistration ( Tinebase_Account_Model_Registration $_registration ) 
+	public function updateRegistration ( Tinebase_Account_Model_Registration $_registration ) 
 	{
 
         if(!$_registration->isValid()) {
@@ -471,7 +470,7 @@ class Tinebase_Account_Registration
         	"login_name" 	=> $_registration->login_name,
             "login_hash" 	=> $_registration->login_hash,
             "email" 		=> $_registration->email,
-        	"date" 		=> ($_registration->date instanceof Zend_Date ? $_registration->date->getTimestamp() : NULL),
+        	"date" 		=> ($_registration->date instanceof Zend_Date ? $_registration->date->getIso() : NULL),
         	"status"		=> $_registration->status,
         	"email_sent"	=> $_registration->email_sent,
         );
