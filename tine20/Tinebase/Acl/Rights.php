@@ -101,7 +101,7 @@ class Tinebase_Acl_Rights
             ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')
             
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships)
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', !empty($groupMemberships) ? $groupMemberships : '')
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
             
@@ -145,7 +145,7 @@ class Tinebase_Acl_Rights
 
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'application_rights', array('account_rights' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
-            ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
+            ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', !empty($groupMemberships) ? $groupMemberships : '')
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->id)
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
@@ -193,7 +193,7 @@ class Tinebase_Acl_Rights
             $this->rightsTable->getAdapter()->quoteInto('application_id = ?', $application->id),
             $this->rightsTable->getAdapter()->quoteInto('right = ?', $right),
             // check if the account or the groups of this account has the given right
-            $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', $groupMemberships)
+            $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', !empty($groupMemberships) ? $groupMemberships : '')
         );
         
         if(!$row = $this->rightsTable->fetchRow($where)) {
