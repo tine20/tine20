@@ -82,10 +82,9 @@ class Tinebase_Account_Registration
     /**
 	 * checks if username is unique
 	 *
-	 * @param 	string $_username
-	 * @return 	bool
+	 * @param 	string 	$_username
+	 * @return 	bool	true if username is unique
 	 * 
-	 * @todo 	include function
 	 */
 	public function checkUniqueUsername ( $_username ) 
 	{		
@@ -278,8 +277,7 @@ class Tinebase_Account_Registration
 	 * @param 	string $_username
 	 * @return 	bool
 	 * 
-	 * @todo 	add more texts to mail views
-	 * @todo	translate mails
+	 * @todo 	add more texts to mail views & translate mails
 	 */
 	public function sendLostPasswordMail ($_username) 
 	{
@@ -458,6 +456,7 @@ class Tinebase_Account_Registration
 	 * update registration
 	 *
 	 * @param	Tinebase_Account_Model_Registration	$_registration
+	 * @return 	Tinebase_Account_Model_Registration the updated registration object
 	 * 
 	 * @access	protected
 	 */
@@ -483,10 +482,7 @@ class Tinebase_Account_Registration
         
         $result = $this->registrationsTable->update($registrationData, $where);
                 
-        return $result;
-        
-        //@todo	add function
-       // return $this->getRegistrationById($accountId, 'Tinebase_Account_Model_FullAccount');
+       	return $this->getRegistrationByHash($_registration->login_hash);
 	}
 	
 	/**
