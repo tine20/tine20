@@ -100,6 +100,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_family'		        => array(),
         'n_fileas'              => array(),
+        'n_fn'                  => array(),
         'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_prefix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -141,6 +142,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             $_data['n_fileas'] = $_data['n_family'];
             if(!empty($_data['n_given'])) {
                 $_data['n_fileas'] .= ', ' . $_data['n_given'];
+            }
+        }
+        
+        if(empty($_data['n_fn'])) {
+            $_data['n_fn'] = $_data['n_family'];
+            if(!empty($_data['n_given'])) {
+                $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
             }
         }
         
