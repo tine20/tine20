@@ -33,7 +33,9 @@ echo "<hr>Try to add contact...<br>";
 $contactData = $_POST;
 $contactData['owner'] = 5;
 
-$client->addContact($contactData);
+$contact = new Addressbook_Model_Contact($contactData);
+
+$client->addContact($contact);
 
 
 echo "<hr>Try to logout...<br>";

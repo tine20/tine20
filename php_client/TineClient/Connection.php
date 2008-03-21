@@ -77,8 +77,12 @@ class TineClient_Connection extends Zend_Http_Client
         }
     }
     
-    public function addContact($_contactData)
+    public function addContact(Addressbook_Model_Contact $_contact)
     {
+        if(!$_contact->isValid()) {
+            throw new Exception('contact is not valid');
+        }
+        
         $this->setParameterPost(array(
             'method'   => 'Addressbook.saveContact',
             'contactData'  => Zend_Json::encode($_contactData)
