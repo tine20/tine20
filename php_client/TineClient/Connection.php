@@ -19,9 +19,15 @@ class TineClient_Connection extends Zend_Http_Client
      */
     protected $debugEnabled = false;
     
-    public function __construct($_uri, $_config, $_headers)
+    /**
+     * @see Zend_Http_Client
+     */
+    public function __construct($_uri, array $_config = array())
     {
-        parent::__construct($_uri, $_config, $_headers);
+        $_config['useragent'] = 'Tine 2.0 remote client (rv: 0.1)';
+        $_config['keepalive'] = TRUE;
+        
+        parent::__construct($_uri, $_config);
         
         $this->setCookieJar();
         $this->setHeaders('X-Requested-With', 'XMLHttpRequest');
@@ -85,7 +91,7 @@ class TineClient_Connection extends Zend_Http_Client
         
         $this->setParameterPost(array(
             'method'   => 'Addressbook.saveContact',
-            'contactData'  => Zend_Json::encode($_contactData)
+            'contactData'  => Zend_Json::encode($_contact->toArray())
         ));        
         $response = $this->request('POST');
         
@@ -103,6 +109,10 @@ class TineClient_Connection extends Zend_Http_Client
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
+        
+        $contact = new Addressbook_Model_Contact($responseData['updatedData']);
+        
+        return $contact;
     }
     
     public function setDebugEnabled($_status)

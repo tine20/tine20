@@ -9,14 +9,13 @@
  * @version     $Id$
  */
 
+var_dump($_POST);
+
 require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-$client = new TineClient_Connection(
-    $_POST['url'],
-    array('keepalive' => true)
-);
+$client = new TineClient_Connection($_POST['url']);
 
 if($_POST['debug'] == 'yes') {
     $client->setDebugEnabled(true);
@@ -30,13 +29,14 @@ $client->login($_POST['username'], $_POST['password']);
 
 echo "<hr>Try to add contact...<br>";
 
-$contactData = $_POST;
+$contactData = $_POST['contact'];
 $contactData['owner'] = 5;
 
 $contact = new Addressbook_Model_Contact($contactData);
 
-$client->addContact($contact);
+$updatedContact = $client->addContact($contact);
 
+var_dump($updatedContact->toArray());
 
 echo "<hr>Try to logout...<br>";
 
