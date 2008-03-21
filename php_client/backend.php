@@ -13,81 +13,31 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
-$client = new Zend_Http_Client(
+$client = new TineClient_Connection(
     $_POST['url'],
     array('keepalive' => true)
 );
 
-$client->setCookieJar();
-$client->setHeaders('X-Requested-With',	'XMLHttpRequest');
-
-// login
 if($_POST['debug'] == 'yes') {
-    echo "Try to login...</br>";
-}
-$client->setParameterPost(array(
-    'username'  => $_POST['username'],
-    'password'  => $_POST['password'],
-    'method'    => 'Tinebase.login'
-));
-
-$response = $client->request('POST');
-
-if(!$response->isSuccessful()) {
-    die('alles schlecht');
+    $client->setDebugEnabled(true);
 }
 
-$responseData = Zend_Json::decode($response->getBody());
-if($_POST['debug'] == 'yes') {
-    var_dump($responseData);
-}
 
-// add contact
-if($_POST['debug'] == 'yes') {
-    echo "Try to add contact...</br>";
-}
+echo "Try to login...<br>";
+
+$client->login($_POST['username'], $_POST['password']);
+
+
+echo "<hr>Try to add contact...<br>";
+
 $contactData = $_POST;
 $contactData['owner'] = 5;
 
-$client->setParameterPost(array(
-    'method'   => 'Addressbook.saveContact',
-    'contactData'  => Zend_Json::encode($contactData)
-));
+$client->addContact($contactData);
 
-$response = $client->request('POST');
 
-//var_dump( $client->getLastRequest());
-//var_dump( $response );
+echo "<hr>Try to logout...<br>";
 
-if(!$response->isSuccessful()) {
-    die('alles schlecht');
-}
-
-$responseData = Zend_Json::decode($response->getBody());
-if($_POST['debug'] == 'yes') {
-    var_dump($responseData);
-}
-
-// logout
-if($_POST['debug'] == 'yes') {
-    echo "Try to logout...</br>";
-}
-$client->setParameterPost(array(
-    'method'   => 'Tinebase.logout'
-));
-
-$response = $client->request('POST');
-
-//var_dump( $client->getLastRequest());
-//var_dump( $response );
-
-if(!$response->isSuccessful()) {
-    die('alles schlecht');
-}
-
-$responseData = Zend_Json::decode($response->getBody());
-if($_POST['debug'] == 'yes') {
-    var_dump($responseData);
-}
+$client->logout();
 
 echo '<a href="index.html">Back to contact form</a>';
