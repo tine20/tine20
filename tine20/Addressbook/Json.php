@@ -69,19 +69,14 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
 
-        try {
-            if(empty($contact->id)) {
-                $contact = Addressbook_Controller::getInstance()->addContact($contact);
-            } else {
-                $contact = Addressbook_Controller::getInstance()->updateContact($contact);
-            }
-            $result = array('success'           => true,
-                            'welcomeMessage'    => 'Entry updated',
-                            'updatedData'       => $contact->toArray());
-        } catch (Exception $e) {
-            $result = array('success'           => false,
-        					'errorMessage'      => $e->getMessage());
+        if(empty($contact->id)) {
+            $contact = Addressbook_Controller::getInstance()->addContact($contact);
+        } else {
+            $contact = Addressbook_Controller::getInstance()->updateContact($contact);
         }
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $contact->toArray());
 
         return $result;
          
