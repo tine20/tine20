@@ -83,38 +83,6 @@ class TineClient_Connection extends Zend_Http_Client
         }
     }
     
-    public function addContact(Addressbook_Model_Contact $_contact)
-    {
-        if(!$_contact->isValid()) {
-            throw new Exception('contact is not valid');
-        }
-        
-        $this->setParameterPost(array(
-            'method'   => 'Addressbook.saveContact',
-            'contactData'  => Zend_Json::encode($_contact->toArray())
-        ));        
-        $response = $this->request('POST');
-        
-        if($this->debugEnabled === true) {
-            var_dump( $this->getLastRequest());
-            var_dump( $response );
-        }
-
-        if(!$response->isSuccessful()) {
-            throw new Exception('adding contact failed');
-        }
-                
-        $responseData = Zend_Json::decode($response->getBody());
-        
-        if($this->debugEnabled === true) {
-            var_dump($responseData);
-        }
-        
-        $contact = new Addressbook_Model_Contact($responseData['updatedData']);
-        
-        return $contact;
-    }
-    
     public function setDebugEnabled($_status)
     {
         $this->debugEnabled = (bool)$_status;

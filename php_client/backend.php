@@ -17,6 +17,8 @@ Zend_Loader::registerAutoload();
 
 $client = new TineClient_Connection($_POST['url']);
 
+TineClient_Service_Abstract::setDefaultConnection($client);
+
 if($_POST['debug'] == 'yes') {
     $client->setDebugEnabled(true);
 }
@@ -34,7 +36,9 @@ $contactData['owner'] = 5;
 
 $contact = new Addressbook_Model_Contact($contactData);
 
-$updatedContact = $client->addContact($contact);
+$addressbook = new Addressbook_Service();
+
+$updatedContact = $addressbook->addContact($contact);
 
 var_dump($updatedContact->toArray());
 
