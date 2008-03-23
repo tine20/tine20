@@ -36,8 +36,8 @@ class TineClient_Connection extends Zend_Http_Client
     public function login($_username, $_password)
     {
         $this->setParameterPost(array(
-            'username'  => $_POST['username'],
-            'password'  => $_POST['password'],
+            'username'  => $_username,
+            'password'  => $_password,
             'method'    => 'Tinebase.login'
         ));
         
