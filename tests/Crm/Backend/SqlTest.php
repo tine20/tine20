@@ -139,9 +139,9 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function _testUpdateContact()
     {
-        #$contact = $this->backend->updateContact($this->objects['updatedContact']);
+        $contact = $this->backend->updateContact($this->objects['updatedContact']);
         
-        #$this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
     }
 
     /**
@@ -150,11 +150,11 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {
-        #$this->backend->deleteLead($this->objects['initialLead']);
+        $this->backend->deleteLead($this->objects['initialLead']);
         
-        #$this->setExpectedException('UnderflowException');
+        $this->setExpectedException('UnderflowException');
         
-        #$lead = Crm_Backend_Sql::getInstance()->getLead($this->objects['initialLead']);
+        $lead = $this->backend->getLead($this->objects['initialLead']);
     }
 }		
 	
