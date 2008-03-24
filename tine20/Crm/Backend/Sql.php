@@ -59,52 +59,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     public function __construct()
     {
-	         /*
-        try {
-             $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
-        } catch (Zend_Db_Statement_Exception $e) {
-       //     Crm_Setup_SetupSqlTables::createLeadTable()
-            $this->leadTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'))
-        
-
-        try {
-            $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
-         } catch (Zend_Db_Statement_Exception $e) {
-         //   Crm_Setup_SetupSqlTables::createLeadSourceTable()
-            $this->leadSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'))
-        
-        
-        try {
-            $this->leadTypeTable     = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
-        } catch (Zend_Db_Statement_Exception $e) {
-         //   Crm_Setup_SetupSqlTables::createLeadTypeTable();
-            $this->leadTypeTable     = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
-        }
-        
-        try {
-             $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
-         } catch (Zend_Db_Statement_Exception $e) {
-            // temporary hack, until setup is available
-          //  Crm_Setup_SetupSqlTables::createLeadStateTable();
-            $this->leadStateTable    = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
-        }
-        
-        try {
-            $this->productSourceTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
-        } catch (Zend_Db_Statement_Exception $e) {
-            // temporary hack, until setup is available
-          //  Crm_Setup_SetupSqlTables::createProductSourceTable();
-            $this->productSourceTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
-        }
-
-        try {
-            $this->productsTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
-        } catch (Zend_Db_Statement_Exception $e) {
-            // temporary hack, until setup is available
-          //  Crm_Setup_SetupSqlTables::createProductTable();
-            $this->productsTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
-        }
-		*/
         $this->leadTable      		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
         $this->leadSourceTable   	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         $this->leadTypeTable     	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
@@ -1340,5 +1294,47 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $this->addFolder('Personal Leads', Tinebase_Container::TYPE_PERSONAL);
     }
      
+
+    /**
+    * add a lead
+    *
+    * @param Crm_Lead $_leadData the leaddata
+    * @return Crm_Model_Lead
+    */
+    public function addLead(Crm_Model_Lead $_lead)
+    {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        # @todo move to model
+        #if(empty($_lead->container)) {
+        #    throw new UnderflowException('container can not be empty');
+        #}
+        
+        # @todo move to controller
+        #if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
+        #    throw new Exception('write access to lead denied');
+        #}
+
+        $leadData = $_lead->toArray();
+        if(empty($_lead->id)) {
+            unset($leadData['id']);
+        }
+        
+        $id = $this->leadTable->insert($leadData);
+
+        // if we insert a contact without an id, we need to get back one
+        if(empty($_lead->id) && $id == 0) {
+            throw new Exception("returned lead id is 0");
+        }
+        
+        // if the account had no accountId set, set the id now
+        if(empty($_lead->id)) {
+            $_lead->id = $id;
+        }
+        
+        return $this->getLead($_lead->id);
+        
+    }
     
 }
