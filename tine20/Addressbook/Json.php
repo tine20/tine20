@@ -116,6 +116,25 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
 
+    /**
+     * get one contact identified by contactId
+     *
+     * @param int $contactId
+     * @return array
+     */
+    public function getContact($contactId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $contact = Addressbook_Controller::getInstance()->getContact($contactId);
+        
+        $result['contact'] = $contact->toArray();
+
+        return $result;
+    }
+
     public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
         $internalContainer = Tinebase_Container::getInstance()->getInternalContainer('addressbook');
