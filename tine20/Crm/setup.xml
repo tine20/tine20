@@ -137,7 +137,7 @@
                     <default>1</default>
                 </field>
                 <index>
-                    <name>leadsource_id</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
