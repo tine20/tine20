@@ -1345,10 +1345,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getLead($_id)
     {
-        $id = (int) $_id;
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
+        $id = Crm_Controller::convertLeadIdToInt($_id);
 
         $select = $this->_getLeadSelectObject()
             ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
