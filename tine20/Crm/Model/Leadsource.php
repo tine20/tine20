@@ -40,7 +40,7 @@ class Crm_Model_Leadsource extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'                 => 'StringTrim'
+        'leadsource'    => 'StringTrim'
     );
     
     /**
@@ -51,8 +51,8 @@ class Crm_Model_Leadsource extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id' 	=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'leadsource'     => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'leadsource'    => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
     
 }
