@@ -1337,4 +1337,40 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
     }
     
+    /**
+     * get lead
+     *
+     * @param int $_id
+     * @return Crm_Model_Lead
+     */
+    public function getLead($_id)
+    {
+        $id = (int) $_id;
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+
+        $select = $this->_getLeadSelectObject()
+            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
+
+      // echo $select->__toString();
+       
+        $stmt = $select->query();
+
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        if(empty($row)) {
+            throw new UnderFlowExecption('lead not found');
+        }
+        
+        $lead = new Crm_Model_Lead($row);
+
+        # @todo move to controller
+        #if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
+        #    throw new Exception('permission to lead denied');
+        #}
+        
+        return $lead;
+    }    
+    
 }
