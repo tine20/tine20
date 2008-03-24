@@ -27,6 +27,8 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
+    
+    protected $testContainer;
 
     /**
      * Runs the test methods of this class.
@@ -56,9 +58,9 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $container = $personalContainer[0];
+            $this->testContainer = $personalContainer[0];
         }
         
         $this->objects['initialLead'] = new Crm_Model_Lead(array(
@@ -67,7 +69,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => 1,
+            'container'     => $this->testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description',
             'end'           => Zend_Date::now(),
@@ -82,7 +84,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => 1,
+            'container'     => $this->testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description',
             'end'           => Zend_Date::now(),
@@ -100,7 +102,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+	   Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
     }
     
     /**
