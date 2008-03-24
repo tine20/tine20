@@ -1368,6 +1368,55 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         #}
         
         return $lead;
-    }    
+    }
+        
+    /**
+     * delete lead
+     *
+     * @param int $_leads lead ids
+     * @return void
+     */
+    public function deleteLead($_leadId)
+    {
+        $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
+
+        #$oldLeadData = $this->getLeadById($_leadId);
+
+        # @todo move to controller
+        #if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->container, Tinebase_Container::GRANT_DELETE)) {
+        #    throw new Exception('delete access to CRM denied');
+        #}
+
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $db->beginTransaction();
+        
+        try {
+            $where_product = $db->quoteInto('lead_id = ?', $leadId);          
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', $where_product);            
+
+            $where_links = array(
+                $db->quoteInto('link_app1 = ?', 'crm'),
+                $db->quoteInto('link_id1 = ?', $leadId),
+                $db->quoteInto('link_app2 = ?', 'addressbook')
+            );                                  
+            $db->delete(SQL_TABLE_PREFIX . 'links', $where_links);               
+            
+            $where_lead    = $db->quoteInto('id = ?', $leadId);
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where_lead);
+
+            #$where  = array(
+            #    $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),
+            #);
+            #$this->leadTable->delete($where);
+            
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            throw $e;
+        }
+    }
+
     
 }
