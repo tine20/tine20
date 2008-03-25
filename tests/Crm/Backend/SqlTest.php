@@ -89,10 +89,10 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'container'     => $this->testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description updated',
-            'end'           => Zend_Date::now(),
+            'end'           => NULL,
             'turnover'      => '200000',
             'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+            'end_scheduled' => NULL,
         )); 
         
         $this->backend = new Crm_Backend_Sql();
@@ -134,17 +134,6 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get multiple leads
-     *
-     */
-    public function testGetLeads()
-    {
-        $leads = $this->backend->getLeads(array($this->testContainer->id), 'PHPUnit');
-        
-        $this->assertEquals(count($leads), 1);
-    }
-    
-    /**
      * try to update a lead
      *
      */
@@ -156,6 +145,17 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['updatedLead']->description, $lead->description);
     }
 
+    /**
+     * try to get multiple leads
+     *
+     */
+    public function testGetLeads()
+    {
+        $leads = $this->backend->getLeads(array($this->testContainer->id), 'PHPUnit');
+        
+        $this->assertEquals(1, count($leads));
+    }
+    
     /**
      * try to delete a contact
      *
