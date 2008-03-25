@@ -374,36 +374,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         return $savedLead->toArray();  
     }      
 
-     /**
-     * save an array of contacts (belonging to one lead)
-     *
-     * @param array $_contacts  contacts data
-     * @param int $_id  id of the lead
-     * @return array
-     */
-/*    public function saveContacts($_contacts, $_id)
-    {  
-        $contacts = Zend_Json::decode($_contacts);
-
-       	if(is_array($contacts)) {            
-            for($i = 0; $i < count($contacts); $i++) {
-                $contacts[$i]['link_id1'] = $_id;
-            }
-        }    
-    
-        
-        if(Crm_Controller::getInstance()->saveContacts($contacts, $_id) === FALSE) {
-            $result = array('success'   => FALSE);
-        } else {
-            $result = array('success'   => TRUE);
-        }
-        
-        return $result;  
-    }
-*/
-
-
-     /**
+    /**
      * delete a array of leads
      *
      * @param array $_leadIDs
@@ -479,55 +450,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }    
  
-
     /**
-     * get data for the overview
+     * search trough all other people leads
      *
-     * returns the data to be displayed in a ExtJS grid
-     *
-     * @todo implement correc total count for lists
+     * @param string $filter
      * @param int $start
      * @param int $sort
      * @param string $dir
      * @param int $limit
-     * @param string $options json encoded array of additional options
-     * @return array
-     */
-    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-                
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
-        
-        if($rows !== false) {
-            $result['results']    = $rows->toArray();
-            if($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $leadstate, $probability, $getClosedLeads);
-            }
-        }
-
-        $this->getLinkedContacts($result['results']);
-
-        return $result;
-    }
-
-    /**
-     * get data for the overview
-     *
-     * returns the data to be displayed in a ExtJS grid
-     *
-     * @todo implement correc total count for lists
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @param string $options json encoded array of additional options
      * @return array
      */
     public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
@@ -537,11 +467,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);
-        
-        if($rows !== false) {
-            $result['results']    = $rows->toArray();
+        if($rows = Crm_Controller::getInstance()->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+            $result['results']      = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -550,24 +477,21 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
 
         $this->getLinkedContacts($result['results']);
-
-        return $result;
+     
+        return $result;                
     }
-  
- 
- 
-   /**
-     * get data for the overview
+    
+    /**
+     * search trough all leads
      *
-     * returns the data to be displayed in a ExtJS grid
-     *
+     * @param string $filter
      * @param int $start
      * @param int $sort
      * @param string $dir
      * @param int $limit
      * @return array
      */
-    public function getAllLeads($filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
+    public function getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
@@ -586,8 +510,42 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $this->getLinkedContacts($result['results']);
      
         return $result;                
+    }
+     
+    /**
+     * search trough all shared leads
+     *
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @param string $options json encoded array of additional options
+     * @return array
+     */
+    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Crm_Controller::getInstance()->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+            $result['results']      = $rows->toArray();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $leadstate, $probability, $getClosedLeads);
+            }
+        }
+
+        $this->getLinkedContacts($result['results']);
+     
+        return $result;                
   
-    } 
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);        
+    }
     
     /**
      * resolve contactIds to contactObjects

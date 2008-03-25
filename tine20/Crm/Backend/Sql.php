@@ -1175,30 +1175,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $result;
     } 
-
-    
-    public function getSharedLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
-    {
-        $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
-        
-        if($sharedContainer->count() === 0) {
-            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
-        }
-        
-        $containerIds = array();
-        
-        foreach($sharedContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
-        );
-
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
-         
-        return $result;
-    }
     
     /**
      * get total count of all leads from shared folders
@@ -1229,31 +1205,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $result;
     }        
- 
-   
-    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
-    {
-        $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
-        
-        if(count($otherPeoplesContainer) === 0) {
-            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
-        }
-        
-        $containerIds = array();
-
-        foreach($otherPeoplesContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
-        );
-
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
-         
-        return $result;
-    }
-    
+     
     /**
      * get total count of all other users leads
      *
@@ -1369,7 +1321,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getLeads(array $_container, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
+    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
     {
         if(count($allContainer) === 0) {
             throw new Exception('$_container can not be empty');

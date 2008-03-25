@@ -428,7 +428,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
      */
     public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
+        $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
         if(count($allContainer) === 0) {
             $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
@@ -436,11 +436,73 @@ class Crm_Controller extends Tinebase_Container_Abstract
         }
                 
         $containerIds = array();
-        foreach($allContainer as $container) {
+        foreach($readableContainer as $container) {
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getAllLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+
+        return $result;
+    }
+    
+    /**
+     * get all shared leads, filtered by different criteria
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @param int $_state
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     */
+    public function getSharedLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+
+        return $result;
+    }
+    
+    /**
+     * get all other people leads, filtered by different criteria
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @param int $_state
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     */
+    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
+                
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
 
         return $result;
     }
