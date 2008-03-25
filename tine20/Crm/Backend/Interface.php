@@ -18,11 +18,4 @@
  */
 interface Crm_Backend_Interface
 {
-   
- //   public function deleteLeadById(array $leads);
-    
- //   public function getLeadById($_leadId);
-    
-
-
 }

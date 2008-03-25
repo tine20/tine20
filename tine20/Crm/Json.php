@@ -384,16 +384,11 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $leadIds = Zend_Json::decode($_leadIds);
 
-        if(is_array($leadIds)) {
-            $leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-            foreach($leadIds as $leadId) {
-                $leads->deleteLeadById($leadId);
-            }
-
-            $result = array('success'   => TRUE, 'ids' => $leadIds);
-        } else {
-            $result = array('success'   => FALSE);
-        }
+        Crm_Controller::getInstance()->deleteLead($leadIds);
+        
+        $result = array(
+            'success'   => TRUE
+        );
 
         return $result;
         
