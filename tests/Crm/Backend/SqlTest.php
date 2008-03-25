@@ -106,7 +106,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	   Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
+	   #Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
     }
     
     /**
