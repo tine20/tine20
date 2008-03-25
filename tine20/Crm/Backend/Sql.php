@@ -80,7 +80,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {	
 		$rows = $this->leadSourceTable->fetchAll(NULL, $sort, $dir);
 		
-		$result = new Tinebase_Record_RecordSet($rows->toArray(), 'Crm_Model_Leadsource');
+		$result = new Tinebase_Record_RecordSet('Crm_Model_Leadsource', $rows->toArray());
 		
         return $result;
 	}
