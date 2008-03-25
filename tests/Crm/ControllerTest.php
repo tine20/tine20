@@ -166,6 +166,17 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($sources));
     }
     
+    /**
+     * try to get the lead types
+     *
+     */
+    public function testGetLeadTypes()
+    {
+        $types = Crm_Controller::getInstance()->getLeadTypes();
+        
+        $this->assertEquals(3, count($types));
+    }
+    
 }		
 	
 

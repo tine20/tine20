@@ -180,6 +180,16 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($sources));
     }
     
+    /**
+     * try to get the lead sources
+     *
+     */
+    public function testGetLeadTypes()
+    {
+        $types = $this->backend->getLeadTypes();
+        
+        $this->assertEquals(3, count($types));
+    }
 }		
 	
 
