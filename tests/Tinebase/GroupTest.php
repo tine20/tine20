@@ -71,7 +71,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountLoginName'      => 'tine20phpunit1',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => 2,
+            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
@@ -82,7 +82,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountLoginName'      => 'tine20phpunit2',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => 2,
+            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0 2',
             'accountFirstName'      => 'PHPUnit 2',
             'accountEmailAddress'   => 'phpunit@tine20.org'
@@ -93,7 +93,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountLoginName'      => 'tine20phpunit3',
             'accountStatus'         => 'disabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => 2,
+            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0 3',
             'accountFirstName'      => 'PHPUnit 3',
             'accountEmailAddress'   => 'phpunit@tine20.org'
