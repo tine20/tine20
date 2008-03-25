@@ -186,7 +186,7 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     public function testSendLostPasswordMail()
     {
     	//$result = Tinebase_Account_Registration::getInstance()->sendLostPasswordMail ( $this->objects['registration']->login_name );
-    	$this->markTestIncomplete('This test has not been implemented yet.');
+    	//$this->markTestIncomplete('This test has not been implemented yet.');
     }    
     
     /**
