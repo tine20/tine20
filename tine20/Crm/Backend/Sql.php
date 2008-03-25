@@ -631,44 +631,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }    
 
-	/**
-	* add or updates an lead
-	*
-	* @param int $_leadOwner the owner of the Crm entry
-	* @param Crm_Lead $_leadData the leaddata
-	* @param int $_leadId the lead to update, if NULL the lead gets added
-	* @return unknown
-	*/
-    public function saveLead(Crm_Model_Lead $_lead)
-    {
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_lead->toArray(), true));
-
-        if(empty($_lead->container)) {
-            throw new UnderflowException('container can not be empty');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('write access to lead denied');
-        }
-
-        $leadArray = $_lead->toArray();
-        unset($leadArray['id']);
-        
-        if(empty($_lead->id)) {
-            $_lead->id = $this->leadTable->insert($leadArray);
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' added new lead ' . $_lead->id);
-        } else {      
-            $where  = array(
-                $this->leadTable->getAdapter()->quoteInto('id = ?', $_lead->id),
-            );
-
-            $result = $this->leadTable->update($_lead->toArray(), $where);
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' updated lead ' . $_lead->id);
-        }
-
-        return $_lead;
-    }
-
 	// handle FOLDERS  
     public function addFolder($_name, $_type) 
     {
