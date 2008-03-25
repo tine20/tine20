@@ -570,19 +570,19 @@ class Crm_Controller extends Tinebase_Container_Abstract
         $view->leadSource = $this->getLeadSource($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container);
         
-        if(is_a($_lead->start, 'Zend_Date')) {
+        if($_lead->start instanceof Zend_Date) {
             $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
             $view->start = '-';
         }
         
-        if(is_a($_lead->end, 'Zend_Date')) {
+        if($_lead->end instanceof Zend_Date) {
             $view->leadEnd = $_lead->end->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
             $view->leadEnd = '-';
         }
         
-        if(is_a($_lead->end_scheduled, 'Zend_Date')) {
+        if($_lead->end_scheduled instanceof Zend_Date) {
             $view->ScheduledEnd = $_lead->end_scheduled->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale'));
         } else {
             $view->ScheduledEnd = '-';

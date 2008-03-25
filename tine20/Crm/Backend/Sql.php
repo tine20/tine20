@@ -622,14 +622,11 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* 
 	* 
 	* 
-	* @return unknown
+	* @return Crm_Model_Lead
 	*/
     public function getLeadById($_id)
     {
-        $id = (int) $_id;
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
+        $id = Crm_Controller::convertLeadIdToInt($_id);
 
         $select = $this->_getLeadSelectObject()
             ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
@@ -644,27 +641,15 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new UnderFlowExecption('lead not found');
         }
         
-        //error_log(print_r($row, true));
-        
         $lead = new Crm_Model_Lead($row);
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('permission to lead denied');
-        }
+        # @todo move to controller
+        #if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
+        #    throw new Exception('permission to lead denied');
+        #}
         
         return $lead;
 
-/*        $result = $this->leadTable->fetchRow($where);
-
-        if($result === NULL) {
-            throw new UnderFlowExecption('lead not found');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($result->container, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('permission to lead denied');
-        }
-        
-        return $result;*/
     }    
     
     public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = NULL)
