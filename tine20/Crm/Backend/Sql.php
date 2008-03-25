@@ -638,7 +638,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
         if(empty($row)) {
-            throw new UnderFlowExecption('lead not found');
+            throw new UnderFlowException('lead not found');
         }
         
         $lead = new Crm_Model_Lead($row);
