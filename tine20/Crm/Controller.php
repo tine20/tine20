@@ -386,7 +386,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         } else {
             $lead = $this->_backend->getLead($_leadId);
             if(Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
-                $this->_backend->deleteLead($_contactId);
+                $this->_backend->deleteLead($_leadId);
             } else {
                 throw new Exception('delete access to lead denied');
             }
