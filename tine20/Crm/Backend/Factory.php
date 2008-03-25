@@ -38,7 +38,7 @@ class Crm_Backend_Factory
     {
         switch($type) {
             case self::SQL:
-                $className = Crm_Backend_ . ucfirst($type);
+                $className = 'Crm_Backend_' . ucfirst($type);
                 $instance = new $className();
                 break;
                 
