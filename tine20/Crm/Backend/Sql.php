@@ -1285,16 +1285,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }   
  
-   /**
-     * create personal container for current user
-     *
-     */
-    public function createPersonalContainer()
-    {
-        $this->addFolder('Personal Leads', Tinebase_Container::TYPE_PERSONAL);
-    }
-     
-
     /**
     * add a lead
     *
@@ -1362,14 +1352,38 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         
         $lead = new Crm_Model_Lead($row);
 
-        # @todo move to controller
-        #if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
-        #    throw new Exception('permission to lead denied');
-        #}
-        
         return $lead;
     }
-        
+
+    /**
+     * get list of leads from all shared folders the current user has access to
+     *
+     * @param array $_container container to read the contacts from
+     * @param string $_filter string to search for in leads
+     * @param unknown_type $_sort fieldname to sort by
+     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
+     * @param unknown_type $_limit how many leads to display
+     * @param unknown_type $_start how many leads to skip
+     * @param int $_leadstate
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     */
+    public function getLeads(array $_container, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
+    {
+        if(count($allContainer) === 0) {
+            throw new Exception('$_container can not be empty');
+        }        
+
+        $where = array(
+            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $containerIds)
+        );
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
+         
+        return $result;
+    }
+    
+    
     /**
      * delete lead
      *

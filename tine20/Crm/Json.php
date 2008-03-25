@@ -343,7 +343,11 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
         
-        $savedLead = Crm_Controller::getInstance()->saveLead($leadData);
+        if(!empty($leadData->id)) {
+            $savedLead = Crm_Controller::getInstance()->addLead($leadData);
+        } else {
+            $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
+        }
         
         // set linked contacts
         $linkedCustomer = Zend_Json::decode($linkedCustomer);
