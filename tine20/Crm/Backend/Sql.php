@@ -146,7 +146,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	 */
     public function getLeadTypes($_sort = 'id', $_dir = 'ASC')
     {	
-		$row = $this->leadTypeTable->fetchAll(NULL, $_sort, $_dir);
+		$rows = $this->leadTypeTable->fetchAll(NULL, $_sort, $_dir);
         
 		$result = new Tinebase_Record_RecordSet('Crm_Model_Leadtype', $rows->toArray());
 		
