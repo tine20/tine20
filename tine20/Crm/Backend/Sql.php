@@ -1373,43 +1373,35 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
      * delete lead
      *
-     * @param int $_leads lead ids
+     * @param int|Crm_Model_Lead $_leads lead ids
      * @return void
      */
     public function deleteLead($_leadId)
     {
         $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
 
-        #$oldLeadData = $this->getLeadById($_leadId);
-
-        # @todo move to controller
-        #if(!Zend_Registry::get('currentAccount')->hasGrant($oldLeadData->container, Tinebase_Container::GRANT_DELETE)) {
-        #    throw new Exception('delete access to CRM denied');
-        #}
-
         $db = Zend_Registry::get('dbAdapter');
         
         $db->beginTransaction();
         
         try {
-            $where_product = $db->quoteInto('lead_id = ?', $leadId);          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', $where_product);            
+            $where = array(
+                $db->quoteInto('lead_id = ?', $leadId)
+            );          
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', $where);            
 
-            $where_links = array(
+            $where = array(
                 $db->quoteInto('link_app1 = ?', 'crm'),
                 $db->quoteInto('link_id1 = ?', $leadId),
                 $db->quoteInto('link_app2 = ?', 'addressbook')
             );                                  
-            $db->delete(SQL_TABLE_PREFIX . 'links', $where_links);               
+            $db->delete(SQL_TABLE_PREFIX . 'links', $where);               
             
-            $where_lead    = $db->quoteInto('id = ?', $leadId);
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where_lead);
+            $where = array(
+                $db->quoteInto('id = ?', $leadId)
+            );
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_lead', $where);
 
-            #$where  = array(
-            #    $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),
-            #);
-            #$this->leadTable->delete($where);
-            
             $db->commit();
 
         } catch (Exception $e) {

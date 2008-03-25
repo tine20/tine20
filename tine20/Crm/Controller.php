@@ -493,6 +493,28 @@ class Crm_Controller extends Tinebase_Container_Abstract
     }
     
     /**
+     * delete a lead
+     *
+     * @param int|Crm_Model_Lead $_leadId
+     * @return Crm_Model_Lead
+     */
+    public function deleteLead($_leadId)
+    {
+        $lead = $this->getLead($_leadId);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
+            throw new Exception('delete access to CRM denied');
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
+        
+        $result = $backend->deleteLead($lead);
+                
+        return $lead;
+    }
+    
+    
+    /**
      * converts a int, string or Crm_Model_Lead to a lead id
      *
      * @param int|string|Crm_Model_Lead $_accountId the lead id to convert
