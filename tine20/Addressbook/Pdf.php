@@ -215,7 +215,7 @@ class Addressbook_Pdf extends Zend_Pdf
 					$xPos += $padding;
 				}
 				
-				$this->pages[$pageNumber]->drawText($row[$i], $xPos, $yPos);
+				$this->pages[$pageNumber]->drawText($row[$i], $xPos, $yPos, 'UTF-8');
 				$xPos += $cellWidth;
 			}
 
