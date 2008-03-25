@@ -28,7 +28,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
-
+    
+    protected $testContainer;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -57,99 +59,40 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $container = $personalContainer[0];
+            $this->testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialContact'] = new Crm_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
-            'note'                  => 'Bla Bla Bla',
-            'owner'                 => $container->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
+        $this->objects['initialLead'] = new Crm_Model_Lead(array(
+            'id'            => 20,
+            'lead_name'     => 'PHPUnit',
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'container'     => $this->testContainer->id,
+            'start'         => Zend_Date::now(),
+            'description'   => 'Description',
+            'end'           => Zend_Date::now(),
+            'turnover'      => '200000',
+            'probability'   => 70,
+            'end_scheduled' => Zend_Date::now(),
         )); 
         
-        $this->objects['updatedContact'] = new Crm_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
-            'note'                  => 'Bla Bla Bla',
-            'owner'                 => $container->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
+        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
+            'id'            => 20,
+            'lead_name'     => 'PHPUnit',
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'container'     => $this->testContainer->id,
+            'start'         => Zend_Date::now(),
+            'description'   => 'Description updated',
+            'end'           => Zend_Date::now(),
+            'turnover'      => '200000',
+            'probability'   => 70,
+            'end_scheduled' => Zend_Date::now(),
         )); 
-            	
-        return;
-        
     }
 
     /**
@@ -164,51 +107,52 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add a contact
+     * try to add a lead
      *
      */
-    public function testAddContact()
+    public function testAddLead()
     {
-        $contact = Crm_Controller::getInstance()->addContact($this->objects['initialContact']);
+        $lead = Crm_Controller::getInstance()->addLead($this->objects['initialLead']);
         
-        $this->assertEquals($this->objects['initialContact']->id, $contact->id);
-        $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertEquals($this->objects['initialLead']->id, $lead->id);
+        $this->assertEquals($this->objects['initialLead']->description, $lead->description);
     }
     
     /**
-     * try to get a contact
+     * try to get a lead
      *
      */
-    public function testGetContact()
+    public function testGetLead()
     {
-        $contact = Crm_Backend_Sql::getInstance()->getContact($this->objects['initialContact']);
+        $lead = Crm_Controller::getInstance()->getLead($this->objects['initialLead']);
         
-        $this->assertEquals($this->objects['initialContact']->id, $contact->id);
-        $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertEquals($this->objects['initialLead']->id, $lead->id);
+        $this->assertEquals($this->objects['initialLead']->description, $lead->description);
     }
     
     /**
-     * try to update a contact
+     * try to update a lead
      *
      */
-    public function testUpdateContact()
+    public function testUpdateLead()
     {
-        $contact = Crm_Controller::getInstance()->updateContact($this->objects['updatedContact']);
+        $lead = Crm_Controller::getInstance()->updateLead($this->objects['updatedLead']);
         
-        $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertEquals($this->objects['updatedLead']->id, $lead->id);
+        $this->assertEquals($this->objects['updatedLead']->description, $lead->description);
     }
 
     /**
-     * try to delete a contact
+     * try to delete a lead
      *
      */
-    public function testDeleteContact()
+    public function testDeleteLead()
     {
-        Crm_Controller::getInstance()->deleteContact($this->objects['initialContact']);
+        Crm_Controller::getInstance()->deleteLead($this->objects['initialLead']);
 
         $this->setExpectedException('UnderflowException');
         
-        $contact = Crm_Controller::getInstance()->getContact($this->objects['initialContact']);
+        Crm_Controller::getInstance()->getLead($this->objects['initialContact']);
     }
 }		
 	

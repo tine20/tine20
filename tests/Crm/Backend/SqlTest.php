@@ -66,7 +66,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         }
         
         $this->objects['initialLead'] = new Crm_Model_Lead(array(
-            'id'            => '120',
+            'id'            => 120,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
@@ -81,14 +81,14 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         )); 
         
         $this->objects['updatedLead'] = new Crm_Model_Lead(array(
-            'id'            => '120',
+            'id'            => 120,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container'     => $this->testContainer->id,
             'start'         => Zend_Date::now(),
-            'description'   => 'Description',
+            'description'   => 'Description updated',
             'end'           => Zend_Date::now(),
             'turnover'      => '200000',
             'probability'   => 70,
@@ -134,14 +134,26 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to update a contact
+     * try to get multiple leads
      *
      */
-    public function _testUpdateContact()
+    public function testGetLeads()
     {
-        $contact = $this->backend->updateContact($this->objects['updatedContact']);
+        $leads = $this->backend->getLeads(array($this->testContainer->id), 'PHPUnit');
         
-        $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertEquals(count($leads), 1);
+    }
+    
+    /**
+     * try to update a lead
+     *
+     */
+    public function testUpdateLead()
+    {
+        $lead = $this->backend->updateLead($this->objects['updatedLead']);
+        
+        $this->assertEquals($this->objects['updatedLead']->id, $lead->id);
+        $this->assertEquals($this->objects['updatedLead']->description, $lead->description);
     }
 
     /**
@@ -154,7 +166,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('UnderflowException');
         
-        $lead = $this->backend->getLead($this->objects['initialLead']);
+        $this->backend->getLead($this->objects['initialLead']);
     }
 }		
 	
