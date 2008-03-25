@@ -519,7 +519,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
      */
     public function getLead($_leadId)
     {
-        $lead = $this->_backend->getLeadById($_leadId);
+        $lead = $this->_backend->getLead($_leadId);
         
         if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read permission to lead denied');

@@ -573,84 +573,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $_productData;
     }
-
-   
-	
-    /**
-    * adds contacts
-    *
-    * @param Tinebase_Record_Recordset $_leadSources list of lead sources
-    * @return unknown
-    */
-/*    public function saveContacts(array $_contacts, $_id)
-    {
-        $id = (int)$_id;
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
-
-        $db = Zend_Registry::get('dbAdapter');
-  
-        $db->beginTransaction();
-        
-        try {
-            $where[] = $db->quoteInto('link_id1 = ?', $id);
-            $where[] = $db->quoteInto('link_app1 = ?', 'crm');            
-            $where[] = $db->quoteInto('link_app2 = ?', 'addressbook');              
-            
-            $db->delete(SQL_TABLE_PREFIX . 'links', $where);
-
-            foreach($_contacts as $_contact) {
-                $db->insert(SQL_TABLE_PREFIX . 'links', $_contact);                
-            }
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-
-        return $_contacts;
-    }    
- */   
-    
-    
-	/**
-	* get single lead by id
-	*
-	* 
-	* 
-	* 
-	* @return Crm_Model_Lead
-	*/
-    public function getLeadById($_id)
-    {
-        $id = Crm_Controller::convertLeadIdToInt($_id);
-
-        $select = $this->_getLeadSelectObject()
-            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
-
-      // echo $select->__toString();
-       
-        $stmt = $select->query();
-
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        if(empty($row)) {
-            throw new UnderFlowException('lead not found');
-        }
-        
-        $lead = new Crm_Model_Lead($row);
-        
-        # @todo move to controller
-        #if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
-        #    throw new Exception('permission to lead denied');
-        #}
-        
-        return $lead;
-
-    }    
     
     public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = NULL)
     {    
@@ -1205,7 +1127,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
      * get lead
      *
-     * @param int $_id
+     * @param int|Crm_Model_Lead $_id
      * @return Crm_Model_Lead
      */
     public function getLead($_id)
