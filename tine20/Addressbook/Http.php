@@ -20,6 +20,12 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Addressbook';
     
+    /*
+     * edit contact dialog
+     * 
+     * @param	integer contact id
+     * 
+     */
 	public function editContact($_contactId)
 	{
         if(empty($_contactId)) {
@@ -75,4 +81,30 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
 	}
+	
+    /*
+     * export contact
+     * 
+     * @param	integer contact id
+     * @param	format	pdf or csv or ...
+     * 
+     * @todo	implement csv export
+     */
+	public function exportContact($_contactId, $_format = 'pdf')
+	{
+		// get contact
+		$contact = Addressbook_Controller::getInstance()->getContact($_contactId);
+		
+		// export
+		if ( $_format === "pdf" ) {
+			$pdf = new Addressbook_Pdf();
+			$pdfOutput = $pdf->contactPdf($contact);
+
+			header("Content-Disposition: inline; filename=contact.pdf"); 
+			header("Content-type: application/x-pdf"); 
+			echo $pdfOutput; 
+			
+		}
+	}
+	
 }
