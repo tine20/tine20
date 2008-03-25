@@ -1248,15 +1248,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');
         }
-        # @todo move to model
-        #if(empty($_lead->container)) {
-        #    throw new UnderflowException('container can not be empty');
-        #}
-        
-        # @todo move to controller
-        #if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
-        #    throw new Exception('write access to lead denied');
-        #}
 
         $leadData = $_lead->toArray();
         if(empty($_lead->id)) {
@@ -1376,5 +1367,33 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
     }
 
-    
+    /**
+     * updates a lead
+     *
+     * @param Crm_Lead $_leadData the leaddata
+     * @return Crm_Model_Lead
+     */
+    public function updateLead(Crm_Model_Lead $_lead)
+    {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        
+        $leadId = Crm_Controller::convertLeadIdToInt($_lead);        
+
+        $leadData = $_lead->toArray();
+        unset($leadData['id']);
+        
+        $where  = array(
+            $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),
+        );
+        
+        $updatedRows = $this->leadTable->update($leadData, $where);
+        
+        if($updatedRows == 0) {
+            throw new Exception("update of lead failed! Does the leadId exist?");
+        }
+        
+        return $this->getLead($leadId);
+    }
 }

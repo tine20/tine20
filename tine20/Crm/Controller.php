@@ -356,6 +356,10 @@ class Crm_Controller extends Tinebase_Container_Abstract
      */ 
     public function addLead(Crm_Model_Lead $_lead)
     {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        
         if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
@@ -532,6 +536,10 @@ class Crm_Controller extends Tinebase_Container_Abstract
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        
         if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
