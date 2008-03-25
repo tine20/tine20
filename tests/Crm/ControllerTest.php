@@ -154,6 +154,18 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         Crm_Controller::getInstance()->getLead($this->objects['initialLead']);
     }
+    
+    /**
+     * try to get the lead sources
+     *
+     */
+    public function testGetLeadSources()
+    {
+        $sources = Crm_Controller::getInstance()->getLeadSources();
+        
+        $this->assertEquals(4, count($sources));
+    }
+    
 }		
 	
 
