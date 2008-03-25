@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:  $
+ * @version     $Id$
  */
 
 
@@ -45,17 +45,109 @@ class Addressbook_Pdf extends Zend_Pdf
 		$xPos = 50;
 		$yPos = 800;
 
+		// name
 		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
 		$this->pages[$pageNumber]->drawText($_contact->n_fn, $xPos, $yPos);
+
+		// note
+		$yPos -= 20;
+		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
+		$this->pages[$pageNumber]->drawText($_contact->note, $xPos, $yPos);
+		
+		// photo
+		//@todo	include contact photo here
+		$xPos += 450;
+		$yPos -= 40;
+		$image = Zend_Pdf_Image::imageWithPath('images/empty_photo.jpg');		
+		$this->pages[$pageNumber]->drawImage($image, $xPos, $yPos, $xPos+50, $yPos + 75 );
+		
+		$contactFields = array ( 
+					'Business Address' => 'separator',
+					'adr_one_countryname' => 'Country',
+			        'adr_one_locality' => 'Locality',
+			        'adr_one_postalcode' => 'Postalcode' ,
+			        'adr_one_region' => 'Region',
+			        'adr_one_street' => 'Street',
+			        'adr_one_street2' => 'Street 2',
+					'Private Address' => 'separator',
+					'adr_two_countryname' => 'Country',
+			        'adr_two_locality' => 'Locality',
+			        'adr_two_postalcode' => 'Postalcode',
+			        'adr_two_region' => 'Region',
+			        'adr_two_street' => 'Country',
+			        'adr_two_street2' => 'Country 2',
+					'Other Infos' => 'separator',
+					'assistent' => 'Assistant',
+			        'bday' => 'Birthday',
+			        'email' => 'Email',
+			        'email_home' => 'Email Home',
+			        'id' => 'ID',
+			        //'owner' => 'Owner',
+			        'role' => 'Role',
+			        'title' => 'Title',
+			        'url' => 'URL',
+			        'url_home' => 'URL Home',
+			        //'n_family' => 'Family Name',
+			        //'n_fileas' => 'File As',
+			        'n_prefix' => 'Name Prefix',
+			        'n_suffix' => 'Name Suffix',
+			        'org_name' => 'Organisation',
+			        'org_unit' => 'Organisation Unit',
+			        'tel_assistent' => 'Assistant Telephone',
+			        'tel_car' => 'Telephone Car',
+			        'tel_cell' => 'Telephone Cellphone',
+			        'tel_cell_private' => 'Telephone Cellphone Private',
+			        'tel_fax' => 'Telephone Fax',
+			        'tel_fax_home' => 'Telephone Fax Home',
+			        'tel_home' => 'Telephone Home',
+			        'tel_pager' => 'Telephone Page',
+			        'tel_work' => 'Telephone Work',
+		);
+		
+		// fill data array
+		$contactData = array ();
+		foreach ( $contactFields as $field => $label ) {
+			//$contactData[$field] = $_contact->$field;
+			if ( $label === 'separator' ) {
+				$contactData[] = array ( $field,  $label );
+			} elseif ( !empty($_contact->$field) ) {
+				$contactData[] = array ( $label,  $_contact->$field );
+			}
+		}
+		
+		// create table
+		$this->CreateTable( array(), $contactData, 75, 750 );
 		
 		// Get PDF document as a string 
 		$pdfData = $this->render(); 
 		
 		return $pdfData; 		
 	}
-	
-	/********************** old functions follow ********************/
-	
+
+	/**
+     * create contact list pdf
+     *
+     * @param	array Addressbook_Model_Contact contact data
+     * 
+     * @return	string	the contact list pdf
+     * 
+     * @todo	implement
+     */
+	public function contactListPdf ( array $_contacts )
+	{
+		$pageNumber = 0;
+		$xPos = 50;
+		$yPos = 800;
+
+		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
+		$this->pages[$pageNumber]->drawText("Contacts", $xPos, $yPos);
+		
+		// Get PDF document as a string 
+		$pdfData = $this->render(); 
+		
+		return $pdfData; 		
+	}
+		
 	/**
      * create a table
      * 
@@ -69,7 +161,7 @@ class Addressbook_Pdf extends Zend_Pdf
      */
 	public function CreateTable ( $_headline, $_content, $_posX = 100, $_posY = 700, $_pageNumber = 0, $border = true )
 	{
-		$cellWidth = 120;
+		$cellWidth = 150;
 		$cellHeight = 30; 
 		$padding = 5;
 		$marginBottom = 75;
@@ -106,14 +198,20 @@ class Addressbook_Pdf extends Zend_Pdf
 				$this->pages[] = $page; 	
 				$yPos = $_posY;
 				$pageNumber++;			
-				$this->CreateHeader($pageNumber);				
+				$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 12);
+				//$this->CreateHeader($pageNumber);				
 			}
 			
 			$xPos = $_posX;
 			for ( $i=0; $i < sizeof($row); $i++) {
+				
+				if ( $row[$i] === 'separator' ) {
+					$this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
+					continue;
+				}
 			
 				if ( $i !== 0 && $border ) {
-					$this->pages[$pageNumber]->drawLine ( $xPos, $yPos + $cellHeight, $xPos, $yPos );
+					$this->pages[$pageNumber]->drawLine ( $xPos, $yPos + $cellHeight - 10, $xPos, $yPos - 10 );
 					$xPos += $padding;
 				}
 				
@@ -124,6 +222,8 @@ class Addressbook_Pdf extends Zend_Pdf
 		}
 		
 	}
+	
+	/********************** old functions follow ********************/
 	
 	/**
      * create a table
