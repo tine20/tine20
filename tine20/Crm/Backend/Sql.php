@@ -118,7 +118,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * delete option identified by id and table
      *
      * @param int $_Id option id
-     * @param $_table which option section
      * @return int the number of rows deleted
      */
     public function deleteLeadsourceById($_Id)
@@ -138,17 +137,21 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
     
     
-	// handle LEADTYPES
 	/**
-	* get Leadtypes
-	*
-	* @return unknown
-	*/
-    public function getLeadtypes($sort, $dir)
+	 * get Leadtypes
+	 * 
+     * @param string $_sort
+     * @param string $_dir
+	 * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadtype
+	 */
+    public function getLeadTypes($_sort = 'id', $_dir = 'ASC')
     {	
-		$result = $this->leadTypeTable->fetchAll(NULL, $sort, $dir);
-        return $result;
-	}	
+		$row = $this->leadTypeTable->fetchAll(NULL, $_sort, $_dir);
+        
+		$result = new Tinebase_Record_RecordSet('Crm_Model_Leadtype', $rows->toArray());
+		
+		return $result;
+    }	
     
 	/**
 	* add or updates an option

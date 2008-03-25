@@ -96,9 +96,9 @@ class Crm_Controller extends Tinebase_Container_Abstract
      *
      * @param string $_sort
      * @param string $_dir
-     * @return array
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadtype
      */
-    public function getLeadtypes($_sort, $_dir)
+    public function getLeadTypes($_sort = 'id', $_dir = 'ASC')
     {
         $result = $this->_backend->getLeadtypes($_sort, $_dir);
 
