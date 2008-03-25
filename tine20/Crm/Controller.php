@@ -67,11 +67,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
      *
      * @param string $_sort
      * @param string $_dir
-     * @return array
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadsource
      */
-    public function getLeadsources($_sort, $_dir)
+    public function getLeadSources($sort = 'id', $dir = 'ASC')
     {
-        $result = $this->_backend->getLeadsources($_sort, $_dir);
+        $result = $this->_backend->getLeadSources($_sort, $_dir);
 
         return $result;    
     }

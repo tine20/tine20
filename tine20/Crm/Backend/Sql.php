@@ -71,12 +71,16 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
 	/**
 	 * get Leadsources
-	 *
-	 * @return unknown
+	 * 
+     * @param string $_sort
+     * @param string $_dir
+	 * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadsource
 	 */
-    public function getLeadsources($sort, $dir)
+    public function getLeadSources($sort = 'id', $dir = 'ASC')
     {	
-		$result = $this->leadSourceTable->fetchAll(NULL, $sort, $dir);
+		$rows = $this->leadSourceTable->fetchAll(NULL, $sort, $dir);
+		
+		$result = new Tinebase_Record_RecordSet($rows->toArray(), 'Crm_Model_Leadsource');
 		
         return $result;
 	}
