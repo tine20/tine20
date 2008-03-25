@@ -59,7 +59,17 @@ Tine.Addressbook.Main = {
             
             Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
         },
-    
+
+        /**
+         * onclick handler for exportBtn
+         */
+        exportContactPdf: function(_button, _event) {
+            var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
+            var contactId = selectedRows[0].id;
+            
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 1024, 1280);
+        },
+        
 	    /**
 	     * onclick handler for deleteBtn
 	     */
@@ -127,6 +137,14 @@ Tine.Addressbook.Main = {
             iconCls: 'action_delete',
             scope: this
         });
+
+        this.actions.exportContactPdf = new Ext.Action({
+            text: 'export contact',
+            disabled: true,
+            handler: this.handlers.exportContactPdf,
+            iconCls: 'action_export',
+            scope: this
+        });
     },
 	
     displayContactsToolbar: function()
@@ -153,6 +171,7 @@ Tine.Addressbook.Main = {
                 this.actions.addContact, 
                 this.actions.editContact,
                 this.actions.deleteContact,
+                this.actions.exportContactPdf,
                 '->', 
                 'Search:', 
                 ' ',
@@ -242,14 +261,17 @@ Tine.Addressbook.Main = {
                 // no row selected
                 this.actions.deleteContact.setDisabled(true);
                 this.actions.editContact.setDisabled(true);
+                this.actions.exportContactPdf.setDisabled(true);
             } else if(rowCount > 1) {
                 // more than one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(true);
+                this.actions.exportContactPdf.setDisabled(true);
             } else {
                 // only one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(false);
+                this.actions.exportContactPdf.setDisabled(false);
             }
         }, this);
         
