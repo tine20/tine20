@@ -1312,14 +1312,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
+    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
-        if(count($allContainer) === 0) {
+        if(count($_container) === 0) {
             throw new Exception('$_container can not be empty');
         }        
 
         $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $containerIds)
+            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
         );
         $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
