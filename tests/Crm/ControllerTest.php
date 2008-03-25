@@ -152,7 +152,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('UnderflowException');
         
-        Crm_Controller::getInstance()->getLead($this->objects['initialContact']);
+        Crm_Controller::getInstance()->getLead($this->objects['initialLead']);
     }
 }		
 	
