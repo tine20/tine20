@@ -561,7 +561,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
     protected function sendNotifications($_isUpdate, Crm_Model_Lead $_lead)
     {
         $view = new Zend_View();
-        $view->setScriptPath('Crm/views');
+        $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
         
         $view->updater = Zend_Registry::get('currentAccount');
         $view->lead = $_lead;
@@ -589,7 +589,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         }
         
         #$translate = new Zend_Translate('gettext', 'Crm/translations/de.mo', 'de');
-        $translate = new Zend_Translate('gettext', 'Crm/translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+        $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));
         
         $view->lang_state = $translate->_('State');
