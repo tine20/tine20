@@ -69,44 +69,7 @@ class Tinebase_Account_SqlTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0 Updated',
             'accountFirstName'      => 'PHPUnit Updated',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
-        
-        return;
-        
-		$this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
-		$this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
-		
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','3');
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
-		
-		$this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
-		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Record_Exception_Validation', array('test_2' => 'string'), );
-		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
-		
-    	$dummy = array(
-					'test_id'=>2, 
-					'test_2'=>'',
-					'date_single' => $date->getIso(), 
-					'date_multiple'=>'');
-  	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
-  	  	
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__set'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['test__isset'][] = array('test_id');
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__isset'][] = array('string');
-  	  	
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__setException'][] = array( 'UnexpectedValueException', 'test_100',);
-		$this->expectFailure['TestRecord']['test__getException'][] = array( 'UnexpectedValueException', 'test_100',);
-		
-  	  	
-  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Record_Exception_NotAllowed', 'test_2',);
+        ));         
     }
 
     /**
