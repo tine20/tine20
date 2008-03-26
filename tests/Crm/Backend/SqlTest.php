@@ -181,7 +181,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get the lead sources
+     * try to get add lead types
      *
      */
     public function testGetLeadTypes()
@@ -191,6 +191,20 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($types) >= 3);
     }
         
+    /**
+     * try to get one lead type
+     *
+     */
+    public function testGetLeadType()
+    {
+        $types = $this->backend->getLeadTypes();
+        
+        $type = $this->backend->getLeadType($types[0]->id);
+        
+        $this->assertType('Crm_Model_Leadtype', $type);
+        $this->assertTrue($type->isValid());
+    }
+    
     /**
      * try to get all products
      *
@@ -224,6 +238,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $state = $this->backend->getLeadState($states[0]->id);
         
         $this->assertType('Crm_Model_Leadstate', $state);
+        $this->assertTrue($state->isValid());
     }
 }		
 	

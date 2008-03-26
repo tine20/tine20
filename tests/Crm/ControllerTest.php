@@ -178,6 +178,20 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to get one lead type
+     *
+     */
+    public function testGetLeadType()
+    {
+        $types = Crm_Controller::getInstance()->getLeadTypes();
+        
+        $type = Crm_Controller::getInstance()->getLeadType($types[0]->id);
+        
+        $this->assertType('Crm_Model_Leadtype', $type);
+        $this->assertTrue($type->isValid());
+    }
+    
+    /**
      * try to get all lead states
      *
      */
