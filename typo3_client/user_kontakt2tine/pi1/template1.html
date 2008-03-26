@@ -1,0 +1,154 @@
+<!-- ###PFEIL### begin -->
+	<img src="fileadmin/images/pfeil.gif" alt="Pfeil" class="pfeil" />
+<!-- ###PFEIL### end -->
+
+<!-- ###RESULTTEMPLATE### begin -->
+<div class="content">
+	<h1>###DANKE###</h1>
+	<p>###MAILBESTAETIGUNG###</p>
+</div>
+<!-- ###RESULTTEMPLATE### end -->
+
+<!-- ###MAILTEMPLATE### begin -->
+<table cellpadding="0" cellspacing="0" border="0" style="font-size:11px; font-family:Arial, Helvetica, sans-serif;">
+	<tr>
+		<td width="80">Betreff:</td>
+		<td width="380">###AUSWAHL###&nbsp;</td>
+	</tr>	
+	<tr>
+		<td width="80">Firma:</td>
+		<td width="380">###FIRMA###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Vorname:</td>
+		<td>###VORNAME###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Nachname:</td>
+		<td>###NACHNAME###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Telefon:</td>
+		<td>###TELEFON###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>E-Mail:</td>
+		<td>###EMAIL###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Strasse:</td>
+		<td>###STRASSE###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>PLZ:</td>
+		<td>###PLZ###&nbsp;</td>
+	</tr>		
+	<tr>
+		<td>Ort:</td>
+		<td>###ORT###&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Land:</td>
+		<td>###COUNTRY###&nbsp;</td>
+	</tr>	
+	<tr>
+		<td>Nachricht:</td>
+		<td>###NACHRICHT###&nbsp;</td>		
+	</tr>
+	<tr>
+		<td width="90">versendet am:</td>
+		<td width="180">###VERSENDEZEIT###&nbsp;</td>
+	</tr>		
+</table>
+<!-- ###MAILTEMPLATE### end -->
+
+
+<!-- ###TEMPLATE### begin -->
+<form id="bestell" action="###ACTION###" method="post">
+	<input type="hidden" name="senden" value="1" />
+	<input type="hidden" name="BILDCODE" value="###BILDCODE###" />
+	<input type="hidden" name="L" value="###LANGUAGE###" />
+	
+<div class="content">###TITLE### ###TEXT###</div>
+	<table cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="errors">
+				###ERRVORNAME###
+				###ERRNACHNAME###
+				###ERRTELEFON###
+				###ERREMAIL###
+				###ERRCODEEINGABE###
+				###ERRNACHRICHT### 
+				###ERRABSTAND### 
+			</td>
+		</tr>	
+	</table>
+	<table cellpadding="0" cellspacing="0" class="formular">
+		<tr>
+			<td class="td1">###LABELAUSWAHL###*</td>
+			<td>
+				<select name="AUSWAHL">
+					<option value="">###SELECT###</option>
+					###SELECTAUSWAHL###
+				</select>
+			</td>
+		</tr>	
+		<tr>
+			<td>###LABELFIRMA###:</td>
+			<td><input type="text" name="FIRMA" value="###FIRMA###" /></td>
+		</tr>
+		<tr>
+			<td>###LABELVORNAME###:*</td>
+			<td><input type="text" name="VORNAME" value="###VORNAME###" /></td>
+		</tr>
+		<tr>	
+			<td>###LABELNACHNAME###:*</td>
+			<td><input type="text" name="NACHNAME" value="###NACHNAME###" /></td>
+		</tr>	
+		<tr>
+			<td>###LABELTELEFON###:</td>
+			<td><input type="text" name="TELEFON" value="###TELEFON###" /></td>
+		</tr>
+		<tr>
+			<td>###LABELEMAIL###:*</td>
+			<td><input type="text" name="EMAIL" value="###EMAIL###" /></td>
+		</tr>		
+		<tr>
+			<td>###LABELSTRASSE###:</td>
+			<td><input type="text" name="STRASSE" value="###STRASSE###" /></td>
+		</tr>	
+		<!-- <input type="text" name="LAND" value="###LAND###" /> -->
+		<tr>
+			<td>###LABELPLZ###:</td>
+			<td><input type="text" name="PLZ" value="###PLZ###" /></td>
+		</tr>
+		<tr>
+			<td>###LABELORT###:</td>
+			<td><input type="text" name="ORT" value="###ORT###" /></td>
+		</tr>	
+		<tr>
+			<td>###LABELLAND###:</td>
+			<td>
+				<select name="COUNTRY"><option value="">###COUNTRYSELECT###</option>
+					###COUNTRYAUSWAHL###
+				</select>
+			</td>
+		</tr>		
+		<tr>
+			<td valign="top">###LABELNACHRICHT###:*</td>
+			<td><textarea name="NACHRICHT" cols="5" rows="5">###NACHRICHT###</textarea></td>
+		</tr>
+		<tr>
+			<td>###LABELCODEEINGABE###:*</td>
+			<td><input type="text" name="CODEEINGABE" id="small" /><img src="###BILDCODEURL###" alt="Code" id="code" /></td>		
+		</tr>					
+		<tr>	
+			<td>&nbsp;</td>		
+			<td><input type="submit" name="SUBMIT" value="###SENDENBUTTON###" class="button_A" /></td>
+		</tr>	
+		<tr>
+			<td colspan="2" class="abstand">###HINWEISPFLICHTFELDER###</td>
+		</tr>		
+	</table>
+</form>
+<!-- ###TEMPLATE### end -->
