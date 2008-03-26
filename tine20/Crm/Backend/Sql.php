@@ -1180,11 +1180,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         );
         
         $updatedRows = $this->leadTable->update($leadData, $where);
-        
-        if($updatedRows == 0) {
-            throw new Exception("update of lead failed! Does the leadId exist?");
-        }
-        
+                
         return $this->getLead($leadId);
     }
 }
