@@ -251,36 +251,34 @@
                     </field>
                 </index>
                 <index>
-                    <name>tasks_container_id</name>
+                    <name>container_id</name>
                     <field>
                         <name>container_id</name>
                     </field>
                 </index>
                 <index>
-                    <name>tasks_organizer</name>
+                    <name>organizer</name>
                     <field>
                         <name>organizer</name>
                     </field>
                 </index>            
                 <index>
-                    <name>class</name>
+                    <name>tasks::class_id--class::id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>class</table>
                         <field>id</field>
-                        <action>ON DELETE RESTRICT</action>
                     </reference>
                     <field>
                         <name>class_id</name>
                     </field>
                 </index>                  
                 <index>
-                    <name>status</name>
+                    <name>tasks::status_id--tasks_status::id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>tasks_status</table>
                         <field>id</field>
-                        <action>ON DELETE RESTRICT</action>
                     </reference>
                     <field>
                         <name>status_id</name>
@@ -303,7 +301,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <index>
-                    <name>task_tag</name>
+                    <name>task_id-tag_id</name>
                     <primary>true</primary>
                     <field>
                         <name>task_id</name>
@@ -313,12 +311,12 @@
                     </field>
                 </index>
                <index>
-                    <name>task_id</name>
+                    <name>task_tag::task_id--tasks::id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>tasks</table>
                         <field>id</field>
-                        <action>ON DELETE CASCADE</action>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                     <field>
                         <name>task_id</name>
@@ -341,7 +339,7 @@
                     <unsigned>true</unsigned>
                 </field>
                 <index>
-                    <name>task_contact</name>
+                    <name>task_id-contact_id</name>
                     <primary>true</primary>
                     <field>
                         <name>task_id</name>
@@ -351,12 +349,12 @@
                     </field>
                 </index>
                <index>
-                    <name>task_contact-task_id</name>
+                    <name>task_contact::task_id--tasks::id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>tasks</table>
                         <field>id</field>
-                        <action>ON DELETE CASCADE</action>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                     <field>
                         <name>task_id</name>
