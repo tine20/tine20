@@ -297,71 +297,39 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     
         return $leadContacts;
     }
-    
   
-	/**
-	* get Contacts
-	*
-	* @return unknown
-	*/  
-/*    public function getContactsById($_id)
-    {
-        $id = (int) $_id;
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
-        
-        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_app1 = ?', 'crm');
-        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_app2 = ?', 'addressbook');        
-        $where[] = Zend_Registry::get('dbAdapter')->quoteInto('links.link_id1 = ?', $id);        
-				        
-        $select = $this->_getContactsSelectObject();
-
-        if(is_array($where)) {
-             foreach($where as $_where) {
-                  $select->where($_where);
-             }               
-        }
-
-        //error_log($select->__toString());
-       
-        $stmt = $select->query();
-    
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        $contacts = new Tinebase_Record_RecordSet($rows, 'Crm_Model_Contact');
-        
-        return $contacts;
-    } */
-  
-  
-  
-	/**
-	* get Leadstates
-	*
-	* @return unknown
-	*/
-    public function getLeadstates($sort, $dir)
-    {	
-    	$result = $this->leadStateTable->fetchAll(NULL, $sort, $dir);
-   
-        return $result;
-	}    
-
-	/**
-    * get state identified by id
-    *
-    * @return Crm_Model_Leadstate
-    */
-    public function getLeadState($_leadstateId)
+    /**
+     * get leadstates
+     * 
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadstate
+     */
+    public function getLeadStates($_sort = 'id', $_dir = 'ASC')
     {   
-        $stateId = (int)$_leadstateId;
-        if($stateId != $_leadstateId) {
-            throw new InvalidArgumentException('$_leadstateId must be integer');
+        $rows = $this->leadStateTable->fetchAll(NULL, $_sort, $_dir);
+        
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Leadstate', $rows->toArray());
+        
+        return $result;
+    }   
+    
+	/**
+     * get state identified by id
+     *
+     * @param int $_leadStateId
+     * @return Crm_Model_Leadstate
+     */
+    public function getLeadState($_leadStateId)
+    {   
+        $stateId = (int)$_leadStateId;
+        if($stateId != $_leadStateId) {
+            throw new InvalidArgumentException('$_leadStateId must be integer');
         }
         $rowSet = $this->leadStateTable->find($stateId);
         
-        if(count($rowSet) == 0) {
-            // something bad happend
+        if(count($rowSet) === 0) {
+            throw new Exception('lead state not found');
         }
         
         $result = new Crm_Model_Leadstate($rowSet->current()->toArray());
