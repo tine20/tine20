@@ -152,11 +152,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
      *
      * @param string $_sort
      * @param string $_dir
-     * @return array
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadstate
      */
-    public function getLeadstates($_sort, $_dir)
+    public function getLeadStates($_sort = 'id', $_dir = 'ASC')
     {
-        $result = $this->_backend->getLeadstates($_sort, $_dir);
+        $result = $this->_backend->getLeadStates($_sort, $_dir);
 
         return $result;    
     }
@@ -164,6 +164,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
     /**
      * get one state identified by id
      *
+     * @param int $_id
      * @return Crm_Model_Leadstate
      */
     public function getLeadState($_id)
