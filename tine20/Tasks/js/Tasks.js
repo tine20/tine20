@@ -191,7 +191,7 @@ Tine.Tasks.mainGrid = {
             this.filter.limit = options.params.limit;
 			
 			// container
-            var nodeAttributes = Ext.getCmp('TasksTreePanel').attributes || {};
+            var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};;
             this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
             this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
             this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
@@ -254,6 +254,8 @@ Tine.Tasks.mainGrid = {
         
         
         this.tree.on('click', function(node){
+        	// note: if node is clicked, it's not selected!
+        	node.getOwnerTree().selectPath(node.getPath());
             this.store.load({params: this.paging});
         }, this);
         
@@ -392,11 +394,11 @@ Tine.Tasks.mainGrid = {
                     })
 				},
 				{
-					id: 'summaray',
-					header: "Summaray",
+					id: 'summary',
+					header: "summary",
 					width: 400,
 					sortable: true,
-					dataIndex: 'summaray',
+					dataIndex: 'summary',
 					//editor: new Ext.form.TextField({
 					//	allowBlank: false
 					//}),
@@ -437,8 +439,8 @@ Tine.Tasks.mainGrid = {
 				}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
 		    ],
-		    quickaddMandatory: 'summaray',
-			autoExpandColumn: 'summaray',
+		    quickaddMandatory: 'summary',
+			autoExpandColumn: 'summary',
 			view: new Ext.grid.GridView({
                 autoFill: true,
 	            forceFit:true,
@@ -627,10 +629,10 @@ Tine.Tasks.EditDialog = function(task) {
                 xtype: 'textfield'
             },
 			items:[{
-				fieldLabel: 'summaray',
+				fieldLabel: 'summary',
 				hideLabel: true,
 				xtype: 'textfield',
-				name: 'summaray',
+				name: 'summary',
 				emptyText: 'enter short name...',
 				allowBlank: false
 			}, {
@@ -749,7 +751,7 @@ Tine.Tasks.Task = Ext.data.Record.create([
     { name: 'organizer' },
     { name: 'priority' },
     { name: 'status' },
-    { name: 'summaray' },
+    { name: 'summary' },
     { name: 'url' },
     // ical common fields with multiple appearance
     { name: 'attach' },
