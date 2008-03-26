@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage	PDF
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
@@ -273,32 +273,6 @@ class Addressbook_Pdf extends Zend_Pdf
 			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
 			$this->pages[$i]->drawText ("Export Date: ".$creationDate, $xPos, $yPos);
 		}
-	}
-		
-	/********************** old functions follow ********************/
-	
-	/**
-     * create header
-     * 
-     * @param 	integer	page number
-     * 
-     * 
-	 */
-	public function CreateHeader ( $_pageNumber = 0 )
-	{
-		$yPos = 760;
-		$xPos = 50;
-		$headerText = "Header Text";
-
-		// load image (logo)
-		$image = Zend_Pdf_Image::imageWithPath('logo.jpg');		
-		$this->pages[$_pageNumber]->drawImage($image, $xPos, $yPos, $xPos + $image->getPixelWidth(), $yPos + $image->getPixelHeight() );
-		
-		// set font & add text
-		$this->pages[$_pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 12); 
-		$this->pages[$_pageNumber]->drawText($headerText, $xPos, $yPos - 30);
-		
-	}
-	
+	}	
 
 }
