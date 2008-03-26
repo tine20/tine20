@@ -190,18 +190,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(count($types) >= 3);
     }
-    
-    /**
-     * try to get the lead sources
-     *
-     */
-    public function testGetLeadTypes()
-    {
-        $types = $this->backend->getLeadTypes();
         
-        $this->assertTrue(count($types) >= 3);
-    }
-    
     /**
      * try to get all products
      *
