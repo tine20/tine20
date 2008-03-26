@@ -40,9 +40,9 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'id'                       => 'Digits',
-        'lead_name'                     => 'StringTrim',
-        'probability'              => 'Digits'
+        'id'            => 'Digits',
+        'lead_name'     => 'StringTrim',
+        'probability'   => 'Digits'
     );
     
     /**
@@ -53,18 +53,18 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_name' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'leadstate_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'leadtype_id'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'leadsource_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'container'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'start'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'end'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'turnover'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'probability'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'end_scheduled'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_name'     => array(),
+        'leadstate_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadtype_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadsource_id' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'container'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'start'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'end'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'turnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'probability'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'end_scheduled' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         #'leadpartner'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadcustomer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         #'leadaccount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
