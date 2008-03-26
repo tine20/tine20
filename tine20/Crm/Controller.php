@@ -451,7 +451,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         
         if(count($readableContainer) === 0) {
             $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
-            $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
+            $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         }
                 
         $containerIds = array();
