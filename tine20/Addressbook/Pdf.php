@@ -17,20 +17,9 @@
  * @package     Addressbook
  * @subpackage	PDF
  */
-class Addressbook_Pdf extends Zend_Pdf
+class Addressbook_Pdf extends Tinebase_Export_Pdf
 {
 	
-	/**
-     * the constructor
-     *
-     */
-	public function __construct()
-	{
-		parent::__construct();
-		
-		// add first page 
-		$this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4); 		
-	}
 	
 	/**
      * create contact pdf
@@ -41,49 +30,7 @@ class Addressbook_Pdf extends Zend_Pdf
      */
 	public function contactPdf ( Addressbook_Model_Contact $_contact )
 	{
-		$pageNumber = 0;
-		$xPos = 50;
-		$yPos = 800;
 
-		// name
-		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
-		$this->pages[$pageNumber]->drawText($_contact->n_fn, $xPos, $yPos);
-
-		// write note (3 lines)
-		//$noteArray = str_split ($_contact->note, 100);
-		$lineCharCount = 95;
-		$splitString = wordwrap($_contact->note, $lineCharCount, "\n");
-		$noteArray = explode("\n",$splitString);
-		if ( sizeof($noteArray) > 3 ) {
-			$noteArray[2] .= "[...]";
-		}
-		$noteArray = array_slice ($noteArray, 0, 3);
-/*
-		$noteArray = array ();
-		$splitString = $_contact->note;
-		while ( strlen($splitString) > 0 && sizeof($noteArray) < 3 ) {
-			if ( strlen($splitString) < $lineCharCount or preg_match("/ /", $splitString) === 0 ) {
-				 $noteArray[] = $splitString;
-				 
-			}
-			$lastSpacePos = strrpos(" ",substr($splitString, 0, $lineCharCount ));
-			$noteArray[] = substr ( $splitString, 0, $lastSpacePos );
-			
-		}
-		*/
-		foreach ( $noteArray as $chunk ) {
-			$yPos -= 20;
-			$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
-			$this->pages[$pageNumber]->drawText( $chunk, $xPos, $yPos);
-		}
-		
-		// photo
-		//@todo	include contact photo here
-		$xPos += 450;
-		$yPos -= 40;
-		$image = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
-		$this->pages[$pageNumber]->drawImage($image, $xPos, $yPos, $xPos+50, $yPos + 75 );
-		
 		$contactFields = array ( 
 					'Business Contact Info' => 'separator',
 			        'org_name' => 'Organisation',
@@ -127,34 +74,12 @@ class Addressbook_Pdf extends Zend_Pdf
 			        //'n_prefix' => 'Name Prefix',
 			        //'n_suffix' => 'Name Suffix',
 		);
+
+		//@todo	include contact photo here
+		$contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
 		
-		// fill data array
-		$contactData = array ();
-		foreach ( $contactFields as $field => $label ) {
-			//$contactData[$field] = $_contact->$field;
-			if ( $label === 'separator' ) {
-				$contactData[] = array ( $field,  $label );
-			} elseif ( !empty($_contact->$field) ) {
-				if ( $field === 'bday' ) {
-					// print date according to locale	
-					$date = new Zend_Date ($_contact->$field);
-					$contactData[] = array ( $label, $date->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
-				} else {
-					$contactData[] = array ( $label, $_contact->$field );
-				}
-			}
-		}
+		return $this->generatePdf($_contact, $_contact->n_fn, $_contact->note, $contactFields, $contactPhoto );
 		
-		// create table
-		$this->CreateTable( array(), $contactData, 75, 730 );
-		
-		// write footer
-		$this->CreateFooter();
-		
-		// Get PDF document as a string 
-		$pdfData = $this->render(); 
-		
-		return $pdfData; 		
 	}
 	
 
@@ -169,110 +94,8 @@ class Addressbook_Pdf extends Zend_Pdf
      */
 	public function contactListPdf ( array $_contacts )
 	{
-		$pageNumber = 0;
-		$xPos = 50;
-		$yPos = 800;
-
-		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
-		$this->pages[$pageNumber]->drawText("Contacts", $xPos, $yPos);
-		
-		// Get PDF document as a string 
-		$pdfData = $this->render(); 
-		
-		return $pdfData; 		
+		return $this->generateListPdf($_contacts);
 	}
 		
-	/**
-     * create a table
-     * 
-     * @param 	array	headline fields
-     * @param	array	content
-     * @param 	integer	xpos (upper left corner)
-     * @param 	integer	ypos (upper left corner)
-     * @param	integer	pagenumber for table
-     * @param	bool	activate border
-     * 
-     */
-	public function CreateTable ( $_headline, $_content, $_posX = 100, $_posY = 700, $_pageNumber = 0, $border = true )
-	{
-		$cellWidth = 150;
-		$cellHeight = 25; 
-		$padding = 5;
-		$marginBottom = 75;
-		$xPos = $_posX;
-		$yPos = $_posY;
-		$pageNumber = $_pageNumber; 
-		
-		// Set headline font 
-		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 14); 
-		
-		// headline
-		for ( $i=0; $i < sizeof($_headline); $i++) {
-			if ( $i !== 0 && $border ) {
-				$this->pages[$pageNumber]->drawLine ( $xPos, $_posY + $cellHeight, $xPos, $_posY - $padding );
-				$xPos += $padding;
-			}
-			$this->pages[$pageNumber]->drawText($_headline[$i], $xPos, $yPos);
-			$xPos += $cellWidth;	
-		}
-		$yPos -= $padding;
-		if ( $border ) {
-			$this->pages[$pageNumber]->drawLine ( $_posX, $yPos, $_posX + ($cellWidth*sizeof($_headline)), $yPos );
-		}
-		
-		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
-		
-		// content
-		foreach ( $_content as $row ) {
-			$yPos -= $cellHeight;
-			
-			if ( $yPos <= $marginBottom ) {
-				// add new page 
-				$page = $this->newPage(Zend_Pdf_Page::SIZE_A4); 
-				$this->pages[] = $page; 	
-				$yPos = $_posY;
-				$pageNumber++;			
-				$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10);
-				//$this->CreateHeader($pageNumber);				
-			}
-			
-			$xPos = $_posX;
-			for ( $i=0; $i < sizeof($row); $i++) {
-				
-				if ( $row[$i] === 'separator' ) {
-					$this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
-					$this->pages[$pageNumber]->drawLine ( $xPos, $yPos - $padding, $xPos, $yPos - 2*$padding);
-					continue;
-				}
-			
-				if ( $i !== 0 && $border ) {
-					$this->pages[$pageNumber]->drawLine ( $xPos, $yPos + $cellHeight - 2*$padding, $xPos, $yPos - 2*$padding );
-					$xPos += $padding;
-				}
-				
-				$this->pages[$pageNumber]->drawText($row[$i], $xPos, $yPos, 'UTF-8');
-				$xPos += $cellWidth;
-			}
-
-		}
-		
-	}
-
-	/**
-     * create footer on all pages
-     * 
-	 */
-	public function CreateFooter ()
-	{
-		
-		$xPos = 50;
-		$yPos = 30;
-		$creationDate = Zend_Date::now()->getIso();
-		
-		for ( $i=0; $i<sizeof($this->pages); $i++ ) {
-			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
-			$this->pages[$i]->drawText ("Export Date: ".$creationDate, $xPos, $yPos);
-		}
-	}	
 
 }
