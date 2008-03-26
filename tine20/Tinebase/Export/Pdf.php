@@ -43,7 +43,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * 
      * @return	string	the contact pdf
      */
-	public function generatePdf ( Tinebase_Record_Abstract $_record, $_title = "", $_note = "", array $_fields, $_image = NULL)
+	public function generatePdf ( Tinebase_Record_Abstract $_record, $_title = "", $_note = "", $_fields = array(), $_image = NULL)
 	{
 		$pageNumber = 0;
 		$xPos = 50;
@@ -97,7 +97,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		}
 		
 		// create table
-		$this->CreateTable( array(), $data, 75, 730 );
+		if ( !empty($data) ) {
+			$this->CreateTable( array(), $data, 75, 730 );
+		}
 		
 		// write footer
 		$this->CreateFooter();
