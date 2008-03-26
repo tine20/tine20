@@ -189,6 +189,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
     /**
      * get one leadtype identified by id
      *
+     * @param int $_typeId
      * @return Crm_Model_Leadtype
      */
     public function getLeadType($_typeId)

@@ -340,6 +340,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     /**
     * get leadtype identified by id
     *
+    * @param int $_typeId
     * @return Crm_Model_Leadtype
     */
     public function getLeadType($_typeId)
@@ -351,7 +352,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $rowSet = $this->leadTypeTable->find($typeId);
         
         if(count($rowSet) == 0) {
-            // something bad happend
+            throw new Exception('lead type not found');
         }
         
         $result = new Crm_Model_Leadtype($rowSet->current()->toArray());
