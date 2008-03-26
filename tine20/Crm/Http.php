@@ -126,7 +126,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
             $leadData['container'] = $folder->toArray();
             
-            $products = $leads->getProductsById($_leadId);
+            $products = $leads->getProductsByLeadId($_leadId);
             $leadData['products'] = $products->toArray();
 
             
@@ -153,7 +153,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $_leadSources =  $leads->getLeadSources('leadsource','ASC');
         $view->formData['comboData']['leadsources'] = $_leadSources->toArray();
 
-        $_productSource =  $leads->getProductsAvailable('productsource','ASC');
+        $_productSource =  $leads->getProducts('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
         $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/Crm.js');

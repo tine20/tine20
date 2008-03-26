@@ -438,28 +438,24 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     }
 
 
-	// handle PRODUCTS (associated to lead)
 	/**
-	* get products by lead id
-	*
-	* 
-	* 
-	* 
-	* @return unknown
-	*/
-     public function getProductsById($_id)
+	 * get products by lead id
+	 *
+	 * @param int $_leadId the leadId
+	 * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+	 */
+    public function getProductsByLeadId($_leadId)
     {
-        $id = (int) $_id;
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
+        $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
 
         $where  = array(
-            $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $_id)
+            $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $leadId)
         );
 
-        $result = $this->productsTable->fetchAll($where);
-
+        $rowSet = $this->productsTable->fetchAll($where);
+        
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
+   
         return $result;
     }      
 
@@ -1107,7 +1103,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
         if(count($_container) === 0) {
             throw new Exception('$_container can not be empty');
@@ -1116,7 +1112,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $where = array(
             Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
         );
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
          
         return $result;
     }

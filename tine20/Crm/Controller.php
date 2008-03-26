@@ -134,7 +134,20 @@ class Crm_Controller extends Tinebase_Container_Abstract
         return $result;    
     }     
 
-   /**
+    /**
+     * get products associated with one lead
+     *
+     * @param int $_leadId lead id
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+     */
+    public function getProductsByLeadId($_leadId)
+    {
+        $result = $this->_backend->getProductsByLeadId($_leadId);
+
+        return $result;    
+    }     
+
+    /**
      * save Productsource
      *
      * if $_Id is -1 the options element gets added, otherwise it gets updated
@@ -427,12 +440,12 @@ class Crm_Controller extends Tinebase_Container_Abstract
      * @param string $_dir
      * @param int $_limit
      * @param int $_start
-     * @param int $_state
+     * @param int $_leadState
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getAllLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
+    public function getAllLeads($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
@@ -446,7 +459,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }
@@ -459,12 +472,12 @@ class Crm_Controller extends Tinebase_Container_Abstract
      * @param string $_dir
      * @param int $_limit
      * @param int $_start
-     * @param int $_state
+     * @param int $_leadState
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getSharedLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
+    public function getSharedLeads($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
         
@@ -477,7 +490,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }

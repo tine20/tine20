@@ -248,22 +248,22 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     }     
     
 
-// handle PRODUCTS
-   public function getProductsById($_id)
+    /**
+     * get products associated with one lead
+     *
+     * @param int $_id lead id
+     * @return array
+     */
+    public function getProductsById($_id)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
 
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getProductsById($_id)) {
+        if($rows = Crm_Controller::getInstance()->getProductsByLeadId($_id)) {
             $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountByOwner($owner);
+            $result['totalcount'] = count($result['results']);
         }
 
         return $result;
