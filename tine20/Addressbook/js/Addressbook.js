@@ -39,7 +39,8 @@ Tine.Addressbook.Main = {
 	actions: {
 	    addContact: null,
 	    editContact: null,
-	    deleteContact: null
+	    deleteContact: null,
+	    exportContact: null,
 	},
 	
 	handlers: {
@@ -63,7 +64,7 @@ Tine.Addressbook.Main = {
         /**
          * onclick handler for exportBtn
          */
-        exportContactPdf: function(_button, _event) {
+        exportContact: function(_button, _event) {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
@@ -138,10 +139,10 @@ Tine.Addressbook.Main = {
             scope: this
         });
 
-        this.actions.exportContactPdf = new Ext.Action({
+        this.actions.exportContact = new Ext.Action({
             text: 'export contact',
             disabled: true,
-            handler: this.handlers.exportContactPdf,
+            handler: this.handlers.exportContact,
             iconCls: 'action_export',
             scope: this
         });
@@ -171,7 +172,7 @@ Tine.Addressbook.Main = {
                 this.actions.addContact, 
                 this.actions.editContact,
                 this.actions.deleteContact,
-                this.actions.exportContactPdf,
+                this.actions.exportContact,
                 '->', 
                 'Search:', 
                 ' ',
@@ -261,17 +262,17 @@ Tine.Addressbook.Main = {
                 // no row selected
                 this.actions.deleteContact.setDisabled(true);
                 this.actions.editContact.setDisabled(true);
-                this.actions.exportContactPdf.setDisabled(true);
+                this.actions.exportContact.setDisabled(true);
             } else if(rowCount > 1) {
                 // more than one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(true);
-                this.actions.exportContactPdf.setDisabled(true);
+                this.actions.exportContact.setDisabled(true);
             } else {
                 // only one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(false);
-                this.actions.exportContactPdf.setDisabled(false);
+                this.actions.exportContact.setDisabled(false);
             }
         }, this);
         
@@ -306,6 +307,7 @@ Tine.Addressbook.Main = {
 		        items: [
 		            this.actions.editContact,
 		            this.actions.deleteContact,
+		            this.actions.exportContact,
 		            '-',
 		            this.actions.addContact 
 		        ]
@@ -455,6 +457,13 @@ Tine.Addressbook.ContactEditDialog = {
 	                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.'); 
 	            } 
 	        });                           
+	    },
+	    
+	    exportContact: function(_button, _event) 
+	    {
+	        var contactIds = Ext.util.JSON.encode([formData.values.id]);
+
+	        //@todo implement
 	    }
 	},
 	
@@ -783,11 +792,14 @@ Tine.Addressbook.ContactEditDialog = {
         if(_rights & 4) {
             Ext.getCmp('contactDialog').action_saveAndClose.enable();
             Ext.getCmp('contactDialog').action_applyChanges.enable();
+            // which rights are needed for pdf export?
+	        Ext.getCmp('contactDialog').action_export.enable();
         }
 
         if(_rights & 8) {
             Ext.getCmp('contactDialog').action_delete.enable();
         }
+        
     },
 
     display: function(_contactData) 
@@ -802,6 +814,7 @@ Tine.Addressbook.ContactEditDialog = {
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
             handlerDelete: this.handlers.deleteContact,
+            handlerExport: this.handlers.exportContact,
             items: this.editContactDialog
         });
 
