@@ -88,10 +88,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'container'     => $this->testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description updated',
-            'end'           => Zend_Date::now(),
+            'end'           => NULL,
             'turnover'      => '200000',
             'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+            'end_scheduled' => NULL,
         )); 
     }
 
