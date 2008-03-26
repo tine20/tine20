@@ -19,11 +19,11 @@ Ext.namespace('Ext.ux', 'Ext.ux.grid');
  * <pre><code>
  var g =  new Ext.ux.grid.QuickaddGridPanel({
      ...
-     quickaddMandatory: 'summaray',
+     quickaddMandatory: 'summary',
      columns: [
          {
              ...
-             id: 'summaray',
+             id: 'summary',
              quickaddField = new Ext.form.TextField({
                  emptyText: 'Add a task...'
              })
