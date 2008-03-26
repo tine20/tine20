@@ -193,7 +193,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     
  
     /**
-     * get product source
+     * get available products
      *
      * @param string $sort
      * @param string $dir
@@ -201,7 +201,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      */
 	public function getProductsource($sort, $dir)
 	{
-         $result = array(
+        $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );

@@ -219,7 +219,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
     {   
         $rows = $this->productSourceTable->fetchAll(NULL, $_sort, $_dir);
         
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Productsource', $rows->toArray());
         
         return $result;
     }   
@@ -232,10 +232,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	 */
     public function saveProductsource(Tinebase_Record_Recordset $_optionData)
     {
-
-        $_daten = $_optionData->toArray();
-    
-
         $db = Zend_Registry::get('dbAdapter');
   
         $db->beginTransaction();
@@ -243,8 +239,8 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         try {
             $db->delete(SQL_TABLE_PREFIX . 'metacrm_productsource');
 
-            foreach($_daten as $_data) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_productsource', $_data);                
+            foreach($_optionData as $_product) {
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_productsource', $_product->toArray());                
             }
 
             $db->commit();
@@ -494,12 +490,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	* @return unknown
 	*/
     public function saveProducts(Tinebase_Record_Recordset $_productData)
-    {
-        /*  if(!Zend_Registry::get('currentAccount')->hasGrant($_leadData->container, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('write access to lead->product denied');
-        }    
-    */   
-    
+    {    
         $_daten = $_productData->toArray();
     
         $lead_id = $_daten[0]['lead_id'];
