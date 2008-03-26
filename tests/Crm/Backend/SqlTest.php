@@ -201,6 +201,30 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         #$this->assertTrue(count($types) >= 3);
     }
+    
+    /**
+     * try to get all lead states
+     *
+     */
+    public function testGetLeadStates()
+    {
+        $states = $this->backend->getLeadStates();
+        
+        $this->assertTrue(count($states) >= 6);
+    }
+    
+    /**
+     * try to get one lead state
+     *
+     */
+    public function testGetLeadState()
+    {
+        $states = $this->backend->getLeadStates();
+        
+        $state = $this->backend->getLeadState($states[0]->id);
+        
+        $this->assertType('Crm_Model_Leadstate', $state);
+    }
 }		
 	
 
