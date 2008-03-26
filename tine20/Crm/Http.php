@@ -176,4 +176,28 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         echo $view->render('mainscreen.php');
     }
 
+   	/**
+     * export lead
+     * 
+     * @param	integer lead id
+     * @param	format	pdf or csv or ...
+     * 
+     * @todo	implement csv export
+     */
+	public function exportLead($_leadId, $_format = 'pdf')
+	{
+		// get lead
+		$lead = Crm_Controller::getInstance()->getLead($_leadId);
+		
+		// export
+		if ( $_format === "pdf" ) {
+			$pdf = new Crm_Pdf();
+			$pdfOutput = $pdf->leadPdf($lead);
+
+			header("Content-Disposition: inline; filename=lead.pdf"); 
+			header("Content-type: application/x-pdf"); 
+			echo $pdfOutput; 
+			
+		}
+	}    
 }

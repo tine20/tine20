@@ -33,7 +33,8 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 		//@todo	add fields
 		$leadFields = array ();
 		
-		return $this->generatePdf($_lead, $_lead->lead_name, "", $leadFields );
+		//return $this->generatePdf($_lead, $_lead->lead_name, "", $leadFields );
+		return $this->generatePdf($_lead, $_lead->lead_name);
 		
 	}
 	
