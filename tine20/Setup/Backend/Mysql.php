@@ -114,7 +114,7 @@ class Setup_Backend_Mysql
                 switch(strtolower($field->value['special'])) {
                     case 'now':
                     {
-                        $value = Zend_Registry::get('dbAdapter')->quote(Zend_Date::now()->getIso());
+                        $value = Zend_Date::now()->getIso();
                         break;
                     }   
                     case 'account_id':
