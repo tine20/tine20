@@ -68,7 +68,7 @@ Tine.Addressbook.Main = {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 1024, 1280);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 768, 1024);
         },
         
 	    /**

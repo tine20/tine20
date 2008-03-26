@@ -121,7 +121,7 @@ class Addressbook_Pdf extends Zend_Pdf
 			        'Other Infos' => 'separator',
 			        'bday' => 'Birthday',
 			        'title' => 'Title',
-					'id' => 'ID',
+					'id' => 'Contact ID',
 		
 			        //'owner' => 'Owner',
 			        //'n_prefix' => 'Name Prefix',
@@ -135,7 +135,13 @@ class Addressbook_Pdf extends Zend_Pdf
 			if ( $label === 'separator' ) {
 				$contactData[] = array ( $field,  $label );
 			} elseif ( !empty($_contact->$field) ) {
-				$contactData[] = array ( $label,  $_contact->$field );
+				if ( $field === 'bday' ) {
+					// print date according to locale	
+					$date = new Zend_Date ($_contact->$field);
+					$contactData[] = array ( $label, $date->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+				} else {
+					$contactData[] = array ( $label, $_contact->$field );
+				}
 			}
 		}
 		
