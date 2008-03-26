@@ -177,6 +177,31 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($types));
     }
     
+    /**
+     * try to get all lead states
+     *
+     */
+    public function testGetLeadStates()
+    {
+        $states = Crm_Controller::getInstance()->getLeadStates();
+        
+        $this->assertTrue(count($states) >= 6);
+    }
+    
+    /**
+     * try to get one lead state
+     *
+     */
+    public function testGetLeadState()
+    {
+        $states = Crm_Controller::getInstance()->getLeadStates();
+        
+        $state = Crm_Controller::getInstance()->getLeadState($states[0]->id);
+        
+        $this->assertType('Crm_Model_Leadstate', $state);
+        $this->assertTrue($state->isValid());
+    }
+    
 }		
 	
 
