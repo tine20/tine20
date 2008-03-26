@@ -208,25 +208,28 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }    
     
-  
-	// handle PRODUCTS AVAILABLE
-	/**
-	* get Products available
-	*
-	* @return unknown
-	*/
-    public function getProductsAvailable($sort, $dir)
-    {	
-		$result = $this->productSourceTable->fetchAll(NULL, $sort, $dir);
+    /**
+     * get products
+     * 
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+     */
+    public function getProducts($_sort = 'id', $_dir = 'ASC')
+    {   
+        $rows = $this->productSourceTable->fetchAll(NULL, $_sort, $_dir);
+        
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
+        
         return $result;
-	}    
+    }   
     
 	/**
-	* add or updates an option
-	*
-	* @param Crm_Productsource $_optionData the optiondata
-	* @return unknown
-	*/
+	 * add or updates an option
+	 *
+	 * @param Crm_Productsource $_optionData the optiondata
+	 * @return unknown
+	 */
     public function saveProductsource(Tinebase_Record_Recordset $_optionData)
     {
 

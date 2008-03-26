@@ -127,9 +127,9 @@ class Crm_Controller extends Tinebase_Container_Abstract
      * @param string $_dir
      * @return array
      */
-    public function getProductsAvailable($_sort, $_dir)
+    public function getProducts($_sort = 'id', $_dir = 'ASC')
     {
-        $result = $this->_backend->getProductsAvailable($_sort, $_dir);
+        $result = $this->_backend->getProducts($_sort, $_dir);
 
         return $result;    
     }     
