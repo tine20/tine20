@@ -452,7 +452,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $leadId)
         );
 
-        $rowSet = $this->productsTable->fetchAll($where);
+        $rows = $this->productsTable->fetchAll($where);
         
         $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
    
