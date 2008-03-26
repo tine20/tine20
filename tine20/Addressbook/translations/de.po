@@ -1,0 +1,89 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 Addressbook\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2008-03-26 22:03+0100\n"
+"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: /home/lkneschke/workspace/Tine 2.0\n"
+"X-Poedit-SearchPath-0: Addressbook\n"
+
+#: Addressbook/Pdf.php:38
+msgid "Organisation"
+msgstr "Organisation"
+
+#: Addressbook/Pdf.php:39
+msgid "Organisation Unit"
+msgstr "Abteilung"
+
+#: Addressbook/Pdf.php:40
+msgid "Street"
+msgstr "Straße"
+
+#: Addressbook/Pdf.php:41
+msgid "Street 2"
+msgstr "Straße 2"
+
+#: Addressbook/Pdf.php:42
+msgid "Postalcode"
+msgstr "Postleitzahl"
+
+#: Addressbook/Pdf.php:43
+msgid "City"
+msgstr "Stadt"
+
+#: Addressbook/Pdf.php:44
+msgid "Region"
+msgstr "Region"
+
+#: Addressbook/Pdf.php:45
+msgid "Country"
+msgstr "Land"
+
+#: Addressbook/Pdf.php:46
+msgid "Email"
+msgstr "Email"
+
+#: Addressbook/Pdf.php:47
+msgid "Telephone Work"
+msgstr "Telefon (Büro)"
+
+#: Addressbook/Pdf.php:48
+msgid "Telephone Cellphone"
+msgstr "Telefon (Mobil)"
+
+#: Addressbook/Pdf.php:49
+msgid "Telephone Car"
+msgstr "Telefon (Auto)"
+
+#: Addressbook/Pdf.php:50
+msgid "Telephone Fax"
+msgstr "Fax"
+
+#: Addressbook/Pdf.php:51
+msgid "Telephone Page"
+msgstr "Pager"
+
+#: Addressbook/Pdf.php:52
+msgid "URL"
+msgstr "URL"
+
+#: Addressbook/Pdf.php:53
+msgid "Role"
+msgstr "Rolle"
+
+#: Addressbook/Pdf.php:54
+msgid "Assistant"
+msgstr "Assistent"
+
+#: Addressbook/Pdf.php:55
+msgid "Assistant Telephone"
+msgstr "Telefon Assistent"
+
