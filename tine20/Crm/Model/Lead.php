@@ -54,7 +54,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_name'     => array(),
+        'lead_name'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadstate_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadtype_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'leadsource_id' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
