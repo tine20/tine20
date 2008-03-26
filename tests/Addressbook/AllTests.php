@@ -30,6 +30,7 @@ class Addressbook_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Tests');
         $suite->addTest(Addressbook_Backend_AllTests::suite());
         $suite->addTestSuite('Addressbook_ControllerTest');
+        $suite->addTestSuite('Addressbook_PdfTest');
         return $suite;
     }
 }
