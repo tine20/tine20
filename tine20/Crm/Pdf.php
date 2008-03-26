@@ -30,11 +30,29 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      */
 	public function leadPdf ( Crm_Model_Lead $_lead )
 	{
-		//@todo	add fields
-		$leadFields = array ();
-		
-		//return $this->generatePdf($_lead, $_lead->lead_name, "", $leadFields );
-		return $this->generatePdf($_lead, $_lead->lead_name);
+		//@todo	add more fields
+		$leadFields = array (
+				'Lead Info' => 'separator',
+				'turnover' => 'Turnover',
+				'probability' => 'Probability',
+			);
+
+	/*
+       'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'lead_name'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadstate_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadtype_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'leadsource_id' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'container'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'start'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'end'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'turnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'probability'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'end_scheduled' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+	*/	
+			
+		return $this->generatePdf($_lead, $_lead->lead_name, $_lead->description, $leadFields);
 		
 	}
 	
