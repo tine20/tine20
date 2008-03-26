@@ -157,6 +157,17 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to get products associated with one lead
+     *
+     */
+    public function testGetProductsByLeadId()
+    {
+        $products = $this->backend->getProductsByLeadId($this->objects['initialLead']);
+        
+        $this->assertType('Tinebase_Record_RecordSet', $products);
+    }
+    
+    /**
      * try to delete a contact
      *
      */
@@ -214,6 +225,20 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $products = $this->backend->getProducts();
         
         #$this->assertTrue(count($types) >= 3);
+    }
+    
+    /**
+     * try to get one product
+     *
+     */
+    public function testGetProduct()
+    {
+        $products = $this->backend->getProducts();
+        
+        #$product = $this->backend->getProduct($products[0]->id);
+        
+        #$this->assertType('Crm_Model_Product', $product);
+        #$this->assertTrue($product->isValid());
     }
     
     /**

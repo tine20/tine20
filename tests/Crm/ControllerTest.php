@@ -143,6 +143,41 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to get all leads
+     *
+     */
+    public function testGetAllLeads()
+    {
+        $leads = Crm_Controller::getInstance()->getAllLeads('PHPUnit');
+        
+        $this->assertEquals(1, count($leads));
+        $this->assertType('Tinebase_Record_RecordSet', $leads);
+    }
+    
+    /**
+     * try to get all shared leads
+     *
+     */
+    public function testGetSharedLeads()
+    {
+        $leads = Crm_Controller::getInstance()->getSharedLeads('PHPUnit');
+        
+        $this->assertEquals(0, count($leads));
+        $this->assertType('Tinebase_Record_RecordSet', $leads);
+    }
+    
+    /**
+     * try to get products associated with one lead
+     *
+     */
+    public function testGetProductsByLeadId()
+    {
+        $products = Crm_Controller::getInstance()->getProductsByLeadId($this->objects['initialLead']);
+        
+        $this->assertType('Tinebase_Record_RecordSet', $products);
+    }
+    
+    /**
      * try to delete a lead
      *
      */
