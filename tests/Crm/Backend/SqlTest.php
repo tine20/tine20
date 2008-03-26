@@ -177,7 +177,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $sources = $this->backend->getLeadSources();
         
-        $this->assertEquals(4, count($sources));
+        $this->assertTrue(count($sources) >= 4);
     }
     
     /**
@@ -188,7 +188,29 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $types = $this->backend->getLeadTypes();
         
-        $this->assertEquals(3, count($types));
+        $this->assertTrue(count($types) >= 3);
+    }
+    
+    /**
+     * try to get the lead sources
+     *
+     */
+    public function testGetLeadTypes()
+    {
+        $types = $this->backend->getLeadTypes();
+        
+        $this->assertTrue(count($types) >= 3);
+    }
+    
+    /**
+     * try to get all products
+     *
+     */
+    public function testGetProducts()
+    {
+        $products = $this->backend->getProducts();
+        
+        #$this->assertTrue(count($types) >= 3);
     }
 }		
 	
