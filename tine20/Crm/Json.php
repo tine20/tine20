@@ -343,7 +343,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
         
-        if(!empty($leadData->id)) {
+        if(empty($leadData->id)) {
             $savedLead = Crm_Controller::getInstance()->addLead($leadData);
         } else {
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
