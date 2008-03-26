@@ -33,7 +33,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     
     protected $_validators = array(
         // tine record fields
-        'container'            => array('allowEmpty' => true,  'Int' ),
+        'container_id'         => array('allowEmpty' => true,  'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
         'creation_time'        => array('allowEmpty' => true         ),
         'last_modified_by'     => array('allowEmpty' => true         ),
@@ -42,19 +42,19 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'deleted_time'         => array('allowEmpty' => true         ),
         'deleted_by'           => array('allowEmpty' => true         ),
         // task only fields
-        'identifier'           => array('allowEmpty' => true, 'Int'  ),
+        'id'                   => array('allowEmpty' => true, 'Int'  ),
         'percent'              => array('allowEmpty' => true         ),
         'completed'            => array('allowEmpty' => true         ),
         'due'                  => array('allowEmpty' => true         ),
         // ical common fields
-        'class'                => array('allowEmpty' => true, 'Int'  ),
+        'class_id'             => array('allowEmpty' => true, 'Int'  ),
         'description'          => array('allowEmpty' => true         ),
         'geo'                  => array('allowEmpty' => true         ),
         'location'             => array('allowEmpty' => true         ),
         'organizer'            => array('allowEmpty' => true, 'Int' ),
         'priority'             => array('allowEmpty' => true         ),
-        'status'               => array('allowEmpty' => true         ),
-        'summaray'             => array('presence' => 'required'     ),
+        'status_id'            => array('allowEmpty' => true         ),
+        'summary'              => array('presence' => 'required'     ),
         'url'                  => array('allowEmpty' => true         ),
         // ical common fields with multiple appearance
         'attach'                => array('allowEmpty' => true        ),
