@@ -140,7 +140,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Crm_Model_Lead', $lead);
         // empty lead can not be valid
-        $this->assertFals($lead->isValid());
+        $this->assertFalse($lead->isValid());
     }
     
     /**
