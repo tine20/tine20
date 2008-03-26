@@ -131,6 +131,19 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to get an empty lead
+     *
+     */
+    public function testGetEmptyLead()
+    {
+        $lead = Crm_Controller::getInstance()->getEmptyLead();
+        
+        $this->assertType('Crm_Model_Lead', $lead);
+        // empty lead can not be valid
+        $this->assertFals($lead->isValid());
+    }
+    
+    /**
      * try to update a lead
      *
      */
