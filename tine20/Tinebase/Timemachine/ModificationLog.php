@@ -86,23 +86,15 @@ class Tinebase_Timemachine_ModificationLog
     {
         $this->_tablename = SQL_TABLE_PREFIX . $this->_tablename;
         
-        // temporaray setup
-        try {
-            $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
-            $this->_table->setRowClass('Tinebase_Timemachine_Model_ModificationLog');
-            
-        } catch (Exception $e) {
-            $this->setupTable();
-            $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
-            $this->_table->setRowClass('Tinebase_Timemachine_Model_ModificationLog');
-        }
+        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
+        $this->_table->setRowClass('Tinebase_Timemachine_Model_ModificationLog');
     }
     
     /**
      * Returns modification of a given record in a given timespan
      * 
      * @param string _application application of given identifier  
-     * @param int _identifier identifier to retreave modification log for
+     * @param string _id identifier to retreave modification log for
      * @param string _type 
      * @param string _backend 
      * @param Zend_Date _from beginning point of timespan, excluding point itself
@@ -110,7 +102,7 @@ class Tinebase_Timemachine_ModificationLog
      * @param int _modifierId optional
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Timemachine_Model_ModificationLog
      */
-    public function getModifications( $_application,  $_identifier, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
+    public function getModifications( $_application,  $_id, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $isoDef = 'YYYY-MM-ddTHH:mm:ss';
@@ -120,7 +112,7 @@ class Tinebase_Timemachine_ModificationLog
             ->from($this->_tablename)
             ->order('modification_time ASC')
             ->where('application = ' . $application->id)
-            ->where($db->quoteInto('record_identifier = ?', $_identifier))
+            ->where($db->quoteInto('record_id = ?', $_id))
             ->where($db->quoteInto('modification_time > ?', $_from->toString($isoDef)))
             ->where($db->quoteInto('modification_time <= ?', $_until->toString($isoDef)));
             
@@ -159,12 +151,12 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * Returns a single logbook entry identified by an logbook identifier
      * 
-     * @param int _identifier 
+     * @param string _id
      * @return Tinebase_Timemachine_Model_ModificationLog
      */
-    public function getModification( $_identifier ) {
+    public function getModification( $_id ) {
         
-        $LogEntry = $this->_table->find($_identifier)->current();
+        $LogEntry = $this->_table->find($_id)->current();
         return $LogEntry;
     } // end of member function getModification
     
@@ -192,31 +184,5 @@ class Tinebase_Timemachine_ModificationLog
         }
     } // end of member function setModification
     
-    /**
-     * Temporary function: Setup timemachine_modificationlog sql table
-     *
-     */
-    protected function setupTable()
-    {
-        $db = Zend_Registry::get('dbAdapter');
-        
-        $db->getConnection()->exec("CREATE TABLE " . $this->_tablename . " (
-            `identifier` INT(11) NOT NULL auto_increment,
-            `application` INT(11) NOT NULL,
-            `record_identifier` int(11) NOT NULL,
-            `record_type` VARCHAR(64),
-            `record_backend` VARCHAR(64) NOT NULL,
-            `modification_time` DATETIME NOT NULL,
-            `modification_account` int(11) NOT NULL,
-            `modified_attribute` VARCHAR(64) NOT NULL,
-            `modified_from` LONGTEXT,
-            `modified_to` LONGTEXT,
-            PRIMARY KEY  (`identifier`),
-            UNIQUE KEY `history_modification` (`application`,`record_identifier`,
-                `record_type`, `record_backend`, `modification_time`, 
-                `modification_account`, `modified_attribute`)) 
-            ENGINE=MyISAM DEFAULT CHARSET=utf8"
-        );
-    }
 } // end of Tinebase_Timemachine_ModificationLog
 ?>

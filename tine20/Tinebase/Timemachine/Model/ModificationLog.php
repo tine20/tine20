@@ -28,7 +28,7 @@ class Tinebase_Timemachine_Model_ModificationLog extends Tinebase_Record_Abstrac
      * 
      * @var string
      */
-    protected $_identifier = 'identifier';
+    protected $_identifier = 'id';
     
     /**
      * Defintion of properties. All properties of record _must_ be declared here!
@@ -37,16 +37,15 @@ class Tinebase_Timemachine_Model_ModificationLog extends Tinebase_Record_Abstrac
      * @var array list of zend validator
      */
     protected $_validators = array(
-        'identifier'           => array('allowEmpty' => true, 'Int' ),
-        'application'          => array('allowEmpty' => false        ),
-        'record_identifier'    => array('allowEmpty' => false, 'Int' ),
-        'record_type'          => array('allowEmpty' => true         ),
-        'record_backend'       => array('allowEmpty' => false        ),
-        'modification_time'    => array('allowEmpty' => false        ),
-        'modification_account' => array('allowEmpty' => false, 'Int' ),
-        'modified_attribute'   => array('allowEmpty' => false        ),
-        'modified_from'        => array('allowEmpty' => true         ),
-        'modified_to'          => array('allowEmpty' => true         )
+        'id'                   => array('allowEmpty' => true,  'Alnum' ),
+        'application_id'       => array('allowEmpty' => false          ),
+        'record_id'            => array('allowEmpty' => false, 'Almum' ),
+        'record_type'          => array('allowEmpty' => true           ),
+        'record_backend'       => array('allowEmpty' => false          ),
+        'modification_time'    => array('allowEmpty' => false          ),
+        'modification_account' => array('allowEmpty' => false, 'Int'   ),
+        'modified_attribute'   => array('allowEmpty' => false          ),
+        'old_value'            => array('allowEmpty' => true           ),
     );
     
     /**
