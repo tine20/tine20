@@ -38,22 +38,15 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 				$translate->_('Lead Data') => 'separator',
 				'turnover' => $translate->_('Turnover'),
 				'probability' => $translate->_('Probability'),
-		);
-
-	/*
-       'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_name'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'leadstate_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'leadtype_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'leadsource_id' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'container'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'start'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'end'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'turnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'probability'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'end_scheduled' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-	*/	
+				'start' => $translate->_('Start'),
+				'end' => $translate->_('End'),
+				'end_scheduled' => $translate->_('End Scheduled'),
+                'container' => $translate->_('Container'),
+                $translate->_('Lead IDs') => 'separator',
+				'leadstate_id' => $translate->_('Leadstate ID'),
+                'leadtype_id' => $translate->_('Leadtype ID'),
+                'leadsource_id' => $translate->_('Leadsource ID'),
+				);
 			
 		return $this->generatePdf($_lead, $_lead->lead_name, $_lead->description, $leadFields);
 		
