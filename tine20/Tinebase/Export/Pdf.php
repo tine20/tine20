@@ -84,7 +84,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$data = array ();
 		foreach ( $_fields as $field => $label ) {
 			if ( $label === 'separator' ) {
-				$data[] = array ( $field,  $label );
+                // if 2 separators follow each other, remove the last 2 elements
+                if ( $data[sizeof($data)-1][1] === 'separator' ) {
+                    array_pop ( $data );
+                }
+				
+                $data[] = array ( $field,  $label );
+				
+				
 			} elseif ( !empty($_record->$field) ) {
 				if ( $_record->$field instanceof Zend_Date ) {
 					$data[] = array ( $label, $_record->$field->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') ) );
@@ -93,7 +100,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 				}
 			}
 		}
-		
+        // if 2 separators follow each other, remove the last 2 elements
+        if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
+            array_pop ( $data );
+        }
+
 		// create table
 		if ( !empty($data) ) {
 			$this->CreateTable( array(), $data, 75, 730 );
@@ -154,26 +165,28 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$yPos = $_posY;
 		$pageNumber = $_pageNumber; 
 		
-		// Set headline font 
-		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 14); 
-		
-		// headline
-		for ( $i=0; $i < sizeof($_headline); $i++) {
-			if ( $i !== 0 && $border ) {
-				$this->pages[$pageNumber]->drawLine ( $xPos, $_posY + $cellHeight, $xPos, $_posY - $padding );
-				$xPos += $padding;
+        // print headline
+		if ( !empty($_headline) ) { 
+            // Set headline font
+			$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 14); 
+			
+			for ( $i=0; $i < sizeof($_headline); $i++) {
+				if ( $i !== 0 && $border ) {
+					$this->pages[$pageNumber]->drawLine ( $xPos, $_posY + $cellHeight, $xPos, $_posY - $padding );
+					$xPos += $padding;
+				}
+				$this->pages[$pageNumber]->drawText($_headline[$i], $xPos, $yPos, 'UTF-8');
+				$xPos += $cellWidth;	
 			}
-			$this->pages[$pageNumber]->drawText($_headline[$i], $xPos, $yPos, 'UTF-8');
-			$xPos += $cellWidth;	
+			$yPos -= $padding;
+			if ( $border ) {
+				$this->pages[$pageNumber]->drawLine ( $_posX, $yPos, $_posX + ($cellWidth*sizeof($_headline)), $yPos );
+			}
 		}
-		$yPos -= $padding;
-		if ( $border ) {
-			$this->pages[$pageNumber]->drawLine ( $_posX, $yPos, $_posX + ($cellWidth*sizeof($_headline)), $yPos );
-		}
-		
-		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
 		
 		// content
+        $this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
+        
 		foreach ( $_content as $row ) {
 			$yPos -= $cellHeight;
 			
