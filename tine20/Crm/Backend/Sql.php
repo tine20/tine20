@@ -208,73 +208,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }    
     
-    /**
-     * get products
-     * 
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
-     */
-    public function getProducts($_sort = 'id', $_dir = 'ASC')
-    {   
-        $rows = $this->productSourceTable->fetchAll(NULL, $_sort, $_dir);
-        
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Productsource', $rows->toArray());
-        
-        return $result;
-    }   
-    
-	/**
-	 * add or updates an option
-	 *
-	 * @param Crm_Productsource $_optionData the optiondata
-	 * @return unknown
-	 */
-    public function saveProductsource(Tinebase_Record_Recordset $_optionData)
-    {
-        $db = Zend_Registry::get('dbAdapter');
-  
-        $db->beginTransaction();
-        
-        try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_productsource');
-
-            foreach($_optionData as $_product) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_productsource', $_product->toArray());                
-            }
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-
-        return $_optionData;
-    }
-    /**
-     * delete option identified by id and table
-     *
-     * @param int $_Id option id
-     * @param $_table which option section
-     * @return int the number of rows deleted
-     */
-    public function deleteProductsourceById($_Id)
-    {
-        $Id = (int)$_Id;
-        if($Id != $_Id) {
-            throw new InvalidArgumentException('$_Id must be integer');
-        }      
-            $where  = array(
-                $this->linksTable->getAdapter()->quoteInto('leadsource_id = ?', $Id),
-            );
-             
-            $result = $this->productSourceTable->delete($where);
-
-        return $result;
-    }    
-    
-    
 	/**
 	* get LeadContacts
 	*
@@ -432,114 +365,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         return $result;
     }
-
-
-	/**
-	 * get products by lead id
-	 *
-	 * @param int $_leadId the leadId
-	 * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
-	 */
-    public function getProductsByLeadId($_leadId)
-    {
-        $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
-
-        $where  = array(
-            $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $leadId)
-        );
-
-        $rows = $this->productsTable->fetchAll($where);
         
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
-   
-        return $result;
-    }      
-
-	/**
-	* delete products (which belong to one lead)
-	*
-	* @param int $_Id the id of the lead
-    *
-	* @return unknown
-	*/
-    public function deleteProducts($_id)
-    {
-        $id = (int) $_id;
-        if($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
-
-        $db = Zend_Registry::get('dbAdapter');      
-        
-        try {          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = ' . $id);      
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-        }      
-        
-        return true;
-   
-    }
-
-	/**
-	* add or updates an product (which belongs to one lead)
-	*
-	* @param int $_productId the id of the product, NULL if new, else gets updated
-	* @param Crm_Product $_productData the productdata
-	* @param int $_leadId the lead id
-	* @return unknown
-	*/
-    public function saveProducts(Tinebase_Record_Recordset $_productData)
-    {    
-        $_daten = $_productData->toArray();
-    
-        $lead_id = $_daten[0]['lead_id'];
-
-
-        if(!(int)$lead_id) {
-             return $_productData;  
-        }
-        
-
-        $db = Zend_Registry::get('dbAdapter');
-  
-        $db->beginTransaction();
-        
-        try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = '.$lead_id);
-
-            foreach($_daten as $_data) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_product', $_data);                
-            }
-
-            $db->commit();
-
-        } catch (Exception $e) {
-            $db->rollBack();
-            error_log($e->getMessage());
-        }
-
-        return $_optionData;
-         
-         
-         
-         
-        $productData = $_productData->toArray();
-
-        if($_productData->product_id === NULL) {
-            $result = $this->productsTable->insert($productData);
-            $_productData->product_id = $this->productsTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->productsTable->getAdapter()->quoteInto('product_id = (?)', $_productData->id),
-            );
-
-            $result = $this->productsTable->update($productData, $where);
-        }
-
-        return $_productData;
-    }
-    
     public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = NULL)
     {    
 		
@@ -652,28 +478,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return true;
     }    
      
-/*    public function getOtherUsers() 
-    {
-        $rows = Tinebase_Container::getInstance()->getOtherUsers('crm');
-
-        //$accountData = array();
-        
-        $result = new Tinebase_Record_RecordSet(NULL, 'Tinebase_Account_Model_Account');
-
-        foreach($rows as $account) {
-            $accountData = array(
-                'account_id'      => $account['account_id'],
-                'account_loginid' => 'loginid',
-                'account_name'    => 'Account ' . $account['account_id']
-            );
-            $result->addRecord($accountData);
-        }
-
-        //$result = new Tinebase_Record_RecordSet($accountData, 'Tinebase_Account_Model_Account');
-        
-        return $result;
-    } */
-
     /**
      * create search filter
      *
@@ -734,45 +538,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         		
         return $leads;
     }   
-    
-    /**
-     * get the basic select object to fetch contacts from the database 
-     *
-     * @todo do we still need this function
-     * @return Zend_Db_Select
-     */
-/*    protected function _getContactsSelectObject()
-    {
-        $db = Zend_Registry::get('dbAdapter');
-
-        $select = $db->select()
-            ->from(array('links' => SQL_TABLE_PREFIX . 'links'), array(
-                'link_remark',
-                'link_id')
-            )
-            ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), 
-                'links.link_id2 = contacts.contact_id', array(
-                    'contact_id',
-                    'owner',
-                    'n_family',
-                    'n_given',
-                    'n_middle',
-                    'n_prefix',
-                    'n_suffix',
-                    'n_fn',
-                    'n_fileas',
-                    'org_name',
-                    'org_unit',
-                    'adr_one_street',
-                    'adr_one_locality',
-                    'adr_one_region',
-                    'adr_one_postalcode',
-                    'adr_one_countryname'
-                )
-            );
-        
-        return $select;
-    }*/    
     
     /**
      * get the basic select object to fetch leads from the database 
@@ -856,65 +621,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
          
         return $result;
     }
-    
-/*    public function _getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
-    {
-        $containers = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
-        
-        if(count($containers) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        
-        foreach($containers as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
-        );
-        
-        $where = $this->_addQuickSearchFilter($where, $_filter);
-        
-        $result = $this->contactsTable->getTotalCount($where);
-
-        return $result;
-    } */
-    
-    /**
-     * get total count of all leads from shared folders
-     *
-     * @todo return the correct count (the accounts are missing)
-     *
-     * @return int count of all other users leads
-     */
-    public function getCountOfAllLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
-    {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
-
-        if(count($allContainer) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        
-        foreach($allContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
-        );
-        
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
-        
-        $result = $this->leadTable->getTotalCount($where);
-
-        return $result;
-    }
-   
-   
+       
     public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
     {
         // convert to int
@@ -1108,6 +815,32 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }
     
+    /**
+     * get total count of leads matching filter
+     *
+     * @param array $_container
+     * @param string $_filter
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return int total number of matching leads
+     */
+    public function getCountOfLeads(array $_container, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        if(count($_container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }        
+        
+        $where = array(
+            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
+        );
+                
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        
+        $result = $this->leadTable->getTotalCount($where);
+
+        return $result;
+    }
     
     /**
      * delete lead
@@ -1174,4 +907,177 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
                 
         return $this->getLead($leadId);
     }
+
+    /**
+     * get available products
+     * 
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+     */
+    public function getProducts($_sort = 'id', $_dir = 'ASC')
+    {   
+        $rows = $this->productSourceTable->fetchAll(NULL, $_sort, $_dir);
+        
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Productsource', $rows->toArray());
+        
+        return $result;
+    }   
+    
+    /**
+     * add or updates an option
+     *
+     * @param Crm_Productsource $_optionData the optiondata
+     * @return unknown
+     */
+    public function saveProductsource(Tinebase_Record_Recordset $_optionData)
+    {
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_productsource');
+
+            foreach($_optionData as $_product) {
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_productsource', $_product->toArray());                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
+        }
+
+        return $_optionData;
+    }
+    /**
+     * delete option identified by id and table
+     *
+     * @param int $_Id option id
+     * @param $_table which option section
+     * @return int the number of rows deleted
+     */
+    public function deleteProductsourceById($_Id)
+    {
+        $Id = (int)$_Id;
+        if($Id != $_Id) {
+            throw new InvalidArgumentException('$_Id must be integer');
+        }      
+            $where  = array(
+                $this->linksTable->getAdapter()->quoteInto('leadsource_id = ?', $Id),
+            );
+             
+            $result = $this->productSourceTable->delete($where);
+
+        return $result;
+    }    
+    
+    /**
+     * get products by lead id
+     *
+     * @param int $_leadId the leadId
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+     */
+    public function getProductsByLeadId($_leadId)
+    {
+        $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
+
+        $where  = array(
+            $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $leadId)
+        );
+
+        $rows = $this->productsTable->fetchAll($where);
+        
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
+   
+        return $result;
+    }      
+
+    /**
+    * delete products (which belong to one lead)
+    *
+    * @param int $_Id the id of the lead
+    *
+    * @return unknown
+    */
+    public function deleteProducts($_id)
+    {
+        $id = (int) $_id;
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+
+        $db = Zend_Registry::get('dbAdapter');      
+        
+        try {          
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = ' . $id);      
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }      
+        
+        return true;
+   
+    }
+
+    /**
+    * add or updates an product (which belongs to one lead)
+    *
+    * @param int $_productId the id of the product, NULL if new, else gets updated
+    * @param Crm_Product $_productData the productdata
+    * @param int $_leadId the lead id
+    * @return unknown
+    */
+    public function saveProducts(Tinebase_Record_Recordset $_productData)
+    {    
+        $_daten = $_productData->toArray();
+    
+        $lead_id = $_daten[0]['lead_id'];
+
+
+        if(!(int)$lead_id) {
+             return $_productData;  
+        }
+        
+
+        $db = Zend_Registry::get('dbAdapter');
+  
+        $db->beginTransaction();
+        
+        try {
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = '.$lead_id);
+
+            foreach($_daten as $_data) {
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_product', $_data);                
+            }
+
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollBack();
+            error_log($e->getMessage());
+        }
+
+        return $_optionData;
+         
+         
+         
+         
+        $productData = $_productData->toArray();
+
+        if($_productData->product_id === NULL) {
+            $result = $this->productsTable->insert($productData);
+            $_productData->product_id = $this->productsTable->getAdapter()->lastInsertId();
+        } else {
+            $where  = array(
+                $this->productsTable->getAdapter()->quoteInto('product_id = (?)', $_productData->id),
+            );
+
+            $result = $this->productsTable->update($productData, $where);
+        }
+
+        return $_productData;
+    }
+    
 }

@@ -309,14 +309,30 @@ class Crm_Controller extends Tinebase_Container_Abstract
     }
     
     /**
-     * get total count of all leads
+     * get total count of all leads matching filter
      *
-     * @return int count of all leads
+     * @param string $_filter
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return int total number of matching leads
      */
-    public function getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads)
+    public function getCountOfAllLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
-        $result = $this->_backend->getCountOfAllLeads($_filter, $_state, $_probability, $_getClosedLeads);
+        $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
+        if(count($readableContainer) === 0) {
+            $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
+            $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
+        }
+                
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+
         return $result;
     }
 
@@ -603,7 +619,6 @@ class Crm_Controller extends Tinebase_Container_Abstract
             $view->ScheduledEnd = '-';
         }
         
-        #$translate = new Zend_Translate('gettext', 'Crm/translations/de.mo', 'de');
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));
         
