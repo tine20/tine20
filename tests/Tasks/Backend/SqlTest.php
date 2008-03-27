@@ -97,8 +97,8 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteTask($testId);
         $filter = new Tasks_Model_Filter();
         $filter->query = 'our fist test task';
-        $pagnition = new Tasks_Model_Pagnition();
-        $tasks = $this->_backend->searchTasks($filter, $pagnition);
+        $pagination = new Tasks_Model_Pagination();
+        $tasks = $this->_backend->searchTasks($filter, $pagination);
         foreach ($tasks as $task) {
         	$this->assertNotEquals($testId, $task->getId());
         }
@@ -123,7 +123,53 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         	$this->assertTrue(true);
         }
     }
-    
+    /**
+     * test basic update function
+     */
+    public function testUpdateTask()
+    {
+    	$nowTs = Zend_Date::now()->getTimestamp();
+    	$task = clone $this->_persistantTestTask1;
+    	$task->summary = 'Update of test task 1';
+    	$task->due->addWeek(1);
+    	$utask = $this->_backend->updateTask($task);
+    	//$this->assertEquals($task, $utask);
+    	foreach ($task as $field => $value) {
+    		switch ($field) {
+    			case 'last_modified_time':
+    			    $this->assertEquals($nowTs, $utask->last_modified_time->getTimestamp(),'', 1);
+    			    break;
+    			case 'last_modified_by':
+    				$this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $utask->last_modified_by);
+    				break;
+    			default:
+    				$this->assertEquals($value, $utask->$field);
+    		}
+    	}
+    }
+    /**
+     * test if non resolvable concurrency problem gets detected
+     */
+    public function testConcurrency()
+    {
+        $task = clone $this->_persistantTestTask1;
+        $task->summary = 'First Update of test task 1';
+        $utask = $this->_backend->updateTask($task);
+        
+        $utask->summary = 'Second Update of test task 1';
+        //$this->_backend->updateTask($utask);
+        
+        $conflictTask = clone $utask;
+        $conflictTask->summary = 'Non resolvable conflict';
+        try {
+        	//$this->_backend->updateTask($conflictTask);
+        	$this->fail('Not detected concurrency conflict');
+        } catch (Exception $e) {
+        	$this->assertType('Exception', $e);
+        }
+        
+        
+    }
 }		
 	
 
