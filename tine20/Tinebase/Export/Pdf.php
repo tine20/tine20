@@ -52,7 +52,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		// title
 		if ( !empty($_title) ) {
 			$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
-			$this->pages[$pageNumber]->drawText($_title, $xPos, $yPos);
+			$this->pages[$pageNumber]->drawText($_title, $xPos, $yPos, 'UTF-8');
 		}
 
 		// write note (3 lines)
@@ -68,7 +68,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 			foreach ( $noteArray as $chunk ) {
 				$yPos -= 20;
 				$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
-				$this->pages[$pageNumber]->drawText( $chunk, $xPos, $yPos);
+				$this->pages[$pageNumber]->drawText( $chunk, $xPos, $yPos, 'UTF-8');
 			}
 		}
 		
@@ -125,7 +125,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$yPos = 800;
 
 		$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
-		$this->pages[$pageNumber]->drawText($_title, $xPos, $yPos);
+		$this->pages[$pageNumber]->drawText($_title, $xPos, $yPos, 'UTF-8');
 		
 		// Get PDF document as a string 
 		$pdfData = $this->render(); 
@@ -163,7 +163,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 				$this->pages[$pageNumber]->drawLine ( $xPos, $_posY + $cellHeight, $xPos, $_posY - $padding );
 				$xPos += $padding;
 			}
-			$this->pages[$pageNumber]->drawText($_headline[$i], $xPos, $yPos);
+			$this->pages[$pageNumber]->drawText($_headline[$i], $xPos, $yPos, 'UTF-8');
 			$xPos += $cellWidth;	
 		}
 		$yPos -= $padding;
