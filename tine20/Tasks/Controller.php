@@ -89,12 +89,13 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * Search for tasks matching given filter
      *
-     * @param Tasks_Model_PaginationFilter $_filter
+     * @param Tasks_Model_Filter $_filter
+     * @param Tasks_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function searchTasks($_filter)
+    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
     {
-        $this->_checkContainerACL($_filter);
+        $this->_checkContainerACL($_filter, $_pagination);
         
         $tasks =  $this->_backend->searchTasks($_filter);
         //Tinebase_Account::getBackend()->getPublicAccountProperties();
@@ -107,10 +108,10 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tasks_Model_PaginationFilter $_filter
+     * @param Tasks_Model_Filter $_filter
      * @return int
      */
-    public function getTotalCount($_filter) {
+    public function getTotalCount(Tasks_Model_Filter $_filter) {
         $this->_checkContainerACL($_filter);
         return $this->_backend->getTotalCount($_filter);
     }
