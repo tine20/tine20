@@ -76,7 +76,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => new Zend_Date ('1975-01-02 03:04:05', Zend_Date::ISO_8601),
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
@@ -133,6 +133,23 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput)); 
 		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput)); 
 				
+    }
+
+    /**
+     * test pdf locale settings (translation & date formatting)
+     *
+     */
+    public function testContactPdfLocale()
+    {
+    	// set de_DE locale
+    	Zend_Registry::set('locale', new Zend_Locale('de_DE'));
+    	
+        $pdf = new Addressbook_Pdf();
+        $pdfOutput = $pdf->contactPdf($this->objects['contact']);
+        
+        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput)); 
+        $this->assertEquals(1, preg_match("/Firmen-Kontaktdaten/", $pdfOutput));
+                
     }
     
 }		
