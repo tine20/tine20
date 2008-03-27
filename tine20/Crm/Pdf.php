@@ -30,12 +30,15 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      */
 	public function leadPdf ( Crm_Model_Lead $_lead )
 	{
-		//@todo	add more fields
+        $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+        $translate->setLocale(Zend_Registry::get('locale'));		
+        
+        //@todo	add more fields and translations
 		$leadFields = array (
-				'Lead Info' => 'separator',
-				'turnover' => 'Turnover',
-				'probability' => 'Probability',
-			);
+				$translate->_('Lead Data') => 'separator',
+				'turnover' => $translate->_('Turnover'),
+				'probability' => $translate->_('Probability'),
+		);
 
 	/*
        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),

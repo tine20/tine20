@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-03-26 21:58+0100\n"
-"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
+"PO-Revision-Date: 2008-03-27 14:10+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -12,54 +12,60 @@ msgstr ""
 "X-Poedit-Country: UNITED KINGDOM\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/lkneschke/workspace/Tine 2.0\n"
+"X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Crm\n"
 
-#: Tine 2.0/Crm/Controller.php:350
-msgid "State"
-msgstr "State"
+#: Crm/Pdf.php:38
+msgid "Lead Data"
+msgstr "Lead Data"
 
-#: Tine 2.0/Crm/Controller.php:351
-msgid "Type"
-msgstr "Type"
-
-#: Tine 2.0/Crm/Controller.php:352
-msgid "Source"
-msgstr "Source"
-
-#: Tine 2.0/Crm/Controller.php:353
-msgid "Start"
-msgstr "Start"
-
-#: Tine 2.0/Crm/Controller.php:354
-msgid "Scheduled end"
-msgstr "Scheduled end"
-
-#: Tine 2.0/Crm/Controller.php:355
-msgid "End"
-msgstr "End"
-
-#: Tine 2.0/Crm/Controller.php:356
+#: Crm/Pdf.php:39
+#: Crm/Controller.php:631
 msgid "Turnover"
 msgstr "Turnover"
 
-#: Tine 2.0/Crm/Controller.php:357
+#: Crm/Pdf.php:40
+#: Crm/Controller.php:632
 msgid "Probability"
 msgstr "Probability"
 
-#: Tine 2.0/Crm/Controller.php:358
+#: Crm/Controller.php:625
+msgid "State"
+msgstr "State"
+
+#: Crm/Controller.php:626
+msgid "Type"
+msgstr "Type"
+
+#: Crm/Controller.php:627
+msgid "Source"
+msgstr "Source"
+
+#: Crm/Controller.php:628
+msgid "Start"
+msgstr "Start"
+
+#: Crm/Controller.php:629
+msgid "Scheduled end"
+msgstr "Scheduled end"
+
+#: Crm/Controller.php:630
+msgid "End"
+msgstr "End"
+
+#: Crm/Controller.php:633
 msgid "Folder"
 msgstr "Folder"
 
-#: Tine 2.0/Crm/Controller.php:359
+#: Crm/Controller.php:634
 msgid "Updated by"
 msgstr "Updated by"
 
-#: Tine 2.0/Crm/Controller.php:365
+#: Crm/Controller.php:640
 msgid "Lead updated"
 msgstr "Lead updated"
 
-#: Tine 2.0/Crm/Controller.php:367
+#: Crm/Controller.php:642
 msgid "Lead added"
 msgstr "Lead added"
 
