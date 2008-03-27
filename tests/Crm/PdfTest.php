@@ -69,7 +69,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
+            'start'         => new Zend_Date( "2007-12-12" ),
             'description'   => 'Lead Description',
             'end'           => Zend_Date::now(),
             'turnover'      => '200000',
@@ -103,7 +103,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
 		$pdfOutput = $pdf->leadPdf($this->objects['lead']);
 		
 		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput)); 
-		//$this->assertEquals(1, preg_match("/Lead Description/", $pdfOutput)); 
+		$this->assertEquals(1, preg_match("/Lead Description/", $pdfOutput)); 
 		$this->assertEquals(1, preg_match("/PHPUnit/", $pdfOutput));
 				
     }
