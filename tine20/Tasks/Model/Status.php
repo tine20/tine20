@@ -22,7 +22,7 @@ class Tasks_Model_Status extends Tinebase_Record_Abstract
      * 
      * @var string
      */
-    protected $_identifier = 'identifier';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -32,7 +32,7 @@ class Tasks_Model_Status extends Tinebase_Record_Abstract
     protected $_application = 'Tasks';
     
     protected $_validators = array(
-        'identifier'           => array('allowEmpty' => true,  'Int' ),
+        'id'                   => array('allowEmpty' => true,  'Int' ),
         'created_by'           => array('allowEmpty' => true,  'Int' ),
         'creation_time'        => array('allowEmpty' => true         ),
         'last_modified_by'     => array('allowEmpty' => true         ),

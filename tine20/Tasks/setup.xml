@@ -146,9 +146,8 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>container_id</name>
@@ -292,8 +291,8 @@
             <declaration>
                 <field>
                     <name>task_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>64</length>
                 </field>            
                 <field>
                     <name>tag_id</name>
@@ -330,8 +329,8 @@
             <declaration>
                 <field>
                     <name>task_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>64</length>
                 </field>            
                 <field>
                     <name>contact_id</name>

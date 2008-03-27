@@ -81,18 +81,16 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         
         $this->_db = Zend_Registry::get('dbAdapter');
         $this->_currentAccount = Zend_Registry::get('currentAccount');
-        
-        //temporary hack to enshure migration from egw14
-        $this->getTableInstance('tasks');
     }
     
     /**
      * Search for tasks matching given filter
      *
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_Filter $_filter
+     * @param Tasks_Model_Pagnition $_pagnition
      * @return Tinebase_Record_RecordSet
      */
-    public function searchTasks($_filter)
+    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagnition $_pagnition)
     {
         $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
@@ -100,23 +98,23 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             return $TaskSet;
         }
         
-        //error_log(print_r($_filter->toArray(),true));
+        // error_log(print_r($_filter->toArray(),true));
         // build query
         // TODO: abstract filter2sql
         $select = $this->_getSelect()
-            ->where($this->_db->quoteInto('tasks.container IN (?)', $_filter->container));
+            ->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
             
-        if (!empty($_filter->limit)) {
-            $select->limit($_filter->limit, $_filter->start);
+        if (!empty($_pagnition->limit)) {
+            $select->limit($_pagnition->limit, $_pagnition->start);
         }
-        if (!empty($_filter->sort)){
-            $select->order($_filter->sort . ' ' . $_filter->dir);
+        if (!empty($_pagnition->sort)){
+            $select->order($_pagnition->sort . ' ' . $_pagnition->dir);
         }
         if(!empty($_filter->query)){
-            $select->where($this->_db->quoteInto('(summaray LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
+            $select->where($this->_db->quoteInto('(summary LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
         }
         if(!empty($_filter->status)){
-            $select->where($this->_db->quoteInto('status = ?',$_filter->status));
+            $select->where($this->_db->quoteInto('status_id = ?',$_filter->status));
         }
         if(!empty($_filter->organizer)){
             $select->where($this->_db->quoteInto('organizer = ?', (int)$_filter->organizer));
@@ -138,15 +136,13 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_Filter $_filter
      * @return int
      */
-    public function getTotalCount($_filter)
+    public function getTotalCount(Tasks_Model_Filter $_filter)
     {
-        // temporay hack
-        unset($_filter->limit);
-        unset($_filter->start);
-        return count($this->searchTasks($_filter));
+        $pagnition = new Tasks_Model_Pagnition();
+        return count($this->searchTasks($_filter, $pagnition));
         /*
         if(empty($_filter->container)) return 0;
         return $this->getTableInstance('tasks')->getTotalCount(array(
@@ -159,18 +155,18 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Return a single Task
      *
-     * @param string $_uid
+     * @param string $_id
      * @return Tasks_Model_Task task
      */
-    public function getTask($_uid)
+    public function getTask($_id)
     {
         $stmt = $this->_db->query($this->_getSelect()
-            ->where($this->_db->quoteInto('tasks.identifier = ?', $_uid))
+            ->where($this->_db->quoteInto('tasks.id = ?', $_id))
         );
         
         $TaskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         if (empty($TaskArray)) {
-            throw new Exception("Task with uid: $_uid not found!");
+            throw new Exception("Task with uid: $_id not found!");
         }
         
         $Task = new Tasks_Model_Task($TaskArray[0], true, array('part' => Zend_Date::ISO_8601)); 
@@ -186,15 +182,15 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     {
         return $this->_db->select()
             ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
-                'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_identifier)',
-                'tag'     => 'GROUP_CONCAT(DISTINCT tag.tag_identifier)',
+                'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
+                'tag'     => 'GROUP_CONCAT(DISTINCT tag.tag_id)',
                 'is_open' => 'status.status_is_open',
             ))
-            ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.identifier = contact.task_identifier', array())
-            ->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.identifier = tag.task_identifier', array())
-            ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status = status.identifier', array())
+            ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
+            ->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.id = tag.task_id', array())
+            ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
             ->where('tasks.is_deleted = FALSE')
-            ->group('tasks.identifier');
+            ->group('tasks.id');
     }
     
     /**
@@ -205,6 +201,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function createTask(Tasks_Model_Task $_task)
     {
+    	$newId = $_task->generateUID();
+    	$_task->setId($newId);
         $_task->creation_time = Zend_Date::now();
         $_task->created_by = $this->_currentAccount->getId();
         
@@ -213,13 +211,14 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         try {
             $this->_db->beginTransaction();
             $tasksTable = $this->getTableInstance('tasks');
-            $taskId = $tasksTable->insert($taskParts['tasks']);
+            $tasksTable->insert($taskParts['tasks']);
             $this->insertDependentRows($taskParts);
             $this->_db->commit();
 
-            return $this->getTask($taskId);
+            return $this->getTask($newId);
             
         } catch (Exception $e) {
+        	echo $e;
             $this->_db->rollBack();
             throw($e);
         }
@@ -237,7 +236,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         try {
             $this->_db->beginTransaction();
             
-            $oldTask = $this->getTask($_task->identifier);
+            $oldTask = $this->getTask($_task->id);
             
             $dbMods = array_diff_assoc($_task->toArray(), $oldTask->toArray());
             $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
@@ -250,7 +249,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             
             // concurrency management
             if(!empty($dbMods['last_modified_time'])) {
-                $logedMods = $modLog->getModifications('Tasks', $_task->identifier,
+                $logedMods = $modLog->getModifications('Tasks', $_task->id,
                         'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $_task->last_modified_time, $oldTask->last_modified_time);
                 $diffs = $modLog->computeDiff($logedMods);
                         
@@ -277,15 +276,15 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         
             $tasksTable = $this->getTableInstance('tasks');
             $numAffectedRows = $tasksTable->update($taskParts['tasks'], array(
-                $this->_db->quoteInto('identifier = ?', $_task->identifier),
+                $this->_db->quoteInto('id = ?', $_task->id),
             ));
-            $this->deleteDependentRows($_task->identifier);
+            $this->deleteDependentRows($_task->id);
             $this->insertDependentRows($taskParts);
 
             // modification log
             $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
                 'application'          => 'tasks',
-                'record_identifier'    => $_task->getId(),
+                'record_id'    => $_task->getId(),
                 'record_type'          => 'Tasks_Model_Task',
                 'record_backend'       => Tasks_Backend_Factory::SQL,
                 'modification_time'    => $taskParts['tasks']['last_modified_time'],
@@ -300,7 +299,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             
             $this->_db->commit();
 
-            return $this->getTask($_task->identifier);
+            return $this->getTask($_task->id);
             
         } catch (Exception $e) {
             $this->_db->rollBack();
@@ -311,10 +310,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Deletes an existing Task
      *
-     * @param int $_identifier
+     * @param string $_id
      * @return void
      */
-    public function deleteTask($_identifier)
+    public function deleteTask($_id)
     {
         $tasksTable = $this->getTableInstance('tasks');
         $data = array(
@@ -323,11 +322,11 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             'deleted_by'   => $this->_currentAccount->getId()
         );
         $tasksTable->update($data, array(
-            $this->_db->quoteInto('identifier = ?', $_identifier)
+            $this->_db->quoteInto('id = ?', $_id)
         ));
         
         // NOTE: cascading delete through the use of forign keys!
-        //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('identifier = ?', $_uid));
+        //$tasksTable->delete($tasksTable->getAdapter()->quoteInto('id = ?', $_uid));
     }
     
     /**
@@ -336,15 +335,15 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * If one of the tasks could not be deleted, no taks is deleted
      * 
      * @throws Exception
-     * @param array array of task identifiers
+     * @param array array of strings (task ids)
      * @return void
      */
-    public function deleteTasks($_identifiers)
+    public function deleteTasks($_ids)
     {
         try {
             $this->_db->beginTransaction();
-            foreach ($_identifiers as $identifier) {
-                $this->deleteTask($identifier);
+            foreach ($_ids as $id) {
+                $this->deleteTask($id);
             }
             $this->_db->commit();
             
@@ -357,13 +356,12 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Returns a record as it was at a given point in history
      * 
-     * @param [string|int] _id 
+     * @param string _id 
      * @param Zend_Date _at 
-     * @param bool _idIsUID wether global (string) or local (int) identifiers are given as _id
      * @return Tinebase_Record
      * @access public
      */
-    public function getRecord( $_id,  Zend_Date $_at, $_idIsUID = FALSE)
+    public function getRecord($_id,  Zend_Date $_at)
     {
         
     }
@@ -371,13 +369,12 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Returns a set of records as they where at a given point in history
      * 
-     * @param array _ids array of [string|int] 
+     * @param array _ids array of strings
      * @param Zend_Date _at 
-     * @param bool _idsAreUIDs wether global (string) or local (int) identifiers are given as _ids
      * @return Tinebase_Record_RecordSet
      * @access public
      */
-    public function getRecords( array $_ids,  Zend_Date $_at, $_idsAreUIDs = FALSE )
+    public function getRecords(array $_ids,  Zend_Date $_at)
     {
         
     }
@@ -385,7 +382,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Deletes all depended rows from a given parent task
      *
-     * @param int $_parentTaskId
+     * @param string $_parentTaskId
      * @return int number of deleted rows
      */
     protected function deleteDependentRows($_parentTaskId)
@@ -394,7 +391,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         foreach (array('contact', 'tag') as $table) {
             $TableObject = $this->getTableInstance($table);
             $deletedRows += $TableObject->delete(
-                $this->_db->quoteInto('task_identifier = ?', $_parentTaskId)
+                $this->_db->quoteInto('task_id = ?', $_parentTaskId)
             );
         }
         return $deletedRows;
@@ -413,8 +410,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                 $TableObject = $this->getTableInstance($table);
                 foreach ($items as $itemId) {
                     $TableObject->insert(array(
-                        'task_identifier'    => $taskId,
-                        $table . '_identifier' => $itemId
+                        'task_id'    => $taskId,
+                        $table . '_id' => $itemId
                     ));
                 }
             }
@@ -452,17 +449,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     protected function getTableInstance($_tablename)
     {
-        
         if (!isset($this->_tables[$_tablename])) {
-            try {
-                $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
-            } catch (Zend_Db_Statement_Exception $e) {
-                Tasks_Setup_SetupSqlTables::createTasksTables();
-                Tasks_Setup_SetupSqlTables::insertDefaultRecords();
-                $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
-
-                Tasks_Setup_MigrateFromTine14::MigrateInfolog2Tasks();
-            }
+            $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tableNames[$_tablename]));
         }
         return $this->_tables[$_tablename];
     }

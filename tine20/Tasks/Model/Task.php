@@ -22,7 +22,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * 
      * @var string
      */
-    protected $_identifier = 'identifier';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -42,7 +42,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'deleted_time'         => array('allowEmpty' => true         ),
         'deleted_by'           => array('allowEmpty' => true         ),
         // task only fields
-        'id'                   => array('allowEmpty' => true, 'Int'  ),
+        'id'                   => array('allowEmpty' => true, 'Alnum'),
         'percent'              => array('allowEmpty' => true         ),
         'completed'            => array('allowEmpty' => true         ),
         'due'                  => array('allowEmpty' => true         ),

@@ -22,26 +22,27 @@ interface Tasks_Backend_Interface
     /**
      * Search for tasks matching given filter
      *
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_Filter $_filter
+     * @param Tasks_Model_Pagnition $_pagnition
      * @return Tinebase_Record_RecordSet
      */
-    public function searchTasks($_filter);
+    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagnition $_pagnition);
     
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_Filter $_filter
      * @return int
      */
-    public function getTotalCount($_filter);
+    public function getTotalCount(Tasks_Model_Filter $_filter);
     
     /**
      * Return a single Task
      *
-     * @param string $_uid
+     * @param string $_id
      * @return Tasks_Model_Task task
      */
-    public function getTask($_uid);
+    public function getTask($_id);
     
     /**
      * Create a new Task
@@ -62,7 +63,7 @@ interface Tasks_Backend_Interface
     /**
      * Deletes an existing Task
      *
-     * @param int $_identifier
+     * @param string $_identifier
      * @return void
      */
     public function deleteTask($_identifier);

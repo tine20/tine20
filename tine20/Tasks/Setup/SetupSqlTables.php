@@ -78,7 +78,7 @@ class Tasks_Setup_SetupSqlTables
                 `organizer` INT(11),
                 `priority` INT(11),
                 `status` INT(11),
-                `summaray` VARCHAR(256),
+                `summary` VARCHAR(256),
                 `url` VARCHAR(256),
                 PRIMARY KEY  (`identifier`),
                 KEY `" . SQL_TABLE_PREFIX . "tasks_container` (`container`),

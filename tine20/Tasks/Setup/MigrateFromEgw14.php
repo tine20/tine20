@@ -62,7 +62,7 @@ class Tasks_Setup_MigrateFromTine14
         'organizer'            => 'info_responsible',
         'priority'             => 'info_priority',
         'status'               => 'info_status',
-        'summaray'             => 'info_subject',
+        'summary'             => 'info_subject',
         'url'                  => '',
         // ical common fields with multiple appearance
         'attach'                => '',

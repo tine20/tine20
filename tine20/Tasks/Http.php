@@ -54,7 +54,7 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         $controller = Tasks_Controller::getInstance();
         $initialData = array(
             'AllStati' => $controller->getStati(),
-            'DefaultContainer' => $controller->getDefaultContainer()
+            //'DefaultContainer' => $controller->getDefaultContainer()
         );
         
         foreach ($initialData as &$data) {
