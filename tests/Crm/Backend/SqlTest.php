@@ -157,6 +157,17 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to get count of leads
+     *
+     */
+    public function testGetCountOfLeads()
+    {
+        $count = $this->backend->getCountOfLeads(array($this->testContainer->id), 'PHPUnit');
+        
+        $this->assertEquals(1, $count);
+    }
+    
+    /**
      * try to get products associated with one lead
      *
      */
