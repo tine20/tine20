@@ -30,8 +30,8 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      */
     protected $_filters = array(
         'id'         => 'Digits',
-        'login_name'  => 'StringTrim',
-        'login_hash'       => 'StringTrim',
+        'login_name' => 'StringTrim',
+        'login_hash' => 'StringTrim',
         'email'      => 'StringTrim',
     );
     
@@ -43,14 +43,14 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
      * @var 	array
      */
     protected $_validators = array(
-        'id'        => array('allowEmpty' => true),
-        'login_name' => array('presence' => 'required'),
-        'login_hash'      => array('presence' => 'required'),
-        'email'     => array('presence' => 'required'),
-    	'date'		=> array('allowEmpty' => true),
+        'id'            => array('allowEmpty' => true),
+        'login_name'    => array('presence' => 'required'),
+        'login_hash'    => array('presence' => 'required'),
+        'email'         => array('presence' => 'required'),
+    	'date'		    => array('allowEmpty' => true),
     	'expires_at'	=> array('allowEmpty' => true),
-    	'status'	=> array('allowEmpty' => true),
-    	'email_sent' => array('allowEmpty' => true),
+    	'status'	    => array('allowEmpty' => true),
+    	'email_sent'    => array('allowEmpty' => true),
     );
     
    /**
