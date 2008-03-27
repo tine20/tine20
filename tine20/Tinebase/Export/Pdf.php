@@ -86,12 +86,10 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 			if ( $label === 'separator' ) {
 				$data[] = array ( $field,  $label );
 			} elseif ( !empty($_record->$field) ) {
-				if ( $field === 'bday' ) {
-					// print date according to locale	
-					$date = new Zend_Date ($_record->$field);
-					$data[] = array ( $label, $date->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+				if ( $_record->$field instanceof Zend_Date ) {
+					$data[] = array ( $label, $_record->$field->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') ) );
 				} else {
-					$data[] = array ( $label, $_record->$field );
+				    $data[] = array ( $label, $_record->$field );
 				}
 			}
 		}
