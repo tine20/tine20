@@ -835,7 +835,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
         );
                 
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadState, $_probability, $_getClosedLeads));
         
         $result = $this->leadTable->getTotalCount($where);
 
