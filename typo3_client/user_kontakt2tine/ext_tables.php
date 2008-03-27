@@ -31,7 +31,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  </config>
 		  </TCEforms>
         </title>	
-	  
+	  '.user_kontakt2tine_linkliste().'
 	  	<text>
 		  <TCEforms>
 			<label>Text</label>
@@ -42,7 +42,15 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 				</config>	
 		  </TCEforms>
         </text>	
-		
+		 <optionemail>
+		  <TCEforms>
+			<label>E-Mail Benachrichtigung</label>
+			  <config>
+				<type>check</type>
+				<default>0</default>
+			  </config>
+		  </TCEforms>
+        </optionemail>		
 		<email>
 		  <TCEforms>
 			<label>E-Mail</label>
@@ -61,22 +69,17 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  </config>
 		  </TCEforms>
         </emailbetreff>
-		<danke>
-			<TCEforms>
-				<label>Danke-Seite</label>
-				<config>
-					<type>group</type>
-					<internal_type>db</internal_type>
-					<allowed>pages</allowed>
-					<size>1</size>
-					<maxitems>1</maxitems>
-					<minitems>0</minitems>
-					<show_thumbs>0</show_thumbs>
-				</config>
-			</TCEforms>
-		</danke>		
-
-		'.user_kontakt2tine_linkliste().'
+		
+		<optioncheck>
+		  <TCEforms>
+			<label>Bild mit Zahlen-Code</label>
+			  <config>
+				<type>check</type>
+				<default>0</default>
+			  </config>
+		  </TCEforms>
+        </optioncheck>	
+		
 	  	
 		<tinehost>
 		  <TCEforms>
@@ -116,7 +119,23 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 				<size>50</size>
 			  </config>
 		  </TCEforms>
-        </tinehostcontainer>			
+        </tinehostcontainer>		
+		<danke>
+			<TCEforms>
+				<label>Danke-Seite</label>
+				<config>
+					<type>group</type>
+					<internal_type>db</internal_type>
+					<allowed>pages</allowed>
+					<size>1</size>
+					<maxitems>1</maxitems>
+					<minitems>0</minitems>
+					<show_thumbs>0</show_thumbs>
+				</config>
+			</TCEforms>
+		</danke>
+
+		
       </el>
   </ROOT>        
 </T3DataStructure>');

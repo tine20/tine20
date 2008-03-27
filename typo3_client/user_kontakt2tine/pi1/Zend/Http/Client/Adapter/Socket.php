@@ -58,7 +58,8 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
     protected $config = array(
         'ssltransport'  => 'ssl',
         'sslcert'       => null,
-        'sslpassphrase' => null
+        'sslpassphrase' => null,
+		'timeout' 		=> '120'
     );
 
     /**
@@ -132,7 +133,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
                 }
             }
 
-            $this->socket = @stream_socket_client($host . ':' . $port,
+            $this->socket = stream_socket_client($host . ':' . $port,
                                                   $errno,
                                                   $errstr,
                                                   (int) $this->config['timeout'],

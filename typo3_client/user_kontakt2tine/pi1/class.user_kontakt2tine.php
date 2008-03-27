@@ -30,16 +30,19 @@
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/config_inc.php' );
-require_once( PATH_site . 'fileadmin/php/constants_inc.php' );
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/constants_inc.php' );
 
 class user_kontakt2tine extends tslib_pibase {
 	var $prefixId = 'user_kontakt2tine';		// Same as class name
 	var $scriptRelPath = 'pi1/class.user_kontakt2tine.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'user_kontakt2tine';	// The extension key.
+	
+	
 	var $templateFile = "typo3conf/ext/user_kontakt2tine/pi1/template1.html";
+	var $templateFileWithoutCODE = "typo3conf/ext/user_kontakt2tine/pi1/template.html";
+	
 	
 	var $pathCodeImageFiles = "typo3conf/ext/user_kontakt2tine/pi1/code_image/code_image_files/";
-	//var $pathCodeImageFiles = "fileadmin/images/user_kontakt2tine/code_image_files/";
 	var $fFieldNames = array('VORNAME','NACHNAME','TELEFON','EMAIL','CODEEINGABE','NACHRICHT','AUSWAHL','FIRMA','STRASSE','PLZ','LAND','ORT','COUNTRY');
 	var $fFieldNamesMandatory = array('VORNAME','NACHNAME','EMAIL','CODEEINGABE','NACHRICHT','AUSWAHL');
 	
@@ -76,13 +79,22 @@ class user_kontakt2tine extends tslib_pibase {
 		global $kontaktnumlinks;
 		
 		
-		$this->conf=$conf;
+		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
-		$this->betreff = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'emailbetreff') .' ( '.date('d.n.Y').', '.date('H:i').' Uhr )';	
-
-		$template = $this->cObj->fileResource($this->templateFile);
+		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		
+		 // parse XML data into php array
+		$this->pi_initPIflexForm();
+		if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'optioncheck') == 0)
+		{
+			$template = $this->cObj->fileResource($this->templateFileWithoutCODE);
+		}
+		else
+		{
+			$template = $this->cObj->fileResource($this->templateFile);
+		}
+		
 		
 		$markerArray['###ACTION###'] = $this->pi_getPageLink($GLOBALS['TSFE']->id);
 		//Language allerdings per Post übergeben im GGS zu den restlichen Links auf der Homepage (wird deswegen über "GP" in Typoscript abgefragt)
@@ -90,31 +102,30 @@ class user_kontakt2tine extends tslib_pibase {
 		$senden =  t3lib_div::GPvar('senden');
 
 		
-		 // parse XML data into php array
-		$this->pi_initPIflexForm();
 
 		$title 	= $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'title');	
 		$danke 	= $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'danke');	
 		$text 	= $this->formatStr($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'text'));	
 		
-		if(strlen(t3lib_div::GPvar('L')) > 0)	{
+		if(strlen(t3lib_div::GPvar('L')) > 0)	
+		{
 			$sprache = '&L='.t3lib_div::GPvar('L');
 		}
-		else	{
+		else	
+		{
 			$sprache = 'DE';
 		}
 		
 		$danke	= 'index.php?id='.$danke;	
 		# t3lib_div::debug($sprache);	
 	
-		$this->empfaenger 	= $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'email');	
-
+		
 		if(strlen($title) > 0) {$title = '<h1>'.$title.'</h1>';}	
 
 		$r=1;
 		$co=1;
-		for($i=0;$i<$kontaktnumlinks;$i++) {
-			$curOptVal = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'.($i+1));
+		for($i = 1; $i < ($kontaktnumlinks + 1); $i++) {
+			$curOptVal = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_' . $i);
 			if(strlen($curOptVal) > 0) {
 				$option[$r++] = $curOptVal;
 			}
@@ -151,8 +162,11 @@ class user_kontakt2tine extends tslib_pibase {
 		// ****************** NACH ERSTAUFRUF bzw. bei Bestätigung *********************
 		if ( $senden == 1 )
 		{		
-
-			$codewrong = ( t3lib_div::_GP('BILDCODE') != md5( t3lib_div::_GP('CODEEINGABE') ) );
+			$codewrong = false;
+			if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'optioncheck') == 1)
+			{
+				$codewrong = ( t3lib_div::_GP('BILDCODE') != md5( t3lib_div::_GP('CODEEINGABE') ) );
+			}
 			$err = $this->chkForm($fFieldValues, $codewrong);	
 			
 				
@@ -161,11 +175,13 @@ class user_kontakt2tine extends tslib_pibase {
 			
 				$subpart_template = $this->cObj->getSubpart($template,'###TEMPLATE###');
 				$subpart_pfeil = $this->cObj->getSubpart($template,'###PFEIL###');
-				
-				if ( ! file_exists( PATH_site . $this->pathCodeImageFiles . $num_codiert.'.png')) {include( 'code_image/image.php' );}
-				$markerArray["###BILDCODEURL###"] =	 $this->pathCodeImageFiles . $num_codiert . '.png'; 				
-				$markerArray["###BILDCODE###"] = $num_codiert;
-				
+				if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'optioncheck') == 1)
+				{
+					if ( ! file_exists( PATH_site . $this->pathCodeImageFiles . $num_codiert.'.png')) {include( 'code_image/image.php' );}
+					$markerArray["###BILDCODEURL###"] =	 $this->pathCodeImageFiles . $num_codiert . '.png'; 				
+					$markerArray["###BILDCODE###"] = $num_codiert;
+					
+				}	
 				
 				($codewrong) ?  $markerArray['###CODEEINGABEPFEIL###'] = $subpart_pfeil : $markerArray['###CODEEINGABEPFEIL###'] = "";
 				
@@ -185,7 +201,6 @@ class user_kontakt2tine extends tslib_pibase {
 			}
 			//wenn keine Fehler mehr auftreten, dann EMail versenden
 			else {
-				#$subpart_template = $this->cObj->getSubpart($template,'###RESULTTEMPLATE###');
 				
 				// begin contact2tine: 
 				//	var_dump($_POST);
@@ -229,18 +244,19 @@ class user_kontakt2tine extends tslib_pibase {
 					// write addressbook entry
 					$contactData = array(
 										'owner'					=> $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostcontainer'),
-										'company' 				=> $_POST['FIRMA'], 
-										'n_family' 				=> $_POST['NACHNAME'],
-										'n_given' 				=> $_POST['VORNAME'],
-										'adr_one_locality'		=> $_POST['ORT'],
-										'adr_one_street'		=> $_POST['STRASSE'],
-										'adr_one_postalcode'	=> $_POST['PLZ'],
-										'tel_work'				=> $_POST['TELEFON'],
-										'email'					=> $_POST['EMAIL'],
-										'adr_one_countryname'	=> $_POST['COUNTRY'],
-										'note'					=> $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'. $_POST['AUSWAHL'] ) 
+										'company' 				=> $fFieldValues['FIRMA'], 
+										'n_family' 				=> $fFieldValues['NACHNAME'],
+										'n_given' 				=> $fFieldValues['VORNAME'],
+										'adr_one_locality'		=> $fFieldValues['ORT'],
+										'adr_one_street'		=> $fFieldValues['STRASSE'],
+										'adr_one_postalcode'	=> $fFieldValues['PLZ'],
+										'tel_work'				=> $fFieldValues['TELEFON'],
+										'email'					=> $fFieldValues['EMAIL'],
+										'adr_one_countryname'	=> $fFieldValues['COUNTRY'],
+										'note'					=> $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'
+																	. $fFieldValues['AUSWAHL'] ) 
 																	. "\n" 
-																	. $_POST['NACHRICHT']  
+																	. $fFieldValues['NACHRICHT']  
 										);
 
 					$contact = new Addressbook_Model_Contact($contactData);
@@ -263,25 +279,30 @@ class user_kontakt2tine extends tslib_pibase {
 					var_dump($e);
 				
 				}
-					
-					/**/
-				header ("Location:$danke");
 				
 								
-				/*
-				$subpart_mailtemplate = $this->cObj->getSubpart($template,'###MAILTEMPLATE###');
+				if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'optionemail') == 1)
+				{
+					$this->empfaenger 	= $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'email');	
+					$this->betreff =	$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'emailbetreff') 
+										.' ( '.date('d.n.Y').', '.date('H:i').' Uhr )';	
+	
+					$subpart_mailtemplate = $this->cObj->getSubpart($template,'###MAILTEMPLATE###');
+					
+					$markerArray['###AUSWAHL###'] = $option[$markerArray['###AUSWAHL###']]; //special case for selection field
+					
+					$markerArray['###COUNTRY###'] = $countryOption[$markerArray['###COUNTRY###']];
+					
+					$this->nachricht = $this->cObj->substituteMarkerArray($subpart_mailtemplate, $markerArray);					
+					$this->header  = 'MIME-Version: 1.0' . "\r\n";
+					$this->header .= 'Content-type: text/html; charset=utf-8' . "\r\n";		
+					$this->header .= 'From: <' . $fFieldValues['EMAIL'] . '>' . "\r\n";
+					
+					mail($this->empfaenger, $this->betreff, $this->nachricht, $this->header);
+				}
 				
-				$markerArray['###AUSWAHL###'] = $option[$markerArray['###AUSWAHL###']]; //special case for selection field
+				header ("Location:$danke");
 				
-				$markerArray['###COUNTRY###'] = $countryOption[$markerArray['###COUNTRY###']];
-				
-				$this->nachricht = $this->cObj->substituteMarkerArray($subpart_mailtemplate, $markerArray);					
-				$this->header  = 'MIME-Version: 1.0' . "\r\n";
-				$this->header .= 'Content-type: text/html; charset=utf-8' . "\r\n";		
-				$this->header .= 'From: <'.$fFieldValues['EMAIL'].'>' . "\r\n";
-				
-				mail($this->empfaenger, $this->betreff, $this->nachricht, $this->header);
-				*/
 			}
 		
 		}
@@ -292,9 +313,11 @@ class user_kontakt2tine extends tslib_pibase {
 			//#################### Initialisierung #####################
 						
 			//### BILD ###
-			if ( ! file_exists( PATH_site . $this->pathCodeImageFiles . $num_codiert.'.png')) {include( 'code_image/image.php' );}
-			$markerArray["###BILDCODEURL###"] =	 $this->pathCodeImageFiles . $num_codiert . '.png'; 
-
+			if ($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'optioncheck') == 1)
+			{
+				if ( ! file_exists( PATH_site . $this->pathCodeImageFiles . $num_codiert.'.png')) {include( 'code_image/image.php' );}
+				$markerArray["###BILDCODEURL###"] =	 $this->pathCodeImageFiles . $num_codiert . '.png'; 
+			}
 			//### Pfeilmarker der Pflichtfelder entfernen ###
 			foreach($this->fFieldNamesMandatory as $fFieldNameMandatory) {$markerArray['###'.$fFieldNameMandatory.'PFEIL###'] = "";}
 			$markerArray["###BILDCODE###"] = $num_codiert;
