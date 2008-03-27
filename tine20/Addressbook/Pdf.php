@@ -78,7 +78,13 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         //@todo	include contact photo here
         $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
         
-        return $this->generatePdf($_contact, $_contact->n_fn, $_contact->note, $contactFields, $contactPhoto );        
+        // build title
+        $title = $_contact->n_fn; 
+        if ( !empty($_contact->org_name) ) {
+            $title .= " - " . $_contact->org_name;
+        }
+        
+        return $this->generatePdf($_contact, $title, $_contact->note, $contactFields, $contactPhoto );        
 	}
 	
 
