@@ -456,4 +456,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return new ArrayIterator($this->_properties);    
     }
     
+    /**
+     * returns a random 40-character hexadecimal number to be used as 
+     * universal identifier (UID)
+     * 
+     * @return string 40-character hexadecimal number
+     */
+    public static function generateUID()
+    {
+        return sha1(mt_rand(). microtime());
+    }
 }
