@@ -85,7 +85,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		foreach ( $_fields as $field => $label ) {
 			if ( $label === 'separator' ) {
                 // if 2 separators follow each other, remove the last 2 elements
-                if ( $data[sizeof($data)-1][1] === 'separator' ) {
+                if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
                     array_pop ( $data );
                 }
 				
