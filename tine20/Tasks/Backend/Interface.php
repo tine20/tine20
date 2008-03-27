@@ -23,10 +23,10 @@ interface Tasks_Backend_Interface
      * Search for tasks matching given filter
      *
      * @param Tasks_Model_Filter $_filter
-     * @param Tasks_Model_Pagnition $_pagnition
+     * @param Tasks_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagnition $_pagnition);
+    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination);
     
     /**
      * Gets total count of search with $_filter

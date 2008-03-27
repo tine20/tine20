@@ -147,7 +147,7 @@
                 <field>
                     <name>id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>container_id</name>
@@ -292,7 +292,7 @@
                 <field>
                     <name>task_id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>tag_id</name>
@@ -330,7 +330,7 @@
                 <field>
                     <name>task_id</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>40</length>
                 </field>            
                 <field>
                     <name>contact_id</name>

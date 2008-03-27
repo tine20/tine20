@@ -34,7 +34,7 @@ class Tasks_Model_Filter extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,  'Int'   ),
 
-        'containerType'             => array('allowEmpty' => true      ),
+        'containerType'        => array('allowEmpty' => true           ),
         'owner'                => array('allowEmpty' => true           ),
         'container'            => array('allowEmpty' => true           ),
         

@@ -44,7 +44,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function searchTasks($filter)
     {
-        $filter = new Tasks_Model_PagnitionFilter(Zend_Json::decode($filter));
+        $filter = new Tasks_Model_PaginationFilter(Zend_Json::decode($filter));
         //error_log(print_r($filter->toArray(),true));
         
         $tasks = $this->_controller->searchTasks($filter);

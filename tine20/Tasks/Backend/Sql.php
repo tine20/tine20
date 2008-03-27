@@ -87,10 +87,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      * Search for tasks matching given filter
      *
      * @param Tasks_Model_Filter $_filter
-     * @param Tasks_Model_Pagnition $_pagnition
+     * @param Tasks_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagnition $_pagnition)
+    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
     {
         $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
@@ -104,11 +104,11 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         $select = $this->_getSelect()
             ->where($this->_db->quoteInto('tasks.container_id IN (?)', $_filter->container));
             
-        if (!empty($_pagnition->limit)) {
-            $select->limit($_pagnition->limit, $_pagnition->start);
+        if (!empty($_pagination->limit)) {
+            $select->limit($_pagination->limit, $_pagination->start);
         }
-        if (!empty($_pagnition->sort)){
-            $select->order($_pagnition->sort . ' ' . $_pagnition->dir);
+        if (!empty($_pagination->sort)){
+            $select->order($_pagination->sort . ' ' . $_pagination->dir);
         }
         if(!empty($_filter->query)){
             $select->where($this->_db->quoteInto('(summary LIKE ? OR description LIKE ?)', '%' . $_filter->query . '%'));
@@ -141,8 +141,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function getTotalCount(Tasks_Model_Filter $_filter)
     {
-        $pagnition = new Tasks_Model_Pagnition();
-        return count($this->searchTasks($_filter, $pagnition));
+        $pagination = new Tasks_Model_Pagination();
+        return count($this->searchTasks($_filter, $pagination));
         /*
         if(empty($_filter->container)) return 0;
         return $this->getTableInstance('tasks')->getTotalCount(array(

@@ -11,10 +11,10 @@
  */
 
 /**
- * Task Pagnition Class
+ * Task Pagination Class
  * @package Tasks
  */
-class Tasks_Model_Pagnition extends Tinebase_Record_Abstract
+class Tasks_Model_Pagination extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 

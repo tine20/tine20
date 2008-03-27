@@ -89,7 +89,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * Search for tasks matching given filter
      *
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_PaginationFilter $_filter
      * @return Tinebase_Record_RecordSet
      */
     public function searchTasks($_filter)
@@ -107,7 +107,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_PaginationFilter $_filter
      * @return int
      */
     public function getTotalCount($_filter) {
@@ -118,7 +118,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * Removes containers where current user has no access to.
      * 
-     * @param Tasks_Model_PagnitionFilter $_filter
+     * @param Tasks_Model_PaginationFilter $_filter
      * @return void
      */
     protected function _checkContainerACL($_filter)
