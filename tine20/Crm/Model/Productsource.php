@@ -51,9 +51,9 @@ class Crm_Model_Productsource extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'productsource'         => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'price'   => array(Zend_Filter_Input::ALLOW_EMPTY => false)        
+        'id' 	          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'productsource'   => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'price'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')        
     );
 
 }

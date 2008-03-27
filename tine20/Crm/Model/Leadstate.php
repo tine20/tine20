@@ -51,10 +51,10 @@ class Crm_Model_Leadstate extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'leadstate'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'probability'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),      
-        'endslead'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
+        'id' 	        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'leadstate'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'probability'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),      
+        'endslead'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),        
     );
     
 }

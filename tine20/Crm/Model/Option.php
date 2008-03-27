@@ -52,7 +52,7 @@ class Crm_Model_Option extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'key' 				=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'value'             => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'value'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')
     );
 
 }

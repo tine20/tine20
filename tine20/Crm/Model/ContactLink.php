@@ -52,11 +52,11 @@ class Crm_Model_ContactLink extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'link_id' 	   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'link_app1'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'link_id1'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'link_app2'    => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'link_id2'     => array(Zend_Filter_Input::ALLOW_EMPTY => false),        
-        'link_remark'  => array(Zend_Filter_Input::ALLOW_EMPTY => false),        
+        'link_app1'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'link_id1'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'link_app2'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'link_id2'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),        
+        'link_remark'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),        
         'link_lastmod' => array(Zend_Filter_Input::ALLOW_EMPTY => true),        
         'link_owner'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
     );

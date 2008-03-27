@@ -52,7 +52,7 @@ class Crm_Model_Leadsource extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'leadsource'    => array(Zend_Filter_Input::ALLOW_EMPTY => false)
+        'leadsource'    => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')
     );
     
 }
