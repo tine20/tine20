@@ -234,6 +234,18 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
     }
+    
+    /**
+     * try to add an account
+     *
+     */
+    public function testGetInternalContainer()
+    {
+        $container = Tinebase_Container::getInstance()->getInternalContainer('Addressbook');
+        
+        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals(Tinebase_Container::TYPE_INTERNAL, $container->type);
+    }
 }		
 	
 
