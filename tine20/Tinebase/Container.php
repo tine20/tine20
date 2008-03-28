@@ -213,7 +213,7 @@ class Tinebase_Container
      * creates a new container
      *
      * @param Tinebase_Model_Container $_container the new container
-     * @return int the id of the newly create container
+     * @return Tinebase_Model_Container the newly created container
      */
     public function new_addContainer(Tinebase_Model_Container $_container)
     {
@@ -233,7 +233,7 @@ class Tinebase_Container
             throw new UnexpectedValueException('$containerId can not be 0');
         }
         
-        return $containerId;
+        return $this->getContainer($containerId);
     }
     
     /**
