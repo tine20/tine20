@@ -407,6 +407,23 @@
                     </field>
                 </index>
                 <index>
+                    <name>name-type-backend-application_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                        <length>100</length>
+                    </field>
+                    <field>
+                        <name>type</name>
+                    </field>
+                    <field>
+                        <name>backend</name>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>
+                <index>
                     <name>container_application_id</name>
                     <field>
                         <name>application_id</name>
