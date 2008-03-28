@@ -696,19 +696,21 @@ class Tinebase_Container
         
         $resultArray = array();
 
-        $tineBaseAccounts = Tinebase_Account::getInstance();
-        
         foreach($rows as $row) {
             if (! isset($resultArray[$row['account_id']])) {
-                if($row['account_id'] === NULL) {
+                if($row['account_type'] === 'anyone') {
                     $displayName = 'Anyone';
-                } else {
-                    $account = $tineBaseAccounts->getAccountById($row['account_id']);
+                } elseif($row['account_type'] === 'account') {
+                    $account = Tinebase_Account::getInstance()->getAccountById($row['account_id']);
                     $displayName = $account->accountDisplayName;
+                } else {
+                    $group = Tinebase_Group::getInstance()->getGroupById($row['account_id']);
+                    $displayName = $group->name;
                 }
                     
                 $containerGrant = new Tinebase_Model_Grants( array(
                     'accountId'     => $row['account_id'],
+                    'accountType'   => $row['account_type'],
                     'accountName'   => $displayName
                 ), true);
                 $resultArray[$row['account_id']] = $containerGrant;
@@ -733,7 +735,7 @@ class Tinebase_Container
             }
         }
         
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $resultArray, true);
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $resultArray);
     }
     
     /**
@@ -766,6 +768,7 @@ class Tinebase_Container
                 $_grants[$currentAccountId] = new Tinebase_Model_Grants(
                     array(
                         'accountId'     => $currentAccountId,
+                        'accountType'   => 'account',
                         'accountName'   => 'not used',
                         'readGrant'     => true,
                         'addGrant'      => true,
@@ -788,6 +791,7 @@ class Tinebase_Container
                 $data = array(
                     'container_id'  => $containerId,
                     'account_id'    => $recordGrants['accountId'],
+                    'account_type'  => $recordGrants['accountType'],
                 );
                 if($recordGrants->readGrant === true) {
                     $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_READ));
