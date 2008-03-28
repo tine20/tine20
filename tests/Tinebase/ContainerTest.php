@@ -89,7 +89,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $container = Tinebase_Container::getInstance()->new_addContainer($this->objects['initialContainer']);
         
-        //$this->assertEquals(10, $account->accountId);
+        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
     }
     
     /**
@@ -97,6 +98,17 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testAddContainerTwice()
+    {
+        $this->setExpectedException('Zend_Db_Statement_Exception');
+        
+        $container = Tinebase_Container::getInstance()->new_addContainer($this->objects['initialContainer']);
+    }
+    
+    /**
+     * try to add an existing container. should throw an exception
+     *
+     */
+    public function testDeleteContainer()
     {
         $this->setExpectedException('Zend_Db_Statement_Exception');
         
