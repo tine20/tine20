@@ -84,7 +84,19 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             $title .= " - " . $_contact->org_name;
         }
         
-        return $this->generatePdf($_contact, $title, $_contact->note, $contactFields, $contactPhoto );        
+        // build data array
+        $record = array ();
+        foreach ( $contactFields as $key => $label ) {
+            if ( $label !== 'separator' ) {
+	        	if ( $_contact->$key instanceof Zend_Date ) {
+	                $record[$key] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
+	            } else {
+	            	$record[$key] = $_contact->$key;
+	            }
+            }
+        }     
+        
+        return $this->generatePdf($record, $title, $_contact->note, $contactFields, $contactPhoto );        
 	}
 	
 

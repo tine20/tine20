@@ -47,8 +47,24 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                 'leadtype_id' => $translate->_('Leadtype ID'),
                 'leadsource_id' => $translate->_('Leadsource ID'),
 				);
+				
+        // build data array
+        $record = array ();
+        foreach ( $leadFields as $key => $label ) {
+        	if ( $label !== 'separator' ) {
+	            if ( $_lead->$key instanceof Zend_Date ) {
+	                $record[$key] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
+	            } elseif ( $key === 'turnover' ) {
+	            	$record[$key] = $_lead->$key . " €";
+	            } elseif ( $key === 'probability' ) {
+	                $record[$key] = $_lead->$key . " %";
+	            } else {
+	                $record[$key] = $_contact->$key;
+	            }
+        	}
+        }     
 			
-		return $this->generatePdf($_lead, $_lead->lead_name, $_lead->description, $leadFields);
+		return $this->generatePdf($record, $_lead->lead_name, $_lead->description, $leadFields);
 		
 	}
 	

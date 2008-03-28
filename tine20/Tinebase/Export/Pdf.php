@@ -35,7 +35,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	/**
      * create pdf
      *
-     * @param	Tinebase_Record_Abstract $_record record data
+     * @param	array $_record record data
      * @param	$_title	the pdf title
      * @param	$_note		pdf note (below title)		
      * @param	$_fields	record fields that should appear in the pdf
@@ -43,7 +43,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * 
      * @return	string	the contact pdf
      */
-	public function generatePdf ( Tinebase_Record_Abstract $_record, $_title = "", $_note = "", $_fields = array(), $_image = NULL)
+	public function generatePdf ( array $_record, $_title = "", $_note = "", $_fields = array(), $_image = NULL)
 	{
 		$pageNumber = 0;
 		$xPos = 50;
@@ -92,12 +92,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 $data[] = array ( $field,  $label );
 				
 				
-			} elseif ( !empty($_record->$field) ) {
-				if ( $_record->$field instanceof Zend_Date ) {
-					$data[] = array ( $label, $_record->$field->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') ) );
-				} else {
-				    $data[] = array ( $label, $_record->$field );
-				}
+			} elseif ( !empty($_record[$field]) ) {
+			    $data[] = array ( $label, $_record[$field] );
 			}
 		}
         // if 2 separators follow each other, remove the last 2 elements
