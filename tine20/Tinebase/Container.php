@@ -770,7 +770,7 @@ class Tinebase_Container
                         'readGrant'     => true,
                         'addGrant'      => true,
                         'editGrant'     => true,
-                        'editGrant'     => true,
+                        'deleteGrant'   => true,
                         'adminGrant'    => true
                     ), true);
             }
