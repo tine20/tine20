@@ -57,12 +57,13 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'accountId'   => array('presence' => 'required', 'allowEmpty' => true),
+            'accountType' => array('InArray' => array('anyone','account','group')),
             'accountName' => array('presence' => 'required'),
             'readGrant'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             ),
-            'addGrant'   => array(
+            'addGrant'    => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             ),
@@ -70,11 +71,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             ),
-            'deleteGrant'   => array(
+            'deleteGrant' => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             ),
-            'adminGrant'   => array(
+            'adminGrant'  => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
                 'default' => FALSE
             )
