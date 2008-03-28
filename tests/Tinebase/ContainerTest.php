@@ -168,7 +168,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      * try to add an account
      *
      */
-    public function testGetGrants()
+    public function testGetGrantsOfContainer()
     {
         $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
         
@@ -176,7 +176,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
         $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Container::GRANT_READ));
 
-        $grants = Tinebase_Container::getInstance()->getGrants($this->objects['initialContainer']);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']);
         $this->assertType('Tinebase_Record_RecordSet', $grants);
 
         $grants = $grants->toArray();

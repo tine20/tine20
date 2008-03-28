@@ -121,7 +121,33 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         
         $container = Tinebase_Container::getInstance()->getContainer($container['id']);    
     }
+    
+    /**
+     * try to add an account
+     *
+     */
+    public function testRenameContainer()
+    {
+        $json = new Tinebase_Json_Container();
+
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+
+        $this->assertEquals('Tine 2.0 Unittest', $container['name']);
+
         
+        $grants = $json->getContainerGrants($container['id']);
+
+        #$this->assertEquals('Tine 2.0 Unittest renamed', $container['name']);
+
+        
+        $json->deleteContainer($container['id']);
+        
+        $this->setExpectedException('UnderflowException');
+        
+        $container = Tinebase_Container::getInstance()->getContainer($container['id']);    
+    }
+        
+    
 }		
 	
 
