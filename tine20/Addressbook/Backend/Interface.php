@@ -52,33 +52,11 @@ interface Addressbook_Backend_Interface
      * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
      * @param unknown_type $_limit how many contacts to display
      * @param unknown_type $_start how many contaxts to skip
-     * @return unknown The row results per the Zend_Db_Adapter fetch mode.
+     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
     public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL);
     
     public function getContactById($_contactId);
-    
-    /**
-     * get contacts of user identified by account id
-     *
-     * @param int $_owner account id
-     * @param string $_filter search filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_limit
-     * @param int $_start
-     * @return Zend_Db_Table_Rowset
-     */
-    public function getContactsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
-
-    /**
-     * returns total number of contacts
-     * 
-     * @param int $_owner owner of the addressbook
-     * @return int total number of personal contacts
-     *
-     */
-    public function getCountByOwner($_owner, $_filter);
     
     /**
      * get total count of contacts from all addressbooks

@@ -113,6 +113,68 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         return $result;
     }
     
+    /**
+     * get list of all contacts of one account
+     *
+     * @param int $_owner account id of the account to get the folders from
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset
+     */
+    public function getContactsByOwner($_owner, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL) 
+    {
+        $owner = (int)$_owner;
+        if($owner != $_owner) {
+            throw new InvalidArgumentException('$_owner must be integer');
+        }
+        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getContacts($containerIds, $_filter, $_sort, $_dir, $_limit, $_start);
+
+        return $result;
+    }
+    
+    /**
+     * get total count of contacts matching filter
+     *
+     * @param int $_owner account id of the account to get the folders from
+     * @param string $_filter
+     * @return int total number of matching leads
+     */
+    public function getCountByOwner($_owner, $_filter = NULL)
+    {
+        $owner = (int)$_owner;
+        if($owner != $_owner) {
+            throw new InvalidArgumentException('$_owner must be integer');
+        }
+        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
+                
+        if(count($readableContainer) === 0) {
+            return 0;
+        }
+                
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getCountOfContacts($containerIds, $_filter);
+
+        return $result;
+    }
+    
     public function getGrants($_addressbookId)
     {
         $addressbookId = (int)$_addressbookId;

@@ -83,13 +83,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     }
 
     /**
-     * get data for overview
+     * get contacts by owner
      *
-     * returns the data to be displayed in a ExtJS grid
-     *
-     * @todo implement correc total count for lists
-     * @param string $nodeid
-     * @param string $_datatype
+     * @param string $filter
+     * @param int $owner
      * @param int $start
      * @param int $sort
      * @param string $dir
@@ -103,13 +100,12 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
 
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        if($rows = $backend->getContactsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
+        if($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = $backend->getCountByOwner($owner, $filter);
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByOwner($owner, $filter);
             }
         }
 
