@@ -69,6 +69,8 @@ class Tinebase_Json_Container
         ));
         $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $newContainer);
         
+        error_log("account_grants YET ARE MISSING");
+        
         return $container->toArray();
     }
     
