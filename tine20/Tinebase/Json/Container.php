@@ -112,7 +112,7 @@ class Tinebase_Json_Container
             'totalcount'  => 0
         );
         
-        $result['results'] = Tinebase_Container::getInstance()->getAllGrants($containerId)->toArray();
+        $result['results'] = Tinebase_Container::getInstance()->getGrantsOfContainer($containerId)->toArray();
         $result['totalcount'] = count($result['results']);
         
         foreach($result['results'] as &$value) {

@@ -677,7 +677,7 @@ class Tinebase_Container
      * @param int|Tinebase_Model_Container $_containerId
      * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      */
-    public function getGrants($_containerId) 
+    public function getGrantsOfContainer($_containerId) 
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
@@ -813,6 +813,6 @@ class Tinebase_Container
             throw($e);
         }
         
-        return $this->getGrants($containerId);
+        return $this->getGrantsOfContainer($containerId);
     }
 }
