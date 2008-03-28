@@ -320,7 +320,7 @@ class Tinebase_Container
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
                
         $db = Zend_Registry::get('dbAdapter');
 
@@ -331,7 +331,7 @@ class Tinebase_Container
                 SQL_TABLE_PREFIX . 'container.id = ' . SQL_TABLE_PREFIX . 'container_acl.container_id', 
                 array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
-            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
+            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $applicationId)
             
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
