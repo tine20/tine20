@@ -13,7 +13,7 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Tinebase_Json_ContainerTest::main');
@@ -69,11 +69,27 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     public function testAddContainer()
     {
         $json = new Tinebase_Json_Container();
-        
+
         $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+
+        $this->assertEquals('Tine 2.0 Unittest', $container['name']);
+
+        Tinebase_Container::getInstance()->deleteContainer($container['id']);
+    }
         
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
+    /**
+     * try to add an account
+     *
+     */
+    public function testAddContainer()
+    {
+        $json = new Tinebase_Json_Container();
+
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+
+        $this->assertEquals('Tine 2.0 Unittest', $container['name']);
+
+        $json->deleteContainer($container['id']);
     }    
 }		
 	
