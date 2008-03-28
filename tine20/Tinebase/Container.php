@@ -463,9 +463,9 @@ class Tinebase_Container
         
         $accountId = Zend_Registry::get('currentAccount')->accountId;
         
-        if(!$this->hasGrant($accountId, $containerId, self::GRANT_READ)) {
-            throw new Exception('permission to container denied');
-        }
+        #if(!$this->hasGrant($accountId, $containerId, self::GRANT_READ)) {
+        #    throw new Exception('permission to container denied');
+        #}
         
         $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
         
@@ -752,14 +752,15 @@ class Tinebase_Container
     /**
      * delete container if user has the required right
      *
+     * @todo move acl check to the right place
      * @param int|Tinebase_Model_Container $_containerId
      * @return void
      */
     public function deleteContainer($_containerId)
     {
-        if (!$this->hasGrant(Zend_Registry::get('currentAccount'), $_containerId, self::GRANT_ADMIN)) {
-            throw new Exception('admin permission to container denied');
-        }
+        #if (!$this->hasGrant(Zend_Registry::get('currentAccount'), $_containerId, self::GRANT_ADMIN)) {
+        #    throw new Exception('admin permission to container denied');
+        #}
         
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
 
