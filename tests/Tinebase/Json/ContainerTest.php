@@ -134,20 +134,56 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
-        
+
         $grants = $json->getContainerGrants($container['id']);
 
-        #$this->assertEquals('Tine 2.0 Unittest renamed', $container['name']);
+        $this->assertEquals(1, $grants['totalcount']);
+        $this->assertTrue($grants['results'][0]["readGrant"]);
 
-        
+
         $json->deleteContainer($container['id']);
-        
+
         $this->setExpectedException('UnderflowException');
-        
-        $container = Tinebase_Container::getInstance()->getContainer($container['id']);    
+
+        $container = Tinebase_Container::getInstance()->getContainer($container['id']);
     }
+            
+    /**
+     * try to add an account
+     *
+     */
+    public function testSetGrants()
+    {
+        $json = new Tinebase_Json_Container();
+
+        $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+
+        $this->assertEquals('Tine 2.0 Unittest', $container['name']);
         
-    
+        $newGrants = array(
+            array(
+                'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                'accountName'   => 'not used',
+                'readGrant'     => true,
+                'addGrant'      => true,
+                'editGrant'     => true,
+                'deleteGrant'   => false,
+                'adminGrant'    => true
+            )
+        );
+        
+        $grants = $json->setContainerGrants($container['id'], Zend_Json::encode($newGrants));
+        
+        $this->assertEquals(1, $grants['totalcount']);
+        $this->assertFalse($grants['results'][0]["deleteGrant"]);
+
+
+        $json->deleteContainer($container['id']);
+
+        $this->setExpectedException('UnderflowException');
+
+        $container = Tinebase_Container::getInstance()->getContainer($container['id']);
+    }
 }		
 	
 
