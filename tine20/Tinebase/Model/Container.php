@@ -57,7 +57,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'type'              => array('InArray' => array(Tinebase_Container::TYPE_INTERNAL, Tinebase_Container::TYPE_PERSONAL, Tinebase_Container::TYPE_SHARED)),
         'backend'           => array('presence' => 'required'),
         'application_id'    => array('Digits', 'presence' => 'required'),
-        'account_grants'    => array('Digits', 'presence' => 'required')
+        'account_grants'    => array('Digits', 'allowEmpty' => true, /*'presence' => 'required'*/)
     );
 
 }
