@@ -241,7 +241,7 @@ class Tinebase_Container
             throw new UnexpectedValueException('$containerId can not be 0');
         }
         
-        return $this->getContainer($containerId);
+        return $this->new_getContainer($containerId);
     }
     
     /**
@@ -496,6 +496,29 @@ class Tinebase_Container
         if(empty($result)) {
             throw new UnderflowException('container not found');
         }
+        
+        return $result;
+        
+    }
+    
+    /**
+     * return a container by containerId
+     *
+     * @todo move acl check to another place
+     * @param int|Tinebase_Model_Container $_containerId the id of the container
+     * @return Tinebase_Model_Container
+     */
+    public function new_getContainer($_containerId)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        $row = $this->containerTable->find($containerId)->current();
+        
+        if($row === NULL) {
+            throw new UnderflowException('container not found');
+        }
+        
+        $result = new Tinebase_Model_Container($row->toArray());
         
         return $result;
         
