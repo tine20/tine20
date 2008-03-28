@@ -1617,6 +1617,16 @@ Tine.Crm.LeadEditDialog = function() {
                 disabled: true
         });         
 
+        var  _export_lead = new Ext.Action({
+                text: 'export lead',
+                handler: function(){
+                	var leadId = _leadData.data.id;
+                    Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);                	
+                },
+                iconCls: 'actionExportLead',
+                disabled: false,
+        });         
+        
        if(_leadData.data.id !== null) {
            _add_task.enable();
        }
@@ -1885,7 +1895,7 @@ Tine.Crm.LeadEditDialog = function() {
   
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
-            tbarItems: [new Ext.Toolbar.Separator(), _add_task],
+            tbarItems: [new Ext.Toolbar.Separator(), _add_task, new Ext.Toolbar.Separator(), _export_lead],
             handlerApplyChanges: handlerApplyChanges,
             handlerSaveAndClose: handlerSaveAndClose,
             handlerDelete: Tine.Crm.LeadEditDialog.Handler.handlerDelete,

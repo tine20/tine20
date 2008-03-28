@@ -40,6 +40,10 @@
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 
+.actionExportLead {
+    background-image:url(../../images/oxygen/16x16/actions/file-export.png) !important;
+}
+
 .actionEdit {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
