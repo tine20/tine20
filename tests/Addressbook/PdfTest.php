@@ -130,12 +130,13 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
 		$pdf = new Addressbook_Pdf();
 		$pdfOutput = $pdf->contactPdf($this->objects['contact']);
 		
-		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput)); 
-		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput)); 
+		//$pdf->save("test.pdf");
 		
-		// check name and company name
-		$this->assertEquals(1, preg_match("/Cornelius Weiß - Metaways Infosystems GmbH/", $pdfOutput));
-				
+		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
+		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
+		
+        // check name and company name
+        $this->assertEquals(1, preg_match("/Lars Kneschke - Metaways Infosystems GmbH/", $pdfOutput), 'name and company not found');
     }
 
     /**
@@ -150,7 +151,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $pdf = new Addressbook_Pdf();
         $pdfOutput = $pdf->contactPdf($this->objects['contact']);
         
-        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput)); 
+        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
         $this->assertEquals(1, preg_match("/Firmen-Kontaktdaten/", $pdfOutput));
                 
     }
