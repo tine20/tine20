@@ -64,24 +64,8 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         	}
         }     
 			
-		return $this->generatePdf($record, $_lead->lead_name, $_lead->description, $leadFields);
+		return $this->generatePdf($record, $_lead->lead_name, "", $_lead->description, $leadFields);
 		
 	}
-	
-
-	/**
-     * create lead list pdf
-     *
-     * @param	array leads data
-     * 
-     * @return	string	the lead list pdf
-     * 
-     * @todo	implement
-     */
-	public function leadListPdf ( array $_leads )
-	{
-		return $this->generateListPdf($_leads);
-	}
-		
 
 }
