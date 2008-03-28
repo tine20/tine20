@@ -789,11 +789,12 @@ Tine.Addressbook.ContactEditDialog = {
 
     updateToolbarButtons: function(_rights)
     {
+    	// temporarly disabled
+        //Ext.getCmp('contactDialog').action_export.enable();
+        
         if(_rights & 4) {
             Ext.getCmp('contactDialog').action_saveAndClose.enable();
             Ext.getCmp('contactDialog').action_applyChanges.enable();
-            // which rights are needed for pdf export?
-	        Ext.getCmp('contactDialog').action_export.enable();
         }
 
         if(_rights & 8) {
