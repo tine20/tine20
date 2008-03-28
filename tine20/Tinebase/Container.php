@@ -132,53 +132,40 @@ class Tinebase_Container
     }
 
     /**
-     * creates a shared container and gives all rights to the owner and read rights to anyone
+     * creates a container and gives all rights to the owner and read rights to anyone if shared container
      *
      * @param int $_accountId the accountId of the owner of the newly created container
      * @param Tinebase_Model_Container $_container the new container
      * @return Tinebase_Model_Container
      */
-    public function addSharedContainer($_accountId, Tinebase_Model_Container $_container)
+    public function addContainerForAccount($_accountId, Tinebase_Model_Container $_container)
     {
         $container = $this->addContainer($_container);
+        
+        if($container->type === Tinebase_Container::TYPE_SHARED) {
 
-        // add all grants to creator
-        $this->addGrants($container, 'account', $_accountId, array(
-            self::GRANT_READ, 
-            self::GRANT_ADD, 
-            self::GRANT_EDIT, 
-            self::GRANT_DELETE, 
-            self::GRANT_ADMIN
-        ));
-        // add read grants to any other user
-        $this->addGrants($containerId, 'anyone', NULL, array(
-            self::GRANT_READ
-        ));
-        
-        return $container;
-    }
-    
-    /**
-     * creates a personal container and gives all rights to the owner
-     *
-     * @param int $_accountId the accountId of the owner of the newly created container
-     * @param string $_application name of the application
-     * @param string $_containerName displayname of the container
-     * @return Tinebase_Model_Container
-     */
-    public function addPersonalContainer($_accountId, Tinebase_Model_Container $_container)
-    {
-        $container = $this->addContainer($_container);
-        
-        // add all grants to creator
-        $this->addGrants($container, 'account', $_accountId, array(
-            self::GRANT_READ, 
-            self::GRANT_ADD, 
-            self::GRANT_EDIT, 
-            self::GRANT_DELETE, 
-            self::GRANT_ADMIN
-        ));
-        
+            // add all grants to creator
+            $this->addGrants($container, 'account', $_accountId, array(
+                self::GRANT_READ, 
+                self::GRANT_ADD, 
+                self::GRANT_EDIT, 
+                self::GRANT_DELETE, 
+                self::GRANT_ADMIN
+            ));
+            // add read grants to any other user
+            $this->addGrants($containerId, 'anyone', NULL, array(
+                self::GRANT_READ
+            ));
+        } else {
+            // add all grants to creator
+            $this->addGrants($container, 'account', $_accountId, array(
+                self::GRANT_READ, 
+                self::GRANT_ADD, 
+                self::GRANT_EDIT, 
+                self::GRANT_DELETE, 
+                self::GRANT_ADMIN
+            ));
+        }
         return $container;
     }
     
@@ -601,21 +588,17 @@ class Tinebase_Container
      */
     public function deleteContainer($_containerId)
     {
-        #if (!$this->hasGrant(Zend_Registry::get('currentAccount'), $_containerId, self::GRANT_ADMIN)) {
-        #    throw new Exception('admin permission to container denied');
-        #}
-        
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
 
-        $where = array(
-            $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
-        );
-        $this->containerTable->delete($where);
-        
         $where = array(
             $this->containerTable->getAdapter()->quoteInto('container_id = ?', $containerId)
         );
         $this->containerAclTable->delete($where);
+        
+        $where = array(
+            $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
+        );
+        $this->containerTable->delete($where);
     }
     
     /**
