@@ -423,61 +423,6 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         return $result;
     }    
 
-	// handle FOLDERS  
-    public function addFolder($_name, $_type) 
-    {
-    	
-        $tinebaseContainer = Tinebase_Container::getInstance();
-        $accountId   = Zend_Registry::get('currentAccount')->accountId;
-        $allGrants = array(
-            Tinebase_Container::GRANT_ADD,
-            Tinebase_Container::GRANT_ADMIN,
-            Tinebase_Container::GRANT_DELETE,
-            Tinebase_Container::GRANT_EDIT,
-            Tinebase_Container::GRANT_READ
-        );
-        
-        if($_type == Tinebase_Container::TYPE_SHARED) {
-            $folderId = $tinebaseContainer->addContainer('crm', $_name, Tinebase_Container::TYPE_SHARED, Crm_Backend_Factory::SQL);
-
-            // add admin grants to creator
-            $tinebaseContainer->addGrants($folderId, $accountId, $allGrants);
-            // add read grants to any other user
-            $tinebaseContainer->addGrants($folderId, NULL, array(Tinebase_Container::GRANT_READ));
-        } else {
-            $folderId = $tinebaseContainer->addContainer('crm', $_name, Tinebase_Container::TYPE_PERSONAL, Crm_Backend_Factory::SQL);
-        
-            // add admin grants to creator
-            $tinebaseContainer->addGrants($folderId, $accountId, $allGrants);
-        }
-        
-        return $folderId;
-    }
-    
-    public function deleteFolder($_folderId)
-    {
-        $tinebaseContainer = Tinebase_Container::getInstance();
-        
-        $tinebaseContainer->deleteContainer($_folderId);
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container = ?', (int)$_folderId)
-        );
-        
-        $this->leadTable->delete($where);
-        
-        return true;
-    }
-    
-    public function renameFolder($_folderId, $_name)
-    {
-        $tinebaseContainer = Tinebase_Container::getInstance();
-        
-        $tinebaseContainer->renameContainer($_folderId, $_name);
-                
-        return true;
-    }    
-     
     /**
      * create search filter
      *
