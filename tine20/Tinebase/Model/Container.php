@@ -41,7 +41,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        '*'      => 'StringTrim'
+        'name'              => 'StringTrim'
     );
     
     /**
@@ -52,10 +52,10 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'      => array('Digits', 'presence' => 'required'),
-        'name'    => array('presence' => 'required'),
-        'type'    => array('presence' => 'required'),
-        'backend' => array('presence' => 'required'),
+        'id'                => array('Digits', 'presence' => 'required', 'allowEmpty' => true),
+        'name'              => array('presence' => 'required'),
+        'type'              => array('InArray' => array(Tinebase_Container::TYPE_INTERNAL, Tinebase_Container::TYPE_PERSONAL, Tinebase_Container::TYPE_SHARED)),
+        'backend'           => array('presence' => 'required'),
         'application_id'    => array('Digits', 'presence' => 'required'),
         'account_grants'    => array('Digits', 'presence' => 'required')
     );
