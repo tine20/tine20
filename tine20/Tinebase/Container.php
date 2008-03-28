@@ -804,7 +804,7 @@ class Tinebase_Container
      * check if the given user user has a certain grant
      *
      * @param int $_accountId
-     * @param int $_containerId
+     * @param int|Tinebase_Model_Container $_containerId
      * @param int $_grant
      * @return boolean
      */
@@ -812,10 +812,7 @@ class Tinebase_Container
     {
         $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
 
-        $containerId = (int)$_containerId;
-        if($containerId != $_containerId) {
-            throw new InvalidArgumentException('$_containerId must be integer');
-        }
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         $grant = (int)$_grant;
         if($grant != $_grant) {
