@@ -50,6 +50,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
        $this->objects['initialContainer'] = new Tinebase_Model_Container(array(
+            'id'                => 123,
             'name'              => 'tine20phpunit',
             'type'              => Tinebase_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
@@ -101,7 +102,22 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Zend_Db_Statement_Exception');
         
-        $container = Tinebase_Container::getInstance()->new_addContainer($this->objects['initialContainer']);
+        $container = clone($this->objects['initialContainer']);
+        $container->setId(NULL);
+        
+        $container = Tinebase_Container::getInstance()->new_addContainer($container);
+    }
+    
+    /**
+     * try to add an account
+     *
+     */
+    public function testGetContainer()
+    {
+        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
+        
+        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
     }
     
     /**
@@ -110,9 +126,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContainer()
     {
-        $this->setExpectedException('Zend_Db_Statement_Exception');
+        Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
-        $container = Tinebase_Container::getInstance()->new_addContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
     }
 }		
 	
