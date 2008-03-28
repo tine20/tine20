@@ -59,7 +59,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 	            } elseif ( $key === 'probability' ) {
 	                $record[$key] = $_lead->$key . " %";
 	            } else {
-	                $record[$key] = $_contact->$key;
+	                $record[$key] = $_lead->$key;
 	            }
         	}
         }     
