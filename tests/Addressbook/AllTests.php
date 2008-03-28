@@ -31,6 +31,7 @@ class Addressbook_AllTests
         $suite->addTest(Addressbook_Backend_AllTests::suite());
         $suite->addTestSuite('Addressbook_ControllerTest');
         $suite->addTestSuite('Addressbook_PdfTest');
+        $suite->addTestSuite('Addressbook_JsonTest');
         return $suite;
     }
 }
