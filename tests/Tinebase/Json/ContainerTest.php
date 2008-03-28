@@ -163,6 +163,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         $newGrants = array(
             array(
                 'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                'accountType'   => 'account',
                 'accountName'   => 'not used',
                 'readGrant'     => true,
                 'addGrant'      => true,
