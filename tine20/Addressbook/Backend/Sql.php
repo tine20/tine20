@@ -300,53 +300,46 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * get list of contacts from all shared addressbooks the current user has access to
+     * get list of contacts from from given containers
      *
+     * @param array $_container container to read the contacts from
      * @param string $_filter string to search for in contacts
      * @param array $_contactType filter by type (list or contact currently)
-     * @param unknown_type $_sort fieldname to sort by
-     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
-     * @param unknown_type $_limit how many contacts to display
-     * @param unknown_type $_start how many contaxts to skip
-     * @return unknown The row results per the Zend_Db_Adapter fetch mode.
+     * @param string $_sort fieldname to sort by
+     * @param string $_dir sort ascending or descending (ASC | DESC)
+     * @param int $_limit how many contacts to display
+     * @param int $_start how many contaxts to skip
+     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
+    public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Tinebase_Container::GRANT_READ);
-        
-        $containerIds = array();
-        
-        foreach($allContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
-        );
+        if(count($_container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }        
 
+        $where = array(
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container)
+        );
         $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
          
         return $result;
     }
 
     /**
-     * get total count of contacts from all addressbooks
+     * get total count of contacts in all given containers
      *
+     * @param array $_container
      * @param string $_filter the search filter
      * @return int count of all other users contacts
      */
-    public function getCountOfAllContacts($_filter)
+    public function getCountOfContacts(array $_container, $_filter)
     {
-        $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('addressbook', Tinebase_Container::GRANT_READ);
-        
-        $containerIds = array();
-        
-        foreach($allContainer as $container) {
-            $containerIds[] = $container->id;
-        }
+        if(count($_container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }        
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container)
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -571,6 +564,17 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $_where;
     }
 
+    /**
+     * Enter description here...
+     *
+     * @param array $_where
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
+     */
     protected function _getContactsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start)
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
