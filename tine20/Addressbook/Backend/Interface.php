@@ -19,23 +19,6 @@
 interface Addressbook_Backend_Interface
 {
     /**
-     * add a new addressbook
-     *
-     * @param string $_name the name of the addressbook
-     * @param int $_type
-     * @return int the id of the new addressbook
-     */
-    public function addAddressbook($_name, $_type);
-    
-    /**
-     * delete an addressbook
-     *
-     * @param int $_addressbookId id of the addressbook
-     * @return unknown
-     */
-    public function deleteAddressbook($_addressbookId);
-        
-    /**
      * deletes contact
      *
      * @param int $contacts contactid

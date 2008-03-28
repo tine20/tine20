@@ -76,7 +76,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @deprecated
      * @return Addressbook_Model_Contact
      */
-    private function saveContact(Addressbook_Model_Contact $_contactData)
+/*    private function saveContact(Addressbook_Model_Contact $_contactData)
     {
         if((int)$_contactData->owner < 0) {
             throw new UnderflowException('owner can not be empty');
@@ -185,7 +185,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
 
         return $this->getContactById($_contactData->id);
-    }
+    }*/
 
     /**
      * add a new addressbook
@@ -194,7 +194,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param int $_type
      * @return int the id of the new addressbook
      */
-    public function addAddressbook($_name, $_type) 
+/*    public function addAddressbook($_name, $_type) 
     {
         $tinebaseContainer = Tinebase_Container::getInstance();
         $accountId   = Zend_Registry::get('currentAccount')->accountId;
@@ -221,7 +221,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         }
         
         return $addressbookId;
-    }
+    }*/
     
     /**
      * delete an addressbook
@@ -229,7 +229,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param int $_addressbookId id of the addressbook
      * @return unknown
      */
-    public function deleteAddressbook($_addressbookId)
+/*    public function deleteAddressbook($_addressbookId)
     {
         $tinebaseContainer = Tinebase_Container::getInstance();
         
@@ -242,7 +242,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         //$this->contactsTable->delete($where);
         
         return true;
-    }
+    } */
 
     /**
      * @see Addressbook_Backend_Interface
