@@ -209,6 +209,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             new Tinebase_Model_Grants(
                 array(
                     'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                    'accountType'   => 'account',
                     'accountName'   => 'not used',
                     'readGrant'     => true,
                     'addGrant'      => true,
