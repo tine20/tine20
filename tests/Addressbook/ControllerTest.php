@@ -198,6 +198,17 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to get count of contacts
+     *
+     */
+    public function testGetCountOfAllContacts()
+    {
+        $count = Addressbook_Controller::getInstance()->getCountOfAllContacts($this->objects['initialContact']->n_family);
+        
+        $this->assertEquals(1, $count);
+    }
+    
+    /**
      * try to update a contact
      *
      */
