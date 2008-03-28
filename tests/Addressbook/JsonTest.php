@@ -27,6 +27,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
+    
+    /**
+     * container to use for the tests
+     *
+     * @var Tinebase_Model_Container
+     */
+    protected $container;
 
     /**
      * Runs the test methods of this class.
@@ -56,9 +63,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Addressbook', 'PHPUNIT');
+            $this->container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Addressbook', 'PHPUNIT');
         } else {
-            $container = $personalContainer[0];
+            $this->container = $personalContainer[0];
         }
         
         $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
@@ -80,7 +87,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $container->id,
+            'owner'                 => $this->container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -123,7 +130,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
             'note'                  => 'Bla Bla Bla',
-            'owner'                 => $container->id,
+            'owner'                 => $this->container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -212,7 +219,21 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contacts = $json->getOtherPeopleContacts(NULL, 0, 'id', 'ASC', 10);
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
-    }    
+    }
+        
+    /**
+     * try to get contacts by owner
+     *
+     */
+    public function testGetContactsByAddressbookId()
+    {
+        $json = new Addressbook_Json();
+        
+        $contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 0, 'id', 'ASC', 10);
+        
+        #$this->assertGreaterThan(0, $contacts['totalcount']);
+    }
+        
 }		
 	
 
