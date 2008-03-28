@@ -300,16 +300,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * get list of contacts from from given containers
-     *
-     * @param array $_container container to read the contacts from
-     * @param string $_filter string to search for in contacts
-     * @param array $_contactType filter by type (list or contact currently)
-     * @param string $_sort fieldname to sort by
-     * @param string $_dir sort ascending or descending (ASC | DESC)
-     * @param int $_limit how many contacts to display
-     * @param int $_start how many contaxts to skip
-     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
+     * @see Addressbook_Backend_Interface
      */
     public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
     {
@@ -326,11 +317,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * get total count of contacts in all given containers
-     *
-     * @param array $_container
-     * @param string $_filter the search filter
-     * @return int count of all other users contacts
+     * @see Addressbook_Backend_Interface
      */
     public function getCountOfContacts(array $_container, $_filter)
     {

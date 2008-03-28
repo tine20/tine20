@@ -45,6 +45,7 @@ interface Addressbook_Backend_Interface
     /**
      * get list of contacts from all shared addressbooks the current user has access to
      *
+     * @param array $_container container to read the contacts from
      * @param string $_filter string to search for in contacts
      * @param array $_contactType filter by type (list or contact currently)
      * @param unknown_type $_sort fieldname to sort by
@@ -53,7 +54,7 @@ interface Addressbook_Backend_Interface
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL);
     
     public function getContactById($_contactId);
     
@@ -82,10 +83,11 @@ interface Addressbook_Backend_Interface
     /**
      * get total count of contacts from all addressbooks
      *
+     * @param array $_container
      * @param string $_filter the search filter
      * @return int count of all other users contacts
      */
-    public function getCountOfContacts($_filter);
+    public function getCountOfContacts(array $_container, $_filter);
     
     /**
      * get total count of all other users contacts
