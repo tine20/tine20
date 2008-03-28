@@ -168,6 +168,28 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      * try to add an account
      *
      */
+    public function testGetContainerByAcl()
+    {
+        $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
+        
+        $this->assertType('Tinebase_Model_Container', $container);
+        $this->assertEquals($this->objects['initialContainer']->name, $container->name);
+        $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(Zend_Registry::get('currentAccount'), $this->objects['initialContainer'], Tinebase_Container::GRANT_READ));
+
+        $readableContainer = Tinebase_Container::getInstance()->getContainerByAcl(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Container::GRANT_READ);
+        $this->assertType('Tinebase_Record_RecordSet', $readableContainer);
+                
+        Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
+        
+        $this->setExpectedException('UnderflowException');
+        
+        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
+    }
+    
+    /**
+     * try to add an account
+     *
+     */
     public function testGetGrants()
     {
         $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
