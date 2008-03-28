@@ -788,10 +788,7 @@ Tine.Addressbook.ContactEditDialog = {
     },
 
     updateToolbarButtons: function(_rights)
-    {
-    	// temporarly disabled
-        //Ext.getCmp('contactDialog').action_export.enable();
-        
+    {        
         if(_rights & 4) {
             Ext.getCmp('contactDialog').action_saveAndClose.enable();
             Ext.getCmp('contactDialog').action_applyChanges.enable();
@@ -805,14 +802,12 @@ Tine.Addressbook.ContactEditDialog = {
 
     display: function(_contactData) 
     {
-    	//console.log ( _contactData );
-    	
         // export lead handler for edit contact dialog
         var  _export_contact = new Ext.Action({
                 text: 'export contact',
                 handler: function(){
                     var contactId = _contactData.id;
-                    Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 768, 1024);                   
+                    Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
                 },
                 iconCls: 'action_export',
                 disabled: false,
