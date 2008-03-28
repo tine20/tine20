@@ -53,7 +53,7 @@ interface Addressbook_Backend_Interface
      * @param unknown_type $_start how many contaxts to skip
      * @return unknown The row results per the Zend_Db_Adapter fetch mode.
      */
-    public function getAllContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
+    public function getContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
     
     public function getContactById($_contactId);
     
@@ -85,7 +85,7 @@ interface Addressbook_Backend_Interface
      * @param string $_filter the search filter
      * @return int count of all other users contacts
      */
-    public function getCountOfAllContacts($_filter);
+    public function getCountOfContacts($_filter);
     
     /**
      * get total count of all other users contacts
