@@ -88,7 +88,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContainer()
     {
-        $container = Tinebase_Container::getInstance()->new_addContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer']);
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
@@ -105,7 +105,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $container = clone($this->objects['initialContainer']);
         $container->setId(NULL);
         
-        $container = Tinebase_Container::getInstance()->new_addContainer($container);
+        $container = Tinebase_Container::getInstance()->addContainer($container);
     }
     
     /**
@@ -114,7 +114,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainer()
     {
-        $container = Tinebase_Container::getInstance()->new_getContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
@@ -130,7 +130,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('UnderflowException');
         
-        $container = Tinebase_Container::getInstance()->new_getContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
     }
 }		
 	
