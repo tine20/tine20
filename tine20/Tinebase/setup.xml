@@ -483,10 +483,10 @@
                     </field>
                 </index>
                 <index>
-                    <name>id-account-type-account_id-account_grant</name>
+                    <name>container_id-account-type-account_id-account_grant</name>
                     <unique>true</unique>
                     <field>
-                        <name>id</name>
+                        <name>container_id</name>
                     </field>
                     <field>
                         <name>account_type</name>
