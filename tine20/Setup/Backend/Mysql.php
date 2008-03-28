@@ -280,23 +280,30 @@ class Setup_Backend_Mysql
     private function _getMysqlIndexDeclarations($_key)
     {
         $snippet = '';
+        $keys = array();
+        
         $definition = ' KEY';
-        if (!empty($_key->primary))
-        {
+        if (!empty($_key->primary)) {
             $definition = ' PRIMARY KEY';
-        } 
-        else if (!empty($_key->unique))
-        {
+        } else if (!empty($_key->unique)) {
             $definition = ' UNIQUE KEY';
         }
        
         $snippet .= $definition . " `" . $_key->name . "`" ;
         
         foreach ($_key->field as $keyfield) {
-            $keys[] = (string)$keyfield->name;
+            $key    = '`' . (string)$keyfield->name . '`';
+            if(!empty($keyfield->length)) {
+                $key .= ' (' . $keyfield->length . ')';
+            }
+            $keys[] = $key;
+        }
+        
+        if(empty($keys)) {
+            throw new Exception('now keys for index found');
         }
                 
-        $snippet .= " (`" . implode("`,`", $keys) . "`) ";            
+        $snippet .= ' (' . implode(",", $keys) . ') ';            
         
         return $snippet;
     }
