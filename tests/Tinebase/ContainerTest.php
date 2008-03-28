@@ -178,7 +178,14 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $grants = Tinebase_Container::getInstance()->getGrants($this->objects['initialContainer']);
         $this->assertType('Tinebase_Record_RecordSet', $grants);
-        
+
+        $grants = $grants->toArray();
+        $this->assertTrue($grants[0]["readGrant"]);
+        $this->assertTrue($grants[0]["addGrant"]);
+        $this->assertTrue($grants[0]["editGrant"]);
+        $this->assertTrue($grants[0]["deleteGrant"]);
+        $this->assertTrue($grants[0]["adminGrant"]);
+                
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
         $this->setExpectedException('UnderflowException');
