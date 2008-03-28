@@ -87,7 +87,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContainer()
     {
-        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->new_addContainer($this->objects['initialContainer']);
         
         //$this->assertEquals(10, $account->accountId);
     }
