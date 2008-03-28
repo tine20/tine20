@@ -68,25 +68,6 @@ interface Addressbook_Backend_Interface
     public function getCountOfContacts(array $_container, $_filter);
     
     /**
-     * get total count of all other users contacts
-     *
-     * @return int count of all other users contacts
-     */
-    public function getCountOfOtherPeopleContacts();
-    
-    /**
-     * get contacts of other people, takes acl of current owner into account
-     *
-     * @param string $_filter the search filter
-     * @param string $_sort the columnname to sort after
-     * @param string $_dir the direction to sort after
-     * @param int $_limit
-     * @param int $_start
-     * @return Zend_Db_Table_Rowset
-     */
-    public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
-
-    /**
      * add a contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata

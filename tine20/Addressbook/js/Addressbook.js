@@ -346,7 +346,7 @@ Tine.Addressbook.Main = {
                 dataStore.baseParams.method = 'Addressbook.getSharedContacts';
                 break;
 
-            case 'OtherUsers':
+            case 'otherUsers':
                 dataStore.baseParams.method = 'Addressbook.getOtherPeopleContacts';
                 break;
 

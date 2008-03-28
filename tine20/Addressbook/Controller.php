@@ -227,6 +227,58 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         return $result;
     }
     
+    /**
+     * get list of other peoples contacts
+     *
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset
+     */
+    public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('Addressbook', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        }
+                        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getContacts($containerIds, $_filter, $_sort, $_dir, $_limit, $_start);
+
+        return $result;
+    }
+    
+    /**
+     * get total count of other peoples contacts matching filter
+     *
+     * @param string $_filter
+     * @return int total number of matching leads
+     */
+    public function getCountOfOtherPeopleContacts($_filter = NULL)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('Addressbook', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return 0;
+        }
+                
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $result = $this->_backend->getCountOfContacts($containerIds, $_filter);
+
+        return $result;
+    }
+    
     public function getGrants($_addressbookId)
     {
         $addressbookId = (int)$_addressbookId;

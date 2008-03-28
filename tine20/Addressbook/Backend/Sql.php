@@ -243,61 +243,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         return true;
     }
-    
-    /**
-     * get contacts of other people, takes acl of current owner into account
-     *
-     * @param string $_filter the search filter
-     * @param string $_sort the columnname to sort after
-     * @param string $_dir the direction to sort after
-     * @param int $_limit
-     * @param int $_start
-     * @return Zend_Db_Table_Rowset
-     */
-    public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
-    {
-        $otherPeoplesContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('addressbook', Tinebase_Container::GRANT_READ);
-        
-        if(count($otherPeoplesContainer) === 0) {
-            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        }
-        
-        $containerIds = array();
-        
-        foreach($otherPeoplesContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
-        );
-
-        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
-         
-        return $result;
-    }
-    
-    /**
-     * get total count of all other users contacts
-     *
-     * @return int count of all other users contacts
-     */
-    public function getCountOfOtherPeopleContacts()
-    {
-        $currentAccount = Zend_Registry::get('currentAccount');
-
-        $acl = $this->tinebaseAcl->getGrants($currentAccount->accountId, 'addressbook', Tinebase_Acl::READ, Tinebase_Acl::ACCOUNT_GRANTS);
-
-        if(empty($acl)) {
-            return false;
-        }
-
-        $groupIds = array_keys($acl);
-
-        $result = $this->contactsTable->getCountByAcl($groupIds);
-
-        return $result;
-    }
 
     /**
      * @see Addressbook_Backend_Interface

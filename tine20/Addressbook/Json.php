@@ -248,12 +248,15 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $rows = $backend->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
+        $rows = Addressbook_Controller::getInstance()->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
-            //$result['totalcount'] = $backend->getCountOfOtherPeopleContacts();
+            if($start == 0 && count($result['results']) < $limit) {
+                $result['totalcount'] = count($result['results']);
+            } else {
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfOtherPeopleContacts();
+            }
         }
 
         return $result;
