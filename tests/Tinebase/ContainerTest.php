@@ -114,7 +114,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainer()
     {
-        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->new_getContainer($this->objects['initialContainer']);
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
@@ -128,7 +128,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
-        $container = Tinebase_Container::getInstance()->getContainer($this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->new_getContainer($this->objects['initialContainer']);
     }
 }		
 	
