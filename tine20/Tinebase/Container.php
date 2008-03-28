@@ -443,6 +443,57 @@ class Tinebase_Container
     }
     
     /**
+     * return a container by containerId
+     *
+     * @todo move acl check to another place
+     * @param int|Tinebase_Model_Container $_containerId the id of the container
+     * @return Tinebase_Model_Container
+     */
+    public function getContainer($_containerId)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        $accountId = Zend_Registry::get('currentAccount')->accountId;
+        
+        if(!$this->hasGrant($accountId, $containerId, self::GRANT_READ)) {
+            throw new Exception('permission to container denied');
+        }
+        
+        $groupMemberships   = Zend_Registry::get('currentAccount')->getGroupMemberships();
+        
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $select = $db->select()
+            ->from(SQL_TABLE_PREFIX . 'container')
+            ->join(
+                SQL_TABLE_PREFIX . 'container_acl',
+                SQL_TABLE_PREFIX . 'container.id = ' . SQL_TABLE_PREFIX . 'container_acl.container_id', 
+                array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
+            )
+            ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            
+            ->group(SQL_TABLE_PREFIX . 'container.id')
+            ->order(SQL_TABLE_PREFIX . 'container.name');
+
+        //error_log("getContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+        $result = new Tinebase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC));
+        
+        if(empty($result)) {
+            throw new UnderflowException('container not found');
+        }
+        
+        return $result;
+        
+    }
+    
+    /**
      * returns the personal container of a given account accessible by the current user
      *
      * @param string $_application the name of the application
