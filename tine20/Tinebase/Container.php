@@ -210,6 +210,33 @@ class Tinebase_Container
     }
     
     /**
+     * creates a new container
+     *
+     * @param Tinebase_Model_Container $_container the new container
+     * @return int the id of the newly create container
+     */
+    public function new_addContainer(Tinebase_Model_Container $_container)
+    {
+        if(!$_container->isValid()) {
+            throw new Exception('invalid container object supplied');
+        }
+        
+        $data = array(
+            'name'              => $_container->name,
+            'type'              => $_container->type,
+            'backend'           => $_container->backend,
+            'application_id'    => $_container->application_id
+        );
+        $containerId = $this->containerTable->insert($data);
+        
+        if($containerId < 1) {
+            throw new UnexpectedValueException('$containerId can not be 0');
+        }
+        
+        return $containerId;
+    }
+    
+    /**
      * add grants to container
      *
      * @param int $_containerId
