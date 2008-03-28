@@ -221,7 +221,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                //$result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts();
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts();
             }
         }
 

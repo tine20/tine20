@@ -75,13 +75,6 @@ interface Addressbook_Backend_Interface
     public function getCountOfOtherPeopleContacts();
     
     /**
-     * get total count of all contacts from shared addressbooks
-     *
-     * @return int count of all other users contacts
-     */
-    public function getCountOfSharedContacts();
-            
-    /**
      * get contacts of other people, takes acl of current owner into account
      *
      * @param string $_filter the search filter
@@ -92,18 +85,6 @@ interface Addressbook_Backend_Interface
      * @return Zend_Db_Table_Rowset
      */
     public function getOtherPeopleContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL);
-
-    /**
-     * get list of shared contacts
-     *
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @return Zend_Db_Table_Rowset returns false if user has no access to shared addressbooks
-     */
-    public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL); 
 
     /**
      * add a contact

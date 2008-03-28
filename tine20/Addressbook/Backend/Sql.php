@@ -337,61 +337,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * get list of shared contacts
-     *
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @return Zend_Db_Table_Rowset returns false if user has no access to shared addressbooks
-     */
-    public function getSharedContacts($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL) 
-    {
-        $sharedContainer = Zend_Registry::get('currentAccount')->getSharedContainer('addressbook', Tinebase_Container::GRANT_READ);
-        
-        if(count($sharedContainer) === 0) {
-            return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
-        }
-        
-        $containerIds = array();
-        
-        foreach($sharedContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $containerIds)
-        );
-
-        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
-         
-        return $result;
-    }
-    
-    /**
-     * get total count of all contacts from shared addressbooks
-     * @todo rework this function
-     * @return int count of all other users contacts
-     */
-    public function getCountOfSharedContacts()
-    {
-        $currentAccount = Zend_Registry::get('currentAccount');
-
-        $acl = $this->tinebaseAcl->getGrants($currentAccount->accountId, 'addressbook', Tinebase_Acl::READ, Tinebase_Acl::GROUP_GRANTS);
-
-        if(empty($acl)) {
-            return false;
-        }
-
-        $groupIds = array_keys($acl);
-
-        $result = $this->contactsTable->getCountByAcl($groupIds);
-
-        return $result;
-    }
-
-    /**
      * fetch one contact identified by contactid
      *
      * @param int $_contactId
