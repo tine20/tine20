@@ -213,7 +213,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                     'readGrant'     => true,
                     'addGrant'      => true,
                     'editGrant'     => true,
-                    'editGrant'     => true,
+                    'deleteGrant'     => true,
                     'adminGrant'    => true
              ))
          );
