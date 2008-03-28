@@ -126,7 +126,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
      * try to add an account
      *
      */
-    public function testRenameContainer()
+    public function testGetContainerGrants()
     {
         $json = new Tinebase_Json_Container();
 
