@@ -163,7 +163,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add a contact
+     * try to get all contacts
      *
      */
     public function testGetAllContacts()
@@ -172,8 +172,20 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $contacts = $json->getAllContacts(NULL, 0, 'id', 'ASC', 10);
         
-        #$this->assertEquals($this->objects['initialContact']->id, $contact->id);
-        #$this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+    }    
+
+    /**
+     * try to get contacts by owner
+     *
+     */
+    public function testGetContactsByOwner()
+    {
+        $json = new Addressbook_Json();
+        
+        $contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 0, 'id', 'ASC', 10);
+        
+        #$this->assertGreaterThan(0, $contacts['totalcount']);
     }    
 }		
 	
