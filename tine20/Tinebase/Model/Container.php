@@ -59,5 +59,29 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'application_id'    => array('Digits', 'presence' => 'required'),
         'account_grants'    => array('Digits', 'allowEmpty' => true, /*'presence' => 'required'*/)
     );
-
+    
+    /**
+     * converts a int, string or Tinebase_Model_Container to a containerid
+     *
+     * @param int|string|Tinebase_Model_Container $_containerId the containerid to convert
+     * @return int
+     */
+    static public function convertContainerIdToInt($_containerId)
+    {
+        if($_containerId instanceof Tinebase_Model_Container) {
+            if($_containerId->getId() === NULL) {
+                throw new Exception('no container id set');
+            }
+            $id = (int) $_containerId->getId();
+        } else {
+            $id = (int) $_containerId;
+        }
+        
+        if($id === 0) {
+            throw new Exception('container id can not be 0');
+        }
+        
+        return $id;
+    }
+    
 }
