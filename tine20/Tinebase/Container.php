@@ -214,7 +214,7 @@ class Tinebase_Container
             throw new UnexpectedValueException('$containerId can not be 0');
         }
         
-        return $this->new_getContainer($containerId);
+        return $this->getContainer($containerId);
     }
     
     /**
