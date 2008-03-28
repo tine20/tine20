@@ -137,7 +137,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      * try to add an account
      *
      */
-    public function testAddContainer()
+    public function testAddContainerForAccount()
     {
         $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
         
