@@ -134,8 +134,9 @@ class Tinebase_Json
     {
         if (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
             $response = array(
-				'success'        => TRUE,
-                'welcomeMessage' => "Some welcome message!"
+				'success'       => TRUE,
+                'account'       => Zend_Registry::get('currentAccount')->getPublicAccount()->toArray(),
+                'welcomeMessage' => "Welcome to Tine 2.0!"
 			);
         } else {
             $response = array(
