@@ -81,7 +81,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
      * try to add an account
      *
      */
-    public function testAddContainer()
+    public function testDeleteContainer()
     {
         $json = new Tinebase_Json_Container();
 
@@ -90,6 +90,11 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
         $json->deleteContainer($container['id']);
+        
+        $this->setExpectedException('UnderflowException');
+        
+        $container = Tinebase_Container::getInstance()->getContainer($container['id']);
+        
     }    
 }		
 	
