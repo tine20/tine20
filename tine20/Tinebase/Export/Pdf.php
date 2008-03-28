@@ -124,9 +124,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		
 		// photo
 		if ( $_image !== NULL ) {
-			$xPos += 450;
-			$yPos -= 40;
-			$this->pages[$pageNumber]->drawImage($_image, $xPos, $yPos, $xPos+50, $yPos + 75 );
+			//$xPos += 450;
+			//$yPos -= 40;
+			$this->pages[$pageNumber]->drawImage($_image, $xPos+450, $yPos, $xPos+500, $yPos + 75 );
 		}
 				
 		
