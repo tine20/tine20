@@ -76,6 +76,15 @@ Tine.Crm.Main = function(){
                 }
             });
         },
+        /**
+         * onclick handler for exportBtn
+         */
+        exportLead: function(_button, _event) {
+            var selectedRows = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
+            var leadId = selectedRows[0].id;
+            
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);
+        },
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
             
@@ -109,13 +118,20 @@ Tine.Crm.Main = function(){
             handler: handler.handlerDelete,
             iconCls: 'actionDelete'
         }),
+        actionExport: new Ext.Action({
+            text: 'export lead',
+            disabled: true,
+            handler: handler.exportLead,
+            iconCls: 'action_export',
+            scope: this
+        }),
         actionAddTask: new Ext.Action({
             text: 'add task',
             handler: handler.handlerAddTask,
             iconCls: 'actionAddTask',
             disabled: true,
             scope: this
-        })
+        }),
     };
     
     var _createDataStore = function()
@@ -783,6 +799,7 @@ Tine.Crm.Main = function(){
                 actions.actionAdd,
                 actions.actionEdit,
                 actions.actionDelete,
+                actions.actionExport,
                 actions.actionAddTask,
                 new Ext.Toolbar.Separator(),
                 {
@@ -869,6 +886,7 @@ Tine.Crm.Main = function(){
         items: [
             actions.actionEdit,
             actions.actionDelete,
+            actions.actionExport,
             actions.actionAddTask
         ]
     });
@@ -919,15 +937,18 @@ Tine.Crm.Main = function(){
             if(rowCount < 1) {
                 actions.actionDelete.setDisabled(true);
                 actions.actionEdit.setDisabled(true);
+                actions.actionExport.setDisabled(true);
                 actions.actionAddTask.setDisabled(true);
             } 
             if (rowCount == 1) {
                actions.actionEdit.setDisabled(false);
                actions.actionDelete.setDisabled(false);               
+               actions.actionExport.setDisabled(false);
                actions.actionAddTask.setDisabled(false);
             }    
             if(rowCount > 1) {                
                actions.actionEdit.setDisabled(true);
+               actions.actionExport.setDisabled(true);
                actions.actionAddTask.setDisabled(true);
             }
         });
