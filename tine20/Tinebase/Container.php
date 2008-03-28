@@ -751,8 +751,10 @@ class Tinebase_Container
         $currentAccountId = Zend_Registry::get('currentAccount')->accountId;
         
         $container = $this->getContainer($containerId);
+        
+        # @todo find a new solution for this block
 
-        if($container->type === Tinebase_Container::TYPE_PERSONAL) {
+/*        if($container->type === Tinebase_Container::TYPE_PERSONAL) {
             // make sure that only the current user has admin rights
             foreach($_grants as $key => $recordGrants) {
                 $_grants[$key]->adminGrant = false;
@@ -777,7 +779,7 @@ class Tinebase_Container
                         'adminGrant'    => true
                     ), true);
             }
-        }
+        } */
         
         //error_log(print_r($_grants->toArray(), true));
         
