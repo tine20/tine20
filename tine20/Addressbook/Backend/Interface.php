@@ -56,7 +56,13 @@ interface Addressbook_Backend_Interface
      */
     public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL);
     
-    public function getContactById($_contactId);
+    /**
+     * fetch one contact identified by contactid
+     *
+     * @param int $_contactId
+     * @return Addressbook_Model_Contact 
+     */
+    public function getContact($_contactId);
     
     /**
      * get total count of contacts from all addressbooks

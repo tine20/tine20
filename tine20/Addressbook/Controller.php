@@ -278,6 +278,54 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
 
         return $result;
     }
+
+    /**
+     * get list of all contacts of one addressbook
+     *
+     * @param int $_containerId container id to get the contacts from
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset
+     */
+    public function getContactsByAddressbookId($_containerId, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL) 
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access denied to addressbook');
+        }
+
+        $containerIds = array($containerId);
+        
+        $result = $this->_backend->getContacts($containerIds, $_filter, $_sort, $_dir, $_limit, $_start);
+
+        return $result;
+    }
+    
+    /**
+     * get total count of contacts for given addressbook
+     *
+     * @param int $_containerId container id to get the contacts from
+     * @param string $_filter
+     * @return int total number of matching leads
+     */
+    public function getCountByAddressbookId($_containerId, $_filter = NULL)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access denied to addressbook');
+        }
+
+        $containerIds = array($containerId);
+                
+        $result = $this->_backend->getCountOfContacts($containerIds, $_filter);
+
+        return $result;
+    }
     
     public function getGrants($_addressbookId)
     {

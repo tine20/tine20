@@ -281,83 +281,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
-    /**
-     * fetch one contact identified by contactid
-     *
-     * @param int $_contactId
-     * @return The row results per the Zend_Db_Adapter fetch mode, or null if no row found.
-     */
-    public function getContactById($_contactId)
-    {
-        $contactId = (int)$_contactId;
-        if($contactId != $_contactId) {
-            throw new InvalidArgumentException('$_contactId must be integer');
-        }
-        
-        $accountId = Zend_Registry::get('currentAccount')->accountId;
-
-        $where  = array(
-            $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId)
-        );
-
-        $row = $this->contactsTable->fetchRow($where);
-        
-        if($row === NULL) {
-            throw new UnderflowException('contact not found');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($row->owner, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('permission to contact denied');
-        }
-        
-        $result = new Addressbook_Model_Contact($row->toArray());
-
-        return $result;
-    }
-
-    public function getContactsByAddressbookId($_addressbookId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL)
-    {
-        // convert to int
-        $addressbookId = (int)$_addressbookId;
-        if($addressbookId != $_addressbookId) {
-            throw new InvalidArgumentException('$_addressbookId must be integer');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_addressbookId, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access denied to addressbook');
-        }
-        
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner = ?', $addressbookId)
-        );
-
-        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
-         
-        return $result;
-    }
-    
-    public function getCountByAddressbookId($_addressbookId, $_filter)
-    {
-        $addressbookId = (int)$_addressbookId;
-        if($addressbookId != $_addressbookId) {
-            throw new InvalidArgumentException('$_addressbookId must be integer');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($addressbookId, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access denied to addressbook');
-        }
-        
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner = ?', $addressbookId)
-        );
-                
-        $where = $this->_addQuickSearchFilter($where, $_filter);
-        
-        $result = $this->contactsTable->getTotalCount($where);
-
-        return $result;
-    }
-    
     protected function _addQuickSearchFilter($_where, $_filter)
     {
         if(!empty($_filter)) {
@@ -473,10 +396,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     /**
-     * fetch one contact identified by contactid
-     *
-     * @param int $_contactId
-     * @return Addressbook_Model_Contact 
+     * @see Addressbook_Backend_Interface
      */
     public function getContact($_contactId)
     {
