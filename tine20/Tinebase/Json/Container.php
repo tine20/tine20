@@ -61,17 +61,14 @@ class Tinebase_Json_Container
      */
     public function addContainer($application, $containerName, $containerType)
     {
-        $accountId = Zend_Registry::get('currentAccount')->accountId;
-        switch($containerType) {
-            case Tinebase_Container::TYPE_SHARED:
-                $container = Tinebase_Container::getInstance()->addSharedContainer($accountId, $application, $containerName);
-                break;
-            case Tinebase_Container::TYPE_PERSONAL:
-                $container = Tinebase_Container::getInstance()->addPersonalContainer($accountId, $application, $containerName);
-                break;
-            default:
-                throw new Exception('no such containerType');
-        }
+        $newContainer = new Tinebase_Model_Container(array(
+            'name'              => $containerName,
+            'type'              => $containerType,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId() 
+        ));
+        $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $newContainer);
+        
         return $container->toArray();
     }
     
