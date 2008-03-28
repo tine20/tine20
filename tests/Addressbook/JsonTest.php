@@ -186,6 +186,19 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 0, 'id', 'ASC', 10);
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
+    }
+        
+    /**
+     * try to get shared contacts
+     *
+     */
+    public function testGetSharedContacts()
+    {
+        $json = new Addressbook_Json();
+        
+        $contacts = $json->getSharedContacts(NULL, 0, 'id', 'ASC', 10);
+        
+        #$this->assertGreaterThan(0, $contacts['totalcount']);
     }    
 }		
 	
