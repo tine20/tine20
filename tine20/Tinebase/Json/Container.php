@@ -137,9 +137,9 @@ class Tinebase_Json_Container
     {
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', Zend_Json::decode($grants));
         
-        Tinebase_Container::getInstance()->setAllGrants($containerId, $newGrants);
+        $grants = Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
                
-        return $this->getContainerGrants($containerId);
+        return $grants->toArray();
     }
     
 }
