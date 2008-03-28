@@ -180,10 +180,21 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContact()
     {
-        $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['initialContact']);
+        $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+    }
+    
+    /**
+     * try to get count of contacts
+     *
+     */
+    public function testGetCountByOwner()
+    {
+        $count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $this->objects['initialContact']->n_family);
+        
+        $this->assertEquals(1, $count);
     }
     
     /**
