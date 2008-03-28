@@ -73,7 +73,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             //'owner' => 'Owner',
             //'n_prefix' => 'Name Prefix',
             //'n_suffix' => 'Name Suffix',
-		);
+        );
         
         //@todo	include contact photo here
         $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
