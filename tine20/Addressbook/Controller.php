@@ -323,7 +323,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         return $result;
     }
     
-    public function getGrants($_addressbookId)
+/*    public function getGrants($_addressbookId)
     {
         $addressbookId = (int)$_addressbookId;
         if($addressbookId != $_addressbookId) {
@@ -345,7 +345,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         $result = Tinebase_Container::getInstance()->setAllGrants($addressbookId, $_grants);
                 
         return $result;
-    }
+    } */
     
         
         
