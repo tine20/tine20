@@ -80,9 +80,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         
         // build title
         $title = $_contact->n_fn; 
-        if ( !empty($_contact->org_name) ) {
-            $title .= " - " . $_contact->org_name;
-        }
+        $subtitle = $_contact->org_name;
         
         // build data array
         $record = array ();
@@ -96,23 +94,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             }
         }     
         
-        return $this->generatePdf($record, $title, $_contact->note, $contactFields, $contactPhoto );        
+        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $contactFields, $contactPhoto );        
 	}
-	
-
-	/**
-     * create contact list pdf
-     *
-     * @param	array Addressbook_Model_Contact contact data
-     * 
-     * @return	string	the contact list pdf
-     * 
-     * @todo	implement
-     */
-	public function contactListPdf ( array $_contacts )
-	{
-		return $this->generateListPdf($_contacts);
-	}
-		
 
 }
