@@ -128,6 +128,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Container::getInstance()->deleteContainer($this->objects['initialContainer']);
         
+        $this->setExpectedException('UnderflowException');
+        
         $container = Tinebase_Container::getInstance()->new_getContainer($this->objects['initialContainer']);
     }
 }		
