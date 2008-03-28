@@ -805,9 +805,23 @@ Tine.Addressbook.ContactEditDialog = {
 
     display: function(_contactData) 
     {
+    	//console.log ( _contactData );
+    	
+        // export lead handler for edit contact dialog
+        var  _export_contact = new Ext.Action({
+                text: 'export contact',
+                handler: function(){
+                    var contactId = _contactData.id;
+                    Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 768, 1024);                   
+                },
+                iconCls: 'action_export',
+                disabled: false,
+        });         
+
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'contactDialog',
+            tbarItems: [new Ext.Toolbar.Separator(), _export_contact],
             //title: 'the title',
             labelWidth: 120,
             labelAlign: 'top',
