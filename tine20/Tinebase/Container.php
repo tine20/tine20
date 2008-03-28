@@ -752,24 +752,24 @@ class Tinebase_Container
     /**
      * delete container if user has the required right
      *
-     * @param int $_containerId
+     * @param int|Tinebase_Model_Container $_containerId
      * @return void
      */
     public function deleteContainer($_containerId)
     {
-        $accountId = Zend_Registry::get('currentAccount')->accountId;
-        
-        if (!$this->hasGrant($accountId, $_containerId, self::GRANT_ADMIN)) {
+        if (!$this->hasGrant(Zend_Registry::get('currentAccount'), $_containerId, self::GRANT_ADMIN)) {
             throw new Exception('admin permission to container denied');
         }
         
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+
         $where = array(
-            $this->containerTable->getAdapter()->quoteInto('id = ?', (int)$_containerId)
+            $this->containerTable->getAdapter()->quoteInto('id = ?', $containerId)
         );
         $this->containerTable->delete($where);
         
         $where = array(
-            $this->containerTable->getAdapter()->quoteInto('container_id = ?', (int)$_containerId)
+            $this->containerTable->getAdapter()->quoteInto('container_id = ?', $containerId)
         );
         $this->containerAclTable->delete($where);
     }
