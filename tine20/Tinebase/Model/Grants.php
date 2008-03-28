@@ -57,7 +57,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'accountId'   => array('presence' => 'required', 'allowEmpty' => true),
-            'accountType' => array('InArray' => array('anyone','account','group')),
+            'accountType' => array('presence' => 'required', 'InArray' => array('anyone','account','group')),
             'accountName' => array('presence' => 'required'),
             'readGrant'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
