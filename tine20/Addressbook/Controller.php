@@ -155,11 +155,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function getCountByOwner($_owner, $_filter = NULL)
     {
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
-        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
+        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $_owner, Tinebase_Container::GRANT_READ);
                 
         if(count($readableContainer) === 0) {
             return 0;
