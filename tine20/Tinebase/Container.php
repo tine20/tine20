@@ -227,7 +227,15 @@ class Tinebase_Container
             'backend'           => $_container->backend,
             'application_id'    => $_container->application_id
         );
-        $containerId = $this->containerTable->insert($data);
+        
+        $containerId = $_container->getId();
+        
+        if($containerId === NULL) {
+            $containerId = $this->containerTable->insert($data);
+        } else {
+            $data['id'] = $containerId;
+            $this->containerTable->insert($data);
+        }
         
         if($containerId < 1) {
             throw new UnexpectedValueException('$containerId can not be 0');
