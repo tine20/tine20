@@ -201,6 +201,17 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      * try to get count of contacts
      *
      */
+    public function testGetCountByAddressbookId()
+    {
+        $count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner);
+        
+        $this->assertGreaterThan(0, $count);
+    }
+    
+    /**
+     * try to get count of contacts
+     *
+     */
     public function testGetCountOfAllContacts()
     {
         $count = Addressbook_Controller::getInstance()->getCountOfAllContacts($this->objects['initialContact']->n_family);
