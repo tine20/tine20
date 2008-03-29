@@ -123,7 +123,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                  $leadData['tasks'] = array();   
             }
             
-            $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
+            $folder = Tinebase_Container::getInstance()->getContainer($lead->container);
             $leadData['container'] = $folder->toArray();
             
             $products = $leads->getProductsByLeadId($_leadId);

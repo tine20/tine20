@@ -147,7 +147,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
-        $_task->container = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container)->toArray());
+        $_task->container = Zend_Json::encode(Tinebase_Container::getInstance()->getContainer($_task->container)->toArray());
         return $_task->toArray();
     }
     
