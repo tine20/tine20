@@ -266,14 +266,16 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('errorMessage', $contact);
         $this->assertGreaterThan(0, $contact['updatedData']['id'], 'returned contactId not > 0');
 
-        $contactId = $contacts['updatedData']['id'];
+        $contactId = $contact['updatedData']['id'];
 
         $contact = $json->getContact($contactId);
 
         $this->assertEqual($contactId, $contact['contact']['id']);
 
-        $json->deleteContact($contactId);
+        $json->deleteContacts($contactId);
 
+        $this->setExpectedException('UnderflowException');
+        
         $contact = $json->getContact($contactId);
     }
 }		
