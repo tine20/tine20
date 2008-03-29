@@ -19,22 +19,23 @@
 interface Addressbook_Backend_Interface
 {
     /**
-     * deletes contact
+     * delete contact identified by contact id
      *
-     * @param int $contacts contactid
+     * @param int $_contacts contact ids
+     * @return int the number of rows deleted
      */
     public function deleteContact($_contactId);
     
     /**
-     * get list of contacts from all shared addressbooks the current user has access to
+     * get list of contacts from given addressbooks
      *
-     * @param array $_container container to read the contacts from
+     * @param array $_container container id's to read the contacts from
      * @param string $_filter string to search for in contacts
      * @param array $_contactType filter by type (list or contact currently)
-     * @param unknown_type $_sort fieldname to sort by
-     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
-     * @param unknown_type $_limit how many contacts to display
-     * @param unknown_type $_start how many contaxts to skip
+     * @param string $_sort fieldname to sort by
+     * @param string $_dir sort ascending or descending (ASC | DESC)
+     * @param int $_limit how many contacts to display
+     * @param int $_start how many contaxts to skip
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
     public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL);
@@ -48,9 +49,9 @@ interface Addressbook_Backend_Interface
     public function getContact($_contactId);
     
     /**
-     * get total count of contacts from all addressbooks
+     * get total count of contacts from given addressbooks
      *
-     * @param array $_container
+     * @param array $_container container id's to read the contacts from
      * @param string $_filter the search filter
      * @return int count of all other users contacts
      */

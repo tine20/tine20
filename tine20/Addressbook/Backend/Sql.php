@@ -188,64 +188,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }*/
 
     /**
-     * add a new addressbook
+     * get list of contacts from given addressbooks
      *
-     * @param string $_name the name of the addressbook
-     * @param int $_type
-     * @return int the id of the new addressbook
-     */
-/*    public function addAddressbook($_name, $_type) 
-    {
-        $tinebaseContainer = Tinebase_Container::getInstance();
-        $accountId   = Zend_Registry::get('currentAccount')->accountId;
-        $allGrants = array(
-            Tinebase_Container::GRANT_ADD,
-            Tinebase_Container::GRANT_ADMIN,
-            Tinebase_Container::GRANT_DELETE,
-            Tinebase_Container::GRANT_EDIT,
-            Tinebase_Container::GRANT_READ
-        );
-        
-        if($_type == Tinebase_Container::TYPE_SHARED) {
-            $addressbookId = $tinebaseContainer->addContainer('addressbook', $_name, Tinebase_Container::TYPE_SHARED, Addressbook_Backend_Factory::SQL);
-
-            // add admin grants to creator
-            $tinebaseContainer->addGrants($addressbookId, $accountId, $allGrants);
-            // add read grants to any other user
-            $tinebaseContainer->addGrants($addressbookId, NULL, array(Tinebase_Container::GRANT_READ));
-        } else {
-            $addressbookId = $tinebaseContainer->addContainer('addressbook', $_name, Tinebase_Container::TYPE_PERSONAL, Addressbook_Backend_Factory::SQL);
-        
-            // add admin grants to creator
-            $tinebaseContainer->addGrants($addressbookId, $accountId, $allGrants);
-        }
-        
-        return $addressbookId;
-    }*/
-    
-    /**
-     * delete an addressbook
-     *
-     * @param int $_addressbookId id of the addressbook
-     * @return unknown
-     */
-/*    public function deleteAddressbook($_addressbookId)
-    {
-        $tinebaseContainer = Tinebase_Container::getInstance();
-        
-        $tinebaseContainer->deleteContainer($_addressbookId);
-        
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner = ?', (int)$_addressbookId)
-        );
-        
-        //$this->contactsTable->delete($where);
-        
-        return true;
-    } */
-
-    /**
-     * @see Addressbook_Backend_Interface
+     * @param array $_container container id's to read the contacts from
+     * @param string $_filter string to search for in contacts
+     * @param array $_contactType filter by type (list or contact currently)
+     * @param string $_sort fieldname to sort by
+     * @param string $_dir sort ascending or descending (ASC | DESC)
+     * @param int $_limit how many contacts to display
+     * @param int $_start how many contaxts to skip
+     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
     public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
     {
@@ -262,7 +214,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * @see Addressbook_Backend_Interface
+     * get total count of contacts from given addressbooks
+     *
+     * @param array $_container container id's to read the contacts from
+     * @param string $_filter the search filter
+     * @return int count of all other users contacts
      */
     public function getCountOfContacts(array $_container, $_filter)
     {
@@ -281,7 +237,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
 
-    protected function _addQuickSearchFilter($_where, $_filter)
+    /**
+     * add the fields to search for to the query
+     *
+     * @param array $_where current where filter
+     * @param string $_filter the string to search for
+     * @return array of where statements
+     */
+    protected function _addQuickSearchFilter(array $_where = array(), $_filter)
     {
         if(!empty($_filter)) {
             $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter) . '%');
@@ -291,9 +254,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
 
     /**
-     * Enter description here...
+     * internal function to read the contacts from the database
      *
-     * @param array $_where
+     * @param array $_where where filter
      * @param string $_filter
      * @param string $_sort
      * @param string $_dir
@@ -311,11 +274,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         return $result;
     }
-    
-/**
- * reworked functions
- */    
-    
     
     /**
      * add a contact
@@ -396,7 +354,10 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     }
     
     /**
-     * @see Addressbook_Backend_Interface
+     * fetch one contact identified by contactid
+     *
+     * @param int $_contactId
+     * @return Addressbook_Model_Contact 
      */
     public function getContact($_contactId)
     {
