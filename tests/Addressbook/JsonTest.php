@@ -238,7 +238,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * try to get accounts
      *
      */
-    public function testGetSharedContacts()
+    public function testGetAccounts()
     {
         $json = new Addressbook_Json();
         
@@ -248,6 +248,32 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertLessThan(10, $contacts['totalcount']);
     }
     
+    /**
+     * try to get accounts
+     *
+     */
+    public function testAddGetDeleteContact()
+    {
+        $newContact = array(
+            'n_family'  => 'PHPUNIT'
+        );
+        
+        $json = new Addressbook_Json();
+        
+        $contact = $json->saveContact(Zend_Json::encode($newContact));
+        
+        $this->assertGreaterThan(0, $contact['updatedData']['id'], 'returned contactId not > 0');
+        
+        $contactId = $contacts['updatedData']['id'];
+        
+        $contact = $json->getContact($contactId);
+
+        $this->assertEqual($contactId, $contact['contact']['id']);
+        
+        $json->deleteContact($contactId);
+        
+        $contact = $json->getContact($contactId);
+    }
 }		
 	
 
