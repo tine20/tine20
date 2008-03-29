@@ -233,7 +233,21 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
     }
+    
+    /**
+     * try to get accounts
+     *
+     */
+    public function testGetSharedContacts()
+    {
+        $json = new Addressbook_Json();
         
+        $contacts = $json->getAccounts(NULL, 0, 'id', 'ASC', 10);
+        
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+        $this->assertLessThan(10, $contacts['totalcount']);
+    }
+    
 }		
 	
 
