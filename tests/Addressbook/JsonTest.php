@@ -255,23 +255,25 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddGetDeleteContact()
     {
         $newContact = array(
-            'n_family'  => 'PHPUNIT'
+            'n_family'  => 'PHPUNIT',
+            'owner'     => $this->container->id
         );
-        
+
         $json = new Addressbook_Json();
-        
+
         $contact = $json->saveContact(Zend_Json::encode($newContact));
-        
+
+        $this->assertArrayNotHasKey('errorMessage', $contact, $contact['errorMessage']);
         $this->assertGreaterThan(0, $contact['updatedData']['id'], 'returned contactId not > 0');
-        
+
         $contactId = $contacts['updatedData']['id'];
-        
+
         $contact = $json->getContact($contactId);
 
         $this->assertEqual($contactId, $contact['contact']['id']);
-        
+
         $json->deleteContact($contactId);
-        
+
         $contact = $json->getContact($contactId);
     }
 }		
