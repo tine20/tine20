@@ -321,33 +321,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         $result = $this->_backend->getCountOfContacts($containerIds, $_filter);
 
         return $result;
-    }
-    
-/*    public function getGrants($_addressbookId)
-    {
-        $addressbookId = (int)$_addressbookId;
-        if($addressbookId != $_addressbookId) {
-            throw new InvalidArgumentException('$_addressbookId must be integer');
-        }
-        
-        $result = Tinebase_Container::getInstance()->getAllGrants($addressbookId);
-                
-        return $result;
-    }
-    
-    public function setGrants($_addressbookId, Tinebase_Record_RecordSet $_grants)
-    {
-        $addressbookId = (int)$_addressbookId;
-        if($addressbookId != $_addressbookId) {
-            throw new InvalidArgumentException('$_addressbookId must be integer');
-        }
-        
-        $result = Tinebase_Container::getInstance()->setAllGrants($addressbookId, $_grants);
-                
-        return $result;
-    } */
-    
-        
+    }        
         
     /**
      * event handler function
