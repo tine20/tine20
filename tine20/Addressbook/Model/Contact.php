@@ -154,4 +154,28 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         parent::setFromArray($_data);
     }
+    
+    /**
+     * converts a int, string or Addressbook_Model_Contact to an contact id
+     *
+     * @param int|string|Addressbook_Model_Contact $_accountId the contact id to convert
+     * @return int
+     */
+    static public function convertContactIdToInt($_contactId)
+    {
+        if($_contactId instanceof Addressbook_Model_Contact) {
+            if(empty($_contactId->id)) {
+                throw new Exception('no contact id set');
+            }
+            $id = (int) $_contactId->id;
+        } else {
+            $id = (int) $_contactId;
+        }
+        
+        if($id === 0) {
+            throw new Exception('contact id can not be 0');
+        }
+        
+        return $id;
+    }
 }

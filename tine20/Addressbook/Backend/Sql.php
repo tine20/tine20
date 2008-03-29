@@ -320,7 +320,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new Exception('invalid contact');
         }
         
-        $contactId = Addressbook_Controller::convertContactIdToInt($_contactData);
+        $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactData);
         
         $contactData = $_contactData->toArray();
         unset($contactData['id']);
@@ -342,7 +342,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function deleteContact($_contactId)
     {
-        $contactId = Addressbook_Controller::convertContactIdToInt($_contactId);
+        $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactId);
 
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),
@@ -361,7 +361,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     public function getContact($_contactId)
     {
-        $contactId = Addressbook_Controller::convertContactIdToInt($_contactId);
+        $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactId);
         
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId)
