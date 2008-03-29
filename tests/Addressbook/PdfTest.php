@@ -128,7 +128,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     public function testContactPdf()
     {
 		$pdf = new Addressbook_Pdf();
-		$pdfOutput = $pdf->contactPdf($this->objects['contact']);
+		$pdfOutput = $pdf->getContactPdf($this->objects['contact']);
 		
 		//$pdf->save("test.pdf");
 		
@@ -152,7 +152,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     	Zend_Registry::set('locale', new Zend_Locale('de_DE'));
     	
         $pdf = new Addressbook_Pdf();
-        $pdfOutput = $pdf->contactPdf($this->objects['contact']);
+        $pdfOutput = $pdf->getContactPdf($this->objects['contact']);
         
         $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
         $this->assertEquals(1, preg_match("/Firmen-Kontaktdaten/", $pdfOutput));
