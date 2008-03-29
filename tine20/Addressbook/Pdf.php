@@ -24,7 +24,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
      *
      * @return	string	the contact pdf
      */
-    public function contactPdf ( Addressbook_Model_Contact $_contact )
+    public function getContactPdf ( Addressbook_Model_Contact $_contact )
     {
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));
