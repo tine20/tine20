@@ -3,7 +3,6 @@
  * contact pdf generation class
  *
  * @package     Addressbook
- * @subpackage	PDF
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,7 +14,6 @@
  * defines the datatype for simple registration object
  * 
  * @package     Addressbook
- * @subpackage	PDF
  */
 class Addressbook_Pdf extends Tinebase_Export_Pdf
 {
