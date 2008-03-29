@@ -270,7 +270,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         $contact = $json->getContact($contactId);
 
-        $this->assertEqual($contactId, $contact['contact']['id']);
+        $this->assertEquals($contactId, $contact['contact']['id']);
 
         $json->deleteContacts($contactId);
 
