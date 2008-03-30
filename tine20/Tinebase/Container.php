@@ -397,11 +397,10 @@ class Tinebase_Container
      * returns the personal container of a given account accessible by a another given account
      *
      * @param int|Tinebase_Account_Model_Account $_accountId
-     * @param unknown_type $_application
-     * @param unknown_type $_owner
-     * @param unknown_type $_grant
-     * @todo rename this function to getPersonalContainer
-     * @return unknown
+     * @param string $_application
+     * @param int|Tinebase_Account_Model_Account $_owner
+     * @param int $_grant
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
     {
@@ -453,7 +452,7 @@ class Tinebase_Container
      *
      * @param int|Tinebase_Account_Model_Account $_accountId
      * @param string $_application the name of the application
-     * @todo rename this function to getSharedContainer
+     * @param int $_grant
      * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
     public function getSharedContainer($_accountId, $_application, $_grant)
