@@ -334,7 +334,7 @@ class Tinebase_Container
             ->where('type = ?', $_type)
             ->where('application_id = ?', $applicationId);
 
-        $row = $this->containerTable->fetchRow($where);
+        $row = $this->containerTable->fetchRow($select);
         
         if($row === NULL) {
             throw new UnderflowException('container not found');
