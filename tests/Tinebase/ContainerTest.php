@@ -182,7 +182,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGrantsOfContainer()
     {
-        $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
@@ -266,7 +266,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContainerByAcl()
     {
-        $container = Tinebase_Container::getInstance()->addContainerForAccount(Zend_Registry::get('currentAccount'), $this->objects['initialContainer']);
+        $container = Tinebase_Container::getInstance()->addContainer($this->objects['initialContainer'], $this->objects['grants']);
 
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
