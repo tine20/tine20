@@ -131,13 +131,21 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
 
+    /**
+     * returns list of accounts
+     *
+     * @param string $filter
+     * @param int $start
+     * @param string $sort
+     * @param string $dir
+     * @param int $limit
+     * @return array
+     */
     public function getAccounts($filter, $start, $sort, $dir, $limit)
     {
-        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer('addressbook');
+        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
         
-        $addressbookId = $internalContainer->id;
-        
-        $result = $this->getContactsByAddressbookId($addressbookId, $filter, $start, $sort, $dir, $limit);
+        $result = $this->getContactsByAddressbookId($internalContainer->getId(), $filter, $start, $sort, $dir, $limit);
 
         return $result;
     }
