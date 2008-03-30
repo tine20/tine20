@@ -127,7 +127,12 @@ class Tinebase_Json_Container
      */
     public function deleteContainer($containerId)
     {
-        Tinebase_Container::getInstance()->deleteContainer($containerId);
+        try {
+            Tinebase_Container::getInstance()->deleteContainer($containerId);
+        } catch (Exception $e) {
+            throw new Exception('container not found or permission to delete container denied!');
+        }
+        
         return 'success';
     }
     
