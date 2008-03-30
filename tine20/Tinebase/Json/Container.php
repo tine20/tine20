@@ -71,46 +71,8 @@ class Tinebase_Json_Container
         if($newContainer->type !== Tinebase_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Container::TYPE_SHARED) {
             throw new Exception('can add personal or shared containers only');
         }
-        
-        if($newContainer->type === Tinebase_Container::TYPE_SHARED) {
-
-            // add all grants to creator
-            // add read grants to any other user
-            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-                array(
-                    'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                    'accountType'   => 'account',
-                    'accountName'   => 'not used',
-                    'readGrant'     => true,
-                    'addGrant'      => true,
-                    'editGrant'     => true,
-                    'deleteGrant'   => true,
-                    'adminGrant'    => true
-                ),            
-                array(
-                    'accountId'     => NULL,
-                    'accountType'   => 'anyone',
-                    'accountName'   => 'not used',
-                    'readGrant'     => true
-                )            
-            ));
-        } else {
-            // add all grants to creator
-            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-                array(
-                    'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                    'accountType'   => 'account',
-                    'accountName'   => 'not used',
-                    'readGrant'     => true,
-                    'addGrant'      => true,
-                    'editGrant'     => true,
-                    'deleteGrant'   => true,
-                    'adminGrant'    => true
-                )            
-            ));
-        }
-        
-        $container = Tinebase_Container::getInstance()->addContainer($newContainer, $grants);
+                
+        $container = Tinebase_Container::getInstance()->addContainer($newContainer);
         
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::GRANT_ANY;

@@ -138,7 +138,7 @@ class Tinebase_Container
      * @param Tinebase_Record_RecordSet $_grants the grants for the new folder 
      * @return Tinebase_Model_Container the newly created container
      */
-    public function addContainer(Tinebase_Model_Container $_container, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE)
+    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
     {
         if(!$_container->isValid()) {
             throw new Exception('invalid container object supplied');
@@ -181,9 +181,53 @@ class Tinebase_Container
             throw new UnexpectedValueException('$containerId can not be 0');
         }
         
-        $this->setGrants($containerId, $_grants, TRUE);
+        $container = $this->getContainerById($containerId);
         
-        return $this->getContainerById($containerId);
+        if($_grants === NULL) {
+            if($container->type === Tinebase_Container::TYPE_SHARED) {
+    
+                // add all grants to creator
+                // add read grants to any other user
+                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+                    array(
+                        'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                        'accountType'   => 'account',
+                        'accountName'   => 'not used',
+                        'readGrant'     => true,
+                        'addGrant'      => true,
+                        'editGrant'     => true,
+                        'deleteGrant'   => true,
+                        'adminGrant'    => true
+                    ),            
+                    array(
+                        'accountId'     => NULL,
+                        'accountType'   => 'anyone',
+                        'accountName'   => 'not used',
+                        'readGrant'     => true
+                    )            
+                ));
+            } else {
+                // add all grants to creator only
+                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+                    array(
+                        'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                        'accountType'   => 'account',
+                        'accountName'   => 'not used',
+                        'readGrant'     => true,
+                        'addGrant'      => true,
+                        'editGrant'     => true,
+                        'deleteGrant'   => true,
+                        'adminGrant'    => true
+                    )            
+                ));
+            }
+        } else {
+            $grants = $_grants;
+        }
+        
+        $this->setGrants($containerId, $grants, TRUE);
+        
+        return $container;
     }
     
     /**
