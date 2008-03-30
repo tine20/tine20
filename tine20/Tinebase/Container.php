@@ -755,6 +755,12 @@ class Tinebase_Container
                 $resultArray[$row['account_id']] = $containerGrant;
             }
             
+            $containerGrant->readGrant = FALSE; 
+            $containerGrant->addGrant = FALSE; 
+            $containerGrant->editGrant = FALSE; 
+            $containerGrant->deleteGrant = FALSE; 
+            $containerGrant->adminGrant = FALSE; 
+            
             switch($row['account_grant']) {
                 case self::GRANT_READ:
                     $containerGrant->readGrant = TRUE; 
