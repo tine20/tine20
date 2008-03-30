@@ -327,7 +327,7 @@ class Tinebase_Container
         if($_type !== self::TYPE_INTERNAL and $_type !== self::TYPE_PERSONAL and $_type !== self::TYPE_SHARED) {
             throw new Exception('invalid $_type supplied');
         }
-        $applicationId = Tinebase_Application::convertApplicationIdToInt($_application);
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
         $select  = $this->containerTable->select()
             ->where('name = ?', $_containerName)
