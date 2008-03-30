@@ -630,12 +630,13 @@ class Tinebase_Container
     }
     
     /**
-     * rename container, if the user has the required right
+     * set container name, if the user has the required right
      *
      * @param int $_containerId
      * @param string $_containerName the new name
+     * @return Tinebase_Model_Container
      */
-    public function renameContainer($_containerId, $_containerName)
+    public function setContainerName($_containerId, $_containerName)
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
 

@@ -145,7 +145,12 @@ class Tinebase_Json_Container
      */
     public function renameContainer($containerId, $newName)
     {
-        $container = Tinebase_Container::getInstance()->renameContainer($containerId, $newName);
+        try {
+            $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
+        } catch (Exception $e) {
+            throw new Exception('container not found or permission to set containername denied!');
+        }
+        
         return $container->toArray();
     }
     
