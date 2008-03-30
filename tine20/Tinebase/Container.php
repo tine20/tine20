@@ -536,10 +536,9 @@ class Tinebase_Container
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Account_Model_Account');
-        $accountsBackend = Tinebase_Account::getInstance();
         
         foreach($rows as $row) {
-            $account = $accountsBackend->getAccountById($row['account_id']);
+            $account = Tinebase_Account::getInstance()->getAccountById($row['account_id']);
             $result->addRecord($account);
         }
         
