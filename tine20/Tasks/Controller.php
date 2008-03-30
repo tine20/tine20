@@ -246,7 +246,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
         $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
         
         if (isset($taskConfig->$configString)) {
-            $defaultContainer = Tinebase_Container::getInstance()->getContainer((int)$taskConfig->$configString);
+            $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
             $containers = $this->getPersonalContainer($this->_currentAccount, $this->_currentAccount->accountId, Tinebase_Container::GRANT_READ);
             $defaultContainer = $containers[0];
