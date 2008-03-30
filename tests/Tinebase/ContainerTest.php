@@ -152,12 +152,12 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     
     
     /**
-     * try to add an account
+     * try to set new container name
      *
      */
-    public function testRenameContainer()
+    public function testSetContainerName()
     {
-        $container = Tinebase_Container::getInstance()->renameContainer($this->objects['initialContainer'], 'renamed container');
+        $container = Tinebase_Container::getInstance()->setContainerName($this->objects['initialContainer'], 'renamed container');
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals('renamed container', $container->name);
