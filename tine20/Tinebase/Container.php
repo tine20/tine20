@@ -132,57 +132,13 @@ class Tinebase_Container
     }
 
     /**
-     * creates a container and gives all rights to the owner and read rights to anyone if shared container
-     *
-     * @param int $_accountId the accountId of the owner of the newly created container
-     * @param Tinebase_Model_Container $_container the new container
-     * @return Tinebase_Model_Container
-     */
-    public function addContainerForAccount($_accountId, Tinebase_Model_Container $_container, $_ignoreAcl = FALSE)
-    {
-        if(!$_container->isValid()) {
-            throw new Exception('invalid container object supplied');
-        }
-        if($_container->type !== self::TYPE_PERSONAL and $_container->type !== self::TYPE_SHARED) {
-            throw new Exception('can add personal or shared containers only');
-        }
-
-        $container = $this->addContainer($_container, $_ignoreAcl);
-        
-        if($container->type === Tinebase_Container::TYPE_SHARED) {
-
-            // add all grants to creator
-            $this->addGrants($container, 'account', $_accountId, array(
-                self::GRANT_READ, 
-                self::GRANT_ADD, 
-                self::GRANT_EDIT, 
-                self::GRANT_DELETE, 
-                self::GRANT_ADMIN
-            ), TRUE);
-            // add read grants to any other user
-            $this->addGrants($containerId, 'anyone', NULL, array(
-                self::GRANT_READ
-            ), TRUE);
-        } else {
-            // add all grants to creator
-            $this->addGrants($container, 'account', $_accountId, array(
-                self::GRANT_READ, 
-                self::GRANT_ADD, 
-                self::GRANT_EDIT, 
-                self::GRANT_DELETE, 
-                self::GRANT_ADMIN
-            ), TRUE);
-        }
-        return $container;
-    }
-    
-    /**
      * creates a new container
      *
      * @param Tinebase_Model_Container $_container the new container
+     * @param Tinebase_Record_RecordSet $_grants the grants for the new folder 
      * @return Tinebase_Model_Container the newly created container
      */
-    public function addContainer(Tinebase_Model_Container $_container, $_ignoreAcl = FALSE)
+    public function addContainer(Tinebase_Model_Container $_container, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE)
     {
         if(!$_container->isValid()) {
             throw new Exception('invalid container object supplied');
@@ -191,9 +147,7 @@ class Tinebase_Container
         if($_ignoreAcl !== TRUE) {
             switch($_container->type) {
                 case self::TYPE_PERSONAL:
-                    if(Tinebase_Account::convertAccountIdToInt($_accountId) != Zend_Registry::get('currentAccount')->getId()) {
-                        throw new Exception('can not add personal container for other accounts');
-                    }
+                    // is the user allowed to create personal container?
                     break;
                     
                 case self::TYPE_SHARED:
@@ -201,7 +155,7 @@ class Tinebase_Container
                     break;
                     
                 default:
-                    throw new Exception('can only add personal or shared folders');
+                    throw new Exception('can add personal or shared folders only when ignoring Acl');
                     break;
             }
         }
@@ -226,6 +180,8 @@ class Tinebase_Container
         if($containerId < 1) {
             throw new UnexpectedValueException('$containerId can not be 0');
         }
+        
+        $this->setGrants($containerId, $_grants, TRUE);
         
         return $this->getContainerById($containerId);
     }
