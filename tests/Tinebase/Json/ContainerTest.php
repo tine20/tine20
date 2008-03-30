@@ -73,6 +73,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
+        $this->assertEquals(Tinebase_Container::GRANT_ANY, $container['account_grants']);
 
         Tinebase_Container::getInstance()->deleteContainer($container['id']);
     }
