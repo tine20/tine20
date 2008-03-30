@@ -261,6 +261,17 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to other users who gave grants to current account
+     *
+     */
+    public function testGetOtherUsers()
+    {
+        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), 'Addressbook', Tinebase_Container::GRANT_READ);
+        
+        $this->assertType('Tinebase_Record_RecordSet', $otherUsers);
+    }
+    
+    /**
      * try to get container by acl
      *
      */
