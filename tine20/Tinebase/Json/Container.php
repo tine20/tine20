@@ -68,7 +68,7 @@ class Tinebase_Json_Container
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId() 
         ));
         
-        if($newContainer->type !== self::TYPE_PERSONAL and $newContainer->type !== self::TYPE_SHARED) {
+        if($newContainer->type !== Tinebase_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Container::TYPE_SHARED) {
             throw new Exception('can add personal or shared containers only');
         }
         
