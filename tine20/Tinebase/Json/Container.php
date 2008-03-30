@@ -112,9 +112,10 @@ class Tinebase_Json_Container
         
         $container = Tinebase_Container::getInstance()->addContainer($newContainer, $grants);
         
-        error_log("account_grants YET ARE MISSING");
+        $result = $container->toArray();
+        $result['account_grants'] = Tinebase_Container::GRANT_ANY;
         
-        return $container->toArray();
+        return $result;
     }
     
     /**
