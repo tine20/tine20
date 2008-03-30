@@ -359,7 +359,14 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function createPersonalFolder(Tinebase_Account_Model_Account $_account)
     {
-        $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'addressbook', 'Personal Contacts');
+        $newContainer = new Tinebase_Model_Container(array(
+            'name'              => 'Personal Contacts',
+            'type'              => Tinebase_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId() 
+        ));
+        
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
