@@ -405,11 +405,10 @@ class Tinebase_Container
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
     {
-        $accountId  = Tinebase_Account::convertAccountIdToInt($_accountId);
-        $ownerId    = Tinebase_Account::convertAccountIdToInt($_owner);
-        
-        $groupMemberships   = $_account->getGroupMemberships();
-        
+        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        $ownerId            = Tinebase_Account::convertAccountIdToInt($_owner);
+
         if(count($groupMemberships) === 0) {
             throw new Exception('account must be in at least one group');
         }
