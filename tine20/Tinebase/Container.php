@@ -736,7 +736,7 @@ class Tinebase_Container
         $resultArray = array();
 
         foreach($rows as $row) {
-            if (! isset($resultArray[$row['account_id']])) {
+            if (! isset($resultArray[$row['account_type'] . $row['account_id']])) {
                 if($row['account_type'] === 'anyone') {
                     $displayName = 'Anyone';
                 } elseif($row['account_type'] === 'account') {
@@ -746,21 +746,17 @@ class Tinebase_Container
                     $group = Tinebase_Group::getInstance()->getGroupById($row['account_id']);
                     $displayName = $group->name;
                 }
-                    
+
                 $containerGrant = new Tinebase_Model_Grants( array(
                     'accountId'     => $row['account_id'],
                     'accountType'   => $row['account_type'],
                     'accountName'   => $displayName
-                ), true);
-                $resultArray[$row['account_id']] = $containerGrant;
+                ));
+                $resultArray[$row['account_type'] . $row['account_id']] = $containerGrant;
+            } else {
+                $containerGrant = $resultArray[$row['account_type'] . $row['account_id']];
             }
-            
-            $containerGrant->readGrant = FALSE; 
-            $containerGrant->addGrant = FALSE; 
-            $containerGrant->editGrant = FALSE; 
-            $containerGrant->deleteGrant = FALSE; 
-            $containerGrant->adminGrant = FALSE; 
-            
+
             switch($row['account_grant']) {
                 case self::GRANT_READ:
                     $containerGrant->readGrant = TRUE; 
