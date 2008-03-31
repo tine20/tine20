@@ -192,7 +192,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
 		// export
 		if ( $_format === "pdf" ) {
 			$pdf = new Crm_Pdf();
-			$pdfOutput = $pdf->leadPdf($lead);
+			$pdfOutput = $pdf->getLeadPdf($lead);
 
 			header("Content-Disposition: inline; filename=lead.pdf"); 
 			header("Content-type: application/x-pdf"); 

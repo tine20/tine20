@@ -28,7 +28,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      * 
      * @return	string	the contact pdf
      */
-	public function leadPdf ( Crm_Model_Lead $_lead )
+	public function getLeadPdf ( Crm_Model_Lead $_lead )
 	{
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));		
@@ -42,10 +42,10 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 				'end' => $translate->_('End'),
 				'end_scheduled' => $translate->_('End Scheduled'),
                 'container' => $translate->_('Container'),
-                $translate->_('Lead IDs') => 'separator',
+        /*        $translate->_('Lead IDs') => 'separator',
 				'leadstate_id' => $translate->_('Leadstate ID'),
                 'leadtype_id' => $translate->_('Leadtype ID'),
-                'leadsource_id' => $translate->_('Leadsource ID'),
+                'leadsource_id' => $translate->_('Leadsource ID'),*/
 				);
 				
         // build data array
@@ -63,8 +63,26 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 	            }
         	}
         }     
-			
-		return $this->generatePdf($record, $_lead->lead_name, "", $_lead->description, $leadFields);
+        
+        // get linked contacts and add them to record array
+        //@todo add to tests
+        $links = Tinebase_Links::getInstance()->getLinks('crm', $_lead->id, 'addressbook');
+                
+        
+        $linkedObjects = array ();
+        if ( !empty($links)) {
+	        $linkedObjects[] = array ('Linked Contacts', 'headline');
+	        foreach ( $links as $contactLink ) {
+	        	$contact = Addressbook_Controller::getInstance()->getContact($contactLink['recordId']);
+	            $linkedObjects[] = array ($contact->n_fn, 'separator');
+	            $linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
+                $linkedObjects[] = array ($translate->_('Address'), $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality );
+                $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);
+	            $linkedObjects[] = array ($translate->_('Email'), $contact->email);
+	        }
+        }
+        			
+		return $this->generatePdf($record, "Lead: ".$_lead->lead_name, "", $_lead->description, $leadFields, NULL, $linkedObjects );
 		
 	}
 

@@ -86,7 +86,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * 
      * @return	string	the contact pdf
      */
-	public function generatePdf ( array $_record, $_title = "", $_subtitle = "", $_note = "", $_fields = array(), $_image = NULL)
+	public function generatePdf ( array $_record, $_title = "", $_subtitle = "", $_note = "", $_fields = array(), $_image = NULL, $_linkedObjects = array() )
 	{
 		$pageNumber = 0;
 		$xPos = 50;
@@ -130,7 +130,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		}
 
 		// debug record
-		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' given record: '. print_r($_record, true));
+		//Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' given record: '. print_r($_record, true));
 		
 		// fill data array for table
 		$data = array ();
@@ -152,13 +152,21 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
             array_pop ( $data );
         }
+        
+        // add linked objects (i.e. contacts for lead export)
+        if ( !empty($_linkedObjects) ) {
+        	$data = array_merge ( $data, $_linkedObjects );
+        }
 
+        // debug $data
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' table data: '. print_r($data, true));
+        
 		// create table
 		if ( !empty($data) ) {
 			$this->CreateTable( array(), $data, 50, 730 );
 		}
-		
-		// write footer
+				
+        // write footer
 		$this->CreateFooter();
 		
 		// Get PDF document as a string 
@@ -230,7 +238,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 			for ( $i=0; $i < sizeof($row); $i++) {
 
 	            // leave some more space between sections
-	            if ( isset($row[$i+1]) && $row[$i+1] === 'separator' ) {
+	            if ( isset($row[$i+1]) && ( $row[$i+1] === 'separator' || $row[$i+1] === 'headline' ) ) {
 	            	$yPos -= 10;
 	            }
 				
@@ -238,8 +246,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 					$this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
 					$this->pages[$pageNumber]->drawLine ( $xPos, $yPos - $padding, $xPos, $yPos - 2*$padding);
 					continue;
-				}
-			
+				} elseif ( $row[$i] === 'headline' ) {
+                    $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*(sizeof($row)+1)), $yPos - $padding );
+                    continue;
+                }
+								
 				if ( $i !== 0 && $border ) {
 					$this->pages[$pageNumber]->drawLine ( $xPos, $yPos + $this->contentLineHeight - 2*$padding, $xPos, $yPos - 2*$padding );
 					$xPos += $padding;
