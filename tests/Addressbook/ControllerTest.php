@@ -228,6 +228,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller::getInstance()->updateContact($this->objects['updatedContact']);
         
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
+        $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
     }
 
     /**
