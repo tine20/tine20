@@ -38,7 +38,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @var integer
      *
      */
-    protected $footerFontSize = 10;
+    protected $footerFontSize = 7;
     
     /**
      * content line height
@@ -128,7 +128,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 			//$yPos -= 40;
 			$this->pages[$pageNumber]->drawImage($_image, $xPos+450, $yPos, $xPos+500, $yPos + 75 );
 		}
-				
+
+		// debug record
+		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' given record: '. print_r($_record, true));
 		
 		// fill data array for table
 		$data = array ();
@@ -267,19 +269,24 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		
 		$creationDate = $translate->_('Export Date').": ".
 		  Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($locale), $locale )." ".
-		  Zend_Date::now()->toString(Zend_Locale_Format::getTimeFormat($locale), $locale );;
+		  Zend_Date::now()->toString(Zend_Locale_Format::getTimeFormat($locale), $locale );
 
 		$creationURL = $translate->_('Created by').": ";
-		if ( isset($_SERVER['SERVER_NAME']) ) {
+		//@todo add this to config file?
+		$creationURL .= 'http://www.tine20.org';
+		
+        /*if ( isset($_SERVER['SERVER_NAME']) ) {
 		  $creationURL .= 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
 		} else {
 		  $creationURL .= 'Tine 2.0';
-		}
+		}*/
 		
 		for ( $i=0; $i<sizeof($this->pages); $i++ ) {
-			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->footerFontSize ); 
+			$this->pages[$i]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->footerFontSize );
+			$this->pages[$i]->setFillColor( new Zend_Pdf_Color_GrayScale(0.5) );
 			$this->pages[$i]->drawText ( $creationDate, $xPos, $yPos);
-			$yPos -= 18;
+			//$yPos -= 18;
+			$xPos += 380;
 			$this->pages[$i]->drawText ( $creationURL, $xPos, $yPos);
 		}
 	}	
