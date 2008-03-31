@@ -71,7 +71,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         
         $linkedObjects = array ();
         if ( !empty($links)) {
-	        $linkedObjects[] = array ('Linked Contacts', 'headline');
+	        $linkedObjects[] = array ($translate->_('Linked Contacts'), 'headline');
 	        foreach ( $links as $contactLink ) {
 	        	$contact = Addressbook_Controller::getInstance()->getContact($contactLink['recordId']);
 	            $linkedObjects[] = array ($contact->n_fn, 'separator');

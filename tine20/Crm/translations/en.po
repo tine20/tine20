@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-03-27 14:10+0100\n"
+"PO-Revision-Date: 2008-03-31 14:16+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,6 +29,46 @@ msgstr "Turnover"
 msgid "Probability"
 msgstr "Probability"
 
+#: Crm/Pdf.php:41
+#: Crm/Controller.php:628
+msgid "Start"
+msgstr "Start"
+
+#: Crm/Pdf.php:42
+#: Crm/Controller.php:630
+msgid "End"
+msgstr "End"
+
+#: Crm/Pdf.php:43
+#, fuzzy
+msgid "End Scheduled"
+msgstr "Scheduled end"
+
+#: Crm/Pdf.php:44
+msgid "Container"
+msgstr "Container"
+
+#: Crm/Pdf.php:74
+msgid "Linked Contacts"
+msgstr "Linked Contacts"
+
+#: Crm/Pdf.php:78
+msgid "Company"
+msgstr "Company"
+
+#: Crm/Pdf.php:79
+msgid "Address"
+msgstr "Address"
+
+#: Crm/Pdf.php:80
+#, fuzzy
+msgid "Telephone"
+msgstr "Telephone Work"
+
+#: Crm/Pdf.php:81
+msgid "Email"
+msgstr "Email Work"
+
 #: Crm/Controller.php:625
 msgid "State"
 msgstr "State"
@@ -41,17 +81,9 @@ msgstr "Type"
 msgid "Source"
 msgstr "Source"
 
-#: Crm/Controller.php:628
-msgid "Start"
-msgstr "Start"
-
 #: Crm/Controller.php:629
 msgid "Scheduled end"
 msgstr "Scheduled end"
-
-#: Crm/Controller.php:630
-msgid "End"
-msgstr "End"
 
 #: Crm/Controller.php:633
 msgid "Folder"

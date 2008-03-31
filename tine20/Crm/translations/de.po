@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-03-27 14:07+0100\n"
+"PO-Revision-Date: 2008-03-31 14:13+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,19 +15,59 @@ msgstr ""
 "X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Crm\n"
 
-#: Crm/Pdf.php:35
+#: Crm/Pdf.php:38
 msgid "Lead Data"
 msgstr "Lead Daten"
 
-#: Crm/Pdf.php:36
+#: Crm/Pdf.php:39
 #: Crm/Controller.php:631
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Crm/Pdf.php:37
+#: Crm/Pdf.php:40
 #: Crm/Controller.php:632
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
+
+#: Crm/Pdf.php:41
+#: Crm/Controller.php:628
+msgid "Start"
+msgstr "Start"
+
+#: Crm/Pdf.php:42
+#: Crm/Controller.php:630
+msgid "End"
+msgstr "Ende"
+
+#: Crm/Pdf.php:43
+#, fuzzy
+msgid "End Scheduled"
+msgstr "geplantes Ende"
+
+#: Crm/Pdf.php:44
+msgid "Container"
+msgstr "Container"
+
+#: Crm/Pdf.php:74
+msgid "Linked Contacts"
+msgstr "Verknüpfte Kontakte"
+
+#: Crm/Pdf.php:78
+msgid "Company"
+msgstr "Firma"
+
+#: Crm/Pdf.php:79
+msgid "Address"
+msgstr "Adresse"
+
+#: Crm/Pdf.php:80
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Crm/Pdf.php:81
+#, fuzzy
+msgid "Email"
+msgstr "Email"
 
 #: Crm/Controller.php:625
 msgid "State"
@@ -41,17 +81,9 @@ msgstr "Typ"
 msgid "Source"
 msgstr "Quelle"
 
-#: Crm/Controller.php:628
-msgid "Start"
-msgstr "Start"
-
 #: Crm/Controller.php:629
 msgid "Scheduled end"
 msgstr "geplantes Ende"
-
-#: Crm/Controller.php:630
-msgid "End"
-msgstr "Ende"
 
 #: Crm/Controller.php:633
 msgid "Folder"
