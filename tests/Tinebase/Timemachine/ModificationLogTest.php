@@ -64,7 +64,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     	
     	$this->_logEntries = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', array(
         array(
-            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase'),
+            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
@@ -116,8 +116,20 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         }
     }
     
-    public function testTest()
+    public function testGetModification()
     {
+    	foreach ($this->_logEntries as $num => $logEntry) {
+    		$RawLogEntry = $logEntry->toArray();
+    		$RawPersistantLogEntry = $this->_persistantLogEntries[$num]->toArray();
+    		
+    		foreach ($RawLogEntry as $field => $value) {
+    			$persistantValue = $RawPersistantLogEntry[$field];
+    			if ($value != $persistantValue) {
+    				$this->fail("Failed asserting that contents of saved LogEntry #$num in field $field equals initial datas. \n" . 
+    				            "Expected '$value', got '$persistantValue'");
+    			}
+    		}
+    	}
     	$this->assertTrue(true);
     }
 }
