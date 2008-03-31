@@ -70,8 +70,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_backend'       => 'TestBackend',
             'modification_time'    => Zend_Date::now()->addDay(-2),
             'modification_account' => 7,
-            'modified_attribute'   => 'TestAttribute',
-            'old_value'            => 'InitialValue'
+            'modified_attribute'   => 'FirstTestAttribute',
+            'old_value'            => 'Hamburg',
+            'new_value'            => 'Bremen'
         ),
         array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
@@ -80,8 +81,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_backend'       => 'TestBackend',
             'modification_time'    => Zend_Date::now()->addDay(-1),
             'modification_account' => 7,
-            'modified_attribute'   => 'TestAttribute',
-            'old_value'            => 'FirstUpdate'
+            'modified_attribute'   => 'FirstTestAttribute',
+            'old_value'            => 'Bremen',
+            'new_value'            => 'Frankfurt'
         ),
         array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
@@ -90,9 +92,44 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_backend'       => 'TestBackend',
             'modification_time'    => Zend_Date::now(),
             'modification_account' => 7,
-            'modified_attribute'   => 'TestAttribute',
-            'old_value'            => 'SecondUpdate'
+            'modified_attribute'   => 'FirstTestAttribute',
+            'old_value'            => 'Frankfurt',
+            'new_value'            => 'Stuttgart'
+        ),
+        array(
+            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_type'          => 'TestType',
+            'record_backend'       => 'TestBackend',
+            'modification_time'    => Zend_Date::now()->addDay(-2),
+            'modification_account' => 7,
+            'modified_attribute'   => 'SecondTestAttribute',
+            'old_value'            => 'Deutschland',
+            'new_value'            => '…stereich'
+        ),
+        array(
+            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_type'          => 'TestType',
+            'record_backend'       => 'TestBackend',
+            'modification_time'    => Zend_Date::now()->addDay(-1)->addSecond(1),
+            'modification_account' => 7,
+            'modified_attribute'   => 'SecondTestAttribute',
+            'old_value'            => '…stereich',
+            'new_value'            => 'Schweitz'
+        ),
+        array(
+            'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_type'          => 'TestType',
+            'record_backend'       => 'TestBackend',
+            'modification_time'    => Zend_Date::now(),
+            'modification_account' => 7,
+            'modified_attribute'   => 'SecondTestAttribute',
+            'old_value'            => 'Schweitz',
+            'new_value'            => 'Italien'
         )), true, false);
+        
         
         foreach ($this->_logEntries as $logEntry) {
         	$id = $logEntry->generateUID();
@@ -115,7 +152,12 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
              $table->delete($table->getAdapter()->quoteInto('id = ?', $persistantLogEntry->getId()));
         }
     }
-    
+    /**
+     * tests that the returned mod logs equal the initial ones we defined 
+     * in this test setup.
+     * If this works, also the setting of logs works!
+     *
+     */
     public function testGetModification()
     {
     	foreach ($this->_logEntries as $num => $logEntry) {
@@ -132,7 +174,37 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     	}
     	$this->assertTrue(true);
     }
+    /**
+     * tests computation of a records differences described by a set of modification logs
+     *
+     */
+    public function testComputeDiff()
+    {
+        $diffs = $this->_modLogClass->computeDiff($this->_persistantLogEntries)->toArray();
+        $this->assertEquals(2, count($diffs)); // we changed two attributes
+        foreach ($diffs as $diff) {
+            switch ($diff['modified_attribute']) {
+        	   case 'FirstTestAttribute':
+                   $this->assertEquals('Hamburg', $diff['old_value']);
+                   $this->assertEquals('Stuttgart', $diff['new_value']);
+                   break;
+        	   case 'SecondTestAttribute':
+        	       $this->assertEquals('Deutschland', $diff['old_value']);
+                   $this->assertEquals('Italien', $diff['new_value']);
+            }
+        }
+    }
+    
+    public function testGetModifications()
+    {
+        $record_id = '5dea69be9c72ea3d263613277c3b02d529fbd8bc';
+        $type = 'TestType';
+        $backend = 'TestBackend';
+        
+        //$diffs = $this->_modLogClass->getModifications('Tinebase', $record_id, $type, $backend,  )
+    }
 }
+
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Timemachine_ModificationLogTest::main') {
     Tinebase_Timemachine_ModificationLogTest::main();
