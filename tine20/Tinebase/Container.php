@@ -485,8 +485,20 @@ class Tinebase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        if(empty($rows) and $accountId === $ownerId) {
+            // no containers found. maybe something went wrong when creating the initial folder
+            // let's check if the controller of the application has a function to create the needed folders
+            $application = Tinebase_Controller::getApplicationInstance($application);
+            
+            if($application instanceof Tinebase_Container_Abstract) {
+                return $application->createPersonalFolder($accountId);
+            }
+        }
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
         
         return $result;
     }

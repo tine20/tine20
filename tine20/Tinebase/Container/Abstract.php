@@ -21,57 +21,11 @@
  */
 abstract class Tinebase_Container_Abstract
 {
+    /**
+     * creates the initial folder for new accounts
+     *
+     * @param Tinebase_Account_Model_Account $_account the accountd object
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     */
     abstract public function createPersonalFolder(Tinebase_Account_Model_Account $_account);
-    
-    /**
-     * returns the personal container of a given account accessible by the current user
-     *
-     * @param string $_application the name of the application
-     * @param int $_owner the numeric account id of the owner
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
-     */
-    public function getPersonalContainer(Tinebase_Account_Model_Account $_account, $_owner, $_right)
-    {
-        $application = strtok(get_class($this) , "_");
-        
-        $container = Tinebase_Container::getInstance()->getPersonalContainer($_account, $application, $_owner, $_right);
-        
-        // if we want to read the personal folders of the current user
-        // and don't get back any container
-        if(count($container) === 0 && $_account->accountId == $_owner) {
-            $container = $this->createPersonalFolder($_account);
-        }
-        
-        return $container;
-    }
-
-    /**
-     * returns the shared container for a given application accessible by the current user
-     *
-     * @param string $_application the name of the application
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
-     */
-    public function getSharedContainer(Tinebase_Account_Model_Account $_account, $_right)
-    {
-        $application = strtok(get_class($this) , "_");
-        
-        $container = Tinebase_Container::getInstance()->getSharedContainer($_account, $application, $_right);
-        
-        return $container;
-    }
-    
-    /**
-     * return set of all personal container of other users made accessible to the current account 
-     *
-     * @param string $_application the name of the application
-     * @return Tinebase_Record_RecordSet set of Tinebase_Account_Model_Account
-     */
-    public function getOtherUsers(Tinebase_Account_Model_Account $_account, $_right)
-    {
-        $application = strtok(get_class($this) , "_");
-        
-        $container = Tinebase_Container::getInstance()->getOtherUsers($_account, $application, $_right);
-        
-        return $container;
-    }
 }

@@ -28,19 +28,19 @@ class Tinebase_Json_Container
      * @param string $owner
      * @return string JSON
      */
-    public function getContainer($application, $containerType, $owner =  NULL)
+    public function getContainer($application, $containerType, $owner)
     {       
-        $application = Tinebase_Controller::getApplicationInstance($application);
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($application)->getId();
         
         switch($containerType) {
             case Tinebase_Container::TYPE_PERSONAL:
-                $container = $application->getPersonalContainer(Zend_Registry::get('currentAccount'), $owner, Tinebase_Container::GRANT_READ);
+                $container = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $applicationId, $owner, Tinebase_Container::GRANT_READ);
                 break;
             case Tinebase_Container::TYPE_SHARED:
-                $container = $application->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
+                $container = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $applicationId, Tinebase_Container::GRANT_READ);
                 break;
             case 'otherUsers':
-                $container = $application->getOtherUsers(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
+                $container = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $applicationId, Tinebase_Container::GRANT_READ);
                 break;
             default:
                 throw new Exception('no such NodeType');
@@ -75,7 +75,7 @@ class Tinebase_Json_Container
         $container = Tinebase_Container::getInstance()->addContainer($newContainer);
         
         $result = $container->toArray();
-        $result['account_grants'] = Tinebase_Container::GRANT_ANY;
+        $result['grants'] = Tinebase_Container::getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId());
         
         return $result;
     }
