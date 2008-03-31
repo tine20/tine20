@@ -21,7 +21,7 @@ Please click on the activation link below to activate your account.
 <?php echo $this->mailActivationLink ?>
 <?php } ?>
 
-Your username and password are: <?= $this->username ?> / <?= $this->password ?>
+Your username and password are: <?php echo $this->username ?> / <?php echo $this->password ?>
 
 Sincerly yours,
    The Tine 2.0 Team
