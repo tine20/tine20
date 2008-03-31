@@ -141,7 +141,7 @@ class Tinebase_Timemachine_ModificationLog
         $diff = array();
         foreach ($_modifications as $modification) {
             if (array_key_exists($modification->modified_attribute, $diff)) {
-                $modification->modified_from = $diff[$modification->modified_attribute]->modified_from;
+                $modification->old_value = $diff[$modification->modified_attribute]->old_value;
             }
             $diff[$modification->modified_attribute] = $modification;
         }

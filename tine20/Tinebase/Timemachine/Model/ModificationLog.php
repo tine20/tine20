@@ -16,6 +16,8 @@
  * 
  * NOTE: record_type is a free-form field, which could be used by the application
  * to distinguish different tables, mask multible keys and so on.
+ * NOTE: new_value is redundant, but it makes it a lot more easy to coumpte records
+ * at a given point in time!
  * 
  * @package Tinebase
  * @subpackage Timemachine
@@ -46,6 +48,7 @@ class Tinebase_Timemachine_Model_ModificationLog extends Tinebase_Record_Abstrac
         'modification_account' => array('allowEmpty' => false, 'Int'   ),
         'modified_attribute'   => array('allowEmpty' => false          ),
         'old_value'            => array('allowEmpty' => true           ),
+        'new_value'            => array('allowEmpty' => true           ),
     );
     
     /**
