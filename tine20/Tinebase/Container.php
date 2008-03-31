@@ -826,7 +826,7 @@ class Tinebase_Container
      *
      * @param int|Tinebase_Account_Model_Account $_accountId the account to get the grants for
      * @param int|Tinebase_Model_Container $_containerId
-     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     * @return Tinebase_Model_Grants
      */
     public function getGrantsOfAccount($_accountId, $_containerId, $_ignoreAcl = FALSE) 
     {
@@ -864,35 +864,33 @@ class Tinebase_Container
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = array(
-            'readGrant'     => FALSE, 
-            'addGrant'      => FALSE, 
-            'editGrant'     => FALSE, 
-            'deleteGrant'   => FALSE, 
-            'adminGrant'    => FALSE
-        ); 
+        $grants = new Tinebase_Model_Grants( array(
+            'accountId'     => $accountId,
+            'accountType'   => 'account',
+            'accountName'   => 'not used'
+        ));
         
         foreach($rows as $row) {
             switch($row['account_grant']) {
                 case self::GRANT_READ:
-                    $result['readGrant'] = TRUE; 
+                    $grants->readGrant = TRUE; 
                     break;
                 case self::GRANT_ADD:
-                    $result['addGrant'] = TRUE; 
+                    $grants->addGrant = TRUE; 
                     break;
                 case self::GRANT_EDIT:
-                    $result['editGrant'] = TRUE; 
+                    $grants->editGrant = TRUE; 
                     break;
                 case self::GRANT_DELETE:
-                    $result['deleteGrant'] = TRUE; 
+                    $grants->deleteGrant = TRUE; 
                     break;
                 case self::GRANT_ADMIN:
-                    $result['adminGrant'] = TRUE; 
+                    $grants->adminGrant = TRUE; 
                     break;
             }
         }
         
-        return $result;
+        return $grants;
     }
     
     /**
