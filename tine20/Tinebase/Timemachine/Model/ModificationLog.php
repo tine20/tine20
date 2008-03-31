@@ -14,7 +14,7 @@
 /**
  * Model of an logbook entry
  * 
- * NOTE: record_type is a freeform field, which could be used by the application
+ * NOTE: record_type is a free-form field, which could be used by the application
  * to distinguish different tables, mask multible keys and so on.
  * 
  * @package Tinebase
@@ -39,7 +39,7 @@ class Tinebase_Timemachine_Model_ModificationLog extends Tinebase_Record_Abstrac
     protected $_validators = array(
         'id'                   => array('allowEmpty' => true,  'Alnum' ),
         'application_id'       => array('allowEmpty' => false          ),
-        'record_id'            => array('allowEmpty' => false, 'Almum' ),
+        'record_id'            => array('allowEmpty' => false, 'Alnum' ),
         'record_type'          => array('allowEmpty' => true           ),
         'record_backend'       => array('allowEmpty' => false          ),
         'modification_time'    => array('allowEmpty' => false          ),

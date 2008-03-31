@@ -155,9 +155,18 @@ class Tinebase_Timemachine_ModificationLog
      * @return Tinebase_Timemachine_Model_ModificationLog
      */
     public function getModification( $_id ) {
+    	$db = $this->_table->getAdapter();
+    	$stmt = $db->query($db->select()
+    	   ->from($this->_tablename)
+    	   ->where($this->_table->getAdapter()->quoteInto('id = ?', $_id))
+    	);
+        $RawLogEntry = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $LogEntry = $this->_table->find($_id)->current();
-        return $LogEntry;
+        if (empty($RawLogEntry)) {
+            throw new Exception("Modification Log with id: $_id not found!");
+        }
+        return new Tinebase_Timemachine_Model_ModificationLog($RawLogEntry[0], true); 
+        
     } // end of member function getModification
     
     /**
@@ -172,10 +181,11 @@ class Tinebase_Timemachine_ModificationLog
         	$_modification->convertDates = true;
             $modificationArray = $_modification->toArray();
             
-            $application = Tinebase_Application::getInstance()->getApplicationByName($_modification->application);
-            $modificationArray['application'] = $application->getId();
+            if ($modificationArray['application_id'] instanceof Tinebase_Model_Application) {
+            	$modificationArray['application_id'] = $modificationArray['application_id']->getId();
+            }
             
-            $modificationId = $this->_table->insert($modificationArray);
+            $this->_table->insert($modificationArray);
         } else {
             throw new Exception(
                 "_modification data is not valid! \n" . 
