@@ -822,6 +822,147 @@ class Tinebase_Container
     }
     
     /**
+     * get grants assigned to one account of one container
+     *
+     * @param int|Tinebase_Account_Model_Account $_accountId the account to get the grants for
+     * @param int|Tinebase_Model_Container $_containerId
+     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     */
+    public function getGrantsOfAccount($_accountId, $_containerId, $_ignoreAcl = FALSE) 
+    {
+        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        if($_ignoreAcl !== TRUE) {
+            if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, self::GRANT_ADMIN)) {
+                throw new Exception('permission to get grants of container denied');
+            }            
+        }
+        
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
+        
+        $db = Zend_Registry::get('dbAdapter');
+        
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+
+        $select = $db->select()
+            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
+
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
+            
+            ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
+            ->group(SQL_TABLE_PREFIX . 'container.id')
+            ->order(SQL_TABLE_PREFIX . 'container.name');
+            
+        error_log("getContainer:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+
+        $row = $stmt->fetchRow(Zend_Db::FETCH_ASSOC);
+        
+        return $row;
+        
+                $containerGrant = new Tinebase_Model_Grants( array(
+                    'accountId'     => $row['account_id'],
+                    'accountType'   => $row['account_type'],
+                    'accountName'   => $displayName
+                ));
+                $resultArray[$row['account_type'] . $row['account_id']] = $containerGrant;
+
+            switch($row['account_grant']) {
+                case self::GRANT_READ:
+                    $containerGrant->readGrant = TRUE; 
+                    break;
+                case self::GRANT_ADD:
+                    $containerGrant->addGrant = TRUE; 
+                    break;
+                case self::GRANT_EDIT:
+                    $containerGrant->editGrant = TRUE; 
+                    break;
+                case self::GRANT_DELETE:
+                    $containerGrant->deleteGrant = TRUE; 
+                    break;
+                case self::GRANT_ADMIN:
+                    $containerGrant->adminGrant = TRUE; 
+                    break;
+            }
+        
+        return $result;
+        
+        
+        
+        
+        
+        
+        
+        
+        $db = Zend_Registry::get('dbAdapter');
+
+        $select = $db->select()
+            ->from(SQL_TABLE_PREFIX . 'container_acl')
+            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
+            ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
+                    
+        //error_log("getAllGrants:: " . $select->__toString());
+
+        $stmt = $db->query($select);
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $resultArray = array();
+
+        foreach($rows as $row) {
+            if (! isset($resultArray[$row['account_type'] . $row['account_id']])) {
+                if($row['account_type'] === 'anyone') {
+                    $displayName = 'Anyone';
+                } elseif($row['account_type'] === 'account') {
+                    $account = Tinebase_Account::getInstance()->getAccountById($row['account_id']);
+                    $displayName = $account->accountDisplayName;
+                } else {
+                    $group = Tinebase_Group::getInstance()->getGroupById($row['account_id']);
+                    $displayName = $group->name;
+                }
+
+                $containerGrant = new Tinebase_Model_Grants( array(
+                    'accountId'     => $row['account_id'],
+                    'accountType'   => $row['account_type'],
+                    'accountName'   => $displayName
+                ));
+                $resultArray[$row['account_type'] . $row['account_id']] = $containerGrant;
+            } else {
+                $containerGrant = $resultArray[$row['account_type'] . $row['account_id']];
+            }
+
+            switch($row['account_grant']) {
+                case self::GRANT_READ:
+                    $containerGrant->readGrant = TRUE; 
+                    break;
+                case self::GRANT_ADD:
+                    $containerGrant->addGrant = TRUE; 
+                    break;
+                case self::GRANT_EDIT:
+                    $containerGrant->editGrant = TRUE; 
+                    break;
+                case self::GRANT_DELETE:
+                    $containerGrant->deleteGrant = TRUE; 
+                    break;
+                case self::GRANT_ADMIN:
+                    $containerGrant->adminGrant = TRUE; 
+                    break;
+            }
+        }
+        
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $resultArray);
+    }
+    
+    /**
      * set all grant for given container
      *
      * @param int|Tinebase_Model_Container $_containerId
