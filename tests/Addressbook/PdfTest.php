@@ -136,10 +136,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
 		
         // check name and company name
-        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');
-        
-        //@todo test not working yet. utf8 problem?
-        //$this->assertEquals(1, preg_match("/Cornelius Weiß/", $pdfOutput), 'assistent not found');
+        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), 'name not found');        
     }
 
     /**
