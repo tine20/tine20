@@ -846,53 +846,51 @@ class Tinebase_Container
         
         $db = Zend_Registry::get('dbAdapter');
         
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
-
         $select = $db->select()
-            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grant'))
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
-            
+
             ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
-            ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->order(SQL_TABLE_PREFIX . 'container.name');
-            
+            ->group(SQL_TABLE_PREFIX . 'container_acl.account_grant');
+
         error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
 
-        $row = $stmt->fetchRow(Zend_Db::FETCH_ASSOC);
-        
-        return $row;
-        
-                $containerGrant = new Tinebase_Model_Grants( array(
-                    'accountId'     => $row['account_id'],
-                    'accountType'   => $row['account_type'],
-                    'accountName'   => $displayName
-                ));
-                $resultArray[$row['account_type'] . $row['account_id']] = $containerGrant;
+        $rows = $stmt->fetchRows(Zend_Db::FETCH_ASSOC);
 
+        $result = array(
+            'readGrant'     => FALSE, 
+            'addGrant'      => FALSE, 
+            'editGrant'     => FALSE, 
+            'deleteGrant'   => FALSE, 
+            'adminGrant'    => FALSE
+        ); 
+        
+        foreach($rows as $row) {
             switch($row['account_grant']) {
                 case self::GRANT_READ:
-                    $containerGrant->readGrant = TRUE; 
+                    $result['readGrant'] = TRUE; 
                     break;
                 case self::GRANT_ADD:
-                    $containerGrant->addGrant = TRUE; 
+                    $result['addGrant'] = TRUE; 
                     break;
                 case self::GRANT_EDIT:
-                    $containerGrant->editGrant = TRUE; 
+                    $result['editGrant'] = TRUE; 
                     break;
                 case self::GRANT_DELETE:
-                    $containerGrant->deleteGrant = TRUE; 
+                    $result['deleteGrant'] = TRUE; 
                     break;
                 case self::GRANT_ADMIN:
-                    $containerGrant->adminGrant = TRUE; 
+                    $result['adminGrant'] = TRUE; 
                     break;
             }
+        }
         
         return $result;
         
