@@ -3,7 +3,6 @@
  * crm pdf generation class
  *
  * @package     Crm
- * @subpackage	PDF
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,8 +14,7 @@
  * crm pdf export class
  * 
  * @package     Crm
- * @subpackage	PDF
- */
+  */
 class Crm_Pdf extends Tinebase_Export_Pdf
 {
 	
@@ -33,7 +31,6 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));		
         
-        //@todo	add more fields and translations
 		$leadFields = array (
 				$translate->_('Lead Data') => 'separator',
 				'turnover' => $translate->_('Turnover'),
@@ -42,7 +39,8 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 				'end' => $translate->_('End'),
 				'end_scheduled' => $translate->_('End Scheduled'),
                 'container' => $translate->_('Container'),
-        /*        $translate->_('Lead IDs') => 'separator',
+        
+/*        $translate->_('Lead IDs') => 'separator',
 				'leadstate_id' => $translate->_('Leadstate ID'),
                 'leadtype_id' => $translate->_('Leadtype ID'),
                 'leadsource_id' => $translate->_('Leadsource ID'),*/
@@ -65,10 +63,8 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         }     
         
         // get linked contacts and add them to record array
-        //@todo add to tests
         $links = Tinebase_Links::getInstance()->getLinks('crm', $_lead->id, 'addressbook');
                 
-        
         $linkedObjects = array ();
         if ( !empty($links)) {
 	        $linkedObjects[] = array ($translate->_('Linked Contacts'), 'headline');
@@ -81,7 +77,10 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 	            $linkedObjects[] = array ($translate->_('Email'), $contact->email);
 	        }
         }
-        			
+        
+        //@todo add activities / products to export
+        
+        // generate pdf now!			
 		return $this->generatePdf($record, "Lead: ".$_lead->lead_name, "", $_lead->description, $leadFields, NULL, $linkedObjects );
 		
 	}
