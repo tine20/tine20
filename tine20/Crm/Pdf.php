@@ -75,6 +75,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                 $linkedObjects[] = array ($translate->_('Address'), $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality );
                 $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);
 	            $linkedObjects[] = array ($translate->_('Email'), $contact->email);
+                $linkedObjects[] = array ($translate->_('Type'), $contactLink['remark']);
 	        }
         }
         
