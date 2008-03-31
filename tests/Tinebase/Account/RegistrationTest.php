@@ -67,8 +67,8 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
         ); 
 
         $this->userDataMail =  array(
-        	//'accountEmailAddress' => 'p.schuele@metaways.de',
-        	'accountEmailAddress' => 'test@example.org',
+        	'accountEmailAddress' => 'p.schuele@metaways.de',
+        	//'accountEmailAddress' => 'test@example.org',
         	'accountFirstName' => 'Philippo',
             'accountLastName' => 'Testet',
             'accountLoginName' => 'ptestet',
