@@ -858,11 +858,11 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
             ->group(SQL_TABLE_PREFIX . 'container_acl.account_grant');
 
-        error_log("getContainer:: " . $select->__toString());
+        //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
 
-        $rows = $stmt->fetchRows(Zend_Db::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         $result = array(
             'readGrant'     => FALSE, 
@@ -893,71 +893,6 @@ class Tinebase_Container
         }
         
         return $result;
-        
-        
-        
-        
-        
-        
-        
-        
-        $db = Zend_Registry::get('dbAdapter');
-
-        $select = $db->select()
-            ->from(SQL_TABLE_PREFIX . 'container_acl')
-            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
-            ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId);
-                    
-        //error_log("getAllGrants:: " . $select->__toString());
-
-        $stmt = $db->query($select);
-        
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $resultArray = array();
-
-        foreach($rows as $row) {
-            if (! isset($resultArray[$row['account_type'] . $row['account_id']])) {
-                if($row['account_type'] === 'anyone') {
-                    $displayName = 'Anyone';
-                } elseif($row['account_type'] === 'account') {
-                    $account = Tinebase_Account::getInstance()->getAccountById($row['account_id']);
-                    $displayName = $account->accountDisplayName;
-                } else {
-                    $group = Tinebase_Group::getInstance()->getGroupById($row['account_id']);
-                    $displayName = $group->name;
-                }
-
-                $containerGrant = new Tinebase_Model_Grants( array(
-                    'accountId'     => $row['account_id'],
-                    'accountType'   => $row['account_type'],
-                    'accountName'   => $displayName
-                ));
-                $resultArray[$row['account_type'] . $row['account_id']] = $containerGrant;
-            } else {
-                $containerGrant = $resultArray[$row['account_type'] . $row['account_id']];
-            }
-
-            switch($row['account_grant']) {
-                case self::GRANT_READ:
-                    $containerGrant->readGrant = TRUE; 
-                    break;
-                case self::GRANT_ADD:
-                    $containerGrant->addGrant = TRUE; 
-                    break;
-                case self::GRANT_EDIT:
-                    $containerGrant->editGrant = TRUE; 
-                    break;
-                case self::GRANT_DELETE:
-                    $containerGrant->deleteGrant = TRUE; 
-                    break;
-                case self::GRANT_ADMIN:
-                    $containerGrant->adminGrant = TRUE; 
-                    break;
-            }
-        }
-        
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $resultArray);
     }
     
     /**
