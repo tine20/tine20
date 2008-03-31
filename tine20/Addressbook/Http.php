@@ -49,6 +49,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 
 		    $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->owner);
 			$encodedContact['owner'] = $addressbook->toArray();
+			$encodedContact['grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $contact->owner);
 
 			if(!empty($contact->adr_one_countryname)) {
 			    $encodedContact['adr_one_countrydisplayname'] = $locale->getCountryTranslation($contact->adr_one_countryname);
@@ -60,7 +61,10 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		} else {
 		    $personalAddressbooks = Addressbook_Controller::getInstance()->getPersonalContainer($currentAccount, $currentAccount->accountId, Tinebase_Container::GRANT_READ);
 		    foreach($personalAddressbooks as $addressbook) {
-    		    $encodedContact = Zend_Json::encode(array('owner' => $addressbook->toArray()));
+    		    $encodedContact = Zend_Json::encode(array(
+    		      'owner'     => $addressbook->toArray(),
+    		      'grants'    => Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $addressbook)
+    		    ));
                 break;
 		    }
 		}

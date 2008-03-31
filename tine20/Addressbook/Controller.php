@@ -367,6 +367,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer->account_grants = Tinebase_Container::GRANT_ANY;
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         

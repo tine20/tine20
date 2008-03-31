@@ -438,7 +438,7 @@ Tine.Addressbook.ContactEditDialog = {
 
 	    deleteContact: function(_button, _event) 
 	    {
-	        var contactIds = Ext.util.JSON.encode([formData.values.id]);
+	        var contactIds = Ext.util.JSON.encode([Tine.Addressbook.ContactEditDialog.contactRecord.data.id]);
 	            
 	        Ext.Ajax.request({
 	            url: 'index.php',
@@ -449,7 +449,7 @@ Tine.Addressbook.ContactEditDialog = {
 	            text: 'Deleting contact...',
 	            success: function(_result, _request) {
                     if(window.opener.Tine.Addressbook) {
-	                   window.opener.Tine.Addressbook.reload();
+                        window.opener.Tine.Addressbook.Main.reload();
                     }
                     window.close();
 	            },
@@ -789,12 +789,12 @@ Tine.Addressbook.ContactEditDialog = {
 
     updateToolbarButtons: function(_rights)
     {        
-        if(_rights & 4) {
+        if(_rights.editGrant === true) {
             Ext.getCmp('contactDialog').action_saveAndClose.enable();
             Ext.getCmp('contactDialog').action_applyChanges.enable();
         }
 
-        if(_rights & 8) {
+        if(_rights.deleteGrant === true) {
             Ext.getCmp('contactDialog').action_delete.enable();
         }
         
@@ -835,7 +835,7 @@ Tine.Addressbook.ContactEditDialog = {
         });
 
         this.updateContactRecord(_contactData);
-        this.updateToolbarButtons(_contactData.owner.account_grants);
+        this.updateToolbarButtons(_contactData.grants);
         
         dialog.getForm().loadRecord(this.contactRecord);
         
