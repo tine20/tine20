@@ -76,8 +76,69 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'probability'   => 70,
             'end_scheduled' => Zend_Date::now(),
         )); 
+
+        $this->objects['leadWithContact'] = new Crm_Model_Lead(array(
+            'id'            => 22,
+            'lead_name'     => 'PHPUnit with contact',
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'container'     => $this->testContainer->id,
+            'start'         => new Zend_Date( "2007-12-24" ),
+            'description'   => 'Lead Description',
+            'end'           => Zend_Date::now(),
+            'turnover'      => '200000',
+            'probability'   => 50,
+            'end_scheduled' => Zend_Date::now(),
+        )); 
         
-            	
+       $this->objects['linkedContact'] = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'email'                 => 'unittests@tine20.org',
+            'email_home'            => 'unittests@tine20.org',
+            'id'                    => 20,
+            'note'                  => 'Bla Bla Bla',
+            'owner'                 => $this->testContainer->id,
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Kneschke',
+            'n_fileas'              => 'Kneschke, Lars',
+            'n_given'               => 'Lars',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+        ));             	
+
+
+        $lead = Crm_Controller::getInstance()->addLead($this->objects['leadWithContact']);
+        $contact = Addressbook_Controller::getInstance()->addContact($this->objects['linkedContact']);
+        
         return;
         
     }
@@ -90,7 +151,10 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+        // delete the db entries
+        Crm_Controller::getInstance()->deleteLead($this->objects['leadWithContact']);
+        Addressbook_Controller::getInstance()->deleteContact($this->objects['linkedContact']);
+    	
     }
     
     /**
@@ -99,13 +163,32 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadPdf()
     {
+    	
 		$pdf = new Crm_Pdf();
-		$pdfOutput = $pdf->leadPdf($this->objects['lead']);
+		$pdfOutput = $pdf->getLeadPdf($this->objects['lead']);
 		
 		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput)); 
 		$this->assertEquals(1, preg_match("/Lead Description/", $pdfOutput)); 
 		$this->assertEquals(1, preg_match("/PHPUnit/", $pdfOutput));
 				
+    }
+
+    /**
+     * try to create a pdf with a linked contact
+     *
+     */
+    public function testLeadPdfLinkedContact()
+    {
+    	// create lead + contact + link
+        Tinebase_Links::getInstance()->addLink('crm', $this->objects['leadWithContact']->id, 'addressbook', $this->objects['linkedContact']->id, "customer");
+        
+    	$pdf = new Crm_Pdf();
+        $pdfOutput = $pdf->getLeadPdf($this->objects['leadWithContact']);
+                
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated"); 
+        $this->assertEquals(1, preg_match("/Linked Contacts/", $pdfOutput), "no contacts linked"); 
+        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact fullname found");
+                
     }
     
 }		
