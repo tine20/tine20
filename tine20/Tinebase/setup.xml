@@ -1010,6 +1010,10 @@
                     <name>old_value</name>
                     <type>clob</type>
                 </field>
+                <field>
+                    <name>new_value</name>
+                    <type>clob</type>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
