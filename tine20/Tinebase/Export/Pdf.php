@@ -188,6 +188,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$yPos = $_posY;
 		$pageNumber = $_pageNumber; 
 		
+		
         // print headline (no longer used?)
 		/*if ( !empty($_headline) ) { 
             // Set headline font
@@ -209,6 +210,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		
 		// content
         $this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->contentFontSize); 
+        $this->pages[$pageNumber]->setLineColor( new Zend_Pdf_Color_GrayScale(0.7) );
         
 		foreach ( $_content as $row ) {
 						
@@ -221,6 +223,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 				$yPos = $_posY;
 				$pageNumber++;			
 				$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->contentFontSize);
+                $this->pages[$pageNumber]->setLineColor( new Zend_Pdf_Color_GrayScale(0.7) );
 			}
 			
 			$xPos = $_posX;
