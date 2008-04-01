@@ -111,12 +111,18 @@ class Tinebase_Timemachine_ModificationLog
         $select = $db->select()
             ->from($this->_tablename)
             ->order('modification_time ASC')
-            ->where('application = ' . $application->id)
+            ->where('application_id = ' . $application->id)
             ->where($db->quoteInto('record_id = ?', $_id))
             ->where($db->quoteInto('modification_time > ?', $_from->toString($isoDef)))
             ->where($db->quoteInto('modification_time <= ?', $_until->toString($isoDef)));
             
-       if (is_int($_modifierId)) {
+       if ($_type) {
+           $select->where($db->quoteInto('record_type LIKE ?', $_type));
+       }
+       if ($_backend) {
+           $select->where($db->quoteInto('record_backend LIKE ?', $_backend));
+       }
+       if ($_modifierId) {
            $select->where($db->quoteInto('modification_account = ?', $_modifierId));
        }
        
