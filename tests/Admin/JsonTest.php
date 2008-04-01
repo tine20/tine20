@@ -57,107 +57,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+    	$this->objects['initialGroup'] = array (   'name' => 'test group',
+    	                                           'description' => 'some description' );
     	
-    	/*
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Container::GRANT_EDIT
-        );
-        
-        if($personalContainer->count() === 0) {
-            $this->container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Addressbook', 'PHPUNIT');
-        } else {
-            $this->container = $personalContainer[0];
-        }
-        
-        $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
-            'note'                  => 'Bla Bla Bla',
-            'owner'                 => $this->container->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        )); 
-        
-        $this->objects['updatedContact'] = new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'id'                    => 20,
-            'note'                  => 'Bla Bla Bla',
-            'owner'                 => $this->container->id,
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        )); 
-          */  	
         return;
         
     }
@@ -186,6 +88,47 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $groups['totalcount']);
     }    
 
+    /**
+     * try to save group data
+     *
+     */
+    public function testSaveGroup()
+    {
+        $json = new Admin_Json();
+        
+        $encodedData = Zend_Json::encode( $this->objects['initialGroup'] );
+        
+        $json->saveGroup( $encodedData );
+        
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+        
+        $this->assertEquals($this->objects['initialGroup']['name'], $group->name);
+    }    
+
+    /**
+     * try to delete group
+     *
+     */
+    public function testDeleteGroup()
+    {
+    	$json = new Admin_Json();
+    	
+    	// get group by name
+    	$group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+    	
+    	// delete group with json.php function
+    	$groupId = Zend_Json::encode( array($group->getId()) );
+    	$result = $json->deleteGroups( $groupId );
+    	
+    	$this->assertTrue( $result['success'] );
+    	
+    	// try to get deleted group
+    	$this->setExpectedException('Tinebase_Record_Exception_NotDefined');
+    	
+        // get group by name
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);    	
+    }    
+    
 }		
 	
 
