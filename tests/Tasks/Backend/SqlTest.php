@@ -152,20 +152,23 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testConcurrency()
     {
+        sleep(1);
         $task = clone $this->_persistantTestTask1;
         $task->summary = 'First Update of test task 1';
         $utask = $this->_backend->updateTask($task);
         
+        sleep(1);
         $utask->summary = 'Second Update of test task 1';
-        //$this->_backend->updateTask($utask);
+        $this->_backend->updateTask($utask);
         
+        sleep(1);
         $conflictTask = clone $utask;
         $conflictTask->summary = 'Non resolvable conflict';
         try {
-        	//$this->_backend->updateTask($conflictTask);
+            $this->_backend->updateTask($conflictTask);
         	$this->fail('Not detected concurrency conflict');
         } catch (Exception $e) {
-        	$this->assertType('Exception', $e);
+        	$this->assertType('Tinebase_Timemachine_Exception_ConcurrencyConflict', $e);
         }
         
         
