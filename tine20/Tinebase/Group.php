@@ -160,12 +160,33 @@ class Tinebase_Group
      *
      * @param int $_groupId
      * @return unknown
+     * 
+     * @deprecated
+     * @todo    remove
      */
     public function deleteGroup($_groupId)
     {
         $result = $this->_backend->deleteGroup($_groupId);
         
         return $result;
+    }
+    
+    /**
+     * remove groups
+     *
+     * @param mixed $_groupId
+     * 
+     */
+    public function deleteGroups($_groupId)
+    {
+        if(is_array($_groupId) or $_groupId instanceof Tinebase_Record_RecordSet) {
+            foreach($_groupId as $groupId) {
+                $this->deleteGroups($groupId);
+            }
+        } else {
+            $this->_backend->deleteGroup($_groupId);
+        }
+    	
     }
     
     /**
