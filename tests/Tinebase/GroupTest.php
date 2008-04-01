@@ -259,7 +259,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_Group::getInstance()->convertGroupIdToInt (0);
+        Tinebase_Group_Model_Group::convertGroupIdToInt (0);
   
     }
 
@@ -271,7 +271,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_Group::getInstance()->convertGroupIdToInt ( $this->objects['noIdGroup'] );
+        Tinebase_Group_Model_Group::convertGroupIdToInt ( $this->objects['noIdGroup'] );
   
     }
 }
