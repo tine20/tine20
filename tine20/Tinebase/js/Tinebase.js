@@ -45,6 +45,18 @@ Tine.Tinebase.initFramework = function() {
         
 		
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
+            // detect resoponse errors (e.g. html from xdebug)
+            if (response.responseText.charAt(0) == '<') {
+                var win = new Ext.Window({
+                    width: 600,
+                    height: 600,
+                    autoScroll: true,
+                    title: 'There where Errors',
+                    html: response.responseText
+                })
+                win.show();
+                return false;
+            }
             var responseData = Ext.util.JSON.decode(response.responseText);
 			if(responseData.status && responseData.status.code != 200) {
 					//console.log(arguments);
