@@ -59,6 +59,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
+    	$now = Zend_Date::now();
     	$this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
     	$this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
     	
@@ -68,7 +69,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => Zend_Date::now()->addDay(-2),
+            'modification_time'    => $this->Cloner($now)->addDay(-2),
             'modification_account' => 7,
             'modified_attribute'   => 'FirstTestAttribute',
             'old_value'            => 'Hamburg',
@@ -79,7 +80,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => Zend_Date::now()->addDay(-1),
+            'modification_time'    => $this->Cloner($now)->addDay(-1),
             'modification_account' => 7,
             'modified_attribute'   => 'FirstTestAttribute',
             'old_value'            => 'Bremen',
@@ -90,7 +91,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => Zend_Date::now(),
+            'modification_time'    => $this->Cloner($now),
             'modification_account' => 7,
             'modified_attribute'   => 'FirstTestAttribute',
             'old_value'            => 'Frankfurt',
@@ -101,7 +102,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => Zend_Date::now()->addDay(-2),
+            'modification_time'    => $this->Cloner($now)->addDay(-2),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => 'Deutschland',
@@ -112,7 +113,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => Zend_Date::now()->addDay(-1)->addSecond(1),
+            'modification_time'    => $this->Cloner($now)->addDay(-1)->addSecond(1),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => '…stereich',
@@ -123,7 +124,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => Zend_Date::now(),
+            'modification_time'    => $this->Cloner($now),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => 'Schweitz',
@@ -197,11 +198,62 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     
     public function testGetModifications()
     {
-        $record_id = '5dea69be9c72ea3d263613277c3b02d529fbd8bc';
-        $type = 'TestType';
-        $backend = 'TestBackend';
+    	$testBase = array(
+            'record_id' => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'type'      => 'TestType',
+            'backend'   => 'TestBackend'
+        );
+        $firstModificationTime = $this->_persistantLogEntries[0]->modification_time;
+        $lastModificationTime  = $this->_persistantLogEntries[count($this->_persistantLogEntries)-1]->modification_time;
         
-        //$diffs = $this->_modLogClass->getModifications('Tinebase', $record_id, $type, $backend,  )
+        $toTest[] = $testBase + array(
+            'from_add'  => 'addDay,-3',
+            'until_add' => 'addDay,1',
+            'nums'      => 6
+        );
+        $toTest[] = $testBase + array(
+            'nums'  => 4
+        );
+        $toTest[] = $testBase + array(
+            'account' => 999,
+            'nums'    => 0
+        );
+        
+        foreach ($toTest as $params) {
+            $from = clone $firstModificationTime;
+            $until = clone $lastModificationTime;
+            
+            if (isset($params['from_add'])) {
+	       	   list($fn,$p) = explode(',', $params['from_add']);
+	           $from->$fn($p);
+            }
+            if (isset($params['until_add'])) {
+                list($fn,$p) = explode(',', $params['until_add']);
+                $until->$fn($p);
+            }
+            
+            $account = isset($params['account']) ? $params['account'] : NULL;
+            $diffs = $this->_modLogClass->getModifications('Tinebase', $params['record_id'], $params['type'], $params['backend'], $from, $until, $account);
+            $count = 0;
+            foreach ($diffs as $diff) {
+                if ($diff->record_id == $params['record_id']) {
+                   $count++;
+                }
+            }
+            $this->assertEquals($params['nums'], $count);
+        }
+    }
+    
+    /**
+     * Workaround as the php clone operator does not return cloned 
+     * objects right hand sided
+     *
+     * @param object $_object
+     * @return object
+     */
+    protected function Cloner($_object)
+    {
+        return clone $_object;
     }
 }
 
