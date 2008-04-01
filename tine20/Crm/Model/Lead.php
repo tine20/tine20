@@ -99,4 +99,28 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         $_contact = $_contactData[$_key];
         $this->_properties['contacts'] = $_contact;
     }
+    
+    /**
+     * converts a int, string or Crm_Model_Lead to a lead id
+     *
+     * @param int|string|Crm_Model_Lead $_accountId the lead id to convert
+     * @return int
+     */
+    static public function convertLeadIdToInt($_leadId)
+    {
+        if($_leadId instanceof Crm_Model_Lead) {
+            if(empty($_leadId->id)) {
+                throw new Exception('no lead id set');
+            }
+            $id = (int) $_leadId->id;
+        } else {
+            $id = (int) $_leadId;
+        }
+        
+        if($id === 0) {
+            throw new Exception('lead id can not be 0');
+        }
+        
+        return $id;
+    }
 }

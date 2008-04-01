@@ -321,11 +321,6 @@ class Crm_Controller extends Tinebase_Container_Abstract
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
-        if(count($readableContainer) === 0) {
-            $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
-            $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
-        }
-                
         $containerIds = array();
         foreach($readableContainer as $container) {
             $containerIds[] = $container->id;
@@ -368,7 +363,15 @@ class Crm_Controller extends Tinebase_Container_Abstract
      */
     public function createPersonalFolder(Tinebase_Account_Model_Account $_account)
     {
-        $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer($_account->accountId, 'crm', 'Personal Leads');
+        $newContainer = new Tinebase_Model_Container(array(
+            'name'              => 'Personal Leads',
+            'type'              => Tinebase_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId() 
+        ));
+        
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer->account_grants = Tinebase_Container::GRANT_ANY;
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
@@ -465,11 +468,6 @@ class Crm_Controller extends Tinebase_Container_Abstract
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
-        if(count($readableContainer) === 0) {
-            $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
-            $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
-        }
-                
         $containerIds = array();
         foreach($readableContainer as $container) {
             $containerIds[] = $container->id;
@@ -645,29 +643,5 @@ class Crm_Controller extends Tinebase_Container_Abstract
         // send notifications to all accounts in the first step
         $accounts = Tinebase_Account::getInstance()->getFullAccounts();
         Tinebase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
-    }
-    
-    /**
-     * converts a int, string or Crm_Model_Lead to a lead id
-     *
-     * @param int|string|Crm_Model_Lead $_accountId the lead id to convert
-     * @return int
-     */
-    static public function convertLeadIdToInt($_leadId)
-    {
-        if($_leadId instanceof Crm_Model_Lead) {
-            if(empty($_leadId->id)) {
-                throw new Exception('no lead id set');
-            }
-            $id = (int) $_leadId->id;
-        } else {
-            $id = (int) $_leadId;
-        }
-        
-        if($id === 0) {
-            throw new Exception('lead id can not be 0');
-        }
-        
-        return $id;
     }
 }

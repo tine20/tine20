@@ -712,7 +712,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getLead($_id)
     {
-        $id = Crm_Controller::convertLeadIdToInt($_id);
+        $id = Crm_Model_Lead::convertLeadIdToInt($_id);
 
         $select = $this->_getLeadSelectObject()
             ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
@@ -795,7 +795,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function deleteLead($_leadId)
     {
-        $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
 
         $db = Zend_Registry::get('dbAdapter');
         
@@ -839,7 +839,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             throw new Exception('lead object is not valid');
         }
         
-        $leadId = Crm_Controller::convertLeadIdToInt($_lead);        
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_lead);        
 
         $leadData = $_lead->toArray();
         unset($leadData['id']);
@@ -927,7 +927,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      */
     public function getProductsByLeadId($_leadId)
     {
-        $leadId = Crm_Controller::convertLeadIdToInt($_leadId);
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
 
         $where  = array(
             $this->productsTable->getAdapter()->quoteInto('lead_id = ?', $leadId)
