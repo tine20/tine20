@@ -147,7 +147,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     public function addGroupMember($_groupId, $_accountId)
     {
         $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
 
         $data = array(
             'group_id'      => $groupId,
@@ -171,7 +171,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     public function removeGroupMember($_groupId, $_accountId)
     {
         $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
     	
         $where = array(
             $this->groupMembersTable->getAdapter()->quoteInto('group_id = ?', $groupId),
