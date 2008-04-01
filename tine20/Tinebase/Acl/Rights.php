@@ -89,7 +89,7 @@ class Tinebase_Acl_Rights
      */
     public function getApplications($_accountId)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         

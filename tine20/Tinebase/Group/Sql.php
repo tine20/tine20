@@ -77,7 +77,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMemberships($_accountId)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $memberships = array();
         
