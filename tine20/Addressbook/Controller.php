@@ -73,11 +73,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
         
-        if(count($readableContainer) === 0) {
-            $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
-            $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
-        }
-                
         $containerIds = array();
         foreach($readableContainer as $container) {
             $containerIds[] = $container->id;
@@ -98,11 +93,6 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
         
-        if(count($readableContainer) === 0) {
-            $this->createPersonalFolder(Zend_Registry::get('currentAccount'));
-            $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
-        }
-                
         $containerIds = array();
         foreach($readableContainer as $container) {
             $containerIds[] = $container->id;
@@ -126,11 +116,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function getContactsByOwner($_owner, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL) 
     {
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
-        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $owner, Tinebase_Container::GRANT_READ);
+        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('addressbook', $_owner, Tinebase_Container::GRANT_READ);
         
         if(count($readableContainer) === 0) {
             return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
