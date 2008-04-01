@@ -160,7 +160,6 @@ class Tinebase_Container
             }
         }
         
-        
         $data = array(
             'name'              => $_container->name,
             'type'              => $_container->type,
@@ -248,10 +247,10 @@ class Tinebase_Container
         
         switch($_accountType) {
             case 'account':
-                $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+                $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
                 break;
             case 'group':
-                $accountId = Tinebase_Group::convertGroupIdToInt($_accountId);
+                $accountId = Tinebase_Group_Model_Group::convertGroupIdToInt($_accountId);
                 break;
             case 'anyone':
                 $accountId = NULL;
@@ -296,7 +295,7 @@ class Tinebase_Container
      */
     public function getContainerByACL($_accountId, $_application, $_right)
     {
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         
         $right = (int)$_right;
         if($right != $_right) {
@@ -330,10 +329,24 @@ class Tinebase_Container
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        if(empty($rows)) {
+            // no containers found. maybe something went wrong when creating the initial folder
+            // any account should have at least one personal folder
+            // let's check if the controller of the application has a function to create the needed folders
+            $application = Tinebase_Controller::getApplicationInstance($application);
+            
+            if($application instanceof Tinebase_Container_Abstract) {
+                return $application->createPersonalFolder($accountId);
+            }
+        }
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
         
         return $result;
+        
     }
     
     /**
@@ -399,7 +412,7 @@ class Tinebase_Container
      */
     public function getInternalContainer($_accountId, $_application)
     {
-        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $application        = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
@@ -448,9 +461,9 @@ class Tinebase_Container
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
     {
-        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        $ownerId            = Tinebase_Account::convertAccountIdToInt($_owner);
+        $ownerId            = Tinebase_Account_Model_Account::convertAccountIdToIntv($_owner);
 
         if(count($groupMemberships) === 0) {
             throw new Exception('account must be in at least one group');
@@ -513,7 +526,7 @@ class Tinebase_Container
      */
     public function getSharedContainer($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -557,7 +570,7 @@ class Tinebase_Container
      */
     public function getOtherUsers($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -610,7 +623,7 @@ class Tinebase_Container
      */
     public function getOtherUsersContainer($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -721,7 +734,7 @@ class Tinebase_Container
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
 
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
@@ -842,7 +855,7 @@ class Tinebase_Container
      */
     public function getGrantsOfAccount($_accountId, $_containerId, $_ignoreAcl = FALSE) 
     {
-        $accountId          = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         

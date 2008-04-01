@@ -247,4 +247,28 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
         
         return $result;
     }
+    
+    /**
+     * converts a int, string or Tinebase_Account_Model_Account to an accountid
+     *
+     * @param int|string|Tinebase_Account_Model_Account $_accountId the accountid to convert
+     * @return int
+     */
+    static public function convertAccountIdToInt($_accountId)
+    {
+        if($_accountId instanceof Tinebase_Account_Model_Account) {
+            if(empty($_accountId->accountId)) {
+                throw new Exception('no accountId set');
+            }
+            $accountId = (int) $_accountId->accountId;
+        } else {
+            $accountId = (int) $_accountId;
+        }
+        
+        if($accountId === 0) {
+            throw new Exception('accountId can not be 0');
+        }
+        
+        return $accountId;
+    }
 }

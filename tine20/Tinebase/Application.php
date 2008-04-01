@@ -199,28 +199,4 @@ class Tinebase_Application
         
         return $_application;
     }
-    
-    /**
-     * converts a int, string or Tinebase_Model_Application to an accountid
-     *
-     * @param int|string|Tinebase_Model_Application $_accountId the accountid to convert
-     * @return int
-     */
-    static public function convertApplicationIdToInt($_applicationId)
-    {
-        if($_applicationId instanceof Tinebase_Model_Application) {
-            if(empty($_applicationId->id)) {
-                throw new Exception('no application id set');
-            }
-            $applicationId = (int) $_applicationId->id;
-        } else {
-            $applicationId = (int) $_applicationId;
-        }
-        
-        if($applicationId === 0) {
-            throw new Exception('applicaiton id can not be 0');
-        }
-        
-        return $applicationId;
-    }    
 }

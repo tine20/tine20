@@ -66,6 +66,7 @@ Tine.Tinebase.container = {
 	models: {
 		containerGrant: Ext.data.Record.create([
             {name: 'accountId'},
+            {name: 'accountType'},
             {name: 'accountName'}, // nasty namespace! need to be fixed when all apps use the grants widgets
             {name: 'readGrant',   type: 'boolean'},
             {name: 'addGrant',    type: 'boolean'},

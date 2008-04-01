@@ -77,7 +77,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMemberships($_accountId)
     {
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         
         $memberships = array();
         
@@ -101,7 +101,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupMembers($_groupId)
     {
-        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
         
         $members = array();
         
@@ -146,8 +146,8 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function addGroupMember($_groupId, $_accountId)
     {
-        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
 
         $data = array(
             'group_id'      => $groupId,
@@ -170,8 +170,8 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
-        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
     	
         $where = array(
             $this->groupMembersTable->getAdapter()->quoteInto('group_id = ?', $groupId),
@@ -216,7 +216,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function updateGroup(Tinebase_Group_Model_Group $_group)
     {
-        $groupId = Tinebase_Group::convertGroupIdToInt($_group);
+        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_group);
         
         $data = array(
             'name'          => $_group->name,
@@ -237,7 +237,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function deleteGroup($_groupId)
     {
-        $groupId = Tinebase_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
 
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
@@ -318,7 +318,7 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
      */
     public function getGroupById($_groupId)
     {   
-        $groupdId = Tinebase_Group::convertGroupIdToInt($_groupId);     
+        $groupdId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);     
         
         $select = $this->groupsTable->select();
         

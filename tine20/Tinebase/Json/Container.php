@@ -30,17 +30,15 @@ class Tinebase_Json_Container
      */
     public function getContainer($application, $containerType, $owner)
     {       
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($application)->getId();
-        
         switch($containerType) {
             case Tinebase_Container::TYPE_PERSONAL:
-                $container = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $applicationId, $owner, Tinebase_Container::GRANT_READ);
+                $container = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $application, $owner, Tinebase_Container::GRANT_READ);
                 break;
             case Tinebase_Container::TYPE_SHARED:
-                $container = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $applicationId, Tinebase_Container::GRANT_READ);
+                $container = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
                 break;
             case 'otherUsers':
-                $container = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $applicationId, Tinebase_Container::GRANT_READ);
+                $container = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
                 break;
             default:
                 throw new Exception('no such NodeType');

@@ -89,7 +89,7 @@ class Tinebase_Acl_Rights
      */
     public function getApplications($_accountId)
     {
-        $accountId = Tinebase_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
@@ -210,10 +210,10 @@ class Tinebase_Acl_Rights
         }
         
         $data['right'] = $_right->right;
-        $data['application_id'] = Tinebase_Application::convertApplicationIdToInt($_right->application_id);
+        $data['application_id'] = Tinebase_Model_Application::convertApplicationIdToInt($_right->application_id);
         switch($_right->account_type) {
             case 'group':
-                $data['group_id'] = Tinebase_Group::convertGroupIdToInt($_right->account_id);
+                $data['group_id'] = Tinebase_Group_Model_Group::convertGroupIdToInt($_right->account_id);
                 break;
                 
             default:
