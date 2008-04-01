@@ -179,17 +179,14 @@ class Tinebase_Timemachine_ModificationLog
      * Saves a logbook record
      * 
      * @param Tinebase_Timemachine_Model_ModificationLog _modification 
-     * @return void
+     * @return string id;
      */
     public function setModification( Tinebase_Timemachine_Model_ModificationLog $_modification ) {
         if ($_modification->isValid()) {
-        	
-        	$_modification->convertDates = true;
+        	$id = $_modification->generateUID();
+            $_modification->setId($id);
+            $_modification->convertDates = true;
             $modificationArray = $_modification->toArray();
-            
-            if ($modificationArray['application_id'] instanceof Tinebase_Model_Application) {
-            	$modificationArray['application_id'] = $modificationArray['application_id']->getId();
-            }
             
             $this->_table->insert($modificationArray);
         } else {
@@ -198,6 +195,7 @@ class Tinebase_Timemachine_ModificationLog
                 print_r($_modification->getValidationErrors(), true)
             );
         }
+        return $id;
     } // end of member function setModification
     
 } // end of Tinebase_Timemachine_ModificationLog
