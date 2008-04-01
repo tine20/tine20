@@ -313,7 +313,7 @@ class Tinebase_AccountTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_Account::getInstance()->convertAccountIdToInt ( $this->objects['noIdAccount'] );
+        Tinebase_Account_Model_Account::convertAccountIdToInt ( $this->objects['noIdAccount'] );
   
     }
 }		
