@@ -87,7 +87,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'url_home'              => 'http://www.tine20.com',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
+            'n_given'               => 'Laars',
             'n_middle'              => 'no middle name',
             'n_prefix'              => 'no prefix',
             'n_suffix'              => 'no suffix',

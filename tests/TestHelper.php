@@ -33,7 +33,7 @@ $path = array(
     get_include_path(),
 	PATH_TO_TEST_DIR,
 );
-	
+        
 set_include_path(implode(PATH_SEPARATOR, $path));
 
 /*
@@ -44,7 +44,7 @@ define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 /*
  * Set up basic tine 2.0 environment
  */
-$_SERVER['DOCUMENT_ROOT'] = '/Applications/xampp/htdocs';
+$_SERVER['DOCUMENT_ROOT'] = '/var/www';
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 $tinebaseController = Tinebase_Controller::getInstance();
