@@ -247,7 +247,7 @@ class Tinebase_Container
         
         switch($_accountType) {
             case 'account':
-                $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+                $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
                 break;
             case 'group':
                 $accountId = Tinebase_Group_Model_Group::convertGroupIdToInt($_accountId);
@@ -295,7 +295,7 @@ class Tinebase_Container
      */
     public function getContainerByACL($_accountId, $_application, $_right)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $right = (int)$_right;
         if($right != $_right) {
@@ -412,7 +412,7 @@ class Tinebase_Container
      */
     public function getInternalContainer($_accountId, $_application)
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $application        = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
@@ -461,9 +461,9 @@ class Tinebase_Container
      */
     public function getPersonalContainer($_accountId, $_application, $_owner, $_grant)
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        $ownerId            = Tinebase_Account_Model_Account::convertAccountIdToIntv($_owner);
+        $ownerId            = Tinebase_Account_Model_Account::convertAccountIdToInt($_owner);
 
         if(count($groupMemberships) === 0) {
             throw new Exception('account must be in at least one group');
@@ -526,7 +526,7 @@ class Tinebase_Container
      */
     public function getSharedContainer($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -570,7 +570,7 @@ class Tinebase_Container
      */
     public function getOtherUsers($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -623,7 +623,7 @@ class Tinebase_Container
      */
     public function getOtherUsersContainer($_accountId, $_application, $_grant)
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         if(count($groupMemberships) === 0) {
@@ -734,7 +734,7 @@ class Tinebase_Container
      */
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
 
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
@@ -855,7 +855,7 @@ class Tinebase_Container
      */
     public function getGrantsOfAccount($_accountId, $_containerId, $_ignoreAcl = FALSE) 
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
