@@ -54,4 +54,17 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
+    
+    /**
+     * overwrite getJsFilesToInclude from abstract class to add groups js file
+     *
+      * @return array with js filenames
+     */
+    public function getJsFilesToInclude() {
+        $jsFiles = parent::getJsFilesToInclude();
+        
+        $jsFiles[] = self::_appendFileTime('Admin/js/Groups.js');
+        
+        return $jsFiles;
+    }
 }

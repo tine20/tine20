@@ -13,7 +13,7 @@ Tine.Admin = function() {
         leaf: null,
         expanded: true,
         dataPanelType: 'accounts'
-/*    },{
+    },{
         text: 'Groups',
         cls: 'treemain',
         allowDrag: false,
@@ -23,7 +23,7 @@ Tine.Admin = function() {
         children: [],
         leaf: null,
         expanded: true,
-        dataPanelType: 'groups' */
+        dataPanelType: 'groups' 
     },{
         "text":"Applications",
 		"cls":"treemain",

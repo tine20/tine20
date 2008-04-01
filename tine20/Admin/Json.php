@@ -21,6 +21,16 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 {
     protected $_appname = 'Admin';
     
+    /**
+     * get list of accounts
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
+     */
     public function getAccounts($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
@@ -48,6 +58,31 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
+    /**
+     * get list of groups
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
+     */
+   public function getGroups($filter, $sort, $dir, $start, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $groups = Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
+
+        $result['results'] = $groups->toArray();
+        $result['totalcount'] = count($groups);
+        
+        return $result;
+    }
+        
     public function deleteAccessLogEntries($logIds)
     {
         try {
@@ -76,6 +111,16 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $application->toArray();
     }
     
+    /**
+     * get list of applications
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
+     */
     public function getApplications($filter, $sort, $dir, $start, $limit)
     {
         if(empty($filter)) {
@@ -153,6 +198,16 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
+    /**
+     * get list of access log entries
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
+     */
     public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
     {
         /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
