@@ -152,7 +152,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $select = $this->_getAccountSelectObject()
             ->where(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId);
@@ -219,7 +219,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function setStatus($_accountId, $_status)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         switch($_status) {
             case 'enabled':
@@ -255,7 +255,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         if($_expiryDate instanceof Zend_Date) {
             $accountData['expires_at'] = $_expiryDate->getIso();
@@ -282,7 +282,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         if($_blockedUntilDate instanceof Zend_Date) {
             $accountData['blocked_until'] = $_blockedUntilDate->getIso();
@@ -309,7 +309,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
@@ -339,7 +339,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             throw(new Exception('invalid account object'));
         }
 
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_account);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_account);
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
@@ -465,7 +465,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
      */
     public function deleteAccount($_accountId)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToIntv($_accountId);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
