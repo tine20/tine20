@@ -257,13 +257,13 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                     $modified_attribute = $diff->modified_attribute;
                     if (!array_key_exists($modified_attribute, $dbMods)) {
                         // useres updated to same value, nothing to do.
-                    } elseif ($diff->modified_from == $_task->$modified_attribute) {
+                    } elseif ($diff->old_value == $_task->$modified_attribute) {
                         unset($dbMods[$modified_attribute]);
                         // merge diff into current contact, as it was not changed in current update request.
-                        $_task->$modified_attribute = $diff->modified_to;
+                        $_task->$modified_attribute = $diff->new_value;
                     } else {
                         // non resolvable conflict!
-                        throw new Exception('concurrency confilict!');
+                        throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
                     }
                 }
                 unset($dbMods['last_modified_time']);
@@ -283,8 +283,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
 
             // modification log
             $modLogEntry = new Tinebase_Timemachine_Model_ModificationLog(array(
-                'application'          => 'tasks',
-                'record_id'    => $_task->getId(),
+                'application_id'       => 'tasks',
+                'record_id'            => $_task->getId(),
                 'record_type'          => 'Tasks_Model_Task',
                 'record_backend'       => Tasks_Backend_Factory::SQL,
                 'modification_time'    => $taskParts['tasks']['last_modified_time'],
@@ -292,8 +292,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             ),true);
             foreach ($dbMods as $modified_attribute => $modified_to) {
                 $modLogEntry->modified_attribute = $modified_attribute;
-                $modLogEntry->modified_from      = $oldTask->$modified_attribute;
-                $modLogEntry->modified_to        = $modified_to;
+                $modLogEntry->old_value = $oldTask->$modified_attribute;
+                $modLogEntry->new_value = $modified_to;
                 $modLog->setModification($modLogEntry);
             }
             
