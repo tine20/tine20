@@ -38,6 +38,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
+        //@todo use controller
         $accounts = Tinebase_Account::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
@@ -75,6 +76,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
+        //@todo use controller
         $groups = Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
 
         $result['results'] = $groups->toArray();
@@ -82,12 +84,77 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
+    
+    /**
+     * save group data from edit form
+     *
+     * @param array json encoded group data
+     * @return array with group data
+     */
+    public function saveGroup($groupData)
+    {
+        $decodedGroupData = Zend_Json::decode($groupData);
         
+        // unset if empty
+        if(empty($decodedGroupData['id'])) {
+            unset($decodedGroupData['id']);
+        }
+        
+        $group = new Tinebase_Group_Model_Group();
+        
+        try {
+            $group->setFromArray($decodedGroupData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $group->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        
+        //@todo use controller
+        if(empty($group->getId)) {
+            $group = Tinebase_Group::getInstance()->addGroup($group);
+        } else {
+            $group = Tinebase_Group::getInstance()->updateGroup($group);
+        }
+         
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $group->toArray());
+        
+        return $result;
+        
+    }    
+        
+    /**
+     * delete multiple groups
+     *
+     * @param array $_groupIDs list of contactId's to delete
+     * @return array
+     */
+    public function deleteGroups($_groupIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $groupIds = Zend_Json::decode($_groupIds);
+        
+        //@todo use controller
+        Tinebase_Group::getInstance()->deleteGroups($groupIds);
+
+        return $result;
+    }
+
+    //@todo add phpdoc
     public function deleteAccessLogEntries($logIds)
     {
         try {
             $logIds = Zend_Json::decode($logIds);
 
+            //@todo use controller
             Tinebase_AccessLog::getInstance()->deleteEntries($logIds);
 
             $result = array(
@@ -102,6 +169,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
+    //@todo add phpdoc
     public function getApplication($applicationId)
     {
         $tineApplications = new Tinebase_Application();
@@ -132,6 +200,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
+        //@todo use controller
         $tineApplications = Tinebase_Application::getInstance();
         
         $applicationSet = $tineApplications->getApplications($filter, $sort, $dir, $start, $limit);
@@ -146,10 +215,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
+    //@todo add phpdoc
     public function setApplicationState($applicationIds, $state)
     {
         $applicationIds = Zend_Json::decode($applicationIds);
 
+        //@todo use controller
         Tinebase_Application::getInstance()->setApplicationState($applicationIds, $state);
 
         $result = array(
@@ -159,6 +230,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
 
+    //@todo add phpdoc
     public function setAccountState($accountIds, $status)
     {
         $accountIds = Zend_Json::decode($accountIds);
@@ -225,6 +297,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
         $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
         
+        //@todo use controller
         $accessLogSet = Tinebase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
         
         $result['results']    = $accessLogSet->toArray();
@@ -276,6 +349,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $treeNodes;
     }
     
+    //@todo add phpdoc
     public function saveAccount($accountData, $password, $password2)
     {
         $decodedAccountData = Zend_Json::decode($accountData);
@@ -301,6 +375,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
     }
     
+    //@todo add phpdoc
     public function deleteAccounts($accountIds)
     {
         $result = array(

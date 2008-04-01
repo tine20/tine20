@@ -96,7 +96,17 @@ class Admin_Controller
         
         return $result;
     }
-    
+
+    /**
+     * get list of access log entries
+     *
+     * @param string $_filter string to search accounts for
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_RecordSet_AccessLog set of matching access log entries
+     */
     public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_from = NULL, $_to = NULL)
     {
         $tineAccessLog = Tinebase_AccessLog::getInstance();
@@ -144,4 +154,19 @@ class Admin_Controller
     {
         return Tinebase_Account::getInstance()->deleteAccounts($_accountIds);
     }
+    
+    /**
+     * get list of groups
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
+     */
+   public function getGroups($filter, $sort, $dir, $start, $limit)
+   {
+   	    return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
+   }
 }

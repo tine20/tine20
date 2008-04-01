@@ -19,6 +19,12 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
 {
     protected $_appname = 'Admin';
     
+    /**
+     * display edit account dialog
+     *
+     * @param   integer     account id
+     * 
+     */
     public function editAccountDialog($accountId)
     {
         if(!empty($accountId)) {
@@ -54,11 +60,58 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
-    
+
+    /**
+     * display edit group dialog
+     *
+     * @param   integer     group id
+     * 
+     */
+    public function editGroup($groupId)
+    {
+        if(empty($groupId)) {
+        	$groupId = NULL;
+        }	
+        	
+        //@todo use controller
+        $group = Tinebase_Group::getInstance()->getGroupById($groupId);
+        //$group->setTimezone(Zend_Registry::get('userTimeZone'));
+        
+        $encodedGroup = Zend_Json::encode($group->toArray());
+                  
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();
+        $view->jsIncludeFiles = array();
+        $view->cssIncludeFiles = array();
+        
+        //$view->jsIncludeFiles[] = 'Admin/js/Admin.js';
+        $view->jsIncludeFiles[] = 'Admin/js/Groups.js';
+        $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
+        $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit group";
+
+        $view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+        
     /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
-      * @return array with js filenames
+     * @return array with js filenames
+     * 
+     * @todo   remove later and add Group.js to Admin.js
      */
     public function getJsFilesToInclude() {
         $jsFiles = parent::getJsFilesToInclude();
