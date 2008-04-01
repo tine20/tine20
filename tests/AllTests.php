@@ -30,7 +30,7 @@ class AllTests
         $suite->addTest(Tinebase_AllTests::suite());
         $suite->addTest(Crm_AllTests::suite());
         //  $suite->addTest(Asterisk_AllTests::suite());
-        //  $suite->addTest(Admin_AllTests::suite());
+        $suite->addTest(Admin_AllTests::suite());
         $suite->addTest(Addressbook_AllTests::suite());
         //  $suite->addTest(Calendar_AllTests::suite());
         //  $suite->addTestSuite('Tasks_ControllerTest');
