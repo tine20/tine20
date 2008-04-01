@@ -192,25 +192,24 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $_data[$this->_identifier] = NULL;
         }
         
-        if($this->bypassFilters === true) {
-            // set data without validation
-            foreach ($_data as $key => $value) {
-                if (array_key_exists ($key, $this->_validators)) {
-                    $this->_properties[$key] = $value;
-                }
+        // make shure we run through the setters
+        $bypassFilter = $this->bypassFilters;
+        $this->bypassFilters = true;
+        foreach ($_data as $key => $value) {
+            if (array_key_exists ($key, $this->_validators)) {
+                $this->$key = $value;
             }
-        } else {
+        }
+        $this->bypassFilters = $bypassFilter;
+        
+        if ($this->bypassFilters !== true) {
             // set data with validation
             $inputFilter = $this->_getFilter();
-            $inputFilter->setData($_data);
+            $inputFilter->setData($this->_properties);
             
             if ($inputFilter->isValid()) {
-                $data = $inputFilter->getUnescaped();
-                foreach($data as $key => $value) {
-                    $this->_properties[$key] = $value;
-                }
-                
-                // set internal state to "validated"
+                // set $this->_properties with the filtered values
+                $this->_properties = $inputFilter->getUnescaped();
                 $this->_isValidated = true;
             } else {
                 foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
@@ -296,10 +295,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if($this->_isValidated === false) {
                 $this->_validationErrors = array();
                 
-                foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
+                foreach($inputFilter->getMessages() as $fieldName => $errorMessage) {
+                    print_r($inputFilter->getMessages());
                     $this->_validationErrors[] = array(
                         'id'  => $fieldName,
-                        'msg' => $errorMessages[0]
+                        'msg' => $errorMessage
                     );
                 }
             }
