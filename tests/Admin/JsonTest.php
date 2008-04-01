@@ -59,6 +59,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
     	$this->objects['initialGroup'] = array (   'name' => 'test group',
     	                                           'description' => 'some description' );
+        $this->objects['updateGroup'] = array (   'name' => 'test group',
+                                                   'description' => 'some description updated' );
     	
         return;
         
@@ -92,7 +94,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      * try to save group data
      *
      */
-    public function testSaveGroup()
+    public function testAddGroup()
     {
         $json = new Admin_Json();
         
@@ -105,6 +107,27 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialGroup']['name'], $group->name);
     }    
 
+    /**
+     * try to update group data
+     *
+     */
+    public function testUpdateGroup()
+    {
+        $json = new Admin_Json();
+
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+        
+        $data = $this->objects['updateGroup'];
+        $data['id'] = $group->getId();
+        $encodedData = Zend_Json::encode( $data );
+        
+        $json->saveGroup( $encodedData );
+
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+        
+        $this->assertEquals($this->objects['updateGroup']['description'], $group->description); 
+    }    
+    
     /**
      * try to delete group
      *
