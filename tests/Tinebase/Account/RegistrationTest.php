@@ -221,12 +221,13 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
 		
 		// delete email account
    		// delete registration
+   		/*
 		Tinebase_Account_Registration::getInstance()->deleteRegistrationByLoginName ( $this->userDataMail['accountLoginName'] );
 
     	// delete account afterwards
 		$account = Tinebase_Account::getInstance()->getAccountByLoginName($this->userDataMail['accountLoginName'], 'Tinebase_Account_Model_FullAccount');
 		Tinebase_Account::getInstance()->deleteAccount( $account );
-		
+        */		
     }
     
     /**
