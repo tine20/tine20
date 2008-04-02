@@ -267,10 +267,10 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * creates the initial folder for new accounts
      *
-     * @param Tinebase_Account_Model_Account $_account the accountd object
-     * @return Tinebase_Record_RecordSet of type Tinebase_Model_Container
+     * @param mixed[int|Tinebase_Account_Model_Account] $_account   the accountd object
+     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
-    public function createPersonalFolder(Tinebase_Account_Model_Account $_account)
+    public function createPersonalFolder($_accountId)
     {
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Takss',
