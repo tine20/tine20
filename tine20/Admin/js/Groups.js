@@ -13,7 +13,7 @@ Tine.Admin.Groups.Main = {
          * onclick handler for addBtn
          */
         addGroup: function(_button, _event) {
-            Tine.Tinebase.Common.openWindow('groupWindow', "index.php?method=Admin.editGroup&groupId=''", 400, 300);
+            Tine.Tinebase.Common.openWindow('groupWindow', "index.php?method=Admin.editGroup&groupId=", 400, 300);
         },
 
         /**
@@ -275,9 +275,11 @@ Tine.Admin.Groups.EditDialog = {
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('groupDialog').getForm();
-
+            console.log ( form );
+            
             if(form.isValid()) {
                 form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
+                console.log ( Tine.Admin.Groups.EditDialog.groupRecord.data );
         
                 Ext.Ajax.request({
                     params: {
@@ -285,10 +287,7 @@ Tine.Admin.Groups.EditDialog = {
                         groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data)
                     },
                     success: function(_result, _request) {
-                        /*if(window.opener.Tine.Admin) {
-                            window.opener.Tine.Admin.Main.reload();
-                        }*/
-                    	if(window.opener.Tine.Admin.Groups) {
+                     	if(window.opener.Tine.Admin.Groups) {
                             window.opener.Tine.Admin.Groups.Main.reload();
                         }
                         if(_closeWindow === true) {
@@ -353,7 +352,8 @@ Tine.Admin.Groups.EditDialog = {
                 xtype:'textfield',
                 fieldLabel:'Group Name', 
                 name:'name',
-                anchor:'95%'
+                anchor:'95%',
+                allowBlank: false,
             }, {
                 xtype:'textarea',
                 name: 'description',
@@ -370,7 +370,11 @@ Tine.Admin.Groups.EditDialog = {
     
     updateGroupRecord: function(_groupData)
     {
-         this.groupRecord = new Tine.Admin.Model.Group(_groupData);
+    	// if groupData is empty (=array), set to empty object because array won't work!
+        if (_groupData.length == 0) {
+        	_groupData = {};
+        }
+        this.groupRecord = new Tine.Admin.Model.Group(_groupData);
     },
 
     updateToolbarButtons: function(_rights)
@@ -410,8 +414,8 @@ Tine.Admin.Groups.EditDialog = {
         });
 
         this.updateGroupRecord(_groupData);
-        this.updateToolbarButtons(_groupData.grants);
-        
+        //this.updateToolbarButtons(_groupData.grants);       
+
         dialog.getForm().loadRecord(this.groupRecord);
         
     }

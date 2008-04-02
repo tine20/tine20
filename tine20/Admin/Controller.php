@@ -169,4 +169,21 @@ class Admin_Controller
    {
    	    return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
    }
+   
+    /**
+     * fetch one group identified by groupid
+     *
+     * @param int $_groupId
+     * @return Tinebase_Group_Model_Group
+     */
+    public function getGroup($_groupId)
+    {
+        $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
+
+        /*if(!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access to contact denied');
+        }*/
+        
+        return $group;            
+    }   
 }

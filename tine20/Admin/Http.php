@@ -70,15 +70,12 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     public function editGroup($groupId)
     {
         if(empty($groupId)) {
-        	$groupId = NULL;
-        }	
-        	
-        //@todo use controller
-        $group = Tinebase_Group::getInstance()->getGroupById($groupId);
-        //$group->setTimezone(Zend_Registry::get('userTimeZone'));
-        
-        $encodedGroup = Zend_Json::encode($group->toArray());
-                  
+        	$encodedGroup = Zend_Json::encode(array());
+        } else {
+            $group = Admin_Controller::getInstance()->getGroup($groupId);        	
+            $encodedGroup = Zend_Json::encode($group->toArray());
+        }
+
         $currentAccount = Zend_Registry::get('currentAccount');
         
         $view = new Zend_View();
@@ -88,6 +85,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->jsIncludeFiles = array();
         $view->cssIncludeFiles = array();
         
+        //@todo move Groups.js to Admin.js later
         //$view->jsIncludeFiles[] = 'Admin/js/Admin.js';
         $view->jsIncludeFiles[] = 'Admin/js/Groups.js';
         $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
