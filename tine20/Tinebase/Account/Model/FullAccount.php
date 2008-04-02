@@ -97,4 +97,13 @@ class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
         return $result;
     }
     
+    /**
+     * returns account login name
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->accountLoginName;
+    }    
 }
