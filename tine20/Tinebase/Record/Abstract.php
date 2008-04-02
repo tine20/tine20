@@ -122,13 +122,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         $this->bypassFilters = (bool)$_bypassFilters;
         $this->convertDates = (bool)$_convertDates;
-        
+
         if(is_array($_data)) {
             $this->setFromArray($_data);
         }
-        if (! isset($this->_properties[$this->_identifier])) {
-            $this->_properties[$this->_identifier] = NULL;
-        }
+        
     }
     
     /**
