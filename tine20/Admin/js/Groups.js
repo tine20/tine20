@@ -275,11 +275,9 @@ Tine.Admin.Groups.EditDialog = {
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('groupDialog').getForm();
-            console.log ( form );
             
             if(form.isValid()) {
                 form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
-                console.log ( Tine.Admin.Groups.EditDialog.groupRecord.data );
         
                 Ext.Ajax.request({
                     params: {
