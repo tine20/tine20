@@ -82,6 +82,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		
 		$view->isPopup = true;
         $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $view->cssIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
 	}
