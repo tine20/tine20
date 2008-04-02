@@ -94,7 +94,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public function getCssFilesToInclude()
     {
     	return array(
-    	   self::_appendFileTime("Tinebase/css/ux/Wizzard.css"),
+    	   self::_appendFileTime("Tinebase/css/ux/Wizard.css"),
     	   self::_appendFileTime("Tinebase/css/ux/grid/IconTextField.css"),
     	   self::_appendFileTime("Tinebase/css/Tinebase.css"),
     	);
