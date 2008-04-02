@@ -94,10 +94,6 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     {
         $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
-        if(empty($_filter->container)){
-            return $TaskSet;
-        }
-        
         // error_log(print_r($_filter->toArray(),true));
         // build query
         // TODO: abstract filter2sql
@@ -119,7 +115,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         if(!empty($_filter->organizer)){
             $select->where($this->_db->quoteInto('organizer = ?', (int)$_filter->organizer));
         }
-        if(!$_filter->showClosed){
+        if(!empty($_filter->showClosed) && !$_filter->showClosed){
             $select->where('status.status_is_open = TRUE');
         }
 
