@@ -70,11 +70,16 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         ),true, false);
         $this->_persistantTestTask1 = $this->_backend->createTask($this->_testTask1);
 	}
+	/**
+	 * remove stuff from db
+	 *
+	 */
 	public function tearDown()
 	{
 		// NOTE: cascading delete of dependend stuff due to sql schema
         $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks'));
         $db->delete($db->getAdapter()->quoteInto('id = ?', $this->_persistantTestTask1->getId() ));
+        Tinebase_Timemachine_ModificationLogTest::purgeLogs($this->_persistantTestTask1->getId());
 	}
 	/**
 	 * If $this->_testTask1 and $this->_persistantTestTask1 are equal, 
@@ -97,6 +102,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->deleteTask($testId);
         $filter = new Tasks_Model_Filter();
         $filter->query = 'our fist test task';
+        $filter->container = array($this->_persistantTestTask1->container_id);
         $pagination = new Tasks_Model_Pagination();
         $tasks = $this->_backend->searchTasks($filter, $pagination);
         foreach ($tasks as $task) {
@@ -170,8 +176,21 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
         	$this->assertType('Tinebase_Timemachine_Exception_ConcurrencyConflict', $e);
         }
+    }
+    public function testSearchTask()
+    {
+        //create a unique search criteria
+        $this->_persistantTestTask1->summary = $this->_persistantTestTask1->getId();
+        $this->_backend->updateTask($this->_persistantTestTask1);
         
+        $pagination = new Tasks_Model_Pagination();
         
+        $filter = new Tasks_Model_Filter();
+        $filter->query = $this->_persistantTestTask1->getId();
+        $filter->container = array($this->_persistantTestTask1->container_id);
+        $tasks = $this->_backend->searchTasks($filter, $pagination);
+        
+        $this->assertEquals(1, count($tasks));
     }
 }		
 	
