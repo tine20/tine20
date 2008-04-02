@@ -37,7 +37,7 @@
     <script type="text/javascript" language="javascript" src="Tinebase/js/Login.js"></script>
     <?php if ( $this->userRegistration ) { ?>
     	<script type="text/javascript" language="javascript" src="Tinebase/js/UserRegistration.js"></script>
-    <? } ?>
+    <?php } ?>
     <!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">
             <?php
