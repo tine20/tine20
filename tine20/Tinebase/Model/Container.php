@@ -52,7 +52,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                => array('Digits', 'presence' => 'required', 'allowEmpty' => true),
+        'id'                => array('Digits', 'allowEmpty' => true),
         'name'              => array('presence' => 'required'),
         'type'              => array('InArray' => array(Tinebase_Container::TYPE_INTERNAL, Tinebase_Container::TYPE_PERSONAL, Tinebase_Container::TYPE_SHARED)),
         'backend'           => array('presence' => 'required'),
