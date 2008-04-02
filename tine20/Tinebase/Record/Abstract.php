@@ -123,9 +123,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $this->bypassFilters = (bool)$_bypassFilters;
         $this->convertDates = (bool)$_convertDates;
         
-        // try to set data only, when $_data is an array
         if(is_array($_data)) {
             $this->setFromArray($_data);
+        }
+        if (! isset($this->_properties[$this->_identifier])) {
+            $this->_properties[$this->_identifier] = NULL;
         }
     }
     
@@ -187,11 +189,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         // set internal state to "not validated"
         $this->_isValidated = false;
         
-        // convinience for new records
-        if (! isset($_data[$this->_identifier])) {
-            $_data[$this->_identifier] = NULL;
-        }
-        
         // make shure we run through the setters
         $bypassFilter = $this->bypassFilters;
         $this->bypassFilters = true;
@@ -203,26 +200,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $this->bypassFilters = $bypassFilter;
         
         if ($this->bypassFilters !== true) {
-            // set data with validation
-            $inputFilter = $this->_getFilter();
-            $inputFilter->setData($this->_properties);
-            
-            if ($inputFilter->isValid()) {
-                // set $this->_properties with the filtered values
-                $this->_properties = $inputFilter->getUnescaped();
-                $this->_isValidated = true;
-            } else {
-                foreach($inputFilter->getMessages() as $fieldName => $errorMessages) {
-                    $this->_validationErrors[] = array(
-                        'id'  => $fieldName,
-                        'msg' => $errorMessages[0]
-                    );
-                }
-                $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
-                Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
-                    print_r($this->_validationErrors,true). $e);
-                throw $e;
-            }
+            $this->isValid(true);
         }
     }
     
@@ -281,9 +259,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * validate the the internal data
      *
+     * @param $_throwExceptionOnInvalidData
      * @return bool
      */
-    public function isValid()
+    public function isValid($_throwExceptionOnInvalidData=false)
     {
         if($this->_isValidated === false) {
             $inputFilter = $this->_getFilter();
@@ -296,11 +275,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $this->_validationErrors = array();
                 
                 foreach($inputFilter->getMessages() as $fieldName => $errorMessage) {
-                    print_r($inputFilter->getMessages());
+                    //print_r($inputFilter->getMessages());
                     $this->_validationErrors[] = array(
                         'id'  => $fieldName,
                         'msg' => $errorMessage
                     );
+                }
+                if ($_throwExceptionOnInvalidData) {
+                    $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
+                    Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
+                        print_r($this->_validationErrors,true). $e);
+                    throw $e;
                 }
             }
         }
@@ -322,16 +307,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             throw new Tinebase_Record_Exception_NotDefined($_name . ' is no property of $this->_properties');
         }
         
-        // set internal state to "not validated"
+        $this->_properties[$_name] = $_value;
         $this->_isValidated = false;
         
-        if ($this->bypassFilters === true) {
-            $this->_properties[$_name] = $_value;
-        } else {
-            $newData = $this->_properties;
-            $newData[$_name] = $_value;
-            
-            $this->setFromArray($newData);
+        if ($this->bypassFilters !== true) {
+            $this->isValid(true);
         }
     }
     
