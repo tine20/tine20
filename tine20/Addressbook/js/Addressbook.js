@@ -549,7 +549,9 @@ Tine.Addressbook.ContactEditDialog = {
                 layout: 'form',
                 border:false,
                 items: [{
+                    //xtype:'icontextfield',
                     xtype:'textfield',
+                    //labelIcon: 'images/oxygen/16x16/actions/about-kde.png',
                     fieldLabel:'Company', 
                     name:'org_name',
                     anchor:'95%'
@@ -611,7 +613,8 @@ Tine.Addressbook.ContactEditDialog = {
                     name:'tel_work',
                     anchor:'95%'
                 }, {
-                    xtype:'textfield',
+                    xtype:'icontextfield',
+                    labelIcon: 'images/oxygen/16x16/devices/phone.png',
                     fieldLabel:'Cellphone', 
                     name:'tel_cell',
                     anchor:'95%'
@@ -631,13 +634,15 @@ Tine.Addressbook.ContactEditDialog = {
                     name:'tel_pager',
                     anchor:'95%'
                 },{
-                    xtype:'textfield',
+                    xtype:'icontextfield',
+                    labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                     fieldLabel:'Email', 
                     name:'email', 
                     vtype:'email',
                     anchor:'95%'
                 },{
-                    xtype:'textfield',
+                    xtype:'icontextfield',
+                    labelIcon: 'images/oxygen/16x16/actions/network.png',
                     fieldLabel:'URL', 
                     name:'url', 
                     vtype:'url',
