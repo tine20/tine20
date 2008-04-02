@@ -84,4 +84,13 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         return $id;
     }
     
+    /**
+     * returns containername
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

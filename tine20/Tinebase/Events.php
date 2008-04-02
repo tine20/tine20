@@ -26,22 +26,18 @@ class Tinebase_Events
     static public function fireEvent(Tinebase_Events_Abstract $_eventObject)
     {
         foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
-            $controllerName = ucfirst($application->name) . '_Controller';
-            
-            if(class_exists($controllerName)) {
+            try {
+                $controller = Tinebase_Controller::getApplicationInstance($application);
+            } catch (Exception $e) {
+                // application has no controller or is not useable at all
+                continue;
+            }
+            if($controller instanceof Tinebase_Events_Interface) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler of ' . (string) $application);
                 try {
-                    $controller = call_user_func(array($controllerName, 'getInstance'));
+                    $controller->handleEvents($_eventObject);
                 } catch (Exception $e) {
-                    // application has no controller or is not useable at all
-                    continue;
-                }
-                if($controller instanceof Tinebase_Events_Interface) {
-                    Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . "calling eventhandler of $controllerName");
-                    try {
-                        $controller->handleEvents($_eventObject);
-                    } catch (Exception $e) {
-                        Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . "$controllerName throwed an exception");
-                    }
+                    Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') ' . (string) $application . ' throwed an exception');
                 }
             }
         }

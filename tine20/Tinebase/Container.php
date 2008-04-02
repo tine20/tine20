@@ -504,7 +504,7 @@ class Tinebase_Container
         if(empty($rows) and $accountId === $ownerId) {
             // no containers found. maybe something went wrong when creating the initial folder
             // let's check if the controller of the application has a function to create the needed folders
-            $application = Tinebase_Controller::getApplicationInstance($_application);
+            $application = Tinebase_Controller::getApplicationInstance($application);
             
             if($application instanceof Tinebase_Container_Abstract) {
                 return $application->createPersonalFolder($accountId);
@@ -928,7 +928,7 @@ class Tinebase_Container
     public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE) 
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        $currentAccountId = Zend_Registry::get('currentAccount')->accountId;
+        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, self::GRANT_ADMIN)) {

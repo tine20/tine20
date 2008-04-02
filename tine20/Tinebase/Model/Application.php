@@ -93,5 +93,15 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
         }
         
         return $applicationId;
+    }
+        
+    /**
+     * returns applicationname
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
     }    
 }

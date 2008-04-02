@@ -93,7 +93,7 @@ class Tinebase_Controller
      */
     public static function getApplicationInstance($_applicationName)
     {
-        $controllerName = ucfirst($_applicationName) . '_Controller';
+        $controllerName = ucfirst((string) $_applicationName) . '_Controller';
         
         if(!class_exists($controllerName)) {
             throw new Exception('class '. $controllerName . ' not found');
@@ -105,7 +105,7 @@ class Tinebase_Controller
     }
     
     /**
-     * Enter description here...
+     * the main function where any request needs to go trough
      * 
      * @todo implement json key check
      *
@@ -140,7 +140,7 @@ class Tinebase_Controller
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
-                    $applicationName = ucfirst($application->name);
+                    $applicationName = ucfirst((string) $application);
                     try {
                         $server->setClass($applicationName.'_Json', $applicationName);
                     } catch (Exception $e) {
@@ -163,7 +163,7 @@ class Tinebase_Controller
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
-                    $applicationName = ucfirst($application->name);
+                    $applicationName = ucfirst((string) $application);
                     try {
                         $server->setClass($applicationName.'_Http', $applicationName);
                     } catch (Exception $e) {
@@ -296,7 +296,7 @@ class Tinebase_Controller
                 $authResult->getIdentity(),
                 $_ipAddress,
                 $authResult->getCode(),
-                Zend_Registry::get('currentAccount')->accountId
+                Zend_Registry::get('currentAccount')
             );
             
             return true;

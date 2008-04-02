@@ -118,8 +118,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $view->initialData = array();
         
         foreach($userApplications as $application) {
-            $applicationName = $application->name;
-            $httpAppName = ucfirst($applicationName) . '_Http';
+            $httpAppName = ucfirst((string) $application) . '_Http';
             if(class_exists($httpAppName)) {
                 $application = new $httpAppName;
                 

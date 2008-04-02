@@ -103,7 +103,7 @@ class Tinebase_Json
 
         if ($oldIsValid === true) {
             $_account   = Tinebase_Account::getInstance();
-            $result     = $_account->setPassword(Zend_Registry::get('currentAccount')->accountId, $newPw);
+            $result     = $_account->setPassword(Zend_Registry::get('currentAccount')->getId(), $newPw);
             
             if($result == 1) {
                 $res = array(
