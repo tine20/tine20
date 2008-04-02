@@ -26,7 +26,7 @@
     <script type="text/javascript" src="ExtJS/ext-all.js"></script>
 
     <!-- Tine -->
-    <link rel="stylesheet" type="text/css" href="Tinebase/css/tinebase.css"/>
+    <link rel="stylesheet" type="text/css" href="Tinebase/css/Tinebase.css"/>
     <link rel="stylesheet" type="text/css" href="Tinebase/css/ux/Wizard.css"/>
     <script type="text/javascript" language="javascript" src="Tinebase/js/ux/Wizard.js"></script>
     <script type="text/javascript" language="javascript">
