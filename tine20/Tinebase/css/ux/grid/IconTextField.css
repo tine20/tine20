@@ -3,5 +3,6 @@
     height: 16px;
     position: relative;
     top: 3px;
-    margin-right: 2px;  
+    margin-right: 3px;
+    margin-top: -3px;  
 }
