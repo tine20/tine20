@@ -86,7 +86,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new Exception('write access to new addressbook denied');
         }
         
-        $accountId   = Zend_Registry::get('currentAccount')->accountId;
+        $accountId   = Zend_Registry::get('currentAccount')->getId();
         $currentAccount = Zend_Registry::get('currentAccount');
 
         $contactData = $_contactData->toArray();
