@@ -114,10 +114,10 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         //@todo use controller
-        if(empty($group->getId)) {
-            $group = Tinebase_Group::getInstance()->addGroup($group);
-        } else {
+        if(isset($decodedGroupData['id'])) {
             $group = Tinebase_Group::getInstance()->updateGroup($group);
+        } else {
+            $group = Tinebase_Group::getInstance()->addGroup($group);
         }
          
         $result = array('success'           => true,

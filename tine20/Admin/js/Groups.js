@@ -13,7 +13,7 @@ Tine.Admin.Groups.Main = {
          * onclick handler for addBtn
          */
         addGroup: function(_button, _event) {
-            Tine.Tinebase.Common.openWindow('contactWindow', "index.php?method=Admin.editGroup&groupId=''", 400, 300);
+            Tine.Tinebase.Common.openWindow('groupWindow', "index.php?method=Admin.editGroup&groupId=''", 400, 300);
         },
 
         /**
@@ -23,7 +23,7 @@ Tine.Admin.Groups.Main = {
             var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
             var groupId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Admin.editGroup&groupId=' + groupId, 400, 300);
+            Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + groupId, 400, 300);
         },
 
         
@@ -48,7 +48,7 @@ Tine.Admin.Groups.Main = {
                             method: 'Admin.deleteGroups',
                             groupIds: groupIds
                         },
-                        text: 'Deleting contact(s)...',
+                        text: 'Deleting group(s)...',
                         success: function(_result, _request){
                             Ext.getCmp('AdminGroupsGrid').getStore().reload();
                         },
@@ -224,7 +224,7 @@ Tine.Admin.Groups.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Admin.editGroup&groupId=' + record.data.id, 400, 300);
+                Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + record.data.id, 400, 300);
             } catch(e) {
                 // alert(e);
             }
@@ -282,11 +282,14 @@ Tine.Admin.Groups.EditDialog = {
                 Ext.Ajax.request({
                     params: {
                         method: 'Admin.saveGroup', 
-                        contactData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data)
+                        groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data)
                     },
                     success: function(_result, _request) {
-                        if(window.opener.Tine.Admin) {
+                        /*if(window.opener.Tine.Admin) {
                             window.opener.Tine.Admin.Main.reload();
+                        }*/
+                    	if(window.opener.Tine.Admin.Groups) {
+                            window.opener.Tine.Admin.Groups.Main.reload();
                         }
                         if(_closeWindow === true) {
                             window.close();
