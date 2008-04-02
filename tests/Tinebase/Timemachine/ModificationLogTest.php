@@ -41,6 +41,11 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     protected $_persistantLogEntries;
     
     /**
+     * @var array holds recordId's we create log entries for
+     */
+    protected $_recordIds = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -62,11 +67,12 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     	$now = Zend_Date::now();
     	$this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
     	$this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog');
+    	$this->_recordIds = array('5dea69be9c72ea3d263613277c3b02d529fbd8bc');
     	
     	$this->_logEntries = new Tinebase_Record_RecordSet('Tinebase_Timemachine_Model_ModificationLog', array(
         array(
             'application_id'       => 'Tinebase',
-            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
             'modification_time'    => $this->Cloner($now)->addDay(-2),
@@ -77,7 +83,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         ),
         array(
             'application_id'       => 'Tinebase',
-            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
             'modification_time'    => $this->Cloner($now)->addDay(-1),
@@ -88,7 +94,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         ),
         array(
             'application_id'       => 'Tinebase',
-            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
             'modification_time'    => $this->Cloner($now),
@@ -99,7 +105,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         ),
         array(
             'application_id'       => 'Tinebase',
-            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
             'modification_time'    => $this->Cloner($now)->addDay(-2),
@@ -110,7 +116,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         ),
         array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase'),
-            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
             'modification_time'    => $this->Cloner($now)->addDay(-1)->addSecond(1),
@@ -121,7 +127,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         ),
         array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'record_id'            => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
+            'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
             'modification_time'    => $this->Cloner($now),
@@ -144,11 +150,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected function tearDown()
     {
-        $table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'timemachine_modificationlog'));
-        
-        foreach ($this->_persistantLogEntries as $persistantLogEntry) {
-             $table->delete($table->getAdapter()->quoteInto('id = ?', $persistantLogEntry->getId()));
-        }
+        $this->purgeLogs($this->_recordIds);
     }
     /**
      * tests that the returned mod logs equal the initial ones we defined 
@@ -241,6 +243,19 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         }
     }
     
+    /**
+     * purges mod log entries of given recordIds
+     *
+     * @param mixed [string|array|Tinebase_Record_RecordSet] $_recordIds
+     */
+    public static function purgeLogs($_recordIds)
+    {
+        $table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'timemachine_modificationlog'));
+        
+        foreach ((array) $_recordIds as $recordId) {
+             $table->delete($table->getAdapter()->quoteInto('record_id = ?', $recordId));
+        }
+    }
     /**
      * Workaround as the php clone operator does not return cloned 
      * objects right hand sided
