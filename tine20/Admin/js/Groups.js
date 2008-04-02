@@ -53,7 +53,7 @@ Tine.Admin.Groups.Main = {
                             Ext.getCmp('AdminGroupsGrid').getStore().reload();
                         },
                         failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
+                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.');
                         }
                     });
                 }
