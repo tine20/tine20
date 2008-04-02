@@ -31,9 +31,9 @@ Ext.ux.form.IconTextField = Ext.extend(Ext.form.TextField, {
      * @private
      */
     initComponent: function(){
-         Ext.ux.form.IconTextField.call(this);
+         Ext.ux.form.IconTextField.superclass.initComponent.call(this);
          if (this.labelIcon.length > 0){
-            this.fieldLabel = this.labelIcon + this.fieldLabel;
+            this.fieldLabel = '<img src="' + this.labelIcon + '" class="x-ux-form-icontextfield-labelicon">' + this.fieldLabel;
          }
     }
 });
