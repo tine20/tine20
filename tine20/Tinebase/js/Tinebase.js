@@ -47,13 +47,23 @@ Tine.Tinebase.initFramework = function() {
         Ext.Ajax.on('requestcomplete', function(connection, response, options){
             // detect resoponse errors (e.g. html from xdebug)
             if (response.responseText.charAt(0) == '<') {
+                var windowHeight = 600;
+                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
+                }
                 var win = new Ext.Window({
                     width: 600,
-                    height: 600,
+                    height: windowHeight,
                     autoScroll: true,
                     title: 'There where Errors',
-                    html: response.responseText
-                })
+                    html: response.responseText,
+                    buttons: [ new Ext.Action({
+                        text: 'ok',
+                        handler: function(){ win.close(); }
+                    })],
+                     buttonAlign: 'center'
+                });
+                
                 win.show();
                 return false;
             }
