@@ -336,7 +336,7 @@ class Tinebase_Container
             // no containers found. maybe something went wrong when creating the initial folder
             // any account should have at least one personal folder
             // let's check if the controller of the application has a function to create the needed folders
-            $application = Tinebase_Controller::getApplicationInstance($application);
+            $application = Tinebase_Controller::getApplicationInstance($rows);
             
             if($application instanceof Tinebase_Container_Abstract) {
                 return $application->createPersonalFolder($_accountId);
