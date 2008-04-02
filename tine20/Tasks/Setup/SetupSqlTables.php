@@ -110,7 +110,7 @@ class Tasks_Setup_SetupSqlTables
      */
     public static function insertDefaultRecords() {
         $db = Zend_Registry::get('dbAdapter');
-        $accountId = Zend_Registry::get('currentAccount')->accountId;
+        $accountId = Zend_Registry::get('currentAccount')->getId();
         $now = $db->quote(Zend_Date::now()->getIso());
         
         // tine_class
