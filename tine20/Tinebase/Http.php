@@ -95,6 +95,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     {
     	return array(
     	   self::_appendFileTime("Tinebase/css/ux/Wizzard.css"),
+    	   self::_appendFileTime("Tinebase/css/ux/grid/IconTextField.css"),
     	   self::_appendFileTime("Tinebase/css/Tinebase.css"),
     	);
     }
@@ -120,12 +121,12 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         foreach($userApplications as $application) {
             $httpAppName = ucfirst((string) $application) . '_Http';
             if(class_exists($httpAppName)) {
-                $application = new $httpAppName;
+                $application_http = new $httpAppName;
                 
-                $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array)$application->getJsFilesToInclude());
-                $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array)$application->getCssFilesToInclude());
+                $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array) $application_http->getJsFilesToInclude());
+                $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array) $application_http->getCssFilesToInclude());
                 
-                $view->initialData[ucfirst($applicationName)] = $application->getInitialMainScreenData();
+                $view->initialData[ucfirst((string) $application)] = $application_http->getInitialMainScreenData();
             }
         }
         
