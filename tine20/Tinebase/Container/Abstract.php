@@ -24,8 +24,8 @@ abstract class Tinebase_Container_Abstract
     /**
      * creates the initial folder for new accounts
      *
-     * @param Tinebase_Account_Model_Account $_account the accountd object
-     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * @param mixed[int|Tinebase_Account_Model_Account] $_account   the accountd object
+     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
-    abstract public function createPersonalFolder(Tinebase_Account_Model_Account $_account);
+    abstract public function createPersonalFolder($_accountId);
 }

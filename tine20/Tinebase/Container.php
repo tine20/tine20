@@ -339,7 +339,7 @@ class Tinebase_Container
             $application = Tinebase_Controller::getApplicationInstance($application);
             
             if($application instanceof Tinebase_Container_Abstract) {
-                return $application->createPersonalFolder($accountId);
+                return $application->createPersonalFolder($_accountId);
             }
         }
 
