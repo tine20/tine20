@@ -89,8 +89,7 @@ class Tasks_Model_Filter extends Tinebase_Record_Abstract
         $cc = Tinebase_Container::getInstance();
         switch($this->containerType) {
             case 'all':
-                $accountId = Zend_Registry::get('currentAccount')->accountId;
-                $containers = $cc->getContainerByACL($accountId, $this->_application, Tinebase_Container::GRANT_READ);
+                $containers = $cc->getContainerByACL(Zend_Registry::get('currentAccount'), $this->_application, Tinebase_Container::GRANT_READ);
                 break;
             case 'personal':
                 $containers = Zend_Registry::get('currentAccount')->getPersonalContainer($this->_application, $this->owner, Tinebase_Container::GRANT_READ);
