@@ -17,13 +17,13 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Admin_JsonTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Admin_ControllerTest::main');
 }
 
 /**
  * Test class for Tinebase_Admin
  */
-class Admin_JsonTest extends PHPUnit_Framework_TestCase
+class Admin_ControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -38,7 +38,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Json Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -50,11 +50,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-    	$this->objects['initialGroup'] = array (   'name' => 'test group',
+    	$this->objects['initialGroup'] = array (   'id' => 10,
+    	                                           'name' => 'test group',
     	                                           'description' => 'some description' );
-        $this->objects['updateGroup'] = array (   'name' => 'test group',
+        /*$this->objects['updateGroup'] = array (   'name' => 'test group',
                                                    'description' => 'some description updated' );
-    	
+    	*/
         return;
         
     }
@@ -75,29 +76,22 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testGetGroups()
-    {
-        $json = new Admin_Json();
+    {        
+        $groups = Admin_Controller::getInstance()->getGroups(NULL, 'id', 'ASC', 0, 10);
         
-        $groups = $json->getGroups(NULL, 'id', 'ASC', 0, 10);
-        
-        $this->assertGreaterThan(0, $groups['totalcount']);
+        $this->assertGreaterThan(0, sizeof($groups));
     }    
 
     /**
-     * try to save group data
+     * try to get group
      *
      */
-    public function testAddGroup()
-    {
-        $json = new Admin_Json();
+    public function testGetGroup()
+    {        
+    	//@todo check added initial group
+        $group = Admin_Controller::getInstance()->getGroup(2);
         
-        $encodedData = Zend_Json::encode( $this->objects['initialGroup'] );
-        
-        $json->saveGroup( $encodedData );
-        
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
-        
-        $this->assertEquals($this->objects['initialGroup']['name'], $group->name);
+        $this->assertEquals('Users', $group->name);
     }    
 
     /**
@@ -106,7 +100,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateGroup()
     {
-        $json = new Admin_Json();
+        /*$json = new Admin_Json();
 
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
         
@@ -118,7 +112,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
         
-        $this->assertEquals($this->objects['updateGroup']['description'], $group->description); 
+        $this->assertEquals($this->objects['updateGroup']['description'], $group->description); */
     }    
     
     /**
@@ -127,7 +121,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteGroup()
     {
-    	$json = new Admin_Json();
+    	/*$json = new Admin_Json();
     	
     	// get group by name
     	$group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
@@ -142,12 +136,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     	$this->setExpectedException('Tinebase_Record_Exception_NotDefined');
     	
         // get group by name
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);    	
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);   */ 	
     }    
     
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Admin_JsonTest::main') {
-    Admin_JsonTest::main();
+if (PHPUnit_MAIN_METHOD == 'Admin_ControllerTest::main') {
+    Admin_ControllerTest::main();
 }
