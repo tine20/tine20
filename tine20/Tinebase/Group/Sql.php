@@ -94,10 +94,10 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     }
     
     /**
-     * get list of groupmembers
+     * get list of groupmembers 
      *
      * @param int $_groupId
-     * @return array
+     * @return array with account ids
      */
     public function getGroupMembers($_groupId)
     {
