@@ -92,7 +92,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
     {
-        // error_log(print_r($_filter->toArray(),true));
+        Zend_Registry::get('logger')->debug(print_r($_filter->toArray(),true));
         $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
         // empty means, that e.g. no shared containers exist
@@ -109,6 +109,9 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             $select->limit($_pagination->limit, $_pagination->start);
         }
         if (!empty($_pagination->sort)){
+            if ($_pagination->sort == 'due') {
+                $select->order('is_due ' . ($_pagination->dir == 'DESC' ? 'ASC' : 'DESC'));
+            } 
             $select->order($_pagination->sort . ' ' . $_pagination->dir);
         }
         if(!empty($_filter->query)){
@@ -120,7 +123,9 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         if(!empty($_filter->organizer)){
             $select->where($this->_db->quoteInto('organizer = ?', (int)$_filter->organizer));
         }
-        if(!empty($_filter->showClosed) && !$_filter->showClosed){
+        if(isset($_filter->showClosed) && $_filter->showClosed){
+            // nothing to filter
+        } else {
             $select->where('status.status_is_open = TRUE');
         }
 
@@ -185,7 +190,8 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
                 'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
                 'tag'     => 'GROUP_CONCAT(DISTINCT tag.tag_id)',
-                'is_open' => 'status.status_is_open',
+                'is_due'  => 'LENGTH(tasks.due)',
+                //'is_open' => 'status.status_is_open',
             ))
             ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
             ->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.id = tag.task_id', array())

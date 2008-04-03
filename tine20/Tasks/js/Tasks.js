@@ -173,6 +173,10 @@ Tine.Tasks.mainGrid = {
 			remoteSort: true,
 			baseParams: {
                 method: 'Tasks.searchTasks'
+            },
+            sortInfo: {
+                field: 'due',
+                dir: 'ASC'
             }
         });
 		
