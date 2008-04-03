@@ -63,6 +63,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->objects['account'] = new Tinebase_Account_Model_FullAccount(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
+            'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
             'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->getId(),
@@ -164,7 +165,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         // get group members with json
         $getGroupMembersArray = $json->getGroupMembers($group->getId());
         
-        $this->assertEquals($this->objects['account']->accountLoginName, $getGroupMembersArray['results'][0]['accountLoginName']);
+        $this->assertEquals($this->objects['account']->accountDisplayName, $getGroupMembersArray['results'][0]['accountDisplayName']);
         $this->assertGreaterThan(0, $getGroupMembersArray['totalcount']);
     }       
     
