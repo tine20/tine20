@@ -38,3 +38,7 @@ html, body {
 .action_hideArchived {
     background-image:url(../../images/oxygen/16x16/actions/ark-delete.png) !important;
 }
+
+.action_logOut {
+    background-image:url(../../images/oxygen/16x16/actions/system-log-out.png) !important;
+}	

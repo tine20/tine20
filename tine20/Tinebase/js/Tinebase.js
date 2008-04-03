@@ -147,7 +147,7 @@ Tine.Tinebase.MainScreen = function() {
 			}, '-', {
 				text: 'Logout',
 	            handler: _logoutButtonHandler,
-				icon: 'images/oxygen/16x16/actions/system-log-out.png'
+				iconCls: 'action_logOut'
 			}]
 		});
 
@@ -160,7 +160,7 @@ Tine.Tinebase.MainScreen = function() {
             },
             '->',
             {
-                icon:    'images/oxygen/16x16/actions/system-log-out.png',
+                iconCls: 'action_logOut',
                 cls:     'x-btn-icon',
                 tooltip: {text:'Click this button to logout from Tine 2.0'},
                 handler: _logoutButtonHandler
