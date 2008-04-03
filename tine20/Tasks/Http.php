@@ -71,7 +71,7 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
      * @param string $linkingApp
      * @param int    $linkedId
      */
-    public function editTask($taskId=-1, $linkingApp='', $linkedId=-1)
+    public function editTask($taskId=-1, $linkingApp='', $linkedId=-1, $containerId=-1)
     {
         if($taskId >= 0) {
             $tjs = new Tasks_Json();
@@ -79,8 +79,11 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         } else {
         	// prepare initial data (temporary, this should become part of json interface)
         	$newTask = new Tasks_Model_Task(array(), true);
-        	$newTask->container = Zend_Json::encode(Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray());
-        	
+        	if ($containerId > 0) {
+        	    $newTask->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($containerId)->toArray());
+        	} else {
+        	   $newTask->container_id = Zend_Json::encode(Tasks_Controller::getInstance()->getDefaultContainer($linkingApp)->toArray());
+        	}
         	$task = Zend_Json::encode($newTask->toArray());
         }
         

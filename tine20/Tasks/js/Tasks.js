@@ -72,9 +72,12 @@ Tine.Tasks.mainGrid = {
 			    var selectedRows = this.grid.getSelectionModel().getSelections();
                 var task = selectedRows[0];
 				taskId = task.data.id;
-			}
+			} else {
+                var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
+            }
 			var popupWindow = new Tine.Tasks.EditPopup({
-				id: taskId
+				id: taskId,
+                containerId: nodeAttributes.container ? nodeAttributes.container.id : -1
                 //relatedApp: 'tasks',
                 //relatedId: 
             });
@@ -191,7 +194,7 @@ Tine.Tasks.mainGrid = {
             this.filter.limit = options.params.limit;
 			
 			// container
-            var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};;
+            var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
             this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
             this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
             this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
@@ -707,12 +710,13 @@ Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    relatedApp: '',
    relatedId: -1,
    id: -1,
+   containerId: -1,
    
    name: 'TasksEditWindow',
    width: 700,
    height: 300,
    initComponent: function(){
-        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.id + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId;
+        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.id + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId + '&containerId=' + this.containerId;
         Tine.Tasks.EditPopup.superclass.initComponent.call(this);
    }
 });

@@ -92,9 +92,14 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
     {
+        // error_log(print_r($_filter->toArray(),true));
         $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
-        // error_log(print_r($_filter->toArray(),true));
+        // empty means, that e.g. no shared containers exist
+        if (empty($_filter->container)) {
+            return $TaskSet;
+        }
+        
         // build query
         // TODO: abstract filter2sql
         $select = $this->_getSelect()

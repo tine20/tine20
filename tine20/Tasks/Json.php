@@ -47,7 +47,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $paginationFilter = Zend_Json::decode($filter);
         $filter = new Tasks_Model_Filter($paginationFilter);
         $pagination = new Tasks_Model_Pagination($paginationFilter);
-        Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
+        //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
         $tasks = $this->_controller->searchTasks($filter, $pagination);
         $tasks->setTimezone($this->_userTimezone);

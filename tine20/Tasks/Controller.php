@@ -274,7 +274,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     public function createPersonalFolder($_accountId)
     {
         $newContainer = new Tinebase_Model_Container(array(
-            'name'              => 'Personal Takss',
+            'name'              => 'Personal Tasks',
             'type'              => Tinebase_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId() 
