@@ -131,16 +131,16 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * delete multiple groups
      *
-     * @param array $_groupIDs list of contactId's to delete
+     * @param array $groupIds list of contactId's to delete
      * @return array
      */
-    public function deleteGroups($_groupIds)
+    public function deleteGroups($groupIds)
     {
         $result = array(
             'success'   => TRUE
         );
         
-        $groupIds = Zend_Json::decode($_groupIds);
+        $groupIds = Zend_Json::decode($groupIds);
         
         //@todo use controller
         Tinebase_Group::getInstance()->deleteGroups($groupIds);
