@@ -285,8 +285,8 @@ Tine.Admin.Groups.EditDialog = {
      * var handlers
      */
      handlers: {
-        removeAccount: function(_button, _event) {
-            
+        removeAccount: function(_button, _event) 
+        { 
             var groupGrid = Ext.getCmp('groupMembersGrid');
             var selectedRows = groupGrid.getSelectionModel().getSelections();
             
@@ -296,9 +296,10 @@ Tine.Admin.Groups.EditDialog = {
             }
                 
         },
-        addAccount: function(account){
-            // we somehow lost scope...            
-            var groupGrid = Ext.getCmp('groupMembersGrid');
+        
+        addAccount: function(account)
+        {
+        	var groupGrid = Ext.getCmp('groupMembersGrid');
             
             var dataStore = groupGrid.getStore();
             var selectionModel = groupGrid.getSelectionModel();
@@ -320,12 +321,29 @@ Tine.Admin.Groups.EditDialog = {
             var form = Ext.getCmp('groupDialog').getForm();
             
             if(form.isValid()) {
-                form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
         
+            	// get group members
+                var groupGrid = Ext.getCmp('groupMembersGrid');
+
+                Ext.MessageBox.wait('Please wait', 'Updating Memberships');
+                
+                var groupMembers = [];
+                var dataStore = groupGrid.getStore();
+                
+                dataStore.each(function(_record){
+                    groupMembers.push(_record.data);
+                });
+                                
+                // update form               
+                form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
+
+                /*********** save group members & form ************/
+                
                 Ext.Ajax.request({
                     params: {
                         method: 'Admin.saveGroup', 
-                        groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data)
+                        groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
+                        groupMembers: Ext.util.JSON.encode(groupMembers)
                     },
                     success: function(_result, _request) {
                      	if(window.opener.Tine.Admin.Groups) {
@@ -335,8 +353,15 @@ Tine.Admin.Groups.EditDialog = {
                             window.close();
                         } else {
                             //this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText));
-                            //this.updateToolbarButtons(formData.config.addressbookRights);
                             //form.loadRecord(this.groupRecord);
+                            
+                        	// @todo   get groupMembers from result
+                        	/*
+                        	var groupMembers = Ext.util.JSON.decode(_result.responseText);
+                            dataStore.loadData(groupMembers, false);
+                            */
+                        	
+                        	Ext.MessageBox.hide();
                         }
                     },
                     failure: function ( result, request) { 
@@ -344,43 +369,7 @@ Tine.Admin.Groups.EditDialog = {
                     },
                     scope: this 
                 });
-
-            // @todo add this for saving the group members
-            // we somehow lost scope...
-            /*
-            var cgd = Ext.getCmp('ContainerGrantsDialog');
-            if (cgd.grantContainer) {
-                var container = cgd.grantContainer;
-                Ext.MessageBox.wait('Please wait', 'Updateing Grants');
-                
-                var grants = [];
-                var grantsStore = cgd.dataStore;
-                
-                grantsStore.each(function(_record){
-                    grants.push(_record.data);
-                });
-                
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Tinebase_Container.setContainerGrants',
-                        containerId: container.id,
-                        grants: Ext.util.JSON.encode(grants)
-                    },
-                    success: function(_result, _request){
-                        var grants = Ext.util.JSON.decode(_result.responseText);
-                        grantsStore.loadData(grants, false);
-                        
-                        Ext.MessageBox.hide();
-                        if (closeWindow){
-                            cgd.close();
-                        }
-                    }
-                });
-                
-                Ext.getCmp('AccountsActionSaveButton').disable();
-                Ext.getCmp('AccountsActionApplyButton').disable();
-            }
-            */
+                    
                 
             } else {
                 Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
@@ -453,6 +442,10 @@ Tine.Admin.Groups.EditDialog = {
     
     /**
      * function display
+     * 
+     * @param   _groupData
+     * @param   _groupMembers
+     * 
      */
     display: function(_groupData, _groupMembers) 
     {
@@ -633,15 +626,6 @@ Tine.Admin.Groups.EditDialog = {
         dialog.getForm().loadRecord(this.groupRecord);
         
     }, // end display function     
-
-    // private
-    onRender: function(ct, position){
-       Tine.Admin.Groups.EditDialog.superclass.onRender.call(this, ct, position);
-        
-        this.getUserSelection().on('accountdblclick', function(account){
-            this.handlers.addAccount(account);   
-        }, this);
-    } 
     
 }
 
@@ -652,6 +636,7 @@ Tine.Admin.Model.Group = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
+    // @todo add accounts array to group model
 ]);
 
 Tine.Admin.Model.groupMember = Ext.data.Record.create([

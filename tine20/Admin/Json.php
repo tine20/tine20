@@ -108,10 +108,11 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * save group data from edit form
      *
-     * @param array json encoded group data
-     * @return array with group data
+     * @param   array $groupData        json encoded group data
+     * @param   array $groupMembers     json encoded array of group members
+     * @return  array with group data
      */
-    public function saveGroup($groupData)
+    public function saveGroup($groupData, $groupMembers)
     {
         $decodedGroupData = Zend_Json::decode($groupData);
         
@@ -139,6 +140,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         } else {
             $group = Tinebase_Group::getInstance()->addGroup($group);
         }
+        
+        //@todo set group members
          
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
