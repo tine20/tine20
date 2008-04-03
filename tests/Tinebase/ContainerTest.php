@@ -107,21 +107,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
     }
-    
-    /**
-     * try to add an existing container. should throw an exception
-     *
-     */
-    public function testAddContainerTwice()
-    {
-        $this->setExpectedException('Zend_Db_Statement_Exception');
         
-        $container = clone($this->objects['initialContainer']);
-        $container->setId(NULL);
-        
-        $container = Tinebase_Container::getInstance()->addContainer($container, $this->objects['grants']);
-    }
-    
     /**
      * try to get container by id
      *
