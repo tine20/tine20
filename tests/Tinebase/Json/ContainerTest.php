@@ -49,6 +49,12 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
+            Tinebase_Container::getInstance()->deleteContainer($container);
+        } catch (Exception $e) {
+            // do nothing
+        }
     }
 
     /**
