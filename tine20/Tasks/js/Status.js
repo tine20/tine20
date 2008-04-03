@@ -23,7 +23,7 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	fieldLabel: 'status',
     name: 'status',
     displayField: 'status_name',
-    valueField: 'identifier',
+    valueField: 'id',
     mode: 'local',
     triggerAction: 'all',
     emptyText: 'Status...',
@@ -59,7 +59,7 @@ Tine.Tasks.status.getStore = function() {
 	if (!store) {
 		var store = new Ext.data.JsonStore({
             fields: [ 
-                { name: 'identifier'                                        },
+                { name: 'id'                                                },
                 { name: 'created_by'                                        }, 
                 { name: 'creation_time',      type: 'date', dateFormat: 'c' },
                 { name: 'last_modified_by'                                  },
@@ -74,7 +74,7 @@ Tine.Tasks.status.getStore = function() {
 		   // initial data from http request
            data: Tine.Tasks.AllStati,
            autoLoad: true,
-           id: 'identifier'
+           id: 'id'
        });
 	}
 	return store;
@@ -83,15 +83,16 @@ Tine.Tasks.status.getStore = function() {
 Tine.Tasks.status.getIdentifier = function(statusName) {
 	var index = Tine.Tasks.status.getStore().find('status_name', statusName);
 	var status = Tine.Tasks.status.getStore().getAt(index);
-	return status.data.identifier;
+	return status.data.id;
 };
 
-Tine.Tasks.status.getStatus = function(identifier) {
-	var status = Tine.Tasks.status.getStore().getById(identifier);
-    return status ? status : identifier;
+Tine.Tasks.status.getStatus = function(id) {
+	var status = Tine.Tasks.status.getStore().getById(id);
+    return status ? status : id;
 };
 
-Tine.Tasks.status.getStatusIcon = function(identifier) {
-    var status = Tine.Tasks.status.getStatus(identifier);
+Tine.Tasks.status.getStatusIcon = function(id) {
+    var status = Tine.Tasks.status.getStatus(id);
+    if (!status) return;
     return '<img class="TasksMainGridStatus" src="' + status.data.status_icon + '" ext:qtip="' + status.data.status_name + '">';
 };

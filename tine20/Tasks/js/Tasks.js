@@ -71,10 +71,10 @@ Tine.Tasks.mainGrid = {
 			if (_button.actionType == 'edit') {
 			    var selectedRows = this.grid.getSelectionModel().getSelections();
                 var task = selectedRows[0];
-				taskId = task.data.identifier;
+				taskId = task.data.id;
 			}
 			var popupWindow = new Tine.Tasks.EditPopup({
-				identifier: taskId
+				id: taskId
                 //relatedApp: 'tasks',
                 //relatedId: 
             });
@@ -95,7 +95,7 @@ Tine.Tasks.mainGrid = {
 					if (selectedRows.length > 1) {
 						var identifiers = [];
 						for (var i=0; i < selectedRows.length; i++) {
-							identifiers.push(selectedRows[i].data.identifier);
+							identifiers.push(selectedRows[i].data.id);
 						} 
 						var params = {
 		                    method: 'Tasks.deleteTasks', 
@@ -104,7 +104,7 @@ Tine.Tasks.mainGrid = {
 					} else {
 						var params = {
 		                    method: 'Tasks.deleteTask', 
-		                    identifier: selectedRows[0].data.identifier
+		                    identifier: selectedRows[0].data.id
 		                };
 					}
 				    
@@ -162,7 +162,7 @@ Tine.Tasks.mainGrid = {
 	
 	initStore: function(){
 	    this.store = new Ext.data.JsonStore({
-			idProperty: 'identifier',
+			idProperty: 'id',
             root: 'results',
             totalProperty: 'totalcount',
 			successProperty: 'status',
@@ -200,7 +200,7 @@ Tine.Tasks.mainGrid = {
 			this.filter.showClosed = Ext.getCmp('TasksShowClosed') ? Ext.getCmp('TasksShowClosed').pressed : false;
 			this.filter.organizer = Ext.getCmp('TasksorganizerFilter') ? Ext.getCmp('TasksorganizerFilter').getValue() : '';
 			this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
-			this.filter.status = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
+			this.filter.status_id = Ext.getCmp('TasksStatusFilter') ? Ext.getCmp('TasksStatusFilter').getValue() : '';
 			//this.filter.due
 			//this.filter.tag
 			options.params.filter = Ext.util.JSON.encode(this.filter);
@@ -235,7 +235,7 @@ Tine.Tasks.mainGrid = {
 				break;
 			}
 		}, this);
-	   
+        
 		this.store.load({
 			params: this.paging
 		});
@@ -293,7 +293,7 @@ Tine.Tasks.mainGrid = {
 			hideLabel: true,
 			store: Tine.Tasks.status.getStore(),
 			displayField: 'status_name',
-			valueField: 'identifier',
+			valueField: 'id',
 			typeAhead: true,
 			mode: 'local',
 			triggerAction: 'all',
@@ -363,11 +363,11 @@ Tine.Tasks.mainGrid = {
 			loadMask: true,
             columns: [
 				{
-					id: 'status',
+					id: 'status_id',
 					header: "Status",
 					width: 40,
 					sortable: true,
-					dataIndex: 'status',
+					dataIndex: 'status_id',
 					renderer: Tine.Tasks.status.getStatusIcon,
                     editor: new Tine.Tasks.status.ComboBox({
 		                autoExpand: true,
@@ -493,7 +493,7 @@ Tine.Tasks.mainGrid = {
         		
 	    this.grid.on('newentry', function(taskData){
 	    	var selectedNode = this.tree.getSelectionModel().getSelectedNode();
-            taskData.container = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
+            taskData.container_id = selectedNode && selectedNode.attributes.container ? selectedNode.attributes.container.id : -1;
 	        var task = new Tine.Tasks.Task(taskData);
 
 	        Ext.Ajax.request({
@@ -598,7 +598,7 @@ Tine.Tasks.EditDialog = function(task) {
 	    			Ext.Ajax.request({
 	                    params: {
 	    					method: 'Tasks.deleteTask',
-	    					identifier: task.data.identifier
+	    					identifier: task.data.id
 	    				},
 	                    success: function(_result, _request) {
 	    					window.ParentEventProxy.fireEvent('update', task);
@@ -658,7 +658,7 @@ Tine.Tasks.EditDialog = function(task) {
                 }), 
                 new Tine.Tasks.status.ComboBox({
                     fieldLabel: 'Status',
-                    name: 'status'
+                    name: 'status_id'
                 }), 
                 new Tine.widgets.Priority.Combo({
                     fieldLabel: 'Priority',
@@ -671,7 +671,7 @@ Tine.Tasks.EditDialog = function(task) {
                 }), 
                 new Tine.widgets.container.selectionComboBox({
                     fieldLabel: 'Folder',
-                    name: 'container',
+                    name: 'container_id',
                     itemName: 'Tasks',
                     appName: 'Tasks'
                 })
@@ -697,7 +697,7 @@ Tine.Tasks.EditDialog = function(task) {
     // load form with initial data
     dlg.getForm().loadRecord(task);
     
-    if(task.get('identifier') > 0) {
+    if(task.get('id') > 0) {
         dlg.action_delete.enable();
     }
 };
@@ -706,21 +706,21 @@ Tine.Tasks.EditDialog = function(task) {
 Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    relatedApp: '',
    relatedId: -1,
-   identifier: -1,
+   id: -1,
    
    name: 'TasksEditWindow',
    width: 700,
    height: 300,
    initComponent: function(){
-        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.identifier + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId;
+        this.url = 'index.php?method=Tasks.editTask&taskId=' + this.id + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId;
         Tine.Tasks.EditPopup.superclass.initComponent.call(this);
    }
 });
 
 // fixes a task
 Tine.Tasks.fixTask = function(task) {
-	if (task.data.container) {
-        task.data.container = Ext.util.JSON.decode(task.data.container);
+	if (task.data.container_id) {
+        task.data.container_id = Ext.util.JSON.decode(task.data.container_id);
     }
     if (task.data.due) {
         task.data.due = Date.parseDate(task.data.due, 'c');
@@ -730,7 +730,7 @@ Tine.Tasks.fixTask = function(task) {
 // Task model
 Tine.Tasks.Task = Ext.data.Record.create([
     // tine record fields
-    { name: 'container' },
+    { name: 'container_id' },
     { name: 'created_by' },
     { name: 'creation_time', type: 'date', dateFormat: 'c' },
     { name: 'last_modified_by' },
@@ -739,18 +739,18 @@ Tine.Tasks.Task = Ext.data.Record.create([
     { name: 'deleted_time', type: 'date', dateFormat: 'c' },
     { name: 'deleted_by' },
     // task only fields
-    { name: 'identifier' },
+    { name: 'id' },
     { name: 'percent' },
     { name: 'completed', type: 'date', dateFormat: 'c' },
     { name: 'due', type: 'date', dateFormat: 'c' },
     // ical common fields
-    { name: 'class' },
+    { name: 'class_id' },
     { name: 'description' },
     { name: 'geo' },
     { name: 'location' },
     { name: 'organizer' },
     { name: 'priority' },
-    { name: 'status' },
+    { name: 'status_id' },
     { name: 'summary' },
     { name: 'url' },
     // ical common fields with multiple appearance

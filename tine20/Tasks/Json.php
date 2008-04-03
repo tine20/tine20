@@ -44,9 +44,10 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      */
     public function searchTasks($filter)
     {
-        $filter = new Tasks_Model_Filter(Zend_Json::decode($filter));
-        $pagination = new Tasks_Model_Pagination(Zend_Json::decode($filter));
-        //error_log(print_r($filter->toArray(),true));
+        $paginationFilter = Zend_Json::decode($filter);
+        $filter = new Tasks_Model_Filter($paginationFilter);
+        $pagination = new Tasks_Model_Pagination($paginationFilter);
+        Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
         
         $tasks = $this->_controller->searchTasks($filter, $pagination);
         $tasks->setTimezone($this->_userTimezone);
@@ -68,21 +69,6 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     {
         $task = $this->_controller->getTask($uid);
         return $this->_task2json($task);
-    }
-    
-    /**
-     * Create a new Task
-     *
-     * @param  $task
-     * @return array the created task
-     */
-    public function createTask($task)
-    {
-        $inTask = $this->_json2task($task);
-        
-        //error_log(print_r($newTask->toArray(),true));
-        $outTask = $this->_controller->createTask($inTask);
-        return $this->_task2json($outTask);
     }
     
     /**
@@ -109,7 +95,8 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function saveTask($task, $linkingApp, $linkedId)
     {
         $inTask = $this->_json2task($task);
-        //error_log(print_r($inTask->toArray(),true));
+        //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
+        
         $outTask = $inTask->getId() > 0 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
@@ -147,7 +134,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     {
         $_task->setTimezone(Zend_Registry::get('userTimeZone'));
         $_task->bypassFilters = true;
-        $_task->container = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container)->toArray());
+        $_task->container_id = Zend_Json::encode(Tinebase_Container::getInstance()->getContainerById($_task->container_id)->toArray());
         return $_task->toArray();
     }
     
