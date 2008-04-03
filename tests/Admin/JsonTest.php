@@ -119,7 +119,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         //print_r ( $this->objects['initialGroup']->toArray());
         $encodedData = Zend_Json::encode( $this->objects['initialGroup']->toArray() );
         
-        $json->saveGroup( $encodedData );
+        $json->saveGroup( $encodedData, array() );
         
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
         
@@ -140,7 +140,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $data['id'] = $group->getId();
         $encodedData = Zend_Json::encode( $data );
         
-        $json->saveGroup( $encodedData );
+        //@todo add group members array to the test
+        $groupMembers = array();
+        $json->saveGroup( $encodedData, $groupMembers );
 
         $updatedGroup = Tinebase_Group::getInstance()->getGroupByName($this->objects['updatedGroup']->name);
         
