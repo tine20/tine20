@@ -73,7 +73,7 @@ class Tinebase_Json_Container
         $container = Tinebase_Container::getInstance()->addContainer($newContainer);
         
         $result = $container->toArray();
-        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray();
+        $result['grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray();
         
         return $result;
     }
