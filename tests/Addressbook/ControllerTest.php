@@ -55,11 +55,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             Tinebase_Container::GRANT_EDIT
         );
         
-        if($personalContainer->count() === 0) {
-            $container = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Addressbook', 'PHPUNIT');
-        } else {
-            $container = $personalContainer[0];
-        }
+        $container = $personalContainer[0];
         
         $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
