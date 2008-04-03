@@ -255,7 +255,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * validate the the internal data
+     * validate and filter the the internal data
      *
      * @param $_throwExceptionOnInvalidData
      * @return bool
@@ -266,10 +266,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $inputFilter = $this->_getFilter();
             $inputFilter->setData($this->_properties);
             
-            $this->_isValidated = $inputFilter->isValid();
-            
-            // still invalid? let's store the fields with problems
-            if($this->_isValidated === false) {
+            if ($inputFilter->isValid()) {
+                // set $this->_properties with the filtered values
+                $this->_properties = $inputFilter->getUnescaped();
+                $this->_isValidated = true;
+            } else {
                 $this->_validationErrors = array();
                 
                 foreach($inputFilter->getMessages() as $fieldName => $errorMessage) {
@@ -291,6 +292,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return $this->_isValidated;
     }
     
+    public function applyFilter()
+    {
+        $this->isValid(true);
+        
+    }
     /**
      * sets record related properties
      * 
@@ -349,7 +355,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected function _getFilter()
     {
         if ($this->_Zend_Filter == NULL) {
-           $this->_Zend_Filter = new Zend_Filter_Input( $this->_filters, $this->_validators);
+           $this->_Zend_Filter = new Zend_Filter_Input($this->_filters, $this->_validators);
         }
         return $this->_Zend_Filter;
     }
