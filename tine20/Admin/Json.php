@@ -76,15 +76,35 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        //@todo use controller
-        $groups = Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
+        $groups = Admin_Controller::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
 
         $result['results'] = $groups->toArray();
         $result['totalcount'] = count($groups);
         
         return $result;
     }
-    
+
+    /**
+     * get list of groupmembers
+     *
+     * @param int $groupId
+     * @return array with results / totalcount
+     */
+    public function getGroupMembers($groupId)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $members = Admin_Controller::getInstance()->getGroupMembers($groupId);
+        
+        $result['results'] = $members;
+        $result['totalcount'] = count($members);
+        
+        return $result;
+    }
+        
     /**
      * save group data from edit form
      *

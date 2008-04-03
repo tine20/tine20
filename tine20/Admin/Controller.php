@@ -185,5 +185,24 @@ class Admin_Controller
         }*/
         
         return $group;            
-    }   
+    }  
+
+    /**
+     * get list of groupmembers
+     *
+     * @param int $_groupId
+     * @return array with Tinebase_A
+     */
+    public function getGroupMembers($_groupId)
+    {
+        $accountIds = Tinebase_Group::getInstance()->getGroupMembers($_groupId);
+        
+        $result = array ();
+        foreach ( $accountIds as $accountId ) {
+            $result[] = Tinebase_Account::getInstance()->getFullAccountById($accountId)->toArray();
+        }
+        
+        return $result;
+    }
+    
 }
