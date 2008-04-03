@@ -280,6 +280,7 @@ Tine.Admin.Groups.Main = {
 /*********************************** EDIT DIALOG / ACCOUNTPICKER ********************************/
 
 /* not used */
+// @todo remove!
 Tine.Admin.Groups.AccountpickerDialog = Ext.extend(Tine.widgets.AccountpickerPanel, {
     
     /**
@@ -287,14 +288,6 @@ Tine.Admin.Groups.AccountpickerDialog = Ext.extend(Tine.widgets.AccountpickerPan
      * group to manage grants for
      */
     group: null,
-
-    /**
-     * @property {Object}
-     * Models 
-     */
-    /*models: {
-       groupMember : Tine.Admin.Model.groupMember
-    },*/
 
     id: 'GroupsAccountDialog',
 
@@ -610,7 +603,7 @@ Tine.Admin.Groups.EditDialog = {
     /**
      * function display
      */
-    display: function(_groupData) 
+    display: function(_groupData, _groupMembers) 
     {
 
         /******* actions ********/
@@ -645,32 +638,23 @@ Tine.Admin.Groups.EditDialog = {
         });
 
         /******* data store ********/
-        
-        // @todo load store on function call (display)  
-        
-        this.dataStore =  new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Admin.getGroupMembers',
-                groupId: _groupData.id
-            },
+
+        //console.log ( _groupMembers );        
+             
+        this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: Tine.Admin.Model.groupMember
+            fields: Tine.Admin.Model.groupMember,
         });
-        
+
         Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
         
-        this.dataStore.setDefaultSort('accountLoginName', 'asc');
+        this.dataStore.setDefaultSort('accountLoginName', 'asc');        
         
-        this.dataStore.load();
-        
-        this.dataStore.on('update', function(_store){
-            Ext.getCmp('AccountsActionSaveButton').enable();
-            Ext.getCmp('AccountsActionApplyButton').enable();
-        }, this);
-        
-        //console.log ( this.dataStore.data );
+        this.dataStore.loadData( _groupMembers );
+
+        //console.log ( this.dataStore );        
         
         /******* column model ********/
 
@@ -729,10 +713,7 @@ Tine.Admin.Groups.EditDialog = {
             height: 500,
             items:[{
             	region: 'north',
-            	//region: 'center',
                 layout:'column',
-                //anchor:'100%',
-                //autoHeight: true,
                 height: 200,
                 items:[{
                     columnWidth: 1,

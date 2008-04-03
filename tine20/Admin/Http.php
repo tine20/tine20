@@ -71,9 +71,12 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     {
         if(empty($groupId)) {
         	$encodedGroup = Zend_Json::encode(array());
+        	$encodedGroupMembers = Zend_Json::encode(array());
         } else {
             $group = Admin_Controller::getInstance()->getGroup($groupId);        	
             $encodedGroup = Zend_Json::encode($group->toArray());
+            $json = new Admin_Json();
+            $encodedGroupMembers = Zend_Json::encode($json->getGroupMembers($groupId));
         }
 
         $currentAccount = Zend_Registry::get('currentAccount');
@@ -89,7 +92,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         //$view->jsIncludeFiles[] = 'Admin/js/Admin.js';
         $view->jsIncludeFiles[] = 'Admin/js/Groups.js';
         $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
-        $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ');';
+        $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ', ' . $encodedGroupMembers . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
