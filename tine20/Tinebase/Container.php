@@ -379,7 +379,7 @@ class Tinebase_Container
      * @param int|Tinebase_Model_Container $_containerId the id of the container
      * @return Tinebase_Model_Container
      */
-    public function getContainerByName($_containerName, $_type, $_application)
+    public function getContainerByName($_application, $_containerName, $_type)
     {
         if($_type !== self::TYPE_INTERNAL and $_type !== self::TYPE_PERSONAL and $_type !== self::TYPE_SHARED) {
             throw new Exception('invalid $_type supplied');
