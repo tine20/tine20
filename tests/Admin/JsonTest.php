@@ -50,11 +50,34 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-    	$this->objects['initialGroup'] = array (   'name' => 'test group',
-    	                                           'description' => 'some description' );
-        $this->objects['updateGroup'] = array (   'name' => 'test group',
-                                                   'description' => 'some description updated' );
-    	
+        $this->objects['initialGroup'] = new Tinebase_Group_Model_Group(array(
+            'name'          => 'tine20phpunit',
+            'description'   => 'initial group'
+        )); 
+        
+        $this->objects['updatedGroup'] = new Tinebase_Group_Model_Group(array(
+            'name'          => 'tine20phpunit',
+            'description'   => 'updated group'
+        )); 
+            	
+        $this->objects['account'] = new Tinebase_Account_Model_FullAccount(array(
+            'accountId'             => 10,
+            'accountLoginName'      => 'tine20phpunit',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->getId(),
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )); 
+        
+        // add account for group member tests
+        try {
+            Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId) ;
+        } catch ( Exception $e ) {
+            Tinebase_Account::getInstance()->addAccount (  $this->objects['account'] );
+        }
+        
         return;
         
     }
@@ -67,7 +90,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+        // remove accounts for group member tests
+        Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account']->accountId );        
     }
     
     /**
@@ -91,13 +115,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Admin_Json();
         
-        $encodedData = Zend_Json::encode( $this->objects['initialGroup'] );
+        //print_r ( $this->objects['initialGroup']->toArray());
+        $encodedData = Zend_Json::encode( $this->objects['initialGroup']->toArray() );
         
         $json->saveGroup( $encodedData );
         
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
         
-        $this->assertEquals($this->objects['initialGroup']['name'], $group->name);
+        $this->assertEquals($this->objects['initialGroup']->description, $group->description);
     }    
 
     /**
@@ -108,18 +133,40 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Admin_Json();
 
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
         
-        $data = $this->objects['updateGroup'];
+        $data = $this->objects['updatedGroup']->toArray();
         $data['id'] = $group->getId();
         $encodedData = Zend_Json::encode( $data );
         
         $json->saveGroup( $encodedData );
 
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
+        $updatedGroup = Tinebase_Group::getInstance()->getGroupByName($this->objects['updatedGroup']->name);
         
-        $this->assertEquals($this->objects['updateGroup']['description'], $group->description); 
+        $this->assertEquals($this->objects['updatedGroup']->description, $updatedGroup->description); 
     }    
+
+    /**
+     * try to set/get group members
+     *
+     */
+    public function testGetGroupMembers()
+    {        
+        $json = new Admin_Json();        
+        
+        $setGroupMembersArray = array ( $this->objects['account']->accountId );
+        
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
+        
+        //@todo set with json?
+        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $setGroupMembersArray );
+        
+        // get group members with json
+        $getGroupMembersArray = $json->getGroupMembers($group->getId());
+        
+        $this->assertEquals($this->objects['account']->accountLoginName, $getGroupMembersArray['results'][0]['accountLoginName']);
+        $this->assertGreaterThan(0, $getGroupMembersArray['totalcount']);
+    }       
     
     /**
      * try to delete group
@@ -128,11 +175,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testDeleteGroup()
     {
     	$json = new Admin_Json();
-    	
-    	// get group by name
-    	$group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);
-    	
+    	    	
     	// delete group with json.php function
+    	$group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
     	$groupId = Zend_Json::encode( array($group->getId()) );
     	$result = $json->deleteGroups( $groupId );
     	
@@ -142,7 +187,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     	$this->setExpectedException('Tinebase_Record_Exception_NotDefined');
     	
         // get group by name
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']['name']);    	
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);    	
     }    
     
 }		
