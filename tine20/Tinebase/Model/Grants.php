@@ -81,6 +81,6 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             )
         );
         
-        return parent::__construct($_data, $_bypassFilters);
+        return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 }
