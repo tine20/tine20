@@ -199,7 +199,8 @@ class Admin_Controller
         
         $result = array ();
         foreach ( $accountIds as $accountId ) {
-            $result[] = Tinebase_Account::getInstance()->getFullAccountById($accountId)->toArray();
+            //$result[] = Tinebase_Account::getInstance()->getFullAccountById($accountId)->toArray();
+            $result[] = Tinebase_Account::getInstance()->getAccountById($accountId)->toArray();
         }
         
         return $result;
