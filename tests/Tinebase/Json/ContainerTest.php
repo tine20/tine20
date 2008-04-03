@@ -73,7 +73,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         $container = $json->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Container::TYPE_PERSONAL);
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
-        $this->assertEquals(Tinebase_Container::GRANT_ANY, $container['account_grants']);
+        $this->assertTrue($container['grants']['adminGrant']);
 
         Tinebase_Container::getInstance()->deleteContainer($container['id']);
     }
@@ -150,10 +150,10 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
     }
             
     /**
-     * try to add an account
+     * try to set container grants
      *
      */
-    public function testSetGrants()
+    public function testSetContainerGrants()
     {
         $json = new Tinebase_Json_Container();
 
@@ -178,7 +178,8 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, count($grants));
         $this->assertFalse($grants[0]["deleteGrant"]);
-
+        $this->assertTrue($grants[0]["adminGrant"]);
+        
 
         $json->deleteContainer($container['id']);
 
