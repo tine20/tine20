@@ -638,7 +638,7 @@ Tine.Admin.Model.Group = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
-    // @todo add accounts array to group model
+    // @todo add accounts array to group model?
 ]);
 
 Tine.Admin.Model.groupMember = Ext.data.Record.create([

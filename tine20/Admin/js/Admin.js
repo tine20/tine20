@@ -1280,27 +1280,13 @@ Tine.Admin.Accounts.EditDialog = function() {
                         name: 'accountPassword2',
                         inputType: 'password',
                         emptyText: 'no password set'
-                    }, {
-                        xtype: 'combo',
+                    },  new Tine.widgets.group.selectionComboBox({
                         fieldLabel: 'Primary group',
                         name: 'accountPrimaryGroup',
-                        mode: 'local',
-                        displayField:'groupName',
-                        valueField:'key',
-                        triggerAction: 'all',
-                        allowBlank: false,
-                        editable: false,
-                        store: new Ext.data.SimpleStore(
-                            {
-                                fields: ['key','groupName'],
-                                data: [
-                                    ['1','Admins'],
-                                    ['2','Default'],
-                                    ['3','Guest']
-                                ]
-                            }
-                        )
-                    }, {
+                        displayField:'name',
+                        valueField:'id',
+                    }), 
+                    {
                         xtype: 'textfield',
                         vtype: 'email',
                         fieldLabel: 'Emailaddress',
@@ -1376,6 +1362,8 @@ Tine.Admin.Accounts.EditDialog = function() {
         
         display: function(_accountData) 
         {
+        	console.log ( _accountData );
+        	
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'admin_editAccountForm',

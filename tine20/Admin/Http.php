@@ -30,13 +30,21 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         if(!empty($accountId)) {
             $account = Tinebase_Account::getInstance()->getFullAccountById($accountId);
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
-            $account = Zend_Json::encode($account->toArray());
+            
+            // add primary group to account for the group selection combo box
+            $group = $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
+            $arrayAccount = $account->toArray();
+            $arrayAccount['accountPrimaryGroup'] = $group->toArray();
+            
+            $encodedAccount = Zend_Json::encode($arrayAccount);           
         } else {
-            $account = Zend_Json::encode(array('accountStatus' => 'enabled'));
+            $encodedAccount = Zend_Json::encode(array('accountStatus' => 'enabled'));
+            
+            //@todo get default primary group for the group selection combo box
         }
         
         $currentAccount = Zend_Registry::get('currentAccount');
-        
+                
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
@@ -46,7 +54,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         
         $view->jsIncludeFiles[] = 'Admin/js/Admin.js';
         $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
-        $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $account . ');';
+        $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
