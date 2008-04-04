@@ -178,7 +178,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteGroup()
     {
-        /*
+        
     	$json = new Admin_Json();
     	    	
     	// delete group with json.php function
@@ -193,7 +193,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     	
         // get group by name
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name); 
-        */   	
+        	
     }    
     
 }		
