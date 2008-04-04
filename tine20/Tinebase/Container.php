@@ -339,7 +339,7 @@ class Tinebase_Container
             $application = Tinebase_Controller::getApplicationInstance($_application);
             
             if($application instanceof Tinebase_Container_Abstract) {
-                return $application->createPersonalFolder($_accountId);
+                $result = $application->createPersonalFolder($_accountId);
             }
         }
 
@@ -412,42 +412,25 @@ class Tinebase_Container
      */
     public function getInternalContainer($_accountId, $_application)
     {
-        $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        $application        = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
-        if(count($groupMemberships) === 0) {
-            throw new Exception('account must be in at least one group');
-        }
+        $select  = $this->containerTable->select()
+            ->where('type = ?', Tinebase_Container::TYPE_INTERNAL)
+            ->where('application_id = ?', $applicationId);
+
+        $row = $this->containerTable->fetchRow($select);
         
-        $db = Zend_Registry::get('dbAdapter');
-
-        $select = $db->select()
-            ->from(SQL_TABLE_PREFIX . 'container_acl', array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
-            ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
-
-            # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
-            
-            ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_INTERNAL)
-            ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
-            ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->having('account_grants & ?', self::GRANT_READ)
-            ->order(SQL_TABLE_PREFIX . 'container.name');
-            
-        //error_log("getInternalContainer:: " . $select->__toString());
-
-        $stmt = $db->query($select);
-        $result = new Tinebase_Model_Container($stmt->fetch(Zend_Db::FETCH_ASSOC), true);
-        
-        if(empty($result)) {
-            throw new Exception('internal container not found or not accessible');
+        if($row === NULL) {
+            throw new UnderflowException('no internal container found');
         }
 
-        return $result;
+        $container = new Tinebase_Model_Container($row->toArray());
         
+        if(!$this->hasGrant($_accountId, $container, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('permission to container denied');
+        }
+        
+        return $container;        
     }
     
     /**
@@ -883,7 +866,6 @@ class Tinebase_Container
         $grants = new Tinebase_Model_Grants( array(
             'accountId'     => $accountId,
             'accountType'   => 'account',
-            'accountName'   => 'not used'
         ));
         
         foreach($rows as $row) {
