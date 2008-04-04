@@ -108,13 +108,15 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * save group data from edit form
      *
-     * @param   array $groupData        json encoded group data
-     * @param   array $groupMembers     json encoded array of group members
-     * @return  array with group data
+     * @param   string $groupData        json encoded group data
+     * @param   string $groupMembers     json encoded array of group members
+     * 
+     * @return  array with success, message, group data and group members
      */
     public function saveGroup($groupData, $groupMembers)
     {
         $decodedGroupData = Zend_Json::decode($groupData);
+        $decodedGroupMembers = Zend_Json::decode($groupMembers);
         
         // unset if empty
         if(empty($decodedGroupData['id'])) {
@@ -134,18 +136,17 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
         
-        //@todo use controller
-        if(isset($decodedGroupData['id'])) {
-            $group = Tinebase_Group::getInstance()->updateGroup($group);
+        if ( empty($group->id) ) {
+            $group = Admin_Controller::getInstance()->addGroup($group, $decodedGroupMembers);
         } else {
-            $group = Tinebase_Group::getInstance()->addGroup($group);
+            $group = Admin_Controller::getInstance()->updateGroup($group, $decodedGroupMembers);
         }
-        
-        //@todo set group members
-         
+                 
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $group->toArray());
+                        'updatedData'       => $group->toArray(),
+                        'groupMembers'      => Admin_Controller::getInstance()->getGroupMembers($group->getId())
+        );
         
         return $result;
         
@@ -341,6 +342,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
+    
     
     
     /**

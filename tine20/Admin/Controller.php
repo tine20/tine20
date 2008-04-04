@@ -187,6 +187,42 @@ class Admin_Controller
         return $group;            
     }  
 
+   /**
+     * add new group
+     *
+     * @param Tinebase_Group_Model_Group $_group
+     * @param array $_groupMembers
+     * 
+     * @return Tinebase_Group_Model_Group
+     */
+    public function AddGroup(Tinebase_Group_Model_Group $_group, array $_groupMembers = array ())
+    {
+        $group = Tinebase_Group::getInstance()->addGroup($_group);
+        
+        if ( !empty($_groupMembers) ) {
+            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_groupMembers);
+        }
+
+        return $group;            
+    }  
+
+   /**
+     * update existing group
+     *
+     * @param Tinebase_Group_Model_Group $_group
+     * @param array $_groupMembers
+     * 
+     * @return Tinebase_Group_Model_Group
+     */
+    public function UpdateGroup(Tinebase_Group_Model_Group $_group, array $_groupMembers = array ())
+    {
+        $group = Tinebase_Group::getInstance()->updateGroup($_group);
+        
+        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_groupMembers);
+
+        return $group;            
+    }  
+    
     /**
      * get list of groupmembers
      *
