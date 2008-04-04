@@ -261,15 +261,6 @@ class Tinebase_Container
         }
         
         foreach($_grants as $grant) {
-            $grant = (int)$grant;
-            
-            if($grant === 0 || $grant > self::GRANT_ADMIN) {
-                throw new InvalidArgumentException('$_grant must be integer and can not be greater than ' . self::GRANT_ADMIN);
-            }
-            if($grant > 1 && $grant % 2 !== 0) {
-                throw new InvalidArgumentException('you can only set one grant(1,2,4,8,...) at once');
-            }
-            
             $data = array(
                 'container_id'  => $containerId,
                 'account_type'  => $_accountType,
@@ -296,11 +287,6 @@ class Tinebase_Container
     public function getContainerByACL($_accountId, $_application, $_right)
     {
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        
-        $right = (int)$_right;
-        if($right != $_right) {
-            throw new InvalidArgumentException('$_right must be integer');
-        }
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
