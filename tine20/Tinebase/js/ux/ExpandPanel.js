@@ -77,4 +77,4 @@ Ext.ux.ExpandPanel = Ext.extend(Ext.Panel, {
         }
     }
 });
-Ext.reg('expanderpanel', Ext.ux.ExpanderPanel);
+Ext.reg('expanderpanel', Ext.ux.ExpandPanel);
