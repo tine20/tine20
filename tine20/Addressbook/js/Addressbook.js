@@ -140,7 +140,7 @@ Tine.Addressbook.Main = {
         });
 
         this.actions.exportContact = new Ext.Action({
-            text: 'export contact',
+            text: 'export as pdf',
             disabled: true,
             handler: this.handlers.exportContact,
             iconCls: 'action_export',
@@ -809,7 +809,7 @@ Tine.Addressbook.ContactEditDialog = {
     {
         // export lead handler for edit contact dialog
         var  _export_contact = new Ext.Action({
-                text: 'export contact',
+                text: 'export as pdf',
                 handler: function(){
                     var contactId = _contactData.id;
                     Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
