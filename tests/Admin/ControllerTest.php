@@ -82,8 +82,8 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testGetGroup()
-    {        
-        $group = Admin_Controller::getInstance()->getGroup(2);
+    {                
+        $group = Admin_Controller::getInstance()->getGroup(Tinebase_Group::getInstance()->getGroupByName('Users')->getId());
         
         $this->assertEquals('Users', $group->name);
     }    
