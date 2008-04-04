@@ -172,6 +172,7 @@ Tine.Addressbook.Main = {
                 this.actions.addContact, 
                 this.actions.editContact,
                 this.actions.deleteContact,
+                '-',
                 this.actions.exportContact,
                 '->', 
                 'Search:', 
