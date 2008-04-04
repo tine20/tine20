@@ -72,6 +72,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             self::_appendFileTime("Tinebase/js/ux/Percentage.js"),
             self::_appendFileTime("Tinebase/js/ux/PopupWindow.js"),
             self::_appendFileTime("Tinebase/js/ux/Wizard.js"),
+            self::_appendFileTime("Tinebase/js/ux/ExpandPanel.js"),
             self::_appendFileTime("Tinebase/js/ux/grid/CheckColumn.js"),
             self::_appendFileTime("Tinebase/js/ux/grid/QuickaddGridPanel.js"),
             self::_appendFileTime("Tinebase/js/ux/form/IconTextField.js"),
