@@ -302,6 +302,7 @@ class Tinebase_Container
                 array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $applicationId)
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_right)
             
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
@@ -309,7 +310,6 @@ class Tinebase_Container
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
             ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->having('account_grants & ?', $right)
             ->order(SQL_TABLE_PREFIX . 'container.name');
 
         //error_log("getContainer:: " . $select->__toString());
