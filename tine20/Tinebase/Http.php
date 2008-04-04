@@ -83,7 +83,8 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             self::_appendFileTime("Tinebase/js/widgets/ContainerSelect.js"),
             self::_appendFileTime("Tinebase/js/widgets/ContainerGrants.js"),
             self::_appendFileTime("Tinebase/js/widgets/ContainerTree.js"),
-        );
+            self::_appendFileTime("Tinebase/js/widgets/GroupSelect.js"),
+            );
     }
     
 	/**
