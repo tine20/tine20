@@ -146,7 +146,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $grants['totalcount']);
         $this->assertTrue($grants['results'][0]["readGrant"]);
-
+        $this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $grants['results'][0]["accountId"]["accountId"]);
 
         $json->deleteContainer($container['id']);
 
