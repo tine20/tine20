@@ -281,10 +281,10 @@ class Tinebase_Container
      * 
      * @param int $_accountId
      * @param string $_application the application name
-     * @param int $_right the required right
+     * @param int $_grant the required grant
      * @return Tinebase_Record_RecordSet
      */
-    public function getContainerByACL($_accountId, $_application, $_right)
+    public function getContainerByACL($_accountId, $_application, $_grant)
     {
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
@@ -302,7 +302,7 @@ class Tinebase_Container
                 array('account_grants' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)')
             )
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $applicationId)
-            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_right)
+            ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
             
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
@@ -452,6 +452,7 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', 'owner.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
             ->where('owner.account_id = ?', $ownerId)
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
+            ->where('user.account_grant = ?', $_grant)
 
             # beware of the extra parenthesis of the next 3 rows
             ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
@@ -461,7 +462,6 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container.application_id = ?', $application->id)
             ->where(SQL_TABLE_PREFIX . 'container.type = ?', self::TYPE_PERSONAL)
             ->group(SQL_TABLE_PREFIX . 'container.id')
-            ->having('account_grants & ?', $_grant)
             ->order(SQL_TABLE_PREFIX . 'container.name');
             
         //error_log("getContainer:: " . $select->__toString());
