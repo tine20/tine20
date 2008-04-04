@@ -331,8 +331,10 @@ Tine.Admin.Groups.EditDialog = {
                 var dataStore = groupGrid.getStore();
                 
                 dataStore.each(function(_record){
-                    groupMembers.push(_record.data);
+                    groupMembers.push(_record.data.accountId);
                 });
+                
+                console.log(groupMembers);
                                 
                 // update form               
                 form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
