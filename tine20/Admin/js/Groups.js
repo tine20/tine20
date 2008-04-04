@@ -568,33 +568,33 @@ Tine.Admin.Groups.EditDialog = {
             width: 600,
             height: 500,
             items:[{
-            	region: 'north',
-                layout:'column',
-                height: 200,
-                items:[{
-                    columnWidth: 1,
-                    layout: 'form',
-                    border: false,
-                    items:[{
-                        xtype:'textfield',
-                        fieldLabel:'Group Name', 
-                        name:'name',
-                        anchor:'95%',
-                        allowBlank: false,
-                    }, {
-                        xtype:'textarea',
-                        name: 'description',
-                        fieldLabel: 'Description',
-                        grow: false,
-                        preventScrollbars:false,
-                        anchor:'95%',
-                        height: 120
-                    }]        
-                }]
-            },
-            accountPicker, 
-            groupMembersGridPanel,
-
+	            	region: 'north',
+	                layout:'column',
+	                border: false,
+	                autoHeight: true,
+	                items:[{
+	                    columnWidth: 1,
+	                    layout: 'form',
+	                    border: false,
+	                    items:[{
+	                        xtype:'textfield',
+	                        fieldLabel:'Group Name', 
+	                        name:'name',
+	                        anchor:'100%',
+	                        allowBlank: false,
+	                    }, {
+	                        xtype:'textarea',
+	                        name: 'description',
+	                        fieldLabel: 'Description',
+	                        grow: false,
+	                        preventScrollbars:false,
+	                        anchor:'100%',
+	                        height: 60
+	                    }]        
+	                }]
+	            },
+	            accountPicker, 
+	            groupMembersGridPanel
             ]
         };
         
@@ -605,7 +605,7 @@ Tine.Admin.Groups.EditDialog = {
             id : 'groupDialog',
             tbarItems: [],
             title: 'Edit Group ' + _groupData.name,
-            layout: 'border',
+            layout: 'fit',
             labelWidth: 120,
             labelAlign: 'top',
             handlerScope: this,
