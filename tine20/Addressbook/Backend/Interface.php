@@ -38,7 +38,7 @@ interface Addressbook_Backend_Interface
      * @param int $_start how many contaxts to skip
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL);
+    public function getContacts(array $_container, $_filter = NULL, $_pagination = NULL);
     
     /**
      * fetch one contact identified by contactid

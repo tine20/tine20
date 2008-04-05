@@ -100,7 +100,14 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
 
-        if($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $sort, $dir, $limit, $start)) {
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        if($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $pagination)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -156,8 +163,15 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-                
-        if($rows = Addressbook_Controller::getInstance()->getContactsByAddressbookId($addressbookId, $filter, $sort, $dir, $limit, $start)) {
+        
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        if($rows = Addressbook_Controller::getInstance()->getContactsByAddressbookId($addressbookId, $filter, $pagination)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
@@ -189,7 +203,14 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $rows = Addressbook_Controller::getInstance()->getAllContacts($filter, $sort, $dir, $limit, $start);
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $rows = Addressbook_Controller::getInstance()->getAllContacts($filter, $pagination);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
@@ -221,7 +242,14 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
 
-        $rows = Addressbook_Controller::getInstance()->getSharedContacts($filter, $sort, $dir, $limit, $start);
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $rows = Addressbook_Controller::getInstance()->getSharedContacts($filter, $pagination);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();
@@ -255,7 +283,14 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
                 
-        $rows = Addressbook_Controller::getInstance()->getOtherPeopleContacts($filter, $sort, $dir, $limit, $start);
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        $rows = Addressbook_Controller::getInstance()->getOtherPeopleContacts($filter, $pagination);
         
         if($rows !== false) {
             $result['results']    = $rows->toArray();

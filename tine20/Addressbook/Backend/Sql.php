@@ -199,7 +199,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param int $_start how many contaxts to skip
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
+    #public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
+    public function getContacts(array $_container, $_filter = NULL, $_pagination = NULL)
     {
         if(count($_container) === 0) {
             throw new Exception('$_container can not be empty');
@@ -208,7 +209,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $where = array(
             $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container)
         );
-        $result = $this->_getContactsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start);
+        $result = $this->_getContactsFromTable($where, $_filter, $_pagination);
          
         return $result;
     }
@@ -264,11 +265,15 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param int $_start
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    protected function _getContactsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start)
+    protected function _getContactsFromTable(array $_where, $_filter, $_pagination)
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
 
-        $rows = $this->contactsTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
+        if($_pagination instanceof Tinebase_Model_Pagination) {
+            $rows = $this->contactsTable->fetchAll($where, $_pagination->sort, $_pagination->dir, $_pagination->limit, $_pagination->start);
+        } else {
+            $rows = $this->contactsTable->fetchAll($where);
+        }
 
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows->toArray(),  true);
         
