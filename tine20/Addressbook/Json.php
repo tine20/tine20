@@ -93,7 +93,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param int $limit
      * @return array
      */
-    public function getContactsByOwner($filter, $owner, $start, $sort, $dir, $limit)
+    public function getContactsByOwner($filter, $owner, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
@@ -148,7 +148,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param int $limit
      * @return array
      */
-    public function getAccounts($filter, $start, $sort, $dir, $limit)
+    public function getAccounts($filter, $sort, $dir, $limit, $start)
     {
         $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
         
@@ -157,7 +157,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
-    public function getContactsByAddressbookId($addressbookId, $filter, $start, $sort, $dir, $limit)
+    public function getContactsByAddressbookId($addressbookId, $filter, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
@@ -196,7 +196,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param string $options json encoded array of additional options
      * @return array
      */
-    public function getAllContacts($filter, $start, $sort, $dir, $limit)
+    public function getAllContacts($filter, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
