@@ -53,7 +53,7 @@ foreach ( new DirectoryIterator('./') as $item ) {
 $groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
 
 $adminGroup = new Tinebase_Group_Model_Group(array(
-    'name'          => 'Adminstrators',
+    'name'          => 'Administrators',
     'description'   => 'Group of administrative accounts'
 ));
 $groupsBackend->addGroup($adminGroup);
