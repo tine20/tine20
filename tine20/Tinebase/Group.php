@@ -216,6 +216,30 @@ class Tinebase_Group
         return $result;
     	
     }
+
+    /**
+     * get default group
+     *
+     * @return Tinebase_Group_Model_Group
+     * 
+     * @todo    add to unit tests
+     */
+    public function getDefaultGroup()
+    {
+        // get default group name from config.ini
+        //@todo add extra section for group settings?
+        try {
+            $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
+        } catch (Zend_Config_Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
+        }
+        $defaultGroupName = ( isset($config->accountPrimaryGroup) ) ? $config->accountPrimaryGroup : 'Users' ;
+        
+        $result = $this->_backend->getGroupByName($defaultGroupName);
+        
+        return $result;
+        
+    }
     
     /**
      * get list of groups
