@@ -512,7 +512,7 @@ Tine.Admin.Groups.EditDialog = {
         /******* column model ********/
 
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'accountDisplayName', header: 'Login', dataIndex: 'accountDisplayName', width: 30 },
+            { resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 },
             /*{ resizable: true, id: 'accountLoginName', header: 'Login', dataIndex: 'accountLoginName', width: 30 },
              { resizable: true, id: 'accountFullName', header: 'Name', dataIndex: 'accountFullName', width: 180 }, */
             ]
