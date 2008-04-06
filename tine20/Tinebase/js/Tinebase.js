@@ -262,7 +262,7 @@ Tine.Tinebase.MainScreen = function() {
 					// layout-specific configs go here
 					titleCollapse: true,
 					animate: true,
-					activeOnTop: false,
+					activeOnTop: true,
 					hideCollapseTool: true
 				},
 				items: _getPanels()
