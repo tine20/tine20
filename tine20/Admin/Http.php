@@ -30,18 +30,20 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         if(!empty($accountId)) {
             $account = Tinebase_Account::getInstance()->getFullAccountById($accountId);
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
+            $arrayAccount = $account->toArray();
             
             // add primary group to account for the group selection combo box
             $group = $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
-            $arrayAccount = $account->toArray();
-            $arrayAccount['accountPrimaryGroup'] = $group->toArray();
-            
-            $encodedAccount = Zend_Json::encode($arrayAccount);           
         } else {
-            $encodedAccount = Zend_Json::encode(array('accountStatus' => 'enabled'));
+            $arrayAccount = array('accountStatus' => 'enabled');
             
-            //@todo get default primary group for the group selection combo box
+            // get default primary group for the group selection combo box
+            $group = $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         }
+
+        // encode the account array
+        $arrayAccount['accountPrimaryGroup'] = $group->toArray();
+        $encodedAccount = Zend_Json::encode($arrayAccount);                   
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 
