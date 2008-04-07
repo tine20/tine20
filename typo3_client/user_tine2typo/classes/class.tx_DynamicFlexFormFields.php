@@ -48,7 +48,7 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		try
 		{
 			$dbh = Factory::createDB( 'PDO' );
-
+			
 			$sql = '
 				SELECT pi_flexform
 				FROM tt_content
@@ -62,11 +62,22 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 			$dbh = null;
 		}
 		catch( PDOException $pe ) {
-			print_r(  $pe->getMessage() . ' - ' . $pe->errorInfo );
+			print_r( "PDO-Message" .  $pe->getMessage() . ' - ' . $pe->errorInfo );
 		}
 		catch( Exception $e ) {
-			print_r( $e->getMessage() );
-		}
+			// seems not to be able to PDO
+			include( PATH_site . 'typo3conf/localconf.php' );
+			
+			$mysql_conn = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password);
+			@mysql_select_db($typo_db);
+			$sql = "SELECT `pi_flexform` FROM `tt_content` WHERE `uid` = '" . $_uid . "';";
+			$result = @mysql_query($sql) or die ($sql);
+			
+			$fetch = @mysql_fetch_array($result);
+			$config = $fetch['pi_flexform'];
+			
+			@mysql_close($mysql_conn);
+			}
 		
 		 $xml = t3lib_div::xml2array($config);
 		

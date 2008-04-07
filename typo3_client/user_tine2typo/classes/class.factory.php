@@ -5,13 +5,13 @@ class Factory
 {
 	public static function createDB( $type = 'PDO' )
 	{
-		include( PATH_site . '/typo3conf/localconf.php' );
+		include( PATH_site . 'typo3conf/localconf.php' );
 
 		if( !isset( $typo_db_adapter ) ) { $typo_db_adapter = 'mysql'; }
 
 		switch( $typo_db_adapter )
 		{
-			case 'mysql':
+			case 'PDO':
 				
 				try{
 					$conf = array(
@@ -26,12 +26,19 @@ class Factory
 
 					$dbh = new PDO( $conf['dsn'], $conf['user'], $conf['pass'], $conf['attr'] );
 					$dbh->exec( "SET NAMES 'utf8'" );
+
 					return $dbh;
 				}
 				catch (Exception $e)
 				{
-				print_r($e);
+				print_r($e->getMessage());
 				}
+				break;
+			case 'mysql':{
+			
+				
+			}	
+				
 			default:
 				
 				throw new Exception( 'Unknown database type: ' . $type );
