@@ -26,7 +26,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	 * Models 
 	 */
 	models: {
-		containerGrant : Tine.Tinebase.container.models.containerGrant
+		containerGrant : Tine.Tinebase.Model.Grant
 	},
 	
 	id: 'ContainerGrantsDialog',
@@ -50,8 +50,8 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 			
 			if (dataStore.getById(account.data.accountId) === undefined) {
 				var record = new cgd.models.containerGrant({
-					accountId: account.data.accountId,
-					accountName: account.data,
+					accountId: account.data,
+                    accountType: 'account',
 					readGrant: true,
 					addGrant: false,
 					editGrant: false,
@@ -76,7 +76,9 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 				var grantsStore = cgd.dataStore;
 				
 				grantsStore.each(function(_record){
-					grants.push(_record.data);
+                    var grant = new Tine.Tinebase.Model.Grant(_record.data);
+                    grant.data.accountId = _record.data.accountId.accountId;
+					grants.push(grant.data);
 				});
 				
 				Ext.Ajax.request({
@@ -131,13 +133,13 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'accountId',
+            //id: 'accountId',
             fields: this.models.containerGrant
         });
 	    
 		Ext.StoreMgr.add('ContainerGrantsStore', this.dataStore);
 		
-        this.dataStore.setDefaultSort('accountName', 'asc');
+        //this.dataStore.setDefaultSort('accountId', 'asc');
         
         this.dataStore.load();
         
@@ -180,12 +182,13 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
         var columnModel = new Ext.grid.ColumnModel([
             {
                 resizable: true, 
-                id: 'accountName', 
+                id: 'accountId', 
                 header: 'Name', 
-                dataIndex: 'accountName', 
+                dataIndex: 'accountId', 
                 renderer: Tine.Tinebase.Common.usernameRenderer,
                 width: 70
-            }].concat(columns)
+            }
+            ].concat(columns)
         );
 
         
@@ -221,7 +224,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             enableColLock:false,
             loadMask: true,
             plugins: columns, // [readColumn, addColumn, editColumn, deleteColumn],
-            autoExpandColumn: 'accountName',
+            autoExpandColumn: 'accountId',
             bbar: permissionsBottomToolbar,
             border: false
         });

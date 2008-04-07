@@ -157,7 +157,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 			var owner     = node.attributes.owner;
 			switch (node.attributes.containerType) {
 				case 'singleContainer':
-					if (container.account_grants & Tine.Tinebase.container.GRANT_ADMIN) {
+					if (container.account_grants.adminGrant) {
 						//console.log('GRANT_ADMIN for this container');
 						this.contextMenuSingleContainer.showAt(event.getXY());
 					}
@@ -348,6 +348,7 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 		// console.log(attr);
 		// map attributes from Tinebase_Container to attrs from ExtJS
 		if (attr.name) {
+            attr.account_grants = Ext.util.JSON.decode(attr.account_grants);
             attr = {
                 containerType: 'singleContainer',
                 container: attr,

@@ -32,19 +32,22 @@ class Tinebase_Json_Container
     {       
         switch($containerType) {
             case Tinebase_Container::TYPE_PERSONAL:
-                $container = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $application, $owner, Tinebase_Container::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $application, $owner, Tinebase_Container::GRANT_READ);
                 break;
             case Tinebase_Container::TYPE_SHARED:
-                $container = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
                 break;
             case 'otherUsers':
-                $container = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
                 break;
             default:
                 throw new Exception('no such NodeType');
         }
-        echo Zend_Json::encode($container->toArray());
-
+        foreach ($containers as $container) {
+            $container->bypassFilters = true;
+            $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray());
+        }
+        echo Zend_Json::encode($containers->toArray());
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
         exit;
     }
@@ -140,7 +143,7 @@ class Tinebase_Json_Container
                     $value['accountId'] = Tinebase_Group::getInstance()->getGroupById($value['accountId'])->toArray();
                     break;
                 case 'anyone':
-                    $value['accountId'] = array('name' => 'Anyone');
+                    $value['accountId'] = array('accountDisplayName' => 'Anyone');
                     break;
                 default:
                     throw new Exception('unsupported accountType');
@@ -164,7 +167,7 @@ class Tinebase_Json_Container
         
         $grants = Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
                
-        return $grants->toArray();
+        return $this->getContainerGrants($containerId);
     }
     
 }

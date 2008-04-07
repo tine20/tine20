@@ -57,22 +57,5 @@ Tine.Tinebase.container = {
     /**
      * type for shared container
      */
-    TYPE_SHARED: 'shared',
-	
-	/**
-	 * Models of Tinebase container
-	 * @property {Object}
-	 */
-	models: {
-		containerGrant: Ext.data.Record.create([
-            {name: 'accountId'},
-            {name: 'accountType'},
-            {name: 'accountName'}, // nasty namespace! need to be fixed when all apps use the grants widgets
-            {name: 'readGrant',   type: 'boolean'},
-            {name: 'addGrant',    type: 'boolean'},
-            {name: 'editGrant',   type: 'boolean'},
-            {name: 'deleteGrant', type: 'boolean'},
-            {name: 'adminGrant',  type: 'boolean'}
-        ])
-	}
+    TYPE_SHARED: 'shared'
 };
