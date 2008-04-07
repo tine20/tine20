@@ -64,6 +64,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             // base framework
             //self::_appendFileTime("../ExtJS/adapter/ext/ext-base.js"),
             //self::_appendFileTime("../ExtJS/ext-all-debug.js"),
+            self::_appendFileTime("Tinebase/js/ExtFixes.js"),
             // Tinebase
             //self::_appendFileTime("Tinebase/js/Tinebase.js"),
             self::_appendFileTime("Tinebase/js/Models.js"),
