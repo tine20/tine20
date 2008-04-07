@@ -223,10 +223,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: [
-                {name: 'accountId'},
-                {name: 'accountDisplayName'}
-            ],
+            fields: Tine.Tinebase.Model.Account,
             remoteSort: true
         });
         
@@ -250,10 +247,9 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         columnModel.defaultSortable = true; // by default columns are sortable
         
         //var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
         this.quickSearchField = new Ext.app.SearchField({
             id: 'Tinebase_Accounts_SearchField',
-            width: 290,
+            width: 253,
             emptyText: 'enter searchfilter'
         }); 
         this.quickSearchField.on('change', function(){
@@ -274,9 +270,26 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 				}
 			}
         });
-
+        var ugSelectionChange = function(pressed){
+            console.log(pressed.iconCls);  
+        };
         this.Toolbar = new Ext.Toolbar({
             items: [
+            {
+                pressed: true,
+                iconCls: 'action_selectUser',
+                xtype: 'button',
+                handler: ugSelectionChange,
+                enableToggle: true,
+                toggleGroup: 'account_picker_panel_ugselect'
+            },
+            {
+                iconCls: 'action_selectGroup',
+                xtype: 'button',
+                handler: ugSelectionChange,
+                enableToggle: true,
+                toggleGroup: 'account_picker_panel_ugselect'
+            },
                 this.quickSearchField
             ]
         });
