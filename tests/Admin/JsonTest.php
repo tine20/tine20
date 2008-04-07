@@ -196,6 +196,29 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         	
     }    
     
+    /**
+     * try to get all access log entries
+     *
+     */
+    public function testGetAccessLogs()
+    {
+        //@todo add access log entry before
+        
+        $json = new Admin_Json();
+        
+        $from = new Zend_Date ();
+        $from->sub('02:00:00',Zend_Date::TIMES);
+        $to = new Zend_Date ();
+        
+        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), NULL, 'id', 'ASC', 0, 10);
+        
+        //print_r ( $accessLogs );
+      
+        // check total count
+        $this->assertGreaterThan(0, sizeof($accessLogs['results']));
+        $this->assertGreaterThan(0, $accessLogs['totalcount']);
+    }    
+    
 }		
 	
 
