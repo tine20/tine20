@@ -45,4 +45,12 @@ html, body {
 
 .action_logOut {
     background-image:url(../../images/oxygen/16x16/actions/system-log-out.png) !important;
-}	
+}
+
+.action_selectUser {
+    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+}
+
+.action_selectGroup {
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+} 
