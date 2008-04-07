@@ -433,10 +433,9 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
-                    <autoincrement>true</autoincrement>
                 </field>
                 <field>
                     <name>container_id</name>
@@ -466,15 +465,12 @@
                 </field>
                 
                 <index>
-                    <name>id</name>
+                    <name>container_id-account-type-account_id-account_grant</name>
                     <primary>true</primary>
+                    <unique>true</unique>
                     <field>
                         <name>id</name>
                     </field>
-                </index>
-                <index>
-                    <name>container_id-account-type-account_id-account_grant</name>
-                    <unique>true</unique>
                     <field>
                         <name>container_id</name>
                     </field>
@@ -489,7 +485,10 @@
                     </field>
                 </index>
                 <index>
-                    <name>account_type-account_id</name>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
                     <field>
                         <name>account_type</name>
                     </field>

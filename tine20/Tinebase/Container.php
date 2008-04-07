@@ -232,6 +232,7 @@ class Tinebase_Container
     /**
      * add grants to container
      *
+     * @todo check that grant is not already given to container/type/accout combi
      * @param int $_containerId
      * @param int $_accountId
      * @param array $_grants list of grants to add
@@ -260,8 +261,12 @@ class Tinebase_Container
                 break;
         }
         
+        //$existingGrants = $this->getGrantsOfAccount($accountId, $containerId);
+        $id = Tinebase_Record_Abstract::generateUID();
+         
         foreach($_grants as $grant) {
             $data = array(
+                'id'            => $id,
                 'container_id'  => $containerId,
                 'account_type'  => $_accountType,
                 'account_id'    => $accountId,
@@ -760,7 +765,7 @@ class Tinebase_Container
         
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container', array('id'))
-            ->join(SQL_TABLE_PREFIX . 'container_acl', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('account_type', 'account_id', 'account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
+            ->join(SQL_TABLE_PREFIX . 'container_acl', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id', 'account_type', 'account_id', 'account_grants' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'container_acl.account_grant)'))
             ->where(SQL_TABLE_PREFIX . 'container.id = ?', $containerId)
             ->group(array(SQL_TABLE_PREFIX . 'container.id', SQL_TABLE_PREFIX . 'container_acl.account_type', SQL_TABLE_PREFIX . 'container_acl.account_id'));
 
@@ -774,6 +779,7 @@ class Tinebase_Container
 
         foreach($rows as $row) {
             $containerGrant = new Tinebase_Model_Grants( array(
+                'id'            => $row['id'],
                 'accountType'   => $row['account_type'],
                 'accountId'     => $row['account_id'],
             ));
@@ -936,10 +942,14 @@ class Tinebase_Container
             
             foreach($_grants as $recordGrants) {
                 $data = array(
+                    'id'            => $recordGrants->getId(),
                     'container_id'  => $containerId,
                     'account_id'    => $recordGrants['accountId'],
                     'account_type'  => $recordGrants['accountType'],
                 );
+                if(empty($data['id'])) {
+                    $data['id'] = $recordGrants->generateUID();
+                }
                 if($recordGrants->readGrant === true) {
                     $this->containerAclTable->insert($data + array('account_grant' => Tinebase_Container::GRANT_READ));
                 }

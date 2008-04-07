@@ -24,7 +24,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'accountId';
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -53,10 +53,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     protected $_validators = array();
 
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
+    public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = NULL)
     {
         $this->_validators = array(
-            'accountId'   => array('presence' => 'required', 'allowEmpty' => true),
+            'id'          => array('Alnum', 'allowEmpty' => TRUE),
+            'accountId'   => array('presence' => 'required', 'allowEmpty' => TRUE),
             'accountType' => array('presence' => 'required', 'InArray' => array('anyone','account','group')),
             'readGrant'   => array(
                 new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
