@@ -66,9 +66,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             //self::_appendFileTime("../ExtJS/ext-all-debug.js"),
             // Tinebase
             //self::_appendFileTime("Tinebase/js/Tinebase.js"),
+            self::_appendFileTime("Tinebase/js/Models.js"),
             self::_appendFileTime("Tinebase/js/Container.js"),
             // Ext user extensions
             self::_appendFileTime("Tinebase/js/ExtUx.js"),
+            self::_appendFileTime("Tinebase/js/ux/ButtonLockedToggle.js"),
             self::_appendFileTime("Tinebase/js/ux/Percentage.js"),
             self::_appendFileTime("Tinebase/js/ux/PopupWindow.js"),
             self::_appendFileTime("Tinebase/js/ux/Wizard.js"),
