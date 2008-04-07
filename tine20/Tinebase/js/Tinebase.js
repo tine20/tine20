@@ -706,26 +706,6 @@ Tine.Tinebase.Common = function(){
 	};
 }();
 
-Ext.namespace('Tine.Tinebase.Models');
-
-/**
- * Model of the tine account
- */
-Tine.Tinebase.Models.Account = Ext.data.Record.create([
-    { name: 'id' },
-	{ name: 'login_name' },
-	{ name: 'password' },
-	{ name: 'last_login' },
-	{ name: 'last_login_from' },
-	{ name: 'last_password_change' },
-	{ name: 'status' },
-	{ name: 'expires_at' },
-	{ name: 'account_type' },
-	{ name: 'account_primary_group' },
-	{ name: 'account_challenge' },
-	{ name: 'account_response' }
-]);
-
 Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     initComponent : function(){
         Ext.app.SearchField.superclass.initComponent.call(this);
