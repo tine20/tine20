@@ -26,7 +26,7 @@ class Tinebase_AccessLog
     /**
      * the table object for the SQL_TABLE_PREFIX . applications table
      *
-     * @var Zend_Db_Table_Abstract
+     * @var Tinebase_Db_Table
      */
     protected $accessLogTable;
 
@@ -168,15 +168,19 @@ class Tinebase_AccessLog
 
     /**
      * get the total number of accesslog entries
-     *
+     * 
+     * @param Zend_Date $_from the date from which to fetch the access log entries from
+     * @param Zend_Date $_to the date to which to fetch the access log entries to
+     * @param string $_filter OPTIONAL search parameter
+     * 
      * @return int
      */
     public function getTotalCount(Zend_Date $_from, Zend_Date $_to, $_filter = NULL)
     {
         $where = array(
-            'li BETWEEN ' . $_from->getIso() . ' AND ' . $_to->getIso()
+            'li BETWEEN ' .$this->accessLogTable->getAdapter()->quote($_from->getIso()) . ' AND ' . $this->accessLogTable->getAdapter()->quote($_to->getIso())
         );
-        if(!empty($_filter)) {
+        if( $_filter !== NULL ) {
             $where[] = $this->accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
         }
 
