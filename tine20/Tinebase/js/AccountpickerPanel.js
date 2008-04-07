@@ -222,16 +222,27 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'accountId',
             fields: Tine.Tinebase.Model.Account,
             remoteSort: true
         });
-        
         this.accountsStore.setDefaultSort('accountDisplayName', 'asc');
-
         this.accountsStore.on('beforeload', function(_accountsStore) {
             _accountsStore.baseParams.filter = Ext.getCmp('Tinebase_Accounts_SearchField').getRawValue();
         });        
+
+        this.groupsStore = new Ext.data.JsonStore({
+            baseParams: {
+                method: 'Admin.getGroups',
+                filter: '',
+                sort: 'name',
+                dir: 'asc',
+                start: 0,
+                limit: 50
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Tinebase.Model.Group,            
+        });
 
         var columnModel = new Ext.grid.ColumnModel([
 		    {
@@ -253,6 +264,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             emptyText: 'enter searchfilter'
         }); 
         this.quickSearchField.on('change', function(){
+            var accountType = Ext.ButtonToggleMgr.getSelected('account_picker_panel_ugselect').accountType;
 			var store = Ext.getCmp('Tinebase_Accounts_Grid').getStore();
 			var lastValue = store.lastOptions ? store.lastOptions.params.filter : false;
 			if (lastValue != this.getRawValue()) {
@@ -271,21 +283,24 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 			}
         });
         var ugSelectionChange = function(pressed){
-            console.log(pressed.iconCls);  
+            
+            //console.log(p.iconCls);
         };
         this.Toolbar = new Ext.Toolbar({
             items: [
             {
                 pressed: true,
+                accountType: 'user',
                 iconCls: 'action_selectUser',
-                xtype: 'button',
+                xtype: 'tbbtnlockedtoggle',
                 handler: ugSelectionChange,
                 enableToggle: true,
                 toggleGroup: 'account_picker_panel_ugselect'
             },
             {
                 iconCls: 'action_selectGroup',
-                xtype: 'button',
+                accountType: 'group',
+                xtype: 'tbbtnlockedtoggle',
                 handler: ugSelectionChange,
                 enableToggle: true,
                 toggleGroup: 'account_picker_panel_ugselect'

@@ -47,8 +47,10 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 			var cgd = Ext.getCmp('ContainerGrantsDialog');
 			var dataStore = cgd.dataStore;
 			var grantsSelectionModel = cgd.GrantsGridPanel.getSelectionModel();
+            
+            var recordId = cgd.getRecordId(account);
 			
-			if (dataStore.getById(account.data.accountId) === undefined) {
+			if (!recordId) {
 				var record = new cgd.models.containerGrant({
 					accountId: account.data,
                     accountType: 'account',
@@ -59,11 +61,10 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 					adminGrant: false
 				}, account.data.accountId);
 				dataStore.addSorted(record);
-			}
-			grantsSelectionModel.selectRow(dataStore.indexOfId(account.data.accountId));
-			
-			Ext.getCmp('AccountsActionSaveButton').enable();
-			Ext.getCmp('AccountsActionApplyButton').enable();
+                Ext.getCmp('AccountsActionSaveButton').enable();
+                Ext.getCmp('AccountsActionApplyButton').enable();
+            }
+			grantsSelectionModel.selectRow(dataStore.indexOfId(cgd.getRecordId(account)));
 		},
 		accountsActionApply: function(button, event, closeWindow) {
 			// we somehow lost scope...
@@ -133,7 +134,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             },
             root: 'results',
             totalProperty: 'totalcount',
-            //id: 'accountId',
+            id: 'id',
             fields: this.models.containerGrant
         });
 	    
@@ -241,5 +242,21 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 		this.getUserSelection().on('accountdblclick', function(account){
             this.handlers.addAccount(account);   
         }, this);
-	}
+	},
+    /**
+     * returns id of record in this.dataStore
+     * @private
+     */
+    getRecordId: function(account) {
+        var cgd = Ext.getCmp('ContainerGrantsDialog');
+        var dataStore = cgd.dataStore;
+            
+        var id = false;
+        dataStore.each(function(item){
+            if (item.data.accountType == 'account' && item.data.accountId.accountId == account.data.accountId){
+                id = item.id;
+            }
+        });
+        return id;
+    }
 });

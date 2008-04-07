@@ -35,6 +35,7 @@ Tine.Tinebase.Model.Group = Ext.data.Record.create([
  * Model of a grant
  */
 Tine.Tinebase.Model.Grant = Ext.data.Record.create([
+    {name: 'id'},
     {name: 'accountId'},
     {name: 'accountType'},
     {name: 'readGrant',   type: 'boolean'},
