@@ -31,6 +31,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/delete-user.png) !important;
 }
 
+.action_exportAsPdf {
+    background-image:url(../../images/oxygen/16x16/mimetypes/pdf.png) !important;
+}
+
 .action_showArchived {
     background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
 }

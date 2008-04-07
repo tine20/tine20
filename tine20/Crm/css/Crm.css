@@ -30,18 +30,12 @@
     background-image:url(../../images/oxygen/16x16/actions/month.png) !important;
 }
 
-
-
 .actionAdd {
     background-image:url(../../images/oxygen/16x16/actions/edit-add.png) !important;
 }
 
 .actionAddTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
-}
-
-.actionExportLead {
-    background-image:url(../../images/oxygen/16x16/mimetypes/pdf.png) !important;
 }
 
 .actionEdit {

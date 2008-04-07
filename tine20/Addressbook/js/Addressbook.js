@@ -143,7 +143,7 @@ Tine.Addressbook.Main = {
             text: 'export as pdf',
             disabled: true,
             handler: this.handlers.exportContact,
-            iconCls: 'action_export',
+            iconCls: 'action_exportAsPdf',
             scope: this
         });
     },
@@ -815,7 +815,7 @@ Tine.Addressbook.ContactEditDialog = {
                     var contactId = _contactData.id;
                     Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
                 },
-                iconCls: 'action_export',
+                iconCls: 'action_exportAsPdf',
                 disabled: false,
         });         
 

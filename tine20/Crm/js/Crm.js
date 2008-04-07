@@ -122,7 +122,7 @@ Tine.Crm.Main = function(){
             text: 'export as pdf',
             disabled: true,
             handler: handler.exportLead,
-            iconCls: 'action_export',
+            iconCls: 'action_exportAsPdf',
             scope: this
         }),
         actionAddTask: new Ext.Action({
@@ -1623,7 +1623,7 @@ Tine.Crm.LeadEditDialog = function() {
                 	var leadId = _leadData.data.id;
                     Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);                	
                 },
-                iconCls: 'actionExportLead',
+                iconCls: 'action_exportAsPdf',
                 disabled: false,
         });         
         
