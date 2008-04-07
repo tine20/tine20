@@ -91,7 +91,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		$pageNumber = 0;
 		$xPos = 50;
 		$yPos = 800;
-
+        $yPosImage = 720;
+		
 		// title
 		if ( !empty($_title) ) {
 			$this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 18); 
@@ -125,8 +126,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		// photo
 		if ( $_image !== NULL ) {
 			//$xPos += 450;
-			//$yPos -= 40;
-			$this->pages[$pageNumber]->drawImage($_image, $xPos+450, $yPos, $xPos+500, $yPos + 75 );
+			$this->pages[$pageNumber]->drawImage($_image, $xPos+450, $yPosImage, $xPos+500, $yPosImage + 75 );
 		}
 
 		// debug record
