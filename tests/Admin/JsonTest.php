@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add more tests!
  */
 
 /**
@@ -72,6 +71,18 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
+        $this->objects['accountUpdate'] = new Tinebase_Account_Model_FullAccount(array(
+            'accountId'             => 10,
+            'accountLoginName'      => 'tine20phpunitup',
+            'accountDisplayName'    => 'tine20phpunit',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->getId(),
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnitup',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )); 
+                
         // add account for group member tests
         try {
             Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId) ;
@@ -96,16 +107,16 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get all groups
+     * try to get all accounts
      *
      */
-    public function testGetGroups()
+    public function testGetAccounts()
     {
         $json = new Admin_Json();
         
-        $groups = $json->getGroups(NULL, 'id', 'ASC', 0, 10);
+        $accounts = $json->getAccounts('PHPUnit', 'accountDisplayName', 'ASC', 0, 10);
         
-        $this->assertGreaterThan(0, $groups['totalcount']);
+        $this->assertGreaterThan(0, $accounts['totalcount']);
     }    
 
     /**
@@ -123,6 +134,42 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($result['success']); 
         $this->assertEquals($this->objects['initialGroup']->description, $result['updatedData']['description']);
+    }    
+
+    /**
+     * try to save an account
+     *
+     */
+    public function testSaveAccount()
+    {
+        $json = new Admin_Json();
+        
+        $accountData = $this->objects['accountUpdate']->toArray();
+        $accountData['accountPrimaryGroup'] = Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId();
+        
+        $encodedData = Zend_Json::encode( $accountData );
+        
+        $account = $json->saveAccount($encodedData, 'test', 'test');
+        
+        $this->assertTrue ( is_array($account) );
+        $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
+        $this->assertEquals(Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId(),  $account['accountPrimaryGroup']);
+        // check password
+        $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
+        $this->assertTrue ( $authResult->isValid() );
+    }    
+    
+    /**
+     * try to get all groups
+     *
+     */
+    public function testGetGroups()
+    {
+        $json = new Admin_Json();
+        
+        $groups = $json->getGroups(NULL, 'id', 'ASC', 0, 10);
+        
+        $this->assertGreaterThan(0, $groups['totalcount']);
     }    
 
     /**
