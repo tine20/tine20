@@ -139,7 +139,7 @@ Tine.Admin.Groups.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Admin.Model.Group,
+            fields: Tine.Tinebase.Model.Group,
             // turn on remote sorting
             remoteSort: true
         });
@@ -305,7 +305,7 @@ Tine.Admin.Groups.EditDialog = {
             var selectionModel = groupGrid.getSelectionModel();
             
             if (dataStore.getById(account.data.accountId) === undefined) {
-                var record = new Tine.Admin.Model.groupMember({
+                var record = new Tine.Tinebase.Model.Account({
                     accountId: account.data.accountId,
                     //accountLoginName: account.data.accountLoginName,
                     //accountFullName: account.data.accountFullName,
@@ -423,7 +423,7 @@ Tine.Admin.Groups.EditDialog = {
         if (_groupData.length == 0) {
         	_groupData = {};
         }
-        this.groupRecord = new Tine.Admin.Model.Group(_groupData);
+        this.groupRecord = new Tine.Tinebase.Model.Group(_groupData);
     },
 
     /**
@@ -498,7 +498,7 @@ Tine.Admin.Groups.EditDialog = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: Tine.Admin.Model.groupMember,
+            fields: Tine.Tinebase.Model.Account,
         });
 
         Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
@@ -630,18 +630,3 @@ Tine.Admin.Groups.EditDialog = {
     }, // end display function     
     
 }
-
-/*********************************** GROUP MODEL ********************************************/
-
-Ext.namespace('Tine.Admin.Model');
-Tine.Admin.Model.Group = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'description'},
-    // @todo add accounts array to group model?
-]);
-
-Tine.Admin.Model.groupMember = Ext.data.Record.create([
-    {name: 'accountId'},
-    {name: 'accountDisplayName'},
-]);

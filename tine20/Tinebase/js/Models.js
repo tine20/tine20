@@ -22,6 +22,16 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 ]);
 
 /**
+ * Model of a user group
+ */
+Tine.Tinebase.Model.Group = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'},
+    // @todo add accounts array to group model?
+]);
+
+/**
  * Model of a grant
  */
 Tine.Tinebase.Model.Grant = Ext.data.Record.create([
