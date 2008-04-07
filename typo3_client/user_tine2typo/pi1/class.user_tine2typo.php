@@ -163,18 +163,25 @@ class user_tine2typo extends tslib_pibase {
 				
 		$subpart_template_td = $this->cObj->getSubpart($template,'###TDTEMPLATE###');
 		
-		//print_r($cols);
 		foreach ($Contact as $contact)
 		{
-		//print_r($contact);
-			foreach ($cols as  $col)
+			foreach ($cols as $key => $col)
 			{
-				if (!empty($contact[$col]))
+				if ($key !== 0)
 				{
-					$markerArray['###TDBODY###'] = $contact[$col];
+					if (!empty($contact[$col]))
+					{
+						$markerArray['###TDBODY###'] = $contact[$col];
+					}
+					elseif ($key !== 0)
+					{
+						$markerArray['###TDBODY###'] =  '';
+					}
+				
 					$trow_ .= $this->cObj->substituteMarkerArray($subpart_template_td, $markerArray);
 				}
 			}
+		
 		$subpart_template = $this->cObj->getSubpart($template,'###TRTEMPLATE###');
 		$TROW .= $this->cObj->substituteMarkerArray($subpart_template, array('###TRBODY###' => $trow_));
 		unset($trow_);

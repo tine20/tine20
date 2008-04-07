@@ -158,17 +158,12 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 //		print_r($Contact);
 		foreach ($Contact as $key => $val)
 		{
-			$config['items'][$key] = array('[' . $key . ']' . $val,  '[' . $key . ']' . $val );
+			$config['items'][$key] = array('[' . $key . ']' . utf8_decode($val),  '[' . $key . ']' . utf8_decode($val) );
 		}
 		
 	}
-	else
-	{
-		$config['items'][0] =  array('bier');
-		$config['items'][1] =  array('wein');
-		$config['items'][2] =  array('lass das sein');
-	}
 
+	unset($config['items'][0]);
 	return $config;
 	}
 	

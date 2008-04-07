@@ -104,7 +104,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
                     <numIndex index="0">LLL:EXT:user_tine2typo/locallang_db.xml:note</numIndex>
                     <numIndex index="1">LLL:EXT:user_tine2typo/locallang_db.xml:note</numIndex>
                   </numIndex>      
-                  <numIndex index="8" type="array">
+                  <numIndex index="9" type="array">
                     <numIndex index="0">LLL:EXT:user_tine2typo/locallang_db.xml:adr_one_countryname</numIndex>
                     <numIndex index="1">LLL:EXT:user_tine2typo/locallang_db.xml:adr_one_countryname</numIndex>
                   </numIndex>             

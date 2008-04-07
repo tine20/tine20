@@ -5,11 +5,15 @@
 			<type>database</type> 
 			<csh_table /> 
 			<labelContext type="array" /> 
+			
 		</meta>
 		<data type="array">
 			<languageKey index="default" type="array">
 				<label index="tt_content.list_type">Tine 2.0 Adressbuch auslesen</label>
 				<label index="tx_user_kontakt2tine">Tine 2.0 Adressbuch auslesen</label>
+				
+			<label index="pi1_title">Tine 2.0 Adressbuch auslesen</label>
+			<label index="pi1_plus_wiz_description">Eine entfernte TINE 2.0-Installation kann hier abgefragt werden und die Adressbuch-Kontakte eines Nutzers einfach tabellarisch dargestellt werden.</label>
 				
 				<label index="what_to_display">Anzeige von</label> 
 				<label index="tx_user_kontakt2tine">Kontaktformular an Tine 2.0</label> 
@@ -27,8 +31,11 @@
 								
 			</languageKey>
 				<languageKey index="en" type="array">
-			</languageKey>
+				</languageKey>
 			<languageKey index="de" type="array">
+			
+				<label index="pi1_title">Kontakte aus TINE 2.0 holen</label>
+			
 				<label index="tt_content.list_type">Tine 2.0 Adressbuch auslesen</label>
 				<label index="tx_user_kontakt2tine">Tine 2.0 Adressbuch auslesen</label>
 				
