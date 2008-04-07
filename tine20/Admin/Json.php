@@ -155,8 +155,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * delete multiple groups
      *
-     * @param array $groupIds list of contactId's to delete
-     * @return array
+     * @param string $groupIds json encoded list of contactId's to delete
+     * @return array with success flag
      */
     public function deleteGroups($groupIds)
     {
@@ -172,7 +172,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
 
-    //@todo add phpdoc
+    /**
+     * delete access log entries
+     *
+     * @param string $logIds json encoded list of logIds to delete
+     * @return array with success flag
+     */
     public function deleteAccessLogEntries($logIds)
     {
         try {
@@ -193,7 +198,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
-    //@todo add phpdoc
+    /**
+     * delete access log entries
+     *
+     * @param   int $applicationId application id to get
+     * @return  array with application data
+     */
     public function getApplication($applicationId)
     {
         $tineApplications = new Tinebase_Application();
@@ -239,7 +249,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
-    //@todo add phpdoc
+    /**
+     * set application state
+     *
+     * @param   string $applicationIds  json encoded array of application ids
+     * @param   string $state           state to set
+     * @return  array with success flag
+     */
     public function setApplicationState($applicationIds, $state)
     {
         $applicationIds = Zend_Json::decode($applicationIds);
@@ -254,15 +270,21 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
 
-    //@todo add phpdoc
-    public function setAccountState($accountIds, $status)
+    /**
+     * set account state
+     *
+     * @param   string $accountIds  json encoded array of account ids
+     * @param   string $state       state to set
+     * @return  array with success flag
+     */
+    public function setAccountState($accountIds, $state)
     {
         $accountIds = Zend_Json::decode($accountIds);
         
         $controller = Admin_Controller::getInstance();
         
         foreach($accountIds as $accountId) {
-            $controller->setAccountStatus($accountId, $status);
+            $controller->setAccountStatus($accountId, $state);
         }
         
         $result = array(
@@ -352,6 +374,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * Additional tree items get loaded on demand.
      *
      * @return array
+     * 
+     * @todo    is this function @deprecated ?
      */
     public function getInitialTree()
     {
@@ -374,7 +398,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $treeNodes;
     }
     
-    //@todo add phpdoc
+    /**
+     * save account
+     *
+     * @param string $accountData JSON encoded Tinebase_Account_Model_FullAccount
+     * @param string $password the new password
+     * @param string $password2 the new password repeated
+     * @return array with 
+     */
     public function saveAccount($accountData, $password, $password2)
     {
         $decodedAccountData = Zend_Json::decode($accountData);
@@ -400,7 +431,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
     }
     
-    //@todo add phpdoc
+    /**
+     * delete accounts
+     *
+     * @param   string $accountIds  json encoded array of account ids
+     * @return  array with success flag
+     */
     public function deleteAccounts($accountIds)
     {
         $result = array(
