@@ -92,7 +92,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination)
     {
-        Zend_Registry::get('logger')->debug(print_r($_filter->toArray(),true));
+        //Zend_Registry::get('logger')->debug(print_r($_filter->toArray(),true));
         $TaskSet = new Tinebase_Record_RecordSet('Tasks_Model_Task');
         
         // empty means, that e.g. no shared containers exist
