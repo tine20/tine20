@@ -256,14 +256,17 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * get list of access log entries
      *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
+     * @param string $from (date format example: 2008-03-31T00:00:00)
+     * @param string $to (date format example: 2008-03-31T00:00:00)
+     * @param string $filter
+     * @param string $sort
+     * @param string $dir
+     * @param int $start
+     * @param int $limit
+     * 
      * @return array with results array & totalcount (int)
      */
-    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
+    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $start, $limit)
     {
         /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
             throw new Exception('invalid date specified for $from');
@@ -277,11 +280,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
+        // debug params
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' function params: '. $from . ', ' . $to . ', ... ');
+        
         $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
         $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
         
-        // use controller
-        //$accessLogSet = Tinebase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
         $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
         
         $result['results']    = $accessLogSet->toArray();
