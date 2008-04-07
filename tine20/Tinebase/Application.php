@@ -149,6 +149,8 @@ class Tinebase_Application
     /**
      * return the total number of applications installed
      *
+     * @param $_filter
+     * 
      * @return int
      */
     public function getTotalApplicationCount($_filter = NULL)
@@ -162,6 +164,12 @@ class Tinebase_Application
         return $count;
     }
     
+    /**
+     * set application state
+     *
+     * @param array $_applicationIds application ids to set new state for
+     * @param string $_state the new state
+     */
     public function setApplicationState(array $_applicationIds, $_state)
     {
         if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
