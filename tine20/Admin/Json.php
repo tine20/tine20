@@ -19,6 +19,11 @@
  */
 class Admin_Json extends Tinebase_Application_Json_Abstract
 {
+    /**
+     * the application name
+     *
+     * @var string
+     */
     protected $_appname = 'Admin';
     
     /**
@@ -38,8 +43,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        //@todo use controller
-        $accounts = Tinebase_Account::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
+        //@todo are full accounts needed?
+        $accounts = Admin_Controller::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
             if($account['last_login'] !== NULL) {
@@ -58,6 +63,245 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
+
+    /**
+     * save account
+     *
+     * @param string $accountData JSON encoded Tinebase_Account_Model_FullAccount
+     * @param string $password the new password
+     * @param string $password2 the new password repeated
+     * @return array with 
+     */
+    public function saveAccount($accountData, $password, $password2)
+    {
+        $decodedAccountData = Zend_Json::decode($accountData);
+        
+        $account = new Tinebase_Account_Model_FullAccount();
+        
+        try {
+            $account->setFromArray($decodedAccountData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $account->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        
+        $saveAccount = Admin_Controller::getInstance()->saveAccount($account, $password, $password2);
+        
+        $result = $saveAccount->toArray();
+        
+        return $result;
+        
+    }
+    
+    /**
+     * delete accounts
+     *
+     * @param   string $accountIds  json encoded array of account ids
+     * @return  array with success flag
+     */
+    public function deleteAccounts($accountIds)
+    {
+        $result = array(
+            'success' => TRUE
+        );
+
+        $accountIds = Zend_Json::decode($accountIds);
+
+        Admin_Controller::getInstance()->deleteAccounts($accountIds);
+        
+        return $result;
+    }
+
+    /**
+     * set account state
+     *
+     * @param   string $accountId  json encoded array of account ids
+     * @param   string $state      state to set
+     * @return  array with success flag
+     */
+    public function setAccountState($accountId, $state)
+    {
+        $accountIds = Zend_Json::decode($accountIds);
+        
+        $controller = Admin_Controller::getInstance();
+        
+        foreach($accountIds as $accountId) {
+            $controller->setAccountStatus($accountId, $state);
+        }
+        
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
+    
+    /**
+     * reset password for given account
+     *
+     * @param string $account JSON encoded Tinebase_Account_Model_FullAccount
+     * @param string $password the new password
+     * @return array
+     */
+    public function resetPassword($account, $password)
+    {
+        $account = new Tinebase_Account_Model_FullAccount(Zend_Json::decode($account));
+        
+        $controller = Admin_Controller::getInstance();
+
+        $controller->setAccountPassword($account, $password, $password);
+        
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
+    
+    /**
+     * delete access log entries
+     *
+     * @param string $logIds json encoded list of logIds to delete
+     * @return array with success flag
+     */
+    public function deleteAccessLogEntries($logIds)
+    {
+        try {
+            $logIds = Zend_Json::decode($logIds);
+
+            Admin_Controller::getInstance()->deleteEntries($logIds);
+
+            $result = array(
+                'success' => TRUE
+            );
+        } catch (Exception $e) {
+            $result = array(
+                'success' => FALSE 
+            );
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get application
+     *
+     * @param   int $applicationId application id to get
+     * @return  array with application data
+     */
+    public function getApplication($applicationId)
+    {
+        $application = Admin_Controller::getInstance()->getApplicationById($applicationId);
+        
+        return $application->toArray();
+    }
+    
+    /**
+     * get list of applications
+     *
+     * @param string $filter
+     * @param string $sort
+     * @param string $dir
+     * @param int $start
+     * @param int $limit
+     * @return array with results array & totalcount (int)
+     */
+    public function getApplications($filter, $sort, $dir, $start, $limit)
+    {
+        if(empty($filter)) {
+            $filter = NULL;
+        }
+        
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $applicationSet = Admin_Controller::getInstance()->getApplications($filter, $sort, $dir, $start, $limit);
+
+        $result['results']    = $applicationSet->toArray();
+        if($start == 0 && count($result['results']) < $limit) {
+            $result['totalcount'] = count($result['results']);
+        } else {
+            $result['totalcount'] = Admin_Controller::getInstance()->getTotalApplicationCount($filter);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * set application state
+     *
+     * @param   string $applicationIds  json encoded array of application ids
+     * @param   string $state           state to set
+     * @return  array with success flag
+     */
+    public function setApplicationState($applicationIds, $state)
+    {
+        $applicationIds = Zend_Json::decode($applicationIds);
+
+        Admin_Controller::getInstance()->setApplicationState($applicationIds, $state);
+
+        $result = array(
+            'success' => TRUE
+        );
+        
+        return $result;
+    }
+
+    /**
+     * get list of access log entries
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
+     */
+    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
+    {
+        /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
+            throw new Exception('invalid date specified for $from');
+        }
+        if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
+            throw new Exception('invalid date specified for $to');
+        }*/
+        
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
+        $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
+        
+        // use controller
+        //$accessLogSet = Tinebase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
+        $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
+        
+        $result['results']    = $accessLogSet->toArray();
+        if($start == 0 && count($result['results']) < $limit) {
+            $result['totalcount'] = count($result['results']);
+        } else {
+            $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
+        }
+        
+        foreach($result['results'] as $key => $value) {
+            try {
+                $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['id'])->toArray();
+            } catch (Exception $e) {
+                // account not found
+                // do nothing so far
+            }
+        }
+        
+        return $result;
+    }
     
     /**
      * get list of groups
@@ -69,7 +313,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * @param int $_limit
      * @return array with results array & totalcount (int)
      */
-   public function getGroups($filter, $sort, $dir, $start, $limit)
+    public function getGroups($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
             'results'     => array(),
@@ -166,207 +410,11 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $groupIds = Zend_Json::decode($groupIds);
         
-        //@todo use controller
-        Tinebase_Group::getInstance()->deleteGroups($groupIds);
+        Admin_Controller::getInstance()->deleteGroups($groupIds);
 
         return $result;
     }
 
-    /**
-     * delete access log entries
-     *
-     * @param string $logIds json encoded list of logIds to delete
-     * @return array with success flag
-     */
-    public function deleteAccessLogEntries($logIds)
-    {
-        try {
-            $logIds = Zend_Json::decode($logIds);
-
-            //@todo use controller
-            Tinebase_AccessLog::getInstance()->deleteEntries($logIds);
-
-            $result = array(
-                'success' => TRUE
-            );
-        } catch (Exception $e) {
-            $result = array(
-                'success' => FALSE 
-            );
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * delete access log entries
-     *
-     * @param   int $applicationId application id to get
-     * @return  array with application data
-     */
-    public function getApplication($applicationId)
-    {
-        $tineApplications = new Tinebase_Application();
-        
-        $application = $tineApplications->getApplicationById($applicationId);
-        
-        return $application->toArray();
-    }
-    
-    /**
-     * get list of applications
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return array with results array & totalcount (int)
-     */
-    public function getApplications($filter, $sort, $dir, $start, $limit)
-    {
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-        
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        //@todo use controller
-        $tineApplications = Tinebase_Application::getInstance();
-        
-        $applicationSet = $tineApplications->getApplications($filter, $sort, $dir, $start, $limit);
-
-        $result['results']    = $applicationSet->toArray();
-        if($start == 0 && count($result['results']) < $limit) {
-            $result['totalcount'] = count($result['results']);
-        } else {
-            $result['totalcount'] = $tineApplications->getTotalApplicationCount($filter);
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * set application state
-     *
-     * @param   string $applicationIds  json encoded array of application ids
-     * @param   string $state           state to set
-     * @return  array with success flag
-     */
-    public function setApplicationState($applicationIds, $state)
-    {
-        $applicationIds = Zend_Json::decode($applicationIds);
-
-        //@todo use controller
-        Tinebase_Application::getInstance()->setApplicationState($applicationIds, $state);
-
-        $result = array(
-            'success' => TRUE
-        );
-        
-        return $result;
-    }
-
-    /**
-     * set account state
-     *
-     * @param   string $accountIds  json encoded array of account ids
-     * @param   string $state       state to set
-     * @return  array with success flag
-     */
-    public function setAccountState($accountIds, $state)
-    {
-        $accountIds = Zend_Json::decode($accountIds);
-        
-        $controller = Admin_Controller::getInstance();
-        
-        foreach($accountIds as $accountId) {
-            $controller->setAccountStatus($accountId, $state);
-        }
-        
-        $result = array(
-            'success' => TRUE
-        );
-        
-        return $result;
-    }
-    
-    /**
-     * reset password for given account
-     *
-     * @param string $account JSON encoded Tinebase_Account_Model_FullAccount
-     * @param string $password the new password
-     * @return array
-     */
-    public function resetPassword($account, $password)
-    {
-        $account = new Tinebase_Account_Model_FullAccount(Zend_Json::decode($account));
-        
-        $controller = Admin_Controller::getInstance();
-
-        $controller->setAccountPassword($account, $password, $password);
-        
-        $result = array(
-            'success' => TRUE
-        );
-        
-        return $result;
-    }
-    
-    /**
-     * get list of access log entries
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return array with results array & totalcount (int)
-     */
-    public function getAccessLogEntries($from, $to, $filter, $sort, $dir, $limit, $start)
-    {
-        /*if (!Zend_Date::isDate($from, 'YYYY-MM-dd hh:mm:ss')) {
-            throw new Exception('invalid date specified for $from');
-        }
-        if (!Zend_Date::isDate($to, 'YYYY-MM-dd hh:mm:ss')) {
-            throw new Exception('invalid date specified for $to');
-        }*/
-        
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $fromDateObject = new Zend_Date($from, Zend_Date::ISO_8601);
-        $toDateObject = new Zend_Date($to, Zend_Date::ISO_8601);
-        
-        //@todo use controller
-        $accessLogSet = Tinebase_AccessLog::getInstance()->getEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
-        
-        $result['results']    = $accessLogSet->toArray();
-        if($start == 0 && count($result['results']) < $limit) {
-            $result['totalcount'] = count($result['results']);
-        } else {
-            $result['totalcount'] = Tinebase_AccessLog::getInstance()->getTotalCount($fromDateObject, $toDateObject, $filter);
-        }
-        
-        foreach($result['results'] as $key => $value) {
-            try {
-                $result['results'][$key]['accountObject'] = Tinebase_Account::getInstance()->getAccountById($value['id'])->toArray();
-            } catch (Exception $e) {
-                // account not found
-                // do nothing so far
-            }
-        }
-        
-        return $result;
-    }
-    
-    
-    
     /**
      * Returns the structure of the initial tree for this application.
      *
@@ -397,57 +445,5 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 */
         return $treeNodes;
     }
-    
-    /**
-     * save account
-     *
-     * @param string $accountData JSON encoded Tinebase_Account_Model_FullAccount
-     * @param string $password the new password
-     * @param string $password2 the new password repeated
-     * @return array with 
-     */
-    public function saveAccount($accountData, $password, $password2)
-    {
-        $decodedAccountData = Zend_Json::decode($accountData);
         
-        $account = new Tinebase_Account_Model_FullAccount();
-        
-        try {
-            $account->setFromArray($decodedAccountData);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $account->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
-
-            return $result;
-        }
-        
-        $saveAccount = Admin_Controller::getInstance()->saveAccount($account, $password, $password2);
-        
-        $result = $saveAccount->toArray();
-        
-        return $result;
-        
-    }
-    
-    /**
-     * delete accounts
-     *
-     * @param   string $accountIds  json encoded array of account ids
-     * @return  array with success flag
-     */
-    public function deleteAccounts($accountIds)
-    {
-        $result = array(
-            'success' => TRUE
-        );
-
-        $accountIds = Zend_Json::decode($accountIds);
-
-        Admin_Controller::getInstance()->deleteAccounts($accountIds);
-        
-        return $result;
-    }
-    
 }

@@ -69,11 +69,28 @@ class Admin_Controller
         return $result;
     }
     
+    /**
+     * get account
+     *
+     * @param   int $_accountId account id to get
+     * @return  Tinebase_Account_Model_Account
+     */
+    public function getAccount($_accountId)
+    {        
+        return Tinebase_Account::getInstance()->getAccountById($_accountId);
+    }
+    
+
+    /**
+     * set account status
+     *
+     * @param   string $_accountId  account id
+     * @param   string $_status     status to set
+     * @return  array with success flag
+     */
     public function setAccountStatus($_accountId, $_status)
     {
-        $backend = Tinebase_Account::getInstance();
-        
-        $result = $backend->setStatus($_accountId, $_status);
+        $result = Tinebase_Account::getInstance()->setStatus($_accountId, $_status);
         
         return $result;
     }
@@ -97,25 +114,6 @@ class Admin_Controller
         return $result;
     }
 
-    /**
-     * get list of access log entries
-     *
-     * @param string $_filter string to search accounts for
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Tinebase_RecordSet_AccessLog set of matching access log entries
-     */
-    public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_from = NULL, $_to = NULL)
-    {
-        $tineAccessLog = Tinebase_AccessLog::getInstance();
-
-        $result = $tineAccessLog->getEntries($_filter, $_sort, $_dir, $_start, $_limit, $_from, $_to);
-        
-        return $result;
-    }
-    
     /**
      * save or update account
      *
@@ -150,9 +148,114 @@ class Admin_Controller
         return $account;
     }
 
+    /**
+     * delete accounts
+     *
+     * @param   array $_accountIds  array of account ids
+     * @return  array with success flag
+     */
     public function deleteAccounts(array $_accountIds)
     {
         return Tinebase_Account::getInstance()->deleteAccounts($_accountIds);
+    }
+    
+    /**
+     * get list of access log entries
+     *
+     * @param string $_filter string to search accounts for
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_RecordSet_AccessLog set of matching access log entries
+     */
+    public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_from = NULL, $_to = NULL)
+    {
+        $tineAccessLog = Tinebase_AccessLog::getInstance();
+
+        $result = $tineAccessLog->getEntries($_filter, $_sort, $_dir, $_start, $_limit, $_from, $_to);
+        
+        return $result;
+    }
+
+    /**
+     * returns the total number of access logs
+     * 
+     * @param Zend_Date $_from the date from which to fetch the access log entries from
+     * @param Zend_Date $_to the date to which to fetch the access log entries to
+     * @param string $_filter OPTIONAL search parameter
+     * 
+     * @return int
+     */
+    public function getTotalAccessLogEntryCount($_from, $_to, $_filter)
+    {
+        return Tinebase_AccessLog::getInstance()->getTotalCount($_from, $_to, $_filter);
+    }
+    
+    /**
+     * delete access log entries
+     *
+     * @param   array $_logIds list of logIds to delete
+     */
+    public function deleteAccessLogEntries($_logIds)
+    {
+        Tinebase_AccessLog::getInstance()->deleteEntries($_logIds);
+    }
+    
+    /**
+     * get list of applications
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_RecordSet_Application
+     */
+    public function getApplications($filter, $sort, $dir, $start, $limit)
+    {
+        $tineApplications = Tinebase_Application::getInstance();
+        
+        return $tineApplications->getApplications($filter, $sort, $dir, $start, $limit);
+    }    
+
+    /**
+     * get application
+     *
+     * @param   int $_applicationId application id to get
+     * @return  Tinebase_Model_Application
+     */
+    public function getApplication($_applicationId)
+    {
+        $tineApplications = Tinebase_Application::getInstance();
+        
+        return $tineApplications->getApplicationById($_applicationId);
+    }
+    
+    /**
+     * returns the total number of applications installed
+     * 
+     * @param string $_filter
+     * @return int
+     */
+    public function getTotalApplicationCount($_filter)
+    {
+        $tineApplications = Tinebase_Application::getInstance();
+        
+        return $tineApplications->getTotalApplicationCount($_filter);
+    }
+    
+    /**
+     * set application state
+     *
+     * @param   array $_applicationIds  array of application ids
+     * @param   string $_state           state to set
+     */
+    public function setApplicationState($_applicationIds, $_state)
+    {
+        $tineApplications = Tinebase_Application::getInstance();
+        
+        return $tineApplications->setApplicationState($_applicationIds, $_state);
     }
     
     /**
@@ -222,6 +325,17 @@ class Admin_Controller
 
         return $group;            
     }  
+    
+    /**
+     * delete multiple groups
+     *
+     * @param   array $_groupIds
+     * @return  array with success flag
+     */
+    public function deleteGroups($_groupIds)
+    {        
+        return Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+    }    
     
     /**
      * get list of groupmembers

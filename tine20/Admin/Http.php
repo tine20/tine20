@@ -17,6 +17,11 @@
  */
 class Admin_Http extends Tinebase_Application_Http_Abstract
 {
+    /**
+     * the application name
+     *
+     * @var string
+     */
     protected $_appname = 'Admin';
     
     /**
