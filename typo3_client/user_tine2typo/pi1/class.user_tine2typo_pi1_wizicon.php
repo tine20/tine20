@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005 Metaways (info@metaways.de)
+* @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,12 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * Class that adds the wizard icon.
+ * Plugin 'user_tine2typo' for the 'user_tine2typo' extension.
  *
- * @author	Metaways <info@metaways.de>
+ * @author  Matthias Greiling <typo3@metaways.de>
+ * @comment this plugin is designed for TINE20 http://www.tine20.org
+ * @version     $$
  */
-
-
+ 
 
 class user_tine2typo_pi1_wizicon {
 

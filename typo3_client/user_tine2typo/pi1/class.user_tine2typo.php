@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005  ()
+* @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +24,9 @@
 /**
  * Plugin 'user_tine2typo' for the 'user_tine2typo' extension.
  *
- * @author	 <>
+ * @author  Matthias Greiling <typo3@metaways.de>
+ * @comment this plugin is designed for TINE20 http://www.tine20.org
+ * @version     $$
  */
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
@@ -54,8 +56,8 @@ class user_tine2typo extends tslib_pibase {
 	{
 		global $countryAbbrNameRel;
 		global $kontaktnumlinks;
-		 $basePath =  PATH_site . 'typo3conf/ext/user_tine2typo/locallang_db.xml'; 
-         $this->LOCAL_LANG = t3lib_div::readLLfile($basePath, $this->LLkey); 
+		$basePath =  PATH_site . 'typo3conf/ext/user_tine2typo/locallang_db.xml'; 
+		$this->LOCAL_LANG = t3lib_div::readLLfile($basePath, $this->LLkey); 
 				
 		
 				
@@ -90,81 +92,74 @@ class user_tine2typo extends tslib_pibase {
 		$subpart_template = $this->cObj->getSubpart($template,'###TRTEMPLATE###');
 		$TROW = $this->cObj->substituteMarkerArray($subpart_template, array('###TRBODY###' => $trow));
 		
-		
-				
-				$path = array(
-					get_include_path(),
-					dirname(__FILE__),
-				);
-	
-				set_include_path(implode(PATH_SEPARATOR, $path));
-					
-				// zend auto loader will load any classes - can not use it
-				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Connection.php');
-				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Service/Abstract.php');
-				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Http/Client.php');
-				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Addressbook/Model/Contact.php');
-				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Addressbook/Service.php');
-				
-				try
-				{
-					// open connection
-					$client = new TineClient_Connection($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehost'));
-					//$client->setDebugEnabled(true);
-					TineClient_Service_Abstract::setDefaultConnection($client);
+		// zend auto loader will load any classes - can not use it in Typo3 Enviroment 
 
-					// login to tine2.0
-					$client->login(
-								$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostlogin'), 
-								$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostpassword')
-								);
-				}
-				catch (Exception $e) 
-				{
-					echo "can not login";
-					//var_dump($e);
-					//exit;
-				}
-				try 
-				{
-					$addressbook = new Addressbook_Service();
-					
-					$pattern =  "/\w*\[(\d*)\]/";
-					$auffang = array();
-					preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'category'), $auffang);
-								
-					foreach ($auffang[1] as $contactId)
-					{
-						try
-						{
-							$Contact[] = $addressbook->getContact($contactId);
-						}
-						catch (Exception $e)
-						{
-							var_dump($e);
-						}
-					}
-				}
-				catch (Exception $e) 
-				{
-					var_dump($e);
-					exit;
-				}
-				
+		require_once(  PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Connection.php');
+		require_once(  PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Service/Abstract.php');
+		require_once(  PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Http/Client.php');
+		require_once(  PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Addressbook/Model/Contact.php');
+		require_once(  PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Addressbook/Service.php');
+		
+		try
+		{
+			// open connection
+			$client = new TineClient_Connection($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehost'));
+			//$client->setDebugEnabled(true);
+			TineClient_Service_Abstract::setDefaultConnection($client);
+
+			// login to tine2.0
+			$client->login(
+						$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostlogin'), 
+						$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostpassword')
+						);
+		}
+		catch (Exception $e) 
+		{
+			echo "can not login";
+			//var_dump($e);
+			//exit;
+		}
+		try 
+		{
+			$addressbook = new Addressbook_Service();
+			
+			$pattern =  "/\w*\[(\d*)\]/";
+			$auffang = array();
+			preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'category'), $auffang);
+						
+			foreach ($auffang[1] as $contactId)
+			{
 				try
 				{
-					$client->logout();
+					$Contact[] = $addressbook->getContact($contactId);
 				}
-				catch (Exception $e) 
+				catch (Exception $e)
 				{
 					var_dump($e);
-				
 				}
-				
+			}
+		}
+		catch (Exception $e) 
+		{
+			var_dump($e);
+			exit;
+		}
+		
+		try
+		{
+			$client->logout();
+		}
+		catch (Exception $e) 
+		{
+			var_dump($e);
+		
+		}
+		
 		$subpart_template_td = $this->cObj->getSubpart($template,'###TDTEMPLATE###');
 		
 		foreach ($Contact as $contact)
 		{
+
 			foreach ($cols as $key => $col)
 			{
 				if ($key !== 0)
@@ -189,21 +184,20 @@ class user_tine2typo extends tslib_pibase {
 		
 		$subpart_template = $this->cObj->getSubpart($template,'###TEMPLATE###');
 		$markerArray["###TABLEBODY###"] = $TROW;
-			
-			
-	//var_dump($this->cObj->substituteMarkerArray($subpart_template, $markerArray));
+				
+				
+		//var_dump($this->cObj->substituteMarkerArray($subpart_template, $markerArray));
 		return $this->pi_wrapInBaseClass($this->cObj->substituteMarkerArray($subpart_template, $markerArray));
 	}
-	
+		
 
 	public function addNames( $config )
 	{
-	
-	$config['items'] = array(array('bier') , array('bier') ,array('brot'),array('wein'));
 		
-	return $config;
+		$config['items'] = array(array('bier') , array('bier') ,array('brot'),array('wein'));
+			
+		return $config;
 	}
-	
 	
 }
 
