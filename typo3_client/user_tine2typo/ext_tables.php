@@ -29,7 +29,7 @@
  * @version     $$
  */
  
-if (!defined ('TYPO3_MODE'))   die ('Access denied.');
+if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
 require_once( PATH_site . 'typo3conf/ext/user_tine2typo/classes/class.tx_DynamicFlexFormFields.php' );
 
@@ -44,24 +44,6 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY]='header,la
 # Dafür blenden wir das tt_content Feld pi_flexform ein
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY]='pi_flexform';
 
-
-	$PID = '';
-	
-	$prePID = explode(',', $TCA['pages']['types'][1]['showitem']);
-	$prePID2 = explode(';', $prePID['6']);
-	$PID = $prePID2[2];
-	
-			//print_r($prePID);	
-				
-	//$contentx = t3lib_div::makeInstance('tx_DynamicFlexFormFields');
-
-
-//print_r(encodeURIComponent(uid));
-
-function proc() {
-$user_pferd['items'] = array(array(0 => $bert) , array(1 => 'bier') ,array(2 => 'brot'),array(3 => 'wein'));
-return $user_pferd;
-}
 
 # Wir definieren die Datei, die unser Flexform Schema enthält
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>

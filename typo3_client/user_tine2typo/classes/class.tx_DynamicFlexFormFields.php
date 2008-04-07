@@ -31,27 +31,24 @@
  
 require_once( 'class.factory.php' );
 
-
-if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
-				define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
-} elseif (@is_dir(PATH_site.'tslib/')) {
-				define('PATH_tslib', PATH_site.'tslib/');
+if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) 
+{
+	define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
+} 
+elseif (@is_dir(PATH_site.'tslib/')) 
+{
+	define('PATH_tslib', PATH_site.'tslib/');
 } else {
-
-				// define path to tslib/ here:
-				$configured_tslib_path = '';
-
-				// example:
-				// $configured_tslib_path = '/var/www/mysite/typo3/sysext/cms/tslib/';
-
-				define('PATH_tslib', $configured_tslib_path);
+	// define path to tslib/ here:
+	$configured_tslib_path = '';
+	// example:
+	// $configured_tslib_path = '/var/www/mysite/typo3/sysext/cms/tslib/';
+	define('PATH_tslib', $configured_tslib_path);
 }
 
 if (PATH_tslib=='') {
-				die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
+	die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
 }
-	
-
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 
 
@@ -62,8 +59,10 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 	var $prefixId = 'tx_DynamicFlexFormFields';		// Same as class name
 	var $scriptRelPath = 'pi1/class.tx_DynamicFlexFormFields.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'user_tine2typo';	// The extension key.
-
-	
+   
+	/**
+     *Get UID of flexform saved data for prefilled form
+     */
 	public function __construct()
 	{
 		$preUID = explode('tt_content',$GLOBALS[_SERVER][QUERY_STRING]);
@@ -71,6 +70,12 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		$this->UID = trim(str_replace('][', '', $preUID2[0])) * 1 ;
 	}
 	
+	/**
+     *Get flexform saved data for prefilled form
+     *
+     * @param int $_uid
+     * @return array
+     */
 	public function getXML( $_uid )
 	{
 		$config = "-";
@@ -108,29 +113,24 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 			@mysql_close($mysql_conn);
 			}
 		
-		 $xml = t3lib_div::xml2array($config);
-		
-		
+		$xml = t3lib_div::xml2array($config);
 		return $xml;
 	}
 
-
-
-
-
-	function getNames($config)
+   
+	/**
+     *Get flexform saved data for prefilled form
+     *
+     * @param array (origin ext_tables)
+     * @return array
+     */
+	 function getNames($config)
 	{
-	//print_r($this->UID);
 	if (!empty($this->UID)) {
-		
-	
 		$this->flexform = $this->getXML($this->UID);
 	
-		//print_r( $this->pi_getFFvalue($this->flexform, 'tinehostlogin'));
-		
-
-		// zend auto loader will load any classes - can not use it
-									
+	
+		// zend auto loader will load any classes - can not use it in this enviroment
 		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Connection.php');
 		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/TineClient/Service/Abstract.php');
 		require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Http/Client.php');
@@ -152,19 +152,16 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		}
 		catch (Exception $e) 
 		{
-			$config['items'][] = array('Mit diesen Daten kann ich mich nicht einloggen');
+			$config['items'][] = array('Can not log in - no access throught this data');
 			$config['items'][] = array($this->pi_getFFvalue($this->flexform, 'tinehostlogin') );
 			$config['items'][] = array($this->pi_getFFvalue($this->flexform, 'tinehostpassword'));
 			$config['items'][] = array($e->getMessage());
-			//var_dump($e);
 			//exit;
 		}
 		try 
 		{
-		 
-			//$contact = new Addressbook_Model_Contact($contactData);
+			// get all contacts of the user
 			$addressbook = new Addressbook_Service();
-			
 			$Contact = $addressbook->getAllContacts();
 		}
 		catch (Exception $e) 
@@ -182,18 +179,22 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		//	var_dump($e);
 		
 		}
-//		print_r($Contact);
+		
+		// bring it to typo3- interna formatting
 		foreach ($Contact as $key => $val)
 		{
 			$config['items'][$key] = array('[' . $key . ']' . utf8_decode($val),  '[' . $key . ']' . utf8_decode($val) );
 		}
 		
 	}
-
+	
+	// unset first element 
 	unset($config['items'][0]);
+	
+	// login succeded, but no data available'
 	if (empty($config['items']))
 	{
-		$config['items'][0] = array( 'no data available', 'no data available');
+		$config['items'][0] = array( 'login succeded, but no data available', 'login succeded, but no data available');
 	}
 	return $config;
 	}

@@ -36,7 +36,6 @@ class Addressbook_Service extends TineClient_Service_Abstract
         }
                 
         $responseData = Zend_Json::decode($response->getBody());
-		//print_r( $responseData );
 		
         foreach ($responseData['results'] as $contact)
 		{
@@ -64,36 +63,10 @@ class Addressbook_Service extends TineClient_Service_Abstract
         if(!$response->isSuccessful()) {
             throw new Exception('getting contact failed');
         }
-                print_r($responseData);
         $responseData = Zend_Json::decode($response->getBody());
-        /*
-		
-		$client = $this->getConnection();
-        $client->setParameterPost(array(
-            'method'    => 'Tinebase_Container.getContainer',
-            'application' => 'Addressbook',
-			'containerType' => 'personal',
-			'owner' => '1'
-			
-        ));  
-		
-        $response = $client->request('POST');
-       // if($this->debugEnabled === true) {
-			echo "<hr>REQUEST DATA";
-            var_dump( $client->getLastRequest());
-            var_dump( $response );
-        //}
-
-        if(!$response->isSuccessful()) {
-            throw new Exception('getting contact failed');
-        }
-            */    
+          
         $responseData = Zend_Json::decode($response->getBody());
         
-		
-		
-		
-		
         $contact = $responseData['contact'];
         
         return $contact;

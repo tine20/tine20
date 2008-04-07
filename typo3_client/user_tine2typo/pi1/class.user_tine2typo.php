@@ -69,13 +69,14 @@ class user_tine2typo extends tslib_pibase {
 		 // parse XML data into php array
 		$this->pi_initPIflexForm();
 		
+		
+		// common template parsing
 		$markerArray['###TITLE###'] =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'title');
 		$markerArray['###TEXT###'] =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'text');
 		$template = $this->cObj->fileResource($this->templateFile);
 		
 		$cols = str_replace(',', '', explode('LLL:EXT:user_tine2typo/locallang_db.xml:', 
 		$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'selection')));
-		
 		
 		$subpart_template = $this->cObj->getSubpart($template,'###THTEMPLATE###');
 		$trow = '';
@@ -123,11 +124,13 @@ class user_tine2typo extends tslib_pibase {
 		{
 			$addressbook = new Addressbook_Service();
 			
+			
+			//  get from [123]meier -> 123;  123 == TINE20.contactId
 			$pattern =  "/\w*\[(\d*)\]/";
-			$auffang = array();
-			preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'category'), $auffang);
+			$ContactIds = array();
+			preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'category'), $ContactIds );
 						
-			foreach ($auffang[1] as $contactId)
+			foreach ($ContactIds[1] as $contactId)
 			{
 				try
 				{
@@ -159,7 +162,6 @@ class user_tine2typo extends tslib_pibase {
 		
 		foreach ($Contact as $contact)
 		{
-
 			foreach ($cols as $key => $col)
 			{
 				if ($key !== 0)
@@ -170,7 +172,7 @@ class user_tine2typo extends tslib_pibase {
 					}
 					elseif ($key !== 0)
 					{
-						$markerArray['###TDBODY###'] =  '';
+						$markerArray['###TDBODY###'] =  '&nbsp;';
 					}
 				
 					$trow_ .= $this->cObj->substituteMarkerArray($subpart_template_td, $markerArray);
@@ -186,19 +188,8 @@ class user_tine2typo extends tslib_pibase {
 		$markerArray["###TABLEBODY###"] = $TROW;
 				
 				
-		//var_dump($this->cObj->substituteMarkerArray($subpart_template, $markerArray));
 		return $this->pi_wrapInBaseClass($this->cObj->substituteMarkerArray($subpart_template, $markerArray));
 	}
-		
-
-	public function addNames( $config )
-	{
-		
-		$config['items'] = array(array('bier') , array('bier') ,array('brot'),array('wein'));
-			
-		return $config;
-	}
-	
 }
 
 
