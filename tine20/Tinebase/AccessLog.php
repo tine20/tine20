@@ -146,7 +146,7 @@ class Tinebase_AccessLog
         if(!empty($_filter)) {
             $where[] = $this->accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
         }
-        error_log(print_r($where, true));
+        //error_log(print_r($where, true));
         $rowSet = $this->accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
         
         $arrayRowSet = $rowSet->toArray();
