@@ -304,16 +304,16 @@ Tine.Admin.Groups.EditDialog = {
             var dataStore = groupGrid.getStore();
             var selectionModel = groupGrid.getSelectionModel();
             
-            if (dataStore.getById(account.data.accountId) === undefined) {
+            if (dataStore.getById(account.data.data.accountId) === undefined) {
                 var record = new Tine.Tinebase.Model.User({
-                    accountId: account.data.accountId,
+                    accountId: account.data.data.accountId,
                     //accountLoginName: account.data.accountLoginName,
                     //accountFullName: account.data.accountFullName,
-                    accountDisplayName: account.data.accountDisplayName,
-                }, account.data.accountId);
+                    accountDisplayName: account.data.data.accountDisplayName,
+                }, account.data.data.accountId);
                 dataStore.addSorted(record);
             }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.accountId));            
+            selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
         },
 
         applyChanges: function(_button, _event, _closeWindow) 
