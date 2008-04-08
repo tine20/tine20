@@ -208,7 +208,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 							scope: this,
 		                    success: function(_result, _request){
 	                            var container = Ext.util.JSON.decode(_result.responseText);
-								var newNode = this.loader.createNode(container);
+                                var newNode = this.loader.createNode(container);
 	                            parentNode.appendChild(newNode);
 								this.fireEvent('containeradd', container);
 								Ext.MessageBox.hide();
@@ -345,10 +345,12 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
 	//private
  	createNode: function(attr)
  	{
-		// console.log(attr);
 		// map attributes from Tinebase_Container to attrs from ExtJS
 		if (attr.name) {
-            attr.account_grants = Ext.util.JSON.decode(attr.account_grants);
+            if (!attr.account_grants.accountId){
+                // temporary workaround, for a Zend_Json::encode problem
+                attr.account_grants = Ext.util.JSON.decode(attr.account_grants);
+            }
             attr = {
                 containerType: 'singleContainer',
                 container: attr,
@@ -365,7 +367,6 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
                 owner: attr
             };
         }
-		
 
 		// apply baseAttrs, nice idea Corey!
         if(this.baseAttrs){
