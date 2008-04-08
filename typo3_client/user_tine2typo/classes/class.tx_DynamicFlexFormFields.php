@@ -181,11 +181,13 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		}
 		
 		// bring it to typo3- interna formatting
-		foreach ($Contact as $key => $val)
+		if (is_array($Contact)) 
 		{
-			$config['items'][$key] = array('[' . $key . ']' . utf8_decode($val),  '[' . $key . ']' . utf8_decode($val) );
+			foreach ($Contact as $key => $val)
+			{
+				$config['items'][$key] = array('[' . $key . ']' . utf8_decode($val),  '[' . $key . ']' . utf8_decode($val) );
+			}
 		}
-		
 	}
 	
 	// unset first element 
