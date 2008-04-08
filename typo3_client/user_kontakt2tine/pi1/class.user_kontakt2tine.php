@@ -222,8 +222,10 @@ class user_kontakt2tine extends tslib_pibase {
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Connection.php');
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Service/Abstract.php');
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Registry.php');
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Addressbook/Model/Contact.php');
 				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Addressbook/Service.php');
+				
 				
 				try
 				{
@@ -242,8 +244,8 @@ class user_kontakt2tine extends tslib_pibase {
 				catch (Exception $e) 
 				{
 					echo "can not login";
-					//var_dump($e);
-					//exit;
+					var_dump($e);
+					exit;
 				}
 				try 
 				{

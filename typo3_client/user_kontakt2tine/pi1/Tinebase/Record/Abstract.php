@@ -222,9 +222,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         'msg' => $errorMessages[0]
                     );
                 }
+				
+				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Tinebase/Record/Exception/Validation.php');
                 $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
-                Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
-                    print_r($this->_validationErrors,true). $e);
+                    echo $this->_validationErrors . $e;
                 throw $e;
             }
         }
