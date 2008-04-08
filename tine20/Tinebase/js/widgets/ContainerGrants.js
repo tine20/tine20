@@ -28,7 +28,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	models: {
 		containerGrant : Tine.Tinebase.Model.Grant
 	},
-	
+	selectType: 'both',
 	id: 'ContainerGrantsDialog',
 	// private
 	handlers: {

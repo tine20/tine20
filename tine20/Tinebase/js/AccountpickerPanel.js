@@ -158,6 +158,11 @@ Tine.widgets.AccountpickerDialog = Ext.extend(Ext.Component, {
  * <p> This widget supplies a account picker panel to be used in related widgets.</p>
  */
 Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
+    /**
+     * @cfg {String} one of 'user', 'group', 'both'
+     * selectType
+     */
+    selectType: 'user',
 	/**
      * @cfg {Ext.Action}
      * selectAction
@@ -237,7 +242,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             }
             
             switch (accountType){
-                case 'account':
+                case 'user':
                     this.requestParams.method = 'Tinebase.getAccounts';
                     this.requestParams.sort   = 'accountDisplayName';
                     Ext.Ajax.request({
@@ -302,7 +307,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         //var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         this.quickSearchField = new Ext.app.SearchField({
             id: 'Tinebase_Accounts_SearchField',
-            width: 253,
+            width: this.width - 3 - (this.selectType == 'both' ? 44 : 0),
             emptyText: 'enter searchfilter'
         }); 
         this.quickSearchField.on('change', function(){
@@ -314,8 +319,10 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         this.Toolbar = new Ext.Toolbar({
             items: [
             {
-                pressed: true,
-                accountType: 'account',
+                scope: this,
+                hidden: this.selectType != 'both',
+                pressed: this.selectType != 'group',
+                accountType: 'user',
                 iconCls: 'action_selectUser',
                 xtype: 'tbbtnlockedtoggle',
                 handler: this.loadData,
@@ -323,6 +330,9 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
                 toggleGroup: 'account_picker_panel_ugselect'
             },
             {
+                scope: this,
+                hidden: this.selectType != 'both',
+                pressed: this.selectType == 'group',
                 iconCls: 'action_selectGroup',
                 accountType: 'group',
                 xtype: 'tbbtnlockedtoggle',
@@ -410,6 +420,7 @@ Tine.widgets.AccountpickerActiondialog = Ext.extend(Ext.Window, {
 			region: 'west',
 			split: true,
 			bbar: this.userSelectionBottomToolBar,
+            selectType: this.selectType,
 			selectAction: function() {
 				
 			}
