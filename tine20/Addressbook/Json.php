@@ -78,6 +78,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $contact->toArray());
         
+        $result['updatedData']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
         return $result;
          
     }
