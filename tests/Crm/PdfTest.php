@@ -135,9 +135,16 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         ));             	
 
-
-        $lead = Crm_Controller::getInstance()->addLead($this->objects['leadWithContact']);
-        $contact = Addressbook_Controller::getInstance()->addContact($this->objects['linkedContact']);
+        try {
+            $lead = Crm_Controller::getInstance()->addLead($this->objects['leadWithContact']);
+        } catch ( Exception $e ) {
+            // already there
+        }
+        try {
+            $contact = Addressbook_Controller::getInstance()->addContact($this->objects['linkedContact']);
+        } catch ( Exception $e ) {
+            // already there
+        }
         
         return;
         
@@ -152,8 +159,17 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete the db entries
-        Crm_Controller::getInstance()->deleteLead($this->objects['leadWithContact']);
-        Addressbook_Controller::getInstance()->deleteContact($this->objects['linkedContact']);
+        try { 
+            Crm_Controller::getInstance()->deleteLead($this->objects['leadWithContact']);
+        } catch ( Exception $e ) {
+            // access denied ?
+        }
+        
+        try { 
+            Addressbook_Controller::getInstance()->deleteContact($this->objects['linkedContact']);
+        } catch ( Exception $e ) {
+            // access denied ?
+        }
     	
     }
     
