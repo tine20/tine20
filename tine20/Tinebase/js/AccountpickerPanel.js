@@ -215,42 +215,84 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
                 iconCls: 'action_addContact'
             })
         };
-		
-		this.accountsStore = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Tinebase.getAccounts'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            fields: Tine.Tinebase.Model.Account,
-            remoteSort: true
-        });
-        this.accountsStore.setDefaultSort('accountDisplayName', 'asc');
-        this.accountsStore.on('beforeload', function(_accountsStore) {
-            _accountsStore.baseParams.filter = Ext.getCmp('Tinebase_Accounts_SearchField').getRawValue();
-        });        
 
-        this.groupsStore = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Admin.getGroups',
-                filter: '',
-                sort: 'name',
-                dir: 'asc',
-                start: 0,
-                limit: 50
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            fields: Tine.Tinebase.Model.Group,            
+        this.ugStore = new Ext.data.SimpleStore({
+            fields: Tine.Tinebase.Model.Account
         });
-
+        
+        this.ugStore.setDefaultSort('name', 'asc');
+        
+        this.loadData = function() {
+            var accountType  = Ext.ButtonToggleMgr.getSelected('account_picker_panel_ugselect').accountType;
+            var searchString = Ext.getCmp('Tinebase_Accounts_SearchField').getRawValue();
+            
+            if (this.requestParams && this.requestParams.filter == searchString && this.requestParams.accountType == accountType) {
+                return;
+            }
+            this.requestParams = { filter: searchString, accountType: accountType, dir: 'asc', start: 0, limit: 50 };
+            
+            Ext.getCmp('Tinebase_Accounts_Grid').getStore().removeAll();
+            if (this.requestParams.filter.length < 1) {
+                return;
+            }
+            
+            switch (accountType){
+                case 'account':
+                    this.requestParams.method = 'Tinebase.getAccounts';
+                    this.requestParams.sort   = 'accountDisplayName';
+                    Ext.Ajax.request({
+                        params: this.requestParams,
+                        success: function(response, options){
+                            var data = Ext.util.JSON.decode(response.responseText);
+                            var toLoad = [];
+                            for (var i=0; i<data.results.length; i++){
+                                var item = (data.results[i]);
+                                toLoad.push( new Tine.Tinebase.Model.Account({
+                                    id: item.accountId,
+                                    type: 'user',
+                                    name: item.accountDisplayName,
+                                    data: item
+                                }));
+                            }
+                            if (toLoad.length > 0) {
+                                Ext.getCmp('Tinebase_Accounts_Grid').getStore().add(toLoad);
+                            }
+                        }
+                    });
+                    break;
+                case 'group':
+                    this.requestParams.method = 'Admin.getGroups';
+                    this.requestParams.sort   = 'name';
+                    Ext.Ajax.request({
+                        params: this.requestParams,
+                        success: function(response, options){
+                            var data = Ext.util.JSON.decode(response.responseText);
+                            var toLoad = [];
+                            for (var i=0; i<data.results.length; i++){
+                                var item = (data.results[i]);
+                                toLoad.push( new Tine.Tinebase.Model.Account({
+                                    id: item.id,
+                                    type: 'group',
+                                    name: item.name,
+                                    data: item
+                                }));
+                            }
+                            if (toLoad.length > 0) {
+                                Ext.getCmp('Tinebase_Accounts_Grid').getStore().add(toLoad);
+                            }
+                        }
+                    });
+                    break;
+            }
+        };
+        
         var columnModel = new Ext.grid.ColumnModel([
 		    {
                 resizable: false,
 				sortable: false, 
-                id: 'accountDisplayName', 
+                id: 'name', 
                 header: 'Name', 
-                dataIndex: 'accountDisplayName', 
+                dataIndex: 'name', 
                 width: 70
             }
         ]);
@@ -264,36 +306,19 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             emptyText: 'enter searchfilter'
         }); 
         this.quickSearchField.on('change', function(){
-            var accountType = Ext.ButtonToggleMgr.getSelected('account_picker_panel_ugselect').accountType;
-			var store = Ext.getCmp('Tinebase_Accounts_Grid').getStore();
-			var lastValue = store.lastOptions ? store.lastOptions.params.filter : false;
-			if (lastValue != this.getRawValue()) {
-
-				if (!Ext.getCmp('Tinebase_Accounts_SearchField').getRawValue()) {
-					Ext.getCmp('Tinebase_Accounts_Grid').getStore().removeAll();
-				}
-				else {
-					Ext.getCmp('Tinebase_Accounts_Grid').getStore().load({
-						params: {
-							start: 0,
-							limit: 50
-						}
-					});
-				}
-			}
-        });
+            this.loadData();
+        }, this);
         var ugSelectionChange = function(pressed){
-            
             //console.log(p.iconCls);
         };
         this.Toolbar = new Ext.Toolbar({
             items: [
             {
                 pressed: true,
-                accountType: 'user',
+                accountType: 'account',
                 iconCls: 'action_selectUser',
                 xtype: 'tbbtnlockedtoggle',
-                handler: ugSelectionChange,
+                handler: this.loadData,
                 enableToggle: true,
                 toggleGroup: 'account_picker_panel_ugselect'
             },
@@ -301,7 +326,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
                 iconCls: 'action_selectGroup',
                 accountType: 'group',
                 xtype: 'tbbtnlockedtoggle',
-                handler: ugSelectionChange,
+                handler: this.loadData,
                 enableToggle: true,
                 toggleGroup: 'account_picker_panel_ugselect'
             },
@@ -318,7 +343,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 		this.searchPanel = new Ext.grid.GridPanel({
             title: 'Search',
             id: 'Tinebase_Accounts_Grid',
-            store: this.accountsStore,
+            store: this.ugStore,
             cm: columnModel,
 			enableColumnHide:false,
             enableColumnMove:false,
@@ -326,7 +351,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             selModel: new Ext.grid.RowSelectionModel({multiSelect:this.multiSelect}),
             enableColLock:false,
             loadMask: true,
-            autoExpandColumn: 'accountDisplayName',
+            autoExpandColumn: 'name',
             tbar: this.Toolbar,
             bbar: this.Toolbar2,
             border: false
@@ -350,7 +375,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         }];
 		
 	    Tine.widgets.AccountpickerPanel.superclass.initComponent.call(this);
-	}
+	},
 });
 
 /**
