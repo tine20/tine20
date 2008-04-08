@@ -82,6 +82,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountFirstName'      => 'PHPUnitup',
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
+        
+        $this->objects['application'] = new Tinebase_Model_Application ( array(
+            'id'                    => 5,
+            'name'                  => 'Tasks',
+            'status'                => 'enabled',
+            'version'               => '0.1',
+            'order'                 => '99',
+        ));
                 
         // add account for group member tests
         try {
@@ -336,9 +344,54 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, sizeof($accessLogs['results']));
         $this->assertEquals(0, $accessLogs['totalcount']);
     }        
-}		
 	
+    /**
+     * try to get an application
+     *
+     */
+    public function testGetApplication()
+    {
+        $json = new Admin_Json();
+        
+        $application = $json->getApplication( $this->objects['application']->getId() );
+        
+        $this->assertEquals($application['name'], $this->objects['application']->name);
+    }
 
+    /**
+     * try to get applications
+     *
+     */
+    public function testGetApplications()
+    {
+        $json = new Admin_Json();
+        
+        $applications = $json->getApplications( NULL, NULL, 'ASC', 0, 10);
+        
+        $this->assertGreaterThan(0, $applications['totalcount']);
+    }
+
+
+    /**
+     * try to set application state
+     *
+     */
+    public function testSetApplicationState()
+    {
+        $json = new Admin_Json();
+        
+        $json->setApplicationState( Zend_Json::encode(array($this->objects['application']->getId())), 'disabled' );
+        
+        $application = $json->getApplication( $this->objects['application']->getId() );
+
+        $this->assertEquals($application['status'], 'disabled');
+
+        // enable again
+        $json->setApplicationState( Zend_Json::encode(array($this->objects['application']->getId())), 'enabled' );
+    }
+    
+}       
+    
 if (PHPUnit_MAIN_METHOD == 'Admin_JsonTest::main') {
     Admin_JsonTest::main();
 }
