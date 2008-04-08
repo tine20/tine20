@@ -11,24 +11,34 @@
 Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Tinebase.Model');
 
 /**
- * Model of the tine (simple) account
+ * Model of the tine (simple) user account
  */
-Tine.Tinebase.Model.Account = Ext.data.Record.create([
+Tine.Tinebase.Model.User = Ext.data.Record.create([
     { name: 'accountId' },
     { name: 'accountDisplayName' },
     { name: 'accountLastName' },
     { name: 'accountFirstName' },
-    { name: 'accountFullName' },
+    { name: 'accountFullName' }
 ]);
 
 /**
- * Model of a user group
+ * Model of a user group account
  */
 Tine.Tinebase.Model.Group = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
-    {name: 'description'},
+    {name: 'description'}
     // @todo add accounts array to group model?
+]);
+
+/**
+ * Model of a generalised account (user or group)
+ */
+Tine.Tinebase.Model.Account = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'type'},
+    {name: 'name'},
+    {name: 'data'}
 ]);
 
 /**

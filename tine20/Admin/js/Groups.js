@@ -305,7 +305,7 @@ Tine.Admin.Groups.EditDialog = {
             var selectionModel = groupGrid.getSelectionModel();
             
             if (dataStore.getById(account.data.accountId) === undefined) {
-                var record = new Tine.Tinebase.Model.Account({
+                var record = new Tine.Tinebase.Model.User({
                     accountId: account.data.accountId,
                     //accountLoginName: account.data.accountLoginName,
                     //accountFullName: account.data.accountFullName,
@@ -498,7 +498,7 @@ Tine.Admin.Groups.EditDialog = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: Tine.Tinebase.Model.Account,
+            fields: Tine.Tinebase.Model.User,
         });
 
         Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
