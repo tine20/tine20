@@ -80,7 +80,7 @@ class Zend_Loader
             self::loadFile($file, $dirs, true);
         } else {
             self::_securityCheck($file);
-            include_once $file;
+            include_once PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/' . $file;
         }
 
         if (!class_exists($class, false) && !interface_exists($class, false)) {

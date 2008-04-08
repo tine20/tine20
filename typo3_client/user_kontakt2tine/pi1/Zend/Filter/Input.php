@@ -24,7 +24,7 @@
  * @see Zend_Loader
  */
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
-
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader.php');
 /**
  * @see Zend_Filter
  */
@@ -257,18 +257,18 @@ class Zend_Filter_Input
             switch ($type) {
                 case self::FILTER:
                     $prefixSegment = 'Zend_Filter_';
-                    $pathSegment   = 'Zend/Filter/';
+                    $pathSegment   = PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/';
                     break;
                 case self::VALIDATE:
                     $prefixSegment = 'Zend_Validate_';
-                    $pathSegment   = 'Zend/Validate/';
+                    $pathSegment   = PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/';
                     break;
                 default:
                     require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
                     throw new Zend_Filter_Exception(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
             }
 
-            require_once 'Zend/Loader/PluginLoader.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader.php');
             $this->_loaders[$type] = new Zend_Loader_PluginLoader(
                 array($prefixSegment => $pathSegment)
             );
@@ -903,7 +903,6 @@ class Zend_Filter_Input
             $args = $classBaseName;
             $classBaseName = array_shift($args);
         }
-
         $interfaceName = 'Zend_' . ucfirst($type) . '_Interface';
         $className = $this->getPluginLoader($type)->load(ucfirst($classBaseName));
 

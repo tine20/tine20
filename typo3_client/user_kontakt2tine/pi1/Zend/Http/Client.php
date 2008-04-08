@@ -23,7 +23,7 @@
 
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri.php');
-require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Client/Adapter/Interface.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Interface.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Response.php');
 
 /**

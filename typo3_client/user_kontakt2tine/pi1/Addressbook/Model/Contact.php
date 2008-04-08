@@ -16,8 +16,8 @@
  * @package     Addressbook
  */
  
-require_once('Tinebase/Record/Abstract.php');
-require_once('Zend/Filter/Input.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Tinebase/Record/Abstract.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Input.php');
 
 
  class Addressbook_Model_Contact extends Tinebase_Record_Abstract

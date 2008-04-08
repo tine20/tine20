@@ -9,7 +9,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Abstract.php 1313 2008-03-22 08:08:49Z lkneschke $
  */
-require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Tinebase/Connection.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/TineClient/Connection.php');
 abstract class TineClient_Service_Abstract
 {
     protected static $_defaultConnection = NULL;

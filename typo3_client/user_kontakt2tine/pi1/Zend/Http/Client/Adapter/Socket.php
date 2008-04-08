@@ -22,7 +22,7 @@
  */
 
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri/Http.php');
-require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Client/Adapter/Interface.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Interface.php');
 
 /**
  * A sockets based (stream_socket_client) adapter class for Zend_Http_Client. Can be used

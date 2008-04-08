@@ -11,6 +11,7 @@
  */
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Json.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/CookieJar.php');
 class TineClient_Connection extends Zend_Http_Client
 {
     /**
