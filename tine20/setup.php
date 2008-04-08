@@ -73,7 +73,7 @@ $account = new Tinebase_Account_Model_FullAccount(array(
     'accountStatus'         => 'enabled',
     'accountPrimaryGroup'   => $userGroup->id,
     'accountLastName'       => 'Account',
-    'accountFirstName'      => 'Tine 2.0 Admin',
+    'accountDisplayName'    => 'Tine 2.0 Admin Account',
     'accountFirstName'      => 'Tine 2.0 Admin'
 ));
 
