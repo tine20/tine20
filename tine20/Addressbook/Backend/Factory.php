@@ -40,7 +40,7 @@ class Addressbook_Backend_Factory
      * factory function to return a selected contacts backend class
      *
      * @param string $type
-     * @return object
+     * @return Addressbook_Backend_Interface
      */
     static public function factory($type)
     {
