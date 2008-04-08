@@ -190,7 +190,7 @@ class Tinebase_Container
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
                         'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                        'accountType'   => 'account',
+                        'accountType'   => 'user',
                         'accountName'   => 'not used',
                         'readGrant'     => true,
                         'addGrant'      => true,
@@ -210,7 +210,7 @@ class Tinebase_Container
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
                         'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                        'accountType'   => 'account',
+                        'accountType'   => 'user',
                         'accountName'   => 'not used',
                         'readGrant'     => true,
                         'addGrant'      => true,
@@ -247,7 +247,7 @@ class Tinebase_Container
         }
         
         switch($_accountType) {
-            case 'account':
+            case 'user':
                 $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
                 break;
             case 'group':
@@ -310,7 +310,7 @@ class Tinebase_Container
             ->where(SQL_TABLE_PREFIX . 'container_acl.account_grant = ?', $_grant)
             
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
@@ -460,7 +460,7 @@ class Tinebase_Container
             ->where('user.account_grant = ?', $_grant)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
+            ->where("(user.account_id = ? AND user.account_type ='user'", $accountId)
             ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
@@ -516,7 +516,7 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
@@ -563,7 +563,7 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
+            ->where("(user.account_id = ? AND user.account_type ='user'", $accountId)
             ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
@@ -619,7 +619,7 @@ class Tinebase_Container
             ->where('owner.account_grant = ?', self::GRANT_ADMIN)
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where("(user.account_id = ? AND user.account_type ='account'", $accountId)
+            ->where("(user.account_id = ? AND user.account_type ='user'", $accountId)
             ->orWhere("user.account_id IN (?) AND user.account_type ='group'", $groupMemberships)
             ->orWhere('user.account_type = ?)', 'anyone')
             
@@ -726,7 +726,7 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id', array('id'))
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
             
@@ -842,7 +842,7 @@ class Tinebase_Container
             ->join(SQL_TABLE_PREFIX . 'container', SQL_TABLE_PREFIX . 'container_acl.container_id = ' . SQL_TABLE_PREFIX . 'container.id')
 
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='account'", $accountId)
+            ->where('(' . SQL_TABLE_PREFIX . 'container_acl.account_id = ? AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='user'", $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_id IN (?) AND ' . SQL_TABLE_PREFIX . "container_acl.account_type ='group'", $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'container_acl.account_type = ?)', 'anyone')
 

@@ -447,7 +447,7 @@
                     <name>account_type</name>
                     <type>enum</type>
                     <value>anyone</value>
-                    <value>account</value>
+                    <value>user</value>
                     <value>group</value>
                     <notnull>true</notnull>
                 </field>

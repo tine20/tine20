@@ -136,7 +136,7 @@ class Tinebase_Json_Container
         
         foreach($result['results'] as &$value) {
             switch($value['accountType']) {
-                case 'account':
+                case 'user':
                     $value['accountId'] = Tinebase_Account::getInstance()->getAccountById($value['accountId'])->toArray();
                     break;
                 case 'group':
