@@ -119,11 +119,11 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * set account state
      *
-     * @param   string $accountId  json encoded array of account ids
+     * @param   string $accountIds  json encoded array of account ids
      * @param   string $state      state to set
      * @return  array with success flag
      */
-    public function setAccountState($accountId, $state)
+    public function setAccountState($accountIds, $state)
     {
         $accountIds = Zend_Json::decode($accountIds);
         
@@ -173,7 +173,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         try {
             $logIds = Zend_Json::decode($logIds);
 
-            Admin_Controller::getInstance()->deleteEntries($logIds);
+            Admin_Controller::getInstance()->deleteAccessLogEntries($logIds);
 
             $result = array(
                 'success' => TRUE
