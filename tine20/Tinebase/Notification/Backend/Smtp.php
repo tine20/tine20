@@ -18,16 +18,39 @@
  */
 class Tinebase_Notification_Backend_Smtp
 {
+    /**
+     * the from address
+     *
+     * @var string
+     */
     protected $_fromAddress;
     
+    /**
+     * the sender name
+     *
+     * @var string
+     */
     protected $_fromName = 'Tine 2.0 notification service';
     
+    /**
+     * the constructor
+     *
+     */
     public function __construct()
     {
         $this->_fromAddress = 'webmaster@tine20.org';
     }
     
-    public function send($_updater, $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
+    /**
+     * send a notification as email
+     *
+     * @param Tinebase_Account_Model_FullAccount $_updater
+     * @param Addressbook_Model_Contact $_recipient
+     * @param string $_subject the subject
+     * @param string $_messagePlain the message as plain text
+     * @param string $_messageHtml the message as html
+     */
+    public function send(Tinebase_Account_Model_FullAccount $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
         $mail = new Tinebase_Mail('UTF-8');
         
@@ -49,9 +72,9 @@ class Tinebase_Notification_Backend_Smtp
         }
 
         if(!empty($_recipient->accountEmailAddress)) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->accountEmailAddress);
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' send notification email to ' . $_recipient->email);
 
-            $mail->addTo($_recipient->accountEmailAddress, $_recipient->accountDisplayName);
+            $mail->addTo($_recipient->email, $_recipient->n_fileas);
         
             $mail->send();
         }

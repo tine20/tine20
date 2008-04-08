@@ -64,10 +64,19 @@ class Tinebase_Notification
      * @param string $_messagePlain
      * @param string $_messageHtml
      */
-    public function send(Tinebase_Account_Model_FullAccount $_updater, Tinebase_Record_RecordSet $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Tinebase_Account_Model_FullAccount $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
+        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+
         foreach($_recipients as $recipient) {
-            $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml);
+            try {
+                if(!$recipient instanceof Addressbook_Model_Contact) {
+                    $recipient = $contactsBackend->getContact($recipient);
+                }
+                $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml);
+            } catch (Exception $e) {
+                // do nothing
+            }
         }
     }
 }
