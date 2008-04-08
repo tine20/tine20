@@ -195,7 +195,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      */
     public function getApplication($applicationId)
     {
-        $application = Admin_Controller::getInstance()->getApplicationById($applicationId);
+        $application = Admin_Controller::getInstance()->getApplication($applicationId);
         
         return $application->toArray();
     }
