@@ -43,28 +43,29 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             Ext.getCmp('AccountsActionApplyButton').enable();
         },
         addAccount: function(account){
-			// we somehow lost scope...
-			var cgd = Ext.getCmp('ContainerGrantsDialog');
-			var dataStore = cgd.dataStore;
-			var grantsSelectionModel = cgd.GrantsGridPanel.getSelectionModel();
+            // we somehow lost scope...
+            var cgd = Ext.getCmp('ContainerGrantsDialog');
+            var dataStore = cgd.dataStore;
+            var grantsSelectionModel = cgd.GrantsGridPanel.getSelectionModel();
             
-            var recordId = cgd.getRecordId(account);
+            var recordIndex = cgd.getRecordIndex(account);
 			
-			if (!recordId) {
+			if (recordIndex === false) {
 				var record = new cgd.models.containerGrant({
-					accountId: account.data,
-                    accountType: 'account',
+                    id: null,
+					accountId: account.data.data,
+                    accountType: account.data.type,
 					readGrant: true,
 					addGrant: false,
 					editGrant: false,
 					deleteGrant: false,
 					adminGrant: false
-				}, account.data.accountId);
+				});
 				dataStore.addSorted(record);
                 Ext.getCmp('AccountsActionSaveButton').enable();
                 Ext.getCmp('AccountsActionApplyButton').enable();
             }
-			grantsSelectionModel.selectRow(dataStore.indexOfId(cgd.getRecordId(account)));
+			grantsSelectionModel.selectRow(cgd.getRecordIndex(account));
 		},
 		accountsActionApply: function(button, event, closeWindow) {
 			// we somehow lost scope...
@@ -78,7 +79,9 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 				
 				grantsStore.each(function(_record){
                     var grant = new Tine.Tinebase.Model.Grant(_record.data);
-                    grant.data.accountId = _record.data.accountId.accountId;
+                    grant.data.accountId = _record.data.accountType == 'group' ?
+                        _record.data.accountId.id :
+                        _record.data.accountId.accountId;
 					grants.push(grant.data);
 				});
 				
@@ -134,7 +137,8 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'id',
+            // auto gernerate id's, as user/group ids are not unique atm.
+            //id: 'id',
             fields: this.models.containerGrant
         });
 	    
@@ -186,7 +190,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
                 id: 'accountId', 
                 header: 'Name', 
                 dataIndex: 'accountId', 
-                renderer: Tine.Tinebase.Common.usernameRenderer,
+                renderer: Tine.Tinebase.Common.accountRenderer,
                 width: 70
             }
             ].concat(columns)
@@ -244,19 +248,25 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
         }, this);
 	},
     /**
-     * returns id of record in this.dataStore
+     * returns index of record in this.dataStore
      * @private
      */
-    getRecordId: function(account) {
+    getRecordIndex: function(account) {
         var cgd = Ext.getCmp('ContainerGrantsDialog');
         var dataStore = cgd.dataStore;
-            
+        
         var id = false;
         dataStore.each(function(item){
-            if (item.data.accountType == 'account' && item.data.accountId.accountId == account.data.accountId){
+            if ((item.data.accountType == 'user' || item.data.accountType == 'account') 
+                    && account.data.type == 'user'
+                    && item.data.accountId.accountId == account.data.id) {
+                id = item.id;
+            } else if (item.data.accountType == 'group'
+                    && account.data.type == 'group'
+                    && item.data.accountId.id == account.data.id) {
                 id = item.id;
             }
         });
-        return id;
+        return id ? dataStore.indexOfId(id) : false;
     }
 });

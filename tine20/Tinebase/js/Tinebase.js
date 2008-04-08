@@ -636,6 +636,20 @@ Tine.Tinebase.Common = function(){
         return _accountObject.accountDisplayName;
     };
 	
+    /**
+     * Returns a username or groupname with according icon in front
+     */
+    _accountRenderer = function(_accountObject){
+        if(_accountObject.accountDisplayName){
+            var iconCls = 'renderer renderer_accountUserIcon';
+            var displayName = _accountObject.accountDisplayName;
+        } else if (_accountObject.name){
+            var iconCls = 'renderer renderer_accountGroupIcon';
+            var displayName = _accountObject.name;
+        }
+        return '<div class="' + iconCls  + '">&#160;</div>' + displayName; 
+    };
+    
     /** 
      * returns json coded data from given data source
 	 *
@@ -699,6 +713,7 @@ Tine.Tinebase.Common = function(){
 		dateTimeRenderer: _dateTimeRenderer,
 		dateRenderer: _dateRenderer,
 		usernameRenderer: _usernameRenderer,
+        accountRenderer:  _accountRenderer,
 		timeRenderer: _timeRenderer,
 		openWindow:       _openWindow,
         getJSONdata:    _getJSONDsRecs,

@@ -7,6 +7,7 @@ html, body {
 	height:100%;
 }
 
+/* ----- actions -------------------------------------------------------------*/
 .action_edit {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
 }
@@ -52,5 +53,20 @@ html, body {
 }
 
 .action_selectGroup {
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+}
+
+/* ----- renderer ------------------------------------------------------------*/
+.renderer {
+    width: 12px;
+    float: left;
+    padding-left: 5px;
+}
+
+.renderer_accountUserIcon {
+    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+}
+
+.renderer_accountGroupIcon {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 } 
