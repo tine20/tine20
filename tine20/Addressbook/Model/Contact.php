@@ -44,9 +44,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
         'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
         'email'                 => array('StringTrim', 'StringToLower'),
-        'email_home'    => array('StringTrim', 'StringToLower'),
-        'url'           => array('StringTrim', 'StringToLower'),
-        'url_home'      => array('StringTrim', 'StringToLower'),
+        'email_home'            => array('StringTrim', 'StringToLower'),
+        'url'                   => array('StringTrim', 'StringToLower'),
+        'url_home'              => array('StringTrim', 'StringToLower'),
     );
     
     /**
