@@ -37,11 +37,13 @@ class Addressbook_Service extends TineClient_Service_Abstract
                 
         $responseData = Zend_Json::decode($response->getBody());
 		
-        foreach ($responseData['results'] as $contact)
+		if (is_array($responseData))
 		{
-			$auswahl[$contact['id']] = $contact['n_fn'];
-		}                    
-        
+			foreach ($responseData['results'] as $contact)
+			{
+				$auswahl[$contact['id']] = $contact['n_fn'];
+			}                    
+        }
         return $auswahl;
 	}
 
