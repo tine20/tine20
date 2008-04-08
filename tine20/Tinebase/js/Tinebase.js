@@ -292,7 +292,7 @@ Tine.Tinebase.MainScreen = function() {
 		
     	var panels = [];
         
-        for(_application in Tine) {
+        for(var _application in Tine) {
         	try{
                 panels.push(Tine[_application].getPanel());
                 
