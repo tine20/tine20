@@ -554,6 +554,22 @@ class Crm_Controller extends Tinebase_Container_Abstract
             throw new Exception('read permission to lead denied');
         }
         
+        $links = $this->getLinks($_leadId, 'Addressbook');
+        
+        foreach($links as $link) {
+            switch($link['remark']) {
+                case 'account':
+                    $lead->responsible[] = $link['recordId'];
+                    break;
+                case 'customer':
+                    $lead->customer[] = $link['recordId'];
+                    break;
+                case 'partner':
+                    $lead->partner[] = $link['recordId'];
+                    break;
+            }
+        }
+        
         return $lead;
     }
     
@@ -641,7 +657,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         }
         
         // send notifications to all accounts in the first step
-        $accounts = Tinebase_Account::getInstance()->getFullAccounts();
+        $accounts = $lead->responsible;
         Tinebase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
     }
 }
