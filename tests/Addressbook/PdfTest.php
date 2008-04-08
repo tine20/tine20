@@ -151,7 +151,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $pdf = new Addressbook_Pdf();
         $pdfOutput = $pdf->getContactPdf($this->objects['contact']);
         
-        $pdf->save("test.pdf");
+        //$pdf->save("test.pdf");
         
         $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
         $this->assertEquals(1, preg_match("/Private Kontaktdaten/", $pdfOutput), 'translation not found');
