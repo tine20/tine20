@@ -455,7 +455,7 @@
                     <name>account_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
-                    <notnull>false</notnull>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>account_grant</name>
