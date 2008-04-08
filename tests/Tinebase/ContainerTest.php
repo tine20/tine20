@@ -61,7 +61,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
             array(
                 'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                'accountType'   => 'account',
+                'accountType'   => 'user',
                 'accountName'   => 'not used',
                 'readGrant'     => true,
                 'addGrant'      => true,
@@ -234,7 +234,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             new Tinebase_Model_Grants(
                 array(
                     'accountId'     => Zend_Registry::get('currentAccount')->getId(),
-                    'accountType'   => 'account',
+                    'accountType'   => 'user',
                     'accountName'   => 'not used',
                     'readGrant'     => true,
                     'addGrant'      => false,
