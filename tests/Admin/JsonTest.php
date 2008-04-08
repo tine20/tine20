@@ -153,11 +153,54 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue ( is_array($account) );
         $this->assertEquals('tine20phpunitup', $account['accountLoginName']);
-        $this->assertEquals(Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId(),  $account['accountPrimaryGroup']);
+        $this->assertEquals(Tinebase_Group_Sql::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']);
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
         $this->assertTrue ( $authResult->isValid() );
     }    
+
+    /**
+     * try to delete accounts 
+     *
+     */
+    public function testDeleteAccounts()
+    {
+        $json = new Admin_Json();
+        
+        $json->deleteAccounts( Zend_Json::encode(array($this->objects['account']->getId())) );
+        
+        $this->setExpectedException ( 'Exception' );
+        Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId);
+    }
+
+    /**
+     * try to set account state
+     *
+     */
+    public function testSetAccountState()
+    {
+        $json = new Admin_Json();
+        
+        $json->setAccountState(Zend_Json::encode(array($this->objects['account']->getId())), 'disabled');
+        
+        $account = Tinebase_Account::getInstance()->getFullAccountById($this->objects['account']);
+        
+        $this->assertEquals('disabled', $account->accountStatus);    
+    }
+    
+    /**
+     * try to reset password
+     *
+     */
+    public function testResetPassword()
+    {
+        $json = new Admin_Json();
+        
+        $json->resetPassword(Zend_Json::encode($this->objects['account']->toArray()), 'password');
+        
+        $authResult = Tinebase_Auth::getInstance()->authenticate($this->objects['account']->accountLoginName, 'password');
+        $this->assertTrue ( $authResult->isValid() );    
+    }
     
     /**
      * try to get all groups
@@ -249,8 +292,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogs()
     {
-        //@todo add access log entry before
-        
         $json = new Admin_Json();
         
         $from = new Zend_Date ();
@@ -265,7 +306,36 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
     }    
-    
+
+    /**
+     * try to delete access log entries
+     *
+     */
+    public function testDeleteAccessLogs()
+    {
+        $json = new Admin_Json();
+        
+        $from = new Zend_Date ();
+        $from->sub('02:00:00',Zend_Date::TIMES);
+        $to = new Zend_Date ();
+        
+        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), 'tine20admin', 'id', 'ASC', 0, 10);
+
+        //print_r ( $accessLogs );
+        
+        $deleteLogIds = array();
+        foreach ( $accessLogs['results'] as $log ) {
+            $deleteLogIds[] = $log['id'];
+        }
+        
+        // delete logs
+        $json->deleteAccessLogEntries( Zend_Json::encode($deleteLogIds) );
+        
+        // check total count
+        $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), 'tine20admin', 'id', 'ASC', 0, 10);
+        $this->assertEquals(0, sizeof($accessLogs['results']));
+        $this->assertEquals(0, $accessLogs['totalcount']);
+    }        
 }		
 	
 
