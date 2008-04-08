@@ -43,8 +43,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        //@todo are full accounts needed?
-        $accounts = Admin_Controller::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit);
+        $accounts = Admin_Controller::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
             if($account['last_login'] !== NULL) {

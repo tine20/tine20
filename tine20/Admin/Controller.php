@@ -68,6 +68,25 @@ class Admin_Controller
         
         return $result;
     }
+
+    /**
+     * get list of full accounts
+     *
+     * @param string $_filter string to search accounts for
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_FullAccount
+     */
+    public function getFullAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    {
+        $backend = Tinebase_Account::getInstance();
+
+        $result = $backend->getFullAccounts($_filter, $_sort, $_dir, $_start, $_limit);
+        
+        return $result;
+    }
     
     /**
      * get account
