@@ -21,10 +21,10 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/Loader.php';
-require_once 'Zend/Uri.php';
-require_once 'Zend/Http/Client/Adapter/Interface.php';
-require_once 'Zend/Http/Response.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Client/Adapter/Interface.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Response.php');
 
 /**
  * Zend_Http_Client is an implemetation of an HTTP client in PHP. The client
@@ -224,7 +224,7 @@ class Zend_Http_Client
         }
 
         if (!$uri instanceof Zend_Uri_Http) {
-            require_once 'Zend/Http/Client/Exception.php';
+           require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
             throw new Zend_Http_Client_Exception('Passed parameter is not a valid HTTP URI.');
         }
 
@@ -262,7 +262,7 @@ class Zend_Http_Client
     public function setConfig($config = array())
     {
         if (! is_array($config)) {
-            require_once 'Zend/Http/Client/Exception.php';
+           require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
             throw new Zend_Http_Client_Exception('Expected array parameter, given ' . gettype($config));
         }
 
@@ -285,7 +285,7 @@ class Zend_Http_Client
     public function setMethod($method = self::GET)
     {
         if (! preg_match('/^[A-Za-z_]+$/', $method)) {
-            require_once 'Zend/Http/Client/Exception.php';
+           require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
             throw new Zend_Http_Client_Exception("'{$method}' is not a valid HTTP request method.");
         }
 
@@ -333,7 +333,7 @@ class Zend_Http_Client
 
             // Make sure the name is valid if we are in strict mode
             if ($this->config['strict'] && (! preg_match('/^[a-zA-Z0-9-]+$/', $name))) {
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception("{$name} is not a valid HTTP header name");
             }
             
@@ -480,7 +480,7 @@ class Zend_Http_Client
         } else {
             // Check we got a proper authentication type
             if (! defined('self::AUTH_' . strtoupper($type))) {
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception("Invalid or not supported authentication type: '$type'");
             }
 
@@ -515,7 +515,7 @@ class Zend_Http_Client
         } elseif (! $cookiejar) {
             $this->cookiejar = null;
         } else {
-            require_once 'Zend/Http/Client/Exception.php';
+           require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
             throw new Zend_Http_Client_Exception('Invalid parameter type passed as CookieJar');
         }
 
@@ -574,7 +574,7 @@ class Zend_Http_Client
             }
 
             if (preg_match("/[=,; \t\r\n\013\014]/", $cookie)) {
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception("Cookie name cannot contain these characters: =,; \t\r\n\013\014 ({$cookie})");
             }
 
@@ -610,7 +610,7 @@ class Zend_Http_Client
     {
         if ($data === null) {
             if (($data = @file_get_contents($filename)) === false) {
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception("Unable to read file '{$filename}' for upload");
             }
 
@@ -719,7 +719,7 @@ class Zend_Http_Client
             try {
                 Zend_Loader::loadClass($adapter);
             } catch (Zend_Exception $e) {
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception("Unable to load adapter '$adapter': {$e->getMessage()}");
             }
 
@@ -727,7 +727,7 @@ class Zend_Http_Client
         }
 
         if (! $adapter instanceof Zend_Http_Client_Adapter_Interface) {
-            require_once 'Zend/Http/Client/Exception.php';
+           require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
             throw new Zend_Http_Client_Exception('Passed adapter is not a HTTP connection adapter');
         }
 
@@ -746,7 +746,7 @@ class Zend_Http_Client
     public function request($method = null)
     {
         if (! $this->uri instanceof Zend_Uri_Http) {
-            require_once 'Zend/Http/Client/Exception.php';
+           require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
             throw new Zend_Http_Client_Exception('No valid URI has been passed to the client');
         }
 
@@ -781,7 +781,7 @@ class Zend_Http_Client
 
             $response = $this->adapter->read();
             if (! $response) {
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception('Unable to read response, or response is empty');
             }
 
@@ -971,7 +971,7 @@ class Zend_Http_Client
                     break;
 
                 default:
-                    require_once 'Zend/Http/Client/Exception.php';
+                   require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                     throw new Zend_Http_Client_Exception("Cannot handle content type '{$this->enctype}' automatically." .
                         " Please use Zend_Http_Client::setRawData to send this kind of content.");
                     break;
@@ -1063,7 +1063,7 @@ class Zend_Http_Client
             case self::AUTH_BASIC:
                 // In basic authentication, the user name cannot contain ":"
                 if (strpos($user, ':') !== false) {
-                    require_once 'Zend/Http/Client/Exception.php';
+                   require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                     throw new Zend_Http_Client_Exception("The user name cannot contain ':' in 'Basic' HTTP authentication");
                 }
 
@@ -1077,7 +1077,7 @@ class Zend_Http_Client
             //    break;
 
             default:
-                require_once 'Zend/Http/Client/Exception.php';
+               require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Exception.php');
                 throw new Zend_Http_Client_Exception("Not a supported HTTP authentication type: '$type'");
         }
 

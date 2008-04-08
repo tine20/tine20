@@ -23,17 +23,17 @@
 /**
  * @see Zend_Loader
  */
-require_once 'Zend/Loader.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
 
 /**
  * @see Zend_Filter
  */
-require_once 'Zend/Filter.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter.php');
 
 /**
  * @see Zend_Validate
  */
-require_once 'Zend/Validate.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate.php');
 
 /**
  * @category   Zend
@@ -229,7 +229,7 @@ class Zend_Filter_Input
                 $this->_loaders[$type] = $loader;
                 return $this;
             default:
-                require_once 'Zend/Filter/Exception.php';
+                require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
                 throw new Zend_Filter_Exception(sprintf('Invalid type "%s" provided to setPluginLoader()', $type));
         }
 
@@ -264,7 +264,7 @@ class Zend_Filter_Input
                     $pathSegment   = 'Zend/Validate/';
                     break;
                 default:
-                    require_once 'Zend/Filter/Exception.php';
+                    require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
                     throw new Zend_Filter_Exception(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
             }
 
@@ -447,11 +447,11 @@ class Zend_Filter_Input
     {
         $this->_process();
         if ($this->hasInvalid()) {
-            require_once 'Zend/Filter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
             throw new Zend_Filter_Exception("Input has invalid fields");
         }
         if ($this->hasMissing()) {
-            require_once 'Zend/Filter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
             throw new Zend_Filter_Exception("Input has missing fields");
         }
 
@@ -490,7 +490,7 @@ class Zend_Filter_Input
             $escapeFilter = $this->_getFilter($escapeFilter);
         }
         if (!$escapeFilter instanceof Zend_Filter_Interface) {
-            require_once 'Zend/Filter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
             throw new Zend_Filter_Exception('Escape filter specified does not implement Zend_Filter_Interface');
         }
         $this->_defaultEscapeFilter = $escapeFilter;
@@ -520,7 +520,7 @@ class Zend_Filter_Input
                     $this->_defaults[$option] = $value;
                     break;
                 default:
-                    require_once 'Zend/Filter/Exception.php';
+                    require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
                     throw new Zend_Filter_Exception("Unknown option '$option'");
                     break;
             }
@@ -910,7 +910,7 @@ class Zend_Filter_Input
         $class = new ReflectionClass($className);
 
         if (!$class->implementsInterface($interfaceName)) {
-            require_once 'Zend/Filter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
             throw new Zend_Filter_Exception("Class based on basename '$classBaseName' must implement the '$interfaceName' interface");
         }
 

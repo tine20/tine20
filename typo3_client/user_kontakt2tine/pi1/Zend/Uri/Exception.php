@@ -22,7 +22,7 @@
 /**
  * Zend_Exception
  */
-require_once 'Zend/Exception.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
 
 
 /**

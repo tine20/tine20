@@ -9,8 +9,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Connection.php 1314 2008-03-23 21:34:20Z lkneschke $
  */
-require_once('Zend/Http/Client.php');
-require_once('Zend/Json.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Json.php');
 class TineClient_Connection extends Zend_Http_Client
 {
     /**

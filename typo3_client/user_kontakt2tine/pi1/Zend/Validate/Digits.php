@@ -24,7 +24,7 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Abstract.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/Abstract.php');
 
 
 /**

@@ -23,7 +23,7 @@
 /**
  * @see Zend_Loader
  */
-require_once 'Zend/Loader.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
 
 /**
  * @category   Zend
@@ -88,13 +88,13 @@ abstract class Zend_Uri
         $schemeSpecific = isset($uri[1]) ? $uri[1] : '';
 
         if (!strlen($scheme)) {
-            require_once 'Zend/Uri/Exception.php';   
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri/Exception.php');   
             throw new Zend_Uri_Exception('An empty string was supplied for the scheme');
         }
 
         // Security check: $scheme is used to load a class file, so only alphanumerics are allowed.
         if (!ctype_alnum($scheme)) {
-            require_once 'Zend/Uri/Exception.php';   
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri/Exception.php');   
             throw new Zend_Uri_Exception('Illegal scheme supplied, only alphanumeric characters are permitted');
         }
 
@@ -110,7 +110,7 @@ abstract class Zend_Uri
             case 'mailto':
                 // @todo
             default:
-                require_once 'Zend/Uri/Exception.php';   
+                require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri/Exception.php');   
                 throw new Zend_Uri_Exception("Scheme \"$scheme\" is not supported");
         }
         Zend_Loader::loadClass($className);

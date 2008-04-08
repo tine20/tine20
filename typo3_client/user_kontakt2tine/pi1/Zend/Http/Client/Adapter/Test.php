@@ -20,9 +20,9 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/Uri/Http.php';
-require_once 'Zend/Http/Response.php';
-require_once 'Zend/Http/Client/Adapter/Interface.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri/Http.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Response.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Client/Adapter/Interface.php');
 
 /**
  * A testing-purposes adapter.
@@ -77,7 +77,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
     public function setConfig($config = array())
     {
         if (! is_array($config)) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
             throw new Zend_Http_Client_Adapter_Exception(
                 '$config expects an array, ' . gettype($config) . ' recieved.');
         }
@@ -184,7 +184,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
     public function setResponseIndex($index)
     {
         if ($index < 0 || $index >= count($this->responses)) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
             throw new Zend_Http_Client_Adapter_Exception(
                 'Index out of range of response buffer size');
         }

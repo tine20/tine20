@@ -17,7 +17,7 @@
  * @subpackage  Record
  */
   
-require_once('Tinebase/Record/Interface.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Tinebase/Record/Interface.php');
  
 abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 {

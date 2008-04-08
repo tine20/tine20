@@ -24,17 +24,17 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Abstract.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/Abstract.php');
 
 /**
  * @see Zend_Loader
  */
-require_once 'Zend/Loader.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
 
 /**
  * @see Zend_Validate_Ip
  */
-require_once 'Zend/Validate/Ip.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/Ip.php');
 
 /**
  * Please note there are two standalone test scripts for testing IDN characters due to problems
@@ -361,7 +361,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                              * Regex error
                              * @see Zend_Validate_Exception
                              */
-                            require_once 'Zend/Validate/Exception.php';
+                            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/Exception.php');
                             throw new Zend_Validate_Exception('Internal error: DNS validation failed');
                         } elseif ($status === 0) {
                             $valid = false;
@@ -398,7 +398,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
              * Regex error
              * @see Zend_Validate_Exception
              */
-            require_once 'Zend/Validate/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/Exception.php');
             throw new Zend_Validate_Exception('Internal error: local network name validation failed');
         }
 
@@ -433,7 +433,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
     protected function _checkRegexType($type)
     {
         if (!isset($this->_regex[$type])) {
-            require_once 'Zend/Validate/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Validate/Exception.php');
             throw new Zend_Validate_Exception("'$type' must be one of ('" . implode(', ', array_keys($this->_regex))
                                             . "')");
         }

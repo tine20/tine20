@@ -24,7 +24,7 @@
 /**
  * @see Zend_Filter_Interface
  */
-require_once 'Zend/Filter/Interface.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Interface.php');
 
 
 /**

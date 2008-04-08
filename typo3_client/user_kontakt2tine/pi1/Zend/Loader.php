@@ -56,7 +56,7 @@ class Zend_Loader
         }
 
         if ((null !== $dirs) && !is_string($dirs) && !is_array($dirs)) {
-            require_once 'Zend/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
             throw new Zend_Exception('Directory argument must be a string or an array');
         }
 
@@ -84,7 +84,7 @@ class Zend_Loader
         }
 
         if (!class_exists($class, false) && !interface_exists($class, false)) {
-            require_once 'Zend/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
             throw new Zend_Exception("File \"$file\" was loaded but class \"$class\" was not found in the file");
         }
     }
@@ -197,14 +197,14 @@ class Zend_Loader
     public static function registerAutoload($class = 'Zend_Loader', $enabled = true)
     {
         if (!function_exists('spl_autoload_register')) {
-            require_once 'Zend/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
             throw new Zend_Exception('spl_autoload does not exist in this PHP installation');
         }
 
         self::loadClass($class);
         $methods = get_class_methods($class);
         if (!in_array('autoload', (array) $methods)) {
-            require_once 'Zend/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
             throw new Zend_Exception("The class \"$class\" does not have an autoload() method");
         }
 
@@ -228,7 +228,7 @@ class Zend_Loader
          * Security check
          */
         if (preg_match('/[^a-z0-9\\/\\\\_.-]/i', $filename)) {
-            require_once 'Zend/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
             throw new Zend_Exception('Security check: Illegal character in filename');
         }
     }

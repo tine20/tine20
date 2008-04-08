@@ -21,8 +21,8 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/Uri/Http.php';
-require_once 'Zend/Http/Client/Adapter/Interface.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Uri/Http.php');
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Client/Adapter/Interface.php');
 
 /**
  * A sockets based (stream_socket_client) adapter class for Zend_Http_Client. Can be used
@@ -85,7 +85,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
     public function setConfig($config = array())
     {
         if (! is_array($config)) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
             throw new Zend_Http_Client_Adapter_Exception(
                 '$config expects an array, ' . gettype($config) . ' recieved.');
         }
@@ -120,14 +120,14 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
                 if ($this->config['sslcert'] !== null) {
                     if (! stream_context_set_option($context, 'ssl', 'local_cert',
                                                     $this->config['sslcert'])) {
-                        require_once 'Zend/Http/Client/Adapter/Exception.php';
+                        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
                         throw new Zend_Http_Client_Adapter_Exception('Unable to set sslcert option');
                     }
                 }
                 if ($this->config['sslpassphrase'] !== null) {
                     if (! stream_context_set_option($context, 'ssl', 'passphrase',
                                                     $this->config['sslpassphrase'])) {
-                        require_once 'Zend/Http/Client/Adapter/Exception.php';
+                        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
                         throw new Zend_Http_Client_Adapter_Exception('Unable to set sslpassphrase option');
                     }
                 }
@@ -141,14 +141,14 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
                                                   $context);
             if (! $this->socket) {
                 $this->close();
-                require_once 'Zend/Http/Client/Adapter/Exception.php';
+                require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
                 throw new Zend_Http_Client_Adapter_Exception(
                     'Unable to Connect to ' . $host . ':' . $port . '. Error #' . $errno . ': ' . $errstr);
             }
 
             // Set the stream timeout
             if (! stream_set_timeout($this->socket, (int) $this->config['timeout'])) {
-                require_once 'Zend/Http/Client/Adapter/Exception.php';
+                require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
                 throw new Zend_Http_Client_Adapter_Exception('Unable to set the connection timeout');
             }
 
@@ -171,14 +171,14 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
     {
         // Make sure we're properly connected
         if (! $this->socket) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
             throw new Zend_Http_Client_Adapter_Exception('Trying to write but we are not connected');
         }
 
         $host = $uri->getHost();
         $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
         if ($this->connected_to[0] != $host || $this->connected_to[1] != $uri->getPort()) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
             throw new Zend_Http_Client_Adapter_Exception('Trying to write but we are connected to the wrong host');
         }
 
@@ -199,7 +199,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
 
         // Send the request
         if (! @fwrite($this->socket, $request)) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
             throw new Zend_Http_Client_Adapter_Exception('Error writing request to server');
         }
 
@@ -256,7 +256,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
                     $chunksize = hexdec(chop($line));
                     if (dechex($chunksize) != $hexchunksize) {
                         @fclose($this->socket);
-                        require_once 'Zend/Http/Client/Adapter/Exception.php';
+                        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client/Adapter/Exception.php');
                         throw new Zend_Http_Client_Adapter_Exception('Invalid chunk size "' .
                             $hexchunksize . '" unable to read chunked body');
                     }

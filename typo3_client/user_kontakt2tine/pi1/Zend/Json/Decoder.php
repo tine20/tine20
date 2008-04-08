@@ -21,12 +21,12 @@
 /**
  * Zend_Json
  */
-require_once 'Zend/Json.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Json.php');
 
 /**
  * Zend_Json_Exception
  */
-require_once 'Zend/Json/Exception.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
 
 
 /**

@@ -22,7 +22,7 @@
 /**
  * @see Zend_Loader_Exception
  */
-require_once 'Zend/Loader/Exception.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/Exception.php');
 
 /**
  * Plugin class loader exceptions

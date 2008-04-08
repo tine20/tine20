@@ -24,7 +24,7 @@
 /**
  * @see Zend_Filter_Interface
  */
-require_once 'Zend/Filter/Interface.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Interface.php');
 
 
 /**
@@ -51,7 +51,7 @@ class Zend_Filter_StringToLower implements Zend_Filter_Interface
     public function setEncoding($encoding = null)
     {
         if (!function_exists('mb_strtolower')) {
-            require_once 'Zend/Filter/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
             throw new Zend_Filter_Exception('mbstring is required for this feature');
         }
         $this->_encoding = $encoding;

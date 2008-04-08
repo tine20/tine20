@@ -21,7 +21,7 @@
 /**
  * Zend_Json_Exception.
  */
-require_once 'Zend/Json/Exception.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Exception.php');
 
 /**
  * Class for encoding to and decoding from JSON.
@@ -70,7 +70,7 @@ class Zend_Json
             return json_decode($encodedValue, $objectDecodeType);
         }
 
-        require_once 'Zend/Json/Decoder.php';
+        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Json/Decoder.php');
         return Zend_Json_Decoder::decode($encodedValue, $objectDecodeType);
     }
 
@@ -95,7 +95,7 @@ class Zend_Json
             return json_encode($valueToEncode);
         }
 
-        require_once 'Zend/Json/Encoder.php';
+        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Json/Encoder.php');
         return Zend_Json_Encoder::encode($valueToEncode, $cycleCheck);
     }
 

@@ -20,10 +20,10 @@
  */
 
 /** Zend_Loader_PluginLoader_Interface */
-require_once 'Zend/Loader/PluginLoader/Interface.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader/Interface.php');
 
 /** Zend_Loader */
-require_once 'Zend/Loader.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
 
 /**
  * Generic plugin class loader
@@ -111,7 +111,7 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
     public function addPrefixPath($prefix, $path)
     {
         if (!is_string($prefix) || !is_string($path)) {
-            require_once 'Zend/Loader/PluginLoader/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader/Exception.php');
             throw new Zend_Loader_PluginLoader_Exception('Zend_Loader_PluginLoader::addPrefixPath() method only takes strings for prefix and path.');
         }
 
@@ -211,7 +211,7 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
         }
 
         if (!isset($registry[$prefix])) {
-            require_once 'Zend/Loader/PluginLoader/Exception.php';
+            require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader/Exception.php');
             throw new Zend_Loader_PluginLoader_Exception('Prefix ' . $prefix . ' was not found in the PluginLoader.');
         }
 
@@ -331,7 +331,7 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
             return $className;
         }
 
-        require_once 'Zend/Loader/PluginLoader/Exception.php';
+        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader/Exception.php');
         throw new Zend_Loader_PluginLoader_Exception('Plugin by name ' . $name . ' was not found in the registry.');
     }
 }

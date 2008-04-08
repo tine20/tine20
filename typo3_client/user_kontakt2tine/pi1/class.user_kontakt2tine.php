@@ -216,11 +216,11 @@ class user_kontakt2tine extends tslib_pibase {
 				set_include_path(implode(PATH_SEPARATOR, $path));
 					
 				// zend auto loader will load any classes - can not use it
-				require_once('TineClient/Connection.php');
-				require_once('TineClient/Service/Abstract.php');
-				require_once('Zend/Http/Client.php');
-				require_once('Addressbook/Model/Contact.php');
-				require_once('Addressbook/Service.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/p1/TineClient/Connection.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/p1/TineClient/Service/Abstract.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/p1/Zend/Http/Client.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/p1/Addressbook/Model/Contact.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/p1/Addressbook/Service.php');
 				
 				try
 				{

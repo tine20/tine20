@@ -24,7 +24,7 @@
 /**
  * @see Zend_Filter_Interface
  */
-require_once 'Zend/Filter/Interface.php';
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Interface.php');
 
 
 /**
@@ -90,7 +90,7 @@ class Zend_Filter implements Zend_Filter_Interface
      */
     public static function get($value, $classBaseName, array $args = array(), $namespaces = array())
     {
-        require_once 'Zend/Loader.php';
+        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
         $namespaces = array_merge(array('Zend_Filter'), (array) $namespaces);
         foreach ($namespaces as $namespace) {
             $className = $namespace . '_' . ucfirst($classBaseName);
@@ -109,7 +109,7 @@ class Zend_Filter implements Zend_Filter_Interface
                 return $object->filter($value);
             }
         }
-        require_once 'Zend/Filter/Exception.php';
+        require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Filter/Exception.php');
         throw new Zend_Filter_Exception("Filter class not found from basename '$classBaseName'");
     }
 }
