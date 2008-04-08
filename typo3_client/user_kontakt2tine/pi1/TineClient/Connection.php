@@ -19,6 +19,7 @@ class TineClient_Connection extends Zend_Http_Client
      * @var bool
      */
     protected $debugEnabled = false;
+    protected $_accountId = NULL;
     
     /**
      * @see Zend_Http_Client
@@ -40,7 +41,7 @@ class TineClient_Connection extends Zend_Http_Client
             'username'  => $_username,
             'password'  => $_password,
             'method'    => 'Tinebase.login',
-			'remote'	=> true
+            'remote'    => true
         ));
         
         $response = $this->request('POST');
@@ -49,12 +50,14 @@ class TineClient_Connection extends Zend_Http_Client
             var_dump( $this->getLastRequest());
             var_dump( $response );
         }
-
+        
+        
         if(!$response->isSuccessful()) {
             throw new Exception('login failed');
         } 
-                
+        
         $responseData = Zend_Json::decode($response->getBody());
+        $this->_setAccountId($responseData['account']['accountId']);
         
         if($this->debugEnabled === true) {
             var_dump($responseData);
@@ -89,4 +92,16 @@ class TineClient_Connection extends Zend_Http_Client
     {
         $this->debugEnabled = (bool)$_status;
     }
+    
+    public function getAccountId()
+    {
+        return $this->_accountId;
+    }
+    
+    private function _setAccountId($_id)
+    {
+        $this->_accountId =(int) $_id;
+        return true;
+    }
+    
 }

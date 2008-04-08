@@ -54,12 +54,13 @@ class Addressbook_Service extends TineClient_Service_Abstract
             'contactData'  => Zend_Json::encode($_contact->toArray())
         ));        
         $response = $client->request('POST');
-        
+  		    
         if($this->debugEnabled === true) {
+			echo "<hr>";
             var_dump( $client->getLastRequest());
             var_dump( $response );
+        	echo "<hr>";
         }
-
         if(!$response->isSuccessful()) {
             throw new Exception('adding contact failed');
         }

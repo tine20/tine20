@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005  ()
+* @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,9 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * Plugin 'user_kontakt2tine' for the 'user_kontakt2tine' extension.
+ * Plugin 'user_tine2typo' for the 'user_tine2typo' extension.
  *
- * @author	 <>
+ * @author  Matthias Greiling <typo3@metaways.de>
+ * @comment this plugin is designed for TINE20 http://www.tine20.org
+ * @version     $$
  */
 
 
@@ -224,7 +226,7 @@ class user_kontakt2tine extends tslib_pibase {
 				{
 					// open connection
 					$client = new TineClient_Connection($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehost'));
- 
+					//$client->setDebugEnabled(true);
 					TineClient_Service_Abstract::setDefaultConnection($client);
 
 					// login to tine2.0
@@ -232,6 +234,7 @@ class user_kontakt2tine extends tslib_pibase {
 								$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostlogin'), 
 								$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostpassword')
 								);
+							
 				}
 				catch (Exception $e) 
 				{
@@ -243,7 +246,7 @@ class user_kontakt2tine extends tslib_pibase {
 				{
 					// write addressbook entry
 					$contactData = array(
-										'owner'					=> $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'tinehostcontainer'),
+										'owner'					=> $client->getAccountId(),
 										'company' 				=> $fFieldValues['FIRMA'], 
 										'n_family' 				=> $fFieldValues['NACHNAME'],
 										'n_given' 				=> $fFieldValues['VORNAME'],
@@ -333,7 +336,7 @@ class user_kontakt2tine extends tslib_pibase {
 	}
 	
 
-  function formatStr($str) {
+	function formatStr($str) {
 		if(is_array($this->conf["general_stdWrap."]))	{
 			$str = $this->cObj->stdWrap($str,$this->conf["general_stdWrap."]);
 		}	
