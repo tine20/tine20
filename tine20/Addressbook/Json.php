@@ -77,7 +77,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $contact->toArray());
-
+        
         return $result;
          
     }
