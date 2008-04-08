@@ -199,7 +199,7 @@ class Tinebase_Container
                         'adminGrant'    => true
                     ),            
                     array(
-                        'accountId'     => NULL,
+                        'accountId'     => 0,
                         'accountType'   => 'anyone',
                         'accountName'   => 'not used',
                         'readGrant'     => true
@@ -254,7 +254,7 @@ class Tinebase_Container
                 $accountId = Tinebase_Group_Model_Group::convertGroupIdToInt($_accountId);
                 break;
             case 'anyone':
-                $accountId = NULL;
+                $accountId = 0;
                 break;
             default:
                 throw new InvalidArgumentException('invalid $_accountType');
