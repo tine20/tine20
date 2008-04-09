@@ -249,7 +249,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         foreach ( $_record as $recordRow ) {
             if ( $recordRow['type'] === 'separator' ) {
                 // if 2 separators follow each other, remove the last 2 elements
-                if ( sizeof($data) > 0 && $data[sizeof($data)-1][0] === 'separator' ) {
+                if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
                     array_pop ( $data );
                 }
                 
@@ -260,17 +260,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             }
         }
         // if 2 separators follow each other, remove the last 2 elements
-        if ( sizeof($data) > 0 && $data[sizeof($data)-1][0] === 'separator' ) {
+        if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
             array_pop ( $data );
         }
                 
-        // @todo    add linked objects again
         // add linked objects (i.e. contacts for lead export)
-        /*
         if ( !empty($_linkedObjects) ) {
             $data = array_merge ( $data, $_linkedObjects );
         }
-        */
         
         // debug $data
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' table data: '. print_r($data, true));
