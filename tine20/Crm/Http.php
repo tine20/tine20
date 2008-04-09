@@ -136,7 +136,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             $leadData['contacts'] = array();   
             $leadData['tasks'] = array();                                   
             
-            $personalFolders = $controller->getPersonalContainer($currentAccount, $currentAccount->accountId, Tinebase_Container::GRANT_READ);
+            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', $currentAccount, Tinebase_Container::GRANT_READ);
             foreach($personalFolders as $folder) {
                 $leadData['container']     = $folder->toArray();
                 break;
