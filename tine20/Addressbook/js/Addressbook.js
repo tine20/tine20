@@ -822,7 +822,7 @@ Tine.Addressbook.ContactEditDialog = {
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'contactDialog',
-            tbarItems: [new Ext.Toolbar.Separator(), _export_contact],
+            tbarItems: [_export_contact],
             //title: 'the title',
             labelWidth: 120,
             labelAlign: 'top',
