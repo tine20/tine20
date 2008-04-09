@@ -603,7 +603,6 @@ Tine.Admin.Groups.EditDialog = {
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'groupDialog',
-            tbarItems: [],
             title: 'Edit Group ' + _groupData.name,
             layout: 'fit',
             labelWidth: 120,
