@@ -141,23 +141,38 @@ class Admin_Controller
      * @param string $_password2 the new password again
      * @return Tinebase_Account_Model_FullAccount
      */
-    public function saveAccount(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
+    public function updateAccount(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
     {
-        if(empty($_account->accountId)) {
-            $account = Tinebase_Account::getInstance()->addAccount($_account);
-        } else {
-            $account = Tinebase_Account::getInstance()->updateAccount($_account);
-        }
+        $account = Tinebase_Account::getInstance()->updateAccount($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         // fire needed events
-        if(isset($_account->accountId)) {
-            $event = new Admin_Event_UpdateAccount;
-            $event->account = $account;
-        } else {
-            $event = new Admin_Event_AddAccount;
-            $event->account = $account;
+        $event = new Admin_Event_UpdateAccount;
+        $event->account = $account;
+        Tinebase_Events::fireEvent($event);
+        
+        if(!empty($_password1) && !empty($_password2)) {
+            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
         }
+        
+        return $account;
+    }
+    
+    /**
+     * save or update account
+     *
+     * @param Tinebase_Account_Model_FullAccount $_account the account
+     * @param string $_password1 the new password
+     * @param string $_password2 the new password again
+     * @return Tinebase_Account_Model_FullAccount
+     */
+    public function addAccount(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
+    {
+        $account = Tinebase_Account::getInstance()->addAccount($_account);
+        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
+        
+        $event = new Admin_Event_AddAccount;
+        $event->account = $account;
         Tinebase_Events::fireEvent($event);
         
         if(!empty($_password1) && !empty($_password2)) {
@@ -167,6 +182,7 @@ class Admin_Controller
         return $account;
     }
 
+    
     /**
      * delete accounts
      *

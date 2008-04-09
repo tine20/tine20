@@ -88,9 +88,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
         
-        $saveAccount = Admin_Controller::getInstance()->saveAccount($account, $password, $password2);
+        if($account->getId() == NULL) {
+            $account = Admin_Controller::getInstance()->addAccount($account, $password, $password2);
+        } else {
+            $account = Admin_Controller::getInstance()->updateAccount($account, $password, $password2);
+        }
         
-        $result = $saveAccount->toArray();
+        $result = $account->toArray();
         
         return $result;
         
