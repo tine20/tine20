@@ -657,7 +657,7 @@ class Crm_Controller extends Tinebase_Container_Abstract
         }
         
         // send notifications to all accounts in the first step
-        $accounts = $lead->responsible;
+        $accounts = $_lead->responsible;
         Tinebase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
     }
 }
