@@ -115,14 +115,25 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
     	$account = Tinebase_Account::getInstance()->getFullAccountByLoginName ( $this->userData['accountLoginName'] );
     	
     	$this->assertEquals( $account->accountLastName,  $this->userData['accountLastName'] );
-    	//@todo check if "expires" in config.ini set to 0 before this check 
-    	$this->assertNotEquals( $account->accountExpires, NULL );
+    	
+    	// check if "expires" in config.ini set to 0 before this check 
+        try {
+            // get config
+            $config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'registration');
+        } catch (Zend_Config_Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
+        }
+    	if ( isset($this->_config->expires) && $this->_config->expires > 0) {
+    	   $this->assertNotEquals( NULL, $account->accountExpires, "account expires" );
+    	} else {
+    	   $this->assertEquals( NULL, $account->accountExpires, "account won't expire" );
+    	}
     	
     	// check registration
     	$registration = Tinebase_Account_Registration::getInstance()->getRegistrationByHash($this->objects['registration']->login_hash);
 
-    	$this->assertEquals( $registration->email,  $this->objects['registration']->email );
-   		$this->assertEquals( $registration->email_sent,  0 );
+    	$this->assertEquals( $registration->email,  $this->objects['registration']->email, "email address is not the same" );
+   		$this->assertEquals( 0, $registration->email_sent, "email sent" );
     	// check config settings
    		
     }    
