@@ -56,11 +56,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
-        $view->jsIncludeFiles = array();
-        $view->cssIncludeFiles = array();
         
-        $view->jsIncludeFiles[] = 'Admin/js/Admin.js';
-        $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
         $view->jsExecute = 'Tine.Admin.Accounts.EditDialog.display(' . $encodedAccount .');';
 
         $view->configData = array(
@@ -71,7 +67,8 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit account";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -100,13 +97,8 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
-        $view->jsIncludeFiles = array();
-        $view->cssIncludeFiles = array();
         
         //@todo move Groups.js to Admin.js later
-        //$view->jsIncludeFiles[] = 'Admin/js/Admin.js';
-        $view->jsIncludeFiles[] = 'Admin/js/Groups.js';
-        $view->cssIncludeFiles[] = 'Admin/css/Admin.css';
         $view->jsExecute = 'Tine.Admin.Groups.EditDialog.display(' . $encodedGroup . ', ' . $encodedGroupMembers . ');';
 
         $view->configData = array(
@@ -117,7 +109,8 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit group";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
