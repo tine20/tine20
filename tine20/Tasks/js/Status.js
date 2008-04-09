@@ -93,6 +93,8 @@ Tine.Tasks.status.getStatus = function(id) {
 
 Tine.Tasks.status.getStatusIcon = function(id) {
     var status = Tine.Tasks.status.getStatus(id);
-    if (!status) return;
+    if (!status) {
+    	return;
+    }
     return '<img class="TasksMainGridStatus" src="' + status.data.status_icon + '" ext:qtip="' + status.data.status_name + '">';
 };
