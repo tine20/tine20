@@ -260,7 +260,12 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
                                 }));
                             }
                             if (toLoad.length > 0) {
-                                Ext.getCmp('Tinebase_Accounts_Grid').getStore().add(toLoad);
+                                var grid = Ext.getCmp('Tinebase_Accounts_Grid');
+                                grid.getStore().add(toLoad);
+                                
+                                // select first result and focus row
+                                grid.getSelectionModel().selectFirstRow();                                
+                                grid.getView().focusRow(0);
                             }
                         }
                     });
@@ -283,7 +288,12 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
                                 }));
                             }
                             if (toLoad.length > 0) {
-                                Ext.getCmp('Tinebase_Accounts_Grid').getStore().add(toLoad);
+                                var grid = Ext.getCmp('Tinebase_Accounts_Grid');
+                                grid.getStore().add(toLoad);
+                                
+                                // select first result
+                                grid.getSelectionModel().selectFirstRow();
+                                grid.getView().focusRow(0);
                             }
                         }
                     });
@@ -314,7 +324,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             this.loadData();
         }, this);
         var ugSelectionChange = function(pressed){
-            //console.log(p.iconCls);
+            console.log(p.iconCls);
         };
         this.Toolbar = new Ext.Toolbar({
             items: [
@@ -372,6 +382,15 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
 			this.fireEvent('accountdblclick', account);
 		}, this);
 		
+		// on keypressed("enter") event to add account
+        this.searchPanel.on('keydown', function(event){
+             //if(event.getKey() == event.ENTER && !this.searchPanel.editing){
+        	 if(event.getKey() == event.ENTER){
+                var account = this.searchPanel.getSelectionModel().getSelected();
+                this.fireEvent('accountdblclick', account);
+             }
+        }, this);
+		
 		this.searchPanel.getSelectionModel().on('selectionchange', function(sm){
 			var account = sm.getSelected();
 			this.actions.addAccount.setDisabled(!account);
@@ -385,7 +404,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         }];
 		
 	    Tine.widgets.AccountpickerPanel.superclass.initComponent.call(this);
-	},
+	}
 });
 
 /**
