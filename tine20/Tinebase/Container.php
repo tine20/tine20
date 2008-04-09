@@ -330,7 +330,8 @@ class Tinebase_Container
             $application = Tinebase_Controller::getApplicationInstance($_application);
             
             if($application instanceof Tinebase_Container_Abstract) {
-                $result = $application->createPersonalFolder($_accountId);
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' create personal folders for application ' . $_application);
+                return $application->createPersonalFolder($_accountId);
             }
         }
 
