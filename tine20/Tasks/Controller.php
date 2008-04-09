@@ -18,7 +18,7 @@
  * 
  * @package Tasks
  */
-class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Backend_Interface
+class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Backend_Interface,Tinebase_Events_Interface
 {
     
     /**
@@ -287,4 +287,26 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
         
         return $container;
     }
+
+    /**
+     * event handler function
+     * 
+     * all events get routed through this function
+     *
+     * @param Tinebase_Events_Abstract $_eventObject the eventObject
+     */
+    public function handleEvents(Tinebase_Events_Abstract $_eventObject)
+    {
+        Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        
+        switch(get_class($_eventObject)) {
+            case 'Admin_Event_AddAccount':
+                $this->createPersonalFolder($_eventObject->account);
+                break;
+            case 'Admin_Event_DeleteAccount':
+                #$this->deletePersonalFolder($_eventObject->account);
+                break;
+        }
+    }
+    
 }
