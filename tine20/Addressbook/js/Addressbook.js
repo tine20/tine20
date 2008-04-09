@@ -33,14 +33,14 @@ Tine.Addressbook = {
         
         return treePanel;       
     }
-}
+};
 
 Tine.Addressbook.Main = {
 	actions: {
 	    addContact: null,
 	    editContact: null,
 	    deleteContact: null,
-	    exportContact: null,
+	    exportContact: null
 	},
 	
 	handlers: {
@@ -107,10 +107,10 @@ Tine.Addressbook.Main = {
 	
 	renderer: {
         contactTid: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-	        switch(_data) {
-	            default:
-	                    return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
-	        }
+            //switch(_data) {
+            //    default:
+                    return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
+            //}
 	    }		
 	},
 
@@ -394,7 +394,7 @@ Tine.Addressbook.Main = {
             setTimeout ("Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload()", 200);
         }
     }
-}
+};
 
 Tine.Addressbook.ContactEditDialog = {
 	handlers: {
@@ -810,13 +810,13 @@ Tine.Addressbook.ContactEditDialog = {
     {
         // export lead handler for edit contact dialog
         var  _export_contact = new Ext.Action({
-                text: 'export as pdf',
-                handler: function(){
-                    var contactId = _contactData.id;
-                    Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
-                },
-                iconCls: 'action_exportAsPdf',
-                disabled: false,
+            text: 'export as pdf',
+            handler: function(){
+                var contactId = _contactData.id;
+                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 200, 150);                   
+            },
+            iconCls: 'action_exportAsPdf',
+            disabled: false
         });         
 
         // Ext.FormPanel
@@ -856,7 +856,7 @@ Tine.Addressbook.ContactEditDialog = {
         }
     }
     
-}
+};
 
 Ext.namespace('Tine.Addressbook.Model');
 
