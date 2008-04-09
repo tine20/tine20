@@ -130,7 +130,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         // add data to array
         $record = array ();
         foreach ( $contactFields as $fieldArray ) {
-            if ( $fieldArray['type'] !== 'separator' ) {
+            if ( !isset($fieldArray['type']) || $fieldArray['type'] !== 'separator' ) {
                 $values = array();
                 foreach ( $fieldArray['value'] as $valueFields ) {
                     $content = array();
@@ -153,11 +153,11 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
                 }
                 if ( !empty($values) ) {
                     $record[] = array ( 'label' => $fieldArray['label'],
-                                        'type'  => $fieldArray['type'],
+                                        'type'  => ( isset($fieldArray['type']) ) ? $fieldArray['type'] : 'singleRow',
                                         'value' => ( sizeof($values) === 1 ) ? $values[0] : $values,
                     ); 
                 }
-            } else {
+            } elseif ( isset($fieldArray['type']) && $fieldArray['type'] === 'separator' ) {
                 $record[] = $fieldArray;
             }
         }     
