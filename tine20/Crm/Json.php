@@ -143,7 +143,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */   
-   public function getLeadstates($sort, $dir)
+    public function getLeadstates($sort, $dir)
     {
          $result = array(
             'results'     => array(),
@@ -277,8 +277,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 	 *
 	 * @return array
 	 */
-   public function saveProducts($products, $id) {	
-   
+    public function saveProducts($products, $id) 
+    {	
         $_products = Zend_Json::decode($products);
         $_productsData = array();
 
@@ -317,8 +317,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
    }
 
-
-
      /**
 	 * save one lead
 	 *
@@ -352,7 +350,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $leadData->customer = $customer;
         }
         
-        $oartner = Zend_Json::decode($linkedPartner);
+        $partner = Zend_Json::decode($linkedPartner);
         if(is_array($partner)) {
             $leadData->partner = $partner;
         }
@@ -396,10 +394,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
         
-    } 
-    
- 
-
+    }
      
     public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
@@ -412,40 +407,38 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $filter = NULL;
         }
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            $result['results']    = $rows->toArray();
+        if($rows = Crm_Controller::getInstance()->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+            foreach($rows as &$lead) {
+                $result['results'][] = $this->convertLeadToArray($lead);
+            }
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = $backend->getCountByOwner($owner, $filter);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountByOwner($owner, $filter, $leadstate, $probability, $getClosedLeads);
             }
         }
-
-        $this->getLinkedContacts($result['results']);
 
         return $result;
     }
         
-     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
+    public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
                 
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        if($rows = $backend->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            $result['results']    = $rows->toArray();
+        if($rows = Crm_Controller::getInstance()->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
+            foreach($rows as &$lead) {
+                $result['results'][] = $this->convertLeadToArray($lead);
+            }
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = $backend->getCountByFolderId($folderId, $filter);
+                $result['totalcount'] = Crm_Controller::getInstance()->getCountByFolder($folderId, $filter);
             }
         }
-        
-        $this->getLinkedContacts($result['results']);
-        
+
         return $result;
     }    
  
@@ -467,7 +460,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         
         if($rows = Crm_Controller::getInstance()->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            $result['results']      = $rows->toArray();
+            foreach($rows as &$lead) {
+                $result['results'][] = $this->convertLeadToArray($lead);
+            }
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -475,9 +470,32 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             }
         }
 
-        $this->getLinkedContacts($result['results']);
-     
         return $result;                
+    }
+    
+    /**
+     * converts a lead to an array and resolves contactids
+     *
+     * @param Crm_Model_Lead $_lead
+     * @return array
+     */
+    protected function convertLeadToArray(Crm_Model_Lead $_lead) {
+        $result = $_lead->toArray();
+
+        $result['leadstate']  = Crm_Controller::getInstance()->getLeadState($_lead['leadstate_id'])->toArray();
+        $result['leadtype']   = Crm_Controller::getInstance()->getLeadType($_lead['leadtype_id'])->toArray();
+        $result['leadsource'] = Crm_Controller::getInstance()->getLeadSource($_lead['leadsource_id'])->toArray();
+        foreach($_lead->responsible as $contactId) {
+            $result['responsible'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+        }
+        foreach($_lead->customer as $contactId) {
+            $result['customer'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+        }
+        foreach($_lead->partner as $contactId) {
+            $result['partner'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+        }
+        
+        return $result;
     }
     
     /**
@@ -498,7 +516,10 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         
         if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            $result['results']      = $rows->toArray();
+            foreach($rows as &$lead) {
+                $result['results'][] = $this->convertLeadToArray($lead);
+            }
+            
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -506,8 +527,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             }
         }
 
-        $this->getLinkedContacts($result['results']);
-     
         return $result;                
     }
      
@@ -530,7 +549,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         );
         
         if($rows = Crm_Controller::getInstance()->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            $result['results']      = $rows->toArray();
+            foreach($rows as &$lead) {
+                $result['results'][] = $this->convertLeadToArray($lead);
+            }
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
@@ -538,160 +559,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             }
         }
 
-        $this->getLinkedContacts($result['results']);
-     
         return $result;                
-  
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-        $rows = $backend->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads);        
-    }
-    
-    /**
-     * resolve contactIds to contactObjects
-     *
-     * @param array $_leads
-     */
-    protected function getLinkedContacts(array &$_leads)
-    {
-        $controller = Crm_Controller::getInstance();
-        
-        foreach($_leads as $id => $lead) {
-            $links = $controller->getLinks($lead['id'], 'addressbook');
-            foreach($links as $link) {
-                switch($link['remark']) {
-                    case 'partner':
-                        try {
-                            $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
-                            $_leads[$id]['leadpartner'][] = $contact->toArray();
-                        } catch (Exception $e) {
-                            // do nothing
-                        }
-                        break;
-                    case 'customer':
-                        try {
-                            $contact = Addressbook_Controller::getInstance()->getContact($link['recordId']);
-                            $_leads[$id]['leadcustomer'][] = $contact->toArray();
-                        } catch (Exception $e) {
-                            // do nothing
-                        }
-                        break;
-                }
-            }
-        }
-    }
-          
-    public function getFoldersByOwner($owner)
-    {
-        $treeNodes = array();
-        
-        $controller = Crm_Controller::getInstance();
-
-        if($rows = $controller->getPersonalContainer(Zend_Registry::get('currentAccount'), $owner, Tinebase_Container::GRANT_READ)) {
-            foreach($rows as $folderData) {
-                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'folder-' . $folderData->id, $folderData->name, TRUE);
-                $childNode->folderId = $folderData->id;
-                $childNode->nodeType = 'singleFolder';
-                $treeNodes[] = $childNode;
-            }
-        }
-        
-        echo Zend_Json::encode($treeNodes);
-
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-    }    
-
-    public function getSharedFolders()
-    {
-        $treeNodes = array();
-        
-        $controller = Crm_Controller::getInstance();
-        
-        if($rows = $controller->getSharedContainer(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ)) {
-            foreach($rows as $folderData) {
-                $childNode = new Tinebase_Ext_Treenode('Crm', 'leads', 'shared-' . $folderData->id, $folderData->name, TRUE);
-                $childNode->folderId = $folderData->id;
-                $childNode->nodeType = 'singleFolder';
-                $treeNodes[] = $childNode;
-            }
-        }
-        
-        echo Zend_Json::encode($treeNodes);
-
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-    }    
-
-   /**
-     * returns a list a accounts who gave current account at least read access to 1 personal folder 
-     *
-     */
-    public function getOtherUsers()
-    {
-        $treeNodes = array();
-        
-        $controller = Crm_Controller::getInstance();
-        $accounts = $controller->getOtherUsers(Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
-        
-        foreach($accounts as $accountData) {
-            $treeNode = new Tinebase_Ext_Treenode(
-                'Crm',
-                'leads',
-                'otherfolder_'. $accountData->accountId, 
-                $accountData->accountDisplayName,
-                false
-            );
-            $treeNode->owner  = $accountData->accountId;
-            $treeNode->nodeType = 'userFolders';
-            $treeNodes[] = $treeNode;
-        }
-
-        echo Zend_Json::encode($treeNodes);
-
-        // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
-        exit;
-    }  
-
-
-/*    public function getAccounts($filter, $start, $sort, $dir, $limit)
-    {
-        $internalContainer = Tinebase_Container::getInstance()->getInternalContainer('crm');
-        
-        $folderId = $internalContainer->id;
-        
-        $result = $this->getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit);
-
-        return $result;
-    }
-*/
-
-   public function addFolder($name, $type)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-
-        $id = $backend->addFolder($name, $type);
-        
-        $result = array('folderId' => $id);
-        
-        return $result;
-    }
-    
-    public function deleteFolder($folderId)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-
-        $backend->deleteFolder($folderId);
-            
-        return TRUE;
-    }
-    
-    public function renameFolder($folderId, $name)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
-
-        $backend->renameFolder($folderId, $name);
-            
-        return TRUE;
-    }     
-     
+    }              
 }

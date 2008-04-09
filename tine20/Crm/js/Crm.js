@@ -52,7 +52,7 @@ Tine.Crm.Main = function(){
             Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this lead?', function(_button) {
                 if(_button == 'yes') {            
                     var _rowIndexIds = Ext.getCmp('gridCrm').getSelectionModel().getSelections();            
-                    var toDelete_Ids = new Array();
+                    var toDelete_Ids = [];
                 
                     for (var i = 0; i < _rowIndexIds.length; ++i) {
                         toDelete_Ids.push(_rowIndexIds[i].id);
@@ -131,7 +131,7 @@ Tine.Crm.Main = function(){
             iconCls: 'actionAddTask',
             disabled: true,
             scope: this
-        }),
+        })
     };
     
     var _createDataStore = function()
@@ -220,24 +220,22 @@ Tine.Crm.Main = function(){
             editable: false 
        });          
        filterComboLeadstate.on('select', function(combo, record, index) {
-           if (!record.data) {
-               var _leadstate = '';       
-           } else {
-               var _leadstate = record.data.leadstate_id;
-           }
+            var _leadState = '';
+            if (record.data) {
+                _leadstate = record.data.leadstate_id;
+            }
            
-           combo.triggers[0].show();
+            combo.triggers[0].show();
            
-           Ext.getCmp('gridCrm').getStore().load({
-               params: {                
-                start: 0,
-                limit: 50,
-          //      state: _state,
-				leadstate: _leadstate,
-				probability: Ext.getCmp('filterProbability').getValue()
+            Ext.getCmp('gridCrm').getStore().load({
+                params: {                
+	                start: 0,
+	                limit: 50,
+					leadstate: _leadstate,
+					probability: Ext.getCmp('filterProbability').getValue()
                 }
             });
-       });
+        });
       
        var filterComboProbability = new Ext.ux.ClearableComboBox({
             fieldLabel:'probability', 
@@ -257,24 +255,21 @@ Tine.Crm.Main = function(){
             renderer: Ext.util.Format.percentage,
             width:90    
         });
-       filterComboProbability.on('select', function(combo, record, index) {
-           if (!record.data) {
-               var _probability = '';       
-           } else {
-               var _probability = record.data.key;
-           }           
-           
-           combo.triggers[0].show();           
-           
-           Ext.getCmp('gridCrm').getStore().load({
-                params: {                    
-                    start: 0,
-                    limit: 50
-                    //state: Ext.getCmp('filterLeadstate').getValue(),
-                    //probability: _probability
-                }
-            });         
-       });      
+		filterComboProbability.on('select', function(combo, record, index) {
+            var _probability = '';       
+		    if (record.data) {
+		       _probability = record.data.key;
+		    }           
+		   
+		    combo.triggers[0].show();           
+		   
+		    Ext.getCmp('gridCrm').getStore().load({
+			    params: {                    
+			        start: 0,
+			        limit: 50
+		        }
+		    });         
+		});      
         
       function editLeadsource() {
            var Dialog = new Ext.Window({
@@ -696,96 +691,27 @@ Tine.Crm.Main = function(){
         var handlerToggleDetails = function(toggle) {
         	//console.log(toggle.pressed);
             var gridView         = Ext.getCmp('gridCrm').getView();
-            var gridColumnModell = Ext.getCmp('gridCrm').getColumnModel();
+            var gridColumnModel = Ext.getCmp('gridCrm').getColumnModel();
             
             if(toggle.pressed === true) {
                 
-                gridColumnModell.setRenderer(1, function(value, meta, record) {
+                gridColumnModel.setRenderer(1, function(value, meta, record) {
                     return '<b>' + value + '</b><br /><br />' + record.data.description;
                 } );                
                 
-                gridColumnModell.setRenderer(2, function(_leadPartner) {                   
-                    if(typeof(_leadPartner == 'array')) {
-                        var _partner = '';
-                        for(i=0; i < _leadPartner.length; i++){
-                            var org_name           = Ext.isEmpty(_leadPartner[i].org_name) === false ? _leadPartner[i].org_name : '&nbsp;';
-                            var n_fileas           = Ext.isEmpty(_leadPartner[i].n_fileas) === false ? _leadPartner[i].n_fileas : '&nbsp;';
-                            var adr_one_street     = Ext.isEmpty(_leadPartner[i].adr_one_street) === false ? _leadPartner[i].adr_one_street : '&nbsp;';
-                            var adr_one_postalcode = Ext.isEmpty(_leadPartner[i].adr_one_postalcode) === false ? _leadPartner[i].adr_one_postalcode : '&nbsp;';
-                            var adr_one_locality   = Ext.isEmpty(_leadPartner[i].adr_one_locality) === false ? _leadPartner[i].adr_one_locality : '&nbsp;';
-                            var tel_work           = Ext.isEmpty(_leadPartner[i].tel_work) === false ? _leadPartner[i].tel_work : '&nbsp;';
-                            var tel_cell           = Ext.isEmpty(_leadPartner[i].tel_cell) === false ? _leadPartner[i].tel_cell : '&nbsp;';
-                            
-                            if(i > 0) {
-                                _style = 'borderTop';
-                            } else {
-                                _style = '';
-                            }
-                            
-                            _partner =  _partner + '<table width="100%" height="100%" class="' + _style + '">'
-                                                 + '<tr><td colspan="2">' + org_name + '</td></tr>'
-                                                 + '<tr><td colspan="2"><b>' + n_fileas + '</b></td></tr>'
-                                                 + '<tr><td colspan="2">' + adr_one_street + '</td></tr>'
-                                                 + '<tr><td colspan="2">' + adr_one_postalcode + ' ' + adr_one_locality + '</td></tr>'
-                                                 + '<tr><td width="50%">phone: </td><td width="50%">' + tel_work + '</td></tr>'
-                                                 + '<tr><td width="50%">cellphone: </td><td width="50%">' + tel_cell + '</td></tr>'
-                                                 + '</table> <br />';
-                        }
-                        return _partner;
-                    }
-                });
-                
-                gridColumnModell.setRenderer(3, function(_leadCustomer) {
-                    if(typeof(_leadCustomer == 'array')) {
-                        var _customer = '';
-                        for(i=0; i < _leadCustomer.length; i++){
-                            var org_name           = Ext.isEmpty(_leadCustomer[i].org_name) === false ? _leadCustomer[i].org_name : '&nbsp;';
-                            var n_fileas           = Ext.isEmpty(_leadCustomer[i].n_fileas) === false ? _leadCustomer[i].n_fileas : '&nbsp;';
-                            var adr_one_street     = Ext.isEmpty(_leadCustomer[i].adr_one_street) === false ? _leadCustomer[i].adr_one_street : '&nbsp;';
-                            var adr_one_postalcode = Ext.isEmpty(_leadCustomer[i].adr_one_postalcode) === false ? _leadCustomer[i].adr_one_postalcode : '&nbsp;';                            
-                            var adr_one_locality   = Ext.isEmpty(_leadCustomer[i].adr_one_locality) === false ? _leadCustomer[i].adr_one_locality : '&nbsp;';                            
-                            var tel_work           = Ext.isEmpty(_leadCustomer[i].tel_work) === false ? _leadCustomer[i].tel_work : '&nbsp;';
-                            var tel_cell           = Ext.isEmpty(_leadCustomer[i].tel_cell) === false  ? _leadCustomer[i].tel_cell : '&nbsp;';
-                            
-                            if(i > 0) {
-                                _style = 'borderTop';
-                            } else {
-                                _style = '';
-                            }
-                                                        
-                            _customer =  _customer + '<table width="100%" height="100%" class="' + _style + '">'
-                                                 + '<tr><td colspan="2">' + org_name + '</td></tr>'
-                                                 + '<tr><td colspan="2"><b>' + n_fileas + '</b></td></tr>'
-                                                 + '<tr><td colspan="2">' + adr_one_street + '</td></tr>'
-                                                 + '<tr><td colspan="2">' + adr_one_postalcode + ' ' + adr_one_locality + '</td></tr>'
-                                                 + '<tr><td width="50%">phone: </td><td width="50%">' + tel_work + '</td></tr>'
-                                                 + '<tr><td width="50%">cellphone: </td><td width="50%">' + tel_cell + '</td></tr>'
-                                                 + '</table> <br />';
-                        }
-                        return _customer;
-                    }
-                });
+                gridColumnModel.setRenderer(2, Tine.Crm.Main.renderer.detailedContact);
+                gridColumnModel.setRenderer(3, Tine.Crm.Main.renderer.detailedContact);
                   
                gridView.refresh();              
-            } 
-            
-            if(toggle.pressed === false) {
+               
+            } else {
                 
-                gridColumnModell.setRenderer(1, function(value, meta, record) {
+                gridColumnModel.setRenderer(1, function(value, meta, record) {
                     return value;
                 } );                
                 
-                gridColumnModell.setRenderer(2, function(_leadPartner) {
-                if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
-                        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
-                    }
-                } );
-                
-                gridColumnModell.setRenderer(3, function(_leadCustomer) {
-                if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
-                        return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
-                    }
-                });
+                gridColumnModel.setRenderer(2, Tine.Crm.Main.renderer.shortContact);
+                gridColumnModel.setRenderer(3, Tine.Crm.Main.renderer.shortContact);
                   
                gridView.refresh();                                
             }
@@ -902,26 +828,12 @@ Tine.Crm.Main = function(){
             
 			{resizable: true, header: 'projekt ID', id: 'id', dataIndex: 'id', width: 20, hidden: true},
             {resizable: true, header: 'lead name', id: 'lead_name', dataIndex: 'lead_name', width: 200},
-            //{resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: function(_leadPartner) {
-            //    if(typeof(_leadPartner == 'array') && _leadPartner[0]) {
-            //        return '<b>' + _leadPartner[0].org_name + '</b><br />' + _leadPartner[0].n_fileas;
-            //    }
-            //}},
-            //{resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: function(_leadCustomer) {
-            //    if(typeof(_leadCustomer == 'array') && _leadCustomer[0]) {
-            //        return '<b>' + _leadCustomer[0].org_name + '</b><br />' + _leadCustomer[0].n_fileas;
-            //    }
-            //}},
-            {resizable: true, 
-              header: 'leadstate', 
-              id: 'leadstate', 
-              dataIndex: 'leadstate', 
-              sortable: false,
-              renderer: function(leadState) {
-                  return leadState.leadstate;
-              },
-              width: 100},
-            {resizable: true, header: 'probability', id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage},
+            {resizable: true, header: 'Partner', id: 'lead_partner', dataIndex: 'partner', width: 175, sortable: false, renderer: Tine.Crm.Main.renderer.shortContact},
+            {resizable: true, header: 'Customer', id: 'lead_customer', dataIndex: 'customer', width: 175, sortable: false, renderer: Tine.Crm.Main.renderer.shortContact},
+            {resizable: true, header: 'leadstate', id: 'leadstate', dataIndex: 'leadstate', sortable: false, width: 100,
+                renderer: function(leadState) {return leadState.leadstate;}
+            },
+            {resizable: true, header: 'probability', id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
             {resizable: true, header: 'turnover', id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney }
         ]);
         
@@ -1050,6 +962,45 @@ Tine.Crm.Main = function(){
                     if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
                         setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
                     }
+        },
+        renderer: {
+        	shortContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+                if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
+                    return '<b>' + _data[0].org_name + '</b><br />' + _data[0].n_fileas;
+                }
+            },        	
+            
+        	detailedContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
+                if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
+                    var contactDetails = '';
+                    for(i=0; i < _data.length; i++){
+                        var org_name           = Ext.isEmpty(_data[i].org_name) === false ? _data[i].org_name : '&nbsp;';
+                        var n_fileas           = Ext.isEmpty(_data[i].n_fileas) === false ? _data[i].n_fileas : '&nbsp;';
+                        var adr_one_street     = Ext.isEmpty(_data[i].adr_one_street) === false ? _data[i].adr_one_street : '&nbsp;';
+                        var adr_one_postalcode = Ext.isEmpty(_data[i].adr_one_postalcode) === false ? _data[i].adr_one_postalcode : '&nbsp;';
+                        var adr_one_locality   = Ext.isEmpty(_data[i].adr_one_locality) === false ? _data[i].adr_one_locality : '&nbsp;';
+                        var tel_work           = Ext.isEmpty(_data[i].tel_work) === false ? _data[i].tel_work : '&nbsp;';
+                        var tel_cell           = Ext.isEmpty(_data[i].tel_cell) === false ? _data[i].tel_cell : '&nbsp;';
+                        
+                        if(i > 0) {
+                            _style = 'borderTop';
+                        } else {
+                            _style = '';
+                        }
+                        
+                        contactDetails = contactDetails + '<table width="100%" height="100%" class="' + _style + '">'
+                                             + '<tr><td colspan="2">' + org_name + '</td></tr>'
+                                             + '<tr><td colspan="2"><b>' + n_fileas + '</b></td></tr>'
+                                             + '<tr><td colspan="2">' + adr_one_street + '</td></tr>'
+                                             + '<tr><td colspan="2">' + adr_one_postalcode + ' ' + adr_one_locality + '</td></tr>'
+                                             + '<tr><td width="50%">phone: </td><td width="50%">' + tel_work + '</td></tr>'
+                                             + '<tr><td width="50%">cellphone: </td><td width="50%">' + tel_cell + '</td></tr>'
+                                             + '</table> <br />';
+                    }
+                    
+                    return contactDetails;
+                }
+        	}
         }
     };
 }(); // end of application
@@ -1312,7 +1263,7 @@ Tine.Crm.LeadEditDialog = function() {
             '</div></tpl>', {
                 setContactField: function(textValue){
                     alert(textValue);
-                    if ((textValue === null) || (textValue.length == 0)) {
+                    if ((textValue === null) || (textValue.length === 0)) {
                         return '';
                     }
                     else {
@@ -1622,7 +1573,7 @@ Tine.Crm.LeadEditDialog = function() {
                     Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);                	
                 },
                 iconCls: 'action_exportAsPdf',
-                disabled: false,
+                disabled: false
         });         
         
        if(_leadData.data.id !== null) {
@@ -1893,7 +1844,7 @@ Tine.Crm.LeadEditDialog = function() {
   
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
-            tbarItems: [new Ext.Toolbar.Separator(), _add_task, new Ext.Toolbar.Separator(), _export_lead],
+            tbarItems: [_add_task, _export_lead],
             handlerApplyChanges: handlerApplyChanges,
             handlerSaveAndClose: handlerSaveAndClose,
             handlerDelete: Tine.Crm.LeadEditDialog.Handler.handlerDelete,
@@ -1940,7 +1891,7 @@ Tine.Crm.LeadEditDialog = function() {
              var _dimension = container.getSize();
              var _offset = 125;
              if(Ext.isIE7) {
-                 var _offset = 142;
+                 _offset = 142;
              }
              var _heightContacts = _dimension.height - Ext.getCmp('lead_name').getSize().height 
                                                      - Ext.getCmp('lead_notes').getSize().height
@@ -1966,7 +1917,7 @@ Tine.Crm.LeadEditDialog = function() {
                 var method = 'Addressbook.getAllContacts';
             }
             
-            if(_newValue == '') {
+            if(_newValue === '') {
                 //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().removeAll();
                 Tine.Crm.LeadEditDialog.Stores.getContactsSearch().removeAll();
             } else {
@@ -2003,7 +1954,7 @@ Tine.Crm.LeadEditDialog = function() {
             var record = _grid.getStore().getAt(_rowIndex);
             var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
             
-            if(currentContactsStore.getById(record.id) == undefined) {
+            if(currentContactsStore.getById(record.id) === undefined) {
                 //console.log('record ' + record.id + 'not found');
                 currentContactsStore.addSorted(record, record.id);
             }
@@ -2064,7 +2015,7 @@ Tine.Crm.LeadEditDialog = function() {
         displayDialog: function(_leadData) {
             _displayDialog(_leadData);
         }
-    }
+    };
 }(); // end of application
 
 Tine.Crm.LeadEditDialog.Handler = function() {
@@ -2130,7 +2081,7 @@ Tine.Crm.LeadEditDialog.Handler = function() {
                 } 
             });
         }
-    }
+    };
 }();
 
 Tine.Crm.LeadEditDialog.Elements = function() {
@@ -2517,7 +2468,7 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                     
                     // temporary extra props
                     {name: 'creator'},
-                    {name: 'modifier'},
+                    {name: 'modifier'}
                   //  {name: 'status_realname'}
                 ]
             });
@@ -2577,11 +2528,12 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadstate'},
     {name: 'leadtype'},
     {name: 'leadsource'},
+    {name: 'partner'},
+    {name: 'customer'}
   //  {name: 'leadpartner_linkId'},
-  //  {name: 'leadpartner'},
   //  {name: 'leadpartner_detail'},                
   //  {name: 'leadlinkId'},
-  //  {name: 'leadcustomer'},
+  //  
   //  {name: 'leaddetail'}  
 ]);
 // work arround nasty ext date bug
@@ -2589,5 +2541,5 @@ Tine.Crm.Model.Lead.FixDates = function(lead) {
     lead.data.start         = lead.data.start         ? Date.parseDate(lead.data.start, 'c')         : lead.data.start;
     lead.data.end           = lead.data.end           ? Date.parseDate(lead.data.end, 'c')           : lead.data.end;
     lead.data.end_scheduled = lead.data.end_scheduled ? Date.parseDate(lead.data.end_scheduled, 'c') : lead.data.end_scheduled;
-}
+};
         

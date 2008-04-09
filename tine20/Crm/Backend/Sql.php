@@ -364,64 +364,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $result = $this->leadStateTable->delete($where);
 
         return $result;
-    }
-        
-    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = NULL)
-    {    
-		
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
-        $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('crm', $owner, Tinebase_Container::GRANT_READ);
-        
-        if(count($ownerContainer) === 0) {
-            return false;
-        }
-        
-        $containerIds = array();
-
-        foreach($ownerContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
-        );
-
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
-         
-        return $result;
-    }
-    
-    public function getCountByOwner($_owner, $_filter)
-    {
-        $owner = (int)$_owner;
-        if($owner != $_owner) {
-            throw new InvalidArgumentException('$_owner must be integer');
-        }
-        $ownerContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('crm', $owner, Tinebase_Container::GRANT_READ);
-        
-        if(count($ownerContainer) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        
-        foreach($ownerContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
-        );
-        
-        $where = $this->_addQuickSearchFilter($where, $_filter);
-        
-        $result = $this->leadTable->getTotalCount($where);
-
-        return $result;
-    }    
+    }        
 
     /**
      * create search filter
@@ -566,111 +509,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
          
         return $result;
     }
-       
-    public function getLeadsByFolder($_folderId, $_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate = NULL, $_probability = NULL, $_getClosedLeads = TRUE)
-    {
-        // convert to int
-        $folderId = (int)$_folderId;
-        if($folderId != $_folderId) {
-            throw new InvalidArgumentException('$_folderId must be integer');
-        }
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_folderId, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access denied to folder');
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container = ?', $folderId)
-        );
-
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
-         
-        return $result;
-    }
-    
-    public function getCountByFolderId($_folderId, $_filter)
-    {
-        $folderId = (int)$_folderId;
-        if($folderId != $_folderId) {
-            throw new InvalidArgumentException('$_folderId must be integer');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($folderId, Tinebase_Container::GRANT_READ)) {
-            return 0;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container = ?', $folderId)
-        );
-                
-        $where = $this->_addQuickSearchFilter($where, $_filter);
-        
-        $result = $this->leadTable->getTotalCount($where);
-
-        return $result;
-    } 
-    
-    /**
-     * get total count of all leads from shared folders
-     *
-     * @return int count of all other users leads
-     */
-    public function getCountOfSharedLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
-    {
-        $allContainer = Tinebase_Container::getInstance()->getSharedContainer('crm');
-
-        if(count($allContainer) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        
-        foreach($allContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)
-        );
-        
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
-        
-        $result = $this->leadTable->getTotalCount($where);
-
-        return $result;
-    }        
-     
-    /**
-     * get total count of all other users leads
-     *
-     * @return int count of all other users leads
-     * 
-     */
-    public function getCountOfOtherPeopleLeads($_filter, $_leadstate, $_probability, $_getClosedLeads)
-    {
-        $allContainer = Tinebase_Container::getInstance()->getOtherUsersContainer('crm');
-
-        if(count($allContainer) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        
-        foreach($allContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $where = array(
-            $this->leadTable->getAdapter()->quoteInto('container IN (?)', $containerIds)	
-        );
-        
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
-        
-        $result = $this->leadTable->getTotalCount($where);
-
-        return $result;
-    }   
- 
     /**
     * add a lead
     *
@@ -1011,24 +850,5 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         }
 
         return $_optionData;
-         
-         
-         
-         
-        $productData = $_productData->toArray();
-
-        if($_productData->product_id === NULL) {
-            $result = $this->productsTable->insert($productData);
-            $_productData->product_id = $this->productsTable->getAdapter()->lastInsertId();
-        } else {
-            $where  = array(
-                $this->productsTable->getAdapter()->quoteInto('product_id = (?)', $_productData->id),
-            );
-
-            $result = $this->productsTable->update($productData, $where);
-        }
-
-        return $_productData;
-    }
-    
+    }    
 }

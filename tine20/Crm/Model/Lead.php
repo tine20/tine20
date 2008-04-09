@@ -66,7 +66,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'probability'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'end_scheduled' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'responsible'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'customer'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'customer'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'partner'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
         #'leadmodified'       => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         #'leadcreated'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
