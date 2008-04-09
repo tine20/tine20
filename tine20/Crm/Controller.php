@@ -284,10 +284,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
     
     public function setLinkedCustomer($_leadId, $_contactIds)
     {
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
         if(is_array($_contactIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'customer');
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'addressbook', $_contactIds, 'customer');
         } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $_leadId, 'addressbook', 'customer');
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'addressbook', 'customer');
         }
         
         return $result;
@@ -295,10 +296,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
 
     public function setLinkedPartner($_leadId, $_contactIds)
     {
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
         if(is_array($_contactIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'partner');
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'addressbook', $_contactIds, 'partner');
         } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $_leadId, 'addressbook', 'partner');
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'addressbook', 'partner');
         }
         
         return $result;
@@ -306,10 +308,11 @@ class Crm_Controller extends Tinebase_Container_Abstract
 
     public function setLinkedAccount($_leadId, $_contactIds)
     {
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
         if(is_array($_contactIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'addressbook', $_contactIds, 'account');
         } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $_leadId, 'addressbook', 'account');
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'addressbook', 'account');
         }
         
         return $result;
