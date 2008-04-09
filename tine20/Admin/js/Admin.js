@@ -1362,7 +1362,7 @@ Tine.Admin.Accounts.EditDialog = function() {
         
         display: function(_accountData) 
         {
-        	console.log ( _accountData );
+        	//console.log ( _accountData );
         	
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({

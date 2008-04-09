@@ -229,7 +229,6 @@ Tine.Admin.Groups.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            //console.log('id: ' + record.data.id);
             try {
                 Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + record.data.id,650, 600);
             } catch(e) {
@@ -332,8 +331,6 @@ Tine.Admin.Groups.EditDialog = {
                     groupMembers.push(_record.data.accountId);
                 });
                 
-                console.log(groupMembers);
-                                
                 // update form               
                 form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
 
@@ -490,8 +487,6 @@ Tine.Admin.Groups.EditDialog = {
 
         /******* load data store ********/
 
-        //console.log ( _groupMembers );
-                     
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
@@ -509,8 +504,6 @@ Tine.Admin.Groups.EditDialog = {
             this.dataStore.loadData( _groupMembers );
         }
 
-        //console.log ( this.dataStore );        
-        
         /******* column model ********/
 
         var columnModel = new Ext.grid.ColumnModel([
