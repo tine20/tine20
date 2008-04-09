@@ -12,7 +12,7 @@ Tine.Admin.Groups.Main = {
     actions: {
         addGroup: null,
         editGroup: null,
-        deleteGroup: null,
+        deleteGroup: null
     },
     
     handlers: {
@@ -307,9 +307,7 @@ Tine.Admin.Groups.EditDialog = {
             if (dataStore.getById(account.data.data.accountId) === undefined) {
                 var record = new Tine.Tinebase.Model.User({
                     accountId: account.data.data.accountId,
-                    //accountLoginName: account.data.accountLoginName,
-                    //accountFullName: account.data.accountFullName,
-                    accountDisplayName: account.data.data.accountDisplayName,
+                    accountDisplayName: account.data.data.accountDisplayName
                 }, account.data.data.accountId);
                 dataStore.addSorted(record);
             }
@@ -404,7 +402,7 @@ Tine.Admin.Groups.EditDialog = {
                     Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.'); 
                 } 
             });                           
-        },
+        }
         
      },
      
@@ -492,20 +490,24 @@ Tine.Admin.Groups.EditDialog = {
 
         /******* load data store ********/
 
-        //console.log ( _groupMembers );        
-             
+        //console.log ( _groupMembers );
+                     
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'accountId',
-            fields: Tine.Tinebase.Model.User,
+            fields: Tine.Tinebase.Model.User
         });
 
         Ext.StoreMgr.add('GroupMembersStore', this.dataStore);
         
         this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
         
-        this.dataStore.loadData( _groupMembers );
+        if (_groupMembers.length == 0) {
+        	this.dataStore.removeAll();
+        } else {
+            this.dataStore.loadData( _groupMembers );
+        }
 
         //console.log ( this.dataStore );        
         
@@ -581,7 +583,7 @@ Tine.Admin.Groups.EditDialog = {
 	                        fieldLabel:'Group Name', 
 	                        name:'name',
 	                        anchor:'100%',
-	                        allowBlank: false,
+	                        allowBlank: false
 	                    }, {
 	                        xtype:'textarea',
 	                        name: 'description',
@@ -626,6 +628,6 @@ Tine.Admin.Groups.EditDialog = {
 
         dialog.getForm().loadRecord(this.groupRecord);
         
-    }, // end display function     
+    } // end display function     
     
 }
