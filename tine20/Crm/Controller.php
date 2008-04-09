@@ -557,6 +557,9 @@ class Crm_Controller extends Tinebase_Container_Abstract
         }
         
         $links = $this->getLinks($_leadId, 'Addressbook');
+        $this->responsible  = array();
+        $this->customer     = array();
+        $this->partner      = array();
         
         foreach($links as $link) {
             switch($link['remark']) {
@@ -564,10 +567,10 @@ class Crm_Controller extends Tinebase_Container_Abstract
                     $lead->responsible[] = $link['recordId'];
                     break;
                 case 'customer':
-                    $lead->customer[] = $link['recordId'];
+                    $lead->customer[]    = $link['recordId'];
                     break;
                 case 'partner':
-                    $lead->partner[] = $link['recordId'];
+                    $lead->partner[]     = $link['recordId'];
                     break;
             }
         }
