@@ -687,6 +687,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if(empty($_lead->id)) {
             unset($leadData['id']);
         }
+        unset($leadData['responsible']);
+        unset($leadData['customer']);
+        unset($leadData['partner']);
         
         $id = $this->leadTable->insert($leadData);
 
@@ -843,7 +846,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $leadData = $_lead->toArray();
         unset($leadData['id']);
-        
+        unset($leadData['responsible']);
+        unset($leadData['customer']);
+        unset($leadData['partner']);
+                
         $where  = array(
             $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),
         );
