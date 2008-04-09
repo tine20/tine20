@@ -163,7 +163,7 @@ Tine.Admin.Groups.Main = {
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: 'ID', dataIndex: 'id', width: 10 },
             { resizable: true, id: 'name', header: 'Name', dataIndex: 'name', width: 50 },
-            { resizable: true, id: 'description', header: 'Description', dataIndex: 'description' },
+            { resizable: true, id: 'description', header: 'Description', dataIndex: 'description' }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
@@ -274,7 +274,7 @@ Tine.Admin.Groups.Main = {
             setTimeout ("Ext.getCmp('AdminGroupsGrid').getStore().reload()", 200);
         }
     }
-}
+};
 
 /*********************************** EDIT DIALOG ********************************************/
 
@@ -415,7 +415,7 @@ Tine.Admin.Groups.EditDialog = {
     updateGroupRecord: function(_groupData)
     {
     	// if groupData is empty (=array), set to empty object because array won't work!
-        if (_groupData.length == 0) {
+        if (_groupData.length === 0) {
         	_groupData = {};
         }
         this.groupRecord = new Tine.Tinebase.Model.Group(_groupData);
@@ -498,7 +498,7 @@ Tine.Admin.Groups.EditDialog = {
         
         this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
         
-        if (_groupMembers.length == 0) {
+        if (_groupMembers.length === 0) {
         	this.dataStore.removeAll();
         } else {
             this.dataStore.loadData( _groupMembers );
@@ -506,12 +506,9 @@ Tine.Admin.Groups.EditDialog = {
 
         /******* column model ********/
 
-        var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 },
-            /*{ resizable: true, id: 'accountLoginName', header: 'Login', dataIndex: 'accountLoginName', width: 30 },
-             { resizable: true, id: 'accountFullName', header: 'Name', dataIndex: 'accountFullName', width: 180 }, */
-            ]
-        );
+        var columnModel = new Ext.grid.ColumnModel([{ 
+        	resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 
+        }]);
 
         /******* row selection model ********/
 
@@ -623,4 +620,4 @@ Tine.Admin.Groups.EditDialog = {
         
     } // end display function     
     
-}
+};

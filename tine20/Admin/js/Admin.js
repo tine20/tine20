@@ -1284,7 +1284,7 @@ Tine.Admin.Accounts.EditDialog = function() {
                         fieldLabel: 'Primary group',
                         name: 'accountPrimaryGroup',
                         displayField:'name',
-                        valueField:'id',
+                        valueField:'id'
                     }), 
                     {
                         xtype: 'textfield',
