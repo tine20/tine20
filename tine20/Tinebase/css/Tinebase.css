@@ -16,12 +16,16 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
 
-.action_saveAndClose {
-    background-image:url(../../images/oxygen/16x16/actions/document-save.png) !important;
+.action_applyChanges {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png) !important;
 }
 
-.action_applyChanges {
-    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+.action_cancel {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
+}
+
+.action_saveAndClose {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-ok.png) !important;
 }
 
 .action_addContact {

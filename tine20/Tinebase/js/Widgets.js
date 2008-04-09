@@ -16,7 +16,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	/**
 	 * @cfg {array} additional toolbar items
 	 */
-	tbarItems: [],
+	tbarItems: false,
 	labelAlign: 'top',
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -25,53 +25,98 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     deferredRender: false,
     layoutOnTabChange:true,
     handlerScope: null,
+    buttonAlign: 'right',
 	
 	//private
     initComponent: function(){
-		this.action_saveAndClose = new Ext.Action({
-            text: 'save and close',
+        this.addEvents(
+            /**
+             * @event cancle
+             * Fired when user pressed cancle button
+             */
+            'cancle',
+            /**
+             * @event saveAndClose
+             * Fired when user pressed OK button
+             */
+            'saveAndClose',
+            /**
+             * @event apply
+             * Fired when user pressed apply button
+             */
+            'apply'
+        );
+        this.action_saveAndClose = new Ext.Action({
+            text: 'Ok',
+            minWidth: 70,
+            //handler: this.onSaveAndClose,
             handler: this.handlerSaveAndClose,
             iconCls: 'action_saveAndClose',
             scope: this.handlerScope
         });
     
-        this.action_applyChanges = new Ext.Action({
-            text: 'apply changes',
+        this.action_applyChanges =new Ext.Action({
+            text: 'Apply',
+            minWidth: 70,
             handler: this.handlerApplyChanges,
             iconCls: 'action_applyChanges',
             scope: this.handlerScope
             //disabled: true
         });
-    
+        
         this.action_delete = new Ext.Action({
             text: 'delete',
+            minWidth: 70,
             handler: this.handlerDelete,
             iconCls: 'action_delete',
             scope: this.handlerScope,
             disabled: true
         });
+        this.action_cancel = new Ext.Action({
+            text: 'Cancel',
+            minWidth: 70,
+            handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
+            iconCls: 'action_cancel',
+            scope: this.handlerScope,
+        });
         
         var genericButtons = [
-            this.action_saveAndClose,
-            this.action_applyChanges,
             this.action_delete
         ];
         
-        this.tbarItems = genericButtons.concat(this.tbarItems);
+        //this.tbarItems = genericButtons.concat(this.tbarItems);
         
-        this.tbar = new Ext.Toolbar({
-            region: 'south',
-            id: 'applicationToolbar',
-            split: false,
-            height: 26,
-            items: this.tbarItems
-        });
+        this.buttons = [
+            this.action_applyChanges,
+            this.action_cancel,
+            this.action_saveAndClose
+           ];
+        
+        if (this.tbarItems) {
+            this.tbar = new Ext.Toolbar({
+                id: 'applicationToolbar',
+                items: this.tbarItems
+            });
+        }
 		
 		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
 	},
 	getToolbar: function() {
 		return this.getTopToolbar();
-	}
+	},
+    onCancel: function(){
+        
+        this.fireEvent('cancle');
+        console.log('cancel');
+    },
+    onSaveAndClose: function(){
+        this.fireEvent('saveAndClose');
+        console.log('save');
+    },
+    onApply: function(){
+        this.fireEvent('apply');
+        console.log('apply');
+    }
 });
 
 
