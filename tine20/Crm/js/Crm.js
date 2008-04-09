@@ -1042,7 +1042,7 @@ Tine.Crm.Main = function(){
     return {
         show:   function(_node) {          
                     var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-                    if (currentToolbar === false || currentToolbar.id != 'Crm_toolbar') {
+                    if (currentToolbar === false || currentToolbar.id != 'crmToolbar') {
                         _showCrmToolbar();
                         _showGrid(_node);
                     }
