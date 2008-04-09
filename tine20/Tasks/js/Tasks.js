@@ -733,7 +733,7 @@ Tine.Tasks.fixTask = function(task) {
     if (task.data.due) {
         task.data.due = Date.parseDate(task.data.due, 'c');
     }
-}
+};
 
 // Task model
 Tine.Tasks.Task = Ext.data.Record.create([
