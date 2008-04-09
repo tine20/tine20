@@ -29,50 +29,97 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));
          
+        // @todo    add more fields
         $contactFields = array (
-            $translate->_('Business Contact Data') => 'separator',
-            'org_name' => $translate->_('Organisation'),
-            'org_unit' => $translate->_('Organisation Unit'),
-            'adr_one_street' => $translate->_('Street'),
-            'adr_one_street2' => $translate->_('Street 2'),
-            'adr_one_postalcode' => $translate->_('Postalcode'),
-            'adr_one_locality' => $translate->_('City'),
-            'adr_one_region' => $translate->_('Region'),
-            'adr_one_countryname' => $translate->_('Country'),
-            'email' => $translate->_('Email'),
-            'tel_work' => $translate->_('Telephone Work'),
-            'tel_cell' => $translate->_('Telephone Cellphone'),
-            'tel_car' => $translate->_('Telephone Car'),
-            'tel_fax' => $translate->_('Telephone Fax'),
-            'tel_pager' => $translate->_('Telephone Page'),
-            'url' => $translate->_('URL'),
-            'role' => $translate->_('Role'),
-            'assistent' => $translate->_('Assistant'),
-            'tel_assistent' => $translate->_('Assistant Telephone'),
-            
-            $translate->_('Private Contact Data') => 'separator',
-            'adr_two_street' => $translate->_('Street'),
-            'adr_two_street2' => $translate->_('Street 2'),
-            'adr_two_postalcode' => $translate->_('Postalcode'),
-            'adr_two_locality' => $translate->_('City'),
-            'adr_two_region' => $translate->_('Region'),
-            'adr_two_countryname' => $translate->_('Country'),
-            'email_home' => $translate->_('Email Home'),
-            'tel_home' => $translate->_('Telephone Home'),
-            'tel_cell_private' => $translate->_('Telephone Cellphone Private'),
-            'tel_fax_home' => $translate->_('Telephone Fax Home'),
-            'url_home' => $translate->_('URL Home'),
-            
-            $translate->_('Other Data') => 'separator',
-            'bday' => $translate->_('Birthday'),
-            'title' => $translate->_('Title'),
-        
+            array(  'label' => $translate->_('Business Contact Data'), 
+                    'type' => 'separator' ),
+            array(  'label' => $translate->_('Business Address'), 
+                    'type'  => 'multiRow', 
+                    'value' => array(   'adr_one_street', 
+                                        'adr_one_street2',
+                                        array ('adr_one_postalcode', 'adr_one_locality'),
+                                        array ('adr_one_region', 'adr_one_countryname'),
+                                    ), 
+            ),
+            array(  'label' => $translate->_('Organisation / Unit'), 
+                    'type'  => 'singleRow',
+                    'value' => array( array('org_name', 'org_unit') ),
+                    'glue'  => ' / ', 
+            ),
+            array(  'label' => $translate->_('Email'), 
+                    'value' => array( 'email' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Work'), 
+                    'value' => array( 'tel_work' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Cellphone'), 
+                    'value' => array( 'tel_cell' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Car'), 
+                    'value' => array( 'tel_car' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Fax'), 
+                    'value' => array( 'tel_fax' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Page'), 
+                    'value' => array( 'tel_pager' ), 
+            ),
+            array(  'label' => $translate->_('URL'), 
+                    'value' => array( 'url' ), 
+            ),
+            array(  'label' => $translate->_('Role'), 
+                    'value' => array( 'role' ), 
+            ),
+            array(  'label' => $translate->_('Assistant'), 
+                    'value' => array( 'assistent' ), 
+            ),
+            array(  'label' => $translate->_('Assistant Telephone'), 
+                    'value' => array( 'tel_assistent' ), 
+            ),
+            /******************************************/
+            array(  'label' => $translate->_('Private Contact Data'), 
+                    'type' => 'separator' ),
+            array(  'label' => $translate->_('Private Address'), 
+                    'type'  => 'multiRow', 
+                    'value' => array(   'adr_two_street', 
+                                        'adr_two_street2',
+                                        array ('adr_two_postalcode', 'adr_two_locality'),
+                                        array ('adr_two_region', 'adr_two_countryname'),
+                                    ), 
+            ),
+            array(  'label' => $translate->_('Email Home'), 
+                    'value' => array( 'email_home' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Home'), 
+                    'value' => array( 'tel_home' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Cellphone Private'), 
+                    'value' => array( 'tel_cell_private' ), 
+            ),
+            array(  'label' => $translate->_('Telephone Fax Home'), 
+                    'value' => array( 'tel_fax_home' ), 
+            ),
+            array(  'label' => $translate->_('URL Home'), 
+                    'value' => array( 'url_home' ), 
+            ),
+            /******************************************/
+            array(  'label' => $translate->_('Other Data'), 
+                    'type' => 'separator' ),
+            array(  'label' => $translate->_('Birthday'), 
+                    'value' => array( 'bday' ), 
+            ),
+            array(  'label' => $translate->_('Title'), 
+                    'value' => array( 'title' ), 
+            ),
+
             //'id' => 'Contact ID',    
             //'owner' => 'Owner',
             //'n_prefix' => 'Name Prefix',
             //'n_suffix' => 'Name Suffix',
+             
         );
-        
+
+         
         //@todo	include contact photo here
         $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
         
@@ -80,19 +127,42 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         $title = $_contact->n_fn; 
         $subtitle = $_contact->org_name;
         
-        // build data array
+        // add data to array
         $record = array ();
-        foreach ( $contactFields as $key => $label ) {
-            if ( $label !== 'separator' ) {
-	        	if ( $_contact->$key instanceof Zend_Date ) {
-	                $record[$key] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
-	            } else {
-	            	$record[$key] = $_contact->$key;
-	            }
+        foreach ( $contactFields as $fieldArray ) {
+            if ( $fieldArray['type'] !== 'separator' ) {
+                $values = array();
+                foreach ( $fieldArray['value'] as $valueFields ) {
+                    $content = array();
+                    if ( is_array($valueFields) ) {
+                        $keys = $valueFields;
+                    } else {
+                        $keys = array ( $valueFields );
+                    }
+                    foreach ( $keys as $key ) {
+                        if ( $_contact->$key instanceof Zend_Date ) {
+                            $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
+                        } elseif (!empty($_contact->$key) ) {
+                            $content[] = $_contact->$key;
+                        }
+                    }
+                    if ( !empty($content) ) {
+                        $glue = ( isset($fieldArray['glue']) ) ? $fieldArray['glue'] : " ";
+                        $values[] = implode($glue,$content);
+                    }
+                }
+                if ( !empty($values) ) {
+                    $record[] = array ( 'label' => $fieldArray['label'],
+                                        'type'  => $fieldArray['type'],
+                                        'value' => ( sizeof($values) === 1 ) ? $values[0] : $values,
+                    ); 
+                }
+            } else {
+                $record[] = $fieldArray;
             }
         }     
-        
-        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $contactFields, $contactPhoto );        
+                
+        return $this->generatePdfNew($record, $title, $subtitle, $_contact->note, $contactPhoto );        
 	}
 
 }
