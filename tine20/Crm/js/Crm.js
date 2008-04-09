@@ -158,7 +158,7 @@ Tine.Crm.Main = function(){
             _dataSource.baseParams.getClosedLeads   = Ext.getCmp('crmShowClosedLeadsButton').pressed;
         });        
         
-        storeCrm.load({params:{start:0, limit:50}});
+        //storeCrm.load({params:{start:0, limit:50}});
         
         return storeCrm;
     };
@@ -882,14 +882,14 @@ Tine.Crm.Main = function(){
         }); 
         
         var ctxMenuGrid = new Ext.menu.Menu({
-        id:'ctxMenuGrid', 
-        items: [
-            actions.actionEdit,
-            actions.actionDelete,
-            actions.actionExport,
-            actions.actionAddTask
-        ]
-    });
+	        id:'ctxMenuGrid', 
+	        items: [
+	            actions.actionEdit,
+	            actions.actionDelete,
+	            actions.actionExport,
+	            actions.actionAddTask
+	        ]
+	    });
 
         var expander = new Ext.grid.RowExpander({
             enableCaching: false,
