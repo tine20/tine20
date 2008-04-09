@@ -287,10 +287,10 @@ class Admin_Controller
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
      */
-   public function getGroups($filter, $sort, $dir, $start, $limit)
-   {
+    public function getGroups($filter, $sort, $dir, $start, $limit)
+    {
    	    return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
-   }
+    }
    
     /**
      * fetch one group identified by groupid
