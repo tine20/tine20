@@ -282,23 +282,35 @@ class Crm_Controller extends Tinebase_Container_Abstract
         return $links;
     }
     
-    public function setLinkedCustomer($_leadId, array $_contactIds)
+    public function setLinkedCustomer($_leadId, $_contactIds)
     {
-        $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'customer');
+        if(is_array($_contactIds)) {
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'customer');
+        } else {
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $_leadId, 'addressbook', 'customer');
+        }
         
         return $result;
     }
 
-    public function setLinkedPartner($_leadId, array $_contactIds)
+    public function setLinkedPartner($_leadId, $_contactIds)
     {
-        $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'partner');
+        if(is_array($_contactIds)) {
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'partner');
+        } else {
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $_leadId, 'addressbook', 'partner');
+        }
         
         return $result;
     }
 
-    public function setLinkedAccount($_leadId, array $_contactIds)
+    public function setLinkedAccount($_leadId, $_contactIds)
     {
-        $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
+        if(is_array($_contactIds)) {
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'addressbook', $_contactIds, 'account');
+        } else {
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $_leadId, 'addressbook', 'account');
+        }
         
         return $result;
     }
@@ -402,9 +414,13 @@ class Crm_Controller extends Tinebase_Container_Abstract
         
         $lead = $this->_backend->addLead($_lead);
         
-        $this->sendNotifications(false, $lead);
+        $this->setLinkedAccount($lead, $_lead->responsible);
+        $this->setLinkedCustomer($lead, $_lead->customer);
+        $this->setLinkedPartner($lead, $_lead->partner);
         
-        return $lead;
+        $this->sendNotifications(false, $lead, $_lead->responsible);
+        
+        return $this->getLead($lead->getId());
     }     
         
     /**
@@ -557,9 +573,6 @@ class Crm_Controller extends Tinebase_Container_Abstract
         }
         
         $links = $this->getLinks($_leadId, 'Addressbook');
-        $this->responsible  = array();
-        $this->customer     = array();
-        $this->partner      = array();
         
         foreach($links as $link) {
             switch($link['remark']) {
@@ -593,12 +606,16 @@ class Crm_Controller extends Tinebase_Container_Abstract
         if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
-        
+
         $lead = $this->_backend->updateLead($_lead);
         
-        $this->sendNotifications(true, $lead);
+        $this->setLinkedAccount($lead, $_lead->responsible);
+        $this->setLinkedCustomer($lead, $_lead->customer);
+        $this->setLinkedPartner($lead, $_lead->partner);
         
-        return $lead;
+        $this->sendNotifications(true, $lead, $_lead->responsible);
+        
+        return $this->getLead($lead->getId());
     }
          
     /**
@@ -608,8 +625,13 @@ class Crm_Controller extends Tinebase_Container_Abstract
      * @param Crm_Model_Lead $_lead
      * @return void
      */
-    protected function sendNotifications($_isUpdate, Crm_Model_Lead $_lead)
+    protected function sendNotifications($_isUpdate, Crm_Model_Lead $_lead, $_contactIds)
     {
+        if(empty($_contactIds)) {
+            // nothing to do
+            return;
+        }
+        
         $view = new Zend_View();
         $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'views');
         
@@ -661,8 +683,6 @@ class Crm_Controller extends Tinebase_Container_Abstract
             $subject = $translate->_('Lead added') . ': ' . $_lead->lead_name;
         }
         
-        // send notifications to all accounts in the first step
-        $accounts = $_lead->responsible;
-        Tinebase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $accounts, $subject, $plain, $html);
+        Tinebase_Notification::getInstance()->send(Zend_Registry::get('currentAccount'), $_contactIds, $subject, $plain, $html);
     }
 }

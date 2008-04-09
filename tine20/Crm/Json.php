@@ -342,6 +342,20 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
+        $responsible = Zend_Json::decode($linkedAccount);
+        if(is_array($responsible)) {
+            $lead->responsible = $responsible;
+        }
+        
+        $customer = Zend_Json::decode($linkedCustomer);
+        if(is_array($customer)) {
+            $lead->customer = $customer;
+        }
+        
+        $oartner = Zend_Json::decode($linkedPartner);
+        if(is_array($partner)) {
+            $lead->partner = $partner;
+        }
         
         if(empty($leadData->id)) {
             $savedLead = Crm_Controller::getInstance()->addLead($leadData);
@@ -350,14 +364,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }
         
         // set linked contacts
-        $linkedCustomer = Zend_Json::decode($linkedCustomer);
-        Crm_Controller::getInstance()->setLinkedCustomer($savedLead->id, $linkedCustomer);
+        //$linkedCustomer = Zend_Json::decode($linkedCustomer);
+        //Crm_Controller::getInstance()->setLinkedCustomer($savedLead->id, $linkedCustomer);
 
-        $linkedPartner = Zend_Json::decode($linkedPartner);
-        Crm_Controller::getInstance()->setLinkedPartner($savedLead->id, $linkedPartner);
+        //$linkedPartner = Zend_Json::decode($linkedPartner);
+        //Crm_Controller::getInstance()->setLinkedPartner($savedLead->id, $linkedPartner);
 
-        $linkedAccount = Zend_Json::decode($linkedAccount);
-        Crm_Controller::getInstance()->setLinkedAccount($savedLead->id, $linkedAccount);
+        //$linkedAccount = Zend_Json::decode($linkedAccount);
+        //Crm_Controller::getInstance()->setLinkedAccount($savedLead->id, $linkedAccount);
 
         // set linked tasks
         $linkedTasks = Zend_Json::decode($linkedTasks);
