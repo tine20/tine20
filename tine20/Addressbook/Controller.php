@@ -319,6 +319,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function handleEvents(Tinebase_Events_Abstract $_eventObject)
     {
+        Zend_Registry::get('logger')->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
