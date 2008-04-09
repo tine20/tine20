@@ -34,7 +34,7 @@ Tine.Crm.LeadState.getStore = function() {
             fields: Tine.Crm.LeadState.Model,
             remoteSort: false
         });
-        store.load();
+        //store.load();
         Ext.StoreMgr.add('CrmLeadstateStore', store);
 	}
 	return store;

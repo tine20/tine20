@@ -213,7 +213,7 @@ Tine.Crm.Main = function(){
             displayField:'leadstate',
             valueField:'leadstate_id',
             typeAhead: true,
-            mode: 'local',
+            mode: 'remote',
             triggerAction: 'all',
             emptyText:'leadstate...',
             selectOnFocus:true,
@@ -891,12 +891,12 @@ Tine.Crm.Main = function(){
 	        ]
 	    });
 
-        var expander = new Ext.grid.RowExpander({
+/*        var expander = new Ext.grid.RowExpander({
             enableCaching: false,
             tpl : new Ext.Template(
                 '<b>Notes:</b> {description}</div></td>',
                 '<td class="x-grid3-col x-grid3-cell"><b>Activities:</b> </td>')
-        });
+        }); */
         
         var columnModel = new Ext.grid.ColumnModel([
             
@@ -914,13 +914,11 @@ Tine.Crm.Main = function(){
             //}},
             {resizable: true, 
               header: 'leadstate', 
-              id: 'leadstate_id', 
-              dataIndex: 'leadstate_id', 
+              id: 'leadstate', 
+              dataIndex: 'leadstate', 
               sortable: false,
-              renderer: function(leadstate_id) {
-                  var leadstates = Ext.getCmp('filterLeadstate').store;
-                  var leadstate_name = leadstates.getById(leadstate_id);
-                  return leadstate_name.data.leadstate;
+              renderer: function(leadState) {
+                  return leadState.leadstate;
               },
               width: 100},
             {resizable: true, header: 'probability', id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage},
@@ -962,7 +960,7 @@ Tine.Crm.Main = function(){
             viewConfig: {
                 forceFit:true
             },  
-            plugins: expander,                    
+            /* plugins: expander, */                    
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock:false,
@@ -1044,7 +1042,7 @@ Tine.Crm.Main = function(){
                     var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
                     if (currentToolbar === false || currentToolbar.id != 'crmToolbar') {
                         _showCrmToolbar();
-                        _showGrid(_node);
+                        _showGrid();
                     }
                     _loadData(_node);
         },    
@@ -2560,9 +2558,10 @@ Tine.Crm.Model = {};
 // lead
 Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'id',            type: 'int'},
-    {name: 'lead_name',          type: 'string'},
+    {name: 'lead_name',     type: 'string'},
     {name: 'leadstate_id',  type: 'int'},
     {name: 'leadtype_id',   type: 'int'},
+    {name: 'leadstate',     type: 'int'},
     {name: 'leadsource_id', type: 'int'},
     {name: 'container',     type: 'int'},
     {name: 'modifier',      type: 'int'},
