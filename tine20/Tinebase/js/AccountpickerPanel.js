@@ -324,7 +324,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
             this.loadData();
         }, this);
         var ugSelectionChange = function(pressed){
-            console.log(p.iconCls);
+            //console.log(p.iconCls);
         };
         this.Toolbar = new Ext.Toolbar({
             items: [
