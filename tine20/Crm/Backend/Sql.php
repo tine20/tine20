@@ -488,7 +488,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
      * @param bool $_getClosedLeads
      * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
      */
-    public function getAllLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
+/*    public function getAllLeads($_filter, $_sort, $_dir, $_limit = NULL, $_start = NULL, $_leadstate, $_probability, $_getClosedLeads)
     {
         $allContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
@@ -508,7 +508,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads);
          
         return $result;
-    }
+    } */
         
     /**
     * add a lead
