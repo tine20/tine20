@@ -275,7 +275,9 @@ class Crm_Controller extends Tinebase_Container_Abstract
     
     public function getLinks($_leadId, $_application = NULL)
     {
-        $links = Tinebase_Links::getInstance()->getLinks('crm', $_leadId, $_application);
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
+        
+        $links = Tinebase_Links::getInstance()->getLinks('crm', $leadId, $_application);
         
         return $links;
     }
