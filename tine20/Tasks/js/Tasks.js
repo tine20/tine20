@@ -77,7 +77,7 @@ Tine.Tasks.mainGrid = {
             }
 			var popupWindow = new Tine.Tasks.EditPopup({
 				id: taskId,
-                containerId: nodeAttributes.container ? nodeAttributes.container.id : -1
+                containerId: (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1
                 //relatedApp: 'tasks',
                 //relatedId: 
             });
@@ -372,7 +372,7 @@ Tine.Tasks.mainGrid = {
 				{
 					id: 'status_id',
 					header: "Status",
-					width: 40,
+					width: 45,
 					sortable: true,
 					dataIndex: 'status_id',
 					renderer: Tine.Tasks.status.getStatusIcon,
@@ -416,7 +416,7 @@ Tine.Tasks.mainGrid = {
 				{
 					id: 'priority',
 					header: "Priority",
-					width: 30,
+					width: 45,
 					sortable: true,
 					dataIndex: 'priority',
 					renderer: Tine.widgets.Priority.renderer,
@@ -432,7 +432,7 @@ Tine.Tasks.mainGrid = {
 				{
 					id: 'due',
 					header: "Due Date",
-					width: 50,
+					width: 55,
 					sortable: true,
 					dataIndex: 'due',
 					renderer: Tine.Tinebase.Common.dateRenderer,
@@ -624,6 +624,7 @@ Tine.Tasks.EditDialog = function(task) {
 	
 	var taskFormPanel = {
 		layout:'column',
+		autoHeight: true,
 		labelWidth: 90,
 		border: false,
 
@@ -692,7 +693,7 @@ Tine.Tasks.EditDialog = function(task) {
         handlerSaveAndClose: handlers.saveAndClose,
         handlerDelete: handlers.pre_delete,
         labelAlign: 'side',
-        layout: 'fit',
+        //layout: 'fit',
         items: taskFormPanel
     });
 	
