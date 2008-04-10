@@ -41,7 +41,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         }
         var cl = Ext.getCmp('UserRegistrationCardLayout');
         //cl.setActiveItem(cl.activeItem + direction);
-        console.log(cl);
+        //console.log(cl);
         //this.getRegForm().setActiveItem(this.regFrom.activeItem + direction);
     },
     
