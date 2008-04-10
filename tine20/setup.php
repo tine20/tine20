@@ -91,9 +91,15 @@ Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
 # enable the applications for the user group
 # give admin rights to the admin group for all applications
 foreach(Tinebase_Application::getInstance()->getApplications() as $application) {
+    if(strtolower($application->name) == 'admin') {
+        $group = $adminGroup;
+    } else {
+        $group = $userGroup;
+    }
+    
     $right = new Tinebase_Acl_Model_Right(array(
         'application_id'    => $application,
-        'account_id'        => $userGroup,
+        'account_id'        => $group,
         'account_type'      => 'group',
         'right'             => Tinebase_Acl_Rights::RUN
     ));
