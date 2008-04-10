@@ -826,11 +826,11 @@ class Tinebase_Container
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        if($_ignoreAcl !== TRUE) {
-            if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, self::GRANT_ADMIN)) {
-                throw new Exception('permission to get grants of container denied');
-            }            
-        }
+        #if($_ignoreAcl !== TRUE) {
+        #    if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, self::GRANT_ADMIN)) {
+        #        throw new Exception('permission to get grants of container denied');
+        #    }            
+        #}
         
         if(count($groupMemberships) === 0) {
             throw new Exception('account must be in at least one group');
