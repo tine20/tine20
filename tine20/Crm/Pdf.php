@@ -35,6 +35,15 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             array(  'label' => /* $translate->_('Lead Data') */ "", 
                     'type' => 'separator' 
             ),
+            array(  'label' => $translate->_('Leadstate'), 
+                    'value' => array( 'leadstate_id' ),
+            ),
+            array(  'label' => $translate->_('Leadtype'), 
+                    'value' => array( 'leadtype_id' ),
+            ),
+            array(  'label' => $translate->_('Leadsource'), 
+                    'value' => array( 'leadsource_id' ),
+            ),
             array(  'label' => $translate->_('Turnover'), 
                     'value' => array( 'turnover' ),
             ),
@@ -73,6 +82,16 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                                 $content[] = $_lead->$key . " €";
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
+                            } elseif ( $key === 'leadstate_id' ) {
+                                $state = Crm_Controller::getInstance()->getLeadState($_lead->leadstate_id);
+                                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' state: '. print_r($state->toArray(), true));
+                                $content[] = $state->leadstate;
+                            } elseif ( $key === 'leadtype_id' ) {
+                                $type = Crm_Controller::getInstance()->getLeadType($_lead->leadtype_id);
+                                $content[] = $type->leadtype;
+                            } elseif ( $key === 'leadsource_id' ) {
+                                $source = Crm_Controller::getInstance()->getLeadSource($_lead->leadsource_id);
+                                $content[] = $source->leadsource;
                             } else {
                                 $content[] = $_lead->$key;
                             }
