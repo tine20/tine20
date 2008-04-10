@@ -34,7 +34,7 @@ Ext.ux.Wizard = function(config) {
     
     this.currentItem = 0;
     this.template = new Ext.Template('Step {current} of {count}');
-    this.mandatorySteps = _config['mandatorySteps'];
+    this.mandatorySteps = _config.mandatorySteps;
 
     Ext.ux.Wizard.superclass.constructor.call(this, _config);
     
@@ -44,7 +44,7 @@ Ext.ux.Wizard = function(config) {
         this.footer.insertFirst({html: '<div class="x-panel-footer-wizard-status">&nbsp;</div>'});
         this.setStatus();
         return true;
-    })
+    });
  
 }; // end of Ext.ux.Wizard constructor
  
@@ -79,9 +79,9 @@ Ext.extend(Ext.ux.Wizard, Ext.Panel, {
 
         var isFirstItem = (this.getCurrentStep() == 1);
         var isLastItem = (this.getCurrentStep() == this.getStepCount());
-        var minimunSteps = isNaN(parseInt(this.mandatorySteps)) 
-                         ? this.getStepCount()
-                         : Math.min(Math.max(parseInt(this.mandatorySteps), 1), this.getStepCount());
+        var minimunSteps = isNaN(parseInt(this.mandatorySteps)) ?
+                           this.getStepCount() :
+                           Math.min(Math.max(parseInt(this.mandatorySteps), 1), this.getStepCount());
 
         this.buttons[BUTTON_PREVIOUS].setDisabled(isFirstItem);
         this.buttons[BUTTON_NEXT].setDisabled(isLastItem);
@@ -123,13 +123,17 @@ Ext.extend(Ext.ux.Wizard, Ext.Panel, {
      * @private
      */
     hideHanlder :function(){
-        if(this.fireEvent('cancel')) this.hide();
+        if(this.fireEvent('cancel')) {
+            this.hide();
+        }
     },
     
     /**
      * @private
      */
     finishHanlder:function(){
-        if(this.fireEvent('finish')) this.hide();
+        if(this.fireEvent('finish')) {
+            this.hide();
+        }
     }
 });

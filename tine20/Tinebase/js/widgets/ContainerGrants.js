@@ -257,13 +257,13 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
         
         var id = false;
         dataStore.each(function(item){
-            if ((item.data.accountType == 'user' || item.data.accountType == 'account') 
-                    && account.data.type == 'user'
-                    && item.data.accountId.accountId == account.data.id) {
+            if ((item.data.accountType == 'user' || item.data.accountType == 'account') &&
+                    account.data.type == 'user' &&
+                    item.data.accountId.accountId == account.data.id) {
                 id = item.id;
-            } else if (item.data.accountType == 'group'
-                    && account.data.type == 'group'
-                    && item.data.accountId.id == account.data.id) {
+            } else if (item.data.accountType == 'group' &&
+                    account.data.type == 'group' &&
+                    item.data.accountId.id == account.data.id) {
                 id = item.id;
             }
         });

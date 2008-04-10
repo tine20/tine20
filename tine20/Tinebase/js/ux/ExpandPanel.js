@@ -65,7 +65,7 @@ Ext.ux.ExpandPanel = Ext.extend(Ext.Panel, {
         var panelCount = 0;
         this.items.each(function(item){
             if(panelCount > 0) {
-                item.setVisible(this.isExpanded)
+                item.setVisible(this.isExpanded);
             }
             panelCount++;
         }, this);

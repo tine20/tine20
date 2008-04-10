@@ -17,13 +17,13 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	 * @cfg {array} additional toolbar items
 	 */
 	tbarItems: false,
-	labelAlign: 'top',
+	//labelAlign: 'top',
     bodyStyle:'padding:5px',
     layout: 'fit',
     anchor:'100%',
     region: 'center',
     deferredRender: false,
-    layoutOnTabChange:true,
+    //layoutOnTabChange:true,
     handlerScope: null,
     buttonAlign: 'right',
 	

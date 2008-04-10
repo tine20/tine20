@@ -62,12 +62,7 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         });
         
         // open popup window
-        this.popup = Tine.Tinebase.Common.openWindow(
-            this.name, 
-            this.url,
-            this.width,
-            this.height
-        );
+        this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
         
         // we need to store ourself in the popup, cause we loose scope by the native broweser event!
         this.popup.ParentEventProxy = this;

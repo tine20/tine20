@@ -28,7 +28,9 @@ Ext.ux.ButtonLockedToggle = Ext.extend(Ext.Button,{
     enableToggle: true,
 
     toggle: function(state){
-        if(state == undefined && this.pressed) return;
+        if(state === undefined && this.pressed) {
+            return;
+        }
         state = state === undefined ? !this.pressed : state;
         if(state != this.pressed){
             if(state){
@@ -39,13 +41,13 @@ Ext.ux.ButtonLockedToggle = Ext.extend(Ext.Button,{
                 this.el.removeClass("x-btn-pressed");
                 this.pressed = false;
                 this.fireEvent("toggle", this, false);
-            };
+            }
             if(this.toggleHandler){
                 this.toggleHandler.call(this.scope || this, this, state);
-            };
-        };
+            }
+        }
     }
-})
+});
 
 Ext.ux.tbButtonLockedToggle = Ext.extend(Ext.Toolbar.Button, Ext.ux.ButtonLockedToggle);
 
