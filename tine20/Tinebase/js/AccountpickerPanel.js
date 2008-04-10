@@ -271,7 +271,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
                     });
                     break;
                 case 'group':
-                    this.requestParams.method = 'Admin.getGroups';
+                    this.requestParams.method = 'Tinebase.getGroups';
                     this.requestParams.sort   = 'name';
                     Ext.Ajax.request({
                         params: this.requestParams,

@@ -71,7 +71,32 @@ class Tinebase_Json
         
         return $result;
     }
+    
+    /**
+     * get list of groups
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
+     */
+    public function getGroups($filter, $sort, $dir, $start, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $groups = Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
 
+        $result['results'] = $groups->toArray();
+        $result['totalcount'] = count($groups);
+        
+        return $result;
+    }
+    
     /**
      * change password of user 
      *
@@ -94,32 +119,7 @@ class Tinebase_Json
             );   
         }
         
-        return $response;
-        
-/*        
-        $auth = Zend_Auth::getInstance();        
-              
-        $oldIsValid = Tinebase_Controller::getInstance()->isValidPassword($auth->getIdentity(), $oldPw);              
-
-        if ($oldIsValid === true) {
-            $_account   = Tinebase_Account::getInstance();
-            $result     = $_account->setPassword(Zend_Registry::get('currentAccount')->getId(), $newPw);
-            
-            if($result == 1) {
-                $res = array(
-    				'success'      => TRUE);                
-            } else {
-                 $res = array(
-    				'success'      => FALSE,
-	    			'errorMessage' => "new password could'nt be set!");   
-            }
-        } else {
-            $res = array(
-				'success'      => FALSE,
-				'errorMessage' => "old password is wrong!");
-        }
-        
-        return $res;*/
+        return $response;        
     }    
     
     
