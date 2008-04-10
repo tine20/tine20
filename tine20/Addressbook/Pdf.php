@@ -29,7 +29,6 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));
          
-        // @todo    add more fields
         $contactFields = array (
             array(  'label' => $translate->_('Business Contact Data'), 
                     'type' => 'separator' ),
@@ -162,7 +161,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             }
         }     
                 
-        return $this->generatePdfNew($record, $title, $subtitle, $_contact->note, $contactPhoto );        
+        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $contactPhoto );        
 	}
 
 }

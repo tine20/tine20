@@ -31,59 +31,100 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
         $translate->setLocale(Zend_Registry::get('locale'));		
         
-		$leadFields = array (
-				$translate->_('Lead Data') => 'separator',
-				'turnover' => $translate->_('Turnover'),
-				'probability' => $translate->_('Probability'),
-				'start' => $translate->_('Start'),
-				'end' => $translate->_('End'),
-				'end_scheduled' => $translate->_('End Scheduled'),
-                'container' => $translate->_('Container'),
+        $leadFields = array (
+            array(  'label' => $translate->_('Lead Data'), 
+                    'type' => 'separator' 
+            ),
+            array(  'label' => $translate->_('Turnover'), 
+                    'value' => array( 'turnover' ),
+            ),
+            array(  'label' => $translate->_('Probability'), 
+                    'value' => array( 'probability' ),
+            ),
+            array(  'label' => $translate->_('Start'), 
+                    'value' => array( 'start' ),
+            ),
+            array(  'label' => $translate->_('End'), 
+                    'value' => array( 'end' ),
+            ),
+            array(  'label' => $translate->_('End Scheduled'), 
+                    'value' => array( 'end_scheduled' ),
+            ),
+            
+        );
         
-/*        $translate->_('Lead IDs') => 'separator',
-				'leadstate_id' => $translate->_('Leadstate ID'),
-                'leadtype_id' => $translate->_('Leadtype ID'),
-                'leadsource_id' => $translate->_('Leadsource ID'),*/
-				);
-				
-        // build data array
+        // add data to array
         $record = array ();
-        foreach ( $leadFields as $key => $label ) {
-        	if ( $label !== 'separator' ) {
-	            if ( $_lead->$key instanceof Zend_Date ) {
-	                $record[$key] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
-	            } elseif ( $key === 'turnover' ) {
-	            	$record[$key] = $_lead->$key . " €";
-	            } elseif ( $key === 'probability' ) {
-	                $record[$key] = $_lead->$key . " %";
-	            } else {
-	                $record[$key] = $_lead->$key;
-	            }
-        	}
+        foreach ( $leadFields as $fieldArray ) {
+            if ( !isset($fieldArray['type']) || $fieldArray['type'] !== 'separator' ) {
+                $values = array();
+                foreach ( $fieldArray['value'] as $valueFields ) {
+                    $content = array();
+                    if ( is_array($valueFields) ) {
+                        $keys = $valueFields;
+                    } else {
+                        $keys = array ( $valueFields );
+                    }
+                    foreach ( $keys as $key ) {
+                        if ( $_lead->$key instanceof Zend_Date ) {
+                            $content[] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
+                        } elseif (!empty($_lead->$key) ) {
+                            if ( $key === 'turnover' ) {
+                                $content[] = $_lead->$key . " €";
+                            } elseif ( $key === 'probability' ) {
+                                $content[] = $_lead->$key . " %";
+                            } else {
+                                $content[] = $_lead->$key;
+                            }
+                        }
+                    }
+                    if ( !empty($content) ) {
+                        $glue = ( isset($fieldArray['glue']) ) ? $fieldArray['glue'] : " ";
+                        $values[] = implode($glue,$content);
+                    }
+                }
+                if ( !empty($values) ) {
+                    $record[] = array ( 'label' => $fieldArray['label'],
+                                        'type'  => ( isset($fieldArray['type']) ) ? $fieldArray['type'] : 'singleRow',
+                                        'value' => ( sizeof($values) === 1 ) ? $values[0] : $values,
+                    ); 
+                }
+            } elseif ( isset($fieldArray['type']) && $fieldArray['type'] === 'separator' ) {
+                $record[] = $fieldArray;
+            }
         }     
-        
+
+        // build title / subtitle / description
+        $title = "Lead: ".$_lead->lead_name; 
+        $subtitle = "";
+        $description = $_lead->description;
+
+        //@todo add linked objects
+        /*
         // get linked contacts and add them to record array
         $links = Tinebase_Links::getInstance()->getLinks('crm', $_lead->id, 'addressbook');
                 
         $linkedObjects = array ();
         if ( !empty($links)) {
-	        $linkedObjects[] = array ($translate->_('Linked Contacts'), 'headline');
-	        foreach ( $links as $contactLink ) {
-	        	$contact = Addressbook_Controller::getInstance()->getContact($contactLink['recordId']);
-	            $linkedObjects[] = array ($contact->n_fn, 'separator');
-	            $linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
+            $linkedObjects[] = array ($translate->_('Linked Contacts'), 'headline');
+            foreach ( $links as $contactLink ) {
+                $contact = Addressbook_Controller::getInstance()->getContact($contactLink['recordId']);
+                $linkedObjects[] = array ($contact->n_fn, 'separator');
+                $linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
                 $linkedObjects[] = array ($translate->_('Address'), $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality );
                 $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);
-	            $linkedObjects[] = array ($translate->_('Email'), $contact->email);
+                $linkedObjects[] = array ($translate->_('Email'), $contact->email);
                 $linkedObjects[] = array ($translate->_('Type'), $contactLink['remark']);
-	        }
+            }
         }
+        */
         
         //@todo add activities / products to export
         
-        // generate pdf now!			
-		return $this->generatePdf($record, "Lead: ".$_lead->lead_name, "", $_lead->description, $leadFields, NULL, $linkedObjects );
-		
+        // generate pdf now!            
+        //return $this->generatePdf($record, $title, "", $description, NULL, $linkedObjects );
+        return $this->generatePdf($record, $title, "", $description );
+        
 	}
 
 }
