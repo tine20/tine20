@@ -77,7 +77,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
             iconCls: 'action_cancel',
-            scope: this.handlerScope,
+            scope: this.handlerScope
         });
         
         var genericButtons = [
