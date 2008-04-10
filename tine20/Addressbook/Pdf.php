@@ -161,7 +161,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             }
         }     
                 
-        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $contactPhoto );        
+        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $contactPhoto, array(), FALSE );        
 	}
 
 }

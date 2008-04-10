@@ -87,15 +87,22 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * create pdf
      *
      * @param   array $_record record data
-     * @param   $_title the pdf title
-     * @param   $_subtitle the subtitle
-     * @param   $_note      pdf note (below title)      
-     * @param   $_image image for the upper right corner (i.e. contact photo)
-     * 
+     * @param   string $_title the pdf title
+     * @param   string $_subtitle the subtitle
+     * @param   string $_note      pdf note (below title)      
+     * @param   Zend_Pdf_Image $_image image for the upper right corner (i.e. contact photo)
+     * @param   bool $_tableBorder
+     *      * 
      * @return  string  the contact pdf
      * 
      */
-    public function generatePdf ( array $_record, $_title = "", $_subtitle = "", $_note = "", $_image = NULL, $_linkedObjects = array() )
+    public function generatePdf (   array $_record, 
+                                    $_title = "", 
+                                    $_subtitle = "", 
+                                    $_note = "", 
+                                    $_image = NULL, 
+                                    $_linkedObjects = array(), 
+                                    $_tableBorder = true )
     {
         $pageNumber = 0;
         $xPos = 50;
@@ -135,7 +142,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // photo
         if ( $_image !== NULL ) {
             //$xPos += 450;
-            $this->pages[$pageNumber]->drawImage($_image, $xPos+450, $yPosImage, $xPos+500, $yPosImage + 75 );
+            $this->pages[$pageNumber]->drawImage( $_image, $xPos+450, $yPosImage, $xPos+500, $yPosImage + 75 );
         }
 
         // debug record
@@ -184,7 +191,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // create table
         if ( !empty($data) ) {
-            $this->CreateTable( $data, 50, 730 );
+            $this->CreateTable( $data, 50, 730, 0, $_tableBorder );
         }
                 
         // write footer
@@ -201,14 +208,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     /**
      * create a table
      * 
-     * @param   array   content
-     * @param   integer xpos (upper left corner)
-     * @param   integer ypos (upper left corner)
-     * @param   integer pagenumber for table
-     * @param   bool    activate border
+     * @param   array   $_content content
+     * @param   integer $_posX xpos (upper left corner)
+     * @param   integer $_posY ypos (upper left corner)
+     * @param   integer $_pageNumber pagenumber for table
+     * @param   bool    $_border    activate border
      * 
      */
-    public function CreateTable ( $_content, $_posX = 100, $_posY = 700, $_pageNumber = 0, $border = true )
+    public function CreateTable ( $_content, $_posX = 100, $_posY = 700, $_pageNumber = 0, $_border = true )
     {
         $cellWidth = 150;
         $padding = 5;
@@ -242,28 +249,34 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 // leave some more space between sections
                 if ( isset($row[$i+1]) && ( $row[$i+1] === 'separator' || $row[$i+1] === 'headline' ) ) {
                     $yPos -= 10;
+                    $this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD), $this->contentFontSize);
+                } else {
+                    $this->pages[$pageNumber]->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), $this->contentFontSize);                    
                 }
                 
                 if ( $row[$i] === 'separator' ) {
-                    $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
-                    $this->pages[$pageNumber]->drawLine ( $xPos, $yPos - $padding, $xPos, $yPos - 2*$padding);
+                    if ( $_border ) {                            
+                        $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
+                        $this->pages[$pageNumber]->drawLine ( $xPos, $yPos - $padding, $xPos, $yPos - 2*$padding);
+                    }
                     continue;
                 } elseif ( $row[$i] === 'headline' ) {
-                    $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*(sizeof($row)+1)), $yPos - $padding );
+                    if ( $_border ) {                            
+                        $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*(sizeof($row)+1)), $yPos - $padding );
+                    }
                     continue;
                 }
                                 
-                if ( $i !== 0 && $border ) {
+                if ( $i !== 0 && $_border ) {
                     if ( is_array($row[$i]) ) {
                         $lineHeight = sizeof($row[$i]) * $this->contentBlockLineHeight;
                     } else {
                         $lineHeight = 0;
-                    }
-                    
+                    }                    
                     $this->pages[$pageNumber]->drawLine ( $xPos, $yPos + $this->contentLineHeight - 2*$padding, $xPos, $yPos - 2*$padding - $lineHeight);
                     $xPos += $padding;
                 }
-                
+                    
                 if ( is_array($row[$i]) ) {
                     $blockLineHeight = 0;
                     foreach ( $row[$i] as $text ) {

@@ -32,7 +32,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         $translate->setLocale(Zend_Registry::get('locale'));		
         
         $leadFields = array (
-            array(  'label' => $translate->_('Lead Data'), 
+            array(  'label' => /* $translate->_('Lead Data') */ "", 
                     'type' => 'separator' 
             ),
             array(  'label' => $translate->_('Turnover'), 
@@ -95,26 +95,35 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         }     
 
         // build title / subtitle / description
-        $title = "Lead: ".$_lead->lead_name; 
+        $title = $_lead->lead_name; 
         $subtitle = "";
         $description = $_lead->description;
 
         // add linked objects               
-        $linkedObjects = array ();
-        $types = array (    "customer" => $translate->_('Linked Customers'), 
+        $linkedObjects = array ( array($translate->_('Contacts'), 'headline') );
+        /*$types = array (    "customer" => $translate->_('Linked Customers'), 
                             "partner" => $translate->_('Linked Partners'), 
-                            "responsible" => $translate->_('Linked Contacts') );
+                            "responsible" => $translate->_('Linked Contacts') );*/
+        
+        $types = array (    "customer" => $translate->_('Customer'), 
+                            "partner" => $translate->_('Partner'), 
+                            "responsible" => $translate->_('Contact') );        
         
         foreach ( $types as $type => $headline ) {
             
             if ( !empty($_lead->$type)) {
-                $linkedObjects[] = array ( $headline, 'headline');
+                //$linkedObjects[] = array ( $headline, 'headline');
                 
                 foreach ( $_lead->$type as $linkID ) {
                     $contact = Addressbook_Controller::getInstance()->getContact($linkID);
                     
-                    $linkedObjects[] = array ($contact->n_fn, 'separator');
-                    $linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
+                    $contactNameAndCompany = $contact->n_fn;
+                    if ( !empty($contact->org_name) ) {
+                        $contactNameAndCompany .= " ( " . $contact->org_name . " )";
+                    }
+                    $linkedObjects[] = array ($contactNameAndCompany, 'separator');
+                    
+                    //$linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
                     $linkedObjects[] = array ($translate->_('Address'), 
                                             // $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality
                                             array( 
@@ -132,8 +141,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         //@todo add tasks / products to export
         
         // generate pdf now!            
-        //return $this->generatePdf($record, $title, "", $description, NULL, $linkedObjects );
-        return $this->generatePdf($record, $title, $subtitle, $description, NULL, $linkedObjects );
+        return $this->generatePdf($record, $title, $subtitle, $description, NULL, $linkedObjects, FALSE );
         
 	}
 
