@@ -74,7 +74,7 @@ Tine.widgets.group.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     // private
     setValue: function(_group)
     {
-    	console.log ( _group );
+    	//console.log ( _group );
         
     	if ( !this.gotJson ) {
     	    this.setRawValue(_group.name);
