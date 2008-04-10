@@ -441,7 +441,7 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
             
             $contactData['account_id'] = $accountId;
             $contactData['tid'] = 'n';
-            $contactData['owner'] = 1;
+            $contactData['owner'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL)->getId();
             
             $contactsTable->insert($contactData);
             
