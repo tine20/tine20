@@ -23,6 +23,7 @@ class Tinebase_Json_Container
      * 
      * Backend function for containerTree widget
      * 
+     * @todo move getOtherUsers to own function
      * @param string $application
      * @param string $containerType
      * @param string $owner
@@ -38,7 +39,9 @@ class Tinebase_Json_Container
                 $containers = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
                 break;
             case 'otherUsers':
-                $containers = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+                $accounts = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+                echo Zend_Json::encode($accounts->toArray());
+                exit;
                 break;
             default:
                 throw new Exception('no such NodeType');
