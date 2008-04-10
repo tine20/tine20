@@ -22,7 +22,7 @@ Tine.Login = {
             text: 'Login',
             handler: Tine.Login.loginHandler 
         }];
-        if ( userRegistration == true ) {
+        if ( userRegistration === true ) {
             loginButtons.push({
                 text: 'Register',
                 handler: Tine.Login.UserRegistrationHandler
@@ -103,11 +103,11 @@ Tine.Login = {
                     });
                 }
             });
-        };
+        }
     },
     
     UserRegistrationHandler: function () {
         var regWindow = new Tine.Tinebase.UserRegistration();
         regWindow.show();
     }
-}
+};
