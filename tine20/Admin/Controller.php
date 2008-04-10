@@ -204,7 +204,7 @@ class Admin_Controller
      * @param int $_limit
      * @return Tinebase_RecordSet_AccessLog set of matching access log entries
      */
-    public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_from = NULL, $_to = NULL)
+    public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
     {
         $tineAccessLog = Tinebase_AccessLog::getInstance();
 
