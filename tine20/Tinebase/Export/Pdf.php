@@ -259,7 +259,16 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                         $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*sizeof($row)), $yPos - $padding );
                         $this->pages[$pageNumber]->drawLine ( $xPos, $yPos - $padding, $xPos, $yPos - 2*$padding);
                     }
-                    continue;
+                    
+                    if ( isset($row[$i+1]) ) {
+                        // add icon
+                        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon path: ' . dirname(dirname(__FILE__)).$row[$i+1]);
+                        $icon = Zend_Pdf_Image::imageWithPath(dirname(dirname(dirname(__FILE__))).$row[$i+1]);
+                        $this->pages[$pageNumber]->drawImage( $icon, $xPos-170, $yPos-6, $xPos-154, $yPos + 10 );
+                    }
+                                        
+                    //continue;
+                    break;
                 } elseif ( $row[$i] === 'headline' ) {
                     if ( $_border ) {                            
                         $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*(sizeof($row)+1)), $yPos - $padding );

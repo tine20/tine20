@@ -105,11 +105,16 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                             "partner" => $translate->_('Linked Partners'), 
                             "responsible" => $translate->_('Linked Contacts') );*/
         
-        $types = array (    "customer" => $translate->_('Customer'), 
+        /*$types = array (    "customer" => $translate->_('Customer'), 
                             "partner" => $translate->_('Partner'), 
-                            "responsible" => $translate->_('Contact') );        
+                            "responsible" => $translate->_('Contact') );*/        
+
+        $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
+                            "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
+                            "responsible" => "/images/oxygen/32x32/apps/preferences-desktop-user.png",
+                        );        
         
-        foreach ( $types as $type => $headline ) {
+        foreach ( $types as $type => /* $headline */ $icon ) {
             
             if ( !empty($_lead->$type)) {
                 //$linkedObjects[] = array ( $headline, 'headline');
@@ -121,11 +126,9 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     if ( !empty($contact->org_name) ) {
                         $contactNameAndCompany .= " ( " . $contact->org_name . " )";
                     }
-                    $linkedObjects[] = array ($contactNameAndCompany, 'separator');
+                    $linkedObjects[] = array ($contactNameAndCompany, 'separator', $icon);
                     
-                    //$linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
                     $linkedObjects[] = array ($translate->_('Address'), 
-                                            // $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality
                                             array( 
                                                 $contact->adr_one_street, 
                                                 $contact->adr_one_postalcode . " " . $contact->adr_one_locality,
