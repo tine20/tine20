@@ -125,6 +125,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         // build title
         $title = $_contact->n_fn; 
         $subtitle = $_contact->org_name;
+        $titleIcon = "/images/oxygen/32x32/apps/system-users.png";
         
         // add data to array
         $record = array ();
@@ -161,7 +162,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             }
         }     
                 
-        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $contactPhoto, array(), FALSE );        
+        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE );        
 	}
 
 }

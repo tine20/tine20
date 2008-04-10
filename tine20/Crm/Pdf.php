@@ -98,6 +98,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         $title = $_lead->lead_name; 
         $subtitle = "";
         $description = $_lead->description;
+        $titleIcon = "/images/oxygen/32x32/actions/paperbag.png";
 
         // add linked objects               
         $linkedObjects = array ( array($translate->_('Contacts'), 'headline') );
@@ -144,7 +145,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         //@todo add tasks / products to export
         
         // generate pdf now!            
-        return $this->generatePdf($record, $title, $subtitle, $description, NULL, $linkedObjects, FALSE );
+        return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE );
         
 	}
 

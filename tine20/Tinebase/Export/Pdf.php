@@ -89,7 +89,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   array $_record record data
      * @param   string $_title the pdf title
      * @param   string $_subtitle the subtitle
-     * @param   string $_note      pdf note (below title)      
+     * @param   string $_note      pdf note (below title)
+     * @param   string $_titleIcon icon next to the title      
      * @param   Zend_Pdf_Image $_image image for the upper right corner (i.e. contact photo)
      * @param   bool $_tableBorder
      *      * 
@@ -100,6 +101,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                                     $_title = "", 
                                     $_subtitle = "", 
                                     $_note = "", 
+                                    $_titleIcon = "",
                                     $_image = NULL, 
                                     $_linkedObjects = array(), 
                                     $_tableBorder = true )
@@ -115,6 +117,12 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $this->pages[$pageNumber]->drawText($_title, $xPos, $yPos, 'UTF-8');
         }
 
+        // title icon
+        if ( !empty($_titleIcon) ) {
+            $icon = Zend_Pdf_Image::imageWithPath(dirname(dirname(dirname(__FILE__))).$_titleIcon);
+            $this->pages[$pageNumber]->drawImage( $icon, $xPos-35, $yPos-20, $xPos-3, $yPos+12 );
+        }
+        
         // subtitle
         if ( !empty($_subtitle) ) {
             $yPos -= 20;
@@ -270,9 +278,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     //continue;
                     break;
                 } elseif ( $row[$i] === 'headline' ) {
-                    if ( $_border ) {                            
+                    //if ( $_border ) {                            
                         $this->pages[$pageNumber]->drawLine ( $_posX, $yPos - $padding, $_posX + ($cellWidth*(sizeof($row)+1)), $yPos - $padding );
-                    }
+                    //}
                     continue;
                 }
                                 
