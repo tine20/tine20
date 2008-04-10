@@ -107,15 +107,15 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     onCancel: function(){
         
         this.fireEvent('cancle');
-        console.log('cancel');
+        //console.log('cancel');
     },
     onSaveAndClose: function(){
         this.fireEvent('saveAndClose');
-        console.log('save');
+        //console.log('save');
     },
     onApply: function(){
         this.fireEvent('apply');
-        console.log('apply');
+        //console.log('apply');
     }
 });
 
