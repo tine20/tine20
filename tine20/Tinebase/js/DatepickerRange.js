@@ -9,13 +9,14 @@ Ext.namespace('Ext.ux');
 
 
 Date.prototype.getFirstDateOfWeek = function(){
-        var value=this.clearTime();
-        var semana=this.getWeekOfYear();
-        while(semana == value.getWeekOfYear())
-            value=value.add(Date.DAY,-1);
-        value=value.add(Date.DAY,1);
-        return value;
+    var value=this.clearTime();
+    var semana=this.getWeekOfYear();
+    while(semana == value.getWeekOfYear()) {
+        value=value.add(Date.DAY,-1);
     }
+    value=value.add(Date.DAY,1);
+    return value;
+};
 
 
 Ext.ux.DatePickerRange = Ext.extend(Ext.DatePicker, { 
@@ -152,15 +153,20 @@ Ext.ux.DatePickerRange = Ext.extend(Ext.DatePicker, {
     },
     isSelected:function(date){
         date=new Date(date);
-        if(this.selectionMode=='day')
-            return date.clearTime().getTime() == this.value.clearTime().getTime();
-        if(this.selectionMode=='month')
-            return date.getFirstDateOfMonth().clearTime().getTime ()==this.value.getFirstDateOfMonth().clearTime().getTime ();
-        if(this.selectionMode=='week'){
-            return date.getFirstDateOfWeek().clearTime().getTime ()==this.value.getFirstDateOfWeek().clearTime().getTime ();
-        }
-        throw 'Illegal selection mode';
-    
+        switch(this.selectionMode) {
+        	case 'day':
+        	   return date.clearTime().getTime() == this.value.clearTime().getTime();
+        	   break;
+        	case 'month':
+        	   return date.getFirstDateOfMonth().clearTime().getTime ()==this.value.getFirstDateOfMonth().clearTime().getTime ();
+        	   break;
+        	case 'week':
+        	   return date.getFirstDateOfWeek().clearTime().getTime ()==this.value.getFirstDateOfWeek().clearTime().getTime ();
+        	   break;
+        	default:
+        	   throw 'Illegal selection mode';
+        	   break;
+        }        
     }
         
     
