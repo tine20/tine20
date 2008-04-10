@@ -34,23 +34,33 @@ class Tinebase_Json_Container
         switch($containerType) {
             case Tinebase_Container::TYPE_PERSONAL:
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Zend_Registry::get('currentAccount'), $application, $owner, Tinebase_Container::GRANT_READ);
+                foreach ($containers as $container) {
+                    $container->bypassFilters = true;
+                    $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray());
+                }
+                echo Zend_Json::encode($containers->toArray());
+                
                 break;
+                
             case Tinebase_Container::TYPE_SHARED:
                 $containers = Tinebase_Container::getInstance()->getSharedContainer(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
+                foreach ($containers as $container) {
+                    $container->bypassFilters = true;
+                    $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray());
+                }
+                echo Zend_Json::encode($containers->toArray());
+                
                 break;
+                
             case 'otherUsers':
                 $accounts = Tinebase_Container::getInstance()->getOtherUsers(Zend_Registry::get('currentAccount'), $application, Tinebase_Container::GRANT_READ);
                 echo Zend_Json::encode($accounts->toArray());
-                exit;
+                
                 break;
+                
             default:
                 throw new Exception('no such NodeType');
         }
-        foreach ($containers as $container) {
-            $container->bypassFilters = true;
-            $container->account_grants = Zend_Json::encode(Tinebase_Container::getInstance()->getGrantsOfAccount(Zend_Registry::get('currentAccount'), $container->getId())->toArray());
-        }
-        echo Zend_Json::encode($containers->toArray());
         // exit here, as the Zend_Server's processing is adding a result code, which breaks the result array
         exit;
     }
