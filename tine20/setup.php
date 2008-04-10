@@ -56,14 +56,14 @@ $adminGroup = new Tinebase_Group_Model_Group(array(
     'name'          => 'Administrators',
     'description'   => 'Group of administrative accounts'
 ));
-$groupsBackend->addGroup($adminGroup);
+$adminGroup = $groupsBackend->addGroup($adminGroup);
 
 # add the user group
 $userGroup = new Tinebase_Group_Model_Group(array(
     'name'          => 'Users',
     'description'   => 'Group of user accounts'
 ));
-$groupsBackend->addGroup($userGroup);
+$userGroup = $groupsBackend->addGroup($userGroup);
 
 # add the admin account
 $accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
@@ -71,7 +71,7 @@ $accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory
 $account = new Tinebase_Account_Model_FullAccount(array(
     'accountLoginName'      => 'tine20admin',
     'accountStatus'         => 'enabled',
-    'accountPrimaryGroup'   => $userGroup->id,
+    'accountPrimaryGroup'   => $userGroup->getId(),
     'accountLastName'       => 'Account',
     'accountDisplayName'    => 'Tine 2.0 Admin Account',
     'accountFirstName'      => 'Tine 2.0 Admin'
