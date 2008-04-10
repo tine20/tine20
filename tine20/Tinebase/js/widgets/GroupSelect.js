@@ -44,7 +44,7 @@ Tine.widgets.group.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Ext.data.Record.create([{name: 'id'}, {name: 'name'}]),            
+            fields: Ext.data.Record.create([{name: 'id'}, {name: 'name'}])       
         });
                         
         Tine.widgets.group.selectionComboBox.superclass.initComponent.call(this, arguments);
@@ -141,6 +141,6 @@ Ext.namespace('Tine.Admin.Model');
 Tine.Admin.Model.Group = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
-    {name: 'description'},
+    {name: 'description'}
     // @todo add accounts array to group model?
 ]);
