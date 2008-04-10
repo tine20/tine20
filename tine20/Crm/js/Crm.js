@@ -1576,7 +1576,7 @@ Tine.Crm.LeadEditDialog = function() {
                 disabled: false
         });         
         
-       if(_leadData.data.id !== null) {
+       if(_leadData.data.id > 0) {
            _add_task.enable();
        }
       
@@ -1711,7 +1711,8 @@ Tine.Crm.LeadEditDialog = function() {
                             ]
                         }]
                     }]
-                }, {
+                }/*, {
+                NOTE: this is intended to become a read only short product overview
                     xtype: 'textfield',
                     hideLabel: false,
                     fieldLabel: 'products',
@@ -1722,8 +1723,9 @@ Tine.Crm.LeadEditDialog = function() {
                     disabled: true,
                     selectOnFocus: true,
                     anchor:'100%'
-                }, {
+                }*/, {
                     xtype: 'tabpanel',
+                    style: 'margin-top: 10px;',
                     id: 'contactsPanel',
                     title:'contacts panel',
                     activeTab: 0,
@@ -1849,29 +1851,26 @@ Tine.Crm.LeadEditDialog = function() {
             handlerSaveAndClose: handlerSaveAndClose,
             handlerDelete: Tine.Crm.LeadEditDialog.Handler.handlerDelete,
             labelAlign: 'top',
-            layout: 'fit',
-                bodyStyle:'padding:5px',
-                anchor:'100%',
-                region: 'center',  
-                deferredRender: false,
-                layoutOnTabChange:true,           
-            items: [{
-                xtype:'tabpanel',
+            items: new Ext.TabPanel({
                 plain:true,
                 activeTab: 0,
-                deferredRender:false,
+                id: 'editMainTabPanel',
                 layoutOnTabChange:true,  
-                anchor:'100% 100%',
-                //defaults:{bodyStyle:'padding:10px'},
                 items:[
                     tabPanelOverview, 
                     Tine.Crm.LeadEditDialog.Elements.getTabPanelManageContacts(),                    
                     tabPanelActivities, 
                     tabPanelProducts
                 ]
-            }]
+            })
         });
         
+        // fix to have the tab panel in the right height accross browsers
+		Ext.getCmp('editMainTabPanel').on('afterlayout', function(container){
+		    var height = Ext.getCmp('leadDialog').getInnerHeight();
+		    Ext.getCmp('editMainTabPanel').setHeight(height-10);
+		});
+		
         var viewport = new Ext.Viewport({
             layout: 'border',
             id: 'editViewport',
@@ -1887,6 +1886,7 @@ Tine.Crm.LeadEditDialog = function() {
         
         leadEdit.getForm().loadRecord(_leadData);
             
+        /*
         Ext.getCmp('editViewport').on('afterlayout',function(container) {
              var _dimension = container.getSize();
              var _offset = 125;
@@ -1901,6 +1901,7 @@ Tine.Crm.LeadEditDialog = function() {
 
              Ext.getCmp('contactsPanel').setHeight(_heightContacts);
         }); 
+        */
 
         
         /*********************************
