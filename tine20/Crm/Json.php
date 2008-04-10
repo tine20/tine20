@@ -355,16 +355,16 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $leadData->partner = $partner;
         }
         
+        $tasks = Zend_Json::decode($linkedTasks);
+        if(is_array($tasks)) {
+            $leadData->tasks = $tasks;
+        }
+        
         if(empty($leadData->id)) {
             $savedLead = Crm_Controller::getInstance()->addLead($leadData);
         } else {
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
         }
-        
-        // set linked tasks
-        $linkedTasks = Zend_Json::decode($linkedTasks);
-        Crm_Controller::getInstance()->setLinkedTasks($savedLead->id, $linkedTasks);
-        
         
         // products    
 		if(strlen($products) > 2) {	    

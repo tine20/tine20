@@ -318,9 +318,14 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         return $result;
     }
     
-    public function setLinkedTasks($_leadId, array $_taskIds)
+    public function setLinkedTasks($_leadId, $_taskIds)
     {
-        $result = Tinebase_Links::getInstance()->setLinks('crm', $_leadId, 'tasks', $_taskIds, '');
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
+        if(is_array($_taskIds)) {
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'tasks', $_taskIds);
+        } else {
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'tasks');
+        }
         
         return $result;
     }
@@ -469,6 +474,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->setLinkedAccount($lead, $_lead->responsible);
         $this->setLinkedCustomer($lead, $_lead->customer);
         $this->setLinkedPartner($lead, $_lead->partner);
+        $this->setLinkedTasks($lead, $_lead->tasks);
         
         $this->sendNotifications(false, $lead, $_lead->responsible);
         
@@ -563,28 +569,31 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $customer = array();
         $partner = array();
         $responsible = array();
+        $tasks = array();
         foreach($links as $link) {
-            switch($link['remark']) {
-                case 'customer':
-                    if(strtolower($link['applicationName']) === 'addressbook') {
-                        $customer[] = $link['recordId'];
+            switch(strtolower($link['applicationName'])) {
+                case 'addressbook':
+                    switch($link['remark']) {
+                        case 'customer':
+                            $customer[] = $link['recordId'];
+                            break;
+                        case 'partner':
+                            $partner[] = $link['recordId'];
+                            break;
+                        case 'account':
+                            $responsible[] = $link['recordId'];
+                            break;
                     }
                     break;
-                case 'partner':
-                    if(strtolower($link['applicationName']) === 'addressbook') {
-                        $partner[] = $link['recordId'];
-                    }
-                    break;
-                case 'account':
-                    if(strtolower($link['applicationName']) === 'addressbook') {
-                        $responsible[] = $link['recordId'];
-                    }
+                case 'tasks':
+                    $tasks[] = $link['recordId'];
                     break;
             }
         }
         $_lead->customer = $customer;
         $_lead->partner = $partner;
         $_lead->responsible = $responsible;
+        $_lead->tasks = $tasks;
     }
     /**
      * get all shared leads, filtered by different criteria
