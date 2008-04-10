@@ -99,31 +99,41 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         $subtitle = "";
         $description = $_lead->description;
 
-        //@todo add linked objects
-        /*
-        // get linked contacts and add them to record array
-        $links = Tinebase_Links::getInstance()->getLinks('crm', $_lead->id, 'addressbook');
-                
+        // add linked objects               
         $linkedObjects = array ();
-        if ( !empty($links)) {
-            $linkedObjects[] = array ($translate->_('Linked Contacts'), 'headline');
-            foreach ( $links as $contactLink ) {
-                $contact = Addressbook_Controller::getInstance()->getContact($contactLink['recordId']);
-                $linkedObjects[] = array ($contact->n_fn, 'separator');
-                $linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
-                $linkedObjects[] = array ($translate->_('Address'), $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality );
-                $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);
-                $linkedObjects[] = array ($translate->_('Email'), $contact->email);
-                $linkedObjects[] = array ($translate->_('Type'), $contactLink['remark']);
+        $types = array (    "customer" => $translate->_('Linked Customers'), 
+                            "partner" => $translate->_('Linked Partners'), 
+                            "responsible" => $translate->_('Linked Contacts') );
+        
+        foreach ( $types as $type => $headline ) {
+            
+            if ( !empty($_lead->$type)) {
+                $linkedObjects[] = array ( $headline, 'headline');
+                
+                foreach ( $_lead->$type as $linkID ) {
+                    $contact = Addressbook_Controller::getInstance()->getContact($linkID);
+                    
+                    $linkedObjects[] = array ($contact->n_fn, 'separator');
+                    $linkedObjects[] = array ($translate->_('Company'), $contact->org_name);
+                    $linkedObjects[] = array ($translate->_('Address'), 
+                                            // $contact->adr_one_street.", ".$contact->adr_one_postalcode." ".$contact->adr_one_locality
+                                            array( 
+                                                $contact->adr_one_street, 
+                                                $contact->adr_one_postalcode . " " . $contact->adr_one_locality,
+                                                $contact->adr_one_region . " " . $contact->adr_one_countryname,
+                                            )
+                                        );
+                    $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);
+                    $linkedObjects[] = array ($translate->_('Email'), $contact->email);
+                }
             }
         }
-        */
         
-        //@todo add activities / products to export
+        //@todo add tasks / products to export
         
         // generate pdf now!            
         //return $this->generatePdf($record, $title, "", $description, NULL, $linkedObjects );
-        return $this->generatePdf($record, $title, "", $description );
+        return $this->generatePdf($record, $title, $subtitle, $description, NULL, $linkedObjects );
         
 	}
 

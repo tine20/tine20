@@ -163,7 +163,20 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 
         // add linked objects (i.e. contacts for lead export)
         if ( !empty($_linkedObjects) ) {
-            $data = array_merge ( $data, $_linkedObjects );
+            
+            // loop linked objects and remove empty rows (with empty value)
+            foreach ( $_linkedObjects as $linked ) {
+                if ( is_array($linked[1]) ) {
+                    foreach ( $linked[1] as $value ) {
+                        if ( !empty($value) && !preg_match("/^[\s]*$/",$value) ) {
+                            $data[] = $linked;
+                            break;
+                        }
+                    }
+                } elseif ( !empty($linked[1]) ) {
+                    $data[] = $linked;
+                }                
+            }            
         }
         
         // debug $data
