@@ -372,8 +372,12 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 		} else {
             Crm_Controller::getInstance()->deleteProducts($savedLead->id);    
         }         
+        
+        $result = $savedLead->toArray();
+        
+        $result['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();        
 
-        return $savedLead->toArray();  
+        return $result;  
     }      
 
     /**
