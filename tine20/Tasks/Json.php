@@ -97,7 +97,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $inTask = $this->_json2task($task);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
         
-        $outTask = $inTask->getId() > 0 ? 
+        $outTask = strlen($inTask->getId()) > 10 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
             

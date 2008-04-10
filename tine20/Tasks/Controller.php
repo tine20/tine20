@@ -156,6 +156,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
      */
     public function createTask(Tasks_Model_Task $_task)
     {
+        Zend_Registry::get('logger')->debug('Tasks_Controller->createTask');
     	if ((int)$_task->container_id < 0) {
     		$_task->container_id = $this->getDefaultContainer()->getId();
     	}
@@ -176,6 +177,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
      */
     public function updateTask(Tasks_Model_Task $_task)
     {
+        Zend_Registry::get('logger')->debug('Tasks_Controller->updateTask');
         $oldtask = $this->getTask($_task->getId());
 
         // mamage acl
