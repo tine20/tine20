@@ -104,8 +104,14 @@ class Setup_Tables
                     $this->_backend->createTable($table);
                     $createdTables[] = $table;
                   } else {
-                    echo "skipped table {$tableName}. Table exists already.<br>";
-                  }
+					echo "{$tableName} . Table exists already.<br>";
+					if(!$this->_backend->tableCheck($this->_config->database->dbname, $tableName, $table)) {
+						$this->_backend->alterTable($this->_config->database->dbname, $tableName, $table);
+						$createdTables[] = $table;
+						
+						echo $tableName . " had different specifications. Now up-to-date to version " . $table->version;
+					}
+				  }
             }
         }
         
@@ -131,7 +137,6 @@ class Setup_Tables
                 $this->_backend->execInsertStatement($record);
             }
         }
-        
     }
     
     public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
