@@ -203,7 +203,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     	$pdf = new Crm_Pdf();
         $pdfOutput = $pdf->getLeadPdf($lead);
         
-        $pdf->save("test.pdf");
+        //$pdf->save("test.pdf");
                 
         $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated"); 
         $this->assertEquals(1, preg_match("/Contacts/", $pdfOutput), "no contacts linked"); 
