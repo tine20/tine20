@@ -22,14 +22,15 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 	/**
      * create lead pdf
      *
-     * @param	Crm_Model_Lead lead data
+     * @param	Crm_Model_Lead $_lead lead data
      * 
      * @return	string	the contact pdf
      */
 	public function getLeadPdf ( Crm_Model_Lead $_lead )
 	{
+	    $locale = Zend_Registry::get('locale');
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-        $translate->setLocale(Zend_Registry::get('locale'));		
+        $translate->setLocale($locale);		
         
         $leadFields = array (
             array(  'label' => /* $translate->_('Lead Data') */ "", 
@@ -79,7 +80,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                             $content[] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
-                                $content[] = $_lead->$key . " €";
+                                $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $locale)) . " €";
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
@@ -121,13 +122,6 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 
         // add linked objects               
         $linkedObjects = array ( array($translate->_('Contacts'), 'headline') );
-        /*$types = array (    "customer" => $translate->_('Linked Customers'), 
-                            "partner" => $translate->_('Linked Partners'), 
-                            "responsible" => $translate->_('Linked Contacts') );*/
-        
-        /*$types = array (    "customer" => $translate->_('Customer'), 
-                            "partner" => $translate->_('Partner'), 
-                            "responsible" => $translate->_('Contact') );*/        
 
         $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
                             "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
@@ -144,15 +138,20 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     
                     $contactNameAndCompany = $contact->n_fn;
                     if ( !empty($contact->org_name) ) {
-                        $contactNameAndCompany .= " ( " . $contact->org_name . " )";
+                        $contactNameAndCompany .= " / " . $contact->org_name;
                     }
                     $linkedObjects[] = array ($contactNameAndCompany, 'separator', $icon);
                     
+                    $postalcodeLocality = ( !empty($contact->adr_one_postalcode) ) ? $contact->adr_one_postalcode . " " . $contact->adr_one_locality : $contact->adr_one_locality;
+                    $regionCountry = ( !empty($contact->adr_one_region) ) ? $contact->adr_one_region . " " : "";
+                    if ( !empty($contact->adr_one_countryname) ) {
+                        $regionCountry .= $locale->getCountryTranslation ( $contact->adr_one_countryname );
+                    }
                     $linkedObjects[] = array ($translate->_('Address'), 
                                             array( 
                                                 $contact->adr_one_street, 
-                                                $contact->adr_one_postalcode . " " . $contact->adr_one_locality,
-                                                $contact->adr_one_region . " " . $contact->adr_one_countryname,
+                                                $postalcodeLocality,
+                                                $regionCountry,
                                             )
                                         );
                     $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);

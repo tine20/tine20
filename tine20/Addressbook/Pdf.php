@@ -20,14 +20,15 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
     /**
      * create contact pdf
      *
-     * @param	Addressbook_Model_Contact contact data
+     * @param	Addressbook_Model_Contact $_contact contact data
      *
      * @return	string	the contact pdf
      */
     public function getContactPdf ( Addressbook_Model_Contact $_contact )
     {
+        $locale = Zend_Registry::get('locale');
         $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-        $translate->setLocale(Zend_Registry::get('locale'));
+        $translate->setLocale($locale);
          
         $contactFields = array (
             array(  'label' => $translate->_('Business Contact Data'), 
@@ -143,7 +144,11 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
                         if ( $_contact->$key instanceof Zend_Date ) {
                             $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
                         } elseif (!empty($_contact->$key) ) {
-                            $content[] = $_contact->$key;
+                            if ( preg_match ("/countryname/", $key) ) {
+                                $content[] = $locale->getCountryTranslation ( $_contact->$key );
+                            } else {
+                                $content[] = $_contact->$key;
+                            }
                         }
                     }
                     if ( !empty($content) ) {
