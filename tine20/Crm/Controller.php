@@ -322,7 +322,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
         if(is_array($_taskIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'tasks', $_taskIds);
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'tasks', $_taskIds, 'task');
         } else {
             $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'tasks');
         }
