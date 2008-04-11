@@ -43,9 +43,11 @@ foreach ( new DirectoryIterator('./') as $item ) {
 	}
 }
 
-# either import data from eGroupWare 1.4
+# either import data from eGroupWare 1.4 or tine 2.0 revision 949
 #$import = new Setup_Import_Egw14();
+#$import = new Setup_Import_TineRev949();
 #$import->import();
+#exit();
 
 # or initialize the database ourself
 
