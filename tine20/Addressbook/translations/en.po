@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Addressbook\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-03-27 11:52+0100\n"
+"PO-Revision-Date: 2008-04-11 13:13+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -12,127 +12,101 @@ msgstr ""
 "X-Poedit-Country: UNITED KINGDOM\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
+"X-Poedit-Basepath: /home/pschuele/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Addressbook\n"
 
-#: Addressbook/Pdf.php:36
+#: Addressbook/Pdf.php:34
 msgid "Business Contact Data"
 msgstr "Business Contact Data"
 
-#: Addressbook/Pdf.php:37
-msgid "Organisation"
-msgstr "Organisation"
-
-#: Addressbook/Pdf.php:38
-msgid "Organisation Unit"
-msgstr "Organisation Unit"
-
-#: Addressbook/Pdf.php:39
-#: Addressbook/Pdf.php:57
-msgid "Street"
-msgstr "Street"
-
-#: Addressbook/Pdf.php:40
-#: Addressbook/Pdf.php:58
-msgid "Street 2"
-msgstr "Street 2"
-
-#: Addressbook/Pdf.php:41
-#: Addressbook/Pdf.php:59
-msgid "Postalcode"
-msgstr "Postalcode"
-
-#: Addressbook/Pdf.php:42
-#: Addressbook/Pdf.php:60
-msgid "City"
-msgstr "City"
-
-#: Addressbook/Pdf.php:43
-#: Addressbook/Pdf.php:61
-msgid "Region"
-msgstr "Region"
+#: Addressbook/Pdf.php:36
+#, fuzzy
+msgid "Business Address"
+msgstr "Business Contact Data"
 
 #: Addressbook/Pdf.php:44
-#: Addressbook/Pdf.php:62
-msgid "Country"
-msgstr "Country"
+msgid "Organisation / Unit"
+msgstr "Organisation / Unit"
 
-#: Addressbook/Pdf.php:45
+#: Addressbook/Pdf.php:49
 msgid "Email"
 msgstr "Email"
 
-#: Addressbook/Pdf.php:46
+#: Addressbook/Pdf.php:52
 msgid "Telephone Work"
 msgstr "Telephone Work"
 
-#: Addressbook/Pdf.php:47
+#: Addressbook/Pdf.php:55
 msgid "Telephone Cellphone"
 msgstr "Telephone Cellphone"
 
-#: Addressbook/Pdf.php:48
+#: Addressbook/Pdf.php:58
 msgid "Telephone Car"
 msgstr "Telephone Car"
 
-#: Addressbook/Pdf.php:49
+#: Addressbook/Pdf.php:61
 msgid "Telephone Fax"
 msgstr "Telephone Fax"
 
-#: Addressbook/Pdf.php:50
+#: Addressbook/Pdf.php:64
 msgid "Telephone Page"
 msgstr "Telephone Page"
 
-#: Addressbook/Pdf.php:51
+#: Addressbook/Pdf.php:67
 msgid "URL"
 msgstr "URL"
 
-#: Addressbook/Pdf.php:52
+#: Addressbook/Pdf.php:70
 msgid "Role"
 msgstr "Role"
 
-#: Addressbook/Pdf.php:53
+#: Addressbook/Pdf.php:73
 msgid "Assistant"
 msgstr "Assistant"
 
-#: Addressbook/Pdf.php:54
+#: Addressbook/Pdf.php:76
 msgid "Assistant Telephone"
 msgstr "Assistant Telephone"
 
-#: Addressbook/Pdf.php:56
+#: Addressbook/Pdf.php:80
 msgid "Private Contact Data"
 msgstr "Private Contact Data"
 
-#: Addressbook/Pdf.php:63
+#: Addressbook/Pdf.php:82
 #, fuzzy
-msgid "Email Home"
-msgstr "Email"
+msgid "Private Address"
+msgstr "Private Contact Data"
 
-#: Addressbook/Pdf.php:64
+#: Addressbook/Pdf.php:90
+msgid "Email Home"
+msgstr "Email Private"
+
+#: Addressbook/Pdf.php:93
 msgid "Telephone Home"
 msgstr "Telephone"
 
-#: Addressbook/Pdf.php:65
-#, fuzzy
+#: Addressbook/Pdf.php:96
 msgid "Telephone Cellphone Private"
-msgstr "Telephone Cellphone"
+msgstr "Cellphone Private"
 
-#: Addressbook/Pdf.php:66
+#: Addressbook/Pdf.php:99
 #, fuzzy
 msgid "Telephone Fax Home"
 msgstr "Telephone Fax"
 
-#: Addressbook/Pdf.php:67
+#: Addressbook/Pdf.php:102
 msgid "URL Home"
-msgstr "URL Home"
+msgstr "URL Private"
 
-#: Addressbook/Pdf.php:69
+#: Addressbook/Pdf.php:106
 msgid "Other Data"
 msgstr "Other Data"
 
-#: Addressbook/Pdf.php:70
+#: Addressbook/Pdf.php:108
 msgid "Birthday"
 msgstr "Birthday"
 
-#: Addressbook/Pdf.php:71
+#: Addressbook/Pdf.php:111
 msgid "Title"
 msgstr "Title"
 

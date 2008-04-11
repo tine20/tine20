@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-03-31 14:13+0100\n"
+"PO-Revision-Date: 2008-04-11 13:29+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -12,92 +12,93 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
+"X-Poedit-Basepath: /home/pschuele/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Crm\n"
 
-#: Crm/Pdf.php:38
-msgid "Lead Data"
-msgstr "Lead Daten"
-
 #: Crm/Pdf.php:39
-#: Crm/Controller.php:631
+msgid "Leadstate"
+msgstr "Status"
+
+#: Crm/Pdf.php:42
+msgid "Leadtype"
+msgstr "Typ"
+
+#: Crm/Pdf.php:45
+#, fuzzy
+msgid "Leadsource"
+msgstr "Quelle"
+
+#: Crm/Pdf.php:48
+#: Crm/Controller.php:871
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Crm/Pdf.php:40
-#: Crm/Controller.php:632
+#: Crm/Pdf.php:51
+#: Crm/Controller.php:872
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Crm/Pdf.php:41
-#: Crm/Controller.php:628
+#: Crm/Pdf.php:54
+#: Crm/Controller.php:868
 msgid "Start"
 msgstr "Start"
 
-#: Crm/Pdf.php:42
-#: Crm/Controller.php:630
+#: Crm/Pdf.php:57
+#: Crm/Controller.php:870
 msgid "End"
 msgstr "Ende"
 
-#: Crm/Pdf.php:43
+#: Crm/Pdf.php:60
 #, fuzzy
 msgid "End Scheduled"
 msgstr "geplantes Ende"
 
-#: Crm/Pdf.php:44
-msgid "Container"
-msgstr "Container"
+#: Crm/Pdf.php:124
+msgid "Contacts"
+msgstr "Kontakte"
 
-#: Crm/Pdf.php:74
-msgid "Linked Contacts"
-msgstr "Verknüpfte Kontakte"
-
-#: Crm/Pdf.php:78
-msgid "Company"
-msgstr "Firma"
-
-#: Crm/Pdf.php:79
+#: Crm/Pdf.php:150
 msgid "Address"
-msgstr "Adresse"
+msgstr "Anschrift"
 
-#: Crm/Pdf.php:80
+#: Crm/Pdf.php:157
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Crm/Pdf.php:81
+#: Crm/Pdf.php:158
 #, fuzzy
 msgid "Email"
 msgstr "Email"
 
-#: Crm/Controller.php:625
+#: Crm/Controller.php:865
 msgid "State"
 msgstr "Status"
 
-#: Crm/Controller.php:626
+#: Crm/Controller.php:866
 msgid "Type"
 msgstr "Typ"
 
-#: Crm/Controller.php:627
+#: Crm/Controller.php:867
 msgid "Source"
 msgstr "Quelle"
 
-#: Crm/Controller.php:629
+#: Crm/Controller.php:869
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Crm/Controller.php:633
+#: Crm/Controller.php:873
 msgid "Folder"
 msgstr "Ordner"
 
-#: Crm/Controller.php:634
+#: Crm/Controller.php:874
 msgid "Updated by"
 msgstr "Aktualisiert von"
 
-#: Crm/Controller.php:640
+#: Crm/Controller.php:880
 msgid "Lead updated"
 msgstr "Hinweis aktualisiert"
 
-#: Crm/Controller.php:642
+#: Crm/Controller.php:882
 msgid "Lead added"
 msgstr "Hinweis hinzugefügt"
 
