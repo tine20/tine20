@@ -75,9 +75,10 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
      *
      * @param int $_accountId
      * @param string $_password
+     * @param bool $_encrypt encrypt password
      * @return void
      */
-    public function setPassword($_loginName, $_password)
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
     {
         if(empty($_loginName)) {
             throw new InvalidArgumentException('$_loginName can not be empty');
@@ -85,7 +86,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        $accountData['password'] = md5($_password);
+        $accountData['password'] = ( $_encrypt ) ? md5($_password) : $_password;
         $accountData['last_password_change'] = Zend_Date::now()->getIso();
         
         $where = array(

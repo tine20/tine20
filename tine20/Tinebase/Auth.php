@@ -169,13 +169,14 @@ class Tinebase_Auth
      * @param string $_loginName the loginname of the account
      * @param string $_password1
      * @param string $_password2
+     * @param bool $_encrypt encrypt password
      */
-    public function setPassword($_loginName, $_password1, $_password2)
+    public function setPassword($_loginName, $_password1, $_password2, $_encrypt = TRUE)
     {
         if($_password1 !== $_password2) {
             throw new Exception('$_password1 and $_password2 don not match');
         }
         
-        $this->_backend->setPassword($_loginName, $_password1);
+        $this->_backend->setPassword($_loginName, $_password1, $_encrypt);
     }
 }

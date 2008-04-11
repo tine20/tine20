@@ -210,9 +210,10 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      *
      * @param int $_accountId
      * @param string $_password
+     * @param bool $_encrypt encrypt password
      * @return void
      */
-    public function setPassword($_loginName, $_password)
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
     {
         if(empty($_loginName)) {
             throw new InvalidArgumentException('$_loginName can not be empty');
