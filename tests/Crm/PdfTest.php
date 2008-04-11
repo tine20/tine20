@@ -198,12 +198,16 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     	// create lead + contact + link
         Tinebase_Links::getInstance()->addLink('crm', $this->objects['leadWithContact']->id, 'addressbook', $this->objects['linkedContact']->id, "customer");
         
+        $lead =  Crm_Controller::getInstance()->getLead ($this->objects['leadWithContact']->getId());
+        
     	$pdf = new Crm_Pdf();
-        $pdfOutput = $pdf->getLeadPdf($this->objects['leadWithContact']);
+        $pdfOutput = $pdf->getLeadPdf($lead);
+        
+        $pdf->save("test.pdf");
                 
         $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated"); 
-        $this->assertEquals(1, preg_match("/Linked Contacts/", $pdfOutput), "no contacts linked"); 
-        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact fullname found");
+        $this->assertEquals(1, preg_match("/Contacts/", $pdfOutput), "no contacts linked"); 
+        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact data/fullname found");
                 
     }
     
