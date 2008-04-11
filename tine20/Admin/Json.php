@@ -300,10 +300,11 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         foreach($result['results'] as $key => $value) {
             try {
-                $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['id'])->toArray();
+                $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['account_id'])->toArray();
             } catch (Exception $e) {
                 // account not found
                 // do nothing so far
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' account ' . $value['account_id'] .' not found');
             }
         }
         
