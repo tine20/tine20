@@ -733,7 +733,7 @@ Tine.Admin.Applications.Main = function() {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.contact_id);
             try {
-                Tine.Tinebase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+                //Tine.Tinebase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
             } catch(e) {
             //  alert(e);
             }
