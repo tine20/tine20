@@ -315,6 +315,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	/**
      * create footer on all pages
      * 
+     * @todo move needed translations to Tinebase
 	 */
 	public function CreateFooter ()
 	{
@@ -322,9 +323,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 		// get translations from addressbook
 		// @todo  create translation file for exports?
 		$locale = Zend_Registry::get('locale');
-		$translationsFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'Addressbook/translations';
-        $translate = new Zend_Translate('gettext', $translationsFile, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-        $translate->setLocale( $locale );
+		$translate = Tinebase_Translation::getTranslation('Addressbook');
 		
 		$xPos = 50;
 		$yPos = 30;
