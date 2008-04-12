@@ -1,18 +1,18 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$ 
+ * @version     $Id$
  *
  */
 
 /**
  * class to handle setup of Tine 2.0
- * 
+ *
  * @package     Setup
  */
 class Setup_Tables
@@ -33,7 +33,7 @@ class Setup_Tables
 
         $this->_backend = new Setup_Backend_Mysql();
     }
-    
+
     /**
      * initializes the logger
      *
@@ -41,10 +41,10 @@ class Setup_Tables
     protected function setupLogger()
     {
         $logger = new Zend_Log();
-        
+
         if(isset($this->_config->logger)) {
             $loggerConfig = $this->_config->logger;
-            
+
             $filename = $loggerConfig->filename;
             $priority = (int)$loggerConfig->priority;
 
@@ -63,7 +63,7 @@ class Setup_Tables
 
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' logger initialized');
     }
-    
+
     /**
      * initializes the database connection
      *
@@ -94,27 +94,29 @@ class Setup_Tables
     public function parseFile($_file)
     {
         $createdTables = array();
-        
+
         $xml = simplexml_load_file($_file);
-        
+
         if(isset($xml->tables)) {
             foreach ($xml->tables[0] as $table) {
                   $tableName = SQL_TABLE_PREFIX . $table->name;
                   if(!$this->_backend->tableExists($this->_config->database->dbname, $tableName)) {
                     $this->_backend->createTable($table);
                     $createdTables[] = $table;
-                  } else {
+                    }
+                    else
+                    {
 					echo "{$tableName} . Table exists already.<br>";
-					if(!$this->_backend->tableCheck($this->_config->database->dbname, $tableName, $table)) {
-						$this->_backend->alterTable($this->_config->database->dbname, $tableName, $table);
-						$createdTables[] = $table;
-						
-						echo $tableName . " had different specifications. Now up-to-date to version " . $table->version;
+					//if(!$this->_backend->tableCheck($this->_config->database->dbname, $tableName, $table)) {
+					//	$this->_backend->alterTable($this->_config->database->dbname, $tableName, $table);
+					//	$createdTables[] = $table;
+					//
+					//	echo $tableName . " had different specifications. Now up-to-date to version " . $table->version;
 					}
-				  }
+				}
             }
         }
-        
+
         try {
             $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
         } catch (Exception $e) {
@@ -124,10 +126,10 @@ class Setup_Tables
                 'order'     => $xml->order ? $xml->order : 99,
                 'version'   => $xml->version
             ));
-            
+
             $application = Tinebase_Application::getInstance()->addApplication($application);
         }
-        
+
         foreach($createdTables as $table) {
             $this->addTable($application, SQL_TABLE_PREFIX . $table->name, $table->version);
         }
@@ -138,7 +140,7 @@ class Setup_Tables
             }
         }
     }
-    
+
     public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
     {
         $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
