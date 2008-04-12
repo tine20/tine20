@@ -26,6 +26,7 @@ class Tinebase_Translation
         try {
             $translate->setLocale(Zend_Registry::get('locale'));
         } catch (Zend_Translate_Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)Zend_Registry::get('locale'));
             // the locale of the user is not available
             // translate with locale en
             $translate->setLocale('en');

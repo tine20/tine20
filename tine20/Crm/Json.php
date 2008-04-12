@@ -493,6 +493,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             try {
                 $result['responsible'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
             } catch (Exception $e) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
                 // ignore, permission denied or contact not found
             }
         }
@@ -500,13 +501,15 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             try {
                 $result['customer'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
             } catch (Exception $e) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
                 // ignore, permission denied or contact not found
             }
         }
         foreach($_lead->partner as $contactId) {
             try {
                 $result['partner'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
-                    } catch (Exception $e) {
+            } catch (Exception $e) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
                 // ignore, permission denied or contact not found
             }
         }
