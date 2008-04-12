@@ -381,6 +381,17 @@
                         <name>org_name</name>
                     </field>
                 </index>
+                <index>
+                    <name>container_id</name>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                    <field>
+                        <name>owner</name>
+                    </field>
+                </index>   
             </declaration>
         </table>
     </tables>    
