@@ -490,13 +490,25 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $result['leadtype']   = Crm_Controller::getInstance()->getLeadType($_lead['leadtype_id'])->toArray();
         $result['leadsource'] = Crm_Controller::getInstance()->getLeadSource($_lead['leadsource_id'])->toArray();
         foreach($_lead->responsible as $contactId) {
-            $result['responsible'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+            try {
+                $result['responsible'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+            } catch (Exception $e) {
+                // ignore, permission denied or contact not found
+            }
         }
         foreach($_lead->customer as $contactId) {
-            $result['customer'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+            try {
+                $result['customer'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+            } catch (Exception $e) {
+                // ignore, permission denied or contact not found
+            }
         }
         foreach($_lead->partner as $contactId) {
-            $result['partner'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+            try {
+                $result['partner'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+                    } catch (Exception $e) {
+                // ignore, permission denied or contact not found
+            }
         }
         
         return $result;
