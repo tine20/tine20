@@ -28,9 +28,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      */
 	public function getLeadPdf ( Crm_Model_Lead $_lead )
 	{
-	    $locale = Zend_Registry::get('locale');
-        $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-        $translate->setLocale($locale);		
+        $translate = Tinebase_Translation::getTranslation('Crm');
         
         $leadFields = array (
             array(  'label' => /* $translate->_('Lead Data') */ "", 

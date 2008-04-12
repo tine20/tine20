@@ -860,8 +860,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $view->ScheduledEnd = '-';
         }
         
-        $translate = new Zend_Translate('gettext', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'translations', null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-        $translate->setLocale(Zend_Registry::get('locale'));
+        $translate = Tinebase_Translation::getTranslation('Crm');
         
         $view->lang_state = $translate->_('State');
         $view->lang_type = $translate->_('Type');
