@@ -1075,7 +1075,7 @@ Tine.Crm.LeadEditDialog = function() {
         var storeTasks = taskGrid.getStore();
         
         storeTasks.each(function(record) {
-            linksTasks.push(record.id);          
+            linksTasks.push(record.data.id);          
         });
         
         additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
@@ -1310,6 +1310,7 @@ Tine.Crm.LeadEditDialog = function() {
 
 
         st_choosenProducts.on('update', function(store, record, index) {
+        	
           //  if(record.data.id == 'NULL' && record.data.product_id) {
             if(record.data.product_id) {          
                 var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable();
@@ -1558,8 +1559,9 @@ Tine.Crm.LeadEditDialog = function() {
                 	});
                 	
                 	popupWindow.on('update', function(task) {
-                		var index = st_activities.getCount();
-                		st_activities.insert(index, [task]);
+                		var index = st_activities.getCount();                		
+                		st_activities.insert(index, [task]);                		
+                		
                 	}, this);
                 },
                 iconCls: 'actionAddTask',
@@ -1612,12 +1614,15 @@ Tine.Crm.LeadEditDialog = function() {
                 // this is major bullshit!
             	// it only works one time. The problem begind begins with the different record 
             	// definitions here and in tasks...
+                
+            	// removed for the moment (ps)
+            	/*
                 var record = st_activities.getById(task.data.identifier);
                 var index = st_activities.indexOf(record);
                 st_activities.remove(record);
                 st_activities.insert(index, [task]);
                 st_activities.commitChanges();
-                
+                */
             }, this);
         });
         
@@ -2446,8 +2451,10 @@ Tine.Crm.LeadEditDialog.Stores = function() {
         getActivities: function (_tasks){     
             var store = new Ext.data.JsonStore({
                 id: 'identifier',
-                //fields: Tine.Tasks.Task
-                fields: [
+                fields: Tine.Tasks.Task
+                
+                // replaced by task record model from tasks
+                /*fields: [
                     {name: 'id'},
                     {name: 'container'},
                     {name: 'created_by'},
@@ -2474,7 +2481,7 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                     {name: 'creator'},
                     {name: 'modifier'}
                   //  {name: 'status_realname'}
-                ]
+                ]*/
             });
 
             if(_tasks) {                
