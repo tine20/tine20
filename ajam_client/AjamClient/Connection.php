@@ -19,7 +19,10 @@ class AjamClient_Connection extends Zend_Http_Client
     protected $debugEnabled = false;
     
     /**
-     * @see Zend_Http_Client
+     * contructor
+     *
+     * @param string $_uri uri to connect to
+     * @param array $_config config options
      */
     public function __construct($_uri, array $_config = array())
     {
@@ -31,6 +34,14 @@ class AjamClient_Connection extends Zend_Http_Client
         $this->setCookieJar();
     }
     
+    /**
+     * login to asterisk server
+     *
+     * see /etc/asterisk/mananger.conf for username and password
+     * 
+     * @param string $_username the username
+     * @param string $_secret the password
+     */
     public function login($_username, $_secret)
     {
         $this->resetParameters();
@@ -62,6 +73,11 @@ class AjamClient_Connection extends Zend_Http_Client
         }
     }
     
+    /**
+     * disconnect selected channel
+     *
+     * @param string $_channel the name of the channel to disconnect
+     */
     public function hangup($_channel)
     {
         $this->resetParameters();
@@ -92,6 +108,14 @@ class AjamClient_Connection extends Zend_Http_Client
         }
     }
     
+    /**
+     * redirect call to another extension
+     * 
+     * this function did not work a expected to far. needs more testing
+     *
+     * @param string $_channel the channel to redirect
+     * @param string $_exten the extension to redirect to
+     */
     public function redirect($_channel, $_exten)
     {
         $this->resetParameters();
@@ -124,6 +148,12 @@ class AjamClient_Connection extends Zend_Http_Client
         }
     }
     
+    /**
+     * get status all channels or channel matching $_channel
+     *
+     * @param string $_channel to channel to match against
+     * @return array list of active channels
+     */
     public function status($_channel = NULL)
     {
         $this->resetParameters();
@@ -167,6 +197,10 @@ class AjamClient_Connection extends Zend_Http_Client
         return $result;
     }
     
+    /**
+     * logout from asterisk server
+     *
+     */
     public function logout()
     {
         $this->resetParameters();
@@ -196,6 +230,11 @@ class AjamClient_Connection extends Zend_Http_Client
         }
     }
 
+    /**
+     * get list of all sip peers
+     *
+     * @return array list of sip peers
+     */
     public function sippeers()
     {
         $this->resetParameters();
@@ -238,6 +277,15 @@ class AjamClient_Connection extends Zend_Http_Client
         return $result;
     }
 
+    /**
+     * initiate new call
+     *
+     * @param string $_channel
+     * @param string $_context
+     * @param string $_exten
+     * @param string $_priority
+     * @param string $_callerId
+     */
     public function originate($_channel, $_context, $_exten, $_priority, $_callerId="Ajam Service")
     {
         $this->resetParameters();
@@ -270,6 +318,11 @@ class AjamClient_Connection extends Zend_Http_Client
         }
     }
     
+    /**
+     * execute command on asterisk server
+     *
+     * @param string $_command the command to execute
+     */
     public function command($_command)
     {
         $this->resetParameters();
@@ -297,6 +350,11 @@ class AjamClient_Connection extends Zend_Http_Client
         }
     }
     
+    /**
+     * enabled debugging
+     *
+     * @param bool $_status set to true to enable debugging
+     */
     public function setDebugEnabled($_status)
     {
         $this->debugEnabled = (bool)$_status;
