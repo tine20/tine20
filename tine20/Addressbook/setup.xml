@@ -135,6 +135,7 @@
                 <field>
                     <name>owner</name>
                     <type>integer</type>
+                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -382,7 +383,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>container_id</name>
+                    <name>addressbook_container_id</name>
                     <foreign>true</foreign>
                     <reference>
                         <table>container</table>
