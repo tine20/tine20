@@ -25,10 +25,15 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      * @param	Crm_Model_Lead $_lead lead data
      * 
      * @return	string	the contact pdf
+     * 
+     * @todo    split function
      */
 	public function getLeadPdf ( Crm_Model_Lead $_lead )
 	{
-        $translate = Tinebase_Translation::getTranslation('Crm');
+        $locale = Zend_Registry::get('locale');
+	    $translate = Tinebase_Translation::getTranslation('Crm');
+        
+       /*********************** build data array *************************/
         
         $leadFields = array (
             array(  'label' => /* $translate->_('Lead Data') */ "", 
@@ -111,13 +116,16 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             }
         }     
 
-        // build title / subtitle / description
+        /******************* build title / subtitle / description ************/
+        
         $title = $_lead->lead_name; 
         $subtitle = "";
         $description = $_lead->description;
         $titleIcon = "/images/oxygen/32x32/actions/paperbag.png";
 
-        // add linked objects               
+        /*********************** add linked objects *************************/
+
+        // contacts
         $linkedObjects = array ( array($translate->_('Contacts'), 'headline') );
 
         $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
@@ -157,9 +165,20 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             }
         }
         
-        //@todo add tasks / products to export
+        // tasks
+        if ( !empty($_lead->tasks) ) {
+            $linkedObjects[] = array ( $translate->_('Tasks'), 'headline');
+            foreach ( $_lead->tasks as $taskId ) {
+                $task = Tasks_Controller::getInstance()->getTask($taskId);
+                //@todo add tasks icon and more fields
+                $linkedObjects[] = array ($translate->_('Summary'), $task->summary);
+            }
+        }
         
-        // generate pdf now!            
+        //@todo add products to export
+        
+        /***************************** generate pdf now! *************************/
+                    
         return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE );
         
 	}
