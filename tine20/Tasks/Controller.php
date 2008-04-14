@@ -57,6 +57,18 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     protected $_currentAccount;
     
     /**
+     * Holds task priorities
+     * 
+     * @var array
+     * @todo move to DB?
+     */
+    protected $_priorities = array (    '0' => 'low',
+                                        '1' => 'normal', 
+                                        '2' => 'high',
+                                        '3' => 'urgent'
+    );
+    
+    /**
      * prohibit use of clone()
      */
     private function __clone() {}
@@ -259,12 +271,40 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     }
     
     /**
-     * retruns all possible task stati
+     * returns all possible task stati
      * 
      * @return Tinebase_Record_RecordSet of Tasks_Model_Status
      */
     public function getStati() {
         return $this->_stati;
+    }
+
+    /**
+     * get task status array
+     * 
+     * @param   int $_statusId
+     * 
+     * @return array of task status with status_id given
+     */
+    public function getTaskStatus($_statusId) {
+        
+        foreach ( $this->_stati as $status ) {
+            if ( $status->getId() === $_statusId ) {
+                return $status->toArray();
+            }
+        }
+    }
+    
+    /**
+     * get task priority
+     * 
+     * @param  int $_priorityId
+     * 
+     * @return string priority
+     */
+    public function getTaskPriority($_priorityId) {
+        
+        return $this->_priorities[$_priorityId];
     }
     
     /**
