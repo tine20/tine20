@@ -165,13 +165,30 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             }
         }
         
-        // tasks
+        // add tasks
         if ( !empty($_lead->tasks) ) {
             $linkedObjects[] = array ( $translate->_('Tasks'), 'headline');
+            
             foreach ( $_lead->tasks as $taskId ) {
                 $task = Tasks_Controller::getInstance()->getTask($taskId);
-                //@todo add tasks icon and more fields
-                $linkedObjects[] = array ($translate->_('Summary'), $task->summary);
+                
+                $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
+                // @todo add big icon to db or preg_replace? 
+                $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
+                $icon = "/" . $status['status_icon'];
+                $linkedObjects[] = array ($taskTitle, 'separator', $icon);
+                
+                // get due date
+                // @todo change to zend date in model later on
+                if ( !empty($task->due) ) {
+                    $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
+                    $linkedObjects[] = array ($translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+                }    
+                
+                // get task priority
+                $taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
+                $linkedObjects[] = array ($translate->_('Priority'), $taskPriority );
+                
             }
         }
         
