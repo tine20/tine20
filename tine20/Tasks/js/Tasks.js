@@ -554,11 +554,12 @@ Tine.Tasks.EditDialog = function(task) {
 			var dlg = Ext.getCmp('TasksEditFormPanel');
 			var form = dlg.getForm();
 			form.render();
-	
+			
 			if(form.isValid()) {
 				Ext.MessageBox.wait('please wait', 'saving task');
 				
-					// merge changes from form into task record
+				// merge changes from form into task record
+				// @todo here is a problem with the linking-form values, if "apply" is clicked, the linking params are lost 
 				form.updateRecord(task);
 				
 	            Ext.Ajax.request({
