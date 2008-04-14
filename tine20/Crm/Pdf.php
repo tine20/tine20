@@ -177,28 +177,32 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                 //$linkedObjects[] = array ( $headline, 'headline');
                 
                 foreach ( $_lead->$type as $linkID ) {
-                    $contact = Addressbook_Controller::getInstance()->getContact($linkID);
-                    
-                    $contactNameAndCompany = $contact->n_fn;
-                    if ( !empty($contact->org_name) ) {
-                        $contactNameAndCompany .= " / " . $contact->org_name;
+                    try {
+                        $contact = Addressbook_Controller::getInstance()->getContact($linkID);
+                        
+                        $contactNameAndCompany = $contact->n_fn;
+                        if ( !empty($contact->org_name) ) {
+                            $contactNameAndCompany .= " / " . $contact->org_name;
+                        }
+                        $linkedObjects[] = array ($contactNameAndCompany, 'separator', $icon);
+                        
+                        $postalcodeLocality = ( !empty($contact->adr_one_postalcode) ) ? $contact->adr_one_postalcode . " " . $contact->adr_one_locality : $contact->adr_one_locality;
+                        $regionCountry = ( !empty($contact->adr_one_region) ) ? $contact->adr_one_region . " " : "";
+                        if ( !empty($contact->adr_one_countryname) ) {
+                            $regionCountry .= $_locale->getCountryTranslation ( $contact->adr_one_countryname );
+                        }
+                        $linkedObjects[] = array ($_translate->_('Address'), 
+                                                array( 
+                                                    $contact->adr_one_street, 
+                                                    $postalcodeLocality,
+                                                    $regionCountry,
+                                                )
+                                            );
+                        $linkedObjects[] = array ($_translate->_('Telephone'), $contact->tel_work);
+                        $linkedObjects[] = array ($_translate->_('Email'), $contact->email);
+                    } catch (Exception $e) {
+                        // do nothing so far
                     }
-                    $linkedObjects[] = array ($contactNameAndCompany, 'separator', $icon);
-                    
-                    $postalcodeLocality = ( !empty($contact->adr_one_postalcode) ) ? $contact->adr_one_postalcode . " " . $contact->adr_one_locality : $contact->adr_one_locality;
-                    $regionCountry = ( !empty($contact->adr_one_region) ) ? $contact->adr_one_region . " " : "";
-                    if ( !empty($contact->adr_one_countryname) ) {
-                        $regionCountry .= $_locale->getCountryTranslation ( $contact->adr_one_countryname );
-                    }
-                    $linkedObjects[] = array ($_translate->_('Address'), 
-                                            array( 
-                                                $contact->adr_one_street, 
-                                                $postalcodeLocality,
-                                                $regionCountry,
-                                            )
-                                        );
-                    $linkedObjects[] = array ($_translate->_('Telephone'), $contact->tel_work);
-                    $linkedObjects[] = array ($_translate->_('Email'), $contact->email);
                 }
             }
         }
@@ -209,25 +213,28 @@ class Crm_Pdf extends Tinebase_Export_Pdf
             $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
             
             foreach ( $_lead->tasks as $taskId ) {
-                $task = Tasks_Controller::getInstance()->getTask($taskId);
-                
-                $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
-                // @todo add big icon to db or preg_replace? 
-                $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
-                $icon = "/" . $status['status_icon'];
-                $linkedObjects[] = array ($taskTitle, 'separator', $icon);
-                
-                // get due date
-                // @todo change to zend date in model later on
-                if ( !empty($task->due) ) {
-                    $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
-                    $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
-                }    
-                
-                // get task priority
-                $taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
-                $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
-                
+                try {
+                    $task = Tasks_Controller::getInstance()->getTask($taskId);
+                    
+                    $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
+                    // @todo add big icon to db or preg_replace? 
+                    $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
+                    $icon = "/" . $status['status_icon'];
+                    $linkedObjects[] = array ($taskTitle, 'separator', $icon);
+                    
+                    // get due date
+                    // @todo change to zend date in model later on
+                    if ( !empty($task->due) ) {
+                        $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
+                        $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+                    }    
+                    
+                    // get task priority
+                    $taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
+                    $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
+                } catch (Exception $e) {
+                    // do nothing so far
+                }
             }
         }
 
