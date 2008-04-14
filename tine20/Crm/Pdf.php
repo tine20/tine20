@@ -18,49 +18,78 @@
 class Crm_Pdf extends Tinebase_Export_Pdf
 {
 	
-	
 	/**
      * create lead pdf
      *
      * @param	Crm_Model_Lead $_lead lead data
      * 
      * @return	string	the contact pdf
-     * 
-     * @todo    split function
      */
 	public function getLeadPdf ( Crm_Model_Lead $_lead )
 	{
         $locale = Zend_Registry::get('locale');
-	    $translate = Tinebase_Translation::getTranslation('Crm');
+        $translate = Tinebase_Translation::getTranslation('Crm');    
+	    
+        /*********************** build data array ***************************/
         
-       /*********************** build data array *************************/
+	    $record = $this->getRecord( $_lead, $locale, $translate );	    
+
+        /******************* build title / subtitle / description ***********/
         
+        $title = $_lead->lead_name; 
+        $subtitle = "";
+        $description = $_lead->description;
+        $titleIcon = "/images/oxygen/32x32/actions/paperbag.png";
+
+        /*********************** add linked objects *************************/
+
+        $linkedObjects = $this->getLinkedObjects ( $_lead, $locale, $translate );        
+        
+        /***************************** generate pdf now! ********************/
+                    
+        return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE );
+        
+	}
+
+    /**
+     * get record array
+     *
+     * @param   Crm_Model_Lead $_lead lead data
+     * @param   Zend_Locale $_locale the locale
+     * @param   Zend_Translate $_translate
+     * 
+     * @return  array  the record
+     *  
+     */
+    protected function getRecord ( Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate )
+    {
+        	
         $leadFields = array (
-            array(  'label' => /* $translate->_('Lead Data') */ "", 
+            array(  'label' => /* $_translate->_('Lead Data') */ "", 
                     'type' => 'separator' 
             ),
-            array(  'label' => $translate->_('Leadstate'), 
+            array(  'label' => $_translate->_('Leadstate'), 
                     'value' => array( 'leadstate_id' ),
             ),
-            array(  'label' => $translate->_('Leadtype'), 
+            array(  'label' => $_translate->_('Leadtype'), 
                     'value' => array( 'leadtype_id' ),
             ),
-            array(  'label' => $translate->_('Leadsource'), 
+            array(  'label' => $_translate->_('Leadsource'), 
                     'value' => array( 'leadsource_id' ),
             ),
-            array(  'label' => $translate->_('Turnover'), 
+            array(  'label' => $_translate->_('Turnover'), 
                     'value' => array( 'turnover' ),
             ),
-            array(  'label' => $translate->_('Probability'), 
+            array(  'label' => $_translate->_('Probability'), 
                     'value' => array( 'probability' ),
             ),
-            array(  'label' => $translate->_('Start'), 
+            array(  'label' => $_translate->_('Start'), 
                     'value' => array( 'start' ),
             ),
-            array(  'label' => $translate->_('End'), 
+            array(  'label' => $_translate->_('End'), 
                     'value' => array( 'end' ),
             ),
-            array(  'label' => $translate->_('End Scheduled'), 
+            array(  'label' => $_translate->_('End Scheduled'), 
                     'value' => array( 'end_scheduled' ),
             ),
             
@@ -83,7 +112,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                             $content[] = $_lead->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
-                                $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $locale)) . " €";
+                                $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
@@ -115,18 +144,27 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                 $record[] = $fieldArray;
             }
         }     
-
-        /******************* build title / subtitle / description ************/
         
-        $title = $_lead->lead_name; 
-        $subtitle = "";
-        $description = $_lead->description;
-        $titleIcon = "/images/oxygen/32x32/actions/paperbag.png";
-
-        /*********************** add linked objects *************************/
-
-        // contacts
-        $linkedObjects = array ( array($translate->_('Contacts'), 'headline') );
+        return $record;
+    }
+        
+    /**
+     * get linked objects for lead pdf (contacts, tasks, ...)
+     *
+     * @param   Crm_Model_Lead $_lead lead data
+     * @param   Zend_Locale $_locale the locale
+     * @param   Zend_Translate $_translate
+     * 
+     * @return  array  the linked objects
+     * 
+     */
+    protected function getLinkedObjects ( Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate )
+    {
+        $linkedObjects = array ();
+	
+        /********************** contacts ******************/
+        
+        $linkedObjects[] = array($_translate->_('Contacts'), 'headline');
 
         $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
                             "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
@@ -150,24 +188,25 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     $postalcodeLocality = ( !empty($contact->adr_one_postalcode) ) ? $contact->adr_one_postalcode . " " . $contact->adr_one_locality : $contact->adr_one_locality;
                     $regionCountry = ( !empty($contact->adr_one_region) ) ? $contact->adr_one_region . " " : "";
                     if ( !empty($contact->adr_one_countryname) ) {
-                        $regionCountry .= $locale->getCountryTranslation ( $contact->adr_one_countryname );
+                        $regionCountry .= $_locale->getCountryTranslation ( $contact->adr_one_countryname );
                     }
-                    $linkedObjects[] = array ($translate->_('Address'), 
+                    $linkedObjects[] = array ($_translate->_('Address'), 
                                             array( 
                                                 $contact->adr_one_street, 
                                                 $postalcodeLocality,
                                                 $regionCountry,
                                             )
                                         );
-                    $linkedObjects[] = array ($translate->_('Telephone'), $contact->tel_work);
-                    $linkedObjects[] = array ($translate->_('Email'), $contact->email);
+                    $linkedObjects[] = array ($_translate->_('Telephone'), $contact->tel_work);
+                    $linkedObjects[] = array ($_translate->_('Email'), $contact->email);
                 }
             }
         }
         
-        // add tasks
+        /********************** tasks ******************/
+
         if ( !empty($_lead->tasks) ) {
-            $linkedObjects[] = array ( $translate->_('Tasks'), 'headline');
+            $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
             
             foreach ( $_lead->tasks as $taskId ) {
                 $task = Tasks_Controller::getInstance()->getTask($taskId);
@@ -182,22 +221,20 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                 // @todo change to zend date in model later on
                 if ( !empty($task->due) ) {
                     $dueDate = new Zend_Date ( $task->due, Zend_Date::ISO_8601 );                 
-                    $linkedObjects[] = array ($translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
+                    $linkedObjects[] = array ($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale')) );
                 }    
                 
                 // get task priority
                 $taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
-                $linkedObjects[] = array ($translate->_('Priority'), $taskPriority );
+                $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
                 
             }
         }
-        
-        //@todo add products to export
-        
-        /***************************** generate pdf now! *************************/
-                    
-        return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE );
-        
-	}
 
+        //@todo add products to export
+
+        return  $linkedObjects;
+       
+    }
+        
 }
