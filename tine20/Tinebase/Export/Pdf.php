@@ -269,10 +269,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                     }
                     
                     if ( isset($row[$i+1]) ) {
+                        $iconFilename = dirname(dirname(dirname(__FILE__))).$row[$i+1];
                         // add icon
-                        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon path: ' . dirname(dirname(__FILE__)).$row[$i+1]);
-                        $icon = Zend_Pdf_Image::imageWithPath(dirname(dirname(dirname(__FILE__))).$row[$i+1]);
-                        $this->pages[$pageNumber]->drawImage( $icon, $xPos-170, $yPos-6, $xPos-154, $yPos + 10 );
+                        if ( is_file($iconFilename)) {
+                            $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
+                            $this->pages[$pageNumber]->drawImage( $icon, $xPos-170, $yPos-6, $xPos-154, $yPos + 10 );                            
+                        } else {
+                            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
+                        }
                     }
                                         
                     //continue;
