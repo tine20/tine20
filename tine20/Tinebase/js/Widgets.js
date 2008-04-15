@@ -17,14 +17,15 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
 	 * @cfg {array} additional toolbar items
 	 */
 	tbarItems: false,
-	//labelAlign: 'top',
+    /**
+     * @cfg {reference} handlerScope scope to be aplied to the handlers
+     */
+    handlerScope: null,
     bodyStyle:'padding:5px',
-    layout: 'fit',
-    anchor:'100%',
+    //layout: 'fit',
+    anchor:'100% 100%',
     region: 'center',
     deferredRender: false,
-    //layoutOnTabChange:true,
-    handlerScope: null,
     buttonAlign: 'right',
 	
 	//private
