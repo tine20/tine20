@@ -124,7 +124,7 @@ class Tinebase_Acl_Rights
      *
      * @param string $_application the name of the application
      * @param int $_accountId the numeric account id
-     * @return int bitmask of rights
+     * @return array list of rights
      */
     public function getRights($_application, $_accountId) 
     {
@@ -144,20 +144,22 @@ class Tinebase_Acl_Rights
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
-            ->from(SQL_TABLE_PREFIX . 'application_rights', array('account_rights' => 'BIT_OR(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
+            ->from(SQL_TABLE_PREFIX . 'application_rights', array('account_rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
             ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->id)
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
         $stmt = $db->query($select);
 
-        $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-        if($result === false) {
-            throw new UnderFlowException('no rights found for accountId ' . $accountId);
+        if($row === false) {
+            return array();
         }
 
-        return (int)$result['account_rights'];
+        $result = explode(',', $result['account_rights']);
+        
+        return $result;
     }
 
     /**
