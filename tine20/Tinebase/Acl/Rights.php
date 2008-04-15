@@ -189,7 +189,7 @@ class Tinebase_Acl_Rights
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
 
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->getId())
-            ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $right);
+            ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $_right);
         
         if(!$row = $this->rightsTable->fetchRow($select)) {
             return false;
