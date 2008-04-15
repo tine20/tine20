@@ -975,6 +975,6 @@ class Tinebase_Container
             throw($e);
         }
         
-        return $this->getGrantsOfContainer($containerId);
+        return $this->getGrantsOfContainer($containerId, $_ignoreAcl);
     }
 }
