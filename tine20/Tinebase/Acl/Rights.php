@@ -128,24 +128,26 @@ class Tinebase_Acl_Rights
      */
     public function getRights($_application, $_accountId) 
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+                
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+
         if($application->status != 'enabled') {
             throw new Exception('user has no rights. the application is disabled.');
         }
-        
-        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-        
+
         $db = Zend_Registry::get('dbAdapter');
 
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'application_rights', array('account_rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
-            ->where(SQL_TABLE_PREFIX . 'application_rights.account_id IN (?) OR ' . SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL', $groupMemberships)
+            
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
+
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->id)
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
