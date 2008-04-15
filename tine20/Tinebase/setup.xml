@@ -588,8 +588,8 @@
                 </field>
                 <field>
                     <name>right</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
