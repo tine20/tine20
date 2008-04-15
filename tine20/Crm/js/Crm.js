@@ -21,7 +21,7 @@ Tine.Crm.getPanel = function(){
         title: 'CRM',
         itemName: 'Leads',
         folderName: 'Leads',
-        appName: 'crm',
+        appName: 'Crm',
         border: false
     });
 
