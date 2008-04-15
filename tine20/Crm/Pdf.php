@@ -219,9 +219,13 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     
                     $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
                     // @todo add big icon to db or preg_replace? 
-                    $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
-                    $icon = "/" . $status['status_icon'];
-                    $linkedObjects[] = array ($taskTitle, 'separator', $icon);
+                    if ( !empty($task->status_id) ) {
+                        $status = Tasks_Controller::getInstance()->getTaskStatus($task->status_id);
+                        $icon = "/" . $status['status_icon'];
+                        $linkedObjects[] = array ($taskTitle, 'separator', $icon);
+                    } else {
+                        $linkedObjects[] = array ($taskTitle, 'separator');
+                    }
                     
                     // get due date
                     // @todo change to zend date in model later on
@@ -237,7 +241,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     
                 } catch (Exception $e) {
                     // do nothing so far
-                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->getMessage());
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->__toString());
                 }
             }
         }
@@ -267,7 +271,9 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                                 '3' => $_translate->_('urgent')
         );
             
-        return $priorities[$_priorityId];
+        $result = ( isset($priorities[$_priorityId]) ) ? $priorities[$_priorityId] : "";
+        
+        return $result;
     }
     
     
