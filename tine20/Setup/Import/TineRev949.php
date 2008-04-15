@@ -28,13 +28,18 @@ class Setup_Import_TineRev949
     protected $groupAccountArray = array();
 
     /**
-     * is needed for container acl
-     * acl -> uid mapping
+     * old table prefix
      * 
-     * @var groupArray
+     * @var string
      */
-    protected $grantAclIdToUid = array();
+    protected $oldTablePrefix = "sirona_";
     
+    /**
+     * new table prefix
+     * 
+     * @var string
+     */
+    protected $newTablePrefix = "sironanew_";
     
     /**
      * import main function
@@ -46,13 +51,17 @@ class Setup_Import_TineRev949
         $this->importGroups();
         $this->importAccounts();
         $this->importGroupMembers();
-        $this->importContainer();
-        $this->importAddressbook();
+        
+        //@todo activate again
+        //$this->importContainer();
+        //$this->importAddressbook();
         
         //@todo make it work
-        //$this->importCrm();
+        $this->importCrmLeads();
         
         //@todo write these functions (and add more?)
+        
+//        $this->importCrmProducts();
         
 //        $this->importAcl();
 //        $this->importXXX();        
@@ -66,7 +75,7 @@ class Setup_Import_TineRev949
      */
     protected function importAccounts()
     {
-        $accountsTable = new Tinebase_Db_Table(array('name' => 'sirona_accounts'));
+        $accountsTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'accounts'));
         
         $where = array(
             Zend_Registry::get('dbAdapter')->quoteInto('account_type = ?', 'u')
@@ -107,7 +116,7 @@ class Setup_Import_TineRev949
      */
     protected function importGroups()
     {
-        $groupsTable = new Tinebase_Db_Table(array('name' => 'sirona_accounts'));
+        $groupsTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'accounts'));
         $groupMapping = array ( "Default" => "Users", "Admins" => "Administrators" );
         
         $where = array(
@@ -139,7 +148,7 @@ class Setup_Import_TineRev949
      */
     protected function importGroupMembers()
     {
-        $aclTable = new Tinebase_Db_Table(array('name' => 'sirona_acl'));
+        $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'acl'));
         
         $where = array(
             Zend_Registry::get('dbAdapter')->quoteInto('acl_appname = ?', 'phpgw_group')
@@ -163,16 +172,16 @@ class Setup_Import_TineRev949
     {
         
         $what = "container";
-        $table = new Tinebase_Db_Table(array('name' => 'sirona_'.$what));
+        $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
         $mapping = array (  "8" => "2", 
                             "12" => "5", 
                             "13" => "4" );
         $where = array();        
 
         // delete old entries (contacts + container)      
-        $newContactsTable = new Tinebase_Db_Table(array('name' => 'sironanew_addressbook'));
+        $newContactsTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.'addressbook'));
         $newContactsTable->delete( "1" );        
-        $newTable = new Tinebase_Db_Table(array('name' => 'sironanew_'.$what));
+        $newTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$what));
         $newTable->delete( "1" );
         
         $rows = $table->fetchAll($where);
@@ -191,7 +200,7 @@ class Setup_Import_TineRev949
             
             // get grants
             $grantsArray = array();
-            $aclTable = new Tinebase_Db_Table(array('name' => 'sirona_container_acl'));
+            $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'container_acl'));
             $grants = $aclTable->fetchAll( array(Zend_Registry::get('dbAdapter')->quoteInto('container_id = ?', $row->container_id)) );
             foreach ( $grants as $grant ) {
                              
@@ -232,7 +241,7 @@ class Setup_Import_TineRev949
      */
     protected function importAddressbook()
     {
-        $contactsTable = new Tinebase_Db_Table(array('name' => 'sirona_addressbook'));
+        $contactsTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'addressbook'));
         
         // get contacts
         $contacts = $contactsTable->fetchAll();        
@@ -339,4 +348,135 @@ class Setup_Import_TineRev949
         echo "done! got ".sizeof($contacts)." contacts.<br>";
         
     }    
+    
+    /**
+     * import the leads (+ states/sources/types) from revision 949
+     *
+     */
+    protected function importCrmLeads()
+    {
+        
+        // delete old entries (leadsource + leadstate + leadtype) and import the new stuff
+        $leadTableDataArray = array ( 
+            array (
+                'name'      => 'metacrm_leadsource',
+                'fields'    => array ( 'lead_leadsource_id' => 'id', 'lead_leadsource' => 'leadsource' ),
+                'model'     => 'Crm_Model_Leadsource'
+            ), 
+            array (
+                'name' => 'metacrm_leadstate',
+                'fields'    => array ( 
+                    'lead_leadstate_id' => 'id', 
+                    'lead_leadstate' => 'leadstate',
+                    'lead_leadstate_probability' => 'probability',
+                    'lead_leadstate_endslead' => 'endslead',
+                ),
+                'model'     => 'Crm_Model_Leadstate'
+            ), 
+            array (
+                'name' => 'metacrm_leadtype',
+                'fields'    => array ( 'lead_leadtype_id' => 'id', 'lead_leadtype' => 'leadtype' ),
+                'model'     => 'Crm_Model_Leadtype'
+            )
+        );
+              
+        // get crm controller
+        $crmController = Crm_Controller::getInstance();
+        
+        foreach ( $leadTableDataArray as $leadTableData ) {
+            echo "Import from table ".$this->oldTablePrefix.''.$leadTableData['name']." ... ";
+            
+            $leadTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$leadTableData['name']));
+            $leadTable->delete( "1" );                    
+            
+            // get data
+            $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$leadTableData['name']));
+            $rows = $table->fetchAll($where);
+
+            $dataArray = array ();
+            foreach ( $rows as $row ) {
+                
+                // add to array
+                $values = array ();
+                foreach ( $leadTableData['fields'] as $oldKey => $newKey ) {
+                    $values[$newKey] = $row->$oldKey;                    
+                }
+                
+                $dataArray[] = $values;
+            }
+            
+            // save in the new tables
+            $records = new Tinebase_Record_RecordSet($leadTableData['model'], $dataArray);
+            
+            switch ( $leadTableData['name'] ) {
+                case 'metacrm_leadsource':
+                    $crmController->saveLeadsources($records);
+                    break;
+                case 'metacrm_leadstate':
+                    $crmController->saveLeadstates($records);
+                    break;
+                case 'metacrm_leadtype':
+                    $crmController->saveLeadtypes($records);
+                    break;
+            }
+            
+            echo "done! got ".sizeof($rows)." rows.<br>";
+        }
+        
+        //@todo import leads
+        
+        /*$what = "metacrm_lead";
+        $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
+        $where = array();        
+        
+        $rows = $table->fetchAll($where);
+        
+        echo "Import $what  ... ";
+        foreach($rows as $row) {
+            // old: container_id    container_name  container_type  container_backend   application_id
+            // new: id   name    type    backend     application_id
+            $tineModel = new Tinebase_Model_Container(array(
+                'id'                => $row->container_id,
+                'name'              => $row->container_name,
+                'type'              => $row->container_type,
+                'backend'           => strtolower($row->container_backend),
+                'application_id'    => ( isset($mapping[$row->application_id]) ) ? $mapping[$row->application_id] : $row->application_id,
+            ));
+            
+            // get grants
+            $grantsArray = array();
+            $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'container_acl'));
+            $grants = $aclTable->fetchAll( array(Zend_Registry::get('dbAdapter')->quoteInto('container_id = ?', $row->container_id)) );
+            foreach ( $grants as $grant ) {
+                             
+                $type = 'user';
+                $accountId = $grant->account_id;
+                
+                if ( empty($accountId) or $accountId === NULL ) {
+                    $type = 'anyone';
+                    $accountId = 0;
+                }
+                if ( in_array($grant->account_id, $this->groupAccountArray) ) {
+                    $type = 'group';
+                }
+                
+                $grantsArray[] = array ( 'type' => $type, 'accountId' => $accountId, 'grant' => $grant->account_grant );
+                
+            }
+            Tinebase_Container::getInstance()->addContainer($tineModel, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), TRUE);
+
+            foreach ( $grantsArray as $grantData ) {
+                Tinebase_Container::getInstance()->addGrants(
+                    $row->container_id, 
+                    $grantData['type'],
+                    $grantData['accountId'], 
+                    array($grantData['grant']),
+                    TRUE
+                );
+            }
+            
+        }
+        echo "done! got ".sizeof($rows)." $what(s).<br>";
+        */
+    }
 }
