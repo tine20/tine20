@@ -237,7 +237,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function saveLeadstates(Tinebase_Record_Recordset $_leadStates)
     {
-        $result = $backend->saveLeadstates($_leadStates);
+        $result = $this->_backend->saveLeadstates($_leadStates);
         
         return $result;
     } 
