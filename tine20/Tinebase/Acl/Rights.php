@@ -120,7 +120,7 @@ class Tinebase_Acl_Rights
     }
 
     /**
-     * returns a bitmask of rights for given application and accountId
+     * returns rights for given application and accountId
      *
      * @param string $_application the name of the application
      * @param int $_accountId the numeric account id
@@ -198,6 +198,11 @@ class Tinebase_Acl_Rights
         }
     }
 
+    /**
+     * add right
+     *
+     * @param Tinebase_Acl_Model_Right $_right
+     */
     public function addRight(Tinebase_Acl_Model_Right $_right) 
     {
         if(!$_right->isValid()) {
