@@ -91,7 +91,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             fieldLabel:'Assistent', 
             name:'assistent',
             width: 165
-        },{
+        }/*,{
             xtype:'textarea',
             fieldLabel:'Public Key', 
             name:'pubkey',
@@ -108,7 +108,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             fieldLabel:'Free/Busy Url', 
             name:'freebusy_uri',
             width: 420
-        }]
+        }*/]
     });
     
     var personalInformation = {
@@ -237,108 +237,112 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     });
     
-    var contactInformation = {
-        xtype: 'expanderfieldset',
+    var contactInformationBasePanel = new Ext.Panel(
+    {
+        layout: 'column',
+        height: 127,
+        customHeight: 127,
+        border: false,
+        defaults: { border: false },
+        items: [
+            {
+                columnWidth: .33,
+                layout: 'form',
+                labelAlign: 'top',
+                defaults: {
+                    xtype:'icontextfield',
+                    anchor:'95%',
+                    labelSeparator: ''
+                },
+                items: [
+                    {
+                        fieldLabel:'Phone', 
+                        labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                        name:'tel_work'
+                    },
+                    {
+                        fieldLabel:'Mobile',
+                        labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                        name:'tel_cell'
+                    },
+                    {
+                        fieldLabel:'Fax', 
+                        labelIcon: 'images/oxygen/16x16/devices/printer.png',
+                        name:'tel_fax'
+                    }
+                ]
+            },
+            {
+                columnWidth: .33,
+                layout: 'form',
+                labelAlign: 'top',
+                defaults: {
+                    xtype:'icontextfield',
+                    anchor:'95%',
+                    labelSeparator: ''
+                },
+                items: [
+                    {
+                        fieldLabel:'E-Mail', 
+                        labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                        name:'email'
+                    },
+                    {
+                        fieldLabel:'Instant Messaging', 
+                        name:'',
+                        disabled: true
+                    },
+                    {
+                        fieldLabel:'Web',
+                        labelIcon: 'images/oxygen/16x16/actions/network.png',
+                        name:'',
+                        disabled: true
+                    }
+                ]
+            },
+            {
+                columnWidth: .33,
+                layout: 'form',
+                labelAlign: 'top',
+                //bodyStyle: 'background-color: #FFFFFF;',
+                defaults: {
+                    xtype:'icontextfield',
+                    anchor:'95%',
+                    labelSeparator: ''
+                },
+                items: [
+                    {
+                        fieldLabel:'Phone (private)',
+                        labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                        name:'tel_home'
+                    },
+                    {
+                        fieldLabel:'Mobile (private)',
+                        labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                        name:'tel_cell_private'
+                    },
+                    {
+                        fieldLabel:'E-Mail (private)', 
+                        labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                        name:'email_home'
+                    }
+                ]
+            }
+        ]
+    });
+    
+    var contactInformation = new Ext.ux.ExpandFieldSet({
+        //xtype: 'expanderfieldset',
         collapsible: true,
         layout: 'fit',
         //collapsed: true,
         autoHeight:true,
         title: 'Contact Information',
         items: [
-            {
-                layout: 'column',
-                //collapsed: true,
-                border: false,
-                defaults: { border: false },
-                items: [
-                    {
-                        columnWidth: .33,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        defaults: {
-                            xtype:'icontextfield',
-                            anchor:'95%',
-                            labelSeparator: ''
-                        },
-                        items: [
-                            {
-                                fieldLabel:'Phone', 
-                                labelIcon: 'images/oxygen/16x16/apps/kcall.png',
-                                name:'tel_work'
-                            },
-                            {
-                                fieldLabel:'Mobile',
-                                labelIcon: 'images/oxygen/16x16/devices/phone.png',
-                                name:'tel_cell'
-                            },
-                            {
-                                fieldLabel:'Fax', 
-                                labelIcon: 'images/oxygen/16x16/devices/printer.png',
-                                name:'tel_fax'
-                            }
-                        ]
-                    },
-                    {
-                        columnWidth: .33,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        defaults: {
-                            xtype:'icontextfield',
-                            anchor:'95%',
-                            labelSeparator: ''
-                        },
-                        items: [
-                            {
-                                fieldLabel:'E-Mail', 
-                                labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
-                                name:'email'
-                            },
-                            {
-                                fieldLabel:'Instant Messaging', 
-                                name:'',
-                                disabled: true
-                            },
-                            {
-                                fieldLabel:'Web',
-                                labelIcon: 'images/oxygen/16x16/actions/network.png',
-                                name:'',
-                                disabled: true
-                            }
-                        ]
-                    },
-                    {
-                        columnWidth: .33,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        //bodyStyle: 'background-color: #FFFFFF;',
-                        defaults: {
-                            xtype:'icontextfield',
-                            anchor:'95%',
-                            labelSeparator: ''
-                        },
-                        items: [
-                            {
-                                fieldLabel:'Phone (private)',
-                                labelIcon: 'images/oxygen/16x16/apps/kcall.png',
-                                name:'tel_home'
-                            },
-                            {
-                                fieldLabel:'Mobile (private)',
-                                labelIcon: 'images/oxygen/16x16/devices/phone.png',
-                                name:'tel_cell_private'
-                            },
-                            {
-                                fieldLabel:'E-Mail (private)', 
-                                labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
-                                name:'email_home'
-                            }
-                        ]
-                    }
-                ]
-            },
+            contactInformationBasePanel,
             contactInformationExpandArea
         ]
-    };
+    });
     
     var companyInformation = {
         xtype: 'tabpanel',
@@ -531,47 +535,17 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
-    var tags = {
-        xtype: 'panel',
+    var tags = new Ext.Panel({
         layout: 'fit',
-//        title: 'Tags',
         width: 205,
         height: 230,
+        customHeight: 230,
         border: true,
         bodyStyle: 'border:1px solid #B5B8C8;',
-        html: ''
-    };
-    /*
-    var tags = {
-        xtype: 'fieldset',
-        title: 'Tags',
-        width: 205,
-        height: 230,
-        border: true,
-        items: [
-            {
-                xtype: 'fieldset',
-                title: 'Shared',
-                items: [
-                    {
-                        xtype: 'textfield',
-                        label: 'super'
-                    }
-                ]
-            },
-            {
-                xtype: 'fieldset',
-                title: 'Private',
-                collapsible: true,
-                itmes: [
-                    {
-                        xtype: 'textfield',
-                        label: 'super'
-                    }
-                ]
-            }
-        ]
-    }*/
+        labelAlign: 'top',
+        items: [{}]
+    });
+    
     
     var contactTabPanel = {
         title: 'Contact',
@@ -601,13 +575,15 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             {
                 // tags & notes
                 layout: 'fit',
+                //bodyStyle: 'border:1px solid #B5B8C8;',
                 bodyStyle: 'margin-left: 5px;',
                 items: [
                     tags,
                     {
+                        //xtype: 'panel',
                         layout: 'form',
                         labelAlign: 'top',
-                        items: {
+                        items: [{
                             labelSeparator: '',
                             xtype:'textarea',
                             name: 'note',
@@ -617,7 +593,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                             anchor:'95%',
                             width: 215,
                             height: 230
-                        }
+                        }]
                     }
                 ]
             }
@@ -659,6 +635,12 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         var wrap = Ext.getCmp('adbEditDialogContactLeft').getEl().up('div.x-column-inner');
         wrap.setWidth(wrap.up('div').getWidth()-16);
     });
-    
+    //workarround Extjs layout bugs
+    contactInformationBasePanel.on('resize', function(cmp){
+        cmp.setHeight(cmp.customHeight);
+    });
+    tags.on('resize', function(cmp){
+        cmp.setHeight(cmp.customHeight);
+    });
     return tabPanel;
 }
