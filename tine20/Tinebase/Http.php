@@ -133,6 +133,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
                 $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array) $application_http->getCssFilesToInclude());
                 
                 $view->initialData[ucfirst((string) $application)] = $application_http->getInitialMainScreenData();
+                $view->initialData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
         
