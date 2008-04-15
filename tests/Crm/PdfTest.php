@@ -77,7 +77,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => Zend_Date::now(),
         )); 
 
-        $this->objects['leadWithContact'] = new Crm_Model_Lead(array(
+        $this->objects['leadWithLink'] = new Crm_Model_Lead(array(
             'id'            => 22,
             'lead_name'     => 'PHPUnit with contact',
             'leadstate_id'  => 1,
@@ -135,8 +135,13 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
             'tel_work'              => '+49TELWORK',
         ));             	
 
+        $this->objects['linkedTask'] = new Tasks_Model_Task(array(
+            'summary'               => 'task test',
+            'container_id'          => $this->testContainer->id,
+        ));
+        
         try {
-            $lead = Crm_Controller::getInstance()->addLead($this->objects['leadWithContact']);
+            $lead = Crm_Controller::getInstance()->addLead($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // already there
         }
@@ -160,7 +165,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     {
         // delete the db entries
         try { 
-            Crm_Controller::getInstance()->deleteLead($this->objects['leadWithContact']);
+            Crm_Controller::getInstance()->deleteLead($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // access denied ?
         }
@@ -196,9 +201,9 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
     public function testLeadPdfLinkedContact()
     {
     	// create lead + contact + link
-        Tinebase_Links::getInstance()->addLink('crm', $this->objects['leadWithContact']->id, 'addressbook', $this->objects['linkedContact']->id, "customer");
+        Tinebase_Links::getInstance()->addLink('crm', $this->objects['leadWithLink']->id, 'addressbook', $this->objects['linkedContact']->id, "customer");
         
-        $lead =  Crm_Controller::getInstance()->getLead ($this->objects['leadWithContact']->getId());
+        $lead =  Crm_Controller::getInstance()->getLead ($this->objects['leadWithLink']->getId());
         
     	$pdf = new Crm_Pdf();
         $pdfOutput = $pdf->getLeadPdf($lead);
@@ -209,6 +214,32 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match("/Contacts/", $pdfOutput), "no contacts linked"); 
         $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact data/fullname found");
                 
+    }
+
+    /**
+     * try to create a pdf with a linked task
+     *
+     */
+    public function testLeadPdfLinkedTask()
+    {
+       
+        // create lead + task + link
+        $task = Tasks_Controller::getInstance()->createTask($this->objects['linkedTask']);
+        Tinebase_Links::getInstance()->addLink('crm', $this->objects['leadWithLink']->getId(), 'tasks', $task->getId(), "task");
+
+        $lead =  Crm_Controller::getInstance()->getLead ($this->objects['leadWithLink']->getId());
+        
+        $pdf = new Crm_Pdf();
+        $pdfOutput = $pdf->getLeadPdf($lead);
+        
+        //$pdf->save("test.pdf");
+                
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated"); 
+        $this->assertEquals(1, preg_match("/Tasks/", $pdfOutput), "no task linked"); 
+        $this->assertEquals(1, preg_match("/".$task->summary."/", $pdfOutput), "no summary found");
+                
+        // remove
+        Tasks_Controller::getInstance()->deleteTask($task->getId());
     }
     
 }		
