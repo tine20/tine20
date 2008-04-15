@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-04-14 18:32+0100\n"
+"PO-Revision-Date: 2008-04-15 11:07+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -55,29 +55,45 @@ msgstr "geplantes Ende"
 msgid "Contacts"
 msgstr "Kontakte"
 
-#: Crm/Pdf.php:193
+#: Crm/Pdf.php:194
 msgid "Address"
 msgstr "Anschrift"
 
-#: Crm/Pdf.php:200
+#: Crm/Pdf.php:201
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Crm/Pdf.php:201
+#: Crm/Pdf.php:202
 msgid "Email"
 msgstr "Email"
 
-#: Crm/Pdf.php:209
+#: Crm/Pdf.php:214
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: Crm/Pdf.php:224
+#: Crm/Pdf.php:230
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: Crm/Pdf.php:229
+#: Crm/Pdf.php:236
 msgid "Priority"
 msgstr "Priorität"
+
+#: Crm/Pdf.php:264
+msgid "low"
+msgstr "Niedrig"
+
+#: Crm/Pdf.php:265
+msgid "normal"
+msgstr "Normal"
+
+#: Crm/Pdf.php:266
+msgid "high"
+msgstr "Hoch"
+
+#: Crm/Pdf.php:267
+msgid "urgent"
+msgstr "Dringend"
 
 #: Crm/Controller.php:865
 msgid "State"

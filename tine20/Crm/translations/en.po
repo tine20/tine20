@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-04-14 18:28+0100\n"
+"PO-Revision-Date: 2008-04-15 11:08+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,6 @@ msgid "End"
 msgstr "End"
 
 #: Crm/Pdf.php:92
-#, fuzzy
 msgid "End Scheduled"
 msgstr "Scheduled end"
 
@@ -56,29 +55,45 @@ msgstr "Scheduled end"
 msgid "Contacts"
 msgstr "Contacts"
 
-#: Crm/Pdf.php:193
+#: Crm/Pdf.php:194
 msgid "Address"
 msgstr "Address"
 
-#: Crm/Pdf.php:200
+#: Crm/Pdf.php:201
 msgid "Telephone"
 msgstr "Telephone"
 
-#: Crm/Pdf.php:201
+#: Crm/Pdf.php:202
 msgid "Email"
 msgstr "Email Work"
 
-#: Crm/Pdf.php:209
+#: Crm/Pdf.php:214
 msgid "Tasks"
 msgstr "Tasks"
 
-#: Crm/Pdf.php:224
+#: Crm/Pdf.php:230
 msgid "Due Date"
 msgstr "Due Date"
 
-#: Crm/Pdf.php:229
+#: Crm/Pdf.php:236
 msgid "Priority"
 msgstr "Priority"
+
+#: Crm/Pdf.php:264
+msgid "low"
+msgstr "low"
+
+#: Crm/Pdf.php:265
+msgid "normal"
+msgstr "normal"
+
+#: Crm/Pdf.php:266
+msgid "high"
+msgstr "high"
+
+#: Crm/Pdf.php:267
+msgid "urgent"
+msgstr "urgent"
 
 #: Crm/Controller.php:865
 msgid "State"
