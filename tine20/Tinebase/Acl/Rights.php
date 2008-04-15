@@ -25,13 +25,13 @@ class Tinebase_Acl_Rights
      * the right to be an administrative account for an application
      *
      */
-    const ADMIN = 2;
+    const ADMIN = 'admin';
         
     /**
      * the right to run an application
      *
      */
-    const RUN = 1;
+    const RUN = 'run';
     
     /**
      * the Zend_Dd_Table object
