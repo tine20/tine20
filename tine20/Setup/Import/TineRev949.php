@@ -47,13 +47,13 @@ class Setup_Import_TineRev949
         $this->importAccounts();
         $this->importGroupMembers();
         $this->importContainer();
+        $this->importAddressbook();
         
         //@todo make it work
-        //$this->importAddressbook();
+        //$this->importCrm();
         
         //@todo write these functions (and add more?)
         
-//        $this->importCrm();
 //        $this->importAcl();
 //        $this->importXXX();        
         
@@ -239,7 +239,28 @@ class Setup_Import_TineRev949
         
         echo "Import Contacts from table sirona_addressbook ... ";
         foreach($contacts as $contact) {
+            // old: contact_id  contact_tid     contact_owner   contact_private     cat_id  n_family    
+            //  n_given     n_middle    n_prefix    n_suffix    n_fn    n_fileas    contact_bday    
+            //  org_name    org_unit    contact_title   contact_role    contact_assistent   contact_room    
+            //  adr_one_street  adr_one_street2     adr_one_locality    adr_one_region  adr_one_postalcode  
+            //  adr_one_countryname     contact_label   adr_two_street  adr_two_street2     adr_two_locality    
+            //  adr_two_region  adr_two_postalcode  adr_two_countryname     tel_work    tel_cell    tel_fax     
+            //  tel_assistent   tel_car     tel_pager   tel_home    tel_fax_home    tel_cell_private    
+            //  tel_other   tel_prefer  contact_email   contact_email_home  contact_url     contact_url_home    
+            //  contact_freebusy_uri    contact_calendar_uri    contact_note    contact_tz  contact_geo     
+            //  contact_pubkey  contact_created     contact_creator     contact_modified    contact_modifier    
+            //  contact_jpegphoto   account_id
             
+            // new: id  account_id adr_one_countryname     adr_one_locality    adr_one_postalcode  
+            //  adr_one_region  adr_one_street  adr_one_street2     adr_two_countryname     
+            //  adr_two_locality    adr_two_postalcode  adr_two_region  adr_two_street  adr_two_street2     
+            //  cat_id  assistent   bday    calendar_uri    email   email_home  freebusy_uri    
+            //  geo     jpegphoto   label   note    owner   private     pubkey  role    room    tid     
+            //  title   tz  url     url_home    n_family    n_fileas    n_fn    n_given     n_middle    
+            //  n_prefix    n_suffix    org_name    org_unit    tel_assistent   tel_car     tel_cell    
+            //  tel_cell_private    tel_fax     tel_fax_home    tel_home    tel_other   tel_pager   
+            //  tel_prefer  tel_work    created_by  creation_time   last_modified_by    last_modified_time  
+            // is_deleted  deleted_by  deleted_time
             $tineContact = new Addressbook_Model_Contact ( array(
                 
                 'id'                    => $contact->contact_id,
@@ -263,36 +284,52 @@ class Setup_Import_TineRev949
                 'adr_two_street'        => $contact->adr_two_street,
                 'adr_two_street2'       => $contact->adr_two_street2,
 
-            /* @todo add more fields */
+                'last_modified_time'    => new Zend_Date ( $contact->contact_modified,Zend_Date::TIMESTAMP ),
+                'assistent'             => $contact->contact_assistent,
+                'bday'                  => $contact->contact_bday,
+                'email'                 => $contact->contact_email,
+                'email_home'            => $contact->contact_email_home,
+                'note'                  => $contact->contact_note,
+                'role'                  => $contact->contact_role,
+                'title'                 => $contact->contact_title,
+                'url'                   => $contact->contact_url,
+                'url_home'              => $contact->contact_url_home,
+                'n_given'               => $contact->n_given,
+                'n_middle'              => $contact->n_middle,
+                'n_prefix'              => $contact->n_prefix,
+                'n_suffix'              => $contact->n_suffix,
+                'org_name'              => $contact->org_name,
+                'org_unit'              => $contact->org_unit,
+                'tel_assistent'         => $contact->tel_assistent,
+                'tel_car'               => $contact->tel_car,
+                'tel_cell'              => $contact->tel_cell,
+                'tel_cell_private'      => $contact->tel_cell_private,
+                'tel_fax'               => $contact->tel_fax,
+                'tel_fax_home'          => $contact->tel_fax_home,
+                'tel_home'              => $contact->tel_home,
+                'tel_pager'             => $contact->tel_pager,
+                'tel_work'              => $contact->tel_work,     
             
-/*
-                'modified'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'assistent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'bday'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'n_prefix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'n_suffix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_cell_private'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_fax'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_fax_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
-            */            
+                // no longer used?
+                // @todo    add these fields to the model?
+                'cat_id'                => $contact->cat_id,
+                'geo'                   => $contact->contact_geo,
+                'label'                 => $contact->contact_label,
+                'private'               => $contact->contact_private,
+                'pubkey'                => $contact->contact_pubkey,
+                'room'                  => $contact->contact_room,
+                'tid'                   => $contact->contact_tid,
+                'tz'                    => $contact->contact_tz,
+                'tel_prefer'            => $contact->tel_prefer,
+                'created_by'            => $contact->contact_creator,
+                'creation_time'         => new Zend_Date ( $contact->contact_created,Zend_Date::TIMESTAMP ),
+                'last_modified_by'      => $contact->contact_modifier,
             
+                //'calendar_uri'          => $contact->calendar_uri,
+                //'freebusy_uri'          => $contact->freebusy_uri,
+            
+                //jpegphoto ?
+                //deleted fields ?
                 ) 
             );
             
