@@ -70,6 +70,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		}
 		
 		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/Addressbook.js');
+		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/EditDialog.js');
 		$view->cssIncludeFiles[] = self::_appendFileTime('Addressbook/css/Addressbook.css');
 		$view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         

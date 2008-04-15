@@ -75,6 +75,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'adr_two_street2'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'assistent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bday'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'calendar_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
  /*       'email'     => array(
             array(
                 'Regex', 
@@ -91,6 +92,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         ),*/
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'freebusy_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'owner'                 => array('Digits', array('GreaterThan', 0), 'presence'=>'required'),
@@ -107,6 +109,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'n_suffix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'pubkey'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -115,7 +118,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_fax_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**

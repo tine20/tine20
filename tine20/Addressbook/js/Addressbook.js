@@ -48,7 +48,7 @@ Tine.Addressbook.Main = {
 	     * onclick handler for addBtn
 	     */
 	    addContact: function(_button, _event) {
-	        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
+	        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 800, 600);
 	    },
 
         /**
@@ -58,7 +58,7 @@ Tine.Addressbook.Main = {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 850, 600);
+            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 800, 600);
         },
 
         /**
@@ -320,7 +320,7 @@ Tine.Addressbook.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 850, 600);
+                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 800, 600);
             } catch(e) {
                 // alert(e);
             }
@@ -467,320 +467,6 @@ Tine.Addressbook.ContactEditDialog = {
 	        //@todo implement
 	    }
 	},
-	
-	editContactDialog: [{
-        layout:'column',
-        border:false,
-        //deferredRender:false,
-        //anchor:'100%',
-        autoHeight: true,
-        items:[{
-            columnWidth:.4,
-            layout: 'form',
-            border:false,
-            items: [{
-                xtype:'textfield',
-                fieldLabel:'First Name', 
-                name:'n_given',
-                anchor:'95%'
-            }, {
-                xtype:'textfield',
-                fieldLabel:'Middle Name', 
-                name:'n_middle',
-                anchor:'95%'
-            }, {
-                xtype:'textfield',
-                fieldLabel:'Last Name', 
-                name:'n_family', 
-                allowBlank:false,
-                anchor:'95%'
-            }]
-        },{
-            columnWidth:.2,
-            layout: 'form',
-            border:false,
-            items: [{
-                xtype:'textfield',
-                fieldLabel:'Prefix', 
-                name:'n_prefix',
-                anchor:'95%'
-            },{
-                xtype:'textfield',
-                fieldLabel:'Suffix', 
-                name:'n_suffix',
-                anchor:'95%'
-            },
-            new Tine.widgets.container.selectionComboBox({
-                fieldLabel:'Addressbook',
-                name: 'owner',
-                anchor:'95%',
-                itemName: 'Addressbook',
-                appName: 'Addressbook'
-            })]
-        }, {
-            columnWidth:.4,
-            layout: 'form',
-            border:false,
-            items: [{
-                xtype:'textarea',
-                name: 'note',
-                fieldLabel: 'Notes',
-                grow: false,
-                preventScrollbars:false,
-                anchor:'95%',
-                height: 120
-            }]
-        }]
-    },{
-        xtype:'tabpanel',
-        plain:true,
-        activeTab: 0,
-        deferredRender:false,
-        anchor:'100%',
-        defaults:{bodyStyle:'padding:10px'},
-        border: false,
-        items:[{
-            title:'Business information',
-            layout:'column',
-            deferredRender:false,
-            border:false,
-            autoHeight: true,
-            items:[{
-                columnWidth:.333,
-                layout: 'form',
-                border:false,
-                items: [{
-                    //xtype:'icontextfield',
-                    xtype:'textfield',
-                    //labelIcon: 'images/oxygen/16x16/actions/about-kde.png',
-                    fieldLabel:'Company', 
-                    name:'org_name',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Street', 
-                    name:'adr_one_street',  
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Street 2', 
-                    name:'adr_one_street2',  
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Postalcode', 
-                    name:'adr_one_postalcode',  
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'City', 
-                    name:'adr_one_locality',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Region', 
-                    name:'adr_one_region',
-                    anchor:'95%'
-                },  
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Country',
-                    name: 'adr_one_countryname',
-                    hiddenName:'adr_one_countryname',
-                    store: new Ext.data.JsonStore({
-			            baseParams: {
-			            	method:'Tinebase.getCountryList'
-			            },
-			            root: 'results',
-			            id: 'shortName',
-			            fields: ['shortName', 'translatedName'],
-			            remoteSort: false
-			        }),
-                    displayField:'translatedName',
-                    valueField:'shortName',
-                    typeAhead: true,
-                    mode: 'remote',
-                    triggerAction: 'all',
-                    emptyText:'Select a state...',
-                    selectOnFocus:true,
-                    anchor:'95%'
-                })]
-            },{
-                columnWidth:.333,
-                layout: 'form',
-                border:false,
-                items: [{
-                    xtype:'textfield',
-                    fieldLabel:'Phone', 
-                    name:'tel_work',
-                    anchor:'95%'
-                }, {
-                    xtype:'icontextfield',
-                    labelIcon: 'images/oxygen/16x16/devices/phone.png',
-                    fieldLabel:'Cellphone', 
-                    name:'tel_cell',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Fax', 
-                    name:'tel_fax',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Car phone', 
-                    name:'tel_car',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Pager', 
-                    name:'tel_pager',
-                    anchor:'95%'
-                },{
-                    xtype:'icontextfield',
-                    labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
-                    fieldLabel:'Email', 
-                    name:'email', 
-                    vtype:'email',
-                    anchor:'95%'
-                },{
-                    xtype:'icontextfield',
-                    labelIcon: 'images/oxygen/16x16/actions/network.png',
-                    fieldLabel:'URL', 
-                    name:'url', 
-                    vtype:'url',
-                    anchor:'95%'
-                }]
-            },{
-                columnWidth:.333,
-                layout: 'form',
-                border:false,
-                items: [{
-                    xtype:'textfield',
-                    fieldLabel:'Unit', 
-                    name:'org_unit',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Role', 
-                    name:'role',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Title', 
-                    name:'title',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Room', 
-                    name:'room',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Name Assistent', 
-                    name:'assistent',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Phone Assistent', 
-                    name:'tel_assistent',
-                    anchor:'95%'
-                }]
-            }]                              
-        },{
-            title:'Private information',
-            layout:'column',
-            deferredRender:false,
-            border:false,
-            items:[{
-                columnWidth:.333,
-                layout: 'form',
-                border:false,
-                items: [{
-                    xtype:'textfield',
-                    fieldLabel:'Street', name:'adr_two_street',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Street2', name:'adr_two_street2',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Postalcode', name:'adr_two_postalcode',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'City', name:'adr_two_locality',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Region', name:'adr_two_region',
-                    anchor:'95%'
-                }, 
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Country',
-                    name: 'adr_two_countryname',
-                    hiddenName:'adr_two_countryname',
-                    store: new Ext.data.JsonStore({
-			            baseParams: {
-			            	method:'Tinebase.getCountryList'
-			            },
-			            root: 'results',
-			            id: 'shortName',
-			            fields: ['shortName', 'translatedName'],
-			            remoteSort: false
-			        }),
-                    displayField:'translatedName',
-                    valueField:'shortName',
-                    typeAhead: true,
-                    mode: 'remote',
-                    triggerAction: 'all',
-                    emptyText:'Select a state...',
-                    selectOnFocus:true,
-                    anchor:'95%'
-                })]
-            },{
-                columnWidth:.333,
-                layout: 'form',
-                border:false,
-                items: [
-                    new Ext.form.DateField({
-                            fieldLabel:'Birthday', 
-                            name:'bday', 
-                            format:'d.m.Y', 
-                            anchor: '95%'
-                }), {
-                    xtype:'textfield',
-                    fieldLabel:'Phone', name:'tel_home',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Cellphone', name:'tel_cell_private',
-                    anchor:'95%'
-                }, {
-                    xtype:'textfield',
-                    fieldLabel:'Fax', name:'tel_fax_home',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'Email', name:'email_home', vtype:'email',
-                    anchor:'95%'
-                },{
-                    xtype:'textfield',
-                    fieldLabel:'URL', name:'url_home', vtype:'url',
-                    anchor:'95%'
-                }]
-            },{
-                columnWidth:.333,
-                layout: 'form',
-                border:false//,
-                //items: [
-                //    new Ext.form.FieldSet({
-                //        id:'photo', 
-                //        legend:'Photo'
-                // })
-                //]
-            }]
-        }]
-    }],
 
     contactRecord: null,
     
@@ -795,15 +481,11 @@ Tine.Addressbook.ContactEditDialog = {
 
     updateToolbarButtons: function(_rights)
     {        
-        if(_rights.editGrant === true) {
-            Ext.getCmp('contactDialog').action_saveAndClose.enable();
-            Ext.getCmp('contactDialog').action_applyChanges.enable();
+        with(_rights) {
+            Ext.getCmp('contactDialog').action_saveAndClose.setDisabled(!editGrant);
+            Ext.getCmp('contactDialog').action_applyChanges.setDisabled(!editGrant);
+            Ext.getCmp('contactDialog').action_delete.setDisabled(!deleteGrant);
         }
-
-        if(_rights.deleteGrant === true) {
-            Ext.getCmp('contactDialog').action_delete.enable();
-        }
-        
     },
 
     display: function(_contactData) 
@@ -823,17 +505,14 @@ Tine.Addressbook.ContactEditDialog = {
         var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'contactDialog',
             tbarItems: [_export_contact],
-            //title: 'the title',
-            labelWidth: 120,
-            labelAlign: 'top',
             handlerScope: this,
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
             handlerDelete: this.handlers.deleteContact,
             handlerExport: this.handlers.exportContact,
-            items: this.editContactDialog
+            items: Tine.Addressbook.ContactEditDialog.getEditForm()
         });
-
+        
         var viewport = new Ext.Viewport({
             layout: 'border',
             frame: true,
