@@ -174,33 +174,24 @@ class Tinebase_Acl_Rights
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
-        $accountId = (int)$_accountId;
-        if($accountId != $_accountId) {
-            throw new InvalidArgumentException('$_accountId must be integer');
-        }
-        
-        $right = (int)$_right;
-        if($right != $_right) {
-            throw new InvalidArgumentException('$_right must be integer');
-        }
-        
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         if($application->status != 'enabled') {
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $groupMemberships   = Tinebase_Account::getInstance()->getGroupMemberships($accountId);
-        $groupMemberships[] = $accountId;
-        
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);        
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
 
-        $where = array(
-            $this->rightsTable->getAdapter()->quoteInto('application_id = ?', $application->id),
-            $this->rightsTable->getAdapter()->quoteInto('right = ?', $right),
-            // check if the account or the groups of this account has the given right
-            $this->rightsTable->getAdapter()->quoteInto('account_id IN (?) OR account_id IS NULL', $groupMemberships)
-        );
+        $select = $this->rightsTable->select()
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
+
+            ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->getId())
+            ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $right);
         
-        if(!$row = $this->rightsTable->fetchRow($where)) {
+        if(!$row = $this->rightsTable->fetchRow($select)) {
             return false;
         } else {
             return true;
