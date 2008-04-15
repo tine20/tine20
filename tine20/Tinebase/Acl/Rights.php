@@ -159,7 +159,7 @@ class Tinebase_Acl_Rights
             return array();
         }
 
-        $result = explode(',', $result['account_rights']);
+        $result = explode(',', $row['account_rights']);
         
         return $result;
     }
