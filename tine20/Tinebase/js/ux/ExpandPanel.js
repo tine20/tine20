@@ -11,12 +11,12 @@
 Ext.namespace('Ext.ux');
 
 /**
- * Expandable panel
- * <p>This class provieds a expandable panel. The first item is allways visable, whereas 
+ * Expandable fieldset
+ * <p>This class provieds a expandable fieldset. The first item is allways visable, whereas 
  * all furthor items are colapsed by default<p>
  * <p>Example usage:</p>
  * <pre><code>
- var p = new Ext.ux.ExpandPanel({
+ var p = new Ext.ux.ExpandFieldSet({
      name: 'Expandable Panel',
      items: [
         {
@@ -30,32 +30,52 @@ Ext.namespace('Ext.ux');
      ]
  });
  * </code></pre>
- * <p>The <b>xtype</b> of this panel is <b>expandpanel</b>.
+ * <p>The <b>xtype</b> of this panel is <b>expanderfieldset</b>.
+ * @todo Generalise this an inherit from Ext.Panel
  */
-Ext.ux.ExpandPanel = Ext.extend(Ext.Panel, {
+Ext.ux.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
     isExpanded: true,
     
     /**
      * @private
      */
     initComponent: function(){
-        Ext.ux.ExpandPanel.superclass.initComponent.call(this);
+        Ext.ux.ExpandFieldSet.superclass.initComponent.call(this);
+        var panelCount = 0;
+        this.items.each(function(item){
+            if(panelCount > 0) {
+                item.collapsed = true;
+            }
+            panelCount++;
+        }, this);
+        
+        this.on('afterlayout', function(){
+            var innerWidth = this.getInnerWidth();
+            var panelCount = 0;
+            this.items.each(function(item){
+                if(panelCount > 0) {
+                    item.setWidth(innerWidth);
+                }
+                panelCount++;
+            }, this);
+        }, this);
     },
     /**
      * @private
      */
     onRender : function(ct, position){
-        Ext.ux.ExpandPanel.superclass.onRender.call(this, ct, position);
-        this.expandArea = this.items.items[1];
+        Ext.ux.ExpandFieldSet.superclass.onRender.call(this, ct, position);
         
         this.expanderButton = this.getEl().createChild({
-            cls: 'x-tool x-tool-toggle'
+            cls: 'x-panel-collapsed'
         });
+        this.expanderButton.createChild({
+            cls: 'x-tool x-tool-toggle x-tool-toggle-expander'
+        });
+        
         this.expanderButton.on('click', function(){
             this.toggleExpandation();
         }, this);
-        
-        this.toggleExpandation();
     },
     /**
      * toggles visability of expand area
@@ -65,16 +85,25 @@ Ext.ux.ExpandPanel = Ext.extend(Ext.Panel, {
         var panelCount = 0;
         this.items.each(function(item){
             if(panelCount > 0) {
-                item.setVisible(this.isExpanded);
+                item[!this.isExpanded ? 'expand' : 'collapse']();
             }
             panelCount++;
         }, this);
-        
-        if (this.isExpanded){
-            this.getEl().removeClass('x-panel-collapsed');
-        } else {
-            this.getEl().addClass('x-panel-collapsed');
-        }
+        this.expanderButton[this.isExpanded ? 'addClass' : 'removeClass']('x-panel-collapsed');
+    },
+    /**
+     * @private
+     */
+    onExpand: function() {
+        Ext.ux.ExpandFieldSet.superclass.onExpand.call(this, arguments);
+        this.expanderButton.setVisible(true);
+    },
+    /**
+     * @private
+     */
+    onCollapse: function(anim) {
+        Ext.ux.ExpandFieldSet.superclass.onCollapse.call(this, arguments);
+        this.expanderButton.setVisible(false);
     }
 });
-Ext.reg('expanderpanel', Ext.ux.ExpandPanel);
+Ext.reg('expanderfieldset', Ext.ux.ExpandFieldSet);
