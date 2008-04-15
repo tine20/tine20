@@ -210,6 +210,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         /********************** tasks ******************/
 
         if ( !empty($_lead->tasks) ) {
+            
             $linkedObjects[] = array ( $_translate->_('Tasks'), 'headline');
             
             foreach ( $_lead->tasks as $taskId ) {
@@ -230,10 +231,13 @@ class Crm_Pdf extends Tinebase_Export_Pdf
                     }    
                     
                     // get task priority
-                    $taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
+                    //$taskPriority = Tasks_Controller::getInstance()->getTaskPriority($task->priority);
+                    $taskPriority = $this->getTaskPriority($task->priority, $_translate);
                     $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
+                    
                 } catch (Exception $e) {
                     // do nothing so far
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' exception caught: ' . $e->getMessage());
                 }
             }
         }
@@ -243,5 +247,29 @@ class Crm_Pdf extends Tinebase_Export_Pdf
         return  $linkedObjects;
        
     }
+    
+    /**
+     * get task priority
+     * 
+     * @param  int $_priorityId
+     * @param  int $_translate
+     * 
+     * @return string priority
+     * 
+     * @todo    move to db / tasks ?
+     */
+    public function getTaskPriority($_priorityId, Zend_Translate $_translate) 
+    {
         
+        $priorities = array (   '0' => $_translate->_('low'),
+                                '1' => $_translate->_('normal'), 
+                                '2' => $_translate->_('high'),
+                                '3' => $_translate->_('urgent')
+        );
+            
+        return $priorities[$_priorityId];
+    }
+    
+    
+    
 }
