@@ -112,7 +112,7 @@ class Setup_Tables
 					//	$createdTables[] = $table;
 					//
 					//	echo $tableName . " had different specifications. Now up-to-date to version " . $table->version;
-					}
+					//}
 				}
             }
         }
