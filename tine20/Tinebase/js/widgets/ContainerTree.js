@@ -169,8 +169,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 					}
 					break;
 				case Tine.Tinebase.container.TYPE_SHARED:
-				    // anyone is allowd to add shared folders atm.
-				    this.contextMenuUserFolder.showAt(event.getXY());
+				    if(Tine[this.appName].rights.indexOf('admin') > -1) {
+				        this.contextMenuUserFolder.showAt(event.getXY());
+				    }
 					break;
 			}
 		}, this);
