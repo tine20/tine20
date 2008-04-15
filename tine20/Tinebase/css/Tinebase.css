@@ -49,7 +49,7 @@ html, body {
 }
 
 .action_logOut {
-    background-image:url(../../images/oxygen/16x16/actions/system-log-out.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/system-shutdown.png) !important;
 }
 
 .action_selectUser {

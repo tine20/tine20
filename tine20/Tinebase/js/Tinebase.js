@@ -267,22 +267,7 @@ Tine.Tinebase.MainScreen = function() {
 				},
 				items: _getPanels()
 			}]
-		});
-		
-		/*var centerPanel = Ext.getCmp('north-panel-1');
-        centerPanel.add(tineMenu);
-        centerPanel.show();
-        centerPanel.doLayout();*/
-
-/*        tineMenu.add({
-            text: 'Tine 2.0',
-            menu: systemMenu
-        }, '->', {
-            icon: 'images/oxygen/16x16/actions/system-log-out.png',
-            cls: 'x-btn-icon',
-            tooltip: {text:'Click this button to logout from Tine 2.0'},
-            handler: _logoutButtonHandler
-        }); */
+		});		
     };
     
     /**
