@@ -894,7 +894,6 @@ class Tinebase_Container
     public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE) 
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Zend_Registry::get('currentAccount'), $containerId, self::GRANT_ADMIN)) {
@@ -905,8 +904,9 @@ class Tinebase_Container
         $container = $this->getContainerById($containerId);
         
         # @todo find a new solution for this block
-
+        
 /*        if($container->type === Tinebase_Container::TYPE_PERSONAL) {
+            $currentAccountId = Zend_Registry::get('currentAccount')->getId();
             // make sure that only the current user has admin rights
             foreach($_grants as $key => $recordGrants) {
                 $_grants[$key]->adminGrant = false;
