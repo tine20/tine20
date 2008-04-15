@@ -151,7 +151,10 @@ class Tinebase_Container
                     break;
                     
                 case self::TYPE_SHARED:
-                    // who is allowed to add shared container
+                    $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
+                    if(!Zend_Registry::get('currentAccount')->hasRight((string) $application, Tinebase_Acl_Rights::ADMIN)) {
+                        throw new Exception('permission to add shared container denied');
+                    }
                     break;
                     
                 default:
