@@ -20,6 +20,10 @@
 	background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
 
+.action_callContact {
+    background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
+}
+
 .AddressbookTreePanel {
     background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
 }
