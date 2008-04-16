@@ -26,7 +26,6 @@
     <script type="text/javascript" src="ExtJS/ext-all-debug.js"></script>
 
     <!-- Tine 2.0 -->
-    <link rel="stylesheet" type="text/css" href="Tinebase/css/Tinebase.css"/>
     <script type="text/javascript" language="javascript" src="Tinebase/js/Tinebase.js"></script>
     <!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">

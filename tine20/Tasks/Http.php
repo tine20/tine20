@@ -97,8 +97,6 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
 		
         $view->title="edit task";
         
-        $view->jsIncludeFiles  = $this->getJsFilesToInclude();
-        $view->cssIncludeFiles = $this->getCssFilesToInclude();
         $view->initialData = array('Tasks' => $this->getInitialMainScreenData());
 
         $view->jsExecute = 'Tine.Tasks.EditDialog(' . $task . ');';
@@ -109,7 +107,8 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         );
         
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

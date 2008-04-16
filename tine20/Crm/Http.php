@@ -156,11 +156,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $_productSource =  $leads->getProducts('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
-        $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/Crm.js');
-        $view->jsIncludeFiles[] = self::_appendFileTime('Crm/js/LeadState.js');
         $view->jsIncludeFiles[] = self::_appendFileTime('Tasks/js/Tasks.js');
-        $view->cssIncludeFiles[] = 'Crm/css/Crm.css';
-        $view->cssIncludeFiles[] = 'Tasks/css/Tasks.css';       
+        $view->cssIncludeFiles[] = self::_appendFileTime('Tasks/css/Tasks.css');       
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';
 
         $view->configData = array(
@@ -171,7 +168,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit lead";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude(), $view->cssIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

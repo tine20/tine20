@@ -69,9 +69,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		    }
 		}
 		
-		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/Addressbook.js');
 		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/EditDialog.js');
-		$view->cssIncludeFiles[] = self::_appendFileTime('Addressbook/css/Addressbook.css');
 		$view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         
 		$view->configData = array(
@@ -82,8 +80,8 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		$view->title="edit contact";
 		
 		$view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $view->jsIncludeFiles);
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $view->cssIncludeFiles);
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude(), $view->jsIncludeFiles);
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude(), $view->cssIncludeFiles);
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
 	}
