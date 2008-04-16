@@ -485,7 +485,7 @@ Tine.Admin.AccessLog.Main = function() {
 	
 	        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
 	        adminButton.setIconClass('AdminTreePanel');
-	        //if(Admin.Crm.rights.indexOf('admin') > -1) {
+	        //if(Tine.Admin.rights.indexOf('admin') > -1) {
 	        //    adminButton.setDisabled(false);
 	        //} else {
 	            adminButton.setDisabled(true);
