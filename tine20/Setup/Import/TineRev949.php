@@ -23,7 +23,7 @@ class Setup_Import_TineRev949
     /**
      * is needed for container grants
      * 
-     * @var groupAccountArray
+     * @var array groupAccountArray
      */
     protected $groupAccountArray = array();
 
@@ -58,6 +58,21 @@ class Setup_Import_TineRev949
     protected $applicationRightsMapping = array ( 1 => 'run', 2 => 'admin' );
         
     /**
+     * mapping of task status ids
+     * 
+     * @var array
+     */
+    protected $statusIdMapping = array ( 2 => 1, 4 => 2, 6 => 3, 8 => 4 );
+
+    /**
+     * is needed for task links (old id => uid)
+     * 
+     * @var array
+     */
+    protected $taskIds = array();
+
+    
+    /**
      * import main function
      *
      */
@@ -70,16 +85,10 @@ class Setup_Import_TineRev949
         $this->importContainer();
         $this->importAddressbook();
         $this->importCrm();
-        $this->importAdmin();        
-        
-        //@todo make it work
-        
-        //@todo write these functions (and add more?)        
+        $this->importApplicationRights();                
+        $this->importTasks();        
+        $this->importLinks();
                 
-//        $this->importApplicationRights();
-//        $this->importTasks();
-//        $this->importLinks();
-        
         //@todo delete old tables?
     }
     
@@ -515,17 +524,15 @@ class Setup_Import_TineRev949
     }
     
     /**
-     * import the admin stuff (accesslog/application rights)
+     * import the application rights
      *
      */
-    protected function importAdmin()
+    protected function importApplicationRights()
     {
         
         // delete old entries and import the new stuff
         $tableDataArray = array ( 
             array (
-                // acl_id   application_id  application_right   account_id
-                // id application_id    right     account_id  group_id
                 'name'      => 'application_rights',
                 'fields'    => array ( 
                     'acl_id'            => 'id', 
@@ -537,27 +544,6 @@ class Setup_Import_TineRev949
                 'delete'    => TRUE,
                 'where'     => array(Zend_Registry::get('dbAdapter')->quoteInto('application_id IN (?)', array_keys($this->applicationIdMapping))),
             ), 
-            // @todo add later on if it's needed
-            /*          
-            array (
-                // log_id sessionid    loginid     ip  li  lo  account_id  result
-                // id sessionid    login_name     ip  li  lo  account_id   result
-                'name'      => 'access_log',
-                'fields'    => array ( 
-                    'log_id'        => 'id', 
-                    'sessionid'     => 'sessionid',
-                    'loginid'       => 'login_name',
-                    'ip'            => 'ip',
-                    'li'            => 'li',
-                    'lo'            => 'lo',
-                    'account_id'    => 'account_id',
-                    'result'        => 'result',
-                ),
-                'model'     => 'Tinebase_Model_AccessLog',
-                'delete'    => TRUE,
-                'where'     => array(),
-            ),
-            */ 
         );
               
         // get backend/controller
@@ -592,8 +578,6 @@ class Setup_Import_TineRev949
                             } else {
                                 $values['account_type'] = 'account';
                             }
-                            //$values['group_id'] = $row->$oldKey;
-                            //continue;
                         } elseif ( $oldKey === 'application_id' ) {
                             $values[$newKey] = $this->applicationIdMapping[$row->$oldKey];
                             continue;
@@ -624,4 +608,151 @@ class Setup_Import_TineRev949
         }        
 
     }    
+    
+    /**
+     * import tasks
+     *
+     */
+    protected function importTasks()
+    {
+        
+        // delete old entries and import the new stuff
+        $tableDataArray = array ( 
+            array (
+                'name'      => 'tasks',
+                'fields'    => array ( 
+                    //'identifier'            => 'id', 
+                    'container'             => 'container',
+                    'created_by'            => 'created_by',
+                    'last_modified_by'      => 'last_modified_by',
+                    'last_modified_time'    => 'last_modified_time',
+                    'is_deleted'            => 'is_deleted',
+                    'deleted_time'          => 'deleted_time',
+                    'deleted_by'            => 'deleted_by',
+                    'percent'               => 'percent',
+                    'completed'             => 'completed',
+                    'due'                   => 'due',
+                    'class'                 => 'class_id',
+                    'description'           => 'description',
+                    'geo'                   => 'geo',
+                    'location'              => 'location',
+                    'organizer'             => 'organizer',
+                    'priority'              => 'priority',
+                    'summaray'              => 'summary',
+                    'status'                => 'status_id',
+                    'url'                   => 'url',
+            ),
+                'model'     => 'Tasks_Model_Task',
+                'delete'    => TRUE,
+                'where'     => array( "is_deleted = 0"),
+            ), 
+        );
+              
+        // get backend/controller
+        $backend = new Tasks_Backend_Sql();
+        
+        foreach ( $tableDataArray as $tableData ) {
+            echo "Import from table ".$this->oldTablePrefix.''.$tableData['name']." ... ";
+            
+            if ( $tableData['delete'] ) {
+                $deleteTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$tableData['name']));
+                $deleteTable->delete( "1" );                    
+            }
+            
+            // get data
+            $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$tableData['name']));
+            $rows = $table->fetchAll($tableData['where']);
+
+            $dataArray = array ();
+            foreach ( $rows as $row ) {
+                
+                // add to array
+                $values = array ();
+                foreach ( $tableData['fields'] as $oldKey => $newKey ) {
+                    if ( $tableData['name'] === 'tasks' ) {
+                        if ( $oldKey === 'status' ) {
+                            $values[$newKey] = $this->statusIdMapping[$row->$oldKey];
+                            continue;
+                        }
+                    }
+
+                    $values[$newKey] = $row->$oldKey;                                        
+                }
+                
+                if ( $tableData['name'] === 'tasks' ) {
+                    $task = new Tasks_Model_Task ( $values );
+                    //$backend->createTask($task);
+                    try {
+                        $task = $backend->createTask($task);
+                    } catch ( Exception $e ) {
+                        echo "error: " . $e->getMessage() . "<br/>" . print_r ( $values, true ) . "<br/>";
+                    }
+                    // add old task id => task uid mapping
+                    $this->taskIds[$row->identifier] = $task->getId();
+                
+                } else {
+                    $dataArray[] = $values;
+                }
+            }
+            
+            echo "done! got ".sizeof($rows)." rows.<br>";
+        }        
+
+    }   
+
+    /**
+     * import links
+     *
+     */
+    protected function importLinks()
+    {
+        
+        // delete old entries and import the new stuff
+        $tableDataArray = array ( 
+            array (
+                'name'      => 'links',
+                'fields'    => array (),
+                'model'     => '',
+                'delete'    => TRUE,
+                'where'     => array(),
+            ), 
+        );
+              
+        // get backend/controller
+        $backend = Tinebase_Links::getInstance();
+        
+        foreach ( $tableDataArray as $tableData ) {
+            echo "Import from table ".$this->oldTablePrefix.''.$tableData['name']." ... ";
+            
+            if ( $tableData['delete'] ) {
+                $deleteTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$tableData['name']));
+                $deleteTable->delete( "1" );                    
+            }
+            
+            // get data
+            $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$tableData['name']));
+            $rows = $table->fetchAll($tableData['where']);
+
+            $counter = sizeof($rows);
+            foreach ( $rows as $row ) {
+                if ( $row->link_app2 === strtolower('tasks') ) {
+                    if ( isset($this->taskIds[$row->link_id2]) ) {                        
+                        $id2 = $this->taskIds[$row->link_id2];
+                    } else {
+                        // skip deleted task links
+                        $counter--;
+                        continue;
+                    }
+                } else {
+                    $id2 = $row->link_id2;
+                }
+                
+                $backend->addLink(strtolower($row->link_app1), $row->link_id1, strtolower($row->link_app2), $id2, $row->link_remark);
+                               
+            }
+            
+            echo "done! got ".$counter." rows.<br>";
+        }        
+
+    }     
 }
