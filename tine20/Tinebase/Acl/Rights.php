@@ -216,6 +216,13 @@ class Tinebase_Acl_Rights
                 $data['group_id'] = Tinebase_Group_Model_Group::convertGroupIdToInt($_right->account_id);
                 break;
                 
+            case 'account':
+                $data['account_id'] = Tinebase_Account_Model_Account::convertAccountIdToInt($_right->account_id);
+                break;
+                
+            case 'anyone':
+                break;
+                
             default:
                 throw new Exception('invalid account_type passed');
                 break;
