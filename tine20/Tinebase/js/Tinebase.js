@@ -139,33 +139,46 @@ Tine.Tinebase.MainScreen = function() {
 
     var _displayMainScreen = function() {
 
-		var systemMenu = new Ext.menu.Menu({
-			items: [{
-				text: 'Change password',
-                handler: _changePasswordHandler,
-				disabled: false
-			}, '-', {
-				text: 'Logout',
-	            handler: _logoutButtonHandler,
-				iconCls: 'action_logOut'
-			}]
-		});
-
 		var tineMenu = new Ext.Toolbar({
 			id: 'tineMenu',
 			height: 26,
             items:[{
                 text: 'Tine 2.0',
-                menu: systemMenu
-            },
-            '->',
-            {
+                menu: {
+                	id: 'Tinebase_System_Menu',  	
+		            items: [{
+		                text: 'Change password',
+		                handler: _changePasswordHandler,
+		                disabled: true
+		            }, '-', {
+		                text: 'Logout',
+		                handler: _logoutButtonHandler,
+		                iconCls: 'action_logOut'
+		            }]                
+		        }
+            }, {
+            	text: 'Admin',
+            	id: 'Tinebase_System_AdminButton',
+                iconCls: 'AddressbookTreePanel',
+                disabled: true,
+                menu: {
+                    id: 'Tinebase_System_AdminMenu'
+                }     
+            }, {
+                text: 'Preferences',
+                id: 'Tinebase_System_PreferencesButton',
+                iconCls: 'AddressbookTreePanel',
+                disabled: true,
+                menu: {
+                    id: 'Tinebase_System_PreferencesMenu'
+                }
+            }, '->', {
+            	text: 'Logout',
                 iconCls: 'action_logOut',
-                cls:     'x-btn-icon',
-                tooltip: {text:'Click this button to logout from Tine 2.0'},
+                //cls:     'x-btn-icon',
+                tooltip: {text:'Logout from Tine 2.0'},
                 handler: _logoutButtonHandler
-            }
-            ]
+            }]
 
 		});
 
