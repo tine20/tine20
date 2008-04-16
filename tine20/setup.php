@@ -9,6 +9,10 @@
  * @version     $Id$
  *
  */
+define ( 'DO_TABLE_SETUP', TRUE );
+define ( 'IMPORT_EGW_14', FALSE );
+define ( 'IMPORT_TINE_REV_949', FALSE );
+
 require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
@@ -23,31 +27,36 @@ if (strpos($output, "FAILURE"))
 	exit;
 }
 
-
 $setup = new Setup_Tables();
-
-$fileName = 'Tinebase/setup.xml';
-if(file_exists($fileName)) {
-    echo "Processing tables definitions from <b>$fileName</b><br>";
-    $setup->parseFile($fileName);
-}
-
-
-foreach ( new DirectoryIterator('./') as $item ) {
-	if($item->isDir() && $item->getFileName() != 'Tinebase') {
-		$fileName = $item->getFileName() . '/setup.xml';
-		if(file_exists($fileName)) {
-			echo "Processing tables definitions from <b>$fileName</b><br>";
-			$setup->parseFile($fileName);
-		}
-	}
+    
+if ( DO_TABLE_SETUP ) {
+    $fileName = 'Tinebase/setup.xml';
+    if(file_exists($fileName)) {
+        echo "Processing tables definitions from <b>$fileName</b><br>";
+        $setup->parseFile($fileName);
+    }
+    
+    foreach ( new DirectoryIterator('./') as $item ) {
+    	if($item->isDir() && $item->getFileName() != 'Tinebase') {
+    		$fileName = $item->getFileName() . '/setup.xml';
+    		if(file_exists($fileName)) {
+    			echo "Processing tables definitions from <b>$fileName</b><br>";
+    			$setup->parseFile($fileName);
+    		}
+    	}
+    }
 }
 
 # either import data from eGroupWare 1.4 or tine 2.0 revision 949
-#$import = new Setup_Import_Egw14();
-#$import = new Setup_Import_TineRev949();
-#$import->import();
-#exit();
+if ( IMPORT_EGW_14 ) {
+    $import = new Setup_Import_Egw14();
+} elseif ( IMPORT_TINE_REV_949 ) {
+    $import = new Setup_Import_TineRev949();
+}
+if ( isset($import) ) {
+    $import->import();
+    exit();
+}
 
 # or initialize the database ourself
 
