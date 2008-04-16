@@ -40,21 +40,24 @@ Tine.Addressbook.Main = {
 	    addContact: null,
 	    editContact: null,
 	    deleteContact: null,
-	    exportContact: null
+	    exportContact: null,
+	    callContact: null
 	},
 	
 	handlers: {
 	    /**
 	     * onclick handler for addBtn
 	     */
-	    addContact: function(_button, _event) {
+	    addContact: function(_button, _event) 
+	    {
 	        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 800, 600);
 	    },
 
         /**
          * onclick handler for editBtn
          */
-        editContact: function(_button, _event) {
+        editContact: function(_button, _event) 
+        {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
@@ -64,12 +67,64 @@ Tine.Addressbook.Main = {
         /**
          * onclick handler for exportBtn
          */
-        exportContact: function(_button, _event) {
+        exportContact: function(_button, _event) 
+        {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
             Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.exportContact&_format=pdf&_contactId=' + contactId, 768, 1024);
         },
+
+        /**
+         * onclick handler for exportBtn
+         */
+        callContact: function(_button, _event) 
+        {
+            var number;
+
+            var contact = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelected();
+
+            switch(_button.getId()) {
+                case 'Addressbook_Contacts_CallContact_Work':
+                    number = contact.data.tel_work;
+                    break;
+                case 'Addressbook_Contacts_CallContact_Home':
+                    number = contact.data.tel_home;
+                    break;
+                case 'Addressbook_Contacts_CallContact_Cell':
+                    number = contact.data.tel_cell;
+                    break;
+                case 'Addressbook_Contacts_CallContact_CellPrivate':
+                    number = contact.data.tel_cell_private;
+                    break;
+                default:
+                    if(!Ext.isEmpty(contact.data.tel_work)) {
+                    	number = contact.data.tel_work;
+                    } else if (!Ext.isEmpty(contact.data.tel_cell)) {
+                        number = contact.data.tel_cell;
+                    } else if (!Ext.isEmpty(contact.data.tel_cell_private)) {
+                        number = contact.data.tel_cell_private;
+                    } else if (!Ext.isEmpty(contact.data.tel_home)) {
+                    	number = contact.data.tel_work;
+                    }
+                    break;
+            }
+
+            Ext.Ajax.request({
+                url: 'index.php',
+                params: {
+                    method: 'Dialer.dialNumber',
+                    number: number
+                },
+                success: function(_result, _request){
+                    //Ext.getCmp('Addressbook_Contacts_Grid').getStore().reload();
+                },
+                failure: function(result, request){
+                    //Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the conctact.');
+                }
+            });
+        },
+        
         
 	    /**
 	     * onclick handler for deleteBtn
@@ -146,6 +201,39 @@ Tine.Addressbook.Main = {
             iconCls: 'action_exportAsPdf',
             scope: this
         });
+
+        this.actions.callContact = new Ext.Action({
+        	id: 'Addressbook_Contacts_CallContact',
+            text: 'call contact',
+            disabled: true,
+            handler: this.handlers.callContact,
+            iconCls: 'action_callContact',
+            menu: new Ext.menu.Menu({
+                id: 'Addressbook_Contacts_CallContact_Menu'
+            }),
+            scope: this
+        });
+    },
+
+    updateMainToolbar : function() 
+    {
+        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+        menu.removeAll();
+        /*menu.add(
+            {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
+        );*/
+
+        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+        adminButton.setIconClass('AddressbookTreePanel');
+        //if(Tine.Addressbook.rights.indexOf('admin') > -1) {
+        //    adminButton.setDisabled(false);
+        //} else {
+            adminButton.setDisabled(true);
+        //}
+
+        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+        preferencesButton.setIconClass('AddressbookTreePanel');
+        preferencesButton.setDisabled(true);
     },
 	
     displayContactsToolbar: function()
@@ -174,6 +262,7 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact,
                 '-',
                 this.actions.exportContact,
+                Tine.Dialer && Tine.Dialer.rights.indexOf('run') > -1 ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
                 '->', 
                 'Search:', 
                 ' ',
@@ -200,7 +289,9 @@ Tine.Addressbook.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
-        }, this);        
+        }, this);   
+        
+        //Ext.StoreMgr.add('ContactsStore', dataStore);
         
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
@@ -264,16 +355,56 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact.setDisabled(true);
                 this.actions.editContact.setDisabled(true);
                 this.actions.exportContact.setDisabled(true);
+                this.actions.callContact.setDisabled(true);
             } else if(rowCount > 1) {
                 // more than one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(true);
                 this.actions.exportContact.setDisabled(true);
+                this.actions.callContact.setDisabled(true);
             } else {
                 // only one row selected
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(false);
                 this.actions.exportContact.setDisabled(false);
+
+                if(Tine.Dialer && Tine.Dialer.rights.indexOf('run') > -1) {
+	                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
+	                callMenu.removeAll();
+	                var contact = _selectionModel.getSelected();
+	                if(!Ext.isEmpty(contact.data.tel_work)) {
+		                callMenu.add({
+	                       id: 'Addressbook_Contacts_CallContact_Work', 
+		                   text: 'work ' + contact.data.tel_work + '',
+		                   handler: this.handlers.callContact
+		                });
+	                    this.actions.callContact.setDisabled(false);
+	                }
+	                if(!Ext.isEmpty(contact.data.tel_home)) {
+	                    callMenu.add({
+	                       id: 'Addressbook_Contacts_CallContact_Home', 
+	                       text: 'home ' + contact.data.tel_home + '',
+	                       handler: this.handlers.callContact
+	                    });
+	                    this.actions.callContact.setDisabled(false);
+	                }
+	                if(!Ext.isEmpty(contact.data.tel_cell)) {
+	                    callMenu.add({
+	                       id: 'Addressbook_Contacts_CallContact_Cell', 
+	                       text: 'cell ' + contact.data.tel_cell + '',
+	                       handler: this.handlers.callContact
+	                    });
+	                    this.actions.callContact.setDisabled(false);
+	                }
+	                if(!Ext.isEmpty(contact.data.tel_cell_private)) {
+	                    callMenu.add({
+	                       id: 'Addressbook_Contacts_CallContact_CellPrivate', 
+	                       text: 'cell private ' + contact.data.tel_cell_private + '',
+	                       handler: this.handlers.callContact
+	                    });
+	                    this.actions.callContact.setDisabled(false);
+	                }
+                }
             }
         }, this);
         
@@ -384,6 +515,7 @@ Tine.Addressbook.Main = {
         if(currentToolbar === false || currentToolbar.id != 'Addressbook_Contacts_Toolbar') {
             this.displayContactsToolbar();
             this.displayContactsGrid();
+            this.updateMainToolbar();
         }
         this.loadData(_node);
     },
