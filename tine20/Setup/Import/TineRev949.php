@@ -40,28 +40,42 @@ class Setup_Import_TineRev949
      * @var string
      */
     protected $newTablePrefix = "sironanew_";
+
+    /**
+     * mapping of application ids
+     * 
+     * @var array
+     */
+    protected $applicationIdMapping = array (  "8" => "2", 
+                                                "12" => "5", 
+                                                "13" => "4" );    
     
+    /**
+     * mapping of application rights
+     * 
+     * @var array
+     */
+    protected $applicationRightsMapping = array ( 1 => 'run', 2 => 'admin' );
+        
     /**
      * import main function
      *
      */
     public function import()
     {
-                
+                        
         $this->importGroups();
         $this->importAccounts();
         $this->importGroupMembers();
         $this->importContainer();
         $this->importAddressbook();
         $this->importCrm();
-
-        //@todo activate again
+        $this->importAdmin();        
         
-        //@todo make it work        
+        //@todo make it work
         
-        //@todo write these functions (and add more?)
-        
-//        $this->importAccessLog();        
+        //@todo write these functions (and add more?)        
+                
 //        $this->importApplicationRights();
 //        $this->importTasks();
 //        $this->importLinks();
@@ -173,9 +187,6 @@ class Setup_Import_TineRev949
         
         $what = "container";
         $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
-        $mapping = array (  "8" => "2", 
-                            "12" => "5", 
-                            "13" => "4" );
         $where = array();        
 
         // delete old entries (contacts + container)      
@@ -195,7 +206,7 @@ class Setup_Import_TineRev949
                 'name'              => $row->container_name,
                 'type'              => $row->container_type,
                 'backend'           => strtolower($row->container_backend),
-                'application_id'    => ( isset($mapping[$row->application_id]) ) ? $mapping[$row->application_id] : $row->application_id,
+                'application_id'    => ( isset($this->applicationIdMapping[$row->application_id]) ) ? $this->applicationIdMapping[$row->application_id] : $row->application_id,
             ));
             
             // get grants
@@ -459,6 +470,10 @@ class Setup_Import_TineRev949
                 }
                 
                 if ( $leadTableData['name'] === 'metacrm_lead' ) {
+                    
+                    // @todo add modified   created lastreader modifier lastread ??
+                    // -> use Zend_Date
+                    
                     $lead = new Crm_Model_Lead ( $values );
                     try {
                         $crmBackend->addLead($lead);
@@ -498,4 +513,115 @@ class Setup_Import_TineRev949
         }        
 
     }
+    
+    /**
+     * import the admin stuff (accesslog/application rights)
+     *
+     */
+    protected function importAdmin()
+    {
+        
+        // delete old entries and import the new stuff
+        $tableDataArray = array ( 
+            array (
+                // acl_id   application_id  application_right   account_id
+                // id application_id    right     account_id  group_id
+                'name'      => 'application_rights',
+                'fields'    => array ( 
+                    'acl_id'            => 'id', 
+                    'application_id'    => 'application_id',
+                    'application_right' => 'right',
+                    'account_id'        => 'account_id',
+                ),
+                'model'     => 'Tinebase_Model_AccessLog',
+                'delete'    => TRUE,
+                'where'     => array(Zend_Registry::get('dbAdapter')->quoteInto('application_id IN (?)', array_keys($this->applicationIdMapping))),
+            ), 
+            // @todo add later on if it's needed
+            /*          
+            array (
+                // log_id sessionid    loginid     ip  li  lo  account_id  result
+                // id sessionid    login_name     ip  li  lo  account_id   result
+                'name'      => 'access_log',
+                'fields'    => array ( 
+                    'log_id'        => 'id', 
+                    'sessionid'     => 'sessionid',
+                    'loginid'       => 'login_name',
+                    'ip'            => 'ip',
+                    'li'            => 'li',
+                    'lo'            => 'lo',
+                    'account_id'    => 'account_id',
+                    'result'        => 'result',
+                ),
+                'model'     => 'Tinebase_Model_AccessLog',
+                'delete'    => TRUE,
+                'where'     => array(),
+            ),
+            */ 
+        );
+              
+        // get backend/controller
+        $backend = Tinebase_Acl_Rights::getInstance();
+        
+        foreach ( $tableDataArray as $tableData ) {
+            echo "Import from table ".$this->oldTablePrefix.''.$tableData['name']." ... ";
+            
+            if ( $tableData['delete'] ) {
+                $deleteTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$tableData['name']));
+                $deleteTable->delete( "1" );                    
+            }
+            
+            // get data
+            $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$tableData['name']));
+            $rows = $table->fetchAll($tableData['where']);
+
+            $dataArray = array ();
+            foreach ( $rows as $row ) {
+                
+                // add to array
+                $values = array ();
+                foreach ( $tableData['fields'] as $oldKey => $newKey ) {
+                    if ( $tableData['name'] === 'application_rights' ) {
+                        if ( $oldKey === 'account_id' ) {
+                            if ( empty($row->$oldKey) ) {
+                                $values['account_type'] = 'anyone';
+                                $values['account_id'] = 0;
+                                continue;
+                            } elseif ( in_array($row->$oldKey, $this->groupAccountArray) ) {
+                                $values['account_type'] = 'group'; 
+                            } else {
+                                $values['account_type'] = 'account';
+                            }
+                            //$values['group_id'] = $row->$oldKey;
+                            //continue;
+                        } elseif ( $oldKey === 'application_id' ) {
+                            $values[$newKey] = $this->applicationIdMapping[$row->$oldKey];
+                            continue;
+                        } elseif ( $oldKey === 'application_right' ) {
+                            $values[$newKey] = $this->applicationRightsMapping[$row->$oldKey];
+                            continue;
+                        }
+                    } 
+
+                    $values[$newKey] = $row->$oldKey;
+                                        
+                }
+                
+                if ( $tableData['name'] === 'application_rights' ) {
+                    $right = new Tinebase_Acl_Model_Right ( $values );
+                    try {
+                        $backend->addRight($right);
+                    } catch ( Exception $e ) {
+                        echo "error: " . $e->getMessage() . "<br/>" . print_r ( $values, true ) . "<br/>";
+                    }
+                } elseif ( $tableData['name'] === 'access_log' ) {
+                } else {
+                    $dataArray[] = $values;
+                }
+            }
+            
+            echo "done! got ".sizeof($rows)." rows.<br>";
+        }        
+
+    }    
 }
