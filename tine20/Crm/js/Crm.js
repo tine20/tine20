@@ -316,7 +316,6 @@ Tine.Crm.Main = function(){
                 actions.actionAddTask,
                 actions.actionExport,
                 '->',
-                'Filter:  ', ' ',                
                 new Ext.Button({
                     tooltip: 'Show details',
                     enableToggle: true,
@@ -325,7 +324,7 @@ Tine.Crm.Main = function(){
                     cls: 'x-btn-icon',
                     handler: handlerToggleDetails
                 }),                    
-                ' ',
+                '-',
                 new Ext.Button({
                     tooltip: 'Show closed leads',
                     enableToggle: true,
@@ -333,7 +332,7 @@ Tine.Crm.Main = function(){
                     cls: 'x-btn-icon',
                     id: 'crmShowClosedLeadsButton',
                     handler: function(toggle) {                        
-                        Ext.getCmp('gridCrm').reload();
+                        Ext.getCmp('gridCrm').getStore().reload();
                     }                    
                 }),
                 ' ',                
