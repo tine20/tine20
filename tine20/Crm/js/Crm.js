@@ -97,7 +97,8 @@ Tine.Crm.Main = function(){
     
     var actions = {
         actionAdd: new Ext.Action({
-            text: 'add lead',
+            text: 'Add lead',
+            tooltip: 'Add new lead',
             iconCls: 'actionAdd',
             handler: function(){
                 //  var tree = Ext.getCmp('venues-tree');
@@ -107,26 +108,30 @@ Tine.Crm.Main = function(){
             }
         }),
         actionEdit: new Ext.Action({
-            text: 'edit lead',
+            text: 'Edit lead',
+            tooltip: 'Edit selected lead',
             disabled: true,
             handler: handler.handlerEdit,
             iconCls: 'actionEdit'
         }),
         actionDelete: new Ext.Action({
-            text: 'delete lead',
+            text: 'Delete lead',
+            tooltip: 'Delete selected leads',
             disabled: true,
             handler: handler.handlerDelete,
             iconCls: 'actionDelete'
         }),
         actionExport: new Ext.Action({
-            text: 'export as pdf',
+            text: 'Export as PDF',
+            tooltip: 'Export selected lead as PDF',
             disabled: true,
             handler: handler.exportLead,
             iconCls: 'action_exportAsPdf',
             scope: this
         }),
         actionAddTask: new Ext.Action({
-            text: 'add task',
+            text: 'Add task',
+            tooltip: 'Add task for selected lead',
             handler: handler.handlerAddTask,
             iconCls: 'actionAddTask',
             disabled: true,
@@ -270,424 +275,7 @@ Tine.Crm.Main = function(){
 		        }
 		    });         
 		});      
-        
-      function editLeadsource() {
-           var Dialog = new Ext.Window({
-                title: 'Leadsources',
-                id: 'leadsourceWindow',
-                modal: true,
-                width: 350,
-                height: 500,
-                minWidth: 300,
-                minHeight: 500,
-                layout: 'fit',
-                plain:true,
-                bodyStyle:'padding:5px;',
-                buttonAlign:'center'
-            }); 
-            
-            var storeLeadsource = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadsources',
-                    sort: 'leadsource',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'leadsource_id',
-                fields: [
-                    {name: 'id'},
-                    {name: 'leadsource'}
-                ],
-                // turn on remote sorting
-                remoteSort: false
-            });
-            
-            storeLeadsource.load();
-            
-            var columnModelLeadsource = new Ext.grid.ColumnModel([
-                    { id:'leadsource_id', 
-                      header: "id", 
-                      dataIndex: 'leadsource_id', 
-                      width: 25, 
-                      hidden: true 
-                    },
-                    { id:'leadsource', 
-                      header: 'entries', 
-                      dataIndex: 'leadsource', 
-                      width: 170, 
-                      hideable: false, 
-                      sortable: false, 
-                      editor: new Ext.form.TextField({allowBlank: false}) 
-                    }                    
-            ]);            
-            
-             var entry = Ext.data.Record.create([
-               {name: 'leadsource_id', type: 'int'},
-               {name: 'leadsource', type: 'varchar'}
-            ]);
-            
-            var handlerLeadsourceAdd = function(){
-                var p = new entry({
-                    leadsource_id: 'NULL',
-                    leadsource: ''
-                });
-                leadsourceGridPanel.stopEditing();
-                storeLeadsource.insert(0, p);
-                leadsourceGridPanel.startEditing(0, 0);
-                leadsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
-            };
-                        
-            var handlerLeadsourceDelete = function(){
-                var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
-                var leadsourceStore = leadsourceGrid.getStore();
-                
-                var selectedRows = leadsourceGrid.getSelectionModel().getSelections();
-                for (var i = 0; i < selectedRows.length; ++i) {
-                    leadsourceStore.remove(selectedRows[i]);
-                }   
-            };                        
-                        
-          
-           var handlerLeadsourceSaveClose = function(){
-                var leadsourceStore = Ext.getCmp('editLeadsourceGrid').getStore();
-                
-                var leadsourceJson = Tine.Tinebase.Common.getJSONdata(leadsourceStore); 
-
-                 Ext.Ajax.request({
-                            params: {
-                                method: 'Crm.saveLeadsources',
-                                optionsData: leadsourceJson
-                            },
-                            text: 'Saving leadsources...',
-                            success: function(_result, _request){
-                                    leadsourceStore.reload();
-                                    leadsourceStore.rejectChanges();
-                               },
-                            failure: function(form, action) {
-                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
-                                }
-                        });          
-            };          
-            
-            var leadsourceGridPanel = new Ext.grid.EditorGridPanel({
-                store: storeLeadsource,
-                id: 'editLeadsourceGrid',
-                cm: columnModelLeadsource,
-                autoExpandColumn:'leadsource',
-                frame:false,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
-                clicksToEdit:2,
-                tbar: [{
-                    text: 'new item',
-                    iconCls: 'actionAdd',
-                    handler : handlerLeadsourceAdd
-                    },{
-                    text: 'delete item',
-                    iconCls: 'actionDelete',
-                    handler : handlerLeadsourceDelete
-                    },{
-                    text: 'save',
-                    iconCls: 'actionSaveAndClose',
-                    handler : handlerLeadsourceSaveClose 
-                    }]  
-                });
-                    
-                        
-          Dialog.add(leadsourceGridPanel);
-          Dialog.show();          
-        }
-  
-     function editLeadtype() {
-           var Dialog = new Ext.Window({
-                title: 'Leadtypes',
-                id: 'leadtypeWindow',
-                modal: true,
-                width: 350,
-                height: 500,
-                minWidth: 300,
-                minHeight: 500,
-                layout: 'fit',
-                plain:true,
-                bodyStyle:'padding:5px;',
-                buttonAlign:'center'
-            }); 
-            
-            var storeLeadtype = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadtypes',
-                    sort: 'leadtype',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'leadtype_id',
-                fields: [
-                    {name: 'id'},
-                    {name: 'leadtype'}
-                ],
-                // turn on remote sorting
-                remoteSort: false
-            });
-            
-			
-            storeLeadtype.load();
-            
-            var columnModelLeadtype = new Ext.grid.ColumnModel([
-                    { id:'id', 
-                      header: "id", 
-                      dataIndex: 'id', 
-                      width: 25, 
-                      hidden: true 
-                    },
-                    { id:'leadtype_id', 
-                      header: 'leadtype', 
-                      dataIndex: 'leadtype', 
-                      width: 170, 
-                      hideable: false, 
-                      sortable: false, 
-                      editor: new Ext.form.TextField({allowBlank: false}) 
-                    }                    
-            ]);            
-            
-             var entry = Ext.data.Record.create([
-               {name: 'id', type: 'int'},
-               {name: 'leadtype', type: 'varchar'}
-            ]);
-            
-            var handlerLeadtypeAdd = function(){
-                var p = new entry({
-                    leadtype_id: 'NULL',
-                    leadtype: ''
-                });
-                leadtypeGridPanel.stopEditing();
-                storeLeadtype.insert(0, p);
-                leadtypeGridPanel.startEditing(0, 0);
-                leadtypeGridPanel.fireEvent('celldblclick',this, 0, 1);                
-            };
-                        
-            var handlerLeadtypeDelete = function(){
-                var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
-                var leadtypeStore = leadtypeGrid.getStore();
-                
-                var selectedRows = leadtypeGrid.getSelectionModel().getSelections();
-                for (var i = 0; i < selectedRows.length; ++i) {
-                    leadtypeStore.remove(selectedRows[i]);
-                }   
-            };                        
-                        
-          
-           var handlerLeadtypeSaveClose = function(){
-                var leadtypeStore = Ext.getCmp('editLeadtypeGrid').getStore();
-                
-                var leadtypeJson = Tine.Tinebase.Common.getJSONdata(leadtypeStore); 
-
-                 Ext.Ajax.request({
-                            params: {
-                                method: 'Crm.saveLeadtypes',
-                                optionsData: leadtypeJson
-                            },
-                            text: 'Saving leadtypes...',
-                            success: function(_result, _request){
-                                    leadtypeStore.reload();
-                                    leadtypeStore.rejectChanges();
-                               },
-                            failure: function(form, action) {
-                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
-                                }
-                        });          
-            };          
-            
-            var leadtypeGridPanel = new Ext.grid.EditorGridPanel({
-                store: storeLeadtype,
-                id: 'editLeadtypeGrid',
-                cm: columnModelLeadtype,
-                autoExpandColumn:'leadtype',
-                frame:false,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
-                clicksToEdit:2,
-                tbar: [{
-                    text: 'new item',
-                    iconCls: 'actionAdd',
-                    handler : handlerLeadtypeAdd
-                    },{
-                    text: 'delete item',
-                    iconCls: 'actionDelete',
-                    handler : handlerLeadtypeDelete
-                    },{
-                    text: 'save',
-                    iconCls: 'actionSaveAndClose',
-                    handler : handlerLeadtypeSaveClose 
-                    }]  
-                });
-                    
-                        
-          Dialog.add(leadtypeGridPanel);
-          Dialog.show();          
-        }
-    
-    function editProductsource() {
-           var Dialog = new Ext.Window({
-                title: 'Products',
-                id: 'productWindow',
-                modal: true,
-                width: 350,
-                height: 500,
-                minWidth: 300,
-                minHeight: 500,
-                layout: 'fit',
-                plain:true,
-                bodyStyle:'padding:5px;',
-                buttonAlign:'center'
-            }); 
-            
-            var storeProductsource = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getProductsource',
-                    sort: 'productsource',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: [
-                    {name: 'id'},
-                    {name: 'productsource'},
-                    {name: 'price'}
-                ],
-                // turn on remote sorting
-                remoteSort: false
-            });
-            
-            storeProductsource.load();
-            
-            var columnModelProductsource = new Ext.grid.ColumnModel([
-                    { id:'id', 
-                      header: "id", 
-                      dataIndex: 'id', 
-                      width: 25, 
-                      hidden: true 
-                    },
-                    { id:'productsource', 
-                      header: 'entries', 
-                      dataIndex: 'productsource', 
-                      width: 170, 
-                      hideable: false, 
-                      sortable: false, 
-                      editor: new Ext.form.TextField({allowBlank: false}) 
-                    }, 
-                    {
-                      id: 'price',  
-                      header: "price",
-                      dataIndex: 'price',
-                      width: 80,
-                      align: 'right',
-                      editor: new Ext.form.NumberField({
-                          allowBlank: false,
-                          allowNegative: false,
-                          decimalSeparator: ','
-                          }),
-                      renderer: Ext.util.Format.euMoney                    
-                    }
-            ]);            
-            
-             var entry = Ext.data.Record.create([
-               {name: 'id', type: 'int'},
-               {name: 'productsource', type: 'varchar'},
-               {name: 'price', type: 'number'}
-            ]);
-            
-            var handlerProductsourceAdd = function(){
-                var p = new entry({
-                    productsource_id: 'NULL',
-                    productsource: '',
-                    productsource_price: '0,00'
-                });
-                productsourceGridPanel.stopEditing();
-                storeProductsource.insert(0, p);
-                productsourceGridPanel.startEditing(0, 0);
-                productsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
-            };
-                        
-            var handlerProductsourceDelete = function(){
-                var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
-                var productsourceStore = productsourceGrid.getStore();
-                
-                var selectedRows = productsourceGrid.getSelectionModel().getSelections();
-                for (var i = 0; i < selectedRows.length; ++i) {
-                    productsourceStore.remove(selectedRows[i]);
-                }   
-            };                        
-                        
-          
-           var handlerProductsourceSaveClose = function(){
-                var productsourceStore = Ext.getCmp('editProductsourceGrid').getStore();
-                
-                var productsourceJson = Tine.Tinebase.Common.getJSONdata(productsourceStore); 
-
-                 Ext.Ajax.request({
-                            params: {
-                                method: 'Crm.saveProductsource',
-                                optionsData: productsourceJson
-                            },
-                            text: 'Saving productsource...',
-                            success: function(_result, _request){
-                                    productsourceStore.reload();
-                                    productsourceStore.rejectChanges();
-                               },
-                            failure: function(form, action) {
-                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
-                                }
-                        });          
-            };          
-            
-            var productsourceGridPanel = new Ext.grid.EditorGridPanel({
-                store: storeProductsource,
-                id: 'editProductsourceGrid',
-                cm: columnModelProductsource,
-                autoExpandColumn:'productsource',
-                frame:false,
-                viewConfig: {
-                    forceFit: true
-                },
-                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
-                clicksToEdit:2,
-                tbar: [{
-                    text: 'new item',
-                    iconCls: 'actionAdd',
-                    handler : handlerProductsourceAdd
-                    },{
-                    text: 'delete item',
-                    iconCls: 'actionDelete',
-                    handler : handlerProductsourceDelete
-                    },{
-                    text: 'save',
-                    iconCls: 'actionSaveAndClose',
-                    handler : handlerProductsourceSaveClose 
-                    }]  
-                });
-             
-          Dialog.add(productsourceGridPanel);
-          Dialog.show();          
-        }     
-        
-        var settingsToolbarMenu = new Ext.menu.Menu({
-            id: 'crmSettingsMenu',
-            items: [
-                {text: 'leadstate', handler: Tine.Crm.LeadState.EditStatesDialog},
-                {text: 'leadsource', handler: editLeadsource},
-                {text: 'leadtype', handler: editLeadtype},
-                {text: 'product', handler: editProductsource}
-            ]
-        });     
-        
-        
+                  
         var handlerToggleDetails = function(toggle) {
         	//console.log(toggle.pressed);
             var gridView         = Ext.getCmp('gridCrm').getView();
@@ -725,34 +313,30 @@ Tine.Crm.Main = function(){
                 actions.actionAdd,
                 actions.actionEdit,
                 actions.actionDelete,
-                actions.actionExport,
                 actions.actionAddTask,
-                new Ext.Toolbar.Separator(),
-                {
-                    text:'Options',
-                    iconCls: 'actionEdit', 
-                    menu: settingsToolbarMenu
-                },
+                actions.actionExport,
                 '->',
+                'Filter:  ', ' ',                
                 new Ext.Button({
-                    text: 'Show Details',
+                    tooltip: 'Show details',
                     enableToggle: true,
                     id: 'crmShowDetailsButton',
                     iconCls: 'showDetailsAction',
+                    cls: 'x-btn-icon',
                     handler: handlerToggleDetails
                 }),                    
                 ' ',
                 new Ext.Button({
-                    text: 'Show closed',
+                    tooltip: 'Show closed leads',
                     enableToggle: true,
                     iconCls: 'showEndedLeadsAction',
+                    cls: 'x-btn-icon',
                     id: 'crmShowClosedLeadsButton',
                     handler: function(toggle) {                        
-                        var dataStore = Ext.getCmp('gridCrm').getStore();
-                        dataStore.reload();
+                        Ext.getCmp('gridCrm').reload();
                     }                    
                 }),
-                'Search:  ', ' ',                
+                ' ',                
                 filterComboLeadstate,
                 ' ',
                 filterComboProbability,                
@@ -950,20 +534,458 @@ Tine.Crm.Main = function(){
         
     // public functions and variables
     return {
-        show:   function(_node) {          
+        show:   function(_node) 
+        {          
                     var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
                     if (currentToolbar === false || currentToolbar.id != 'crmToolbar') {
                         _showCrmToolbar();
                         _showGrid();
+                        this.updateMainToolbar();
                     }
                     _loadData(_node);
         },    
-        reload: function() {
+        
+        updateMainToolbar : function() 
+        {
+            var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+            menu.removeAll();
+            menu.add(
+                {text: 'leadstate', handler: Tine.Crm.LeadState.EditStatesDialog},
+                {text: 'leadsource', handler: Tine.Crm.Main.handlers.editLeadSource},
+                {text: 'leadtype', handler: Tine.Crm.Main.handlers.editLeadType},
+                {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
+            );
+
+        	var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+            adminButton.setIconClass('crmThumbnailApplication');
+            if(Tine.Crm.rights.indexOf('admin') > -1) {
+                adminButton.setDisabled(false);
+            } else {
+            	adminButton.setDisabled(true);
+            }
+
+            var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+            preferencesButton.setIconClass('crmThumbnailApplication');
+            adminButton.setDisabled(false);
+        },
+        
+        handlers: 
+        {
+            editLeadSource: function(_button, _event) {
+	            var Dialog = new Ext.Window({
+	                title: 'Leadsources',
+	                id: 'leadsourceWindow',
+	                modal: true,
+	                width: 350,
+	                height: 500,
+	                minWidth: 300,
+	                minHeight: 500,
+	                layout: 'fit',
+	                plain:true,
+	                bodyStyle:'padding:5px;',
+	                buttonAlign:'center'
+	            }); 
+	            
+	            var storeLeadsource = new Ext.data.JsonStore({
+	                baseParams: {
+	                    method: 'Crm.getLeadsources',
+	                    sort: 'leadsource',
+	                    dir: 'ASC'
+	                },
+	                root: 'results',
+	                totalProperty: 'totalcount',
+	                id: 'leadsource_id',
+	                fields: [
+	                    {name: 'id'},
+	                    {name: 'leadsource'}
+	                ],
+	                // turn on remote sorting
+	                remoteSort: false
+	            });
+	            
+	            storeLeadsource.load();
+	            
+	            var columnModelLeadsource = new Ext.grid.ColumnModel([
+	                    { id:'leadsource_id', 
+	                      header: "id", 
+	                      dataIndex: 'leadsource_id', 
+	                      width: 25, 
+	                      hidden: true 
+	                    },
+	                    { id:'leadsource', 
+	                      header: 'entries', 
+	                      dataIndex: 'leadsource', 
+	                      width: 170, 
+	                      hideable: false, 
+	                      sortable: false, 
+	                      editor: new Ext.form.TextField({allowBlank: false}) 
+	                    }                    
+	            ]);            
+	            
+	             var entry = Ext.data.Record.create([
+	               {name: 'leadsource_id', type: 'int'},
+	               {name: 'leadsource', type: 'varchar'}
+	            ]);
+	            
+	            var handlerLeadsourceAdd = function(){
+	                var p = new entry({
+	                    leadsource_id: 'NULL',
+	                    leadsource: ''
+	                });
+	                leadsourceGridPanel.stopEditing();
+	                storeLeadsource.insert(0, p);
+	                leadsourceGridPanel.startEditing(0, 0);
+	                leadsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
+	            };
+	                        
+	            var handlerLeadsourceDelete = function(){
+	                var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
+	                var leadsourceStore = leadsourceGrid.getStore();
+	                
+	                var selectedRows = leadsourceGrid.getSelectionModel().getSelections();
+	                for (var i = 0; i < selectedRows.length; ++i) {
+	                    leadsourceStore.remove(selectedRows[i]);
+	                }   
+	            };                        
+	                        
+	          
+	            var handlerLeadsourceSaveClose = function(){
+	                var leadsourceStore = Ext.getCmp('editLeadsourceGrid').getStore();
+	                
+	                var leadsourceJson = Tine.Tinebase.Common.getJSONdata(leadsourceStore); 
+	
+	                 Ext.Ajax.request({
+	                            params: {
+	                                method: 'Crm.saveLeadsources',
+	                                optionsData: leadsourceJson
+	                            },
+	                            text: 'Saving leadsources...',
+	                            success: function(_result, _request){
+	                                    leadsourceStore.reload();
+	                                    leadsourceStore.rejectChanges();
+	                               },
+	                            failure: function(form, action) {
+	                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+	                                }
+	                        });          
+	            };          
+	            
+	            var leadsourceGridPanel = new Ext.grid.EditorGridPanel({
+	                store: storeLeadsource,
+	                id: 'editLeadsourceGrid',
+	                cm: columnModelLeadsource,
+	                autoExpandColumn:'leadsource',
+	                frame:false,
+	                viewConfig: {
+	                    forceFit: true
+	                },
+	                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+	                clicksToEdit:2,
+	                tbar: [{
+	                    text: 'new item',
+	                    iconCls: 'actionAdd',
+	                    handler : handlerLeadsourceAdd
+	                    },{
+	                    text: 'delete item',
+	                    iconCls: 'actionDelete',
+	                    handler : handlerLeadsourceDelete
+	                    },{
+	                    text: 'save',
+	                    iconCls: 'actionSaveAndClose',
+	                    handler : handlerLeadsourceSaveClose 
+	                    }]  
+	                });
+	                    
+	                        
+	            Dialog.add(leadsourceGridPanel);
+	            Dialog.show();          	                
+            },
+            
+            editLeadType: function(_button, _event) {
+	            var Dialog = new Ext.Window({
+	                title: 'Leadtypes',
+	                id: 'leadtypeWindow',
+	                modal: true,
+	                width: 350,
+	                height: 500,
+	                minWidth: 300,
+	                minHeight: 500,
+	                layout: 'fit',
+	                plain:true,
+	                bodyStyle:'padding:5px;',
+	                buttonAlign:'center'
+	            }); 
+	            
+	            var storeLeadtype = new Ext.data.JsonStore({
+	                baseParams: {
+	                    method: 'Crm.getLeadtypes',
+	                    sort: 'leadtype',
+	                    dir: 'ASC'
+	                },
+	                root: 'results',
+	                totalProperty: 'totalcount',
+	                id: 'leadtype_id',
+	                fields: [
+	                    {name: 'id'},
+	                    {name: 'leadtype'}
+	                ],
+	                // turn on remote sorting
+	                remoteSort: false
+	            });
+	            
+	            
+	            storeLeadtype.load();
+	            
+	            var columnModelLeadtype = new Ext.grid.ColumnModel([
+	                    { id:'id', 
+	                      header: "id", 
+	                      dataIndex: 'id', 
+	                      width: 25, 
+	                      hidden: true 
+	                    },
+	                    { id:'leadtype_id', 
+	                      header: 'leadtype', 
+	                      dataIndex: 'leadtype', 
+	                      width: 170, 
+	                      hideable: false, 
+	                      sortable: false, 
+	                      editor: new Ext.form.TextField({allowBlank: false}) 
+	                    }                    
+	            ]);            
+	            
+	            var entry = Ext.data.Record.create([
+	               {name: 'id', type: 'int'},
+	               {name: 'leadtype', type: 'varchar'}
+	            ]);
+	            
+	            var handlerLeadtypeAdd = function(){
+	                var p = new entry({
+	                    leadtype_id: 'NULL',
+	                    leadtype: ''
+	                });
+	                leadtypeGridPanel.stopEditing();
+	                storeLeadtype.insert(0, p);
+	                leadtypeGridPanel.startEditing(0, 0);
+	                leadtypeGridPanel.fireEvent('celldblclick',this, 0, 1);                
+	            };
+	                        
+	            var handlerLeadtypeDelete = function(){
+	                var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
+	                var leadtypeStore = leadtypeGrid.getStore();
+	                
+	                var selectedRows = leadtypeGrid.getSelectionModel().getSelections();
+	                for (var i = 0; i < selectedRows.length; ++i) {
+	                    leadtypeStore.remove(selectedRows[i]);
+	                }   
+	            };                        
+	                        
+	          
+	            var handlerLeadtypeSaveClose = function(){
+	                var leadtypeStore = Ext.getCmp('editLeadtypeGrid').getStore();
+	                
+	                var leadtypeJson = Tine.Tinebase.Common.getJSONdata(leadtypeStore); 
+	
+	                 Ext.Ajax.request({
+	                            params: {
+	                                method: 'Crm.saveLeadtypes',
+	                                optionsData: leadtypeJson
+	                            },
+	                            text: 'Saving leadtypes...',
+	                            success: function(_result, _request){
+	                                    leadtypeStore.reload();
+	                                    leadtypeStore.rejectChanges();
+	                               },
+	                            failure: function(form, action) {
+	                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+	                                }
+	                        });          
+	            };          
+	            
+	            var leadtypeGridPanel = new Ext.grid.EditorGridPanel({
+	                store: storeLeadtype,
+	                id: 'editLeadtypeGrid',
+	                cm: columnModelLeadtype,
+	                autoExpandColumn:'leadtype',
+	                frame:false,
+	                viewConfig: {
+	                    forceFit: true
+	                },
+	                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+	                clicksToEdit:2,
+	                tbar: [{
+	                    text: 'new item',
+	                    iconCls: 'actionAdd',
+	                    handler : handlerLeadtypeAdd
+	                    },{
+	                    text: 'delete item',
+	                    iconCls: 'actionDelete',
+	                    handler : handlerLeadtypeDelete
+	                    },{
+	                    text: 'save',
+	                    iconCls: 'actionSaveAndClose',
+	                    handler : handlerLeadtypeSaveClose 
+	                    }]  
+	                });
+	                    
+	                        
+	            Dialog.add(leadtypeGridPanel);
+	            Dialog.show();          
+                
+            },
+            
+            editProductSource: function(_button, _event) {
+	            var Dialog = new Ext.Window({
+	                title: 'Products',
+	                id: 'productWindow',
+	                modal: true,
+	                width: 350,
+	                height: 500,
+	                minWidth: 300,
+	                minHeight: 500,
+	                layout: 'fit',
+	                plain:true,
+	                bodyStyle:'padding:5px;',
+	                buttonAlign:'center'
+	            }); 
+	            
+	            var storeProductsource = new Ext.data.JsonStore({
+	                baseParams: {
+	                    method: 'Crm.getProductsource',
+	                    sort: 'productsource',
+	                    dir: 'ASC'
+	                },
+	                root: 'results',
+	                totalProperty: 'totalcount',
+	                id: 'id',
+	                fields: [
+	                    {name: 'id'},
+	                    {name: 'productsource'},
+	                    {name: 'price'}
+	                ],
+	                // turn on remote sorting
+	                remoteSort: false
+	            });
+	            
+	            storeProductsource.load();
+	            
+	            var columnModelProductsource = new Ext.grid.ColumnModel([
+	                    { id:'id', 
+	                      header: "id", 
+	                      dataIndex: 'id', 
+	                      width: 25, 
+	                      hidden: true 
+	                    },
+	                    { id:'productsource', 
+	                      header: 'entries', 
+	                      dataIndex: 'productsource', 
+	                      width: 170, 
+	                      hideable: false, 
+	                      sortable: false, 
+	                      editor: new Ext.form.TextField({allowBlank: false}) 
+	                    }, 
+	                    {
+	                      id: 'price',  
+	                      header: "price",
+	                      dataIndex: 'price',
+	                      width: 80,
+	                      align: 'right',
+	                      editor: new Ext.form.NumberField({
+	                          allowBlank: false,
+	                          allowNegative: false,
+	                          decimalSeparator: ','
+	                          }),
+	                      renderer: Ext.util.Format.euMoney                    
+	                    }
+	            ]);            
+	            
+	             var entry = Ext.data.Record.create([
+	               {name: 'id', type: 'int'},
+	               {name: 'productsource', type: 'varchar'},
+	               {name: 'price', type: 'number'}
+	            ]);
+	            
+	            var handlerProductsourceAdd = function(){
+	                var p = new entry({
+	                    productsource_id: 'NULL',
+	                    productsource: '',
+	                    productsource_price: '0,00'
+	                });
+	                productsourceGridPanel.stopEditing();
+	                storeProductsource.insert(0, p);
+	                productsourceGridPanel.startEditing(0, 0);
+	                productsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
+	            };
+	                        
+	            var handlerProductsourceDelete = function(){
+	                var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
+	                var productsourceStore = productsourceGrid.getStore();
+	                
+	                var selectedRows = productsourceGrid.getSelectionModel().getSelections();
+	                for (var i = 0; i < selectedRows.length; ++i) {
+	                    productsourceStore.remove(selectedRows[i]);
+	                }   
+	            };                        
+	                        
+	          
+	            var handlerProductsourceSaveClose = function(){
+	                var productsourceStore = Ext.getCmp('editProductsourceGrid').getStore();
+	                
+	                var productsourceJson = Tine.Tinebase.Common.getJSONdata(productsourceStore); 
+	
+	                 Ext.Ajax.request({
+	                            params: {
+	                                method: 'Crm.saveProductsource',
+	                                optionsData: productsourceJson
+	                            },
+	                            text: 'Saving productsource...',
+	                            success: function(_result, _request){
+	                                    productsourceStore.reload();
+	                                    productsourceStore.rejectChanges();
+	                               },
+	                            failure: function(form, action) {
+	                                //  Ext.MessageBox.alert("Error",action.result.errorMessage);
+	                                }
+	                        });          
+	            };          
+	            
+	            var productsourceGridPanel = new Ext.grid.EditorGridPanel({
+	                store: storeProductsource,
+	                id: 'editProductsourceGrid',
+	                cm: columnModelProductsource,
+	                autoExpandColumn:'productsource',
+	                frame:false,
+	                viewConfig: {
+	                    forceFit: true
+	                },
+	                sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
+	                clicksToEdit:2,
+	                tbar: [{
+	                    text: 'new item',
+	                    iconCls: 'actionAdd',
+	                    handler : handlerProductsourceAdd
+	                    },{
+	                    text: 'delete item',
+	                    iconCls: 'actionDelete',
+	                    handler : handlerProductsourceDelete
+	                    },{
+	                    text: 'save',
+	                    iconCls: 'actionSaveAndClose',
+	                    handler : handlerProductsourceSaveClose 
+	                    }]  
+	                });
+	             
+	            Dialog.add(productsourceGridPanel);
+	            Dialog.show();                          
+            } 
+        },
+        reload: function() 
+        {
                     if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
                         setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
                     }
         },
-        renderer: {
+        renderer: 
+        {
         	shortContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
                 if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
                     return '<b>' + _data[0].org_name + '</b><br />' + _data[0].n_fileas;
@@ -1569,7 +1591,7 @@ Tine.Crm.LeadEditDialog = function() {
         });         
 
         var  _export_lead = new Ext.Action({
-                text: 'export as pdf',
+                text: 'Export as PDF',
                 handler: function(){
                 	var leadId = _leadData.data.id;
                     Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);                	
