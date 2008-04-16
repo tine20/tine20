@@ -471,8 +471,30 @@ Tine.Admin.AccessLog.Main = function() {
     return {
         show: function() {
             _showToolbar();
-            _showGrid();            
-        }
+            _showGrid();    
+            this.updateMainToolbar();        
+        },
+        
+	    updateMainToolbar : function() 
+	    {
+	        var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+	        menu.removeAll();
+	        /*menu.add(
+	            {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
+	        );*/
+	
+	        var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+	        adminButton.setIconClass('AdminTreePanel');
+	        //if(Admin.Crm.rights.indexOf('admin') > -1) {
+	        //    adminButton.setDisabled(false);
+	        //} else {
+	            adminButton.setDisabled(true);
+	        //}
+	
+	        var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+	        preferencesButton.setIconClass('AdminTreePanel');
+	        preferencesButton.setDisabled(true);
+	    }
     };
     
 }();
@@ -747,6 +769,28 @@ Tine.Admin.Applications.Main = function() {
         show: function() {
         	_showApplicationsToolbar();
             _showApplicationsGrid();        	
+            this.updateMainToolbar();        
+        },
+        
+        updateMainToolbar : function() 
+        {
+            var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+            menu.removeAll();
+            /*menu.add(
+                {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
+            );*/
+    
+            var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+            adminButton.setIconClass('AdminTreePanel');
+            //if(Admin.Crm.rights.indexOf('admin') > -1) {
+            //    adminButton.setDisabled(false);
+            //} else {
+                adminButton.setDisabled(true);
+            //}
+    
+            var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+            preferencesButton.setIconClass('AdminTreePanel');
+            preferencesButton.setDisabled(true);
         }
     };
     
@@ -816,6 +860,28 @@ Tine.Admin.Accounts.Main = function() {
         	this.initComponent();
             this.showToolbar();
             this.showMainGrid();            
+            this.updateMainToolbar();        
+        },
+        
+        updateMainToolbar : function() 
+        {
+            var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
+            menu.removeAll();
+            /*menu.add(
+                {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
+            );*/
+    
+            var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
+            adminButton.setIconClass('AdminTreePanel');
+            //if(Admin.Crm.rights.indexOf('admin') > -1) {
+            //    adminButton.setDisabled(false);
+            //} else {
+                adminButton.setDisabled(true);
+            //}
+    
+            var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
+            preferencesButton.setIconClass('AdminTreePanel');
+            preferencesButton.setDisabled(true);
         },
         
         openAccountEditWindow: function(_accountId) 
