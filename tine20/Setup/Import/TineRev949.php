@@ -622,7 +622,7 @@ class Setup_Import_TineRev949
                 'name'      => 'tasks',
                 'fields'    => array ( 
                     //'identifier'            => 'id', 
-                    'container'             => 'container',
+                    'container'             => 'container_id',
                     'created_by'            => 'created_by',
                     'last_modified_by'      => 'last_modified_by',
                     'last_modified_time'    => 'last_modified_time',
