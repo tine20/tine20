@@ -207,7 +207,7 @@ Tine.Addressbook.Main = {
             text: 'call contact',
             disabled: true,
             handler: this.handlers.callContact,
-            iconCls: 'action_callContact',
+            iconCls: 'DialerTreePanel',
             menu: new Ext.menu.Menu({
                 id: 'Addressbook_Contacts_CallContact_Menu'
             }),
