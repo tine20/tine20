@@ -161,6 +161,7 @@ Tine.Tasks.mainGrid = {
         };
         this.initStore();
         this.initGrid();
+        this.updateMainToolbar();
 	},
 	
 	initStore: function(){
@@ -258,7 +259,7 @@ Tine.Tasks.mainGrid = {
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('TasksTreePanel');
-        //if(Admin.Crm.rights.indexOf('admin') > -1) {
+        //if(Tine.Tasks.rights.indexOf('admin') > -1) {
         //    adminButton.setDisabled(false);
         //} else {
             adminButton.setDisabled(true);
