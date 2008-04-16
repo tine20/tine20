@@ -29,6 +29,7 @@ require_once('Interface.php');
  * @subpackage  Backend
  * @todo searchTasks: filter..., pageing
  * @todo Use of spechial Exceptions
+ * @todo remove current account from sql backend?
  */
 class Tasks_Backend_Sql implements Tasks_Backend_Interface
 {
@@ -80,7 +81,11 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         }
         
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
+        try {
+            $this->_currentAccount = Zend_Registry::get('currentAccount');
+        } catch ( Zend_Exception $e ) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'no account available: ' . $e->getMessage());
+        }
     }
     
     /**
@@ -171,6 +176,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         );
         
         $TaskArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
         if (empty($TaskArray)) {
             throw new Exception("Task with uid: $_id not found!");
         }
@@ -211,7 +217,9 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     	$newId = $_task->generateUID();
     	$_task->setId($newId);
         $_task->creation_time = Zend_Date::now();
-        $_task->created_by = $this->_currentAccount->getId();
+        if ( isset($this->_currentAccount) ) {
+            $_task->created_by = $this->_currentAccount->getId();
+        }
         
         $taskParts = $this->seperateTaskData($_task);
         
