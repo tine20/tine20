@@ -47,24 +47,24 @@ class Setup_Import_TineRev949
      */
     public function import()
     {
-        
+                
         $this->importGroups();
         $this->importAccounts();
         $this->importGroupMembers();
-        
+        $this->importContainer();
+        $this->importAddressbook();
+        $this->importCrm();
+
         //@todo activate again
-        //$this->importContainer();
-        //$this->importAddressbook();
         
-        //@todo make it work
-        $this->importCrmLeads();
+        //@todo make it work        
         
         //@todo write these functions (and add more?)
         
-//        $this->importCrmProducts();
-        
-//        $this->importAcl();
-//        $this->importXXX();        
+//        $this->importAccessLog();        
+//        $this->importApplicationRights();
+//        $this->importTasks();
+//        $this->importLinks();
         
         //@todo delete old tables?
     }
@@ -350,10 +350,10 @@ class Setup_Import_TineRev949
     }    
     
     /**
-     * import the leads (+ states/sources/types) from revision 949
+     * import the leads (+ states/sources/types/products) from revision 949
      *
      */
-    protected function importCrmLeads()
+    protected function importCrm()
     {
         
         // delete old entries (leadsource + leadstate + leadtype) and import the new stuff
@@ -361,7 +361,9 @@ class Setup_Import_TineRev949
             array (
                 'name'      => 'metacrm_leadsource',
                 'fields'    => array ( 'lead_leadsource_id' => 'id', 'lead_leadsource' => 'leadsource' ),
-                'model'     => 'Crm_Model_Leadsource'
+                'model'     => 'Crm_Model_Leadsource',
+                'delete'    => TRUE,
+                'where'     => array(),
             ), 
             array (
                 'name' => 'metacrm_leadstate',
@@ -371,27 +373,81 @@ class Setup_Import_TineRev949
                     'lead_leadstate_probability' => 'probability',
                     'lead_leadstate_endslead' => 'endslead',
                 ),
-                'model'     => 'Crm_Model_Leadstate'
-            ), 
+                'model'     => 'Crm_Model_Leadstate',
+                'delete'    => TRUE,
+                'where'     => array(),
+                ), 
             array (
                 'name' => 'metacrm_leadtype',
                 'fields'    => array ( 'lead_leadtype_id' => 'id', 'lead_leadtype' => 'leadtype' ),
-                'model'     => 'Crm_Model_Leadtype'
-            )
-        );
+                'model'     => 'Crm_Model_Leadtype',
+                'delete'    => TRUE,
+                'where'     => array(),
+            ),
+            array (
+                'name' => 'metacrm_lead',
+                'fields'    => array ( 
+                    'lead_id'               => 'id', 
+                    'lead_name'             => 'lead_name',
+                    'lead_leadstate_id'     => 'leadstate_id', 
+                    'lead_leadtype_id'      => 'leadtype_id',            
+                    'lead_leadsource_id'    => 'leadsource_id',
+                    'lead_container'        => 'container',
+                    'lead_modifier'         => 'modifier',
+                    'lead_start'            => 'start',
+                    'lead_modified'         => 'modified',
+                    'lead_created'          => 'created',
+                    'lead_description'      => 'description',
+                    'lead_end'              => 'end',
+                    'lead_turnover'         => 'turnover',
+                    'lead_probability'      => 'probability',
+                    'lead_end_scheduled'    => 'end_scheduled',
+                    'lead_lastread'         => 'lastread',
+                ),
+                'model'     => 'Crm_Model_Lead',
+                'delete'    => FALSE,
+                'where'     => array(),
+            ),
+            array (
+                'name' => 'metacrm_product',
+                'fields'    => array ( 
+                    'lead_id' => 'id', 
+                    'lead_lead_id' => 'lead_id',
+                    'lead_product_id' => 'product_id',
+                    'lead_product_desc' => 'product_desc',
+                    'lead_product_price' => 'product_price',
+                ),
+                'model'     => 'Crm_Model_Product',
+                'delete'    => TRUE,
+                'where'     => array( 'lead_product_id > 0' ),
+            ),
+            array (
+                'name' => 'metacrm_productsource',
+                'fields'    => array ( 
+                    'lead_productsource_id' => 'id', 
+                    'lead_productsource' => 'productsource',
+                    'lead_productsource_price' => 'price',
+                ),
+                'model'     => 'Crm_Model_Productsource',
+                'delete'    => TRUE,
+                'where'     => array(),
+            ),
+            );
               
-        // get crm controller
-        $crmController = Crm_Controller::getInstance();
+        // get crm backend
+        $crmBackend = new Crm_Backend_Sql();
         
         foreach ( $leadTableDataArray as $leadTableData ) {
             echo "Import from table ".$this->oldTablePrefix.''.$leadTableData['name']." ... ";
             
-            $leadTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$leadTableData['name']));
-            $leadTable->delete( "1" );                    
+            if ( $leadTableData['delete'] ) {
+                $leadTable = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.$leadTableData['name']));
+                $leadTable->delete( "1" );                    
+            }
             
             // get data
             $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$leadTableData['name']));
-            $rows = $table->fetchAll($where);
+            $rows = $table->fetchAll($leadTableData['where']);
 
             $dataArray = array ();
             foreach ( $rows as $row ) {
@@ -402,81 +458,44 @@ class Setup_Import_TineRev949
                     $values[$newKey] = $row->$oldKey;                    
                 }
                 
-                $dataArray[] = $values;
+                if ( $leadTableData['name'] === 'metacrm_lead' ) {
+                    $lead = new Crm_Model_Lead ( $values );
+                    try {
+                        $crmBackend->addLead($lead);
+                    } catch ( UnderflowException $e ) {
+                        echo "error: " . $e->getMessage() . "<br/>";
+                    }
+                } else {
+                    $dataArray[] = $values;
+                }
             }
             
-            // save in the new tables
-            $records = new Tinebase_Record_RecordSet($leadTableData['model'], $dataArray);
-            
-            switch ( $leadTableData['name'] ) {
-                case 'metacrm_leadsource':
-                    $crmController->saveLeadsources($records);
-                    break;
-                case 'metacrm_leadstate':
-                    $crmController->saveLeadstates($records);
-                    break;
-                case 'metacrm_leadtype':
-                    $crmController->saveLeadtypes($records);
-                    break;
+            if ( !empty($dataArray) ) {
+                
+                $records = new Tinebase_Record_RecordSet($leadTableData['model'], $dataArray);
+                
+                // save in the new tables            
+                switch ( $leadTableData['name'] ) {
+                    case 'metacrm_leadsource':
+                        $crmBackend->saveLeadsources($records);
+                        break;
+                    case 'metacrm_leadstate':
+                        $crmBackend->saveLeadstates($records);
+                        break;
+                    case 'metacrm_leadtype':                        
+                        $crmBackend->saveLeadtypes($records);
+                        break;
+                    case 'metacrm_product':
+                        $crmBackend->saveProducts($records);
+                        break;
+                    case 'metacrm_productsource':
+                        $crmBackend->saveProductsource($records);
+                        break;                        
+                }
             }
             
             echo "done! got ".sizeof($rows)." rows.<br>";
-        }
-        
-        //@todo import leads
-        
-        /*$what = "metacrm_lead";
-        $table = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
-        $where = array();        
-        
-        $rows = $table->fetchAll($where);
-        
-        echo "Import $what  ... ";
-        foreach($rows as $row) {
-            // old: container_id    container_name  container_type  container_backend   application_id
-            // new: id   name    type    backend     application_id
-            $tineModel = new Tinebase_Model_Container(array(
-                'id'                => $row->container_id,
-                'name'              => $row->container_name,
-                'type'              => $row->container_type,
-                'backend'           => strtolower($row->container_backend),
-                'application_id'    => ( isset($mapping[$row->application_id]) ) ? $mapping[$row->application_id] : $row->application_id,
-            ));
-            
-            // get grants
-            $grantsArray = array();
-            $aclTable = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.'container_acl'));
-            $grants = $aclTable->fetchAll( array(Zend_Registry::get('dbAdapter')->quoteInto('container_id = ?', $row->container_id)) );
-            foreach ( $grants as $grant ) {
-                             
-                $type = 'user';
-                $accountId = $grant->account_id;
-                
-                if ( empty($accountId) or $accountId === NULL ) {
-                    $type = 'anyone';
-                    $accountId = 0;
-                }
-                if ( in_array($grant->account_id, $this->groupAccountArray) ) {
-                    $type = 'group';
-                }
-                
-                $grantsArray[] = array ( 'type' => $type, 'accountId' => $accountId, 'grant' => $grant->account_grant );
-                
-            }
-            Tinebase_Container::getInstance()->addContainer($tineModel, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array()), TRUE);
+        }        
 
-            foreach ( $grantsArray as $grantData ) {
-                Tinebase_Container::getInstance()->addGrants(
-                    $row->container_id, 
-                    $grantData['type'],
-                    $grantData['accountId'], 
-                    array($grantData['grant']),
-                    TRUE
-                );
-            }
-            
-        }
-        echo "done! got ".sizeof($rows)." $what(s).<br>";
-        */
     }
 }
