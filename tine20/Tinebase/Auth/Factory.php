@@ -35,14 +35,29 @@ class Tinebase_Auth_Factory
      * factory function to return a selected authentication backend class
      *
      * @param string $type
-     * @return object
+     * @return Zend_Auth_Adapter_Interface
      */
-    static public function factory($_type, $_options)
+    static public function factory($_type)
     {
-        $className = 'Tinebase_Auth_' . ucfirst($_type);
-        $instance = new $className($_options);
-        
-        //throw new Exception('unknown type');
+        switch(ucfirst($_type)) {
+            case self::LDAP:
+                $instance = new Tinebase_Auth_Ldap(Zend_Registry::get('configFile')->authentication);
+                break;
+                
+            case self::SQL:
+                $instance = new Tinebase_Auth_Sql(
+                    Zend_Registry::get('dbAdapter'),
+                    SQL_TABLE_PREFIX . 'accounts',
+                    'login_name',
+                    'password',
+                    'MD5(?)'
+                );
+                break;
+                
+            default:
+                throw new Exception('unknown authentication backend');
+                break;
+        }
         
         return $instance;
     }

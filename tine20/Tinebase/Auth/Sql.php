@@ -17,19 +17,7 @@
  * @subpackage  Auth 
  */
 class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
-{
-	public function __construct(Zend_Config $_options)
-	{
-		$db = Zend_Registry::get('dbAdapter');
-		parent::__construct(
-			$db,
-			SQL_TABLE_PREFIX . 'accounts',
-			'login_name',
-			'password',
-			'MD5(?)'
-		);
-	}
-	
+{	
 	/**
      * authenticate() - defined by Zend_Auth_Adapter_Interface.
      *
@@ -99,6 +87,5 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         }
         
         return $result;
-    }
-    
+    }   
 }

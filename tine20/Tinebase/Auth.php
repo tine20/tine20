@@ -98,17 +98,15 @@ class Tinebase_Auth
      */
     private function __construct() {
         try {
-            $authConfig = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini', 'authentication');
-            
-            $this->_backendType = $authConfig->get('backend', Tinebase_Auth_Factory::SQL);
+            $this->_backendType = Zend_Registry::get('configFile')->authentication->get('backend', Tinebase_Auth_Factory::SQL);
             
         } catch (Zend_Config_Exception $e) {
-            $authConfig = new Zend_Config(array(
-                'backend'   => Tinebase_Auth_Factory::SQL
-            ));
+            // do nothing
         }
+        
         Zend_Registry::get('logger')->debug('authentication backend: ' . $this->_backendType);
-        $this->_backend = Tinebase_Auth_Factory::factory($this->_backendType, $authConfig);
+        
+        $this->_backend = Tinebase_Auth_Factory::factory($this->_backendType);
     }
     
     /**
