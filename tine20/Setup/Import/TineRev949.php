@@ -784,7 +784,7 @@ class Setup_Import_TineRev949
         // fill array
         foreach ( $rowsNew as $rowNew ) {
             foreach ( $rowsOld as $rowOld ) {
-                if ( strtolower($rowOld->name) === strtolower($rowNew) ) {
+                if ( strtolower($rowOld->app_name) === strtolower($rowNew->name) ) {
                     $mapping[$rowOld->app_id] = $rowNew[id];                  
                     continue;
                 }
