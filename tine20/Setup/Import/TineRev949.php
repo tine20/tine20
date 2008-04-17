@@ -76,7 +76,7 @@ class Setup_Import_TineRev949
     public function __construct() 
     {
         // get applicationIdMapping
-        $this->applicationIdMapping = getApplicationIdMapping();
+        $this->applicationIdMapping = $this->getApplicationIdMapping();
     }
     
     /**
