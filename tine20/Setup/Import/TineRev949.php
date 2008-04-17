@@ -785,7 +785,7 @@ class Setup_Import_TineRev949
         foreach ( $rowsNew as $rowNew ) {
             foreach ( $rowsOld as $rowOld ) {
                 if ( strtolower($rowOld->app_name) === strtolower($rowNew->name) ) {
-                    $mapping[$rowOld->app_id] = $rowNew[id];                  
+                    $mapping[$rowOld->app_id] = $rowNew->id;                  
                     continue;
                 }
             }
