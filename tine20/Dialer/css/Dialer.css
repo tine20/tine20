@@ -12,3 +12,7 @@
 .DialerTreePanel {
     background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
+
+.action_DialNumber {
+    background-image:url(../../images/oxygen/16x16/devices/audio-headset.png) !important;
+}

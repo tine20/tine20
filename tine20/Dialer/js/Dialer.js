@@ -58,7 +58,7 @@ Tine.Dialer.Main = {
             text: 'Dial number',
             tooltip: 'Initiate a new outgoing call',
             handler: this.handlers.dialNumber,
-            iconCls: 'action_addContact',
+            iconCls: 'action_DialNumber',
             scope: this
         });
     	
