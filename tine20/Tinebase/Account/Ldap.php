@@ -26,6 +26,7 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     private function __construct(array $_options) {
         $this->_backend = new Tinebase_Ldap($_options);
+        $this->_backend->bind();
     }
     
     /**
@@ -44,24 +45,24 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
     /**
      * Enter description here...
      *
-     * @var Zend_Ldap
+     * @var Tinebase_Ldap
      */
     protected $_backend = NULL;
     
     protected $rowNameMapping = array(
-        'accountId'             => 'id',
-        'accountDisplayName'    => 'n_fileas',
-        'accountFullName'       => 'n_fn',
-        'accountFirstName'      => 'n_given',
-        'accountLastName'       => 'n_family',
-        'accountLoginName'      => 'login_name',
-        'accountLastLogin'      => 'last_login',
-        'accountLastLoginfrom'  => 'last_login_from',
-        'accountLastPasswordChange' => 'last_password_change',
+        'accountId'             => 'uidnumber',
+        //'accountDisplayName'    => 'n_fileas',
+        'accountFullName'       => 'cn',
+        'accountFirstName'      => 'givenname',
+        'accountLastName'       => 'sn',
+        'accountLoginName'      => 'uid',
+        //'accountLastLogin'      => 'last_login',
+        //'accountLastLoginfrom'  => 'last_login_from',
+        //'accountLastPasswordChange' => 'last_password_change',
         'accountStatus'         => 'status',
         'accountExpires'        => 'expires_at',
-        'accountPrimaryGroup'   => 'primary_group_id',
-        'accountEmailAddress'   => 'email'
+        'accountPrimaryGroup'   => 'gidnumber',
+        'accountEmailAddress'   => 'mail'
     );
     
     
@@ -93,27 +94,26 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
     {        
-        $select = $this->_getAccountSelectObject()
-            ->limit($_limit, $_start);
-            
-        if($_sort !== NULL) {
-            $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, 'objectclass=posixaccount');
+        
+        $result = new Tinebase_Record_RecordSet($_accountClass);
+        
+        foreach($accounts as $account) {
+            $accountArray = array(
+                'accountStatus' => 'enabled'
+            );
+            foreach($account as $key => $value) {
+                if(is_int($key)) {
+                    continue;
+                }
+                $keyMapping = array_search($key, $this->rowNameMapping);
+                if($keyMapping !== FALSE) {
+                    $accountArray[$keyMapping] = $value[0];
+                }
+            }
+            $accountObject = new $_accountClass($accountArray);
+            $result->addRecord($accountObject);
         }
-
-        if($_filter !== NULL) {
-            $select->where('(n_family LIKE ? OR n_given LIKE ? OR login_name LIKE ?)', '%' . $_filter . '%');
-        }
-        // return only active accounts, when searching for simple accounts
-        if($_accountClass == 'Tinebase_Account_Model_Account') {
-            $select->where('status = ?', 'enabled');
-        }
-        //error_log("getAccounts:: " . $select->__toString());
-
-        $stmt = $select->query();
-
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-
-        $result = new Tinebase_Record_RecordSet($_accountClass, $rows);
         
         return $result;
     }
