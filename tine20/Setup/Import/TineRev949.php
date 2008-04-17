@@ -46,9 +46,7 @@ class Setup_Import_TineRev949
      * 
      * @var array
      */
-    protected $applicationIdMapping = array (  "8" => "2", 
-                                                "12" => "5", 
-                                                "13" => "4" );    
+    protected $applicationIdMapping = array ();    
     
     /**
      * mapping of application rights
@@ -71,6 +69,15 @@ class Setup_Import_TineRev949
      */
     protected $taskIds = array();
 
+    
+    /**
+     * the constructor
+     */
+    public function __construct() 
+    {
+        // get applicationIdMapping
+        $this->applicationIdMapping = getApplicationIdMapping();
+    }
     
     /**
      * import main function
@@ -754,5 +761,37 @@ class Setup_Import_TineRev949
             echo "done! got ".$counter." rows.<br>";
         }        
 
-    }     
+    }
+
+    /**
+     * get application ids (old -> new)
+     *
+     * @return  array   application id mapping
+     */
+    private function getApplicationIdMapping()
+    {
+        $mapping = array();
+        $what = "applications";
+        
+        // get old table data
+        $tableOld = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
+        $rowsOld = $tableOld->fetchAll();
+        
+        // get new table data
+        $tableNew = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
+        $rowsNew = $tableNew->fetchAll();
+        
+        // fill array
+        foreach ( $rowsNew as $rowNew ) {
+            foreach ( $rowsOld as $rowOld ) {
+                if ( strtolower($rowOld->name) === strtolower($rowNew) ) {
+                    $mapping[$rowOld->app_id] = $rowNew[id];                  
+                    continue;
+                }
+            }
+        }
+        
+        return $mapping;
+    }
+    
 }
