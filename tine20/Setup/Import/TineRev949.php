@@ -49,19 +49,19 @@ class Setup_Import_TineRev949
     protected $applicationIdMapping = array ();    
     
     /**
+     * mapping of task status ids
+     * 
+     * @var array
+     */
+    protected $statusIdMapping = array ();
+
+    /**
      * mapping of application rights
      * 
      * @var array
      */
     protected $applicationRightsMapping = array ( 1 => 'run', 2 => 'admin' );
         
-    /**
-     * mapping of task status ids
-     * 
-     * @var array
-     */
-    protected $statusIdMapping = array ( 2 => 1, 4 => 2, 6 => 3, 8 => 4 );
-
     /**
      * is needed for task links (old id => uid)
      * 
@@ -75,8 +75,9 @@ class Setup_Import_TineRev949
      */
     public function __construct() 
     {
-        // get applicationIdMapping
+        // get applicationIdMapping and statusIdMapping
         $this->applicationIdMapping = $this->getApplicationIdMapping();
+        $this->statusIdMapping = $this->getStatusIdMapping();
     }
     
     /**
@@ -494,7 +495,7 @@ class Setup_Import_TineRev949
                     try {
                         $crmBackend->addLead($lead);
                     } catch ( UnderflowException $e ) {
-                        echo "error: " . $e->getMessage() . "<br/>";
+                        //echo "error: " . $e->getMessage() . "<br/>";
                     }
                 } else {
                     $dataArray[] = $values;
@@ -770,6 +771,7 @@ class Setup_Import_TineRev949
      */
     private function getApplicationIdMapping()
     {
+        /*
         $mapping = array();
         $what = "applications";
         
@@ -789,9 +791,54 @@ class Setup_Import_TineRev949
                     continue;
                 }
             }
+        }*/
+        
+        return $this->getMapping("applications", "app_name", "name", "app_id", "id");
+    }
+    
+    
+    /**
+     * get status ids (old -> new)
+     *
+     * @return  array   status id mapping
+     */
+    private function getStatusIdMapping()
+    {
+        return $this->getMapping("tasks_status", "status_name", "status_name", "identifier", "id");
+    }
+    
+    /**
+     * get status ids (old -> new)
+     *
+     * @param   string  $_tablename
+     * @param   string  $_compareFieldOld
+     * @param   string  $_compareFieldNew
+     * @param   string  $_idFieldOld
+     * @param   string  $_idFieldNew
+     * @return  array  id mapping
+     */
+    private function getMapping($_tablename, $_compareFieldOld, $_compareFieldNew, $_idFieldOld, $_idFieldNew)
+    {
+        $mapping = array();
+        
+        // get old table data
+        $tableOld = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$_tablename));
+        $rowsOld = $tableOld->fetchAll();
+        
+        // get new table data
+        $tableNew = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.''.$_tablename));
+        $rowsNew = $tableNew->fetchAll();
+        
+        // fill array
+        foreach ( $rowsNew as $rowNew ) {
+            foreach ( $rowsOld as $rowOld ) {
+                if ( strtolower($rowOld->$_compareFieldOld) === strtolower($rowNew->$_compareFieldNew) ) {
+                    $mapping[$rowOld->$_idFieldOld] = $rowNew->$_idFieldNew;                  
+                    continue;
+                }
+            }
         }
         
         return $mapping;
     }
-    
 }
