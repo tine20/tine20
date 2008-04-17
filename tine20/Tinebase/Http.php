@@ -121,7 +121,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 
         //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
         $view->jsIncludeFiles = $this->getJsFilesToInclude();
-        $view->cssIncludeFiles = array();
+        $view->cssIncludeFiles = $this->getCssFilesToInclude();
         $view->initialData = array();
         
         foreach($userApplications as $application) {
