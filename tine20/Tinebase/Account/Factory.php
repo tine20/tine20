@@ -20,9 +20,9 @@
  */
 class Tinebase_Account_Factory
 {
-    const SQL = 'sql';
+    const SQL = 'Sql';
     
-    const LDAP = 'ldap';
+    const LDAP = 'Ldap';
     
     /**
      * return a instance of the current accounts backend
@@ -33,7 +33,9 @@ class Tinebase_Account_Factory
     {
         switch($_backendType) {
             case self::LDAP:
-                $result = Tinebase_Account_Ldap::getInstance();
+                $options = Zend_Registry::get('configFile')->accounts->get('ldap')->toArray();
+                
+                $result = Tinebase_Account_Ldap::getInstance($options);
                 break;
                 
             case self::SQL:
