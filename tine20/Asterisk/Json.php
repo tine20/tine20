@@ -128,4 +128,3 @@ class Asterisk_Json
 		return $treeNode;
 	}
 }
-?>
