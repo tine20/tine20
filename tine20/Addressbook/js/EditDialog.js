@@ -535,15 +535,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
-    var tags = new Ext.Panel({
-        layout: 'fit',
+    var tags = new Tine.widgets.tags.TagPanel({
         width: 205,
         height: 230,
         customHeight: 230,
-        border: true,
-        bodyStyle: 'border:1px solid #B5B8C8;',
-        labelAlign: 'top',
-        items: [{}]
+        border: false,
+        style: 'border:1px solid #B5B8C8;',
+        //labelAlign: 'top'
     });
     
     
