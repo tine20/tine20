@@ -99,6 +99,7 @@ class Tinebase_Auth
     private function __construct() {
         try {
             $this->_backendType = Zend_Registry::get('configFile')->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+            $this->_backendType = ucfirst($this->_backendType);
             
         } catch (Zend_Config_Exception $e) {
             // do nothing

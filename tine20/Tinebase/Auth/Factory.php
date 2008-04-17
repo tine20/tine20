@@ -39,11 +39,11 @@ class Tinebase_Auth_Factory
      */
     static public function factory($_type)
     {
-        switch(ucfirst($_type)) {
+        switch($_type) {
             case self::LDAP:
                 $options = Zend_Registry::get('configFile')->authentication->toArray();
                 unset($options['backend']);
-                error_log(print_r($options, true));
+
                 $instance = new Tinebase_Auth_Ldap($options);
                 break;
                 
