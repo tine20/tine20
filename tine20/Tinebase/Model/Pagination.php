@@ -44,4 +44,22 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                                         'InArray'       => array('ASC', 'DESC'),
                                         'default'       => 'ASC'        )
     );
+    
+    /**
+     * Appends pagination statements to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendPagination($_select)
+    {
+        if ($this->isValid()) {
+            if (!empty($this->limit)) {
+                $_select->limit($this->limit, $this->start);
+            }
+            if (!empty($this->sort) && !empty($this->sort)){
+                $_select->order($this->sort . ' ' . $this->dir);
+            }
+        }
+    }
 }
