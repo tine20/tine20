@@ -778,7 +778,7 @@ class Setup_Import_TineRev949
         $rowsOld = $tableOld->fetchAll();
         
         // get new table data
-        $tableNew = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
+        $tableNew = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.''.$what));
         $rowsNew = $tableNew->fetchAll();
         
         // fill array
