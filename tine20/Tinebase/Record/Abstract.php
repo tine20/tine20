@@ -281,7 +281,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     );
                 }
                 if ($_throwExceptionOnInvalidData) {
-                    $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
+                    $e = new Tinebase_Record_Exception_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
                     Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
                         print_r($this->_validationErrors,true). $e);
                     throw $e;
