@@ -23,7 +23,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     private function __construct() {
         $this->contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
-        $this->_currentAccount = Zend_Registry::get('currentAccount');
+        
+        // removed current account object (isn't used at the moment in this class)
+        //$this->_currentAccount = Zend_Registry::get('currentAccount');
     }
     
     /**
@@ -65,7 +67,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      *
      * @var Tinebase_Account_Model_Account
      */
-    protected $_currentAccount;
+    protected $_currentAccount = NULL;
 
     /**
      * add or updates a contact
