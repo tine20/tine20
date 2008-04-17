@@ -122,6 +122,25 @@ class Tinebase_Json
         return $response;        
     }    
     
+    public function searchTags($query, $context, $owner, $findGlobalTags, $start=0, $limit=0)
+    {
+        $filter = new Tinebase_Tags_Model_Filter(array(
+            'name'        => $query . '%',
+            'application' => $context,
+            'owner'       => $owner,
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => 'name',
+            'dir'   => 'ASC'
+        ));
+        
+        return array(
+            'results'    => Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray(),
+            'totalCount' => Tinebase_Tags::getInstance()->getSearchTagsCount($filter)
+        );
+    }
     
     /**
      * authenticate user by username and password
