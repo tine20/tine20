@@ -275,29 +275,9 @@ class Setup_Import_TineRev949
         $contacts = $contactsTable->fetchAll();        
         
         echo "Import Contacts from table sirona_addressbook ... ";
+        
         foreach($contacts as $contact) {
-            // old: contact_id  contact_tid     contact_owner   contact_private     cat_id  n_family    
-            //  n_given     n_middle    n_prefix    n_suffix    n_fn    n_fileas    contact_bday    
-            //  org_name    org_unit    contact_title   contact_role    contact_assistent   contact_room    
-            //  adr_one_street  adr_one_street2     adr_one_locality    adr_one_region  adr_one_postalcode  
-            //  adr_one_countryname     contact_label   adr_two_street  adr_two_street2     adr_two_locality    
-            //  adr_two_region  adr_two_postalcode  adr_two_countryname     tel_work    tel_cell    tel_fax     
-            //  tel_assistent   tel_car     tel_pager   tel_home    tel_fax_home    tel_cell_private    
-            //  tel_other   tel_prefer  contact_email   contact_email_home  contact_url     contact_url_home    
-            //  contact_freebusy_uri    contact_calendar_uri    contact_note    contact_tz  contact_geo     
-            //  contact_pubkey  contact_created     contact_creator     contact_modified    contact_modifier    
-            //  contact_jpegphoto   account_id
             
-            // new: id  account_id adr_one_countryname     adr_one_locality    adr_one_postalcode  
-            //  adr_one_region  adr_one_street  adr_one_street2     adr_two_countryname     
-            //  adr_two_locality    adr_two_postalcode  adr_two_region  adr_two_street  adr_two_street2     
-            //  cat_id  assistent   bday    calendar_uri    email   email_home  freebusy_uri    
-            //  geo     jpegphoto   label   note    owner   private     pubkey  role    room    tid     
-            //  title   tz  url     url_home    n_family    n_fileas    n_fn    n_given     n_middle    
-            //  n_prefix    n_suffix    org_name    org_unit    tel_assistent   tel_car     tel_cell    
-            //  tel_cell_private    tel_fax     tel_fax_home    tel_home    tel_other   tel_pager   
-            //  tel_prefer  tel_work    created_by  creation_time   last_modified_by    last_modified_time  
-            // is_deleted  deleted_by  deleted_time
             $tineContact = new Addressbook_Model_Contact ( array(
                 
                 'id'                    => $contact->contact_id,
@@ -770,29 +750,7 @@ class Setup_Import_TineRev949
      * @return  array   application id mapping
      */
     private function getApplicationIdMapping()
-    {
-        /*
-        $mapping = array();
-        $what = "applications";
-        
-        // get old table data
-        $tableOld = new Tinebase_Db_Table(array('name' => $this->oldTablePrefix.''.$what));
-        $rowsOld = $tableOld->fetchAll();
-        
-        // get new table data
-        $tableNew = new Tinebase_Db_Table(array('name' => $this->newTablePrefix.''.$what));
-        $rowsNew = $tableNew->fetchAll();
-        
-        // fill array
-        foreach ( $rowsNew as $rowNew ) {
-            foreach ( $rowsOld as $rowOld ) {
-                if ( strtolower($rowOld->app_name) === strtolower($rowNew->name) ) {
-                    $mapping[$rowOld->app_id] = $rowNew->id;                  
-                    continue;
-                }
-            }
-        }*/
-        
+    {        
         return $this->getMapping("applications", "app_name", "name", "app_id", "id");
     }
     
