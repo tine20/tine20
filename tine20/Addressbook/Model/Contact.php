@@ -94,6 +94,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'freebusy_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'owner'                 => array('Digits', array('GreaterThan', 0), 'presence'=>'required'),
         'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -162,7 +163,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     /**
      * converts a int, string or Addressbook_Model_Contact to an contact id
      *
-     * @param int|string|Addressbook_Model_Contact $_accountId the contact id to convert
+     * @param int|string|Addressbook_Model_Contact $_contactId the contact id to convert
      * @return int
      */
     static public function convertContactIdToInt($_contactId)
