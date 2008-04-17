@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface 
+class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap 
 {    
     /**
      * the list of attributes to fetch from ldap
@@ -35,20 +35,6 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
     );
 
     /**
-     * $_identity - Identity value
-     *
-     * @var string
-     */
-    protected $_identity = null;
-
-    /**
-     * $_credential - Credential values
-     *
-     * @var string
-     */
-    protected $_credential = null;
-
-    /**
      * $_resultRow - Results of database authentication query
      *
      * @var array
@@ -56,45 +42,25 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
     protected $_resultRow = null;
     
     /**
-     * the ldap host to connect to
+     * authenticate() - defined by Zend_Auth_Adapter_Interface.
      *
-     * @var string
+     * @throws Zend_Auth_Adapter_Exception if answering the authentication query is impossible
+     * @return Zend_Auth_Result
      */
-    protected $_host;
-    
-    /**
-     * the adminDN to search the ldap tree
-     *
-     * @var string
-     */
-    protected $_adminDN;
-    
-    /**
-     * the password for the adminDN
-     *
-     * @var string
-     */
-    protected $_adminPassword;
-    
-    /**
-     * where to start searching for accounts
-     *
-     * @var string
-     */
-    protected $_searchDN;
-
-    /**
-     * the contructor
-     *
-     * @param Zend_Config $_options
-     */
-    public function __construct(Zend_Config $_options)
+    public function authenticate()
     {
-        $this->_host                = $_options->get('host');
-        $this->_adminDN             = $_options->get('admindn');
-        $this->_adminPassword       = $_options->get('adminpassword');
-        $this->_searchDN            = $_options->get('searchdn');
-        $this->_updateShadowFields  = strtolower($_options->get('updateshadowfields', 'no')) === 'yes' ? true : false;
+        Zend_Registry::get('logger')->debug('trying to authenticate '. $this->_identity);
+        
+        $result = parent::authenticate();
+        
+        if($result->isValid()) {
+            // username and password are correct, let's do some additional tests            
+            Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' succeeded');
+        } else {
+            Zend_Registry::get('logger')->debug('authentication of '. $this->_identity . ' failed');
+        }
+        
+        return $result;
     }
     
     /**
@@ -103,7 +69,7 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      * @throws Zend_Auth_Adapter_Exception If authentication cannot be performed
      * @return Zend_Auth_Result
      */
-    public function authenticate()
+    public function _authenticate()
     {
         if (empty($this->_identity)) {
             throw new Zend_Auth_Adapter_Exception('identity can not be empty');
@@ -189,7 +155,7 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      */
     public function setIdentity($_identity)
     {
-        $this->_identity = $_identity;
+        $this->setUsername($_identity);
         return $this;
     }
     
@@ -201,7 +167,7 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      */
     public function setCredential($_credential)
     {
-        $this->_credential = $_credential;
+        $this->setPassword($_credential);
         return $this;
     }    
 
@@ -213,7 +179,7 @@ class Tinebase_Auth_Ldap implements Zend_Auth_Adapter_Interface
      * @param bool $_encrypt encrypt password
      * @return void
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
+    public function _setPassword($_loginName, $_password, $_encrypt = TRUE)
     {
         if(empty($_loginName)) {
             throw new InvalidArgumentException('$_loginName can not be empty');

@@ -102,9 +102,10 @@ class Tinebase_Auth
             
         } catch (Zend_Config_Exception $e) {
             // do nothing
+            // there is a default set for $this->_backendType
         }
         
-        Zend_Registry::get('logger')->debug('authentication backend: ' . $this->_backendType);
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $this->_backendType);
         
         $this->_backend = Tinebase_Auth_Factory::factory($this->_backendType);
     }

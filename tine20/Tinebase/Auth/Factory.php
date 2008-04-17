@@ -41,7 +41,10 @@ class Tinebase_Auth_Factory
     {
         switch(ucfirst($_type)) {
             case self::LDAP:
-                $instance = new Tinebase_Auth_Ldap(Zend_Registry::get('configFile')->authentication);
+                $options = Zend_Registry::get('configFile')->authentication->toArray();
+                unset($options['backend']);
+                error_log(print_r($options, true));
+                $instance = new Tinebase_Auth_Ldap($options);
                 break;
                 
             case self::SQL:
