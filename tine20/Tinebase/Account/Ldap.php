@@ -51,16 +51,16 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
     
     protected $rowNameMapping = array(
         'accountId'             => 'uidnumber',
-        //'accountDisplayName'    => 'n_fileas',
+        'accountDisplayName'    => 'displayname',
         'accountFullName'       => 'cn',
         'accountFirstName'      => 'givenname',
         'accountLastName'       => 'sn',
         'accountLoginName'      => 'uid',
         //'accountLastLogin'      => 'last_login',
         //'accountLastLoginfrom'  => 'last_login_from',
-        //'accountLastPasswordChange' => 'last_password_change',
-        'accountStatus'         => 'status',
-        'accountExpires'        => 'expires_at',
+        'accountLastPasswordChange' => 'shadowlastchange',
+        'accountStatus'         => 'shadowinactive',
+        'accountExpires'        => 'shadowexpire',
         'accountPrimaryGroup'   => 'gidnumber',
         'accountEmailAddress'   => 'mail'
     );
@@ -94,7 +94,14 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
     {        
-        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, 'objectclass=posixaccount');
+        if(!empty($_filter)) {
+            $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
+            $filter = "(&(objectclass=posixaccount)(|(uid=$searchString)(cn=$searchString)(sn=$searchString)(givenName=$searchString)))";
+        } else {
+            $filter = 'objectclass=posixaccount';
+        }
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
+        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, $filter, array_values($this->rowNameMapping));
         
         $result = new Tinebase_Record_RecordSet($_accountClass);
         
@@ -102,16 +109,29 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
             $accountArray = array(
                 'accountStatus' => 'enabled'
             );
+            
             foreach($account as $key => $value) {
                 if(is_int($key)) {
                     continue;
                 }
                 $keyMapping = array_search($key, $this->rowNameMapping);
                 if($keyMapping !== FALSE) {
-                    $accountArray[$keyMapping] = $value[0];
+                    switch($keyMapping) {
+                        case 'accountLastPasswordChange':
+                        case 'accountExpires':
+                            $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                            break;
+                        case 'accountStatus':
+                            break;
+                        default: 
+                            $accountArray[$keyMapping] = $value[0];
+                            break;
+                    }
                 }
             }
+            
             $accountObject = new $_accountClass($accountArray);
+            
             $result->addRecord($accountObject);
         }
         
@@ -128,30 +148,40 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $select = $this->_getAccountSelectObject()
-            ->where(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName);
-
-        $stmt = $select->query();
-
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
+        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, 'uid=' . $_loginName);
+                
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
-        if ( $row === false ) {
+/*        if ( $row === false ) {
              throw new Exception('account not found');
-        }        
+        } */        
 
-        try {
-            $account = new $_accountClass();
-            $account->setFromArray($row);
-        } catch (Exception $e) {
-            $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
-                "Tinebase_Account_Model_Account::validation_errors: \n" .
-                print_r($validation_errors,true));
-            throw ($e);
+        $accountArray = array(
+            'accountStatus' => 'enabled'
+        );
+        
+        foreach($account as $key => $value) {
+            if(is_int($key)) {
+                continue;
+            }
+            $keyMapping = array_search($key, $this->rowNameMapping);
+            if($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    case 'accountLastPasswordChange':
+                    case 'accountExpires':
+                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        break;
+                    case 'accountStatus':
+                        break;
+                    default: 
+                        $accountArray[$keyMapping] = $value[0];
+                        break;
+                }
+            }
         }
         
+        $account = new $_accountClass($accountArray);
+                
         return $account;
     }
     
@@ -163,29 +193,40 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, 'uidnumber=' . $_accountId);
+                
+        // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
+        // because of the wrong type that is not catched by the block below)
+/*        if ( $row === false ) {
+             throw new Exception('account not found');
+        } */        
+
+        $accountArray = array(
+            'accountStatus' => 'enabled'
+        );
         
-        $select = $this->_getAccountSelectObject()
-            ->where(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId);
-
-        $stmt = $select->query();
-
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        if($row === false) {
-            throw new Exception('account not found');
-        }
-
-        try {
-            $account = new $_accountClass();
-            $account->setFromArray($row);
-        } catch (Exception $e) {
-            $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::_getAccountFromSQL: ' . $e->getMessage() . "\n" .
-                "Tinebase_Account_Model_Account::validation_errors: \n" .
-                print_r($validation_errors,true));
-            throw ($e);
+        foreach($account as $key => $value) {
+            if(is_int($key)) {
+                continue;
+            }
+            $keyMapping = array_search($key, $this->rowNameMapping);
+            if($keyMapping !== FALSE) {
+                switch($keyMapping) {
+                    case 'accountLastPasswordChange':
+                    case 'accountExpires':
+                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        break;
+                    case 'accountStatus':
+                        break;
+                    default: 
+                        $accountArray[$keyMapping] = $value[0];
+                        break;
+                }
+            }
         }
         
+        $account = new $_accountClass($accountArray);
+                
         return $account;
     }
     
