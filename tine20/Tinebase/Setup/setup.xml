@@ -569,7 +569,7 @@
 
         <table>
             <name>application_rights</name>
-            <version>0.0.2</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
