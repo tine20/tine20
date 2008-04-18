@@ -120,16 +120,16 @@ if ($kindOfSetup == 'initalLoad')
 	    }
 	    
 	    $right = new Tinebase_Acl_Model_Right(array(
-	        'application_id'    => $application,
-	        'account_id'        => $group,
+	        'application_id'    => $application->getId(),
+	        'account_id'        => $group->getId(),
 	        'account_type'      => 'group',
 	        'right'             => Tinebase_Acl_Rights::RUN
 	    ));
 	    Tinebase_Acl_Rights::getInstance()->addRight($right);
 
 	    $right = new Tinebase_Acl_Model_Right(array(
-	        'application_id'    => $application,
-	        'account_id'        => $adminGroup,
+	        'application_id'    => $application->getId(),
+	        'account_id'        => $adminGroup->getId(),
 	        'account_type'      => 'group',
 	        'right'             => Tinebase_Acl_Rights::ADMIN
 	    ));

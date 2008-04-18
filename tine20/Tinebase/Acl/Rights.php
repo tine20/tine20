@@ -208,26 +208,8 @@ class Tinebase_Acl_Rights
         if(!$_right->isValid()) {
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
+                        
+        $this->rightsTable->insert($_right->toArray());
         
-        $data['right'] = $_right->right;
-        $data['application_id'] = Tinebase_Model_Application::convertApplicationIdToInt($_right->application_id);
-        switch($_right->account_type) {
-            case 'group':
-                $data['group_id'] = Tinebase_Group_Model_Group::convertGroupIdToInt($_right->account_id);
-                break;
-                
-            case 'account':
-                $data['account_id'] = Tinebase_Account_Model_Account::convertAccountIdToInt($_right->account_id);
-                break;
-                
-            case 'anyone':
-                break;
-                
-            default:
-                throw new Exception('invalid account_type passed');
-                break;
-        }
-        
-        $this->rightsTable->insert($data);
     }
 }

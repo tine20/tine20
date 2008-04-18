@@ -569,7 +569,7 @@
 
         <table>
             <name>application_rights</name>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -586,18 +586,20 @@
                 </field>
                 <field>
                     <name>right</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>user</value>
+                    <value>group</value>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>account_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>group_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
                     <notnull>false</notnull>
@@ -611,13 +613,13 @@
                     </field>
                 </index>
                 <index>
-                    <name>account_id-group_id-application_id-right</name>
+                    <name>account_id-account_type-application_id-right</name>
                     <unique>true</unique>
                     <field>
                         <name>account_id</name>
                     </field>
                     <field>
-                        <name>group_id</name>
+                        <name>account_type</name>
                     </field>
                     <field>
                         <name>application_id</name>
