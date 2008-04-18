@@ -22,11 +22,7 @@ class Setup_Tables
 
     public function __construct()
     {
-        try {
-            $this->_config = new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini');
-        } catch (Zend_Config_Exception $e) {
-            die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
-        }
+        $this->_config = Zend_Registry::get('configFile');
 
         $this->setupLogger();
         $this->setupDatabaseConnection();

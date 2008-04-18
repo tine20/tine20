@@ -17,6 +17,12 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
+try {
+    Zend_Registry::set('configFile', new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini'));
+} catch (Zend_Config_Exception $e) {
+    die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+}
+
 $check = new Setup_ExtCheck('Setup/essentials.xml');
 $output = $check->getOutput();
 
