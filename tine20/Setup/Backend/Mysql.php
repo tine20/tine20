@@ -107,33 +107,26 @@ class Setup_Backend_Mysql
 	
 	}
 	
-	
 	public function _addCol($_tableName, $_declaration , $_position = NULL)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD COLUMN " ;
 		
 		$statement .= $this->_getMysqlDeclarations($_declaration);
 		
-		if($_position != NULL)
-		{
-			if ($_position == 0)
-			{
+		if($_position != NULL) {
+			if ($_position == 0) {
 				$statement .= ' FIRST ';
-			}
-			else
-			{
+			} else {
 				$before = $this->_execQuery('DESCRIBE `' .  $_tableName . '` ');
 				$statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
 			}
 		}
 		
-		if ($this->_execQuery($statement))
-		{
+		echo "STATEMENT: $statement<br>";
+		if ($this->_execQueryVoid($statement)) {
 			echo  "modified " . $_tableName . "\n";
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -150,7 +143,8 @@ class Setup_Backend_Mysql
 		
 		$statement .= " `" . $oldName .  "` " . $this->_getMysqlDeclarations($_declaration) ;
 		
-		if ($this->_execQuery($statement))
+		echo "STATEMENT: $statement<br>";
+		if ($this->_execQueryVoid($statement))
 		{
 			echo  "modified " . $_tableName . "\n";
 			return true;
@@ -165,13 +159,10 @@ class Setup_Backend_Mysql
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
 		
-		if ($this->_execQuery($statement))
-		{
+		if ($this->_execQueryVoid($statement)) {
 			echo  "modified " . $_tableName . "\n";
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}	
 	}
@@ -226,35 +217,29 @@ class Setup_Backend_Mysql
 		}	
 	}
 	
-	public function _addPrimaryKey($_tableName)
+	public function _addPrimaryKey($_tableName, $_declaration)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
-					. $this->_getMysqlIndexDeclarations($_declaration)  ; ;
+					. $this->_getMysqlIndexDeclarations($_declaration);
 		
-		if ($this->_execQuery($statement))
-		{
+		if ($this->_execQueryVoid($statement)) {
 			echo  "modified " . $_tableName . "\n";
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}	
 	
 	}
 	
-	public function _addIndex($_tableName , $_name)
+	public function _addIndex($_tableName , $_declaration)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
-					. $this->_getMysqlForeignKeyDeclarations($_declaration)  ; ;
+					. $this->_getMysqlIndexDeclarations($_declaration);
 		
-		if ($this->_execQuery($statement))
-		{
+		if ($this->_execQueryVoid($statement)) {
 			echo  "modified " . $_tableName . "\n";
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -264,37 +249,28 @@ class Setup_Backend_Mysql
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
 		
-		if ($this->_execQuery($statement))
-		{
+		if ($this->_execQueryVoid($statement)) {
 			echo  "modified " . $_tableName . "\n";
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}	
 	}
 	
 	public function _execQueryVoid($_statement)
 	{
-		try
-        {
+		try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
-        }
-        catch (Zend_Db_Exception $e)
-        {
+        } catch (Zend_Db_Exception $e) {
             var_dump($e);
         }
 	}
 	
 	public function _execQuery($_statement)
 	{
-		try
-        {
+		try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
-        }
-        catch (Zend_Db_Exception $e)
-        {
+        } catch (Zend_Db_Exception $e) {
             var_dump($e);
             return false;
         }

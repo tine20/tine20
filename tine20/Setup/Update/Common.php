@@ -18,8 +18,18 @@
  */
 class Setup_Update_Common
 {
-	public $backend;
+    /**
+     * Enter description here...
+     *
+     * @var Setup_Backend_Mysql
+     */
+	protected $_backend;
 
+	public function __construct($_backend)
+	{
+	    $this->_backend = $_backend;
+	}
+	
 	public function getApplicationVersion($_application)
 	{
 		$select = Zend_Registry::get('dbAdapter')->select()
@@ -41,6 +51,33 @@ class Setup_Update_Common
 		$result = $applicationsTable->update(array('version' => $_version), $where);
 	}
 
+	public function getTableVersion($_tableName)
+    {
+        $select = Zend_Registry::get('dbAdapter')->select()
+                ->from( SQL_TABLE_PREFIX . 'application_tables')
+                ->where('name = ?', SQL_TABLE_PREFIX . $_tableName);
 
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll();
+        
+        return $rows[0]['version'];
+    }
 
+    public function setTableVersion($_tableName, $_version)
+    {
+        $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
+        $where  = array(
+                    $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
+                );
+        $result = $applicationsTables->update(array('version' => $_version), $where);
+    }
+    
+    public function validateTableVersion($_tableName, $_version)
+    {
+        $currentVersion = $this->getTableVersion($_tableName);
+        
+        if($_version != $currentVersion) {
+            throw new Exception("wrong table version for $_tableName. expected $_version go $currentVersion");
+        }
+    }
 }

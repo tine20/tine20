@@ -20,6 +20,10 @@ class Setup_Tables
     private $_backend;
     private $_config;
 
+    /**
+     * the contructor
+     *
+     */
     public function __construct()
     {
         $this->_config = Zend_Registry::get('configFile');
@@ -27,19 +31,14 @@ class Setup_Tables
         $this->setupLogger();
         $this->setupDatabaseConnection();
         
-        switch ($this->_config->database->database)
-        {
-            case('mysql'):
-            {
+        #switch ($this->_config->database->database) {
+        #    case('mysql'):
                 $this->_backend = new Setup_Backend_Mysql();
-                break;
-            }
-            
-            default:
-            {
-                echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
-            }
-        }
+        #        break;
+        #    
+        #    default:
+        #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
+        #}
     }
 
     /**
@@ -94,23 +93,21 @@ class Setup_Tables
         }
     }
 
+    /**
+     * checks if application is installed at all
+     *
+     * @param unknown_type $_application
+     * @return unknown
+     */
     public function applicationExists($_application)
     {
-        if($this->tableExists(SQL_TABLE_PREFIX . 'applications'))
-        {
-            if($this->applicationVersionQuery($_application) != false)
-            {
+        if($this->tableExists(SQL_TABLE_PREFIX . 'applications')) {
+            if($this->applicationVersionQuery($_application) != false) {
                 return true;
             }
-            else
-            {
-                return false;
-            }
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
     
     
@@ -125,15 +122,11 @@ class Setup_Tables
     
         $xml = simplexml_load_file($_file);
         
-        if (false == $this->applicationExists($xml->name)) 
-        {
+        if (!$this->applicationExists($xml->name)) {
             // just insert tables
-            if(isset($xml->tables)) 
-            {
-                foreach ($xml->tables[0] as $table) 
-                {
-                    if (false == $this->tableExists(SQL_TABLE_PREFIX . $table->name)) 
-                    {
+            if(isset($xml->tables)) {
+                foreach ($xml->tables[0] as $table) {
+                    if (false == $this->tableExists(SQL_TABLE_PREFIX . $table->name)) {
                         $this->_backend->_createTable($table);
                         $createdTables[] = $table;
                     }
@@ -165,35 +158,25 @@ class Setup_Tables
             }    
                 
             
-        return 'initialLoad';    
-        }
-        else
-        {
-        
-            switch($this->applicationNeedsUpdate($xml->name, $xml->version)) 
-            {
-                case (-1):
-                {
-                    $this->applicationUpdate($xml->name, $xml->version);
+            return 'initialLoad';    
+        } else {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
+
+            switch(version_compare($application->version, $xml->version)) {
+                case -1:
+                    $this->updateApplication($xml->name, $application->version, $xml->version);
                     
-                    echo "<strong>" . $xml->name . " had different specifications. Now up-to-date to version " .  $xml->version . "</strong>";
+                    echo "<strong>" . $xml->name . " had different specifications. Now up-to-date to version " .  $xml->version . "</strong><br>";
                     break; 
-                }
-                case (0):
-                {
-                    echo "<i>" . $xml->name . " no changes " . $xml->version . "</i>";
+                case 0:
+                    echo "<i>" . $xml->name . " no changes " . $xml->version . "</i><br>";
                     break;
-                }
-                case(1):
-                {
+                case 1:
                     echo "<span style=color:#ff0000>database schema newer as your new definition - giving up</span>";
                     break;
-                }
             }
-        
+            return 'update';
         }
-        return 'update';   
-
     }
 
 
@@ -242,13 +225,13 @@ class Setup_Tables
         
         return $version[0]['version'];
     }
+    
     /**
      * check's a given application version
      *
      * @param string $_application
      * @return boolean return string "version" if the table exists, otherwise false
      */
-    
     public function applicationVersionQuery($_application)
     {    
         $select = Zend_Registry::get('dbAdapter')->select()
@@ -257,12 +240,9 @@ class Setup_Tables
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();
-        if(empty($version))
-        {
+        if(empty($version)) {
             return false;
-        }
-        else
-        {
+        } else {
             return $version[0]['version'];
         }
     }
@@ -292,63 +272,33 @@ class Setup_Tables
         return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
     }
 
-    /**
-     * update database tables via including the right files
-     *
-     * @param string $_xmlVersion (numbers read from xml-file)
-     * @param string $_application (name of updateable application)
-     * @param string $_tableName (name of database table)
-     * @return true
-     */
-     
-     /*
-     hirnknoten: update ich eine tabelle oder eine application ... 
-     
-     */
-     
-    public function tableUpdate($_xmlVersion, $_application, $_tableName)
+    public function updateApplication($_name, $_updateFrom, $_updateTo)
     {
-        $tableVersion = $this->tableVersionQuery($_tableName);
+        echo "Updateing $_name from $_updateFrom to $_updateTo<br>";
         
-        $noGoArea = array('.', '..', 'setup.xml');
+        list($fromMajorVersion, $fromMinorVersion) = explode('.', $_updateFrom);
+        list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
+
+        $minor = $fromMinorVersion;
         
-        $path = $_application . "/Setup/";
-        
-        foreach ( new DirectoryIterator( $path ) as $item ) 
-        {
-            if(! in_array($item->getFileName(), $noGoArea)) {
-                $fileBuffer[] = $item->getPathname();
-            }
+        for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
+            $className = ucfirst($_name) . '_Setup_Update_Release' . $major;
+            
+            $update = new $className($this->_backend);
+            
+            $classMethods = get_class_methods($update);
+            
+            // we must do at least one update
+            do {
+                $functionName = 'update_' . $minor;
+                //echo "FUNCTIONNAME: $functionName<br>";
+                $update->$functionName();
+                $minor++;
+            } while(array_search('update_' . $minor, $classMethods) !== false);
+            
+            //reset minor version to 0
+            $minor = 0;
         }
-        
-        sort($fileBuffer);
-    
-        foreach ($fileBuffer as $file)
-        {
-            $fileVersion = substr($file, (strpos($file, 'up-') + 3), (strlen($file) - 4 - (strpos($file, 'up-') + 3)));
-            if ((version_compare($fileVersion, $tableVersion) == 1) && ((version_compare($_xmlVersion, $fileVersion ) == 0 || version_compare($_xmlVersion, $fileVersion) == 1)))
-            {
-                try
-                {
-                    include ($file);
-                }
-                catch (Exception $e)
-                {
-                    echo $e->getMessage();
-                }
-            }
-        }
-        exit;
-        
-    }
-    
-    public function applicationUpdate($_name, $_version)
-    {
-        $number = explode('.', $_version);
-        $className = $_name . '_Setup_Update_' . $number[0] . '_' . $number[1];
-        $update = new $className($this->_backend, $_name);
-        
-        $update->make();
     }
     
     
