@@ -1158,6 +1158,7 @@
                     <name>account_grant</name>
                     <type>text</type>
                     <length>10</length>
+                    <notnull>false</notnull>
                 </field>
                 <index>
                     <name>tag_id-account_type-account_id-account_grant</name>

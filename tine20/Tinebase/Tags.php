@@ -12,18 +12,11 @@
 
 /**
  * Class for handling tags and tagging.
- *
+ * @todo work out /apply transaction concept!
  */
 class Tinebase_Tags
 {
-    /**
-     * Type of a shared tag
-     */
-    const TYPE_SHARED = 'shared';
-    /**
-     * Type of a personal tag
-     */
-    const TYPE_PERSONAL = 'personal';
+
     
     /**
      * @var Zend_Db_Adapter_Pdo_Mysql
@@ -129,18 +122,39 @@ class Tinebase_Tags
         $_tag->creation_time = Zend_Date::now()->getIso();
         
         switch ($_tag->type) {
-            case self::TYPE_PERSONAL:
-                // tags_acl (personal => NULL)
-                // tags_context (personal => NULL)
-                $_tag->owner = Zend_Registry::get('currentAccount')->getId();
+            case Tinebase_Tags_Model_Tag::TYPE_PERSONAL:
+                $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+                $_tag->owner = $currentAccountId;
+                $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
+                // grant all right to owner
+                $grant = new Tinebase_Tags_Model_Grant(array(
+                    'tag_id'        => $newId,
+                    'account_type'  => 'user',
+                    'account_id'    => $currentAccountId,
+                    'grant_view'    => true,
+                    'grant_attach'  => true,
+                    'grant_detach'  => true
+                ));
+                $this->setGrants($grant);
+                // grant all (NULL) contexts
+                
                 break;
-            case self::TYPE_SHARED:
+            case Tinebase_Tags_Model_Tag::TYPE_SHARED:
                 $_tag->owner = 0;
+                $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
+                // grant anyone view rights
+                $grant = new Tinebase_Tags_Model_Grant(array(
+                    'tag_id'        => $newId,
+                    'account_type'  => 'anyone',
+                    'account_id'    => 0,
+                    'grant_view'    => true
+                ));
+                $this->setGrants($grant);
                 break;
             default:
                 throw new Exception('No such tag type');
         }
-        $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
+        
         return $this->getTagById($newId);
     }
     
@@ -173,4 +187,36 @@ class Tinebase_Tags
         
     }
     
+    /**
+     * Sets all given tag grants
+     * 
+     * @param Tinebase_Record_RecordSet|Tinebase_Tags_Model_Grant
+     * @return void
+     * @throws Exception
+     */
+    protected function setGrants($_grants)
+    {
+        $grants = $_grants instanceof Tinebase_Tags_Model_Grant ? array($_grants) : $_grants;
+        foreach ($grants as $grant) {
+            if (! ($grant instanceof Tinebase_Tags_Model_Grant && $grant->isValid())) {
+                throw new Exception ('The given grant is not valid!');
+            }
+            $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', array(
+                $this->_db->quoteInto('tag_id = ?', $grant->tag_id),
+                $this->_db->quoteInto('account_type = ?', $grant->account_type),
+                $this->_db->quoteInto('account_id = ?', $grant->account_id)
+            ));
+            foreach (array('view', 'attach', 'detach' ) as $availableGrant) {
+                $grantField = 'grant_' . $availableGrant;
+            	if ($grant->$grantField === true) {
+            	    $this->_db->insert(SQL_TABLE_PREFIX . 'tags_acl', array(
+                        'tag_id'        => $grant->tag_id,
+                        'account_type'  => $grant->account_type,
+                        'account_id'    => $grant->account_id,
+            	        'account_grant' => $availableGrant
+                    ));
+            	}
+            }
+        } 
+    }
 }

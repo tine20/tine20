@@ -14,10 +14,19 @@
  * defines the datatype for one tag
  * 
  * @package     Tinebase
- * @subpackage  Record
+ * @subpackage  Tags
  */
 class Tinebase_Tags_Model_Tag extends Tinebase_Record_Abstract
 {
+    /**
+     * Type of a shared tag
+     */
+    const TYPE_SHARED = 'shared';
+    /**
+     * Type of a personal tag
+     */
+    const TYPE_PERSONAL = 'personal';
+    
 	/**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -53,7 +62,7 @@ class Tinebase_Tags_Model_Tag extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                     => array('Alnum', 'allowEmpty' => true),
-        'type'                   => array('InArray' => array(Tinebase_Tags::TYPE_PERSONAL, Tinebase_Tags::TYPE_SHARED) ),
+        'type'                   => array('InArray' => array(self::TYPE_PERSONAL, self::TYPE_SHARED) ),
         'owner'                  => array('allowEmpty' => true),
         'name'                   => array('presence' => 'required'),
         'description'            => array('allowEmpty' => true),

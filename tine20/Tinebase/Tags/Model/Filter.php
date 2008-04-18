@@ -41,7 +41,7 @@ class Tinebase_Tags_Model_Filter extends Tinebase_Record_Abstract
     
         'type'                 => array('presence'   => 'required',
                                         'allowEmpty' => true,
-                                        'InArray'    => array(Tinebase_Tags::TYPE_PERSONAL, Tinebase_Tags::TYPE_SHARED),
+                                        'InArray'    => array(Tinebase_Tags_Model_Tag::TYPE_PERSONAL, Tinebase_Tags_Model_Tag::TYPE_SHARED),
                                         'default'    => ''
                                   ),
     );
