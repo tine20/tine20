@@ -515,7 +515,7 @@ Tine.Admin.Applications.Main = function() {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
-        Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 800, 450);
+        Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
     };
     
     var _enableDisableButtonHandler = function(_button, _event) {
@@ -759,9 +759,8 @@ Tine.Admin.Applications.Main = function() {
         
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            //console.log('id: ' + record.data.contact_id);
             try {
-                //Tine.Tinebase.Common.openWindow('listWindow', 'index.php?method=Addressbook.editList&_listId=' + record.data.list_id, 800, 450);
+               Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + record.data.id, 600, 400);
             } catch(e) {
             //  alert(e);
             }
