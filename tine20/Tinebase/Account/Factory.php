@@ -34,6 +34,8 @@ class Tinebase_Account_Factory
         switch($_backendType) {
             case self::LDAP:
                 $options = Zend_Registry::get('configFile')->accounts->get('ldap')->toArray();
+                unset($options['userDn']);
+                unset($options['groupsDn']);
                 
                 $result = Tinebase_Account_Ldap::getInstance($options);
                 break;

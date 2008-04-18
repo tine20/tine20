@@ -25,8 +25,6 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      * don't use the constructor. use the singleton 
      */
     private function __construct(array $_options) {
-        unset($_options['userDn']);
-        unset($_options['groupsDn']);
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
     }
