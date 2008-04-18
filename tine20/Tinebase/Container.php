@@ -297,6 +297,9 @@ class Tinebase_Container
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
         
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
                
@@ -441,11 +444,10 @@ class Tinebase_Container
     {
         $accountId          = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        $ownerId            = Tinebase_Account_Model_Account::convertAccountIdToInt($_owner);
-
         if(count($groupMemberships) === 0) {
             throw new Exception('account must be in at least one group');
         }
+        $ownerId            = Tinebase_Account_Model_Account::convertAccountIdToInt($_owner);
         
         $db = Zend_Registry::get('dbAdapter');
         
@@ -722,6 +724,9 @@ class Tinebase_Container
         }
         
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        if(count($groupMemberships) === 0) {
+            throw new Exception('account must be in at least one group');
+        }
         
         $db = Zend_Registry::get('dbAdapter');
 
