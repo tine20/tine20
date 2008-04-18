@@ -25,6 +25,8 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      * don't use the constructor. use the singleton 
      */
     private function __construct(array $_options) {
+        unset($_options['userDn']);
+        unset($_options['groupsDn']);
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
     }
@@ -101,7 +103,7 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
             $filter = 'objectclass=posixaccount';
         }
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
-        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, $filter, array_values($this->rowNameMapping));
+        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, $filter, array_values($this->rowNameMapping));
         
         $result = new Tinebase_Record_RecordSet($_accountClass);
         
@@ -148,7 +150,7 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, 'uid=' . $_loginName);
+        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $_loginName);
                 
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
@@ -193,7 +195,7 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->baseDn, 'uidnumber=' . $_accountId);
+        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uidnumber=' . $_accountId);
                 
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
