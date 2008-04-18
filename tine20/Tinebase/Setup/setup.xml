@@ -587,7 +587,7 @@
                 <field>
                     <name>right</name>
                     <type>text</type>
-                    <length>128</length>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
