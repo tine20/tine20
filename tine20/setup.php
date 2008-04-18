@@ -34,6 +34,7 @@ if (strpos($output, "FAILURE"))
 }
 
 $setup = new Setup_Tables();
+$kindOfSetup = 'initalLoad';
     
 if ( DO_TABLE_SETUP ) {
     $fileName = 'Tinebase/Setup/setup.xml';
@@ -47,7 +48,7 @@ if ( DO_TABLE_SETUP ) {
     		$fileName = $item->getFileName() . '/Setup/setup.xml';
     		if(file_exists($fileName)) {
     			echo "Processing tables definitions from <b>$fileName</b><br>";
-    			$setup->parseFile($fileName);
+    			$kindOfSetup = $setup->parseFile($fileName);
     		}
     	}
     }
@@ -65,85 +66,88 @@ if ( isset($import) ) {
     exit();
 }
 
-# or initialize the database ourself
-//*
-# add the admin group
-$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
 
-$adminGroup = new Tinebase_Group_Model_Group(array(
-    'name'          => 'Administrators',
-    'description'   => 'Group of administrative accounts'
-));
-$adminGroup = $groupsBackend->addGroup($adminGroup);
+if ($kindOfSetup == 'initalLoad')
+{
+	# or initialize the database ourself
+	//*
+	# add the admin group
+	$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
 
-# add the user group
-$userGroup = new Tinebase_Group_Model_Group(array(
-    'name'          => 'Users',
-    'description'   => 'Group of user accounts'
-));
-$userGroup = $groupsBackend->addGroup($userGroup);
+	$adminGroup = new Tinebase_Group_Model_Group(array(
+	    'name'          => 'Administrators',
+	    'description'   => 'Group of administrative accounts'
+	));
+	$adminGroup = $groupsBackend->addGroup($adminGroup);
 
-# add the admin account
-$accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
+	# add the user group
+	$userGroup = new Tinebase_Group_Model_Group(array(
+	    'name'          => 'Users',
+	    'description'   => 'Group of user accounts'
+	));
+	$userGroup = $groupsBackend->addGroup($userGroup);
 
-$account = new Tinebase_Account_Model_FullAccount(array(
-    'accountLoginName'      => 'tine20admin',
-    'accountStatus'         => 'enabled',
-    'accountPrimaryGroup'   => $userGroup->getId(),
-    'accountLastName'       => 'Account',
-    'accountDisplayName'    => 'Tine 2.0 Admin Account',
-    'accountFirstName'      => 'Tine 2.0 Admin'
-));
+	# add the admin account
+	$accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
 
-$accountsBackend->addAccount($account);
+	$account = new Tinebase_Account_Model_FullAccount(array(
+	    'accountLoginName'      => 'tine20admin',
+	    'accountStatus'         => 'enabled',
+	    'accountPrimaryGroup'   => $userGroup->getId(),
+	    'accountLastName'       => 'Account',
+	    'accountDisplayName'    => 'Tine 2.0 Admin Account',
+	    'accountFirstName'      => 'Tine 2.0 Admin'
+	));
 
-Zend_Registry::set('currentAccount', $account);
+	$accountsBackend->addAccount($account);
 
-# set the password for the tine20admin account
-Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
+	Zend_Registry::set('currentAccount', $account);
 
-# add the admin account to all groups
-Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
-Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
+	# set the password for the tine20admin account
+	Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
 
-# enable the applications for the user group
-# give admin rights to the admin group for all applications
-foreach(Tinebase_Application::getInstance()->getApplications() as $application) {
-    if(strtolower($application->name) == 'admin') {
-        $group = $adminGroup;
-    } else {
-        $group = $userGroup;
-    }
-    
-    $right = new Tinebase_Acl_Model_Right(array(
-        'application_id'    => $application,
-        'account_id'        => $group,
-        'account_type'      => 'group',
-        'right'             => Tinebase_Acl_Rights::RUN
-    ));
-    Tinebase_Acl_Rights::getInstance()->addRight($right);
+	# add the admin account to all groups
+	Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
+	Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
 
-    $right = new Tinebase_Acl_Model_Right(array(
-        'application_id'    => $application,
-        'account_id'        => $adminGroup,
-        'account_type'      => 'group',
-        'right'             => Tinebase_Acl_Rights::ADMIN
-    ));
-    Tinebase_Acl_Rights::getInstance()->addRight($right);
+	# enable the applications for the user group
+	# give admin rights to the admin group for all applications
+	foreach(Tinebase_Application::getInstance()->getApplications() as $application) {
+	    if(strtolower($application->name) == 'admin') {
+	        $group = $adminGroup;
+	    } else {
+	        $group = $userGroup;
+	    }
+	    
+	    $right = new Tinebase_Acl_Model_Right(array(
+	        'application_id'    => $application,
+	        'account_id'        => $group,
+	        'account_type'      => 'group',
+	        'right'             => Tinebase_Acl_Rights::RUN
+	    ));
+	    Tinebase_Acl_Rights::getInstance()->addRight($right);
+
+	    $right = new Tinebase_Acl_Model_Right(array(
+	        'application_id'    => $application,
+	        'account_id'        => $adminGroup,
+	        'account_type'      => 'group',
+	        'right'             => Tinebase_Acl_Rights::ADMIN
+	    ));
+	    Tinebase_Acl_Rights::getInstance()->addRight($right);
+	}
+
+	# give Users group read rights to the internal addressbook
+	# give Adminstrators group read/write rights to the internal addressbook
+	$internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
+	Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
+	    Tinebase_Container::GRANT_READ
+	), TRUE);
+	Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
+	    Tinebase_Container::GRANT_READ,
+	    Tinebase_Container::GRANT_ADD,
+	    Tinebase_Container::GRANT_EDIT,
+	    Tinebase_Container::GRANT_DELETE,
+	    Tinebase_Container::GRANT_ADMIN
+	), TRUE);
 }
-
-# give Users group read rights to the internal addressbook
-# give Adminstrators group read/write rights to the internal addressbook
-$internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
-Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
-    Tinebase_Container::GRANT_READ
-), TRUE);
-Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
-    Tinebase_Container::GRANT_READ,
-    Tinebase_Container::GRANT_ADD,
-    Tinebase_Container::GRANT_EDIT,
-    Tinebase_Container::GRANT_DELETE,
-    Tinebase_Container::GRANT_ADMIN
-), TRUE);
-
 //*/
