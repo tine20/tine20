@@ -148,7 +148,8 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
      */
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $_loginName);
+        $loginName = Zend_Ldap::filterEscape($_loginName);
+        $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $loginName);
                 
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
