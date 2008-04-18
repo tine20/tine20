@@ -32,8 +32,12 @@ class Tinebase_Ldap extends Zend_Ldap
             throw new Exception('not connected to ldap server');
         }
         
-        $searchResult = ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
-
+        $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
+        
+        if($searchResult === FALSE) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+        
         $entries = ldap_get_entries($this->_resource, $searchResult);
         
         ldap_free_result($searchResult);
@@ -57,8 +61,12 @@ class Tinebase_Ldap extends Zend_Ldap
             throw new Exception('not connected to ldap server');
         }
         
-        $searchResult = ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
-
+        $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);  
+        
+        if($searchResult === FALSE) {
+            throw new Exception(ldap_error($this->_resource));
+        }
+        
         if(ldap_count_entries($this->_resource, $searchResult) === 0) {
             throw new Exception('nothing found for filter: ' . $_filter);
         }
