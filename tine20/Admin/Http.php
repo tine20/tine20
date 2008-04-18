@@ -114,7 +114,45 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
+
+    /**
+     * display edit application dialog
+     *
+     * @param   integer $appId    application id
+     * 
+     */
+    public function editApplication($appId)
+    {
+        $application = Admin_Controller::getInstance()->getApplication($appId);           
+        $encodedApplication = Zend_Json::encode($application->toArray());
         
+        //@todo add accounts
+        //$json = new Admin_Json();
+        //$encodedAccounts = Zend_Json::encode($json->getApplicationAccounts($appId));
+        $encodedAccounts = Zend_Json::encode( array() );
+
+        $currentAccount = Zend_Registry::get('currentAccount');
+        
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();
+        
+        $view->jsExecute = 'Tine.Admin.Applications.EditDialog.display(' . $encodedApplication . ', ' . $encodedAccounts . ');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit application";
+
+        $view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }    
     /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
