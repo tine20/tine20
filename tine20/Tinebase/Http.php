@@ -80,6 +80,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             self::_appendFileTime("Tinebase/js/ux/grid/QuickaddGridPanel.js"),
             self::_appendFileTime("Tinebase/js/ux/form/IconTextField.js"),
             self::_appendFileTime("Tinebase/js/ux/form/MirrorTextField.js"),
+            self::_appendFileTime("Tinebase/js/ux/layout/ColumnForm.js"),
             self::_appendFileTime("Tinebase/js/DatepickerRange.js"),
             // Tine 2.0 specific widgets
             self::_appendFileTime("Tinebase/js/Widgets.js"),
