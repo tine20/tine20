@@ -101,10 +101,10 @@ class Tinebase_Acl_Rights
             ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')
             
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships)
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
-            
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
+
             ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', Tinebase_Acl_Rights::RUN)
             ->where(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED)
 
@@ -144,9 +144,9 @@ class Tinebase_Acl_Rights
             ->from(SQL_TABLE_PREFIX . 'application_rights', array('account_rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
             
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships)
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
 
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->id)
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
@@ -184,9 +184,9 @@ class Tinebase_Acl_Rights
 
         $select = $this->rightsTable->select()
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.group_id IN (?)', $groupMemberships)
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id IS NULL AND ' . SQL_TABLE_PREFIX . 'application_rights.group_id IS NULL)')
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
 
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $_right);
@@ -208,8 +208,12 @@ class Tinebase_Acl_Rights
         if(!$_right->isValid()) {
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
+        
+        $data = $_right->toArray();
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
-        $this->rightsTable->insert($_right->toArray());
+        $this->rightsTable->insert($data);
         
     }
 }
