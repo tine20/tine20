@@ -23,7 +23,7 @@ class Tinebase_Group
      *
      * @var Tinebase_Group_Interface
      */
-    protected $_backend;
+    protected $_backendType = Tinebase_Group_Factory::SQL;
     
     /**
      * the constructor
@@ -31,7 +31,18 @@ class Tinebase_Group
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
+        try {
+            $this->_backendType = Zend_Registry::get('configFile')->accounts->get('backend', Tinebase_Group_Factory::SQL);
+            $this->_backendType = ucfirst($this->_backendType);
+            
+        } catch (Zend_Config_Exception $e) {
+            // do nothing
+            // there is a default set for $this->_backendType
+        }
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $this->_backendType);
+        
+        $this->_backend = Tinebase_Group_Factory::getBackend($this->_backendType);
     }
     
     /**

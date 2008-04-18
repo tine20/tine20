@@ -33,7 +33,11 @@ class Tinebase_Group_Factory
     {
         switch($_backendType) {
             case self::LDAP:
-                $result = Tinebase_Group_Ldap::getInstance();
+                $options = Zend_Registry::get('configFile')->accounts->get('ldap')->toArray();
+                unset($options['userDn']);
+                unset($options['groupsDn']);
+                
+                $result = Tinebase_Group_Ldap::getInstance($options);
                 break;
                 
             case self::SQL:
@@ -41,7 +45,7 @@ class Tinebase_Group_Factory
                 break;
             
             default:
-                throw new Exception("accounts backend type $_backendType not implemented");
+                throw new Exception("groups backend type $_backendType not implemented");
         }
         
         return $result;
