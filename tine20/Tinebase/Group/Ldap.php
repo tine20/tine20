@@ -194,24 +194,5 @@ class Tinebase_Group_Ldap implements Tinebase_Group_Interface
         }
         
         return $result;
-        
-        
-        $select = $this->groupsTable->select();
-        
-        if($_filter !== NULL) {
-            $select->where('`name` LIKE ?', '%' . $_filter . '%');
-        }
-        if($_sort !== NULL) {
-            $select->order("$_sort $_dir");
-        }
-        if($_start !== NULL) {
-            $select->limit($_limit, $_start);
-        }
-        
-        $rows = $this->groupsTable->fetchAll($select);
-
-        $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group', $rows->toArray());
-        
-        return $result;
     }
 }
