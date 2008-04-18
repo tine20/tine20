@@ -212,7 +212,7 @@ class Setup_Tables
 
         if(isset($xml->defaultRecords)) {
             foreach ($xml->defaultRecords[0] as $record) {
-                $this->_backend->execInsertStatement($record);
+                $this->execInsertStatement($record);
             }
         }
     }

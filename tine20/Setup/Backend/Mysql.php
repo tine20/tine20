@@ -16,513 +16,17 @@
  * @package     Setup
  */
 
-
-
-
-
-
-
-class SchemaTable
-{
-	public $name;
-	public $version;
-	public $declaration;
-//	public $engine;
-
-	public static function __set($prop, $value)
-    {
-		if (isset(self::$prop))
-        {
-			self::$prop = $value;
-		}
-		else
-		{
-			throw new Exception('Undefined property [' . $prop . ']',1);
-		}
-	}
-
-
-
-
-
-	public function __construct($_tableInfo = array('TABLE_NAME'=> NULL, 'TABLE_COMMENT' => NULL ))
-	{
-		$this->name = substr($_tableInfo['TABLE_NAME'], strlen( SQL_TABLE_PREFIX ));
-		//$this->engine = $_tableInfo['ENGINE'];
-
-		$version = explode(';', $_tableInfo['TABLE_COMMENT']);
-		$this->version = substr($version[0],9);
-	}
-
-
-
-	public function setDeclarationField($_declaration)
-	{
-		var_dump(get_object_vars($_declaration));
-		$this->declaration['field'][] = new SchemaField($_declaration);
-	}
-
-	public function setDeclarationIndex($_field)
-	{
-		$this->declaration['index'][] = new SchemaIndex($_field);
-	}
-
-	public function setIndex($_definition)
-	{
-		foreach ($this->declaration['index'] as $index)
-		{
-			if ($index->field->name == $_definition['COLUMN_NAME'])
-			{
-				$index->setName($_definition['CONSTRAINT_NAME']);
-			}
-		}
-	}
-
-	public function setForeign($_definition)
-	{
-		foreach ($this->declaration['index'] as $index)
-		{
-			if ($index->field->name == substr($_definition['CONSTRAINT_NAME'], strlen( SQL_TABLE_PREFIX )))
-			{
-				$index->setForeignKey($_definition);
-			}
-		}
-	}
-
-
-
-}
-
-class SchemaField
-{
-	public $name;
-	public $type;
-	public $autoincrement;
-	public $unsigned;
-	public $length;
-	public $notnull;
-	public $value;
-	public $comment;
-	public $mul;
-	public $primary;
-	public $unique;
-
-	public function __construct($_declaration = NULL)
-	{
-
-
-		if (!$_declaration instanceof SimpleXMLElement)
-		{
-			$this->name = $_declaration['COLUMN_NAME'];
-			$type = '';
-			$length= '';
-			switch ($_declaration['DATA_TYPE'])
-			{
-				case('int'):
-				{
-					$type = 'integer';
-					$length = $_declaration['NUMERIC_PRECISION'];
-					break;
-				}
-				case('enum'):
-				{
-					$type = $_declaration['DATA_TYPE'];
-					$this->value = explode(',', str_replace("'", '', substr($_declaration['COLUMN_TYPE'], 5, (strlen($_declaration['COLUMN_TYPE']) - 6))));
-					break;
-				}
-				case('varchar'):
-				{
-					$length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
-					$type = 'text';
-				}
-
-
-				default:
-				{
-					$length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
-					$type = $_declaration['DATA_TYPE'];
-				}
-			}
-
-			if ($_declaration['EXTRA'] == 'auto_increment')
-			{
-				$this->autoincrement = 'true';
-			}
-
-			if (preg_match('/unsigned/', $_declaration['COLUMN_TYPE']))
-			{
-				$this->unsigned = 'true';
-			}
-
-			($_declaration['IS_NULLABLE'] == 'NO')? $this->notnull = 'true': $this->notnull = 'false';
-
-			($_declaration['COLUMN_KEY'] == 'UNI')? $this->unique = 'true': $this->unique = 'false';
-
-			($_declaration['COLUMN_KEY'] == 'PRI')? $this->primary = 'true': $this->primary = 'false';
-
-			($_declaration['COLUMN_KEY'] == 'MUL')? $this->mul = 'true': $this->mul = 'false';
-
-			$this->comment = $_declaration['COLUMN_COMMENT'];
-
-			$this->length = $length;
-			$this->type = $type;
-		}
-		else
-		{
-
-		//	var_dump($_declaration->value);
-
-			$this->name = (string) $_declaration->name;
-			$this->type = (string)$_declaration->type;
-
-			//print_r(	get_object_vars ($_declaration->value));
-
-			foreach ($_declaration as $key => $val)
-			{
-					$this->$key = (string) $val;
-			}
-
-
-
-
-	        switch ($this->type)
-	        {
-	            case('text'):
-	            {
-	            	$this->type = 'varchar';
-
-	                break;
-	            }
-	            case ('integer'):
-	            {
-	                if (isset($this->length))
-	                {
-	                    if ($this->length > 19)
-	                    {
-	                       $this->type = 'bigint';}
-	                    else if($this->length < 5)
-	                    {
-	                        $this->type = 'tinyint';
-	                    }
-	                    else
-	                    {
-	                        $this->type =  'int';
-	                    }
-	                }
-	                else
-	                {
-						$this->type =  'int';
-						$this->length =  11;
-	                }
-	                break;
-	            }
-	            case ('clob'):
-	            {
-	                $this->type = 'text';
-	                break;
-	            }
-	            case ('blob'):
-	            {
-	                $this->type = 'longblob';
-	                break;
-	            }
-	            case ('enum'):
-	            {
-	               if (isset($_declaration->value[0]) )
-					{
-						$i = 0;
-						$array = array();
-						while (isset($_declaration->value[$i]))
-						{
-							$array[] = (string) $_declaration->value[$i];
-
-							$i++;
-						}
-						$this->value = $array;
-					}
-	                break;
-	            }
-	            case ('datetime'):
-	            {
-	               $this->type = 'datetime';
-	                break;
-	            }
-	            case ('double'):
-	            {
-	                $this->type = 'double';
-	                break;
-	            }
-	            case ('float'):
-	            {
-	                $this->type = 'float';
-	                break;
-	            }
-	            case ('boolean'):
-	            {
-	                $this->type =  'tinyint';
-	                if ($this->default == 'false')
-	                {
-	                    $this->default = 0;
-	                }
-	                else
-	                {
-	                    $this->default = 1;
-	                }
-	                break;
-	            }
-	            case ('decimal'):
-	            {
-	              //   $this->type =  "decimal (" . $this->value . ")" ;
-	              //   $f
-	            }
-	        }
-
-
-
-
-
-
-
-
-
-/*
-			$this->primary = (string)$_declaration->primary;
-			$this->autoincrement =(string) $_declaration->autoincrement;
-			$this->notnull = (string)$_declaration->notnull;
-			$this->length = (string)$_declaration->length;
-			$this->comment = (string)$_declaration->comment;
-			$this->unique = (string)$_declaration->unique;
-			$this->unsigned = (string)$_declaration->unsigned;
-			$this->mul = (string)$_declaration->mul;
-
-
-*/
-/*
-			foreach ($_declaration as $key => $val)
-			{
-					$this->$key = (string) $val;
-			}
-*/
-//			var_dump($_declaration);
-		}
-//		var_dump($this);
-
-	}
-
-
-
-
-}
-
-class SchemaIndex
-{
-	public $name;
-	public $primary;
-	public $field;
-	public $foreign;
-	public $reference;
-	public $unique;
-	public $mul;
-
-	public function __construct($_field)
-	{
-		$this->name = $this->field->name = $_field->name;
-
-		if ($_field->primary === 'true')
-		{
-			$this->primary = 'true';
-			$this->unique = 'true';
-		}
-		else
-		{
-			($_field->unique === 'true')? $this->unique = 'true': $this->unique = 'false';
-
-			($_field->mul === 'true')? $this->mul = 'true': $this->mul = 'false';
-		}
-	}
-
-	public function setName($_name)
-	{
-		$this->name = substr($_name,  strlen( SQL_TABLE_PREFIX ));
-	}
-
-	public function setForeignKey($_foreign)
-	{
-		$this->foreign = 'true';
-		$this->reference['table'] = substr($_foreign['REFERENCED_TABLE_NAME'], strlen( SQL_TABLE_PREFIX));
-		$this->reference['field'] = $_foreign['REFERENCED_COLUMN_NAME'];
-
-	}
-
-
-
-}
-
 class Setup_Backend_Mysql
 {
-
-	public function tableCheck($_dbname, $_tableName, $_table)
-	{
-		echo "<pre>";
-//		print_r($_table);
-		echo "</pre>";
-
-		// step 1: get existing schema
-		$existent = $this->getExistingSchema($_dbname, $_tableName);
-
-
-		// step 2: find differnences and log variations
-		$Differences = $this->compare($existent, $_table);
-
-
-		// step 3: return true or array
-
-
-
-		echo "<pre>";
-		//print_r($existent);
-		echo "</pre>";
-
-
-
-		return false;
-	}
-
-	public function alterTable($_dbname, $_tableName, $_table)
-	{
-
-		return true;
-	}
-
-	public function getExistingSchema($_dbname, $_tableName)
-	{
-		// Get common table information
-	    $select = Zend_Registry::get('dbAdapter')->select()
-          ->from('information_schema.tables')
-          ->where('TABLE_NAME = ?', $_tableName);
-
-        $stmt = $select->query();
-        $tableInfo = $stmt->fetchAll();
-
-		$existingTable = new SchemaTable($tableInfo[0]);
-
-	   // get field informations
-		$select = Zend_Registry::get('dbAdapter')->select()
-          ->from('information_schema.COLUMNS')
-          ->where('TABLE_NAME = ?', $_tableName);
-
-        $stmt = $select->query();
-        $tableColumns = $stmt->fetchAll();
-
-		foreach($tableColumns as $tableColumn)
-		{
-			$existingTable->setDeclarationField($tableColumn);
-		}
-
-		foreach ($existingTable->declaration['field'] as $field)
-		{
-			if ($field->primary === 'true' || $field->unique === 'true')
-			{
-				$existingTable->setDeclarationIndex($field);
-			}
-		}
-
-		// get foreign keys
-		$select = Zend_Registry::get('dbAdapter')->select()
-          ->from('information_schema.KEY_COLUMN_USAGE')
-          ->where('TABLE_NAME = ?', $_tableName);
-
-        $stmt = $select->query();
-        $keyUsage = $stmt->fetchAll();
-
-		foreach ($keyUsage as $keyUse)
-		{
-//			var_dump($keyUse);
-			$existingTable->setIndex($keyUse);
-			if($keyUse['REFERENCED_TABLE_NAME'] != NULL)
-			{
-				$existingTable->setForeign($keyUse);
-			}
-		}
-		return $existingTable;
-	}
-
-
-
-	public function compare($_existent, $_future)
-	{
-$future = $this->toSchema($_future);
-/*
-
-		echo "<pre><hr><font color=#f00>";
-		print_r($_existent);
-		echo "</font><pre><hr><font color=#0f0>";
-		print_r($future);
-		echo "</font></pre><hr>";
-*/
-		foreach($_existent->declaration['field'] as $fieldKey => $field)//ExistentKey => $fieldExistentVal)
-		{
-		echo "<pre><hr><font color=#f00>";
-		print_r($field);
-		echo "</font><pre><hr><font color=#0f0>";
-		print_r($future->declaration['field'][$fieldKey]);
-		echo "</font></pre><hr>";
-
-		echo "</font><pre><font color=#00f>";
-	//	print_r($this->toFieldSchema($future->declaration['field'][$fieldKey]));
-		echo "</font></pre><hr>";
-/*
-			if ($future->declaration['field'][$tableExistentKey] == $tableExistentVal)
-			{
-				echo "richtig" . $tableExistentVal;
-
-			}
-			else
-			{
-				echo "mššp";
-			}
-*/
-		}
-
-
-		$similar = true;
-
-		return $similar;
-	}
-
-
-
-
-	public function toSchema($_table)
-	{
-		$schema = new SchemaTable();
-
-
-		$schema->name = (string) $_table->name;
-		$schema->version = (string) $_table->version;
-
-		foreach($_table->declaration->field as $field)
-		{
-			$field['TABLE_NAME'] = (string) $_table->name;
-			$field['TABLE_COMMENT'] = (string) $_table->comment;
-
-			//var_dump($field);
-			$schema->setDeclarationField($field);
-		}
-
-		return $schema;
-	}
-
-
-
+	public $DBMS = 'mysql';
     /**
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
      */
-    public function createTable($_table)
+    public function _createTable($_table)
     {
-        $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
+	    $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
         $statementSnippets = array();
 
         foreach ($_table->declaration->field as $field)
@@ -566,86 +70,240 @@ $future = $this->toSchema($_future);
 			$statement .= "';";
 		}
 
-        echo "<pre>$statement</pre>";
-        try
+		echo "<pre>$statement</pre>";
+		$this->_execQueryVoid($statement);
+		echo "<hr>";
+	}
+	
+
+	
+	public function _dropTable($_tableName)
+	{
+		$statement = "DROP TABLE `" . $_tableName . "`;";
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "dropped table " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function _renameTable($_tableName, $_newName )
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` RENAME TO `" . $_newName . "` ;";
+		
+		if ($this->_execQuery($statement))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
+	}
+	
+	
+	public function _addCol($_tableName, $_declaration , $_position = NULL)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` ADD COLUMN " ;
+		
+		$statement .= $this->_getMysqlDeclarations($_declaration);
+		
+		if($_position != NULL)
+		{
+			if ($_position == 0)
+			{
+				$statement .= ' FIRST ';
+			}
+			else
+			{
+				$before = $this->_execQuery('DESCRIBE `' .  $_tableName . '` ');
+				$statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
+			}
+		}
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function _alterCol($_tableName, $_declaration, $_oldName = NULL)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` CHANGE COLUMN " ;
+		$oldName = $_oldName ;
+		
+		if ($_oldName == NULL)
+		{
+			$oldName = $_declaration->name;
+		}
+		
+		$statement .= " `" . $oldName .  "` " . $this->_getMysqlDeclarations($_declaration) ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	public function _dropCol($_tableName, $_colName)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+
+
+	
+	public function _addForeignKey($_tableName, $_declaration)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` ADD " 
+					. $this->_getMysqlForeignKeyDeclarations($_declaration)  ;
+		
+		echo $statement;
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	
+	public function _dropForeignKey($_tableName, $_name)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	public function _dropPrimaryKey($_tableName)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` DROP PRIMARY KEY " ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	public function _addPrimaryKey($_tableName)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
+					. $this->_getMysqlIndexDeclarations($_declaration)  ; ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	
+	}
+	
+	public function _addIndex($_tableName , $_name)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
+					. $this->_getMysqlForeignKeyDeclarations($_declaration)  ; ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	public function _dropIndex($_tableName, $_indexName)
+	{
+		$statement = "ALTER TABLE `" . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
+		
+		if ($this->_execQuery($statement))
+		{
+			echo  "modified " . $_tableName . "\n";
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	public function _execQueryVoid($_statement)
+	{
+		try
         {
-            Zend_Registry::get('dbAdapter')->query($statement);
+            $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
         }
         catch (Zend_Db_Exception $e)
         {
             var_dump($e);
-            exit;
         }
-    }
-
-    /**
-     * check's if a given table exists
-     *
-     * @param string $_tableSchema
-     * @param string $_tableName
-     * @return boolean return true if the table exists, otherwise false
-     */
-    public function tableExists($_tableSchema, $_tableName)
-    {
-        $select = Zend_Registry::get('dbAdapter')->select()
-          ->from('information_schema.tables')
-          ->where('TABLE_SCHEMA = ?', $_tableSchema)
-          ->where('TABLE_NAME = ?', $_tableName);
-
-        $stmt = $select->query();
-
-        $table = $stmt->fetchObject();
-
-        if($table === false) {
-          return false;
+	}
+	
+	public function _execQuery($_statement)
+	{
+		try
+        {
+            $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
         }
-
-        return true;
-    }
-
-    public function execInsertStatement($_record)
-    {
-        $table = new Tinebase_Db_Table(array(
-           'name' => SQL_TABLE_PREFIX . $_record->table->name
-        ));
-
-        foreach ($_record->field as $field) {
-            if(isset($field->value['special'])) {
-                switch(strtolower($field->value['special'])) {
-                    case 'now':
-                    {
-                        $value = Zend_Date::now()->getIso();
-                        break;
-                    }
-                    case 'account_id':
-                    {
-                        break;
-                    }
-                    case 'application_id':
-                    {
-                        $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
-
-                        $value = $application->id;
-
-                        break;
-                    }
-                    default:
-                    {
-                        throw new Exception('unsupported special type ' . strtolower($field->value['special']));
-                        break;
-                    }
-                }
-            } else {
-                $value = $field->value;
-            }
-
-            $data[(string)$field->name] = $value;
+        catch (Zend_Db_Exception $e)
+        {
+            var_dump($e);
+            return false;
         }
+		return $stmt->fetchAll();
+	}
+	
+	
 
-        $table->insert($data);
-    }
-
-    private function _getMysqlDeclarations($_field)
+    public function _getMysqlDeclarations($_field)
     {
         $definition = '`' . $_field->name . '`';
 
@@ -774,10 +432,10 @@ $future = $this->toSchema($_future);
     /**
      * create the right mysql-statement-snippet for keys
      *
-     * @param object $_key the xml index definition
+     * @param object $_key the xml index definition 
      * @return string
      */
-    private function _getMysqlIndexDeclarations($_key)
+    public function _getMysqlIndexDeclarations($_key)
     {
         $snippet = '';
         $keys = array();
@@ -789,6 +447,7 @@ $future = $this->toSchema($_future);
             $definition = ' UNIQUE KEY';
         }
 
+        //$snippet .= $definition . " `" . SQL_TABLE_PREFIX .  $_key->name . "`" ;
         $snippet .= $definition . " `" . $_key->name . "`" ;
 
         foreach ($_key->field as $keyfield) {
@@ -815,13 +474,15 @@ $future = $this->toSchema($_future);
      * @return string
      */
 
-    private function _getMysqlForeignKeyDeclarations($_key)
+    public function _getMysqlForeignKeyDeclarations($_key)
     {
+	
         $snippet = '';
-        $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX . $_key->name . '` FOREIGN KEY';
+        $snippet = 'CONSTRAINT `' . $_key->name . '` FOREIGN KEY';
 
-        $snippet .= '(`' .$_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
-                    . $_key->reference->table . "` (`" . $_key->reference->field . "`) ";
+        $snippet .= '(`' . $_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
+                    . $_key->reference->table . 
+					"` (`" . $_key->reference->field . "`) ";
 
         if(!empty($_key->reference->ondelete)) {
             $snippet .= "ON DELETE " . strtoupper($_key->reference->ondelete);
