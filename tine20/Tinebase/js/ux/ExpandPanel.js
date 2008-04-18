@@ -45,19 +45,12 @@ Ext.ux.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
         this.items.each(function(item){
             if(panelCount > 0) {
                 item.collapsed = true;
+                item.on('expand', function(){
+                    var innerWidth = this.getInnerWidth();
+                    item.setWidth(innerWidth);
+                }, this);
             }
             panelCount++;
-        }, this);
-        
-        this.on('afterlayout', function(){
-            var innerWidth = this.getInnerWidth();
-            var panelCount = 0;
-            this.items.each(function(item){
-                if(panelCount > 0) {
-                    item.setWidth(innerWidth);
-                }
-                panelCount++;
-            }, this);
         }, this);
     },
     /**
@@ -91,19 +84,5 @@ Ext.ux.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
         }, this);
         this.expanderButton[this.isExpanded ? 'addClass' : 'removeClass']('x-panel-collapsed');
     },
-    /**
-     * @private
-     */
-    onExpand: function() {
-        Ext.ux.ExpandFieldSet.superclass.onExpand.call(this, arguments);
-        this.expanderButton.setVisible(true);
-    },
-    /**
-     * @private
-     */
-    onCollapse: function(anim) {
-        Ext.ux.ExpandFieldSet.superclass.onCollapse.call(this, arguments);
-        this.expanderButton.setVisible(false);
-    }
 });
 Ext.reg('expanderfieldset', Ext.ux.ExpandFieldSet);
