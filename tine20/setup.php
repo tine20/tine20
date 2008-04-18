@@ -30,7 +30,7 @@ if (strpos($output, "FAILURE"))
 $setup = new Setup_Tables();
     
 if ( DO_TABLE_SETUP ) {
-    $fileName = 'Tinebase/setup.xml';
+    $fileName = 'Tinebase/Setup/setup.xml';
     if(file_exists($fileName)) {
         echo "Processing tables definitions from <b>$fileName</b><br>";
         $setup->parseFile($fileName);
@@ -38,7 +38,7 @@ if ( DO_TABLE_SETUP ) {
     
     foreach ( new DirectoryIterator('./') as $item ) {
     	if($item->isDir() && $item->getFileName() != 'Tinebase') {
-    		$fileName = $item->getFileName() . '/setup.xml';
+    		$fileName = $item->getFileName() . '/Setup/setup.xml';
     		if(file_exists($fileName)) {
     			echo "Processing tables definitions from <b>$fileName</b><br>";
     			$setup->parseFile($fileName);
@@ -46,6 +46,7 @@ if ( DO_TABLE_SETUP ) {
     	}
     }
 }
+
 
 # either import data from eGroupWare 1.4 or tine 2.0 revision 949
 if ( IMPORT_EGW_14 ) {
@@ -59,7 +60,7 @@ if ( isset($import) ) {
 }
 
 # or initialize the database ourself
-
+//*
 # add the admin group
 $groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
 
@@ -138,3 +139,5 @@ Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adm
     Tinebase_Container::GRANT_DELETE,
     Tinebase_Container::GRANT_ADMIN
 ), TRUE);
+
+//*/
