@@ -116,19 +116,21 @@ class Tinebase_Group_Ldap implements Tinebase_Group_Interface
      * @param string $_name
      * @return Tinebase_Group_Model_Group
      */
-    public function _getGroupByName($_name)
+    public function getGroupByName($_name)
     {        
-        $select = $this->groupsTable->select();
+        $groupName = Zend_Ldap::filterEscape($_name);
         
-        $select->where('name = ?', $_name);
-        
-        $row = $this->groupsTable->fetchRow($select);
-
-        if($row === NULL) {
+        try {
+            $group = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'cn=' . $groupName, array('cn','description','gidnumber'));
+        } catch (Exception $e) {
             throw new Tinebase_Record_Exception_NotDefined('group not found');
         }
-        
-        $result = new Tinebase_Group_Model_Group($row->toArray());
+
+        $result = new Tinebase_Group_Model_Group(array(
+            'id'            => $group['gidnumber'][0],
+            'name'          => $group['cn'][0],
+            'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
+        ));
         
         return $result;
     }
