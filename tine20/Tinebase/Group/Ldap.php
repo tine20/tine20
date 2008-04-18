@@ -94,20 +94,36 @@ class Tinebase_Group_Ldap implements Tinebase_Group_Interface
      */
     public function getGroupMembers($_groupId)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);     
+        
+        try {
+            $groupMembers = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, 'gidnumber=' . $groupId, array('member', 'memberuid'));
+        } catch (Exception $e) {
+            throw new Tinebase_Record_Exception_NotDefined('group not found');
+        }
         
         $members = array();
-        
-        $select = $this->groupMembersTable->select();
-        $select->where('group_id = ?', $groupId);
-        
-        $rows = $this->groupMembersTable->fetchAll($select);
-        
-        foreach($rows as $member) {
-            $members[] = $member->account_id;
-        }
 
-        return $members;
+        if(isset($groupMembers['member'])) {
+            unset($groupMembers['member']['count']);
+            foreach($groupMembers['member'] as $dn) {
+                try {
+                    $accountData = $this->_backend->fetchDn($dn, 'objectclass=*', array('uidnumber'));
+                    $members[] = $accountData['uidnumber'][0];
+                } catch (Exception $e) {
+                    // ignore ldap errors
+                }
+            }
+        } else {
+            unset($groupMembers['memberuid']['count']);
+            foreach($groupMembers['memberuid'] as $loginName) {
+                error_log('LARS:: ' . $loginName);
+                $account = Tinebase_Account::getInstance()->getAccountByLoginName($loginName);
+                $members[] = $account->getId();
+            }
+        }
+        
+        return $members;        
     }
 
     /**
