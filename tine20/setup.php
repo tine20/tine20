@@ -70,7 +70,6 @@ if ( isset($import) ) {
 if ($kindOfSetup == 'initalLoad')
 {
 	# or initialize the database ourself
-	//*
 	# add the admin group
 	$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
 
@@ -112,8 +111,9 @@ if ($kindOfSetup == 'initalLoad')
 
 	# enable the applications for the user group
 	# give admin rights to the admin group for all applications
-	foreach(Tinebase_Application::getInstance()->getApplications() as $application) {
-	    if(strtolower($application->name) == 'admin') {
+	$applications = Tinebase_Application::getInstance()->getApplications();
+	foreach( $applications as $application) {
+        if(strtolower($application->name) == 'admin') {
 	        $group = $adminGroup;
 	    } else {
 	        $group = $userGroup;
@@ -150,4 +150,3 @@ if ($kindOfSetup == 'initalLoad')
 	    Tinebase_Container::GRANT_ADMIN
 	), TRUE);
 }
-//*/
