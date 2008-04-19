@@ -57,7 +57,6 @@ Ext.ux.layout.HorizontalFitLayout = Ext.extend(Ext.layout.ContainerLayout, {
      * @private
      */
     setItemSize : function(item, size){
-        console.log(item);
         if(item && size.height > 0){ // display none?
             item.setWidth(size.width);
         }
