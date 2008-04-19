@@ -89,7 +89,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>application_id</name>
+                    <name>application_tables::application_id--applications::id</name>
                     <field>
                         <name>application_id</name>
                     </field>
@@ -225,7 +225,7 @@
                 </index>
 
                 <index>
-                    <name>primary_group_id</name>
+                    <name>accounts::primary_group_id--groups::id</name>
                     <field>
                         <name>primary_group_id</name>
                     </field>
@@ -268,7 +268,7 @@
                 </index>                
 
                 <index>
-                    <name>group_id</name>
+                    <name>group_members::group_id--groups::id</name>
                     <field>
                         <name>group_id</name>
                     </field>
@@ -280,7 +280,7 @@
                 </index>
 
                 <index>
-                    <name>account_id</name>
+                    <name>group_members::account_id--accounts::id</name>
                     <field>
                         <name>account_id</name>
                     </field>
