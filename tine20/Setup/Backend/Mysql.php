@@ -454,7 +454,7 @@ class Setup_Backend_Mysql
     {
 	
         $snippet = '';
-        $snippet = 'CONSTRAINT `' . $_key->name . '` FOREIGN KEY';
+        $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY';
 
         $snippet .= '(`' . $_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
                     . $_key->reference->table . 
