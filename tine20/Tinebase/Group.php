@@ -32,8 +32,10 @@ class Tinebase_Group
      */
     private function __construct() {
         try {
-            $this->_backendType = Zend_Registry::get('configFile')->accounts->get('backend', Tinebase_Group_Factory::SQL);
-            $this->_backendType = ucfirst($this->_backendType);
+            if(isset(Zend_Registry::get('configFile')->accounts)) {
+                $this->_backendType = Zend_Registry::get('configFile')->accounts->get('backend', Tinebase_Group_Factory::SQL);
+                $this->_backendType = ucfirst($this->_backendType);
+            }
             
         } catch (Zend_Config_Exception $e) {
             // do nothing
