@@ -79,8 +79,6 @@ if ( IMPORT_EGW_14 === TRUE ) {
     exit();
 }
 
-echo "KIND OF SETUP:: $kindOfSetup<br>";
-
 if ($kindOfSetup == 'initialLoad')
 {
 	# or initialize the database ourself
