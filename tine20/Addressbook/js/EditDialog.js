@@ -55,105 +55,45 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
-    var personalInformationExpandArea = new Ext.Panel({
-        layout: 'anchor',
-        onResize: function(w, h){
-            this.items.each(function(item){
-                if(item.rendered) {
-                    item.setWidth(w);
-                }
-            });
-        },
+    var personalInformationExpandArea = {
+        xtype: 'columnform',
         items:[
-            {
-                layout: 'column',
-                items:[
-                    {
-                        columnWidth: .2,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        bodyStyle: 'padding-right: 5px;',
-                        items: {
-                            xtype: 'textfield',
-                            labelSeparator: '',
-                            anchor: '100%',
-                            fieldLabel:'Room', 
-                            name:'room'
-                        }
-                    },
-                    {
-                        columnWidth: .4,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        bodyStyle: 'padding-right: 5px;',
-                        items: {
-                            xtype: 'textfield',
-                            labelSeparator: '',
-                            anchor: '100%',
-                            fieldLabel:'Job Role', 
-                            name:'role'
-                        }
-                    },
-                    {
-                        columnWidth: .4,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        bodyStyle: 'padding-right: 5px;',
-                        items: {
-                            xtype: 'textfield',
-                            labelSeparator: '',
-                            anchor: '100%',
-                            fieldLabel:'Name Assistent', 
-                            name:'assistent'
-                        }
-                    }
-                ]
-            },
-            {
-                layout: 'column',
-                items:[
-                    {
-                        columnWidth: .5,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        bodyStyle: 'padding-right: 5px;',
-                        items: {
-                            xtype: 'textfield',
-                            labelSeparator: '',
-                            anchor: '100%',
-                            fieldLabel:'Middle Name(s)', 
-                            name:'n_middle'
-                        }
-                    },
-                    {
-                        columnWidth: .5,
-                        layout: 'form',
-                        labelAlign: 'top',
-                        bodyStyle: 'padding-right: 5px;',
-                        items: {
-                            xtype: 'textfield',
-                            labelSeparator: '',
-                            anchor: '100%',
-                            fieldLabel:'Suffix', 
-                            name:'n_suffix'
-                        }
-                    }
-                ]
-            }
+            [
+                {
+                    columnWidth: .2,
+                    fieldLabel:'Room', 
+                    name:'room'
+                },
+                {
+                    columnWidth: .4,
+                    fieldLabel:'Job Role', 
+                    name:'role'
+                },
+                {
+                    columnWidth: .4,
+                    fieldLabel:'Name Assistent', 
+                    name:'assistent'
+                }
+            ],
+            [
+                {
+                    columnWidth: .5,
+                    fieldLabel:'Middle Name(s)', 
+                    name:'n_middle'
+                },
+                {
+                    columnWidth: .5,
+                    fieldLabel:'Suffix', 
+                    name:'n_suffix'
+                }
+            ]
         ]
-    });
+    };
     
     var personalInformation = {
         title: 'Personal Information',
         xtype: 'expanderfieldset',
-        layout: 'anchor',
-        onResize: function(w, h){
-            this.items.each(function(item){
-                if(item.rendered) {
-                    item.setWidth(w-10);
-                }
-            });
-        },
+        layout: 'hfit',
         collapsible: true,
         autoHeight: true,
         items:[
@@ -162,90 +102,38 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 items:[
                     {
                         columnWidth: 1,
-                        layout: 'anchor',
-                        onResize: function(w, h){
-                            this.items.each(function(item){
-                                if(item.rendered) {
-                                    item.setWidth(w);
-                                }
-                            });
-                        },
+                        xtype: 'columnform',
                         items: [
-                            {
-                                layout: 'column',
-                                items:[
-                                    {
-                                        columnWidth: .2,
-                                        layout: 'form',
-                                        labelAlign: 'top',
-                                        bodyStyle: 'padding-right: 5px;',
-                                        items: {
-                                            xtype: 'textfield',
-                                            labelSeparator: '',
-                                            anchor: '100%',
-                                            fieldLabel:'Title', 
-                                            name:'n_prefix'
-                                        }
-                                    },
-                                    {
-                                        columnWidth: .4,
-                                        layout: 'form',
-                                        labelAlign: 'top',
-                                        bodyStyle: 'padding-right: 5px;',
-                                        items: {
-                                            xtype: 'textfield',
-                                            labelSeparator: '',
-                                            anchor: '100%',
-                                            fieldLabel:'First Name', 
-                                            name:'n_given'
-                                        }
-                                    },
-                                    {
-                                        columnWidth: .4,
-                                        layout: 'form',
-                                        labelAlign: 'top',
-                                        bodyStyle: 'padding-right: 5px;',
-                                        items: {
-                                            xtype: 'textfield',
-                                            labelSeparator: '',
-                                            anchor: '100%',
-                                            fieldLabel:'Last Name', 
-                                            name:'n_family'
-                                        }
-                                    }
-                                ]
-                            },
-                            {
-                                layout: 'column',
-                                items:[
-                                    {
-                                        columnWidth: .6,
-                                        layout: 'form',
-                                        labelAlign: 'top',
-                                        bodyStyle: 'padding-right: 5px;',
-                                        items: {
-                                            xtype: 'mirrortextfield',
-                                            labelSeparator: '',
-                                            anchor: '100%',
-                                            fieldLabel:'Company', 
-                                            name:'org_name',
-                                        }
-                                    },
-                                    {
-                                        columnWidth: .4,
-                                        layout: 'form',
-                                        labelAlign: 'top',
-                                        bodyStyle: 'padding-right: 5px;',
-                                        items: {
-                                            xtype: 'textfield',
-                                            labelSeparator: '',
-                                            anchor: '100%',
-                                            fieldLabel: 'Job Title',
-                                             name: 'title',
-                                        }
-                                    }
-                                ]
-                            }
+                            [
+                                {
+                                    columnWidth: .2,
+                                    fieldLabel:'Title', 
+                                    name:'n_prefix'
+                                },
+                                {
+                                    columnWidth: .4,
+                                    fieldLabel:'First Name', 
+                                    name:'n_given'
+                                },
+                                {
+                                    columnWidth: .4,
+                                    fieldLabel:'Last Name', 
+                                    name:'n_family'
+                                }
+                            ],
+                            [
+                                {
+                                    columnWidth: .6,
+                                    xtype: 'mirrortextfield',
+                                    fieldLabel:'Company', 
+                                    name:'org_name',
+                                },
+                                {
+                                    columnWidth: .4,
+                                    fieldLabel: 'Job Title',
+                                     name: 'title',
+                                }
+                            ]
                         ]
                     },
                     {
@@ -258,10 +146,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
  
-    var contactInformationBasePanel = Ext.ux.layout.ColumnFormLayout(
-    {
+    var contactInformationBasePanel = {
+        xtype: 'columnform',
         labelAlign: 'top',
-        defaults: {
+        formDefaults: {
             xtype:'icontextfield',
             anchor: '100%',
             labelSeparator: '',
@@ -321,23 +209,23 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 }
             ]
         ]
-    });
+    };
     
-    var contactInformation = new Ext.form.FieldSet({
-        collapsible: true,
-        layout: 'anchor',
-        autoHeight:true,
+    var contactInformation = {
         title: 'Contact Information',
+        xtype: 'fieldset',
+        layout: 'hfit',
+        collapsible: true,
+        autoHeight:true,
         items: [
             contactInformationBasePanel,
             //contactInformationExpandArea
         ]
-    });
+    };
     
     var companyInformation = {
         xtype: 'tabpanel',
         deferredRender:false,
-        //autoHeight: true,
         height: 160,
         activeTab: 0,
         border: false,
@@ -345,10 +233,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             frame: true
         },
         items: [
-            Ext.apply({ title: 'Company Information' }, Ext.ux.layout.ColumnFormLayout({
-                //layout: 'form',
+            {
+                xtype: 'columnform',
+                title: 'Company Information',
                 labelAlign: 'top',
-                defaults: {
+                formDefaults: {
                     xtype:'textfield',
                     anchor:'100%',
                     labelSeparator: '',
@@ -409,10 +298,12 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         })
                     ]
                 ]
-            })),
-            Ext.apply({ title: 'Private Information' }, Ext.ux.layout.ColumnFormLayout({
+            },
+            {
+                xtype: 'columnform',
+                title: 'Private Information',
                 labelAlign: 'top',
-                defaults: {
+                formDefaults: {
                     xtype:'textfield',
                     anchor:'100%',
                     labelSeparator: '',
@@ -469,7 +360,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         })
                     ]
                 ]
-            })),
+            },
             {
                 title: 'Custom Fields',
                 html: '',
@@ -477,16 +368,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             }
         ]
     };
-    
-    var tags = new Tine.widgets.tags.TagPanel({
-        height: 230,
-        customHeight: 230,
-        border: false,
-        style: 'border:1px solid #B5B8C8;',
-        //labelAlign: 'top'
-    });
-    
-    
+
     var contactTabPanel = {
         title: 'Contact',
         autoScroll: true,
@@ -494,36 +376,33 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         border: false,
         items: [
             {
-                layout: 'anchor',
+                layout: 'hfit',
                 id: 'adbEditDialogContactLeft',
                 region: 'center',
                 items: [
                     personalInformation,
                     contactInformation,
                     companyInformation
-                ],
-                // fix resizing in border layout
-                onResize: function(w,h){
-                    this.items.each(function(item){
-                        if (item.rendered) {
-                            item.setWidth(w);
-                        }
-                    });
-                }
+                ]
             },
             {
                 // tags & notes
-                layout: 'anchor',
+                layout: 'hfit',
                 region: 'east',
                 width: 200,
                 split: true,
                 collapsible: true,
                 collapseMode: 'mini',
-                margins: '0 5 0 5',
+                margins: '0 18 0 5',
                 //bodyStyle: 'border:1px solid #B5B8C8;',
                 bodyStyle: 'padding-left: 5px;',
                 items: [
-                    tags,
+                    new Tine.widgets.tags.TagPanel({
+                        height: 230,
+                        customHeight: 230,
+                        border: false,
+                        style: 'border:1px solid #B5B8C8;',
+                    }),
                     {
                         xtype: 'panel',
                         layout: 'form',
@@ -536,19 +415,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                             grow: false,
                             preventScrollbars:false,
                             anchor:'100%',
-                            //width: 215,
                             height: 205
                         }]
                     }
-                ],
-                // fix resizing in border layout
-                onResize: function(w,h){
-                    this.items.each(function(item){
-                        if (item.rendered) {
-                            item.setWidth(w);
-                        }
-                    });
-                }
+                ]
             }
         ]
     };
@@ -578,8 +448,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             }
         ]
     };
-    
-    
     // hacks to supress the bottom scrollbar when the side scollbar apreas
     /*
     personalInformationExpandArea.on('expand', function(panel){
@@ -595,9 +463,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         cmp.setHeight(cmp.customHeight);
     });
     */
-    tags.on('resize', function(cmp){
-        cmp.setHeight(cmp.customHeight);
-    });
     return [
         tabPanel,
         savePath
