@@ -635,6 +635,7 @@ Tine.Addressbook.ContactEditDialog = {
 
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
+            layout: 'hfit',
             id : 'contactDialog',
             tbarItems: [_export_contact],
             handlerScope: this,
