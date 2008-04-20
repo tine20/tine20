@@ -1097,7 +1097,7 @@ Tine.Admin.Applications.EditDialog = {
         
         this.RightsGridPanel = new Ext.grid.EditorGridPanel({
             region: 'center',
-            title: 'Rights',
+            title: 'Account rights for ' + _applicationData.name + ' application',
             store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,

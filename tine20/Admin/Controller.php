@@ -294,6 +294,32 @@ class Admin_Controller
     }
     
     /**
+     * get application account rights
+     *
+     * @param   int $_applicationId  app id
+     * @return  array with account rights for the application
+     */
+    public function getApplicationAccountRights($_applicationId)
+    {
+        $applicationRights = Tinebase_Application::getInstance()->getApplicationAccountRights($_applicationId);
+        
+        return $applicationRights;
+    }
+    
+    /**
+     * set application account rights
+     *
+     * @param   int $_applicationId  app id
+     * @param   array $_applicationRights  app id
+     */
+    public function setApplicationAccountRights($_applicationId, $_applicationRights)
+    {
+        $tineApplications = Tinebase_Application::getInstance();
+        
+        return $tineApplications->setApplicationAccountRights($_applicationId, $_applicationRights);
+    }
+    
+    /**
      * get list of groups
      *
      * @param string $_filter

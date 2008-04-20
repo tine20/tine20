@@ -243,17 +243,17 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * @return array with results array & totalcount (int)
      * 
      */
-    public function getApplicationAccounts($appId)
+    public function getApplicationAccountRights($appId)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        //$accountsWithRights = Admin_Controller::getInstance()->getApplicationAccounts($appID);
+        $accountsWithRights = Admin_Controller::getInstance()->getApplicationAccountRights($appId);
 
         // for testing purposes
-        // @todo    add function for getting accounts in controller + backend
+        /*
         $accountsWithRights    = array( array(
             'id' => 1, 
             'accountId' => 1, 
@@ -261,6 +261,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'adminRight' => 1,
             'accountDisplayName' => 'GROUP XY'
         ));
+        */
         
         $result['results']    = $accountsWithRights;
         $result['totalcount'] = count($accountsWithRights);
