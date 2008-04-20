@@ -535,6 +535,7 @@ Tine.Addressbook.ContactEditDialog = {
             var form = Ext.getCmp('contactDialog').getForm();
 
             if(form.isValid()) {
+                Ext.MessageBox.wait('Please wait a moment...', 'Saving Contact');
                 form.updateRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
         
                 Ext.Ajax.request({
@@ -552,6 +553,7 @@ Tine.Addressbook.ContactEditDialog = {
                             this.updateContactRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
                             //this.updateToolbarButtons(formData.config.addressbookRights);
                             form.loadRecord(this.contactRecord);
+                            Ext.MessageBox.hide();
                         }
                     },
                     failure: function ( result, request) { 
