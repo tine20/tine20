@@ -207,4 +207,71 @@ class Tinebase_Application
         
         return $_application;
     }
+    
+    /**
+     * get application account rights
+     *
+     * @param   int $_applicationId  app id
+     * @return  array with account rights for the application
+     * 
+     * @todo    return recordset with Tinebase_Acl_Right records here?
+     * @todo    translate 'Anyone'
+     */
+    public function getApplicationAccountRights($_applicationId)
+    {
+        $applicationRights = Tinebase_Acl_Rights::getInstance()->getApplicationAccountRights($_applicationId);
+
+        $result = array();
+        foreach ( $applicationRights as $tineRight ) {
+
+            $rightArray = $tineRight->toArray();
+            
+            // set display name
+            switch ( $tineRight->accountType ) {
+                case 'anyone':
+                    // @todo translate
+                    $displayName = 'Anyone';
+                    break;
+                case 'group':
+                    // get group name
+                    $group = Tinebase_Group::getInstance()->getGroupById($tineRight->accountId);
+                    $displayName = $group->name;
+                    break;
+                case 'account':
+                    // get account name
+                    $account = Tinebase_Account::getInstance()->getAccountById($tineRight->accountId);
+                    $displayName = $account->AccountDisplayName;
+                    break;
+                default:
+                    throw Exception ('not a valid account type');
+            }
+            $rightArray['accountDisplayName'] = $displayName;
+
+            $result[] = $rightArray;
+        }
+
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights record: ' . print_r($result, true));
+        
+        return $result;
+    }
+    
+    /**
+     * set application account rights
+     *
+     * @param   int $_applicationId  app id
+     * @param   array $_applicationRights  app id
+     */
+    public function setApplicationAccountRights($_applicationId, $_applicationRights)
+    {
+        $tineAclRights = Tinebase_Acl_Rights::getInstance();
+        
+        $tineRights = array();
+        foreach ( $_applicationRights as $right ) {
+            $right['application_id'] = $_applicationId;
+            $tineRights[] = new Tinebase_Acl_Model_Right( $right );
+        }
+        
+        return $tineAclRights->setApplicationAccountRights($tineRights);
+    }
+    
 }

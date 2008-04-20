@@ -216,4 +216,75 @@ class Tinebase_Acl_Rights
         $this->rightsTable->insert($data);
         
     }
+    
+    /**
+     * get application account rights
+     *
+     * @param   int $_applicationId  app id
+     * @return  Tinebase_Record_RecordSet of Tinebase_Acl_Model_Right with account rights for the application
+     * 
+     * @todo    add id conversion?
+     */
+    public function getApplicationAccountRights($_applicationId)
+    {
+        //  
+        // $applicationId = Tinebase_Application::convertApplicationIdToInt($_applicationId);
+                
+        $select = $this->rightsTable->select()
+            ->from(SQL_TABLE_PREFIX . 'application_rights', array ( '*', 'rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
+            ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $_applicationId)
+            ->group(array(SQL_TABLE_PREFIX . 'application_rights.application_id', SQL_TABLE_PREFIX . 'application_rights.account_type', SQL_TABLE_PREFIX . 'application_rights.account_id'));
+            
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        if( empty($rows) ) {
+            throw new Exception("no rights found for application with id $_applicationId");
+        } 
+        
+        $result = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
+
+        foreach($rows as $row) {
+
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights row: ' . print_r($row, true));
+            
+            $applicationRight = new Tinebase_Acl_Model_Right( array(
+                'id'            => $row['id'],
+                'accountType'   => $row['account_type'],
+                'accountId'     => $row['account_id'],
+                'applicationId' => $row['application_id'],
+            ));
+
+            $rights = explode(',', $row['rights']);
+
+            foreach($rights as $right) {
+                switch($right) {
+                    case self::ADMIN:
+                        $applicationRight->adminRight = TRUE;
+                        break;
+                    case self::RUN:
+                        $applicationRight->runRight = TRUE;
+                        break;
+                }
+            }
+
+            $result->addRecord($applicationRight);
+        }
+
+        return $result;
+    }
+    
+    /**
+     * set application account rights
+     *
+     * @param   array $_applicationRights  app rights
+     * 
+     * @todo    add functionality
+     * @todo    use tine recordset here?
+     */
+    public function setApplicationAccountRights(array $_applicationRights)
+    {
+    }
+    
+    
 }

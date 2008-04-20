@@ -60,12 +60,21 @@ class Tinebase_Acl_Model_Right extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'id'                => array('allowEmpty' => true),
-            'application_id'    => array('presence' => 'required'),
-            'account_id'        => array('presence' => 'required', 'allowEmpty' => true),
-            'account_type'      => array(
+            'applicationId'    => array('presence' => 'required'),
+            'accountId'        => array('presence' => 'required', 'allowEmpty' => true),
+            'accountType'      => array(
                 new Zend_Validate_InArray(array('account', 'group', 'anyone')) 
             ),
-            'right'             => array('presence' => 'required')
+            // @todo remove right
+            //'right'             => array('presence' => 'required'),
+            'runRight'   => array(
+                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
+                'default' => FALSE
+            ),
+            'adminRight'    => array(
+                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
+                'default' => FALSE
+            ),             
         );
         
         return parent::__construct($_data, $_bypassFilters);
