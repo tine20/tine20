@@ -126,10 +126,9 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $application = Admin_Controller::getInstance()->getApplication($appId);           
         $encodedApplication = Zend_Json::encode($application->toArray());
         
-        //@todo add accounts
-        //$json = new Admin_Json();
-        //$encodedAccounts = Zend_Json::encode($json->getApplicationAccounts($appId));
-        $encodedAccounts = Zend_Json::encode( array() );
+        // add accounts
+        $json = new Admin_Json();
+        $encodedAccounts = Zend_Json::encode($json->getApplicationAccounts($appId));
 
         $currentAccount = Zend_Registry::get('currentAccount');
         
