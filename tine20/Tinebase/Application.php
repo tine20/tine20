@@ -227,19 +227,19 @@ class Tinebase_Application
             $rightArray = $tineRight->toArray();
             
             // set display name
-            switch ( $tineRight->accountType ) {
+            switch ( $tineRight->account_type ) {
                 case 'anyone':
                     // @todo translate
                     $displayName = 'Anyone';
                     break;
                 case 'group':
                     // get group name
-                    $group = Tinebase_Group::getInstance()->getGroupById($tineRight->accountId);
+                    $group = Tinebase_Group::getInstance()->getGroupById($tineRight->account_id);
                     $displayName = $group->name;
                     break;
                 case 'account':
                     // get account name
-                    $account = Tinebase_Account::getInstance()->getAccountById($tineRight->accountId);
+                    $account = Tinebase_Account::getInstance()->getAccountById($tineRight->account_id);
                     $displayName = $account->AccountDisplayName;
                     break;
                 default:

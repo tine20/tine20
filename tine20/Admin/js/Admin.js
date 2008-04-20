@@ -831,14 +831,14 @@ Tine.Admin.Applications.EditDialog = {
             var dataStore = groupGrid.getStore();
             var selectionModel = groupGrid.getSelectionModel();
             
-            if (dataStore.getById(account.data.data.accountId) === undefined) {
+            if (dataStore.getById(account.data.data.account_id) === undefined) {
                 var record = new Tine.Tinebase.Model.User({
-                    accountId: account.data.data.accountId,
+                    account_id: account.data.data.account_id,
                     accountDisplayName: account.data.data.accountDisplayName
-                }, account.data.data.accountId);
+                }, account.data.data.account_id);
                 dataStore.addSorted(record);
             }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));   
+            selectionModel.selectRow(dataStore.indexOfId(account.data.data.account_id));   
             */         
         },
 
@@ -858,7 +858,7 @@ Tine.Admin.Applications.EditDialog = {
                 var dataStore = groupGrid.getStore();
                 
                 dataStore.each(function(_record){
-                    groupMembers.push(_record.data.accountId);
+                    groupMembers.push(_record.data.account_id);
                 });
                 
                 // update form               
@@ -1019,7 +1019,7 @@ Tine.Admin.Applications.EditDialog = {
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'accountId',
+            id: 'account_id',
             fields: Tine.Admin.Applications.Right
         });
 
@@ -1062,10 +1062,10 @@ Tine.Admin.Applications.EditDialog = {
         var columnModel = new Ext.grid.ColumnModel([
             {
                 resizable: true, 
-                //id: 'accountId', 
+                //id: 'account_id', 
                 id: 'accountDisplayName',
                 header: 'Name', 
-                //dataIndex: 'accountId', 
+                //dataIndex: 'account_id', 
                 dataIndex: 'accountDisplayName',
                 //renderer: Tine.Tinebase.Common.accountRenderer,
                 width: 70
@@ -1097,7 +1097,7 @@ Tine.Admin.Applications.EditDialog = {
         
         this.RightsGridPanel = new Ext.grid.EditorGridPanel({
             region: 'center',
-            title: 'Account rights for ' + _applicationData.name + ' application',
+            title: 'Account rights for ' + _applicationData.name + '',
             store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,
@@ -1105,7 +1105,7 @@ Tine.Admin.Applications.EditDialog = {
             enableColLock:false,
             loadMask: true,
             plugins: columns, // [readColumn, addColumn, editColumn, deleteColumn],
-            //autoExpandColumn: 'accountId',
+            //autoExpandColumn: 'account_id',
             autoExpandColumn: 'accountDisplayName',
             bbar: permissionsBottomToolbar,
             border: false
@@ -1131,13 +1131,13 @@ Tine.Admin.Applications.EditDialog = {
         
         var id = false;
         dataStore.each(function(item){
-            if ((item.data.accountType == 'user' || item.data.accountType == 'account') &&
+            if ((item.data.account_type == 'user' || item.data.account_type == 'account') &&
                     account.data.type == 'user' &&
-                    item.data.accountId.accountId == account.data.id) {
+                    item.data.account_id.account_id == account.data.id) {
                 id = item.id;
-            } else if (item.data.accountType == 'group' &&
+            } else if (item.data.account_type == 'group' &&
                     account.data.type == 'group' &&
-                    item.data.accountId.id == account.data.id) {
+                    item.data.account_id.id == account.data.id) {
                 id = item.id;
             }
         });
@@ -1880,8 +1880,8 @@ Tine.Admin.Accounts.Account = Ext.data.Record.create([
  */
 Tine.Admin.Applications.Right = Ext.data.Record.create([
     {name: 'id'},
-    {name: 'accountId'},
-    {name: 'accountType'},
+    {name: 'account_id'},
+    {name: 'account_type'},
     {name: 'runRight',   type: 'boolean'},
     {name: 'adminRight',    type: 'boolean'},
     {name: 'accountDisplayName'}

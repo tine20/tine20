@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        rework the functions and simplify the select statements
  */
 
 /**
@@ -209,8 +211,22 @@ class Tinebase_Acl_Rights
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
         
-        $data = $_right->toArray();
+        //@todo make that better -> use array to foreach the rights
+        if ( $_right->adminRight ) {
+            $right = self::ADMIN;
+        }
+        if ( $_right->runRight ) {
+            $right = self::RUN;
+        }
         
+        //$data = $_right->toArray();
+        $data = array ( 
+            "account_id" => $_right->account_id, 
+            "application_id" => $_right->application_id,
+            "account_type" => $_right->account_type,
+            "right" => $right,
+        );
+                
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
         $this->rightsTable->insert($data);
@@ -247,13 +263,8 @@ class Tinebase_Acl_Rights
         foreach($rows as $row) {
 
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights row: ' . print_r($row, true));
-            
-            $applicationRight = new Tinebase_Acl_Model_Right( array(
-                'id'            => $row['id'],
-                'accountType'   => $row['account_type'],
-                'accountId'     => $row['account_id'],
-                'applicationId' => $row['application_id'],
-            ));
+                        
+            $applicationRight = new Tinebase_Acl_Model_Right( $row );
 
             $rights = explode(',', $row['rights']);
 
