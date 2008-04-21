@@ -290,6 +290,48 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     }
 
     /**
+     * save application data from edit form
+     *
+     * @param   int     $applicationId  app id
+     * @param   string  $rights         json encoded array of application rights
+     * 
+     * @return  array with success, message, group data and rights
+     */
+    public function saveApplication($applicationId, $rights)
+    {
+        //$decodedGroupData = Zend_Json::decode($groupData);
+        $decodedRights = Zend_Json::decode($rights);
+        
+        // @todo    save other data (order,...) later
+        
+        /*
+        $application = new Tinebase_Model_Application ();
+        
+        try {
+            $group->setFromArray($decodedGroupData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $group->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        */
+        
+        $application = Tinebase_Application::getInstance()->getApplicationById($applicationId);
+        $application = Admin_Controller::getInstance()->updateApplication($application, $decodedRights);
+                 
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $application->toArray(),
+                        'rights'            => Admin_Controller::getInstance()->getApplicationAccountRights($applicationId),
+        );
+        
+        return $result;
+        
+    }    
+    /**
      * get list of access log entries
      *
      * @param string $from (date format example: 2008-03-31T00:00:00)

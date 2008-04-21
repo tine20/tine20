@@ -211,21 +211,24 @@ class Tinebase_Acl_Rights
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
         
-        //@todo make that better -> use array to foreach the rights
+        /*
+        //@todo remove
         if ( $_right->adminRight ) {
             $right = self::ADMIN;
         }
         if ( $_right->runRight ) {
             $right = self::RUN;
         }
-        
-        //$data = $_right->toArray();
+
         $data = array ( 
             "account_id" => $_right->account_id, 
             "application_id" => $_right->application_id,
             "account_type" => $_right->account_type,
             "right" => $right,
         );
+        */
+        
+        $data = $_right->toArray();
                 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
@@ -247,7 +250,7 @@ class Tinebase_Acl_Rights
         // $applicationId = Tinebase_Application::convertApplicationIdToInt($_applicationId);
                 
         $select = $this->rightsTable->select()
-            ->from(SQL_TABLE_PREFIX . 'application_rights', array ( '*', 'rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
+            ->from(SQL_TABLE_PREFIX . 'application_rights', array ( '*', 'right' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $_applicationId)
             ->group(array(SQL_TABLE_PREFIX . 'application_rights.application_id', SQL_TABLE_PREFIX . 'application_rights.account_type', SQL_TABLE_PREFIX . 'application_rights.account_id'));
             
@@ -266,8 +269,9 @@ class Tinebase_Acl_Rights
                         
             $applicationRight = new Tinebase_Acl_Model_Right( $row );
 
-            $rights = explode(',', $row['rights']);
-
+            /*
+            $rights = explode(',', $row['rights']);            
+            
             foreach($rights as $right) {
                 switch($right) {
                     case self::ADMIN:
@@ -277,8 +281,8 @@ class Tinebase_Acl_Rights
                         $applicationRight->runRight = TRUE;
                         break;
                 }
-            }
-
+            }*/
+            
             $result->addRecord($applicationRight);
         }
 
@@ -288,14 +292,34 @@ class Tinebase_Acl_Rights
     /**
      * set application account rights
      *
-     * @param   array $_applicationRights  app rights
+     * @param   int $_applicationId  app id
+     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
      * 
-     * @todo    add functionality
-     * @todo    use tine recordset here?
      */
-    public function setApplicationAccountRights(array $_applicationRights)
+    public function setApplicationAccountRights($_applicationId, Tinebase_Record_RecordSet $_applicationRights)
     {
+        // delete all old rights for this application
+        // @todo quote into?
+        $this->rightsTable->delete( "application_id = ".$_applicationId );        
+        
+        foreach ( $_applicationRights as $right ) {
+            $this->addRight($right);
+        }
     }
     
+    /**
+     * get all possible application rights
+     *
+     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
+     * @return  array   all application rights
+     * 
+     * @todo    get other possible rights from APPNAME_Rights class 
+     */
+    public function getAllApplicationRights($_applicationId)
+    {
+        $allRights = array ( self::RUN, self::ADMIN );
+        
+        return $allRights;
+    }
     
 }

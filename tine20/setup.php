@@ -133,8 +133,7 @@ if ($kindOfSetup == 'initialLoad')
                 'application_id'    => $application->getId(),
                 'account_id'        => $userGroup->getId(),
                 'account_type'      => 'group',
-                //'right'             => Tinebase_Acl_Rights::RUN
-                'runRight'         => TRUE
+                'right'             => Tinebase_Acl_Rights::RUN
             ));
             Tinebase_Acl_Rights::getInstance()->addRight($right);
             
@@ -143,8 +142,7 @@ if ($kindOfSetup == 'initialLoad')
             Tinebase_Acl_Rights::getInstance()->addRight($right);
             
             // admin for admin group
-            $right->runRight = FALSE;            
-            $right->adminRight = TRUE;            
+            $right->right = Tinebase_Acl_Rights::ADMIN;            
             Tinebase_Acl_Rights::getInstance()->addRight($right);
             
         } else {
@@ -153,14 +151,12 @@ if ($kindOfSetup == 'initialLoad')
                 'application_id'    => $application->getId(),
                 'account_id'        => $adminGroup->getId(),
                 'account_type'      => 'group',
-                //'right'             => Tinebase_Acl_Rights::RUN
-                'runRight'         => TRUE
+                'right'             => Tinebase_Acl_Rights::RUN
             ));
             Tinebase_Acl_Rights::getInstance()->addRight($right);
             
             // admin for admin group
-            $right->runRight = FALSE;            
-            $right->adminRight = TRUE;            
+            $right->right = Tinebase_Acl_Rights::ADMIN;     
             Tinebase_Acl_Rights::getInstance()->addRight($right);            
 	    }
 	}

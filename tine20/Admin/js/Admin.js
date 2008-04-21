@@ -806,10 +806,14 @@ Tine.Admin.Applications.Main = function() {
 Tine.Admin.Applications.EditDialog = {
 
     /**
-     * var applicationRecord
+     * var applicationRecordRights for the dynamic data store
      */
-    applicationRecord: null,
+    applicationRecordRights: null,
     
+    /**
+     * var applicationId
+     */
+    applicationId: null,
 
     /**
      * function updateGroupRecord
@@ -896,7 +900,8 @@ Tine.Admin.Applications.EditDialog = {
             
             if (recordIndex === false) {
                         
-                var record = new Tine.Admin.Applications.Right({
+                //var record = new Tine.Admin.Applications.Right({
+            	var record = new Ext.data.Record({
                     account_id: account.data.id,
                     account_type: account.data.type,
                     accountDisplayName: account.data.name
@@ -908,7 +913,47 @@ Tine.Admin.Applications.EditDialog = {
 
         applyChanges: function(_button, _event, _closeWindow) 
         {
-        	/*
+        	Ext.MessageBox.wait('Please wait', 'Updating Rights');
+        	
+        	var dlg = Ext.getCmp('adminApplicationEditDialog');
+            var accountsGrid = Ext.getCmp('accountRightsGrid');            
+            var dataStore = accountsGrid.getStore();
+            
+            var rights = [];
+            dataStore.each(function(_record){
+                //accountRights.push(_record.data.account_id);
+            	rights.push(_record.data);
+            });
+            
+            //console.log ( rights );
+            
+            Ext.Ajax.request({
+                params: {
+                    method: 'Admin.saveApplication', 
+                    //groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
+                    applicationId: dlg.applicationId,
+                    rights: Ext.util.JSON.encode(rights)
+                },
+                success: function(_result, _request) {
+                    /*if(window.opener.Tine.Admin.Applications) {
+                        window.opener.Tine.Admin.Applications.Main.reload();
+                    }*/
+                    if(_closeWindow === true) {
+                        window.close();
+                    } else {
+                        //this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText));
+                        //form.loadRecord(this.groupRecord);                      
+                       
+                        Ext.MessageBox.hide();
+                    }
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert('Failed', 'Could not save group.'); 
+                },
+                scope: this 
+            });
+
+            /*
             var form = Ext.getCmp('groupDialog').getForm();
             
             if(form.isValid()) {
@@ -972,11 +1017,16 @@ Tine.Admin.Applications.EditDialog = {
      * 
      * @param   __applicationData
      * @param   __accounts
-     * 
+     * @param   __allRights
      */
-    display: function(  _applicationData, _accounts ) 
+    display: function(  _applicationData, _accounts, _allRights ) 
     {
 
+    	//console.log ( _allRights );
+    	console.log ( _accounts );
+    	
+    	this.applicationId = _applicationData.id;
+    	
         /******* actions ********/
         
         this.actions = {
@@ -1018,12 +1068,28 @@ Tine.Admin.Applications.EditDialog = {
         /******* load data store ********/
         
         //console.log ( _accounts );
-
+        
+        // create dynamic record for the store
+        var rights = [];
+        for (var i = 0; i < _allRights.length; i++) {
+            rights.push({
+            	   name: _allRights[i]
+            });
+        }
+        this.applicationRecordRights = Ext.data.Record.create([
+            {name: 'id'},
+            {name: 'account_id'},
+            {name: 'account_type'},
+            {name: 'accountDisplayName'},            
+            ].concat(rights)
+        );
+        
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'account_id',
-            fields: Tine.Admin.Applications.Right
+            //id: 'account_id',
+            id: 'id',
+             fields: this.applicationRecordRights
         });
 
         Ext.StoreMgr.add('ApplicationRightsStore', this.dataStore);
@@ -1036,7 +1102,7 @@ Tine.Admin.Applications.EditDialog = {
             this.dataStore.loadData( _accounts );
         }
 
-        //console.log ( this.dataStore );
+        //console.log (  this.dataStore );
         
         /*       
         this.dataStore.on('update', function(_store){
@@ -1047,18 +1113,16 @@ Tine.Admin.Applications.EditDialog = {
 
         /******* define rights grid model ********/
         
-        var columns = [
-            new Ext.ux.grid.CheckColumn({
-                header: 'Run',
-                dataIndex: 'runRight',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: 'Admin',
-                dataIndex: 'adminRight',
-                width: 55
-            })
-        ];
+        var columns = [];
+        for (var i = 0; i < _allRights.length; i++) {
+            columns.push(
+                new Ext.ux.grid.CheckColumn({
+                    header: _allRights[i],
+                    dataIndex: _allRights[i],
+                    width: 55
+                })            
+            );
+        }
         
         // @todo    add more rights (from php model)
                 
@@ -1125,30 +1189,6 @@ Tine.Admin.Applications.EditDialog = {
         }, this);
     },*/
         
-    /**
-     * returns index of record in this.dataStore
-     * @private
-     */
-        /*
-    getRecordIndex: function(account) {
-        var cgd = Ext.getCmp('ContainerGrantsDialog');
-        var dataStore = cgd.dataStore;
-        
-        var id = false;
-        dataStore.each(function(item){
-            if ((item.data.account_type == 'user' || item.data.account_type == 'account') &&
-                    account.data.type == 'user' &&
-                    item.data.account_id.account_id == account.data.id) {
-                id = item.id;
-            } else if (item.data.account_type == 'group' &&
-                    account.data.type == 'group' &&
-                    item.data.account_id.id == account.data.id) {
-                id = item.id;
-            }
-        });
-        return id ? dataStore.indexOfId(id) : false;
-    }
-    */
         /******* THE edit dialog ********/
         
         var editApplicationDialog = {
@@ -1166,7 +1206,7 @@ Tine.Admin.Applications.EditDialog = {
                
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
-            id : 'applicationDialog',
+            id : 'adminApplicationEditDialog',
             title: 'Edit ' + _applicationData.name + ' Application',
             layout: 'fit',
             labelWidth: 120,
@@ -1175,7 +1215,8 @@ Tine.Admin.Applications.EditDialog = {
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
             //handlerDelete: this.handlers.deleteGroup,
-            items: editApplicationDialog
+            items: editApplicationDialog,
+            applicationId: _applicationData.id
         });
 
         var viewport = new Ext.Viewport({
@@ -1877,22 +1918,4 @@ Tine.Admin.Accounts.Account = Ext.data.Record.create([
     { name: 'accountLastPasswordChange', type: 'date', dateFormat: 'c' },
     { name: 'accountLastLoginfrom' },
     { name: 'accountEmailAddress' }
-]);
-
-
-/**
- * Model of an application right
- */
-Tine.Admin.Applications.Right = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'account_id'},
-    {name: 'account_type'},
-    {name: 'runRight',   type: 'boolean'},
-    {name: 'adminRight',    type: 'boolean'},
-    {name: 'accountDisplayName'}
-    /*
-    {name: 'editGrant',   type: 'boolean'},
-    {name: 'deleteGrant', type: 'boolean'},
-    {name: 'adminGrant',  type: 'boolean'}
-    */
 ]);

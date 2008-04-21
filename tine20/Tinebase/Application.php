@@ -237,20 +237,34 @@ class Tinebase_Application
                     $group = Tinebase_Group::getInstance()->getGroupById($tineRight->account_id);
                     $displayName = $group->name;
                     break;
-                case 'account':
+                case 'user':
                     // get account name
                     $account = Tinebase_Account::getInstance()->getAccountById($tineRight->account_id);
-                    $displayName = $account->AccountDisplayName;
+                    $displayName = $account->accountDisplayName;
                     break;
                 default:
                     throw Exception ('not a valid account type');
             }
             $rightArray['accountDisplayName'] = $displayName;
 
+            // @todo it's a bit dirty to fill up the rightArray with the rights, is there a better solution? 
+
+            // set rights array and remove single right value
+            unset($rightArray['right']);
+            $rights = explode(',', $tineRight->right);
+            $allRights = $this->getAllRights($_applicationId); 
+            foreach ( $allRights as $key ) {
+                if ( in_array($key, $rights) ) {
+                    $rightArray[$key] = TRUE;
+                } else {
+                    $rightArray[$key] = FALSE;                    
+                }
+            }
+            
             $result[] = $rightArray;
         }
 
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights record: ' . print_r($result, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights record: ' . print_r($result, true));
         
         return $result;
     }
@@ -259,19 +273,41 @@ class Tinebase_Application
      * set application account rights
      *
      * @param   int $_applicationId  app id
-     * @param   array $_applicationRights  app id
+     * @param   array $_applicationRights  application account rights
      */
     public function setApplicationAccountRights($_applicationId, $_applicationRights)
     {
         $tineAclRights = Tinebase_Acl_Rights::getInstance();
         
-        $tineRights = array();
+        $tineRights = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
         foreach ( $_applicationRights as $right ) {
             $right['application_id'] = $_applicationId;
-            $tineRights[] = new Tinebase_Acl_Model_Right( $right );
+            
+            $allRights = $this->getAllRights($_applicationId); 
+            foreach ( $allRights as $key ) {
+                if ( $right[$key] === TRUE ) {
+                    unset ( $right['id'] );
+                    $right['right'] = $key;
+                    $tineRight = new Tinebase_Acl_Model_Right ( $right );
+                    $tineRights->addRecord( $tineRight );
+                }
+            }
         }
         
-        return $tineAclRights->setApplicationAccountRights($tineRights);
+        return $tineAclRights->setApplicationAccountRights($_applicationId, $tineRights);
+    }
+
+    /**
+     * get all possible application rights
+     *
+     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
+     * @return  array   all application rights
+     */
+    public function getAllRights($_applicationId)
+    {
+        $tineAclRights = Tinebase_Acl_Rights::getInstance();
+                
+        return $tineAclRights->getAllApplicationRights($_applicationId);
     }
     
 }

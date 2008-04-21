@@ -63,17 +63,9 @@ class Tinebase_Acl_Model_Right extends Tinebase_Record_Abstract
             'application_id'    => array('presence' => 'required'),
             'account_id'        => array('presence' => 'required', 'allowEmpty' => true),
             'account_type'      => array(
-                new Zend_Validate_InArray(array('account', 'group', 'anyone')) 
+                new Zend_Validate_InArray(array('user', 'group', 'anyone')) 
             ),
-            //'right'             => array('presence' => 'required'),
-            'runRight'   => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
-            ),
-            'adminRight'    => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE
-            ),             
+            'right'             => array('presence' => 'required'),
         );
         
         return parent::__construct($_data, $_bypassFilters);

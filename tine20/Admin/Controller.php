@@ -306,19 +306,24 @@ class Admin_Controller
         return $applicationRights;
     }
     
-    /**
-     * set application account rights
+   /**
+     * update existing application
      *
-     * @param   int $_applicationId  app id
-     * @param   array $_applicationRights  app id
+     * @param Tinebase_Model_Application    $_application
+     * @param array                         $_rights
+     * 
+     * @return Tinebase_Model_Application
      */
-    public function setApplicationAccountRights($_applicationId, $_applicationRights)
+    public function UpdateApplication(Tinebase_Model_Application $_application, array $_rights = array ())
     {
-        $tineApplications = Tinebase_Application::getInstance();
+        //$application = Tinebase_Application::getInstance()->updateApplication($_application);
+        $application = $_application;
         
-        return $tineApplications->setApplicationAccountRights($_applicationId, $_applicationRights);
-    }
-    
+        Tinebase_Application::getInstance()->setApplicationAccountRights($application->getId(), $_rights);
+
+        return $application;            
+    }  
+        
     /**
      * get list of groups
      *
