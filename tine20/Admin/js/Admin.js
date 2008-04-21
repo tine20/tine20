@@ -806,26 +806,26 @@ Tine.Admin.Applications.Main = function() {
 Tine.Admin.Applications.EditDialog = {
 
     /**
+     * var applicationRecord
+     */
+    applicationRecord: null,
+
+    /**
      * var applicationRecordRights for the dynamic data store
      */
     applicationRecordRights: null,
     
     /**
-     * var applicationId
+     * function updateApplicationRecord
      */
-    applicationId: null,
-
-    /**
-     * function updateGroupRecord
-     */
-    updateGroupRecord: function(_groupData)
+    updateApplicationRecord: function(_applicationData)
     {
         /*
-        // if groupData is empty (=array), set to empty object because array won't work!
-        if (_groupData.length === 0) {
-            _groupData = {};
+        // if _applicationData is empty (=array), set to empty object because array won't work!
+        if (_applicationData.length === 0) {
+            _applicationData = {};
         }
-        this.groupRecord = new Tine.Tinebase.Model.Group(_groupData);
+        this.applicationRecord = new Tine.Tinebase.Model.Application(_applicationData);
         */
     },
 
@@ -851,8 +851,6 @@ Tine.Admin.Applications.EditDialog = {
      * @private
      */
     getRecordIndex: function(account, dataStore) {
-        //var cgd = Ext.getCmp('accountRightsGrid');
-        //var dataStore = cgd.dataStore;
         
         var id = false;
         dataStore.each(function(item){
@@ -899,8 +897,6 @@ Tine.Admin.Applications.EditDialog = {
             var recordIndex = Tine.Admin.Applications.EditDialog.getRecordIndex(account, dataStore);
             
             if (recordIndex === false) {
-                        
-                //var record = new Tine.Admin.Applications.Right({
             	var record = new Ext.data.Record({
                     account_id: account.data.id,
                     account_type: account.data.type,
@@ -921,7 +917,6 @@ Tine.Admin.Applications.EditDialog = {
             
             var rights = [];
             dataStore.each(function(_record){
-                //accountRights.push(_record.data.account_id);
             	rights.push(_record.data);
             });
             
@@ -930,7 +925,7 @@ Tine.Admin.Applications.EditDialog = {
             Ext.Ajax.request({
                 params: {
                     method: 'Admin.saveApplication', 
-                    //groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
+                    //applicationData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
                     applicationId: dlg.applicationId,
                     rights: Ext.util.JSON.encode(rights)
                 },
@@ -941,7 +936,7 @@ Tine.Admin.Applications.EditDialog = {
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        //this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText));
+                        //this.updateApplicationRecord(Ext.util.JSON.decode(_result.responseText));
                         //form.loadRecord(this.groupRecord);                      
                        
                         Ext.MessageBox.hide();
@@ -986,7 +981,7 @@ Tine.Admin.Applications.EditDialog = {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            //this.updateGroupRecord(Ext.util.JSON.decode(_result.responseText));
+                            //this.updateApplicationRecord(Ext.util.JSON.decode(_result.responseText));
                             //form.loadRecord(this.groupRecord);
                             
                            
@@ -1023,7 +1018,7 @@ Tine.Admin.Applications.EditDialog = {
     {
 
     	//console.log ( _allRights );
-    	console.log ( _accounts );
+    	//console.log ( _accounts );
     	
     	this.applicationId = _applicationData.id;
     	
@@ -1113,6 +1108,7 @@ Tine.Admin.Applications.EditDialog = {
 
         /******* define rights grid model ********/
         
+        // add all available application rights to column model
         var columns = [];
         for (var i = 0; i < _allRights.length; i++) {
             columns.push(
@@ -1124,8 +1120,6 @@ Tine.Admin.Applications.EditDialog = {
             );
         }
         
-        // @todo    add more rights (from php model)
-                
         var columnModel = new Ext.grid.ColumnModel([
             {
                 resizable: true, 
@@ -1173,7 +1167,6 @@ Tine.Admin.Applications.EditDialog = {
             enableColLock:false,
             loadMask: true,
             plugins: columns, // [readColumn, addColumn, editColumn, deleteColumn],
-            //autoExpandColumn: 'account_id',
             autoExpandColumn: 'accountDisplayName',
             bbar: permissionsBottomToolbar,
             border: false,
@@ -1225,7 +1218,7 @@ Tine.Admin.Applications.EditDialog = {
             items: dialog
         });
 
-        //this.updateGroupRecord(_groupData);
+        //this.updateApplicationRecord(_groupData);
         //this.updateToolbarButtons(_groupData.grants);       
 
         //dialog.getForm().loadRecord(this.groupRecord);
