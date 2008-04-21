@@ -17,9 +17,9 @@ Ext.namespace('Ext.ux', 'Ext.ux.layout');
  * the horizontal dimenson of the layout's container.  This class is intended to be extended or created via the 
  * layout:'hfit' {@link Ext.Container#layout} config, and should generally not need to be created directly via 
  * the new keyword.</p>
- * <p>FitLayout does not have any direct config options (other than inherited ones).  To fit a panel to a container
- * horizontally using Horizontal FitLayout, simply set layout:'hfit' on the container and add a multiple panel to it.
- * Example usage:</p>
+ * <p>To fit a panel to a container horizontally using Horizontal FitLayout, simply set layout:'hfit' on the container 
+ * and add a multiple panel to it.</p>
+ * <p>Example usage:</p>
  * <pre><code>
 var p = new Ext.Panel({
     title: 'Horizontal Fit Layout',
@@ -38,6 +38,10 @@ var p = new Ext.Panel({
  */
 Ext.ux.layout.HorizontalFitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     /**
+     * @cfg {bool} containsScrollbar
+     */
+    containsScrollbar: false,
+    /**
      * @private
      */
     monitorResize:true,
@@ -48,8 +52,11 @@ Ext.ux.layout.HorizontalFitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     onLayout : function(ct, target){
         Ext.layout.FitLayout.superclass.onLayout.call(this, ct, target);
         if(!this.container.collapsed){
+            var size = target.getStyleSize();
+            size.width = ct.containsScrollbar ? size.width-16 : size.width;
+            
             ct.items.each(function(item){
-                this.setItemSize(item,  target.getStyleSize());
+                this.setItemSize(item,  size);
             }, this);
         }
     },
