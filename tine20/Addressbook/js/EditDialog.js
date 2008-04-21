@@ -215,7 +215,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         title: 'Contact Information',
         xtype: 'fieldset',
         layout: 'hfit',
-        collapsible: true,
+        //collapsible: true,
         autoHeight:true,
         items: [
             contactInformationBasePanel,
@@ -253,17 +253,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             fieldLabel:'Street', 
                             name:'adr_one_street'
-                        },
-                        {
-                            fieldLabel:'Street 2', 
-                            name:'adr_one_street2'
                         }
                     ],
                     [
-                        {
-                            fieldLabel:'Region',
-                            name:'adr_one_region'
-                        },
                         {
                             fieldLabel:'Postal Code', 
                             name:'adr_one_postalcode'
@@ -271,6 +263,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             fieldLabel:'City',
                             name:'adr_one_locality'
+                        },
+                        {
+                            fieldLabel:'Region',
+                            name:'adr_one_region'
                         }
                     ],
                     [
@@ -315,17 +311,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             fieldLabel:'Street', 
                             name:'adr_two_street'
-                        },
-                        {
-                            fieldLabel:'Street 2', 
-                            name:'adr_two_street2'
                         }
                     ],
                     [
-                        {
-                            fieldLabel:'Region',
-                            name:'adr_two_region'
-                        },
                         {
                             fieldLabel:'Postal Code', 
                             name:'adr_two_postalcode'
@@ -333,6 +321,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             fieldLabel:'City',
                             name:'adr_two_locality'
+                        },
+                        {
+                            fieldLabel:'Region',
+                            name:'adr_two_region'
                         }
                     ],
                     [
