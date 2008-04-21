@@ -125,29 +125,44 @@ if ($kindOfSetup == 'initialLoad')
 	# give admin rights to the admin group for all applications
 	$applications = Tinebase_Application::getInstance()->getApplications();
 	foreach( $applications as $application) {
-        if(strtolower($application->name) == 'admin') {
-	        $group = $adminGroup;
-	    } else {
-	        $group = $userGroup;
-	    }
 	    
-	    $right = new Tinebase_Acl_Model_Right(array(
-	        'application_id'    => $application->getId(),
-	        'account_id'        => $group->getId(),
-	        'account_type'      => 'group',
-	        //'right'             => Tinebase_Acl_Rights::RUN
-	        'runRight'         => TRUE
-	    ));
-	    Tinebase_Acl_Rights::getInstance()->addRight($right);
-
-	    $right = new Tinebase_Acl_Model_Right(array(
-	        'application_id'    => $application->getId(),
-	        'account_id'        => $adminGroup->getId(),
-	        'account_type'      => 'group',
-	        //'right'             => Tinebase_Acl_Rights::ADMIN
-	        'adminRight'       => TRUE
-	    ));
-	    Tinebase_Acl_Rights::getInstance()->addRight($right);
+	    //@todo    use 'right' field with const from Tinebase_Acl_Rights
+        if(strtolower($application->name) !== 'admin') {
+            // run right for user group
+            $right = new Tinebase_Acl_Model_Right(array(
+                'application_id'    => $application->getId(),
+                'account_id'        => $userGroup->getId(),
+                'account_type'      => 'group',
+                //'right'             => Tinebase_Acl_Rights::RUN
+                'runRight'         => TRUE
+            ));
+            Tinebase_Acl_Rights::getInstance()->addRight($right);
+            
+            // run for admin group
+            $right->account_id = $adminGroup->getId();            
+            Tinebase_Acl_Rights::getInstance()->addRight($right);
+            
+            // admin for admin group
+            $right->runRight = FALSE;            
+            $right->adminRight = TRUE;            
+            Tinebase_Acl_Rights::getInstance()->addRight($right);
+            
+        } else {
+            // run right for admin group
+            $right = new Tinebase_Acl_Model_Right(array(
+                'application_id'    => $application->getId(),
+                'account_id'        => $adminGroup->getId(),
+                'account_type'      => 'group',
+                //'right'             => Tinebase_Acl_Rights::RUN
+                'runRight'         => TRUE
+            ));
+            Tinebase_Acl_Rights::getInstance()->addRight($right);
+            
+            // admin for admin group
+            $right->runRight = FALSE;            
+            $right->adminRight = TRUE;            
+            Tinebase_Acl_Rights::getInstance()->addRight($right);            
+	    }
 	}
 
 	# give Users group read rights to the internal addressbook
