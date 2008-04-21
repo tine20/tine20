@@ -55,8 +55,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
-    var personalInformationExpandArea = {
-        xtype: 'columnform',
+    var personalInformationExpandArea = new Ext.ux.form.ColumnFormPanel({
+        //xtype: 'columnform',
         items:[
             [
                 {
@@ -88,7 +88,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 }
             ]
         ]
-    };
+    });
     
     var personalInformation = {
         title: 'Personal Information',
@@ -369,6 +369,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         items: [
             {
                 layout: 'hfit',
+                containsScrollbar: true,
+                //margins: '0 18 0 5',
+                autoScroll: true,
                 id: 'adbEditDialogContactLeft',
                 region: 'center',
                 items: [
@@ -385,7 +388,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 split: true,
                 collapsible: true,
                 collapseMode: 'mini',
-                margins: '0 18 0 5',
+                margins: '0 5 0 5',
                 //bodyStyle: 'border:1px solid #B5B8C8;',
                 bodyStyle: 'padding-left: 5px;',
                 items: [
@@ -415,7 +418,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
-    var tabPanel = {
+    var tabPanel = new Ext.TabPanel({
         xtype:'tabpanel',
         defaults: {
             frame: true
@@ -439,22 +442,13 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 disabled: true
             }
         ]
-    };
-    // hacks to supress the bottom scrollbar when the side scollbar apreas
-    /*
-    personalInformationExpandArea.on('expand', function(panel){
-        var wrap = Ext.getCmp('adbEditDialogContactLeft').getEl().up('div.x-column-inner');
-        wrap.setWidth(wrap.up('div').getWidth()-16);
     });
-    contactInformationExpandArea.on('expand', function(panel){
-        var wrap = Ext.getCmp('adbEditDialogContactLeft').getEl().up('div.x-column-inner');
-        wrap.setWidth(wrap.up('div').getWidth()-16);
+    
+    // resize tab panel when window gets resised, and let space for savePath
+    tabPanel.on('bodyresize', function(panel, w, h){
+        panel.setHeight(Ext.getCmp('contactDialog').getSize().height-100);
     });
-    //workarround Extjs layout bugs
-    contactInformationBasePanel.on('resize', function(cmp){
-        cmp.setHeight(cmp.customHeight);
-    });
-    */
+    
     return [
         tabPanel,
         savePath
