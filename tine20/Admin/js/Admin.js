@@ -804,42 +804,106 @@ Tine.Admin.Applications.Main = function() {
 /*********************************** EDIT DIALOG ********************************************/
 
 Tine.Admin.Applications.EditDialog = {
+
+    /**
+     * var applicationRecord
+     */
+    applicationRecord: null,
+    
+
+    /**
+     * function updateGroupRecord
+     */
+    updateGroupRecord: function(_groupData)
+    {
+        /*
+        // if groupData is empty (=array), set to empty object because array won't work!
+        if (_groupData.length === 0) {
+            _groupData = {};
+        }
+        this.groupRecord = new Tine.Tinebase.Model.Group(_groupData);
+        */
+    },
+
+    /**
+     * function updateToolbarButtons
+     */
+    updateToolbarButtons: function(_rights)
+    {        
+       /* if(_rights.editGrant === true) {
+            Ext.getCmp('groupDialog').action_saveAndClose.enable();
+            Ext.getCmp('groupDialog').action_applyChanges.enable();
+        }
+
+        if(_rights.deleteGrant === true) {
+            Ext.getCmp('groupDialog').action_delete.enable();
+        }
+        Ext.getCmp('groupDialog').action_delete.enable();
+        */
+    },    
+
+    /**
+     * returns index of record in the stor
+     * @private
+     */
+    getRecordIndex: function(account, dataStore) {
+        //var cgd = Ext.getCmp('accountRightsGrid');
+        //var dataStore = cgd.dataStore;
+        
+        var id = false;
+        dataStore.each(function(item){
+        	//console.log (item);
+            if ((item.data.account_type == 'user' || item.data.account_type == 'account') &&
+                    account.data.type == 'user' &&
+                    item.data.account_id == account.data.id) {
+                id = item.id;
+            } else if (item.data.account_type == 'group' &&
+                    account.data.type == 'group' &&
+                    item.data.account_id == account.data.id) {
+                id = item.id;
+            }
+        });
+        
+        return id ? dataStore.indexOfId(id) : false;
+    },            
     
     /**
      * var handlers
      */
-	
      handlers: {
         removeAccount: function(_button, _event) 
-        { 
-        	/*
-            var groupGrid = Ext.getCmp('groupMembersGrid');
-            var selectedRows = groupGrid.getSelectionModel().getSelections();
+        {         	
+            var accountsGrid = Ext.getCmp('accountRightsGrid');
+            var selectedRows = accountsGrid.getSelectionModel().getSelections();
             
-            var groupMembersStore = this.dataStore;
+            var accountsStore = this.dataStore;
             for (var i = 0; i < selectedRows.length; ++i) {
-                groupMembersStore.remove(selectedRows[i]);
-            }
-            */  
+                accountsStore.remove(selectedRows[i]);
+            }             
         },
         
         addAccount: function(account)
-        {
-        	/*
-            var groupGrid = Ext.getCmp('groupMembersGrid');
+        {        	
+        	//console.log (account);
+        	
+            var accountsGrid = Ext.getCmp('accountRightsGrid');
             
-            var dataStore = groupGrid.getStore();
-            var selectionModel = groupGrid.getSelectionModel();
+            var dataStore = accountsGrid.getStore();
+            var selectionModel = accountsGrid.getSelectionModel();
             
-            if (dataStore.getById(account.data.data.account_id) === undefined) {
-                var record = new Tine.Tinebase.Model.User({
-                    account_id: account.data.data.account_id,
-                    accountDisplayName: account.data.data.accountDisplayName
-                }, account.data.data.account_id);
+            // check if exists
+            var recordIndex = Tine.Admin.Applications.EditDialog.getRecordIndex(account, dataStore);
+            
+            if (recordIndex === false) {
+                        
+                var record = new Tine.Admin.Applications.Right({
+                    account_id: account.data.id,
+                    account_type: account.data.type,
+                    accountDisplayName: account.data.name
+                }, account.data.id);
                 dataStore.addSorted(record);
             }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.data.account_id));   
-            */         
+            selectionModel.selectRow(dataStore.indexOfId(account.data.account_id));   
         },
 
         applyChanges: function(_button, _event, _closeWindow) 
@@ -850,7 +914,7 @@ Tine.Admin.Applications.EditDialog = {
             if(form.isValid()) {
         
                 // get group members
-                var groupGrid = Ext.getCmp('groupMembersGrid');
+                var groupGrid = Ext.getCmp('accountRightsGrid');
 
                 Ext.MessageBox.wait('Please wait', 'Updating Memberships');
                 
@@ -901,70 +965,8 @@ Tine.Admin.Applications.EditDialog = {
         {
             this.handlers.applyChanges(_button, _event, true);
         }
-        /*
-        deleteGroup: function(_button, _event) 
-        {
-            var groupIds = Ext.util.JSON.encode([Tine.Admin.Groups.EditDialog.groupRecord.data.id]);
-                
-            Ext.Ajax.request({
-                url: 'index.php',
-                params: {
-                    method: 'Admin.deleteGroups', 
-                    groupIds: groupIds
-                },
-                text: 'Deleting group...',
-                success: function(_result, _request) {
-                    if(window.opener.Tine.Admin.Groups) {
-                        window.opener.Tine.Admin.Groups.Main.reload();
-                    }
-                    window.close();
-                },
-                failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the group.'); 
-                } 
-            });                           
-        }
-        */
      },
-     
-     
-    /**
-     * var applicationRecord
-     */
-    applicationRecord: null,
-    
-
-    /**
-     * function updateGroupRecord
-     */
-    /*
-    updateGroupRecord: function(_groupData)
-    {
-        // if groupData is empty (=array), set to empty object because array won't work!
-        if (_groupData.length === 0) {
-            _groupData = {};
-        }
-        this.groupRecord = new Tine.Tinebase.Model.Group(_groupData);
-    },
-    */
-
-    /**
-     * function updateToolbarButtons
-     */
-    updateToolbarButtons: function(_rights)
-    {        
-       /* if(_rights.editGrant === true) {
-            Ext.getCmp('groupDialog').action_saveAndClose.enable();
-            Ext.getCmp('groupDialog').action_applyChanges.enable();
-        }
-
-        if(_rights.deleteGrant === true) {
-            Ext.getCmp('groupDialog').action_delete.enable();
-        }
-        Ext.getCmp('groupDialog').action_delete.enable();
-        */
-    },    
-    
+         
     /**
      * function display
      * 
@@ -999,7 +1001,8 @@ Tine.Admin.Applications.EditDialog = {
         var accountPicker =  new Tine.widgets.AccountpickerPanel ({            
             enableBbar: true,
             region: 'west',
-            height: 200,
+            selectType: 'both',
+            height: 300,
             selectAction: function() {              
                 this.account = account;
                 this.handlers.addAccount(account);
@@ -1014,7 +1017,7 @@ Tine.Admin.Applications.EditDialog = {
 
         /******* load data store ********/
         
-        console.log ( _accounts );
+        //console.log ( _accounts );
 
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
@@ -1033,7 +1036,7 @@ Tine.Admin.Applications.EditDialog = {
             this.dataStore.loadData( _accounts );
         }
 
-        console.log ( this.dataStore );
+        //console.log ( this.dataStore );
         
         /*       
         this.dataStore.on('update', function(_store){
@@ -1096,6 +1099,7 @@ Tine.Admin.Applications.EditDialog = {
         }, this);
         
         this.RightsGridPanel = new Ext.grid.EditorGridPanel({
+        	id: 'accountRightsGrid',
             region: 'center',
             title: 'Account rights for ' + _applicationData.name + '',
             store: this.dataStore,
@@ -1108,7 +1112,8 @@ Tine.Admin.Applications.EditDialog = {
             //autoExpandColumn: 'account_id',
             autoExpandColumn: 'accountDisplayName',
             bbar: permissionsBottomToolbar,
-            border: false
+            border: false,
+            height: 300
         });
         
     // private
