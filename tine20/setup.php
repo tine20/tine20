@@ -51,7 +51,7 @@ if ( DO_TABLE_SETUP === TRUE ) {
     $fileName = 'Tinebase/Setup/setup.xml';
     if(file_exists($fileName)) {
         echo "Processing tables definitions for <b>Tinebase</b>($fileName)<br>";
-        $setup->parseFile($fileName);
+        $kindOfSetup = $setup->parseFile($fileName);
     }
     
     foreach ( new DirectoryIterator('./') as $item ) {
@@ -59,7 +59,7 @@ if ( DO_TABLE_SETUP === TRUE ) {
     		$fileName = $item->getFileName() . '/Setup/setup.xml';
     		if(file_exists($fileName)) {
     			echo "Processing tables definitions for <b>" . $item->getFileName() . "</b>($fileName)<br>";
-    			$kindOfSetup = $setup->parseFile($fileName);
+    			$setup->parseFile($fileName);
     		}
     	}
     }
