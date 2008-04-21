@@ -733,5 +733,6 @@ Tine.Addressbook.Model.Contact = Ext.data.Record.create([
     {name: 'modified'},
     {name: 'modifier'},
     {name: 'jpegphoto'},
-    {name: 'account_id'}
+    {name: 'account_id'},
+    {name: 'tags'}
 ]);
