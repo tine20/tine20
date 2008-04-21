@@ -75,12 +75,12 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             self::_appendFileTime("Tinebase/js/ux/Percentage.js"),
             self::_appendFileTime("Tinebase/js/ux/PopupWindow.js"),
             self::_appendFileTime("Tinebase/js/ux/Wizard.js"),
-            self::_appendFileTime("Tinebase/js/ux/ExpandPanel.js"),
             self::_appendFileTime("Tinebase/js/ux/grid/CheckColumn.js"),
             self::_appendFileTime("Tinebase/js/ux/grid/QuickaddGridPanel.js"),
             self::_appendFileTime("Tinebase/js/ux/form/IconTextField.js"),
             self::_appendFileTime("Tinebase/js/ux/form/MirrorTextField.js"),
             self::_appendFileTime("Tinebase/js/ux/form/ColumnFormPanel.js"),
+            self::_appendFileTime("Tinebase/js/ux/form/ExpandFieldSet.js"),
             self::_appendFileTime("Tinebase/js/ux/layout/HorizontalFitLayout.js"),
             self::_appendFileTime("Tinebase/js/DatepickerRange.js"),
             // Tine 2.0 specific widgets
@@ -105,7 +105,9 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     	return array(
     	   self::_appendFileTime("Tinebase/css/ux/Wizard.css"),
     	   self::_appendFileTime("Tinebase/css/ux/grid/IconTextField.css"),
+    	   self::_appendFileTime("Tinebase/css/ux/form/ExpandFieldSet.css"),
     	   self::_appendFileTime("Tinebase/css/Tinebase.css"),
+    	   self::_appendFileTime("Tinebase/css/widgets/TagsPanel.css"),
     	);
     }
     

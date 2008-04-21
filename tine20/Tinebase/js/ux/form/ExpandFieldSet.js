@@ -8,10 +8,10 @@
  *
  */
  
-Ext.namespace('Ext.ux');
+Ext.namespace('Ext.ux', 'Ext.ux.form');
 
 /**
- * Expandable fieldset
+ * Expandable Panel
  * <p>This class provieds a expandable fieldset. The first item is allways visable, whereas 
  * all furthor items are colapsed by default<p>
  * <p>Example usage:</p>
@@ -33,14 +33,13 @@ Ext.namespace('Ext.ux');
  * <p>The <b>xtype</b> of this panel is <b>expanderfieldset</b>.
  * @todo Generalise this an inherit from Ext.Panel
  */
-Ext.ux.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
-    isExpanded: true,
-    
+Ext.ux.form.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
     /**
      * @private
      */
     initComponent: function(){
-        Ext.ux.ExpandFieldSet.superclass.initComponent.call(this);
+        Ext.ux.form.ExpandFieldSet.superclass.initComponent.call(this);
+        
         var panelCount = 0;
         this.items.each(function(item){
             if(panelCount > 0) {
@@ -52,37 +51,43 @@ Ext.ux.ExpandFieldSet = Ext.extend(Ext.form.FieldSet, {
             }
             panelCount++;
         }, this);
+        this.collapsed = true;
     },
-    /**
-     * @private
-     */
     onRender : function(ct, position){
-        Ext.ux.ExpandFieldSet.superclass.onRender.call(this, ct, position);
-        
-        this.expanderButton = this.getEl().createChild({
-            cls: 'x-panel-collapsed'
-        });
-        this.expanderButton.createChild({
-            cls: 'x-tool x-tool-toggle x-tool-toggle-expander'
-        });
-        
-        this.expanderButton.on('click', function(){
-            this.toggleExpandation();
-        }, this);
+        Ext.ux.form.ExpandFieldSet.superclass.onRender.call(this, ct, position);
+        this.el.addClass('x-tool-expand');
     },
-    /**
-     * toggles visability of expand area
-     */
-    toggleExpandation: function(){
-        this.isExpanded = !this.isExpanded;
+    
+    expand: function(animate) {
         var panelCount = 0;
         this.items.each(function(item){
             if(panelCount > 0) {
-                item[!this.isExpanded ? 'expand' : 'collapse']();
+                item.expand(animate);
             }
             panelCount++;
         }, this);
-        this.expanderButton[this.isExpanded ? 'addClass' : 'removeClass']('x-panel-collapsed');
+        this.el.removeClass('x-tool-expand');
+        this.el.addClass('x-tool-collapse');
+        //this.el.addClass('x-tool-minimize');
+        this.collapsed = false;
     },
+    collapse: function(animate) {
+        var panelCount = 0;
+        this.items.each(function(item){
+            if(panelCount > 0) {
+                item.collapse(animate);
+            }
+            panelCount++;
+        }, this);
+        //this.el.addClass(this.collapsedCls);
+        this.el.removeClass('x-tool-collapse');
+        this.el.addClass('x-tool-expand');
+        
+        this.collapsed = true;
+    }
+    
+    
+
 });
-Ext.reg('expanderfieldset', Ext.ux.ExpandFieldSet);
+
+Ext.reg('expanderfieldset', Ext.ux.form.ExpandFieldSet);
