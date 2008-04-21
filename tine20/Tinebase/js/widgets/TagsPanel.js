@@ -102,10 +102,30 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.searchField.on('select', function(searchField, selectedTag){
             if(this.recordTagsStore.getById(selectedTag.id) == undefined) {
                 this.recordTagsStore.add(selectedTag);
-                searchField.emptyText = '';
-                searchField.clearValue();
             }
+            searchField.emptyText = '';
+            searchField.clearValue();
         },this);
+        this.searchField.on('specialkey', function(searchField, e){
+             if(e.getKey() == e.ENTER){
+                var value = searchField.getValue();
+                if (value.length < 3) {
+                    Ext.Msg.show({
+                       title:'Notice',
+                       msg: 'The minimum tag length is three.',
+                       buttons: Ext.Msg.OK,
+                       animEl: 'elId',
+                       icon: Ext.MessageBox.INFO
+                    });
+                } else {
+                    var newTag = new Tine.widgets.tags.Tag({
+                        name: value
+                    });
+                    this.recordTagsStore.add(newTag);
+                }
+                 
+             }
+        }, this);
         // workaround extjs bug:
         this.searchField.on('blur', function(searchField){
             searchField.emptyText = 'Enter tag name';
@@ -129,7 +149,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 '</div>',
             '</tpl>'
         );
-        this.items = new Ext.DataView({
+        this.dataView = new Ext.DataView({
             store: this.recordTagsStore,
             tpl: tagTpl,
             autoHeight:true,
@@ -139,7 +159,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             itemSelector:'div.x-widget-tag-tagitem',
             emptyText: 'No Tags to display'
         });
-        this.items.on('contextmenu', function(dataView, selectedIdx, node, event){
+        this.dataView.on('contextmenu', function(dataView, selectedIdx, node, event){
             event.preventDefault();
             var menu = new Ext.menu.Menu({
                 items: [
@@ -148,7 +168,6 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                         text: 'detach tag',
                         iconCls: 'action_delete',
                         handler: function() {
-                            
                             //this.recordTagsStore.remove();
                         }
                     })
@@ -157,6 +176,17 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             menu.showAt(event.getXY());
         },this);
         
+        this.formField = {
+            layout: 'form',
+            items: new Tine.widgets.tags.TagFormField({
+                recordTagsStore: this.recordTagsStore
+            })
+        };
+        
+        this.items = [
+            this.dataView,
+            this.formField
+        ]
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
     /**
@@ -167,6 +197,43 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         // maximize search field and let space for list button
         this.searchField.setWidth(w-37);
     },
+});
+
+/**
+ * @private Helper class to have tags processing in the standard form/record cycle
+ */
+Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
+    /**
+     * @cfg {Ext.data.JsonStore} recordTagsStore a store where the record tags are in.
+     */
+    recordTagsStore: null,
+    
+    name: 'tags',
+    hidden: true,
+    labelSeparator: '',
+    /**
+     * @private
+     */
+    initComponent: function() {
+        Tine.widgets.tags.TagFormField.superclass.initComponent.call(this);
+        //this.hide();
+    },
+    /**
+     * Returns 
+     */
+    getValue: function() {
+        var value = [];
+        this.recordTagsStore.each(function(tag){
+            if(tag.id.length > 5) {
+                //if we have a valid id we just return the id
+                value.push(tag.id);
+            } else {
+                //it's a new tag and will be saved on the fly
+                value.push(Ext.util.JSON.encode(tag.data));
+            }
+        });
+        return (value.join(','));
+    }
 });
 
 /**
@@ -184,172 +251,6 @@ Tine.widgets.tags.Tag = Ext.data.Record.create([
     {name: 'color'      },
     {name: 'occurrence' },
 ]);
-
-
-Tine.widgets.TagsPanel = Ext.extend(Ext.Panel, {
-    layout: 'anchor',
-    
-    /**
-     * Holds public tags panel
-     * @private
-     */
-    publicTagPanel: null,
-    /**
-     * Holds private tags panel
-     * @private
-     */
-    privateTagPanel: null,
-    /**
-     * Holds public tag store
-     * @private
-     */
-    publicTagStore: false,
-    /**
-     * holds private tag store
-     * @private
-     */
-    privateTagStore: false,
-    /**
-     * @private
-     */
-    initComponent: function(){
-        this.initTagPanels();
-        this.items = [
-            this.publicTagPanel,
-            this.privateTagPanel
-        ];
-        Tine.widgets.TagsPanel.superclass.initComponent.call(this);
-    },
-    /**
-     * @private
-     */
-    initTagPanels: function() {
-        this.publicTagPanel = new Ext.Panel({
-            title: 'Public Tags',
-            layout: 'fit',
-            html: '',
-            bbar: [
-                new Ext.form.TextField({
-                    name: 'new'
-                }),
-                '->',
-                new Ext.Button({
-                    text: 'list'
-                })
-            ],
-        });
-        this.privateTagPanel = new Ext.form.FieldSet({
-            title: 'Private Tags',
-            checkboxToggle: true,
-            layout: 'fit',
-            html: ''
-        });
-        var publicTagEditButton = new Ext.Button({
-            text: 'Edit Public Tags',
-            iconCls: 'action_edit',
-            handler: function() {
-                var win = new Tine.widgets.tags.EditDialog({
-                });
-                win.show();
-            }
-        });
-        //this.bbar.addButton(publicTagEditButton);
-        
-        this.privateTagPanel.on('collapse', function(){
-            this.resizeTagPanels();
-        }, this);
-        this.privateTagPanel.on('expand', function(){
-            this.resizeTagPanels();
-        }, this);
-        this.displayPublicTags();
-    },
-    /**
-     * @private
-     */
-    initStores: function(){
-        this.getPublicTagStore;
-    },
-    getPublicTagStore: function(){
-        if (!this.publicTagStore) {
-            this.publicTagStore = new Ext.data.SimpleStore({
-                storeId: 'superStore',
-                id: 'id',
-                /*fields: [
-                    { name: 'id', dataIndex: 'id' },
-                    { name: 'label', dataIndex: 'label' },
-                    { name: 'occurrence', dataIndex: 'occurrence' }
-                ]*/
-                fields: ['id', 'label', 'color', 'description', 'occurrence'],
-                data: [
-                    ['0', 'x-mas card', '#B06296', 'Is this contact going to receive a x-mas card?', '127' ],
-                    ['1', 'follow ups', '#4C82FF', 'Need to be contacted by sales people' ,'32' ],
-                    ['2', 'week 34+35', '#FFA815', 'Will be visited on calendar weeks 34/35 ', '12' ]
-                ]
-            });
-            
-        }
-        return this.publicTagStore;
-    },
-    displayPublicTags: function() {
-        /*var tpl = new Ext.XTemplate(
-            '<div class="x-widget-tag-tagitem" style="background-color:{color};">',
-                '<span class="x-widget-tag-tagitem-text" ext:qtip="{description}">',
-                    '{label} [{occurrence}]',
-                '</span>',
-            '</div>'
-        ).compile();*/
-        /*
-        var tpl = new Ext.XTemplate(
-            '<div class="x-widget-tag-tagitem">',
-                '<div class="x-widget-tag-bullet"><li style="color:{color};">&#160;</li></div>', 
-                '<span class="x-widget-tag-tagitem-text" ext:qtip="{description}">',
-                    '{label} <span class="x-widget-tag-tagitem-occurrence">[{occurrence}]</span>',
-                '</span>',
-            '</div>'
-        ).compile();
-        */
-        var tpl = new Ext.XTemplate(
-            '<li class="x-widget-tag-bullet" style="color:{color};">', 
-                '<span class="x-widget-tag-tagitem-text" ext:qtip="{description}">{label}</span><span class="x-widget-tag-tagitem-occurrence"> [{occurrence}]</span>',
-            '</li>'
-        ).compile();
-        var store = this.getPublicTagStore();
-        var html = '<ul class="x-widget-tag-list">';
-        this.publicTagStore.each(function(tag){
-            html += tpl.apply(tag.data);
-        }, this);
-        html += '</ul>'
-        this.publicTagPanel.html = html;
-    },
-    /**
-     * @private
-     */
-    onRender : function(ct, position){
-        Tine.widgets.TagsPanel.superclass.onRender.call(this, ct, position);
-        this.resizeTagPanels();
-    },
-    /**
-     * @private
-     */
-    onResize : function(w,h){
-        Tine.widgets.TagsPanel.superclass.onResize.call(this, w, h);
-        this.resizeTagPanels();
-    },
-    /**
-     * @private
-     */
-    resizeTagPanels: function(){
-        if (this.privateTagPanel.collapsed) {
-            var SingleExpandedHeight = this.getSize().height - 20;
-            this.publicTagPanel.setHeight(SingleExpandedHeight);
-        } else {
-            var areaHeights = this.getSize().height/2 - 3
-            this.publicTagPanel.setHeight(areaHeights);
-            this.privateTagPanel.setHeight(areaHeights);
-        }
-    },
-    
-});
 
 Tine.widgets.tags.EditDialog = Ext.extend(Ext.Window, {
     layout:'border',
