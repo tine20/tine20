@@ -66,6 +66,8 @@ Tine.Login = {
 
         Ext.Element.get('loginDialog').center();
         
+        Ext.getCmp('username').focus();
+        
         Ext.getCmp('username').on('specialkey', function(_field, _event) {
         	if(_event.getKey() == _event.ENTER){
         		Tine.Login.loginHandler();
