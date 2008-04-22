@@ -60,7 +60,7 @@ class Setup_Import_TineRev949
      * 
      * @var array
      */
-    protected $applicationRightsMapping = array ( 1 => 'run', 2 => 'admin' );
+    protected $applicationRightsMapping = array ( 1 => Tinebase_Acl_Rights::RUN, 2 => Tinebase_Acl_Rights::ADMIN );
         
     /**
      * is needed for task links (old id => uid)
@@ -564,7 +564,7 @@ class Setup_Import_TineRev949
                             } elseif ( in_array($row->$oldKey, $this->groupAccountArray) ) {
                                 $values['account_type'] = 'group'; 
                             } else {
-                                $values['account_type'] = 'account';
+                                $values['account_type'] = 'user';
                             }
                         } elseif ( $oldKey === 'application_id' ) {
                             $values[$newKey] = $this->applicationIdMapping[$row->$oldKey];
