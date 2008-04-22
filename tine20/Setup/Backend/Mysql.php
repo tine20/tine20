@@ -19,245 +19,291 @@
 class Setup_Backend_Mysql
 {
 	public $DBMS = 'mysql';
+	private $_config = '';
+	
+	public function __construct()
+	{
+		$this->_config = Zend_Registry::get('configFile');
+	}
+	
     /**
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
      */
-    public function _createTable($_table)
+    public function createTable($_table)
     {
 	    $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
         $statementSnippets = array();
 
-        foreach ($_table->declaration->field as $field)
-        {
-            if(isset($field->name))
-            {
-               $statementSnippets[] = $this->_getMysqlDeclarations($field);
+        foreach ($_table->declaration->field as $field) {
+            if(isset($field->name)) {
+               $statementSnippets[] = $this->getMysqlDeclarations($field);
             }
         }
 
-        foreach ($_table->declaration->index as $key)
-        {
-            if (!$key->foreign)
-            {
-                $statementSnippets[] = $this->_getMysqlIndexDeclarations($key);
-            }
-            else
-            {
-                $statementSnippets[] = $this->_getMysqlForeignKeyDeclarations($key);
+        foreach ($_table->declaration->index as $key) {
+            if (!$key->foreign) {
+                $statementSnippets[] = $this->getMysqlIndexDeclarations($key);
+            } else {
+                $statementSnippets[] = $this->getMysqlForeignKeyDeclarations($key);
             }
         }
 
         $statement .= implode(",\n", $statementSnippets) . ")";
 
-        if (isset($_table->engine))
-        {
+        if (isset($_table->engine)) {
             $statement .= "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
-        }
-        else
-        {
+        } else {
             $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
         }
 
 		$statement .= " COMMENT='VERSION: " .  $_table->version  ;
-        if (isset($_table->comment))
-        {
+        if (isset($_table->comment)) {
           $statement .= "; " . $_table->comment . "';";
-        }
-		else
-		{
+        } else {
 			$statement .= "';";
 		}
 
 		echo "<pre>$statement</pre>";
-		$this->_execQueryVoid($statement);
+		$this->execQueryVoid($statement);
 		echo "<hr>";
 	}
 	
+	    /**
+     * checks if application is installed at all
+     *
+     * @param unknown_type $_application
+     * @return unknown
+     */
+    public function applicationExists($_application)
+    {
+		 if($this->tableExists('applications')) {
+            if($this->applicationVersionQuery($_application) != false) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+	
+    /**
+     * check's if a given table exists
+     *
+     * @param string $_tableSchema
+     * @param string $_tableName
+     * @return boolean return true if the table exists, otherwise false
+     */
+    public function tableExists($_tableName)
+    {
+         $select = Zend_Registry::get('dbAdapter')->select()
+          ->from('information_schema.tables')
+          ->where('TABLE_SCHEMA = ?', $this->_config->database->dbname)
+          ->where('TABLE_NAME = ?',  SQL_TABLE_PREFIX . $_tableName);
+
+        $stmt = $select->query();
+        $table = $stmt->fetchObject();
+		
+        if($table === false) {
+	     return false;
+        }
+		return true; 
+    }
+    
+    /**
+     * check's a given database table version 
+     *
+     * @param string $_tableName
+     * @return boolean return string "version" if the table exists, otherwise false
+     */
+    
+    public function tableVersionQuery($_tableName)
+    {
+        $select = Zend_Registry::get('dbAdapter')->select()
+                ->from( SQL_TABLE_PREFIX . 'application_tables')
+                ->where('name = ?',  SQL_TABLE_PREFIX . $_tableName);
+
+        $stmt = $select->query();
+        $version = $stmt->fetchAll();
+        
+        return $version[0]['version'];
+    }
+    
+    /**
+     * check's a given application version
+     *
+     * @param string $_application
+     * @return boolean return string "version" if the table exists, otherwise false
+     */
+    public function applicationVersionQuery($_application)
+    {    
+        $select = Zend_Registry::get('dbAdapter')->select()
+                ->from( SQL_TABLE_PREFIX . 'applications')
+                ->where('name = ?', $_application);
+
+        $stmt = $select->query();
+        $version = $stmt->fetchAll();
+        if(empty($version)) {
+            return false;
+        } else {
+            return $version[0]['version'];
+        }
+    }
+	
+	
+    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
+    {
+        $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
+
+        $applicationData = array(
+            'application_id'    => $_application->id,
+            'name'              =>  SQL_TABLE_PREFIX . $_name,
+            'version'           => $_version
+        );
+
+        $applicationID = $applicationTable->insert($applicationData);
+
+        return $applicationID;
+    }
+    
+    public function execInsertStatement($_record)
+    {
+        $table = new Tinebase_Db_Table(array(
+           'name' => SQL_TABLE_PREFIX . $_record->table->name
+        ));
+
+        foreach ($_record->field as $field) {
+            if(isset($field->value['special'])) {
+                switch(strtolower($field->value['special'])) {
+                    case 'now':
+                    {
+                        $value = Zend_Date::now()->getIso();
+                        break;
+                    }
+                    case 'account_id':
+                    {
+                        break;
+                    }
+                    case 'application_id':
+                    {
+                        $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
+
+                        $value = $application->id;
+
+                        break;
+                    }
+                    default:
+                    {
+                        throw new Exception('unsupported special type ' . strtolower($field->value['special']));
+                        break;
+                    }
+                }
+            } else {
+                $value = $field->value;
+            }
+
+            $data[(string)$field->name] = $value;
+        }
+
+        $table->insert($data);
+    }
 
 	
-	public function _dropTable($_tableName)
+	
+	
+	public function dropTable($_tableName)
 	{
 		$statement = "DROP TABLE `" . $_tableName . "`;";
-		
-		if ($this->_execQuery($statement))
-		{
-			echo  "dropped table " . $_tableName . "\n";
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		$this->execQueryVoid($statement);
 	}
 	
-	public function _renameTable($_tableName, $_newName )
+	public function renameTable($_tableName, $_newName )
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` RENAME TO `" . $_newName . "` ;";
-		
-		if ($this->_execQuery($statement))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	
+		$this->execQueryVoid($statement);
 	}
 	
-	public function _addCol($_tableName, $_declaration , $_position = NULL)
+	public function addCol($_tableName, $_declaration , $_position = NULL)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD COLUMN " ;
 		
-		$statement .= $this->_getMysqlDeclarations($_declaration);
+		$statement .= $this->getMysqlDeclarations($_declaration);
 		
 		if($_position != NULL) {
 			if ($_position == 0) {
 				$statement .= ' FIRST ';
 			} else {
-				$before = $this->_execQuery('DESCRIBE `' .  $_tableName . '` ');
+				$before = $this->execQuery('DESCRIBE `' .  $_tableName . '` ');
 				$statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
 			}
 		}
 		
-		echo "STATEMENT: $statement<br>";
-		if ($this->_execQueryVoid($statement)) {
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		} else {
-			return false;
-		}
+		$this->execQueryVoid($statement);
 	}
 	
-	public function _alterCol($_tableName, $_declaration, $_oldName = NULL)
+	public function alterCol($_tableName, $_declaration, $_oldName = NULL)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` CHANGE COLUMN " ;
 		$oldName = $_oldName ;
 		
-		if ($_oldName == NULL)
-		{
+		if ($_oldName == NULL) {
 			$oldName = $_declaration->name;
 		}
 		
-		$statement .= " `" . $oldName .  "` " . $this->_getMysqlDeclarations($_declaration) ;
-		
-		echo "STATEMENT: $statement<br>";
-		if ($this->_execQueryVoid($statement))
-		{
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		}
-		else
-		{
-			return false;
-		}	
+		$statement .= " `" . $oldName .  "` " . $this->getMysqlDeclarations($_declaration) ;
+		$this->execQueryVoid($statement);	
 	}
 	
-	public function _dropCol($_tableName, $_colName)
+	public function dropCol($_tableName, $_colName)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
-		
-		if ($this->_execQueryVoid($statement)) {
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		} else {
-			return false;
-		}	
+		$this->execQueryVoid($statement);	
 	}
 
 
 	
-	public function _addForeignKey($_tableName, $_declaration)
+	public function addForeignKey($_tableName, $_declaration)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD " 
-					. $this->_getMysqlForeignKeyDeclarations($_declaration)  ;
-		
-		echo $statement;
-		if ($this->_execQuery($statement))
-		{
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+					. $this->getMysqlForeignKeyDeclarations($_declaration)  ;
+		$this->execQueryVoid($statement);	
 	}
 
 	
-	public function _dropForeignKey($_tableName, $_name)
+	public function dropForeignKey($_tableName, $_name)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
-		
-		if ($this->_execQuery($statement))
-		{
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		}
-		else
-		{
-			return false;
-		}	
+		$this->execQueryVoid($statement);	
 	}
 	
-	public function _dropPrimaryKey($_tableName)
+	public function dropPrimaryKey($_tableName)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` DROP PRIMARY KEY " ;
-		
-		if ($this->_execQuery($statement))
-		{
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		}
-		else
-		{
-			return false;
-		}	
+		$this->execQueryVoid($statement);	
 	}
 	
-	public function _addPrimaryKey($_tableName, $_declaration)
+	public function addPrimaryKey($_tableName, $_declaration)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
-					. $this->_getMysqlIndexDeclarations($_declaration);
-		
-		if ($this->_execQueryVoid($statement)) {
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		} else {
-			return false;
-		}	
-	
+					. $this->getMysqlIndexDeclarations($_declaration);
+		$this->execQueryVoid($statement);	
 	}
 	
-	public function _addIndex($_tableName , $_declaration)
+	public function addIndex($_tableName , $_declaration)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
-					. $this->_getMysqlIndexDeclarations($_declaration);
-		
-		if ($this->_execQueryVoid($statement)) {
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		} else {
-			return false;
-		}
+					. $this->getMysqlIndexDeclarations($_declaration);
+		$this->execQueryVoid($statement);	
 	}
 	
 	
-	public function _dropIndex($_tableName, $_indexName)
+	public function dropIndex($_tableName, $_indexName)
 	{
 		$statement = "ALTER TABLE `" . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
-		
-		if ($this->_execQueryVoid($statement)) {
-			echo  "modified " . $_tableName . "\n";
-			return true;
-		} else {
-			return false;
-		}	
+		$this->execQueryVoid($statement);	
 	}
 	
-	public function _execQueryVoid($_statement)
+	public function execQueryVoid($_statement)
 	{
 		try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
@@ -266,7 +312,7 @@ class Setup_Backend_Mysql
         }
 	}
 	
-	public function _execQuery($_statement)
+	public function execQuery($_statement)
 	{
 		try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
@@ -279,112 +325,83 @@ class Setup_Backend_Mysql
 	
 	
 
-    public function _getMysqlDeclarations($_field)
+    public function getMysqlDeclarations($_field)
     {
         $definition = '`' . $_field->name . '`';
 
-        switch ($_field->type)
-        {
+        switch ($_field->type) {
             case('text'):
-            {
-                if (isset($_field->length))
-                {
+				if (isset($_field->length)) {
                     $definition .= ' varchar(' . $_field->length . ') ';
-                }
-                else
-                {
+                } else {
                     $definition .= ' ' . $_field->type . ' ';
                 }
                 break;
-            }
+            
             case ('integer'):
-            {
-                if (isset($_field->length))
-                {
-                    if ($_field->length > 19)
-                    {
-                        $definition .= ' bigint(' . $_field->length . ') ';}
-                    else if($_field->length < 5)
-                    {
+                if (isset($_field->length)) {
+                    if ($_field->length > 19) {
+                        $definition .= ' bigint(' . $_field->length . ') ';
+					} else if($_field->length < 5) {
                         $definition .= ' tinyint(' . $_field->length . ') ';
-                    }
-                    else
-                    {
+                    } else {
                         $definition .= ' int(' . $_field->length . ') ';
                     }
-                }
-                else
-                {
+                } else {
                     $definition .= ' int(11) ';
                 }
                 break;
-            }
+            
             case ('clob'):
-            {
                 $definition .= ' text ';
                 break;
-            }
-            case ('blob'):
-            {
+            
+			case ('blob'):
                 $definition .= ' longblob ';
                 break;
-            }
-            case ('enum'):
-            {
-                foreach ($_field->value as $value)
-                {
+            
+			case ('enum'):
+                foreach ($_field->value as $value) {
                     $values[] = $value;
                 }
                 $definition .= " enum('" . implode("','", $values) . "') ";
-
                 break;
-            }
-            case ('datetime'):
-            {
+            
+			case ('datetime'):
                 $definition .= ' datetime ';
                 break;
-            }
-            case ('double'):
-            {
+            
+			case ('double'):
                 $definition .= ' double ';
                 break;
-            }
-            case ('float'):
-            {
+            
+			case ('float'):
                 $definition .= ' float ';
                 break;
-            }
-            case ('boolean'):
-            {
+            
+			case ('boolean'):
                 $definition .= ' tinyint(1) ';
-                if ($_field->default == 'false')
-                {
+                if ($_field->default == 'false') {
                     $_field->default = 0;
-                }
-                else
-                {
+                } else {
                     $_field->default = 1;
                 }
                 break;
-            }
-            case ('decimal'):
-            {
+            
+			case ('decimal'):
                 $definition .= " decimal (" . $_field->value . ")" ;
-            }
-        }
+				break;
+			}
 
-        if (isset($_field->unsigned))
-        {
+        if (isset($_field->unsigned)) {
             $definition .= ' unsigned ';
         }
 
-        if (isset($_field->autoincrement))
-        {
+        if (isset($_field->autoincrement)) {
             $definition .= ' auto_increment';
         }
 
-        if (isset($_field->default))
-        {
+        if (isset($_field->default)) {
             $definition .= "default '" . $_field->default . "'";
         }
 
@@ -394,10 +411,8 @@ class Setup_Backend_Mysql
          //   $definition .= ' default NULL ';
         }
 
-        if (isset($_field->comment))
-        {
-            if ($_field->comment)
-            {
+        if (isset($_field->comment)) {
+            if ($_field->comment) {
                 $definition .= "COMMENT '" .  $_field->comment . "'";
             }
         }
@@ -411,7 +426,7 @@ class Setup_Backend_Mysql
      * @param object $_key the xml index definition 
      * @return string
      */
-    public function _getMysqlIndexDeclarations($_key)
+    public function getMysqlIndexDeclarations($_key)
     {
         $snippet = '';
         $keys = array();
@@ -423,7 +438,6 @@ class Setup_Backend_Mysql
             $definition = ' UNIQUE KEY';
         }
 
-        //$snippet .= $definition . " `" . SQL_TABLE_PREFIX .  $_key->name . "`" ;
         $snippet .= $definition . " `" . $_key->name . "`" ;
 
         foreach ($_key->field as $keyfield) {
@@ -450,9 +464,8 @@ class Setup_Backend_Mysql
      * @return string
      */
 
-    public function _getMysqlForeignKeyDeclarations($_key)
+    public function getMysqlForeignKeyDeclarations($_key)
     {
-	
         $snippet = '';
         $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY';
 
@@ -466,8 +479,6 @@ class Setup_Backend_Mysql
         if(!empty($_key->reference->onupdate)) {
             $snippet .= "ON UPDATE " . strtoupper($_key->reference->onupdate);
         }
-
         return $snippet;
     }
-
 }
