@@ -6,7 +6,7 @@
     <tables>
         <table>
             <name>class</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -68,7 +68,7 @@
         </table>
         <table>
             <name>tasks_status</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -142,7 +142,7 @@
         </table>    
         <table>
             <name>tasks</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -287,7 +287,7 @@
         </table>
         <table>
             <name>tasks_tag</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>task_id</name>
@@ -325,7 +325,7 @@
         </table>
         <table>
             <name>tasks_contact</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>task_id</name>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.2</version>
+    <version>0.1</version>
     <tables>
         <table>
             <name>applications</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -58,7 +58,7 @@
         
         <table>
             <name>application_tables</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>application_id</name>
@@ -104,7 +104,7 @@
         
         <table>
             <name>groups</name>
-            <version>0.0.7</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -143,7 +143,7 @@
         
         <table>
             <name>accounts</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -240,7 +240,7 @@
         
         <table>
             <name>group_members</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>group_id</name>
@@ -296,7 +296,7 @@
         
         <table>
             <name>registrations</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -365,7 +365,7 @@
 
         <table>
             <name>container</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -428,7 +428,7 @@
 
         <table>
             <name>container_acl</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -510,7 +510,7 @@
 
         <table>
             <name>access_log</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -569,7 +569,7 @@
 
         <table>
             <name>application_rights</name>
-            <version>2</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -650,7 +650,7 @@
 
         <table>
             <name>record_persistentobserver</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -763,7 +763,7 @@
         
         <table>
             <name>record_relations</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -867,7 +867,7 @@
 		
 		<table>
 			<name>links</name>
-			<version>0.0.1</version>
+			<version>1</version>
 			<declaration>
 				<field>
 					<name>link_id</name>
@@ -952,7 +952,7 @@
         
         <table>
             <name>timemachine_modificationlog</name>
-            <version>0.0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
