@@ -3,4 +3,5 @@
     <name>Dialer</name>
     <version>0.1</version>
     <order>11</order>
+    <status>disabled</status>
 </application>
