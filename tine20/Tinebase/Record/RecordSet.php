@@ -118,6 +118,18 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns array of ids
+     */
+    public function getArrayOfIds()
+    {
+        $ids = array();
+        foreach ($this->_listOfRecords as $record) {
+            array_push($ids, $record->getId());
+        }
+        return $ids;
+    }
+    
+    /**
      * sets given property in all member records of this set
      * 
      * @param string $_name
