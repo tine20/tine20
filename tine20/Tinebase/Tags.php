@@ -12,7 +12,11 @@
 
 /**
  * Class for handling tags and tagging.
+ * 
+ * NOTE: Tags for a record are and Setting of Tags
+ * NOTE: History loging of tags 
  * @todo work out /apply transaction concept!
+ * @todo check/manage contexts
  */
 class Tinebase_Tags
 {
@@ -57,15 +61,17 @@ class Tinebase_Tags
     
     /**
      * Searches tags according to filter and paging
+     * The Current user needs to have view rights, unless $_ignoreAcl is true
      * 
      * @param  Tinebase_Tags_Model_Filter $_filter
      * @param  Tinebase_Model_Pagination  $_paging
-     * @param  bool                       $ignoreAcl
+     * @param  string                     $_right   the required right current user must have on the tags
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Tags_Model_Tag
      */
-    public function searchTags($_filter, $_paging, $_ignoreAcl=false)
+    public function searchTags($_filter, $_paging, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
         $select = $_filter->getSelect();
+        Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
         $_paging->appendPagination($select);
         
         return new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select));
@@ -76,39 +82,44 @@ class Tinebase_Tags
      * @todo automate the count query if paging is active!
      * 
      * @param  Tinebase_Tags_Model_Filter $_filter
-     * @param  bool                       $ignoreAcl
+     * @param  string                     $_right   the required right current user must have on the tags
      * @return int
      */
-    public function getSearchTagsCount($_filter, $_ignoreAcl=false)
+    public function getSearchTagsCount($_filter, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
         $select = $_filter->getSelect();
+        Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+        
         $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select));
         return count($tags);
     }
     
     /**
-     * Returns a tag identified by its id
+     * Returns tags identified by its id(s)
+     * @todo check view acl and attach rights + context
      * 
-     * @param  string $_id
-     * @return Tinebase_Tags_Model_Tag
+     * @param  string|array|Tinebase_Record_RecordSet  $_id
+     * @param  string                                  $_right the required right current user must have on the tags
+     * @return Tinebase_Record_RecordSet               Set of Tinebase_Tags_Model_Tag
      */
-    public function getTagById($_id)
+    public function getTagsById($_id, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
-        $tag = new Tinebase_Tags_Model_Tag($this->_db->fetchRow(
-            $this->_db->select()
-                ->from(SQL_TABLE_PREFIX . 'tags')
-                ->where($this->_db->quoteInto('id = ?', $_id),
-            Zend_Db::FETCH_ASSOC
-        )), true);
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'tags')
+            ->where($this->_db->quoteInto('id IN (?)', $_id));
+        Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
         
-        if ($tag->getId() != $_id) {
-            throw new Exception("Tag not found");
+        $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select), true);
+        
+        if (is_string($_id) && empty($tags)) {
+            throw new Exception("Tag with id '$_id'' not found");
         }
-        return $tag;
+        return $tags;
     }
     
     /**
      * Creates a single tag
+     * @todo Check if right to add shared tag is given else throw exception
      * 
      * @param  Tinebase_Tags_Model_Tag
      * @return Tinebase_Tags_Model_Tag
@@ -126,94 +137,157 @@ class Tinebase_Tags
                 $currentAccountId = Zend_Registry::get('currentAccount')->getId();
                 $_tag->owner = $currentAccountId;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
-                // grant all right to owner
-                $grant = new Tinebase_Tags_Model_Grant(array(
+                $right = new Tinebase_Tags_Model_Right(array(
                     'tag_id'        => $newId,
                     'account_type'  => 'user',
                     'account_id'    => $currentAccountId,
-                    'grant_view'    => true,
-                    'grant_attach'  => true,
-                    'grant_detach'  => true
+                    'view_right'    => true,
+                    'use_right'     => true,
                 ));
-                $this->setGrants($grant);
+                $this->setRights($right);
                 // grant all (NULL) contexts
-                
                 break;
             case Tinebase_Tags_Model_Tag::TYPE_SHARED:
                 $_tag->owner = 0;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
-                // grant anyone view rights
-                $grant = new Tinebase_Tags_Model_Grant(array(
+                $right = new Tinebase_Tags_Model_Right(array(
                     'tag_id'        => $newId,
                     'account_type'  => 'anyone',
                     'account_id'    => 0,
-                    'grant_view'    => true
+                    'view_right'    => true,
+                    'use_right'     => true,
                 ));
-                $this->setGrants($grant);
+                $this->setRights($right);
                 break;
             default:
                 throw new Exception('No such tag type');
         }
-        
-        return $this->getTagById($newId);
+        $tags = $this->getTagsById($newId);
+        return $tags[0];
     }
     
     /**
-     * Returns all tags of a given record
+     * Gets tags of a given record where user has the required right to
+     * The tags are stored in the records $_tagsProperty.
      * 
-     * @param int|string|Tinebase_Model_Application $_application   application of record
-     * @param string                                $_recordId      id of record
-     * @param string                                $_recordBackend backend the record is in
-     * @param bool                                  $_ignoreAcl     ignore acl restricions
+     * @param Tinebase_Record_Abstract  $_record        the record object
+     * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
+     * @param string                    $_right         the required right current user must have on the tags
+     * return Tinebase_Record_RecordSet tags of record
      */
-    public function getTagsOfRecord($_application, $_recordId, $_recordBackend, $_ignoreAcl)
+    public function getTagsOfRecord($_record, $_tagsProperty='tags', $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
-        
+        $select = $this->_db->select()
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
+            ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
+            ->join(array('acl'     => SQL_TABLE_PREFIX . 'tags_acl'), 'tagging.tag_id = acl.tag_id')
+            ->where('application_id = ?', Tinebase_Model_Application::convertApplicationIdToInt($_record->getApplication()), Zend_Db::INT_TYPE)
+            ->where('record_id = ? ', $_record->getId(), Zend_Db::INT_TYPE)
+            ->where('acl.account_right', $_right, Zend_Db::STRING_TYPE);
+       
+        $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select), true);
+        $_record[$_tagsProperty] = $tags;
+        return $tags;
     }
     
     /**
-     * Attaches Tgas to Record
-     * NOTE: Only touches Tags in the users scope, unless $_ignoreAcl is true
+     * sets (attachs and detaches) tags of a record
+     * NOTE: Only touches tags the user has use right for
      * NOTE: Non existing personal tags will be created on the fly
      * 
-     * @param int|string|Tinebase_Model_Application $_application   application of record
-     * @param string                                $_recordId      id of record
-     * @param string                                $_recordBackend backend the record is in
-     * @param Tinebase_Record_RecordSet             $_tags          tags to set
-     * @param bool                                  $_ignoreAcl     ignore acl restricions and reset all tags of the record
+     * @param Tinebase_Record_Abstract  $_record        the record object
+     * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
      */
-    public function attachTagsToRecord($_application, $_recordId, $_recordBackend, $_tags, $_ignoreAcl)
+    public function setTagsOfRecord($_record, $_tagsProperty='tags')
     {
+        $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Tags_Model_Right::USE_RIGHT)->getArrayOfIds();
+        $tagsToSet = $this->CreateTagsFly($_record[$_tagsProperty])->getArrayOfIds();
         
+        $toAttach = array_diff($tagsToSet, $currentTags);
+        $toDetach = array_diff($currentTags, $tagsToSet);
+        
+        // manage tags
+        $appId = Tinebase_Model_Application::convertApplicationIdToInt($_record->getApplication());
+        $recordId = $_record->getId();
+        foreach ($toAttach as $tagId) {
+            $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
+                'tag_id'         => $tagId,
+                'application_id' => $appId,
+                'record_id'      => $recordId
+                // backend property not supported by record yet
+            ));
+        }
+        foreach ($toDetach as $tagId) {
+            $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
+                $this->_db->quoteInto('tag_id = ?',         $tagId), 
+                $this->_db->quoteInto('application_id = ?', $appId), 
+                $this->_db->quoteInto('record_id = ?',      $recordId), 
+                // backend property not supported by record yet
+            ));
+        }
+        
+        // todo: history log
     }
     
     /**
-     * Sets all given tag grants
+     * Creates missing tags on the fly and returns complete list of tags the current
+     * user has use rights for.
+     * Allways respects the current acl of the current user!
      * 
-     * @param Tinebase_Record_RecordSet|Tinebase_Tags_Model_Grant
+     * @param   array|Tinebase_Record_RecordSet set of string|array|Tinebase_Tags_Model_Tag with existing and non-existing tags
+     * @return  Tinebase_Record_RecordSet       set of all tags
+     */
+    protected function CreateTagsFly($_mixedTags)
+    {
+        $tagIds = array();
+        foreach ($_mixedTags as $tag) {
+            if (is_string($tag)) {
+                $tagIds[] = $tag;
+                continue;
+            } else {
+                if (is_array($tag)) {
+                    $tag = new Tinebase_Tags_Model_Tag($tag);
+                } elseif (!$tag instanceof Tinebase_Tags_Model_Tag) {
+                    throw new Exception('Tag could not be identified');
+                }
+                if (!$tag->getId()) {
+                    $tag = $this->createTag(new Tinebase_Tags_Model_Tag($tag));
+                }
+                $tagIds[] = $tag->getId();
+            }
+        }
+        return($this->getTagsById($tagIds, Tinebase_Tags_Model_Right::USE_RIGHT));
+    }
+    
+    /**
+     * Sets all given tag rights
+     * @todo check for tag admin right in case of shared tag && owner in case of 
+     * personal tag!
+     * 
+     * @param Tinebase_Record_RecordSet|Tinebase_Tags_Model_Right
      * @return void
      * @throws Exception
      */
-    protected function setGrants($_grants)
+    protected function setRights($_rights)
     {
-        $grants = $_grants instanceof Tinebase_Tags_Model_Grant ? array($_grants) : $_grants;
-        foreach ($grants as $grant) {
-            if (! ($grant instanceof Tinebase_Tags_Model_Grant && $grant->isValid())) {
-                throw new Exception ('The given grant is not valid!');
+        $rights = $_rights instanceof Tinebase_Tags_Model_Right ? array($_rights) : $_rights;
+        foreach ($rights as $right) {
+            if (! ($right instanceof Tinebase_Tags_Model_Right && $right->isValid())) {
+                throw new Exception ('The given right is not valid!');
             }
             $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', array(
-                $this->_db->quoteInto('tag_id = ?', $grant->tag_id),
-                $this->_db->quoteInto('account_type = ?', $grant->account_type),
-                $this->_db->quoteInto('account_id = ?', $grant->account_id)
+                $this->_db->quoteInto('tag_id = ?', $right->tag_id),
+                $this->_db->quoteInto('account_type = ?', $right->account_type),
+                $this->_db->quoteInto('account_id = ?', $right->account_id)
             ));
-            foreach (array('view', 'attach', 'detach' ) as $availableGrant) {
-                $grantField = 'grant_' . $availableGrant;
-            	if ($grant->$grantField === true) {
+            foreach (array('view', 'use' ) as $availableRight) {
+                $rightField = $availableRight . '_right';
+            	if ($right->$rightField === true) {
             	    $this->_db->insert(SQL_TABLE_PREFIX . 'tags_acl', array(
-                        'tag_id'        => $grant->tag_id,
-                        'account_type'  => $grant->account_type,
-                        'account_id'    => $grant->account_id,
-            	        'account_grant' => $availableGrant
+                        'tag_id'        => $right->tag_id,
+                        'account_type'  => $right->account_type,
+                        'account_id'    => $right->account_id,
+            	        'account_right' => $availableRight
                     ));
             	}
             }
