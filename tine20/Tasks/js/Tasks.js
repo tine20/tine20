@@ -1,4 +1,4 @@
-/**
+p/**
  * Tine 2.0
  * 
  * @package     Tasks
@@ -578,7 +578,7 @@ Tine.Tasks.EditDialog = function(task) {
 			form.render();
 			
 			if(form.isValid()) {
-				Ext.MessageBox.wait('please wait', 'saving task');
+				Ext.MessageBox.wait('Please wait', 'Saving Task');
 				
 				// merge changes from form into task record
 				// @todo here is a problem with the linking-form values, if "apply" is clicked, the linking params are lost 
@@ -624,7 +624,7 @@ Tine.Tasks.EditDialog = function(task) {
 		pre_delete: function(_button, _event) {
 			Ext.MessageBox.confirm('Confirm', 'Do you really want to delete this task?', function(_button) {
                 if(_button == 'yes') {
-			        Ext.MessageBox.wait('please wait', 'saving task');
+			        Ext.MessageBox.wait('Please wait a moment...', 'Saving Task');
 	    			Ext.Ajax.request({
 	                    params: {
 	    					method: 'Tasks.deleteTask',
