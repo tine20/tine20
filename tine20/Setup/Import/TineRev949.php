@@ -29,17 +29,19 @@ class Setup_Import_TineRev949
 
     /**
      * old table prefix
+     * ----> you may want to change that
      * 
      * @var string
      */
-    protected $oldTablePrefix = "sirona_";
+    protected $oldTablePrefix = "tineold_";
     
     /**
      * new table prefix
+     * ----> you may want to change that
      * 
      * @var string
      */
-    protected $newTablePrefix = "sironanew_";
+    protected $newTablePrefix = "tinenew_";
 
     /**
      * mapping of application ids
@@ -114,7 +116,7 @@ class Setup_Import_TineRev949
         
         $accounts = $accountsTable->fetchAll($where);
         
-        echo "Import Accounts from table sirona_accounts ... ";
+        echo "Import Accounts from table " . $this->oldTablePrefix.'accounts' ." ... ";
         foreach($accounts as $account) {
             $tineAccount = new Tinebase_Account_Model_FullAccount(array(
                 'accountId'                 => $account->account_id,
@@ -156,7 +158,7 @@ class Setup_Import_TineRev949
         
         $groups = $groupsTable->fetchAll($where);
         
-        echo "Import Groups from table sirona_accounts ... ";
+        echo "Import Groups from table " . $this->oldTablePrefix.'accounts' ." ... ";
         foreach($groups as $group) {
             $tineGroup = new Tinebase_Group_Model_Group(array(
                 'id'            => $group->account_id,
@@ -187,7 +189,7 @@ class Setup_Import_TineRev949
         
         $groupMembers = $aclTable->fetchAll($where);
         
-        echo "Import Groupmembers from table sirona_acl ... ";
+        echo "Import Groupmembers from table " .$this->oldTablePrefix.'acl' ."_acl ... ";
         foreach($groupMembers as $member) {
             Tinebase_Group_Sql::getInstance()->addGroupMember(abs($member->acl_location), $member->acl_account);
         }
@@ -274,7 +276,7 @@ class Setup_Import_TineRev949
         // get contacts
         $contacts = $contactsTable->fetchAll();        
         
-        echo "Import Contacts from table sirona_addressbook ... ";
+        echo "Import Contacts from table ".$this->oldTablePrefix.'addressbook' . " ... ";
         
         foreach($contacts as $contact) {
             
