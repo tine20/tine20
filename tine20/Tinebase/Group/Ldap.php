@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Group
  */
-class Tinebase_Group_Ldap implements Tinebase_Group_Interface
+class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
 {
     /**
      * the constructor
@@ -212,5 +212,74 @@ class Tinebase_Group_Ldap implements Tinebase_Group_Interface
         }
         
         return $result;
+    }
+
+    /**
+     * replace all current groupmembers with the new groupmembers list
+     *
+     * @param int $_groupId
+     * @param array $_groupMembers
+     * @return unknown
+     */
+    public function setGroupMembers($_groupId, $_groupMembers) 
+    {
+        throw new Exception('not yet implemented');
+    }
+    
+    /**
+     * add a new groupmember to the group
+     *
+     * @param int $_groupId
+     * @param int $_accountId
+     * @return unknown
+     */
+    public function addGroupMember($_groupId, $_accountId) 
+    {
+        throw new Exception('not yet implemented');
+    }
+
+    /**
+     * remove one groupmember from the group
+     *
+     * @param int $_groupId
+     * @param int $_accountId
+     * @return unknown
+     */
+    public function removeGroupMember($_groupId, $_accountId) 
+    {
+        throw new Exception('not yet implemented');
+    }
+    
+    /**
+     * create a new group
+     *
+     * @param string $_groupName
+     * @return unknown
+     */
+    public function addGroup($_groupName) 
+    {
+        throw new Exception('not yet implemented');
+    }
+    
+    /**
+     * updates an existing group
+     *
+     * @param Tinebase_Group_Model_Group $_account
+     * @return Tinebase_Group_Model_Group
+     */
+    public function updateGroup(Tinebase_Group_Model_Group $_group) 
+    {
+        throw new Exception('not yet implemented');
+    }
+
+    /**
+     * remove groups
+     *
+     * @param mixed $_groupId
+     * 
+     */
+    public function deleteGroups($_groupId) 
+    {
+        throw new Exception('not yet implemented');
     }
 }

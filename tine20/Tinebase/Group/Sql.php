@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Group
  */
-class Tinebase_Group_Sql implements Tinebase_Group_Interface
+class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 {
     /**
      * the groups table
@@ -230,22 +230,30 @@ class Tinebase_Group_Sql implements Tinebase_Group_Interface
     }
     
     /**
-     * delete group
+     * delete groups
      *
      * @param int|Tinebase_Group_Model_Group $_groupId
      * @return void
      */
-    public function deleteGroup($_groupId)
+    public function deleteGroups($_groupId)
     {
-        $groupId = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
-
+        $groupIds = array();
+        
+        if(is_array($_groupId) or $_groupId instanceof Tinebase_Record_RecordSet) {
+            foreach($_groupId as $groupId) {
+                $groupIds[] = Tinebase_Group_Model_Group::convertGroupIdToInt($groupId);
+            }
+        } else {
+            $groupIds[] = Tinebase_Group_Model_Group::convertGroupIdToInt($_groupId);
+        }        
+        
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
 
-            $where = Zend_Registry::get('dbAdapter')->quoteInto('group_id = ?', $groupId);
+            $where = Zend_Registry::get('dbAdapter')->quoteInto('group_id IN (?)', $groupIds);
             $this->groupMembersTable->delete($where);
             
-            $where = Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $groupId);
+            $where = Zend_Registry::get('dbAdapter')->quoteInto('id IN (?)', $groupIds);
             $this->groupsTable->delete($where);
             
             Zend_Registry::get('dbAdapter')->commit();
