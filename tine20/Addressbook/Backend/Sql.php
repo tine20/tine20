@@ -300,6 +300,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             unset($contactData['id']);
         }
         
+        // tags are not property of this backend
+        unset($contactData['tags']);
+        
         $id = $this->contactsTable->insert($contactData);
 
         // if we insert a contact without an id, we need to get back one
@@ -331,6 +334,8 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         
         $contactData = $_contactData->toArray();
         unset($contactData['id']);
+        // tags are not property of this backend
+        unset($contactData['tags']);
         
         $where  = array(
             $this->contactsTable->getAdapter()->quoteInto('id = ?', $contactId),

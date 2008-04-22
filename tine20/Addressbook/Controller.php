@@ -415,7 +415,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if ( !empty($_data['n_given']) && !empty($_data['n_family']) ) {
             $_contact->n_fn = $_contact['n_given'] . ' ' . $_contact['n_family'];
         }
-        
+        $tags = Tinebase_Tags::getInstance();
+        $tags->setTagsOfRecord($_contact);
         $contact = $this->_backend->updateContact($_contact);
         
         return $contact;
