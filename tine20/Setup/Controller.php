@@ -124,7 +124,7 @@ class Setup_Controller
 	public function initialLoad()
 	{
 		
-   echo "Creating initial user(tine20amdin) and groups...<br>";
+   echo "Creating initial user(tine20admin) and groups...<br>";
 	# or initialize the database ourself
 	# add the admin group
 	$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
