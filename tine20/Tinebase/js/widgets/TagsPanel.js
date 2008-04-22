@@ -229,10 +229,10 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
                 value.push(tag.id);
             } else {
                 //it's a new tag and will be saved on the fly
-                value.push(Ext.util.JSON.encode(tag.data));
+                value.push(tag.data);
             }
         });
-        return (value.join(','));
+        return Ext.util.JSON.encode(value);
     }
 });
 
