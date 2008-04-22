@@ -525,7 +525,7 @@ Tine.Admin.Applications.Main = function() {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
-        Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 600, 400);
+        Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 700, 350);
     };
 
     var _enableDisableButtonHandler = function(_button, _event) {
@@ -787,7 +787,7 @@ Tine.Admin.Applications.Main = function() {
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             try {
-               Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 600, 400);
+               Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 700, 350);
             } catch(e) {
             //  alert(e);
             }
@@ -828,7 +828,7 @@ Tine.Admin.Applications.Main = function() {
     
 }();
 
-/*********************************** EDIT DIALOG ********************************************/
+/*********************************** EDIT PERMISSIONS DIALOG ********************************************/
 
 Tine.Admin.Applications.EditPermissionsDialog = {
 
@@ -1078,7 +1078,9 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             selectAction: function() {              
                 this.account = account;
                 this.handlers.addAccount(account);
-            }  
+            },
+            border: true
+
         });
                 
         accountPicker.on('accountdblclick', function(account){
@@ -1186,7 +1188,7 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         this.RightsGridPanel = new Ext.grid.EditorGridPanel({
         	id: 'accountRightsGrid',
             region: 'center',
-            title: 'Account ermissions for ' + _applicationData.name + '',
+            title: 'Account permissions for ' + _applicationData.name + '',
             store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,
@@ -1197,7 +1199,9 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             autoExpandColumn: 'accountDisplayName',
             bbar: permissionsBottomToolbar,
             border: false,
-            height: 300
+            height: 300,
+            //width: 300,
+            border: true
         });
         
     // private
@@ -1227,7 +1231,7 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'adminApplicationEditPermissionsDialog',
-            title: 'Edit permissions for ' + _applicationData.name,
+            //title: 'Edit permissions for ' + _applicationData.name,
             layout: 'fit',
             labelWidth: 120,
             labelAlign: 'top',
