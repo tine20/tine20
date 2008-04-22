@@ -199,7 +199,6 @@ class Tinebase_Tags
      */
     public function setTagsOfRecord($_record, $_tagsProperty='tags')
     {
-        error_log(print_r($_record->toArray(), true));
         $tagsToSet = $this->CreateTagsFly($_record[$_tagsProperty])->getArrayOfIds();
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Tags_Model_Right::USE_RIGHT)->getArrayOfIds();
         
@@ -240,7 +239,6 @@ class Tinebase_Tags
      */
     protected function CreateTagsFly($_mixedTags)
     {
-        error_log(print_r($_mixedTags, true));
         $tagIds = array();
         foreach ($_mixedTags as $tag) {
             if (is_string($tag)) {
