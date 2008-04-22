@@ -244,7 +244,7 @@ class Tinebase_Acl_Rights
      * 
      * @todo    add id conversion?
      */
-    public function getApplicationAccountRights($_applicationId)
+    public function getApplicationPermissions($_applicationId)
     {
         //  
         // $applicationId = Tinebase_Application::convertApplicationIdToInt($_applicationId);
@@ -257,9 +257,12 @@ class Tinebase_Acl_Rights
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
+        // don't throw exception here
+        /*
         if( empty($rows) ) {
             throw new Exception("no rights found for application with id $_applicationId");
         } 
+        */
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
 
@@ -269,20 +272,6 @@ class Tinebase_Acl_Rights
                         
             $applicationRight = new Tinebase_Acl_Model_Right( $row );
 
-            /*
-            $rights = explode(',', $row['rights']);            
-            
-            foreach($rights as $right) {
-                switch($right) {
-                    case self::ADMIN:
-                        $applicationRight->adminRight = TRUE;
-                        break;
-                    case self::RUN:
-                        $applicationRight->runRight = TRUE;
-                        break;
-                }
-            }*/
-            
             $result->addRecord($applicationRight);
         }
 
@@ -296,7 +285,7 @@ class Tinebase_Acl_Rights
      * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
      * 
      */
-    public function setApplicationAccountRights($_applicationId, Tinebase_Record_RecordSet $_applicationRights)
+    public function setApplicationPermissions($_applicationId, Tinebase_Record_RecordSet $_applicationRights)
     {
         // delete all old rights for this application
         // @todo quote into?

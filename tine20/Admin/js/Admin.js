@@ -518,6 +518,16 @@ Tine.Admin.Applications.Main = function() {
         Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + applicationId, 600, 400);
     };
     
+    /**
+     * onclick handler for permissions action
+     */
+    var _permissionsButtonHandler = function(_button, _event) {
+        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+        var applicationId = selectedRows[0].id;
+        
+        Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 600, 400);
+    };
+
     var _enableDisableButtonHandler = function(_button, _event) {
     	//console.log(_button);
     	
@@ -574,7 +584,14 @@ Tine.Admin.Applications.Main = function() {
         handler: _editButtonHandler,
         iconCls: 'action_settings'
     });
-        
+
+    var _action_permissions = new Ext.Action({
+        text: 'permissions',
+        disabled: true,
+        handler: _permissionsButtonHandler,
+        iconCls: 'action_permissions'
+    });
+    
 	var _createApplicationaDataStore = function()
     {
         /**
@@ -631,6 +648,7 @@ Tine.Admin.Applications.Main = function() {
                 _action_disable,
                 '-',
                 _action_settings,
+                _action_permissions,
                 '->',
                 'Search:', ' ',
 /*                new Ext.ux.SelectBox({
@@ -705,18 +723,22 @@ Tine.Admin.Applications.Main = function() {
                 _action_enable.setDisabled(true);
                 _action_disable.setDisabled(true);
                 _action_settings.setDisabled(true);
+                _action_permissions.setDisabled(true);
             } else if (rowCount > 1){
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
                 _action_settings.setDisabled(true);
+                _action_permissions.setDisabled(true);
             } else if (selected.data.name == 'Tinebase') {
                 _action_enable.setDisabled(true);
                 _action_disable.setDisabled(true);
                 _action_settings.setDisabled(true);            	
+                _action_permissions.setDisabled(true);
             } else {
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
-                _action_settings.setDisabled(false);                
+                _action_settings.setDisabled(true);                
+                _action_permissions.setDisabled(false);
             }
         });
                 
@@ -765,7 +787,7 @@ Tine.Admin.Applications.Main = function() {
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             try {
-               Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplication&appId=' + record.data.id, 600, 400);
+               Tine.Tinebase.Common.openWindow('applicationWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 600, 400);
             } catch(e) {
             //  alert(e);
             }
@@ -808,7 +830,7 @@ Tine.Admin.Applications.Main = function() {
 
 /*********************************** EDIT DIALOG ********************************************/
 
-Tine.Admin.Applications.EditDialog = {
+Tine.Admin.Applications.EditPermissionsDialog = {
 
     /**
      * var applicationRecord
@@ -899,7 +921,7 @@ Tine.Admin.Applications.EditDialog = {
             var selectionModel = accountsGrid.getSelectionModel();
             
             // check if exists
-            var recordIndex = Tine.Admin.Applications.EditDialog.getRecordIndex(account, dataStore);
+            var recordIndex = Tine.Admin.Applications.EditPermissionsDialog.getRecordIndex(account, dataStore);
             
             if (recordIndex === false) {
             	var record = new Ext.data.Record({
@@ -916,7 +938,7 @@ Tine.Admin.Applications.EditDialog = {
         {
         	Ext.MessageBox.wait('Please wait', 'Updating Rights');
         	
-        	var dlg = Ext.getCmp('adminApplicationEditDialog');
+        	var dlg = Ext.getCmp('adminApplicationEditPermissionsDialog');
             var accountsGrid = Ext.getCmp('accountRightsGrid');            
             var dataStore = accountsGrid.getStore();
             
@@ -929,7 +951,7 @@ Tine.Admin.Applications.EditDialog = {
             
             Ext.Ajax.request({
                 params: {
-                    method: 'Admin.saveApplication', 
+                    method: 'Admin.saveApplicationPermissions', 
                     //applicationData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
                     applicationId: dlg.applicationId,
                     rights: Ext.util.JSON.encode(rights)
@@ -1164,7 +1186,7 @@ Tine.Admin.Applications.EditDialog = {
         this.RightsGridPanel = new Ext.grid.EditorGridPanel({
         	id: 'accountRightsGrid',
             region: 'center',
-            title: 'Account rights for ' + _applicationData.name + '',
+            title: 'Account ermissions for ' + _applicationData.name + '',
             store: this.dataStore,
             cm: columnModel,
             autoSizeColumns: false,
@@ -1189,7 +1211,7 @@ Tine.Admin.Applications.EditDialog = {
         
         /******* THE edit dialog ********/
         
-        var editApplicationDialog = {
+        var editApplicationPermissionsDialog = {
             layout:'column',
             border:false,
             width: 600,
@@ -1204,8 +1226,8 @@ Tine.Admin.Applications.EditDialog = {
                
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
-            id : 'adminApplicationEditDialog',
-            title: 'Edit ' + _applicationData.name + ' Application',
+            id : 'adminApplicationEditPermissionsDialog',
+            title: 'Edit permissions for ' + _applicationData.name,
             layout: 'fit',
             labelWidth: 120,
             labelAlign: 'top',
@@ -1213,7 +1235,7 @@ Tine.Admin.Applications.EditDialog = {
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
             //handlerDelete: this.handlers.deleteGroup,
-            items: editApplicationDialog,
+            items: editApplicationPermissionsDialog,
             applicationId: _applicationData.id
         });
 

@@ -250,19 +250,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $accountsWithRights = Admin_Controller::getInstance()->getApplicationAccountRights($appId);
+        $accountsWithRights = Admin_Controller::getInstance()->getApplicationPermissions($appId);
 
-        // for testing purposes
-        /*
-        $accountsWithRights    = array( array(
-            'id' => 1, 
-            'accountId' => 1, 
-            'accountType' => 'group', 
-            'adminRight' => 1,
-            'accountDisplayName' => 'GROUP XY'
-        ));
-        */
-        
         $result['results']    = $accountsWithRights;
         $result['totalcount'] = count($accountsWithRights);
         
@@ -297,35 +286,15 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * 
      * @return  array with success, message, group data and rights
      */
-    public function saveApplication($applicationId, $rights)
+    public function saveApplicationPermissions($applicationId, $rights)
     {
-        //$decodedGroupData = Zend_Json::decode($groupData);
         $decodedRights = Zend_Json::decode($rights);
-        
-        // @todo    save other data (order,...) later
-        
-        /*
-        $application = new Tinebase_Model_Application ();
-        
-        try {
-            $group->setFromArray($decodedGroupData);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $group->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
-
-            return $result;
-        }
-        */
-        
-        $application = Tinebase_Application::getInstance()->getApplicationById($applicationId);
-        $application = Admin_Controller::getInstance()->updateApplication($application, $decodedRights);
+                
+        $application = Admin_Controller::getInstance()->setApplicationPermissions($applicationId, $decodedRights);
                  
         $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $application->toArray(),
-                        'rights'            => Admin_Controller::getInstance()->getApplicationAccountRights($applicationId),
+                        'welcomeMessage'    => 'Entry updated',                        
+                        'rights'            => Admin_Controller::getInstance()->getApplicationPermissions($applicationId),
         );
         
         return $result;

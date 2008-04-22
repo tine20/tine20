@@ -299,29 +299,24 @@ class Admin_Controller
      * @param   int $_applicationId  app id
      * @return  array with account rights for the application
      */
-    public function getApplicationAccountRights($_applicationId)
+    public function getApplicationPermissions($_applicationId)
     {
-        $applicationRights = Tinebase_Application::getInstance()->getApplicationAccountRights($_applicationId);
+        $applicationRights = Tinebase_Application::getInstance()->getApplicationPermissions($_applicationId);
         
         return $applicationRights;
     }
     
    /**
-     * update existing application
+     * save application permissions
      *
-     * @param Tinebase_Model_Application    $_application
-     * @param array                         $_rights
+     * @param int    $_applicationId
+     * @param array  $_rights
      * 
-     * @return Tinebase_Model_Application
+     * @return unknown
      */
-    public function UpdateApplication(Tinebase_Model_Application $_application, array $_rights = array ())
-    {
-        //$application = Tinebase_Application::getInstance()->updateApplication($_application);
-        $application = $_application;
-        
-        Tinebase_Application::getInstance()->setApplicationAccountRights($application->getId(), $_rights);
-
-        return $application;            
+    public function setApplicationPermissions($_applicationId, array $_rights = array ())
+    {        
+        return Tinebase_Application::getInstance()->setApplicationPermissions($_applicationId, $_rights);
     }  
         
     /**

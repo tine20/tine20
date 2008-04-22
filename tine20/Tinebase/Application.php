@@ -217,9 +217,9 @@ class Tinebase_Application
      * @todo    return recordset with Tinebase_Acl_Right records here?
      * @todo    translate 'Anyone'
      */
-    public function getApplicationAccountRights($_applicationId)
+    public function getApplicationPermissions($_applicationId)
     {
-        $applicationRights = Tinebase_Acl_Rights::getInstance()->getApplicationAccountRights($_applicationId);
+        $applicationRights = Tinebase_Acl_Rights::getInstance()->getApplicationPermissions($_applicationId);
 
         $result = array();
         foreach ( $applicationRights as $tineRight ) {
@@ -275,7 +275,7 @@ class Tinebase_Application
      * @param   int $_applicationId  app id
      * @param   array $_applicationRights  application account rights
      */
-    public function setApplicationAccountRights($_applicationId, $_applicationRights)
+    public function setApplicationPermissions($_applicationId, $_applicationRights)
     {
         $tineAclRights = Tinebase_Acl_Rights::getInstance();
         
@@ -294,7 +294,7 @@ class Tinebase_Application
             }
         }
         
-        return $tineAclRights->setApplicationAccountRights($_applicationId, $tineRights);
+        return $tineAclRights->setApplicationPermissions($_applicationId, $tineRights);
     }
 
     /**

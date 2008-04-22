@@ -121,7 +121,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      * @param   integer $appId    application id
      * 
      */
-    public function editApplication($appId)
+    public function editApplicationPermissions($appId)
     {
         $application = Admin_Controller::getInstance()->getApplication($appId);           
         $encodedApplication = Zend_Json::encode($application->toArray());
@@ -140,14 +140,14 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         
-        $view->jsExecute = 'Tine.Admin.Applications.EditDialog.display(' . $encodedApplication . ', ' . $encodedAccounts . ', ' . $encodedRights . ');';
+        $view->jsExecute = 'Tine.Admin.Applications.EditPermissionsDialog.display(' . $encodedApplication . ', ' . $encodedAccounts . ', ' . $encodedRights . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
         
-        $view->title="edit application";
+        $view->title="edit application permissions";
 
         $view->isPopup = true;
         $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
