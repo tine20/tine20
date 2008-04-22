@@ -13,6 +13,7 @@
  */
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+
 if (! defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'AllTests::main');
 }
@@ -28,12 +29,14 @@ class AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
         $suite->addTest(Tinebase_AllTests::suite());
-        $suite->addTest(Crm_AllTests::suite());
-        //  $suite->addTest(Asterisk_AllTests::suite());
+		$suite->addTest(Crm_AllTests::suite());
+        //$suite->addTest(Asterisk_AllTests::suite());
+		
         $suite->addTest(Admin_AllTests::suite());
         $suite->addTest(Addressbook_AllTests::suite());
-        //  $suite->addTest(Calendar_AllTests::suite());
-        //  $suite->addTestSuite('Tasks_ControllerTest');
+        $suite->addTest(Tasks_AllTests::suite());
+		//$suite->addTest(Setup_AllTests::suite());
+        //		$suite->addTestSuite('Tasks_ControllerTest');
         return $suite;
     }
 }
