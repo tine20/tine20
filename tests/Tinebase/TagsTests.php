@@ -66,6 +66,11 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($personalTag->description, $savedPersonalTag->description);
     }
     
+    public function testTagsAcl()
+    {
+        // create tags out of scope for the test user!
+    }
+    
     public function testSearchTags()
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
