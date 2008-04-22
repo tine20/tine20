@@ -280,6 +280,7 @@ class Setup_Controller
         } else {
             $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
 			$this->_update = true;
+			
             switch(version_compare($application->version, $xml->version)) {
                 case -1:
                     $this->updateApplication($xml->name, $application->version, $xml->version);
@@ -325,6 +326,12 @@ class Setup_Controller
         return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
     }
 
+	/** 
+	 * update application
+	 *
+	 *
+	 */
+	
     public function updateApplication($_name, $_updateFrom, $_updateTo)
     {
         echo "Updating $_name from $_updateFrom to $_updateTo<br>";
@@ -335,22 +342,26 @@ class Setup_Controller
         $minor = $fromMinorVersion;
         
         for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-            $className = ucfirst($_name) . '_Setup_Update_Release' . $major;
+			if(file_exists(ucfirst($_name) . '/Setup/Update/Release' . $major . '.php')){
+				$className = ucfirst($_name) . '_Setup_Update_Release' . $major;
             
-            $update = new $className($this->_backend);
+				$update = new $className($this->_backend);
             
-            $classMethods = get_class_methods($update);
+				$classMethods = get_class_methods($update);
             
-            // we must do at least one update
-            do {
-                $functionName = 'update_' . $minor;
-                //echo "FUNCTIONNAME: $functionName<br>";
-                $update->$functionName();
-                $minor++;
-            } while(array_search('update_' . $minor, $classMethods) !== false);
+				// we must do at least one update
+				do {
+					$functionName = 'update_' . $minor;
+					//echo "FUNCTIONNAME: $functionName<br>";
+					$update->$functionName();
+					$minor++;
+				} while(array_search('update_' . $minor, $classMethods) !== false);
             
-            //reset minor version to 0
-            $minor = 0;
-        }
+				//reset minor version to 0
+				$minor = 0;
+			}// else {
+			//	echo "Sorry, no update file available \n";
+			//}
+		}
     }
 }
