@@ -180,10 +180,9 @@ class Tinebase_Tags
         $select = $this->_db->select()
             ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
             ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
-            ->join(array('acl'     => SQL_TABLE_PREFIX . 'tags_acl'), 'tagging.tag_id = acl.tag_id')
-            ->where('application_id = ?', Tinebase_Model_Application::convertApplicationIdToInt($_record->getApplication()), Zend_Db::INT_TYPE)
-            ->where('record_id = ? ', $_record->getId(), Zend_Db::INT_TYPE)
-            ->where('acl.account_right', $_right, Zend_Db::STRING_TYPE);
+            ->where('application_id = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId(), Zend_Db::INT_TYPE)
+            ->where('record_id = ? ', $_record->getId(), Zend_Db::INT_TYPE);
+        Tinebase_Tags_Model_Right::applyAclSql($select, $_right, 'tagging.tag_id');
        
         $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select), true);
         $_record[$_tagsProperty] = $tags;
@@ -200,14 +199,16 @@ class Tinebase_Tags
      */
     public function setTagsOfRecord($_record, $_tagsProperty='tags')
     {
-        $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Tags_Model_Right::USE_RIGHT)->getArrayOfIds();
+        error_log(print_r($_record->toArray(), true));
         $tagsToSet = $this->CreateTagsFly($_record[$_tagsProperty])->getArrayOfIds();
+        $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Tags_Model_Right::USE_RIGHT)->getArrayOfIds();
+        
         
         $toAttach = array_diff($tagsToSet, $currentTags);
         $toDetach = array_diff($currentTags, $tagsToSet);
         
         // manage tags
-        $appId = Tinebase_Model_Application::convertApplicationIdToInt($_record->getApplication());
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
         $recordId = $_record->getId();
         foreach ($toAttach as $tagId) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
@@ -239,6 +240,7 @@ class Tinebase_Tags
      */
     protected function CreateTagsFly($_mixedTags)
     {
+        error_log(print_r($_mixedTags, true));
         $tagIds = array();
         foreach ($_mixedTags as $tag) {
             if (is_string($tag)) {
@@ -251,7 +253,8 @@ class Tinebase_Tags
                     throw new Exception('Tag could not be identified');
                 }
                 if (!$tag->getId()) {
-                    $tag = $this->createTag(new Tinebase_Tags_Model_Tag($tag));
+                    $tag->type = Tinebase_Tags_Model_Tag::TYPE_PERSONAL;
+                    $tag = $this->createTag($tag);
                 }
                 $tagIds[] = $tag->getId();
             }
