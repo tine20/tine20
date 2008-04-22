@@ -19,7 +19,8 @@ class Setup_Controller
 {
     private $_backend;
     private $_config;
-
+	private $_update;
+	
     /**
      * the contructor
      *
@@ -39,6 +40,8 @@ class Setup_Controller
         #    default:
         #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
         #}
+		$this->_update = false;
+		
     }
 
     /**
@@ -93,136 +96,138 @@ class Setup_Controller
         }
     }
     
-	/**
+    /**
      * setup the Database - read from the XML-files
      *
      */
-	public function run($_tinebaseFile = 'Tinebase/Setup/setup.xml', $_setupFilesPath = '/Setup/setup.xml')
-	{
-		
-	    if(file_exists($_tinebaseFile)) {
-	        echo "Processing tables definitions for <b>Tinebase</b> ($_tinebaseFile)<br>";
-	       $this->parseFile($_tinebaseFile);
-	    }
-	    
-	    foreach ( new DirectoryIterator('./') as $item ) {
-	    	if($item->isDir() && $item->getFileName() != 'Tinebase') {
-	    		$fileName = $item->getFileName() . $_setupFilesPath ;
-	    		if(file_exists($fileName)) {
-	    			echo "Processing tables definitions for <b>" . $item->getFileName() . "</b>($fileName)<br>";
-	    			$this->parseFile($fileName);
-	    		}
-	    	}
-	    }
-	}
+    public function run($_tinebaseFile = 'Tinebase/Setup/setup.xml', $_setupFilesPath = '/Setup/setup.xml')
+    {
+        
+        if(file_exists($_tinebaseFile)) {
+            echo "Processing tables definitions for <b>Tinebase</b> ($_tinebaseFile)<br>";
+           $this->parseFile($_tinebaseFile);
+        }
+        
+        foreach ( new DirectoryIterator('./') as $item ) {
+            if($item->isDir() && $item->getFileName() != 'Tinebase') {
+                $fileName = $item->getFileName() . $_setupFilesPath ;
+                if(file_exists($fileName)) {
+                    echo "Processing tables definitions for <b>" . $item->getFileName() . "</b>($fileName)<br>";
+                    $this->parseFile($fileName);
+                }
+            }
+        }
+    }
     
-	/**
+    /**
      * fill the Database with default values and initialise admin account 
      *
-     */	
-	
-	public function initialLoad()
-	{
-		
-   echo "Creating initial user(tine20admin) and groups...<br>";
-	# or initialize the database ourself
-	# add the admin group
-	$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
+     */    
+    
+    public function initialLoad()
+    {
+        if($this->_update === false) {		
+				
+	       echo "Creating initial user(tine20admin) and groups...<br>";
+	        # or initialize the database ourself
+	        # add the admin group
+	        $groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
 
-	$adminGroup = new Tinebase_Group_Model_Group(array(
-	    'name'          => 'Administrators',
-	    'description'   => 'Group of administrative accounts'
-	));
-	$adminGroup = $groupsBackend->addGroup($adminGroup);
+	        $adminGroup = new Tinebase_Group_Model_Group(array(
+	            'name'          => 'Administrators',
+	            'description'   => 'Group of administrative accounts'
+	        ));
+	        $adminGroup = $groupsBackend->addGroup($adminGroup);
 
-	# add the user group
-	$userGroup = new Tinebase_Group_Model_Group(array(
-	    'name'          => 'Users',
-	    'description'   => 'Group of user accounts'
-	));
-	$userGroup = $groupsBackend->addGroup($userGroup);
+	        # add the user group
+	        $userGroup = new Tinebase_Group_Model_Group(array(
+	            'name'          => 'Users',
+	            'description'   => 'Group of user accounts'
+	        ));
+	        $userGroup = $groupsBackend->addGroup($userGroup);
 
-	# add the admin account
-	$accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
+	        # add the admin account
+	        $accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
 
-	$account = new Tinebase_Account_Model_FullAccount(array(
-	    'accountLoginName'      => 'tine20admin',
-	    'accountStatus'         => 'enabled',
-	    'accountPrimaryGroup'   => $userGroup->getId(),
-	    'accountLastName'       => 'Account',
-	    'accountDisplayName'    => 'Tine 2.0 Admin Account',
-	    'accountFirstName'      => 'Tine 2.0 Admin'
-	));
+	        $account = new Tinebase_Account_Model_FullAccount(array(
+	            'accountLoginName'      => 'tine20admin',
+	            'accountStatus'         => 'enabled',
+	            'accountPrimaryGroup'   => $userGroup->getId(),
+	            'accountLastName'       => 'Account',
+	            'accountDisplayName'    => 'Tine 2.0 Admin Account',
+	            'accountFirstName'      => 'Tine 2.0 Admin'
+	        ));
 
-	$accountsBackend->addAccount($account);
+	        $accountsBackend->addAccount($account);
 
-	Zend_Registry::set('currentAccount', $account);
+	        Zend_Registry::set('currentAccount', $account);
 
-	# set the password for the tine20admin account
-	Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
+	        # set the password for the tine20admin account
+	        Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
 
-	# add the admin account to all groups
-	Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
-	Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
+	        # add the admin account to all groups
+	        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
+	        Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
 
-	# enable the applications for the user group
-	# give admin rights to the admin group for all applications
-	$applications = Tinebase_Application::getInstance()->getApplications();
-	foreach( $applications as $application) {
-	    
-	    //@todo    use 'right' field with const from Tinebase_Acl_Rights
-        if(strtolower($application->name) !== 'admin') {
-            // run right for user group
-            $right = new Tinebase_Acl_Model_Right(array(
-                'application_id'    => $application->getId(),
-                'account_id'        => $userGroup->getId(),
-                'account_type'      => 'group',
-                'right'             => Tinebase_Acl_Rights::RUN
-            ));
-            Tinebase_Acl_Rights::getInstance()->addRight($right);
-            
-            // run for admin group
-            $right->account_id = $adminGroup->getId();            
-            Tinebase_Acl_Rights::getInstance()->addRight($right);
-            
-            // admin for admin group
-            $right->right = Tinebase_Acl_Rights::ADMIN;            
-            Tinebase_Acl_Rights::getInstance()->addRight($right);
-            
-        } else {
-            // run right for admin group
-            $right = new Tinebase_Acl_Model_Right(array(
-                'application_id'    => $application->getId(),
-                'account_id'        => $adminGroup->getId(),
-                'account_type'      => 'group',
-                'right'             => Tinebase_Acl_Rights::RUN
-            ));
-            Tinebase_Acl_Rights::getInstance()->addRight($right);
-            
-            // admin for admin group
-            $right->right = Tinebase_Acl_Rights::ADMIN;     
-            Tinebase_Acl_Rights::getInstance()->addRight($right);            
-	    }
-	}
+	        # enable the applications for the user group
+	        # give admin rights to the admin group for all applications
+	        $applications = Tinebase_Application::getInstance()->getApplications();
+	        foreach( $applications as $application) {
+	            
+	            //@todo    use 'right' field with const from Tinebase_Acl_Rights
+	            if(strtolower($application->name) !== 'admin') {
+	                // run right for user group
+	                $right = new Tinebase_Acl_Model_Right(array(
+	                    'application_id'    => $application->getId(),
+	                    'account_id'        => $userGroup->getId(),
+	                    'account_type'      => 'group',
+	                    'right'             => Tinebase_Acl_Rights::RUN
+	                ));
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	                // run for admin group
+	                $right->account_id = $adminGroup->getId();            
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	                // admin for admin group
+	                $right->right = Tinebase_Acl_Rights::ADMIN;            
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	            } else {
+	                // run right for admin group
+	                $right = new Tinebase_Acl_Model_Right(array(
+	                    'application_id'    => $application->getId(),
+	                    'account_id'        => $adminGroup->getId(),
+	                    'account_type'      => 'group',
+	                    'right'             => Tinebase_Acl_Rights::RUN
+	                ));
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	                // admin for admin group
+	                $right->right = Tinebase_Acl_Rights::ADMIN;     
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);            
+	            }
+	        }
 
-	# give Users group read rights to the internal addressbook
-	# give Adminstrators group read/write rights to the internal addressbook
-	$internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
-	Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
-	    Tinebase_Container::GRANT_READ
-	), TRUE);
-	Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
-	    Tinebase_Container::GRANT_READ,
-	    Tinebase_Container::GRANT_ADD,
-	    Tinebase_Container::GRANT_EDIT,
-	    Tinebase_Container::GRANT_DELETE,
-	    Tinebase_Container::GRANT_ADMIN
-	), TRUE);
-		
-		echo "TINE 2.0 now ready to use try <a href=\"./index.php\">TINE 2.0 Login</a>";
-	}
-	
-	
+	        # give Users group read rights to the internal addressbook
+	        # give Adminstrators group read/write rights to the internal addressbook
+	        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
+	        Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
+	            Tinebase_Container::GRANT_READ
+	        ), TRUE);
+	        Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
+	            Tinebase_Container::GRANT_READ,
+	            Tinebase_Container::GRANT_ADD,
+	            Tinebase_Container::GRANT_EDIT,
+	            Tinebase_Container::GRANT_DELETE,
+	            Tinebase_Container::GRANT_ADMIN
+	        ), TRUE);
+	            
+	        echo "TINE 2.0 now ready to use try <a href=\"./index.php\">TINE 2.0 Login</a>";
+		}	
+    }
+    
+    
     /**
      * parses the xml stream and creates the tables if needed
      *
@@ -238,14 +243,14 @@ class Setup_Controller
             // just insert tables
             if(isset($xml->tables)) {
                 foreach ($xml->tables[0] as $table) {
-					if (false == $this->_backend->tableExists($table->name)) {
-						try {
-							$this->_backend->createTable($table);
-							$createdTables[] = $table;
-						} catch (Exception $e) {
-							echo $e->getMessage();
-						}
-					}
+                    if (false == $this->_backend->tableExists($table->name)) {
+                        try {
+                            $this->_backend->createTable($table);
+                            $createdTables[] = $table;
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
+                        }
+                    }
                 }
             }
             
@@ -254,7 +259,7 @@ class Setup_Controller
             } catch (Exception $e) {
                 $application = new Tinebase_Model_Application(array(
                     'name'      => $xml->name,
-                    'status'    => Tinebase_Application::ENABLED,
+                    'status'    => $xml->status ? $xml->status : Tinebase_Application::ENABLED,
                     'order'     => $xml->order ? $xml->order : 99,
                     'version'   => $xml->version
                 ));
@@ -274,7 +279,7 @@ class Setup_Controller
                 
         } else {
             $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
-
+			$this->_update = true;
             switch(version_compare($application->version, $xml->version)) {
                 case -1:
                     $this->updateApplication($xml->name, $application->version, $xml->version);
@@ -347,5 +352,5 @@ class Setup_Controller
             //reset minor version to 0
             $minor = 0;
         }
-	}
+    }
 }
