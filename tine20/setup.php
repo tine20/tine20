@@ -81,6 +81,7 @@ if ( IMPORT_EGW_14 === TRUE ) {
 
 if ($kindOfSetup == 'initialLoad')
 {
+    echo "Creating initial user(tine20amdin) and groups...<br>";
 	# or initialize the database ourself
 	# add the admin group
 	$groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
@@ -175,3 +176,5 @@ if ($kindOfSetup == 'initialLoad')
 	    Tinebase_Container::GRANT_ADMIN
 	), TRUE);
 }
+
+echo "setup done!<br>";
