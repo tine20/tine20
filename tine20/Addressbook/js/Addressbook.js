@@ -557,7 +557,7 @@ Tine.Addressbook.ContactEditDialog = {
                         }
                     },
                     failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', 'Could not save account.'); 
+                        Ext.MessageBox.alert('Failed', 'Could not save contact.'); 
                     },
                     scope: this 
                 });
