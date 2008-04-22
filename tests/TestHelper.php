@@ -44,7 +44,7 @@ define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
 /*
  * Set up basic tine 2.0 environment
  */
-$_SERVER['DOCUMENT_ROOT'] = '/www/user/mgreiling/erp1.mwdev.net/htdocs/';
+ 
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 $tinebaseController = Tinebase_Controller::getInstance();
