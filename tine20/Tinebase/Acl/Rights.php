@@ -210,24 +210,7 @@ class Tinebase_Acl_Rights
         if(!$_right->isValid()) {
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
-        
-        /*
-        //@todo remove
-        if ( $_right->adminRight ) {
-            $right = self::ADMIN;
-        }
-        if ( $_right->runRight ) {
-            $right = self::RUN;
-        }
-
-        $data = array ( 
-            "account_id" => $_right->account_id, 
-            "application_id" => $_right->application_id,
-            "account_type" => $_right->account_type,
-            "right" => $right,
-        );
-        */
-        
+                
         $data = $_right->toArray();
                 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
@@ -302,7 +285,7 @@ class Tinebase_Acl_Rights
      * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
      * @return  array   all application rights
      * 
-     * @todo    get other possible rights from APPNAME_Rights class 
+     * @todo    get other possible rights from APPNAME_Rights (?) class 
      */
     public function getAllApplicationRights($_applicationId)
     {
