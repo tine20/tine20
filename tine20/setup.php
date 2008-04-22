@@ -11,7 +11,7 @@
  */
 define ( 'DO_TABLE_SETUP', TRUE );
 define ( 'IMPORT_EGW_14', FALSE );
-define ( 'IMPORT_TINE_REV_949', TRUE );
+define ( 'IMPORT_TINE_REV_949', FALSE );
 
 /**
  * initialize autoloader
