@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Account
  */
-class Tinebase_Account_Ldap implements Tinebase_Account_Interface
+class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
 {
     /**
      * the constructor
@@ -290,4 +290,78 @@ class Tinebase_Account_Ldap implements Tinebase_Account_Interface
         return $select;
     }
     
+    /**
+     * update account status
+     *
+     * @param   int         $_accountId
+     * @param   string      $_status
+    */
+    public function setStatus($_accountId, $_status) 
+    {
+        throw new Exception('not yet implemented');
+    }
+
+    /**
+     * sets/unsets expiry date (calls backend class with the same name)
+     *
+     * @param   int         $_accountId
+     * @param   Zend_Date   $_expiryDate
+    */
+    public function setExpiryDate($_accountId, $_expiryDate) 
+    {
+        throw new Exception('not yet implemented');
+    }
+
+    /**
+     * blocks/unblocks the account (calls backend class with the same name)
+     *
+     * @param   int $_accountId
+     * @param   Zend_Date   $_blockedUntilDate
+    */
+    public function setBlockedDate($_accountId, $_blockedUntilDate) 
+    {
+        throw new Exception('not yet implemented');
+    }
+        
+    /**
+     * updates an existing account
+     *
+     * @param Tinebase_Account_Model_FullAccount $_account
+     * @return Tinebase_Account_Model_FullAccount
+     */
+    public function updateAccount(Tinebase_Account_Model_FullAccount $_account) 
+    {
+        throw new Exception('not yet implemented');
+    }
+
+    /**
+     * adds a new account
+     *
+     * @param Tinebase_Account_Model_FullAccount $_account
+     * @return Tinebase_Account_Model_FullAccount
+     */
+    public function addAccount(Tinebase_Account_Model_FullAccount $_account) 
+    {
+        throw new Exception('not yet implemented');
+    }
+    
+    /**
+     * delete an account
+     *
+     * @param int $_accountId
+     */
+    public function deleteAccount($_accountId) 
+    {
+        throw new Exception('not yet implemented');
+    }
+
+    /**
+     * delete multiple accounts
+     *
+     * @param array $_accountIds
+     */
+    public function deleteAccounts(array $_accountIds) 
+    {
+        throw new Exception('not yet implemented');
+    }
 }

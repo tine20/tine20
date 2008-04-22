@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Account
  */
-class Tinebase_Account_Sql implements Tinebase_Account_Interface
+class Tinebase_Account_Sql extends Tinebase_Group_Abstract
 {
     /**
      * the constructor
@@ -176,6 +176,17 @@ class Tinebase_Account_Sql implements Tinebase_Account_Interface
         }
         
         return $account;
+    }
+    
+    /**
+     * get full account by id
+     *
+     * @param   int         $_accountId
+     * @return  Tinebase_Account_Model_FullAccount full account
+     */
+    public function getFullAccountById($_accountId)
+    {
+        return $this->getAccountById($_accountId, 'Tinebase_Account_Model_FullAccount');
     }
     
     protected function _getAccountSelectObject()
