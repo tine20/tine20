@@ -15,11 +15,12 @@
  *
  * @package     Setup
  */
-class Setup_Tables
+class Setup_Controller
 {
     private $_backend;
     private $_config;
-
+	private $_update;
+	
     /**
      * the contructor
      *
@@ -39,6 +40,8 @@ class Setup_Tables
         #    default:
         #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
         #}
+		$this->_update = false;
+		
     }
 
     /**
@@ -82,7 +85,7 @@ class Setup_Tables
 
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
 
-            echo "setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
+            echo "<hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
 
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
@@ -92,22 +95,136 @@ class Setup_Tables
             die ('database section not found in central configuration file');
         }
     }
-
+    
     /**
-     * checks if application is installed at all
+     * setup the Database - read from the XML-files
      *
-     * @param unknown_type $_application
-     * @return unknown
      */
-    public function applicationExists($_application)
+    public function run($_tinebaseFile = 'Tinebase/Setup/setup.xml', $_setupFilesPath = '/Setup/setup.xml')
     {
-        if($this->tableExists(SQL_TABLE_PREFIX . 'applications')) {
-            if($this->applicationVersionQuery($_application) != false) {
-                return true;
-            }
+        
+        if(file_exists($_tinebaseFile)) {
+            echo "Processing tables definitions for <b>Tinebase</b> ($_tinebaseFile)<br>";
+           $this->parseFile($_tinebaseFile);
         }
         
-        return false;
+        foreach ( new DirectoryIterator('./') as $item ) {
+            if($item->isDir() && $item->getFileName() != 'Tinebase') {
+                $fileName = $item->getFileName() . $_setupFilesPath ;
+                if(file_exists($fileName)) {
+                    echo "Processing tables definitions for <b>" . $item->getFileName() . "</b>($fileName)<br>";
+                    $this->parseFile($fileName);
+                }
+            }
+        }
+    }
+    
+    /**
+     * fill the Database with default values and initialise admin account 
+     *
+     */    
+    
+    public function initialLoad()
+    {
+        if($this->_update === false) {		
+				
+	       echo "Creating initial user(tine20admin) and groups...<br>";
+	        # or initialize the database ourself
+	        # add the admin group
+	        $groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
+
+	        $adminGroup = new Tinebase_Group_Model_Group(array(
+	            'name'          => 'Administrators',
+	            'description'   => 'Group of administrative accounts'
+	        ));
+	        $adminGroup = $groupsBackend->addGroup($adminGroup);
+
+	        # add the user group
+	        $userGroup = new Tinebase_Group_Model_Group(array(
+	            'name'          => 'Users',
+	            'description'   => 'Group of user accounts'
+	        ));
+	        $userGroup = $groupsBackend->addGroup($userGroup);
+
+	        # add the admin account
+	        $accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
+
+	        $account = new Tinebase_Account_Model_FullAccount(array(
+	            'accountLoginName'      => 'tine20admin',
+	            'accountStatus'         => 'enabled',
+	            'accountPrimaryGroup'   => $userGroup->getId(),
+	            'accountLastName'       => 'Account',
+	            'accountDisplayName'    => 'Tine 2.0 Admin Account',
+	            'accountFirstName'      => 'Tine 2.0 Admin'
+	        ));
+
+	        $accountsBackend->addAccount($account);
+
+	        Zend_Registry::set('currentAccount', $account);
+
+	        # set the password for the tine20admin account
+	        Tinebase_Auth::getInstance()->setPassword('tine20admin', 'lars', 'lars');
+
+	        # add the admin account to all groups
+	        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
+	        Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
+
+	        # enable the applications for the user group
+	        # give admin rights to the admin group for all applications
+	        $applications = Tinebase_Application::getInstance()->getApplications();
+	        foreach( $applications as $application) {
+	            
+	            //@todo    use 'right' field with const from Tinebase_Acl_Rights
+	            if(strtolower($application->name) !== 'admin') {
+	                // run right for user group
+	                $right = new Tinebase_Acl_Model_Right(array(
+	                    'application_id'    => $application->getId(),
+	                    'account_id'        => $userGroup->getId(),
+	                    'account_type'      => 'group',
+	                    'right'             => Tinebase_Acl_Rights::RUN
+	                ));
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	                // run for admin group
+	                $right->account_id = $adminGroup->getId();            
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	                // admin for admin group
+	                $right->right = Tinebase_Acl_Rights::ADMIN;            
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	            } else {
+	                // run right for admin group
+	                $right = new Tinebase_Acl_Model_Right(array(
+	                    'application_id'    => $application->getId(),
+	                    'account_id'        => $adminGroup->getId(),
+	                    'account_type'      => 'group',
+	                    'right'             => Tinebase_Acl_Rights::RUN
+	                ));
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);
+	                
+	                // admin for admin group
+	                $right->right = Tinebase_Acl_Rights::ADMIN;     
+	                Tinebase_Acl_Rights::getInstance()->addRight($right);            
+	            }
+	        }
+
+	        # give Users group read rights to the internal addressbook
+	        # give Adminstrators group read/write rights to the internal addressbook
+	        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL);
+	        Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $userGroup, array(
+	            Tinebase_Container::GRANT_READ
+	        ), TRUE);
+	        Tinebase_Container::getInstance()->addGrants($internalAddressbook, 'group', $adminGroup, array(
+	            Tinebase_Container::GRANT_READ,
+	            Tinebase_Container::GRANT_ADD,
+	            Tinebase_Container::GRANT_EDIT,
+	            Tinebase_Container::GRANT_DELETE,
+	            Tinebase_Container::GRANT_ADMIN
+	        ), TRUE);
+	            
+	        echo "TINE 2.0 now ready to use try <a href=\"./index.php\">TINE 2.0 Login</a>";
+		}	
     }
     
     
@@ -122,24 +239,27 @@ class Setup_Tables
     
         $xml = simplexml_load_file($_file);
         
-        if (!$this->applicationExists($xml->name)) {
+        if (!$this->_backend->applicationExists($xml->name)) {
             // just insert tables
             if(isset($xml->tables)) {
                 foreach ($xml->tables[0] as $table) {
-                    if (false == $this->tableExists(SQL_TABLE_PREFIX . $table->name)) {
-                        $this->_backend->_createTable($table);
-                        $createdTables[] = $table;
+                    if (false == $this->_backend->tableExists($table->name)) {
+                        try {
+                            $this->_backend->createTable($table);
+                            $createdTables[] = $table;
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
+                        }
                     }
                 }
             }
-            
             
             try {
                 $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
             } catch (Exception $e) {
                 $application = new Tinebase_Model_Application(array(
                     'name'      => $xml->name,
-                    'status'    => Tinebase_Application::ENABLED,
+                    'status'    => $xml->status ? $xml->status : Tinebase_Application::ENABLED,
                     'order'     => $xml->order ? $xml->order : 99,
                     'version'   => $xml->version
                 ));
@@ -148,20 +268,19 @@ class Setup_Tables
             }
 
             foreach($createdTables as $table) {
-                $this->addTable($application, SQL_TABLE_PREFIX . $table->name, $table->version);
+                $this->_backend->addTable($application, $table->name, $table->version);
             }
 
             if(isset($xml->defaultRecords)) {
                 foreach ($xml->defaultRecords[0] as $record) {
-                    $this->execInsertStatement($record);
+                    $this->_backend->execInsertStatement($record);
                 }
             }    
                 
-            
-            return 'initialLoad';    
         } else {
             $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
-
+			$this->_update = true;
+			
             switch(version_compare($application->version, $xml->version)) {
                 case -1:
                     $this->updateApplication($xml->name, $application->version, $xml->version);
@@ -181,71 +300,6 @@ class Setup_Tables
 
 
 
-    /**
-     * check's if a given table exists
-     *
-     * @param string $_tableSchema
-     * @param string $_tableName
-     * @return boolean return true if the table exists, otherwise false
-     */
-    public function tableExists($_tableName)
-    {
-         $select = Zend_Registry::get('dbAdapter')->select()
-          ->from('information_schema.tables')
-          ->where('TABLE_SCHEMA = ?', $this->_config->database->dbname)
-          ->where('TABLE_NAME = ?', $_tableName);
-
-        $stmt = $select->query();
-
-        $table = $stmt->fetchObject();
- 
-
-        if($table === false) {
-          return false;
-        }
-
-        return true; 
-    }
-    
-    /**
-     * check's a given database table version 
-     *
-     * @param string $_tableName
-     * @return boolean return string "version" if the table exists, otherwise false
-     */
-    
-    public function tableVersionQuery($_tableName)
-    {
-        $select = Zend_Registry::get('dbAdapter')->select()
-                ->from( SQL_TABLE_PREFIX . 'application_tables')
-                ->where('name = ?', $_tableName);
-
-        $stmt = $select->query();
-        $version = $stmt->fetchAll();
-        
-        return $version[0]['version'];
-    }
-    
-    /**
-     * check's a given application version
-     *
-     * @param string $_application
-     * @return boolean return string "version" if the table exists, otherwise false
-     */
-    public function applicationVersionQuery($_application)
-    {    
-        $select = Zend_Registry::get('dbAdapter')->select()
-                ->from( SQL_TABLE_PREFIX . 'applications')
-                ->where('name = ?', $_application);
-
-        $stmt = $select->query();
-        $version = $stmt->fetchAll();
-        if(empty($version)) {
-            return false;
-        } else {
-            return $version[0]['version'];
-        }
-    }
 
     /**
      * compare versions
@@ -272,9 +326,15 @@ class Setup_Tables
         return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
     }
 
+	/** 
+	 * update application
+	 *
+	 *
+	 */
+	
     public function updateApplication($_name, $_updateFrom, $_updateTo)
     {
-        echo "Updateing $_name from $_updateFrom to $_updateTo<br>";
+        echo "Updating $_name from $_updateFrom to $_updateTo<br>";
         
         list($fromMajorVersion, $fromMinorVersion) = explode('.', $_updateFrom);
         list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
@@ -282,80 +342,24 @@ class Setup_Tables
         $minor = $fromMinorVersion;
         
         for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-            $className = ucfirst($_name) . '_Setup_Update_Release' . $major;
+			if(file_exists(ucfirst($_name) . '/Setup/Update/Release' . $major . '.php')){
+				$className = ucfirst($_name) . '_Setup_Update_Release' . $major;
             
-            $update = new $className($this->_backend);
+				$update = new $className($this->_backend);
             
-            $classMethods = get_class_methods($update);
+				$classMethods = get_class_methods($update);
             
-            // we must do at least one update
-            do {
-                $functionName = 'update_' . $minor;
-                //echo "FUNCTIONNAME: $functionName<br>";
-                $update->$functionName();
-                $minor++;
-            } while(array_search('update_' . $minor, $classMethods) !== false);
+				// we must do at least one update
+				do {
+					$functionName = 'update_' . $minor;
+					//echo "FUNCTIONNAME: $functionName<br>";
+					$update->$functionName();
+					$minor++;
+				} while(array_search('update_' . $minor, $classMethods) !== false);
             
-            //reset minor version to 0
-            $minor = 0;
-        }
-    }
-    
-    
-    public function execInsertStatement($_record)
-    {
-        $table = new Tinebase_Db_Table(array(
-           'name' => SQL_TABLE_PREFIX . $_record->table->name
-        ));
-
-        foreach ($_record->field as $field) {
-            if(isset($field->value['special'])) {
-                switch(strtolower($field->value['special'])) {
-                    case 'now':
-                    {
-                        $value = Zend_Date::now()->getIso();
-                        break;
-                    }
-                    case 'account_id':
-                    {
-                        break;
-                    }
-                    case 'application_id':
-                    {
-                        $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
-
-                        $value = $application->id;
-
-                        break;
-                    }
-                    default:
-                    {
-                        throw new Exception('unsupported special type ' . strtolower($field->value['special']));
-                        break;
-                    }
-                }
-            } else {
-                $value = $field->value;
-            }
-
-            $data[(string)$field->name] = $value;
-        }
-
-        $table->insert($data);
-    }
-
-    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
-    {
-        $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
-
-        $applicationData = array(
-            'application_id'    => $_application->id,
-            'name'              => $_name,
-            'version'           => $_version
-        );
-
-        $applicationID = $applicationTable->insert($applicationData);
-
-        return $applicationID;
+				//reset minor version to 0
+				$minor = 0;
+			}
+		}
     }
 }
