@@ -699,6 +699,7 @@ Tine.Admin.Applications.Main = function() {
         
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
+            var selected = _selectionModel.getSelected();
 
             if(rowCount < 1) {
                 _action_enable.setDisabled(true);
@@ -708,10 +709,14 @@ Tine.Admin.Applications.Main = function() {
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
                 _action_settings.setDisabled(true);
+            } else if (selected.data.name == 'Tinebase') {
+                _action_enable.setDisabled(true);
+                _action_disable.setDisabled(true);
+                _action_settings.setDisabled(true);            	
             } else {
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
-                _action_settings.setDisabled(false);            	
+                _action_settings.setDisabled(false);                
             }
         });
                 
