@@ -582,6 +582,12 @@ class Setup_Import_TineRev949
                 if ( $tableData['name'] === 'application_rights' ) {
                     $right = new Tinebase_Acl_Model_Right ( $values );
                     try {
+                        // try to get user account
+                        if ( $right->account_type === 'user' ) {
+                            $account = Tinebase_Account::getInstance()->getAccountById( $right->account_id );
+                        }
+                        
+                        // try to add the right
                         $backend->addRight($right);
                     } catch ( Exception $e ) {
                         echo "error: " . $e->getMessage() . "<br/>" . print_r ( $values, true ) . "<br/>";
