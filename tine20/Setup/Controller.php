@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Tables.php 2020 2008-04-18 23:00:10Z lkneschke $
+ * @version     $Id: Controller.php 2064 2008-04-18 23:00:10Z lkneschke $
  *
  */
 
@@ -359,9 +359,7 @@ class Setup_Controller
             
 				//reset minor version to 0
 				$minor = 0;
-			}// else {
-			//	echo "Sorry, no update file available \n";
-			//}
+			}
 		}
     }
 }
