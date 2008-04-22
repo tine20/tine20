@@ -1,5 +1,5 @@
 <?php
-class Tinebase_Db_Schema_Table
+class Setup_Backend_Schema_Table
 {
 	public $name;
 	public $version;

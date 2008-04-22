@@ -1,5 +1,5 @@
 <?php
-class Tinebase_Db_Schema_Field
+class Setup_Backend_Schema_Field
 {
 	public $name;
 	public $type;

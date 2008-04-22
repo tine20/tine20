@@ -105,7 +105,7 @@ class Setup_Backend_Mysql
         $table = $stmt->fetchObject();
 		
         if($table === false) {
-	     return false;
+	        return false;
         }
 		return true; 
     }
@@ -213,19 +213,19 @@ class Setup_Backend_Mysql
 	
 	public function dropTable($_tableName)
 	{
-		$statement = "DROP TABLE `" . $_tableName . "`;";
+		$statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
 		$this->execQueryVoid($statement);
 	}
 	
 	public function renameTable($_tableName, $_newName )
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` RENAME TO `" . $_newName . "` ;";
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` RENAME TO `" . SQL_TABLE_PREFIX . $_newName . "` ;";
 		$this->execQueryVoid($statement);
 	}
 	
 	public function addCol($_tableName, $_declaration , $_position = NULL)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` ADD COLUMN " ;
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
 		
 		$statement .= $this->getMysqlDeclarations($_declaration);
 		
@@ -233,7 +233,7 @@ class Setup_Backend_Mysql
 			if ($_position == 0) {
 				$statement .= ' FIRST ';
 			} else {
-				$before = $this->execQuery('DESCRIBE `' .  $_tableName . '` ');
+				$before = $this->execQuery('DESCRIBE `' . SQL_TABLE_PREFIX . $_tableName . '` ');
 				$statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
 			}
 		}
@@ -243,11 +243,11 @@ class Setup_Backend_Mysql
 	
 	public function alterCol($_tableName, $_declaration, $_oldName = NULL)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` CHANGE COLUMN " ;
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
 		$oldName = $_oldName ;
 		
 		if ($_oldName == NULL) {
-			$oldName = $_declaration->name;
+			$oldName = SQL_TABLE_PREFIX . $_declaration->name;
 		}
 		
 		$statement .= " `" . $oldName .  "` " . $this->getMysqlDeclarations($_declaration) ;
@@ -256,7 +256,7 @@ class Setup_Backend_Mysql
 	
 	public function dropCol($_tableName, $_colName)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
 		$this->execQueryVoid($statement);	
 	}
 
@@ -264,7 +264,7 @@ class Setup_Backend_Mysql
 	
 	public function addForeignKey($_tableName, $_declaration)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` ADD " 
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
 					. $this->getMysqlForeignKeyDeclarations($_declaration)  ;
 		$this->execQueryVoid($statement);	
 	}
@@ -272,26 +272,26 @@ class Setup_Backend_Mysql
 	
 	public function dropForeignKey($_tableName, $_name)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
 		$this->execQueryVoid($statement);	
 	}
 	
 	public function dropPrimaryKey($_tableName)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` DROP PRIMARY KEY " ;
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP PRIMARY KEY " ;
 		$this->execQueryVoid($statement);	
 	}
 	
 	public function addPrimaryKey($_tableName, $_declaration)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
 					. $this->getMysqlIndexDeclarations($_declaration);
 		$this->execQueryVoid($statement);	
 	}
 	
 	public function addIndex($_tableName , $_declaration)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` ADD "
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
 					. $this->getMysqlIndexDeclarations($_declaration);
 		$this->execQueryVoid($statement);	
 	}
@@ -299,7 +299,7 @@ class Setup_Backend_Mysql
 	
 	public function dropIndex($_tableName, $_indexName)
 	{
-		$statement = "ALTER TABLE `" . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
+		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
 		$this->execQueryVoid($statement);	
 	}
 	

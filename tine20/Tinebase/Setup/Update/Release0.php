@@ -10,37 +10,38 @@
  * @version     $Id$
  */
 
-class Tinebase_Setup_Update_Release0 extends Setup_Update_Common
+class Crm_Setup_Update_Release0 extends Setup_Update_Common
 {
     public function update_0()
     {
+	
     }
 
     public function update_1()
     {
-        $this->validateTableVersion('application_rights', '0.0.1');
 
+	    $this->validateTableVersion('application_rights', '1');
         
-        $declaration = new StdClass();
+        $declaration = new Setup_Backend_Schema_Field();
         
         $declaration->name      = 'account_type';
         $declaration->type      = 'enum';
         $declaration->notnull   = 'true';
         $declaration->value     = array('anyone', 'account', 'group');
         
-        $this->_backend->_addCol(SQL_TABLE_PREFIX . 'application_rights', $declaration);
+        $this->_backend->addCol('application_rights', $declaration);
         
         
-        $declaration = new StdClass();
+        $declaration = new Setup_Backend_Schema_Field();
         
         $declaration->name      = 'right';
         $declaration->type      = 'text';
         $declaration->length    = 64;
         $declaration->notnull   = 'true';
         
-        $this->_backend->_alterCol(SQL_TABLE_PREFIX . 'application_rights', $declaration);
+        $this->_backend->alterCol('application_rights', $declaration);
         
-        $rightsTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_rights'));
+        $rightsTable = new Tinebase_Db_Table(array('name' =>  'application_rights'));
         
         
         $data = array(
@@ -81,7 +82,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Common
         );
         $rightsTable->update($data, $where);
 
-        $this->_backend->_dropIndex(SQL_TABLE_PREFIX . 'application_rights', 'account_id-group_id-application_id-right');
+        $this->_backend->dropIndex('application_rights', 'account_id-group_id-application_id-right');
         
         $index = new StdClass();
         $index->name = 'account_id-account_type-application_id-right';
@@ -104,9 +105,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Common
         $field->name = 'right';
         $index->field[] = $field;
         
-        $this->_backend->_addIndex(SQL_TABLE_PREFIX . 'application_rights', $index);
+        $this->_backend->addIndex( 'application_rights', $index);
         
-        $this->_backend->_dropCol(SQL_TABLE_PREFIX . 'application_rights', 'group_id');
+        $this->_backend->dropCol('application_rights', 'group_id');
         
         $this->setTableVersion('application_rights', '2');
         $this->setApplicationVersion('Tinebase', '0.2');

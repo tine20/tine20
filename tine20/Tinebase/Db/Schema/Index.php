@@ -1,5 +1,5 @@
 <?php
-class Tinebase_Db_Schema_Index
+class Setup_Backend_Schema_Index
 {
 	public $name;
 	public $primary;
