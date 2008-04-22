@@ -368,11 +368,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _convertZendDateToISO8601(&$_toConvert)
     {
-        foreach ($_toConvert as $field => $value) {
+        foreach ($_toConvert as $field => &$value) {
             if ($value instanceof Zend_Date) {
                 $_toConvert[$field] = $value->get(Zend_Date::ISO_8601);
             } elseif (is_array($value)) {
-                $_toConvert[$field] = $this->_convertZendDateToISO8601($value);
+                $this->_convertZendDateToISO8601($value);
             }
         }
     }
