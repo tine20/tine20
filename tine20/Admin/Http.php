@@ -128,7 +128,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         
         // add accounts
         $json = new Admin_Json();
-        $encodedAccounts = Zend_Json::encode($json->getApplicationAccountRights($appId));
+        $encodedPermissions = Zend_Json::encode($json->getApplicationPermissions($appId));
         
         // add all rights for this application
         $encodedRights = Zend_Json::encode(Tinebase_Application::getInstance()->getAllRights($appId));
@@ -140,7 +140,8 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         
-        $view->jsExecute = 'Tine.Admin.Applications.EditPermissionsDialog.display(' . $encodedApplication . ', ' . $encodedAccounts . ', ' . $encodedRights . ');';
+        $view->jsExecute = 'Tine.Admin.Applications.EditPermissionsDialog.display(' . 
+            $encodedApplication . ', ' . $encodedPermissions . ', ' . $encodedRights . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

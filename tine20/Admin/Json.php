@@ -237,28 +237,6 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     }
 
     /**
-     * get list of application accounts with rights
-     *
-     * @param int   $appId
-     * @return array with results array & totalcount (int)
-     * 
-     */
-    public function getApplicationAccountRights($appId)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        $accountsWithRights = Admin_Controller::getInstance()->getApplicationPermissions($appId);
-
-        $result['results']    = $accountsWithRights;
-        $result['totalcount'] = count($accountsWithRights);
-        
-        return $result;
-    }
-    
-    /**
      * set application state
      *
      * @param   string $applicationIds  json encoded array of application ids
@@ -277,7 +255,29 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }
+    
+    /**
+     * get list of application accounts with rights
+     *
+     * @param int   $appId
+     * @return array with results array & totalcount (int)
+     * 
+     */
+    public function getApplicationPermissions($appId)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $permissions = Admin_Controller::getInstance()->getApplicationPermissions($appId);
 
+        $result['results']    = $permissions;
+        $result['totalcount'] = count($permissions);
+        
+        return $result;
+    }
+    
     /**
      * save application data from edit form
      *

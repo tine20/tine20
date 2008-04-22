@@ -301,9 +301,9 @@ class Admin_Controller
      */
     public function getApplicationPermissions($_applicationId)
     {
-        $applicationRights = Tinebase_Application::getInstance()->getApplicationPermissions($_applicationId);
+        $permissions = Tinebase_Application::getInstance()->getApplicationPermissions($_applicationId);
         
-        return $applicationRights;
+        return $permissions;
     }
     
    /**
