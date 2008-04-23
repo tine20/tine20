@@ -145,7 +145,6 @@ class Tinebase_Tags
                     'use_right'     => true,
                 ));
                 $this->setRights($right);
-                // grant all (NULL) contexts
                 break;
             case Tinebase_Tags_Model_Tag::TYPE_SHARED:
                 $_tag->owner = 0;
@@ -162,6 +161,12 @@ class Tinebase_Tags
             default:
                 throw new Exception('No such tag type');
         }
+        
+        // any context temprary
+        $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
+            'tag_id'         => $newId,
+            'application_id' => 0
+        ));
         $tags = $this->getTagsById($newId);
         return $tags[0];
     }
@@ -177,14 +182,20 @@ class Tinebase_Tags
      */
     public function getTagsOfRecord($_record, $_tagsProperty='tags', $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
-        $select = $this->_db->select()
-            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
-            ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
-            ->where('application_id = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId(), Zend_Db::INT_TYPE)
-            ->where('record_id = ? ', $_record->getId(), Zend_Db::INT_TYPE);
-        Tinebase_Tags_Model_Right::applyAclSql($select, $_right, 'tagging.tag_id');
-       
-        $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select), true);
+        $recordId =$_record->getId();
+        $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag');
+        if (!empty($recordId)) {
+            $select = $this->_db->select()
+                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
+                ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
+                ->where('application_id = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId())
+                ->where('record_id = ? ', $recordId);
+            Tinebase_Tags_Model_Right::applyAclSql($select, $_right, 'tagging.tag_id');
+            foreach ($this->_db->fetchAssoc($select) as $tagArray){
+                $tags->addRecord(new Tinebase_Tags_Model_Tag($tagArray, true));
+            }
+        }
+        
         $_record[$_tagsProperty] = $tags;
         return $tags;
     }
@@ -216,6 +227,7 @@ class Tinebase_Tags
                 'record_id'      => $recordId
                 // backend property not supported by record yet
             ));
+            $this->addOccurrence($tagId, +1);
         }
         foreach ($toDetach as $tagId) {
             $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
@@ -224,6 +236,7 @@ class Tinebase_Tags
                 $this->_db->quoteInto('record_id = ?',      $recordId), 
                 // backend property not supported by record yet
             ));
+            $this->addOccurrence($tagId, -1);
         }
         
         // todo: history log
@@ -258,6 +271,22 @@ class Tinebase_Tags
             }
         }
         return($this->getTagsById($tagIds, Tinebase_Tags_Model_Right::USE_RIGHT));
+    }
+    
+    /**
+     * adds given number to the persistent occurrence property of a given tag
+     * 
+     * @param  Tinbebase_Tags_Model_Tag|string $_tag
+     * @param  int                             $_toAdd
+     * @return void
+     */
+    protected function addOccurrence($_tag, $_toAdd)
+    {
+        $tagId = $_tag instanceof Tinebase_Tags_Model_Tag ? $_tag->getId() : $_tag;
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
+            'occurrence' => (int)$_toAdd
+        ), $this->_db->quoteInto('id = ?', $tagId));
     }
     
     /**
