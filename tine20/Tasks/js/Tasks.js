@@ -1,4 +1,4 @@
-p/**
+/**
  * Tine 2.0
  * 
  * @package     Tasks
