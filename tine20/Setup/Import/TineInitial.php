@@ -32,7 +32,6 @@
      *
      */    
     public function initialLoad()
-    
     {
        echo "Creating initial user(tine20admin) and groups...<br>";
         # or initialize the database ourself
@@ -130,6 +129,5 @@
         ), TRUE);
             
         echo "TINE 2.0 now ready to use try <a href=\"./index.php\">TINE 2.0 Login</a>";
-    
-	}	
+    }
 }	
