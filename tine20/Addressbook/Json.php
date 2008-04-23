@@ -77,9 +77,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         }
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $contact->toArray());
+                        'updatedData'       => $this->getContact($contact->getId())
+        ); //$contact->toArray());
         
-        $result['updatedData']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
+        //$result['updatedData']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
         return $result;
          
     }
@@ -137,7 +138,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $contact->tags = $contact->tags->toArray();
         $result['contact'] = $contact->toArray();
-
+        $result['contact']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
         return $result;
     }
 
