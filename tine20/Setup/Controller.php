@@ -103,25 +103,26 @@ class Setup_Controller
     public function updateInstalledApplications()
     {
         // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        
-        foreach($applications as $application) {
-            $xml = $this->parseFile2($application->name);
-            $this->updateApplication($application, $xml->version);
-        }
+		try {
+			$applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+       
+			foreach($applications as $application) {
+				$xml = $this->parseFile2($application->name);
+				$this->updateApplication($application, $xml->version);
+			}
+		} catch (Exception $e) {
+			
+		}
+			
     }
-    
-    public function installNewApplications()
-    {
-        
-    }
-    
+	
     /**
      * setup the Database - read from the XML-files
      *
      */
-    public function run($_tinebaseFile = 'Tinebase/Setup/setup.xml', $_setupFilesPath = '/Setup/setup.xml')
-    {
+
+    public function installNewApplications($_tinebaseFile, $_setupFilesPath )
+    {	
         if(file_exists($_tinebaseFile)) {
             echo "Processing tables definitions for <b>Tinebase</b> ($_tinebaseFile)<br>";
            $this->parseFile($_tinebaseFile);
@@ -138,6 +139,8 @@ class Setup_Controller
         }
     }
     
+
+    
     /**
      * returns true if we need to load initial data
      *
@@ -153,8 +156,8 @@ class Setup_Controller
     public function addApplication($_xml)
     {
         // just insert tables
-        if(isset($xml->tables)) {
-            foreach ($xml->tables[0] as $table) {
+        if(isset($_xml->tables)) {
+            foreach ($_xml->tables[0] as $table) {
                 if (false == $this->_backend->tableExists($table->name)) {
                     try {
                         $this->_backend->createTable($table);
@@ -167,13 +170,13 @@ class Setup_Controller
         }
         
         try {
-            $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
+            $application = Tinebase_Application::getInstance()->getApplicationByName($_xml->name);
         } catch (Exception $e) {
             $application = new Tinebase_Model_Application(array(
-                'name'      => $xml->name,
-                'status'    => $xml->status ? $xml->status : Tinebase_Application::ENABLED,
-                'order'     => $xml->order ? $xml->order : 99,
-                'version'   => $xml->version
+                'name'      => $_xml->name,
+                'status'    => $_xml->status ? $_xml->status : Tinebase_Application::ENABLED,
+                'order'     => $_xml->order ? $_xml->order : 99,
+                'version'   => $_xml->version
             ));
 
             $application = Tinebase_Application::getInstance()->addApplication($application);
@@ -183,13 +186,13 @@ class Setup_Controller
             $this->_backend->addTable($application, $table->name, $table->version);
         }
 
-        if(isset($xml->defaultRecords)) {
-            foreach ($xml->defaultRecords[0] as $record) {
+        if(isset($_xml->defaultRecords)) {
+            foreach ($_xml->defaultRecords[0] as $record) {
                 $this->_backend->execInsertStatement($record);
             }
         }
 
-        if($xml->name == 'Tinebase') {
+        if($_xml->name == 'Tinebase') {
             $this->_doInitialLoad = true;
         }
     }
@@ -285,7 +288,7 @@ class Setup_Controller
                 break; 
                 
             case 0:
-                echo "<i>" . $_application->name . " is uptodate (Version: " . $_updateTo . ")</i><br>";
+                echo "<i>" . $_application->name . " is up to date (Version: " . $_updateTo . ")</i><br>";
                 break;
                 
             case 1:

@@ -44,31 +44,27 @@ try {
 /**
  * start setup
  */
-$setup = new Setup_Controller('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
+$setup = new Setup_Controller();
 
-//$setup->updateInstalledApplications();
-
-//$setup->installNewApplications();
+$setup->updateInstalledApplications();
+echo "<hr> update / install <hr>";
+$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
 
 /**
  * build empty Database and fill with default values or update applications
  */ 
-$setup->run();
 
 
 if($setup->initialLoadRequired()) {
     # either import data from eGroupWare 1.4 or tine 2.0 revision 949    
     if ( IMPORT_INITIALDATA === TRUE ) {
         $import = new Setup_Import_TineInitial();
-        $import->import();
     } elseif ( IMPORT_EGW_14 === TRUE ) {
         $import = new Setup_Import_Egw14();
-        $import->import();
     } elseif ( IMPORT_TINE_REV_949 === TRUE ) {
         $import = new Setup_Import_TineRev949();
-        $import->import();
     }
-    
+    $import->import();
 }
 
 
