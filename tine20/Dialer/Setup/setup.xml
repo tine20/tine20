@@ -29,6 +29,12 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>context</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>callerid</name>
                     <type>text</type>
                     <length>128</length>
@@ -42,13 +48,16 @@
                     </field>
                 </index>
                 <index>
-                    <name>account_id-device</name>
+                    <name>account_id-device-context</name>
                     <unique>true</unique>
                     <field>
                         <name>account_id</name>
                     </field>
                     <field>
                         <name>device</name>
+                    </field>
+                    <field>
+                        <name>context</name>
                     </field>
                 </index>
             </declaration>
