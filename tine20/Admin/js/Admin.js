@@ -843,20 +843,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
     applicationRecordRights: null,
     
     /**
-     * function updateApplicationRecord
-     */
-    updateApplicationRecord: function(_applicationData)
-    {
-        /*
-        // if _applicationData is empty (=array), set to empty object because array won't work!
-        if (_applicationData.length === 0) {
-            _applicationData = {};
-        }
-        this.applicationRecord = new Tine.Tinebase.Model.Application(_applicationData);
-        */
-    },
-
-    /**
      * function updateToolbarButtons
      */
     updateToolbarButtons: function(_rights)
@@ -913,8 +899,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         
         addAccount: function(account)
         {        	
-        	//console.log (account);
-        	
             var accountsGrid = Ext.getCmp('accountRightsGrid');
             
             var dataStore = accountsGrid.getStore();
@@ -947,25 +931,16 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             	rights.push(_record.data);
             });
             
-            //console.log ( rights );
-            
             Ext.Ajax.request({
                 params: {
                     method: 'Admin.saveApplicationPermissions', 
-                    //applicationData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
                     applicationId: dlg.applicationId,
                     rights: Ext.util.JSON.encode(rights)
                 },
                 success: function(_result, _request) {
-                    /*if(window.opener.Tine.Admin.Applications) {
-                        window.opener.Tine.Admin.Applications.Main.reload();
-                    }*/
                     if(_closeWindow === true) {
                         window.close();
                     } else {
-                        //this.updateApplicationRecord(Ext.util.JSON.decode(_result.responseText));
-                        //form.loadRecord(this.groupRecord);                      
-                       
                         Ext.MessageBox.hide();
                     }
                 },
@@ -975,57 +950,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
                 scope: this 
             });
 
-            /*
-            var form = Ext.getCmp('groupDialog').getForm();
-            
-            if(form.isValid()) {
-        
-                // get group members
-                var groupGrid = Ext.getCmp('accountRightsGrid');
-
-                Ext.MessageBox.wait('Please wait', 'Updating Memberships');
-                
-                var groupMembers = [];
-                var dataStore = groupGrid.getStore();
-                
-                dataStore.each(function(_record){
-                    groupMembers.push(_record.data.account_id);
-                });
-                
-                // update form               
-                form.updateRecord(Tine.Admin.Groups.EditDialog.groupRecord);
-
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Admin.saveGroup', 
-                        groupData: Ext.util.JSON.encode(Tine.Admin.Groups.EditDialog.groupRecord.data),
-                        groupMembers: Ext.util.JSON.encode(groupMembers)
-                    },
-                    success: function(_result, _request) {
-                        if(window.opener.Tine.Admin.Groups) {
-                            window.opener.Tine.Admin.Groups.Main.reload();
-                        }
-                        if(_closeWindow === true) {
-                            window.close();
-                        } else {
-                            //this.updateApplicationRecord(Ext.util.JSON.decode(_result.responseText));
-                            //form.loadRecord(this.groupRecord);
-                            
-                           
-                            Ext.MessageBox.hide();
-                        }
-                    },
-                    failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', 'Could not save group.'); 
-                    },
-                    scope: this 
-                });
-                    
-                
-            } else {
-                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
-            }
-            */
         },
 
         saveAndClose: function(_button, _event) 
@@ -1044,9 +968,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
     display: function(  _applicationData, _accounts, _allRights ) 
     {
 
-    	//console.log ( _allRights );
-    	//console.log ( _accounts );
-    	
     	this.applicationId = _applicationData.id;
     	
         /******* actions ********/
@@ -1091,8 +1012,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
 
         /******* load data store ********/
         
-        //console.log ( _accounts );
-        
         // create dynamic record for the store
         var rights = [];
         for (var i = 0; i < _allRights.length; i++) {
@@ -1111,9 +1030,8 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
-            //id: 'account_id',
             id: 'id',
-             fields: this.applicationRecordRights
+            fields: this.applicationRecordRights
         });
 
         Ext.StoreMgr.add('ApplicationRightsStore', this.dataStore);
@@ -1126,8 +1044,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             this.dataStore.loadData( _accounts );
         }
 
-        //console.log (  this.dataStore );
-        
         /*       
         this.dataStore.on('update', function(_store){
             Ext.getCmp('AccountsActionSaveButton').enable();
@@ -1152,10 +1068,8 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         var columnModel = new Ext.grid.ColumnModel([
             {
                 resizable: true, 
-                //id: 'account_id', 
                 id: 'accountDisplayName',
                 header: 'Name', 
-                //dataIndex: 'account_id', 
                 dataIndex: 'accountDisplayName',
                 //renderer: Tine.Tinebase.Common.accountRenderer,
                 width: 70
@@ -1195,12 +1109,11 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
-            plugins: columns, // [readColumn, addColumn, editColumn, deleteColumn],
+            plugins: columns,
             autoExpandColumn: 'accountDisplayName',
             bbar: permissionsBottomToolbar,
             border: false,
             height: 300,
-            //width: 300,
             border: true
         });
         
@@ -1238,7 +1151,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             handlerScope: this,
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
-            //handlerDelete: this.handlers.deleteGroup,
             items: editApplicationPermissionsDialog,
             applicationId: _applicationData.id
         });
@@ -1248,11 +1160,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
             frame: true,
             items: dialog
         });
-
-        //this.updateApplicationRecord(_groupData);
-        //this.updateToolbarButtons(_groupData.grants);       
-
-        //dialog.getForm().loadRecord(this.groupRecord);
         
     } // end display function     
     
