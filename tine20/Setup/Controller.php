@@ -99,6 +99,22 @@ class Setup_Controller
             die ('database section not found in central configuration file');
         }
     }
+
+    public function updateInstalledApplications()
+    {
+        // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
+        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        
+        foreach($applications as $application) {
+            $xml = $this->parseFile2($application->name);
+            $this->updateApplication($application, $xml->version);
+        }
+    }
+    
+    public function installNewApplications()
+    {
+        
+    }
     
     /**
      * setup the Database - read from the XML-files
@@ -141,7 +157,7 @@ class Setup_Controller
        echo "Creating initial user(tine20admin) and groups...<br>";
         # or initialize the database ourself
         # add the admin group
-        $groupsBackend = Tinebase_Group_Factory::getBackend(Tinebase_Group_Factory::SQL);
+        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
 
         $adminGroup = new Tinebase_Group_Model_Group(array(
             'name'          => 'Administrators',
@@ -157,7 +173,7 @@ class Setup_Controller
         $userGroup = $groupsBackend->addGroup($userGroup);
 
         # add the admin account
-        $accountsBackend = Tinebase_Account_Factory::getBackend(Tinebase_Account_Factory::SQL);
+        $accountsBackend = Tinebase_Account::factory(Tinebase_Account::SQL);
 
         $account = new Tinebase_Account_Model_FullAccount(array(
             'accountLoginName'      => 'tine20admin',
@@ -236,6 +252,49 @@ class Setup_Controller
         echo "TINE 2.0 now ready to use try <a href=\"./index.php\">TINE 2.0 Login</a>";
     }
     
+    public function addApplication($_xml)
+    {
+        // just insert tables
+        if(isset($xml->tables)) {
+            foreach ($xml->tables[0] as $table) {
+                if (false == $this->_backend->tableExists($table->name)) {
+                    try {
+                        $this->_backend->createTable($table);
+                        $createdTables[] = $table;
+                    } catch (Exception $e) {
+                        echo $e->getMessage();
+                    }
+                }
+            }
+        }
+        
+        try {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
+        } catch (Exception $e) {
+            $application = new Tinebase_Model_Application(array(
+                'name'      => $xml->name,
+                'status'    => $xml->status ? $xml->status : Tinebase_Application::ENABLED,
+                'order'     => $xml->order ? $xml->order : 99,
+                'version'   => $xml->version
+            ));
+
+            $application = Tinebase_Application::getInstance()->addApplication($application);
+        }
+
+        foreach($createdTables as $table) {
+            $this->_backend->addTable($application, $table->name, $table->version);
+        }
+
+        if(isset($xml->defaultRecords)) {
+            foreach ($xml->defaultRecords[0] as $record) {
+                $this->_backend->execInsertStatement($record);
+            }
+        }
+
+        if($xml->name == 'Tinebase') {
+            $this->_doInitialLoad = true;
+        }
+    }
     
     /**
      * parses the xml stream and creates the tables if needed
@@ -249,80 +308,29 @@ class Setup_Controller
         $xml = simplexml_load_file($_file);
         
         if (!$this->_backend->applicationExists($xml->name)) {
-            // just insert tables
-            if(isset($xml->tables)) {
-                foreach ($xml->tables[0] as $table) {
-                    if (false == $this->_backend->tableExists($table->name)) {
-                        try {
-                            $this->_backend->createTable($table);
-                            $createdTables[] = $table;
-                        } catch (Exception $e) {
-                            echo $e->getMessage();
-                        }
-                    }
-                }
-            }
-            
-            try {
-                $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
-            } catch (Exception $e) {
-                $application = new Tinebase_Model_Application(array(
-                    'name'      => $xml->name,
-                    'status'    => $xml->status ? $xml->status : Tinebase_Application::ENABLED,
-                    'order'     => $xml->order ? $xml->order : 99,
-                    'version'   => $xml->version
-                ));
-
-                $application = Tinebase_Application::getInstance()->addApplication($application);
-            }
-
-            foreach($createdTables as $table) {
-                $this->_backend->addTable($application, $table->name, $table->version);
-            }
-
-            if(isset($xml->defaultRecords)) {
-                foreach ($xml->defaultRecords[0] as $record) {
-                    $this->_backend->execInsertStatement($record);
-                }
-            }
-
-            if($xml->name == 'Tinebase') {
-                $this->_doInitialLoad = true;
-            }
+            $this->addApplication($xml);
         } else {
-            $application = Tinebase_Application::getInstance()->getApplicationByName($xml->name);
-			
-            switch(version_compare($application->version, $xml->version)) {
-                case -1:
-                    $this->updateApplication($xml->name, $application->version, $xml->version);
-                    
-                    echo "<strong>" . $xml->name . " had different specifications. Now up-to-date to version " .  $xml->version . "</strong><br>";
-                    break; 
-                case 0:
-                    echo "<i>" . $xml->name . " no changes " . $xml->version . "</i><br>";
-                    break;
-                case 1:
-                    echo "<span style=color:#ff0000>database schema newer as your new definition - giving up</span>";
-                    break;
-            }
+            $this->updateApplication($xml->name, $xml->version);
         }
     }
-
-
-
-
-    /**
-     * compare versions
-     *
-     * @param string $_tableName (database)
-     * @param string $_tableVersion (xml-file)
-     * @return 1,0,-1
-     */
-    public function applicationNeedsUpdate($_applicationName, $_applicationVersion)
-    {
-        return version_compare($this->applicationVersionQuery($_applicationName),  $_applicationVersion);
-    }
     
+/**
+     * parses the xml stream and creates the tables if needed
+     *
+     * @param string $_file path to xml file
+     */
+    public function parseFile2($_applicationName)
+    {
+        $setupXML = dirname(__FILE__) . '/../' . ucfirst($_applicationName) . '/Setup/setup.xml';
+        
+        if(!file_exists($setupXML)) {
+            throw new Exception(ucfirst($_applicationName) . '/Setup/setup.xml not foud');
+        }
+        
+        $xml = simplexml_load_file($setupXML);
+        
+        return $xml;
+    }
     
     /**
      * compare versions
@@ -336,40 +344,56 @@ class Setup_Controller
         return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
     }
 
-	/** 
-	 * update application
-	 *
-	 *
-	 */
-	
-    public function updateApplication($_name, $_updateFrom, $_updateTo)
+    /**
+     * update installed application
+     *
+     * @param string $_name application name
+     * @param string $_updateTo version to update to (example: 1.17)
+     */
+    public function updateApplication(Tinebase_Model_Application $_application, $_updateTo)
     {
-        echo "Updating $_name from $_updateFrom to $_updateTo<br>";
+        switch(version_compare($_application->version, $_updateTo)) {
+            case -1:
+                echo "Updating " . $_application->name . " from " . $_application->version . " to $_updateTo<br>";
+                
+                list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
+                list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
         
-        list($fromMajorVersion, $fromMinorVersion) = explode('.', $_updateFrom);
-        list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
-
-        $minor = $fromMinorVersion;
-        
-        for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-			if(file_exists(ucfirst($_name) . '/Setup/Update/Release' . $major . '.php')){
-				$className = ucfirst($_name) . '_Setup_Update_Release' . $major;
-            
-				$update = new $className($this->_backend);
-            
-				$classMethods = get_class_methods($update);
-            
-				// we must do at least one update
-				do {
-					$functionName = 'update_' . $minor;
-					//echo "FUNCTIONNAME: $functionName<br>";
-					$update->$functionName();
-					$minor++;
-				} while(array_search('update_' . $minor, $classMethods) !== false);
-            
-				//reset minor version to 0
-				$minor = 0;
-			}
-		}
+                $minor = $fromMinorVersion;
+                
+                for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
+                    if(file_exists(ucfirst($_name) . '/Setup/Update/Release' . $major . '.php')){
+                        $className = ucfirst($_name) . '_Setup_Update_Release' . $major;
+                    
+                        $update = new $className($this->_backend);
+                    
+                        $classMethods = get_class_methods($update);
+                    
+                        // we must do at least one update
+                        do {
+                            $functionName = 'update_' . $minor;
+                            //echo "FUNCTIONNAME: $functionName<br>";
+                            $update->$functionName();
+                            $minor++;
+                        } while(array_search('update_' . $minor, $classMethods) !== false);
+                    
+                        //reset minor version to 0
+                        $minor = 0;
+                    }
+                }
+                
+                echo "<strong> Updated " . $_application->name . " successfully to " .  $_updateTo . "</strong><br>";
+                
+                break; 
+                
+            case 0:
+                echo "<i>" . $_application->name . " is uptodate (Version: " . $_updateTo . ")</i><br>";
+                break;
+                
+            case 1:
+                echo "<span style=color:#ff0000>Something went wrong!!! Current application version is higher than version from setup.xml.</span>";
+                throw new Exception('Current application version is higher than version from setup.xml');
+                break;
+        }        
     }
 }
