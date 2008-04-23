@@ -104,13 +104,18 @@ class Tinebase_Tags
      */
     public function getTagsById($_id, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'tags')
-            ->where($this->_db->quoteInto('id IN (?)', $_id));
-        Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+        $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag');
         
-        $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select), true);
-        
+        if (!empty($_id)) {
+            $select = $this->_db->select()
+                ->from(SQL_TABLE_PREFIX . 'tags')
+                ->where($this->_db->quoteInto('id IN (?)', $_id));
+            Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+            
+            foreach ($this->_db->fetchAssoc($select) as $tagArray){
+                $tags->addRecord(new Tinebase_Tags_Model_Tag($tagArray, true));
+            }
+        }        
         if (is_string($_id) && empty($tags)) {
             throw new Exception("Tag with id '$_id'' not found");
         }
@@ -285,7 +290,7 @@ class Tinebase_Tags
         $tagId = $_tag instanceof Tinebase_Tags_Model_Tag ? $_tag->getId() : $_tag;
         
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
-            'occurrence' => (int)$_toAdd
+            'occurrence' => new Zend_Db_Expr('occurrence+' . (int)$_toAdd)
         ), $this->_db->quoteInto('id = ?', $tagId));
     }
     
