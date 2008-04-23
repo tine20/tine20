@@ -33,15 +33,8 @@ class Dialer_Json extends Tinebase_Application_Json_Abstract
             'success'   => TRUE
         );
         
-        $url = Zend_Registry::get('configFile')->asterisk->managerurl;
-        $username = Zend_Registry::get('configFile')->asterisk->managerusername;
-        $password = Zend_Registry::get('configFile')->asterisk->managerpassword;
+        Dialer_Controller::getInstance()->dialNumber($number);
         
-        $ajam = new Asterisk_Ajam_Connection($url);
-        $ajam->login($username, $password);
-        $ajam->originate('SIP/29', 'metaways-phones', $number, 1, '29');
-        $ajam->logout();
-
         return $result;
     }
 }
