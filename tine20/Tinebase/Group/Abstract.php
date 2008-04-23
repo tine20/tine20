@@ -102,7 +102,7 @@ abstract class Tinebase_Group_Abstract
      * @param string $_groupName
      * @return unknown
      */
-    abstract public function addGroup($_groupName);
+    abstract public function addGroup(Tinebase_Group_Model_Group $_group);
     
     /**
      * updates an existing group

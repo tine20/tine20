@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Account
  */
-class Tinebase_Account_Sql extends Tinebase_Group_Abstract
+class Tinebase_Account_Sql extends Tinebase_Account_Abstract
 {
     /**
      * the constructor
@@ -506,5 +506,15 @@ class Tinebase_Account_Sql extends Tinebase_Group_Abstract
             Zend_Registry::get('dbAdapter')->rollBack();
             throw($e);
         }
+    }
+    
+    /*
+     * delete accounts
+     * 
+     * @param array $_accountIds
+     * @todo    implement
+     */
+    public function deleteAccounts (array $_accountIds) {
+        
     }
 }
