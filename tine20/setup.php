@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  */
-define ( 'DO_TABLE_SETUP', TRUE );
+define ( 'IMPORT_INITIALDATA', TRUE );
 define ( 'IMPORT_EGW_14', FALSE );
 define ( 'IMPORT_TINE_REV_949', FALSE );
 
@@ -45,32 +45,30 @@ try {
  * start setup
  */
 $setup = new Setup_Controller('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
-   
+
+//$setup->updateInstalledApplications();
+
+//$setup->installNewApplications();
+
 /**
  * build empty Database and fill with default values or update applications
  */ 
- if ( DO_TABLE_SETUP === TRUE ) {
-	$setup->run();
-}
+$setup->run();
 
-# either import data from eGroupWare 1.4 or tine 2.0 revision 949
-if ( IMPORT_EGW_14 === TRUE ) {
-    $import = new Setup_Import_Egw14();
-    $import->import();
-    exit();
 
-} elseif ( IMPORT_TINE_REV_949 === TRUE ) {
-    $import = new Setup_Import_TineRev949();
-    $import->import();
-    exit();
-
-}
-
-/**
- * initialise admin account if not given
- */ 
-if ( $setup->initialLoadRequired() === TRUE ) {
-	$setup->initialLoad();
+if($setup->initialLoadRequired()) {
+    # either import data from eGroupWare 1.4 or tine 2.0 revision 949    
+    if ( IMPORT_INITIALDATA === TRUE ) {
+        $import = new Setup_Import_Egw14();
+        $import->import();
+    } elseif ( IMPORT_EGW_14 === TRUE ) {
+        $import = new Setup_Import_Egw14();
+        $import->import();
+    } elseif ( IMPORT_TINE_REV_949 === TRUE ) {
+        $import = new Setup_Import_TineRev949();
+        $import->import();
+    }
+    
 }
 
 
