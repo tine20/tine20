@@ -58,7 +58,7 @@ class Dialer_Backend_Asterisk
      *
      * @return Dialer_Controller
      */
-    public static function getInstance(_$url, $_username, $_password) 
+    public static function getInstance($_url, $_username, $_password) 
     {
         if (self::$_instance === NULL) {
             self::$_instance = new Dialer_Controller($_url, $_username, $_password);
