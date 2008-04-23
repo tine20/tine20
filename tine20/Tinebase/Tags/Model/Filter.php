@@ -55,7 +55,8 @@ class Tinebase_Tags_Model_Filter extends Tinebase_Record_Abstract
     {
         $db = Zend_Registry::get('dbAdapter');
         $select = $db->select()
-            ->from (array('tags' => SQL_TABLE_PREFIX . 'tags'));
+            ->from (array('tags' => SQL_TABLE_PREFIX . 'tags'))
+            ->where('is_deleted = 0');
         
         // IF SHARED {
         //  LEFT JOIN tags tags_acl ON id, grant

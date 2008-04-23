@@ -143,6 +143,18 @@ class Tinebase_Json
     }
     
     /**
+     * deletes tags identified by an array of identifiers
+     * 
+     * @param  array $ids
+     * @return array 
+     */
+    public function deleteTags($ids)
+    {
+        Tinebase_Tags::getInstance()->deleteTags(Zend_Json::decode($ids));
+        return array('success' => true);
+    }
+    
+    /**
      * authenticate user by username and password
      *
      * @param string $username the username

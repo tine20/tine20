@@ -109,6 +109,7 @@ class Tinebase_Tags
         if (!empty($_id)) {
             $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'tags')
+                ->where('is_deleted = 0')
                 ->where($this->_db->quoteInto('id IN (?)', $_id));
             Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
             
@@ -167,13 +168,44 @@ class Tinebase_Tags
                 throw new Exception('No such tag type');
         }
         
-        // any context temprary
+        // any context temporary
         $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
             'tag_id'         => $newId,
             'application_id' => 0
         ));
         $tags = $this->getTagsById($newId);
         return $tags[0];
+    }
+    
+    /**
+     * Deletes tags identified by their identifiers
+     * @todo add acl for shared tags
+     * @todo remove all taggings -> history log of records!
+     * 
+     * @param  string|array id(s) to delete
+     * @return void
+     */
+    public function deleteTags($_ids)
+    {
+        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        
+        $tags = $this->getTagsById($_ids);
+        if (count($tags) != count((array)$_ids)) {
+            throw new Exception('You are not allowed to delete this tags');
+        }
+        foreach ($tags as $tag) {
+            if ( ($tag->type == Tinebase_Tags_Model_Tag::TYPE_PERSONAL && $tag->owner == $currentAccountId) ||
+                 ($tag->type == Tinebase_Tags_Model_Tag::TYPE_SHARED && false /* admin right */) ) {
+                continue;      
+            } else {
+                throw new Exception('You are not allowed to delete this tags');
+            }
+        }
+        $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
+            'is_deleted'   => true,
+            'deleted_by'   => $currentAccountId,
+            'deleted_time' => Zend_Date::now()->getIso()
+        ), $this->_db->quoteInto('id IN (?)', $tags->getArrayOfIds()));
     }
     
     /**
@@ -194,7 +226,8 @@ class Tinebase_Tags
                 ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'))
                 ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'tagging.tag_id = tags.id')
                 ->where('application_id = ?', Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId())
-                ->where('record_id = ? ', $recordId);
+                ->where('record_id = ? ', $recordId)
+                ->where('is_deleted = 0');
             Tinebase_Tags_Model_Right::applyAclSql($select, $_right, 'tagging.tag_id');
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Tags_Model_Tag($tagArray, true));
