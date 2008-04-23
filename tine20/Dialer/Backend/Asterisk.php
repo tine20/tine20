@@ -49,19 +49,19 @@ class Dialer_Backend_Asterisk
     /**
      * holdes the instance of the singleton
      *
-     * @var Dialer_Controller
+     * @var Dialer_Backend_Asterisk
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Dialer_Controller
+     * @return Dialer_Backend_Asterisk
      */
     public static function getInstance($_url, $_username, $_password) 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Dialer_Controller($_url, $_username, $_password);
+            self::$_instance = new Dialer_Backend_Asterisk($_url, $_username, $_password);
         }
         
         return self::$_instance;
