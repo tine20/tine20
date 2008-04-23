@@ -1,7 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Dialer</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <order>11</order>
     <status>disabled</status>
+    <tables>
+        <table>
+            <name>dialer_extensions</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                    <unsigned>true</unsigned>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>device</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>callerid</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id-device</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>device</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+    </tables>
 </application>
