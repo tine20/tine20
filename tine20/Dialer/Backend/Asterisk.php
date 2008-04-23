@@ -35,7 +35,7 @@ class Dialer_Backend_Asterisk
      */
     private function __construct($_url, $_username, $_password) 
     {
-        $ajam = new Asterisk_Ajam_Connection($url);
+        $this->_ajam = new Asterisk_Ajam_Connection($_url);
         $this->_username = $_username;
         $this->_password = $_password;
     }
