@@ -14,6 +14,16 @@ Ext.BLANK_IMAGE_URL = "ExtJS/resources/images/default/s.gif";
 
 Ext.QuickTips.init();
 
+/**
+ * create console pseudo object when firebug is disabled/not installed
+ */
+if (! ("console" in window) || !("firebug" in console)) {
+    var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml", "group"
+                 , "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
+    window.console = {};
+    for (var i = 0; i <names.length; ++i) window.console[names[i]] = function() {};
+}
+
 Ext.namespace('Tine.Tinebase');
 
 /**
