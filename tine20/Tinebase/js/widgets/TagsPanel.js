@@ -156,6 +156,10 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             emptyText: 'No Tags to display'
         });
         this.dataView.on('contextmenu', function(dataView, selectedIdx, node, event){
+            if (!this.dataView.isSelected(selectedIdx)) {
+                this.dataView.clearSelections();
+                this.dataView.select(selectedIdx);
+            }
             event.preventDefault();
             var menu = new Ext.menu.Menu({
                 items: [
@@ -164,7 +168,10 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                         text: 'detach tag',
                         iconCls: 'action_delete',
                         handler: function() {
-                            //this.recordTagsStore.remove();
+                            var selectedTags = this.dataView.getSelectedRecords();
+                            for (var i=0,j=selectedTags.length; i<j; i++){
+                                this.recordTagsStore.remove(selectedTags[i]);
+                            }
                         }
                     })
                 ]
