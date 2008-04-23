@@ -53,7 +53,7 @@ class Dialer_Controller
     
     public function dialNumber($_number)
     {
-        $backed = Dialer_Backend_Factory::factory(Dialer_Backend_Factory::ASTERISK);
+        $backend = Dialer_Backend_Factory::factory(Dialer_Backend_Factory::ASTERISK);
         
         $extension = $backend->getPreferedExtension(Zend_Registry::get('currentAccount'));
 
