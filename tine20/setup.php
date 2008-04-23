@@ -45,17 +45,23 @@ try {
  * start setup
  */
 $setup = new Setup_Controller();
+var_dump($setup->initialLoadRequired());
 
 $setup->updateInstalledApplications();
-echo "<hr> update / install <hr>";
-$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
 
-/**
- * build empty Database and fill with default values or update applications
- */ 
-
+var_dump($setup->initialLoadRequired());
 
 if($setup->initialLoadRequired()) {
+	/**
+	
+	 * build empty Database and fill with default values or update applications
+     */ 
+	
+var_dump($setup->initialLoadRequired());
+	$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
+
+
+	
     # either import data from eGroupWare 1.4 or tine 2.0 revision 949    
     if ( IMPORT_INITIALDATA === TRUE ) {
         $import = new Setup_Import_TineInitial();

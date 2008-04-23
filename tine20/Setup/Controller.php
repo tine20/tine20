@@ -25,7 +25,7 @@ class Setup_Controller
      *
      * @var bool
      */
-	private $_doInitialLoad = false;
+	private $_doInitialLoad = true;
 	
     /**
      * the contructor
@@ -105,15 +105,18 @@ class Setup_Controller
         // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
 		try {
 			$applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-       
-			foreach($applications as $application) {
-				$xml = $this->parseFile2($application->name);
-				$this->updateApplication($application, $xml->version);
+       } catch (Exception $e) {
+			return;
+	   }
+		
+		foreach($applications as $application) {
+			$xml = $this->parseFile2($application->name);
+			if($xml->name == 'Tinebase') {
+				$this->_doInitialLoad = false;
 			}
-		} catch (Exception $e) {
-			
+			$this->updateApplication($application, $xml->version);
 		}
-			
+						
     }
 	
     /**
@@ -192,9 +195,7 @@ class Setup_Controller
             }
         }
 
-        if($_xml->name == 'Tinebase') {
-            $this->_doInitialLoad = true;
-        }
+
     }
     
     /**
