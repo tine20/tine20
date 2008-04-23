@@ -59,8 +59,7 @@ $setup->run();
 if($setup->initialLoadRequired()) {
     # either import data from eGroupWare 1.4 or tine 2.0 revision 949    
     if ( IMPORT_INITIALDATA === TRUE ) {
-        $import = new Setup_Import_Egw14();
-        $import->import();
+        $setup->initialLoad();
     } elseif ( IMPORT_EGW_14 === TRUE ) {
         $import = new Setup_Import_Egw14();
         $import->import();
