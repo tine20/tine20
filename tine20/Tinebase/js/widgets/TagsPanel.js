@@ -52,11 +52,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     initComponent: function(){
         // init recordTagsStore
-        this.tags = [
-        {id: 'fsgsfdgsf', owner: '1', name: 'x-mas card', description: 'Is this contact going to receive a x-mas card?', color: '#B06296', occurrence: '127' },
-        {id: 'fsgsfgsff', owner: '1', name: 'follow ups', description: 'Need to be contacted by sales people', color: '#4C82FF' , occurrence: '32' },
-        {id: 'vxbfsgfgf', owner: '1', name: 'week 34+35', description: 'Will be visited on calendar weeks 34/35 ', color: '#FFA815', occurrence: '12' }
-        ];
+        this.tags = [];
         this.recordTagsStore = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.widgets.tags.Tag,
@@ -219,7 +215,7 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
         //this.hide();
     },
     /**
-     * Returns 
+     * returns JSON encoded tags data of the current record
      */
     getValue: function() {
         var value = [];
@@ -233,7 +229,14 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
             }
         });
         return Ext.util.JSON.encode(value);
-    }
+    },
+    /**
+     * sets tags from an array of tag data objects (not records)
+     */
+    setValue: function(value){
+        this.recordTagsStore.loadData(value);
+    },
+
 });
 
 /**
