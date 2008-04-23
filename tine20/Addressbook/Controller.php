@@ -377,6 +377,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         $contact = $this->_backend->addContact($_contact);
         
+        $contact->tags = $_contact['tags'];
+        Tinebase_Tags::getInstance()->setTagsOfRecord($contact);
+        
         return $contact;
     }
     
@@ -389,6 +392,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function getContact($_contactId)
     {
         $contact = $this->_backend->getContact($_contactId);
+        // only get tags the user has view right for
+        Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
 
         if(!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read access to contact denied');
@@ -415,8 +420,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if ( !empty($_data['n_given']) && !empty($_data['n_family']) ) {
             $_contact->n_fn = $_contact['n_given'] . ' ' . $_contact['n_family'];
         }
-        $tags = Tinebase_Tags::getInstance();
-        $tags->setTagsOfRecord($_contact);
+        
+        Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
+
         $contact = $this->_backend->updateContact($_contact);
         
         return $contact;

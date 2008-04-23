@@ -135,6 +135,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
 
         $contact = Addressbook_Controller::getInstance()->getContact($contactId);
         
+        $contact->tags = $contact->tags->toArray();
         $result['contact'] = $contact->toArray();
 
         return $result;

@@ -50,6 +50,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		    $addressbook = Tinebase_Container::getInstance()->getContainerById($contact->owner);
 			$encodedContact['owner'] = $addressbook->toArray();
 			$encodedContact['grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount($currentAccount, $contact->owner)->toArray();
+			$encodedContact['tags'] = $encodedContact['tags']->toArray();
 
 			if(!empty($contact->adr_one_countryname)) {
 			    $encodedContact['adr_one_countrydisplayname'] = $locale->getCountryTranslation($contact->adr_one_countryname);
