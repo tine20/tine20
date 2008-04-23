@@ -1,0 +1,51 @@
+<?php
+/**
+ * Tine 2.0
+ * 
+ * @package     Dialer
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ */
+
+/**
+ * dialer backend factory class
+ * 
+ * @package     Dialer
+ */
+class Dialer_Backend_Factory
+{
+    /**
+     * constant for the asterisk backend class
+     *
+     */
+    const ASTERISK = 'Asterisk';
+    
+    /**
+     * factory function to return a selected dialer backend class
+     *
+     * @param string $type
+     * @return Dialer_Backend_Interface
+     */
+    static public function factory($type)
+    {
+        switch($type) {
+            case self::ASTERISK:
+                if(isset(Zend_Registry::get('configFile')->asterisk)) {
+                    $url = Zend_Registry::get('configFile')->asterisk->managerurl;
+                    $username = Zend_Registry::get('configFile')->asterisk->managerusername;
+                    $password = Zend_Registry::get('configFile')->asterisk->managerpassword;
+                } else {
+                    throw new Exception('no settings found for asterisk backend in config.ini');
+                }
+                $instance = Dialer_Backend_Asterisk::getInstance($url, $username, $password);
+                break;
+                
+            default:
+                throw new Exception('unsupported dialer backend');
+        }
+
+        return $instance;
+    }
+}    

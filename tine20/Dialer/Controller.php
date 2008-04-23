@@ -53,37 +53,10 @@ class Dialer_Controller
     
     public function dialNumber($_number)
     {
-        if(isset(Zend_Registry::get('configFile')->asterisk)) {
-            $url = Zend_Registry::get('configFile')->asterisk->managerurl;
-            $username = Zend_Registry::get('configFile')->asterisk->managerusername;
-            $password = Zend_Registry::get('configFile')->asterisk->managerpassword;
-        } else {
-            throw new Exception('AJAM settings not found in config.ini');
-        }
+        $backed = Dialer_Backend_Factory::factory(Dialer_Backend_Factory::ASTERISK);
         
-        $extension = $this->getPreferedExtension(Zend_Registry::get('currentAccount'));
-        
-        $ajam = new Asterisk_Ajam_Connection($url);
-        $ajam->login($username, $password);
-        $ajam->originate($extension['device'], $extension['context'], $_number, 1, $extension['callerid']);
-        $ajam->logout();
-    }
-    
-    protected function getPreferedExtension($_accountId)
-    {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        
-        $extensionsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'dialer_extensions'));
-        
-        $select  = $extensionsTable->select()
-            ->where('account_id = ?', $accountId);
+        $extension = $backend->getPreferedExtension(Zend_Registry::get('currentAccount'));
 
-        $row = $extensionsTable->fetchRow($select);
-        
-        if($row === NULL) {
-            throw new Exception('no prefered extension found');
-        }
-        
-        return $row->toArray();
-    }
+        $backend->dialNumber($extension['device'], $extension['context'], $_number, 1, $extension['callerid']);        
+    }    
 }
