@@ -69,7 +69,7 @@ if ( IMPORT_EGW_14 === TRUE ) {
 /**
  * initialise admin account if not given
  */ 
-if ( DO_TABLE_SETUP === TRUE ) {
+if ( $setup->initialLoadRequired() === TRUE ) {
 	$setup->initialLoad();
 }
 
