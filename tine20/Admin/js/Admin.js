@@ -786,10 +786,12 @@ Tine.Admin.Applications.Main = function() {
         
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-               Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 700, 350);
-            } catch(e) {
-            //  alert(e);
+            if ( record.data.name != 'Tinebase' ) {
+                try {
+                   Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 700, 350);
+                } catch(e) {
+                //  alert(e);
+                }
             }
         });
         
