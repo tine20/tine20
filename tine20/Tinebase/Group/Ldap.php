@@ -256,7 +256,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @param string $_groupName
      * @return unknown
      */
-    public function addGroup($_groupName) 
+    public function addGroup(Tinebase_Group_Model_Group $_group) 
     {
         throw new Exception('not yet implemented');
     }
