@@ -49,7 +49,7 @@ Ext.ux.ButtonLockedToggle = Ext.extend(Ext.Button,{
     }
 });
 
-Ext.ux.tbButtonLockedToggle = Ext.extend(Ext.Toolbar.Button, Ext.ux.ButtonLockedToggle);
-
+//Ext.ux.tbButtonLockedToggle = Ext.extend(Ext.Toolbar.Button, Ext.ux.ButtonLockedToggle);
 Ext.reg('btnlockedtoggle', Ext.ux.ButtonLockedToggle);
-Ext.reg('tbbtnlockedtoggle', Ext.ux.tbButtonLockedToggle);
+Ext.reg('tbbtnlockedtoggle', Ext.ux.ButtonLockedToggle);
+//Ext.reg('tbbtnlockedtoggle', Ext.ux.tbButtonLockedToggle);
