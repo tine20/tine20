@@ -6,6 +6,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
+ * 
+ * @todo        what about the account/group tests? only test the backends or the factory as well?
  * @version     $Id$
  */
 
@@ -30,8 +32,8 @@ class Tinebase_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
         $suite->addTestSuite('Tinebase_Record_RecordTest');
         $suite->addTestSuite('Tinebase_Record_RecordSetTest');
-        $suite->addTestSuite('Tinebase_AccountTest');
-        $suite->addTestSuite('Tinebase_GroupTest');
+        //$suite->addTestSuite('Tinebase_AccountTest');
+        //$suite->addTestSuite('Tinebase_GroupTest');
         $suite->addTestSuite('Tinebase_ZendFilterTest');
         $suite->addTestSuite('Tinebase_ContainerTest');
         

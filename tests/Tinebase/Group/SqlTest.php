@@ -133,9 +133,9 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      * try to delete a group
      *
      */
-    public function testDeleteGroup()
+    public function testDeleteGroups()
     {
-        Tinebase_Group_Sql::getInstance()->deleteGroup($this->objects['initialGroup']);
+        Tinebase_Group_Sql::getInstance()->deleteGroups($this->objects['initialGroup']);
 
         $this->setExpectedException('Exception');
 

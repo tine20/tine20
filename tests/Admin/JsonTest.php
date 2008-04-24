@@ -178,7 +178,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $json->deleteAccounts( Zend_Json::encode(array($this->objects['account']->getId())) );
         
         $this->setExpectedException ( 'Exception' );
-        Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId);
+        Tinebase_Account::getInstance()->getAccountById($this->objects['account']->getId);
     }
 
     /**
