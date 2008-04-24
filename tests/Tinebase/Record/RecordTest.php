@@ -81,7 +81,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
 					'test_id'=>2, 
 					'test_2'=>'',
 					'date_single' => $date->getIso(), 
-					'date_multiple'=>'');
+					'date_multiple'=> array($date->getIso()));
   	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
   	  	
   	  	
