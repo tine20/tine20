@@ -550,7 +550,7 @@ Tine.Addressbook.ContactEditDialog = {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            this.updateContactRecord(Ext.util.JSON.decode(_result.responseText).updatedData.contact);
+                            this.updateContactRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
                             //this.updateToolbarButtons(formData.config.addressbookRights);
                             form.loadRecord(this.contactRecord);
                             Ext.MessageBox.hide();

@@ -377,8 +377,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         
         $contact = $this->_backend->addContact($_contact);
         
-        $contact->tags = $_contact['tags'];
-        Tinebase_Tags::getInstance()->setTagsOfRecord($contact);
+        if (!empty($_contact->tags)) {
+            $contact->tags = $_contact->tags;
+            Tinebase_Tags::getInstance()->setTagsOfRecord($contact);
+        }
         
         return $contact;
     }
@@ -420,8 +422,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if ( !empty($_data['n_given']) && !empty($_data['n_family']) ) {
             $_contact->n_fn = $_contact['n_given'] . ' ' . $_contact['n_family'];
         }
-        
-        Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
+        if (!empty($_contact->tags)) {
+            Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
+        }
 
         $contact = $this->_backend->updateContact($_contact);
         

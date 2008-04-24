@@ -51,7 +51,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     public function saveContact($contactData)
     {
         $contactData = Zend_Json::decode($contactData);
-        $contactData['tags'] = Zend_Json::decode($contactData['tags']);
+        if (isset($contactData['tags'])) {
+            $contactData['tags'] = Zend_Json::decode($contactData['tags']);
+        }
         
         // unset if empty
         if(empty($contactData['id'])) {
@@ -75,9 +77,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         } else {
             $contact = Addressbook_Controller::getInstance()->updateContact($contact);
         }
+        $contact = $this->getContact($contact->getId());
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $this->getContact($contact->getId())
+                        'updatedData'       => $contact['contact']
         ); //$contact->toArray());
         
         //$result['updatedData']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
