@@ -115,7 +115,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                                 {
                                     columnWidth: .2,
                                     fieldLabel:'Title', 
-                                    name:'n_prefix'
+                                    name:'n_prefix',
+                                    id: 'n_prefix'
                                 },
                                 {
                                     columnWidth: .4,
@@ -133,12 +134,12 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                                     columnWidth: .6,
                                     xtype: 'mirrortextfield',
                                     fieldLabel:'Company', 
-                                    name:'org_name',
+                                    name:'org_name'
                                 },
                                 {
                                     columnWidth: .4,
                                     fieldLabel: 'Job Title',
-                                     name: 'title',
+                                     name: 'title'
                                 }
                             ]
                         ]
@@ -201,18 +202,21 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 {
                     fieldLabel:'E-Mail', 
                     labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
-                    name:'email'
+                    name:'email',
+                    vtype: 'email'
                 },
                 {
                     fieldLabel:'E-Mail (private)', 
                     labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
-                    name:'email_home'
+                    name:'email_home',
+                    vtype: 'email'
                 },
                 {
                     xtype: 'mirrortextfield',
                     fieldLabel:'Web',
                     labelIcon: 'images/oxygen/16x16/actions/network.png',
                     name:'url',
+                    vtype:'url'
                 }
             ]
         ]
