@@ -905,9 +905,11 @@ Tine.Crm.Main = function(){
 	            
 	            var handlerProductsourceAdd = function(){
 	                var p = new entry({
-	                    productsource_id: 'NULL',
+	                    //productsource_id: 'NULL',
+	                	'id': 'NULL',
 	                    productsource: '',
-	                    productsource_price: '0,00'
+	                    //productsource_price: '0,00'
+	                    price: '0,00'
 	                });
 	                productsourceGridPanel.stopEditing();
 	                storeProductsource.insert(0, p);
@@ -1330,18 +1332,18 @@ Tine.Crm.LeadEditDialog = function() {
             ]
         });
 
-
         st_choosenProducts.on('update', function(store, record, index) {
-        	
-          //  if(record.data.id == 'NULL' && record.data.product_id) {
-            if(record.data.product_id) {          
+            if(record.data.product_id && !arguments[1].modified.product_price) {          
                 var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable();
                 var preset_price = st_productsAvailable.getById(record.data.product_id);
-                record.data.product_price = preset_price.data.productsource_price;
+                record.data.product_price = preset_price.data.price;
             }
         });
 
         var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
+        
+        console.log ( st_productsAvailable );
+        console.log ( st_choosenProducts );
         
         var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
                 header: "id",
@@ -1358,10 +1360,14 @@ Tine.Crm.LeadEditDialog = function() {
                 editor: new Ext.form.ComboBox({
                     name: 'product_combo',
                     id: 'product_combo',
-                    hiddenName: 'productsource_id', //product_id',
+                    //hiddenName: 'productsource_id',
+                    //hiddenName: 'product_id',
+                    hiddenName: 'id',
                     store: st_productsAvailable, 
-                    displayField:'value', 
-                    valueField: 'productsource_id',
+                    //displayField:'value',                     
+                    displayField:'productsource',
+                    //valueField: 'productsource_id',
+                    valueField: 'id',
                     allowBlank: false, 
                     typeAhead: true,
                     editable: true,
@@ -1376,7 +1382,8 @@ Tine.Crm.LeadEditDialog = function() {
                     record = st_productsAvailable.getById(data);
                     
                     if (record) {
-                        return record.data.value;
+                        //return record.data.value;
+                    	return record.data.productsource;
                     }
                     else {
                         Ext.getCmp('leadDialog').doLayout();
@@ -1395,19 +1402,20 @@ Tine.Crm.LeadEditDialog = function() {
                 dataIndex: 'product_price',
                 width: 150,
                 align: 'right',
-/*                editor: new Ext.form.NumberField({
+                editor: new Ext.form.NumberField({
                     allowBlank: false,
                     allowNegative: false,
                     decimalSeparator: ','
-                    }),   */
+                    }),  
                 renderer: Ext.util.Format.euMoney
                 }
         ]);
        
-       var product_combo = Ext.getCmp('product_combo');
-       product_combo.on('change', function(field, value) {
-    
-       });
+        var product_combo = Ext.getCmp('product_combo');
+        product_combo.on('change', function(field, productsource) {
+            //console.log ( field );
+            //console.log ( productsource );
+        });
         
         var handler_remove_product = function(_button, _event)
         {
@@ -1448,7 +1456,7 @@ Tine.Crm.LeadEditDialog = function() {
             anchor: '100% 100%',
             autoExpandColumn:'cm_product',
             frame: false,
-            clicksToEdit:2,
+            clicksToEdit:1,
             tbar: [{
                 text: 'add product',
                 iconCls: 'actionAdd',
@@ -1463,7 +1471,11 @@ Tine.Crm.LeadEditDialog = function() {
                     grid_choosenProducts.stopEditing();
                     st_choosenProducts.insert(0, p);
                     grid_choosenProducts.startEditing(0, 0);
-                    grid_choosenProducts.fireEvent('celldblclick',this, 0, 1);
+                    grid_choosenProducts.fireEvent('cellclick',this, 0, 1);
+                    
+                    // @todo expand combobox
+                    //var combo = Ext.getCmp('product_combo');
+                    //combo.expand();
                 }
             } , {
                 text: 'delete product',
@@ -2447,7 +2459,8 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                 id: 'id',
                 fields: [
                     {name: 'id'},
-                    {name: 'value', mapping: 'productsource'},
+                    //{name: 'value', mapping: 'productsource'},
+                    {name: 'productsource'},
                     {name: 'price'}
                 ]
             });
