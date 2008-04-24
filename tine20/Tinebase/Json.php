@@ -122,6 +122,22 @@ class Tinebase_Json
         return $response;        
     }    
     
+    public function getTags($context, $owner, $findGlobalTags)
+    {
+        $filter = new Tinebase_Tags_Model_Filter(array(
+            'name'        => '%',
+            'application' => $context,
+            'owner'       => $owner,
+        ));
+        $paging = new Tinebase_Model_Pagination();
+        
+        $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
+        return array(
+            'results'    => $tags,
+            'totalCount' => count($tags)
+        );
+    }
+    
     public function searchTags($query, $context, $owner, $findGlobalTags, $start=0, $limit=0)
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
