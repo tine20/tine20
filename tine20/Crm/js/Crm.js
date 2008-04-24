@@ -986,7 +986,7 @@ Tine.Crm.Main = function(){
         renderer: 
         {
         	shortContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
-                if(typeof(_data) == 'object' && !Ext.isEmpty(_data)) {
+        		if( Ext.isArray(_data) && _data.length > 0 ) {
                     return '<b>' + _data[0].org_name + '</b><br />' + _data[0].n_fileas;
                 }
             },        	
