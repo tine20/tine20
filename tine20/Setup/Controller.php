@@ -159,6 +159,7 @@ class Setup_Controller
     public function addApplication($_xml)
     {
         // just insert tables
+        $createdTables = array();
         if(isset($_xml->tables)) {
             foreach ($_xml->tables[0] as $table) {
                 if (false == $this->_backend->tableExists($table->name)) {

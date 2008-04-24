@@ -45,19 +45,13 @@ try {
  * start setup
  */
 $setup = new Setup_Controller();
-var_dump($setup->initialLoadRequired());
 
 $setup->updateInstalledApplications();
 
-var_dump($setup->initialLoadRequired());
-
 if($setup->initialLoadRequired()) {
 	/**
-	
 	 * build empty Database and fill with default values or update applications
      */ 
-	
-var_dump($setup->initialLoadRequired());
 	$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
 
 
