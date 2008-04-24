@@ -49,7 +49,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         );
         this.action_saveAndClose = new Ext.Action({
             text: 'Ok',
-            tooltip: 'Save changes and close this window',
+            //tooltip: 'Save changes and close this window',
             minWidth: 70,
             //handler: this.onSaveAndClose,
             handler: this.handlerSaveAndClose,
@@ -59,7 +59,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     
         this.action_applyChanges =new Ext.Action({
             text: 'Apply',
-            tooltip: 'Save changes',
+            //tooltip: 'Save changes',
             minWidth: 70,
             handler: this.handlerApplyChanges,
             iconCls: 'action_applyChanges',
@@ -77,7 +77,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         });
         this.action_cancel = new Ext.Action({
             text: 'Cancel',
-            tooltip: 'Reject changes and close this window',
+            //tooltip: 'Reject changes and close this window',
             minWidth: 70,
             handler: this.handlerCancle ? this.handlerCancle : function(){window.close();},
             iconCls: 'action_cancel',
