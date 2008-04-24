@@ -264,24 +264,24 @@
                 <index>
                     <name>tasks::class_id--class::id</name>
                     <foreign>true</foreign>
+                    <field>
+                        <name>class_id</name>
+                    </field>
                     <reference>
                         <table>class</table>
                         <field>id</field>
                     </reference>
-                    <field>
-                        <name>class_id</name>
-                    </field>
                 </index>                  
                 <index>
                     <name>tasks::status_id--tasks_status::id</name>
                     <foreign>true</foreign>
+                    <field>
+                        <name>status_id</name>
+                    </field>
                     <reference>
                         <table>tasks_status</table>
                         <field>id</field>
                     </reference>
-                    <field>
-                        <name>status_id</name>
-                    </field>
                 </index>                  
             </declaration>
         </table>
@@ -312,14 +312,14 @@
                <index>
                     <name>task_tag::task_id--tasks::id</name>
                     <foreign>true</foreign>
+                    <field>
+                        <name>task_id</name>
+                    </field>
                     <reference>
                         <table>tasks</table>
                         <field>id</field>
                         <ondelete>CASCADE</ondelete>
                     </reference>
-                    <field>
-                        <name>task_id</name>
-                    </field>
                 </index>   
             </declaration>
         </table>
@@ -350,14 +350,14 @@
                <index>
                     <name>task_contact::task_id--tasks::id</name>
                     <foreign>true</foreign>
+                    <field>
+                        <name>task_id</name>
+                    </field>
                     <reference>
                         <table>tasks</table>
                         <field>id</field>
                         <ondelete>CASCADE</ondelete>
                     </reference>
-                    <field>
-                        <name>task_id</name>
-                    </field>
                 </index>   
             </declaration>
         </table>        

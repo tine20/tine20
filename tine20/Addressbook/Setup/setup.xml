@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <order>10</order>
     <tables>
         <table>
@@ -382,16 +382,16 @@
                         <name>org_name</name>
                     </field>
                 </index>
-                <index>
+				<index>
                     <name>addressbook_container_id</name>
+                    <field>
+                        <name>owner</name>
+                    </field>
                     <foreign>true</foreign>
                     <reference>
                         <table>container</table>
                         <field>id</field>
                     </reference>
-                    <field>
-                        <name>owner</name>
-                    </field>
                 </index>   
             </declaration>
         </table>
