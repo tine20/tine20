@@ -60,19 +60,19 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         items:[
             [
                 {
-                    columnWidth: .2,
-                    fieldLabel:'Room', 
-                    name:'room'
-                },
-                {
                     columnWidth: .4,
                     fieldLabel:'Job Role', 
                     name:'role'
                 },
                 {
                     columnWidth: .4,
-                    fieldLabel:'Name Assistent', 
-                    name:'assistent'
+                    fieldLabel:'Unit', 
+                    name:'org_unit'
+                },
+                {
+                    columnWidth: .2,
+                    fieldLabel:'Room', 
+                    name:'room'
                 }
             ],
             [
@@ -192,9 +192,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                     name:'tel_cell_private'
                 },
                 {
-                    fieldLabel:'Phone Assistent', 
-                    labelIcon: 'images/oxygen/16x16/apps/kcall.png',
-                    name:'tel_assistent'
+                    fieldLabel:'Fax (private)', 
+                    labelIcon: 'images/oxygen/16x16/devices/printer.png',
+                    name:'tel_fax_home'
                 }
             ],
             [
