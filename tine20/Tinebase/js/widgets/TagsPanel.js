@@ -36,18 +36,13 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     recordTagsStore: null,
     /**
-     * @var {Ext.data.JsonStore} Store for searchd tags
+     * @var {Ext.data.JsonStore} Store for available tags
      */
-    searchTagsStore: null,
+    availableTagsStore: false,
     /**
      * @var {Ext.form.ComboBox} live search field to search tags to add
      */
     searchField: null,
-    /**
-     * @private
-     * @var {Bool} True, if data from a tags query arrived
-     */
-    searchTagsArrived: false,
     
     title: 'Tags',
     layout: 'hfit',
@@ -65,91 +60,21 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             data: this.tags
         });
         
-        // init searchTagsStore
-        this.searchTagsStore = new Ext.data.JsonStore({
+        // init availableTagsStore
+        this.availableTagsStore = new Ext.data.JsonStore({
             id: 'id',
             root: 'results',
             totalProperty: 'totalCount',
             fields: Tine.widgets.tags.Tag,
             baseParams: {
-                method: 'Tinebase.searchTags',
+                method: 'Tinebase.getTags',
                 context: this.app,
                 owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
                 findGlobalTags: this.findGlobalTags,
             }
         });
-        this.searchTagsStore.on('load', function(store){
-            this.searchTagsArrived = true;
-        },this);
         
-        // init searchFild
-        var resultTpl = new Ext.XTemplate(
-            '<tpl for="."><div class="search-item">',
-                '<em class="x-widget-tag-bullet" style="color:{color};">&#8226;</em><b class="x-widget-tag-tagitem-text" style="font-size: 11px;">{name}</b><br/>',
-                '<i style="font-size: 10px; color: #B5B8C8;">{description}</i>',
-            '</div></tpl>'
-        );
-        this.searchField = new Ext.form.ComboBox({
-            store: this.searchTagsStore,
-            displayField:'name',
-            typeAhead: false,
-            emptyText: 'Enter tag name',
-            loadingText: 'Searching...',
-            listWidth: 300,
-            maxHeight: 300,
-            queryDelay: 10,
-            minChars: 2,
-            pageSize:10,
-            hideTrigger:true,
-            tpl: resultTpl,
-            itemSelector: 'div.search-item',
-        });
-        this.searchField.on('select', function(searchField, selectedTag){
-            if(this.recordTagsStore.getById(selectedTag.id) == undefined) {
-                this.recordTagsStore.add(selectedTag);
-            }
-            searchField.emptyText = '';
-            searchField.clearValue();
-            this.searchTagsArrived = false;
-        },this);
-        this.searchField.on('specialkey', function(searchField, e){
-            //only accept ENTER when search had no result!
-             if(e.getKey() == e.ENTER && this.searchTagsArrived){
-                var value = searchField.getValue();
-                if (value.length < 3) {
-                    Ext.Msg.show({
-                       title:'Notice',
-                       msg: 'The minimum tag length is three.',
-                       buttons: Ext.Msg.OK,
-                       animEl: 'elId',
-                       icon: Ext.MessageBox.INFO
-                    });
-                } else {
-                    var nameExists = false;
-                    this.recordTagsStore.each(function(tag){
-                        if(tag.data.name == value) {
-                            nameExists = true;
-                        }
-                    },this);
-                    
-                    if (!nameExists) {
-                        var newTag = new Tine.widgets.tags.Tag({
-                            name: value
-                        });
-                        this.recordTagsStore.add(newTag);
-                    }
-                }
-                searchField.emptyText = '';
-                searchField.clearValue();
-                this.searchTagsArrived = false;
-             }
-        }, this);
-        // workaround extjs bug:
-        this.searchField.on('blur', function(searchField){
-            searchField.emptyText = 'Enter tag name';
-            searchField.clearValue();
-            this.searchTagsArrived = false;
-        },this);
+        this.initSearchField();
         
         this.bbar = [
             this.searchField, '->',
@@ -162,7 +87,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-tag-tagitem" id="{id}">',
                     '<div class="x-widget-tag-tagitem-color" style="background-color: {color};">&#160;</div>', 
-                    '<div class="x-widget-tag-tagitem-text" ext:qtip="<h2>{description}</h2>">', 
+                    '<div class="x-widget-tag-tagitem-text" ext:qtitle="{type}-tag: {name}" ext:qtip="{description}" >', 
                         '{name}',
                     '</div>',
                 '</div>',
@@ -294,6 +219,81 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         // maximize search field and let space for list button
         this.searchField.setWidth(w-37);
     },
+    /**
+     * @private
+     */
+    initSearchField: function() {
+        this.searchField = new Ext.form.ComboBox({
+            store: this.availableTagsStore,
+            mode: 'local',
+            displayField:'name',
+            typeAhead: true,
+            emptyText: 'Enter tag name',
+            loadingText: 'Searching...',
+            typeAheadDelay: 10,
+            minChars: 1,
+            hideTrigger:true,
+            expand: function(){}
+        });
+        
+        this.searchField.on('focus', function(searchField){
+            searchField.hasFocus = false;
+            // hack to supress selecting the first item from the freshly
+            // retrieved store
+            this.availableTagsStore.load({
+                scope: this,
+                callback: function() {
+                    searchField.hasFocus = true;
+                }
+            });
+        }, this);
+        
+        this.searchField.on('select', function(searchField, selectedTag){
+            if(this.recordTagsStore.getById(selectedTag.id) == undefined) {
+                this.recordTagsStore.add(selectedTag);
+            }
+            searchField.emptyText = '';
+            searchField.clearValue();
+        },this);
+        
+        this.searchField.on('specialkey', function(searchField, e){
+            //only accept ENTER when search had no result!
+             if(e.getKey() == e.ENTER){
+                var value = searchField.getValue();
+                if (value.length < 3) {
+                    Ext.Msg.show({
+                       title:'Notice',
+                       msg: 'The minimum tag length is three.',
+                       buttons: Ext.Msg.OK,
+                       animEl: 'elId',
+                       icon: Ext.MessageBox.INFO
+                    });
+                } else {
+                    var nameExists = false;
+                    this.recordTagsStore.each(function(tag){
+                        if(tag.data.name == value) {
+                            nameExists = true;
+                        }
+                    },this);
+                    
+                    if (!nameExists) {
+                        var newTag = new Tine.widgets.tags.Tag({
+                            name: value
+                        });
+                        this.recordTagsStore.add(newTag);
+                    }
+                }
+                searchField.emptyText = '';
+                searchField.clearValue();
+             }
+        }, this);
+        
+        // workaround extjs bug:
+        this.searchField.on('blur', function(searchField){
+            searchField.emptyText = 'Enter tag name';
+            searchField.clearValue();
+        },this);
+    }
 });
 
 /**
@@ -351,6 +351,7 @@ Tine.widgets.tags.Tag = Ext.data.Record.create([
     {name: 'app'        },
     {name: 'owner'      },
     {name: 'name'       },
+    {name: 'type'       },
     {name: 'description'},
     {name: 'color'      },
     {name: 'occurrence' },
