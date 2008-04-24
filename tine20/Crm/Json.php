@@ -497,6 +497,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
                 // ignore, permission denied or contact not found
             }
         }
+        $result['customer'] = array();
         foreach($_lead->customer as $contactId) {
             try {
                 $result['customer'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
@@ -505,6 +506,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
                 // ignore, permission denied or contact not found
             }
         }
+        $result['partner'] = array();
         foreach($_lead->partner as $contactId) {
             try {
                 $result['partner'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
