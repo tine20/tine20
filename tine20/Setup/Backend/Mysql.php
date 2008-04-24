@@ -33,34 +33,38 @@ class Setup_Backend_Mysql
      */
     public function createTable($_table)
     {
-	    $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
+		$table = new Setup_Backend_Schema_Table($_table);
+		
+	    $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $table->name . "` (\n";
         $statementSnippets = array();
 
-        foreach ($_table->declaration->field as $field) {
+        foreach ($table->fields as $field) {
             if(isset($field->name)) {
                $statementSnippets[] = $this->getMysqlDeclarations($field);
             }
         }
 
-        foreach ($_table->declaration->index as $key) {
-            if (!$key->foreign) {
-                $statementSnippets[] = $this->getMysqlIndexDeclarations($key);
+        foreach ($table->indices as $index) {
+		
+			//var_dump($index);
+            if ($index->foreign) {
+               $statementSnippets[] = $this->getMysqlForeignKeyDeclarations($index);
             } else {
-                $statementSnippets[] = $this->getMysqlForeignKeyDeclarations($key);
+               $statementSnippets[] = $this->getMysqlIndexDeclarations($index);
             }
         }
 
         $statement .= implode(",\n", $statementSnippets) . ")";
 
-        if (isset($_table->engine)) {
-            $statement .= "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
+        if (isset($table->engine)) {
+            $statement .= "\n ENGINE=" . $table->engine . " DEFAULT CHARSET=" . $table->charset;
         } else {
             $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
         }
 
-		$statement .= " COMMENT='VERSION: " .  $_table->version  ;
-        if (isset($_table->comment)) {
-          $statement .= "; " . $_table->comment . "';";
+		$statement .= " COMMENT='VERSION: " .  $table->version  ;
+        if (isset($table->comment)) {
+          $statement .= "; " . $table->comment . "';";
         } else {
 			$statement .= "';";
 		}
@@ -325,19 +329,15 @@ class Setup_Backend_Mysql
 	
 	
 
-    public function getMysqlDeclarations($_field)
+    public function getMysqlDeclarations(Setup_Backend_Schema_Field $_field)
     {
         $definition = '`' . $_field->name . '`';
 
         switch ($_field->type) {
-            case('text'):
-				if (isset($_field->length)) {
-                    $definition .= ' varchar(' . $_field->length . ') ';
-                } else {
-                    $definition .= ' ' . $_field->type . ' ';
-                }
-                break;
-            
+            case('varchar'): 
+				$definition .= ' varchar(' . $_field->length . ') ';
+				break;
+			
             case ('integer'):
                 if (isset($_field->length)) {
                     if ($_field->length > 19) {
@@ -391,6 +391,9 @@ class Setup_Backend_Mysql
 			case ('decimal'):
                 $definition .= " decimal (" . $_field->value . ")" ;
 				break;
+				
+			default:
+				$definition .= ' ' . $_field->type . ' ';
 			}
 
         if (isset($_field->unsigned)) {
@@ -426,8 +429,8 @@ class Setup_Backend_Mysql
      * @param object $_key the xml index definition 
      * @return string
      */
-    public function getMysqlIndexDeclarations($_key)
-    {
+    public function getMysqlIndexDeclarations(Setup_Backend_Schema_Index $_key)
+    {	
         $snippet = '';
         $keys = array();
 
@@ -441,7 +444,7 @@ class Setup_Backend_Mysql
         $snippet .= $definition . " `" . $_key->name . "`" ;
 
         foreach ($_key->field as $keyfield) {
-            $key    = '`' . (string)$keyfield->name . '`';
+		    $key = '`' . (string)$keyfield . '`';
             if(!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';
             }
@@ -449,11 +452,10 @@ class Setup_Backend_Mysql
         }
 
         if(empty($keys)) {
-            throw new Exception('now keys for index found');
+            throw new Exception('no keys for index found');
         }
 
         $snippet .= ' (' . implode(",", $keys) . ') ';
-
         return $snippet;
     }
 
@@ -464,20 +466,19 @@ class Setup_Backend_Mysql
      * @return string
      */
 
-    public function getMysqlForeignKeyDeclarations($_key)
+    public function getMysqlForeignKeyDeclarations(Setup_Backend_Schema_Index $_key)
     {
         $snippet = '';
         $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY';
+        $snippet .= '(`' . $_key->field . "`) REFERENCES `" . SQL_TABLE_PREFIX
+                    . $_key->referenceTable . 
+					"` (`" . $_key->referenceField . "`) ";
 
-        $snippet .= '(`' . $_key->field->name . "`) REFERENCES `" . SQL_TABLE_PREFIX
-                    . $_key->reference->table . 
-					"` (`" . $_key->reference->field . "`) ";
-
-        if(!empty($_key->reference->ondelete)) {
-            $snippet .= "ON DELETE " . strtoupper($_key->reference->ondelete);
+        if(!empty($_key->referenceOnDelete)) {
+            $snippet .= "ON DELETE " . strtoupper($_key->referenceOnDelete);
         }
-        if(!empty($_key->reference->onupdate)) {
-            $snippet .= "ON UPDATE " . strtoupper($_key->reference->onupdate);
+        if(!empty($_key->referenceOnUpdate)) {
+            $snippet .= "ON UPDATE " . strtoupper($_key->referenceOnUpdate);
         }
         return $snippet;
     }
