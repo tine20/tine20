@@ -61,7 +61,6 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $view->cssIncludeFiles = array();
         
         $controller = Crm_Controller::getInstance();
-        $leads = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
         
         if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
             $leadData = $lead->toArray();
@@ -126,7 +125,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
             $leadData['container'] = $folder->toArray();
             
-            $products = $leads->getProductsByLeadId($_leadId);
+            $products = $controller->getProductsByLeadId($_leadId);
             $leadData['products'] = $products->toArray();
 
             
@@ -144,16 +143,16 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             
         }
 
-        $_leadTypes = $leads->getLeadtypes('leadtype','ASC');
+        $_leadTypes = $controller->getLeadtypes('leadtype','ASC');
         $view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
         
-        $_leadStates =  $leads->getLeadStates('leadstate','ASC');
+        $_leadStates =  $controller->getLeadStates('leadstate','ASC');
         $view->formData['comboData']['leadstates'] = $_leadStates->toArray();
         
-        $_leadSources =  $leads->getLeadSources('leadsource','ASC');
+        $_leadSources =  $controller->getLeadSources('leadsource','ASC');
         $view->formData['comboData']['leadsources'] = $_leadSources->toArray();
 
-        $_productSource =  $leads->getProducts('productsource','ASC');
+        $_productSource =  $controller->getProducts('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
         $view->jsIncludeFiles[] = self::_appendFileTime('Tasks/js/Tasks.js');
