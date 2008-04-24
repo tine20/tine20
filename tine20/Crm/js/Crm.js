@@ -1342,8 +1342,8 @@ Tine.Crm.LeadEditDialog = function() {
 
         var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
         
-        console.log ( st_productsAvailable );
-        console.log ( st_choosenProducts );
+        //console.log ( st_productsAvailable );
+        //console.log ( st_choosenProducts );
         
         var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
                 header: "id",
