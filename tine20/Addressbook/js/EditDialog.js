@@ -77,14 +77,21 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             ],
             [
                 {
-                    columnWidth: .5,
+                    columnWidth: .4,
                     fieldLabel:'Middle Name(s)', 
                     name:'n_middle'
                 },
                 {
-                    columnWidth: .5,
+                    columnWidth: .4,
                     fieldLabel:'Suffix', 
                     name:'n_suffix'
+                },
+                {
+                    columnWidth: .2,
+                    xtype: 'datefield',
+                    format: 'd.m.Y',
+                    fieldLabel: 'Birthday',
+                    name: 'bday'
                 }
             ]
         ]
@@ -175,15 +182,14 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             ],
             [
                 {
-                    fieldLabel:'E-Mail', 
-                    labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
-                    name:'email'
+                    fieldLabel:'Phone (private)',
+                    labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                    name:'tel_home'
                 },
                 {
-                    xtype: 'mirrortextfield',
-                    fieldLabel:'Web',
-                    labelIcon: 'images/oxygen/16x16/actions/network.png',
-                    name:'url',
+                    fieldLabel:'Mobile (private)',
+                    labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                    name:'tel_cell_private'
                 },
                 {
                     fieldLabel:'Phone Assistent', 
@@ -193,9 +199,9 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             ],
             [
                 {
-                    fieldLabel:'Phone (private)',
-                    labelIcon: 'images/oxygen/16x16/apps/kcall.png',
-                    name:'tel_home'
+                    fieldLabel:'E-Mail', 
+                    labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                    name:'email'
                 },
                 {
                     fieldLabel:'E-Mail (private)', 
@@ -203,9 +209,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                     name:'email_home'
                 },
                 {
-                    fieldLabel:'Mobile (private)',
-                    labelIcon: 'images/oxygen/16x16/devices/phone.png',
-                    name:'tel_cell_private'
+                    xtype: 'mirrortextfield',
+                    fieldLabel:'Web',
+                    labelIcon: 'images/oxygen/16x16/actions/network.png',
+                    name:'url',
                 }
             ]
         ]
