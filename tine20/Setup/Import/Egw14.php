@@ -17,6 +17,14 @@
  */
 class Setup_Import_Egw14
 {
+    
+    /**
+     * old table prefix
+     * 
+     * @var string
+     */
+    protected $oldTablePrefix = "egw_";
+    
     public function import()
     {
         $this->importGroups();
@@ -112,7 +120,7 @@ class Setup_Import_Egw14
      *
      * @param string $oldTableName [OPTIONAL]
      */
-    public function importAddressbook( $_oldTableName = NULL )
+    public function importAddressbook( $_oldTableName = NULL, $useOldId = TRUE )
     {
         $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'addressbook';
         $contactsTable = new Tinebase_Db_Table(array('name' => $tableName));
@@ -126,9 +134,11 @@ class Setup_Import_Egw14
             
             $tineContact = new Addressbook_Model_Contact ( array(
                 
-                'id'                    => $contact->contact_id,
+                'id'                    => ( $useOldId ) ? $contact->contact_id : 0,
                 'account_id'            => $contact->account_id,
-                'owner'                 => $contact->contact_owner,
+                // @todo    who is the owner ( -15 )? add correct owner !
+                //'owner'                 => $contact->contact_owner,
+                'owner'                 => 1,
 
                 'n_family'              => $contact->n_family,
                 'n_fileas'              => $contact->n_fileas,
@@ -197,6 +207,8 @@ class Setup_Import_Egw14
             );
             
             Addressbook_Backend_Sql::getInstance()->addContact($tineContact);
+            
+            // @todo add categories / tags
             
         }
         echo "done! got ".sizeof($contacts)." contacts.<br>";

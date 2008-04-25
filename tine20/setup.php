@@ -62,13 +62,17 @@ if($setup->initialLoadRequired()) {
     } elseif ( IMPORT_EGW_14 === TRUE ) {
         $import = new Setup_Import_Egw14();
         $import->import();
-    } elseif ( IMPORT_EGW_14_ADDRESSBOOK === TRUE ) {
-        $import = new Setup_Import_Egw14();
-        $import->importAddressbook();   
     } elseif ( IMPORT_TINE_REV_949 === TRUE ) {
         $import = new Setup_Import_TineRev949();
         $import->import();
     }
 }
 
+/**
+ * import other data (from single tables)
+ */
+if ( IMPORT_EGW_14_ADDRESSBOOK === TRUE ) {
+    $import = new Setup_Import_Egw14();
+    $import->importAddressbook('egw_addressbook', FALSE);   
+}
 
