@@ -119,8 +119,13 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 
         // title icon
         if ( !empty($_titleIcon) ) {
-            $icon = Zend_Pdf_Image::imageWithPath(dirname(dirname(dirname(__FILE__))).$_titleIcon);
-            $this->pages[$pageNumber]->drawImage( $icon, $xPos-35, $yPos-20, $xPos-3, $yPos+12 );
+            try {
+                $titleImage = dirname(dirname(dirname(__FILE__))).$_titleIcon;
+                $icon = Zend_Pdf_Image::imageWithPath($titleImage);
+                $this->pages[$pageNumber]->drawImage( $icon, $xPos-35, $yPos-20, $xPos-3, $yPos+12 );
+            } catch ( Zend_Pdf_Exception $e ) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' could not draw image: ' . $titleImage . '(' . $e->getMessage() . ')' );
+            }
         }
         
         // subtitle
@@ -150,7 +155,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // photo
         if ( $_image !== NULL ) {
             //$xPos += 450;
-            $this->pages[$pageNumber]->drawImage( $_image, $xPos+450, $yPosImage, $xPos+500, $yPosImage + 75 );
+			try {            
+            	$this->pages[$pageNumber]->drawImage( $_image, $xPos+450, $yPosImage, $xPos+500, $yPosImage + 75 );
+            } catch ( Zend_Pdf_Exception $e ) {
+                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' could not draw image (user photo): ' . '(' . $e->getMessage() . ')' );
+            }
         }
 
         // debug record
@@ -272,8 +281,12 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                         $iconFilename = dirname(dirname(dirname(__FILE__))).$row[$i+1];
                         // add icon
                         if ( is_file($iconFilename)) {
-                            $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
-                            $this->pages[$pageNumber]->drawImage( $icon, $xPos-170, $yPos-6, $xPos-154, $yPos + 10 );                            
+							try {
+                                $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
+                                $this->pages[$pageNumber]->drawImage( $icon, $xPos-170, $yPos-6, $xPos-154, $yPos + 10 );                            
+                            } catch ( Zend_Pdf_Exception $e ) {
+                                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' could not draw image: ' . $iconFilename . '(' . $e->getMessage() . ')' );
+                            }
                         } else {
                             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
                         }
