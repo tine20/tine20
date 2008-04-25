@@ -61,17 +61,20 @@ class Tinebase_Tags
     
     /**
      * Searches tags according to filter and paging
-     * The Current user needs to have view rights, unless $_ignoreAcl is true
+     * The Current user needs to have the given right, unless $_ignoreAcl is true
      * 
      * @param  Tinebase_Tags_Model_Filter $_filter
      * @param  Tinebase_Model_Pagination  $_paging
      * @param  string                     $_right   the required right current user must have on the tags
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Tags_Model_Tag
      */
-    public function searchTags($_filter, $_paging, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
+    public function searchTags($_filter, $_paging, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT, $_ignoreAcl=false)
     {
         $select = $_filter->getSelect();
-        Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+        
+        if ($_ignoreAcl !== true) {
+            Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+        }
         $_paging->appendPagination($select);
         
         return new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag', $this->_db->fetchAssoc($select));
