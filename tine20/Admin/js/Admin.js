@@ -877,23 +877,6 @@ Tine.Admin.Applications.EditPermissionsDialog = {
     applicationRecordRights: null,
     
     /**
-     * function updateToolbarButtons
-     */
-    updateToolbarButtons: function(_rights)
-    {        
-       /* if(_rights.editGrant === true) {
-            Ext.getCmp('groupDialog').action_saveAndClose.enable();
-            Ext.getCmp('groupDialog').action_applyChanges.enable();
-        }
-
-        if(_rights.deleteGrant === true) {
-            Ext.getCmp('groupDialog').action_delete.enable();
-        }
-        Ext.getCmp('groupDialog').action_delete.enable();
-        */
-    },    
-
-    /**
      * returns index of record in the stor
      * @private
      */
@@ -914,7 +897,66 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         });
         
         return id ? dataStore.indexOfId(id) : false;
-    },            
+    },  
+    
+    /**
+     * loads permissions data store
+     * @private
+     */
+    loadDataStore: function ( _accounts, _allRights ) {
+        // create dynamic record for the store
+        var rights = [];
+        for (var i = 0; i < _allRights.length; i++) {
+            rights.push({
+                   name: _allRights[i]
+            });
+        }
+        this.applicationRecordRights = Ext.data.Record.create([
+            {name: 'id'},
+            {name: 'account_id'},
+            {name: 'account_type'},
+            {name: 'accountDisplayName'},            
+            ].concat(rights)
+        );
+        
+        this.dataStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: this.applicationRecordRights
+        });
+
+        Ext.StoreMgr.add('ApplicationRightsStore', this.dataStore);
+        
+        this.dataStore.setDefaultSort('accountDisplayName', 'asc');
+        
+        // check if 'anyone' in rights store -> if not, add it
+        var found = false;
+        //console.log ( _accounts );
+        for ( var i=0; i < _accounts.results.length; i++ ) {
+            //console.log ( _accounts.results[i] );
+        	if ( _accounts.results[i].account_type === 'anyone' ) {
+        		found = true;
+        	}
+        }
+        if ( !found ) {
+        	_accounts.results.push({
+        	   accountDisplayName: 'Anyone',
+        	   account_type: 'anyone'
+        	});
+        }
+        
+        // load the store
+        this.dataStore.loadData( _accounts );
+        
+        /*
+        if (_accounts.length === 0) {
+            this.dataStore.removeAll();
+        } else {
+            this.dataStore.loadData( _accounts );
+        }
+        */
+    },
     
     /**
      * var handlers
@@ -1046,38 +1088,8 @@ Tine.Admin.Applications.EditPermissionsDialog = {
 
         /******* load data store ********/
         
-        // create dynamic record for the store
-        var rights = [];
-        for (var i = 0; i < _allRights.length; i++) {
-            rights.push({
-            	   name: _allRights[i]
-            });
-        }
-        this.applicationRecordRights = Ext.data.Record.create([
-            {name: 'id'},
-            {name: 'account_id'},
-            {name: 'account_type'},
-            {name: 'accountDisplayName'},            
-            ].concat(rights)
-        );
+        this.loadDataStore ( _accounts, _allRights );
         
-        this.dataStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: this.applicationRecordRights
-        });
-
-        Ext.StoreMgr.add('ApplicationRightsStore', this.dataStore);
-        
-        this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
-        
-        if (_accounts.length === 0) {
-            this.dataStore.removeAll();
-        } else {
-            this.dataStore.loadData( _accounts );
-        }
-
         /*       
         this.dataStore.on('update', function(_store){
             Ext.getCmp('AccountsActionSaveButton').enable();
