@@ -25,10 +25,10 @@ class Setup_Controller
      *
      * @var bool
      */
-	private $_doInitialLoad = true;
-	
+    private $_doInitialLoad = true;
+    
     /**
-     * the contructor
+     * the constructor
      *
      */
     public function __construct()
@@ -45,7 +45,7 @@ class Setup_Controller
         #    
         #    default:
         #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
-        #}		
+        #}        
     }
 
     /**
@@ -100,32 +100,38 @@ class Setup_Controller
         }
     }
 
+    /**
+     * updates installed applications - if there are installed applications
+     * if there aren't installed applications just return otherwise set _doInitialLoad = false
+     * 
+     */
     public function updateInstalledApplications()
     {
-        // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
-		try {
-			$applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        // try - catch, because of likeness to query an empty database
+        try {
+            // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
+            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
        } catch (Exception $e) {
-			return;
-	   }
-		
-		foreach($applications as $application) {
-			$xml = $this->parseFile2($application->name);
-			if($xml->name == 'Tinebase') {
-				$this->_doInitialLoad = false;
-			}
-			$this->updateApplication($application, $xml->version);
-		}
-						
+            return;
+       }
+        
+        foreach($applications as $application) {
+            $xml = $this->parseFileForUpdate($application->name);
+            $this->updateApplication($application, $xml->version);
+            
+            if($xml->name == 'Tinebase') {
+                $this->_doInitialLoad = false;
+            }
+        }
     }
-	
+    
     /**
      * setup the Database - read from the XML-files
      *
      */
 
     public function installNewApplications($_tinebaseFile, $_setupFilesPath )
-    {	
+    {    
         if(file_exists($_tinebaseFile)) {
             echo "Processing tables definitions for <b>Tinebase</b> ($_tinebaseFile)<br>";
            $this->parseFile($_tinebaseFile);
@@ -155,8 +161,14 @@ class Setup_Controller
     }
     
 
-    
-    public function addApplication($_xml)
+    /**
+     * add an application to database
+     * register to tine
+     * insert default records
+     *
+     * @return void
+     */    
+    public function addApplication(SimpleXMLElement $_xml)
     {
         // just insert tables
         $createdTables = array();
@@ -172,7 +184,8 @@ class Setup_Controller
                 }
             }
         }
-        
+
+        // register to tine
         try {
             $application = Tinebase_Application::getInstance()->getApplicationByName($_xml->name);
         } catch (Exception $e) {
@@ -185,18 +198,18 @@ class Setup_Controller
 
             $application = Tinebase_Application::getInstance()->addApplication($application);
         }
-
+        
+        // insert in database
         foreach($createdTables as $table) {
             $this->_backend->addTable($application, $table->name, $table->version);
         }
 
+        // insert default records
         if(isset($_xml->defaultRecords)) {
             foreach ($_xml->defaultRecords[0] as $record) {
                 $this->_backend->execInsertStatement($record);
             }
         }
-
-
     }
     
     /**
@@ -206,8 +219,6 @@ class Setup_Controller
      */
     public function parseFile($_file)
     {
-        $createdTables = array();
-    
         $xml = simplexml_load_file($_file);
         
         if (!$this->_backend->applicationExists($xml->name)) {
@@ -217,12 +228,12 @@ class Setup_Controller
         }
     }
     
-/**
+    /**
      * parses the xml stream and creates the tables if needed
      *
      * @param string $_file path to xml file
      */
-    public function parseFile2($_applicationName)
+    public function parseFileForUpdate($_applicationName)
     {
         $setupXML = dirname(__FILE__) . '/../' . ucfirst($_applicationName) . '/Setup/setup.xml';
         

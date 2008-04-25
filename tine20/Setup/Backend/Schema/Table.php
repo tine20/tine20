@@ -9,7 +9,11 @@
  * @version     $Id: Table.php 1703 2008-04-03 18:16:32Z lkneschke $
  */
 
- 
+ /**
+ * Data definition for tables used in setup
+ *
+ * @package     Setup
+ */
 class Setup_Backend_Schema_Table
 {
     /**
@@ -118,16 +122,16 @@ class Setup_Backend_Schema_Table
     }
     
     /**
-     * convert string if possible to simpleXMLElement
+     * convert string if possible to simpleXMLElement and starts setting table
      *
      */    
-    
     protected function _setTableFromString(array $_tableDefinition)
     {
         try {
             $xmlObject = new SimpleXMLElement($_tableDefinition['XmlString']);
         } catch (Exception $e) {
             echo $e->getMessage(); 
+            exit;
         }
         $this->_setTableFromXml($xmlObject);
     }
@@ -136,7 +140,6 @@ class Setup_Backend_Schema_Table
      * set Table from database information schema
      *
      */
-    
     protected function _setTableFromObject(stdClass $_tableDefinition)
     {
         //collect information von information schema - 
@@ -148,7 +151,10 @@ class Setup_Backend_Schema_Table
     
     
     
-    
+    /**
+     * set all fields (columns) from simpleXMLObject
+     *
+     */
     protected function _setFieldsFromXML(SimpleXMLElement $_fieldDefinitions)
     {
         foreach ($_fieldDefinitions as $fieldDefinition) {
@@ -156,7 +162,10 @@ class Setup_Backend_Schema_Table
         }
     }
 
-    
+    /**
+     * set all fields (columns) from simpleXMLObject
+     *
+     */
     protected function _setIndicesFromXML(SimpleXMLElement $_indicesDefinitions)
     {
         foreach ($_indicesDefinitions as $indexDefinition) {
@@ -179,7 +188,7 @@ class Setup_Backend_Schema_Table
     /**
      * add one index to the table definition
      *
-     * @param unknown_type $_definition
+     * @param Setup_Backend_Schema_Index $_definition
      */
     protected function _addIndex(Setup_Backend_Schema_Index $_index)
     {
@@ -187,9 +196,8 @@ class Setup_Backend_Schema_Table
     }
     
     /**
-     * add one index to the table definition
+     * put information whether field is key or not to all fields definitions
      *
-     * @param unknown_type $_definition
      */
     protected function _addIndexInformation()
     {

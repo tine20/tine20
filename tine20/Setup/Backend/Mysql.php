@@ -15,17 +15,16 @@
  *
  * @package     Setup
  */
-
 class Setup_Backend_Mysql
 {
-	public $DBMS = 'mysql';
-	private $_config = '';
-	
-	public function __construct()
-	{
-		$this->_config = Zend_Registry::get('configFile');
-	}
-	
+    public $DBMS = 'mysql';
+    private $_config = '';
+    
+    public function __construct()
+    {
+        $this->_config = Zend_Registry::get('configFile');
+    }
+    
     /**
      * takes the xml stream and creates a table
      *
@@ -33,9 +32,9 @@ class Setup_Backend_Mysql
      */
     public function createTable($_table)
     {
-		$table = new Setup_Backend_Schema_Table($_table);
-		
-	    $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $table->name . "` (\n";
+        $table = new Setup_Backend_Schema_Table($_table);
+        
+        $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $table->name . "` (\n";
         $statementSnippets = array();
 
         foreach ($table->fields as $field) {
@@ -45,8 +44,6 @@ class Setup_Backend_Mysql
         }
 
         foreach ($table->indices as $index) {
-		
-			//var_dump($index);
             if ($index->foreign) {
                $statementSnippets[] = $this->getMysqlForeignKeyDeclarations($index);
             } else {
@@ -62,19 +59,19 @@ class Setup_Backend_Mysql
             $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
         }
 
-		$statement .= " COMMENT='VERSION: " .  $table->version  ;
+        $statement .= " COMMENT='VERSION: " .  $table->version  ;
         if (isset($table->comment)) {
           $statement .= "; " . $table->comment . "';";
         } else {
-			$statement .= "';";
-		}
+            $statement .= "';";
+        }
 
-		echo "<pre>$statement</pre>";
-		$this->execQueryVoid($statement);
-		echo "<hr>";
-	}
-	
-	    /**
+        echo "<pre>$statement</pre>";
+        $this->execQueryVoid($statement);
+        echo "<hr>";
+    }
+    
+    /**
      * checks if application is installed at all
      *
      * @param unknown_type $_application
@@ -82,7 +79,7 @@ class Setup_Backend_Mysql
      */
     public function applicationExists($_application)
     {
-		 if($this->tableExists('applications')) {
+         if($this->tableExists('applications')) {
             if($this->applicationVersionQuery($_application) != false) {
                 return true;
             }
@@ -90,7 +87,7 @@ class Setup_Backend_Mysql
         
         return false;
     }
-	
+    
     /**
      * check's if a given table exists
      *
@@ -107,11 +104,11 @@ class Setup_Backend_Mysql
 
         $stmt = $select->query();
         $table = $stmt->fetchObject();
-		
+        
         if($table === false) {
-	        return false;
+            return false;
         }
-		return true; 
+        return true; 
     }
     
     /**
@@ -139,7 +136,7 @@ class Setup_Backend_Mysql
      * @param string $_application
      * @return boolean return string "version" if the table exists, otherwise false
      */
-    public function applicationVersionQuery($_application)
+    public function applicationVersionQuery(string $_application)
     {    
         $select = Zend_Registry::get('dbAdapter')->select()
                 ->from( SQL_TABLE_PREFIX . 'applications')
@@ -153,9 +150,16 @@ class Setup_Backend_Mysql
             return $version[0]['version'];
         }
     }
-	
-	
-    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
+    
+    /**
+    * add table to tine registry
+    *
+    * @param Tinebase_Model_Application
+    * @param string name of table
+    * @param int version of table
+    * @return int
+    */
+    public function addTable(Tinebase_Model_Application $_application, string $_name, int $_version)
     {
         $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
 
@@ -170,7 +174,13 @@ class Setup_Backend_Mysql
         return $applicationID;
     }
     
-    public function execInsertStatement($_record)
+    /*
+    * execute insert statement for default values (records)
+    * handles some special fields, which can't contain static values
+    * 
+    * @param SimpleXMLElement $_record
+    */
+    public function execInsertStatement(SimpleXMLElement $_record)
     {
         $table = new Tinebase_Db_Table(array(
            'name' => SQL_TABLE_PREFIX . $_record->table->name
@@ -180,154 +190,224 @@ class Setup_Backend_Mysql
             if(isset($field->value['special'])) {
                 switch(strtolower($field->value['special'])) {
                     case 'now':
-                    {
                         $value = Zend_Date::now()->getIso();
                         break;
-                    }
+                    
                     case 'account_id':
-                    {
                         break;
-                    }
+                    
                     case 'application_id':
-                    {
                         $application = Tinebase_Application::getInstance()->getApplicationByName($field->value);
-
                         $value = $application->id;
-
                         break;
-                    }
+                    
                     default:
-                    {
                         throw new Exception('unsupported special type ' . strtolower($field->value['special']));
-                        break;
-                    }
+                    
                 }
             } else {
                 $value = $field->value;
             }
-
+            // buffer for insert statement
             $data[(string)$field->name] = $value;
         }
-
+        
+        // final insert process
         $table->insert($data);
     }
 
-	
-	
-	
-	public function dropTable($_tableName)
-	{
-		$statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
-		$this->execQueryVoid($statement);
-	}
-	
-	public function renameTable($_tableName, $_newName )
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` RENAME TO `" . SQL_TABLE_PREFIX . $_newName . "` ;";
-		$this->execQueryVoid($statement);
-	}
-	
-	public function addCol($_tableName, $_declaration , $_position = NULL)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
-		
-		$statement .= $this->getMysqlDeclarations($_declaration);
-		
-		if($_position != NULL) {
-			if ($_position == 0) {
-				$statement .= ' FIRST ';
-			} else {
-				$before = $this->execQuery('DESCRIBE `' . SQL_TABLE_PREFIX . $_tableName . '` ');
-				$statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
-			}
-		}
-		
-		$this->execQueryVoid($statement);
-	}
-	
-	public function alterCol($_tableName, $_declaration, $_oldName = NULL)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
-		$oldName = $_oldName ;
-		
-		if ($_oldName == NULL) {
-			$oldName = SQL_TABLE_PREFIX . $_declaration->name;
-		}
-		
-		$statement .= " `" . $oldName .  "` " . $this->getMysqlDeclarations($_declaration) ;
-		$this->execQueryVoid($statement);	
-	}
-	
-	public function dropCol($_tableName, $_colName)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
-		$this->execQueryVoid($statement);	
-	}
+    
+    /*
+    * removes table from database
+    * 
+    * @param string tableName
+    */
+    public function dropTable(string $_tableName)
+    {
+        $statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
+        $this->execQueryVoid($statement);
+    }
+    
+    /*
+    * renames table in database
+    * 
+    * @param string tableName
+    */
+    public function renameTable(string $_tableName, string $_newName )
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` RENAME TO `" . SQL_TABLE_PREFIX . $_newName . "` ;";
+        $this->execQueryVoid($statement);
+    }
+    
+    /*
+    * add column/field to database table
+    * 
+    * @param string tableName
+    * @param Setup_Backend_Schema_Field declaration
+    * @param int position of future column
+    */    
+    public function addCol(string $_tableName, Setup_Backend_Schema_Field $_declaration , int $_position = NULL)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
+        
+        $statement .= $this->getMysqlDeclarations($_declaration);
+        
+        if($_position != NULL) {
+            if ($_position == 0) {
+                $statement .= ' FIRST ';
+            } else {
+                $before = $this->execQuery('DESCRIBE `' . SQL_TABLE_PREFIX . $_tableName . '` ');
+                $statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
+            }
+        }
+        
+        $this->execQueryVoid($statement);
+    }
+    
+    /*
+    * rename or redefines column/field in database table
+    * 
+    * @param string tableName
+    * @param Setup_Backend_Schema_Field declaration
+    * @param string old column/field name 
+    */    
+    public function alterCol(string $_tableName, Setup_Backend_Schema_Field $_declaration, $_oldName = NULL)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
+        $oldName = $_oldName ;
+        
+        if ($_oldName == NULL) {
+            $oldName = SQL_TABLE_PREFIX . $_declaration->name;
+        }
+        
+        $statement .= " `" . $oldName .  "` " . $this->getMysqlDeclarations($_declaration) ;
+        $this->execQueryVoid($statement);    
+    }
+    
+    /*
+    * drop column/field in database table
+    * 
+    * @param string tableName
+    * @param string column/field name 
+    */    
+    public function dropCol(string $_tableName, string $_colName)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
+        $this->execQueryVoid($statement);    
+    }
 
 
-	
-	public function addForeignKey($_tableName, $_declaration)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
-					. $this->getMysqlForeignKeyDeclarations($_declaration)  ;
-		$this->execQueryVoid($statement);	
-	}
+     /*
+    * add a foreign key to database table
+    * 
+    * @param string tableName
+    * @param Setup_Backend_Schema_Index declaration
+    */       
+    public function addForeignKey(string $_tableName, Setup_Backend_Schema_Index $_declaration)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
+                    . $this->getMysqlForeignKeyDeclarations($_declaration)  ;
+        $this->execQueryVoid($statement);    
+    }
 
-	
-	public function dropForeignKey($_tableName, $_name)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
-		$this->execQueryVoid($statement);	
-	}
-	
-	public function dropPrimaryKey($_tableName)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP PRIMARY KEY " ;
-		$this->execQueryVoid($statement);	
-	}
-	
-	public function addPrimaryKey($_tableName, $_declaration)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
-					. $this->getMysqlIndexDeclarations($_declaration);
-		$this->execQueryVoid($statement);	
-	}
-	
-	public function addIndex($_tableName , $_declaration)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
-					. $this->getMysqlIndexDeclarations($_declaration);
-		$this->execQueryVoid($statement);	
-	}
-	
-	
-	public function dropIndex($_tableName, $_indexName)
-	{
-		$statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
-		$this->execQueryVoid($statement);	
-	}
-	
-	public function execQueryVoid($_statement)
-	{
-		try {
+    /*
+    * removes a foreign key from database table
+    * 
+    * @param string tableName
+    * @param string foreign key name
+    */     
+    public function dropForeignKey(string $_tableName, string $_name)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
+        $this->execQueryVoid($statement);    
+    }
+    
+    /*
+    * removes a primary key from database table
+    * 
+    * @param string tableName (there is just one primary key...)
+    */         
+    public function dropPrimaryKey(string $_tableName)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP PRIMARY KEY " ;
+        $this->execQueryVoid($statement);    
+    }
+    
+    /*
+    * add a primary key to database table
+    * 
+    * @param string tableName 
+    * @param Setup_Backend_Schema_Index declaration
+    */         
+    public function addPrimaryKey(string $_tableName, Setup_Backend_Schema_Index $_declaration)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
+                    . $this->getMysqlIndexDeclarations($_declaration);
+        $this->execQueryVoid($statement);    
+    }
+ 
+    /*
+    * add a key to database table
+    * 
+    * @param string tableName 
+    * @param Setup_Backend_Schema_Index declaration
+    */     
+    public function addIndex(string $_tableName ,  Setup_Backend_Schema_Index$_declaration)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
+                    . $this->getMysqlIndexDeclarations($_declaration);
+        $this->execQueryVoid($statement);    
+    }
+    
+    /*
+    * removes a key from database table
+    * 
+    * @param string tableName 
+    * @param string key name
+    */    
+    public function dropIndex(string $_tableName, string $_indexName)
+    {
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
+        $this->execQueryVoid($statement);    
+    }
+    
+    /*
+    * execute statement without return values
+    * 
+    * @param string statement
+    */    
+    public function execQueryVoid(string $_statement)
+    {
+        try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
         } catch (Zend_Db_Exception $e) {
             var_dump($e);
         }
-	}
-	
-	public function execQuery($_statement)
-	{
-		try {
+    }
+    
+     /*
+    * execute statement  return values
+    * 
+    * @param string statement
+    * @return stdClass object
+    */       
+    public function execQuery(string $_statement)
+    {
+        try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
         } catch (Zend_Db_Exception $e) {
             var_dump($e);
             return false;
         }
-		return $stmt->fetchAll();
-	}
-	
-	
+        return $stmt->fetchAll();
+    }
+    
+    /**
+     * create the right mysql-statement-snippet for columns/fields
+     *
+     * @param Setup_Backend_Schema_Field field / column
+     * @return string
+     */
 
     public function getMysqlDeclarations(Setup_Backend_Schema_Field $_field)
     {
@@ -335,14 +415,14 @@ class Setup_Backend_Mysql
 
         switch ($_field->type) {
             case('varchar'): 
-				$definition .= ' varchar(' . $_field->length . ') ';
-				break;
-			
+                $definition .= ' varchar(' . $_field->length . ') ';
+                break;
+            
             case ('integer'):
                 if (isset($_field->length)) {
                     if ($_field->length > 19) {
                         $definition .= ' bigint(' . $_field->length . ') ';
-					} else if($_field->length < 5) {
+                    } else if($_field->length < 5) {
                         $definition .= ' tinyint(' . $_field->length . ') ';
                     } else {
                         $definition .= ' int(' . $_field->length . ') ';
@@ -356,30 +436,30 @@ class Setup_Backend_Mysql
                 $definition .= ' text ';
                 break;
             
-			case ('blob'):
+            case ('blob'):
                 $definition .= ' longblob ';
                 break;
             
-			case ('enum'):
+            case ('enum'):
                 foreach ($_field->value as $value) {
                     $values[] = $value;
                 }
                 $definition .= " enum('" . implode("','", $values) . "') ";
                 break;
             
-			case ('datetime'):
+            case ('datetime'):
                 $definition .= ' datetime ';
                 break;
             
-			case ('double'):
+            case ('double'):
                 $definition .= ' double ';
                 break;
             
-			case ('float'):
+            case ('float'):
                 $definition .= ' float ';
                 break;
             
-			case ('boolean'):
+            case ('boolean'):
                 $definition .= ' tinyint(1) ';
                 if ($_field->default == 'false') {
                     $_field->default = 0;
@@ -388,13 +468,13 @@ class Setup_Backend_Mysql
                 }
                 break;
             
-			case ('decimal'):
+            case ('decimal'):
                 $definition .= " decimal (" . $_field->value . ")" ;
-				break;
-				
-			default:
-				$definition .= ' ' . $_field->type . ' ';
-			}
+                break;
+                
+            default:
+                $definition .= ' ' . $_field->type . ' ';
+            }
 
         if (isset($_field->unsigned)) {
             $definition .= ' unsigned ';
@@ -426,11 +506,11 @@ class Setup_Backend_Mysql
     /**
      * create the right mysql-statement-snippet for keys
      *
-     * @param object $_key the xml index definition 
+     * @param Setup_Backend_Schema_Index key
      * @return string
      */
     public function getMysqlIndexDeclarations(Setup_Backend_Schema_Index $_key)
-    {	
+    {    
         $snippet = '';
         $keys = array();
 
@@ -444,7 +524,7 @@ class Setup_Backend_Mysql
         $snippet .= $definition . " `" . $_key->name . "`" ;
 
         foreach ($_key->field as $keyfield) {
-		    $key = '`' . (string)$keyfield . '`';
+            $key = '`' . (string)$keyfield . '`';
             if(!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';
             }
@@ -472,7 +552,7 @@ class Setup_Backend_Mysql
         $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY';
         $snippet .= '(`' . $_key->field . "`) REFERENCES `" . SQL_TABLE_PREFIX
                     . $_key->referenceTable . 
-					"` (`" . $_key->referenceField . "`) ";
+                    "` (`" . $_key->referenceField . "`) ";
 
         if(!empty($_key->referenceOnDelete)) {
             $snippet .= "ON DELETE " . strtoupper($_key->referenceOnDelete);
