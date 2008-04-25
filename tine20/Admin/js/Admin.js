@@ -252,13 +252,13 @@ Tine.Admin.AccessLog.Main = function() {
         	
         	var from = Date.parseDate(
         	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/y'
+               'm/d/Y'
         	);
             _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
 
             var to = Date.parseDate(
                Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/y'
+               'm/d/Y'
             );
             _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");
         });        
