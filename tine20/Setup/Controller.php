@@ -35,7 +35,7 @@ class Setup_Controller
     {
         $this->_config = Zend_Registry::get('configFile');
 
-        $this->setupLogger();
+        $this->_setupLogger();
         $this->setupDatabaseConnection();
         
         #switch ($this->_config->database->database) {
@@ -47,12 +47,28 @@ class Setup_Controller
         #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
         #}        
     }
+	
+	
+	/** 
+	 *  compares XML-Definitions with database schema
+	 */
+	public function TINECheck()
+	{
+		// collect every database table belonging to TINE 2.0
+		
+		
+		// collect every xml storage
+		
+		
+		// find (hopefully none) differences
+ 	
+	}
 
     /**
      * initializes the logger
      *
      */
-    protected function setupLogger()
+    protected function _setupLogger()
     {
         $logger = new Zend_Log();
 
@@ -274,15 +290,15 @@ class Setup_Controller
                 list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
         
                 $minor = $fromMinorVersion;
-                
+               
                 for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-                    if(file_exists(ucfirst($_name) . '/Setup/Update/Release' . $major . '.php')){
-                        $className = ucfirst($_name) . '_Setup_Update_Release' . $major;
+				    if(file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')){
+                        $className = ucfirst($_application->name) . '_Setup_Update_Release' . $major;
                     
                         $update = new $className($this->_backend);
                     
                         $classMethods = get_class_methods($update);
-                    
+                  
                         // we must do at least one update
                         do {
                             $functionName = 'update_' . $minor;
