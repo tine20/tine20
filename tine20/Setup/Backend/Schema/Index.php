@@ -23,72 +23,72 @@ class Setup_Backend_Schema_Index
      */
     public $name;
     
-	/**
+    /**
      * the name of the field(s)/column(s) in its own table 
      *
      * @var array
      */
-	public $field = array();
+    public $field = array();
 
-	/**
+    /**
      * index defines primary key
      *
      * @var boolean
      */
-	public $primary;
+    public $primary;
 
-	/**
+    /**
      * index defines unique key
      *
      * @var boolean
      */
     public $unique;
 
-	/**
+    /**
      * index defines any key, except (foreign, unique or primary)
      *
      * @var boolean
      */
     public $mul;
     
-	/**
+    /**
      * index defines foreign key
      *
      * @var boolean
      */
     public $foreign;
-	
-	/**
+    
+    /**
      * name of referenced table of foreign key
      *
      * @var string
      */
-	public $referencetable;
+    public $referencetable;
     
-	/**
+    /**
      * name of referenced table field/column of foreign key
      *
      * @var string
      */
-	public $referencefield;
-	
-	/**
+    public $referencefield;
+    
+    /**
      * defines behaviour of foreign key
      *
      * @var boolean
      */
     public $referenceOnDelete;
-	
-	/**
+    
+    /**
      * defines behaviour of foreign key
      *
      * @var boolean
      */
     public $referenceOnUpdate;
     
-	/**
+    /**
      * the constructor
-	* @param mixed $_declaration
+    * @param mixed $_declaration
      * @param string $_type
      */
     public function __construct($_declaration, $_type = 'XML')
@@ -104,9 +104,9 @@ class Setup_Backend_Schema_Index
         }
     }
 
-	/**
+    /**
      * set index from declaration 
-	* @param SimpleXMLElement $_declaration
+    * @param SimpleXMLElement $_declaration
      * 
      */    
     protected function _setFromXML(SimpleXMLElement $_declaration)
@@ -116,15 +116,15 @@ class Setup_Backend_Schema_Index
             if ($key != 'field' && $key != 'reference') {
                 $this->$key = (string) $val;
                 
-			// field definition is stored in SimpleXMLElement in quite different ways, depending on quantity
+            // field definition is stored in SimpleXMLElement in quite different ways, depending on quantity
             } else if ($key == 'field') {
                 if ($val instanceof SimpleXMLElement) {
                     $this->field[] = (string) $val->name;
                 } else {
                     $this->field = (string) $val;
                 }
-			
-			// reduce complexity of storage of foreign keys 
+            
+            // reduce complexity of storage of foreign keys 
             } else if ($key == 'reference') {
                 $this->referenceTable = $val->table;
                 $this->referenceField = $val->field;
@@ -137,17 +137,17 @@ class Setup_Backend_Schema_Index
 
     /**
      * set index from declaration 
-	* @param stdClass $_declaration
+    * @param stdClass $_declaration
      * NOT IMPLEMENTED YET
      */  
     protected function _setFromMySQL(stdClass $_declaration)
     {
         $this->name = $this->field['name'] = $_index->name;
     }
-	
+    
     /**
      * set index from declaration 
-	* @param stdClass $_declaration
+    * @param stdClass $_declaration
      * NOT IMPLEMENTED YET
      */      
     public function setName($_name)
@@ -158,10 +158,10 @@ class Setup_Backend_Schema_Index
             $this->name == $_name;
         }
     }
-	
+    
     /**
      * set index from declaration 
-	* @param stdClass $_declaration
+    * @param stdClass $_declaration
      * NOT IMPLEMENTED YET
      */  
     public function setForeignKey($_foreign)
@@ -171,9 +171,9 @@ class Setup_Backend_Schema_Index
         $this->reference['field'] = $_foreign['REFERENCED_COLUMN_NAME'];
     }
     
-	/**
+    /**
      * set index from declaration 
-	* @param stdClass $_declaration
+    * @param stdClass $_declaration
      * NOT IMPLEMENTED YET
      */  
     public function addIndex($_definition)
@@ -188,10 +188,10 @@ class Setup_Backend_Schema_Index
             }
         }
     }
-	
+    
     /**
      * set index from declaration 
-	* @param stdClass $_declaration
+    * @param stdClass $_declaration
      * NOT IMPLEMENTED YET
      */     
     public function setIndex($_definition)
@@ -206,10 +206,10 @@ class Setup_Backend_Schema_Index
             }
         }
     }
-	
+    
     /**
      * set index from declaration 
-	* @param stdClass $_declaration
+    * @param stdClass $_declaration
      * NOT IMPLEMENTED YET
      */  
     public function setForeign($_definition)

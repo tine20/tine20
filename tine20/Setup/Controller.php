@@ -201,7 +201,7 @@ class Setup_Controller
         
         // insert in database
         foreach($createdTables as $table) {
-            $this->_backend->addTable($application, $table->name, $table->version);
+            $this->_backend->addTable($application, (string) $table->name, (int) $table->version);
         }
 
         // insert default records

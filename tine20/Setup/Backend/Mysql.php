@@ -136,7 +136,7 @@ class Setup_Backend_Mysql
      * @param string $_application
      * @return boolean return string "version" if the table exists, otherwise false
      */
-    public function applicationVersionQuery(string $_application)
+    public function applicationVersionQuery($_application)
     {    
         $select = Zend_Registry::get('dbAdapter')->select()
                 ->from( SQL_TABLE_PREFIX . 'applications')
@@ -159,7 +159,7 @@ class Setup_Backend_Mysql
     * @param int version of table
     * @return int
     */
-    public function addTable(Tinebase_Model_Application $_application, string $_name, int $_version)
+    public function addTable(Tinebase_Model_Application $_application, $_name, $_version)
     {
         $applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_tables'));
 
@@ -222,7 +222,7 @@ class Setup_Backend_Mysql
     * 
     * @param string tableName
     */
-    public function dropTable(string $_tableName)
+    public function dropTable($_tableName)
     {
         $statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
         $this->execQueryVoid($statement);
@@ -233,7 +233,7 @@ class Setup_Backend_Mysql
     * 
     * @param string tableName
     */
-    public function renameTable(string $_tableName, string $_newName )
+    public function renameTable($_tableName, $_newName )
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` RENAME TO `" . SQL_TABLE_PREFIX . $_newName . "` ;";
         $this->execQueryVoid($statement);
@@ -246,7 +246,7 @@ class Setup_Backend_Mysql
     * @param Setup_Backend_Schema_Field declaration
     * @param int position of future column
     */    
-    public function addCol(string $_tableName, Setup_Backend_Schema_Field $_declaration , int $_position = NULL)
+    public function addCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_position = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
         
@@ -271,7 +271,7 @@ class Setup_Backend_Mysql
     * @param Setup_Backend_Schema_Field declaration
     * @param string old column/field name 
     */    
-    public function alterCol(string $_tableName, Setup_Backend_Schema_Field $_declaration, $_oldName = NULL)
+    public function alterCol($_tableName, Setup_Backend_Schema_Field $_declaration, $_oldName = NULL)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
         $oldName = $_oldName ;
@@ -290,7 +290,7 @@ class Setup_Backend_Mysql
     * @param string tableName
     * @param string column/field name 
     */    
-    public function dropCol(string $_tableName, string $_colName)
+    public function dropCol($_tableName, $_colName)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
         $this->execQueryVoid($statement);    
@@ -303,7 +303,7 @@ class Setup_Backend_Mysql
     * @param string tableName
     * @param Setup_Backend_Schema_Index declaration
     */       
-    public function addForeignKey(string $_tableName, Setup_Backend_Schema_Index $_declaration)
+    public function addForeignKey($_tableName, Setup_Backend_Schema_Index $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
                     . $this->getMysqlForeignKeyDeclarations($_declaration)  ;
@@ -316,7 +316,7 @@ class Setup_Backend_Mysql
     * @param string tableName
     * @param string foreign key name
     */     
-    public function dropForeignKey(string $_tableName, string $_name)
+    public function dropForeignKey($_tableName, $_name)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP FOREIGN KEY `" . $_name . "`" ;
         $this->execQueryVoid($statement);    
@@ -327,7 +327,7 @@ class Setup_Backend_Mysql
     * 
     * @param string tableName (there is just one primary key...)
     */         
-    public function dropPrimaryKey(string $_tableName)
+    public function dropPrimaryKey($_tableName)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP PRIMARY KEY " ;
         $this->execQueryVoid($statement);    
@@ -339,7 +339,7 @@ class Setup_Backend_Mysql
     * @param string tableName 
     * @param Setup_Backend_Schema_Index declaration
     */         
-    public function addPrimaryKey(string $_tableName, Setup_Backend_Schema_Index $_declaration)
+    public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getMysqlIndexDeclarations($_declaration);
@@ -352,7 +352,7 @@ class Setup_Backend_Mysql
     * @param string tableName 
     * @param Setup_Backend_Schema_Index declaration
     */     
-    public function addIndex(string $_tableName ,  Setup_Backend_Schema_Index$_declaration)
+    public function addIndex($_tableName ,  Setup_Backend_Schema_Index$_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getMysqlIndexDeclarations($_declaration);
@@ -365,7 +365,7 @@ class Setup_Backend_Mysql
     * @param string tableName 
     * @param string key name
     */    
-    public function dropIndex(string $_tableName, string $_indexName)
+    public function dropIndex($_tableName, $_indexName)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP INDEX `"  . $_indexName. "`" ;
         $this->execQueryVoid($statement);    
@@ -376,7 +376,7 @@ class Setup_Backend_Mysql
     * 
     * @param string statement
     */    
-    public function execQueryVoid(string $_statement)
+    public function execQueryVoid($_statement)
     {
         try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
@@ -391,7 +391,7 @@ class Setup_Backend_Mysql
     * @param string statement
     * @return stdClass object
     */       
-    public function execQuery(string $_statement)
+    public function execQuery($_statement)
     {
         try {
             $stmt = Zend_Registry::get('dbAdapter')->query($_statement);
