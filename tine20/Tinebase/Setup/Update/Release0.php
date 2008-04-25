@@ -14,13 +14,43 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Common
 {
     public function update_0()
     {
-	
+        // just show how it works
+        $tableDEF = array(
+        'XmlString' =>
+                '<table>
+                    <name>test_table</name>
+                    <version>1</version>
+                    <declaration>
+                        <field>
+                            <name>id</name>
+                            <type>integer</type>
+                            <autoincrement>true</autoincrement>
+                        </field>
+                        <field>
+                            <name>name</name>
+                            <type>text</type>
+                            <length>128</length>
+                            <notnull>true</notnull>
+                        </field>
+                        <index>
+                            <name>id</name>
+                            <primary>true</primary>
+                            <field>
+                                <name>id</name>
+                            </field>
+                        </index>
+                    </declaration>
+                </table>'
+        );
+                        
+        $this->_backend->createTable($tableDEF);
+        $this->_backend->dropTable('test_table');
     }
 
     public function update_1()
     {
 
-	    $this->validateTableVersion('application_rights', '1');
+        $this->validateTableVersion('application_rights', '1');
         
         $declaration = new Setup_Backend_Schema_Field();
         
