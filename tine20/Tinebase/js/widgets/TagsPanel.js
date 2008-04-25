@@ -56,7 +56,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.tags = [];
         this.recordTagsStore = new Ext.data.JsonStore({
             id: 'id',
-            fields: Tine.widgets.tags.Tag,
+            fields: Tine.Tinebase.Model.Tag,
             data: this.tags
         });
         
@@ -65,7 +65,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             id: 'id',
             root: 'results',
             totalProperty: 'totalCount',
-            fields: Tine.widgets.tags.Tag,
+            fields: Tine.Tinebase.Model.Tag,
             baseParams: {
                 method: 'Tinebase.getTags',
                 context: this.app,
@@ -289,8 +289,10 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     },this);
                     
                     if (!nameExists) {
-                        var newTag = new Tine.widgets.tags.Tag({
-                            name: value
+                        var newTag = new Tine.Tinebase.Model.Tag({
+                            name: value,
+                            description: '',
+                            color: '#FFFFFF'
                         });
                         this.recordTagsStore.add(newTag);
                     }
@@ -351,23 +353,6 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
     },
 
 });
-
-/**
- * Tine.widgets.tags.Tag
- * 
- * @constructor {Ext.data.Record}
- * Record definition of a tag
- */
-Tine.widgets.tags.Tag = Ext.data.Record.create([
-    {name: 'id'         },
-    {name: 'app'        },
-    {name: 'owner'      },
-    {name: 'name'       },
-    {name: 'type'       },
-    {name: 'description'},
-    {name: 'color'      },
-    {name: 'occurrence' },
-]);
 
 /**
  * Dialog for editing a tag itself

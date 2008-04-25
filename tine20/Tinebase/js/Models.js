@@ -54,3 +54,19 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'deleteGrant', type: 'boolean'},
     {name: 'adminGrant',  type: 'boolean'}
 ]);
+
+/**
+ * Model of a tag
+ * 
+ * @constructor {Ext.data.Record}
+ */
+Tine.Tinebase.Model.Tag = Ext.data.Record.create([
+    {name: 'id'         },
+    {name: 'app'        },
+    {name: 'owner'      },
+    {name: 'name'       },
+    {name: 'type'       },
+    {name: 'description'},
+    {name: 'color'      },
+    {name: 'occurrence' },
+]);
