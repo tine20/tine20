@@ -417,4 +417,93 @@ class Admin_Controller
         return $result;
     }
     
+    /**
+     * get list of tags
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Tag_Model_Tag
+     */
+    public function getTags($query, $sort, $dir, $start, $limit)
+    {
+        $filter = new Tinebase_Tags_Model_Filter(array(
+            'name'        => $query,
+            'type'        => Tinebase_Tags_Model_Tag::TYPE_SHARED
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        return Tinebase_Tags::getInstance()->searchTags($filter, $paging);
+    }
+   
+    /**
+     * fetch one tag identified by tagid
+     *
+     * @param int $_tagId
+     * @return Tinebase_Tag_Model_Tag
+     */
+    public function getTag($_tagId)
+    {
+        $tag = Tinebase_Tag::getInstance()->getTagById($_tagId);
+
+        /*if(!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access to contact denied');
+        }*/
+        
+        return $tag;            
+    }  
+
+   /**
+     * add new tag
+     *
+     * @param Tinebase_Tag_Model_Tag $_tag
+     * @param array $_tagMembers
+     * 
+     * @return Tinebase_Tag_Model_Tag
+     */
+    public function AddTag(Tinebase_Tag_Model_Tag $_tag, array $_tagMembers = array ())
+    {
+        $tag = Tinebase_Tag::getInstance()->addTag($_tag);
+        
+        if ( !empty($_tagMembers) ) {
+            Tinebase_Tag::getInstance()->setTagMembers($tag->getId(), $_tagMembers);
+        }
+
+        return $tag;            
+    }  
+
+   /**
+     * update existing tag
+     *
+     * @param Tinebase_Tag_Model_Tag $_tag
+     * @param array $_tagMembers
+     * 
+     * @return Tinebase_Tag_Model_Tag
+     */
+    public function UpdateTag(Tinebase_Tag_Model_Tag $_tag, array $_tagMembers = array ())
+    {
+        $tag = Tinebase_Tag::getInstance()->updateTag($_tag);
+        
+        Tinebase_Tag::getInstance()->setTagMembers($tag->getId(), $_tagMembers);
+
+        return $tag;            
+    }  
+    
+    /**
+     * delete multiple tags
+     *
+     * @param   array $_tagIds
+     * @return  array with success flag
+     */
+    public function deleteTags($_tagIds)
+    {        
+        return Tinebase_Tag::getInstance()->deleteTags($_tagIds);
+    } 
 }

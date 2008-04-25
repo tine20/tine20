@@ -468,34 +468,93 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     }
 
     /**
-     * Returns the structure of the initial tree for this application.
+     * get list of tags
      *
-     * This function returns the needed structure, to display the initial tree, after the the logoin.
-     * Additional tree items get loaded on demand.
-     *
-     * @return array
-     * 
-     * @todo    is this function @deprecated ?
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return array with results array & totalcount (int)
      */
-    public function getInitialTree()
+    public function getTags($query, $sort, $dir, $start, $limit)
     {
-        $treeNodes = array();
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $tags = Admin_Controller::getInstance()->getTags($query, $sort, $dir, $start, $limit);
 
-/*        $treeNode = new Tinebase_Ext_Treenode('Admin', 'applications', 'applications', 'Applications', TRUE);
-        //$treeNode->setIcon('apps/kaddressbook.png');
-        $treeNode->cls = 'treemain';
-        $treeNode->jsonMethod = 'Admin.getApplications';
-        $treeNode->dataPanelType = 'applications';
-        $treeNodes[] = $treeNode;
-
-        $treeNode = new Tinebase_Ext_Treenode('Admin', 'accesslog', 'accesslog', 'Access Log', TRUE);
-        //$treeNode->setIcon('apps/kaddressbook.png');
-        $treeNode->cls = 'treemain';
-        $treeNode->jsonMethod = 'Admin.getAccessLog';
-        $treeNode->dataPanelType = 'accesslog';
-        $treeNodes[] = $treeNode;
-*/
-        return $treeNodes;
+        $result['results'] = $tags->toArray();
+        $result['totalcount'] = count($tags);
+        
+        return $result;
     }
         
+    /**
+     * save tag data from edit form
+     *
+     * @param   string $tagData        json encoded tag data
+     * @param   string $tagMembers     json encoded array of tag members
+     * 
+     * @return  array with success, message, tag data and tag members
+     */
+    public function saveTag($tagData, $tagMembers)
+    {
+        $decodedTagData = Zend_Json::decode($tagData);
+        $decodedTagMembers = Zend_Json::decode($tagMembers);
+        
+        // unset if empty
+        if(empty($decodedTagData['id'])) {
+            unset($decodedTagData['id']);
+        }
+        
+        $tag = new Tinebase_Tag_Model_Tag();
+        
+        try {
+            $tag->setFromArray($decodedTagData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $tag->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        
+        if ( empty($tag->id) ) {
+            $tag = Admin_Controller::getInstance()->addTag($tag, $decodedTagMembers);
+        } else {
+            $tag = Admin_Controller::getInstance()->updateTag($tag, $decodedTagMembers);
+        }
+                 
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $tag->toArray(),
+                        'tagMembers'      => Admin_Controller::getInstance()->getTagMembers($tag->getId())
+        );
+        
+        return $result;
+        
+    }    
+        
+    /**
+     * delete multiple tags
+     *
+     * @param string $tagIds json encoded list of contactId's to delete
+     * @return array with success flag
+     */
+    public function deleteTags($tagIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $tagIds = Zend_Json::decode($tagIds);
+        
+        Admin_Controller::getInstance()->deleteTags($tagIds);
+
+        return $result;
+    }
 }

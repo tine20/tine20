@@ -167,6 +167,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $jsFiles = parent::getJsFilesToInclude();
         
         $jsFiles[] = self::_appendFileTime('Admin/js/Groups.js');
+        $jsFiles[] = self::_appendFileTime('Admin/js/Tags.js');
         
         return $jsFiles;
     }

@@ -1,3 +1,13 @@
+/*
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: TagsPanel.js 2156 2008-04-25 09:42:05Z nelius_weiss $
+ *
+ */
+ 
 Ext.namespace('Tine.Admin');
 
 Tine.Admin = function() {
@@ -25,28 +35,40 @@ Tine.Admin = function() {
         expanded: true,
         dataPanelType: 'groups' 
     },{
-        "text":"Applications",
-		"cls":"treemain",
-		"allowDrag":false,
-		"allowDrop":true,
-		"id":"applications",
-		"icon":false,
-		"children":[],
-		"leaf":null,
-		"expanded":true,
-		"dataPanelType":"applications"
+        text: "Applications",
+		cls: "treemain",
+		allowDrag: false,
+		allowDrop: true,
+		id: "applications",
+		icon: false,
+		children: [],
+		leaf: null,
+		expanded: true,
+		dataPanelType: "applications"
 	},{
-		"text":"Access Log",
-		"cls":"treemain",
-		"allowDrag":false,
-		"allowDrop":true,
-		"id":"accesslog",
-		"icon":false,
-		"children":[],
-		"leaf":null,
-		"expanded":true,
-		"dataPanelType":"accesslog"
-	}];
+		text :"Access Log",
+		cls :"treemain",
+		allowDrag :false,
+		allowDrop :true,
+		id :"accesslog",
+		icon :false,
+		children :[],
+		leaf :null,
+		expanded :true,
+		dataPanelType :"accesslog"
+	},{
+        text :"Shared Tags",
+        cls :"treemain",
+        iconCls: 'action_tag',
+        allowDrag :false,
+        allowDrop :true,
+        id :"sharedtags",
+        //icon :false,
+        children :[],
+        leaf :null,
+        expanded :true,
+        dataPanelType :"sharedtags"
+    }];
 
 	/**
      * creates the address grid
@@ -127,6 +149,16 @@ Tine.Admin = function() {
                     }
                     
                     break;
+                    
+                case 'sharedtags':
+                    if(currentToolbar !== false && currentToolbar.id == 'AdminTagsToolbar') {
+                        Ext.getCmp('AdminTagsGrid').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Admin.Tags.Main.show();
+                    }
+                    
+                    break;
+                    
             }
         }, this);
 
