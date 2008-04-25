@@ -206,7 +206,25 @@ Tine.Tinebase.MainScreen = function() {
 			id: 'applicationToolbar',
 			height: 26
 		});
+        // defualt app
+        applicationToolbar.on('render', function(){
+            var appPanel = Ext.getCmp('Addressbook_Tree');
+            if (appPanel) {
+                appPanel.expand();
+            }
+        });
 
+        var applicationArcordion = new Ext.Panel({
+            layout:'accordion',
+            layoutConfig: {
+                // layout-specific configs go here
+                titleCollapse: true,
+                animate: true,
+                activeOnTop: true,
+                hideCollapseTool: true
+            },
+            items: _getPanels()
+        });
         
 		var viewport = new Ext.Viewport({
 			layout: 'border',
@@ -275,12 +293,13 @@ Tine.Tinebase.MainScreen = function() {
 	            collapsible:true,
 	            containerScroll: true,
 	            collapseMode: 'mini',
-	            //layout: 'fit',
-				layout:'accordion',
+	            layout: 'fit',
+				//layout:'accordion',
 				defaults: {
 					// applied to each contained panel
 					// bodyStyle: 'padding:15px'
 				},
+                /*
 				layoutConfig: {
 					// layout-specific configs go here
 					titleCollapse: true,
@@ -288,9 +307,11 @@ Tine.Tinebase.MainScreen = function() {
 					activeOnTop: true,
 					hideCollapseTool: true
 				},
-				items: _getPanels()
+                */
+                items: applicationArcordion
+				//items: _getPanels()
 			}]
-		});		
+		});
     };
     
     /**
