@@ -211,7 +211,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             $pdfData = $this->render();
         } catch ( Zend_Pdf_Exception $e ) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString() );
-            throw new Exception ( "could not create pdf!");
+            echo "could not create pdf <br/>". $e->__toString();
+            exit();            
+            //throw new Exception ( "could not create pdf!");
         }
             
         
