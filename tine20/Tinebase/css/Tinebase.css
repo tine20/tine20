@@ -59,6 +59,9 @@ html, body {
 .action_selectGroup {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
+.action_tag {
+    background-image:url(../../images/oxygen/16x16/actions/rss-tag.png) !important;
+}
 
 /* ----- renderer ------------------------------------------------------------*/
 .renderer {
