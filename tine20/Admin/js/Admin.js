@@ -726,6 +726,16 @@ Tine.Admin.Applications.Main = function() {
 	 */
     var _showApplicationsGrid = function() 
     {
+        var ctxMenuGrid = new Ext.menu.Menu({
+            items: [
+                _action_enable,
+                _action_disable,
+                _action_disable,
+                _action_permissions
+            ]
+        });
+
+    	
         var ds_applications = _createApplicationaDataStore();
         
         var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
@@ -788,21 +798,42 @@ Tine.Admin.Applications.Main = function() {
         });
         
         Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications);
+        
+        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
 
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                _action_settings.setDisabled(true);
+                _action_permissions.setDisabled(false);
+            }
+            //var record = _grid.getStore().getAt(rowIndex);
+            ctxMenuGrid.showAt(_eventObject.getXY());
+        }, this);
+        
         grid_applications.on('rowclick', function(gridP, rowIndexP, eventP) {
             var rowCount = gridP.getSelectionModel().getCount();
             
-/*            if(rowCount < 1) {
-                action_edit.setDisabled(true);
-                action_delete.setDisabled(true);
+            if(rowCount < 1) {
+                _action_enable.setDisabled(true);
+                _action_disable.setDisabled(true);
+                _action_settings.setDisabled(true);
+                _action_permissions.setDisabled(true);
             } else if(rowCount == 1) {
-                action_edit.setDisabled(false);
-                action_delete.setDisabled(false);
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                _action_settings.setDisabled(true);
+                _action_permissions.setDisabled(false);
             } else {
-                action_edit.setDisabled(true);
-                action_delete.setDisabled(false);
-            } */
+                _action_enable.setDisabled(false);
+                _action_disable.setDisabled(false);
+                _action_settings.setDisabled(true);
+                _action_permissions.setDisabled(true);
+            } 
         });
+        
         
         grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
@@ -1524,7 +1555,7 @@ Tine.Admin.Accounts.Main = function() {
 	            }
 	        }, this);
 	                
-	        var grid_applications = new Ext.grid.GridPanel({
+	        var grid_accounts = new Ext.grid.GridPanel({
 	            id: 'AdminAccountsGrid',
 	            store: dataStore,
 	            cm: columnModel,
@@ -1537,9 +1568,9 @@ Tine.Admin.Accounts.Main = function() {
 	            border: false
 	        });
 	        
-	        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications);
+	        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_accounts);
 	
-	        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+	        grid_accounts.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
 	            _eventObject.stopEvent();
 	            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
 	                _grid.getSelectionModel().selectRow(_rowIndex);
@@ -1551,7 +1582,7 @@ Tine.Admin.Accounts.Main = function() {
 	            ctxMenuGrid.showAt(_eventObject.getXY());
 	        }, this);
 	        
-	        grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
+	        grid_accounts.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
 	            var record = _gridPar.getStore().getAt(_rowIndexPar);
 	            try {
 	                Tine.Admin.Accounts.Main.openAccountEditWindow(record.id);
@@ -1560,7 +1591,7 @@ Tine.Admin.Accounts.Main = function() {
 	            }
 	        });
 	        
-	        grid_applications.on('keydown', function(e){
+	        grid_accounts.on('keydown', function(e){
                  if(e.getKey() == e.DELETE && Ext.getCmp('AdminAccountsGrid').getSelectionModel().getCount() > 0){
                      this.deleteButtonHandler();
                  }
