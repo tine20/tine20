@@ -154,7 +154,7 @@ abstract class Tinebase_Group_Abstract
         }
         $defaultGroupName = ( isset($config->accountPrimaryGroup) ) ? $config->accountPrimaryGroup : 'Users' ;
         
-        $result = $this->_backend->getGroupByName($defaultGroupName);
+        $result = $this->getGroupByName($defaultGroupName);
         
         return $result;
     }
