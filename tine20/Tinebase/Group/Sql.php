@@ -274,7 +274,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
      */
-    public function getGroups($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {        
         $select = $this->groupsTable->select();
         

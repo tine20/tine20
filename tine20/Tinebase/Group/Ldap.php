@@ -186,7 +186,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Group_Model_Group
      */
-    public function getGroups($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {        
         if(!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
@@ -197,7 +197,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
         
-        $groups = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, $filter, array('cn','description','gidnumber'));
+        $groups = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->groupsDn, $filter, array('cn','description','gidnumber'), 'cn');
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Group_Model_Group');
         
