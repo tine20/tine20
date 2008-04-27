@@ -26,13 +26,17 @@ class Tinebase_Ldap extends Zend_Ldap
      * @param array $_attributes which fields to return
      * @return array
      */
-    public function fetchAll($_dn, $_filter= 'objectclass=*', array $_attributes = array())
+    public function fetchAll($_dn, $_filter= 'objectclass=*', array $_attributes = array(), $_order = NULL)
     {
         if(!is_resource($this->_resource)) {
             throw new Exception('not connected to ldap server');
         }
         
         $searchResult = @ldap_search($this->_resource, $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
+        
+        if($_order !== NULL) {
+            ldap_sort($this->_resource, $searchResult, $_order);
+        }
         
         if($searchResult === FALSE) {
             throw new Exception(ldap_error($this->_resource));
