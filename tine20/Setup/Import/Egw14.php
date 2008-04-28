@@ -155,6 +155,9 @@ class Setup_Import_Egw14
         // get contacts
         $contacts = $contactsTable->fetchAll();
 
+        // get categories
+        $categories = $this->getCategories();
+        
         echo "Import Contacts from table ".$tableName." ... <br/>";
         
         foreach($contacts as $contact) {
@@ -282,7 +285,6 @@ class Setup_Import_Egw14
             echo " ok.<br/>";
             
             // get categories -> tags
-            $categories = $this->getCategories();
             $catIds = explode ( ',', $contact->cat_id );
             $filter = new Tinebase_Tags_Model_Filter(array(
                 'name'        => '%',
