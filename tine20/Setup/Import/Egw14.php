@@ -137,9 +137,10 @@ class Setup_Import_Egw14
     }
     
     /**
-     * import the addressbook from revision 949
+     * import the addressbook from egw14
      *
-     * @param string $oldTableName [OPTIONAL]
+     * @param string $_oldTableName [OPTIONAL]
+     * @param int $useOldId [OPTIONAL]
      */
     public function importAddressbook( $_oldTableName = NULL, $useOldId = TRUE )
     {
@@ -149,23 +150,62 @@ class Setup_Import_Egw14
         // get contacts
         $contacts = $contactsTable->fetchAll();
 
-        // @todo get internal addressbook
-        //$internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Container::TYPE_INTERNAL);        
-        
         echo "Import Contacts from table ".$tableName." ... <br/>";
         
         foreach($contacts as $contact) {
 
             echo "importing " . $contact->n_given . " " . $contact->n_family . " ...";
+
+            // add container
+            if ( $contact->contact_owner > 0 ) {
+                // personal container for owner
+                try {
+                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Container::TYPE_PERSONAL);
+                } catch ( UnderflowException $e ) {
+                    $container = new Tinebase_Model_Container(array(
+                        'name' => 'Personal Contacts',
+                        'type' => Tinebase_Container::TYPE_PERSONAL,      
+                        'backend' => 'Sql',
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
+                    ));                    
+                }
+
+                Tinebase_Container::getInstance()->addGrants($container, 'user', $contact->contact_owner, array(
+                    Tinebase_Container::GRANT_ANY,
+                ), TRUE);
+                                
+            } else if ( $contact->contact_owner == -15 ) {
+                // default users group -> shared container
+                $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
+                try {
+                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Shared Contacts', Tinebase_Container::TYPE_SHARED);
+                } catch ( UnderflowException $e ) {
+                    $container = new Tinebase_Model_Container(array(
+                        'name' => 'Shared Contacts',
+                        'type' => Tinebase_Container::TYPE_SHARED,      
+                        'backend' => 'Sql',
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
+                    ));
+                    $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
+                    Tinebase_Container::getInstance()->addGrants($container, 'group', $userGroup, array(
+                        Tinebase_Container::GRANT_READ,
+                        Tinebase_Container::GRANT_ADD,
+                        Tinebase_Container::GRANT_EDIT,
+                        Tinebase_Container::GRANT_DELETE,
+                    ), TRUE);
+                }                
+            } else {
+                echo "skipped.<br/>";
+                continue;
+            }                   
+            $containerId = $container->getId();         
             
             // create contact record
             $tineContact = new Addressbook_Model_Contact ( array(
                 
                 'id'                    => ( $useOldId ) ? $contact->contact_id : 0,
-                'account_id'            => $contact->account_id,
-                        
-                //'owner'                 => $contact->contact_owner,
-                'owner'                 => 1,
+                'account_id'            => $contact->account_id,                        
+                'owner'                 => $containerId,
 
                 'n_family'              => ( empty($contact->n_family) ) ? 'imported' : $contact->n_family,
                 'n_fileas'              => ( empty($contact->n_fileas) ) ? 'imported' : $contact->n_fileas,
@@ -210,8 +250,10 @@ class Setup_Import_Egw14
                 'tel_pager'             => $contact->tel_pager,
                 'tel_work'              => $contact->tel_work,     
             
+                'tags'                  => array(),
+            
                 // no longer used?
-                // @todo    add these fields to the model?
+                /*
                 'cat_id'                => $contact->cat_id,
                 'geo'                   => $contact->contact_geo,
                 'label'                 => $contact->contact_label,
@@ -223,26 +265,17 @@ class Setup_Import_Egw14
                 'tel_prefer'            => $contact->tel_prefer,
                 'created_by'            => $contact->contact_creator,
                 'creation_time'         => new Zend_Date ( $contact->contact_created,Zend_Date::TIMESTAMP ),
-                'last_modified_by'      => $contact->contact_modifier,
-            
+                'last_modified_by'      => $contact->contact_modifier,            
                 //'calendar_uri'          => $contact->calendar_uri,
-                //'freebusy_uri'          => $contact->freebusy_uri,
-            
+                //'freebusy_uri'          => $contact->freebusy_uri,            
                 //jpegphoto ?
-                //deleted fields ?
-                
-                'tags'                  => array(),
+                */
                 ) 
             );
            
             $tineContact = Addressbook_Backend_Sql::getInstance()->addContact($tineContact);
             echo " ok.<br/>";
             
-            // @todo add container
-            // who is the owner ( -15 )? add correct owner !
-            //-> positive: user container            
-            //-> negative: group container    
-
             // get categories -> tags
             $categories = $this->getCategories();
             $catIds = explode ( ',', $contact->cat_id );
