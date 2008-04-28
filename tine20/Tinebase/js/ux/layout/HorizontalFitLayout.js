@@ -13,6 +13,7 @@ Ext.namespace('Ext.ux', 'Ext.ux.layout');
 /**
  * @class Ext.ux.layout.HorizontalFitLayout
  * @extends Ext.layout.ContainerLayout
+ * @description
  * <p>This is a base class for layouts that contain a single item that automatically expands horizontally to fill 
  * the horizontal dimenson of the layout's container.  This class is intended to be extended or created via the 
  * layout:'hfit' {@link Ext.Container#layout} config, and should generally not need to be created directly via 

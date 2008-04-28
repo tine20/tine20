@@ -21,11 +21,11 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
      items: [
         {
             xtype: 'panel'
-            html: '<p>This panel is always visable</p>'
+            html: 'This panel is always visable'
         },
         {
             xtype: 'panel'
-            html: '<p>This panel is colabsed by default</p>'
+            html: 'This panel is colabsed by default'
         }
      ]
  });
