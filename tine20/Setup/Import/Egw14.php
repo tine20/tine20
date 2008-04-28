@@ -32,13 +32,15 @@ class Setup_Import_Egw14
     public function __construct()
     {
         // set import user current account
+        // @todo make it work with ldap
         echo "adding import user<br/>";
-        $account = new Tinebase_Account_Model_Account(array(
+        /*$account = new Tinebase_Account_Model_Account(array(
             'accountId' => 777,
             'accountDisplayName' => 'import user',
             'accountLastName' => 'import',
             'accountFullName' => 'import user',
-        ));
+        ));*/
+        $account = Tinebase_Account::getInstance()->getFullAccountByLoginName('pschuele');
         Zend_Registry::set('currentAccount', $account);
     }
     
