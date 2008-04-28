@@ -42,6 +42,7 @@ class Setup_Import_Egw14
         ));*/
         $account = Tinebase_Account::getInstance()->getFullAccountByLoginName('pschuele');
         Zend_Registry::set('currentAccount', $account);
+        
     }
     
     /**
@@ -146,6 +147,8 @@ class Setup_Import_Egw14
      */
     public function importAddressbook( $_oldTableName = NULL, $useOldId = TRUE )
     {
+        @set_time_limit (120);  
+        
         $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'addressbook';
         $contactsTable = new Tinebase_Db_Table(array('name' => $tableName));
         
