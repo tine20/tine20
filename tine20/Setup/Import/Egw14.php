@@ -24,7 +24,28 @@ class Setup_Import_Egw14
      * @var string
      */
     protected $oldTablePrefix = "egw_";
+        
+    /**
+     * the constructor 
+     *
+     */
+    public function __construct()
+    {
+        // set import user current account
+        echo "adding import user<br/>";
+        $account = new Tinebase_Account_Model_Account(array(
+            'accountId' => 777,
+            'accountDisplayName' => 'import user',
+            'accountLastName' => 'import',
+            'accountFullName' => 'import user',
+        ));
+        Zend_Registry::set('currentAccount', $account);
+    }
     
+    /**
+     * all imports 
+     *
+     */
     public function import()
     {
         $this->importGroups();
@@ -126,23 +147,29 @@ class Setup_Import_Egw14
         $contactsTable = new Tinebase_Db_Table(array('name' => $tableName));
         
         // get contacts
-        $contacts = $contactsTable->fetchAll();        
+        $contacts = $contactsTable->fetchAll();
+
+        // @todo get internal addressbook
+        //$internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Container::TYPE_INTERNAL);        
         
-        echo "Import Contacts from table ".$tableName." ... ";
+        echo "Import Contacts from table ".$tableName." ... <br/>";
         
         foreach($contacts as $contact) {
+
+            echo "importing " . $contact->n_given . " " . $contact->n_family . " ...";
             
+            // create contact record
             $tineContact = new Addressbook_Model_Contact ( array(
                 
                 'id'                    => ( $useOldId ) ? $contact->contact_id : 0,
                 'account_id'            => $contact->account_id,
-                // @todo    who is the owner ( -15 )? add correct owner !
+                        
                 //'owner'                 => $contact->contact_owner,
                 'owner'                 => 1,
 
-                'n_family'              => $contact->n_family,
-                'n_fileas'              => $contact->n_fileas,
-                'n_fn'                  => $contact->n_fn,
+                'n_family'              => ( empty($contact->n_family) ) ? 'imported' : $contact->n_family,
+                'n_fileas'              => ( empty($contact->n_fileas) ) ? 'imported' : $contact->n_fileas,
+                'n_fn'                  => ( empty($contact->n_fn) ) ? 'imported' : $contact->n_fn,
             
                 'adr_one_countryname'   => $contact->adr_one_countryname,
                 'adr_one_locality'      => $contact->adr_one_locality,
@@ -203,15 +230,75 @@ class Setup_Import_Egw14
             
                 //jpegphoto ?
                 //deleted fields ?
+                
+                'tags'                  => array(),
                 ) 
             );
+           
+            $tineContact = Addressbook_Backend_Sql::getInstance()->addContact($tineContact);
+            echo " ok.<br/>";
             
-            Addressbook_Backend_Sql::getInstance()->addContact($tineContact);
-            
-            // @todo add categories / tags
+            // @todo add container
+            // who is the owner ( -15 )? add correct owner !
+            //-> positive: user container            
+            //-> negative: group container    
+
+            // get categories -> tags
+            $categories = $this->getCategories();
+            $catIds = explode ( ',', $contact->cat_id );
+            $filter = new Tinebase_Tags_Model_Filter(array(
+                'name'        => '%',
+                'application' => 'Addressbook',
+                //'owner'       => $owner,
+            ));
+            $paging = new Tinebase_Model_Pagination();
+                
+            $contactTags = new Tinebase_Record_RecordSet ('Tinebase_Tags_Model_Tag');
+            foreach ( $catIds as $catId ) {
+                $filter->name = $categories[$catId]->cat_name;
+                $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
+                if ( empty($tags) ) {
+                    $tag = new Tinebase_Tags_Model_Tag (array(
+                        'type'  => Tinebase_Tags_Model_Tag::TYPE_SHARED,
+                        'name'  => $categories[$catId]->cat_name,
+                    ));
+                    $tag = Tinebase_Tags::getInstance()->createTag($tag);
+                    $contactTags->addRecord($tag);
+                } else {
+                    $contactTags->addRecord(new Tinebase_Tags_Model_Tag($tags[0]));
+                }
+            }        
+                        
+            $tineContact->tags = $contactTags;
+            Tinebase_Tags::getInstance()->setTagsOfRecord($tineContact);
             
         }
         echo "done! got ".sizeof($contacts)." contacts.<br>";
         
-    }        
+    }   
+
+    /**
+     * get categories (-> tags)
+     *
+     * @param string $oldTableName [OPTIONAL]
+     * @return  array  categories
+     */
+    private function getCategories($_oldTableName = NULL)
+    {
+        $cats = array();
+        
+        // get old table data
+        $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'categories';
+        $table = new Tinebase_Db_Table(array('name' => $tableName));
+        $rows = $table->fetchAll();
+        
+        // fill array
+        $cats = array();
+        foreach ( $rows as $row ) {
+            $cats[$row->cat_id] = $row;
+        }
+        
+        return $cats;
+    }
+    
 }
