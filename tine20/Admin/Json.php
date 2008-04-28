@@ -510,7 +510,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             unset($decodedTagData['id']);
         }
         
-        $tag = new Tinebase_Tag_Model_Tag();
+        $tag = new Tinebase_Tags_Model_Tag();
         
         try {
             $tag->setFromArray($decodedTagData);

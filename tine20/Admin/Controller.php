@@ -425,7 +425,7 @@ class Admin_Controller
      * @param string $_dir
      * @param int $_start
      * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Tag_Model_Tag
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Tags_Model_Tag
      */
     public function getTags($query, $sort, $dir, $start, $limit)
     {
@@ -447,7 +447,7 @@ class Admin_Controller
      * fetch one tag identified by tagid
      *
      * @param int $_tagId
-     * @return Tinebase_Tag_Model_Tag
+     * @return Tinebase_Tags_Model_Tag
      */
     public function getTag($_tagId)
     {
@@ -463,12 +463,12 @@ class Admin_Controller
    /**
      * add new tag
      *
-     * @param Tinebase_Tag_Model_Tag $_tag
+     * @param Tinebase_Tags_Model_Tag $_tag
      * @param array $_tagMembers
      * 
-     * @return Tinebase_Tag_Model_Tag
+     * @return Tinebase_Tags_Model_Tag
      */
-    public function AddTag(Tinebase_Tag_Model_Tag $_tag, array $_tagMembers = array ())
+    public function AddTag(Tinebase_Tags_Model_Tag $_tag, array $_tagMembers = array ())
     {
         $tag = Tinebase_Tag::getInstance()->addTag($_tag);
         
@@ -482,12 +482,12 @@ class Admin_Controller
    /**
      * update existing tag
      *
-     * @param Tinebase_Tag_Model_Tag $_tag
+     * @param Tinebase_Tags_Model_Tag $_tag
      * @param array $_tagMembers
      * 
-     * @return Tinebase_Tag_Model_Tag
+     * @return Tinebase_Tags_Model_Tag
      */
-    public function UpdateTag(Tinebase_Tag_Model_Tag $_tag, array $_tagMembers = array ())
+    public function UpdateTag(Tinebase_Tags_Model_Tag $_tag, array $_tagMembers = array ())
     {
         $tag = Tinebase_Tag::getInstance()->updateTag($_tag);
         
