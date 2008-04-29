@@ -27,8 +27,8 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      * @var    Setup_Backend_Mysql
      * @access protected
      */
-    protected $object;
-
+	 
+	protected $_backend;
     /**
      * Runs the test methods of this class.
      *
@@ -49,14 +49,7 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Setup_Backend_Mysql;
-		
-		try {
-            $stmt = Zend_Registry::get('dbAdapter')->query('');
-        } catch (Zend_Db_Exception $e) {
-            var_dump($e);
-        }
-		
+		$this->_backend = Setup_Backend_Factory::factory(Setup_Backend_Factory::SQL);
 		
     }
 
@@ -68,240 +61,294 @@ class Setup_Backend_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    }
-
-    /**
-     * @todo Implement testCreateTable().
-     */
-    public function testCreateTable() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testApplicationExists().
-     */
-    public function testApplicationExists() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testTableExists().
-     */
-    public function testTableExists() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testTableVersionQuery().
-     */
-    public function testTableVersionQuery() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testApplicationVersionQuery().
-     */
-    public function testApplicationVersionQuery() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testAddTable().
-     */
-    public function testAddTable() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testExecInsertStatement().
-     */
-    public function testExecInsertStatement() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testDropTable().
-     */
-    public function testDropTable() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testRenameTable().
-     */
-    public function testRenameTable() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testAddCol().
-     */
-    public function testAddCol() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testAlterCol().
-     */
-    public function testAlterCol() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testDropCol().
-     */
-    public function testDropCol() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testAddForeignKey().
-     */
-    public function testAddForeignKey() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testDropForeignKey().
-     */
-    public function testDropForeignKey() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testDropPrimaryKey().
-     */
-    public function testDropPrimaryKey() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testAddPrimaryKey().
-     */
-    public function testAddPrimaryKey() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testAddIndex().
-     */
-    public function testAddIndex() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testDropIndex().
-     */
-    public function testDropIndex() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testExecQueryVoid().
-     */
-    public function testExecQueryVoid() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testExecQuery().
-     */
-    public function testExecQuery() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetMysqlDeclarations().
-     */
-    public function testGetMysqlDeclarations() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetMysqlIndexDeclarations().
-     */
-    public function testGetMysqlIndexDeclarations() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetMysqlForeignKeyDeclarations().
-     */
-    public function testGetMysqlForeignKeyDeclarations() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-}		
 	
+    }
 
+	public function testStringToMysqlStatement_001() 
+	{
+		$string ="
+			<field>
+				<name>id</name>
+				<type>integer</type>
+				<autoincrement>true</autoincrement>
+				<unsigned>true</unsigned>
+			</field>";
+			
+		$statement = "`id` int(11)  unsigned  auto_increment";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}
+	
+	public function testStringToMysqlStatement_002() 
+	{
+		$string ="
+			<field>
+				<name>id</name>
+				<autoincrement>true</autoincrement>
+			</field>";
+			
+		$statement = "`id` int(11)  unsigned  auto_increment";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}
+	
+	public function testStringToMysqlStatement_003() 
+	{
+		$string ="
+				<field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>25</length>
+                    <notnull>true</notnull>
+                </field>";
+			
+		$statement = "`name` varchar(25)  NOT NULL ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}
+	
+	public function testStringToMysqlStatement_004() 
+	{
+		$string ="
+				 <field>
+                    <name>status</name>
+                    <type>enum</type>
+                    <value>enabled</value>
+                    <value>disabled</value>
+                    <notnull>true</notnull>
+                </field>";
+			
+		$statement = "`status` enum('enabled','disabled')  NOT NULL ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}			
+	
+	public function testStringToMysqlStatement_005() 
+	{
+		$string ="
+				<field>
+                    <name>order</name>
+                    <type>integer</type>
+                    <length>11</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>";
+			
+		$statement = "`order` int(11)  unsigned  NOT NULL ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}		
+	
+	public function testStringToMysqlStatement_006() 
+	{
+		$string ="
+				
+                <field>
+                    <name>last_login</name>
+                    <type>datetime</type>
+                </field>";
+			
+		$statement = "`last_login` datetime ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_007() 
+	{
+		$string ="
+				
+                <field>
+                    <name>email_sent</name>
+                    <type>boolean</type>
+                    <default>0</default>
+                </field>";
+			
+		$statement = "`email_sent` tinyint default '1'";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_008() 
+	{
+		$string ="
+				<field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>false</notnull>
+                </field>";
+			
+		$statement = "`account_id` int(11)  unsigned ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_009() 
+	{
+		$string ="
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>";
+			
+		$statement = "`last_modified_time` datetime  NOT NULL ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_010() 
+	{
+		$string ="
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>";
+			
+		$statement = "`is_deleted` tinyint default '0' NOT NULL ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_011() 
+	{
+		$string ="
+				<field>
+                    <name>new_value</name>
+                    <type>clob</type>
+                </field>";
+			
+		$statement = "`new_value` text ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}		
+	
+	public function testStringToMysqlStatement_012() 
+	{
+		$string ="
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                </field>";
+			
+		$statement = "`created_by` int(11) ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_013() 
+	{
+		$string ="
+                <field>
+                    <name>account_id</name>
+                    <type>integer</type>
+                    <comment>comment</comment>
+                </field>";
+			
+		$statement = "`account_id` int(11) COMMENT 'comment'";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}
+	
+	public function testStringToMysqlStatement_014() 
+	{
+		$string ="
+               <field>
+                    <name>jpegphoto</name>
+                    <type>blob</type>
+                </field>";
+			
+		$statement = "`jpegphoto` longblob ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+	
+	public function testStringToMysqlStatement_015() 
+	{
+		$string ="
+                <field>
+                    <name>private</name>
+                    <type>integer</type>
+                    <default>0</default>
+                    <length>4</length>
+                </field>";
+			
+		$statement = "`private` tinyint(1) default '0'";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}
+	
+	public function testStringToMysqlStatement_016() 
+	{
+		$string ="
+	            <field>
+                    <name>created</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>";
+			
+		$statement = "`created` datetime  NOT NULL ";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}		
+	
+	public function testStringToMysqlStatement_017() 
+	{
+		$string ="
+               <field>
+                    <name>price</name>
+                    <type>decimal</type>
+                    <value>12,2</value>
+                    <default>0</default>
+                </field>";
+			
+		$statement = "`price` decimal (12,2) default '0'";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}
+	
+	public function testStringToMysqlStatement_018() 
+	{
+		$string ="
+               <field>
+                    <name>leadtype_translate</name>
+                    <type>integer</type>
+                    <value>4</value>
+                    <default>1</default>
+                </field>";
+			
+		$statement = "`leadtype_translate` int(11) default '1'";	
+		
+		$field = Setup_Backend_Schema_Field_Factory::factory('String', $string);
+		$this->assertEquals($statement, $this->_backend->getFieldDeclarations($field));
+	}	
+}		
+	 
+
+			
+				 
+				 
+				
+				
 if (PHPUnit_MAIN_METHOD == 'Setup_Backend_MysqlTest::main') {
     Setup_Backend_MysqlTest::main();
 }
