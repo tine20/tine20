@@ -24,7 +24,27 @@ class Setup_Import_Egw14
      * @var string
      */
     protected $oldTablePrefix = "egw_";
-        
+            
+    /**
+     * country mapping
+     * 
+     * @var array
+     * @todo    add more countries
+     */
+    protected $countryMapping = array(
+        "ÖSTERREICH" => "AT",
+        "BELGIEN" => "BE",
+        "DEUTSCHLAND" => "DE",
+        "FRANKREICH" => "FR",
+        "GERMANY" => "DE",
+        "LUXEMBURG" => "LU",
+        "NIEDERLANDE" => "NL",
+        "SCHWEIZ" => "CH",
+        "SLOVAKEI" => "SK",
+        "SPANIEN" => "ES",
+        "VEREINIGTE STAATEN VON AMERIKA" => "US",
+    );
+            
     /**
      * the constructor 
      *
@@ -203,8 +223,6 @@ class Setup_Import_Egw14
             }                   
             $containerId = $container->getId();         
             
-            // @todo    import iso code in countrynames (DEUTSCHLAND -> DE)
-            
             // create contact record
             $tineContact = new Addressbook_Model_Contact ( array(
                 
@@ -216,13 +234,13 @@ class Setup_Import_Egw14
                 'n_fileas'              => ( empty($contact->n_fileas) ) ? 'imported' : $contact->n_fileas,
                 'n_fn'                  => ( empty($contact->n_fn) ) ? 'imported' : $contact->n_fn,
             
-                'adr_one_countryname'   => $contact->adr_one_countryname,
+                'adr_one_countryname'   => ( isset($this->countryMapping[$contact->adr_one_countryname]) ) ? $this->countryMapping[$contact->adr_one_countryname] : "",
                 'adr_one_locality'      => $contact->adr_one_locality,
                 'adr_one_postalcode'    => $contact->adr_one_postalcode,
                 'adr_one_region'        => $contact->adr_one_region,
                 'adr_one_street'        => $contact->adr_one_street,
                 'adr_one_street2'       => $contact->adr_one_street2,
-                'adr_two_countryname'   => $contact->adr_two_countryname,
+                'adr_two_countryname'   => ( isset($this->countryMapping[$contact->adr_two_countryname]) ) ? $this->countryMapping[$contact->adr_two_countryname] : "",
                 'adr_two_locality'      => $contact->adr_two_locality,
                 'adr_two_postalcode'    => $contact->adr_two_postalcode,
                 'adr_two_region'        => $contact->adr_two_region,
