@@ -86,6 +86,11 @@ Tine.Tinebase.initFramework = function() {
 			}
         }, this);
         
+        /**
+         * Exceptions which come to the client signal a software failure.
+         * So we display the message and trace here for the devs.
+         * @todo In production mode there should be a 'report bug' wizzard here
+         */
         Ext.Ajax.on('requestexception', function(connection, response, options){
 			//connection.purgeListeners();
 
@@ -95,12 +100,33 @@ Tine.Tinebase.initFramework = function() {
             }
             
             var data = Ext.util.JSON.decode(response.responseText);
-            Ext.Msg.show({
-                title: response.statusText,
-                msg: data.msg,
-                icon: Ext.MessageBox.WARNING,
-                buttons: Ext.MessageBox.OK
+            var trace = '';
+            for (var i=0,j=data.trace.length; i<j; i++) {
+                trace += (data.trace[i].file ? data.trace[i].file : '[internal function]') +
+                         (data.trace[i].line ? '(' + data.trace[i].line + ')' : '') + ': ' +
+                         (data.trace[i]['class'] ? '<b>' + data.trace[i]['class'] + data.trace[i]['type'] + '</b>' : '') +
+                         '<b>' + data.trace[i]['function'] + '</b>' +
+                        '(' + (data.trace[i]['args'][0] ? data.trace[i]['args'][0] : '') + ')<br/>';
+            }
+
+            var windowHeight = 600;
+            if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                windowHeight = Ext.getBody().getHeight(true) * 0.7;
+            }
+            var win = new Ext.Window({
+                width: 800,
+                height: windowHeight,
+                autoScroll: true,
+                title: data.msg,
+                html: trace,
+                buttons: [ new Ext.Action({
+                    text: 'ok',
+                    handler: function(){ win.close(); }
+                })],
+                 buttonAlign: 'center'
             });
+            
+            win.show();
             
         }, this);
     };
