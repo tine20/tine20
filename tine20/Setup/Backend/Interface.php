@@ -24,7 +24,7 @@ interface Setup_Backend_Interface
      *
      * @param object $_table xml stream
      */
-    public function createTable(Setup_Schema_Table_Abstract $_table);
+    public function createTable(Setup_Backend_Schema_Table_Abstract $_table);
     
     
     /**

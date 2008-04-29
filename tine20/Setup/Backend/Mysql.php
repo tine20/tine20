@@ -30,7 +30,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      *
      * @param object $_table xml stream
      */
-    public function createTable(Setup_Schema_Table_Abstract  $_table)
+    public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
     {
         $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
         $statementSnippets = array();
