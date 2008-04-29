@@ -10,17 +10,17 @@
  */
 
  
- class Setup_Backend_Schema_Table_String extends Setup_Backend_Schema_Table_Abstract
+ class Setup_Backend_Schema_Index_String extends Setup_Backend_Schema_Index_Abstract
  {
-	public function __construct($_tableDefinition)
+	public function __construct($_definition)
     {
         try {
-            $xmlObject = new SimpleXMLElement($_tableDefinition);
+            $xmlObject = new SimpleXMLElement($_definition);
         } catch (Exception $e) {
             echo $e->getMessage(); 
             exit;
         }
-        $temp = Setup_Backend_Schema_Table_Factory::factory('Xml', $xmlObject);
+        $temp = Setup_Backend_Schema_Index_Factory::factory('Xml', $xmlObject);
 		
 		foreach ($temp as $key => $val) {
 			$this->$key = $val;

@@ -53,7 +53,4 @@
         }
     }
     
-    public function setFields($_fieldDefinition)
-    {
-    }    
 }

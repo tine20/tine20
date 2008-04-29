@@ -96,7 +96,7 @@ abstract class Setup_Backend_Schema_Field_Abstract
     public $unique;
     
     
-    abstract protected function _setField($_declaration);
+    //abstract protected function _setField($_declaration);
     
     /**
      * homogenize key definition from database and XML
@@ -122,7 +122,8 @@ abstract class Setup_Backend_Schema_Field_Abstract
     public function toArray()
     {
         return array('name'=> $this->name, 
-                //    'length' => (int) $this->length ,
+					'type' => $this->type,
+                    'length' => (int) $this->length ,
                     'value' => $this->value,
                     'mul' => $this->mul,
                     'primary' => $this->primary,

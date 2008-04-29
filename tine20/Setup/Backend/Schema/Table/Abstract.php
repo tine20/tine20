@@ -65,14 +65,6 @@ abstract class Setup_Backend_Schema_Table_Abstract
     
     
     
-    abstract public function setFields($_definition);
-    
-    abstract public function setIndices($_definition);
-    
-    
-    
-    
-    
     /**
      * add one field to the table definition
      *
