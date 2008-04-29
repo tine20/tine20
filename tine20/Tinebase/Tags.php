@@ -17,7 +17,6 @@
  * NOTE: History loging of tags 
  * @todo work out /apply transaction concept!
  * @todo check/manage contexts
- * @todo should rights for managing tags be considered in this class?
  */
 class Tinebase_Tags
 {
@@ -129,13 +128,14 @@ class Tinebase_Tags
     
     /**
      * Creates a single tag
-     * @todo Check if right to add shared tag is given else throw exception
      * 
      * @param  Tinebase_Tags_Model_Tag
      * @return Tinebase_Tags_Model_Tag
      */
     public function createTag(Tinebase_Tags_Model_Tag $_tag)
     {
+        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        
         $newId = $_tag->generateUID();
         $_tag->setId($newId);
         $_tag->occurrence = 0;
@@ -144,7 +144,6 @@ class Tinebase_Tags
         
         switch ($_tag->type) {
             case Tinebase_Tags_Model_Tag::TYPE_PERSONAL:
-                $currentAccountId = Zend_Registry::get('currentAccount')->getId();
                 $_tag->owner = $currentAccountId;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
                 $right = new Tinebase_Tags_Model_Right(array(
@@ -157,6 +156,11 @@ class Tinebase_Tags
                 $this->setRights($right);
                 break;
             case Tinebase_Tags_Model_Tag::TYPE_SHARED:
+                if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', 
+                    $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
+                        throw new Exception('Your are not allowed to create a shared tag!');
+                }
+                
                 $_tag->owner = 0;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
                 $right = new Tinebase_Tags_Model_Right(array(
@@ -181,26 +185,41 @@ class Tinebase_Tags
         return $tags[0];
     }
     
-    
+    /**
+     * updates a single tag
+     * 
+     * @param  Tinebase_Tags_Model_Tag
+     * @return Tinebase_Tags_Model_Tag
+     */
     public function updateTag(Tinebase_Tags_Model_Tag $_tag)
     {
-        $tagId = $_tag->getId();
-        if (strlen($tagId) != 40) {
-            throw new Exception('Could not update non-existing tag');
+        $currentAccountId = Zend_Registry::get('currentAccount')->getId();
+        $manageSharedTagsRight = Tinebase_Acl_Rights::getInstance()
+            ->hasRight('Tinebase', $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
+        
+        if ( ($_tag->type == Tinebase_Tags_Model_Tag::TYPE_PERSONAL && $_tag->owner == $currentAccountId) ||
+             ($_tag->type == Tinebase_Tags_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
+                 
+            $tagId = $_tag->getId();
+            if (strlen($tagId) != 40) {
+                throw new Exception('Could not update non-existing tag');
+            }
+            
+            $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
+                'type'               => $_tag->type,
+                'owner'              => $_tag->owner,
+                'name'               => $_tag->name,
+                'description'        => $_tag->description,
+                'color'              => $_tag->color,
+                'last_modified_by'   => $currentAccountId,
+                'last_modified_time' => Zend_Date::now()->getIso()
+            ), $this->_db->quoteInto('id = ?', $tagId));
+            
+            $tags = $this->getTagsById($tagId);
+            return $tags[0];
+        } else {
+            throw new Exception('Your are not allowed to update this tag');
         }
-        
-        $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
-            'type'               => $_tag->type,
-            'owner'              => $_tag->owner,
-            'name'               => $_tag->name,
-            'description'        => $_tag->description,
-            'color'              => $_tag->color,
-            'last_modified_by'   => Zend_Registry::get('currentAccount')->getId(),
-            'last_modified_time' => Zend_Date::now()->getIso()
-        ), $this->_db->quoteInto('id = ?', $tagId));
-        
-        $tags = $this->getTagsById($tagId);
-        return $tags[0];
     }
     
     /**
@@ -356,8 +375,6 @@ class Tinebase_Tags
     
     /**
      * Sets all given tag rights
-     * @todo check for tag admin right in case of shared tag && owner in case of 
-     * personal tag!
      * 
      * @param Tinebase_Record_RecordSet|Tinebase_Tags_Model_Right
      * @return void
