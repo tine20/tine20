@@ -10,7 +10,7 @@
  * @version     $Id$
  */
 
-class Crm_Setup_Update_Release0 extends Setup_Update_Common
+class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     public function update_0()
     {
@@ -142,5 +142,4 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Common
         $this->setTableVersion('application_rights', '2');
         $this->setApplicationVersion('Tinebase', '0.2');
     }
-
 }
