@@ -508,11 +508,10 @@ Tine.Addressbook.Main = {
 
     show: function(_node) 
     {
-    	this.initComponent();
-    	
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Addressbook_Contacts_Toolbar') {
+            this.initComponent();
             this.displayContactsToolbar();
             this.displayContactsGrid();
             this.updateMainToolbar();
