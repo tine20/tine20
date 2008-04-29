@@ -22,7 +22,6 @@
         }
         $temp = Setup_Backend_Schema_Table_Factory::factory('Xml', $xmlObject);
 		
-		$i = 0; 
 		foreach ($temp as $key => $val) {
 			$this->$key = $val;
 		}

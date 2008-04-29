@@ -15,20 +15,16 @@
  
     public function __construct($_tableDefinition = NULL)
     {
-		$this->name = (string) $_tableDefinition->name;
+		$this->name    = (string) $_tableDefinition->name;
 		$this->comment = (string) $_tableDefinition->comment;
 		$this->version = (string) $_tableDefinition->version;
-		$i = 0;
-		while (isset($_tableDefinition->declaration->field[$i])){
-			$this->addField(Setup_Backend_Schema_Field_Factory::factory('Xml', $_tableDefinition->declaration->field[$i]));
-			//echo "." . $_tableDefinition->declaration->field[$i]->name;
-			$i++;
-		}        
-		$i = 0;
+		
+		foreach ($_tableDefinition->declaration->field as $field){
+			$this->addField(Setup_Backend_Schema_Field_Factory::factory('Xml', $field));
+		}
 
 		foreach ($_tableDefinition->declaration->index as $index){
 			$this->addIndex(Setup_Backend_Schema_Index_Factory::factory('Xml', $index));
-			
 		}
 	}    
     
