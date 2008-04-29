@@ -36,6 +36,11 @@ class Tinebase_Acl_Rights
     const RUN = 'run';
     
     /**
+     * the right to manage shared tags
+     */
+    const MANAGE_SHARED_TAGS = 'manage_shared_tags';
+    
+    /**
      * the Zend_Dd_Table object
      *
      * @var Tinebase_Db_Table
