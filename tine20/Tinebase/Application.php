@@ -285,7 +285,7 @@ class Tinebase_Application
             
             $allRights = $this->getAllRights($_applicationId); 
             foreach ( $allRights as $key ) {
-                if ( $right[$key] === TRUE ) {
+                if ( isset($right[$key]) && $right[$key] === TRUE ) {
                     unset ( $right['id'] );
                     $right['right'] = $key;
                     $tineRight = new Tinebase_Acl_Model_Right ( $right );
