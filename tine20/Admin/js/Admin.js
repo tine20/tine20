@@ -775,7 +775,7 @@ Tine.Admin.Applications.Main = function() {
                 _action_enable.setDisabled(true);
                 _action_disable.setDisabled(true);
                 _action_settings.setDisabled(true);            	
-                _action_permissions.setDisabled(true);
+                _action_permissions.setDisabled(false);
             } else {
                 _action_enable.setDisabled(false);
                 _action_disable.setDisabled(false);
@@ -849,6 +849,8 @@ Tine.Admin.Applications.Main = function() {
         
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
+            Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 700, 350);
+            /*
             if ( record.data.name != 'Tinebase' ) {
                 try {
                    Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 700, 350);
@@ -856,6 +858,7 @@ Tine.Admin.Applications.Main = function() {
                 //  alert(e);
                 }
             }
+            */
         });
         
         return;
@@ -1133,11 +1136,12 @@ Tine.Admin.Applications.EditPermissionsDialog = {
         // add all available application rights to column model
         var columns = [];
         for (var i = 0; i < _allRights.length; i++) {
+        	var colWidth = ( _allRights[i].length > 7 ) ? _allRights[i].length*8 : 55; 
             columns.push(
                 new Ext.ux.grid.CheckColumn({
                     header: _allRights[i],
                     dataIndex: _allRights[i],
-                    width: 55
+                    width: colWidth
                 })            
             );
         }

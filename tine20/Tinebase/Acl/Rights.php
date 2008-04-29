@@ -294,7 +294,13 @@ class Tinebase_Acl_Rights
      */
     public function getAllApplicationRights($_applicationId)
     {
-        $allRights = array ( self::RUN, self::ADMIN );
+        // check if tinebase application
+        $application = Tinebase_Application::getInstance()->getApplicationById($_applicationId);
+        if ( $application->name === 'Tinebase' ) {
+            $allRights = array ( self::MANAGE_SHARED_TAGS );
+        } else {
+            $allRights = array ( self::RUN, self::ADMIN );
+        }
         
         return $allRights;
     }
