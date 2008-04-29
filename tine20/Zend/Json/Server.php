@@ -228,8 +228,9 @@ class Zend_Json_Server extends Zend_Server_Abstract implements Zend_Server_Inter
 		$error['code'] = 404;
 		
 		if ($exception instanceof Exception) {
-			$error['msg'] = $exception->getMessage();
-			$error['code'] = $exception->getCode();
+			$error['msg']   = $exception->getMessage();
+			$error['code']  = $exception->getCode();
+			$error['trace'] = $exception->getTrace();
 		} elseif (!is_null($exception)) {
 			$error['msg'] = $exception;
 		}
