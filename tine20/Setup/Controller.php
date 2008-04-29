@@ -40,29 +40,15 @@ class Setup_Controller
         
         #switch ($this->_config->database->database) {
         #    case('mysql'):
-                $this->_backend = new Setup_Backend_Mysql();
+                $this->_backend = Setup_Backend_Factory::factory(Setup_Backend_Factory::SQL);
         #        break;
         #    
         #    default:
         #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
         #}        
     }
-	
-	
-	/** 
-	 *  compares XML-Definitions with database schema
-	 */
-	public function TINECheck()
-	{
-		// collect every database table belonging to TINE 2.0
-		
-		
-		// collect every xml storage
-		
-		
-		// find (hopefully none) differences
- 	
-	}
+    
+    
 
     /**
      * initializes the logger
@@ -189,7 +175,8 @@ class Setup_Controller
         // just insert tables
         $createdTables = array();
         if(isset($_xml->tables)) {
-            foreach ($_xml->tables[0] as $table) {
+            foreach ($_xml->tables[0] as $tableXML) {
+                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                 if (false == $this->_backend->tableExists($table->name)) {
                     try {
                         $this->_backend->createTable($table);
@@ -239,28 +226,49 @@ class Setup_Controller
         
         if (!$this->_backend->applicationExists($xml->name)) {
             $this->addApplication($xml);
-        } else {
-            $this->updateApplication($xml->name, $xml->version);
         }
     }
     
     /**
-     * parses the xml stream and creates the tables if needed
+     * parses the xml stream and creates the tables if needed LIMITED TO CHOOSEN ONES
      *
      * @param string $_file path to xml file
      */
     public function parseFileForUpdate($_applicationName)
     {
+    
         $setupXML = dirname(__FILE__) . '/../' . ucfirst($_applicationName) . '/Setup/setup.xml';
-        
+      
         if(!file_exists($setupXML)) {
             throw new Exception(ucfirst($_applicationName) . '/Setup/setup.xml not foud');
         }
         
         $xml = simplexml_load_file($setupXML);
-        
+       
         return $xml;
     }
+    
+    public function checkUpdate(Tinebase_Model_Application $_application)  
+    {
+        $xmlTables = $this->parseFileForUpdate($_application->name);
+        if(isset($xmlTables->tables)) {
+            foreach ($xmlTables->tables[0] as $tableXML) {
+                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                
+                if (true == $this->_backend->tableExists($table->name)) {
+                
+                    try {
+                        $this->_backend->checkTable($table);
+                    } catch (Exception $e) {
+                        echo $e->getMessage();
+                    }
+                } else {
+                    throw new Exception ('Table ' . $table->name . ' for application' . $_application->name . " does not exists. \n<strong>Update broken</strong>");
+                }
+            }
+        }
+    }
+    
     
     /**
      * compare versions
@@ -282,6 +290,12 @@ class Setup_Controller
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_updateTo)
     {
+       try {
+            $this->checkUpdate($_application);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+     
         switch(version_compare($_application->version, $_updateTo)) {
             case -1:
                 echo "Updating " . $_application->name . " from " . $_application->version . " to $_updateTo<br>";
@@ -292,7 +306,7 @@ class Setup_Controller
                 $minor = $fromMinorVersion;
                
                 for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-				    if(file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')){
+                    if(file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')){
                         $className = ucfirst($_application->name) . '_Setup_Update_Release' . $major;
                     
                         $update = new $className($this->_backend);
@@ -310,6 +324,12 @@ class Setup_Controller
                         //reset minor version to 0
                         $minor = 0;
                     }
+                }
+
+                try {
+                    $this->checkUpdate($_application);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
                 }
                 
                 echo "<strong> Updated " . $_application->name . " successfully to " .  $_updateTo . "</strong><br>";

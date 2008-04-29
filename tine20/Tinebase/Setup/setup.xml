@@ -341,9 +341,7 @@
                 </field>
                 <field>
                     <name>email_sent</name>
-                    <type>integer</type>
-                    <length>1</length>
-                    <unsigned>true</unsigned>
+                    <type>boolean</type>
                     <default>0</default>
                 </field>
                 <index>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>0.2</version>
+    <version>0.3</version>
     <order>10</order>
     <tables>
         <table>
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -19,7 +19,7 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-					<comment>unsure, whether this is a foreign key, or not</comment>
+                    <comment>unsure, whether this is a foreign key, or not</comment>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>
@@ -382,7 +382,7 @@
                         <name>org_name</name>
                     </field>
                 </index>
-				<index>
+                <index>
                     <name>addressbook_container_id</name>
                     <field>
                         <name>owner</name>
