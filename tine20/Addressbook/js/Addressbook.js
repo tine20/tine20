@@ -4,6 +4,19 @@ Tine.Addressbook = {
 
     getPanel: function()
     {
+        var accountBackend = Tine.Tinebase.Registry.get('accountBackend');
+        if (accountBackend == 'Sql') {
+            var internalContactsleaf = {
+                text: "Internal Contacts",
+                cls: "file",
+                containerType: 'internalContainer',
+                id: "internal",
+                children: [],
+                leaf: false,
+                expanded: true
+            }
+        }
+        
         var treePanel =  new Tine.widgets.container.TreePanel({
             id: 'Addressbook_Tree',
             iconCls: 'AddressbookTreePanel',
@@ -12,15 +25,7 @@ Tine.Addressbook = {
             folderName: 'addressbook',
             appName: 'Addressbook',
             border: false,
-            extraItems:[{
-	            text: "Internal Contacts",
-	            cls: "file",
-	            containerType: 'internalContainer',
-	            id: "internal",
-	            children: [],
-	            leaf: false,
-	            expanded: true
-	        }] 
+            extraItems: internalContactsleaf ? internalContactsleaf : [] 
         });
         
         treePanel.on('click', function(_node, _event) {
