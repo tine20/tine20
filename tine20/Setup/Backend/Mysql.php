@@ -15,7 +15,7 @@
  *
  * @package     Setup
  */
-class Setup_Backend_Mysql
+class Setup_Backend_Mysql extends Setup_Backend_Abstract
 {
     public $DBMS = 'mysql';
     private $_config = '';
@@ -30,22 +30,22 @@ class Setup_Backend_Mysql
      *
      * @param object $_table xml stream
      */
-    public function createTable($_table)
+    public function createTable(Setup_Schema_Table_Abstract  $_table)
     {
         $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
         $statementSnippets = array();
      
         foreach ($_table->fields as $field) {
             if(isset($field->name)) {
-               $statementSnippets[] = $this->getMysqlDeclarations($field);
+               $statementSnippets[] = $this->getFieldDeclarations($field);
             }
         }
 
         foreach ($_table->indices as $index) {
             if ($index->foreign) {
-               $statementSnippets[] = $this->getMysqlForeignKeyDeclarations($index);
+               $statementSnippets[] = $this->getForeignKeyDeclarations($index);
             } else {
-               $statementSnippets[] = $this->getMysqlIndexDeclarations($index);
+               $statementSnippets[] = $this->getIndexDeclarations($index);
             }
         }
 
@@ -329,7 +329,7 @@ class Setup_Backend_Mysql
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
         
-        $statement .= $this->getMysqlDeclarations($_declaration);
+        $statement .= $this->getFieldDeclarations($_declaration);
         
         if($_position != NULL) {
             if ($_position == 0) {
@@ -359,7 +359,7 @@ class Setup_Backend_Mysql
             $oldName = SQL_TABLE_PREFIX . $_declaration->name;
         }
         
-        $statement .= " `" . $oldName .  "` " . $this->getMysqlDeclarations($_declaration) ;
+        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration) ;
         $this->execQueryVoid($statement);    
     }
     
@@ -385,7 +385,7 @@ class Setup_Backend_Mysql
     public function addForeignKey($_tableName, Setup_Backend_Schema_Index $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
-                    . $this->getMysqlForeignKeyDeclarations($_declaration)  ;
+                    . $this->getForeignKeyDeclarations($_declaration)  ;
         $this->execQueryVoid($statement);    
     }
 
@@ -421,7 +421,7 @@ class Setup_Backend_Mysql
     public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
-                    . $this->getMysqlIndexDeclarations($_declaration);
+                    . $this->getIndexDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
  
@@ -434,7 +434,7 @@ class Setup_Backend_Mysql
     public function addIndex($_tableName ,  Setup_Backend_Schema_Index$_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
-                    . $this->getMysqlIndexDeclarations($_declaration);
+                    . $this->getIndexDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
     
@@ -488,7 +488,7 @@ class Setup_Backend_Mysql
      * @return string
      */
 
-    public function getMysqlDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
     {
         $definition = '`' . $_field->name . '`';
 
@@ -586,7 +586,7 @@ class Setup_Backend_Mysql
      * @param Setup_Backend_Schema_Index key
      * @return string
      */
-    public function getMysqlIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
+    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {    
         $snippet = '';
         $keys = array();
@@ -623,7 +623,7 @@ class Setup_Backend_Mysql
      * @return string
      */
 
-    public function getMysqlForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
+    public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {
         $snippet = '';
         $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY';
