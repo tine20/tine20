@@ -72,6 +72,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
             
             var initialRowConfig = this.items[i];
             var rowConfig = {
+                border: false,
                 layout: 'column',
                 items: [],
             };
@@ -84,6 +85,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                     labelAlign: this.labelAlign,
                     defaults: this.formDefaults,
                     bodyStyle: 'padding-right: 5px;',
+                    border: false,
                     items: column
                 });
             }
