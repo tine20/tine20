@@ -28,19 +28,13 @@ class Setup_Import_Egw14
     /**
      * the constructor 
      *
+     * @param   string $_importAccountName [OPTIONAL]
      */
-    public function __construct()
+    public function __construct( $_importAccountName = 'tine20admin' )
     {
         // set import user current account
-        // @todo make it work with ldap
         echo "adding import user<br/>";
-        /*$account = new Tinebase_Account_Model_Account(array(
-            'accountId' => 777,
-            'accountDisplayName' => 'import user',
-            'accountLastName' => 'import',
-            'accountFullName' => 'import user',
-        ));*/
-        $account = Tinebase_Account::getInstance()->getFullAccountByLoginName('pschuele');
+        $account = Tinebase_Account::getInstance()->getFullAccountByLoginName($_importAccountName);
         Zend_Registry::set('currentAccount', $account);
         
     }
@@ -175,7 +169,8 @@ class Setup_Import_Egw14
                         'type' => Tinebase_Container::TYPE_PERSONAL,      
                         'backend' => 'Sql',
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
-                    ));                    
+                    ));             
+                    $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);  
                 }
 
                 Tinebase_Container::getInstance()->addGrants($container, 'user', $contact->contact_owner, array(
@@ -207,6 +202,8 @@ class Setup_Import_Egw14
                 continue;
             }                   
             $containerId = $container->getId();         
+            
+            // @todo    import iso code in countrynames (DEUTSCHLAND -> DE)
             
             // create contact record
             $tineContact = new Addressbook_Model_Contact ( array(
@@ -285,33 +282,36 @@ class Setup_Import_Egw14
             echo " ok.<br/>";
             
             // get categories -> tags
-            $catIds = explode ( ',', $contact->cat_id );
-            $filter = new Tinebase_Tags_Model_Filter(array(
-                'name'        => '%',
-                'application' => 'Addressbook',
-                //'owner'       => $owner,
-            ));
-            $paging = new Tinebase_Model_Pagination();
-                
-            $contactTags = new Tinebase_Record_RecordSet ('Tinebase_Tags_Model_Tag');
-            foreach ( $catIds as $catId ) {
-                $filter->name = $categories[$catId]->cat_name;
-                $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
-                if ( empty($tags) ) {
-                    $tag = new Tinebase_Tags_Model_Tag (array(
-                        'type'  => Tinebase_Tags_Model_Tag::TYPE_SHARED,
-                        'name'  => $categories[$catId]->cat_name,
-                    ));
-                    $tag = Tinebase_Tags::getInstance()->createTag($tag);
-                    $contactTags->addRecord($tag);
-                } else {
-                    $contactTags->addRecord(new Tinebase_Tags_Model_Tag($tags[0]));
-                }
-            }        
-                        
-            $tineContact->tags = $contactTags;
-            Tinebase_Tags::getInstance()->setTagsOfRecord($tineContact);
-            
+            if ( !empty($contact->cat_id) ) {
+                $catIds = explode ( ',', $contact->cat_id );
+                $filter = new Tinebase_Tags_Model_Filter(array(
+                    'name'        => '%',
+                    'application' => 'Addressbook',
+                    //'owner'       => $owner,
+                ));
+                $paging = new Tinebase_Model_Pagination();
+                    
+                $contactTags = new Tinebase_Record_RecordSet ('Tinebase_Tags_Model_Tag');
+                foreach ( $catIds as $catId ) {
+                    if ( isset($categories[$catId]) ) {
+                        $filter->name = $categories[$catId]->cat_name;
+                        $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
+                        if ( empty($tags) ) {
+                            $tag = new Tinebase_Tags_Model_Tag (array(
+                                'type'  => Tinebase_Tags_Model_Tag::TYPE_SHARED,
+                                'name'  => $categories[$catId]->cat_name,
+                            ));
+                            $tag = Tinebase_Tags::getInstance()->createTag($tag);
+                            $contactTags->addRecord($tag);
+                        } else {
+                            $contactTags->addRecord(new Tinebase_Tags_Model_Tag($tags[0]));
+                        }
+                    }
+                }        
+                            
+                $tineContact->tags = $contactTags;
+                Tinebase_Tags::getInstance()->setTagsOfRecord($tineContact);
+            }            
         }
         echo "done! got ".sizeof($contacts)." contacts.<br>";
         
