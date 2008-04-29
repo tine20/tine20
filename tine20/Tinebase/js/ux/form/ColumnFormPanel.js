@@ -12,6 +12,7 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
 
 /**
  * @class Ext.ux.form.ColumnFormPanel
+ * @description
  * Helper Class for creating form panels with a horizontal layout. This class could be directly
  * created using the new keyword or by specifying the xtype: 'columnform'
  * Example usage:</p>
