@@ -103,6 +103,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public function getCssFilesToInclude()
     {
     	return array(
+    	   self::_appendFileTime("Addressbook/css/Addressbook.css"),
     	   self::_appendFileTime("Tinebase/css/ux/Wizard.css"),
     	   self::_appendFileTime("Tinebase/css/ux/grid/IconTextField.css"),
     	   self::_appendFileTime("Tinebase/css/ux/form/ExpandFieldSet.css"),
@@ -143,8 +144,9 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         }
         
         $view->configData = array(
-            'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+            'timeZone'        => Zend_Registry::get('userTimeZone'),
+            'currentAccount'  => Zend_Registry::get('currentAccount')->toArray(),
+            'accountBackend'  => Tinebase_Account::getConfiguredBackend()
         );
         
         

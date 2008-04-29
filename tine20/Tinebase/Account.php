@@ -50,13 +50,7 @@ class Tinebase_Account
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            if(isset(Zend_Registry::get('configFile')->accounts)) {
-                $backendType = Zend_Registry::get('configFile')->accounts->get('backend', self::SQL);
-                $backendType = ucfirst($backendType);
-            } else {
-                $backendType = self::SQL;
-            }
-            
+            $backendType = self::getConfiguredBackend();
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' acconts backend: ' . $backendType);
             
             self::$_instance = self::factory($backendType);
@@ -91,5 +85,21 @@ class Tinebase_Account
         }
         
         return $result;
+    }
+    
+    /**
+     * returns the configured accounts backend
+     * 
+     * @return string
+     */
+    public static function getConfiguredBackend()
+    {
+        if(isset(Zend_Registry::get('configFile')->accounts)) {
+            $backendType = Zend_Registry::get('configFile')->accounts->get('backend', self::SQL);
+            $backendType = ucfirst($backendType);
+        } else {
+            $backendType = self::SQL;
+        }
+        return $backendType;
     }
 }
