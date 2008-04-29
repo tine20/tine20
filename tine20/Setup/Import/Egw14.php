@@ -158,6 +158,8 @@ class Setup_Import_Egw14
      *
      * @param string $_oldTableName [OPTIONAL]
      * @param int $useOldId [OPTIONAL]
+     * 
+     * @todo use old group name for the (shared) container 
      */
     public function importAddressbook( $_oldTableName = NULL, $useOldId = TRUE )
     {

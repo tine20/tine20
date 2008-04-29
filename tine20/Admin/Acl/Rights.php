@@ -35,7 +35,6 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
      * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
      * @return  array   all application rights
      * 
-     * @todo    get other possible rights from APPNAME_Rights (?) class 
      */
     public function getAllApplicationRights($_applicationId)
     {
