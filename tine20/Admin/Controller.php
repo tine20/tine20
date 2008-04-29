@@ -313,9 +313,20 @@ class Admin_Controller
      * @param array  $_rights
      * 
      * @return unknown
+     * 
+     * @todo    change exception to PermissionDeniedException
      */
     public function setApplicationPermissions($_applicationId, array $_rights = array ())
-    {        
+    {   
+        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Admin_Acl_Rights::MANAGE_APPS) && 
+             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Tinebase_Acl_Rights::ADMIN) ) {
+            throw new Exception('Your are not allowed to change application permissions!');
+        }        
+        
         return Tinebase_Application::getInstance()->setApplicationPermissions($_applicationId, $_rights);
     }  
         
