@@ -68,6 +68,17 @@ Tine.Admin = function() {
         leaf :null,
         expanded :true,
         dataPanelType :"sharedtags"
+    },{
+        text :"Roles",
+        cls :"treemain",
+        iconCls: 'action_permissions',
+        allowDrag :false,
+        allowDrop :true,
+        id :"roles",
+        children :[],
+        leaf :null,
+        expanded :true,
+        dataPanelType :"roles"
     }];
 
 	/**
@@ -155,6 +166,15 @@ Tine.Admin = function() {
                         Ext.getCmp('AdminTagsGrid').getStore().load({params:{start:0, limit:50}});
                     } else {
                         Tine.Admin.Tags.Main.show();
+                    }
+                    
+                    break;
+
+                case 'roles':
+                    if(currentToolbar !== false && currentToolbar.id == 'AdminRolesToolbar') {
+                        Ext.getCmp('AdminRolesGrid').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Admin.Roles.Main.show();
                     }
                     
                     break;

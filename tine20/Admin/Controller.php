@@ -508,5 +508,34 @@ class Admin_Controller
     public function deleteTags($_tagIds)
     {        
         Tinebase_Tags::getInstance()->deleteTags($_tagIds);
-    } 
+    }
+
+    /**
+     * get list of roles
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_start
+     * @param int $_limit
+     * @return Tinebase_Record_RecordSet with record class Tinebase_Acl_Model_Role
+     */
+    public function getRoles($query, $sort, $dir, $start, $limit)
+    {
+        /*
+        $filter = new Tinebase_Tags_Model_Filter(array(
+            'name'        => $query,
+            'type'        => Tinebase_Tags_Model_Tag::TYPE_SHARED
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => $start,
+            'limit' => $limit,
+            'sort'  => $sort,
+            'dir'   => $dir
+        ));
+        
+        return Tinebase_Tags::getInstance()->searchTags($filter, $paging);
+        */
+    }
+    
 }

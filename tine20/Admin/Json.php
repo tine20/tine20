@@ -554,4 +554,32 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }
+    
+    /**
+     * get list of roles
+     *
+     * @param string $filter
+     * @param string $sort
+     * @param string $dir
+     * @param int $start
+     * @param int $limit
+     * @return array with results array & totalcount (int)
+     */
+    public function getRoles($filter, $sort, $dir, $start, $limit)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        //$roles = Admin_Controller::getInstance()->getRoles($query, $sort, $dir, $start, $limit);
+
+        //$result['results'] = $roles->toArray();
+        $result['results'] = array ( array("name" => "role1", "description" => "blabla", "id" => 1) );
+        //$result['totalcount'] = count($tags);
+        $result['totalcount'] = 1;
+        
+        return $result;
+    }
+    
 }
