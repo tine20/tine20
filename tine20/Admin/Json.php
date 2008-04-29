@@ -496,14 +496,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * save tag data from edit form
      *
      * @param   string $tagData        json encoded tag data
-     * @param   string $tagMembers     json encoded array of tag members
      * 
      * @return  array with success, message, tag data and tag members
      */
-    public function saveTag($tagData, $tagMembers)
+    public function saveTag($tagData)
     {
         $decodedTagData = Zend_Json::decode($tagData);
-        $decodedTagMembers = Zend_Json::decode($tagMembers);
         
         // unset if empty
         if(empty($decodedTagData['id'])) {
@@ -524,15 +522,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         if ( empty($tag->id) ) {
-            $tag = Admin_Controller::getInstance()->addTag($tag, $decodedTagMembers);
+            $tag = Admin_Controller::getInstance()->addTag($tag);
         } else {
-            $tag = Admin_Controller::getInstance()->updateTag($tag, $decodedTagMembers);
+            $tag = Admin_Controller::getInstance()->updateTag($tag);
         }
                  
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $tag->toArray(),
-                        'tagMembers'      => Admin_Controller::getInstance()->getTagMembers($tag->getId())
         );
         
         return $result;

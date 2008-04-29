@@ -61,9 +61,6 @@ Tine.Admin.Tags.Main = {
                         text: 'Deleting tag(s)...',
                         success: function(_result, _request){
                             Ext.getCmp('AdminTagsGrid').getStore().reload();
-                        },
-                        failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the tag.');
                         }
                     });
                 }
@@ -287,6 +284,7 @@ Tine.Admin.Tags.EditDialog = {
      * var handlers
      */
      handlers: {
+        /*
         removeAccount: function(_button, _event) 
         { 
             var tagGrid = Ext.getCmp('tagMembersGrid');
@@ -315,7 +313,7 @@ Tine.Admin.Tags.EditDialog = {
             }
             selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
         },
-
+        */
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('tagDialog').getForm();
@@ -323,16 +321,16 @@ Tine.Admin.Tags.EditDialog = {
             if(form.isValid()) {
         
                 // get tag members
-                var tagGrid = Ext.getCmp('tagMembersGrid');
+                //var tagGrid = Ext.getCmp('tagMembersGrid');
 
                 Ext.MessageBox.wait('Please wait', 'Updating Memberships');
                 
-                var tagMembers = [];
-                var dataStore = tagGrid.getStore();
+                //var tagMembers = [];
+                //var dataStore = tagGrid.getStore();
                 
-                dataStore.each(function(_record){
-                    tagMembers.push(_record.data.accountId);
-                });
+                //dataStore.each(function(_record){
+                //    tagMembers.push(_record.data.accountId);
+                //});
                 
                 // update form               
                 form.updateRecord(Tine.Admin.Tags.EditDialog.tagRecord);
@@ -343,7 +341,6 @@ Tine.Admin.Tags.EditDialog = {
                     params: {
                         method: 'Admin.saveTag', 
                         tagData: Ext.util.JSON.encode(Tine.Admin.Tags.EditDialog.tagRecord.data),
-                        tagMembers: Ext.util.JSON.encode(tagMembers)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Admin.Tags) {
@@ -352,14 +349,8 @@ Tine.Admin.Tags.EditDialog = {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            //this.updateTagRecord(Ext.util.JSON.decode(_result.responseText));
-                            //form.loadRecord(this.tagRecord);
-                            
-                            // @todo   get tagMembers from result
-                            /*
-                            var tagMembers = Ext.util.JSON.decode(_result.responseText);
-                            dataStore.loadData(tagMembers, false);
-                            */
+                            this.updateTagRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            form.loadRecord(this.tagRecord);
                             
                             Ext.MessageBox.hide();
                         }
@@ -397,10 +388,10 @@ Tine.Admin.Tags.EditDialog = {
                         window.opener.Tine.Admin.Tags.Main.reload();
                     }
                     window.close();
-                },
+                }/*,
                 failure: function ( result, request) { 
                     Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the tag.'); 
-                } 
+                }*/
             });                           
         }
         
@@ -453,6 +444,7 @@ Tine.Admin.Tags.EditDialog = {
         /******* actions ********/
 
         this.actions = {
+            /*
             addAccount: new Ext.Action({
                 text: 'add account',
                 disabled: true,
@@ -467,10 +459,11 @@ Tine.Admin.Tags.EditDialog = {
                 handler: this.handlers.removeAccount,
                 iconCls: 'action_deleteContact'
             })
+            */
         };
 
         /******* account picker panel ********/
-        
+        /*
         var accountPicker =  new Tine.widgets.AccountpickerPanel ({            
             enableBbar: true,
             region: 'west',
@@ -486,10 +479,10 @@ Tine.Admin.Tags.EditDialog = {
             this.account = account;
             this.handlers.addAccount(account);
         }, this);
-        
+        */
 
         /******* load data store ********/
-
+        /*
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
@@ -506,15 +499,15 @@ Tine.Admin.Tags.EditDialog = {
         } else {
             this.dataStore.loadData( _tagMembers );
         }
-
+        */
         /******* column model ********/
-
+        /*
         var columnModel = new Ext.grid.ColumnModel([{ 
             resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 
         }]);
-
+        */
         /******* row selection model ********/
-
+        /*
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
@@ -528,17 +521,17 @@ Tine.Admin.Tags.EditDialog = {
                 this.actions.removeAccount.setDisabled(false);
             }
         }, this);
-       
+        */
         /******* bottom toolbar ********/
-
+        /*
         var membersBottomToolbar = new Ext.Toolbar({
             items: [
                 this.actions.removeAccount
             ]
         });
-
+        */
         /******* tag members grid ********/
-        
+        /*
         var tagMembersGridPanel = new Ext.grid.EditorGridPanel({
             id: 'tagMembersGrid',
             region: 'center',
@@ -554,11 +547,11 @@ Tine.Admin.Tags.EditDialog = {
             bbar: membersBottomToolbar,
             border: true
         }); 
-        
+        */
         /******* THE edit dialog ********/
         
         var editTagDialog = {
-            layout:'border',
+            layout:'hfit',
             border:false,
             width: 600,
             height: 500,
@@ -585,11 +578,13 @@ Tine.Admin.Tags.EditDialog = {
                             preventScrollbars:false,
                             anchor:'100%',
                             height: 60
-                        }]        
+                        }/*,{
+                            xtype: 'colorpalette',
+                            name: 'color',
+                            fieldLabel: 'Color'
+                        }*/]        
                     }]
-                },
-                accountPicker, 
-                tagMembersGridPanel
+                }
             ]
         };
         
@@ -598,8 +593,7 @@ Tine.Admin.Tags.EditDialog = {
         // Ext.FormPanel
         var dialog = new Tine.widgets.dialog.EditRecord({
             id : 'tagDialog',
-            title: 'Edit Tag ' + _tagData.name,
-            layout: 'fit',
+            layout: 'hfit',
             labelWidth: 120,
             labelAlign: 'top',
             handlerScope: this,
@@ -617,7 +611,7 @@ Tine.Admin.Tags.EditDialog = {
         });
 
         this.updateTagRecord(_tagData);
-        this.updateToolbarButtons(_tagData.grants);       
+        //this.updateToolbarButtons(_tagData.grants);       
 
         dialog.getForm().loadRecord(this.tagRecord);
         

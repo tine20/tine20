@@ -17,6 +17,7 @@
  * NOTE: History loging of tags 
  * @todo work out /apply transaction concept!
  * @todo check/manage contexts
+ * @todo should rights for managing tags be considered in this class?
  */
 class Tinebase_Tags
 {
@@ -180,9 +181,30 @@ class Tinebase_Tags
         return $tags[0];
     }
     
+    
+    public function updateTag(Tinebase_Tags_Model_Tag $_tag)
+    {
+        $tagId = $_tag->getId();
+        if (strlen($tagId) != 40) {
+            throw new Exception('Could not update non-existing tag');
+        }
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
+            'type'               => $_tag->type,
+            'owner'              => $_tag->owner,
+            'name'               => $_tag->name,
+            'description'        => $_tag->description,
+            'color'              => $_tag->color,
+            'last_modified_by'   => Zend_Registry::get('currentAccount')->getId(),
+            'last_modified_time' => Zend_Date::now()->getIso()
+        ), $this->_db->quoteInto('id = ?', $tagId));
+        
+        $tags = $this->getTagsById($tagId);
+        return $tags[0];
+    }
+    
     /**
      * Deletes tags identified by their identifiers
-     * @todo add acl for shared tags
      * @todo remove all taggings -> history log of records!
      * 
      * @param  string|array id(s) to delete
@@ -191,14 +213,16 @@ class Tinebase_Tags
     public function deleteTags($_ids)
     {
         $currentAccountId = Zend_Registry::get('currentAccount')->getId();
-        
+        $manageSharedTagsRight = Tinebase_Acl_Rights::getInstance()
+            ->hasRight('Tinebase', $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
         $tags = $this->getTagsById($_ids);
         if (count($tags) != count((array)$_ids)) {
             throw new Exception('You are not allowed to delete this tags');
         }
+        
         foreach ($tags as $tag) {
             if ( ($tag->type == Tinebase_Tags_Model_Tag::TYPE_PERSONAL && $tag->owner == $currentAccountId) ||
-                 ($tag->type == Tinebase_Tags_Model_Tag::TYPE_SHARED && false /* admin right */) ) {
+                 ($tag->type == Tinebase_Tags_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
                 continue;      
             } else {
                 throw new Exception('You are not allowed to delete this tags');

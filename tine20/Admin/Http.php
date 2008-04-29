@@ -155,7 +155,45 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
-    }    
+    }
+    
+    /**
+     * display edit tag dialog
+     *
+     * @param   integer     tag id
+     * 
+     */
+    public function editTag($tagId)
+    {
+        if(empty($tagId)) {
+            $encodedTag = Zend_Json::encode(array());
+        } else {
+            $tag = Admin_Controller::getInstance()->getTag($tagId);         
+            $encodedTag = Zend_Json::encode($tag->toArray());
+        }
+
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();
+        
+        //@todo move Tags.js to Admin.js later
+        $view->jsExecute = 'Tine.Admin.Tags.EditDialog.display(' . $encodedTag . ');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit tag";
+
+        $view->isPopup = true;
+        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
+        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+    
     /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
