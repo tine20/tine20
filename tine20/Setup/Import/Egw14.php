@@ -157,13 +157,18 @@ class Setup_Import_Egw14
      * import the addressbook from egw14
      *
      * @param string $_oldTableName [OPTIONAL]
-     * @param int $useOldId [OPTIONAL]
+     * @param int $_useOldId [OPTIONAL]
      * 
-     * @todo use old group name for the (shared) container 
+     * @todo    use old group name for the (shared) container ?
+     * @todo    add more config params (
      */
-    public function importAddressbook( $_oldTableName = NULL, $useOldId = TRUE )
+    public function importAddressbook( $_oldTableName = NULL, $_useOldId = TRUE )
     {
-        @set_time_limit (120);  
+        // did nothing
+        //@set_time_limit (120);  
+        $sharedContactsGroupId = -15;
+        $sharedContactsContainerName = "Metaways Kontakte";
+        $setFileasFromName = TRUE; 
         
         $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'addressbook';
         $contactsTable = new Tinebase_Db_Table(array('name' => $tableName));
@@ -180,7 +185,8 @@ class Setup_Import_Egw14
 
             echo "importing " . $contact->n_given . " " . $contact->n_family . " ...";
 
-            // add container
+            /******************** add container ************************/
+            
             if ( $contact->contact_owner > 0 ) {
                 // personal container for owner
                 try {
@@ -199,14 +205,14 @@ class Setup_Import_Egw14
                     Tinebase_Container::GRANT_ANY,
                 ), TRUE);
                                 
-            } else if ( $contact->contact_owner == -15 ) {
+            } else if ( $contact->contact_owner == $sharedContactsGroupId ) {
                 // default users group -> shared container
                 $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
                 try {
-                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Shared Contacts', Tinebase_Container::TYPE_SHARED);
+                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $sharedContactsContainerName, Tinebase_Container::TYPE_SHARED);
                 } catch ( UnderflowException $e ) {
                     $container = new Tinebase_Model_Container(array(
-                        'name' => 'Shared Contacts',
+                        'name' => $sharedContactsContainerName,
                         'type' => Tinebase_Container::TYPE_SHARED,      
                         'backend' => 'Sql',
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
@@ -223,17 +229,55 @@ class Setup_Import_Egw14
                 echo "skipped.<br/>";
                 continue;
             }                   
-            $containerId = $container->getId();         
+            $containerId = $container->getId();        
+
+            /******************** set fileas ************************/
+
+            if ( $setFileasFromName ) {
+                
+                $fileas = ""; 
+                if ( !empty($contact->n_family) ) {
+                    if ( !empty($contact->n_given) ) {
+                        $fileas = $contact->n_family . ", " . $contact->n_given;
+                    } else {
+                        $fileas = $contact->n_family;
+                    }
+                } else {
+                    $fileas = $contact->n_given;
+                }
+
+                if ( empty($fileas) ) {
+                    $fileas = $contact->org_name;
+                } elseif ( !empty($contact->n_middle) ) {
+                    $fileas .= " " .$contact->n_middle;
+                }
+            } else {
+                $fileas = ( empty($contact->n_fileas) ) ? $contact->org_name : $contact->n_fileas;
+            }
+
+            /******************** set urls (add 'http://' if missing) ************************/
             
-            // create contact record
+            if ( !preg_match("/https*:\/\//i", $contact->contact_url) && !empty($contact->contact_url) ) {
+                $url = "http://".$contact->contact_url;
+            } else {
+                $url = $contact->contact_url;
+            }
+            if ( !preg_match("/https*:\/\//i", $contact->contact_url_home) && !empty($contact->contact_url_home) ) {
+                $urlHome = "http://".$contact->contact_url_home;
+            } else {
+                $urlHome = $contact->contact_url_home;
+            }
+            
+            /******************** create contact record ************************/
+            
             $tineContact = new Addressbook_Model_Contact ( array(
                 
-                'id'                    => ( $useOldId ) ? $contact->contact_id : 0,
+                'id'                    => ( $_useOldId ) ? $contact->contact_id : 0,
                 'account_id'            => $contact->account_id,                        
                 'owner'                 => $containerId,
 
                 'n_family'              => ( empty($contact->n_family) ) ? 'imported' : $contact->n_family,
-                'n_fileas'              => ( empty($contact->n_fileas) ) ? 'imported' : $contact->n_fileas,
+                'n_fileas'              => $fileas,
                 'n_fn'                  => ( empty($contact->n_fn) ) ? 'imported' : $contact->n_fn,
             
                 'adr_one_countryname'   => ( isset($this->countryMapping[$contact->adr_one_countryname]) ) ? $this->countryMapping[$contact->adr_one_countryname] : "",
@@ -257,8 +301,8 @@ class Setup_Import_Egw14
                 'note'                  => $contact->contact_note,
                 'role'                  => $contact->contact_role,
                 'title'                 => $contact->contact_title,
-                'url'                   => $contact->contact_url,
-                'url_home'              => $contact->contact_url_home,
+                'url'                   => $url,
+                'url_home'              => $urlHome,
                 'n_given'               => $contact->n_given,
                 'n_middle'              => $contact->n_middle,
                 'n_prefix'              => $contact->n_prefix,
