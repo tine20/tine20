@@ -159,5 +159,5 @@ interface Setup_Backend_Interface
  
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field);
 
-	public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_index);
+    public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_index);
 }

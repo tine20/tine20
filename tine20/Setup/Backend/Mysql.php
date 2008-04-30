@@ -216,15 +216,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             
             foreach ($_table->fields as $spalte) {
                 if ($spalte->name == $existingField->name) {
+                
                     if (NULL != (array_diff($spalte->toArray(), $existingField->toArray()))) {
                         
+                        print_r("Differences between database and newest xml declarations\n");
                         echo $_table->name . " in der datenbank: ";
-                        var_dump($existingField);
-						//var_dump($existingField->toArray());
+                       // var_dump($existingField);
+                        var_dump($existingField->toArray());
                         echo "XML field: ";
-                        var_dump($spalte);
-						//var_dump($spalte->toArray());
-                        print_r('fehler');
+                       // var_dump($spalte);
+                        var_dump($spalte->toArray());
+                        
                     }
                 }
             }
@@ -549,7 +551,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 break;
             
             case ('decimal'):
-                $definition .= " decimal (" . $_field->value . ")" ;
+                $definition .= " decimal (" . $_field->value . ") " ;
                 break;
                 
             default:
@@ -565,7 +567,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         if (isset($_field->default)) {
-            $definition .= "default '" . $_field->default . "'";
+            $definition .= " default '" . $_field->default . "'";
         }
 
         if (isset($_field->notnull) && $_field->notnull == 'true') {

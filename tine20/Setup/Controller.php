@@ -120,7 +120,7 @@ class Setup_Controller
         foreach($applications as $application) {
             $xml = $this->parseFileForUpdate($application->name);
             $this->updateApplication($application, $xml->version);
-			echo $application->name;
+            echo $application->name;
         }
     }
     
@@ -139,7 +139,6 @@ class Setup_Controller
             if($item->isDir() && $item->getFileName() != 'Tinebase') {
                 $fileName = $item->getFileName() . $_setupFilesPath ;
                 if(file_exists($fileName)) {
-                    echo "<h3>" . $fileName . "</h3>";
                     $this->parseFile($fileName);
                 }
             }

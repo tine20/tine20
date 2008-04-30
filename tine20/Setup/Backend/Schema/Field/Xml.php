@@ -117,9 +117,9 @@
             case ('decimal'):
               //$this->type =  "decimal (" . (string) $_declaration->value . ")" ;
               $this->type =  "decimal";
-			  $this->value = (string) $_declaration->value ;
+              $this->value = (string) $_declaration->value ;
               
-			  break;
+              break;
         
             default :
                 $this->type = 'integer';
