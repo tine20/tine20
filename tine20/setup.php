@@ -47,25 +47,30 @@ try {
  */
 $setup = new Setup_Controller();
 
+/**
+ * update applications
+ */
 $setup->updateInstalledApplications();
 
+/**
+ * build empty Database 
+ */ 
+$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
+
+/**
+ * fill with default or present values 
+ */
 if($setup->initialLoadRequired()) {
-	/**
-	 * build empty Database and fill with default values or update applications
-     */ 
-	$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
 
     # either import data from eGroupWare 1.4 or tine 2.0 revision 949    
     if ( IMPORT_INITIALDATA === TRUE ) {
         $import = new Setup_Import_TineInitial();
-        $import->import();
     } elseif ( IMPORT_EGW_14 === TRUE ) {
         $import = new Setup_Import_Egw14();
-        $import->import();
     } elseif ( IMPORT_TINE_REV_949 === TRUE ) {
         $import = new Setup_Import_TineRev949();
-        $import->import();
     }
+    $import->import();
 }
 
 /**

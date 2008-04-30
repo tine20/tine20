@@ -17,7 +17,6 @@
  */
 class Setup_Backend_Mysql extends Setup_Backend_Abstract
 {
-    public $DBMS = 'mysql';
     private $_config = '';
     
     public function __construct()
@@ -220,9 +219,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     if (NULL != (array_diff($spalte->toArray(), $existingField->toArray()))) {
                         
                         echo $_table->name . " in der datenbank: ";
-                        var_dump($existingField->toArray());
+                        var_dump($existingField);
+						//var_dump($existingField->toArray());
                         echo "XML field: ";
-                        var_dump($spalte->toArray());
+                        var_dump($spalte);
+						//var_dump($spalte->toArray());
                         print_r('fehler');
                     }
                 }
@@ -502,9 +503,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     if ($_field->length > 19) {
                         $definition .= ' bigint(' . $_field->length . ') ';
                     } else if ($_field->length < 5){
-                        $definition .= ' tinyint(1) ';
+                        $definition .= ' tinyint(' . $_field->length . ') ';
                     } else {
-					    $definition .= ' int(' . $_field->length . ') ';
+                        $definition .= ' int(' . $_field->length . ') ';
                     }
                 } else {
                     $definition .= ' int(11) ';

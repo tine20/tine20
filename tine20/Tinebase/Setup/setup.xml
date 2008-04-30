@@ -11,7 +11,6 @@
                     <name>id</name>
                     <type>integer</type>
                     <autoincrement>true</autoincrement>
-                    <unsigned>true</unsigned>
                 </field>
                 <field>
                     <name>name</name>
@@ -29,8 +28,6 @@
                 <field>
                     <name>order</name>
                     <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -63,7 +60,6 @@
                 <field>
                     <name>application_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -109,8 +105,6 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -148,8 +142,6 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -195,8 +187,6 @@
                 <field>
                     <name>login_failures</name>
                     <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
                 </field>    
                 <field>
                     <name>last_login_failure_at</name>
@@ -205,8 +195,6 @@
                 <field>
                     <name>primary_group_id</name>
                     <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <index>
@@ -245,14 +233,11 @@
                 <field>
                     <name>group_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
 
@@ -301,8 +286,6 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -342,7 +325,7 @@
                 <field>
                     <name>email_sent</name>
                     <type>boolean</type>
-                    <default>0</default>
+                    <default>false</default>
                 </field>
                 <index>
                     <name>account_id</name>
@@ -368,8 +351,6 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -394,7 +375,6 @@
                 <field>
                     <name>application_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <index>
@@ -451,13 +431,11 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>account_grant</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 
@@ -513,8 +491,6 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -551,7 +527,6 @@
                 <field>
                     <name>result</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 
@@ -572,8 +547,6 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -599,8 +572,6 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
                 </field>
                 
                 <index>
@@ -653,33 +624,25 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
                     <name>observable_application</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observable_identifier</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observer_application</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>observer_identifier</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
                 </field> 
                 <field>
                     <name>observed_event</name>
@@ -689,7 +652,6 @@
                 <field>
                     <name>created_by</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -766,33 +728,25 @@
                 <field>
                     <name>id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
                     <name>own_application</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>own_identifier</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>related_application</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>related_identifier</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
                 </field> 
                 <field>
                     <name>related_role</name>
@@ -862,91 +816,90 @@
                 </index>
             </declaration>
         </table>
-		
-		<table>
-			<name>links</name>
-			<version>1</version>
-			<declaration>
-				<field>
-					<name>link_id</name>
-					<type>integer</type>
-					<autoincrement>true</autoincrement>
-					<notnull>true</notnull>
-				</field>
-				<field>
-					<name>link_app1</name>
-					<type>text</type>
-					<length>25</length>
-					<notnull>true</notnull>
-				</field>
-				<field>
-					<name>link_app2</name>
-					<type>text</type>
-					<length>25</length>
-					<notnull>true</notnull>
-				</field>
+        
+        <table>
+            <name>links</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>link_id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>link_app1</name>
+                    <type>text</type>
+                    <length>25</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>link_app2</name>
+                    <type>text</type>
+                    <length>25</length>
+                    <notnull>true</notnull>
+                </field>
 
-				<field>
-					<name>link_id1</name>
-					<type>text</type>
-					<length>50</length>
-					<notnull>true</notnull>
-				</field>
-				<field>
-					<name>link_id2</name>
-					<type>text</type>
-					<length>50</length>
-					<notnull>true</notnull>
-				</field>
-				<field>
-					<name>link_lastmod</name>
-					<type>integer</type>
-					<notnull>true</notnull>
-				</field>
-				<field>
-					<name>link_owner</name>
-					<type>integer</type>
-					<notnull>true</notnull>
-				</field>
-				<field>
-					<name>link_remark</name>
-					<type>text</type>
-					<length>100</length>
-				</field>
-				<index>
-					<name>egw_links_app1_id1_lastmod</name>
-					<field>
-						<name>link_app1</name>
-					</field>
-					<field>
-						<name>link_id1</name>
-					</field>
-					<field>
-						<name>link_lastmod</name>
-					</field>
-				</index>
-				<index>
-					<name>egw_links_app2_id2_lastmod</name>
-					<field>
-						<name>link_app2</name>
-					</field>
-					<field>
-						<name>link_id2</name>
-					</field>
-					<field>
-						<name>link_lastmod</name>
-					</field>
-				</index>
-				<index>
-					<name>link_id</name>
-					<primary>true</primary>
-					<unique>true</unique>
-					<field>
-						<name>link_id</name>
-					</field>
-				</index>
-			</declaration>
-		</table>
+                <field>
+                    <name>link_id1</name>
+                    <type>text</type>
+                    <length>50</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>link_id2</name>
+                    <type>text</type>
+                    <length>50</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>link_lastmod</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>link_owner</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>link_remark</name>
+                    <type>text</type>
+                    <length>100</length>
+                </field>
+                <index>
+                    <name>egw_links_app1_id1_lastmod</name>
+                    <field>
+                        <name>link_app1</name>
+                    </field>
+                    <field>
+                        <name>link_id1</name>
+                    </field>
+                    <field>
+                        <name>link_lastmod</name>
+                    </field>
+                </index>
+                <index>
+                    <name>egw_links_app2_id2_lastmod</name>
+                    <field>
+                        <name>link_app2</name>
+                    </field>
+                    <field>
+                        <name>link_id2</name>
+                    </field>
+                    <field>
+                        <name>link_lastmod</name>
+                    </field>
+                </index>
+                <index>
+                    <name>link_id</name>
+                    <primary>true</primary>
+                    <unique>true</unique>
+                    <field>
+                        <name>link_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
         
         <table>
             <name>timemachine_modificationlog</name>
@@ -961,7 +914,6 @@
                     <name>application_id</name>
                     <type>integer</type>
                     <notnull>true</notnull>
-                    <unsigned>true</unsigned>
                 </field>
                 <field>
                     <name>record_id</name>
@@ -1148,8 +1100,6 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>account_right</name>

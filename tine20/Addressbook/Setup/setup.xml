@@ -14,12 +14,10 @@
                     <name>id</name>
                     <type>integer</type>
                     <autoincrement>true</autoincrement>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <comment>unsure, whether this is a foreign key, or not</comment>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>
@@ -135,14 +133,12 @@
                 <field>
                     <name>owner</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>private</name>
-                    <type>integer</type>
-                    <default>0</default>
-                    <length>4</length>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>pubkey</name>
@@ -287,33 +283,27 @@
                 <field>
                     <name>created_by</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                    <notnull>true</notnull>
                 </field> 
                 <field>
                     <name>last_modified_by</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>last_modified_time</name>
                     <type>datetime</type>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>is_deleted</name>
                     <type>boolean</type>
-                    <notnull>true</notnull>
                     <default>false</default>
                 </field>
                 <field>
                     <name>deleted_by</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                 </field>            
                 <field>
                     <name>deleted_time</name>

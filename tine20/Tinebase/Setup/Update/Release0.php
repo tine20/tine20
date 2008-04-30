@@ -10,13 +10,12 @@
  * @version     $Id$
  */
 
-class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
+class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     public function update_0()
     {
         // just show how it works
-        $tableDEF = array(
-        'XmlString' =>
+        $tableDefinition = 
                 '<table>
                     <name>test_table</name>
                     <version>1</version>
@@ -41,9 +40,9 @@ class Crm_Setup_Update_Release0 extends Setup_Update_Abstract
                         </index>
                     </declaration>
                 </table>'
-        );
-                        
-        $this->_backend->createTable($tableDEF);
+				;
+        $table = Setup_Backend_Schema_Index_Factory::factory('String', $tableDefinition); 
+		$this->_backend->createTable($table);
         $this->_backend->dropTable('test_table');
     }
 

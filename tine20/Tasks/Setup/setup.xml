@@ -12,7 +12,12 @@
                     <name>id</name>
                     <type>integer</type>
                     <autoincrement>true</autoincrement>
-                    <unsigned>true</unsigned>
+                </field>
+                <field>
+                    <name>class</name>
+                    <notnull>true</notnull>
+                    <type>text</type>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -33,7 +38,6 @@
                 <field>
                     <name>is_deleted</name>
                     <type>boolean</type>
-                    <notnull>true</notnull>
                     <default>false</default>
                 </field>
                 <field>
@@ -43,12 +47,6 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
-                </field>
-                <field>
-                    <name>class</name>
-                    <notnull>true</notnull>
-                    <type>text</type>
-                    <length>64</length>
                 </field>
                 <index>
                     <name>id</name>
@@ -74,9 +72,7 @@
                     <name>id</name>
                     <type>integer</type>
                     <autoincrement>true</autoincrement>
-                    <unsigned>true</unsigned>
                 </field>
-
                 <field>
                     <name>created_by</name>
                     <type>integer</type>
@@ -116,7 +112,6 @@
                  <field>
                     <name>status_is_open</name>
                     <type>boolean</type>
-                    <notnull>true</notnull>
                     <default>false</default>
                 </field>
                 <field>
@@ -152,7 +147,6 @@
                 <field>
                     <name>container_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -173,21 +167,21 @@
                 <field>
                     <name>is_deleted</name>
                     <type>boolean</type>
-                    <notnull>true</notnull>
                     <default>false</default>
                 </field>
                 <field>
                     <name>deleted_by</name>
                     <type>integer</type>
                 </field>            
+               
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
                 </field>        
                 <field>
                     <name>percent</name>
-                    <type>integer</type>
-                    <length>3</length>
+                    <type>decimal</type>
+                     <value>3,0</value>
                 </field>    
                 <field>
                     <name>completed</name>
@@ -200,8 +194,6 @@
                 <field>
                     <name>class_id</name>
                     <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
                 </field>
                 <field>
                     <name>description</name>
@@ -219,18 +211,14 @@
                     <field>
                     <name>organizer</name>
                     <type>integer</type>
-                    <length>11</length>
                 </field>
                 <field>
                     <name>priority</name>
                     <type>integer</type>
-                    <length>11</length>
                 </field>
                 <field>
                     <name>status_id</name>
                     <type>integer</type>
-                    <length>11</length>
-                    <unsigned>true</unsigned>
                 </field>
                 <field>
                     <name>summary</name>
@@ -297,7 +285,6 @@
                 <field>
                     <name>tag_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                 </field>
                 <index>
                     <name>task_id-tag_id</name>
@@ -335,7 +322,6 @@
                 <field>
                     <name>contact_id</name>
                     <type>integer</type>
-                    <unsigned>true</unsigned>
                 </field>
                 <index>
                     <name>task_id-contact_id</name>

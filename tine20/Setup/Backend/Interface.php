@@ -157,4 +157,7 @@ interface Setup_Backend_Interface
     
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table);
  
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field);
+
+	public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_index);
 }

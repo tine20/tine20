@@ -122,9 +122,10 @@ abstract class Setup_Backend_Schema_Field_Abstract
     public function toArray()
     {
         return array('name'=> $this->name, 
-					'type' => $this->type,
                     'length' => (int) $this->length ,
-                    'value' => $this->value,
+				    //'type' => $this->type,
+					
+                    //'value' => $this->value,
                     'mul' => $this->mul,
                     'primary' => $this->primary,
                     );

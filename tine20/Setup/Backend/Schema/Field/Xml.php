@@ -37,12 +37,13 @@
         
         if (!empty ($_declaration->unsigned)) {
             $this->unsigned = (string) $_declaration->unsigned;
+        } else if ( $this->type == 'integer') {
+            $this->unsigned = 'true';
         }
         
         if ($_declaration->autoincrement) {
             $this->notnull = 'true';
             $this->length = 11;
-            $this->type = 'integer';
             $this->autoincrement = 'true';
             $this->unsigned = 'true';
         }
@@ -61,12 +62,6 @@
                 if ($this->length == 0) {
                     $this->type = 'text';
                     $this->length = 65535;
-                }
-                break;
-            
-            case ('integer'):
-                if (!isset($this->length)) {
-                    $this->length = 11;
                 }
                 break;
             
@@ -111,7 +106,7 @@
             
             case ('boolean'):
                 $this->type =  'tinyint';
-                $this->length = 1;
+                $this->length = 4;
                 if ($this->default == 'false') {
                     $this->default = 0;
                 } else {
@@ -120,11 +115,14 @@
                 break;
             
             case ('decimal'):
-              $this->type =  "decimal (" . (string) $_declaration->value . ")" ;
-              break;
+              //$this->type =  "decimal (" . (string) $_declaration->value . ")" ;
+              $this->type =  "decimal";
+			  $this->value = (string) $_declaration->value ;
+              
+			  break;
         
             default :
-                $this->type = 'undefined';
+                $this->type = 'integer';
         }
 
         $this->mul = 'false';
