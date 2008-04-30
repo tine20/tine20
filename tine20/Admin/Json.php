@@ -289,11 +289,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     public function saveApplicationPermissions($applicationId, $rights)
     {
         $decodedRights = Zend_Json::decode($rights);
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($decodedRights, true));
                 
-        $application = Admin_Controller::getInstance()->setApplicationPermissions($applicationId, $decodedRights);
+        $countOfRightsSet = Admin_Controller::getInstance()->setApplicationPermissions($applicationId, $decodedRights);
                  
-        $result = array('success'           => true,
-                        'welcomeMessage'    => 'Entry updated',                        
+        $result = array('success'           => TRUE,
+                        'welcomeMessage'    => $countOfRightsSet . " rights set",                        
                         'rights'            => Admin_Controller::getInstance()->getApplicationPermissions($applicationId),
         );
         

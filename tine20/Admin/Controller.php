@@ -312,7 +312,7 @@ class Admin_Controller
      * @param int    $_applicationId    the application id for which the rights will be set
      * @param array  $_rights           array with rights. if empty, all rights will be removed for this application 
      * 
-     * @return unknown
+     * @return  int number of rights set
      * 
      * @todo    change exception to PermissionDeniedException
      */

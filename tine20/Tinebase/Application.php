@@ -274,6 +274,8 @@ class Tinebase_Application
      *
      * @param   int $_applicationId  app id
      * @param   array $_applicationRights  application account rights
+     * 
+     * @return  int number of rights set
      */
     public function setApplicationPermissions($_applicationId, $_applicationRights)
     {
@@ -283,7 +285,10 @@ class Tinebase_Application
         foreach ( $_applicationRights as $right ) {
             $right['application_id'] = $_applicationId;
             
-            $allRights = $this->getAllRights($_applicationId); 
+            $allRights = $this->getAllRights($_applicationId);
+
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' all rights: ' . print_r($allRights, true));
+                        
             foreach ( $allRights as $key ) {
                 if ( isset($right[$key]) && $right[$key] === TRUE ) {
                     unset ( $right['id'] );
@@ -293,6 +298,8 @@ class Tinebase_Application
                 }
             }
         }
+        
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($tineRights, true));
         
         return $tineAclRights->setApplicationPermissions($_applicationId, $tineRights);
     }

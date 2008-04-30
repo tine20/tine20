@@ -272,16 +272,24 @@ class Tinebase_Acl_Rights
      * @param   int $_applicationId  app id
      * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
      * 
+     * @return  int number of rights set
      */
     public function setApplicationPermissions($_applicationId, Tinebase_Record_RecordSet $_applicationRights)
     {
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($_applicationRights, true));
+        
         // delete all old rights for this application
         // @todo quote into?
         $this->rightsTable->delete( "application_id = ".$_applicationId );        
         
+        $count = 0;
         foreach ( $_applicationRights as $right ) {
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' add right: ' . $right->right);
             $this->addRight($right);
+            $count++;
         }
+        
+        return $count;
     }
     
     /**
