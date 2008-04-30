@@ -256,7 +256,7 @@ class Tinebase_Acl_Rights
 
         foreach($rows as $row) {
 
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights row: ' . print_r($row, true));
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights row: ' . print_r($row, true));
                         
             $applicationRight = new Tinebase_Acl_Model_Right( $row );
 
