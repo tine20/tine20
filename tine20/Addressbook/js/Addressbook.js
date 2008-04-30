@@ -310,11 +310,11 @@ Tine.Addressbook.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'tid', header: 'Type', dataIndex: 'tid', width: 30, renderer: this.renderer.contactTid },
-            { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family' },
-            { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80 },
+            { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family', hidden: true },
+            { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80, hidden: true },
             { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
-            { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true },
-            { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150, hidden: false },
+            { resizable: true, id: 'n_fileas', header: 'Display name', dataIndex: 'n_fileas'},
+            { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150},
             { resizable: true, id: 'bday', header: 'Birthday', dataIndex: 'bday', hidden: true },
             { resizable: true, id: 'org_name', header: 'Organisation', dataIndex: 'org_name', width: 200 },
             { resizable: true, id: 'org_unit', header: 'Unit', dataIndex: 'org_unit' , hidden: true },
