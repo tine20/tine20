@@ -83,6 +83,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
+        /*
         $this->objects['application'] = new Tinebase_Model_Application ( array(
             'id'                    => 5,
             'name'                  => 'Crm',
@@ -90,6 +91,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'version'               => '0.1',
             'order'                 => '99',
         ));
+        */
+        $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
                 
         // add account for group member tests
         try {
@@ -393,6 +396,77 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
         // enable again
         $json->setApplicationState( Zend_Json::encode(array($this->objects['application']->getId())), 'enabled' );
+    }
+
+    /**
+     * try to set applications permissions
+     *
+     */
+    public function testSaveApplicationPermissions()
+    {        
+        $adminGroup = Tinebase_Group::getInstance()->getGroupByName('Administrators'); 
+        $rights = Zend_Json::encode(array(
+           array(
+                "application_id" => $this->objects['application']->getId(),
+                "account_id" => $adminGroup->getId(),
+                "account_type" => "group",
+                "accountDisplayName" => "Administrators",
+                "run" => TRUE,
+                "admin" => TRUE,           
+           ) 
+        ));
+        
+        //echo $rights;
+                
+        $json = new Admin_Json();
+        
+        $result = $json->saveApplicationPermissions($this->objects['application']->getId(), $rights);
+        
+        $this->assertTrue( $result["success"], "save permissions failed" );
+        $this->assertEquals ( 2, substr($result["welcomeMessage"],0,1) );
+    }
+    
+    /**
+     * try to get applications permissions
+     *
+     */
+    public function testGetApplicationPermissions()
+    {
+        $json = new Admin_Json();
+        
+        $permissions = $json->getApplicationPermissions($this->objects['application']->getId());
+        //print_r( $permissions );
+        
+        $this->assertGreaterThan(0, $permissions['totalcount']);
+        
+        // get permissions for admin group
+        $adminPermissions = array();
+        foreach ( $permissions['results'] as $permission ) {
+            if ( $permission['accountDisplayName'] === 'Administrators' ) {
+                $adminPermissions = $permission;
+                break;
+            }
+        }
+        
+        $this->assertTrue ( $adminPermissions['admin'], "admin group doesn't have the admin right" );
+        
+    }
+
+    /**
+     * try to get roles
+     *
+     */
+    public function testGetRoles()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+        
+        /*
+        $json = new Admin_Json();
+        
+        $applications = $json->getRoles( NULL, NULL, 'ASC', 0, 10);
+        
+        $this->assertGreaterThan(0, $applications['totalcount']);
+        */
     }
     
 }       
