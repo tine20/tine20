@@ -26,7 +26,6 @@
     protected function _setField($_declaration)
     {    
         if (is_array($_declaration)) {
-         var_dump($_declaration);   
             $this->name = $_declaration['COLUMN_NAME'];
             $type = '';
             $length= '';
