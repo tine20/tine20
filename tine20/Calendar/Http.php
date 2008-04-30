@@ -25,14 +25,10 @@ class Calendar_Http extends Tinebase_Application_Http_Abstract
     
     public function getJsFilesToInclude()
     {
-        foreach( ( $files = array(
-            'Calendar.js',
-            'GridView_Days.js'
-        ) ) as $key => $file) {
-            $files[$key] = 'Calendar/js/' . self::_appendFileTime($file);
-        }
-        return $files;
-        
+        return array(
+            'Calendar/js/Calendar.js',
+            'Calendar/js/GridView_Days.js'
+        );
     }
     
     public function getCssFilesToInclude()

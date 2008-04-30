@@ -67,8 +67,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit account";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -109,8 +112,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit group";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -151,8 +157,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit application permissions";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -188,8 +197,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit tag";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
@@ -198,16 +210,13 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
      * @return array with js filenames
-     * 
-     * @todo   remove later and add Group.js to Admin.js
      */
     public function getJsFilesToInclude() {
-        $jsFiles = parent::getJsFilesToInclude();
-        
-        $jsFiles[] = self::_appendFileTime('Admin/js/Groups.js');
-        $jsFiles[] = self::_appendFileTime('Admin/js/Tags.js');
-        $jsFiles[] = self::_appendFileTime('Admin/js/Roles.js');
-        
-        return $jsFiles;
+        return array(
+            'Admin/js/Admin.js',
+            'Admin/js/Groups.js',
+            'Admin/js/Tags.js',
+            'Admin/js/Roles.js'
+        );
     }
 }

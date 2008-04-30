@@ -40,9 +40,6 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		$view->setScriptPath('Tinebase/views');
 		$view->formData = array();
 
-		$view->jsIncludeFiles = array();
-		$view->cssIncludeFiles = array();
-		
 		$addresses = Addressbook_Controller::getInstance();
 		if($_contactId !== NULL && $contact = $addresses->getContact($_contactId)) {
 		    $encodedContact = $contact->toArray();
@@ -70,7 +67,6 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		    }
 		}
 		
-		$view->jsIncludeFiles[] = self::_appendFileTime('Addressbook/js/EditDialog.js');
 		$view->jsExecute = 'Tine.Addressbook.ContactEditDialog.display(' . $encodedContact . ');';
         
 		$view->configData = array(
@@ -81,8 +77,11 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		$view->title="edit contact";
 		
 		$view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude(), $view->jsIncludeFiles);
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude(), $view->cssIncludeFiles);
+		
+		$includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
 	}
@@ -112,4 +111,16 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
 		}
 	}
 	
+	/**
+     * Returns all JS files which must be included for Addressbook
+     * 
+     * @return array array of filenames
+     */
+	public function getJsFilesToInclude()
+    {
+        return array(
+            'Addressbook/js/Addressbook.js',
+            'Addressbook/js/EditDialog.js',
+        );
+    }
 }

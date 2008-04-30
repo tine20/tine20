@@ -28,8 +28,8 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            self::_appendFileTime("Tasks/js/Status.js"),
-            self::_appendFileTime("Tasks/js/Tasks.js"),
+            'Tasks/js/Status.js',
+            'Tasks/js/Tasks.js',
         );
     }
 
@@ -107,8 +107,11 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         );
         
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude());
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude());
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

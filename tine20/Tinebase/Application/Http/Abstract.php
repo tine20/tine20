@@ -30,7 +30,7 @@ abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_A
     {
         $standartFile = "{$this->_appname}/js/{$this->_appname}.js";
         if (file_exists($standartFile)) {
-            return array(self::_appendFileTime($standartFile));
+            return array($standartFile);
         }
         return array();
         
@@ -45,7 +45,7 @@ abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_A
     {
         $standartFile = "{$this->_appname}/css/{$this->_appname}.css";
         if (file_exists($standartFile)) {
-            return array(self::_appendFileTime($standartFile));
+            return array($standartFile);
         }
         return array();
     }

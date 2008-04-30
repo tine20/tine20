@@ -28,7 +28,7 @@ class Dialer_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            self::_appendFileTime("Dialer/js/Dialer.js")
+            'Dialer/js/Dialer.js'
         );
     }
 }

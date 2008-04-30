@@ -27,6 +27,7 @@
 
     <!-- Tine 2.0 -->
     <script type="text/javascript" language="javascript" src="Tinebase/js/Tinebase.js"></script>
+    
     <!-- initialize the registry, before the other js files get included -->
     <script type="text/javascript" language="javascript">
             <?php
@@ -36,12 +37,14 @@
                 echo "Tine.Tinebase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');\n";
             ?>
     </script>
-    <?php 
+    <script type="text/javascript" language="javascript" src="Tinebase/js/tine20-debug.js"></script>
+    <link rel="stylesheet" type="text/css" href="Tinebase/css/tine20-debug.css" />
+    <?php
+        foreach ($this->cssIncludeFiles as $name) {
+            echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
+        }
     	foreach ($this->jsIncludeFiles as $name) {
-    		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. $name .'"></script>';
-    	}
-    	foreach ($this->cssIncludeFiles as $name) {
-    		echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. $name .'" />';
+    		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
     	}
     ?>
     <script type="text/javascript" language="javascript">

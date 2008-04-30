@@ -28,8 +28,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            self::_appendFileTime("Crm/js/Crm.js"),
-            self::_appendFileTime("Crm/js/LeadState.js"),
+            'Crm/js/Crm.js',
+            'Crm/js/LeadState.js',
         );
     }
     
@@ -55,10 +55,6 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();
         
         $crmJson = new Crm_Json;        
-//      $view->formData['config']['initialTree'] = $eventschedulerJson->getInitialTree('mainTree');
-
-        $view->jsIncludeFiles = array('extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js');
-        $view->cssIncludeFiles = array();
         
         $controller = Crm_Controller::getInstance();
         
@@ -167,8 +163,11 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $view->title="edit lead";
 
         $view->isPopup = true;
-        $view->jsIncludeFiles = array_merge(Tinebase_Http::getJsFilesToInclude(), $this->getJsFilesToInclude(), $view->jsIncludeFiles);
-        $view->cssIncludeFiles = array_merge(Tinebase_Http::getCssFilesToInclude(), $this->getCssFilesToInclude(), $view->cssIncludeFiles);
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }

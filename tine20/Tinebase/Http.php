@@ -60,37 +60,38 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
      */
     public function getJsFilesToInclude()
     {
+       //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
         return array(
             // base framework
-            //self::_appendFileTime("../ExtJS/adapter/ext/ext-base.js"),
-            //self::_appendFileTime("../ExtJS/ext-all-debug.js"),
-            self::_appendFileTime("Tinebase/js/ExtFixes.js"),
+            //'../ExtJS/adapter/ext/ext-base.js',
+            //'../ExtJS/ext-all-debug.js',
+            'Tinebase/js/ExtFixes.js',
             // Tinebase
-            //self::_appendFileTime("Tinebase/js/Tinebase.js"),
-            self::_appendFileTime("Tinebase/js/Models.js"),
-            self::_appendFileTime("Tinebase/js/Container.js"),
+            //'Tinebase/js/Tinebase.js',
+            'Tinebase/js/Models.js',
+            'Tinebase/js/Container.js',
             // Ext user extensions
-            self::_appendFileTime("Tinebase/js/ExtUx.js"),
-            self::_appendFileTime("Tinebase/js/ux/ButtonLockedToggle.js"),
-            self::_appendFileTime("Tinebase/js/ux/Percentage.js"),
-            self::_appendFileTime("Tinebase/js/ux/PopupWindow.js"),
-            self::_appendFileTime("Tinebase/js/ux/Wizard.js"),
-            self::_appendFileTime("Tinebase/js/ux/grid/CheckColumn.js"),
-            self::_appendFileTime("Tinebase/js/ux/grid/QuickaddGridPanel.js"),
-            self::_appendFileTime("Tinebase/js/ux/form/IconTextField.js"),
-            self::_appendFileTime("Tinebase/js/ux/form/MirrorTextField.js"),
-            self::_appendFileTime("Tinebase/js/ux/form/ColumnFormPanel.js"),
-            self::_appendFileTime("Tinebase/js/ux/form/ExpandFieldSet.js"),
-            self::_appendFileTime("Tinebase/js/ux/layout/HorizontalFitLayout.js"),
-            self::_appendFileTime("Tinebase/js/DatepickerRange.js"),
+            'Tinebase/js/ExtUx.js',
+            'Tinebase/js/ux/ButtonLockedToggle.js',
+            'Tinebase/js/ux/Percentage.js',
+            'Tinebase/js/ux/PopupWindow.js',
+            'Tinebase/js/ux/Wizard.js',
+            'Tinebase/js/ux/grid/CheckColumn.js',
+            'Tinebase/js/ux/grid/QuickaddGridPanel.js',
+            'Tinebase/js/ux/form/IconTextField.js',
+            'Tinebase/js/ux/form/MirrorTextField.js',
+            'Tinebase/js/ux/form/ColumnFormPanel.js',
+            'Tinebase/js/ux/form/ExpandFieldSet.js',
+            'Tinebase/js/ux/layout/HorizontalFitLayout.js',
+            'Tinebase/js/DatepickerRange.js',
             // Tine 2.0 specific widgets
-            self::_appendFileTime("Tinebase/js/Widgets.js"),
-            self::_appendFileTime("Tinebase/js/AccountpickerPanel.js"),
-            self::_appendFileTime("Tinebase/js/widgets/ContainerSelect.js"),
-            self::_appendFileTime("Tinebase/js/widgets/ContainerGrants.js"),
-            self::_appendFileTime("Tinebase/js/widgets/ContainerTree.js"),
-            self::_appendFileTime("Tinebase/js/widgets/GroupSelect.js"),
-            self::_appendFileTime("Tinebase/js/widgets/TagsPanel.js"),
+            'Tinebase/js/Widgets.js',
+            'Tinebase/js/AccountpickerPanel.js',
+            'Tinebase/js/widgets/ContainerSelect.js',
+            'Tinebase/js/widgets/ContainerGrants.js',
+            'Tinebase/js/widgets/ContainerTree.js',
+            'Tinebase/js/widgets/GroupSelect.js',
+            'Tinebase/js/widgets/TagsPanel.js',
             );
     }
     
@@ -103,12 +104,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     public function getCssFilesToInclude()
     {
     	return array(
-    	   self::_appendFileTime("Addressbook/css/Addressbook.css"),
-    	   self::_appendFileTime("Tinebase/css/ux/Wizard.css"),
-    	   self::_appendFileTime("Tinebase/css/ux/grid/IconTextField.css"),
-    	   self::_appendFileTime("Tinebase/css/ux/form/ExpandFieldSet.css"),
-    	   self::_appendFileTime("Tinebase/css/Tinebase.css"),
-    	   self::_appendFileTime("Tinebase/css/widgets/TagsPanel.css"),
+    	   'Tinebase/css/Tinebase.css',
+    	   'Tinebase/css/ux/Wizard.css',
+    	   'Tinebase/css/ux/grid/IconTextField.css',
+    	   'Tinebase/css/ux/form/ExpandFieldSet.css',
+    	   'Tinebase/css/widgets/TagsPanel.css',
     	);
     }
     
@@ -135,13 +135,14 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             if(class_exists($httpAppName)) {
                 $application_http = new $httpAppName;
                 
-                $view->jsIncludeFiles = array_merge($view->jsIncludeFiles, (array) $application_http->getJsFilesToInclude());
-                $view->cssIncludeFiles = array_merge($view->cssIncludeFiles, (array) $application_http->getCssFilesToInclude());
-                
                 $view->initialData[ucfirst((string) $application)] = $application_http->getInitialMainScreenData();
                 $view->initialData[ucfirst((string) $application)]['rights'] = Zend_Registry::get('currentAccount')->getRights((string) $application);
             }
         }
+        
+        $includeFiles = self::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
         
         $view->configData = array(
             'timeZone'        => Zend_Registry::get('userTimeZone'),
@@ -197,5 +198,46 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         //Output the newly created image in jpeg format
         ImageJpeg($captcha);		
 		
+	}
+
+	/**
+	 * returns an array with all css and js files which needs to be included
+	 * all over Tine 2.0
+	 * 
+	 * NOTE: As the HTML servers have no singletons, we need to create a unique
+	 * instance here. This might get relaxed wiht php 5.3 with static functions
+	 * 
+	 * @return array 
+	 */
+	public static function getAllInclueFiles()
+	{
+	    $tine20path = dirname(dirname(__FILE__));
+	    
+	    // Tinebase first
+        $cssFiles = Tinebase_Http::getCssFilesToInclude();
+        $jsFiles  = Tinebase_Http::getJsFilesToInclude();
+	    
+        $d = dir($tine20path);
+	    while (false !== ($appName = $d->read())) {
+            if (is_dir("$tine20path/$appName") && $appName{0} != '.' && $appName != 'Tinebase') {
+                if (file_exists("$tine20path/$appName/Http.php")) {
+                    $httpClass = $appName . "_Http";
+                    $instance = new $httpClass();
+                    if (method_exists($instance, 'getCssFilesToInclude')) {
+                        $cssFiles = array_merge($cssFiles, call_user_func(array($instance, 'getCssFilesToInclude')));
+                    }
+                    if (method_exists($instance, 'getJsFilesToInclude')) {
+                        $jsFiles = array_merge($jsFiles, call_user_func(array($instance, 'getJsFilesToInclude')));
+                    }
+                }
+            }
+           
+        }
+        $d->close();
+        
+        return array(
+            'js'  => $jsFiles,
+            'css' => $cssFiles
+        );
 	}
 }
