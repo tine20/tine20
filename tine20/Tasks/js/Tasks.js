@@ -57,7 +57,6 @@ Tine.Tasks.mainGrid = {
      */
     filter: {
         containerType: 'personal',
-        owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
         query: '',
         due: false,
         container: false,
@@ -159,6 +158,7 @@ Tine.Tasks.mainGrid = {
                 scope: this
             })
         };
+        this.filter.owner = Tine.Tinebase.Registry.get('currentAccount').accountId;
         this.initStore();
         this.initGrid();
         this.updateMainToolbar();
