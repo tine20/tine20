@@ -79,7 +79,6 @@
         $applications = Tinebase_Application::getInstance()->getApplications();
         foreach( $applications as $application) {
             
-            //@todo    use 'right' field with const from Tinebase_Acl_Rights
             if(strtolower($application->name) !== 'admin') {
                 // run right for user group
                 $right = new Tinebase_Acl_Model_Right(array(
