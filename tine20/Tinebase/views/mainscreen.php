@@ -37,16 +37,27 @@
                 echo "Tine.Tinebase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');\n";
             ?>
     </script>
-    <script type="text/javascript" language="javascript" src="Tinebase/js/tine20-debug.js"></script>
-    <link rel="stylesheet" type="text/css" href="Tinebase/css/tine20-debug.css" />
+
     <?php
-        foreach ($this->cssIncludeFiles as $name) {
-            echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
+        $TinebasePath = dirname(dirname(__FILE__));
+        
+        if (file_exists("$TinebasePath/css/tine-all.css")) {
+            echo "\n    " . '<link rel="stylesheet" type="text/css" href="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/css/tine-all.css') . '" />';
+        } else {
+            foreach ($this->cssIncludeFiles as $name) {
+                echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'" />';
+            }
         }
-    	foreach ($this->jsIncludeFiles as $name) {
-    		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
-    	}
+        
+        if (file_exists("$TinebasePath/js/tine-all.js")) {
+            echo "\n    " . '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime('Tinebase/js/tine-all.js') . '"></script>';
+        } else {
+        	foreach ($this->jsIncludeFiles as $name) {
+        		echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Application_Http_Abstract::_appendFileTime($name) .'"></script>';
+        	}
+        }
     ?>
+    
     <script type="text/javascript" language="javascript">
         <?php
            foreach ((array)$this->initialData as $appname => $data) {
