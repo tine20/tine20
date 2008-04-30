@@ -314,8 +314,6 @@ Tine.Addressbook.Main = {
             { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80, hidden: true },
             { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
             { resizable: true, id: 'n_fileas', header: 'Display name', dataIndex: 'n_fileas'},
-            { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150},
-            { resizable: true, id: 'bday', header: 'Birthday', dataIndex: 'bday', hidden: true },
             { resizable: true, id: 'org_name', header: 'Organisation', dataIndex: 'org_name', width: 200 },
             { resizable: true, id: 'org_unit', header: 'Unit', dataIndex: 'org_unit' , hidden: true },
             { resizable: true, id: 'title', header: 'Title', dataIndex: 'title', hidden: true },
@@ -331,6 +329,7 @@ Tine.Addressbook.Main = {
             { resizable: true, id: 'adr_two_region', header: 'Region (private)', dataIndex: 'adr_two_region', hidden: true },
             { resizable: true, id: 'adr_two_postalcode', header: 'Postalcode (private)', dataIndex: 'adr_two_postalcode', hidden: true },
             { resizable: true, id: 'adr_two_countryname', header: 'Country (private)', dataIndex: 'adr_two_countryname', hidden: true },
+            { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150},
             { resizable: true, id: 'tel_work', header: 'Phone', dataIndex: 'tel_work', hidden: false },
             { resizable: true, id: 'tel_cell', header: 'Cellphone', dataIndex: 'tel_cell', hidden: false },
             { resizable: true, id: 'tel_fax', header: 'Fax', dataIndex: 'tel_fax', hidden: true },
@@ -344,7 +343,8 @@ Tine.Addressbook.Main = {
             { resizable: true, id: 'url_home', header: 'URL (private)', dataIndex: 'url_home', hidden: true },
             { resizable: true, id: 'note', header: 'Note', dataIndex: 'note', hidden: true },
             { resizable: true, id: 'tz', header: 'Timezone', dataIndex: 'tz', hidden: true },
-            { resizable: true, id: 'geo', header: 'Geo', dataIndex: 'geo', hidden: true }
+            { resizable: true, id: 'geo', header: 'Geo', dataIndex: 'geo', hidden: true },
+            { resizable: true, id: 'bday', header: 'Birthday', dataIndex: 'bday', hidden: true }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable
