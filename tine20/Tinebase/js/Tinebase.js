@@ -349,8 +349,12 @@ Tine.Tinebase.MainScreen = function() {
         
         for(var _application in Tine) {
         	try{
-                panels.push(Tine[_application].getPanel());
-                
+                for (var i=0, j=Tine[_application]['rights'].length; i<j; i++) {
+                    if (Tine[_application]['rights'][i] == 'run') {
+                        panels.push(Tine[_application].getPanel());
+                        break;
+                    }
+                }
         	} catch(e) {
         		//console.log(_application + ' failed');
         		//console.log(e);
