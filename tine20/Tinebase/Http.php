@@ -67,7 +67,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             //'../ExtJS/ext-all-debug.js',
             'Tinebase/js/ExtFixes.js',
             // Tinebase
-            //'Tinebase/js/Tinebase.js',
+            'Tinebase/js/Tinebase.js',
             'Tinebase/js/Models.js',
             'Tinebase/js/Container.js',
             // Ext user extensions

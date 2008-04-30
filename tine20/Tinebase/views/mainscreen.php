@@ -25,19 +25,7 @@
     <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="ExtJS/ext-all-debug.js"></script>
 
-    <!-- Tine 2.0 -->
-    <script type="text/javascript" language="javascript" src="Tinebase/js/Tinebase.js"></script>
-    
-    <!-- initialize the registry, before the other js files get included -->
-    <script type="text/javascript" language="javascript">
-            <?php
-                foreach ((array)$this->configData as $index => $value) {
-                    echo "Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");\n";
-                }
-                echo "Tine.Tinebase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');\n";
-            ?>
-    </script>
-
+    <!-- Tine 2.0 static files -->
     <?php
         $TinebasePath = dirname(dirname(__FILE__));
         
@@ -58,17 +46,29 @@
         }
     ?>
     
+    
+    <!-- Tine 2.0 dynamic initialisation -->
     <script type="text/javascript" language="javascript">
+    // registry
+        <?php
+                foreach ((array)$this->configData as $index => $value) {
+                    echo "\n    Tine.Tinebase.Registry.add('$index'," . Zend_Json::encode($value) . ");";
+                }
+                echo "\n    Tine.Tinebase.Registry.add('jsonKey','" . Zend_Registry::get('jsonKey') . "');";
+        ?>
+        
+    // initialData
         <?php
            foreach ((array)$this->initialData as $appname => $data) {
                if (!empty($data) ) {
                    foreach ($data as $var => $content) {
-                       echo "Tine.$appname.$var = ". Zend_Json::encode($content). ';';
+                       echo "\n    Tine.$appname.$var = ". Zend_Json::encode($content). ';';
                    }
                }
            }
         ?>
-
+        
+    // onReady, fired by ExtJS
         Ext.onReady(function(){
             Tine.Tinebase.initFramework();
             <?php if(empty($this->isPopup)) echo "Tine.Tinebase.MainScreen.display(); \n" ?>
@@ -76,6 +76,7 @@
             <?php if(isset($this->jsExecute)) echo "$this->jsExecute \n" ?>
             window.focus();
     	});
+    	
     </script>
 </head>
 <body>
