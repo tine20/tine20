@@ -309,8 +309,8 @@ class Admin_Controller
    /**
      * save application permissions
      *
-     * @param int    $_applicationId
-     * @param array  $_rights
+     * @param int    $_applicationId    the application id for which the rights will be set
+     * @param array  $_rights           array with rights. if empty, all rights will be removed for this application 
      * 
      * @return unknown
      * 
@@ -324,7 +324,7 @@ class Admin_Controller
              !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
                 Zend_Registry::get('currentAccount')->getId(), 
                 Tinebase_Acl_Rights::ADMIN) ) {
-            throw new Exception('Your are not allowed to change application permissions!');
+            throw new Exception('You are not allowed to change application permissions!');
         }        
         
         return Tinebase_Application::getInstance()->setApplicationPermissions($_applicationId, $_rights);
