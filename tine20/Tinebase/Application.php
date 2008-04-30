@@ -313,7 +313,7 @@ class Tinebase_Application
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get all rights from ' . $application->name . 
             //    "_Acl_Rights ( " . $application->name."/Acl/Rights.php" ." )");
         } else {
-            $allRights = Tinebase_Acl_Rights::getAllApplicationRights($_applicationId);   
+            $allRights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights($_applicationId);   
         }
         
         return $allRights;
