@@ -98,6 +98,11 @@
                 $right->right = Tinebase_Acl_Rights::ADMIN;            
                 Tinebase_Acl_Rights::getInstance()->addRight($right);
                 
+                // create shared tags for admin group in tinebase
+                if ( strtolower($application->name) !== 'tinebase') {
+                    $right->right = Tinebase_Acl_Rights::MANAGE_SHARED_TAGS;            
+                    Tinebase_Acl_Rights::getInstance()->addRight($right);
+                }            
             } else {
                 // run right for admin group
                 $right = new Tinebase_Acl_Model_Right(array(
