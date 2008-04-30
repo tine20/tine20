@@ -462,6 +462,12 @@ Tine.Addressbook.Main = {
             }
         }, this);
 
+        gridPanel.on('keydown', function(e){
+             if(e.getKey() == e.DELETE && Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getCount() > 0){
+                 this.handlers.deleteContact();
+             }
+        }, this);
+
         // add the grid to the layout
         Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
     },
