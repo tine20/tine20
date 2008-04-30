@@ -242,6 +242,7 @@ Tine.Tinebase.MainScreen = function() {
 
         var applicationArcordion = new Ext.Panel({
             layout:'accordion',
+            border: false,
             layoutConfig: {
                 // layout-specific configs go here
                 titleCollapse: true,
