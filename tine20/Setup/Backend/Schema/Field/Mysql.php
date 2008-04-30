@@ -37,7 +37,7 @@
                     break;
             
                 case('tinyint'):
-                    $type = 'integer';
+                    $type = $_declaration['DATA_TYPE'];
                     $length = $_declaration['NUMERIC_PRECISION'] + 1;
                     break;
                 

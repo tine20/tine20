@@ -121,13 +121,19 @@ abstract class Setup_Backend_Schema_Field_Abstract
         
     public function toArray()
     {
-        return array('name'=> $this->name, 
-                    'length' => (int) $this->length ,
-				    //'type' => $this->type,
-					
-                    //'value' => $this->value,
+		if ('decimal' == $this->type) {
+			return array();
+		} 
+        
+		return array('name'=> $this->name, 
+                    'type' => $this->type,
+					'autoincrement' => $this->autoincrement,
+					'length' => (int) $this->length ,
+					'unsigned' => $this->unsigned,
+                    'value' => $this->value,
                     'mul' => $this->mul,
                     'primary' => $this->primary,
+					'unique' => $this->unique,
                     );
     }
 }
