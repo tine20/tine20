@@ -245,10 +245,10 @@ Tine.Addressbook.Main = {
     {
         var quickSearchField = new Ext.app.SearchField({
             id: 'quickSearchField',
-            width:240,
+            width: 240,
             emptyText: 'enter searchfilter'
         }); 
-        quickSearchField.on('change', function(){
+        quickSearchField.on('change', function(_field, _newValue, _oldValue){
             Ext.getCmp('Addressbook_Contacts_Grid').getStore().load({
                 params: {
                     start: 0,
