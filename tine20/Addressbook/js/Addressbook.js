@@ -246,6 +246,7 @@ Tine.Addressbook.Main = {
         var quickSearchField = new Ext.app.SearchField({
             id: 'quickSearchField',
             width: 240,
+            selectOnFocus : true,
             emptyText: 'enter searchfilter'
         }); 
         quickSearchField.on('change', function(_field, _newValue, _oldValue){
