@@ -284,6 +284,7 @@ Tine.Admin.Roles.EditDialog = {
      * var handlers
      */
      handlers: {
+     	/*
         removeAccount: function(_button, _event) 
         { 
             var roleGrid = Ext.getCmp('roleMembersGrid');
@@ -312,13 +313,13 @@ Tine.Admin.Roles.EditDialog = {
             }
             selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
         },
-
+        */
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('roleDialog').getForm();
             
             if(form.isValid()) {
-        
+                /*       
             	// get role members
                 var roleGrid = Ext.getCmp('roleMembersGrid');
 
@@ -330,7 +331,7 @@ Tine.Admin.Roles.EditDialog = {
                 dataStore.each(function(_record){
                     roleMembers.push(_record.data.accountId);
                 });
-                
+                */
                 // update form               
                 form.updateRecord(Tine.Admin.Roles.EditDialog.roleRecord);
 
@@ -340,7 +341,7 @@ Tine.Admin.Roles.EditDialog = {
                     params: {
                         method: 'Admin.saveRole', 
                         roleData: Ext.util.JSON.encode(Tine.Admin.Roles.EditDialog.roleRecord.data),
-                        roleMembers: Ext.util.JSON.encode(roleMembers)
+                        //roleMembers: Ext.util.JSON.encode(roleMembers)
                     },
                     success: function(_result, _request) {
                      	if(window.opener.Tine.Admin.Roles) {
@@ -349,8 +350,10 @@ Tine.Admin.Roles.EditDialog = {
                         if(_closeWindow === true) {
                             window.close();
                         } else {
-                            //this.updateRoleRecord(Ext.util.JSON.decode(_result.responseText));
-                            //form.loadRecord(this.roleRecord);
+                        	var response = Ext.util.JSON.decode(_result.responseText);
+                            console.log(response);
+                            this.updateRoleRecord(response.updatedData);
+                            form.loadRecord(this.roleRecord);
                             
                         	// @todo   get roleMembers from result
                         	/*
@@ -433,8 +436,9 @@ Tine.Admin.Roles.EditDialog = {
 
         if(_rights.deleteGrant === true) {
             Ext.getCmp('roleDialog').action_delete.enable();
-        }*/
+        }
         Ext.getCmp('roleDialog').action_delete.enable();
+        */
     },
     
     /**
@@ -448,7 +452,7 @@ Tine.Admin.Roles.EditDialog = {
     {
 
         /******* actions ********/
-
+        /*
     	this.actions = {
             addAccount: new Ext.Action({
                 text: 'add account',
@@ -465,9 +469,9 @@ Tine.Admin.Roles.EditDialog = {
                 iconCls: 'action_deleteContact'
             })
         };
-
+        */
         /******* account picker panel ********/
-        
+        /*
         var accountPicker =  new Tine.widgets.AccountpickerPanel ({            
             enableBbar: true,
             region: 'west',
@@ -483,10 +487,10 @@ Tine.Admin.Roles.EditDialog = {
             this.account = account;
             this.handlers.addAccount(account);
         }, this);
-        
+        */
 
-        /******* load data store ********/
-
+        /******* load role members data store ********/
+        /*
         this.dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
@@ -503,15 +507,15 @@ Tine.Admin.Roles.EditDialog = {
         } else {
             this.dataStore.loadData( _roleMembers );
         }
-
+        */
         /******* column model ********/
-
+        /*
         var columnModel = new Ext.grid.ColumnModel([{ 
         	resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 
         }]);
-
+        */
         /******* row selection model ********/
-
+        /*
         var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
 
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
@@ -525,17 +529,17 @@ Tine.Admin.Roles.EditDialog = {
                 this.actions.removeAccount.setDisabled(false);
             }
         }, this);
-       
+        */
         /******* bottom toolbar ********/
-
+        /*
         var membersBottomToolbar = new Ext.Toolbar({
             items: [
                 this.actions.removeAccount
             ]
         });
-
+        */
         /******* role members grid ********/
-        
+        /*
         var roleMembersGridPanel = new Ext.grid.EditorGridPanel({
         	id: 'roleMembersGrid',
             region: 'center',
@@ -551,7 +555,7 @@ Tine.Admin.Roles.EditDialog = {
             bbar: membersBottomToolbar,
             border: true
         }); 
-        
+        */
         /******* THE edit dialog ********/
         
         var editRoleDialog = {
@@ -585,8 +589,13 @@ Tine.Admin.Roles.EditDialog = {
 	                    }]        
 	                }]
 	            },
+	            new Ext.Panel ({
+	               region: 'center'
+	            })
+	            /*
 	            accountPicker, 
 	            roleMembersGridPanel
+	            */
             ]
         };
         
@@ -614,7 +623,7 @@ Tine.Admin.Roles.EditDialog = {
         });
 
         this.updateRoleRecord(_roleData);
-        this.updateToolbarButtons(_roleData.grants);       
+        //this.updateToolbarButtons(_roleData.grants);       
 
         dialog.getForm().loadRecord(this.roleRecord);
         
