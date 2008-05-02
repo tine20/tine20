@@ -93,6 +93,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/widgets/GroupSelect.js',
             'Tinebase/js/widgets/TagsPanel.js',
             'Tinebase/js/widgets/TagCombo.js',
+            'Tinebase/js/widgets/CountryCombo.js',
             );
     }
     
