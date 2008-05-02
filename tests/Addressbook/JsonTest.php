@@ -177,7 +177,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getAllContacts(NULL, 'id', 'ASC', 0, 10);
+        $contacts = $json->getAllContacts(NULL, 'id', 'ASC', 0, 10, NULL);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }    
@@ -190,7 +190,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 'id', 'ASC', 0, 10);
+        $contacts = $json->getContactsByOwner(NULL, Zend_Registry::get('currentAccount')->getId(), 'id', 'ASC', 0, 10, NULL);
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -203,7 +203,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getSharedContacts(NULL, 'id', 'ASC', 0, 10);
+        $contacts = $json->getSharedContacts(NULL, 'id', 'ASC', 0, 10, NULL);
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -216,7 +216,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getOtherPeopleContacts(NULL, 'id', 'ASC', 0, 10);
+        $contacts = $json->getOtherPeopleContacts(NULL, 'id', 'ASC', 0, 10, NULL);
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -229,7 +229,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 'id', 'ASC', 0, 10);
+        $contacts = $json->getContactsByAddressbookId($this->container->id, NULL, 'id', 'ASC', 0, 10, NULL);
         
         #$this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -242,7 +242,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getAccounts(NULL, 'id', 'ASC', 0, 10);
+        $contacts = $json->getAccounts(NULL, 'id', 'ASC', 0, 10, NULL);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
         $this->assertLessThan(10, $contacts['totalcount']);
