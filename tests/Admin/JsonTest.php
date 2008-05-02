@@ -30,12 +30,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
     
     /**
-     * the id of the added role
-     * @var int
-     */
-    protected $_roleId = 0;
-    
-    /**
      * Runs the test methods of this class.
      *
      * @access public
