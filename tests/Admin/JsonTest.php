@@ -30,6 +30,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
     
     /**
+     * the id of the added role
+     * @var int
+     */
+    protected $_roleId = 0;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -92,8 +98,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'order'                 => '99',
         ));
         */
+
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
-                
+       
+        $this->objects['role'] = new Tinebase_Acl_Model_Role ( array(
+            'name'                  => 'phpunit test role',
+            'description'           => 'phpunit test role',
+        ));
+        
         // add account for group member tests
         try {
             Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId) ;
@@ -453,25 +465,49 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to add role
+     *
+     */
+    public function testAddRole()
+    {
+        
+        $json = new Admin_Json();
+        
+        $encodedData = Zend_Json::encode($this->objects['role']->toArray());
+        $result = $json->saveRole($encodedData);
+        
+        $this->assertTrue($result['success']);    
+        
+        // get role id from result
+        $roleId = $result['updatedData']['id'];
+        
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
+        
+        $this->assertEquals($role->getId(), $roleId);
+    }
+    
+    /**
      * try to save role
      *
      */
-    public function testSaveRole()
+    public function testUpdateRole()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        /*
         $json = new Admin_Json();
         
-        $applications = $json->getRoles( NULL, NULL, 'ASC', 0, 10);
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
+        $role->description = "updated description";
+        $roleArray = $role->toArray();
+        $encodedData = Zend_Json::encode($roleArray);
         
-        $this->assertGreaterThan(0, $applications['totalcount']);
-        */
+        $result = $json->saveRole($encodedData);
+        
+        $this->assertTrue($result['success']);
+        $this->assertEquals( "updated description", $result['updatedData']['description']);        
     }
 
     /**
      * try to get roles
      *
-     * @todo    add/save test role first
      */
     public function testGetRoles()
     {
@@ -479,7 +515,25 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $roles = $json->getRoles( NULL, NULL, 'ASC', 0, 10);
         
-        //$this->assertGreaterThan(0, $roles['totalcount']);
+        $this->assertGreaterThan(0, $roles['totalcount']);
+    }
+
+    /**
+     * try to delete roles
+     *
+     * @todo implement json function and use it
+     */
+    public function testDeleteRoles()
+    {
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
+        
+        //$json = new Admin_Json();        
+        Tinebase_Acl_Roles::getInstance()->deleteRoles($role->getId());
+        
+        // try to get it, shouldn't be found
+        $this->setExpectedException( 'Exception');
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
+        
     }
     
 }       
