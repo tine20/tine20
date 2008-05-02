@@ -294,7 +294,7 @@ Tine.Tasks.mainGrid = {
 	// toolbar must be generated each time this fn is called, 
 	// as tinebase destroys the old toolbar when setting a new one.
 	getToolbar: function(){
-		var quickSearchField = new Ext.app.SearchField({
+		var quickSearchField = new Ext.ux.SearchField({
 			id: 'quickSearchField',
 			width: 200,
 			emptyText: 'enter searchfilter'

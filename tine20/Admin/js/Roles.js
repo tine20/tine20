@@ -97,7 +97,7 @@ Tine.Admin.Roles.Main = {
     
     displayRolesToolbar: function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width:240,
             emptyText: 'enter searchfilter'

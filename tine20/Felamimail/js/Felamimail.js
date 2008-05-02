@@ -262,7 +262,7 @@ Tine.Felamimail.Email = function() {
 
     var _showToolbar = function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id:        'quickSearchField',
             width:     200,
             emptyText: 'enter searchfilter'

@@ -188,7 +188,7 @@ Tine.Crm.Main = function(){
                     ]
         });
         
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width: 200,
             emptyText: 'enter searchfilter'
@@ -2228,7 +2228,7 @@ Tine.Crm.LeadEditDialog.Elements = function() {
         
         getTabPanelManageContacts: function() {
             // why does this not work????
-            var quickSearchField = new Ext.app.SearchField({
+            var quickSearchField = new Ext.ux.SearchField({
             //var quickSearchField = new Ext.form.TriggerField({
             //var quickSearchField = new Ext.form.TwinTriggerField({
                 id: 'crm_editLead_SearchContactsField',

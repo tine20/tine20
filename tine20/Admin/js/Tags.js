@@ -97,7 +97,7 @@ Tine.Admin.Tags.Main = {
     
     displayTagsToolbar: function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width:240,
             emptyText: 'enter searchfilter'
@@ -556,34 +556,28 @@ Tine.Admin.Tags.EditDialog = {
             width: 600,
             height: 500,
             items:[{
-                    region: 'north',
-                    layout:'column',
+                    xtype: 'columnform',
                     border: false,
                     autoHeight: true,
-                    items:[{
-                        columnWidth: 1,
-                        layout: 'form',
-                        border: false,
-                        items:[{
-                            xtype:'textfield',
+                    items:[
+                        [{
+                            columnWidth: .3,
                             fieldLabel:'Tag Name', 
                             name:'name',
-                            anchor:'100%',
                             allowBlank: false
                         }, {
-                            xtype:'textarea',
+                            columnWidth: .5,
                             name: 'description',
                             fieldLabel: 'Description',
-                            grow: false,
-                            preventScrollbars:false,
                             anchor:'100%',
-                            height: 60
-                        }/*,{
-                            xtype: 'colorpalette',
+                        }/*, {
+                            columnWidth: .2,
+                            xtype: 'combo',
                             name: 'color',
                             fieldLabel: 'Color'
-                        }*/]        
-                    }]
+                        }*/
+                        ]        
+                    ]
                 }
             ]
         };

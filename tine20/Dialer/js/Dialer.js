@@ -90,7 +90,7 @@ Tine.Dialer.Main = {
  
     displayToolbar: function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width:240,
             emptyText: 'enter searchfilter'

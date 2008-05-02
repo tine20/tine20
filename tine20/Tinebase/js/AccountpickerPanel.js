@@ -315,7 +315,7 @@ Tine.widgets.AccountpickerPanel = Ext.extend(Ext.TabPanel, {
         columnModel.defaultSortable = true; // by default columns are sortable
         
         //var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-        this.quickSearchField = new Ext.app.SearchField({
+        this.quickSearchField = new Ext.ux.SearchField({
             id: 'Tinebase_Accounts_SearchField',
             width: this.width - 3 - (this.selectType == 'both' ? 44 : 0),
             emptyText: 'enter searchfilter'

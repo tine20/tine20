@@ -243,19 +243,20 @@ Tine.Addressbook.Main = {
 	
     displayContactsToolbar: function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width: 240,
-            selectOnFocus : true,
-            emptyText: 'enter searchfilter'
         }); 
         quickSearchField.on('change', function(_field, _newValue, _oldValue){
-            Ext.getCmp('Addressbook_Contacts_Grid').getStore().load({
-                params: {
-                    start: 0,
-                    limit: 50
-                }
-            });
+            // only refresh data on new query strings
+            if (_newValue != _oldValue) {
+                Ext.getCmp('Addressbook_Contacts_Grid').getStore().load({
+                    params: {
+                        start: 0,
+                        limit: 50
+                    }
+                });
+            }
         }, this);
         
         var contactToolbar = new Ext.Toolbar({
@@ -269,7 +270,11 @@ Tine.Addressbook.Main = {
                 '-',
                 this.actions.exportContact,
                 Tine.Dialer && Tine.Dialer.rights.indexOf('run') > -1 ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
-                '->', 
+                '->',
+                'Filter: ',
+                new Tine.widgets.tags.TagCombo({
+                    app: 'Addressbook'
+                }),
                 'Search:', 
                 ' ',
                 quickSearchField

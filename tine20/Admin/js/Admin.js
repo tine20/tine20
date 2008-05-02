@@ -322,7 +322,7 @@ Tine.Admin.AccessLog.Main = function() {
 
     var _showToolbar = function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id:        'quickSearchField',
             width:     200,
             emptyText: 'enter searchfilter'
@@ -682,7 +682,7 @@ Tine.Admin.Applications.Main = function() {
 
 	var _showApplicationsToolbar = function()
     {
-        var quickSearchField = new Ext.app.SearchField({
+        var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width:240,
             emptyText: 'enter searchfilter'
@@ -1469,7 +1469,7 @@ Tine.Admin.Accounts.Main = function() {
 	    
 	    showToolbar: function()
 	    {
-	        var quickSearchField = new Ext.app.SearchField({
+	        var quickSearchField = new Ext.ux.SearchField({
 	            id: 'quickSearchField',
 	            width:240,
 	            emptyText: 'enter searchfilter'

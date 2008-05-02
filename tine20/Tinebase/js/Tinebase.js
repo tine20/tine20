@@ -781,49 +781,6 @@ Tine.Tinebase.Common = function(){
 	};
 }();
 
-Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
-    initComponent : function(){
-        Ext.app.SearchField.superclass.initComponent.call(this);
-        this.on('specialkey', function(f, e){
-            if(e.getKey() == e.ENTER){
-                this.onTrigger2Click();
-            }
-        }, this);
-    },
-
-    validationEvent:false,
-    validateOnBlur:false,
-    trigger1Class:'x-form-clear-trigger',
-    trigger2Class:'x-form-search-trigger',
-    hideTrigger1:true,
-    width:180,
-    hasSearch : false,
-    paramName : 'query',
-    selectOnFocus : true,
-    emptyText: 'enter searchfilter',
-
-    onTrigger1Click : function(){
-        if(this.hasSearch){
-            this.el.dom.value = '';
-        	this.fireEvent('change', this, this.getRawValue(), this.startValue);
-            this.startValue = this.getRawValue();
-            this.triggers[0].hide();
-            this.hasSearch = false;
-        }
-    },
-
-    onTrigger2Click : function(){
-        var v = this.getRawValue();
-        if(v.length < 1){
-            this.onTrigger1Click();
-            return;
-        }
-        this.fireEvent('change', this, this.getRawValue(), this.startValue);
-        this.startValue = this.getRawValue();
-        this.hasSearch = true;
-        this.triggers[0].show();
-    }
-});
 
 
 Ext.grid.RowExpander = function(config){
