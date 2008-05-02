@@ -188,7 +188,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByOwner()
     {
-        $count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $this->objects['initialContact']->n_family);
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $this->objects['initialContact']->n_family
+        ));
+        $count = Addressbook_Controller::getInstance()->getCountByOwner(Zend_Registry::get('currentAccount'), $filter);
         
         $this->assertEquals(1, $count);
     }
@@ -199,7 +202,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByAddressbookId()
     {
-        $count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner);
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => ''
+        ));
+        $count = Addressbook_Controller::getInstance()->getCountByAddressbookId($this->objects['initialContact']->owner, $filter);
         
         $this->assertGreaterThan(0, $count);
     }
@@ -210,7 +216,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountOfAllContacts()
     {
-        $count = Addressbook_Controller::getInstance()->getCountOfAllContacts($this->objects['initialContact']->n_family);
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $this->objects['initialContact']->n_family
+        ));
+        $count = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
         
         $this->assertEquals(1, $count);
     }
