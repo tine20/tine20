@@ -202,11 +202,11 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         if(count($_container) === 0) {
             throw new Exception('$_container can not be empty');
         }        
+        $select = $this->contactsTable->select();
+        $select->where($this->contactsTable->getAdapter()->quoteInto('owner IN (?)', 
+            $_container->getArrayOfIds()));
 
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container->getArrayOfIds())
-        );
-        $result = $this->_getContactsFromTable($where, $_filter, $_pagination);
+        $result = $this->_getContactsFromTable($select, $_filter, $_pagination);
          
         return $result;
     }
@@ -224,13 +224,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
             throw new Exception('$_container can not be empty');
         }        
         
-        $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container->getArrayOfIds())
-        );
+        $select = $this->contactsTable->select();
+        $select->where($this->contactsTable->getAdapter()->quoteInto('owner IN (?)', 
+            $_container->getArrayOfIds()));
         
-        $where = $this->_addQuickSearchFilter($where, $_filter);
+        $this->_addFilter($select, $_filter);
         
-        $result = $this->contactsTable->getTotalCount($where);
+        $result = $this->contactsTable->getTotalCount($select);
 
         return $result;
     }
@@ -238,36 +238,28 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * add the fields to search for to the query
      *
-     * @param  array                    $_where current where filter
+     * @param  Zend_Db_Select           $_select current where filter
      * @param  Addressbook_Model_Filter $_filter the string to search for
-     * @return array                    of where statements
+     * @return void
      */
-    protected function _addQuickSearchFilter(array $_where = array(), Addressbook_Model_Filter $_filter)
+    protected function _addFilter(Zend_Db_Select $_select, Addressbook_Model_Filter $_filter)
     {
-        if(!empty($_filter)) {
-            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter->query) . '%');
-        }
-        
-        return $_where;
+        $_select->where($this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter->query) . '%'));
     }
 
     /**
      * internal function to read the contacts from the database
      *
-     * @param  array                     $_where where filter
+     * @param  Zend_Db_Select                     $_where where filter
      * @param  Addressbook_Model_Filter  $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    protected function _getContactsFromTable(array $_where, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination)
+    protected function _getContactsFromTable(Zend_Db_Select $_select, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination)
     {
-        $where = $this->_addQuickSearchFilter($_where, $_filter);
+        $this->_addFilter($_select, $_filter);
 
-        if($_pagination instanceof Tinebase_Model_Pagination) {
-            $rows = $this->contactsTable->fetchAll($where, $_pagination->sort, $_pagination->dir, $_pagination->limit, $_pagination->start);
-        } else {
-            $rows = $this->contactsTable->fetchAll($where);
-        }
+        $rows = $this->contactsTable->fetchAll($_select, $_pagination->sort, $_pagination->dir, $_pagination->limit, $_pagination->start);
 
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows->toArray(),  true);
         
