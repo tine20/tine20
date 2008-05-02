@@ -281,28 +281,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         }
                     ],
                     [
-                        new Ext.form.ComboBox({
+                        {
+                            xtype: 'widget-countrycombo',
                             fieldLabel: 'Country',
                             name: 'adr_one_countryname',
-                            hiddenName:'adr_one_countryname',
-                            store: new Ext.data.JsonStore({
-                                baseParams: {
-                                    method:'Tinebase.getCountryList'
-                                },
-                                root: 'results',
-                                id: 'shortName',
-                                fields: ['shortName', 'translatedName'],
-                                remoteSort: false
-                            }),
-                            displayField:'translatedName',
-                            valueField:'shortName',
-                            typeAhead: true,
-                            mode: 'remote',
-                            triggerAction: 'all',
-                            emptyText:'Select a state...',
-                            selectOnFocus:true,
-                            anchor:'95%'
-                        })
+                        }
                     ]
                 ]
             },
@@ -339,28 +322,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         }
                     ],
                     [
-                        new Ext.form.ComboBox({
+                        {
+                            xtype: 'widget-countrycombo',
                             fieldLabel: 'Country',
                             name: 'adr_two_countryname',
-                            hiddenName:'adr_two_countryname',
-                            store: new Ext.data.JsonStore({
-                                baseParams: {
-                                    method:'Tinebase.getCountryList'
-                                },
-                                root: 'results',
-                                id: 'shortName',
-                                fields: ['shortName', 'translatedName'],
-                                remoteSort: false
-                            }),
-                            displayField:'translatedName',
-                            valueField:'shortName',
-                            typeAhead: true,
-                            mode: 'remote',
-                            triggerAction: 'all',
-                            emptyText:'Select a state...',
-                            selectOnFocus:true,
-                            anchor:'95%'
-                        })
+                        }
                     ]
                 ]
             },
