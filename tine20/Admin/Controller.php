@@ -7,6 +7,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo    change exceptions to PermissionDeniedException
  */
 
 /**
@@ -311,10 +313,7 @@ class Admin_Controller
      *
      * @param int    $_applicationId    the application id for which the rights will be set
      * @param array  $_rights           array with rights. if empty, all rights will be removed for this application 
-     * 
      * @return  int number of rights set
-     * 
-     * @todo    change exception to PermissionDeniedException
      */
     public function setApplicationPermissions($_applicationId, array $_rights = array ())
     {   
@@ -537,5 +536,63 @@ class Admin_Controller
         return Tinebase_Acl_Roles::getInstance()->searchRoles($filter, $paging);
         
     }
+    
+    /**
+     * fetch one role identified by $_roleId
+     *
+     * @param int $_roleId
+     * @return Tinebase_Acl_Model_Role
+     */
+    public function getRole($_roleId)
+    {
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleById($_roleId);
+
+        return $role;            
+    }  
+    
+   /**
+     * add new role
+     *
+     * @param  Tinebase_Acl_Model_Role $_role
+     * @return Tinebase_Acl_Model_Role
+     */
+    public function AddRole(Tinebase_Acl_Model_Role $_role)
+    {
+        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Admin_Acl_Rights::MANAGE_ROLES) && 
+             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Tinebase_Acl_Rights::ADMIN) ) {
+            throw new Exception('You are not allowed to manage roles!');
+        }        
+        
+        $role = Tinebase_Acl_Roles::getInstance()->createRole($_role);
+        
+        return $role;            
+    }  
+
+   /**
+     * update existing role
+     *
+     * @param  Tinebase_Acl_Model_Role $_role
+     * @return Tinebase_Acl_Model_Role
+     */
+    public function UpdateRole(Tinebase_Acl_Model_Role $_role)
+    {
+        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Admin_Acl_Rights::MANAGE_ROLES) && 
+             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Tinebase_Acl_Rights::ADMIN) ) {
+            throw new Exception('You are not allowed to manage roles!');
+        }        
+        
+        $role = Tinebase_Acl_Roles::getInstance()->updateRole($_role);
+        
+        return $role;            
+    }  
+    
     
 }

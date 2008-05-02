@@ -594,40 +594,40 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      */
     public function saveRole($roleData)
     {
-        /*
-        $decodedTagData = Zend_Json::decode($tagData);
+        $decodedRoleData = Zend_Json::decode($roleData);
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleData, true));
         
         // unset if empty
-        if(empty($decodedTagData['id'])) {
-            unset($decodedTagData['id']);
+        if(empty($decodedRoleData['id'])) {
+            unset($decodedRoleData['id']);
         }
         
-        $tag = new Tinebase_Tags_Model_Tag();
+        $role = new Tinebase_Acl_Model_Role();
         
         try {
-            $tag->setFromArray($decodedTagData);
+            $role->setFromArray($decodedRoleData);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array('success'           => false,
-                            'errors'            => $tag->getValidationErrors(),
+                            'errors'            => $role->getValidationErrors(),
                             'errorMessage'      => 'invalid data for some fields');
 
             return $result;
         }
         
-        if ( empty($tag->id) ) {
-            $tag = Admin_Controller::getInstance()->addTag($tag);
+        if ( empty($role->id) ) {
+            $role = Admin_Controller::getInstance()->addRole($role);
         } else {
-            $tag = Admin_Controller::getInstance()->updateTag($tag);
+            $role = Admin_Controller::getInstance()->updateRole($role);
         }
                  
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $tag->toArray(),
+                        'updatedData'       => $role->toArray(),
         );
         
         return $result;
-        */
     }    
     
 }

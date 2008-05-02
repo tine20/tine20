@@ -43,7 +43,7 @@ class Tinebase_Acl_Model_Role extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        //'*'      => 'StringTrim'
+        'name'      => 'StringTrim'
     );
 
     /**
@@ -53,19 +53,32 @@ class Tinebase_Acl_Model_Role extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_validators = array();
-
-    /**
-     * @see Tinebase_Record_Abstract
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
-    {
-        $this->_validators = array(
-            'id'                => array('allowEmpty' => true),
-            'name'              => array('presence' => 'required'),
-            'description'       => array('allowEmpty' => true),
-        );
+    protected $_validators = array(
+            'id'                    => array('allowEmpty' => true),
+            'name'                  => array('presence' => 'required'),
+            'description'           => array('allowEmpty' => true),
+            'created_by'            => array('allowEmpty' => true),
+            'creation_time'         => array('allowEmpty' => true),
+            'last_modified_by'      => array('allowEmpty' => true),
+            'last_modified_time'    => array('allowEmpty' => true),
+    );
         
-        return parent::__construct($_data, $_bypassFilters);
+    /**
+     * @var array
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+    );
+    
+    /**
+     * returns role name
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
     }
+    
 }

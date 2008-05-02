@@ -207,6 +207,48 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     }
     
     /**
+     * display edit role dialog
+     *
+     * @param   integer  $roleId   role id
+     * 
+     * @todo    create generic "edit" function with edit tag/group/role
+     * 
+     */
+    public function editRole($roleId)
+    {
+        if(empty($roleId)) {
+            $encodedRole = Zend_Json::encode(array());
+        } else {
+            $role = Admin_Controller::getInstance()->getRole($roleId);         
+            $encodedRole = Zend_Json::encode($role->toArray());
+        }
+
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();
+        
+        //@todo move Roles.js to Admin.js later
+        $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . $encodedRole . ');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit role";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }
+    
+    /**
      * overwrite getJsFilesToInclude from abstract class to add groups js file
      *
      * @return array with js filenames

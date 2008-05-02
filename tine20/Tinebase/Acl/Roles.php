@@ -87,5 +87,105 @@ class Tinebase_Acl_Roles
         
         return new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Role', $this->_db->fetchAssoc($select));
     }
+
+    /**
+     * Returns role identified by its id
+     * 
+     * @param  int  $_roleId
+     * @return Tinebase_Acl_Model_Role  
+     */
+    public function getRoleById($_roleId)
+    {
+        $roleId = (int)$_roleId;
+        if($roleId != $_roleId) {
+            throw new InvalidArgumentException('$_roleId must be integer');
+        }
         
+        $where = $this->rolesTable->getAdapter()->quoteInto('`id` = ?', $roleId);
+        if(!$row = $this->rolesTable->fetchRow($where)) {
+            throw new Exception("role with id $_roleId not found");
+        }
+        
+        $result = new Tinebase_Acl_Model_Role($row->toArray());
+        
+        return $result;
+        
+    }
+
+    /**
+     * Returns role identified by its name
+     * 
+     * @param  string $_roleName
+     * @return Tinebase_Acl_Model_Role  
+     */
+    public function getRoleByName($_roleName)
+    {        
+        $where = $this->rolesTable->getAdapter()->quoteInto('`name` = ?', $_roleName);
+
+        if(!$row = $this->rolesTable->fetchRow($where)) {
+            throw new Exception("role $_roleName not found");
+        }
+        
+        $result = new Tinebase_Acl_Model_Role($row->toArray());
+        
+        return $result;
+    }
+    
+    /**
+     * Creates a single role
+     * 
+     * @param  Tinebase_Acl_Model_Role
+     * @return Tinebase_Acl_Model_Role
+     */
+    public function createRole(Tinebase_Acl_Model_Role $_role)
+    {
+        $_role->created_by = Zend_Registry::get('currentAccount')->getId();
+        $_role->creation_time = Zend_Date::now()->getIso();
+        
+        $data = $_role->toArray();
+                
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+                        
+        $newId = $this->rolesTable->insert($data); 
+        
+        $role = $this->getRoleById($newId);
+        return $role;
+    }
+    
+    /**
+     * updates a single role
+     * 
+     * @param  Tinebase_Acl_Model_Role $_role
+     * @return Tinebase_Acl_Model_Role
+     */
+    public function updateRole(Tinebase_Acl_Model_Role $_role)
+    {
+        $_role->last_modified_by = Zend_Registry::get('currentAccount')->getId();
+        $_role->last_modified_time = Zend_Date::now()->getIso();
+        
+        $data = $_role->toArray();
+                
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
+
+        $where = $this->rolesTable->getAdapter()->quoteInto('`id` = ?', $_role->getId());
+        $this->rolesTable->update($data, $where); 
+        
+        $role = $this->getRoleById($_role->getId());
+        return $role;
+    }
+    
+    /**
+     * Deletes roles identified by their identifiers
+     * @todo implement 
+     * 
+     * @param  string|array id(s) to delete
+     * @return void
+     */
+    public function deleteRoles($_ids)
+    {
+        $ids = ( is_array($_ids) ) ? explode ( ",", $_ids) : $_ids;
+        $this->rolesTable->delete( "id in ( $ids )");
+    }
+    
+    
 }
