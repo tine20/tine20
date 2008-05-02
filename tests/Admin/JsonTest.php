@@ -453,13 +453,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to get roles
+     * try to save role
      *
      */
-    public function testGetRoles()
+    public function testSaveRole()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
-        
         /*
         $json = new Admin_Json();
         
@@ -467,6 +466,20 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $applications['totalcount']);
         */
+    }
+
+    /**
+     * try to get roles
+     *
+     * @todo    add/save test role first
+     */
+    public function testGetRoles()
+    {
+        $json = new Admin_Json();
+        
+        $roles = $json->getRoles( NULL, NULL, 'ASC', 0, 10);
+        
+        //$this->assertGreaterThan(0, $roles['totalcount']);
     }
     
 }       
