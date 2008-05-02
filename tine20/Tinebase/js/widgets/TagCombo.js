@@ -20,6 +20,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      */
     findGlobalTags: true,
     
+    id: 'TagCombo',
     emptyText: 'tag name',
     typeAhead: true,
     editable: false,
@@ -46,5 +47,12 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             }
         });
         Tine.widgets.tags.TagCombo.superclass.initComponent.call(this);
+        
+        this.on('select', function(){
+            var v = this.getValue();
+            if(String(v) !== String(this.startValue)){
+                this.fireEvent('change', this, v, this.startValue);
+            }
+        }, this);
     }
 });
