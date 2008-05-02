@@ -1286,6 +1286,23 @@
                     <type>text</type>
                     <length>255</length>
                 </field>                
+                <field>
+                    <name>created_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>integer</type>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+
                 <index>
                     <name>id</name>
                     <primary>true</primary>

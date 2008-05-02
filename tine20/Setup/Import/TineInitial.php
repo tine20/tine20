@@ -60,7 +60,9 @@
             'accountPrimaryGroup'   => $userGroup->getId(),
             'accountLastName'       => 'Account',
             'accountDisplayName'    => 'Tine 2.0 Admin Account',
-            'accountFirstName'      => 'Tine 2.0 Admin'
+            'accountFirstName'      => 'Tine 2.0 Admin',
+            'accountExpires'        => NULL,
+            'accountEmailAddress'   => NULL,
         ));
 
         $accountsBackend->addAccount($account);
@@ -103,18 +105,29 @@
                     Tinebase_Acl_Rights::getInstance()->addRight($right);
                 }            
             } else {
+                
+                /***** Admin application *****/
+                
+                $adminAppId = $application->getId();
+                
                 // run right for admin group
                 $right = new Tinebase_Acl_Model_Right(array(
-                    'application_id'    => $application->getId(),
+                    'application_id'    => $adminAppId,
                     'account_id'        => $adminGroup->getId(),
                     'account_type'      => 'group',
                     'right'             => Tinebase_Acl_Rights::RUN
                 ));
                 Tinebase_Acl_Rights::getInstance()->addRight($right);
+                               
+                $allAdminRights = Tinebase_Application::getInstance()->getAllRights($adminAppId);
                 
-                // admin for admin group
-                $right->right = Tinebase_Acl_Rights::ADMIN;     
-                Tinebase_Acl_Rights::getInstance()->addRight($right);            
+                foreach ( $allAdminRights as $adminRight ) {
+                    // don't add run right again
+                    if ( $adminRight !== Tinebase_Acl_Rights::RUN ) {
+                        $right->right = $adminRight;     
+                        Tinebase_Acl_Rights::getInstance()->addRight($right);
+                    }            
+                }    
             }
         }
 

@@ -25,22 +25,38 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
 {
    /**
      * the right to manage applications
-     *
+     * @staticvar string
      */
     const MANAGE_APPS = 'manage_apps';
+    
+   /**
+     * the right to manage roles
+     * @staticvar string
+     */
+    const MANAGE_ROLES = 'manage_roles';
+
+    /**
+     * application name
+     * @staticvar string
+     */
+    const APP_NAME = 'Admin';
     
     /**
      * get all possible application rights
      *
-     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
      * @return  array   all application rights
-     * 
      */
-    public function getAllApplicationRights($_applicationId)
+    public function getAllApplicationRights()
     {
-        $allRights = parent::getAllApplicationRights($_applicationId);
+        // get application id
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(self::APP_NAME)->getId();
         
-        $addRights = array ( self::MANAGE_APPS );
+        $allRights = parent::getAllApplicationRights($appId);
+        
+        $addRights = array ( 
+            self::MANAGE_APPS, 
+            self::MANAGE_ROLES, 
+        );
         $allRights = array_merge ( $allRights, $addRights );
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allRights, true));
