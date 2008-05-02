@@ -457,10 +457,10 @@ Tine.Tasks.mainGrid = {
 					sortable: true,
 					dataIndex: 'due',
 					renderer: Tine.Tinebase.Common.dateRenderer,
-					editor: new Ext.ux.ClearableDateField({
+					editor: new Ext.ux.form.ClearableDateField({
                         format : 'd.m.Y'
                     }),
-                    quickaddField: new Ext.ux.ClearableDateField({
+                    quickaddField: new Ext.ux.form.ClearableDateField({
                         //value: new Date(),
                         format : "d.m.Y"
                     })
@@ -694,7 +694,7 @@ Tine.Tasks.EditDialog = function(task) {
                     fieldLabel: 'Priority',
                     name: 'priority'
                 }), 
-                new Ext.ux.ClearableDateField({
+                new Ext.ux.form.ClearableDateField({
                     fieldLabel: 'Due date',
                     name: 'due',
                     format: "d.m.Y"

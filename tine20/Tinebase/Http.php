@@ -69,7 +69,6 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/Models.js',
             'Tinebase/js/Container.js',
             // Ext user extensions
-            'Tinebase/js/ExtUx.js',
             'Tinebase/js/ux/ButtonLockedToggle.js',
             'Tinebase/js/ux/Percentage.js',
             'Tinebase/js/ux/PopupWindow.js',
@@ -81,6 +80,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/form/ColumnFormPanel.js',
             'Tinebase/js/ux/form/ExpandFieldSet.js',
             'Tinebase/js/ux/form/ClearableComboBox.js',
+            'Tinebase/js/ux/form/ClearableDateField.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/DatepickerRange.js',
             // Tine 2.0 specific widgets

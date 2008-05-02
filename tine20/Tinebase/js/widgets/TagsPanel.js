@@ -27,9 +27,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     tags: [],
     /**
-     * @cfg {Bool} findGlobalTags true to find global tags during search (default: false)
+     * @cfg {Bool} findGlobalTags true to find global tags during search (default: true)
      */
-    findGlobalTags: false,
+    findGlobalTags: true,
     /**
      * @var {Ext.data.JsonStore}
      * Holds tags of the record this panel is displayed for

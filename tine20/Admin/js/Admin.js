@@ -1860,7 +1860,7 @@ Tine.Admin.Accounts.EditDialog = function() {
                             }
                         )
                     }, 
-                    new Ext.ux.ClearableDateField({ 
+                    new Ext.ux.form.ClearableDateField({ 
                         fieldLabel: 'Expires',
                         name: 'accountExpires',
                         format: "d.m.Y",

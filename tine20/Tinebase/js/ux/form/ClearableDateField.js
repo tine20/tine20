@@ -1,21 +1,29 @@
-/**
- * Extensions to Ext
+/*
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ *
  */
+ 
+Ext.namespace('Ext.ux', 'Ext.ux.form');
 
-Ext.namespace('Ext.ux');
-
-// --- A DateField with a secondary trigger button that clears the contents of the DateField
-Ext.ux.ClearableDateField = Ext.extend(Ext.form.DateField, {
+/**
+ * A DateField with a secondary trigger button that clears the contents of the DateField
+ */
+Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
     initComponent : function(){
-        Ext.ux.ClearableDateField.superclass.initComponent.call(this);
+        Ext.ux.form.ClearableDateField.superclass.initComponent.call(this);
 
         this.triggerConfig = {
             tag:'span', cls:'x-form-twin-triggers',
             cn:[
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-clear-trigger"},            
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger"}                            
-               ]
-           };
+            ]
+        };
     },
 
     getTrigger : function(index){
@@ -57,14 +65,15 @@ Ext.ux.ClearableDateField = Ext.extend(Ext.form.DateField, {
       
         return true;
     },    
-    
+    // clear contents of combobox
     onTrigger1Click : function() {
         this.reset();
         this.fireEvent('select', this, '' , '');
         this.triggers[0].hide();
-        },             // clear contents of combobox
+    },
+    // pass to original combobox trigger handler
     onTrigger2Click : function() {
         this.onTriggerClick();
-        }   // pass to original combobox trigger handler
+    }
 
 });
