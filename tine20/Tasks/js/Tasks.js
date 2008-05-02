@@ -316,7 +316,7 @@ Tine.Tasks.mainGrid = {
 			iconCls: 'action_showArchived'
 		});
 		
-		var statusFilter = new Ext.ux.ClearableComboBox({
+		var statusFilter = new Ext.ux.form.ClearableComboBox({
 			id: 'TasksStatusFilter',
 			//name: 'statusFilter',
 			hideLabel: true,
@@ -334,7 +334,6 @@ Tine.Tasks.mainGrid = {
 		
 		statusFilter.on('select', function(combo, record, index){
 			this.store.load({params: this.paging});
-			combo.triggers[0].show();
 		},this);
 		
 		var organizerFilter = new Tine.widgets.AccountpickerField({

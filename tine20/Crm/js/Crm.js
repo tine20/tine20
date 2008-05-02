@@ -205,7 +205,7 @@ Tine.Crm.Main = function(){
         });
 
             
-       var filterComboLeadstate = new Ext.ux.ClearableComboBox({
+       var filterComboLeadstate = new Ext.ux.form.ClearableComboBox({
             fieldLabel:'leadstate', 
             id:'filterLeadstate',
            //id:'id',
@@ -230,8 +230,6 @@ Tine.Crm.Main = function(){
                 _leadstate = record.data.leadstate_id;
             }
            
-            combo.triggers[0].show();
-           
             Ext.getCmp('gridCrm').getStore().load({
                 params: {                
 	                start: 0,
@@ -242,7 +240,7 @@ Tine.Crm.Main = function(){
             });
         });
       
-       var filterComboProbability = new Ext.ux.ClearableComboBox({
+       var filterComboProbability = new Ext.ux.form.ClearableComboBox({
             fieldLabel:'probability', 
             id: 'filterProbability',
             name:'probability',
@@ -265,8 +263,6 @@ Tine.Crm.Main = function(){
 		    if (record.data) {
 		       _probability = record.data.key;
 		    }           
-		   
-		    combo.triggers[0].show();           
 		   
 		    Ext.getCmp('gridCrm').getStore().load({
 			    params: {                    

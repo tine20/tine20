@@ -62,9 +62,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     {
        //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
         return array(
-            // base framework
-            //'../ExtJS/adapter/ext/ext-base.js',
-            //'../ExtJS/ext-all-debug.js',
+            // base framework fixes
             'Tinebase/js/ExtFixes.js',
             // Tinebase
             'Tinebase/js/Tinebase.js',
@@ -82,6 +80,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/form/MirrorTextField.js',
             'Tinebase/js/ux/form/ColumnFormPanel.js',
             'Tinebase/js/ux/form/ExpandFieldSet.js',
+            'Tinebase/js/ux/form/ClearableComboBox.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/DatepickerRange.js',
             // Tine 2.0 specific widgets
@@ -92,6 +91,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/widgets/ContainerTree.js',
             'Tinebase/js/widgets/GroupSelect.js',
             'Tinebase/js/widgets/TagsPanel.js',
+            'Tinebase/js/widgets/TagCombo.js',
             );
     }
     
