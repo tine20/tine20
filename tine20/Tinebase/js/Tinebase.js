@@ -787,7 +787,6 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.on('specialkey', function(f, e){
             if(e.getKey() == e.ENTER){
                 this.onTrigger2Click();
-                this.fireEvent('change', this, this.getRawValue(), this.startValue);
             }
         }, this);
     },
@@ -800,11 +799,14 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     width:180,
     hasSearch : false,
     paramName : 'query',
+    selectOnFocus : true,
+    emptyText: 'enter searchfilter',
 
     onTrigger1Click : function(){
         if(this.hasSearch){
             this.el.dom.value = '';
         	this.fireEvent('change', this, this.getRawValue(), this.startValue);
+            this.startValue = this.getRawValue();
             this.triggers[0].hide();
             this.hasSearch = false;
         }
@@ -817,6 +819,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             return;
         }
         this.fireEvent('change', this, this.getRawValue(), this.startValue);
+        this.startValue = this.getRawValue();
         this.hasSearch = true;
         this.triggers[0].show();
     }
