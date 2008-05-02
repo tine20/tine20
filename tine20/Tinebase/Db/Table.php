@@ -48,17 +48,22 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
     /**
      * get total count of rows
      *
+     * @param string|array|Zend_Db_Select $_where
      */
-    public function getTotalCount(array $_where)
+    public function getTotalCount($_where)
     {
         $tableInfo = $this->info();
-        
-        $select = $this->getAdapter()->select()
-            ->from($tableInfo['name'], array('count' => 'COUNT(*)'));
             
-        foreach($_where as $where) {
-            $select->where($where);
+        if (is_array($_where) || is_string($_where)) {
+            $select = $this->getAdapter()->select();
+            foreach((array)$_where as $where) {
+                $select->where($where);
+            }
+        } elseif ($_where instanceof Zend_Db_Select ) {
+            $select = $_where;
         }
+        
+        $select->from($tableInfo['name'], array('count' => 'COUNT(*)'));
         
         $stmt = $this->getAdapter()->query($select);
         $result = $stmt->fetch(Zend_Db::FETCH_ASSOC);
