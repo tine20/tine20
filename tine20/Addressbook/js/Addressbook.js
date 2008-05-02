@@ -299,7 +299,7 @@ Tine.Addressbook.Main = {
         dataStore.setDefaultSort('n_family', 'asc');
 
         dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
         }, this);   
         
         //Ext.StoreMgr.add('ContactsStore', dataStore);

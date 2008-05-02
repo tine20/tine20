@@ -192,24 +192,19 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * get list of contacts from given addressbooks
      *
-     * @param array $_container container id's to read the contacts from
-     * @param string $_filter string to search for in contacts
-     * @param array $_contactType filter by type (list or contact currently)
-     * @param string $_sort fieldname to sort by
-     * @param string $_dir sort ascending or descending (ASC | DESC)
-     * @param int $_limit how many contacts to display
-     * @param int $_start how many contaxts to skip
+     * @param  Tinebase_Record_RecordSet $_container  container id's to read the contacts from
+     * @param  Addressbook_Model_Filter  $_filter     string to search for in contacts
+     * @param  Tinebase_Model_Pagination $_pagination 
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    #public function getContacts(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL)
-    public function getContacts(array $_container, $_filter = NULL, $_pagination = NULL)
+    public function getContacts(Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {
         if(count($_container) === 0) {
             throw new Exception('$_container can not be empty');
         }        
 
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container->getArrayOfIds())
         );
         $result = $this->_getContactsFromTable($where, $_filter, $_pagination);
          
@@ -219,18 +214,18 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * get total count of contacts from given addressbooks
      *
-     * @param array $_container container id's to read the contacts from
-     * @param string $_filter the search filter
-     * @return int count of all other users contacts
+     * @param  Tinebase_Record_RecordSet $_container container id's to read the contacts from
+     * @param  Addressbook_Model_Filter  $_filter the search filter
+     * @return int                       count of all other users contacts
      */
-    public function getCountOfContacts(array $_container, $_filter)
+    public function getCountOfContacts(Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter)
     {
         if(count($_container) === 0) {
             throw new Exception('$_container can not be empty');
         }        
         
         $where = array(
-            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container)
+            $this->contactsTable->getAdapter()->quoteInto('owner IN (?)', $_container->getArrayOfIds())
         );
         
         $where = $this->_addQuickSearchFilter($where, $_filter);
@@ -243,14 +238,14 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * add the fields to search for to the query
      *
-     * @param array $_where current where filter
-     * @param string $_filter the string to search for
-     * @return array of where statements
+     * @param  array                    $_where current where filter
+     * @param  Addressbook_Model_Filter $_filter the string to search for
+     * @return array                    of where statements
      */
-    protected function _addQuickSearchFilter(array $_where = array(), $_filter)
+    protected function _addQuickSearchFilter(array $_where = array(), Addressbook_Model_Filter $_filter)
     {
         if(!empty($_filter)) {
-            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter) . '%');
+            $_where[] = $this->contactsTable->getAdapter()->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter->query) . '%');
         }
         
         return $_where;
@@ -259,15 +254,12 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * internal function to read the contacts from the database
      *
-     * @param array $_where where filter
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_limit
-     * @param int $_start
+     * @param  array                     $_where where filter
+     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    protected function _getContactsFromTable(array $_where, $_filter, $_pagination)
+    protected function _getContactsFromTable(array $_where, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination)
     {
         $where = $this->_addQuickSearchFilter($_where, $_filter);
 
@@ -349,7 +341,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
     /**
      * delete contact identified by contact id
      *
-     * @param int $_contacts contact ids
+     * @param int $_contactId contact ids
      * @return int the number of rows deleted
      */
     public function deleteContact($_contactId)

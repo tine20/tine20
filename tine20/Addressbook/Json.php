@@ -91,21 +91,24 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * get contacts by owner
      *
-     * @param string $filter
-     * @param int $owner
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
+     * @param  string $query
+     * @param  int    $owner
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @praam  int    $start
      * @return array
      */
-    public function getContactsByOwner($filter, $owner, $sort, $dir, $limit, $start)
+    public function getContactsByOwner($query, $owner, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
-
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query
+        ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
             'limit' => $limit,
@@ -148,29 +151,43 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * returns list of accounts
      *
-     * @param string $filter
-     * @param int $start
-     * @param string $sort
-     * @param string $dir
-     * @param int $limit
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @praam  int    $start
      * @return array
      */
-    public function getAccounts($filter, $sort, $dir, $limit, $start)
+    public function getAccounts($query, $sort, $dir, $limit, $start)
     {
         $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
         
-        $result = $this->getContactsByAddressbookId($internalContainer->getId(), $filter, $sort, $dir, $limit, $start);
+        $result = $this->getContactsByAddressbookId($internalContainer->getId(), $query, $sort, $dir, $limit, $start);
 
         return $result;
     }
     
-    public function getContactsByAddressbookId($addressbookId, $filter, $sort, $dir, $limit, $start)
+    /**
+     * get all contacts for a given addressbookId (container)
+     *
+     * @param  int    $addressbookId
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @praam  int    $start
+     * @return array
+     */
+    public function getContactsByAddressbookId($addressbookId, $query, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query
+        ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
             'limit' => $limit,
@@ -193,23 +210,23 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * get data for the overview
      *
-     * returns the data to be displayed in a ExtJS grid
-     *
-     * @todo implement correc total count for lists
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @param string $options json encoded array of additional options
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @praam  int    $start
      * @return array
      */
-    public function getAllContacts($filter, $sort, $dir, $limit, $start)
+    public function getAllContacts($query, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
-                
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query
+        ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
             'limit' => $limit,
@@ -224,7 +241,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfAllContacts();
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
             }
         }
 
@@ -234,21 +251,23 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * get list of shared contacts
      *
-     * @todo implement correct total count of shared contacts
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @praam  int    $start
      * @return array
      */
-    public function getSharedContacts($filter, $sort, $dir, $limit, $start)
+    public function getSharedContacts($query, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
-
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query
+        ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
             'limit' => $limit,
@@ -263,7 +282,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts();
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts($filter);
             }
         }
 
@@ -273,23 +292,23 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     /**
      * get data for the overview
      *
-     * returns the data to be displayed in a ExtJS grid
-     *
-     * @todo implement correc total count for lists
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @param string $options json encoded array of additional options
+     * @param  string $query
+     * @param  int    $sort
+     * @param  string $dir
+     * @param  int    $limit
+     * @praam  int    $start
      * @return array
      */
-    public function getOtherPeopleContacts($filter, $sort, $dir, $limit, $start)
+    public function getOtherPeopleContacts($query, $sort, $dir, $limit, $start)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
-                
+        
+        $filter = new Addressbook_Model_Filter(array(
+            'query' => $query
+        ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
             'limit' => $limit,
@@ -304,7 +323,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
-                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfOtherPeopleContacts();
+                $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfOtherPeopleContacts($filter);
             }
         }
 
