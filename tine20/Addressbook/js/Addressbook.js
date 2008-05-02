@@ -269,7 +269,7 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact,
                 '-',
                 this.actions.exportContact,
-                Tine.Dialer && Tine.Dialer.rights.indexOf('run') > -1 ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
+                ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
                 '->',
                 'Filter: ',
                 new Tine.widgets.tags.TagCombo({
