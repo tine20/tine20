@@ -236,8 +236,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $_select->where($this->_db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter->query) . '%'));
         
         if (!empty($_filter->tag)) {
-            //$_select->join(SQL_TABLE_PREFIX . 'tagging', "tag_id = 1");
-            //Tinebase_Tags::appendSqlFilter($_select, $_filter->tag);
+            Tinebase_Tags::appendSqlFilter($_select, $_filter->tag);
         }
     }
 
@@ -251,9 +250,9 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      */
     protected function _getContactsFromTable(Zend_Db_Select $_select, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination)
     {
-        $this->_addFilter($_select, $_filter);
-        
         $_select->from(SQL_TABLE_PREFIX . 'addressbook');
+        
+        $this->_addFilter($_select, $_filter);
         $_pagination->appendPagination($_select);
         
         $rows = $this->_db->fetchAssoc($_select);
