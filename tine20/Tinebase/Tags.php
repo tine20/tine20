@@ -20,8 +20,6 @@
  */
 class Tinebase_Tags
 {
-
-    
     /**
      * @var Zend_Db_Adapter_Pdo_Mysql
      */
@@ -255,6 +253,24 @@ class Tinebase_Tags
     }
     
     /**
+     * Apends sql to a given select object to filter by the given tagId
+     * 
+     * @param  Zend_Db_Select $_select
+     * @param  string         $_tagId
+     * $param  string         $_idProperty id property of records
+     * @return void
+     */
+    public static function appendSqlFilter(Zend_Db_Select $_select, $_tagId, $_idProperty='id')
+    {
+        $db = Zend_Registry::get('dbAdapter');
+        $idProperty = $db->quoteIdentifier($_idProperty);
+        
+        $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), "tagging.record_id = $idProperty");
+        $_select->where($db->quoteInto('tagging.tag_id = ?', $_tagId));
+        Tinebase_Tags_Model_Right::applyAclSql($_select, Tinebase_Tags_Model_Right::VIEW_RIGHT, 'tagging.tag_id');
+    }
+    
+    /**
      * Gets tags of a given record where user has the required right to
      * The tags are stored in the records $_tagsProperty.
      * 
@@ -265,7 +281,7 @@ class Tinebase_Tags
      */
     public function getTagsOfRecord($_record, $_tagsProperty='tags', $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
     {
-        $recordId =$_record->getId();
+        $recordId = $_record->getId();
         $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag');
         if (!empty($recordId)) {
             $select = $this->_db->select()
