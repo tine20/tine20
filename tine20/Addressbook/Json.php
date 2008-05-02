@@ -97,9 +97,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  string $dir
      * @param  int    $limit
      * @praam  int    $start
+     * @param  string $tagFilter
      * @return array
      */
-    public function getContactsByOwner($query, $owner, $sort, $dir, $limit, $start)
+    public function getContactsByOwner($query, $owner, $sort, $dir, $limit, $start, $tagFilter)
     {
         $result = array(
             'results'     => array(),
@@ -107,7 +108,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
         
         $filter = new Addressbook_Model_Filter(array(
-            'query' => $query
+            'query' => $query,
+            'tag'   => $tagFilter
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
@@ -156,9 +158,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  string $dir
      * @param  int    $limit
      * @praam  int    $start
+     * @param  string $tagFilter
      * @return array
      */
-    public function getAccounts($query, $sort, $dir, $limit, $start)
+    public function getAccounts($query, $sort, $dir, $limit, $start, $tagFilter)
     {
         $internalContainer = Tinebase_Container::getInstance()->getInternalContainer(Zend_Registry::get('currentAccount'), 'Addressbook');
         
@@ -176,9 +179,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  string $dir
      * @param  int    $limit
      * @praam  int    $start
+     * @param  string $tagFilter
      * @return array
      */
-    public function getContactsByAddressbookId($addressbookId, $query, $sort, $dir, $limit, $start)
+    public function getContactsByAddressbookId($addressbookId, $query, $sort, $dir, $limit, $start, $tagFilter)
     {
         $result = array(
             'results'     => array(),
@@ -186,7 +190,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
         
         $filter = new Addressbook_Model_Filter(array(
-            'query' => $query
+            'query' => $query,
+            'tag'   => $tagFilter
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
@@ -215,9 +220,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  string $dir
      * @param  int    $limit
      * @praam  int    $start
+     * @param  string $tagFilter
      * @return array
      */
-    public function getAllContacts($query, $sort, $dir, $limit, $start)
+    public function getAllContacts($query, $sort, $dir, $limit, $start, $tagFilter)
     {
         $result = array(
             'results'     => array(),
@@ -225,7 +231,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
         
         $filter = new Addressbook_Model_Filter(array(
-            'query' => $query
+            'query' => $query,
+            'tag'   => $tagFilter
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
@@ -256,9 +263,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  string $dir
      * @param  int    $limit
      * @praam  int    $start
+     * @param  string $tagFilter
      * @return array
      */
-    public function getSharedContacts($query, $sort, $dir, $limit, $start)
+    public function getSharedContacts($query, $sort, $dir, $limit, $start, $tagFilter)
     {
         $result = array(
             'results'     => array(),
@@ -266,7 +274,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
         
         $filter = new Addressbook_Model_Filter(array(
-            'query' => $query
+            'query' => $query,
+            'tag'   => $tagFilter
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
@@ -297,9 +306,10 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  string $dir
      * @param  int    $limit
      * @praam  int    $start
+     * @param  string $tagFilter
      * @return array
      */
-    public function getOtherPeopleContacts($query, $sort, $dir, $limit, $start)
+    public function getOtherPeopleContacts($query, $sort, $dir, $limit, $start, $tagFilter)
     {
         $result = array(
             'results'     => array(),
@@ -307,7 +317,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         );
         
         $filter = new Addressbook_Model_Filter(array(
-            'query' => $query
+            'query' => $query,
+            'tag'   => $tagFilter
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => $start,
