@@ -243,11 +243,7 @@ Tine.Addressbook.Main = {
 	
     displayContactsToolbar: function()
     {
-        var quickSearchField = new Ext.ux.SearchField({
-            id: 'quickSearchField',
-            width: 240,
-        }); 
-        quickSearchField.on('change', function(_field, _newValue, _oldValue){
+        var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
                 Ext.getCmp('Addressbook_Contacts_Grid').getStore().load({
@@ -257,7 +253,19 @@ Tine.Addressbook.Main = {
                     }
                 });
             }
-        }, this);
+        };
+        
+        var quickSearchField = new Ext.ux.SearchField({
+            id: 'quickSearchField',
+            width: 240,
+        }); 
+        quickSearchField.on('change', onFilterChange, this);
+        
+        var tagFilter = new Tine.widgets.tags.TagCombo({
+            app: 'Addressbook',
+            blurOnSelect: true
+        });
+        tagFilter.on('change', onFilterChange, this);
         
         var contactToolbar = new Ext.Toolbar({
             id: 'Addressbook_Contacts_Toolbar',
@@ -271,13 +279,8 @@ Tine.Addressbook.Main = {
                 this.actions.exportContact,
                 ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
                 '->',
-                'Filter: ',
-                new Tine.widgets.tags.TagCombo({
-                    app: 'Addressbook'
-                }),
-                'Search:', 
-                ' ',
-                quickSearchField
+                'Filter: ', tagFilter,
+                'Search: ', quickSearchField
             ]
         });
 
@@ -300,6 +303,7 @@ Tine.Addressbook.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
         }, this);   
         
         //Ext.StoreMgr.add('ContactsStore', dataStore);
