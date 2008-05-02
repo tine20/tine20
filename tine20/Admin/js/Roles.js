@@ -73,7 +73,7 @@ Tine.Admin.Roles.Main = {
         this.actions.addRole = new Ext.Action({
             text: 'add role',
             handler: this.handlers.addRole,
-            iconCls: 'action_addRole',
+            iconCls: 'action_permissions',
             scope: this
         });
         
@@ -147,7 +147,7 @@ Tine.Admin.Roles.Main = {
         dataStore.setDefaultSort('id', 'asc');
 
         dataStore.on('beforeload', function(_dataStore) {
-            _dataStore.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
+            _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
         }, this);        
         
         // the paging toolbar

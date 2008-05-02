@@ -560,28 +560,74 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * get list of roles
      *
-     * @param string $filter
+     * @param string $query
      * @param string $sort
      * @param string $dir
      * @param int $start
      * @param int $limit
      * @return array with results array & totalcount (int)
      */
-    public function getRoles($filter, $sort, $dir, $start, $limit)
+    public function getRoles($query, $sort, $dir, $start, $limit)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        //$roles = Admin_Controller::getInstance()->getRoles($query, $sort, $dir, $start, $limit);
+        $roles = Admin_Controller::getInstance()->getRoles($query, $sort, $dir, $start, $limit);
 
-        //$result['results'] = $roles->toArray();
-        $result['results'] = array ( array("name" => "role1", "description" => "blabla", "id" => 1) );
-        //$result['totalcount'] = count($tags);
-        $result['totalcount'] = 1;
+        //$result['results'] = array ( array("name" => "role1", "description" => "blabla", "id" => 1) );
+        //$result['totalcount'] = 1;
+        
+        $result['totalcount'] = count($roles);
+        $result['results'] = $roles->toArray();
         
         return $result;
     }
+
+    /**
+     * save role data from edit form
+     *
+     * @param   string $roleData        json encoded role data
+     * 
+     * @return  array with success, message, role data and role members
+     */
+    public function saveRole($roleData)
+    {
+        /*
+        $decodedTagData = Zend_Json::decode($tagData);
+        
+        // unset if empty
+        if(empty($decodedTagData['id'])) {
+            unset($decodedTagData['id']);
+        }
+        
+        $tag = new Tinebase_Tags_Model_Tag();
+        
+        try {
+            $tag->setFromArray($decodedTagData);
+        } catch (Exception $e) {
+            // invalid data in some fields sent from client
+            $result = array('success'           => false,
+                            'errors'            => $tag->getValidationErrors(),
+                            'errorMessage'      => 'invalid data for some fields');
+
+            return $result;
+        }
+        
+        if ( empty($tag->id) ) {
+            $tag = Admin_Controller::getInstance()->addTag($tag);
+        } else {
+            $tag = Admin_Controller::getInstance()->updateTag($tag);
+        }
+                 
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $tag->toArray(),
+        );
+        
+        return $result;
+        */
+    }    
     
 }

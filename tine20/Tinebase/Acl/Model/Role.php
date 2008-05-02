@@ -9,7 +9,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo    make it work! wollen wir das überhaupt nutzen??
+ * @todo        add role members and rights
  */
 
 /**
@@ -62,12 +62,8 @@ class Tinebase_Acl_Model_Role extends Tinebase_Record_Abstract
     {
         $this->_validators = array(
             'id'                => array('allowEmpty' => true),
-            /*'application_id'    => array('presence' => 'required'),
-            'account_id'        => array('presence' => 'required', 'allowEmpty' => true),
-            'account_type'      => array(
-                new Zend_Validate_InArray(array('account', 'group', 'anyone')) 
-            ),
-            'right'             => array('presence' => 'required')*/
+            'name'              => array('presence' => 'required'),
+            'description'       => array('allowEmpty' => true),
         );
         
         return parent::__construct($_data, $_bypassFilters);

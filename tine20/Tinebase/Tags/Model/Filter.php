@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add role members and rights
  */
 
 /**

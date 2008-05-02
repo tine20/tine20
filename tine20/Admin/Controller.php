@@ -522,10 +522,10 @@ class Admin_Controller
      */
     public function getRoles($query, $sort, $dir, $start, $limit)
     {
-        /*
-        $filter = new Tinebase_Tags_Model_Filter(array(
+       
+        $filter = new Tinebase_Acl_Model_RoleFilter(array(
             'name'        => $query,
-            'type'        => Tinebase_Tags_Model_Tag::TYPE_SHARED
+            'description' => $query
         ));
         $paging = new Tinebase_Model_Pagination(array(
             'start' => $start,
@@ -534,8 +534,8 @@ class Admin_Controller
             'dir'   => $dir
         ));
         
-        return Tinebase_Tags::getInstance()->searchTags($filter, $paging);
-        */
+        return Tinebase_Acl_Roles::getInstance()->searchRoles($filter, $paging);
+        
     }
     
 }
