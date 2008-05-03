@@ -2,14 +2,19 @@
 /**
  * Tine 2.0
  *
- * @package     Egwbase
- * @subpackage  Server
+ * @package     Tinebase
+ * @subpackage  Ldap
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
 
+/**
+ * LDAP base class for tine 2.0
+ * @package     Tinebase
+ * @subpackage  Ldap
+ */
 class Tinebase_Ldap extends Zend_Ldap
 {
     protected $_attrsOnly = 0;

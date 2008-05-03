@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Tasks
+ * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -12,9 +12,11 @@
  * @todo        add role members and rights
  */
 
+
 /**
  * Task Filter Class
- * @package Tasks
+ * @package    Tinebase
+ * @subpackage Tags
  */
 class Tinebase_Tags_Model_Filter extends Tinebase_Record_Abstract
 {

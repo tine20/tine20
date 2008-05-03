@@ -13,6 +13,8 @@
 /**
  * Class for handling tags and tagging.
  * 
+ * @package     Tinebase
+ * @subpackage  Tags 
  * NOTE: Tags for a record are and Setting of Tags
  * NOTE: History loging of tags 
  * @todo work out /apply transaction concept!
