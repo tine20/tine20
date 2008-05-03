@@ -1,4 +1,4 @@
-#! /Applications/xampp/xamppfiles/bin/php
+#!/usr/bin/env php
 <?php
 
 if (isset($_SERVER['HTTP_HOST'])) {
