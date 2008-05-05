@@ -590,14 +590,17 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * save role data from edit form
      *
      * @param   string $roleData        json encoded role data
-     * 
+     * @param   string $roleMembers     json encoded role members
+     *  
      * @return  array with success, message, role data and role members
      */
-    public function saveRole($roleData)
+    public function saveRole($roleData, $roleMembers)
     {
         $decodedRoleData = Zend_Json::decode($roleData);
+        $decodedRoleMembers = Zend_Json::decode($roleMembers);
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleData, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleData, true));
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleMembers, true));
         
         // unset if empty
         if(empty($decodedRoleData['id'])) {
@@ -618,9 +621,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         if ( empty($role->id) ) {
-            $role = Admin_Controller::getInstance()->addRole($role);
+            $role = Admin_Controller::getInstance()->addRole($role, $decodedRoleMembers);
         } else {
-            $role = Admin_Controller::getInstance()->updateRole($role);
+            $role = Admin_Controller::getInstance()->updateRole($role, $decodedRoleMembers);
         }
                  
         $result = array('success'           => true,

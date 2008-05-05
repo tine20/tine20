@@ -105,8 +105,8 @@ class Tinebase_Acl_Roles
     public function getRoleById($_roleId)
     {
         $roleId = (int)$_roleId;
-        if($roleId != $_roleId) {
-            throw new InvalidArgumentException('$_roleId must be integer');
+        if($roleId != $_roleId && $roleId > 0) {
+            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
         }
         
         $where = $this->rolesTable->getAdapter()->quoteInto('`id` = ?', $roleId);
@@ -203,7 +203,12 @@ class Tinebase_Acl_Roles
      */
     public function getRoleMembers($_roleId)
     {
-    $members = array();
+        $roleId = (int)$_roleId;
+        if($roleId != $_roleId && $roleId > 0) {
+            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+        }
+        
+        $members = array();
         
         $select = $this->roleMembersTable->select();
         $select->where('role_id = ?', $_roleId);
@@ -211,9 +216,38 @@ class Tinebase_Acl_Roles
         $rows = $this->roleMembersTable->fetchAll($select);
         
         foreach($rows as $member) {
-            $members[] = array ( "id" => $member->account_id, "type" => $member->type );
+            $members[] = array ( "id" => $member->account_id, "type" => $member->account_type );
         }
 
         return $members;
     }
+
+    /**
+     * set role members 
+     *
+     * @param   int $_roleId
+     * @param   array $_roleMembers with role members
+     * @return array with account ids & types
+     */
+    public function setRoleMembers($_roleId, array $_roleMembers)
+    {
+        $roleId = (int)$_roleId;
+        if($roleId != $_roleId && $roleId > 0) {
+            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+        }
+
+        // remove old members
+        $where = Zend_Registry::get('dbAdapter')->quoteInto('role_id = ?', $roleId);
+        $this->roleMembersTable->delete($where);
+                
+        foreach ( $_roleMembers as $member ) {
+            $data = array(
+                "role_id"       => $roleId,
+                "account_type"  => $member["type"],
+                "account_id"    => $member["id"],
+            );
+            $this->roleMembersTable->insert($data); 
+        }
+    }
+    
 }

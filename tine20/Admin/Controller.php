@@ -552,10 +552,11 @@ class Admin_Controller
    /**
      * add new role
      *
-     * @param  Tinebase_Acl_Model_Role $_role
-     * @return Tinebase_Acl_Model_Role
+     * @param   Tinebase_Acl_Model_Role $_role
+     * @param   array role members
+     * @return  Tinebase_Acl_Model_Role
      */
-    public function AddRole(Tinebase_Acl_Model_Role $_role)
+    public function AddRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers)
     {
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
                 Zend_Registry::get('currentAccount')->getId(), 
@@ -567,6 +568,7 @@ class Admin_Controller
         }        
         
         $role = Tinebase_Acl_Roles::getInstance()->createRole($_role);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(),$_roleMembers);
         
         return $role;            
     }  
@@ -575,9 +577,10 @@ class Admin_Controller
      * update existing role
      *
      * @param  Tinebase_Acl_Model_Role $_role
+     * @param   array role members
      * @return Tinebase_Acl_Model_Role
      */
-    public function UpdateRole(Tinebase_Acl_Model_Role $_role)
+    public function UpdateRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers)
     {
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
                 Zend_Registry::get('currentAccount')->getId(), 
@@ -589,6 +592,7 @@ class Admin_Controller
         }        
         
         $role = Tinebase_Acl_Roles::getInstance()->updateRole($_role);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(),$_roleMembers);
         
         return $role;            
     }  
@@ -632,7 +636,7 @@ class Admin_Controller
                     "name"  => $user->accountDisplayName,
                 );
             } elseif ( $member['type'] === 'group' ) {
-                $group = Tinebase_Account::getInstance()->getAccountById($member['id']);
+                $group = Tinebase_Group::getInstance()->getGroupById($member['id']);
                 $result[] = array (
                     "id"    => $group->getId(),
                     "type"  => $member['type'],
