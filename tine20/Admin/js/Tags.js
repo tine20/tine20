@@ -438,7 +438,7 @@ Tine.Admin.Tags.EditDialog = {
      * @param   _tagMembers
      * 
      */
-    display: function(_tagData, _tagMembers) 
+    display: function(_tagData, _appList) 
     {
 
         /******* actions ********/
@@ -548,8 +548,34 @@ Tine.Admin.Tags.EditDialog = {
             border: true
         }); 
         */
-        /******* THE edit dialog ********/
+        /******* THE contexts box ********/
+        var anyContext = !_tagData.contexts || _tagData.contexts.indexOf('any') > -1;
         
+        var appSelection = [];
+        for(var i=0, j=_appList.length; i<j; i++){
+            var app = _appList[i];
+            if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
+                continue;
+            }
+            console.log(app);
+            appSelection.push( new Ext.form.Checkbox({
+                boxLabel: app.name,
+                name: 'application_' + app.name,
+                hideLabel: true,
+                checked: anyContext || _tagData.contexts.indexOf(app.id) > -1
+            }));
+        }
+        
+        var confineCheckbox = new Ext.form.FieldSet({
+            autoHeight: true,
+            checkboxToggle: true,
+            title: 'Confine Applications Contexts',
+            checkboxName: 'confineContexts',
+            collapsed: anyContext,
+            items: appSelection
+        });
+        
+        /******* THE edit dialog ********/
         var editTagDialog = {
             layout:'hfit',
             border:false,
@@ -578,7 +604,8 @@ Tine.Admin.Tags.EditDialog = {
                         }*/
                         ]        
                     ]
-                }
+                },
+                confineCheckbox
             ]
         };
         

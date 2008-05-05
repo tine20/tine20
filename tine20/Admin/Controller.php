@@ -460,13 +460,9 @@ class Admin_Controller
      */
     public function getTag($_tagId)
     {
-        $tag = Tinebase_Tags::getInstance()->getTagsById($_tagId);
-
-        /*if(!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access to contact denied');
-        }*/
+        $fullTag = Tinebase_Tags::getInstance()->getFullTag($_tagId);
         
-        return $tag[0];            
+        return $fullTag;        
     }  
 
    /**

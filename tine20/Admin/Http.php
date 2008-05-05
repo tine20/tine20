@@ -177,7 +177,8 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         if(empty($tagId)) {
             $encodedTag = Zend_Json::encode(array());
         } else {
-            $tag = Admin_Controller::getInstance()->getTag($tagId);         
+            $tag = Admin_Controller::getInstance()->getTag($tagId);
+            $tag->rights = $tag->rights->toArray();       
             $encodedTag = Zend_Json::encode($tag->toArray());
         }
 
@@ -186,8 +187,8 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
         
-        //@todo move Tags.js to Admin.js later
-        $view->jsExecute = 'Tine.Admin.Tags.EditDialog.display(' . $encodedTag . ');';
+        $appList = Zend_Json::encode(Tinebase_Application::getInstance()->getApplications('%')->toArray());
+        $view->jsExecute = "Tine.Admin.Tags.EditDialog.display($encodedTag, $appList);";
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
