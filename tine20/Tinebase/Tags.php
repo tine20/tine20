@@ -13,12 +13,10 @@
 /**
  * Class for handling tags and tagging.
  * 
+ * NOTE: Functions in the 'tagging' chain check acl of the actions, 
+ *       tag housekeeper functions do their acl in the admin controller
  * @package     Tinebase
  * @subpackage  Tags 
- * NOTE: Tags for a record are and Setting of Tags
- * NOTE: History loging of tags 
- * @todo work out /apply transaction concept!
- * @todo check/manage contexts
  */
 class Tinebase_Tags
 {
@@ -30,7 +28,10 @@ class Tinebase_Tags
     /**
      * don't clone. Use the singleton.
      */
-    private function __clone() {}
+    private function __clone()
+    {
+        
+    }
 
     /**
      * holdes the instance of the singleton
@@ -98,8 +99,8 @@ class Tinebase_Tags
     }
     
     /**
-     * Returns tags identified by its id(s)
-     * @todo check view acl and attach rights + context
+     * Returns (bare) tags identified by its id(s)
+     * @todo check context ?
      * 
      * @param  string|array|Tinebase_Record_RecordSet  $_id
      * @param  string                                  $_right the required right current user must have on the tags
@@ -223,8 +224,7 @@ class Tinebase_Tags
     }
     
     /**
-     * Deletes tags identified by their identifiers
-     * @todo remove all taggings -> history log of records!
+     * Deletes (set stated deleted) tags identified by their identifiers
      * 
      * @param  string|array id(s) to delete
      * @return void
@@ -392,13 +392,63 @@ class Tinebase_Tags
     }
     
     /**
+     * returns full tag, including all rights and contexts
+     * 
+     * @param  string $_tagId
+     * @return Tinebase_Tags_Model_FullTag
+     */
+    public function getFullTag($_tagId)
+    {
+        $tag = $this->getTagsById($_tagId);
+        $fullTag = new Tinebase_Tags_Model_FullTag($tag[0]->toArray(), true);
+        $fullTag->rights = $this->getRights($_tagId);
+        $fullTag->contexts = $this->getContexts($_tagId);
+        
+        return $fullTag;
+    }
+    
+    /**
+     * get all rights of a given tag
+     * 
+     * @param  string                    $_tagId 
+     * @return Tinebase_Record_RecordSet Set of Tinebase_Tags_Model_Right
+     */
+    public function getRights($_tagId)
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'tags_acl', array('tag_id', 'account_type', 'account_id',
+                 'account_right' => 'GROUP_CONCAT(DISTINCT account_right)'))
+            ->where($this->_db->quoteInto('tag_id = ?', $_tagId))
+            ->group(array('tag_id', 'account_type', 'account_id'));
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $rights = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Right', $rows, true);
+        
+        //Zend_Registry::get('logger')->debug(print_r($rights->toArray(), true));
+        return $rights;
+    }
+    
+    /**
+     * purges (removes from tabel) all rights of a given tag
+     * 
+     * @param  string $_tagId
+     * @return void
+     */
+    public function purgeRights($_tagId)
+    {
+        $where = $this->_db->quoteInto('tag_id = ?', $_tagId);
+        $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', $where);
+    }
+    
+    /**
      * Sets all given tag rights
      * 
      * @param Tinebase_Record_RecordSet|Tinebase_Tags_Model_Right
      * @return void
      * @throws Exception
      */
-    protected function setRights($_rights)
+    public function setRights($_rights)
     {
         $rights = $_rights instanceof Tinebase_Tags_Model_Right ? array($_rights) : $_rights;
         foreach ($rights as $right) {
@@ -422,5 +472,40 @@ class Tinebase_Tags
             	}
             }
         } 
+    }
+    
+    /**
+     * returns all contexts of a given tag
+     * 
+     * @param  string $_tagId
+     * @return array  array of application ids
+     */
+    public function getContexts($_tagId)
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'tags_context', array('application_id' => 'GROUP_CONCAT(DISTINCT application_id)'))
+            ->where($this->_db->quoteInto('tag_id = ?', $_tagId))
+            ->group('tag_id');
+        $apps = $this->_db->fetchOne($select);
+        
+        //Zend_Registry::get('logger')->debug($apps);
+        if ($apps == 0){
+            $apps = 'any';
+        }
+        //$stmt = $this->_db->query($select);
+        //$rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC); 
+        return explode(',', $apps);
+        
+        
+    }
+    
+    public function purgeContexts($_tagId)
+    {
+        
+    }
+    
+    public function setContexts($_contexts)
+    {
+        
     }
 }

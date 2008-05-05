@@ -59,6 +59,19 @@ class Tinebase_Tags_Model_Right extends Tinebase_Record_Abstract
     );
     
     /**
+     * overwrite default constructor as convinience for data from database
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        if (is_array($_data) && isset($_data['account_right'])) {
+            $rights = explode(',', $_data['account_right']);
+            $_data['view_right'] = in_array(self::VIEW_RIGHT, $rights);
+            $_data['use_right']  = in_array(self::USE_RIGHT, $rights);
+        }
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
      * Applies the requierd params for tags acl to the given select object
      * 
      * @param  Zend_Db_Select $_select
