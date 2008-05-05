@@ -295,15 +295,14 @@ class Tinebase_Acl_Rights
     /**
      * get all possible application rights
      *
-     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
+     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights (empty/NULL -> Tinebase)
      * @return  array   all application rights
      * 
      */
-    public function getAllApplicationRights($_applicationId)
+    public function getAllApplicationRights($_applicationId = NULL)
     {
         // check if tinebase application
-        $application = Tinebase_Application::getInstance()->getApplicationById($_applicationId);
-        if ( $application->name === 'Tinebase' ) {
+        if ( $_applicationId === NULL ) {
             $allRights = array ( self::MANAGE_SHARED_TAGS );
         } else {
             $allRights = array ( self::RUN, self::ADMIN );
