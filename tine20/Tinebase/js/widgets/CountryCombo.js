@@ -62,6 +62,23 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
             Ext.StoreMgr.add('Countries', store);
         }
         return store;
+    },
+    /**
+     * @private
+     * expand after store load, as this is ommited by the initial load hack
+     */
+    onTriggerClick: function(){
+        if (this.getCountryStore().getCount() == 0) {
+            this.getCountryStore().load({
+                scope: this,
+                callback: function() {
+                    Tine.widgets.CountryCombo.superclass.onTriggerClick.call(this);
+                }
+            });
+        } else {
+            Tine.widgets.CountryCombo.superclass.onTriggerClick.call(this);
+        }
+        
     }
 });
 
