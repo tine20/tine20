@@ -1,5 +1,4 @@
 <?php
-
 /**
  * interface for contacs class
  * 
@@ -10,7 +9,6 @@
  * @version     $Id$
  *
  */
-
 /**
  * interface for contacs class
  * 
@@ -24,8 +22,7 @@ interface Addressbook_Backend_Interface
      * @param int $_contacts contact ids
      * @return int the number of rows deleted
      */
-    public function deleteContact($_contactId);
-    
+    public function deleteContact ($_contactId);
     /**
      * get list of contacts from given addressbooks
      *
@@ -34,8 +31,7 @@ interface Addressbook_Backend_Interface
      * @param  Tinebase_Model_Pagination $_pagination 
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    public function getContacts(Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL);
-    
+    public function getContacts (Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination);
     /**
      * get total count of contacts from given addressbooks
      *
@@ -43,29 +39,26 @@ interface Addressbook_Backend_Interface
      * @param  Addressbook_Model_Filter  $_filter the search filter
      * @return int                       count of all other users contacts
      */
-    public function getCountOfContacts(Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter);
-        
+    public function getCountOfContacts (Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter);
     /**
      * fetch one contact identified by contactid
      *
      * @param int $_contactId
      * @return Addressbook_Model_Contact 
      */
-    public function getContact($_contactId);
-    
+    public function getContact ($_contactId);
     /**
      * add a contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @return Addressbook_Model_Contact
      */
-    public function addContact(Addressbook_Model_Contact $_contactData);
-
+    public function addContact (Addressbook_Model_Contact $_contactData);
     /**
      * update a contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @return Addressbook_Model_Contact
      */
-    public function updateContact(Addressbook_Model_Contact $_contactData);
+    public function updateContact (Addressbook_Model_Contact $_contactData);
 }
