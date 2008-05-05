@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
-
 /**
  * sql backend class for the addressbook
  *
@@ -20,43 +19,41 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
-    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct ()
+    {
         $this->_db = Zend_Registry::get('dbAdapter');
     }
-    
     /**
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() {}
-
+    private function __clone ()
+    {
+        
+    }
     /**
      * holdes the instance of the singleton
      *
      * @var Addressbook_Backend_Sql
      */
     private static $_instance = NULL;
-    
     /**
      * the singleton pattern
      *
      * @return Addressbook_Backend_Sql
      */
-    public static function getInstance() 
+    public static function getInstance ()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Backend_Sql;
+            self::$_instance = new Addressbook_Backend_Sql();
         }
-        
         return self::$_instance;
     }
-
     /**
      * add or updates a contact
      *
@@ -66,7 +63,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @deprecated
      * @return Addressbook_Model_Contact
      */
-/*    private function saveContact(Addressbook_Model_Contact $_contactData)
+    /*    private function saveContact(Addressbook_Model_Contact $_contactData)
     {
         if((int)$_contactData->owner < 0) {
             throw new UnderflowException('owner can not be empty');
@@ -176,7 +173,6 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
 
         return $this->getContactById($_contactData->id);
     }*/
-
     /**
      * get list of contacts from given addressbooks
      *
@@ -185,20 +181,16 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param  Tinebase_Model_Pagination $_pagination 
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    public function getContacts(Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
+    public function getContacts (Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter  $_filter, Tinebase_Model_Pagination $_pagination)
     {
-        if(count($_container) === 0) {
+        if (count($_container) === 0) {
             throw new Exception('$_container can not be empty');
-        }        
+        }
         $select = $this->_db->select();
-        $select->where($this->_db->quoteInto('owner IN (?)', 
-            $_container->getArrayOfIds()));
-
+        $select->where($this->_db->quoteInto('owner IN (?)', $_container->getArrayOfIds()));
         $result = $this->_getContactsFromTable($select, $_filter, $_pagination);
-         
         return $result;
     }
-
     /**
      * get total count of contacts from given addressbooks
      *
@@ -206,24 +198,18 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param  Addressbook_Model_Filter  $_filter the search filter
      * @return int                       count of all other users contacts
      */
-    public function getCountOfContacts(Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter)
+    public function getCountOfContacts (Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter)
     {
-        if(count($_container) === 0) {
+        if (count($_container) === 0) {
             throw new Exception('$_container can not be empty');
-        }        
-        
+        }
         $select = $this->_db->select();
         $select->from(SQL_TABLE_PREFIX . 'addressbook', array('count' => 'COUNT(*)'));
-        
-        $select->where($this->_db->quoteInto('owner IN (?)', 
-            $_container->getArrayOfIds()));
+        $select->where($this->_db->quoteInto('owner IN (?)', $_container->getArrayOfIds()));
         $this->_addFilter($select, $_filter);
-        
         $result = $this->_db->fetchOne($select);
-
         return $result;
     }
-
     /**
      * add the fields to search for to the query
      *
@@ -231,15 +217,13 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param  Addressbook_Model_Filter $_filter the string to search for
      * @return void
      */
-    protected function _addFilter(Zend_Db_Select $_select, Addressbook_Model_Filter $_filter)
+    protected function _addFilter (Zend_Db_Select $_select, Addressbook_Model_Filter $_filter)
     {
         $_select->where($this->_db->quoteInto('(n_family LIKE ? OR n_given LIKE ? OR org_name LIKE ? or email LIKE ?)', '%' . trim($_filter->query) . '%'));
-        
-        if (!empty($_filter->tag)) {
+        if (! empty($_filter->tag)) {
             Tinebase_Tags::appendSqlFilter($_select, $_filter->tag);
         }
     }
-
     /**
      * internal function to read the contacts from the database
      *
@@ -248,128 +232,92 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
      */
-    protected function _getContactsFromTable(Zend_Db_Select $_select, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination)
+    protected function _getContactsFromTable (Zend_Db_Select $_select, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination)
     {
         $_select->from(SQL_TABLE_PREFIX . 'addressbook');
-        
         $this->_addFilter($_select, $_filter);
         $_pagination->appendPagination($_select);
-        
         $rows = $this->_db->fetchAssoc($_select);
-
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows,  true);
-        
+        $result = new Tinebase_Record_RecordSet('Addressbook_Model_Contact', $rows, true);
         return $result;
     }
-    
     /**
      * add a contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @return Addressbook_Model_Contact
      */
-    public function addContact(Addressbook_Model_Contact $_contactData)
+    public function addContact (Addressbook_Model_Contact $_contactData)
     {
-        if(!$_contactData->isValid()) {
+        if (! $_contactData->isValid()) {
             throw new Exception('invalid contact');
         }
-        
         $contactData = $_contactData->toArray();
-        
-        if(empty($_contactData->id)) {
+        if (empty($_contactData->id)) {
             unset($contactData['id']);
         }
-        
         // tags are not property of this backend
         unset($contactData['tags']);
-        
         $this->_db->insert(SQL_TABLE_PREFIX . 'addressbook', $contactData);
         $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'addressbook', 'id');
-
         // if we insert a contact without an id, we need to get back one
-        if(empty($_contactData->id) && $id == 0) {
+        if (empty($_contactData->id) && $id == 0) {
             throw new Exception("returned contact id is 0");
         }
-        
         // if the account had no accountId set, set the id now
-        if(empty($_contactData->id)) {
+        if (empty($_contactData->id)) {
             $_contactData->id = $id;
         }
-        
         return $this->getContact($_contactData->id);
     }
-    
     /**
      * update an existing contact
      *
      * @param Addressbook_Model_Contact $_contactData the contactdata
      * @return Addressbook_Model_Contact
      */
-    public function updateContact(Addressbook_Model_Contact $_contactData)
+    public function updateContact (Addressbook_Model_Contact $_contactData)
     {
-        if(!$_contactData->isValid()) {
+        if (! $_contactData->isValid()) {
             throw new Exception('invalid contact');
         }
-        
         $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactData);
-        
         $contactData = $_contactData->toArray();
         unset($contactData['id']);
         // tags are not property of this backend
         unset($contactData['tags']);
-        
-        $where  = array(
-            $this->_db->quoteInto('id = ?', $contactId),
-        );
-        
+        $where = array($this->_db->quoteInto('id = ?', $contactId));
         $this->_db->update(SQL_TABLE_PREFIX . 'addressbook', $contactData, $where);
-        
         return $this->getContact($contactId);
     }
-    
     /**
      * delete contact identified by contact id
      *
      * @param int $_contactId contact ids
      * @return int the number of rows deleted
      */
-    public function deleteContact($_contactId)
+    public function deleteContact ($_contactId)
     {
         $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactId);
-
-        $where  = array(
-            $this->_db->quoteInto('id = ?', $contactId),
-            $this->_db->quoteInto('id = ?', $contactId),
-        );
-         
+        $where = array($this->_db->quoteInto('id = ?', $contactId) , $this->_db->quoteInto('id = ?', $contactId));
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'addressbook', $where);
-
         return $result;
     }
-    
     /**
      * fetch one contact identified by contactid
      *
      * @param int $_contactId
      * @return Addressbook_Model_Contact 
      */
-    public function getContact($_contactId)
+    public function getContact ($_contactId)
     {
         $contactId = Addressbook_Model_Contact::convertContactIdToInt($_contactId);
-        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'addressbook')
-            ->where($this->_db->quoteInto('id = ?', $contactId));
-
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id = ?', $contactId));
         $row = $this->_db->fetchRow($select);
-        
-        if(!$row) {
+        if (! $row) {
             throw new UnderflowException('contact not found');
         }
-        
         $result = new Addressbook_Model_Contact($row);
-
         return $result;
     }
-    
 }
