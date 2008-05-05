@@ -649,6 +649,27 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         return $result;
     }
+
+    /**
+     * get list of role members
+     *
+     * @param int $roleId
+     * @return array with results / totalcount
+     */
+    public function getRoleMembers($roleId)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $members = Admin_Controller::getInstance()->getRoleMembers($roleId);
+        
+        $result['results'] = $members;
+        $result['totalcount'] = count($members);
+        
+        return $result;
+    }
     
     
 }

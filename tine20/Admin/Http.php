@@ -216,11 +216,15 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      */
     public function editRole($roleId)
     {
+        
         if(empty($roleId)) {
             $encodedRole = Zend_Json::encode(array());
+            $encodedRoleMembers = Zend_Json::encode(array());
         } else {
             $role = Admin_Controller::getInstance()->getRole($roleId);         
             $encodedRole = Zend_Json::encode($role->toArray());
+            $json = new Admin_Json();
+            $encodedRoleMembers = Zend_Json::encode($json->getRoleMembers($roleId));
         }
 
         $view = new Zend_View();
@@ -229,7 +233,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();
         
         //@todo move Roles.js to Admin.js later
-        $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . $encodedRole . ');';
+        $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . $encodedRole . ', ' . $encodedRoleMembers . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

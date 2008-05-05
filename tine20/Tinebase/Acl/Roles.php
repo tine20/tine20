@@ -33,6 +33,13 @@ class Tinebase_Acl_Roles
     protected $rolesTable;
     
     /**
+     * the Zend_Dd_Table object for role members
+     *
+     * @var Tinebase_Db_Table
+     */
+    protected $roleMembersTable;
+    
+    /**
      * holdes the instance of the singleton
      *
      * @var Tinebase_Acl_Roles
@@ -53,8 +60,9 @@ class Tinebase_Acl_Roles
      * temporarly the constructor also creates the needed tables on demand and fills them with some initial values
      */
     private function __construct() {
-        // @todo is the table needed?
+
         $this->rolesTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'roles'));
+        $this->roleMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
         $this->_db = Zend_Registry::get('dbAdapter');
     }    
     
@@ -183,9 +191,29 @@ class Tinebase_Acl_Roles
      */
     public function deleteRoles($_ids)
     {
-        $ids = ( is_array($_ids) ) ? explode ( ",", $_ids) : $_ids;
+        $ids = ( is_array($_ids) ) ? implode ( ",", $_ids) : $_ids;
         $this->rolesTable->delete( "id in ( $ids )");
     }
     
-    
+    /**
+     * get list of role members 
+     *
+     * @param int $_roleId
+     * @return array with account ids & types
+     */
+    public function getRoleMembers($_roleId)
+    {
+    $members = array();
+        
+        $select = $this->roleMembersTable->select();
+        $select->where('role_id = ?', $_roleId);
+        
+        $rows = $this->roleMembersTable->fetchAll($select);
+        
+        foreach($rows as $member) {
+            $members[] = array ( "id" => $member->account_id, "type" => $member->type );
+        }
+
+        return $members;
+    }
 }

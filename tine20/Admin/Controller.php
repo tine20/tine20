@@ -412,7 +412,7 @@ class Admin_Controller
      * get list of groupmembers
      *
      * @param int $_groupId
-     * @return array with Tinebase_A
+     * @return array with Tinebase_Account_Model_Account arrays
      */
     public function getGroupMembers($_groupId)
     {
@@ -420,7 +420,6 @@ class Admin_Controller
         
         $result = array ();
         foreach ( $accountIds as $accountId ) {
-            //$result[] = Tinebase_Account::getInstance()->getFullAccountById($accountId)->toArray();
             $result[] = Tinebase_Account::getInstance()->getAccountById($accountId)->toArray();
         }
         
@@ -613,5 +612,36 @@ class Admin_Controller
         Tinebase_Acl_Roles::getInstance()->deleteRoles($_roleIds);
     }
 
+    /**
+     * get list of role members
+     *
+     * @param int $_roleId
+     * @return array with Tinebase_Account_Model_Account arrays
+     */
+    public function getRoleMembers($_roleId)
+    {
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($_roleId);
+        
+        $result = array ();
+        foreach ( $members as $member ) {
+            if ( $member['type'] === 'user' ) {
+                $user = Tinebase_Account::getInstance()->getAccountById($member['id']);
+                $result[] = array (
+                    "id"    => $user->getId(),
+                    "type"  => $member['type'],
+                    "name"  => $user->accountDisplayName,
+                );
+            } elseif ( $member['type'] === 'group' ) {
+                $group = Tinebase_Account::getInstance()->getAccountById($member['id']);
+                $result[] = array (
+                    "id"    => $group->getId(),
+                    "type"  => $member['type'],
+                    "name"  => $group->name,
+                );                
+            }
+        }
+        
+        return $result;
+    }
     
 }

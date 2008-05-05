@@ -922,7 +922,7 @@ Tine.Admin.Applications.EditPermissionsDialog = {
     applicationRecordRights: null,
     
     /**
-     * returns index of record in the stor
+     * returns index of record in the store
      * @private
      */
     getRecordIndex: function(account, dataStore) {
