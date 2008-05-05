@@ -383,7 +383,7 @@ Tine.Addressbook.Main = {
                 this.actions.editContact.setDisabled(false);
                 this.actions.exportContact.setDisabled(false);
 
-                if(Tine.Dialer && Tine.Dialer.rights.indexOf('run') > -1) {
+                if(Tine.Dialer.length > 0 && Tine.Dialer.rights.indexOf('run') > -1) {
 	                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
 	                callMenu.removeAll();
 	                var contact = _selectionModel.getSelected();
