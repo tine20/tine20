@@ -630,5 +630,25 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         return $result;
     }    
+
+    /**
+     * delete multiple roles
+     *
+     * @param string $roleIds json encoded list of roleId's to delete
+     * @return array with success flag
+     */
+    public function deleteRoles($roleIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $roleIds = Zend_Json::decode($roleIds);
+        
+        Admin_Controller::getInstance()->deleteRoles($roleIds);
+
+        return $result;
+    }
+    
     
 }

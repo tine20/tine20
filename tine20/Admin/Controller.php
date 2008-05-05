@@ -594,5 +594,24 @@ class Admin_Controller
         return $role;            
     }  
     
+    /**
+     * delete multiple roles
+     *
+     * @param   array $_roleIds
+     * @void
+     */
+    public function deleteRoles($_roleIds)
+    {        
+        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Admin_Acl_Rights::MANAGE_ROLES) && 
+             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
+                Zend_Registry::get('currentAccount')->getId(), 
+                Tinebase_Acl_Rights::ADMIN) ) {
+            throw new Exception('You are not allowed to manage roles!');
+        }        
+        Tinebase_Acl_Roles::getInstance()->deleteRoles($_roleIds);
+    }
+
     
 }
