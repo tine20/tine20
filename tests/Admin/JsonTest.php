@@ -521,8 +521,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
-        //$json = new Admin_Json();        
-        Tinebase_Acl_Roles::getInstance()->deleteRoles($role->getId());
+        $json = new Admin_Json();
+        $encodedData = Zend_Json::encode(array($role->getId()));        
+        //Tinebase_Acl_Roles::getInstance()->deleteRoles($role->getId());
+        $result = $json->deleteRoles($encodedData);
+        
+        $this->assertTrue($result['success']);
         
         // try to get it, shouldn't be found
         $this->setExpectedException( 'Exception');
