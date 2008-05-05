@@ -17,6 +17,10 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
      */
     selectType: 'user',
     /**
+     * @cfg{String} selectTypeDefault 'user' or 'group' defines which accountType is selected when  {selectType} is true
+     */
+    selectTypeDefault: 'user',
+    /**
      * @cfg {Ext.Action}
      * selectAction
      */
@@ -184,7 +188,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
             {
                 scope: this,
                 hidden: this.selectType != 'both',
-                pressed: this.selectType != 'group',
+                pressed: this.selectTypeDefault != 'group',
                 accountType: 'user',
                 iconCls: 'action_selectUser',
                 xtype: 'tbbtnlockedtoggle',
@@ -195,7 +199,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
             {
                 scope: this,
                 hidden: this.selectType != 'both',
-                pressed: this.selectType == 'group',
+                pressed: this.selectTypeDefault == 'group',
                 iconCls: 'action_selectGroup',
                 accountType: 'group',
                 xtype: 'tbbtnlockedtoggle',
