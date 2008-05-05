@@ -246,7 +246,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         items: [
             {
                 xtype: 'columnform',
-                title: 'Company Information',
+                title: 'Company Address',
                 labelAlign: 'top',
                 formDefaults: {
                     xtype:'textfield',
@@ -256,14 +256,18 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 },
                 items: [
                     [
-                        {
+                        /*{
                             xtype: 'mirrortextfield',
                             fieldLabel:'Company Name', 
                             name:'org_name'
-                        },
+                        },*/
                         {
                             fieldLabel:'Street', 
                             name:'adr_one_street'
+                        },
+                        {
+                            fieldLabel:'Street 2', 
+                            name:'adr_one_street2'
                         }
                     ],
                     [
@@ -291,7 +295,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             },
             {
                 xtype: 'columnform',
-                title: 'Private Information',
+                title: 'Private Address',
                 labelAlign: 'top',
                 formDefaults: {
                     xtype:'textfield',
@@ -305,6 +309,10 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             fieldLabel:'Street', 
                             name:'adr_two_street'
+                        },
+                        {
+                            fieldLabel:'Street 2', 
+                            name:'adr_two_street2'
                         }
                     ],
                     [
