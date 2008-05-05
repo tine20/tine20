@@ -87,6 +87,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             // Tine 2.0 specific widgets
             'Tinebase/js/Widgets.js',
             'Tinebase/js/AccountpickerPanel.js',
+            'Tinebase/js/widgets/account/PickerPanel.js',
             'Tinebase/js/widgets/ContainerSelect.js',
             'Tinebase/js/widgets/ContainerGrants.js',
             'Tinebase/js/widgets/ContainerTree.js',

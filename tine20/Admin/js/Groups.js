@@ -468,7 +468,7 @@ Tine.Admin.Groups.EditDialog = {
 
         /******* account picker panel ********/
         
-        var accountPicker =  new Tine.widgets.AccountpickerPanel ({            
+        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
             enableBbar: true,
             region: 'west',
             height: 200,

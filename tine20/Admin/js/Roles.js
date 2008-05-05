@@ -503,7 +503,7 @@ Tine.Admin.Roles.EditDialog = {
 
         /******* account picker panel ********/
 
-        var accountPicker =  new Tine.widgets.AccountpickerPanel ({            
+        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
             enableBbar: true,
             height: 300,
             selectType: 'both',
