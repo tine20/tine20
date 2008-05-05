@@ -100,7 +100,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'description'           => 'phpunit test role',
         ));
         
-        // add account for group member tests
+        // add account for group / role member tests
         try {
             Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId) ;
         } catch ( Exception $e ) {
@@ -464,11 +464,20 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddRole()
     {
+        // account to add as role member
+        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId);
         
         $json = new Admin_Json();
         
         $encodedData = Zend_Json::encode($this->objects['role']->toArray());
-        $result = $json->saveRole($encodedData);
+        $encodedRoleMembers = Zend_Json::encode(array(
+            array(
+                "id"    => $account->getId(),
+                "type"  => "user",
+                "name"  => $account->accountDisplayName,
+            )
+        ));
+        $result = $json->saveRole($encodedData, $encodedRoleMembers);
         
         $this->assertTrue($result['success']);    
         
@@ -478,6 +487,21 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
         $this->assertEquals($role->getId(), $roleId);
+    }
+
+    /**
+     * try to get role members
+     *
+     */
+    public function testGetRoleMembers()        
+    {
+        $json = new Admin_Json();
+        
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
+        $result = $json->getRoleMembers($role->getId());
+        
+        $this->assertGreaterThan(0,$result['totalcount']);
+        
     }
     
     /**
@@ -493,7 +517,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $roleArray = $role->toArray();
         $encodedData = Zend_Json::encode($roleArray);
         
-        $result = $json->saveRole($encodedData);
+        $result = $json->saveRole($encodedData, Zend_Json::encode(array()));
         
         $this->assertTrue($result['success']);
         $this->assertEquals( "updated description", $result['updatedData']['description']);        
@@ -515,7 +539,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to delete roles
      *
-     * @todo implement json function and use it
+     *
      */
     public function testDeleteRoles()
     {
@@ -532,7 +556,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException( 'Exception');
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
-    }
+    }    
     
 }       
     
