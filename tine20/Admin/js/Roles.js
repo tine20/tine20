@@ -469,6 +469,124 @@ Tine.Admin.Roles.EditDialog = {
         Ext.getCmp('roleDialog').action_delete.enable();
         */
     },
+
+    /**
+     * creates the rights tree
+     *
+     */
+    getRightsTree: function() 
+    {
+    	/*
+        var treeLoader = new Ext.tree.TreeLoader({
+            dataUrl:'index.php',
+            baseParams: {
+                method: 'Admin.getRoleRights',
+            	roleId: roleRecord.data.id
+            }
+        });
+    	
+        treeLoader.on("beforeload", function(_loader, _node) {
+            _loader.baseParams.node     = _node.id;
+        }, this);
+        */
+    
+        var treePanel = new Ext.tree.TreePanel({
+            title: 'Role Application Rights',
+            id: 'rights',
+            iconCls: 'AdminTreePanel',
+            //loader: treeLoader,
+            rootVisible: false,
+            border: false
+        });
+        
+        // set the root node
+        var treeRoot = new Ext.tree.TreeNode({
+            text: 'root',
+            draggable:false,
+            allowDrop:false,
+            id:'root'
+        });
+        treePanel.setRootNode(treeRoot);
+
+        // get tree data from json / Admin.getRoleRights
+        var _rights = [{
+            text: 'Addressbook',
+            cls: 'treemain',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'addressbook',
+            icon: false,
+            children: [{
+                text: 'Admin',
+                checked: true,
+                id: 'admin',
+                icon: false,            
+            },{
+                text: 'Run',
+                checked: false,
+                id: 'run',
+                icon: false,            
+            }],
+            leaf: null,
+            expanded: false,
+            //dataPanelType: 'accounts'
+        },{
+            text: 'CRM',
+            cls: 'treemain',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'groupss',
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            //dataPanelType: 'groups' 
+        }];
+        
+        for(var i=0; i<_rights.length; i++) {
+            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_rights[i]));
+        }
+        
+        treePanel.on('click', function(_node, _event) {
+            //var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
+            /*
+            switch(_node.attributes.dataPanelType) {
+                case 'accesslog':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminAccessLog') {
+                        Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+                    } else {
+                        Tine.Admin.AccessLog.Main.show();
+                    }
+                    
+                    break;
+                    
+                    
+            } */
+        }, this);
+
+        /*
+        treePanel.on('beforeexpand', function(_panel) {
+            if(_panel.getSelectionModel().getSelectedNode() === null) {
+                _panel.expandPath('/root');
+                _panel.selectPath('/root/applications');
+            }
+            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
+        }, this);
+        */
+        treePanel.on('contextmenu', function(_node, _event) {
+            _event.stopEvent();
+            //_node.select();
+            //_node.getOwnerTree().fireEvent('click', _node);
+            //console.log(_node.attributes.contextMenuClass);
+            /* switch(_node.attributes.contextMenuClass) {
+                case 'ctxMenuContactsTree':
+                    ctxMenuContactsTree.showAt(_event.getXY());
+                    break;
+            } */
+        });
+
+        return treePanel;
+    },
     
     /**
      * function display
@@ -507,6 +625,7 @@ Tine.Admin.Roles.EditDialog = {
             enableBbar: true,
             height: 300,
             selectType: 'both',
+            selectTypeDefault: 'group', 
             //bbar: this.userSelectionBottomToolBar,
             /*selectAction: function() {            	
                 this.account = account;
@@ -586,6 +705,10 @@ Tine.Admin.Roles.EditDialog = {
             bbar: membersBottomToolbar,
             border: true
         }); 
+        
+        /******* rights tree ********/
+        
+        var rightsTreePanel = this.getRightsTree();
  
         /******* tab panels ********/
     	
@@ -609,9 +732,12 @@ Tine.Admin.Roles.EditDialog = {
             anchor:'100% 100%',
             border:false,
             items:[
+                rightsTreePanel
+                /*
                 new Ext.Panel ({
                    title: 'rights tree panel'
                 })
+                */
             ]
         };
     	
