@@ -557,7 +557,7 @@ Tine.Admin.Tags.EditDialog = {
             if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
                 continue;
             }
-            console.log(app);
+            //console.log(app);
             appSelection.push( new Ext.form.Checkbox({
                 boxLabel: app.name,
                 name: 'application_' + app.name,
@@ -573,6 +573,40 @@ Tine.Admin.Tags.EditDialog = {
             checkboxName: 'confineContexts',
             collapsed: anyContext,
             items: appSelection
+        });
+        
+        /******* THE rights box ********/
+        var rightsStore = new Ext.data.JsonStore({
+            baseParams: {
+                method: 'Admin.getTagRights',
+                containerId: _tagData.id
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: [ 'account_id', 'account_type', 'view_right', 'use_right' ]
+        });
+        rightsStore.loadData({
+            results:    _tagData.rights,
+            totalcount: _tagData.rights.length
+        });
+        
+        
+        var rightsPanel = new Tine.widgets.account.ConfigGrid({
+            height: 200,
+            configStore: rightsStore,
+            accountProperty: 'account_id',
+            configColumns: [
+                new Ext.ux.grid.CheckColumn({
+                    header: 'View',
+                    dataIndex: 'view_right',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: 'Use',
+                    dataIndex: 'use_right',
+                    width: 55
+                })
+            ]
         });
         
         /******* THE edit dialog ********/
@@ -605,7 +639,8 @@ Tine.Admin.Tags.EditDialog = {
                         ]        
                     ]
                 },
-                confineCheckbox
+                confineCheckbox,
+                rightsPanel
             ]
         };
         
