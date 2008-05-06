@@ -178,7 +178,25 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $encodedTag = Zend_Json::encode(array());
         } else {
             $tag = Admin_Controller::getInstance()->getTag($tagId);
-            $tag->rights = $tag->rights->toArray();       
+            
+            foreach ($tag->rights as &$right) {
+                switch ($right['account_type']) {
+                    case 'user':
+                    $right['account_id'] = Tinebase_Account::getInstance()->getAccountById($right['account_id'])->toArray();
+                    break;
+                case 'group':
+                    $right['account_id'] = Tinebase_Group::getInstance()->getGroupById($right['account_id'])->toArray();
+                    break;
+                case 'anyone':
+                    $right['account_id'] = array('accountDisplayName' => 'Anyone');
+                    break;
+                default:
+                    throw new Exception('unsupported accountType');
+                    break;
+                }
+            }
+            $tag->rights = $tag->rights->toArray();
+            
             $encodedTag = Zend_Json::encode($tag->toArray());
         }
 
