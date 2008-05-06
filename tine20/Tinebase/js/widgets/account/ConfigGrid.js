@@ -38,10 +38,17 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
+        this.action_removeAccount = new Ext.Action({
+            text: 'remove account',
+            disabled: true,
+            scope: this,
+            handler: null,//this.handlers.removeAccount,
+            iconCls: 'action_deleteContact'
+        });
         
-        this.accountPicker = new Tine.widgets.account.PickerPanel(
-            this.accountPickerConfig
-        );
+        this.accountPicker = new Tine.widgets.account.PickerPanel({
+            enableBbar: true
+        });
         
         var columnModel = new Ext.grid.ColumnModel([{
                 resizable: true, 
@@ -52,18 +59,28 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
                 width: 70
             }].concat(this.configColumns)
         );
+        columnModel.defaultSortable = true; // by default columns are sortable
         
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({
+            multiSelect:true
+        });
+        
+        rowSelectionModel.on('selectionchange', function(selectionModel) {
+            this.action_removeAccount.setDisabled(selectionModel.getCount() < 1);
+        }, this);
+        
+
         this.configGridPanel = new Ext.grid.EditorGridPanel({
             title: 'Permissions',
             store: this.configStore,
             cm: columnModel,
             autoSizeColumns: false,
-            //selModel: rowSelectionModel,
+            selModel: rowSelectionModel,
             enableColLock:false,
             loadMask: true,
             plugins: this.configColumns,
             autoExpandColumn: this.accountProperty,
-            //bbar: permissionsBottomToolbar,
+            bbar: [this.action_removeAccount],
             border: false
         });
         
@@ -82,11 +99,13 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      */
     getConfigGridLayout: function() {
         return [{
-            layout: 'hfit',
+            layout: 'fit',
             width: this.accountPickerWidth,
-            items: new Tine.widgets.account.PickerPanel({})
+            items: new Tine.widgets.account.PickerPanel({
+                enableBbar: true
+            })
         },{
-            layout: 'hfit',
+            layout: 'fit',
             columnWidth: 1,
             items: this.configGridPanel
         }];
