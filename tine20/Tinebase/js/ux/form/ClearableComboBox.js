@@ -73,7 +73,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
     // show clear triger when item got selected
     onSelect: function(combo, record, index) {
         Ext.ux.form.ClearableComboBox.superclass.onSelect.call(this, combo, record, index);
-        this.startValue = this.getRawValue();
+        this.startValue = this.getValue();
         this.triggers[0].show();
     }
 
