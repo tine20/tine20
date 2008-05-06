@@ -304,6 +304,24 @@ Tine.Admin.Roles.EditDialog = {
     },  
 
     /**
+     * check if right is set for application and get the record id
+     * @private
+     */
+    getRightId: function(applicationId, right) {
+        
+        var id = false;
+        var result = 0;
+        this.rightsDataStore.each(function(item){
+            if ( item.data.application_id == applicationId && item.data.right == right ) {
+            	result = item.id;
+            	return;
+            }
+        });
+        
+        return result;
+    },  
+    
+    /**
      * var handlers
      */
      handlers: {
@@ -325,8 +343,6 @@ Tine.Admin.Roles.EditDialog = {
             
             var dataStore = roleGrid.getStore();
             var selectionModel = roleGrid.getSelectionModel();
-            
-            //console.log ( account );
             
             // check if exists
             var recordIndex = Tine.Admin.Roles.EditDialog.getRecordIndex(account, dataStore);
@@ -384,12 +400,6 @@ Tine.Admin.Roles.EditDialog = {
                             this.updateRoleRecord(response.updatedData);
                             form.loadRecord(this.roleRecord);
                             
-                        	// @todo   get roleMembers from result
-                        	/*
-                        	var roleMembers = Ext.util.JSON.decode(_result.responseText);
-                            dataStore.loadData(roleMembers, false);
-                            */
-                        	
                         	Ext.MessageBox.hide();
                         }
                     },
@@ -440,6 +450,10 @@ Tine.Admin.Roles.EditDialog = {
      */
     roleRecord: null,
     
+    /**
+     * var rights storage
+     */
+    rightsDataStore: null,
 
     /**
      * function updateRoleRecord
@@ -454,27 +468,10 @@ Tine.Admin.Roles.EditDialog = {
     },
 
     /**
-     * function updateToolbarButtons
-     */
-    updateToolbarButtons: function(_rights)
-    {        
-       /* if(_rights.editGrant === true) {
-            Ext.getCmp('roleDialog').action_saveAndClose.enable();
-            Ext.getCmp('roleDialog').action_applyChanges.enable();
-        }
-
-        if(_rights.deleteGrant === true) {
-            Ext.getCmp('roleDialog').action_delete.enable();
-        }
-        Ext.getCmp('roleDialog').action_delete.enable();
-        */
-    },
-
-    /**
      * creates the rights tree
      *
      */
-    getRightsTree: function(_roleRights, _allRights) 
+    getRightsTree: function(_allRights) 
     {
     
         var treePanel = new Ext.tree.TreePanel({
@@ -494,104 +491,54 @@ Tine.Admin.Roles.EditDialog = {
         });
 
         treePanel.setRootNode(treeRoot);
-                
-        /*
-        var _rights = [{
-            id: 1,
-            text: 'addressbook',
-            children: [{
-                id: 2,
-                text: 'run',
-                leaf: true,
-                checked: true,
-                icon: false,
-                qtip: 'blabla'
-            },{
-                id: 3,
-                text: 'admin',
-                leaf: true,
-                icon: false,
-                checked: false
-            }]
-        },{
-            id: 4,
-            text: 'crm',
-            children: [{
-                id: 5,
-                text: 'run',
-                leaf: true,
-                checked: true
-            },{
-                id: 6,
-                text: 'admin',
-                leaf: true,
-                checked: false
-            }]
-        }];
-        */
-        
-        // add nodes to tree
-        console.log (_allRights );
-        
+                        
+        // add nodes to tree        
         for(var i=0; i<_allRights.length; i++) {
 
         	var node = new Ext.tree.TreeNode(_allRights[i]);
+        	node.attributes.application_id = _allRights[i].application_id;
         	treeRoot.appendChild(node);
         	
-        	// append children
-        	
+        	// append children        	
         	if ( _allRights[i].children ) {
+        	
                 for(var j=0; j < _allRights[i].children.length; j++) {
+                
                 	var childData = _allRights[i].children[j];
                 	childData.leaf = true;
-                	childData.checked = false;
-                	node.appendChild(new Ext.tree.TreeNode(childData));                	
+                    childData.icon = "s.gif";
+                	
+                	// check if right is set
+                	var rightIsSet = ( this.getRightId(_allRights[i].application_id,childData.text) > 0 );
+                	childData.checked = rightIsSet;
+                    
+                    var child = new Ext.tree.TreeNode(childData);
+                	
+                	// add onchange handler
+                	child.on('checkchange', function(_node, _checked) {
+                	
+                	    // get parents application id
+                	    var applicationId = _node.parentNode.attributes.application_id;
+                	
+                	    // put it in the storage or remove it                        
+                	    if ( _checked ) {
+                   	        this.rightsDataStore.add (
+                   	            new Ext.data.Record({
+                                    right: _node.text,
+                                    application_id: applicationId
+                                })
+                            );
+                        } else {
+                            var rightId = this.getRightId(applicationId,_node.text);
+                            this.rightsDataStore.remove ( this.rightsDataStore.getById(rightId) );                                                                                         
+                        }                	   
+                	},this);
+                	
+                	node.appendChild(child);                	
                 }		
         	}
         	
         }        
-
-        /*        
-        treePanel.on('click', function(_node, _event) {
-            //var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-            switch(_node.attributes.dataPanelType) {
-                case 'accesslog':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAdminAccessLog') {
-                        Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
-                    } else {
-                        Tine.Admin.AccessLog.Main.show();
-                    }
-                    
-                    break;
-                    
-                    
-            } 
-        }, this);
-        */
-
-        /*
-        treePanel.on('beforeexpand', function(_panel) {
-            if(_panel.getSelectionModel().getSelectedNode() === null) {
-                _panel.expandPath('/root');
-                _panel.selectPath('/root/applications');
-            }
-            _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
-        }, this);
-        */
-        
-        /*
-        treePanel.on('contextmenu', function(_node, _event) {
-            _event.stopEvent();
-            //_node.select();
-            //_node.getOwnerTree().fireEvent('click', _node);
-            //console.log(_node.attributes.contextMenuClass);
-            //switch(_node.attributes.contextMenuClass) {
-            //    case 'ctxMenuContactsTree':
-            //        ctxMenuContactsTree.showAt(_event.getXY());
-            //        break;
-            //} 
-        });
-        */
 
         return treePanel;
     },
@@ -635,11 +582,6 @@ Tine.Admin.Roles.EditDialog = {
             height: 300,
             selectType: 'both',
             selectTypeDefault: 'group', 
-            //bbar: this.userSelectionBottomToolBar,
-            /*selectAction: function() {            	
-                this.account = account;
-                this.handlers.addAccount(account);
-            } */ 
         });
                 
         accountPicker.on('accountdblclick', function(account){
@@ -735,7 +677,7 @@ Tine.Admin.Roles.EditDialog = {
         
         /******* rights tree ********/
         
-        var rightsTreePanel = this.getRightsTree(this.rightsDataStore, _allRights);
+        var rightsTreePanel = this.getRightsTree(_allRights);
  
         /******* tab panels ********/
     	
@@ -834,7 +776,6 @@ Tine.Admin.Roles.EditDialog = {
         });
 
         this.updateRoleRecord(_roleData);
-        //this.updateToolbarButtons(_roleData.grants);       
 
         dialog.getForm().loadRecord(this.roleRecord);
         

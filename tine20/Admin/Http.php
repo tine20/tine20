@@ -273,9 +273,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
                 "children"  => array (
                     array (
                         "text"  => Tinebase_Acl_Rights::ADMIN,
+                        "qtip"  => "admin right",
                     ),
                     array (
                         "text"  => Tinebase_Acl_Rights::RUN,
+                        "qtip"  => "run right",
                     ),
                 ),
             ),
@@ -285,9 +287,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
                 "children"  => array (
                     array (
                         "text"  => Tinebase_Acl_Rights::ADMIN,
+                        "qtip"  => "admin right",
                     ),
                     array (
                         "text"  => Tinebase_Acl_Rights::RUN,
+                        "qtip"  => "admin right",
                     ),
                 ),
             ),
