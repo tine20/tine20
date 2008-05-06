@@ -17,7 +17,7 @@ Ext.namespace('Tine.Dialer');
 Tine.Dialer.getPanel = function(){
     var tree = new Ext.tree.TreePanel({
         id: 'dialerTree',
-        iconCls: 'DialerTreePanel',
+        iconCls: 'DialerIconCls',
         title: 'Dialer',
         border: false,
         root: new Ext.tree.TreeNode({

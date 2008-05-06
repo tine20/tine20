@@ -273,7 +273,7 @@ Tine.Tasks.mainGrid = {
 	getTree: function() {
         this.tree =  new Tine.widgets.container.TreePanel({
             id: 'TasksTreePanel',
-            iconCls: 'TasksTreePanel',
+            iconCls: 'TasksIconCls',
             title: 'Tasks',
             itemName: 'to do lists',
             folderName: 'to do list',

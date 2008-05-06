@@ -20,7 +20,7 @@ Tine.Felamimail = function() {
         var treePanel = new Ext.tree.TreePanel({
             title: 'Email',
             id: 'felamimail-tree',
-            iconCls: 'FelamimailTreePanel',
+            iconCls: 'FelamimailIconCls',
             loader: treeLoader,
             rootVisible: false,
             border: false

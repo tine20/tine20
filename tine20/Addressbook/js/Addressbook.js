@@ -19,7 +19,7 @@ Tine.Addressbook = {
         
         var treePanel =  new Tine.widgets.container.TreePanel({
             id: 'Addressbook_Tree',
-            iconCls: 'AddressbookTreePanel',
+            iconCls: 'AddressbookIconCls',
             title: 'Contacts',
             itemName: 'contacts',
             folderName: 'addressbook',

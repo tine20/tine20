@@ -17,7 +17,7 @@ Ext.namespace('Tine.Crm');
 Tine.Crm.getPanel = function(){
 	var tree = new Tine.widgets.container.TreePanel({
         id: 'crmTree',
-        iconCls: 'crmThumbnailApplication',
+        iconCls: 'CrmIconCls',
         title: 'CRM',
         itemName: 'Leads',
         folderName: 'Leads',

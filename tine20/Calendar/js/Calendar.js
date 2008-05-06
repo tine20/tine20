@@ -63,7 +63,7 @@ Tine.Calendar.Preferences = {
 Tine.Calendar.getPanel = function() {
     
     var calPanel =  new Ext.Panel({
-		iconCls: 'CalendarTreePanel',
+		iconCls: 'CalendarIconCls',
         title: 'Calendar',
         //html: '<p>Magic Calendar App!</p>',
         items: new Ext.DatePicker({}),

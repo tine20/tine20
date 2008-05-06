@@ -102,7 +102,7 @@ Tine.Admin = function() {
         var treePanel = new Ext.tree.TreePanel({
             title: 'Admin',
             id: 'admin-tree',
-            iconCls: 'AdminTreePanel',
+            iconCls: 'AdminIconCls',
             loader: treeLoader,
             rootVisible: false,
             border: false
