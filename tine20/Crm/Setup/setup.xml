@@ -305,7 +305,7 @@
                     <reference>
                         <table>metacrm_lead</table>
                         <field>id</field>
-                        <action>ON DELETE CASCADE</action>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>   
             </declaration>
