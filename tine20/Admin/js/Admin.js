@@ -82,7 +82,7 @@ Tine.Admin = function() {
     }];
 
 	/**
-     * creates the address grid
+     * creates the admin menu tree
      *
      */
     var _getAdminTree = function() 

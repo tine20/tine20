@@ -617,6 +617,8 @@ class Admin_Controller
      *
      * @param int $_roleId
      * @return array with Tinebase_Account_Model_Account arrays
+     * 
+     * @todo  move user/group selection to json
      */
     public function getRoleMembers($_roleId)
     {

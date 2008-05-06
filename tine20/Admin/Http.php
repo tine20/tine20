@@ -230,7 +230,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      *
      * @param   integer  $roleId   role id
      * 
-     * @todo    create generic "edit" function with edit tag/group/role
+     * @todo    create generic "edit" function with edit tag/group/role?
      * 
      */
     public function editRole($roleId)
@@ -239,12 +239,59 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         if(empty($roleId)) {
             $encodedRole = Zend_Json::encode(array());
             $encodedRoleMembers = Zend_Json::encode(array());
+            $encodedRoleRights = Zend_Json::encode(array());
         } else {
             $role = Admin_Controller::getInstance()->getRole($roleId);         
             $encodedRole = Zend_Json::encode($role->toArray());
+            
             $json = new Admin_Json();
             $encodedRoleMembers = Zend_Json::encode($json->getRoleMembers($roleId));
+            
+            // @todo add function to controller and comment testing array
+            //$roleRights = Admin_Controller::getInstance()->getRoleRights($roleId);
+            $roleRights = array (
+                "results" => array(
+                    array(
+                        "application_id" => 4,
+                        "right"          => Tinebase_Acl_Rights::ADMIN,
+                    ),
+                    array(
+                        "application_id" => 4,
+                        "right"          => Tinebase_Acl_Rights::RUN,
+                    ),
+                ),
+                "totalcount" => 2,
+            );
+            $encodedRoleRights = Zend_Json::encode( $roleRights );
         }
+        
+        // @todo add function to controller and comment testing array
+        $encodedAllRights = Zend_Json::encode(array (
+            array(
+                "application_id" => 4,
+                "text"      => "Addressbook",
+                "children"  => array (
+                    array (
+                        "text"  => Tinebase_Acl_Rights::ADMIN,
+                    ),
+                    array (
+                        "text"  => Tinebase_Acl_Rights::RUN,
+                    ),
+                ),
+            ),
+            array(
+                "application_id" => 2,
+                "text"      => "Crm",
+                "children"  => array (
+                    array (
+                        "text"  => Tinebase_Acl_Rights::ADMIN,
+                    ),
+                    array (
+                        "text"  => Tinebase_Acl_Rights::RUN,
+                    ),
+                ),
+            ),
+        ));
 
         $view = new Zend_View();
          
@@ -252,7 +299,12 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         $view->formData = array();
         
         //@todo move Roles.js to Admin.js later
-        $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . $encodedRole . ', ' . $encodedRoleMembers . ');';
+        $view->jsExecute = 'Tine.Admin.Roles.EditDialog.display(' . 
+            $encodedRole . ', ' . 
+            $encodedRoleMembers . ', ' . 
+            $encodedRoleRights . ', ' .
+            $encodedAllRights .  
+        ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
