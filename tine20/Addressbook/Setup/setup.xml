@@ -152,7 +152,6 @@
                 <field>
                     <name>owner</name>
                     <type>integer</type>
-                    <notnull>true</notnull>
                     <notnull>false</notnull>
                 </field>
                 <field>
