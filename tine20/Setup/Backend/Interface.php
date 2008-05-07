@@ -128,7 +128,7 @@ interface Setup_Backend_Interface
     public function applicationExists($_application);
     
     /**
-     * check's if a given table exists
+     * checks if a given table exists
      *
      * @param string $_tableSchema
      * @param string $_tableName
@@ -137,7 +137,7 @@ interface Setup_Backend_Interface
     public function tableExists($_tableName);
 
     /**
-     * check's a given database table version 
+     * /***checks a given database table version 
      *
      * @param string $_tableName
      * @return boolean return string "version" if the table exists, otherwise false
@@ -146,13 +146,17 @@ interface Setup_Backend_Interface
     public function tableVersionQuery($_tableName);
     
     /**
-     * check's a given application version
+     * checks a given application version
      *
      * @param string $_application
      * @return boolean return string "version" if the table exists, otherwise false
      */
     public function applicationVersionQuery($_application);
     
+	/**
+	 *
+	 *
+	 */
     public function getExistingSchema($_tableName);
     
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table);

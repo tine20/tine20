@@ -78,10 +78,10 @@
                     <name>name-application_id</name>
                     <primary>true</primary>
                     <field>
-                        <name>name</name>
+                        <name>application_id</name>
                     </field>
                     <field>
-                        <name>application_id</name>
+                        <name>name</name>
                     </field>
                 </index>
                 <index>
@@ -117,6 +117,7 @@
                     <name>description</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
                 </field>                
                 <index>
                     <name>id</name>
@@ -164,6 +165,7 @@
                     <name>last_login_from</name>
                     <type>text</type>
                     <length>20</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>last_password_change</name>
@@ -211,7 +213,12 @@
                         <name>login_name</name>
                     </field>
                 </index>
-
+               <index>
+                    <name>primary_group_id</name>
+                    <field>
+                        <name>primary_group_id</name>
+                    </field>
+                </index>
                 <index>
                     <name>accounts::primary_group_id--groups::id</name>
                     <field>
@@ -251,7 +258,12 @@
                         <name>account_id</name>
                     </field>
                 </index>                
-
+                <index>
+                    <name>account_id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
                 <index>
                     <name>group_members::group_id--groups::id</name>
                     <field>
@@ -365,6 +377,7 @@
                     <value>personal</value>
                     <value>shared</value>
                     <value>internal</value>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>backend</name>
@@ -388,6 +401,12 @@
                     <name>type</name>
                     <field>
                         <name>type</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
                     </field>
                 </index>
                 <index>
@@ -431,7 +450,8 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <notnull>false</notnull>
+                    <default>'0'</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>account_grant</name>
@@ -509,6 +529,7 @@
                     <name>ip</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>li</name>
@@ -523,6 +544,7 @@
                     <name>account_id</name>
                     <type>integer</type>
                     <unsigned>true</unsigned>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>result</name>
@@ -585,13 +607,13 @@
                     <name>account_id-account_type-application_id-right</name>
                     <unique>true</unique>
                     <field>
+                        <name>application_id</name>
+                    </field>                    
+                    <field>
                         <name>account_id</name>
                     </field>
                     <field>
                         <name>account_type</name>
-                    </field>
-                    <field>
-                        <name>application_id</name>
                     </field>
                     <field>
                         <name>right</name>
@@ -648,6 +670,7 @@
                     <name>observed_event</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>                  
                 <field>
                     <name>created_by</name>
@@ -691,18 +714,6 @@
                     </field>
                 </index>
                 <index>
-                    <name>observer_application</name>
-                    <field>
-                        <name>observer_application</name>
-                    </field>
-                </index>
-                 <index>
-                    <name>observer_identifier</name>
-                    <field>
-                        <name>observer_identifier</name>
-                    </field>
-                </index>
-                <index>
                     <name>observable_id-observer_id-application_id</name>
                     <unique>true</unique>
                     <field>
@@ -718,6 +729,19 @@
                         <name>observed_event</name>
                     </field>
                 </index>
+                <index>
+                    <name>observer_application</name>
+                    <field>
+                        <name>observer_application</name>
+                    </field>
+                </index>
+                 <index>
+                    <name>observer_identifier</name>
+                    <field>
+                        <name>observer_identifier</name>
+                    </field>
+                </index>
+
             </declaration>
         </table>
         
@@ -752,6 +776,7 @@
                     <name>related_role</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>                  
                 <field>
                     <name>created_by</name>
@@ -865,7 +890,15 @@
                     <name>link_remark</name>
                     <type>text</type>
                     <length>100</length>
+                    <notnull>false</notnull>
                 </field>
+                <index>
+                    <name>link_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>link_id</name>
+                    </field>
+                </index>
                 <index>
                     <name>egw_links_app1_id1_lastmod</name>
                     <field>
@@ -890,14 +923,6 @@
                         <name>link_lastmod</name>
                     </field>
                 </index>
-                <index>
-                    <name>link_id</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>link_id</name>
-                    </field>
-                </index>
             </declaration>
         </table>
         
@@ -909,6 +934,8 @@
                     <name>id</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>true</notnull>
+                    <default>''</default>
                 </field>
                 <field>
                     <name>application_id</name>
@@ -919,16 +946,19 @@
                     <name>record_id</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>record_type</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>record_backend</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>modification_time</name>
@@ -944,6 +974,7 @@
                     <name>modified_attribute</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>old_value</name>
@@ -996,6 +1027,8 @@
                     <name>id</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>true</notnull>
+                    <default>''</default>
                 </field>
                 <field>
                     <name>type</name>
@@ -1012,16 +1045,19 @@
                     <name>name</name>
                     <type>text</type>
                     <length>20</length>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>description</name>
                     <type>text</type>
                     <length>50</length>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>color</name>
                     <type>text</type>
                     <length>7</length>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>occurrence</name>
@@ -1100,6 +1136,8 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>'0'</default>
                 </field>
                 <field>
                     <name>account_right</name>
@@ -1175,6 +1213,12 @@
                         <name>application_id</name>
                     </field>
                 </index>
+                 <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>
                 <index>
                     <name>tags_context::tag_id--tags::id</name>
                     <field>
@@ -1186,12 +1230,7 @@
                         <field>id</field>
                     </reference>
                 </index>
-                <index>
-                    <name>application_id</name>
-                    <field>
-                        <name>application_id</name>
-                    </field>
-                </index>
+
             </declaration>
         </table>
         
@@ -1221,6 +1260,8 @@
                     <name>record_backend_id</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>true</notnull>
+                    <default>''</default>
                 </field>
                 <index>
                     <name>tag_id-application_id-record_id-record_backend_id</name>
@@ -1238,17 +1279,7 @@
                         <name>record_backend_id</name>
                     </field>
                 </index>
-                <index>
-                    <name>tagging::tag_id--tags::id</name>
-                    <field>
-                        <name>tag_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>tags</table>
-                        <field>id</field>
-                    </reference>
-                </index>
+
                 <index>
                     <name>application_id</name>
                     <field>
@@ -1261,6 +1292,17 @@
                         <name>record_id</name>
                     </field>
                 </index>
+                <index>
+                    <name>tagging::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                    </reference>
+                </index>                
             </declaration>
         </table>
         
@@ -1285,6 +1327,7 @@
                     <name>description</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
                 </field>                
                 <field>
                     <name>created_by</name>
@@ -1359,6 +1402,18 @@
                     </field>
                 </index>
                 <index>
+                    <name>role_id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>application_id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                </index>
+                <index>
                     <name>role_rights::role_id--roles::id</name>
                     <field>
                         <name>role_id</name>
@@ -1427,13 +1482,13 @@
                     <name>account_id-account_type-role_id</name>
                     <unique>true</unique>
                     <field>
+                        <name>role_id</name>
+                    </field>
+                    <field>
                         <name>account_id</name>
                     </field>
                     <field>
                         <name>account_type</name>
-                    </field>
-                    <field>
-                        <name>role_id</name>
                     </field>
                 </index>
                 <index>

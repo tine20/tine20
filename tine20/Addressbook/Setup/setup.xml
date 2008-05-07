@@ -12,7 +12,6 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -23,100 +22,120 @@
                     <name>adr_one_countryname</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_one_locality</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_one_postalcode</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_one_region</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_one_street</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_one_street2</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_two_countryname</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_two_locality</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_two_postalcode</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_two_region</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_two_street</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_two_street2</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>cat_id</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>assistent</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>bday</name>
                     <type>datetime</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>calendar_uri</name>
                     <type>text</type>
                     <length>128</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>email</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>email_home</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>freebusy_uri</name>
                     <type>text</type>
                     <length>128</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>geo</name>
                     <type>text</type>
                     <length>32</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>jpegphoto</name>
@@ -134,6 +153,7 @@
                     <name>owner</name>
                     <type>integer</type>
                     <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>private</name>
@@ -148,137 +168,163 @@
                     <name>role</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>room</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tid</name>
                     <type>text</type>
                     <length>1</length>
-                    <default>n</default>
+                    <default>'n'</default>
                 </field>
                 <field>
                     <name>title</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tz</name>
                     <type>text</type>
                     <length>8</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>url</name>
                     <type>text</type>
                     <length>128</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>url_home</name>
                     <type>text</type>
                     <length>128</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_family</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_fileas</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_fn</name>
                     <type>text</type>
                     <length>128</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_given</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_middle</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_prefix</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>n_suffix</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>org_name</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>org_unit</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_assistent</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_car</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_cell</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_cell_private</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_fax</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_fax_home</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_home</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_other</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_pager</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_prefer</name>
                     <type>text</type>
                     <length>32</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>tel_work</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>created_by</name>

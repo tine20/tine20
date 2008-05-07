@@ -31,6 +31,14 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
     {
+        $statement = $this->getCreateStatement($_table);
+        $this->execQueryVoid($statement);
+        
+            
+    }
+    
+    public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
+    {
         $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
         $statementSnippets = array();
      
@@ -41,6 +49,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         foreach ($_table->indices as $index) {
+        
             if ($index->foreign) {
                $statementSnippets[] = $this->getForeignKeyDeclarations($index);
             } else {
@@ -48,25 +57,28 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             }
         }
 
-        $statement .= implode(",\n", $statementSnippets) . ")";
+        $statement .= implode(",\n", $statementSnippets) . "\n)";
 
         if (isset($_table->engine)) {
-            $statement .= "\n ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
+            $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
         } else {
-            $statement .= "\n ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
+            $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
         }
 
         $statement .= " COMMENT='VERSION: " .  $_table->version  ;
         if (isset($_table->comment)) {
-          $statement .= "; " . $_table->comment . "';";
+          $statement .= "; " . $_table->comment . "'";
         } else {
-            $statement .= "';";
+            $statement .= "'";
         }
 
-        echo "<pre>$statement</pre>";
-        $this->execQueryVoid($statement);
-        echo "<hr>";
+        //echo "<pre>$statement</pre>";
+
+        
+        return $statement;
+    
     }
+    
     
     /**
      * checks if application is installed at all
@@ -173,45 +185,56 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         foreach($tableColumns as $tableColumn) {
             $field = Setup_Backend_Schema_Field_Factory::factory('Mysql', $tableColumn);
             $existingTable->addField($field);
-        }
-/*
-        foreach ($existingTable->fields as $field) {
-            if ($field->primary === 'true' || $field->unique === 'true') {
             
-                //var_dump($field);
-                $index = Setup_Backend_Schema_Index_Factory::factory('Mysql', $field);
-                //$index = new Setup_Backend_Schema_Index($field, 'MySQL');
-                
-                
+            if ($field->primary === 'true' || $field->unique === 'true' || $field->mul === 'true') {
+                $index = Setup_Backend_Schema_Index_Factory::factory('Mysql', $tableColumn);
+                        
+                // get foreign keys
+                $select = Zend_Registry::get('dbAdapter')->select()
+                  ->from('information_schema.KEY_COLUMN_USAGE')
+                  ->where('TABLE_NAME = ?', SQL_TABLE_PREFIX .  $_tableName)
+                  ->where('COLUMN_NAME = ?', $tableColumn['COLUMN_NAME']);
+
+                $stmt = $select->query();
+                $keyUsage = $stmt->fetchAll();
+
+                foreach ($keyUsage as $keyUse) {
+                    if($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
+                        $index->setForeignKey($keyUse);
+                    }
+                }
                 $existingTable->addIndex($index);
             }
-        }*/
-        /*
-        // get foreign keys
-        $select = Zend_Registry::get('dbAdapter')->select()
-          ->from('information_schema.KEY_COLUMN_USAGE')
-          ->where('TABLE_NAME = ?', SQL_TABLE_PREFIX .  $_tableName);
-
-        $stmt = $select->query();
-        $keyUsage = $stmt->fetchAll();
-
-        foreach ($keyUsage as $keyUse)
-        {
-//            var_dump($keyUse);
-            $existingTable->setIndex($keyUse);
-            if($keyUse['REFERENCED_TABLE_NAME'] != NULL)
-            {
-                $existingTable->setForeign($keyUse);
-            }
-        }*/
+        }
+        
+        //var_dump($existingTable);
+        
+      
         return $existingTable;
     }
     
     
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
-        $existentTable = $this->getExistingSchema($_table->name);
         
+        $string = $this->getCreateStatement($_table);
+        $dump = $this->execQuery('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . $_table->name );
+        $compareString = preg_replace('/ AUTO_INCREMENT=\d*/', '', $dump[0]['Create Table']);
+        
+        if ($compareString != $string) {
+            echo "XML<br/>" . $string;
+            echo "<hr color=red>MYSQL<br/>";
+            for ($i = 0 ; $i < (strlen($compareString)+1) ; $i++ ) {
+                if ($compareString[$i] == $string[$i]) {
+                    echo $compareString[$i];
+                } else {
+                    echo "<font color=red>" . $compareString[$i] . "</font>";
+                }
+            }
+            throw new Exception ("<h1>Failure</h1>");
+        }
+        
+        /*
         foreach ($existentTable->fields as $existingFieldKey => $existingField) {
             
             foreach ($_table->fields as $spalte) {
@@ -220,7 +243,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     if (NULL != (array_diff($spalte->toArray(), $existingField->toArray()))) {
                         
                         print_r("Differences between database and newest xml declarations\n");
-                        echo $_table->name . " in der datenbank: ";
+                        echo $_table->name . " database: ";
                        // var_dump($existingField);
                         var_dump($existingField->toArray());
                         echo "XML field: ";
@@ -231,6 +254,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 }
             }
         }
+        */
     }
     
     /**
@@ -308,6 +332,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         $statement = "DROP TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`;";
         $this->execQueryVoid($statement);
+        echo  $_tableName . " geloescht\n";
     }
     
     /*
@@ -493,93 +518,98 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field)
     {
-        $definition = '`' . $_field->name . '`';
+        $buffer[] = '  `' . $_field->name . '`';
 
         switch ($_field->type) {
             case('varchar'): 
-                $definition .= ' varchar(' . $_field->length . ') ';
+                $buffer[] = 'varchar(' . $_field->length . ')';
                 break;
             
             case ('integer'):
                 if (isset($_field->length)) {
                     if ($_field->length > 19) {
-                        $definition .= ' bigint(' . $_field->length . ') ';
+                        $buffer[] = 'bigint(' . $_field->length . ')';
                     } else if ($_field->length < 5){
-                        $definition .= ' tinyint(' . $_field->length . ') ';
+                        $buffer[] = 'tinyint(4)';
                     } else {
-                        $definition .= ' int(' . $_field->length . ') ';
+                        $buffer[] = 'int(' . $_field->length . ')';
                     }
                 } else {
-                    $definition .= ' int(11) ';
+                    $buffer[] = 'int(11)';
                 }
                 break;
             
             case ('clob'):
-                $definition .= ' text ';
+                $buffer[] = 'text';
                 break;
             
             case ('blob'):
-                $definition .= ' longblob ';
+                $buffer[] = 'longblob';
                 break;
             
             case ('enum'):
                 foreach ($_field->value as $value) {
                     $values[] = $value;
                 }
-                $definition .= " enum('" . implode("','", $values) . "') ";
+                $buffer[] = "enum('" . implode("','", $values) . "')";
                 break;
             
             case ('datetime'):
-                $definition .= ' datetime ';
+                $buffer[] = 'datetime';
                 break;
             
             case ('double'):
-                $definition .= ' double ';
+                $buffer[] = 'double';
                 break;
             
             case ('float'):
-                $definition .= ' float ';
-                break;
-            
-            case ('boolean'):
-                $definition .= ' tinyint(1) ';
-                if ($_field->default == 'false') {
-                    $_field->default = 0;
-                } else {
-                    $_field->default = 1;
-                }
+                $buffer[] = 'float';
                 break;
             
             case ('decimal'):
-                $definition .= " decimal (" . $_field->value . ") " ;
+                $buffer[] = "decimal(" . $_field->value . ")";
                 break;
                 
             default:
-                $definition .= ' ' . $_field->type . ' ';
+                $buffer[] = $_field->type;
             }
 
         if (isset($_field->unsigned)) {
-            $definition .= ' unsigned ';
+            $buffer[] = 'unsigned';
         }
+
+        // range  (int) default - null --- (string) null-default
+        if ($_field->type == 'varchar' || $_field->type == 'text' || $_field->type == 'integer') {
+            if (isset($_field->notnull) && $_field->notnull == 'true') {
+                $buffer[] = 'NOT NULL';
+            }
+
+            if (isset($_field->default)) {
+                $buffer[] = "default " . $_field->default ;
+            }    
+        } else {
+        
+            if (isset($_field->default)) {
+                $buffer[] = "default " . $_field->default ;
+            }
+            
+            if (isset($_field->notnull) && $_field->notnull == 'true') {
+                $buffer[] = 'NOT NULL';
+            }
+
+        }
+        
 
         if (isset($_field->autoincrement)) {
-            $definition .= ' auto_increment';
+            $buffer[] = 'auto_increment';
         }
-
-        if (isset($_field->default)) {
-            $definition .= " default '" . $_field->default . "'";
-        }
-
-        if (isset($_field->notnull) && $_field->notnull == 'true') {
-            $definition .= ' NOT NULL ';
-        }
-
+        
         if (isset($_field->comment)) {
             if ($_field->comment) {
-                $definition .= "COMMENT '" .  $_field->comment . "'";
+                $buffer[] = "COMMENT '" .  $_field->comment . "'";
             }
         }
-
+        $definition = implode(' ', $buffer);
         return $definition;
     }
 
@@ -591,18 +621,16 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {    
-        $snippet = '';
         $keys = array();
 
-        $definition = ' KEY';
+        $snippet = "  KEY `" . $_key->name . "`";
         if (!empty($_key->primary)) {
-            $definition = ' PRIMARY KEY';
+            $snippet = '  PRIMARY KEY ';
         } else if (!empty($_key->unique)) {
-            $definition = ' UNIQUE KEY';
+            $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         }
 
-        $snippet .= $definition . " `" . $_key->name . "`" ;
-
+        
         foreach ($_key->field as $keyfield) {
             $key = '`' . (string)$keyfield . '`';
             if(!empty($keyfield->length)) {
@@ -615,7 +643,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             throw new Exception('no keys for index found');
         }
 
-        $snippet .= ' (' . implode(",", $keys) . ') ';
+        $snippet .= ' (' . implode(",", $keys) . ')';
         return $snippet;
     }
 
@@ -628,17 +656,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {
-        $snippet = '';
-        $snippet = 'CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY';
+        
+        $snippet = '  CONSTRAINT `' . SQL_TABLE_PREFIX .  $_key->name . '` FOREIGN KEY ';
         $snippet .= '(`' . $_key->field . "`) REFERENCES `" . SQL_TABLE_PREFIX
                     . $_key->referenceTable . 
-                    "` (`" . $_key->referenceField . "`) ";
+                    "` (`" . $_key->referenceField . "`)";
 
         if(!empty($_key->referenceOnDelete)) {
-            $snippet .= "ON DELETE " . strtoupper($_key->referenceOnDelete);
+            $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
         }
         if(!empty($_key->referenceOnUpdate)) {
-            $snippet .= "ON UPDATE " . strtoupper($_key->referenceOnUpdate);
+            $snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
         }
         return $snippet;
     }

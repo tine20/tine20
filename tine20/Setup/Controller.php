@@ -38,14 +38,7 @@ class Setup_Controller
         $this->_setupLogger();
         $this->setupDatabaseConnection();
         
-        #switch ($this->_config->database->database) {
-        #    case('mysql'):
-                $this->_backend = Setup_Backend_Factory::factory(Setup_Backend_Factory::SQL);
-        #        break;
-        #    
-        #    default:
-        #        echo "you have to define a dbms = yourdbms (like mysql) in your config.ini file";
-        #}        
+        $this->_backend = Setup_Backend_Factory::factory(Setup_Backend_Factory::SQL);
     }
     
     
@@ -91,7 +84,7 @@ class Setup_Controller
 
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
 
-            echo "<hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
+            echo "<pre><hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
 
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
@@ -120,7 +113,6 @@ class Setup_Controller
         foreach($applications as $application) {
             $xml = $this->parseFileForUpdate($application->name);
             $this->updateApplication($application, $xml->version);
-            echo $application->name;
         }
     }
     
@@ -249,8 +241,12 @@ class Setup_Controller
     public function checkUpdate(Tinebase_Model_Application $_application)  
     {
         $xmlTables = $this->parseFileForUpdate($_application->name);
+        echo "Check tables for " .$_application->name . "\n";
         if(isset($xmlTables->tables)) {
             foreach ($xmlTables->tables[0] as $tableXML) {
+            
+                
+            
                 $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                 
                 if (true == $this->_backend->tableExists($table->name)) {
@@ -262,9 +258,11 @@ class Setup_Controller
                     }
                 } else {
                     throw new Exception ('Table ' . $table->name . ' for application' . $_application->name . " does not exists. \n<strong>Update broken</strong>");
+                    
                 }
             }
         }
+        echo "done\n\n";
     }
     
     
@@ -335,7 +333,7 @@ class Setup_Controller
                 break; 
                 
             case 0:
-                echo "<i>" . $_application->name . " is up to date (Version: " . $_updateTo . ")</i><br>";
+                echo "<i>" . $_application->name . " is up to date (Version: " . $_updateTo . ")</i><br>\n\n";
                 break;
                 
             case 1:

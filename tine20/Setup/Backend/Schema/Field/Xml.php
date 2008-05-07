@@ -31,26 +31,24 @@
         $this->notnull = (string) $_declaration->notnull;
         $this->comment = (string) $_declaration->comment;
         
-        if (!empty ($_declaration->default) || $_declaration->default == '0') {
-            $this->default = (string) $_declaration->default;
-        }
         
         if (!empty ($_declaration->unsigned)) {
             $this->unsigned = (string) $_declaration->unsigned;
         } else if ( $this->type == 'integer') {
             $this->unsigned = 'true';
+            if ($this->notnull != 'true') {
+                $this->default = 'NULL';
+            }
+            
+            
         }
+
+        if (!empty ($_declaration->default) || $_declaration->default == '0') {
+            $this->default = (string) $_declaration->default;
+        }        
+
         
-        if ($_declaration->autoincrement) {
-            $this->notnull = 'true';
-            $this->length = 11;
-            $this->autoincrement = 'true';
-            $this->unsigned = 'true';
-        }
-        
-        if (!isset ($_declaration->notnull)) {
-            $this->notnull = 'false';
-        }
+      
 
         if (empty($_declaration->length) && $this->type == 'integer') {
             $this->length = 11;
@@ -62,6 +60,10 @@
                 if ($this->length == 0) {
                     $this->type = 'text';
                     $this->length = 65535;
+                }
+                
+                if ($this->default == NULL && $this->type == 'varchar') {
+                //    $this->default = '';
                 }
                 break;
             
@@ -94,37 +96,63 @@
 
             case ('datetime'):
                $this->type = 'datetime';
+               if (empty($this->default) && !($this->notnull)) {
+                    $this->default = 'NULL';
+                }
                 break;
     
             case ('double'):
                 $this->type = 'double';
+                if (empty($this->default)) {
+                    $this->default = 'NULL';
+                }
                 break;
             
             case ('float'):
                 $this->type = 'float';
+                if (empty($this->default)) {
+                    $this->default = 'NULL';
+                }
                 break;
             
             case ('boolean'):
-                $this->type =  'tinyint';
+                $this->type =  'integer';
                 $this->length = 4;
                 if ($this->default == 'false') {
-                    $this->default = 0;
+                    $this->default = "'0'";
                 } else {
-                    $this->default = 1;
+                    $this->default = "'1'";
                 }
                 break;
             
             case ('decimal'):
-              //$this->type =  "decimal (" . (string) $_declaration->value . ")" ;
-              $this->type =  "decimal";
-              $this->value = (string) $_declaration->value ;
+                $this->type =  "decimal";
+                $this->value = (string) $_declaration->value ;
+                if (empty($this->default)) {
+                    $this->default = 'NULL';
+                }
               
               break;
         
             default :
                 $this->type = 'integer';
+                
         }
-
+        
+        if (!isset ($this->notnull) || $this->notnull == 'false') {
+            $this->notnull = 'false';
+            $this->default = 'NULL';
+        
+        }
+          if ($_declaration->autoincrement) {
+            $this->notnull = 'true';
+            $this->length = 11;
+            $this->autoincrement = 'true';
+            $this->unsigned = 'true';
+            unset($this->default);
+        }
+        
+        
         $this->mul = 'false';
         $this->primary = 'false';
         $this->unique = 'false';

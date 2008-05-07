@@ -145,6 +145,6 @@
             Tinebase_Container::GRANT_ADMIN
         ), TRUE);
             
-        echo "TINE 2.0 now ready to use try <a href=\"./index.php\">TINE 2.0 Login</a>";
+        echo "TINE 2.0 now ready to use - try <a href=\"./index.php\">TINE 2.0 Login</a>";
     }
 }	

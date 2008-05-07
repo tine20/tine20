@@ -47,7 +47,7 @@ abstract class Setup_Backend_Schema_Table_Abstract
      *
      * @var int
      */
-     public $charset = 'UTF8';
+     public $charset = 'utf8';
     
     /**
      * the table columns

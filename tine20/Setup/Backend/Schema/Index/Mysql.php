@@ -18,6 +18,15 @@
         $this->_setIndex($_declaration);
     }
 
+	public function setForeignKey($_declaration)
+	{
+		$this->referencetable =  substr($_declaration['REFERENCED_TABLE_NAME'], strlen( SQL_TABLE_PREFIX ));
+		$this->referencefield = $_declaration['REFERENCED_COLUMN_NAME'];
+		$this->referenceOnDelete;
+	    $this->referenceOnUpdate;
+    }
+	
+	
     /**
      * set Setup_Backend_Schema_Table from a given database query 
      *
