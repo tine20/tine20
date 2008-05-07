@@ -281,20 +281,30 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                        icon: Ext.MessageBox.INFO
                     });
                 } else {
-                    var nameExists = false;
+                    var isAttached = false;
                     this.recordTagsStore.each(function(tag){
                         if(tag.data.name == value) {
-                            nameExists = true;
+                            isAttached = true;
                         }
                     },this);
                     
-                    if (!nameExists) {
-                        var newTag = new Tine.Tinebase.Model.Tag({
-                            name: value,
-                            description: '',
-                            color: '#FFFFFF'
-                        });
-                        this.recordTagsStore.add(newTag);
+                    if (!isAttached) {
+                        var tagToAttach = false;
+                        this.availableTagsStore.each(function(tag){
+                            if(tag.data.name == value) {
+                                tagToAttach = tag;
+                            }
+                        }, this);
+                        
+                        if (!tagToAttach) {
+                            tagToAttach = new Tine.Tinebase.Model.Tag({
+                                name: value,
+                                description: '',
+                                color: '#FFFFFF'
+                            });
+                        }
+                        
+                        this.recordTagsStore.add(tagToAttach);
                     }
                 }
                 searchField.emptyText = '';
