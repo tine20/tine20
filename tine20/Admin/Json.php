@@ -396,10 +396,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        $members = Admin_Controller::getInstance()->getGroupMembers($groupId);
-        
-        $result['results'] = $members;
-        $result['totalcount'] = count($members);
+        $accountIds = Admin_Controller::getInstance()->getGroupMembers($groupId);
+
+        $result['results'] = array ();
+        foreach ( $accountIds as $accountId ) {
+            $result['results'][] = Tinebase_Account::getInstance()->getAccountById($accountId)->toArray();
+        }
+                
+        $result['totalcount'] = count($result['results']);
         
         return $result;
     }
@@ -658,6 +662,8 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int $roleId
      * @return array with results / totalcount
+     * 
+     * @todo    move group/user resolution to new accounts class
      */
     public function getRoleMembers($roleId)
     {
@@ -667,9 +673,27 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         );
         
         $members = Admin_Controller::getInstance()->getRoleMembers($roleId);
+
+        $result['results'] = array ();
+        foreach ( $members as $member ) {
+            if ( $member['type'] === 'user' ) {
+                $user = Tinebase_Account::getInstance()->getAccountById($member['id']);
+                $result['results'][] = array (
+                    "id"    => $user->getId(),
+                    "type"  => $member['type'],
+                    "name"  => $user->accountDisplayName,
+                );
+            } elseif ( $member['type'] === 'group' ) {
+                $group = Tinebase_Group::getInstance()->getGroupById($member['id']);
+                $result['results'][] = array (
+                    "id"    => $group->getId(),
+                    "type"  => $member['type'],
+                    "name"  => $group->name,
+                );                
+            }
+        }        
         
-        $result['results'] = $members;
-        $result['totalcount'] = count($members);
+        $result['totalcount'] = count($result['results']);
         
         return $result;
     }
