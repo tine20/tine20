@@ -144,7 +144,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             }
         }
         
-        $includeFiles = self::getAllInclueFiles();
+        $includeFiles = self::getAllIncludeFiles();
         $view->jsIncludeFiles  = $includeFiles['js'];
         $view->cssIncludeFiles = $includeFiles['css'];
         
@@ -213,7 +213,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 * 
 	 * @return array 
 	 */
-	public static function getAllInclueFiles()
+	public static function getAllIncludeFiles()
 	{
 	    $tine20path = dirname(dirname(__FILE__));
 	    

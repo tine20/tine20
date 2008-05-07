@@ -108,7 +108,7 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
         
         $view->isPopup = true;
         
-        $includeFiles = Tinebase_Http::getAllInclueFiles();
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
         $view->jsIncludeFiles  = $includeFiles['js'];
         $view->cssIncludeFiles = $includeFiles['css'];
         
