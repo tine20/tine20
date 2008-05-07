@@ -92,7 +92,7 @@ class Tinebase_Tags_Model_Right extends Tinebase_Record_Abstract
             $db->quoteInto('acl.account_id = ?', $currentAccountId, Zend_Db::INT_TYPE) . ' ) ' .
             $groupCondition;
         
-        $_select->join(array('acl' => SQL_TABLE_PREFIX . 'tags_acl'), $_idProperty . ' = acl.tag_id' )
+        $_select->join(array('acl' => SQL_TABLE_PREFIX . 'tags_acl'), $_idProperty . ' = acl.tag_id', array() )
             ->where($where)
             ->where('acl.account_right = ?', $_right);
     }

@@ -267,7 +267,7 @@ class Tinebase_Tags
         $db = Zend_Registry::get('dbAdapter');
         $idProperty = $db->quoteIdentifier($_idProperty);
         
-        $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), "tagging.record_id = $idProperty");
+        $_select->join(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), "tagging.record_id = $idProperty", array());
         $_select->where($db->quoteInto('tagging.tag_id = ?', $_tagId));
         Tinebase_Tags_Model_Right::applyAclSql($_select, Tinebase_Tags_Model_Right::VIEW_RIGHT, 'tagging.tag_id');
     }
