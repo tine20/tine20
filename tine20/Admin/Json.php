@@ -698,5 +698,38 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
+    /**
+     * adds the name of the account to each item in the name property
+     * 
+     * @param  array  &$_items array of arrays which contain a type and id property
+     * @param  bool   $_hasAccountPrefix
+     * @return array  items with appended name 
+     * 
+     */
+    public static function resolveAccountName(array $_items, $_hasAccountPrefix=false)
+    {
+        $prefix = $_hasAccountPrefix ? 'account_' : '';
+        
+        $return = array();
+        foreach ($_items as $num => $item) {
+            
+            switch ($item[$prefix . 'type']) {
+                case 'user':
+                    $item[$prefix . 'name'] = Tinebase_Account::getInstance()->getAccountById($item[$prefix . 'id'])->accountDisplayName;
+                    break;
+                case 'group':
+                    $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
+                    break;
+                case 'anyone':
+                    $item[$prefix . 'name'] = 'Anyone';
+                    break;
+                default:
+                    throw new Exception('unsupported accountType');
+                    break;
+            }
+            $return[$num] = $item;
+        }
+        return $return;
+    }
     
 }
