@@ -19,11 +19,11 @@ class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
         $this->comment = (string) $_tableDefinition->comment;
         $this->version = (string) $_tableDefinition->version;
         
-        foreach ($_tableDefinition->declaration->field as $field){
+        foreach ($_tableDefinition->declaration->field as $field) {
             $this->addField(Setup_Backend_Schema_Field_Factory::factory('Xml', $field));
         }
 
-        foreach ($_tableDefinition->declaration->index as $index){
+        foreach ($_tableDefinition->declaration->index as $index) {
             $this->addIndex(Setup_Backend_Schema_Index_Factory::factory('Xml', $index));
         }
     }    

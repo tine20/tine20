@@ -82,7 +82,7 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 break;
             
             case ('enum'):
-               if (isset($_declaration->value[0])) {
+                if (isset($_declaration->value[0])) {
                     $i = 0;
                     $array = array();
                     while (isset($_declaration->value[$i])) {
@@ -131,25 +131,25 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                     $this->default = 'NULL';
                 }
               
-              break;
+                break;
         
             default :
                 $this->type = 'integer';
                 
-            }
+        }
         
         if (!isset ($this->notnull) || $this->notnull == 'false') {
             $this->notnull = 'false';
             $this->default = 'NULL';
         
         }
-          if ($_declaration->autoincrement) {
+        if ($_declaration->autoincrement) {
             $this->notnull = 'true';
             $this->length = 11;
             $this->autoincrement = 'true';
             $this->unsigned = 'true';
             unset($this->default);
-            }
+        }
         
         
         $this->mul = 'false';

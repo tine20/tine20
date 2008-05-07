@@ -16,6 +16,7 @@
  * 
  * @package     Setup
  */
+
 abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 {
     /*
@@ -24,5 +25,6 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     * 
     * @param SimpleXMLElement $_record
     */
+
     abstract public function execInsertStatement(SimpleXMLElement $_record);
 }

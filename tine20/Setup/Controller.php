@@ -110,7 +110,7 @@ class Setup_Controller
             return;
         }
         
-        foreach($applications as $application) {
+        foreach ($applications as $application) {
             $xml = $this->parseFileForUpdate($application->name);
             $this->updateApplication($application, $xml->version);
         }
@@ -190,7 +190,7 @@ class Setup_Controller
         }
         
         // insert in database
-        foreach($createdTables as $table) {
+        foreach ($createdTables as $table) {
             $this->_backend->addTable($application, (string) $table->name, (int) $table->version);
         }
 
@@ -257,7 +257,8 @@ class Setup_Controller
                         echo $e->getMessage();
                     }
                 } else {
-                    throw new Exception ('Table ' . $table->name . ' for application' . $_application->name . " does not exists. \n<strong>Update broken</strong>");
+                    throw new Exception ('Table ' . $table->name . ' for application' . $_application->name 
+                                        . " does not exists. \n<strong>Update broken</strong>");
                     
                 }
             }
@@ -275,7 +276,7 @@ class Setup_Controller
      */
     public function tableNeedsUpdate($_tableName, $_tableVersion)
     {
-        return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
+        return version_compare($this->tableVersionQuery($_tableName), $_tableVersion);
     }
 
     /**
@@ -286,7 +287,7 @@ class Setup_Controller
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_updateTo)
     {
-       try {
+        try {
             $this->checkUpdate($_application);
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -302,7 +303,7 @@ class Setup_Controller
                 $minor = $fromMinorVersion;
                
                 for ($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-                    if (file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')){
+                    if (file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')) {
                         $className = ucfirst($_application->name) . '_Setup_Update_Release' . $major;
                     
                         $update = new $className($this->_backend);
@@ -315,8 +316,7 @@ class Setup_Controller
                             //echo "FUNCTIONNAME: $functionName<br>";
                             $update->$functionName();
                             $minor++;
-                        }
-                        while(array_search('update_' . $minor, $classMethods) !== false);
+                        } while(array_search('update_' . $minor, $classMethods) !== false) ;
                     
                         //reset minor version to 0
                         $minor = 0;
