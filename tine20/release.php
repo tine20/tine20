@@ -11,12 +11,12 @@ Zend_Loader::registerAutoload();
 /**
  * path to tine 2.0 checkout
  */
-$tine20path = '/Applications/xampp/htdocs/tine20/';
+$tine20path = dirname(__FILE__);
 
 /**
  * path to yui compressor
  */
-$yuiCompressorPath = '/Users/nelius/htdocs/yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
+$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
 
 
 
