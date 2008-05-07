@@ -328,15 +328,12 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	/**
      * create footer on all pages
      * 
-     * @todo move needed translations to Tinebase
 	 */
 	public function CreateFooter ()
 	{
-
 		// get translations from addressbook
-		// @todo  create translation file for exports?
 		$locale = Zend_Registry::get('locale');
-		$translate = Tinebase_Translation::getTranslation('Addressbook');
+		$translate = Tinebase_Translation::getTranslation('Tinebase');
 		
 		$xPos = 50;
 		$yPos = 30;

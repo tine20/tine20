@@ -10,6 +10,7 @@
  * @version     $Id$
  * 
  * @todo        rework the functions and simplify the select statements
+ * @todo        remove the application right queries completely?
  */
 
 /**
@@ -46,13 +47,13 @@ class Tinebase_Acl_Rights
      * @var Tinebase_Db_Table
      */
     protected $rightsTable;
-    
+
     /**
      * holdes the instance of the singleton
      *
      * @var Tinebase_Acl_Rights
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     /**
      * the clone function
@@ -78,11 +79,11 @@ class Tinebase_Acl_Rights
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Acl_Rights;
+        if (self::$_instance === NULL) {
+            self::$_instance = new Tinebase_Acl_Rights;
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
         
     /**
@@ -181,13 +182,16 @@ class Tinebase_Acl_Rights
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
+        $result = false;
+        
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         if($application->status != 'enabled') {
             throw new Exception('user has no rights. the application is disabled.');
         }
         
+        // check application rights
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);        
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
 
         $select = $this->rightsTable->select()
             # beware of the extra parenthesis of the next 3 rows
@@ -199,10 +203,17 @@ class Tinebase_Acl_Rights
             ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $_right);
         
         if(!$row = $this->rightsTable->fetchRow($select)) {
-            return false;
+            $result = false;
         } else {
-            return true;
+            $result = true;
         }
+
+        // check role rights
+        if ( !$result ) {
+            $result = Tinebase_Acl_Roles::getInstance()->hasRight($_application->getId(), $_accountId, $_right);
+        }
+        
+        return $result;
     }
 
     /**
@@ -229,8 +240,6 @@ class Tinebase_Acl_Rights
      *
      * @param   int $_applicationId  app id
      * @return  Tinebase_Record_RecordSet of Tinebase_Acl_Model_Right with account rights for the application
-     * 
-     * @todo    add id conversion?
      */
     public function getApplicationPermissions($_applicationId)
     {
@@ -244,13 +253,6 @@ class Tinebase_Acl_Rights
             
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        // don't throw exception here
-        /*
-        if( empty($rows) ) {
-            throw new Exception("no rights found for application with id $_applicationId");
-        } 
-        */
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
 
@@ -279,8 +281,8 @@ class Tinebase_Acl_Rights
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($_applicationRights, true));
         
         // delete all old rights for this application
-        // @todo quote into?
-        $this->rightsTable->delete( "application_id = ".$_applicationId );        
+        $where = Zend_Registry::get('dbAdapter')->quoteInto('application_id = ?', $_applicationId);
+        $this->rightsTable->delete($where);        
         
         $count = 0;
         foreach ( $_applicationRights as $right ) {
@@ -309,6 +311,55 @@ class Tinebase_Acl_Rights
         }
         
         return $allRights;
+    }
+
+    /**
+     * get translated right descriptions
+     * 
+     * @return  array with translated descriptions for this applications rights
+     */
+    private function getTranslatedRightDescriptions()
+    {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
+        $rightDescriptions = array(
+            self::ADMIN                 => array(
+                'text'          => $translate->_('admin'),
+                'description'   => $translate->_('admin right description'),
+            ),
+            self::RUN                   => array(
+                'text'          => $translate->_('run'),
+                'description'   => $translate->_('run right description'),
+            ),
+            self::MANAGE_SHARED_TAGS    => array(
+                'text'          => $translate->_('manage shared tags'),
+                'description'   => $translate->_('manage shared tags right description'),
+            ),
+        );
+        
+        return $rightDescriptions;
+    }
+    
+    /**
+     * get right description
+     * 
+     * @param   string right
+     * @return  array with text + description
+     */
+    public function getRightDescription($_right)
+    {        
+        $result = array(
+            'text'          => $_right,
+            'description'   => $_right . " right",
+        );
+        
+        $rightDescriptions = self::getTranslatedRightDescriptions();
+        
+        if ( isset($rightDescriptions[$_right]) ) {
+            $result = $rightDescriptions[$_right];
+        }
+
+        return $result;
     }
     
 }

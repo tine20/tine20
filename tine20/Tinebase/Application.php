@@ -307,7 +307,7 @@ class Tinebase_Application
     /**
      * get all possible application rights
      *
-     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
+     * @param   int application id
      * @return  array   all application rights
      */
     public function getAllRights($_applicationId)
@@ -325,5 +325,28 @@ class Tinebase_Application
         
         return $allRights;
     }
+
+    /**
+     * get right description
+     *
+     * @param   int     application id
+     * @param   string  right
+     * @return  array   right description
+     */
+    public function getRightDescription($_applicationId, $_right)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationById($_applicationId);
+        
+        // call getAllApplicationRights for application (if it has specific rights)
+        if ( file_exists ( $application->name."/Acl/Rights.php") ) {
+            $description = call_user_func(array($application->name . "_Acl_Rights", 'getRightDescription'), $_right);
+        } else {
+            $description = Tinebase_Acl_Rights::getInstance()->getRightDescription($_right);   
+        }
+        
+        return $description;
+    }
+    
+    
     
 }

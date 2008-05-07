@@ -63,5 +63,30 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
         
         return $allRights;
     }
+
+    /**
+     * get translated right descriptions
+     * 
+     * @return  array with translated descriptions for this applications rights
+     */
+    private function getTranslatedRightDescriptions()
+    {
+        $descriptionsParent = parent::getTranslatedRightDescriptions();
+        
+        $translate = Tinebase_Translation::getTranslation('Admin');
+        
+        $rightDescriptions = array(
+            self::MANAGE_ROLES  => array(
+                'text'          => $translate->_('manage roles'),
+                'description'   => $translate->_('manage roles right description'),
+            ),
+            self::MANAGE_APPS   => array(
+                'text'          => $translate->_('manage applications'),
+                'description'   => $translate->_('manage applications right description'),
+            ),
+        );
+        
+        return array_merge($descriptionsParent, $rightDescriptions);
+    }
     
 }

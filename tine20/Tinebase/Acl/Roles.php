@@ -89,6 +89,46 @@ class Tinebase_Acl_Roles
     }        
 
     /**
+     * check if one of the roles the user is in has a given right for a given application
+     *
+     * @param int $_applicationId the application id
+     * @param int $_accountId the numeric id of a user account
+     * @param int $_right the right to check for
+     * @return bool
+     * 
+     * @todo    implement
+     */
+    public function hasRight($_applicationId, $_accountId, $_right) 
+    {        
+        //$roleMemberships = Tinebase_Group::getInstance()->getRoleMemberships($accountId);
+
+        /*
+        $select = $this->rightsTable->select()
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
+            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
+
+            ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->getId())
+            ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $_right);
+        
+        if(!$row = $this->rightsTable->fetchRow($select)) {
+            $result = false;
+        } else {
+            $result = true;
+        }
+
+        // check role rights
+        if ( !$result ) {
+            $result = Tinebase_Acl_Roles::getInstance()->hasRight($_application->getId(), $_accountId, $_right);
+        }
+        */
+        
+        $result = false;
+        return $result;
+    }
+    
+    /**
      * Searches roles according to filter and paging
      * 
      * @param  Tinebase_Acl_Model_RoleFilter    $_filter

@@ -727,9 +727,10 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             $allAplicationRights = Tinebase_Application::getInstance()->getAllRights($appId);
             
             foreach ( $allAplicationRights as $right ) {
+                $description = Tinebase_Application::getInstance()->getRightDescription($appId, $right);
                 $rightsForApplication["children"][] = array(
-                    "text"      => $right,
-                    "qtip"      => $right . " right",
+                    "text"      => $description['text'],
+                    "qtip"      => $description['description'],
                 ); 
             }
 
