@@ -48,6 +48,9 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             iconCls: 'action_deleteContact'
         });
         
+        this.configStore.sort(this.recordPrefix + 'name', 'asc');
+        
+        
         /* account picker */
         this.accountPicker = new Tine.widgets.account.PickerPanel({
             enableBbar: true

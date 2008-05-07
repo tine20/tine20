@@ -174,12 +174,12 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         //var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         this.quickSearchField = new Ext.ux.SearchField({
             id: 'Tinebase_Accounts_SearchField',
-            width: this.width - 3 - (this.selectType == 'both' ? 44 : 0),
             emptyText: 'enter searchfilter'
         }); 
         this.quickSearchField.on('change', function(){
             this.loadData();
         }, this);
+        
         var ugSelectionChange = function(pressed){
             //console.log(p.iconCls);
         };
@@ -210,7 +210,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
                 this.quickSearchField
             ]
         });
-
+        
         if (this.enableBbar && !this.bbar) {
             this.bbar = new Ext.Toolbar({
                 items: [this.actions.addAccount]
@@ -261,5 +261,11 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
         }];
         
         Tine.widgets.account.PickerPanel.superclass.initComponent.call(this);
+        
+        this.on('resize', function(){
+            
+            console.log(this.getSize());
+            this.quickSearchField.setWidth(this.getSize().width - 3 - (this.selectType == 'both' ? 44 : 0));
+        }, this);
     }
 });
