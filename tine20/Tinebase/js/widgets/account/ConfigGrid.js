@@ -15,6 +15,10 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      */
     accountPickerWidth: 200,
     /**
+     * @cfg accountPickerType one of 'user', 'group', 'both'
+     */
+    accountPickerType: 'user',
+    /**
      * @cfg {Ext.data.JsonStore} configStore
      */
     configStore: null,
@@ -30,9 +34,8 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
     accountPicker: null,
     configGridPanel: null,
     
-    layout: 'column',
-    height: 200,
-    border: true,
+    layout: 'border',
+    border: false,
 
     /**
      * @private
@@ -53,6 +56,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         
         /* account picker */
         this.accountPicker = new Tine.widgets.account.PickerPanel({
+            selectType: this.accountPickerType,
             enableBbar: true
         });
         this.accountPicker.on('accountdblclick', function(account){
@@ -99,8 +103,9 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         
         Tine.widgets.account.ConfigGrid.superclass.initComponent.call(this);
         
-        this.on('afterlayout', function(){
-            var height = this.getEl().getSize().height;
+        this.on('afterlayout', function(container){
+            var height = container.ownerCt.getSize().height;
+            this.setHeight(height);
             this.items.each(function(item){
                 item.setHeight(height);
             });
@@ -112,11 +117,15 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
     getConfigGridLayout: function() {
         return [{
             layout: 'fit',
+            region: 'west',
+            border: false,
+            split: true,
             width: this.accountPickerWidth,
             items: this.accountPicker
         },{
             layout: 'fit',
-            columnWidth: 1,
+            region: 'center',
+            border: false,
             items: this.configGridPanel
         }];
     },
