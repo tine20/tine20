@@ -57,7 +57,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
             self::MANAGE_APPS, 
             self::MANAGE_ROLES, 
         );
-        $allRights = array_merge ( $allRights, $addRights );
+        $allRights = array_merge($allRights, $addRights);
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allRights, true));
         

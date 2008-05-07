@@ -14,7 +14,7 @@
  *
  * @package     Admin
  */
-class Admin_Event_AddAccount extends Tinebase_Events_Abstract 
+class Admin_Event_AddAccount extends Tinebase_Events_Abstract
 {
     /**
      * the just added account

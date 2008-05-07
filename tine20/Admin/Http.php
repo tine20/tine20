@@ -32,7 +32,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      */
     public function editAccountDialog($accountId)
     {
-        if(!empty($accountId)) {
+        if (!empty($accountId)) {
             $account = Tinebase_Account::getInstance()->getFullAccountById($accountId);
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
             $arrayAccount = $account->toArray();
@@ -84,9 +84,9 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      */
     public function editGroup($groupId)
     {
-        if(empty($groupId)) {
-        	$encodedGroup = Zend_Json::encode(array());
-        	$encodedGroupMembers = Zend_Json::encode(array());
+        if (empty($groupId)) {
+            $encodedGroup = Zend_Json::encode(array());
+            $encodedGroupMembers = Zend_Json::encode(array());
         } else {
             $group = Admin_Controller::getInstance()->getGroup($groupId);        	
             $encodedGroup = Zend_Json::encode($group->toArray());
@@ -174,7 +174,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      */
     public function editTag($tagId)
     {
-        if(empty($tagId)) {
+        if (empty($tagId)) {
             $encodedTag = Zend_Json::encode(array());
         } else {
             $tag = Admin_Controller::getInstance()->getTag($tagId);
@@ -222,7 +222,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     {
         $json = new Admin_Json();
         
-        if(empty($roleId)) {
+        if (empty($roleId)) {
             $encodedRole = Zend_Json::encode(array());
             $encodedRoleMembers = Zend_Json::encode(array());
             $encodedRoleRights = Zend_Json::encode(array());

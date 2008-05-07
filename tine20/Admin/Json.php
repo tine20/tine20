@@ -46,13 +46,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $accounts = Admin_Controller::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
-            if($account['last_login'] !== NULL) {
+            if ($account['last_login'] !== NULL) {
                  $accounts[$key]['last_login'] = $account['last_login']->get(Zend_Date::ISO_8601);
             }
-            if($account['last_password_change'] !== NULL) {
+            if ($account['last_password_change'] !== NULL) {
                  $accounts[$key]['last_password_change'] = $account['last_password_change']->get(Zend_Date::ISO_8601);
             }
-            if($account['expires_at'] !== NULL) {
+            if ($account['expires_at'] !== NULL) {
                  $accounts[$key]['expires_at'] = $account['expires_at']->get(Zend_Date::ISO_8601);
             }
         }*/
@@ -68,10 +68,10 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      *
      * @param string $accountData JSON encoded Tinebase_Account_Model_FullAccount
      * @param string $password the new password
-     * @param string $password2 the new password repeated
+     * @param string $passwordRepeat the new password repeated
      * @return array with 
      */
-    public function saveAccount($accountData, $password, $password2)
+    public function saveAccount($accountData, $password, $passwordRepeat)
     {
         $decodedAccountData = Zend_Json::decode($accountData);
         
@@ -88,10 +88,10 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
         
-        if($account->getId() == NULL) {
-            $account = Admin_Controller::getInstance()->addAccount($account, $password, $password2);
+        if ($account->getId() == NULL) {
+            $account = Admin_Controller::getInstance()->addAccount($account, $password, $passwordRepeat);
         } else {
-            $account = Admin_Controller::getInstance()->updateAccount($account, $password, $password2);
+            $account = Admin_Controller::getInstance()->updateAccount($account, $password, $passwordRepeat);
         }
         
         $result = $account->toArray();
@@ -132,7 +132,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $controller = Admin_Controller::getInstance();
         
-        foreach($accountIds as $accountId) {
+        foreach ($accountIds as $accountId) {
             $controller->setAccountStatus($accountId, $state);
         }
         
@@ -215,7 +215,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      */
     public function getApplications($filter, $sort, $dir, $start, $limit)
     {
-        if(empty($filter)) {
+        if (empty($filter)) {
             $filter = NULL;
         }
         
@@ -227,7 +227,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $applicationSet = Admin_Controller::getInstance()->getApplications($filter, $sort, $dir, $start, $limit);
 
         $result['results']    = $applicationSet->toArray();
-        if($start == 0 && count($result['results']) < $limit) {
+        if ($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
             $result['totalcount'] = Admin_Controller::getInstance()->getTotalApplicationCount($filter);
@@ -338,7 +338,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $accessLogSet = Admin_Controller::getInstance()->getAccessLogEntries($filter, $sort, $dir, $start, $limit, $fromDateObject, $toDateObject);
         
         $result['results']    = $accessLogSet->toArray();
-        if($start == 0 && count($result['results']) < $limit) {
+        if ($start == 0 && count($result['results']) < $limit) {
             $result['totalcount'] = count($result['results']);
         } else {
             $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
@@ -421,7 +421,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $decodedGroupMembers = Zend_Json::decode($groupMembers);
         
         // unset if empty
-        if(empty($decodedGroupData['id'])) {
+        if (empty($decodedGroupData['id'])) {
             unset($decodedGroupData['id']);
         }
         
@@ -510,7 +510,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $decodedTagData = Zend_Json::decode($tagData);
         
         // unset if empty
-        if(empty($decodedTagData['id'])) {
+        if (empty($decodedTagData['id'])) {
             unset($decodedTagData['id']);
         }
         
@@ -607,7 +607,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleMembers, true));
         
         // unset if empty
-        if(empty($decodedRoleData['id'])) {
+        if (empty($decodedRoleData['id'])) {
             unset($decodedRoleData['id']);
         }
         
