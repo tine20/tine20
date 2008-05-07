@@ -9,10 +9,9 @@
  * @version     $Id: XML.php 1703 2008-04-03 18:16:32Z lkneschke $
  */
 
- 
- class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
- {
- 
+
+class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
+{
     public function __construct($_definition = NULL)
     {
         $this->_setField($_definition);
@@ -34,7 +33,7 @@
         
         if (!empty ($_declaration->unsigned)) {
             $this->unsigned = (string) $_declaration->unsigned;
-        } else if ( $this->type == 'integer') {
+        } else if ($this->type == 'integer') {
             $this->unsigned = 'true';
             if ($this->notnull != 'true') {
                 $this->default = 'NULL';
@@ -137,7 +136,7 @@
             default :
                 $this->type = 'integer';
                 
-        }
+            }
         
         if (!isset ($this->notnull) || $this->notnull == 'false') {
             $this->notnull = 'false';
@@ -150,7 +149,7 @@
             $this->autoincrement = 'true';
             $this->unsigned = 'true';
             unset($this->default);
-        }
+            }
         
         
         $this->mul = 'false';

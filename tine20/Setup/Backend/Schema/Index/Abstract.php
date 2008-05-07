@@ -94,8 +94,8 @@ abstract class Setup_Backend_Schema_Index_Abstract
      */      
     public function setName($_name)
     {
-        if (SQL_TABLE_PREFIX == substr($_name, 0, strlen( SQL_TABLE_PREFIX ))) {
-            $this->name = substr($_name,  strlen( SQL_TABLE_PREFIX ));
+        if (SQL_TABLE_PREFIX == substr($_name, 0, strlen(SQL_TABLE_PREFIX))) {
+            $this->name = substr($_name, strlen(SQL_TABLE_PREFIX));
         } else {
             $this->name == $_name;
         }
@@ -109,7 +109,7 @@ abstract class Setup_Backend_Schema_Index_Abstract
     public function setForeignKey($_foreign)
     {
         $this->foreign = 'true';
-        $this->reference['table'] = substr($_foreign['REFERENCED_TABLE_NAME'], strlen( SQL_TABLE_PREFIX));
+        $this->reference['table'] = substr($_foreign['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
         $this->reference['field'] = $_foreign['REFERENCED_COLUMN_NAME'];
     }
     
@@ -157,9 +157,9 @@ abstract class Setup_Backend_Schema_Index_Abstract
     public function setForeign($_definition)
     {
         foreach ($this->declaration['index'] as $index) {
-            //echo "<h1>"  . substr($_definition['CONSTRAINT_NAME'], strlen( SQL_TABLE_PREFIX )) . "/" .$index->field->name.  "</h1>";
+            //echo "<h1>"  . substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)) . "/" .$index->field->name.  "</h1>";
             
-            //if ($index->field->name == substr($_definition['CONSTRAINT_NAME'], strlen( SQL_TABLE_PREFIX )))
+            //if ($index->field->name == substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)))
             //{
                 $index->setForeignKey($_definition);
             //}

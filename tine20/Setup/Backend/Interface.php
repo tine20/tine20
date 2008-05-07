@@ -49,7 +49,7 @@ interface Setup_Backend_Interface
     * 
     * @param string tableName
     */
-    public function renameTable($_tableName, $_newName );
+    public function renameTable($_tableName, $_newName);
 
     /*
     * add column/field to database table

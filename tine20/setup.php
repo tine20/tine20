@@ -63,11 +63,11 @@ $setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
 if($setup->initialLoadRequired()) {
 
     # either import data from eGroupWare 1.4 or tine 2.0 revision 949    
-    if ( IMPORT_INITIALDATA === TRUE ) {
+    if (IMPORT_INITIALDATA === TRUE) {
         $import = new Setup_Import_TineInitial();
-    } elseif ( IMPORT_EGW_14 === TRUE ) {
+    } elseif (IMPORT_EGW_14 === TRUE) {
         $import = new Setup_Import_Egw14();
-    } elseif ( IMPORT_TINE_REV_949 === TRUE ) {
+    } elseif (IMPORT_TINE_REV_949 === TRUE) {
         $import = new Setup_Import_TineRev949();
     }
     $import->import();
@@ -78,6 +78,5 @@ if($setup->initialLoadRequired()) {
  */
 if ( IMPORT_EGW_14_ADDRESSBOOK === TRUE ) {
     $import = new Setup_Import_Egw14();
-    $import->importAddressbook('egw_addressbook', FALSE);   
+    $import->importAddressbook('egw_addressbook', FALSE);
 }
-

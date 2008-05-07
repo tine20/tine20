@@ -134,6 +134,6 @@ abstract class Setup_Backend_Schema_Field_Abstract
                     'mul' => $this->mul,
                     'primary' => $this->primary,
                     'unique' => $this->unique,
-                    );
+                   );
     }
 }

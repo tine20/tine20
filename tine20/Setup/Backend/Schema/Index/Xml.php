@@ -9,10 +9,10 @@
  * @version     $Id: XML.php 1703 2008-04-03 18:16:32Z lkneschke $
  */
 
- 
- class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
- {
- 
+
+class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
+{
+
      public function __construct($_declaration)
      {
          $this->_setIndex($_declaration);

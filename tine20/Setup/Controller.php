@@ -51,7 +51,7 @@ class Setup_Controller
     {
         $logger = new Zend_Log();
 
-        if(isset($this->_config->logger)) {
+        if (isset($this->_config->logger)) {
             $loggerConfig = $this->_config->logger;
 
             $filename = $loggerConfig->filename;
@@ -79,7 +79,7 @@ class Setup_Controller
      */
     protected function setupDatabaseConnection()
     {
-        if(isset($this->_config->database)) {
+        if (isset($this->_config->database)) {
             $dbConfig = $this->_config->database;
 
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
@@ -106,9 +106,9 @@ class Setup_Controller
         try {
             // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-       } catch (Exception $e) {
+        } catch (Exception $e) {
             return;
-       }
+        }
         
         foreach($applications as $application) {
             $xml = $this->parseFileForUpdate($application->name);
@@ -123,14 +123,14 @@ class Setup_Controller
 
     public function installNewApplications($_tinebaseFile, $_setupFilesPath )
     {    
-        if(file_exists($_tinebaseFile)) {
+        if (file_exists($_tinebaseFile)) {
            $this->parseFile($_tinebaseFile);
         }
         
         foreach ( new DirectoryIterator('./') as $item ) {
-            if($item->isDir() && $item->getFileName() != 'Tinebase') {
+            if ($item->isDir() && $item->getFileName() != 'Tinebase') {
                 $fileName = $item->getFileName() . $_setupFilesPath ;
-                if(file_exists($fileName)) {
+                if (file_exists($fileName)) {
                     $this->parseFile($fileName);
                 }
             }
@@ -161,7 +161,7 @@ class Setup_Controller
     {
         // just insert tables
         $createdTables = array();
-        if(isset($_xml->tables)) {
+        if (isset($_xml->tables)) {
             foreach ($_xml->tables[0] as $tableXML) {
                 $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                 if (false == $this->_backend->tableExists($table->name)) {
@@ -195,7 +195,7 @@ class Setup_Controller
         }
 
         // insert default records
-        if(isset($_xml->defaultRecords)) {
+        if (isset($_xml->defaultRecords)) {
             foreach ($_xml->defaultRecords[0] as $record) {
                 $this->_backend->execInsertStatement($record);
             }
@@ -213,7 +213,7 @@ class Setup_Controller
         
         if (!$this->_backend->applicationExists($xml->name)) {
             $this->addApplication($xml);
-            if($xml->name == 'Tinebase') {
+            if ($xml->name == 'Tinebase') {
                 $this->_doInitialLoad = true;
             }
         }
@@ -229,7 +229,7 @@ class Setup_Controller
     
         $setupXML = dirname(__FILE__) . '/../' . ucfirst($_applicationName) . '/Setup/setup.xml';
       
-        if(!file_exists($setupXML)) {
+        if (!file_exists($setupXML)) {
             throw new Exception(ucfirst($_applicationName) . '/Setup/setup.xml not foud');
         }
         
@@ -242,7 +242,7 @@ class Setup_Controller
     {
         $xmlTables = $this->parseFileForUpdate($_application->name);
         echo "Check tables for " .$_application->name . "\n";
-        if(isset($xmlTables->tables)) {
+        if (isset($xmlTables->tables)) {
             foreach ($xmlTables->tables[0] as $tableXML) {
             
                 
@@ -301,8 +301,8 @@ class Setup_Controller
         
                 $minor = $fromMinorVersion;
                
-                for($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-                    if(file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')){
+                for ($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
+                    if (file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')){
                         $className = ucfirst($_application->name) . '_Setup_Update_Release' . $major;
                     
                         $update = new $className($this->_backend);
@@ -315,7 +315,8 @@ class Setup_Controller
                             //echo "FUNCTIONNAME: $functionName<br>";
                             $update->$functionName();
                             $minor++;
-                        } while(array_search('update_' . $minor, $classMethods) !== false);
+                        }
+                        while(array_search('update_' . $minor, $classMethods) !== false);
                     
                         //reset minor version to 0
                         $minor = 0;

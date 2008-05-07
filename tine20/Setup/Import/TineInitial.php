@@ -16,16 +16,16 @@
  * 
  * @package     Setup
  */
- class Setup_Import_TineInitial
- {
-     /**
+class Setup_Import_TineInitial
+{
+    /**
      * import main function
      *
      */
     public function import()
     {
-		$this->initialLoad();
-	}
+        $this->initialLoad();
+    }
      
     /**
      * fill the Database with default values and initialise admin account 
@@ -79,9 +79,9 @@
         # enable the applications for the user group
         # give admin rights to the admin group for all applications
         $applications = Tinebase_Application::getInstance()->getApplications();
-        foreach( $applications as $application) {
+        foreach ($applications as $application) {
             
-            if(strtolower($application->name) !== 'admin') {
+            if (strtolower($application->name) !== 'admin') {
                 // run right for user group
                 $right = new Tinebase_Acl_Model_Right(array(
                     'application_id'    => $application->getId(),
@@ -96,16 +96,16 @@
                 Tinebase_Acl_Rights::getInstance()->addRight($right);
                 
                 // admin for admin group
-                $right->right = Tinebase_Acl_Rights::ADMIN;            
+                $right->right = Tinebase_Acl_Rights::ADMIN;
                 Tinebase_Acl_Rights::getInstance()->addRight($right);
                 
                 // create shared tags for admin group in tinebase
                 if ( strtolower($application->name) !== 'tinebase') {
-                    $right->right = Tinebase_Acl_Rights::MANAGE_SHARED_TAGS;            
+                    $right->right = Tinebase_Acl_Rights::MANAGE_SHARED_TAGS;
                     Tinebase_Acl_Rights::getInstance()->addRight($right);
-                }            
+                }
             } else {
-                
+
                 /***** Admin application *****/
                 
                 $adminAppId = $application->getId();
@@ -147,4 +147,4 @@
             
         echo "TINE 2.0 now ready to use - try <a href=\"./index.php\">TINE 2.0 Login</a>";
     }
-}	
+}

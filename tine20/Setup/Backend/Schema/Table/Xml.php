@@ -9,10 +9,10 @@
  * @version     $Id: XML.php 1703 2008-04-03 18:16:32Z lkneschke $
  */
 
- 
- class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
- {
- 
+
+class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
+{
+
     public function __construct($_tableDefinition = NULL)
     {
         $this->name    = (string) $_tableDefinition->name;

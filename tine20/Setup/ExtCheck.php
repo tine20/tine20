@@ -441,7 +441,7 @@ class Setup_ExtCheck
                             unset($iniSettings);
                         }
 
-                        if($succeeded)
+                        if ($succeeded)
                         {
                             $data[] = array($extensionArray['NAME'], 'SUCCESS');
                         }
