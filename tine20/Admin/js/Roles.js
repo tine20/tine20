@@ -707,6 +707,7 @@ Tine.Admin.Roles.EditDialog = {
             layout:'form',
             layoutOnTabChange:true,            
             deferredRender:false,
+            autoScroll: true,
             anchor:'100% 100%',
             border:false,
             items:[
