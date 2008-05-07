@@ -41,8 +41,11 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
                     }
                 });
             }
-            
         }, this);
+        
+        this.on('select', function(searchField){
+            searchField.selectText();
+        },this);
     },
     /**
      * @private store has static content
