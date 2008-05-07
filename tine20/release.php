@@ -22,7 +22,7 @@ $yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompr
 
 $includeFiles = Tinebase_Http::getAllInclueFiles();
 
-$cssDebug = fopen($tine20path . 'Tinebase/css/tine-all-debug.css', 'w+');
+$cssDebug = fopen($tine20path . '/Tinebase/css/tine-all-debug.css', 'w+');
 foreach ($includeFiles['css'] as $file) {
     list($filename) = explode('?', $file);
     if (file_exists("$tine20path/$filename")) {
