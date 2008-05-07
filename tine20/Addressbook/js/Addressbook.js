@@ -212,7 +212,7 @@ Tine.Addressbook.Main = {
             text: 'call contact',
             disabled: true,
             handler: this.handlers.callContact,
-            iconCls: 'DialerTreePanel',
+            iconCls: 'DialerIconCls',
             menu: new Ext.menu.Menu({
                 id: 'Addressbook_Contacts_CallContact_Menu'
             }),
@@ -382,8 +382,8 @@ Tine.Addressbook.Main = {
                 this.actions.deleteContact.setDisabled(false);
                 this.actions.editContact.setDisabled(false);
                 this.actions.exportContact.setDisabled(false);
-
-                if(Tine.Dialer.length > 0 && Tine.Dialer.rights.indexOf('run') > -1) {
+                
+                if(Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1) {
 	                var callMenu = Ext.menu.MenuMgr.get('Addressbook_Contacts_CallContact_Menu');
 	                callMenu.removeAll();
 	                var contact = _selectionModel.getSelected();
