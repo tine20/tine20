@@ -545,9 +545,10 @@ class Admin_Controller
      *
      * @param   Tinebase_Acl_Model_Role $_role
      * @param   array role members
+     * @param   array role rights
      * @return  Tinebase_Acl_Model_Role
      */
-    public function AddRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers)
+    public function AddRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
                 Zend_Registry::get('currentAccount')->getId(), 
@@ -560,6 +561,7 @@ class Admin_Controller
         
         $role = Tinebase_Acl_Roles::getInstance()->createRole($_role);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(),$_roleMembers);
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $_roleRights);
         
         return $role;            
     }  
@@ -569,9 +571,10 @@ class Admin_Controller
      *
      * @param  Tinebase_Acl_Model_Role $_role
      * @param   array role members
+     * @param   array role rights
      * @return Tinebase_Acl_Model_Role
      */
-    public function UpdateRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers)
+    public function UpdateRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
                 Zend_Registry::get('currentAccount')->getId(), 
@@ -584,6 +587,7 @@ class Admin_Controller
         
         $role = Tinebase_Acl_Roles::getInstance()->updateRole($_role);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(),$_roleMembers);
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $_roleRights);
         
         return $role;            
     }  
@@ -611,12 +615,26 @@ class Admin_Controller
      * get list of role members
      *
      * @param int $_roleId
-     * @return array with Tinebase_Account_Model_Account arrays
+     * @return array of arrays (account id and type)
      * 
      */
     public function getRoleMembers($_roleId)
     {
         $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($_roleId);
+                
+        return $members;
+    }
+    
+    /**
+     * get list of role rights
+     *
+     * @param int $_roleId
+     * @return array of arrays (application id and right)
+     * 
+     */
+    public function getRoleRights($_roleId)
+    {
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleRights($_roleId);
                 
         return $members;
     }

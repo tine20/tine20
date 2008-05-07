@@ -220,6 +220,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      */
     public function editRole($roleId)
     {
+        $json = new Admin_Json();
         
         if(empty($roleId)) {
             $encodedRole = Zend_Json::encode(array());
@@ -227,30 +228,13 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $encodedRoleRights = Zend_Json::encode(array());
         } else {
             $role = Admin_Controller::getInstance()->getRole($roleId);         
-            $encodedRole = Zend_Json::encode($role->toArray());
-            
-            $json = new Admin_Json();
-            $encodedRoleMembers = Zend_Json::encode($json->getRoleMembers($roleId));
-            
-            // @todo add function to controller and comment testing array
-            //$roleRights = Admin_Controller::getInstance()->getRoleRights($roleId);
-            $roleRights = array (
-                "results" => array(
-                    array(
-                        "application_id" => 4,
-                        "right"          => Tinebase_Acl_Rights::ADMIN,
-                    ),
-                    array(
-                        "application_id" => 4,
-                        "right"          => Tinebase_Acl_Rights::RUN,
-                    ),
-                ),
-                "totalcount" => 2,
-            );
-            $encodedRoleRights = Zend_Json::encode( $roleRights );
+            $encodedRole = Zend_Json::encode($role->toArray());           
+            $encodedRoleMembers = Zend_Json::encode($json->getRoleMembers($roleId));            
+            $encodedRoleRights = Zend_Json::encode($json->getRoleRights($roleId));
         }
         
-        // @todo add function to controller and comment testing array
+        // @todo add function to json and comment testing arra
+        //$encodedAllRights = Zend_Json::encode($json->getAllRoleRights();
         $encodedAllRights = Zend_Json::encode(array (
             array(
                 "application_id" => 4,

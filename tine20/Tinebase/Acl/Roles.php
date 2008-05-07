@@ -38,6 +38,13 @@ class Tinebase_Acl_Roles
      * @var Tinebase_Db_Table
      */
     protected $roleMembersTable;
+
+    /**
+     * the Zend_Dd_Table object for role rights
+     *
+     * @var Tinebase_Db_Table
+     */
+    protected $roleRightsTable;
     
     /**
      * holdes the instance of the singleton
@@ -63,6 +70,7 @@ class Tinebase_Acl_Roles
 
         $this->rolesTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'roles'));
         $this->roleMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
+        $this->roleRightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_rights'));
         $this->_db = Zend_Registry::get('dbAdapter');
     }    
     
@@ -199,7 +207,7 @@ class Tinebase_Acl_Roles
      * get list of role members 
      *
      * @param int $_roleId
-     * @return array with account ids & types
+     * @return array of array with account ids & types
      */
     public function getRoleMembers($_roleId)
     {
@@ -216,7 +224,10 @@ class Tinebase_Acl_Roles
         $rows = $this->roleMembersTable->fetchAll($select);
         
         foreach($rows as $member) {
-            $members[] = array ( "id" => $member->account_id, "type" => $member->account_type );
+            $members[] = array ( 
+                "id" => $member->account_id, 
+                "type" => $member->account_type 
+            );
         }
 
         return $members;
@@ -227,7 +238,6 @@ class Tinebase_Acl_Roles
      *
      * @param   int $_roleId
      * @param   array $_roleMembers with role members
-     * @return array with account ids & types
      */
     public function setRoleMembers($_roleId, array $_roleMembers)
     {
@@ -250,4 +260,59 @@ class Tinebase_Acl_Roles
         }
     }
     
+    /**
+     * get list of role rights 
+     *
+     * @param int $_roleId
+     * @return array of array with application ids & rights
+     */
+    public function getRoleRights($_roleId)
+    {
+        $roleId = (int)$_roleId;
+        if($roleId != $_roleId && $roleId > 0) {
+            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+        }
+        
+        $rights = array();
+        
+        $select = $this->roleRightsTable->select();
+        $select->where('role_id = ?', $_roleId);
+        
+        $rows = $this->roleRightsTable->fetchAll($select);
+        
+        foreach($rows as $right) {
+            $rights[] = array ( 
+                "application_id"    => $right->application_id, 
+                "right"             => $right->right
+            );
+        }
+        return $rights;
+    }
+
+    /**
+     * set role rights 
+     *
+     * @param   int $_roleId
+     * @param   array $_roleRights with role rights
+     */
+    public function setRoleRights($_roleId, array $_roleRights)
+    {
+        $roleId = (int)$_roleId;
+        if($roleId != $_roleId && $roleId > 0) {
+            throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
+        }
+        
+        // remove old rights
+        $where = Zend_Registry::get('dbAdapter')->quoteInto('role_id = ?', $roleId);
+        $this->roleRightsTable->delete($where);
+                
+        foreach ( $_roleRights as $right ) {
+            $data = array(
+                "role_id"           => $roleId,
+                "application_id"    => $right["application_id"],
+                "right"             => $right["right"],
+            );
+            $this->roleRightsTable->insert($data); 
+        }
+    }
 }

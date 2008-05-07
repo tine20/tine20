@@ -377,6 +377,13 @@ Tine.Admin.Roles.EditDialog = {
                 	roleMembers.push(_record.data);
                 });
 
+                // get role rights                
+                var roleRights = [];
+                
+                this.rightsDataStore.each(function(_record){
+                    roleRights.push(_record.data);
+                });
+
                 // update form               
                 form.updateRecord(Tine.Admin.Roles.EditDialog.roleRecord);
 
@@ -386,7 +393,8 @@ Tine.Admin.Roles.EditDialog = {
                     params: {
                         method: 'Admin.saveRole', 
                         roleData: Ext.util.JSON.encode(Tine.Admin.Roles.EditDialog.roleRecord.data),
-                        roleMembers: Ext.util.JSON.encode(roleMembers)
+                        roleMembers: Ext.util.JSON.encode(roleMembers),
+                        roleRights: Ext.util.JSON.encode(roleRights),
                     },
                     success: function(_result, _request) {
                      	if(window.opener.Tine.Admin.Roles) {

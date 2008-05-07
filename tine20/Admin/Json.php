@@ -594,13 +594,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      *
      * @param   string $roleData        json encoded role data
      * @param   string $roleMembers     json encoded role members
-     *  
+     * @param   string $roleMembers     json encoded role rights
      * @return  array with success, message, role data and role members
      */
-    public function saveRole($roleData, $roleMembers)
+    public function saveRole($roleData, $roleMembers, $roleRights)
     {
         $decodedRoleData = Zend_Json::decode($roleData);
         $decodedRoleMembers = Zend_Json::decode($roleMembers);
+        $decodedRoleRights = Zend_Json::decode($roleRights);
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleData, true));
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedRoleMembers, true));
@@ -624,9 +625,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         if ( empty($role->id) ) {
-            $role = Admin_Controller::getInstance()->addRole($role, $decodedRoleMembers);
+            $role = Admin_Controller::getInstance()->addRole($role, $decodedRoleMembers, $decodedRoleRights);
         } else {
-            $role = Admin_Controller::getInstance()->updateRole($role, $decodedRoleMembers);
+            $role = Admin_Controller::getInstance()->updateRole($role, $decodedRoleMembers, $decodedRoleRights);
         }
                  
         $result = array('success'           => true,
@@ -675,6 +676,27 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         $result['results'] = self::resolveAccountName($members);
         $result['totalcount'] = count($result['results']);
+        
+        return $result;
+    }
+
+    /**
+     * get list of role rights
+     *
+     * @param int $roleId
+     * @return array with results / totalcount
+     */
+    public function getRoleRights($roleId)
+    {
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $rights = Admin_Controller::getInstance()->getRoleRights($roleId);
+
+        $result['results'] = $rights;
+        $result['totalcount'] = count($rights);
         
         return $result;
     }
