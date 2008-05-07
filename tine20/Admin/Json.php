@@ -344,7 +344,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             $result['totalcount'] = Admin_Controller::getInstance()->getTotalAccessLogEntryCount($fromDateObject, $toDateObject, $filter);
         }
         
-        foreach($result['results'] as $key => $value) {
+        foreach ($result['results'] as $key => $value) {
             try {
                 $result['results'][$key]['accountObject'] = Admin_Controller::getInstance()->getAccount($value['account_id'])->toArray();
             } catch (Exception $e) {

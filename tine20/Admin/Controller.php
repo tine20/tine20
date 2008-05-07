@@ -23,20 +23,24 @@ class Admin_Controller
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() 
+    {        
+    }
     
     /**
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() {}
+    private function __clone() 
+    {        
+    }
 
     /**
      * holdes the instance of the singleton
      *
      * @var Admin_Controller
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     /**
      * the singleton pattern
@@ -45,11 +49,11 @@ class Admin_Controller
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Admin_Controller;
+        if (self::$_instance === NULL) {
+            self::$_instance = new Admin_Controller;
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
 
     /**
@@ -120,17 +124,17 @@ class Admin_Controller
      * set the password for a given account
      *
      * @param Tinebase_Account_Model_FullAccount $_account the account
-     * @param string $_password1 the new password
-     * @param string $_password2 the new password again
+     * @param string $_password the new password
+     * @param string $_passwordRepeat the new password again
      * @return unknown
      */
-    public function setAccountPassword(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
+    public function setAccountPassword(Tinebase_Account_Model_FullAccount $_account, $_password, $_passwordRepeat)
     {
-        if($_password1 != $_password2) {
+        if ($_password != $_passwordRepeat) {
             throw new Exception("passwords don't match");
         }
         
-        $result = Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
+        $result = Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         
         return $result;
     }
@@ -139,11 +143,11 @@ class Admin_Controller
      * save or update account
      *
      * @param Tinebase_Account_Model_FullAccount $_account the account
-     * @param string $_password1 the new password
-     * @param string $_password2 the new password again
+     * @param string $_password the new password
+     * @param string $_passwordRepeat the new password again
      * @return Tinebase_Account_Model_FullAccount
      */
-    public function updateAccount(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
+    public function updateAccount(Tinebase_Account_Model_FullAccount $_account, $_password, $_passwordRepeat)
     {
         $account = Tinebase_Account::getInstance()->updateAccount($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
@@ -153,8 +157,8 @@ class Admin_Controller
         $event->account = $account;
         Tinebase_Events::fireEvent($event);
         
-        if(!empty($_password1) && !empty($_password2)) {
-            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
+        if (!empty($_password) && !empty($_passwordRepeat)) {
+            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         }
         
         return $account;
@@ -164,11 +168,11 @@ class Admin_Controller
      * save or update account
      *
      * @param Tinebase_Account_Model_FullAccount $_account the account
-     * @param string $_password1 the new password
-     * @param string $_password2 the new password again
+     * @param string $_password the new password
+     * @param string $_passwordRepeat the new password again
      * @return Tinebase_Account_Model_FullAccount
      */
-    public function addAccount(Tinebase_Account_Model_FullAccount $_account, $_password1, $_password2)
+    public function addAccount(Tinebase_Account_Model_FullAccount $_account, $_password, $_passwordRepeat)
     {
         $account = Tinebase_Account::getInstance()->addAccount($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
@@ -177,8 +181,8 @@ class Admin_Controller
         $event->account = $account;
         Tinebase_Events::fireEvent($event);
         
-        if(!empty($_password1) && !empty($_password2)) {
-            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password1, $_password2);
+        if (!empty($_password) && !empty($_passwordRepeat)) {
+            Tinebase_Auth::getInstance()->setPassword($_account->accountLoginName, $_password, $_passwordRepeat);
         }
         
         return $account;
@@ -341,7 +345,7 @@ class Admin_Controller
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
-   	    return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
+        return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
     }
    
     /**
@@ -354,7 +358,7 @@ class Admin_Controller
     {
         $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
 
-        /*if(!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+        /*if (!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read access to contact denied');
         }*/
         
@@ -560,7 +564,7 @@ class Admin_Controller
         }        
         
         $role = Tinebase_Acl_Roles::getInstance()->createRole($_role);
-        Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(),$_roleMembers);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(), $_roleMembers);
         Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $_roleRights);
         
         return $role;            
@@ -586,7 +590,7 @@ class Admin_Controller
         }        
         
         $role = Tinebase_Acl_Roles::getInstance()->updateRole($_role);
-        Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(),$_roleMembers);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(), $_roleMembers);
         Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $_roleRights);
         
         return $role;            
