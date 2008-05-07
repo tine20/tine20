@@ -19,6 +19,10 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      */
     accountPickerType: 'user',
     /**
+     * @cfg {String} title for the account list
+     */
+    accountListTitle: '',
+    /**
      * @cfg {Ext.data.JsonStore} configStore
      */
     configStore: null,
@@ -86,7 +90,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         
         /* grid panel */
         this.configGridPanel = new Ext.grid.EditorGridPanel({
-            title: 'Permissions',
+            title: this.accountListTitle,
             store: this.configStore,
             cm: columnModel,
             autoSizeColumns: false,

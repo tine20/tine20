@@ -524,6 +524,7 @@ Tine.Admin.Tags.EditDialog = {
         var rightsPanel = new Tine.widgets.account.ConfigGrid({
             //height: 300,
             accountPickerType: 'both',
+            accountListTitle: 'Account Rights',
             configStore: rightsStore,
             hasAccountPrefix: true,
             configColumns: [
