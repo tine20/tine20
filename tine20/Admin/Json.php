@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        add deleteRoles function
  */
 
 /**
@@ -674,25 +673,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $members = Admin_Controller::getInstance()->getRoleMembers($roleId);
 
-        $result['results'] = array ();
-        foreach ( $members as $member ) {
-            if ( $member['type'] === 'user' ) {
-                $user = Tinebase_Account::getInstance()->getAccountById($member['id']);
-                $result['results'][] = array (
-                    "id"    => $user->getId(),
-                    "type"  => $member['type'],
-                    "name"  => $user->accountDisplayName,
-                );
-            } elseif ( $member['type'] === 'group' ) {
-                $group = Tinebase_Group::getInstance()->getGroupById($member['id']);
-                $result['results'][] = array (
-                    "id"    => $group->getId(),
-                    "type"  => $member['type'],
-                    "name"  => $group->name,
-                );                
-            }
-        }        
-        
+        $result['results'] = self::resolveAccountName($members);
         $result['totalcount'] = count($result['results']);
         
         return $result;
