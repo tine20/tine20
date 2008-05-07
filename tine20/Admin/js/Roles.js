@@ -379,8 +379,9 @@ Tine.Admin.Roles.EditDialog = {
 
                 // get role rights                
                 var roleRights = [];
+                var rightsStore = Ext.StoreMgr.get('RoleRightsStore');
                 
-                this.rightsDataStore.each(function(_record){
+                rightsStore.each(function(_record){
                     roleRights.push(_record.data);
                 });
 
