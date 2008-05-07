@@ -47,6 +47,7 @@ class Addressbook_Backend_Factory
                 break;
             default:
                 throw new Exception('unknown type');
+                break;
         }
         return $instance;
     }
