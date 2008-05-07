@@ -41,6 +41,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Group_AllTests::suite());
         $suite->addTest(Tinebase_Timemachine_AllTests::suite());
         $suite->addTest(Tinebase_Json_AllTests::suite());
+        $suite->addTest(Tinebase_Acl_AllTests::suite());
         
         return $suite;
     }
