@@ -362,14 +362,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Admin_Json();
         
-        //@todo create new application
-        
         $application = $json->getApplication( $this->objects['application']->getId() );
         
-        //$this->assertEquals($application['name'], $this->objects['application']->name);
         $this->assertEquals($application['status'], $this->objects['application']->status);
         
-        //@todo remove application (no delete function yet) 
     }
 
     /**
@@ -580,6 +576,21 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
     }    
+
+    /**
+     * try to get all role rights
+     *
+     * @todo    check structure of return array
+     */
+    public function testGetAllRoleRights()
+    {
+        $json = new Admin_Json();
+        
+        $allRights = $json->getAllRoleRights();
+        
+        //print_r ( $allRights );
+        $this->assertGreaterThan(0, $allRights);
+    }
     
 }       
     
