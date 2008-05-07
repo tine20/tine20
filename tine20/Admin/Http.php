@@ -233,39 +233,9 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
             $encodedRoleRights = Zend_Json::encode($json->getRoleRights($roleId));
         }
         
-        // @todo add function to json and comment testing arra
-        //$encodedAllRights = Zend_Json::encode($json->getAllRoleRights();
-        $encodedAllRights = Zend_Json::encode(array (
-            array(
-                "application_id" => 4,
-                "text"      => "Addressbook",
-                "children"  => array (
-                    array (
-                        "text"  => Tinebase_Acl_Rights::ADMIN,
-                        "qtip"  => "admin right",
-                    ),
-                    array (
-                        "text"  => Tinebase_Acl_Rights::RUN,
-                        "qtip"  => "run right",
-                    ),
-                ),
-            ),
-            array(
-                "application_id" => 2,
-                "text"      => "Crm",
-                "children"  => array (
-                    array (
-                        "text"  => Tinebase_Acl_Rights::ADMIN,
-                        "qtip"  => "admin right",
-                    ),
-                    array (
-                        "text"  => Tinebase_Acl_Rights::RUN,
-                        "qtip"  => "admin right",
-                    ),
-                ),
-            ),
-        ));
-
+        // get all rights for all (active?) applications
+        $encodedAllRights = Zend_Json::encode($json->getAllRoleRights());
+        
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');

@@ -702,6 +702,44 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     }
     
     /**
+     * get list of all role rights for all applications
+     *
+     * @return array with all rights for applications
+     * 
+     * @todo    get right description from Tinebase_Application/Acl_Rights
+     * @todo    get only active applications rights?
+     */
+    public function getAllRoleRights()
+    {
+        $result = array();
+        
+        // get all applications
+        $applications = Admin_Controller::getInstance()->getApplications(NULL, 'name', 'ASC', NULL, NULL);
+        
+        foreach ( $applications as $application ) {
+            $appId = $application->getId();
+            $rightsForApplication = array(
+                "application_id"    => $appId,
+                "text"              => $application->name,
+                "children"          => array()
+            );
+            
+            $allAplicationRights = Tinebase_Application::getInstance()->getAllRights($appId);
+            
+            foreach ( $allAplicationRights as $right ) {
+                $rightsForApplication["children"][] = array(
+                    "text"      => $right,
+                    "qtip"      => $right . " right",
+                ); 
+            }
+
+            $result[] = $rightsForApplication;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * adds the name of the account to each item in the name property
      * 
      * @param  array  &$_items array of arrays which contain a type and id property
