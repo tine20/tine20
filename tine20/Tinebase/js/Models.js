@@ -47,7 +47,7 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
     {name: 'id'},
     {name: 'type'},
     {name: 'name'},
-    {name: 'data'}
+    {name: 'data'} // todo: throw away data
 ]);
 
 /**

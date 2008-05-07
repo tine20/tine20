@@ -699,14 +699,23 @@ Tine.Tinebase.Common = function(){
     /**
      * Returns a username or groupname with according icon in front
      */
-    _accountRenderer = function(_accountObject){
+    _accountRenderer = function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store){
+        var type, iconCls, displayName;
+        
         if(_accountObject.accountDisplayName){
-            var iconCls = 'renderer renderer_accountUserIcon';
-            var displayName = _accountObject.accountDisplayName;
+            type = 'user';
+            displayName = _accountObject.accountDisplayName;
         } else if (_accountObject.name){
-            var iconCls = 'renderer renderer_accountGroupIcon';
-            var displayName = _accountObject.name;
+            type = 'group'
+            displayName = _accountObject.name;
+        } else if (_record.data.name) {
+            type = _record.data.type
+            displayName = _record.data.name;
+        } else if (_record.data.account_name) {
+            type = _record.data.account_type;
+            displayName = _record.data.account_name;
         }
+        iconCls = type == 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
         return '<div class="' + iconCls  + '">&#160;</div>' + displayName; 
     };
     
