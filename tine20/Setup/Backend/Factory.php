@@ -44,9 +44,8 @@ class Setup_Backend_Factory
                 
             default:
                 throw new Exception('unknown type');
-        }
+            }
 
         return $instance;
     }
-    
-}    
+}

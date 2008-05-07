@@ -152,13 +152,9 @@ interface Setup_Backend_Interface
      * @return boolean return string "version" if the table exists, otherwise false
      */
     public function applicationVersionQuery($_application);
-    
-	/**
-	 *
-	 *
-	 */
+
     public function getExistingSchema($_tableName);
-    
+
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table);
  
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field);

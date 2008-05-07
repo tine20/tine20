@@ -105,8 +105,8 @@ abstract class Setup_Backend_Schema_Field_Abstract
      */
     public function fixFieldKey(array $_indices)
     {
-        foreach($_indices as $index) {
-            if($this->name == $index->name) {
+        foreach ($_indices as $index) {
+            if ($this->name == $index->name) {
                 if ($index->primary == 'true') {
                     $this->primary = 'true';
                 } elseif ($index->unique == 'true') {

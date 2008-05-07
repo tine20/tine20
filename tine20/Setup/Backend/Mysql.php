@@ -43,7 +43,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $statementSnippets = array();
      
         foreach ($_table->fields as $field) {
-            if(isset($field->name)) {
+            if (isset($field->name)) {
                $statementSnippets[] = $this->getFieldDeclarations($field);
             }
         }
@@ -88,8 +88,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function applicationExists($_application)
     {
-         if($this->tableExists('applications')) {
-            if($this->applicationVersionQuery($_application) != false) {
+        if ($this->tableExists('applications')) {
+            if ($this->applicationVersionQuery($_application) != false) {
                 return true;
             }
         }
@@ -114,7 +114,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $stmt = $select->query();
         $table = $stmt->fetchObject();
         
-        if($table === false) {
+        if ($table === false) {
             return false;
         }
         return true; 
@@ -131,7 +131,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         $select = Zend_Registry::get('dbAdapter')->select()
                 ->from( SQL_TABLE_PREFIX . 'application_tables')
-                ->where('name = ?',  SQL_TABLE_PREFIX . $_tableName);
+                ->where('name = ?', SQL_TABLE_PREFIX . $_tableName);
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();
@@ -153,7 +153,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();
-        if(empty($version)) {
+        if (empty($version)) {
             return false;
         } else {
             return $version[0]['version'];
@@ -182,7 +182,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $stmt = $select->query();
         $tableColumns = $stmt->fetchAll();
 
-        foreach($tableColumns as $tableColumn) {
+        foreach ($tableColumns as $tableColumn) {
             $field = Setup_Backend_Schema_Field_Factory::factory('Mysql', $tableColumn);
             $existingTable->addField($field);
             
@@ -199,7 +199,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 $keyUsage = $stmt->fetchAll();
 
                 foreach ($keyUsage as $keyUse) {
-                    if($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
+                    if ($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
                         $index->setForeignKey($keyUse);
                     }
                 }
@@ -218,13 +218,13 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     {
         
         $string = $this->getCreateStatement($_table);
-        $dump = $this->execQuery('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . $_table->name );
+        $dump = $this->execQuery('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . $_table->name);
         $compareString = preg_replace('/ AUTO_INCREMENT=\d*/', '', $dump[0]['Create Table']);
         
         if ($compareString != $string) {
             echo "XML<br/>" . $string;
             echo "<hr color=red>MYSQL<br/>";
-            for ($i = 0 ; $i < (strlen($compareString)+1) ; $i++ ) {
+            for ($i = 0 ; $i < (strlen($compareString)+1) ; $i++) {
                 if ($compareString[$i] == $string[$i]) {
                     echo $compareString[$i];
                 } else {
@@ -293,7 +293,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         ));
 
         foreach ($_record->field as $field) {
-            if(isset($field->value['special'])) {
+            if (isset($field->value['special'])) {
                 switch(strtolower($field->value['special'])) {
                     case 'now':
                         $value = Zend_Date::now()->getIso();
@@ -310,7 +310,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     default:
                         throw new Exception('unsupported special type ' . strtolower($field->value['special']));
                     
-                }
+                    }
             } else {
                 $value = $field->value;
             }
@@ -359,7 +359,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         $statement .= $this->getFieldDeclarations($_declaration);
         
-        if($_position != NULL) {
+        if ($_position != NULL) {
             if ($_position == 0) {
                 $statement .= ' FIRST ';
             } else {
@@ -387,7 +387,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $oldName = SQL_TABLE_PREFIX . $_declaration->name;
         }
         
-        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration) ;
+        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
     
@@ -399,7 +399,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     */    
     public function dropCol($_tableName, $_colName)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`" ;
+        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` DROP COLUMN `" . $_colName . "`";
         $this->execQueryVoid($statement);    
     }
 
@@ -413,7 +413,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     public function addForeignKey($_tableName, Setup_Backend_Schema_Index $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD " 
-                    . $this->getForeignKeyDeclarations($_declaration)  ;
+                    . $this->getForeignKeyDeclarations($_declaration);
         $this->execQueryVoid($statement);    
     }
 
@@ -572,7 +572,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 
             default:
                 $buffer[] = $_field->type;
-            }
+        }
 
         if (isset($_field->unsigned)) {
             $buffer[] = 'unsigned';
@@ -633,13 +633,13 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         foreach ($_key->field as $keyfield) {
             $key = '`' . (string)$keyfield . '`';
-            if(!empty($keyfield->length)) {
+            if (!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';
             }
             $keys[] = $key;
         }
 
-        if(empty($keys)) {
+        if (empty($keys)) {
             throw new Exception('no keys for index found');
         }
 
@@ -662,10 +662,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                     . $_key->referenceTable . 
                     "` (`" . $_key->referenceField . "`)";
 
-        if(!empty($_key->referenceOnDelete)) {
+        if (!empty($_key->referenceOnDelete)) {
             $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
         }
-        if(!empty($_key->referenceOnUpdate)) {
+        if (!empty($_key->referenceOnUpdate)) {
             $snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
         }
         return $snippet;

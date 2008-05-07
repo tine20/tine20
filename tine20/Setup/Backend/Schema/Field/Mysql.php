@@ -6,13 +6,13 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @version     $Id: XML.php 1703 2008-04-03 18:16:32Z lkneschke $
+ * @version     $Id: Mysql.php 1703 2008-04-03 18:16:32Z lkneschke $
  */
 
  
- class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstract
- {
- 
+class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstract
+{
+
     public function __construct($_declaration)
     {
         $this->_setField($_declaration);
@@ -53,7 +53,7 @@
                 default:
                     $length = $_declaration['CHARACTER_MAXIMUM_LENGTH'];
                     $type = $_declaration['DATA_TYPE'];
-            }
+                }
 
             if ($_declaration['EXTRA'] == 'auto_increment') {
                 $this->autoincrement = 'true';
