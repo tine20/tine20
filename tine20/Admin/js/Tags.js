@@ -583,7 +583,7 @@ Tine.Admin.Tags.EditDialog = {
             },
             root: 'results',
             totalProperty: 'totalcount',
-            fields: [ 'account_id', 'account_type', 'view_right', 'use_right' ]
+            fields: [ 'account_name', 'account_id', 'account_type', 'view_right', 'use_right' ]
         });
         rightsStore.loadData({
             results:    _tagData.rights,
@@ -594,7 +594,7 @@ Tine.Admin.Tags.EditDialog = {
         var rightsPanel = new Tine.widgets.account.ConfigGrid({
             height: 200,
             configStore: rightsStore,
-            accountProperty: 'account_id',
+            hasAccountPrefix: true,
             configColumns: [
                 new Ext.ux.grid.CheckColumn({
                     header: 'View',

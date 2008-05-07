@@ -19,9 +19,9 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      */
     configStore: null,
     /**
-     * @cfg {String} property the account is stored in
+     * @cfg {bool} have the record account properties an account prefix?
      */
-    accountProperty: 'accountId',
+    hasAccountPrefix: false,
     /**
      * @cfg {Array} Array of column's config objects where the config options are in
      */
@@ -38,29 +38,37 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
+        this.recordPrefix = this.hasAccountPrefix ? 'account_' : '';
+        
         this.action_removeAccount = new Ext.Action({
             text: 'remove account',
             disabled: true,
             scope: this,
-            handler: null,//this.handlers.removeAccount,
+            handler: this.removeAccount,
             iconCls: 'action_deleteContact'
         });
         
+        /* account picker */
         this.accountPicker = new Tine.widgets.account.PickerPanel({
             enableBbar: true
         });
+        this.accountPicker.on('accountdblclick', function(account){
+            this.addAccount(account);   
+        }, this);
         
+        /* col model */
         var columnModel = new Ext.grid.ColumnModel([{
                 resizable: true, 
-                id: this.accountProperty, 
+                id: this.recordPrefix + 'name', 
                 header: 'Name', 
-                dataIndex: this.accountProperty, 
+                dataIndex: this.recordPrefix + 'name', 
                 renderer: Tine.Tinebase.Common.accountRenderer,
                 width: 70
             }].concat(this.configColumns)
         );
         columnModel.defaultSortable = true; // by default columns are sortable
         
+        /* selection model */
         var rowSelectionModel = new Ext.grid.RowSelectionModel({
             multiSelect:true
         });
@@ -69,7 +77,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             this.action_removeAccount.setDisabled(selectionModel.getCount() < 1);
         }, this);
         
-
+        /* grid panel */
         this.configGridPanel = new Ext.grid.EditorGridPanel({
             title: 'Permissions',
             store: this.configStore,
@@ -79,12 +87,13 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
             enableColLock:false,
             loadMask: true,
             plugins: this.configColumns,
-            autoExpandColumn: this.accountProperty,
+            autoExpandColumn: this.recordPrefix + 'name',
             bbar: [this.action_removeAccount],
             border: false
         });
         
         this.items = this.getConfigGridLayout();
+        
         Tine.widgets.account.ConfigGrid.superclass.initComponent.call(this);
         
         this.on('afterlayout', function(){
@@ -101,13 +110,60 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         return [{
             layout: 'fit',
             width: this.accountPickerWidth,
-            items: new Tine.widgets.account.PickerPanel({
-                enableBbar: true
-            })
+            items: this.accountPicker
         },{
             layout: 'fit',
             columnWidth: 1,
             items: this.configGridPanel
         }];
+    },
+    /**
+     * add given account to this.configStore
+     * 
+     * @param {Tine.model.account}
+     */
+    addAccount: function(account) {
+        var recordIndex = this.getRecordIndex(account);
+        if (recordIndex === false) {
+            var newRecord = {};
+            newRecord[this.recordPrefix + 'name'] = account.data.name;
+            newRecord[this.recordPrefix + 'type'] = account.data.type;
+            newRecord[this.recordPrefix + 'id'] = account.data.id;
+            
+            var newData = {};
+            newData[this.configStore.root] = [newRecord];
+            newData[this.configStore.totalProperty] = 1;
+            
+            this.configStore.loadData(newData,true);
+        }
+        this.configGridPanel.getSelectionModel().selectRow(this.getRecordIndex(account));
+    },
+    /**
+     * removes currently in this.configGridPanel selected rows
+     */
+    removeAccount: function() {
+        var selectedRows = this.configGridPanel.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; ++i) {
+            this.configStore.remove(selectedRows[i]);
+        }
+    },
+    /**
+     * returns index of given record in this.configStore
+     * 
+     * @param {Tine.model.account}
+     */
+    getRecordIndex: function(account) {
+        var id = false;
+        this.configStore.each(function(item){
+            if ( item.data[this.recordPrefix + 'type'] == 'user' && account.data.type == 'user' &&
+                    item.data[this.recordPrefix + 'id'] == account.data.id) {
+                id = item.id;
+            } else if (item.data[this.recordPrefix + 'type'] == 'group' && account.data.type == 'group' &&
+                    item.data[this.recordPrefix + 'id'] == account.data.id) {
+                id = item.id;
+            }
+        }, this);
+        return id ? this.configStore.indexOfId(id) : false;
     }
+    
 });
