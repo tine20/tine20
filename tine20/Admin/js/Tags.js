@@ -23,7 +23,7 @@ Tine.Admin.Tags.Main = {
          * onclick handler for addBtn
          */
         addTag: function(_button, _event) {
-            Tine.Tinebase.Common.openWindow('tagWindow', "index.php?method=Admin.editTag&tagId=",650, 600);
+            Tine.Tinebase.Common.openWindow('tagWindow', "index.php?method=Admin.editTag&tagId=",650, 400);
         },
 
         /**
@@ -33,7 +33,7 @@ Tine.Admin.Tags.Main = {
             var selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
             var tagId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('tagWindow', 'index.php?method=Admin.editTag&tagId=' + tagId,650, 600);
+            Tine.Tinebase.Common.openWindow('tagWindow', 'index.php?method=Admin.editTag&tagId=' + tagId,650, 400);
         },
 
         
@@ -230,7 +230,7 @@ Tine.Admin.Tags.Main = {
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             try {
-                Tine.Tinebase.Common.openWindow('tagWindow', 'index.php?method=Admin.editTag&tagId=' + record.data.id,650, 600);
+                Tine.Tinebase.Common.openWindow('tagWindow', 'index.php?method=Admin.editTag&tagId=' + record.data.id,650, 400);
             } catch(e) {
                 // alert(e);
             }
@@ -462,120 +462,50 @@ Tine.Admin.Tags.EditDialog = {
             */
         };
 
-        /******* account picker panel ********/
-        /*
-        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
-            enableBbar: true,
-            region: 'west',
-            height: 200,
-            //bbar: this.userSelectionBottomToolBar,
-            selectAction: function() {              
-                this.account = account;
-                this.handlers.addAccount(account);
-            }  
-        });
-                
-        accountPicker.on('accountdblclick', function(account){
-            this.account = account;
-            this.handlers.addAccount(account);
-        }, this);
-        */
-
-        /******* load data store ********/
-        /*
-        this.dataStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'accountId',
-            fields: Tine.Tinebase.Model.User
-        });
-
-        Ext.StoreMgr.add('TagMembersStore', this.dataStore);
-        
-        this.dataStore.setDefaultSort('accountDisplayName', 'asc');        
-        
-        if (_tagMembers.length === 0) {
-            this.dataStore.removeAll();
-        } else {
-            this.dataStore.loadData( _tagMembers );
-        }
-        */
-        /******* column model ********/
-        /*
-        var columnModel = new Ext.grid.ColumnModel([{ 
-            resizable: true, id: 'accountDisplayName', header: 'Name', dataIndex: 'accountDisplayName', width: 30 
-        }]);
-        */
-        /******* row selection model ********/
-        /*
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.removeAccount.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.removeAccount.setDisabled(false);
-            }
-        }, this);
-        */
-        /******* bottom toolbar ********/
-        /*
-        var membersBottomToolbar = new Ext.Toolbar({
-            items: [
-                this.actions.removeAccount
-            ]
-        });
-        */
-        /******* tag members grid ********/
-        /*
-        var tagMembersGridPanel = new Ext.grid.EditorGridPanel({
-            id: 'tagMembersGrid',
-            region: 'center',
-            title: 'Tag Members',
-            store: this.dataStore,
-            cm: columnModel,
-            autoSizeColumns: false,
-            selModel: rowSelectionModel,
-            enableColLock:false,
-            loadMask: true,
-            //autoExpandColumn: 'accountLoginName',
-            autoExpandColumn: 'accountDisplayName',
-            bbar: membersBottomToolbar,
-            border: true
-        }); 
-        */
         /******* THE contexts box ********/
         var anyContext = !_tagData.contexts || _tagData.contexts.indexOf('any') > -1;
         
         var appSelection = [];
+        
+        var rootNode = new Ext.tree.TreeNode({
+            text: 'Allowed Contexts',
+            expanded: true,
+            draggable:false,
+            allowDrop:false
+        });
+        var confinePanel = new Ext.tree.TreePanel({
+            rootVisible: true,
+            border: false,
+            root: rootNode
+        });
+        
+
         for(var i=0, j=_appList.length; i<j; i++){
             var app = _appList[i];
             if (app.name == 'Tinebase' /*|| app.status == 'disabled'*/) {
                 continue;
             }
             //console.log(app);
-            appSelection.push( new Ext.form.Checkbox({
-                boxLabel: app.name,
-                name: 'application_' + app.name,
-                hideLabel: true,
-                checked: anyContext || _tagData.contexts.indexOf(app.id) > -1
+            
+            rootNode.appendChild(new Ext.tree.TreeNode({
+                text: app.name,
+                id: 'application_' + app.name,
+                checked: anyContext || _tagData.contexts.indexOf(app.id) > -1,
+                leaf: true,
+                icon: "s.gif"
             }));
         }
         
-        var confineCheckbox = new Ext.form.FieldSet({
-            autoHeight: true,
-            checkboxToggle: true,
-            title: 'Confine Applications Contexts',
-            checkboxName: 'confineContexts',
-            collapsed: anyContext,
-            items: appSelection
-        });
-        
         /******* THE rights box ********/
+        if (!_tagData.rights) {
+            _tagData.rights = [{
+                account_name: 'Anyone',
+                account_id: 0,
+                account_type: 'anyone',
+                view_right: true,
+                use_right: true
+            }];
+        }
         var rightsStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Admin.getTagRights',
@@ -592,7 +522,8 @@ Tine.Admin.Tags.EditDialog = {
         
         
         var rightsPanel = new Tine.widgets.account.ConfigGrid({
-            height: 200,
+            //height: 300,
+            accountPickerType: 'both',
             configStore: rightsStore,
             hasAccountPrefix: true,
             configColumns: [
@@ -614,7 +545,7 @@ Tine.Admin.Tags.EditDialog = {
             layout:'hfit',
             border:false,
             width: 600,
-            height: 500,
+            height: 350,
             items:[{
                     xtype: 'columnform',
                     border: false,
@@ -638,9 +569,23 @@ Tine.Admin.Tags.EditDialog = {
                         }*/
                         ]        
                     ]
-                },
-                confineCheckbox,
-                rightsPanel
+                },{
+                    xtype: 'tabpanel',
+                    //autoHeight: true,
+                    height: 300,
+                    activeTab: 0,
+                    deferredRender: false,
+                    defaults:{autoScroll:true},
+                    border: true,
+                    plain: true,                    
+                    items: [{
+                        title: 'Rights',
+                        items: [rightsPanel]
+                    },{
+                        title: 'Context',
+                        items: [confinePanel]
+                    }]
+                }
             ]
         };
         
