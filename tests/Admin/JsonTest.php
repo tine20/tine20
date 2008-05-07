@@ -545,6 +545,19 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['success']);
         $this->assertEquals( "updated description", $result['updatedData']['description']);        
     }
+
+    /**
+     * try to get roles
+     *
+     */
+    public function testGetRoles()
+    {
+        $json = new Admin_Json();
+        
+        $roles = $json->getRoles( NULL, NULL, 'ASC', 0, 10);
+        
+        $this->assertGreaterThan(0, $roles['totalcount']);
+    }
     
     /**
      * try to delete roles
