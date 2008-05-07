@@ -45,6 +45,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     searchField: null,
     
     title: 'Tags',
+    iconCls: 'action_tag',
     layout: 'hfit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
     
@@ -87,7 +88,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-tag-tagitem" id="{id}">',
                     '<div class="x-widget-tag-tagitem-color" style="background-color: {color};">&#160;</div>', 
-                    '<div class="x-widget-tag-tagitem-text" ext:qtip="{name} <i>({type})</i><tpl if="description != null"><hr>{description}</tpl>" >', 
+                    '<div class="x-widget-tag-tagitem-text" ext:qtip="{name} <i>({type})</i><tpl if="description.length &gt; 1"><hr>{description}</tpl>" >', 
                         '{name}',
                     '</div>',
                 '</div>',
