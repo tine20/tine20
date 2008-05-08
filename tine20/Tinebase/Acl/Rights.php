@@ -46,7 +46,7 @@ class Tinebase_Acl_Rights
      *
      * @var Tinebase_Db_Table
      */
-    protected $rightsTable;
+    protected $_rightsTable;
 
     /**
      * holdes the instance of the singleton
@@ -60,7 +60,9 @@ class Tinebase_Acl_Rights
      *
      * disabled. use the singleton
      */
-    private function __clone() {}
+    private function __clone() 
+    {        
+    }
     
     /**
      * the constructor
@@ -69,7 +71,7 @@ class Tinebase_Acl_Rights
      * temporarly the constructor also creates the needed tables on demand and fills them with some initial values
      */
     private function __construct() {
-        $this->rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
+        $this->_rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
     }    
     
     /**
@@ -106,16 +108,15 @@ class Tinebase_Acl_Rights
         //@todo what should happen if user is in no groups? getGroupMemberships() doesn't fetch the primary group at the moment ...
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'application_rights', array())
-            ->join(SQL_TABLE_PREFIX . 'applications', SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')
-            
+            ->join(SQL_TABLE_PREFIX . 'applications', 
+                SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')            
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . 
+                SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
-
             ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', Tinebase_Acl_Rights::RUN)
             ->where(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED)
-
             ->group(SQL_TABLE_PREFIX . 'application_rights.application_id');
             
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
@@ -142,7 +143,7 @@ class Tinebase_Acl_Rights
                 
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
 
-        if($application->status != 'enabled') {
+        if ($application->status != 'enabled') {
             throw new Exception('user has no rights. the application is disabled.');
         }
 
@@ -163,7 +164,7 @@ class Tinebase_Acl_Rights
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-        if($row === false) {
+        if ($row === false) {
             return array();
         }
 
@@ -185,7 +186,7 @@ class Tinebase_Acl_Rights
         $result = false;
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
-        if($application->status != 'enabled') {
+        if ($application->status != 'enabled') {
             throw new Exception('user has no rights. the application is disabled.');
         }
         
@@ -193,16 +194,17 @@ class Tinebase_Acl_Rights
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);        
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
 
-        $select = $this->rightsTable->select()
+        $select = $this->_rightsTable->select()
             # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
+            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . 
+                SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
             ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
 
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->getId())
             ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $_right);
         
-        if(!$row = $this->rightsTable->fetchRow($select)) {
+        if (!$row = $this->_rightsTable->fetchRow($select)) {
             $result = false;
         } else {
             $result = true;
@@ -223,7 +225,7 @@ class Tinebase_Acl_Rights
      */
     public function addRight(Tinebase_Acl_Model_Right $_right) 
     {
-        if(!$_right->isValid()) {
+        if (!$_right->isValid()) {
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
                 
@@ -231,7 +233,7 @@ class Tinebase_Acl_Rights
                 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
-        $this->rightsTable->insert($data);
+        $this->_rightsTable->insert($data);
         
     }
     
@@ -246,8 +248,11 @@ class Tinebase_Acl_Rights
         //  
         // $applicationId = Tinebase_Application::convertApplicationIdToInt($_applicationId);
                 
-        $select = $this->rightsTable->select()
-            ->from(SQL_TABLE_PREFIX . 'application_rights', array ( '*', 'right' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'))
+        $select = $this->_rightsTable->select()
+            ->from(SQL_TABLE_PREFIX . 'application_rights', array( 
+                '*', 
+                'right' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'
+            ))
             ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $_applicationId)
             ->group(array(SQL_TABLE_PREFIX . 'application_rights.application_id', SQL_TABLE_PREFIX . 'application_rights.account_type', SQL_TABLE_PREFIX . 'application_rights.account_id'));
             
@@ -256,7 +261,7 @@ class Tinebase_Acl_Rights
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
 
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
 
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights row: ' . print_r($row, true));
                         
@@ -282,7 +287,7 @@ class Tinebase_Acl_Rights
         
         // delete all old rights for this application
         $where = Zend_Registry::get('dbAdapter')->quoteInto('application_id = ?', $_applicationId);
-        $this->rightsTable->delete($where);        
+        $this->_rightsTable->delete($where);        
         
         $count = 0;
         foreach ( $_applicationRights as $right ) {

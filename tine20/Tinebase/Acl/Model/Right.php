@@ -18,7 +18,7 @@
  *  */
 class Tinebase_Acl_Model_Right extends Tinebase_Record_Abstract
 {
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

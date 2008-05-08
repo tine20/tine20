@@ -20,7 +20,7 @@
  */
 class Tinebase_Acl_Model_RoleFilter extends Tinebase_Record_Abstract
 {
-	/**
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -59,7 +59,7 @@ class Tinebase_Acl_Model_RoleFilter extends Tinebase_Record_Abstract
     {
         $db = Zend_Registry::get('dbAdapter');
         $select = $db->select()
-            ->from (array('roles' => SQL_TABLE_PREFIX . 'roles'));
+            ->from(array('roles' => SQL_TABLE_PREFIX . 'roles'));
         
         if (!empty($this->name)) {
             $select->where($db->quoteInto('roles.name LIKE ?', $this->name));
