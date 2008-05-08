@@ -314,9 +314,17 @@ Tine.Admin.Roles.EditDialog = {
         this.rightsDataStore.each(function(item){
             if ( item.data.application_id == applicationId && item.data.right == right ) {
             	result = item.id;
+            	//console.log ("hit");
             	return;
             }
         });
+        
+        /*
+        if ( result == 0 ) {
+        	console.log (applicationId);
+            console.log (right);
+        }
+        */
         
         return result;
     },  
@@ -515,13 +523,14 @@ Tine.Admin.Roles.EditDialog = {
                 
                 	var childData = _allRights[i].children[j];
                 	childData.leaf = true;
-                    childData.icon = "s.gif";
+                    childData.icon = "s.gif";                    
                 	
                 	// check if right is set
-                	var rightIsSet = ( this.getRightId(_allRights[i].application_id,childData.text) > 0 );
+                	var rightIsSet = ( this.getRightId(_allRights[i].application_id,childData.right) > 0 );
                 	childData.checked = rightIsSet;
                     
                     var child = new Ext.tree.TreeNode(childData);
+                    child.attributes.right = childData.right;
                 	
                 	// add onchange handler
                 	child.on('checkchange', function(_node, _checked) {
@@ -533,14 +542,18 @@ Tine.Admin.Roles.EditDialog = {
                 	    if ( _checked ) {
                    	        this.rightsDataStore.add (
                    	            new Ext.data.Record({
-                                    right: _node.text,
+                                    //right: _node.text,
+                   	            	right: _node.attributes.right,
                                     application_id: applicationId
                                 })
                             );
                         } else {
-                            var rightId = this.getRightId(applicationId,_node.text);
+                            var rightId = this.getRightId(applicationId,_node.attributes.right);
                             this.rightsDataStore.remove ( this.rightsDataStore.getById(rightId) );                                                                                         
-                        }                	   
+                        }   
+                        
+                        //console.log ( this.rightsDataStore );
+                        
                 	},this);
                 	
                 	node.appendChild(child);                	

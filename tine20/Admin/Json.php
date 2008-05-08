@@ -723,6 +723,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
                 $rightsForApplication["children"][] = array(
                     "text"      => $description['text'],
                     "qtip"      => $description['description'],
+                    "right"     => $right,
                 ); 
             }
 
