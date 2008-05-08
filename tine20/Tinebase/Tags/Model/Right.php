@@ -51,7 +51,7 @@ class Tinebase_Tags_Model_Right extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'           => array('Alnum', 'allowEmpty' => true),
-        'tag_id'       => array('Alnum', 'presence' => 'required', 'allowEmpty' => false),
+        'tag_id'       => array('Alnum', 'allowEmpty' => true),
         'account_type' => array('InArray' => array('user', 'group', 'anyone'), 'presence' => 'required', 'allowEmpty' => false),
         'account_id'   => array('Alnum', 'presence' => 'required', 'allowEmpty' => false),
         'view_right'   => array('presence' => 'required', 'default' => false, 'InArray' => array(true, false), 'allowEmpty' => true),

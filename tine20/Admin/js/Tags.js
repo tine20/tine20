@@ -284,63 +284,43 @@ Tine.Admin.Tags.EditDialog = {
      * var handlers
      */
      handlers: {
-        /*
-        removeAccount: function(_button, _event) 
-        { 
-            var tagGrid = Ext.getCmp('tagMembersGrid');
-            var selectedRows = tagGrid.getSelectionModel().getSelections();
-            
-            var tagMembersStore = this.dataStore;
-            for (var i = 0; i < selectedRows.length; ++i) {
-                tagMembersStore.remove(selectedRows[i]);
-            }
-                
-        },
-        
-        addAccount: function(account)
-        {
-            var tagGrid = Ext.getCmp('tagMembersGrid');
-            
-            var dataStore = tagGrid.getStore();
-            var selectionModel = tagGrid.getSelectionModel();
-            
-            if (dataStore.getById(account.data.data.accountId) === undefined) {
-                var record = new Tine.Tinebase.Model.User({
-                    accountId: account.data.data.accountId,
-                    accountDisplayName: account.data.data.accountDisplayName
-                }, account.data.data.accountId);
-                dataStore.addSorted(record);
-            }
-            selectionModel.selectRow(dataStore.indexOfId(account.data.data.accountId));            
-        },
-        */
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('tagDialog').getForm();
             
             if(form.isValid()) {
-        
-                // get tag members
-                //var tagGrid = Ext.getCmp('tagMembersGrid');
-
                 Ext.MessageBox.wait('Please wait', 'Updating Memberships');
                 
-                //var tagMembers = [];
-                //var dataStore = tagGrid.getStore();
+                var tag = Tine.Admin.Tags.EditDialog.tagRecord;
                 
-                //dataStore.each(function(_record){
-                //    tagMembers.push(_record.data.accountId);
-                //});
+                // fetch rights
+                tag.data.rights = [];
+                var rightsStore = Ext.StoreMgr.lookup('adminSharedTagsRights');
+                rightsStore.each(function(item){
+                    tag.data.rights.push(item.data);
+                });
                 
-                // update form               
-                form.updateRecord(Tine.Admin.Tags.EditDialog.tagRecord);
-
-                /*********** save tag members & form ************/
+                // fetch contexts
+                tag.data.contexts = [];
+                var anycontext = true;
+                var confinePanel = Ext.getCmp('adminSharedTagsConfinePanel');
+                confinePanel.getRootNode().eachChild(function(node){
+                    if (node.attributes.checked) {
+                        tag.data.contexts.push(node.id);
+                    } else {
+                        anycontext = false;
+                    }
+                });
+                if (anycontext) {
+                    tag.data.contexts = ['any'];
+                }
+                
+                form.updateRecord(tag);
                 
                 Ext.Ajax.request({
                     params: {
                         method: 'Admin.saveTag', 
-                        tagData: Ext.util.JSON.encode(Tine.Admin.Tags.EditDialog.tagRecord.data),
+                        tagData: Ext.util.JSON.encode(tag.data),
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Admin.Tags) {
@@ -424,11 +404,8 @@ Tine.Admin.Tags.EditDialog = {
             Ext.getCmp('tagDialog').action_saveAndClose.enable();
             Ext.getCmp('tagDialog').action_applyChanges.enable();
         }
+       */
 
-        if(_rights.deleteGrant === true) {
-            Ext.getCmp('tagDialog').action_delete.enable();
-        }*/
-        Ext.getCmp('tagDialog').action_delete.enable();
     },
     
     /**
@@ -441,31 +418,8 @@ Tine.Admin.Tags.EditDialog = {
     display: function(_tagData, _appList) 
     {
 
-        /******* actions ********/
-
-        this.actions = {
-            /*
-            addAccount: new Ext.Action({
-                text: 'add account',
-                disabled: true,
-                scope: this,
-                handler: this.handlers.addAccount,
-                iconCls: 'action_addContact'
-            }),
-            removeAccount: new Ext.Action({
-                text: 'remove account',
-                disabled: true,
-                scope: this,
-                handler: this.handlers.removeAccount,
-                iconCls: 'action_deleteContact'
-            })
-            */
-        };
-
         /******* THE contexts box ********/
         var anyContext = !_tagData.contexts || _tagData.contexts.indexOf('any') > -1;
-        
-        var appSelection = [];
         
         var rootNode = new Ext.tree.TreeNode({
             text: 'Allowed Contexts',
@@ -474,11 +428,11 @@ Tine.Admin.Tags.EditDialog = {
             allowDrop:false
         });
         var confinePanel = new Ext.tree.TreePanel({
+            id: 'adminSharedTagsConfinePanel',
             rootVisible: true,
             border: false,
             root: rootNode
         });
-        
 
         for(var i=0, j=_appList.length; i<j; i++){
             var app = _appList[i];
@@ -489,7 +443,7 @@ Tine.Admin.Tags.EditDialog = {
             
             rootNode.appendChild(new Ext.tree.TreeNode({
                 text: app.name,
-                id: 'application_' + app.name,
+                id: app.id,
                 checked: anyContext || _tagData.contexts.indexOf(app.id) > -1,
                 leaf: true,
                 icon: "s.gif"
@@ -499,6 +453,7 @@ Tine.Admin.Tags.EditDialog = {
         /******* THE rights box ********/
         if (!_tagData.rights) {
             _tagData.rights = [{
+                tag_id: '', //todo!
                 account_name: 'Anyone',
                 account_id: 0,
                 account_type: 'anyone',
@@ -507,6 +462,7 @@ Tine.Admin.Tags.EditDialog = {
             }];
         }
         var rightsStore = new Ext.data.JsonStore({
+            storeId: 'adminSharedTagsRights',
             baseParams: {
                 method: 'Admin.getTagRights',
                 containerId: _tagData.id

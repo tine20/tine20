@@ -501,7 +501,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * save tag data from edit form
      *
-     * @param   string $tagData        json encoded tag data
+     * @param   string $tagData
      * 
      * @return  array with success, message, tag data and tag members
      */
@@ -509,23 +509,15 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     {
         $decodedTagData = Zend_Json::decode($tagData);
         
+        //Zend_Registry::get('logger')->debug(print_r($decodedTagData,true));
         // unset if empty
         if (empty($decodedTagData['id'])) {
             unset($decodedTagData['id']);
         }
         
-        $tag = new Tinebase_Tags_Model_Tag();
-        
-        try {
-            $tag->setFromArray($decodedTagData);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $tag->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
-
-            return $result;
-        }
+        $tag = new Tinebase_Tags_Model_FullTag($decodedTagData);
+        $tag->rights = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Right', $decodedTagData['rights']);
+        //Zend_Registry::get('logger')->debug(print_r($tag->toArray(),true));
         
         if ( empty($tag->id) ) {
             $tag = Admin_Controller::getInstance()->addTag($tag);

@@ -78,4 +78,6 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
     {name: 'description'},
     {name: 'color'      },
     {name: 'occurrence' },
+    {name: 'rights'     },
+    {name: 'contexts'   }
 ]);

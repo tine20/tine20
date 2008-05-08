@@ -455,11 +455,14 @@ class Admin_Controller
      * fetch one tag identified by tagid
      *
      * @param int $_tagId
-     * @return Tinebase_Tags_Model_Tag
+     * @return Tinebase_Tags_Model_FullTag
      */
     public function getTag($_tagId)
     {
-        $fullTag = Tinebase_Tags::getInstance()->getFullTag($_tagId);
+        $tag = Tinebase_Tags::getInstance()->getTagsById($_tagId);
+        $fullTag = new Tinebase_Tags_Model_FullTag($tag[0]->toArray(), true);
+        $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_tagId);
+        $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_tagId);
         
         return $fullTag;        
     }  
@@ -467,29 +470,40 @@ class Admin_Controller
    /**
      * add new tag
      *
-     * @param  Tinebase_Tag_Model_Tag $_tag
-     * @return Tinebase_Tags_Model_Tag
+     * @param  Tinebase_Tags_Model_FullTag $_tag
+     * @return Tinebase_Tags_Model_FullTag
      */
-    public function AddTag(Tinebase_Tags_Model_Tag $_tag)
+    public function AddTag(Tinebase_Tags_Model_FullTag $_tag)
     {
         $_tag->type = Tinebase_Tags_Model_Tag::TYPE_SHARED;
-        $tag = Tinebase_Tags::getInstance()->createTag($_tag);
         
+        $newTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
 
-        return $tag;            
+        $_tag->rights->tag_id = $newTag->getId();
+        Tinebase_Tags::getInstance()->setRights($_tag->rights);
+        Tinebase_Tags::getInstance()->setContexts($_tag->contexts, $newTag->getId());
+        
+        return $this->getTag($newTag->getId());
     }  
 
    /**
      * update existing tag
      *
-     * @param  Tinebase_Tag_Model_Tag $_tag
-     * @return Tinebase_Tags_Model_Tag
+     * @param  Tinebase_Tags_Model_FullTag $_tag
+     * @return Tinebase_Tags_Model_FullTag
      */
-    public function UpdateTag(Tinebase_Tags_Model_Tag $_tag)
+    public function UpdateTag(Tinebase_Tags_Model_FullTag $_tag)
     {
-        $tag = Tinebase_Tags::getInstance()->updateTag($_tag);
+        Tinebase_Tags::getInstance()->updateTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
         
-        return $tag;            
+        $_tag->rights->tag_id = $_tag->getId();
+        Tinebase_Tags::getInstance()->purgeRights($_tag->getId());
+        Tinebase_Tags::getInstance()->setRights($_tag->rights);
+        
+        Tinebase_Tags::getInstance()->purgeContexts($_tag->getId());
+        Tinebase_Tags::getInstance()->setContexts($_tag->contexts, $_tag->getId());
+        
+        return $this->getTag($_tag->getId());
     }  
     
     /**

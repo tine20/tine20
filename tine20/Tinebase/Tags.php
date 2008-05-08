@@ -392,22 +392,6 @@ class Tinebase_Tags
     }
     
     /**
-     * returns full tag, including all rights and contexts
-     * 
-     * @param  string $_tagId
-     * @return Tinebase_Tags_Model_FullTag
-     */
-    public function getFullTag($_tagId)
-    {
-        $tag = $this->getTagsById($_tagId);
-        $fullTag = new Tinebase_Tags_Model_FullTag($tag[0]->toArray(), true);
-        $fullTag->rights = $this->getRights($_tagId);
-        $fullTag->contexts = $this->getContexts($_tagId);
-        
-        return $fullTag;
-    }
-    
-    /**
      * get all rights of a given tag
      * 
      * @param  string                    $_tagId 
@@ -499,13 +483,40 @@ class Tinebase_Tags
         
     }
     
+    /**
+     * purges (removes from tabel) all contexts of a given tag
+     * 
+     * @param  string $_tagId
+     * @return void
+     */
     public function purgeContexts($_tagId)
     {
-        
+        $where = $this->_db->quoteInto('tag_id = ?', $_tagId);
+        $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', $where);
     }
     
-    public function setContexts($_contexts)
+    /**
+     * sets all given contexts for a given tag
+     * 
+     * @param  array  $_contexts
+     * @param  string $_tagId
+     * @return void
+     */
+    public function setContexts(array $_contexts, $_tagId)
     {
+        if (!$_tagId) {
+            throw new Exception('a $_tagId is mandentory');
+        }
         
+        if (in_array('any', $_contexts, true) || in_array(0, $_contexts, true)) {
+            $_contexts = array(0);
+        }
+        
+        foreach ($_contexts as $content) {
+            $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
+                'tag_id'         => $_tagId,
+                'application_id' => $content
+            ));
+        }
     }
 }
