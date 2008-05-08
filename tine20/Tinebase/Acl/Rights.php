@@ -9,8 +9,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        rework the functions and simplify the select statements
- * @todo        remove the application right queries completely?
+ * @todo        remove the application right queries completely
  */
 
 /**
@@ -96,6 +95,8 @@ class Tinebase_Acl_Rights
      * 
      * @param int $_accountId the numeric account id
      * @return array list of enabled applications for this account
+     * 
+     * @todo    remove old application rights query
      */
     public function getApplications($_accountId)
     {
@@ -105,7 +106,6 @@ class Tinebase_Acl_Rights
         
         $db = Zend_Registry::get('dbAdapter');
 
-        //@todo what should happen if user is in no groups? getGroupMemberships() doesn't fetch the primary group at the moment ...
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'application_rights', array())
             ->join(SQL_TABLE_PREFIX . 'applications', 
@@ -125,6 +125,15 @@ class Tinebase_Acl_Rights
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
         
+        $applicationsFromRoles = Tinebase_Acl_Roles::getInstance()->getApplications($accountId);
+        
+        // add applications from roles
+        foreach ( $applicationsFromRoles as $application ) {            
+            if ( !in_array($application->toArray(), $result->toArray()) ) {
+                $result->addRecord($application);
+            }
+        }
+        
         return $result;
     }
 
@@ -134,18 +143,20 @@ class Tinebase_Acl_Rights
      * @param string $_application the name of the application
      * @param int $_accountId the numeric account id
      * @return array list of rights
+     * 
+     * @todo    remove old application rights query
      */
     public function getRights($_application, $_accountId) 
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-                
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
-
+        
         if ($application->status != 'enabled') {
             throw new Exception('user has no rights. the application is disabled.');
         }
+
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);                        
 
         $db = Zend_Registry::get('dbAdapter');
 
@@ -165,10 +176,21 @@ class Tinebase_Acl_Rights
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
         if ($row === false) {
-            return array();
+            $rightsFromApplicationRights = array();
+        } else {
+            $rightsFromApplicationRights = explode(',', $row['account_rights']);            
         }
-
-        $result = explode(',', $row['account_rights']);
+        
+        $rightsFromRoles = Tinebase_Acl_Roles::getInstance()->getApplicationRights($application->getId(), $accountId);
+        $rights = array_merge ($rightsFromApplicationRights, $rightsFromRoles);
+        
+        // remove duplicates
+        $result = array();
+        foreach ( $rights as $right ) {
+            if ( !in_array($right, $result) ) {
+                $result[] = $right;
+            }
+        }
         
         return $result;
     }
@@ -180,6 +202,8 @@ class Tinebase_Acl_Rights
      * @param int $_accountId the numeric id of a user account
      * @param int $_right the right to check for
      * @return bool
+     * 
+     * @todo    remove old application rights query
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
@@ -212,7 +236,7 @@ class Tinebase_Acl_Rights
 
         // check role rights
         if ( !$result ) {
-            $result = Tinebase_Acl_Roles::getInstance()->hasRight($_application->getId(), $_accountId, $_right);
+            $result = Tinebase_Acl_Roles::getInstance()->hasRight($application->getId(), $_accountId, $_right);
         }
         
         return $result;

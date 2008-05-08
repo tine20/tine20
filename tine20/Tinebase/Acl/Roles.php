@@ -99,11 +99,17 @@ class Tinebase_Acl_Roles
     public function hasRight($_applicationId, $_accountId, $_right) 
     {        
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
+        
+        if ( empty($roleMemberships) ) {
+            return false;
+        }
 
         $rightIdentifier = $this->_roleRightsTable->getAdapter()->quoteIdentifier('right');
         $select = $this->_roleRightsTable->select();
-        $select->where("role_id IN (?)", implode(',', $roleMemberships))
+        $select->where("role_id IN (?)", $roleMemberships)
                ->where("$rightIdentifier = ?", $_right);
+               
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
             $result = false;
@@ -113,7 +119,77 @@ class Tinebase_Acl_Roles
         
         return $result;
     }
-    
+
+    /**
+     * returns list of applications the user is able to use
+     *
+     * this function takes group memberships into account. Applications the accounts is able to use
+     * must have the 'run' right set and the application must be enabled
+     * 
+     * @param int $_accountId the numeric account id
+     * @return array list of enabled applications for this account
+     */
+    public function getApplications($_accountId)
+    {  
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+
+        $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
+        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'role_rights', array())
+            ->join(SQL_TABLE_PREFIX . 'applications', 
+                SQL_TABLE_PREFIX . 'role_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')            
+            ->where("role_id IN (?)", $roleMemberships)
+            ->where(SQL_TABLE_PREFIX . 'role_rights.right = ?', Tinebase_Acl_Rights::RUN)
+            ->where(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED)
+            ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
+            
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
+        $stmt = $this->_db->query($select);
+        
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
+        
+        return $result;
+    }
+
+    /**
+     * returns rights for given application and accountId
+     *
+     * @param string $_applicationId application id
+     * @param int $_accountId the numeric account id
+     * @return array list of rights
+     * 
+     * @todo    add right group by to statement
+     */
+    public function getApplicationRights($_applicationId, $_accountId) 
+    {
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        
+        $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
+                        
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'role_rights', array('account_rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'role_rights.right)'))
+            ->where(SQL_TABLE_PREFIX . 'role_rights.application_id = ?', $_applicationId)
+            ->where("role_id IN (?)", $roleMemberships)
+            ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
+            //->group(SQL_TABLE_PREFIX . 'role_rights.right');
+            
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
+            
+        $stmt = $this->_db->query($select);
+
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        
+        if ($row === false) {
+            return array();
+        }
+
+        $result = explode(',', $row['account_rights']);
+        
+        return $result;
+    }
+        
     /**
      * Searches roles according to filter and paging
      * 
@@ -274,7 +350,9 @@ class Tinebase_Acl_Roles
         
         $select = $this->_roleMembersTable->select();
         $select->where("account_id = ? and account_type='user'", $_accountId)
-            ->orwhere("account_id IN (?) and account_type='group'", implode(',', $groupMemberships));
+            ->orwhere("account_id IN (?) and account_type='group'", $groupMemberships);
+            
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
@@ -289,7 +367,7 @@ class Tinebase_Acl_Roles
      * set role members 
      *
      * @param   int $_roleId
-     * @param   array $_roleMembers with role members
+     * @param   array $_roleMembers with role members ("type" => account type, "id" => account id)
      */
     public function setRoleMembers($_roleId, array $_roleMembers)
     {
@@ -297,12 +375,19 @@ class Tinebase_Acl_Roles
         if ($roleId != $_roleId && $roleId > 0) {
             throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
         }
-
+        
         // remove old members
         $where = Zend_Registry::get('dbAdapter')->quoteInto('role_id = ?', $roleId);
         $this->_roleMembersTable->delete($where);
                 
+        $validTypes = array( 'user', 'group', 'anyone');
         foreach ( $_roleMembers as $member ) {
+            if ( !in_array($member["type"], $validTypes) ) {
+                throw new InvalidArgumentException('type must be one of ' . 
+                    implode(', ', $validTypes) . ' (values given: ' . 
+                    print_r($member, true) . ')');
+            }
+            
             $data = array(
                 "role_id"       => $roleId,
                 "account_type"  => $member["type"],
@@ -345,7 +430,7 @@ class Tinebase_Acl_Roles
      * set role rights 
      *
      * @param   int $_roleId
-     * @param   array $_roleRights with role rights
+     * @param   array $_roleRights with role rights ("application_id" => app id, "right" => the right to set)
      */
     public function setRoleRights($_roleId, array $_roleRights)
     {
@@ -367,4 +452,31 @@ class Tinebase_Acl_Roles
             $this->_roleRightsTable->insert($data); 
         }
     }
+
+    /**
+     * add single role rights 
+     *
+     * @param   int $_roleId
+     * @param   int $_applicationId
+     * @param   string $_right
+     */
+    public function addSingleRight($_roleId, $_applicationId, $_right)
+    {        
+        // check if already in
+        $rightIdentifier = $this->_roleRightsTable->getAdapter()->quoteIdentifier('right');
+        $select = $this->_roleRightsTable->select();
+        $select->where("role_id = ?", $_roleId)
+               ->where("$rightIdentifier = ?", $_right)
+               ->where("application_id = ?", $_applicationId);
+            
+        if (!$row = $this->_roleRightsTable->fetchRow($select)) {                        
+            $data = array(
+                "role_id"           => $_roleId,
+                "application_id"    => $_applicationId,
+                "right"             => $_right,
+            );
+            $this->_roleRightsTable->insert($data); 
+        }
+    }
+    
 }
