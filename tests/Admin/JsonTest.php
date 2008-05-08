@@ -350,8 +350,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         // check total count
         $accessLogs = $json->getAccessLogEntries($from->getIso(), $to->getIso(), 'tine20admin', 'id', 'ASC', 0, 10);
-        $this->assertEquals(0, sizeof($accessLogs['results']));
-        $this->assertEquals(0, $accessLogs['totalcount']);
+        $this->assertEquals(0, sizeof($accessLogs['results']), 'results not matched');
+        $this->assertEquals(0, $accessLogs['totalcount'], 'totalcount not matched');
     }        
 	
     /**
