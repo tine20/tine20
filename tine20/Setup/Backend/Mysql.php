@@ -31,7 +31,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
     {
-        $statement = $this->getCreateStatement($_table);
+		echo "<pre>$statement</pre><hr>";
+
+		$statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
         
             
@@ -72,8 +74,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $statement .= "'";
         }
 
-        echo "<pre>$statement</pre><hr>";
-
+       
         
         return $statement;
     

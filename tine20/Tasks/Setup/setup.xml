@@ -348,7 +348,6 @@
                     <name>contact_id</name>
                     <type>integer</type>
                     <notnull>true</notnull>
-                    <default></default>
                 </field>
                 <index>
                     <name>task_id-contact_id</name>
