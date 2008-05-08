@@ -104,9 +104,10 @@ class Tinebase_Tags
      * 
      * @param  string|array|Tinebase_Record_RecordSet  $_id
      * @param  string                                  $_right the required right current user must have on the tags
+     * @param  bool                                    $_ignoreAcl
      * @return Tinebase_Record_RecordSet               Set of Tinebase_Tags_Model_Tag
      */
-    public function getTagsById($_id, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT)
+    public function getTagsById($_id, $_right=Tinebase_Tags_Model_Right::VIEW_RIGHT, $_ignoreAcl=false)
     {
         $tags = new Tinebase_Record_RecordSet('Tinebase_Tags_Model_Tag');
         
@@ -115,7 +116,9 @@ class Tinebase_Tags
                 ->from(SQL_TABLE_PREFIX . 'tags')
                 ->where('is_deleted = 0')
                 ->where($this->_db->quoteInto('id IN (?)', $_id));
-            Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+            if ($_ignoreAcl !== true) {
+                Tinebase_Tags_Model_Right::applyAclSql($select, $_right);
+            }
             
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Tags_Model_Tag($tagArray, true));
@@ -147,6 +150,8 @@ class Tinebase_Tags
             case Tinebase_Tags_Model_Tag::TYPE_PERSONAL:
                 $_tag->owner = $currentAccountId;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
+                // for personal tags we set rights and scope temprary here, 
+                // this needs to be moved into Tinebase Controller later
                 $right = new Tinebase_Tags_Model_Right(array(
                     'tag_id'        => $newId,
                     'account_type'  => 'user',
@@ -155,34 +160,23 @@ class Tinebase_Tags
                     'use_right'     => true,
                 ));
                 $this->setRights($right);
+                $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
+                    'tag_id'         => $newId,
+                    'application_id' => 0
+                ));
                 break;
             case Tinebase_Tags_Model_Tag::TYPE_SHARED:
-                if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', 
-                    $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
-                        throw new Exception('Your are not allowed to create a shared tag!');
-                }
-                
                 $_tag->owner = 0;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
-                $right = new Tinebase_Tags_Model_Right(array(
-                    'tag_id'        => $newId,
-                    'account_type'  => 'anyone',
-                    'account_id'    => 0,
-                    'view_right'    => true,
-                    'use_right'     => true,
-                ));
-                $this->setRights($right);
                 break;
             default:
                 throw new Exception('No such tag type');
+                break;
         }
         
         // any context temporary
-        $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
-            'tag_id'         => $newId,
-            'application_id' => 0
-        ));
-        $tags = $this->getTagsById($newId);
+        
+        $tags = $this->getTagsById($newId, NULL, true);
         return $tags[0];
     }
     
