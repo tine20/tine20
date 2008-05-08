@@ -72,7 +72,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $statement .= "'";
         }
 
-        //echo "<pre>$statement</pre>";
+        echo "<pre>$statement</pre><hr>";
 
         
         return $statement;
