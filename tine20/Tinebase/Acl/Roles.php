@@ -100,31 +100,18 @@ class Tinebase_Acl_Roles
      */
     public function hasRight($_applicationId, $_accountId, $_right) 
     {        
-        //$roleMemberships = Tinebase_Group::getInstance()->getRoleMemberships($accountId);
+        $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
 
-        /*
-        $select = $this->rightsTable->select()
-            # beware of the extra parenthesis of the next 3 rows
-            ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_id = ?', $accountId)
-            ->orWhere(SQL_TABLE_PREFIX . 'application_rights.account_type = \'anyone\' )')
-
-            ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $application->getId())
-            ->where(SQL_TABLE_PREFIX . 'application_rights.right = ?', $_right);
-        
-        if(!$row = $this->rightsTable->fetchRow($select)) {
+        $select = $this->roleRightsTable->select();
+        $select->where("role_id IN (?)", implode(',', $roleMemberships))
+               ->where("`right` = ?", $_right);
+            
+        if(!$row = $this->roleRightsTable->fetchRow($select)) {
             $result = false;
         } else {
             $result = true;
         }
-
-        // check role rights
-        if ( !$result ) {
-            $result = Tinebase_Acl_Roles::getInstance()->hasRight($_application->getId(), $_accountId, $_right);
-        }
-        */
         
-        $result = false;
         return $result;
     }
     
@@ -271,6 +258,32 @@ class Tinebase_Acl_Roles
         }
 
         return $members;
+    }
+
+    /**
+     * get list of role members 
+     *
+     * @param int $_accountId
+     * @return array of array with account ids & types
+     */
+    public function getRoleMemberships($_accountId)
+    {
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);        
+        
+        $memberships = array();
+        
+        $select = $this->roleMembersTable->select();
+        $select->where("account_id = ? and account_type='user'", $_accountId)
+            ->orwhere("account_id IN (?) and account_type='group'", implode(',',$groupMemberships));
+        
+        $rows = $this->roleMembersTable->fetchAll($select);
+        
+        foreach($rows as $membership) {
+            $memberships[] = $membership->role_id;
+        }
+
+        return $memberships;
     }
 
     /**
