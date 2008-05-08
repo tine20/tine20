@@ -73,7 +73,7 @@ Tine.Admin.Tags.Main = {
         this.actions.addTag = new Ext.Action({
             text: 'add tag',
             handler: this.handlers.addTag,
-            iconCls: 'action_addTag',
+            iconCls: 'action_tag',
             scope: this
         });
         
