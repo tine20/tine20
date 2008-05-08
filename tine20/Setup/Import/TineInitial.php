@@ -33,7 +33,7 @@ class Setup_Import_TineInitial
      */    
     public function initialLoad()
     {
-       echo "Creating initial user(tine20admin) and groups...<br>";
+        echo "Creating initial user(tine20admin), groups and roles ...<br>";
         # or initialize the database ourself
         # add the admin group
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
@@ -75,61 +75,72 @@ class Setup_Import_TineInitial
         # add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $account);
         Tinebase_Group::getInstance()->addGroupMember($userGroup, $account);
-
-        # enable the applications for the user group
-        # give admin rights to the admin group for all applications
+        
+        # add roles and add the groups to the roles
+        $adminRole = new Tinebase_Acl_Model_Role(array(
+            'name'                  => 'admin role',
+            'description'           => 'admin role for tine. this role has all rights per default.',
+        ));
+        $adminRole = Tinebase_Acl_Roles::getInstance()->createRole($adminRole);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
+            array(
+                'id'    => $adminGroup->getId(),
+                'type'  => 'group', 
+            )
+        ));
+        
+        $userRole = new Tinebase_Acl_Model_Role(array(
+            'name'                  => 'user role',
+            'description'           => 'userrole for tine. this role has only the run rights for all applications per default.',
+        ));
+        $userRole = Tinebase_Acl_Roles::getInstance()->createRole($userRole);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
+            array(
+                'id'    => $userGroup->getId(),
+                'type'  => 'group', 
+            )
+        ));
+        
+        # enable the applications for the user group/role
+        # give all rights to the admin group/role for all applications
         $applications = Tinebase_Application::getInstance()->getApplications();
         foreach ($applications as $application) {
             
-            if (strtolower($application->name) !== 'admin') {
-                // run right for user group
-                $right = new Tinebase_Acl_Model_Right(array(
-                    'application_id'    => $application->getId(),
-                    'account_id'        => $userGroup->getId(),
-                    'account_type'      => 'group',
-                    'right'             => Tinebase_Acl_Rights::RUN
-                ));
-                Tinebase_Acl_Rights::getInstance()->addRight($right);
+            if ( $application->name  !== 'Admin' ) {
+
+                /***** All applications except Admin *****/
                 
-                // run for admin group
-                $right->account_id = $adminGroup->getId();            
-                Tinebase_Acl_Rights::getInstance()->addRight($right);
+                // run right for user role
+                Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                    $userRole->getId(), 
+                    $application->getId(), 
+                    Tinebase_Acl_Rights::RUN
+                );
                 
-                // admin for admin group
-                $right->right = Tinebase_Acl_Rights::ADMIN;
-                Tinebase_Acl_Rights::getInstance()->addRight($right);
-                
-                // create shared tags for admin group in tinebase
-                if ( strtolower($application->name) !== 'tinebase') {
-                    $right->right = Tinebase_Acl_Rights::MANAGE_SHARED_TAGS;
-                    Tinebase_Acl_Rights::getInstance()->addRight($right);
-                }
+                // all rights for admin role
+                $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+                foreach ( $allRights as $right ) {
+                    Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                        $adminRole->getId(), 
+                        $application->getId(), 
+                        $right
+                    );
+                }                                
             } else {
 
                 /***** Admin application *****/
-                
-                $adminAppId = $application->getId();
-                
-                // run right for admin group
-                $right = new Tinebase_Acl_Model_Right(array(
-                    'application_id'    => $adminAppId,
-                    'account_id'        => $adminGroup->getId(),
-                    'account_type'      => 'group',
-                    'right'             => Tinebase_Acl_Rights::RUN
-                ));
-                Tinebase_Acl_Rights::getInstance()->addRight($right);
-                               
-                $allAdminRights = Tinebase_Application::getInstance()->getAllRights($adminAppId);
-                
-                foreach ( $allAdminRights as $adminRight ) {
-                    // don't add run right again
-                    if ( $adminRight !== Tinebase_Acl_Rights::RUN ) {
-                        $right->right = $adminRight;     
-                        Tinebase_Acl_Rights::getInstance()->addRight($right);
-                    }            
-                }    
+
+                // all rights for admin role
+                $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+                foreach ( $allRights as $right ) {
+                    Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                        $adminRole->getId(), 
+                        $application->getId(), 
+                        $right
+                    );
+                }                                                
             }
-        }
+        } // end foreach applications               
 
         # give Users group read rights to the internal addressbook
         # give Adminstrators group read/write rights to the internal addressbook
