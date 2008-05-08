@@ -77,7 +77,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
             Tinebase_Acl_Rights::ADMIN
         );
         
-        $this->assertTrue($result);
+        $this->assertTrue($result, 'admin user tine20admin has no admin right for Admin application');
                 
     }    
     
