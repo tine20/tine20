@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * @todo        add more functions
  */
 
 /**
@@ -95,16 +93,15 @@ class Tinebase_Acl_Roles
      * @param int $_accountId the numeric id of a user account
      * @param int $_right the right to check for
      * @return bool
-     * 
-     * @todo    implement
      */
     public function hasRight($_applicationId, $_accountId, $_right) 
     {        
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
 
+        $rightIdentifier = $this->roleRightsTable->getAdapter()->quoteIdentifier('right');
         $select = $this->roleRightsTable->select();
         $select->where("role_id IN (?)", implode(',', $roleMemberships))
-               ->where("`right` = ?", $_right);
+               ->where("$rightIdentifier = ?", $_right);
             
         if(!$row = $this->roleRightsTable->fetchRow($select)) {
             $result = false;
@@ -144,7 +141,8 @@ class Tinebase_Acl_Roles
             throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
         }
         
-        $where = $this->rolesTable->getAdapter()->quoteInto('`id` = ?', $roleId);
+        $idIdentifier = $this->rolesTable->getAdapter()->quoteIdentifier('id');
+        $where = $this->rolesTable->getAdapter()->quoteInto($idIdentifier . ' = ?', $roleId);
         if(!$row = $this->rolesTable->fetchRow($where)) {
             throw new Exception("role with id $_roleId not found");
         }
@@ -163,7 +161,8 @@ class Tinebase_Acl_Roles
      */
     public function getRoleByName($_roleName)
     {        
-        $where = $this->rolesTable->getAdapter()->quoteInto('`name` = ?', $_roleName);
+        $nameIdentifier = $this->rolesTable->getAdapter()->quoteIdentifier('name');        
+        $where = $this->rolesTable->getAdapter()->quoteInto($nameIdentifier . ' = ?', $_roleName);
 
         if(!$row = $this->rolesTable->fetchRow($where)) {
             throw new Exception("role $_roleName not found");
@@ -210,7 +209,8 @@ class Tinebase_Acl_Roles
                 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
 
-        $where = $this->rolesTable->getAdapter()->quoteInto('`id` = ?', $_role->getId());
+        $idIdentifier = $this->rolesTable->getAdapter()->quoteIdentifier('id');
+        $where = $this->rolesTable->getAdapter()->quoteInto($idIdentifier . ' = ?', $_role->getId());
         $this->rolesTable->update($data, $where); 
         
         $role = $this->getRoleById($_role->getId());
@@ -219,7 +219,6 @@ class Tinebase_Acl_Roles
     
     /**
      * Deletes roles identified by their identifiers
-     * @todo implement 
      * 
      * @param  string|array id(s) to delete
      * @return void
