@@ -56,7 +56,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         }
         
         // unset if empty
-        if(empty($contactData['id'])) {
+        if (empty($contactData['id'])) {
             unset($contactData['id']);
         }
 
@@ -72,7 +72,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
         
-        if(empty($contact->id)) {
+        if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->addContact($contact);
         } else {
             $contact = Addressbook_Controller::getInstance()->updateContact($contact);
@@ -118,9 +118,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'dir'   => $dir
         ));
         
-        if($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $pagination)) {
+        if ($rows = Addressbook_Controller::getInstance()->getContactsByOwner($owner, $filter, $pagination)) {
             $result['results']    = $rows->toArray();
-            if($start == 0 && count($result['results']) < $limit) {
+            if ($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
                 $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByOwner($owner, $filter);
@@ -200,9 +200,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             'dir'   => $dir
         ));
         
-        if($rows = Addressbook_Controller::getInstance()->getContactsByAddressbookId($addressbookId, $filter, $pagination)) {
+        if ($rows = Addressbook_Controller::getInstance()->getContactsByAddressbookId($addressbookId, $filter, $pagination)) {
             $result['results']    = $rows->toArray();
-            if($start == 0 && count($result['results']) < $limit) {
+            if ($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
                 $result['totalcount'] = Addressbook_Controller::getInstance()->getCountByAddressbookId($addressbookId, $filter);
@@ -243,9 +243,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $rows = Addressbook_Controller::getInstance()->getAllContacts($filter, $pagination);
         
-        if($rows !== false) {
+        if ($rows !== false) {
             $result['results']    = $rows->toArray();
-            if($start == 0 && count($result['results']) < $limit) {
+            if ($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
                 $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfAllContacts($filter);
@@ -286,9 +286,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $rows = Addressbook_Controller::getInstance()->getSharedContacts($filter, $pagination);
         
-        if($rows !== false) {
+        if ($rows !== false) {
             $result['results']    = $rows->toArray();
-            if($start == 0 && count($result['results']) < $limit) {
+            if ($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
                 $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfSharedContacts($filter);
@@ -329,9 +329,9 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         
         $rows = Addressbook_Controller::getInstance()->getOtherPeopleContacts($filter, $pagination);
         
-        if($rows !== false) {
+        if ($rows !== false) {
             $result['results']    = $rows->toArray();
-            if($start == 0 && count($result['results']) < $limit) {
+            if ($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);
             } else {
                 $result['totalcount'] = Addressbook_Controller::getInstance()->getCountOfOtherPeopleContacts($filter);

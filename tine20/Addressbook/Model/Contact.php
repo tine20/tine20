@@ -144,16 +144,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        if(empty($_data['n_fileas'])) {
+        if (empty($_data['n_fileas'])) {
             $_data['n_fileas'] = $_data['n_family'];
-            if(!empty($_data['n_given'])) {
+            if (!empty($_data['n_given'])) {
                 $_data['n_fileas'] .= ', ' . $_data['n_given'];
             }
         }
         
-        if(empty($_data['n_fn'])) {
+        if (empty($_data['n_fn'])) {
             $_data['n_fn'] = $_data['n_family'];
-            if(!empty($_data['n_given'])) {
+            if (!empty($_data['n_given'])) {
                 $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
             }
         }
@@ -169,8 +169,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      */
     static public function convertContactIdToInt($_contactId)
     {
-        if($_contactId instanceof Addressbook_Model_Contact) {
-            if(empty($_contactId->id)) {
+        if ($_contactId instanceof Addressbook_Model_Contact) {
+            if (empty($_contactId->id)) {
                 throw new Exception('no contact id set');
             }
             $id = (int) $_contactId->id;
@@ -178,7 +178,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             $id = (int) $_contactId;
         }
         
-        if($id === 0) {
+        if ($id === 0) {
             throw new Exception('contact id can not be 0');
         }
         

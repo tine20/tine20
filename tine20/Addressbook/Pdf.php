@@ -123,8 +123,8 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
         
         // build title
-        $title = $_contact->n_fn; 
-        $subtitle = $_contact->org_name;
+        $title = $_contact['n_fn']; 
+        $subtitle = $_contact['org_name'];
         $titleIcon = "/images/oxygen/32x32/apps/system-users.png";
         
         // add data to array
@@ -141,10 +141,11 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
                     }
                     foreach ( $keys as $key ) {
                         if ( $_contact->$key instanceof Zend_Date ) {
-                            $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), Zend_Registry::get('locale') );
+                            $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Zend_Registry::get('locale')), 
+                                Zend_Registry::get('locale'));
                         } elseif (!empty($_contact->$key) ) {
-                            if ( preg_match ("/countryname/", $key) ) {
-                                $content[] = $locale->getCountryTranslation ( $_contact->$key );
+                            if (preg_match("/countryname/", $key)) {
+                                $content[] = $locale->getCountryTranslation($_contact->$key);
                             } else {
                                 $content[] = $_contact->$key;
                             }
@@ -152,7 +153,7 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
                     }
                     if ( !empty($content) ) {
                         $glue = ( isset($fieldArray['glue']) ) ? $fieldArray['glue'] : " ";
-                        $values[] = implode($glue,$content);
+                        $values[] = implode($glue, $content);
                     }
                 }
                 if ( !empty($values) ) {
@@ -166,7 +167,6 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             }
         }     
                 
-        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE );        
-	}
-
+        return $this->generatePdf($record, $title, $subtitle, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE);
+    }
 }
