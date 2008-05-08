@@ -81,7 +81,27 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
                 
     }    
     
+    /**
+     * try to check getting applications
+     *
+     */
+    public function testGetApplications()
+    {
+        $result = Tinebase_Acl_Rights::getInstance()->getApplications($this->objects['adminAccount']->getId());
+
+        $this->assertGreaterThan(0, count($result->toArray()));
+    }    
     
+    /**
+     * try to check getting application rights
+     *
+     */
+    public function testGetRights()
+    {
+        $result = Tinebase_Acl_Rights::getInstance()->getRights('Admin', $this->objects['adminAccount']->getId());
+
+        $this->assertGreaterThan(0, count($result));
+    }    
 }		
 	
 

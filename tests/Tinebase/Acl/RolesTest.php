@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        add test for addSingleRight
  */
 
 /**
@@ -139,6 +141,35 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     }    
     
     /**
+     * try to check getting applications
+     *
+     */
+    public function testGetApplications()
+    {
+        $result = Tinebase_Acl_Roles::getInstance()->getApplications($this->objects['user']->getId());
+
+        //print_r ( $result->toArray() );
+        
+        $this->assertGreaterThan(0, count($result->toArray()));
+    }    
+
+    /**
+     * try to check getting applications
+     *
+     */
+    public function testGetApplicationRights()
+    {
+        $result = Tinebase_Acl_Roles::getInstance()->getApplicationRights(
+            $this->objects['application']->getId(), 
+            $this->objects['user']->getId()
+        );
+
+        //print_r ( $result );
+        
+        $this->assertGreaterThan(0, count($result));
+    }    
+    
+    /**
      * try to check if user with a role has right
      *
      */
@@ -167,6 +198,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteRole()
     {
+        
         // remove role members and rights first
         Tinebase_Acl_Roles::getInstance()->setRoleRights($this->objects['role']->getId(), array());
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());        
@@ -176,6 +208,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         
         Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
+        
     }    
     
 }		
