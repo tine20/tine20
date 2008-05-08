@@ -146,7 +146,7 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                    <default></default>
+                    <default>''</default>
                 </field>
                 <field>
                     <name>container_id</name>
