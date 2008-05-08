@@ -28,9 +28,9 @@ abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_A
      */
     public function getJsFilesToInclude()
     {
-        $standartFile = "{$this->_appname}/js/{$this->_appname}.js";
-        if (file_exists($standartFile)) {
-            return array($standartFile);
+        $standardFile = "{$this->_appname}/js/{$this->_appname}.js";
+        if (file_exists(dirname(__FILE__) . '/../../../' . $standardFile)) {
+            return array($standardFile);
         }
         return array();
         
@@ -43,9 +43,9 @@ abstract class Tinebase_Application_Http_Abstract extends Tinebase_Application_A
      */
     public function getCssFilesToInclude()
     {
-        $standartFile = "{$this->_appname}/css/{$this->_appname}.css";
-        if (file_exists($standartFile)) {
-            return array($standartFile);
+        $standardFile = "{$this->_appname}/css/{$this->_appname}.css";
+        if (file_exists(dirname(__FILE__) . '/../../../' . $standardFile)) {
+            return array($standardFile);
         }
         return array();
     }
