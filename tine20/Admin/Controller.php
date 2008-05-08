@@ -19,12 +19,18 @@
 class Admin_Controller
 {
     /**
+     * @var Tinebase_Account_Model_Account
+     */
+    protected $_currentAccount;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() 
-    {        
+    {
+        $this->_currentAccount = Zend_Registry::get('currentAccount');        
     }
     
     /**
@@ -322,10 +328,10 @@ class Admin_Controller
     public function setApplicationPermissions($_applicationId, array $_rights = array ())
     {   
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Admin_Acl_Rights::MANAGE_APPS) && 
              !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Tinebase_Acl_Rights::ADMIN) ) {
             throw new Exception('You are not allowed to change application permissions!');
         }        
@@ -358,7 +364,7 @@ class Admin_Controller
     {
         $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
 
-        /*if (!Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+        /*if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read access to contact denied');
         }*/
         
@@ -476,7 +482,9 @@ class Admin_Controller
     public function AddTag(Tinebase_Tags_Model_FullTag $_tag)
     {
         $_tag->type = Tinebase_Tags_Model_Tag::TYPE_SHARED;
-        
+        if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', $this->_currentAccount->getId(), Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
+                throw new Exception('Your are not allowed to create a shared tag!');
+        }
         $newTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
 
         $_tag->rights->tag_id = $newTag->getId();
@@ -494,6 +502,9 @@ class Admin_Controller
      */
     public function UpdateTag(Tinebase_Tags_Model_FullTag $_tag)
     {
+        if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', $this->_currentAccount->getId(), Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
+                throw new Exception('Your are not allowed to create a shared tag!');
+        }
         Tinebase_Tags::getInstance()->updateTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
         
         $_tag->rights->tag_id = $_tag->getId();
@@ -569,10 +580,10 @@ class Admin_Controller
     public function AddRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Admin_Acl_Rights::MANAGE_ROLES) && 
              !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Tinebase_Acl_Rights::ADMIN) ) {
             throw new Exception('You are not allowed to manage roles!');
         }        
@@ -595,10 +606,10 @@ class Admin_Controller
     public function UpdateRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Admin_Acl_Rights::MANAGE_ROLES) && 
              !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Tinebase_Acl_Rights::ADMIN) ) {
             throw new Exception('You are not allowed to manage roles!');
         }        
@@ -619,10 +630,10 @@ class Admin_Controller
     public function deleteRoles($_roleIds)
     {        
         if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Admin_Acl_Rights::MANAGE_ROLES) && 
              !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                Zend_Registry::get('currentAccount')->getId(), 
+                $this->_currentAccount->getId(), 
                 Tinebase_Acl_Rights::ADMIN) ) {
             throw new Exception('You are not allowed to manage roles!');
         }        
