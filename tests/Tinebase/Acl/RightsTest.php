@@ -71,8 +71,8 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     public function testHasRight()
     {
-        $result = Tinebase_Acl_Roles::getInstance()->hasRight(
-            Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(), 
+        $result = Tinebase_Acl_Rights::getInstance()->hasRight(
+            'Admin', 
             $this->objects['adminAccount']->getId(), 
             Tinebase_Acl_Rights::ADMIN
         );
