@@ -49,7 +49,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        
+        $this->objects['adminAccount'] = Tinebase_Account::getInstance()->getAccountByLoginName('tine20admin');
         return;        
     }
 
@@ -64,13 +64,19 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to check if user with has right
+     * try to check if admin user has admin right for admin application
      *
-     * @todo    create role and add rights for application first
      */
     public function testHasRight()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $result = Tinebase_Acl_Roles::getInstance()->hasRight(
+            Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(), 
+            $this->objects['adminAccount']->getId(), 
+            Tinebase_Acl_Rights::ADMIN
+        );
+        
+        $this->assertTrue($result);
+                
     }    
     
     

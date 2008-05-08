@@ -61,6 +61,11 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
+        $this->objects['role'] = new Tinebase_Acl_Model_Role(array(
+            'id'                    => 10,
+            'name'                  => 'phpunitrole',
+            'description'           => 'test role for phpunit',
+        ));
 
         // add account for group / role member tests
         try {
@@ -85,17 +90,92 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to add a role
+     *
+     */
+    public function testCreateRole()
+    {
+        $role = Tinebase_Acl_Roles::getInstance()->createRole($this->objects['role']);
+        
+        $this->assertEquals($role->getId(), $this->objects['role']->getId());
+    }    
+    
+    /**
+     * try to add a role membership
+     *
+     */
+    public function testSetRoleMember()
+    {
+        $member = array(
+            array(
+                "type"  => 'user',
+                "id"    => $this->objects['user']->getId(),
+            )
+        );
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), $member);
+        
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->objects['role']->getId());
+        
+        $this->assertGreaterThan(0, count($members));
+    }    
+    
+    /**
+     * try to add a role right
+     *
+     */
+    public function testSetRoleRight()
+    {
+        $right = array(
+            array(
+                "application_id"    => $this->objects['application']->getId(),
+                "right"             => Tinebase_Acl_Rights::RUN,
+            )
+        );
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($this->objects['role']->getId(), $right);
+        
+        $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($this->objects['role']->getId());
+        
+        $this->assertGreaterThan(0, count($rights));
+    }    
+    
+    /**
      * try to check if user with a role has right
      *
-     * @todo    create role and add rights for application first
      */
     public function testHasRight()
     {
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
             $this->objects['application']->getId(), 
             $this->objects['user']->getId(), 
+            Tinebase_Acl_Rights::RUN
+        );
+        
+        $this->assertTrue($result);
+        
+        $result = Tinebase_Acl_Roles::getInstance()->hasRight(
+            $this->objects['application']->getId(), 
+            $this->objects['user']->getId(), 
             Tinebase_Acl_Rights::ADMIN
         );
+
+        $this->assertFalse($result);
+    }    
+
+    /**
+     * try to delete a role
+     *
+     */
+    public function testDeleteRole()
+    {
+        // remove role members and rights first
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($this->objects['role']->getId(), array());
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());        
+        
+        Tinebase_Acl_Roles::getInstance()->deleteRoles($this->objects['role']->getId());
+                      
+        $this->setExpectedException('Exception');
+        
+        Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
     }    
     
 }		
