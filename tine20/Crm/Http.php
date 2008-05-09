@@ -81,7 +81,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                 }
             }
 
-            $no_links = '1';
+            $leadData['tasks'] = array();
             $task_links = $controller->getLinks($_leadId, 'tasks');
             foreach($task_links as $task_link) {
                 try {
@@ -107,15 +107,10 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                                     
                     
                     $leadData['tasks'][] = $_task;  
-                    $no_links = '0';
                     
                 } catch (Exception $e) {
                     // do nothing
                 }
-            }
-            
-            if($no_links == '1') {
-                 $leadData['tasks'] = array();   
             }
             
             $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);

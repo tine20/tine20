@@ -1109,6 +1109,9 @@ Tine.Crm.LeadEditDialog = function() {
      *
      */
     var _displayDialog = function(_leadData) {
+    	
+    	//console.log ( _leadData );
+    	
         Ext.QuickTips.init();
 
         // turn on validation errors beside the field globally
@@ -1224,6 +1227,8 @@ Tine.Crm.LeadEditDialog = function() {
         });
 
         var st_activities = Tine.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
+        
+        //console.log ( st_activities );
      
         var combo_probability =  new Ext.form.ComboBox({
             fieldLabel:'probability', 
@@ -1631,7 +1636,8 @@ Tine.Crm.LeadEditDialog = function() {
             enableColLock:false,
             loadMask: true,
             autoExpandColumn: 'description',
-            border: false
+            border: false,
+            height: 600, 
         });               
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
@@ -1800,6 +1806,7 @@ Tine.Crm.LeadEditDialog = function() {
             disabled: false,
             layoutOnTabChange:true,            
             deferredRender:false,
+            anchor:'100% 100%',
             border:false,
             items:[
                 gridActivities                  
