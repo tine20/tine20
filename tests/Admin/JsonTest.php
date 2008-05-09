@@ -468,8 +468,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $encodedData = Zend_Json::encode($this->objects['role']->toArray());
         $encodedRoleMembers = Zend_Json::encode(array(
             array(
-                "id"    => $account->getId(),
-                "type"  => "user",
+                "account_id"    => $account->getId(),
+                "account_type"  => "user",
                 "name"  => $account->accountDisplayName,
             )
         ));
