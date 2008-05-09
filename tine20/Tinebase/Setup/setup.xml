@@ -1494,7 +1494,63 @@
                     </reference>
                 </index>
             </declaration>
-        </table>     
+        </table>
+        
+        <table>
+            <name>temp_files</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>session_id</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>path</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>error</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>size</name>
+                    <type>integer</type>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>
+                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table> 
 
     </tables>
 </application>

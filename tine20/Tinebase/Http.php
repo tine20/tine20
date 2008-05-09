@@ -76,12 +76,14 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/SearchField.js',
             'Tinebase/js/ux/grid/CheckColumn.js',
             'Tinebase/js/ux/grid/QuickaddGridPanel.js',
+            'Tinebase/js/ux/file/Uploader.js',
             'Tinebase/js/ux/form/IconTextField.js',
             'Tinebase/js/ux/form/MirrorTextField.js',
             'Tinebase/js/ux/form/ColumnFormPanel.js',
             'Tinebase/js/ux/form/ExpandFieldSet.js',
             'Tinebase/js/ux/form/ClearableComboBox.js',
             'Tinebase/js/ux/form/ClearableDateField.js',
+            'Tinebase/js/ux/form/BrowseButton.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/DatepickerRange.js',
             // Tine 2.0 specific widgets
@@ -204,6 +206,63 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 		
 	}
 
+	/**
+	 * receives file uploads and stores it in the file_uploads db
+	 * 
+	 * @todo: move db storage into seperate tmp_file class
+	 */
+	public function uploadTempFile()
+	{
+	    $uploadedFile = $_FILES['file'];
+	    
+	    $path = tempnam('/tmp', 'tine_tempfile_');
+	    if (!$path) {
+	        throw new Exception('Can not upload file, tempnam could not return a valid filename!');
+	    }
+	    if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
+	        throw new Exception('No valid upload file found!');
+	    }
+	    
+	    $id = Tinebase_Model_TempFile::generateUID();
+	    error_log($id);
+	    $tempFile = new Tinebase_Model_TempFile(array(
+	       'id'          => $id,
+           'session_id'  => session_id(),
+           'time'        => Zend_Date::now()->getIso(),
+           'path'        => $path,
+           'name'        => $uploadedFile['name'],
+           'type'        => $uploadedFile['type'],
+           'error'       => $uploadedFile['error'],
+           'size'        => $uploadedFile['size'],
+	    ));
+	    
+	    $db = Zend_Registry::get('dbAdapter');
+	    $db->insert(SQL_TABLE_PREFIX . 'temp_files', $tempFile->toArray());
+	    
+	    die(Zend_Json::encode(array(
+	       'status'   => 'success',
+	       'tempFile' => $tempFile->toArray(),
+	    )));
+	}
+	
+	/**
+	 * downloads a tempFile
+	 * 
+	 * @param  string $id
+	 */
+	public function downloadTempImage($id)//, $width, $height, $preserveRatio)
+	{
+	    $db = Zend_Registry::get('dbAdapter');
+	    $select = $db->select()
+	       ->from(SQL_TABLE_PREFIX . 'temp_files')
+	       ->where($db->quoteInto('id = ?', $id))
+	       ->where($db->quoteInto('session_id = ?', session_id()));
+        $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+        
+        header('Content-Type: ' . $tempFile['type']);
+        die(file_get_contents($tempFile['path']));
+	}
+	
 	/**
 	 * returns an array with all css and js files which needs to be included
 	 * all over Tine 2.0
