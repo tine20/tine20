@@ -279,7 +279,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $select = $this->groupsTable->select();
         
         if($_filter !== NULL) {
-            $select->where('`name` LIKE ?', '%' . $_filter . '%');
+            $select->where('name LIKE ?', '%' . $_filter . '%');
         }
         if($_sort !== NULL) {
             $select->order("$_sort $_dir");
