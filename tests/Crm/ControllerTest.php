@@ -217,7 +217,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         }
         
         // link task
-        print_r($task->toArray());
+        //print_r($task->toArray());
         Crm_Controller::getInstance()->setLinkedTasks($this->objects['initialLead']->getId(), array($task->getId()));
         
         // get linked tasks
