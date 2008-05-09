@@ -12,6 +12,11 @@
 
 class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 {
+    /**
+     * update function 0
+     * has no real functionality, only shows how its done
+     *
+     */    
     public function update_0()
     {
         // just show how it works
@@ -46,6 +51,11 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->dropTable('test_table');
     }
 
+    /**
+     * update function 1
+     * adds application rights
+     *
+     */    
     public function update_1()
     {
 
@@ -140,5 +150,283 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setTableVersion('application_rights', '2');
         $this->setApplicationVersion('Tinebase', '0.2');
+    }
+    
+    /**
+     * update function 2
+     * adds roles (tables and user/admin role)
+     *
+     * @todo    get names/ids for user/admin groups from new config table
+     * @todo    remove application_rights tables?
+     */    
+    function update_2()
+    {
+        /************ create roles tables **************/
+        
+        $tableDefinitions = array( 
+            '<table>
+                <name>roles</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>description</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>false</notnull>
+                    </field>                
+                    <field>
+                        <name>created_by</name>
+                        <type>integer</type>
+                    </field>
+                    <field>
+                        <name>creation_time</name>
+                        <type>datetime</type>
+                    </field> 
+                    <field>
+                        <name>last_modified_by</name>
+                        <type>integer</type>
+                    </field>
+                    <field>
+                        <name>last_modified_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>                
+                    <index>
+                        <name>name</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>name</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>',
+            '<table>
+                <name>role_rights</name>
+                <version>1</version>
+                <declaration>
+                   <field>
+                        <name>id</name>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>role_id</name>
+                        <type>integer</type>
+                        <unsigned>true</unsigned>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                        <type>integer</type>
+                        <length>11</length>
+                        <unsigned>true</unsigned>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>right</name>
+                        <type>text</type>
+                        <length>64</length>
+                        <notnull>true</notnull>
+                    </field>
+                   <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>role_id</name>
+                        <field>
+                            <name>role_id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>application_id</name>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>role_rights::role_id--roles::id</name>
+                        <field>
+                            <name>role_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>roles</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                    <index>
+                        <name>role_rights::application_id--applications::id</name>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>applications</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>',        
+            '<table>
+                <name>role_accounts</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>role_id</name>
+                        <type>integer</type>
+                        <unsigned>true</unsigned>
+                        <notnull>true</notnull>
+                    </field>
+                     <field>
+                        <name>account_type</name>
+                        <type>enum</type>
+                        <value>anyone</value>
+                        <value>user</value>
+                        <value>group</value>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                        <type>integer</type>
+                        <unsigned>true</unsigned>
+                        <notnull>false</notnull>
+                    </field>                
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>account_id-account_type-role_id</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>role_id</name>
+                        </field>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <field>
+                            <name>account_type</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>role_accounts::role_id--roles::id</name>
+                        <field>
+                            <name>role_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>roles</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>'     
+        );
+
+        foreach ( $tableDefinitions as $tableDefinition ) {                    
+            $table = Setup_Backend_Schema_Index_Factory::factory('String', $tableDefinition); 
+            $this->_backend->createTable($table);        
+        }
+        
+        /************ create roles ***************/
+        
+        // get admin and user groups
+        $adminGroup = Tinebase_Group::getInstance()->getGroupByName('Administrators');
+        $userGRoup = Tinebase_Group::getInstance()->getGroupByName('Users');
+        
+        # add roles and add the groups to the roles
+        $adminRole = new Tinebase_Acl_Model_Role(array(
+            'name'                  => 'admin role',
+            'description'           => 'admin role for tine. this role has all rights per default.',
+        ));
+        $adminRole = Tinebase_Acl_Roles::getInstance()->createRole($adminRole);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
+            array(
+                'id'    => $adminGroup->getId(),
+                'type'  => 'group', 
+            )
+        ));
+        
+        $userRole = new Tinebase_Acl_Model_Role(array(
+            'name'                  => 'user role',
+            'description'           => 'userrole for tine. this role has only the run rights for all applications per default.',
+        ));
+        $userRole = Tinebase_Acl_Roles::getInstance()->createRole($userRole);
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
+            array(
+                'id'    => $userGroup->getId(),
+                'type'  => 'group', 
+            )
+        ));
+        
+        # enable the applications for the user group/role
+        # give all rights to the admin group/role for all applications
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        foreach ($applications as $application) {
+            
+            if ( $application->name  !== 'Admin' ) {
+
+                /***** All applications except Admin *****/
+                
+                // run right for user role
+                Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                    $userRole->getId(), 
+                    $application->getId(), 
+                    Tinebase_Acl_Rights::RUN
+                );
+                
+                // all rights for admin role
+                $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+                foreach ( $allRights as $right ) {
+                    Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                        $adminRole->getId(), 
+                        $application->getId(), 
+                        $right
+                    );
+                }                                
+            } else {
+
+                /***** Admin application *****/
+
+                // all rights for admin role
+                $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+                foreach ( $allRights as $right ) {
+                    Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                        $adminRole->getId(), 
+                        $application->getId(), 
+                        $right
+                    );
+                }                                                
+            }
+        } // end foreach applications               
+
+        $this->setApplicationVersion('Tinebase', '0.3');
+        
     }
 }
