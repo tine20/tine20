@@ -70,8 +70,8 @@ class Tinebase_Application
         if($applicationId != $_applicationId) {
             throw new InvalidArgumentException('$_applicationId must be integer');
         }
-        
-        $row = $this->applicationTable->fetchRow('`id` = ' . $applicationId);
+        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('id');
+        $row = $this->applicationTable->fetchRow( $colName . ' = ' . $applicationId);
         
         $result = new Tinebase_Model_Application($row->toArray());
         
@@ -91,8 +91,8 @@ class Tinebase_Application
         if(empty($_applicationName)) {
             throw new InvalidArgumentException('$_applicationName can not be empty');
         }
-        
-        $where = $this->applicationTable->getAdapter()->quoteInto('`name` = ?', $_applicationName);
+        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('name');
+        $where = $this->applicationTable->getAdapter()->quoteInto($colName . ' = ?', $_applicationName);
         if(!$row = $this->applicationTable->fetchRow($where)) {
             throw new Exception("application $_applicationName not found");
         }
@@ -116,7 +116,8 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $where[] = $this->applicationTable->getAdapter()->quoteInto('`name` LIKE ?', '%' . $_filter . '%');
+            $colName = $this->applicationTable->getAdapter()->quoteIdentifier('name');
+            $where[] = $this->applicationTable->getAdapter()->quoteInto($colName . ' LIKE ?', '%' . $_filter . '%');
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -137,7 +138,8 @@ class Tinebase_Application
         if($_status !== Tinebase_Application::ENABLED && $_status !== Tinebase_Application::DISABLED) {
             throw new InvalidArgumentException('$_status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
-        $where[] = $this->applicationTable->getAdapter()->quoteInto('`status` = ?', $_status);
+        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('status');
+        $where[] = $this->applicationTable->getAdapter()->quoteInto($colName . '= ?', $_status);
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
@@ -157,7 +159,8 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $where[] = $this->applicationTable->getAdapter()->quoteInto('`name` LIKE ?', '%' . $_filter . '%');
+            $colName = $this->applicationTable->getAdapter()->quoteIdentifier('name');
+            $where[] = $this->applicationTable->getAdapter()->quoteInto($colName . ' LIKE ?', '%' . $_filter . '%');
         }
         $count = $this->applicationTable->getTotalCount($where);
         
@@ -175,9 +178,9 @@ class Tinebase_Application
         if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
             throw new OutOfRangeException('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
-        
+        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('id');
         $where = array(
-            $this->applicationTable->getAdapter()->quoteInto('`id` IN (?)', $_applicationIds)
+            $this->applicationTable->getAdapter()->quoteInto($colName . ' IN (?)', $_applicationIds)
         );
         
         $data = array(
@@ -198,13 +201,20 @@ class Tinebase_Application
     public function addApplication(Tinebase_Model_Application $_application)
     {
         $data = $_application->toArray();
-        unset($data['id']);
+      //  unset($data['id']);
+      // $data['id'] = 1;
         unset($data['tables']);
+        print_r($data);
         
-        $applicationId = $this->applicationTable->insert($data);
-        
-        $_application->id = $applicationId;
-        
+        //unset($data['order']);
+        //unset($data['version']);
+        //$data['range'] = 99;
+
+        //$data['version'] = 2;
+        $_application->id = $this->applicationTable->insert($data);
+        if ($_application->id != ((int) $_application->id  )) {
+            $_application->id = $this->applicationTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . '_applications_seq');
+        }
         return $_application;
     }
     
