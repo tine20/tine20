@@ -385,16 +385,16 @@ class Tinebase_Acl_Roles
                 
         $validTypes = array( 'user', 'group', 'anyone');
         foreach ( $_roleMembers as $member ) {
-            if ( !in_array($member["account_type"], $validTypes) ) {
+            if ( !in_array($member['type'], $validTypes) ) {
                 throw new InvalidArgumentException('type must be one of ' . 
                     implode(', ', $validTypes) . ' (values given: ' . 
                     print_r($member, true) . ')');
             }
             
             $data = array(
-                "role_id"       => $roleId,
-                "account_type"  => $member["account_type"],
-                "account_id"    => $member["account_id"],
+                'role_id'       => $roleId,
+                'account_type'  => $member['type'],
+                'account_id'    => $member['id'],
             );
             $this->_roleMembersTable->insert($data); 
         }
@@ -422,8 +422,8 @@ class Tinebase_Acl_Roles
         
         foreach ($rows as $right) {
             $rights[] = array ( 
-                "application_id"    => $right['application_id'], 
-                "right"             => $right['right']
+                'application_id'    => $right['application_id'], 
+                'right'             => $right['right']
             );
         }
         return $rights;
@@ -448,9 +448,9 @@ class Tinebase_Acl_Roles
                 
         foreach ( $_roleRights as $right ) {
             $data = array(
-                "role_id"           => $roleId,
-                "application_id"    => $right["application_id"],
-                "right"             => $right["right"],
+                'role_id'           => $roleId,
+                'application_id'    => $right['application_id'],
+                'right'             => $right['right'],
             );
             $this->_roleRightsTable->insert($data); 
         }
@@ -469,7 +469,7 @@ class Tinebase_Acl_Roles
         $rightIdentifier = $this->_roleRightsTable->getAdapter()->quoteIdentifier('right');
         $select = $this->_roleRightsTable->select();
         $select->where("role_id = ?", $_roleId)
-               ->where("$rightIdentifier = ?", $_right)
+               ->where($rightIdentifier . "= ?", $_right)
                ->where("application_id = ?", $_applicationId);
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {                        

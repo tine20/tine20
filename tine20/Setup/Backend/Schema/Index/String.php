@@ -26,4 +26,5 @@ class Setup_Backend_Schema_Index_String extends Setup_Backend_Schema_Index_Abstr
             $this->$key = $val;
         }
     }
+    protected function _setIndex($_declaration) {}
 }

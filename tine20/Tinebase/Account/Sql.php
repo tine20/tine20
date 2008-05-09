@@ -425,7 +425,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountData = array(
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
-            'expires_at'        => "ber",//($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
+            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
             'primary_group_id'  => $_account->accountPrimaryGroup,
         );
         
