@@ -1312,9 +1312,6 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -1369,9 +1366,6 @@
             <declaration>
                <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -1445,9 +1439,6 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
