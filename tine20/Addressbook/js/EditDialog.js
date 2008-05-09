@@ -5,6 +5,11 @@
  * @todo make country selection a widget
  */
 Tine.Addressbook.ContactEditDialog.getEditForm = function() {
+    var uploadImage = function(bb) {
+        //var inp = bb.detachInputFile();
+        //console.log(bb);
+    };
+    
     var savePath = {
         layout: 'column',
         autoHeight: true,
@@ -139,14 +144,16 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                                 {
                                     columnWidth: .4,
                                     fieldLabel: 'Job Title',
-                                     name: 'title'
+                                    name: 'title'
                                 }
                             ]
                         ]
                     },
                     {
                         width: 90,
-                        html: '<img src="images/empty_photo.jpg" width="90px">'
+                        items: new Ext.ux.form.ImageField({
+                            name: 'jpegimage',
+                        })
                     }
                 ]
             },
