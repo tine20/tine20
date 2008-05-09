@@ -109,7 +109,7 @@ class Tinebase_Acl_Roles
         $select->where("role_id IN (?)", $roleMemberships)
                ->where("$rightIdentifier = ?", $_right);
                
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
             $result = false;
@@ -144,7 +144,7 @@ class Tinebase_Acl_Roles
             ->where(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED)
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         
@@ -160,7 +160,7 @@ class Tinebase_Acl_Roles
      * @param int $_accountId the numeric account id
      * @return array list of rights
      * 
-     * @todo    add right group by to statement
+     * @todo    add right group by to statement if possible or remove duplicates in result array
      */
     public function getApplicationRights($_applicationId, $_accountId) 
     {
@@ -175,7 +175,7 @@ class Tinebase_Acl_Roles
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             //->group(SQL_TABLE_PREFIX . 'role_rights.right');
             
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
             
         $stmt = $this->_db->query($select);
 
@@ -352,7 +352,7 @@ class Tinebase_Acl_Roles
         $select->where("account_id = ? and account_type='user'", $_accountId)
             ->orwhere("account_id IN (?) and account_type='group'", $groupMemberships);
             
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
