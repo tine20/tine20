@@ -1742,7 +1742,7 @@ Tine.Admin.Accounts.EditDialog = function() {
 	                    method: 'Admin.saveAccount', 
 	                    accountData: Ext.util.JSON.encode(this.accountRecord.data),
 	                    password: form.findField('accountPassword').getValue(),
-	                    password2: form.findField('accountPassword2').getValue()                        
+	                    passwordRepeat: form.findField('accountPassword2').getValue()                        
 	                },
 	                success: function(_result, _request) {
 	                	if(window.opener.Tine.Admin.Accounts) {
