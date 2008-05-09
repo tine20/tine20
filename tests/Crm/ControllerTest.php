@@ -190,6 +190,45 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_Record_RecordSet', $products);
     }
+
+    /**
+     * try to set / get linked tasks
+     *
+     */
+    public function testLinkedTasks()
+    {
+        $tasksBackend = new Tasks_Backend_Sql();
+        
+        // create test task
+        $task = new Tasks_Model_Task(array(
+            // tine record fields
+            'id'                   => '90a75021e353685aa9a06e67a7c0b558d0acae32',
+            'container_id'         => 5,
+            'created_by'           => 6,
+            'creation_time'        => Zend_Date::now(),
+            'percent'              => 70,
+            'due'                  => Zend_Date::now()->addMonth(1),
+            'summary'              => 'our fist test task',        
+        ));
+        try {
+            $task = $tasksBackend->getTask($task->getId());
+        } catch ( Exception $e ) {
+            $task = $tasksBackend->createTask($task);
+        }
+        
+        // link task
+        print_r($task->toArray());
+        Crm_Controller::getInstance()->setLinkedTasks($this->objects['initialLead']->getId(), array($task->getId()));
+        
+        // get linked tasks
+        $linkedTasks = Crm_Controller::getInstance()->getLinks($this->objects['initialLead']->getId(), 'tasks');
+        
+        //print_r($linkedTasks);
+        
+        $this->assertGreaterThan(0, count($linkedTasks));
+        $this->assertEquals($task->getId(), $linkedTasks[0]['recordId']);
+        
+    }
     
     /**
      * try to delete a lead
