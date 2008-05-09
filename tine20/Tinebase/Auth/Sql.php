@@ -78,7 +78,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
         $accountData['last_password_change'] = Zend_Date::now()->getIso();
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('login_name = ?', $_loginName)
+            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('login_name') . ' = ?', $_loginName)
         );
         
         $result = $accountsTable->update($accountData, $where);

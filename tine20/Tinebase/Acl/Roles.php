@@ -105,9 +105,11 @@ class Tinebase_Acl_Roles
         }
 
         $rightIdentifier = $this->_roleRightsTable->getAdapter()->quoteIdentifier('right');
+		$colRolId = $this->_roleRightsTable->getAdapter()->quoteIdentifier('role_id');
+		
         $select = $this->_roleRightsTable->select();
-        $select->where("role_id IN (?)", $roleMemberships)
-               ->where("$rightIdentifier = ?", $_right);
+        $select->where($colRolId .' IN (?)', $roleMemberships)
+               ->where($rightIdentifier . ' = ?', $_right);
                
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
             
@@ -135,14 +137,22 @@ class Tinebase_Acl_Roles
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
+		$tableRoleRights = $this->_db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights');
+		$tableApplications = $this->_db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'applications');
+		$colApplicationId = $this->_db->getAdapter()->quoteIdentifier('application_id');
+		$colId = $this->_db->getAdapter()->quoteIdentifier('id');
+		$colRoleId = $this->_db->getAdapter()->quoteIdentifier('role_id');
+		$colRight = $this->_db->getAdapter()->quoteIdentifier('right');
+		$colStatus = $this->_db->getAdapter()->quoteIdentifier('status');
+		
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'role_rights', array())
-            ->join(SQL_TABLE_PREFIX . 'applications', 
-                SQL_TABLE_PREFIX . 'role_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')            
-            ->where("role_id IN (?)", $roleMemberships)
-            ->where(SQL_TABLE_PREFIX . 'role_rights.right = ?', Tinebase_Acl_Rights::RUN)
-            ->where(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED)
-            ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
+            ->from($tableRoleRights, array())
+            ->join($tableApplications, 
+                $tableRoleRights . '.' . $colApplicationId . ' = ' . $tableApplications . '.' . $colId)            
+            ->where($colRoleId .' IN (?)', $roleMemberships)
+            ->where($tableRoleRights . '.' . $colRight .' = ?', Tinebase_Acl_Rights::RUN)
+            ->where($tableApplications . '.' . $colStatus . ' = ?', Tinebase_Application::ENABLED)
+            ->group($tableRoleRights . '.' . $colApplicationId );
             
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
@@ -215,14 +225,14 @@ class Tinebase_Acl_Roles
     public function getRoleById($_roleId)
     {
         $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId > 0) {
+        if ($roleId != $_roleId && $roleId <= 0) {
             throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
         }
         
         $idIdentifier = $this->_rolesTable->getAdapter()->quoteIdentifier('id');
         $where = $this->_rolesTable->getAdapter()->quoteInto($idIdentifier . ' = ?', $roleId);
         if (!$row = $this->_rolesTable->fetchRow($where)) {
-            throw new Exception("role with id $_roleId not found");
+            throw new Exception("role with id $roleId not found");
         }
         
         $result = new Tinebase_Acl_Model_Role($row->toArray());
@@ -266,6 +276,10 @@ class Tinebase_Acl_Roles
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
         $newId = $this->_rolesTable->insert($data); 
+		
+		if ($newId === NULL) {
+           $newId = $this->_rolesTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'accounts_seq');
+        }
         
         $role = $this->getRoleById($newId);
         return $role;
@@ -380,7 +394,7 @@ class Tinebase_Acl_Roles
         }
         
         // remove old members
-        $where = Zend_Registry::get('dbAdapter')->quoteInto('role_id = ?', $roleId);
+        $where = Zend_Registry::get('dbAdapter')->quoteInto(Zend_Registry::get('dbAdapter')->quoteIdentifier('role_id') . ' = ?', $roleId);
         $this->_roleMembersTable->delete($where);
                 
         $validTypes = array( 'user', 'group', 'anyone');
@@ -466,17 +480,19 @@ class Tinebase_Acl_Roles
     public function addSingleRight($_roleId, $_applicationId, $_right)
     {        
         // check if already in
+        $colRoleId = $this->_roleRightsTable->getAdapter()->quoteIdentifier('role_id');
         $rightIdentifier = $this->_roleRightsTable->getAdapter()->quoteIdentifier('right');
+        $colApplicationId = $this->_roleRightsTable->getAdapter()->quoteIdentifier('application_id');
         $select = $this->_roleRightsTable->select();
-        $select->where("role_id = ?", $_roleId)
-               ->where($rightIdentifier . "= ?", $_right)
-               ->where("application_id = ?", $_applicationId);
+        $select->where($colRoleId . ' = ?', $_roleId)
+               ->where($rightIdentifier . ' = ?', $_right)
+               ->where($colApplicationId  . ' = ?', $_applicationId);
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {                        
             $data = array(
-                "role_id"           => $_roleId,
-                "application_id"    => $_applicationId,
-                "right"             => $_right,
+                'role_id'           => $_roleId,
+                'application_id'    => $_applicationId,
+                'right'             => $_right,
             );
             $this->_roleRightsTable->insert($data); 
         }

@@ -126,6 +126,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
      */
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
+//		$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
             ->where(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName);
 
@@ -162,9 +163,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        
+        $db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId);
+            ->where($db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts') . '.' .$db->quoteIdentifier('id') . ' = ?', $accountId);
 
         $stmt = $select->query();
 
@@ -216,8 +217,10 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
                 )
             )
             ->join(
-                SQL_TABLE_PREFIX . 'addressbook',
-                SQL_TABLE_PREFIX . 'accounts.id = ' . SQL_TABLE_PREFIX . 'addressbook.account_id',
+               SQL_TABLE_PREFIX . 'addressbook',
+              $db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts'). '.' . $db->quoteIdentifier('id') . ' = ' 
+				. $db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook') . '.' .
+				$db->quoteIdentifier('account_id'), 
                 array(
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
