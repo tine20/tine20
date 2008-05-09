@@ -27,9 +27,11 @@ require_once('Interface.php');
  * 
  * @package     Tasks
  * @subpackage  Backend
- * @todo searchTasks: filter..., pageing
- * @todo Use of spechial Exceptions
- * @todo remove current account from sql backend?
+ * 
+ * @todo    searchTasks: filter..., pageing
+ * @todo    Use of special Exceptions
+ * @todo    remove current account from sql backend?
+ * @todo    add function for complete removal of tasks?
  */
 class Tasks_Backend_Sql implements Tasks_Backend_Interface
 {
