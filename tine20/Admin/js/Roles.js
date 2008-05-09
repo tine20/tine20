@@ -319,13 +319,6 @@ Tine.Admin.Roles.EditDialog = {
             }
         });
         
-        /*
-        if ( result == 0 ) {
-        	console.log (applicationId);
-            console.log (right);
-        }
-        */
-        
         return result;
     },  
     
@@ -377,11 +370,11 @@ Tine.Admin.Roles.EditDialog = {
 
                 Ext.MessageBox.wait('Please wait', 'Updating Memberships');
                 
-                var roleMembers = [];
-                var dataStore = roleGrid.getStore();
+                //var dataStore = roleGrid.getStore();
                 
-                dataStore.each(function(_record){
-                    //roleMembers.push(_record.data.accountId);
+                var roleMembers = [];
+                var membersStore = Ext.StoreMgr.lookup('RoleMembersStore');
+                membersStore.each(function(_record){
                 	roleMembers.push(_record.data);
                 });
 
@@ -578,58 +571,36 @@ Tine.Admin.Roles.EditDialog = {
     	//console.log ( _roleMembers );
         //console.log ( _roleRights );
 
-        /******* actions ********/
-
-    	this.actions = {
-            addAccount: new Ext.Action({
-                text: 'add account',
-                disabled: true,
-                scope: this,
-                handler: this.handlers.addAccount,
-                iconCls: 'action_addContact'
-            }),
-            removeAccount: new Ext.Action({
-                text: 'remove account',
-                disabled: true,
-                scope: this,
-                handler: this.handlers.removeAccount,
-                iconCls: 'action_deleteContact'
-            })
-        };
-
-        /******* account picker panel ********/
-
-        var accountPicker =  new Tine.widgets.account.PickerPanel ({            
-            enableBbar: true,
-            height: 300,
-            selectType: 'both',
-            selectTypeDefault: 'group', 
-        });
-                
-        accountPicker.on('accountdblclick', function(account){
-            this.account = account;
-            this.handlers.addAccount(account);
-        }, this);
-
-
         /******* load role members data store ********/
 
         this.membersDataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             //id: 'id',
-            fields: Tine.Tinebase.Model.Account
+            //fields: Tine.Tinebase.Model.Account
+            fields: [ 'account_name', 'account_id', 'account_type' ]
         });
 
-        Ext.StoreMgr.add('RoleMembersStore', this.membersDataStore);
-        
-        this.membersDataStore.setDefaultSort('name', 'asc');        
+        Ext.StoreMgr.add('RoleMembersStore', this.membersDataStore);        
+        // this.membersDataStore.setDefaultSort('account_name', 'asc');        
         
         if (_roleMembers.length === 0) {
-        	this.membersDataStore.removeAll();
+            this.membersDataStore.removeAll();
         } else {
             this.membersDataStore.loadData( _roleMembers );
         }
+        
+        /******* account picker + members grid panel ********/
+ 
+        var membersPanel = new Tine.widgets.account.ConfigGrid({
+            //height: 300,
+            accountPickerType: 'both',
+            selectTypeDefault: 'group', 
+            accountListTitle: 'Role members',
+            configStore: this.membersDataStore,
+            hasAccountPrefix: true,
+            configColumns: []
+        });        
 
         /******* load role rights data store ********/
 
@@ -649,54 +620,6 @@ Tine.Admin.Roles.EditDialog = {
             this.rightsDataStore.loadData( _roleRights );
         }
         
-        /******* column model ********/
-
-        var columnModel = new Ext.grid.ColumnModel([{ 
-        	resizable: true, id: 'name', header: 'Name', dataIndex: 'name', width: 30 
-        }]);
-
-        /******* row selection model ********/
-
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.removeAccount.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.removeAccount.setDisabled(false);
-            }
-        }, this);
-
-        /******* bottom toolbar ********/
-
-        var membersBottomToolbar = new Ext.Toolbar({
-            items: [
-                this.actions.removeAccount
-            ]
-        });
-
-        /******* role members grid ********/
- 
-    	var roleMembersGridPanel = new Ext.grid.EditorGridPanel({
-        	id: 'roleMembersGrid',
-        	title: 'Role Members',
-        	height: 300,
-            store: this.membersDataStore,
-            cm: columnModel,
-            autoSizeColumns: false,
-            selModel: rowSelectionModel,
-            enableColLock:false,
-            loadMask: true,
-            //autoExpandColumn: 'accountLoginName',
-            autoExpandColumn: 'name',
-            bbar: membersBottomToolbar,
-            border: true
-        }); 
-        
         /******* rights tree ********/
         
         var rightsTreePanel = this.getRightsTree(_allRights);
@@ -705,13 +628,13 @@ Tine.Admin.Roles.EditDialog = {
     	
         var tabPanelMembers = {
             title:'Members',
-            layout:'column',
+            //layout:'column',
+            layout:'form',
             layoutOnTabChange:true,            
             deferredRender:false,
             border:false,
             items:[
-                accountPicker, 
-                roleMembersGridPanel
+                membersPanel
             ]
         };
         

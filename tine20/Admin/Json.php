@@ -666,7 +666,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         
         $members = Admin_Controller::getInstance()->getRoleMembers($roleId);
 
-        $result['results'] = self::resolveAccountName($members);
+        $result['results'] = self::resolveAccountName($members, true);
         $result['totalcount'] = count($result['results']);
         
         return $result;
