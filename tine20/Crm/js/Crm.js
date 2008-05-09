@@ -1965,7 +1965,7 @@ Tine.Crm.LeadEditDialog = function() {
                     params: {
                         start: 0,
                         limit: 50,
-                        filter: _newValue,
+                        query: _newValue,
                         method: method
                     }
                 });
@@ -2416,7 +2416,8 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                         start: 0,
                         sort: 'n_fileas',
                         dir: 'asc',
-                        limit: 0
+                        limit: 0,
+                        tagFilter: 0
                     },
                     root: 'results',
                     totalProperty: 'totalcount',
