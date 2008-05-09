@@ -19,6 +19,10 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
      */
     accountPickerType: 'user',
     /**
+     * @cfg{String} accountPickerTypeDefault 'user' or 'group' defines which accountType is selected when  {selectType} is true
+     */
+    accountPickerTypeDefault: 'user',    
+    /**
      * @cfg {String} title for the account list
      */
     accountListTitle: '',
@@ -61,6 +65,7 @@ Tine.widgets.account.ConfigGrid = Ext.extend(Ext.Panel, {
         /* account picker */
         this.accountPicker = new Tine.widgets.account.PickerPanel({
             selectType: this.accountPickerType,
+            selectTypeDefault: this.accountPickerTypeDefault,
             enableBbar: true
         });
         this.accountPicker.on('accountdblclick', function(account){

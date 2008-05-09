@@ -595,7 +595,7 @@ Tine.Admin.Roles.EditDialog = {
         var membersPanel = new Tine.widgets.account.ConfigGrid({
             //height: 300,
             accountPickerType: 'both',
-            selectTypeDefault: 'group', 
+            accountPickerTypeDefault: 'group', 
             accountListTitle: 'Role members',
             configStore: this.membersDataStore,
             hasAccountPrefix: true,
