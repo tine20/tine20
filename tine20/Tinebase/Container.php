@@ -174,7 +174,10 @@ class Tinebase_Container
         
         if($containerId === NULL) {
             $containerId = $this->containerTable->insert($data);
-        } else {
+			if ($containerId === NULL) {
+				$containerId = $this->containerTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'container_seq');
+			}
+		} else {
             $data['id'] = $containerId;
             $this->containerTable->insert($data);
         }
@@ -304,8 +307,35 @@ class Tinebase_Container
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
                
         $db = Zend_Registry::get('dbAdapter');
-
-        $select = $db->select()
+		
+		$tableContainer = $db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
+		$tableContainerAcl = $db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
+		$colId = $db->getAdapter()->quoteIdentifier('id');
+		$colName = $db->getAdapter()->quoteIdentifier('name');
+		$colContainerId = $db->getAdapter()->quoteIdentifier('container_id');
+		$colApplicationId = $db->getAdapter()->quoteIdentifier('application_id');
+		$colAccountGrant = $db->getAdapter()->quoteIdentifier('account_grant');
+		$colAccountId = $db->getAdapter()->quoteIdentifier('account_id');
+		$colAccountType = $db->getAdapter()->quoteIdentifier('account_type');
+		
+		$select = $db->select()
+            ->from($tableContainer)
+            ->join(
+                $tableContainerAcl,
+                $tableContainer . '.' . $colId . ' = ' . $tableContainerAcl . '.' . $colContainerId , 
+                array()
+            )
+            ->where($tableContainer . '.' . $colApplicationId . ' = ?', $applicationId)
+            ->where($tableContainerAcl . '.' . $colAccountGrant . ' = ?', $_grant)
+            
+            # beware of the extra parenthesis of the next 3 rows
+            ->where('(' . $tableContainerAcl . '.' . $colAccountId . ' = ? AND ' . $tableContainerAcl . "." . $colAccountType . " ='user'", $accountId)
+            ->orWhere($tableContainerAcl . '.' . $colAccountId . ' IN (?) AND ' . $tableContainerAcl . "." . $colAccountType . " ='group'", $groupMemberships)
+            ->orWhere($tableContainerAcl . '.' . $colAccountType . ' = ?)', 'anyone')
+            
+            ->group($tableContainer . '.' . $colId)
+            ->order($tableContainer . '.' . $colName);
+       /* $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
                 SQL_TABLE_PREFIX . 'container_acl',
@@ -322,7 +352,7 @@ class Tinebase_Container
             
             ->group(SQL_TABLE_PREFIX . 'container.id')
             ->order(SQL_TABLE_PREFIX . 'container.name');
-
+*/
         //error_log("getContainer:: " . $select->__toString());
 
         $stmt = $db->query($select);
@@ -384,10 +414,14 @@ class Tinebase_Container
         }
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
+		$colName = $this->containerTable->getAdapter()->quoteIdentifier('name');
+		$colType = $this->containerTable->getAdapter()->quoteIdentifier('type');
+		$colApplicationId = $this->containerTable->getAdapter()->quoteIdentifier('application_id');
+		
         $select  = $this->containerTable->select()
-            ->where('name = ?', $_containerName)
-            ->where('type = ?', $_type)
-            ->where('application_id = ?', $applicationId);
+            ->where($colName . ' = ?', $_containerName)
+            ->where($colType . ' = ?', $_type)
+            ->where($colApplicationId . ' = ?', $applicationId);
 
         $row = $this->containerTable->fetchRow($select);
         

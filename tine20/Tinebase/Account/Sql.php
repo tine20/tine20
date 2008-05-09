@@ -90,11 +90,20 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         }
 
         if($_filter !== NULL) {
-            $select->where('(n_family LIKE ? OR n_given LIKE ? OR login_name LIKE ?)', '%' . $_filter . '%');
+        
+            $whereStatement = array();
+            $defaultValues = array('n_family', 'n_given', 'login_name');
+            foreach ($defaultValues as $defaultValue) {
+                $whereStatement[] = $_instance->getAdapter()->quoteIdentifier($defaultValue) . 'LIKE ?';
+                
+            }
+        
+            $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
         // return only active accounts, when searching for simple accounts
         if($_accountClass == 'Tinebase_Account_Model_Account') {
-            $select->where('status = ?', 'enabled');
+            $colName = $_instance->getAdapter()->quoteIdentifier('status');
+            $select->where($colName . ' = ?', 'enabled');
         }
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -124,17 +133,17 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-	   	// throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
-	   	// because of the wrong type that is not catched by the block below)
-    	if ( $row === false ) {
+           // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
+           // because of the wrong type that is not catched by the block below)
+        if ( $row === false ) {
              throw new Exception('account not found');
-    	}        
+        }        
 
         try {
             $account = new $_accountClass();
             $account->setFromArray($row);
         } catch (Exception $e) {
-        	$validation_errors = $account->getValidationErrors();
+            $validation_errors = $account->getValidationErrors();
             Zend_Registry::get('logger')->debug( 'Tinebase_Account_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
                 "Tinebase_Account_Model_Account::validation_errors: \n" .
                 print_r($validation_errors,true));
@@ -261,8 +270,8 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     /**
      * sets/unsets expiry date 
      *
-     * @param 	int 		$_accountId
-     * @param 	Zend_Date 	$_expiryDate set to NULL to disable expirydate
+     * @param     int         $_accountId
+     * @param     Zend_Date     $_expiryDate set to NULL to disable expirydate
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
@@ -283,13 +292,13 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $result = $accountsTable->update($accountData, $where);
         
         return $result;
-	}
+    }
 
     /**
      * sets blocked until date 
      *
-     * @param 	int 		$_accountId
-     * @param 	Zend_Date 	$_blockedUntilDate set to NULL to disable blockedDate
+     * @param     int         $_accountId
+     * @param     Zend_Date     $_blockedUntilDate set to NULL to disable blockedDate
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
@@ -310,7 +319,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $result = $accountsTable->update($accountData, $where);
         
         return $result;
-	}	
+    }    
     /**
      * update the lastlogin time of account
      *
@@ -416,9 +425,10 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountData = array(
             'login_name'        => $_account->accountLoginName,
             'status'            => $_account->accountStatus,
-            'expires_at'        => ($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
+            'expires_at'        => "ber",//($_account->accountExpires instanceof Zend_Date ? $_account->accountExpires->getIso() : NULL),
             'primary_group_id'  => $_account->accountPrimaryGroup,
         );
+        
         if(!empty($_account->accountId)) {
             $accountData['id'] = $_account->accountId;
         }
@@ -439,7 +449,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             
             // add new account
             $accountId = $accountsTable->insert($accountData);
-            
+            if ($accountId === NULL) {
+                $accountId = $accountsTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'accounts_seq');
+            }
             // if we insert an account without an accountId, we need to get back one
             if(empty($_account->accountId) && $accountId == 0) {
                 throw new Exception("returned accountId is 0");
@@ -453,7 +465,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             $contactData['account_id'] = $accountId;
             $contactData['tid'] = 'n';
             $contactData['owner'] = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Container::TYPE_INTERNAL)->getId();
-            
+            //var_dump($contactData);
             $contactsTable->insert($contactData);
             
             Zend_Registry::get('dbAdapter')->commit();

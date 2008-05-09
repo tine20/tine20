@@ -201,20 +201,15 @@ class Tinebase_Application
     public function addApplication(Tinebase_Model_Application $_application)
     {
         $data = $_application->toArray();
-      //  unset($data['id']);
-      // $data['id'] = 1;
+//		print_r($data);
         unset($data['tables']);
-        print_r($data);
-        
-        //unset($data['order']);
-        //unset($data['version']);
-        //$data['range'] = 99;
-
-        //$data['version'] = 2;
+      
         $_application->id = $this->applicationTable->insert($data);
-        if ($_application->id != ((int) $_application->id  )) {
-            $_application->id = $this->applicationTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . '_applications_seq');
+//		var_dump( $_application->id );
+        if ($_application->id === NULL) {
+            $_application->id = $this->applicationTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'applications_seq');
         }
+//		var_dump($_application);
         return $_application;
     }
     

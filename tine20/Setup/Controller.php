@@ -1,4 +1,4 @@
-<?php
+    <?php
 /**
  * Tine 2.0
  *
@@ -37,10 +37,15 @@ class Setup_Controller
 
         $this->_setupLogger();
         $this->setupDatabaseConnection();
-        
-        $this->_backend = Setup_Backend_Factory::factory(Setup_Backend_Factory::SQL);
+         if (strtoupper($this->_config->database->get('backend')) == 'MYSQL') {
+            $this->_backend = Setup_Backend_Factory::factory('Mysql');
+            
+        } else if (strtoupper($this->_config->database->get('backend')) == 'PDO_OCI') {    
+            $this->_backend = Setup_Backend_Factory::factory('Oracle');
+        }
+       
     }
-    
+              
     
 
     /**
@@ -81,12 +86,19 @@ class Setup_Controller
     {
         if (isset($this->_config->database)) {
             $dbConfig = $this->_config->database;
-
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
 
             echo "<pre><hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
-
-            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+            
+            if (strtoupper($dbConfig->get('backend')) == 'MYSQL') {
+                $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+                //$db = Zend_Db::factory('Mysqli', $dbConfig->toArray());
+            
+            } else if (strtoupper($dbConfig->get('backend')) == 'PDO_OCI') {    
+           //     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+                $db = Zend_Db::factory('Oracle', $dbConfig->toArray());
+            }
+            
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
             Zend_Registry::set('dbAdapter', $db);
@@ -160,20 +172,25 @@ class Setup_Controller
     public function addApplication(SimpleXMLElement $_xml)
     {
         // just insert tables
+       ///*
         $createdTables = array();
         if (isset($_xml->tables)) {
             foreach ($_xml->tables[0] as $tableXML) {
                 $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+
                 if (false == $this->_backend->tableExists($table->name)) {
                     try {
                         $this->_backend->createTable($table);
                         $createdTables[] = $table;
+                        //exit();
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
                 }
             }
         }
+
+//*/
 
         // register to tine
         try {
@@ -185,14 +202,16 @@ class Setup_Controller
                 'order'     => $_xml->order ? $_xml->order : 99,
                 'version'   => $_xml->version
             ));
-
-            $application = Tinebase_Application::getInstance()->addApplication($application);
+        
+           $application = Tinebase_Application::getInstance()->addApplication($application);
+        
         }
         
         // insert in database
         foreach ($createdTables as $table) {
             $this->_backend->addTable($application, (string) $table->name, (int) $table->version);
-        }
+       }
+
 
         // insert default records
         if (isset($_xml->defaultRecords)) {

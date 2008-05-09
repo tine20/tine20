@@ -61,12 +61,12 @@ class Tinebase_Controller
         
         $this->session = new Zend_Session_Namespace('tinebase');
         
-        if(!isset($this->session->jsonKey)) {
+        if (!isset($this->session->jsonKey)) {
             $this->session->jsonKey = md5(time());
         }
         Zend_Registry::set('jsonKey', $this->session->jsonKey);
 
-        if(isset($this->session->currentAccount)) {
+        if (isset($this->session->currentAccount)) {
             Zend_Registry::set('currentAccount', $this->session->currentAccount);
         }
     }
@@ -95,7 +95,7 @@ class Tinebase_Controller
     {
         $controllerName = ucfirst((string) $_applicationName) . '_Controller';
         
-        if(!class_exists($controllerName)) {
+        if (!class_exists($controllerName)) {
             throw new Exception('class '. $controllerName . ' not found');
         }
         
@@ -115,7 +115,7 @@ class Tinebase_Controller
 
         $auth = Zend_Auth::getInstance();
 
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && isset($_REQUEST['method']) 
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && isset($_REQUEST['method']) 
               && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !empty($_REQUEST['method'])) {
                   
             Zend_Registry::get('logger')->debug('is json request. method: ' . $_REQUEST['method']);
@@ -123,7 +123,7 @@ class Tinebase_Controller
 
             // is it save to use the jsonKey from $_GET too???
             // can we move this to the Zend_Json_Server???
-            if($_POST['jsonKey'] != Zend_Registry::get('jsonKey')) {
+            if ($_POST['jsonKey'] != Zend_Registry::get('jsonKey')) {
                 error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);
                 //throw new Exception('wrong JSON Key sent!!!');
             }
@@ -135,8 +135,8 @@ class Tinebase_Controller
             // register addidional Tinebase Json servers (i.e. UserRegistration)
             Tinebase_Json::setJsonServers($server);
             
-            if(Zend_Auth::getInstance()->hasIdentity()) {
-            	
+            if (Zend_Auth::getInstance()->hasIdentity()) {
+                
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
@@ -152,14 +152,14 @@ class Tinebase_Controller
             $server->handle($_REQUEST);
 
         } else {
-            Zend_Registry::get('logger')->debug('is http request. method: ' . ( isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY' ) );
+            Zend_Registry::get('logger')->debug('is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
             // HTTP request
     
             $server = new Tinebase_Http_Server();
     
             $server->setClass('Tinebase_Http', 'Tinebase');
     
-            if(Zend_Auth::getInstance()->hasIdentity()) {
+            if (Zend_Auth::getInstance()->hasIdentity()) {
                 $userApplications = Zend_Registry::get('currentAccount')->getApplications();
                 
                 foreach ($userApplications as $application) {
@@ -172,8 +172,8 @@ class Tinebase_Controller
                 }
             }
     
-            if(empty($_REQUEST['method'])) {
-                if(Zend_Auth::getInstance()->hasIdentity()) {
+            if (empty($_REQUEST['method'])) {
+                if (Zend_Auth::getInstance()->hasIdentity()) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 } else {
                     $_REQUEST['method'] = 'Tinebase.login';
@@ -193,7 +193,7 @@ class Tinebase_Controller
     {
         $logger = new Zend_Log();
         
-        if(isset($this->_config->logger)) {
+        if (isset($this->_config->logger)) {
             $loggerConfig = $this->_config->logger;
             
             $filename = $loggerConfig->filename;
@@ -221,12 +221,18 @@ class Tinebase_Controller
      */
     protected function setupDatabaseConnection()
     {
-        if(isset($this->_config->database)) {
+        if (isset($this->_config->database)) {
             $dbConfig = $this->_config->database;
             
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         
-            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+            if (strtoupper($dbConfig->get('backend')) == 'PDO_MYSQL') {
+                $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+            
+            } else if (strtoupper($dbConfig->get('backend')) == 'PDO_OCI') {    
+                $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+            }
+            
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
             Zend_Registry::set('dbAdapter', $db);
@@ -242,11 +248,11 @@ class Tinebase_Controller
      */
     protected function setupUserLocale()
     {
-    	try {
+        try {
             $locale = new Zend_Locale();
-    	} catch (Zend_Locale_Exception $e) {
-    		$locale = new Zend_Locale('en_US');
-    	}
+        } catch (Zend_Locale_Exception $e) {
+            $locale = new Zend_Locale('en_US');
+        }
         Zend_Registry::set('locale', $locale);
     }
     
@@ -297,7 +303,7 @@ class Tinebase_Controller
                 $_ipAddress,
                 $authResult->getCode(),
                 Zend_Registry::get('currentAccount')
-            );
+           );
             
             return true;
         } else {
@@ -306,12 +312,12 @@ class Tinebase_Controller
                 $_username,
                 $_ipAddress,
                 $authResult->getCode()
-            );
+           );
             
             Tinebase_AccessLog::getInstance()->addLogoutEntry(
                 session_id(),
                 $_ipAddress
-            );
+           );
             
             Zend_Session::destroy();
             
@@ -327,7 +333,7 @@ class Tinebase_Controller
         $loginName = Zend_Registry::get('currentAccount')->accountLoginName;
         Zend_Registry::get('logger')->debug("change password for $loginName");
         
-        if(!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
+        if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
             throw new Exception('old password worng');
         }
         
@@ -348,7 +354,7 @@ class Tinebase_Controller
                 session_id(),
                 $_ipAddress,
                 $currentAccount->accountId
-            );
+           );
         }
         
         Zend_Session::destroy();
@@ -360,13 +366,13 @@ class Tinebase_Controller
      */
     protected function setupMailer()
     {
-        if(isset($this->_config->mail)) {
+        if (isset($this->_config->mail)) {
             $mailConfig = $this->_config->mail;
         } else {
             $mailConfig = new Zend_Config(array(
                 'smtpserver' => 'localhost', 
                 'port' => 25
-            ));
+           ));
         }
         
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());

@@ -22,13 +22,8 @@
  */
 class Setup_Backend_Factory
 {
+
     /**
-     * constant for Sql contacts backend class
-     *
-     */
-    const SQL = 'Mysql';
-    
-  /**
      * factory function to return a selected contacts backend class
      *
      * @param string $type
@@ -36,15 +31,8 @@ class Setup_Backend_Factory
      */
     static public function factory($_type)
     {
-        switch($_type) {
-            case self::SQL:
-                $className = 'Setup_Backend_' . ucfirst($_type);
-                $instance = new $className();
-                break;
-                
-            default:
-                throw new Exception('unknown type');
-            }
+        $className = 'Setup_Backend_' . ucfirst($_type);
+        $instance = new $className($_definition);
 
         return $instance;
     }

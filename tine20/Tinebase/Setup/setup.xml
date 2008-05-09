@@ -155,7 +155,7 @@
                     <name>password</name>
                     <type>text</type>
                     <length>100</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>last_login</name>
@@ -250,7 +250,7 @@
 
                 <index>
                     <name>group_id-account_id</name>
-                    <unique>true</unique>
+                    <primary>true</primary>
                     <field>
                         <name>group_id</name>
                     </field>
@@ -265,6 +265,17 @@
                     </field>
                 </index>
                 <index>
+                    <name>group_members::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
                     <name>group_members::group_id--groups::id</name>
                     <field>
                         <name>group_id</name>
@@ -276,17 +287,7 @@
                     </reference>
                 </index>
 
-                <index>
-                    <name>group_members::account_id--accounts::id</name>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-                    </reference>
-                </index>
+
 
             </declaration>
         </table>
@@ -927,7 +928,7 @@
         </table>
         
         <table>
-            <name>timemachine_modificationlog</name>
+            <name>timemachine_modlog</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -1408,17 +1409,6 @@
                     </field>
                 </index>
                 <index>
-                    <name>role_rights::role_id--roles::id</name>
-                    <field>
-                        <name>role_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>roles</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
                     <name>role_rights::application_id--applications::id</name>
                     <field>
                         <name>application_id</name>
@@ -1429,6 +1419,18 @@
                         <field>id</field>
                     </reference>
                 </index>
+                <index>
+                    <name>role_rights::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+
 
             </declaration>
         </table>
