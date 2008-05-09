@@ -34,7 +34,6 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         });
     },
     getValue: function() {
-        //return 'index.php?method=' + Ext.util.Format.htmlEncode('Tinebase.downloadTempImage') + '&id=29a3c486ca63913b26e43a06a3237131efc7c8cb'
         return 'images/empty_photo.jpg';
     },
     setValue: function(value) {
@@ -46,7 +45,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             input: input
         }).upload();
         uploader.on('uploadcomplete', function(uploader, record){
-            var method = Ext.util.Format.htmlEncode('Tinebase.downloadTempImage');
+            var method = Ext.util.Format.htmlEncode('Tinebase.getTempFileThumbnail');
             var ct = this.imageCt.up('div');
             var img = Ext.DomHelper.insertFirst(ct, '<img src="index.php?method=' + method + '&id=' + record.get('tempFile').id + '" width="90px">', true);
             this.imageCt.remove();

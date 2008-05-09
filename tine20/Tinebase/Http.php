@@ -250,7 +250,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 * 
 	 * @param  string $id
 	 */
-	public function downloadTempImage($id)//, $width, $height, $preserveRatio)
+	public function getTempFileThumbnail($id)//, $width, $height, $preserveRatio)
 	{
 	    $db = Zend_Registry::get('dbAdapter');
 	    $select = $db->select()
