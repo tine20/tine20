@@ -23,7 +23,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {}
+    private function __construct() {
+        $this->_db = Zend_Registry::get('dbAdapter');
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -37,6 +39,13 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
      * @var Tinebase_Account_Sql
      */
     private static $_instance = NULL;
+    
+    /**
+     * copy of Zend_Registry::get('dbAdapter')
+     *
+     * @var Zend_Db_Adapter_Abstract
+     */
+    private $_db;
     
     protected $rowNameMapping = array(
         'accountId'             => 'id',
@@ -94,15 +103,14 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             $whereStatement = array();
             $defaultValues = array('n_family', 'n_given', 'login_name');
             foreach ($defaultValues as $defaultValue) {
-                $whereStatement[] = $_instance->getAdapter()->quoteIdentifier($defaultValue) . 'LIKE ?';
-                
+                $whereStatement[] = $this->_db->quoteIdentifier($defaultValue) . 'LIKE ?';
             }
         
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
         // return only active accounts, when searching for simple accounts
         if($_accountClass == 'Tinebase_Account_Model_Account') {
-            $colName = $_instance->getAdapter()->quoteIdentifier('status');
+            $colName = $this->_db->quoteIdentifier('status');
             $select->where($colName . ' = ?', 'enabled');
         }
         //error_log("getAccounts:: " . $select->__toString());
@@ -163,9 +171,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
     {
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        $db = Zend_Registry::get('dbAdapter');
+        #$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where($db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts') . '.' .$db->quoteIdentifier('id') . ' = ?', $accountId);
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts') . '.' . $this->_db->quoteIdentifier('id') . ' = ?', $accountId);
 
         $stmt = $select->query();
 
@@ -261,7 +269,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -288,7 +296,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -315,7 +323,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -339,7 +347,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountData['last_login']      = Zend_Date::now()->getIso();
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto('id = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -381,26 +389,26 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         );
 
         try {
-            Zend_Registry::get('dbAdapter')->beginTransaction();
+            $this->_db->beginTransaction();
             
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
             
             
             $where = array(
-                Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId)
+                $this->_db->quoteInto('id = ?', $accountId)
             );
             $accountsTable->update($accountData, $where);
             
             $where = array(
-                Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId)
+                $this->_db->quoteInto('account_id = ?', $accountId)
             );
             $contactsTable->update($contactData, $where);
             
-            Zend_Registry::get('dbAdapter')->commit();
+            $this->_db->commit();
             
         } catch (Exception $e) {
-            Zend_Registry::get('dbAdapter')->rollBack();
+            $this->_db->rollBack();
             throw($e);
         }
         
@@ -444,7 +452,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         );
 
         try {
-            Zend_Registry::get('dbAdapter')->beginTransaction();
+            $this->_db->beginTransaction();
             
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
@@ -470,10 +478,10 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             //var_dump($contactData);
             $contactsTable->insert($contactData);
             
-            Zend_Registry::get('dbAdapter')->commit();
+            $this->_db->commit();
             
         } catch (Exception $e) {
-            Zend_Registry::get('dbAdapter')->rollBack();
+            $this->_db->rollBack();
             throw($e);
         }
         
@@ -498,26 +506,26 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         
         
         try {
-            Zend_Registry::get('dbAdapter')->beginTransaction();
+            $this->_db->beginTransaction();
             
             $where  = array(
-                Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
+                $this->_db->quoteInto('account_id = ?', $accountId),
             );
             $contactsTable->delete($where);
 
             $where  = array(
-                Zend_Registry::get('dbAdapter')->quoteInto('account_id = ?', $accountId),
+                $this->_db->quoteInto('account_id = ?', $accountId),
             );
             $groupMembersTable->delete($where);
             
             $where  = array(
-                Zend_Registry::get('dbAdapter')->quoteInto('id = ?', $accountId),
+                $this->_db->quoteInto('id = ?', $accountId),
             );
             $accountsTable->delete($where);
             
-            Zend_Registry::get('dbAdapter')->commit();
+            $this->_db->commit();
         } catch (Exception $e) {
-            Zend_Registry::get('dbAdapter')->rollBack();
+            $this->_db->rollBack();
             throw($e);
         }
     }
