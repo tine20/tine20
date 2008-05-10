@@ -150,9 +150,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         ]
                     },
                     {
-                        width: 90,
+                        width: 92,
                         items: new Ext.ux.form.ImageField({
                             name: 'jpegimage',
+                            width: 90,
+                            height: 90
                         })
                     }
                 ]
