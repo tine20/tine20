@@ -308,20 +308,20 @@ class Tinebase_Container
                
         $db = Zend_Registry::get('dbAdapter');
 		
-		$tableContainer = $db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
-		$tableContainerAcl = $db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
-		$colId = $db->getAdapter()->quoteIdentifier('id');
-		$colName = $db->getAdapter()->quoteIdentifier('name');
-		$colContainerId = $db->getAdapter()->quoteIdentifier('container_id');
-		$colApplicationId = $db->getAdapter()->quoteIdentifier('application_id');
-		$colAccountGrant = $db->getAdapter()->quoteIdentifier('account_grant');
-		$colAccountId = $db->getAdapter()->quoteIdentifier('account_id');
-		$colAccountType = $db->getAdapter()->quoteIdentifier('account_type');
+		$tableContainer = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
+		$tableContainerAcl = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
+		$colId = $db->quoteIdentifier('id');
+		#$colName = $db->quoteIdentifier('name');
+		$colContainerId = $db->quoteIdentifier('container_id');
+		$colApplicationId = $db->quoteIdentifier('application_id');
+		$colAccountGrant = $db->quoteIdentifier('account_grant');
+		$colAccountId = $db->quoteIdentifier('account_id');
+		$colAccountType = $db->quoteIdentifier('account_type');
 		
 		$select = $db->select()
-            ->from($tableContainer)
+            ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
-                $tableContainerAcl,
+                SQL_TABLE_PREFIX . 'container_acl',
                 $tableContainer . '.' . $colId . ' = ' . $tableContainerAcl . '.' . $colContainerId , 
                 array()
             )
@@ -333,8 +333,8 @@ class Tinebase_Container
             ->orWhere($tableContainerAcl . '.' . $colAccountId . ' IN (?) AND ' . $tableContainerAcl . "." . $colAccountType . " ='group'", $groupMemberships)
             ->orWhere($tableContainerAcl . '.' . $colAccountType . ' = ?)', 'anyone')
             
-            ->group($tableContainer . '.' . $colId)
-            ->order($tableContainer . '.' . $colName);
+            ->group(SQL_TABLE_PREFIX . 'container.id')
+            ->order(SQL_TABLE_PREFIX . 'container.name');
        /* $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
