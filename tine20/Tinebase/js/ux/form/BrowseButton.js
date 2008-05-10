@@ -1,3 +1,11 @@
+/*
+ * Tine 2.0
+ * 
+ * @license     New BSD License
+ * @author      loeppky - based on the work done by MaximGB in Ext.ux.UploadDialog (http://extjs.com/forum/showthread.php?t=21558)
+ * @version     $Id$
+ *
+ */
 Ext.namespace('Ext.ux.form');
 
 /**
@@ -20,14 +28,12 @@ Ext.namespace('Ext.ux.form');
  * - pointer cursor doesn't display when hovering over the button.
  * Safari 3 - Windows:
  * - no issues.
- * @author loeppky - based on the work done by MaximGB in Ext.ux.UploadDialog (http://extjs.com/forum/showthread.php?t=21558)
- * The follow the curosr float div idea also came from MaximGB.
- * @see http://extjs.com/forum/showthread.php?t=29032
  * @constructor
  * Create a new BrowseButton.
  * @param {Object} config Configuration options
  */
-Ext.ux.form.BrowseButton = Ext.extend(Ext.Button, {
+//Ext.ux.form.BrowseButton = Ext.extend(Ext.Button, {
+Ext.ux.form.BrowseButton = Ext.extend(Ext.BoxComponent, {
 	/*
 	 * Config options:
 	 */
