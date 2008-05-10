@@ -204,7 +204,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $db = Zend_Registry::get('dbAdapter');
         
         $select = $db->select()
-            ->from(SQL_TABLE_PREFIX . 'accounts', 
+            ->from($db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts'), 
                 array(
                     'accountId'             => $this->rowNameMapping['accountId'],
                     'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
@@ -217,10 +217,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
                 )
             )
             ->join(
-               SQL_TABLE_PREFIX . 'addressbook',
-              $db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts'). '.' . $db->quoteIdentifier('id') . ' = ' 
-				. $db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook') . '.' .
-				$db->quoteIdentifier('account_id'), 
+               $db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook'),
+               SQL_TABLE_PREFIX . 'accounts' . '.' . 'id' . ' = ' 
+				. SQL_TABLE_PREFIX . 'addressbook' . '.' . 'account_id', 
                 array(
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],

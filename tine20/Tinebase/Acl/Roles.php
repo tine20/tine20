@@ -139,16 +139,16 @@ class Tinebase_Acl_Roles
         
 		$tableRoleRights = $this->_db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights');
 		$tableApplications = $this->_db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'applications');
-		$colApplicationId = $this->_db->getAdapter()->quoteIdentifier('application_id');
-		$colId = $this->_db->getAdapter()->quoteIdentifier('id');
-		$colRoleId = $this->_db->getAdapter()->quoteIdentifier('role_id');
-		$colRight = $this->_db->getAdapter()->quoteIdentifier('right');
-		$colStatus = $this->_db->getAdapter()->quoteIdentifier('status');
+		$colApplicationId = 'application_id';
+		$colId = 'id';
+		$colRoleId = 'role_id';
+		$colRight = 'right';
+		$colStatus = 'status';
 		
         $select = $this->_db->select()
             ->from($tableRoleRights, array())
             ->join($tableApplications, 
-                $tableRoleRights . '.' . $colApplicationId . ' = ' . $tableApplications . '.' . $colId)            
+                SQL_TABLE_PREFIX . 'role_rights' . '.' . $colApplicationId . ' = ' . SQL_TABLE_PREFIX . 'applications' . '.' . $colId)            
             ->where($colRoleId .' IN (?)', $roleMemberships)
             ->where($tableRoleRights . '.' . $colRight .' = ?', Tinebase_Acl_Rights::RUN)
             ->where($tableApplications . '.' . $colStatus . ' = ?', Tinebase_Application::ENABLED)
@@ -278,7 +278,7 @@ class Tinebase_Acl_Roles
         $newId = $this->_rolesTable->insert($data); 
 		
 		if ($newId === NULL) {
-           $newId = $this->_rolesTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'accounts_seq');
+           $newId = $this->_rolesTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'roles_seq');
         }
         
         $role = $this->getRoleById($newId);
@@ -328,7 +328,7 @@ class Tinebase_Acl_Roles
     public function getRoleMembers($_roleId)
     {
         $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId > 0) {
+        if ($roleId != $_roleId && $roleId <= 0) {
             throw new InvalidArgumentException('$_roleId must be integer and greater than 0');
         }
         
