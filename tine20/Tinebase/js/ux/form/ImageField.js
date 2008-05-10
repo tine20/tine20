@@ -35,16 +35,15 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         Ext.ux.form.ImageField.superclass.onRender.call(this, ct, position);
         
         // the container for the browe button
-        var buttonCt = Ext.DomHelper.insertFirst(ct, '<div>&nbsp;</div>', true);
-        buttonCt.setSize(90,100);
+        this.buttonCt = Ext.DomHelper.insertFirst(ct, '<div>&nbsp;</div>', true);
+        this.buttonCt.setSize(this.width, this.height);
         
-        //var imgHtml = '<img src="' + this.getValue() + '" width="90px">';
+        // the image container        
+        this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
         
-        this.imageCt = Ext.DomHelper.insertFirst(buttonCt, this.getImgTpl().apply(this), true);
-
         var bb = new Ext.ux.form.BrowseButton({
-            buttonCt: buttonCt,
-            renderTo: buttonCt,
+            buttonCt: this.buttonCt,
+            renderTo: this.buttonCt,
             scope: this,
             handler: this.onFileSelect,
             //debug: true
@@ -57,6 +56,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
     },
     onFileSelect: function(bb) {
+        this.buttonCt.mask('Loading', 'x-mask-loading');
         var input = bb.detachInputFile();
         var uploader = new Ext.ux.file.Uploader({
             input: input
@@ -65,9 +65,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             var method = Ext.util.Format.htmlEncode('Tinebase.getTempFileThumbnail');
             this.imageSrc = 'index.php?method=' + method + '&id=' + record.get('tempFile').id;
             var ct = this.imageCt.up('div');
-            var img = Ext.DomHelper.insertFirst(ct, this.getImgTpl().apply(this), true);
-            this.imageCt.remove();
-            this.imageCt = img;
+            var img = Ext.DomHelper.insertAfter(this.imageCt, this.getImgTpl().apply(this), true);
+            // replace image after load
+            img.on('load', function(){
+                this.imageCt.remove();
+                this.imageCt = img;
+                this.buttonCt.unmask();
+            }, this);
         }, this);
     },
     getImgTpl: function() {
