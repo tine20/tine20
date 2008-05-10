@@ -137,8 +137,8 @@ class Tinebase_Acl_Roles
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
-		$tableRoleRights = $this->_db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights');
-		$tableApplications = $this->_db->getAdapter()->quoteIdentifier(SQL_TABLE_PREFIX . 'applications');
+		$tableRoleRights = SQL_TABLE_PREFIX . 'role_rights';
+		$tableApplications = SQL_TABLE_PREFIX . 'applications';
 		$colApplicationId = 'application_id';
 		$colId = 'id';
 		$colRoleId = 'role_id';
