@@ -13,7 +13,7 @@ Ext.namespace('Ext.ux', 'Ext.ux.form');
 /**
  * Expandable Panel
  * <p>This class provieds a expandable fieldset. The first item is allways visable, whereas 
- * all furthor items are colapsed by default<p>
+ * all furthor items are colapsed by default</p>
  * <p>Example usage:</p>
  * <pre><code>
  var p = new Ext.ux.ExpandFieldSet({
