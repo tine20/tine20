@@ -313,8 +313,8 @@ class Setup_Controller
         
         switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
-                echo "Executing updates for " . $_application->name . " for major version " . $_majorVersion . "<br>";
-                
+                echo "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")<br>";
+
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
                 //list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
         
@@ -336,13 +336,13 @@ class Setup_Controller
                     } while(array_search('update_' . $minor, $classMethods) !== false);
                 }
 
-                try {
-                    $this->checkUpdate($_application);
-                } catch (Exception $e) {
-                    echo $e->getMessage();
-                }
+                #try {
+                #    $this->checkUpdate($_application);
+                #} catch (Exception $e) {
+                #    echo $e->getMessage();
+                #}
                 
-                echo "<strong> Updated " . $_application->name . " successfully to " .  $_updateTo . "</strong><br>";
+                echo "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong><br>";
                 
                 break; 
                 
