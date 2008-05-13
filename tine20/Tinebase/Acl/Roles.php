@@ -270,7 +270,9 @@ class Tinebase_Acl_Roles
     public function createRole(Tinebase_Acl_Model_Role $_role)
     {
         $data = $_role->toArray();
-        $data['created_by'] = Zend_Registry::get('currentAccount')->getId();
+        if(Zend_Registry::isRegistered('currentAccount')) {
+            $data['created_by'] = Zend_Registry::get('currentAccount')->getId();
+        }
         $data['creation_time'] = Zend_Date::now()->getIso();
                 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
