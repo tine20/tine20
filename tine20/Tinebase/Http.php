@@ -248,9 +248,10 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	/**
 	 * downloads a tempFile
 	 * 
+	 * @todo move db stuff into seperate class
 	 * @param  string $id
 	 */
-	public function getTempFileThumbnail($id)//, $width, $height, $preserveRatio)
+	public function getTempFileThumbnail($id, $width, $height, $ratiomode)
 	{
 	    $db = Zend_Registry::get('dbAdapter');
 	    $select = $db->select()
@@ -259,8 +260,12 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	       ->where($db->quoteInto('session_id = ?', session_id()));
         $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
         
-        header('Content-Type: ' . $tempFile['type']);
-        die(file_get_contents($tempFile['path']));
+        $image = Tinebase_ImageHelper::resize($tempFile['path'], $width, $height, $ratiomode);
+        
+         header('Content-Type: image/jpeg');
+         imagejpeg($image);
+         imagedestroy($image);
+         die();
 	}
 	
 	/**
