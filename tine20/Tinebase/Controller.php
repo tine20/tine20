@@ -34,6 +34,10 @@ class Tinebase_Controller
     
     protected $_config;
     
+    const PDO_MYSQL = 'Pdo_Mysql';
+    
+    const PDO_OCI = 'Pdo_Oci';
+    
     /**
      * the constructor
      *
@@ -226,17 +230,18 @@ class Tinebase_Controller
             
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         
-            // mysql is default
-            $backend = strtoupper($dbConfig->get('backend'));
-            switch ( $backend ) {
-                case 'PDO_MYSQL':
-                    $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+            $dbBackend = constant('self::' . strtoupper($dbConfig->get('backend', self::PDO_MYSQL)));
+            
+            switch($dbBackend) {
+                case self::PDO_MYSQL:
+                    $db = Zend_Db::factory('Pdo_Mysql', $dbConfig->toArray());
                     break;
-                case 'PDO_OCI':
+                case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
                     break;
                 default:
-                    $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+                    throw new Exception('Invalid database backend type defined. Please set backend to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.ini.');
+                    break;
             }
             
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
