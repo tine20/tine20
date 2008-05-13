@@ -350,7 +350,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         );
 
         foreach ( $tableDefinitions as $tableDefinition ) {                    
-            $table = Setup_Backend_Schema_Index_Factory::factory('String', $tableDefinition); 
+            $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
             $this->_backend->createTable($table);        
         }
         
@@ -358,7 +358,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         // get admin and user groups
         $adminGroup = Tinebase_Group::getInstance()->getGroupByName('Administrators');
-        $userGRoup = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
         
         # add roles and add the groups to the roles
         $adminRole = new Tinebase_Acl_Model_Role(array(
