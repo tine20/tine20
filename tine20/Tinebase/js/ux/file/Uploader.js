@@ -103,6 +103,37 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         this.record.set('tempFile', tempFile);
         
         this.fireEvent('uploadcomplete', this, this.record);
+    },
+    /**
+     * get file name
+     * @return {String}
+     */
+    getFileName:function() {
+        return this.input.getValue().split(/[\/\\]/).pop();
+    },
+    /**
+     * get file path (excluding the file name)
+     * @return {String}
+     */
+    getFilePath:function() {
+        return this.input.getValue().replace(/[^\/\\]+$/,'');
+    },
+    /**
+     * returns file class based on name extension
+     * @return {String} class to use for file type icon
+     */
+    getFileCls: function() {
+        var fparts = this.getFileName().split('.');
+        if(fparts.length === 1) {
+            return '';
+        }
+        else {
+            return fparts.pop().toLowerCase();
+        }
+    },
+    isImage: function() {
+        var cls = this.getFileCls();
+        return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');
     }
 });
 

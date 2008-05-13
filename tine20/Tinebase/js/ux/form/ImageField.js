@@ -30,7 +30,6 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     initComponent: function() {
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.imageSrc = this.getValue();
-        
     },
     onRender: function(ct, position) {
         Ext.ux.form.ImageField.superclass.onRender.call(this, ct, position);
@@ -63,11 +62,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.updateImage();
     },
     onFileSelect: function(bb) {
-        this.buttonCt.mask('Loading', 'x-mask-loading');
         var input = bb.detachInputFile();
         var uploader = new Ext.ux.file.Uploader({
             input: input
-        }).upload();
+        });
+        if(! uploader.isImage()) {
+            Ext.MessageBox.alert('Not An Image', 'Plase select an image file (gif/png/jpeg)').setIcon(Ext.MessageBox.ERROR);
+            return;
+        }
+        
+        this.buttonCt.mask('Loading', 'x-mask-loading');
+        uploader.upload();
         uploader.on('uploadcomplete', function(uploader, record){
             var method = Ext.util.Format.htmlEncode('Tinebase.getTempFileThumbnail');
             this.imageSrc = 'index.php?method=' + method + '&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + this.height + '&ratiomode=0';
