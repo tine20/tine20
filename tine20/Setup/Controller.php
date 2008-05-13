@@ -37,13 +37,6 @@ class Setup_Controller
 
         $this->_setupLogger();
         $this->setupDatabaseConnection();
-        if ( $this->_config->database->get('backend') == '' or strtoupper($this->_config->database->get('backend')) == 'MYSQL') {
-            $this->_backend = Setup_Backend_Factory::factory('Mysql');
-            
-        } else if (strtoupper($this->_config->database->get('backend')) == 'PDO_OCI') {    
-            $this->_backend = Setup_Backend_Factory::factory('Oracle');
-        }
-       
     }
               
     
@@ -90,15 +83,23 @@ class Setup_Controller
 
             echo "<pre><hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
             
-            if ( $this->_config->database->get('backend') == '' or strtoupper($dbConfig->get('backend')) == 'MYSQL') {
-                $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
-                //$db = Zend_Db::factory('Mysqli', $dbConfig->toArray());
+            $dbBackend = constant('Tinebase_Controller::' . strtoupper($dbConfig->get('backend', Tinebase_Controller::PDO_MYSQL)));
             
-            } else if (strtoupper($dbConfig->get('backend')) == 'PDO_OCI') {    
-           //     $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
-                $db = Zend_Db::factory('Oracle', $dbConfig->toArray());
+            switch($dbBackend) {
+                case Tinebase_Controller::PDO_MYSQL:
+                    $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+                    $this->_backend = Setup_Backend_Factory::factory('Mysql');
+                    break;
+                case Tinebase_Controller::PDO_OCI:
+                    //$db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+                    $db = Zend_Db::factory('Oracle', $dbConfig->toArray());
+                    $this->_backend = Setup_Backend_Factory::factory('Oracle');
+                    break;
+                default:
+                    throw new Exception('Invalid database backend type defined. Please set backend to ' . Tinebase_Controller::PDO_MYSQL . ' or ' . Tinebase_Controller::PDO_OCI . ' in config.ini.');
+                    break;
             }
-            
+                        
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
             Zend_Registry::set('dbAdapter', $db);
@@ -108,23 +109,29 @@ class Setup_Controller
     }
 
     /**
-     * updates installed applications - if there are installed applications
-     * if there aren't installed applications just return otherwise set _doInitialLoad = false
-     * 
+     * updates installed applications. does nothing if no applications are installed
      */
-    public function updateInstalledApplications()
+    public function updateApplications(Tinebase_Record_RecordSet $_applications)
     {
-        // try - catch, because of likeness to query an empty database
-        try {
-            // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
-            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        } catch (Exception $e) {
-            return;
-        }
+        $smallestMajorVersion = NULL;
+        $biggestMajorVersion = NULL;
         
-        foreach ($applications as $application) {
-            $xml = $this->parseFileForUpdate($application->name);
-            $this->updateApplication($application, $xml->version);
+        //find smallest major version
+        foreach($_applications as $application) {
+            if($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
+                $smallestMajorVersion = $application->getMajorVersion();
+            }
+            if($biggestMajorVersion === NULL || $application->getMajorVersion() > $biggestMajorVersion) {
+                $biggestMajorVersion = $application->getMajorVersion();
+            }
+        }
+
+        for($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
+            foreach($_applications as $application) {
+                if($application->getMajorVersion() <= $majorVersion) {
+                    $this->updateApplication($application, $majorVersion);
+                }
+            }
         }
     }
     
@@ -132,17 +139,16 @@ class Setup_Controller
      * setup the Database - read from the XML-files
      *
      */
-
-    public function installNewApplications($_tinebaseFile, $_setupFilesPath )
+    public function installApplications($_tinebaseFile, $_setupFilesPath )
     {    
-        if (file_exists($_tinebaseFile)) {
+        if(file_exists($_tinebaseFile)) {
            $this->parseFile($_tinebaseFile);
         }
         
         foreach ( new DirectoryIterator('./') as $item ) {
-            if ($item->isDir() && $item->getFileName() != 'Tinebase') {
+            if($item->isDir() && $item->getFileName() != 'Tinebase') {
                 $fileName = $item->getFileName() . $_setupFilesPath ;
-                if (file_exists($fileName)) {
+                if(file_exists($fileName)) {
                     $this->parseFile($fileName);
                 }
             }
@@ -239,11 +245,11 @@ class Setup_Controller
     }
     
     /**
-     * parses the xml stream and creates the tables if needed LIMITED TO CHOOSEN ONES
+     * load the setup.xml file and returns a simplexml object
      *
-     * @param string $_file path to xml file
+     * @param string $_applicationName name of the application
      */
-    public function parseFileForUpdate($_applicationName)
+    public function getSetupXml($_applicationName)
     {
     
         $setupXML = dirname(__FILE__) . '/../' . ucfirst($_applicationName) . '/Setup/setup.xml';
@@ -259,30 +265,21 @@ class Setup_Controller
     
     public function checkUpdate(Tinebase_Model_Application $_application)  
     {
-        $xmlTables = $this->parseFileForUpdate($_application->name);
-        echo "Check tables for " .$_application->name . "\n";
-        if (isset($xmlTables->tables)) {
+        $xmlTables = $this->getSetupXml($_application->name);
+        if(isset($xmlTables->tables)) {
             foreach ($xmlTables->tables[0] as $tableXML) {
-            
-                
-            
                 $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                
                 if (true == $this->_backend->tableExists($table->name)) {
-                
                     try {
                         $this->_backend->checkTable($table);
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
                 } else {
-                    throw new Exception ('Table ' . $table->name . ' for application' . $_application->name 
-                                        . " does not exists. \n<strong>Update broken</strong>");
-                    
+                    throw new Exception ('Table ' . $table->name . ' for application' . $_application->name . " does not exists. \n<strong>Update broken</strong>");
                 }
             }
         }
-        echo "done\n\n";
     }
     
     
@@ -293,10 +290,10 @@ class Setup_Controller
      * @param string $_tableVersion (xml-file)
      * @return 1,0,-1
      */
-    public function tableNeedsUpdate($_tableName, $_tableVersion)
+  /*public function tableNeedsUpdate($_tableName, $_tableVersion)
     {
-        return version_compare($this->tableVersionQuery($_tableName), $_tableVersion);
-    }
+        return version_compare($this->tableVersionQuery($_tableName),  $_tableVersion);
+    }*/
 
     /**
      * update installed application
@@ -304,42 +301,39 @@ class Setup_Controller
      * @param string $_name application name
      * @param string $_updateTo version to update to (example: 1.17)
      */
-    public function updateApplication(Tinebase_Model_Application $_application, $_updateTo)
+    public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
     {
-        try {
-            $this->checkUpdate($_application);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-     
-        switch(version_compare($_application->version, $_updateTo)) {
+        #try {
+        #    $this->checkUpdate($_application);
+        #} catch (Exception $e) {
+        #    echo $e->getMessage();
+        #}
+        
+        $setupXml = $this->getSetupXml($_application->name);
+        
+        switch(version_compare($_application->version, $setupXml->version)) {
             case -1:
-                echo "Updating " . $_application->name . " from " . $_application->version . " to $_updateTo<br>";
+                echo "Executing updates for " . $_application->name . " for major version " . $_majorVersion . "<br>";
                 
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
-                list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
+                //list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
         
                 $minor = $fromMinorVersion;
                
-                for ($major = $fromMajorVersion; $major <= $toMajorVersion; $major++) {
-                    if (file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $major . '.php')) {
-                        $className = ucfirst($_application->name) . '_Setup_Update_Release' . $major;
-                    
-                        $update = new $className($this->_backend);
-                    
-                        $classMethods = get_class_methods($update);
-                  
-                        // we must do at least one update
-                        do {
-                            $functionName = 'update_' . $minor;
-                            //echo "FUNCTIONNAME: $functionName<br>";
-                            $update->$functionName();
-                            $minor++;
-                        } while(array_search('update_' . $minor, $classMethods) !== false) ;
-                    
-                        //reset minor version to 0
-                        $minor = 0;
-                    }
+                if(file_exists(ucfirst($_application->name) . '/Setup/Update/Release' . $_majorVersion . '.php')) {
+                    $className = ucfirst($_application->name) . '_Setup_Update_Release' . $_majorVersion;
+                
+                    $update = new $className($this->_backend);
+                
+                    $classMethods = get_class_methods($update);
+              
+                    // we must do at least one update
+                    do {
+                        $functionName = 'update_' . $minor;
+                        //echo "FUNCTIONNAME: $functionName<br>";
+                        $update->$functionName();
+                        $minor++;
+                    } while(array_search('update_' . $minor, $classMethods) !== false);
                 }
 
                 try {
@@ -353,7 +347,7 @@ class Setup_Controller
                 break; 
                 
             case 0:
-                echo "<i>" . $_application->name . " is up to date (Version: " . $_updateTo . ")</i><br>\n\n";
+                echo "<i>" . $_application->name . " is up to date (Version: " . $_application->version . ")</i><br>\n\n";
                 break;
                 
             case 1:

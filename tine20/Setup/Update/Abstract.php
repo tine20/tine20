@@ -38,10 +38,10 @@ class Setup_Update_Abstract
 	 * get version number of a given application 
 	 * version is stored in database table "applications"
 	 *
-	 * @params Tinebase_Application application
-	 * @returns int version number 
+	 * @params string application
+	 * @returns string version number major.minor release 
 	 */
-	public function getApplicationVersion(Tinebase_Application $_application)
+	public function getApplicationVersion($_application)
 	{
 		$select = Zend_Registry::get('dbAdapter')->select()
 				->from( SQL_TABLE_PREFIX . 'applications')
@@ -50,17 +50,17 @@ class Setup_Update_Abstract
 		$stmt = $select->query();
 		$version = $stmt->fetchAll();
 		
-		return (int) $version[0]['version'];
+		return $version[0]['version'];
 	}
 
 	/*
 	 * set version number of a given application 
 	 * version is stored in database table "applications"
 	 *
-	 * @params Tinebase_Application application
+	 * @params string application
 	 * @params int new version number
 	 */	
-	public function setApplicationVersion(Tinebase_Application $_application, $_version)
+	public function setApplicationVersion($_application, $_version)
 	{
 		$applicationsTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'applications'));
 		$where  = array(
