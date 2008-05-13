@@ -92,3 +92,5 @@ if ( IMPORT_EGW_14_ADDRESSBOOK === TRUE ) {
     $import = new Setup_Import_Egw14();
     $import->importAddressbook('egw_addressbook', FALSE);
 }
+
+echo "setup done<br>";
