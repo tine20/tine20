@@ -485,7 +485,6 @@ Tine.Admin.Roles.EditDialog = {
     {
     
         var treePanel = new Ext.tree.TreePanel({
-            title: 'Role Application Rights',
             id: 'rightsTree',
             iconCls: 'AdminTreePanel',
             rootVisible: false,
@@ -507,6 +506,7 @@ Tine.Admin.Roles.EditDialog = {
 
         	var node = new Ext.tree.TreeNode(_allRights[i]);
         	node.attributes.application_id = _allRights[i].application_id;
+        	node.expanded = true;
         	treeRoot.appendChild(node);
         	
         	// append children        	
@@ -553,8 +553,8 @@ Tine.Admin.Roles.EditDialog = {
                 }		
         	}
         	
-        }        
-
+        }     
+        
         return treePanel;
     },
     
