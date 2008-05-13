@@ -133,6 +133,10 @@ class Tinebase_Acl_Roles
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
+        
+        if ( empty($roleMemberships) ) {
+            throw Exception('user has no role memberships');
+        }
 
         $rightIdentifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right');
 		
@@ -146,7 +150,7 @@ class Tinebase_Acl_Roles
             ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED))
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         
@@ -360,7 +364,7 @@ class Tinebase_Acl_Roles
         $select ->where($this->_db->quoteInto('account_id = ?', $_accountId) . ' AND ' . $this->_db->quoteInto('account_type = ?', 'user'))
 				->orwhere($this->_db->quoteInto('account_id IN (?)', $groupMemberships) . ' AND ' .  $this->_db->quoteInto('account_type', 'group'));
             
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
