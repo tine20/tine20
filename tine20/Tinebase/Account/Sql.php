@@ -135,7 +135,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     {
 //		$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'accounts.login_name = ?'), $_loginName);
+            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName));
 
         $stmt = $select->query();
 
