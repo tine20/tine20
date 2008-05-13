@@ -200,7 +200,6 @@ class Tinebase_Application
     {
         $data = $_application->toArray();
         unset($data['tables']);
-var_dump($this->applicationTable);
         $_application->id = $this->applicationTable->insert($data);
         if ($_application->id === NULL) {
             $_application->id = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'applications', 0,26) . '_seq');
