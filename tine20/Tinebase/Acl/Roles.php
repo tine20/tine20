@@ -334,16 +334,6 @@ class Tinebase_Acl_Roles
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
-        /*
-        foreach ($rows as $member) {
-            $members[] = array ( 
-                "account_id"    => $member['account_id'], 
-                "account_type"  => $member['account_type'] 
-            );
-        }
-
-        return $members;
-        */
         return $rows;
     }
 
@@ -379,7 +369,7 @@ class Tinebase_Acl_Roles
      * set role members 
      *
      * @param   int $_roleId
-     * @param   array $_roleMembers with role members ("type" => account type, "id" => account id)
+     * @param   array $_roleMembers with role members ("account_type" => account type, "account_id" => account id)
      */
     public function setRoleMembers($_roleId, array $_roleMembers)
     {
@@ -394,16 +384,16 @@ class Tinebase_Acl_Roles
               
         $validTypes = array( 'user', 'group', 'anyone');
         foreach ( $_roleMembers as $member ) {
-            if ( !in_array($member['type'], $validTypes) ) {
-                throw new InvalidArgumentException('type must be one of ' . 
+            if ( !in_array($member['account_type'], $validTypes) ) {
+                throw new InvalidArgumentException('account_type must be one of ' . 
                     implode(', ', $validTypes) . ' (values given: ' . 
                     print_r($member, true) . ')');
             }
             
             $data = array(
                 'role_id'       => $roleId,
-                'account_type'  => $member['type'],
-                'account_id'    => $member['id'],
+                'account_type'  => $member['account_type'],
+                'account_id'    => $member['account_id'],
             );
             $this->_roleMembersTable->insert($data); 
         }
