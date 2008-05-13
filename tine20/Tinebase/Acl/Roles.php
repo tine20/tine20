@@ -471,9 +471,12 @@ class Tinebase_Acl_Roles
     {        
         // check if already in
         $select = $this->_roleRightsTable->select();
+        $rightIdentifier = $this->_db->quoteIdentifier('right');
         $select->where($this->_db->quoteInto('role_id = ?', $_roleId))
-               ->where($this->_db->quoteInto('right = ?', $_right))
+               ->where($this->_db->quoteInto($rightIdentifier . ' = ?', $_right))
                ->where($this->_db->quoteInto('application_id = ?', $_applicationId));
+               
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {                        
             $data = array(
