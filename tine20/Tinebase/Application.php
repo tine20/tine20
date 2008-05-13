@@ -74,7 +74,7 @@ class Tinebase_Application
             throw new InvalidArgumentException('$_applicationId must be integer');
         }
         
-        $row = $this->applicationTable->fetchRow($this->_db->quoteInto('id = ' . $applicationId));
+        $row = $this->applicationTable->fetchRow($this->_db->quoteInto('id = ?' . $applicationId));
         
         $result = new Tinebase_Model_Application($row->toArray());
         
