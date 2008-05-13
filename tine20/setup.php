@@ -53,14 +53,21 @@ try {
 $setup = new Setup_Controller();
 
 /**
- * update applications
+ * update already installed applications
  */
-$setup->updateInstalledApplications();
+try {
+    // get list of applications, sorted by id. Tinebase should have the smallest id because it got installed first.
+    $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+    $setup->updateApplications($applications);
+} catch (Exception $e) {
+    // do nothing, no applications installed
+}    
+
 
 /**
- * build empty Database 
+ * install new applications 
  */ 
-$setup->installNewApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
+$setup->installApplications('Tinebase/Setup/setup.xml', '/Setup/setup.xml');
 
 /**
  * fill with default or present values 
