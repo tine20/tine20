@@ -109,7 +109,7 @@ class Tinebase_Acl_Roles
         $select->where($this->_db->quoteInto('role_id IN (?)', $roleMemberships))
                ->where($this->_db->quoteInto($rightIdentifier . '= ?', $_right));
                
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());               
             
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
             $result = false;
