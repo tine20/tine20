@@ -226,11 +226,17 @@ class Tinebase_Controller
             
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         
-            if (strtoupper($dbConfig->get('backend')) == 'PDO_MYSQL') {
-                $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
-            
-            } else if (strtoupper($dbConfig->get('backend')) == 'PDO_OCI') {    
-                $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+            // mysql is default
+            $backend = strtoupper($dbConfig->get('backend'));
+            switch ( $backend ) {
+                case 'PDO_MYSQL':
+                    $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
+                    break;
+                case 'PDO_OCI':
+                    $db = Zend_Db::factory('Pdo_Oci', $dbConfig->toArray());
+                    break;
+                default:
+                    $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
             }
             
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
