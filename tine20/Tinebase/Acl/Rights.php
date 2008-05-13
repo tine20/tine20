@@ -310,7 +310,7 @@ class Tinebase_Acl_Rights
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($_applicationRights, true));
         
         // delete all old rights for this application
-        $where = Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId);
+        $where = $this->_rightsTable->getAdapter()->quoteInto($this->_rightsTable->getAdapter()->quoteIdentifier('application_id') . ' = ?', $_applicationId);
         $this->_rightsTable->delete($where);        
         
         $count = 0;
