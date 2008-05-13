@@ -369,7 +369,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
             array(
                 'id'    => $adminGroup->getId(),
-                'type'  => 'group', 
+                'account_type'  => 'group', 
             )
         ));
         
@@ -381,7 +381,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
             array(
                 'id'    => $userGroup->getId(),
-                'type'  => 'group', 
+                'account_type'  => 'group', 
             )
         ));
         
