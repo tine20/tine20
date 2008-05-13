@@ -133,7 +133,8 @@ class Tinebase_Acl_Roles
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
-      
+
+        $rightIdentifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right');
 		
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'role_rights', array())
@@ -141,11 +142,11 @@ class Tinebase_Acl_Roles
                 $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.application_id') . 
 				' = ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'applications.id'))            
             ->where($this->_db->quoteInto('role_id IN (?)', $roleMemberships))
-            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'role_rights.right = ?', Tinebase_Acl_Rights::RUN))
+            ->where($this->_db->quoteInto($rightIdentifier . ' = ?', Tinebase_Acl_Rights::RUN))
             ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'applications.status = ?', Tinebase_Application::ENABLED))
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         
@@ -357,9 +358,9 @@ class Tinebase_Acl_Roles
         
         $select = $this->_roleMembersTable->select();
         $select ->where($this->_db->quoteInto('account_id = ?', $_accountId) . ' AND ' . $this->_db->quoteInto('account_type = ?', 'user'))
-				->orwhere($this->_db->quoteInto('account_id IN (?)', $groupMemberships . ' AND ' .  $this->_db->quoteInto('account_type', 'group')));
+				->orwhere($this->_db->quoteInto('account_id IN (?)', $groupMemberships) . ' AND ' .  $this->_db->quoteInto('account_type', 'group'));
             
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
