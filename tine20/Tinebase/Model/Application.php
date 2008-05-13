@@ -104,4 +104,20 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     {
         return $this->name;
     }    
+    
+    /**
+     * return the major version of the appliaction
+     *
+     * @return int the major version
+     */
+    public function getMajorVersion()
+    {
+        if(empty($this->version)) {
+            throw new Exception('no version set');
+        }
+        
+        list($majorVersion, $minorVersion) = explode('.', $this->version);
+        
+        return $majorVersion;
+    }
 }
