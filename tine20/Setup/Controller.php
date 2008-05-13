@@ -37,7 +37,7 @@ class Setup_Controller
 
         $this->_setupLogger();
         $this->setupDatabaseConnection();
-         if (strtoupper($this->_config->database->get('backend')) == 'MYSQL') {
+        if ( $this->_config->database->get('backend') == '' or strtoupper($this->_config->database->get('backend')) == 'MYSQL') {
             $this->_backend = Setup_Backend_Factory::factory('Mysql');
             
         } else if (strtoupper($this->_config->database->get('backend')) == 'PDO_OCI') {    
@@ -90,7 +90,7 @@ class Setup_Controller
 
             echo "<pre><hr>setting table prefix to: " . SQL_TABLE_PREFIX . " <hr>";
             
-            if (strtoupper($dbConfig->get('backend')) == 'MYSQL') {
+            if ( $this->_config->database->get('backend') == '' or strtoupper($dbConfig->get('backend')) == 'MYSQL') {
                 $db = Zend_Db::factory('PDO_MYSQL', $dbConfig->toArray());
                 //$db = Zend_Db::factory('Mysqli', $dbConfig->toArray());
             

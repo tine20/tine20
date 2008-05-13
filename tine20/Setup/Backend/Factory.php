@@ -32,7 +32,8 @@ class Setup_Backend_Factory
     static public function factory($_type)
     {
         $className = 'Setup_Backend_' . ucfirst($_type);
-        $instance = new $className($_definition);
+        //$instance = new $className($_definition);
+        $instance = new $className();
 
         return $instance;
     }
