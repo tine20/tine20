@@ -112,7 +112,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => 'Deutschland',
-            'new_value'            => '…stereich'
+            'new_value'            => 'ï¿½stereich'
         ),
         array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName('Tinebase'),
@@ -122,7 +122,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'modification_time'    => $this->Cloner($now)->addDay(-1)->addSecond(1),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
-            'old_value'            => '…stereich',
+            'old_value'            => 'ï¿½stereich',
             'new_value'            => 'Schweitz'
         ),
         array(
@@ -250,7 +250,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     public static function purgeLogs($_recordIds)
     {
-        $table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'timemachine_modificationlog'));
+        $table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'timemachine_modlog'));
         
         foreach ((array) $_recordIds as $recordId) {
              $table->delete($table->getAdapter()->quoteInto('record_id = ?', $recordId));
