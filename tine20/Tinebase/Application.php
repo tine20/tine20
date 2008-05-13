@@ -21,7 +21,7 @@ class Tinebase_Application
     const ENABLED  = 'enabled';
     
     const DISABLED = 'disabled';
-	
+    
     /**
      * the table object for the SQL_TABLE_PREFIX . applications table
      *
@@ -29,11 +29,11 @@ class Tinebase_Application
      */
     protected $applicationTable;
 
-	protected $_db = '';
-	
+    protected $_db = '';
+    
     private function __construct() {
         $this->applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'applications'));
-		$this->_db = $this->applicationTable->getAdapter();
+        $this->_db = $this->applicationTable->getAdapter();
     }
     private function __clone() {}
 
@@ -74,7 +74,7 @@ class Tinebase_Application
             throw new InvalidArgumentException('$_applicationId must be integer');
         }
         
-        $row = $this->applicationTable->fetchRow($this->_db->quoteInto('id = ?', $applicationId));
+        $row = $this->applicationTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId));
         
         $result = new Tinebase_Model_Application($row->toArray());
         
@@ -94,7 +94,7 @@ class Tinebase_Application
         if(empty($_applicationName)) {
             throw new InvalidArgumentException('$_applicationName can not be empty');
         }
-        $where = $this->_db->quoteInto('name = ?', $_applicationName);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
         if(!$row = $this->applicationTable->fetchRow($where)) {
             throw new Exception("application $_applicationName not found");
         }
@@ -118,7 +118,7 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $where[] = $this->_db->quoteInto('name LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -139,7 +139,7 @@ class Tinebase_Application
         if($_status !== Tinebase_Application::ENABLED && $_status !== Tinebase_Application::DISABLED) {
             throw new InvalidArgumentException('$_status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
-        $where[] = $this->_db->quoteInto('status = ?', $_status);
+        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', $_status);
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
@@ -159,7 +159,7 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $where[] = $this->_db->quoteInto('name LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
         }
         $count = $this->applicationTable->getTotalCount($where);
         
@@ -178,7 +178,7 @@ class Tinebase_Application
             throw new OutOfRangeException('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
         $where = array(
-            $this->_db->quoteInto('id IN (?)', $_applicationIds)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_applicationIds)
         );
         
         $data = array(
@@ -200,10 +200,10 @@ class Tinebase_Application
     {
         $data = $_application->toArray();
         unset($data['tables']);
-
+var_dump($this->applicationTable);
         $_application->id = $this->applicationTable->insert($data);
         if ($_application->id === NULL) {
-            $_application->id = $this->_db->lastSequenceId($this->applicationTable->name . '_seq');
+            $_application->id = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'applications', 0,26) . '_seq');
         }
         return $_application;
     }

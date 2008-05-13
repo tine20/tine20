@@ -174,10 +174,10 @@ class Tinebase_Container
         
         if($containerId === NULL) {
             $containerId = $this->containerTable->insert($data);
-			if ($containerId === NULL) {
-				$containerId = $this->containerTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'container_seq');
-			}
-		} else {
+            if ($containerId === NULL) {
+                $containerId = $this->containerTable->getAdapter()->lastSequenceId(substr(SQL_TABLE_PREFIX . 'container', 0, 26) . '_seq');
+            }
+        } else {
             $data['id'] = $containerId;
             $this->containerTable->insert($data);
         }
@@ -307,18 +307,18 @@ class Tinebase_Container
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
                
         $db = Zend_Registry::get('dbAdapter');
-		
-		$tableContainer = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
-		$tableContainerAcl = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
-		$colId = $db->quoteIdentifier('id');
-		#$colName = $db->quoteIdentifier('name');
-		$colContainerId = $db->quoteIdentifier('container_id');
-		$colApplicationId = $db->quoteIdentifier('application_id');
-		$colAccountGrant = $db->quoteIdentifier('account_grant');
-		$colAccountId = $db->quoteIdentifier('account_id');
-		$colAccountType = $db->quoteIdentifier('account_type');
-		
-		$select = $db->select()
+        
+        $tableContainer = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container');
+        $tableContainerAcl = $db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl');
+        $colId = $db->quoteIdentifier('id');
+        #$colName = $db->quoteIdentifier('name');
+        $colContainerId = $db->quoteIdentifier('container_id');
+        $colApplicationId = $db->quoteIdentifier('application_id');
+        $colAccountGrant = $db->quoteIdentifier('account_grant');
+        $colAccountId = $db->quoteIdentifier('account_id');
+        $colAccountType = $db->quoteIdentifier('account_type');
+        
+        $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'container')
             ->join(
                 SQL_TABLE_PREFIX . 'container_acl',
@@ -414,10 +414,10 @@ class Tinebase_Container
         }
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
-		$colName = $this->containerTable->getAdapter()->quoteIdentifier('name');
-		$colType = $this->containerTable->getAdapter()->quoteIdentifier('type');
-		$colApplicationId = $this->containerTable->getAdapter()->quoteIdentifier('application_id');
-		
+        $colName = $this->containerTable->getAdapter()->quoteIdentifier('name');
+        $colType = $this->containerTable->getAdapter()->quoteIdentifier('type');
+        $colApplicationId = $this->containerTable->getAdapter()->quoteIdentifier('application_id');
+        
         $select  = $this->containerTable->select()
             ->where($colName . ' = ?', $_containerName)
             ->where($colType . ' = ?', $_type)

@@ -109,7 +109,7 @@ class Tinebase_Acl_Rights
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'application_rights', array())
             ->join(SQL_TABLE_PREFIX . 'applications', 
-                SQL_TABLE_PREFIX . 'application_rights.application_id = ' . SQL_TABLE_PREFIX . 'applications.id')            
+                $db->quoteIdentifier(SQL_TABLE_PREFIX . 'application_rights.application_id') . ' = ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'applications.id'))            
             # beware of the extra parenthesis of the next 3 rows
             ->where('(' . SQL_TABLE_PREFIX . 'application_rights.account_type = \'group\' and ' . 
                 SQL_TABLE_PREFIX . 'application_rights.account_id IN (?)', $groupMemberships)
@@ -310,7 +310,7 @@ class Tinebase_Acl_Rights
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($_applicationRights, true));
         
         // delete all old rights for this application
-        $where = Zend_Registry::get('dbAdapter')->quoteInto('application_id = ?', $_applicationId);
+        $where = Zend_Registry::get('dbAdapter')->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId);
         $this->_rightsTable->delete($where);        
         
         $count = 0;

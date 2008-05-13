@@ -110,7 +110,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         }
         // return only active accounts, when searching for simple accounts
         if($_accountClass == 'Tinebase_Account_Model_Account') {
-            $select->where($this->_db->quoteInto('status = ?', 'enabled'));
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -133,9 +133,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
      */
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
-//		$db = Zend_Registry::get('dbAdapter');
+//        $db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.login_name') . ' = ?'), $_loginName);
 
         $stmt = $select->query();
 
@@ -172,7 +172,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         #$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.id') . ' = ?', $accountId));
 
         $stmt = $select->query();
 
@@ -226,7 +226,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             ->join(
                SQL_TABLE_PREFIX . 'addressbook',
                $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.id') . ' = ' 
-				. $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook.account_id'), 
+                . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook.account_id'), 
                 array(
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
@@ -268,7 +268,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $this->_db->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -295,7 +295,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $this->_db->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -322,7 +322,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $where = array(
-            $this->_db->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -346,7 +346,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountData['last_login']      = Zend_Date::now()->getIso();
         
         $where = array(
-            $this->_db->quoteInto('id = ?', $accountId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
         
         $result = $accountsTable->update($accountData, $where);
@@ -395,12 +395,12 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             
             
             $where = array(
-                $this->_db->quoteInto('id = ?', $accountId)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
             );
             $accountsTable->update($accountData, $where);
             
             $where = array(
-                $this->_db->quoteInto('account_id = ?', $accountId)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId)
             );
             $contactsTable->update($contactData, $where);
             
@@ -459,7 +459,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             // add new account
             $accountId = $accountsTable->insert($accountData);
             if ($accountId === NULL) {
-                $accountId = $this->_db->lastSequenceId(SQL_TABLE_PREFIX . 'accounts_seq');
+                $accountId = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'accounts', 0,26) . '_seq');
             }
             // if we insert an account without an accountId, we need to get back one
             if(empty($_account->accountId) && $accountId == 0) {
@@ -508,17 +508,17 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             $this->_db->beginTransaction();
             
             $where  = array(
-                $this->_db->quoteInto('account_id = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
             );
             $contactsTable->delete($where);
 
             $where  = array(
-                $this->_db->quoteInto('account_id = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
             );
             $groupMembersTable->delete($where);
             
             $where  = array(
-                $this->_db->quoteInto('id = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId),
             );
             $accountsTable->delete($where);
             
