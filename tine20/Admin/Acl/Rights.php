@@ -18,6 +18,11 @@
  * a right is always specific to an application and not to a record
  * examples for rights are: admin, run
  * 
+ * to add a new right you have to do these 3 steps:
+ * - add a constant for the right
+ * - add the constant to the $addRights in getAllApplicationRights() function
+ * . add getText identifier in getTranslatedRightDescriptions() function
+ * 
  * @package     Tinebase
  * @subpackage  Acl
  */
@@ -35,6 +40,42 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
      */
     const MANAGE_ROLES = 'manage_roles';
 
+   /**
+     * the right to manage accounts
+     * @staticvar string
+     */
+    const MANAGE_ACCOUNTS = 'manage_accounts';
+    
+   /**
+     * the right to manage roles
+     * @staticvar string
+     */
+    const MANAGE_ACCESS_LOG = 'manage_access_log';
+
+   /**
+     * the right to view applications
+     * @staticvar string
+     */
+    const VIEW_APPS = 'view_apps';
+    
+   /**
+     * the right to view roles
+     * @staticvar string
+     */
+    const VIEW_ROLES = 'view_roles';
+
+   /**
+     * the right to view accounts
+     * @staticvar string
+     */
+    const VIEW_ACCOUNTS = 'view_accounts';
+    
+   /**
+     * the right to view roles
+     * @staticvar string
+     */
+    const VIEW_ACCESS_LOG = 'view_access_log';
+    
     /**
      * application name
      * @staticvar string
@@ -56,7 +97,13 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
         $addRights = array ( 
             self::MANAGE_APPS, 
             self::MANAGE_ROLES, 
-        );
+            self::MANAGE_ACCOUNTS, 
+            self::MANAGE_ACCESS_LOG, 
+            self::VIEW_APPS, 
+            self::VIEW_ROLES, 
+            self::VIEW_ACCOUNTS, 
+            self::VIEW_ACCESS_LOG, 
+            );
         $allRights = array_merge($allRights, $addRights);
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allRights, true));
@@ -83,6 +130,30 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
             self::MANAGE_APPS   => array(
                 'text'          => $translate->_('manage applications'),
                 'description'   => $translate->_('manage applications right description'),
+            ),
+            self::MANAGE_ACCOUNTS   => array(
+                'text'          => $translate->_('manage accounts'),
+                'description'   => $translate->_('manage accounts right description'),
+            ),
+            self::MANAGE_ACCESS_LOG   => array(
+                'text'          => $translate->_('manage access log'),
+                'description'   => $translate->_('manage access log right description'),
+            ),
+            self::VIEW_ROLES  => array(
+                'text'          => $translate->_('view roles'),
+                'description'   => $translate->_('view roles right description'),
+            ),
+            self::VIEW_APPS   => array(
+                'text'          => $translate->_('view applications'),
+                'description'   => $translate->_('view applications right description'),
+            ),
+            self::VIEW_ACCOUNTS   => array(
+                'text'          => $translate->_('view accounts'),
+                'description'   => $translate->_('view accounts right description'),
+            ),
+            self::VIEW_ACCESS_LOG   => array(
+                'text'          => $translate->_('view access log'),
+                'description'   => $translate->_('view access log right description'),
             ),
         );
         

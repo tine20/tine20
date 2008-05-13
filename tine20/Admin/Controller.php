@@ -74,6 +74,8 @@ class Admin_Controller
      */
     public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
         $backend = Tinebase_Account::getInstance();
 
         $result = $backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit);
@@ -93,6 +95,8 @@ class Admin_Controller
      */
     public function getFullAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
         $backend = Tinebase_Account::getInstance();
 
         $result = $backend->getFullAccounts($_filter, $_sort, $_dir, $_start, $_limit);
@@ -108,6 +112,8 @@ class Admin_Controller
      */
     public function getAccount($_accountId)
     {        
+        $this->checkRight('VIEW_ACCOUNTS');
+        
         return Tinebase_Account::getInstance()->getAccountById($_accountId);
     }
     
@@ -121,6 +127,8 @@ class Admin_Controller
      */
     public function setAccountStatus($_accountId, $_status)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         $result = Tinebase_Account::getInstance()->setStatus($_accountId, $_status);
         
         return $result;
@@ -136,6 +144,8 @@ class Admin_Controller
      */
     public function setAccountPassword(Tinebase_Account_Model_FullAccount $_account, $_password, $_passwordRepeat)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         if ($_password != $_passwordRepeat) {
             throw new Exception("passwords don't match");
         }
@@ -155,6 +165,8 @@ class Admin_Controller
      */
     public function updateAccount(Tinebase_Account_Model_FullAccount $_account, $_password, $_passwordRepeat)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         $account = Tinebase_Account::getInstance()->updateAccount($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
@@ -180,6 +192,8 @@ class Admin_Controller
      */
     public function addAccount(Tinebase_Account_Model_FullAccount $_account, $_password, $_passwordRepeat)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         $account = Tinebase_Account::getInstance()->addAccount($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
@@ -203,6 +217,8 @@ class Admin_Controller
      */
     public function deleteAccounts(array $_accountIds)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         return Tinebase_Account::getInstance()->deleteAccounts($_accountIds);
     }
     
@@ -218,6 +234,8 @@ class Admin_Controller
      */
     public function getAccessLogEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
     {
+        $this->checkRight('VIEW_ACCESS_LOG');        
+        
         $tineAccessLog = Tinebase_AccessLog::getInstance();
 
         $result = $tineAccessLog->getEntries($_filter, $_sort, $_dir, $_start, $_limit, $_from, $_to);
@@ -246,6 +264,8 @@ class Admin_Controller
      */
     public function deleteAccessLogEntries($_logIds)
     {
+        $this->checkRight('MANAGE_ACCESS_LOG');        
+        
         Tinebase_AccessLog::getInstance()->deleteEntries($_logIds);
     }
     
@@ -261,6 +281,8 @@ class Admin_Controller
      */
     public function getApplications($filter, $sort, $dir, $start, $limit)
     {
+        $this->checkRight('VIEW_APPS');        
+        
         $tineApplications = Tinebase_Application::getInstance();
         
         return $tineApplications->getApplications($filter, $sort, $dir, $start, $limit);
@@ -274,6 +296,8 @@ class Admin_Controller
      */
     public function getApplication($_applicationId)
     {
+        $this->checkRight('VIEW_APPS');        
+        
         $tineApplications = Tinebase_Application::getInstance();
         
         return $tineApplications->getApplicationById($_applicationId);
@@ -300,6 +324,8 @@ class Admin_Controller
      */
     public function setApplicationState($_applicationIds, $_state)
     {
+        $this->checkRight('MANAGE_APPS');        
+        
         $tineApplications = Tinebase_Application::getInstance();
         
         return $tineApplications->setApplicationState($_applicationIds, $_state);
@@ -327,15 +353,8 @@ class Admin_Controller
      */
     public function setApplicationPermissions($_applicationId, array $_rights = array ())
     {   
-        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Admin_Acl_Rights::MANAGE_APPS) && 
-             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Tinebase_Acl_Rights::ADMIN) ) {
-            throw new Exception('You are not allowed to change application permissions!');
-        }        
-        
+        $this->checkRight('MANAGE_APPS');        
+                
         return Tinebase_Application::getInstance()->setApplicationPermissions($_applicationId, $_rights);
     }  
         
@@ -351,6 +370,8 @@ class Admin_Controller
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
         return Tinebase_Group::getInstance()->getGroups($filter, $sort, $dir, $start, $limit);
     }
    
@@ -362,6 +383,8 @@ class Admin_Controller
      */
     public function getGroup($_groupId)
     {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
         $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
 
         /*if (!$this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
@@ -381,6 +404,8 @@ class Admin_Controller
      */
     public function AddGroup(Tinebase_Group_Model_Group $_group, array $_groupMembers = array ())
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         $group = Tinebase_Group::getInstance()->addGroup($_group);
         
         if ( !empty($_groupMembers) ) {
@@ -400,6 +425,8 @@ class Admin_Controller
      */
     public function UpdateGroup(Tinebase_Group_Model_Group $_group, array $_groupMembers = array ())
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
         
         Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_groupMembers);
@@ -415,6 +442,8 @@ class Admin_Controller
      */
     public function deleteGroups($_groupIds)
     {        
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
         return Tinebase_Group::getInstance()->deleteGroups($_groupIds);
     }    
     
@@ -481,10 +510,14 @@ class Admin_Controller
      */
     public function AddTag(Tinebase_Tags_Model_FullTag $_tag)
     {
-        $_tag->type = Tinebase_Tags_Model_Tag::TYPE_SHARED;
+        /*
         if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', $this->_currentAccount->getId(), Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
                 throw new Exception('Your are not allowed to create a shared tag!');
         }
+        */
+        $this->checkRight('MANAGE_SHARED_TAGS');
+        
+        $_tag->type = Tinebase_Tags_Model_Tag::TYPE_SHARED;
         $newTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
 
         $_tag->rights->tag_id = $newTag->getId();
@@ -502,9 +535,13 @@ class Admin_Controller
      */
     public function UpdateTag(Tinebase_Tags_Model_FullTag $_tag)
     {
+        /*
         if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', $this->_currentAccount->getId(), Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
                 throw new Exception('Your are not allowed to create a shared tag!');
         }
+        */
+        $this->checkRight('MANAGE_SHARED_TAGS');
+        
         Tinebase_Tags::getInstance()->updateTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
         
         $_tag->rights->tag_id = $_tag->getId();
@@ -525,6 +562,8 @@ class Admin_Controller
      */
     public function deleteTags($_tagIds)
     {        
+        $this->checkRight('MANAGE_SHARED_TAGS');
+        
         Tinebase_Tags::getInstance()->deleteTags($_tagIds);
     }
 
@@ -540,6 +579,7 @@ class Admin_Controller
      */
     public function getRoles($query, $sort, $dir, $start, $limit)
     {
+        $this->checkRight('VIEW_ROLES');
        
         $filter = new Tinebase_Acl_Model_RoleFilter(array(
             'name'        => $query,
@@ -564,6 +604,8 @@ class Admin_Controller
      */
     public function getRole($_roleId)
     {
+        $this->checkRight('VIEW_ROLES');
+        
         $role = Tinebase_Acl_Roles::getInstance()->getRoleById($_roleId);
 
         return $role;            
@@ -605,14 +647,7 @@ class Admin_Controller
      */
     public function UpdateRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
-        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Admin_Acl_Rights::MANAGE_ROLES) && 
-             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Tinebase_Acl_Rights::ADMIN) ) {
-            throw new Exception('You are not allowed to manage roles!');
-        }        
+        $this->checkRight('MANAGE_ROLES');
         
         $role = Tinebase_Acl_Roles::getInstance()->updateRole($_role);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(), $_roleMembers);
@@ -629,14 +664,8 @@ class Admin_Controller
      */
     public function deleteRoles($_roleIds)
     {        
-        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Admin_Acl_Rights::MANAGE_ROLES) && 
-             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Tinebase_Acl_Rights::ADMIN) ) {
-            throw new Exception('You are not allowed to manage roles!');
-        }        
+        $this->checkRight('MANAGE_ROLES');
+        
         Tinebase_Acl_Roles::getInstance()->deleteRoles($_roleIds);
     }
 
@@ -666,6 +695,43 @@ class Admin_Controller
         $members = Tinebase_Acl_Roles::getInstance()->getRoleRights($_roleId);
                 
         return $members;
+    }
+
+    /**
+     * generic check admin rights function
+     * rules: 
+     * - ADMIN right includes all other rights
+     * - MANAGE_* right includes VIEW_* right 
+     * 
+     * @param   string  $_right to check
+     */    
+    protected function checkRight( $_right ) {
+        
+        $rightsToCheck = array ( Tinebase_Acl_Rights::ADMIN );
+        
+        if ( preg_match("/MANAGE_/", $_right) ) {
+            $rightsToCheck[] = constant('Admin_Acl_Rights::' . $_right);
+        }
+
+        if ( preg_match("/VIEW_([A-Z_]*)/", $_right, $matches) ) {
+            $rightsToCheck[] = constant('Admin_Acl_Rights::' . $_right);
+            // manage right includes view right
+            $rightsToCheck[] = constant('Admin_Acl_Rights::MANAGE_' . $matches[1]);
+        }
+        
+        $hasRight = FALSE;
+        
+        foreach ( $rightsToCheck as $rightToCheck ) {
+            if ( Tinebase_Acl_Rights::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck) ) {
+                $hasRight = TRUE;
+                break;    
+            }
+        }
+        
+        if ( !$hasRight ) {
+            throw new Exception("You are not allowed to $_right !");
+        }        
+                
     }
     
 }
