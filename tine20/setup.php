@@ -30,6 +30,7 @@ $output = $check->getOutput();
 echo $output;
 
 if (strpos($output, "FAILURE")) {
+    phpinfo();
     die("Unsufficent server system.");
 }
 
@@ -37,7 +38,11 @@ if (strpos($output, "FAILURE")) {
  * load central configuration once and put it in the registry
  */
 try {
-    Zend_Registry::set('configFile', new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini'));
+    if (isset($argv[1]) && is_file($argv[1])) {
+        Zend_Registry::set('configFile', new Zend_Config_Ini($argv[1]));
+    } else {
+        Zend_Registry::set('configFile', new Zend_Config_Ini($_SERVER['DOCUMENT_ROOT'] . '/../config.ini'));
+    }
 } catch (Zend_Config_Exception $e) {
     die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
 }
