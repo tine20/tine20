@@ -134,8 +134,9 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
     {
 //        $db = Zend_Registry::get('dbAdapter');
+        // quote into expects 2 params
         $select = $this->_getAccountSelectObject()
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.login_name') . ' = ?'), $_loginName);
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.login_name') . ' = ?', $_loginName));
 
         $stmt = $select->query();
 
