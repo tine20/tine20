@@ -51,8 +51,16 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     public function saveContact($contactData)
     {
         $contactData = Zend_Json::decode($contactData);
+        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
+        
         if (isset($contactData['tags'])) {
             $contactData['tags'] = Zend_Json::decode($contactData['tags']);
+        }
+        if (isset($contactData['jpegphoto'])) {
+            $imageParams = $this->parseImageLink($contactData['jpegphoto']);
+            if ($imageParams['isNewImage']) {
+                $contactData['jpegphoto'] = $this->getImageData($imageParams);
+            }
         }
         
         // unset if empty
@@ -60,6 +68,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             unset($contactData['id']);
         }
 
+        //Zend_Registry::get('logger')->debug(print_r($contactData,true));
         $contact = new Addressbook_Model_Contact();
         try {
             $contact->setFromArray($contactData);
@@ -147,6 +156,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $contact->tags = $contact->tags->toArray();
         $result['contact'] = $contact->toArray();
         $result['contact']['owner'] = Tinebase_Container::getInstance()->getContainerById($contact->owner)->toArray();
+        $result['contact']['jpegphoto'] = $this->getImageLink($contact);
+        
         return $result;
     }
 
@@ -341,4 +352,55 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         return $result;
     }
     
+    /**
+     * returns a image link
+     * 
+     * @param  Addressbook_Model_Contact|array
+     * @return string
+     */
+    protected function getImageLink($contact)
+    {
+        if (!empty($contact->jpegphoto)) {
+            $link =  'index.php?method=Addressbook.getImage&id=' . $contact['id'] . '&width=90&height=90&$ratiomode=0';
+        } else {
+            $link = 'images/empty_photo.jpg';
+        }
+        return $link;
+    }
+    /**
+     * parses an image link
+     * 
+     * @param  string $link
+     * @return array
+     */
+    protected function parseImageLink($link)
+    {
+        $params = array();
+        //Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
+        parse_str(parse_url($link, PHP_URL_QUERY), $params);
+        $params['isNewImage'] = false;
+        if (isset($params['method']) && $params['method'] == 'Tinebase.getTempFileThumbnail') {
+            $params['isNewImage'] = true;
+        }
+        //Zend_Registry::get('logger')->debug(print_r($params,true));
+        return $params;
+    }
+    /**
+     * returns binary image data from a image identified by a imagelink
+     * 
+     * @param  array  $imageParams
+     * @return string binary data
+     */
+    protected function getImageData($imageParams)
+    {
+        $db = Zend_Registry::get('dbAdapter');
+        $select = $db->select()
+           ->from(SQL_TABLE_PREFIX . 'temp_files')
+           ->where($db->quoteInto('id = ?', $imageParams['id']))
+           ->where($db->quoteInto('session_id = ?', session_id()));
+        $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+        
+        //Zend_Registry::get('logger')->debug(print_r($tempFile,true));
+        return $tempFile ? file_get_contents($tempFile['path']) : NULL;
+    }
 }

@@ -557,6 +557,7 @@ Tine.Addressbook.ContactEditDialog = {
             if(form.isValid()) {
                 Ext.MessageBox.wait('Please wait a moment...', 'Saving Contact');
                 form.updateRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
+                Tine.Addressbook.ContactEditDialog.contactRecord.set('jpegphoto', Ext.getCmp('addressbookeditdialog-jpegimage').getValue());
         
                 Ext.Ajax.request({
                     params: {
@@ -681,6 +682,7 @@ Tine.Addressbook.ContactEditDialog = {
         this.updateToolbarButtons(_contactData.grants);
         
         dialog.getForm().loadRecord(this.contactRecord);
+        Ext.getCmp('addressbookeditdialog-jpegimage').setValue(this.contactRecord.get('jpegphoto'));
         
         if(this.contactRecord.data.adr_one_countrydisplayname) {
             //console.log('set adr_one_countryname to ' + this.contactRecord.data.adr_one_countrydisplayname);

@@ -92,6 +92,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         ),*/
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'jpegphoto'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'freebusy_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
