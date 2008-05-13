@@ -17,8 +17,8 @@
  * @subpackage  Auth 
  */
 class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable
-{	
-	/**
+{    
+    /**
      * authenticate() - defined by Zend_Auth_Adapter_Interface.
      *
      * @throws Zend_Auth_Adapter_Exception if answering the authentication query is impossible

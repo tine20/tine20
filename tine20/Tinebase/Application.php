@@ -21,7 +21,7 @@ class Tinebase_Application
     const ENABLED  = 'enabled';
     
     const DISABLED = 'disabled';
-    
+	
     /**
      * the table object for the SQL_TABLE_PREFIX . applications table
      *
@@ -29,8 +29,11 @@ class Tinebase_Application
      */
     protected $applicationTable;
 
+	protected $_db = '';
+	
     private function __construct() {
         $this->applicationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'applications'));
+		$this->_db = $this->applicationTable->getAdapter();
     }
     private function __clone() {}
 
@@ -70,8 +73,8 @@ class Tinebase_Application
         if($applicationId != $_applicationId) {
             throw new InvalidArgumentException('$_applicationId must be integer');
         }
-        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('id');
-        $row = $this->applicationTable->fetchRow( $colName . ' = ' . $applicationId);
+        
+        $row = $this->applicationTable->fetchRow($this->_db->quoteInto('id = ' . $applicationId));
         
         $result = new Tinebase_Model_Application($row->toArray());
         
@@ -91,8 +94,7 @@ class Tinebase_Application
         if(empty($_applicationName)) {
             throw new InvalidArgumentException('$_applicationName can not be empty');
         }
-        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('name');
-        $where = $this->applicationTable->getAdapter()->quoteInto($colName . ' = ?', $_applicationName);
+        $where = $this->_db->quoteInto('name = ?', $_applicationName);
         if(!$row = $this->applicationTable->fetchRow($where)) {
             throw new Exception("application $_applicationName not found");
         }
@@ -116,8 +118,7 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $colName = $this->applicationTable->getAdapter()->quoteIdentifier('name');
-            $where[] = $this->applicationTable->getAdapter()->quoteInto($colName . ' LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->_db->quoteInto('name LIKE ?', '%' . $_filter . '%');
         }
         
         $rowSet = $this->applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
@@ -138,8 +139,7 @@ class Tinebase_Application
         if($_status !== Tinebase_Application::ENABLED && $_status !== Tinebase_Application::DISABLED) {
             throw new InvalidArgumentException('$_status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
-        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('status');
-        $where[] = $this->applicationTable->getAdapter()->quoteInto($colName . '= ?', $_status);
+        $where[] = $this->_db->quoteInto('status = ?', $_status);
         
         $rowSet = $this->applicationTable->fetchAll($where);
 
@@ -159,8 +159,7 @@ class Tinebase_Application
     {
         $where = array();
         if($_filter !== NULL) {
-            $colName = $this->applicationTable->getAdapter()->quoteIdentifier('name');
-            $where[] = $this->applicationTable->getAdapter()->quoteInto($colName . ' LIKE ?', '%' . $_filter . '%');
+            $where[] = $this->_db->quoteInto('name LIKE ?', '%' . $_filter . '%');
         }
         $count = $this->applicationTable->getTotalCount($where);
         
@@ -178,9 +177,8 @@ class Tinebase_Application
         if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
             throw new OutOfRangeException('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
-        $colName = $this->applicationTable->getAdapter()->quoteIdentifier('id');
         $where = array(
-            $this->applicationTable->getAdapter()->quoteInto($colName . ' IN (?)', $_applicationIds)
+            $this->_db->quoteInto('id IN (?)', $_applicationIds)
         );
         
         $data = array(
@@ -201,15 +199,12 @@ class Tinebase_Application
     public function addApplication(Tinebase_Model_Application $_application)
     {
         $data = $_application->toArray();
-//		print_r($data);
         unset($data['tables']);
-      
+
         $_application->id = $this->applicationTable->insert($data);
-//		var_dump( $_application->id );
         if ($_application->id === NULL) {
-            $_application->id = $this->applicationTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'applications_seq');
+            $_application->id = $this->_db->lastSequenceId($this->applicationTable->name . '_seq');
         }
-//		var_dump($_application);
         return $_application;
     }
     

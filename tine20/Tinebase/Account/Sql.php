@@ -110,8 +110,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         }
         // return only active accounts, when searching for simple accounts
         if($_accountClass == 'Tinebase_Account_Model_Account') {
-            $colName = $this->_db->quoteIdentifier('status');
-            $select->where($colName . ' = ?', 'enabled');
+            $select->where($this->_db->quoteInto('status = ?', 'enabled'));
         }
         //error_log("getAccounts:: " . $select->__toString());
 
@@ -136,7 +135,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     {
 //		$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where(SQL_TABLE_PREFIX . 'accounts.login_name = ?', $_loginName);
+            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'accounts.login_name = ?'), $_loginName);
 
         $stmt = $select->query();
 
@@ -173,7 +172,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         #$db = Zend_Registry::get('dbAdapter');
         $select = $this->_getAccountSelectObject()
-            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts') . '.' . $this->_db->quoteIdentifier('id') . ' = ?', $accountId);
+            ->where($this->_db->quoteInto(SQL_TABLE_PREFIX . 'accounts.id = ?', $accountId));
 
         $stmt = $select->query();
 
@@ -226,8 +225,8 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             )
             ->join(
                SQL_TABLE_PREFIX . 'addressbook',
-               SQL_TABLE_PREFIX . 'accounts' . '.' . 'id' . ' = ' 
-				. SQL_TABLE_PREFIX . 'addressbook' . '.' . 'account_id', 
+               $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.id') . ' = ' 
+				. $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook.account_id'), 
                 array(
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
@@ -460,7 +459,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             // add new account
             $accountId = $accountsTable->insert($accountData);
             if ($accountId === NULL) {
-                $accountId = $accountsTable->getAdapter()->lastSequenceId(SQL_TABLE_PREFIX . 'accounts_seq');
+                $accountId = $this->_db->lastSequenceId(SQL_TABLE_PREFIX . 'accounts_seq');
             }
             // if we insert an account without an accountId, we need to get back one
             if(empty($_account->accountId) && $accountId == 0) {
