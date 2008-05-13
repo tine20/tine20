@@ -51,11 +51,11 @@ class Tinebase_ImageHelper
             case self::RATIOMODE_PRESERVANDCROP:
                 if($src_ratio - $dst_ratio >= 0) {
                     // crop width
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[0] / $src_ratio, $imgInfo[1]);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[1] * $dst_ratio, $imgInfo[1]);
                     
                 } else {
                     // crop heights
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[0], $imgInfo[1] * $src_ratio);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[0], $imgInfo[0] / $dst_ratio);
                 }
                 break;
             default: 
