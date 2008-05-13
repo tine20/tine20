@@ -51,7 +51,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     /**
      * the singleton pattern
      *
-     * @return Adressbook_Controller
+     * @return Addressbook_Controller
      */
     public static function getInstance() 
     {
