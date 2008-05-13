@@ -262,10 +262,10 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         
         $image = Tinebase_ImageHelper::resize($tempFile['path'], $width, $height, $ratiomode);
         
-         header('Content-Type: image/jpeg');
-         imagejpeg($image);
-         imagedestroy($image);
-         die();
+        header('Content-Type: image/jpeg');
+        imagejpeg($image);
+        imagedestroy($image);
+        die();
 	}
 	
 	/**

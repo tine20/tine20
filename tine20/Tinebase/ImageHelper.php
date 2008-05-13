@@ -51,12 +51,10 @@ class Tinebase_ImageHelper
             case self::RATIOMODE_PRESERVANDCROP:
                 if($src_ratio - $dst_ratio >= 0) {
                     // crop width
-                    $scaleBy = $_height/$imgInfo[1];
                     imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[0] / $src_ratio, $imgInfo[1]);
                     
                 } else {
                     // crop heights
-                    $scaleBy = $_width/$imgInfo[0];
                     imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[0], $imgInfo[1] * $src_ratio);
                 }
                 break;
@@ -65,5 +63,31 @@ class Tinebase_ImageHelper
                 break;
         }
         return $dst_image;
+    }
+    /**
+     * checks wether given file is an image or not
+     * 
+     * @param  string $_file image file
+     * @return bool
+     */
+    public static function isImageFile($_file)
+    {
+        if(!$_file) {
+            return false;
+        }
+        $imgInfo = getimagesize($_file);
+        if (!$imgInfo) {
+            return false;
+        }
+        switch ($imgInfo['mime']) {
+            case ('image/png'):
+            case ('image/jpeg'):
+            case ('image/gif'):
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
     }
 }
