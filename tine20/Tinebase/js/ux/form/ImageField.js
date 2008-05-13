@@ -30,6 +30,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     initComponent: function() {
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.imageSrc = this.getValue();
+        
     },
     onRender: function(ct, position) {
         Ext.ux.form.ImageField.superclass.onRender.call(this, ct, position);
@@ -50,10 +51,16 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         });
     },
     getValue: function() {
-        return 'images/empty_photo.jpg';
+        var value = Ext.ux.form.ImageField.superclass.getValue.call(this);
+        if (!value) {
+            value = 'images/empty_photo.jpg';
+        }
+        return value;
     },
     setValue: function(value) {
-        
+        Ext.ux.form.ImageField.superclass.setValue.call(this, value);
+        this.imageSrc = value;
+        this.updateImage();
     },
     onFileSelect: function(bb) {
         this.buttonCt.mask('Loading', 'x-mask-loading');
@@ -63,15 +70,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }).upload();
         uploader.on('uploadcomplete', function(uploader, record){
             var method = Ext.util.Format.htmlEncode('Tinebase.getTempFileThumbnail');
-            this.imageSrc = 'index.php?method=' + method + '&id=' + record.get('tempFile').id;
-            var ct = this.imageCt.up('div');
-            var img = Ext.DomHelper.insertAfter(this.imageCt, this.getImgTpl().apply(this), true);
-            // replace image after load
-            img.on('load', function(){
-                this.imageCt.remove();
-                this.imageCt = img;
-                this.buttonCt.unmask();
-            }, this);
+            this.imageSrc = 'index.php?method=' + method + '&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + this.height + '&ratiomode=0';
+            //console.log(this.imageSrc);
+            this.setValue(this.imageSrc);
+            
+            this.updateImage();
         }, this);
     },
     getImgTpl: function() {
@@ -85,5 +88,15 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             ).compile();
         }
         return this.imgTpl;
+    },
+    updateImage: function() {
+        var ct = this.imageCt.up('div');
+        var img = Ext.DomHelper.insertAfter(this.imageCt, this.getImgTpl().apply(this), true);
+        // replace image after load
+        img.on('load', function(){
+            this.imageCt.remove();
+            this.imageCt = img;
+            this.buttonCt.unmask();
+        }, this);
     }
 });
