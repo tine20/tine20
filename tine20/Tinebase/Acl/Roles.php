@@ -399,7 +399,7 @@ class Tinebase_Acl_Roles
                 
         $validTypes = array( 'user', 'group', 'anyone');
         foreach ( $_roleMembers as $member ) {
-            if ( !in_array($member['type'], $validTypes) ) {
+            if ( !in_array($member['account_type'], $validTypes) ) {
                 throw new InvalidArgumentException('type must be one of ' . 
                     implode(', ', $validTypes) . ' (values given: ' . 
                     print_r($member, true) . ')');
@@ -407,8 +407,8 @@ class Tinebase_Acl_Roles
             
             $data = array(
                 'role_id'       => $roleId,
-                'account_type'  => $member['type'],
-                'account_id'    => $member['id'],
+                'account_type'  => $member['account_type'],
+                'account_id'    => $member['account_id'],
             );
             $this->_roleMembersTable->insert($data); 
         }

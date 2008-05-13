@@ -47,7 +47,7 @@ class Tinebase_Timemachine_ModificationLog
      *
      * @var string
      */
-    protected $_tablename = 'timemachine_modificationlog';
+    protected $_tablename = 'timemachine_modlog';
     
     /**
      * Holds table instance for timemachine_history table

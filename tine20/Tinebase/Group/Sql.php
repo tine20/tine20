@@ -235,7 +235,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         );
 		
 		
-		$colName = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
+		$colName = $this->groupsTable->getAdapter()->quoteIdentifier('id');
         $where = Zend_Registry::get('dbAdapter')->quoteInto( $colName . ' = ?', $groupId);
         
         $this->groupsTable->update($data, $where);
@@ -264,7 +264,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         try {
             Zend_Registry::get('dbAdapter')->beginTransaction();
 			$colNameGroup = $this->groupsTable->getAdapter()->quoteIdentifier('group_id');
-            $where = Zend_Registry::get('dbAdapter')->quoteInto($colName . ' IN (?)', $groupIds);
+            $where = Zend_Registry::get('dbAdapter')->quoteInto($colNameGroup . ' IN (?)', $groupIds);
             $this->groupMembersTable->delete($where);
             $colName = $this->groupsTable->getAdapter()->quoteIdentifier('id');
             $where = Zend_Registry::get('dbAdapter')->quoteInto($colName . ' IN (?)', $groupIds);
