@@ -36,7 +36,7 @@ class Tinebase_AccessLog
      */
     private function __construct()
     {
-        $this->accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log', 'sequence' => SQL_TABLE_PREFIX . 'access_log_seq'));
+        $this->accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log');
     }
     
     /**
