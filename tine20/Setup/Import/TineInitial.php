@@ -84,8 +84,8 @@ class Setup_Import_TineInitial
         $adminRole = Tinebase_Acl_Roles::getInstance()->createRole($adminRole);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
             array(
-                'id'    => $adminGroup->getId(),
-                'type'  => 'group', 
+                'account_id'    => $adminGroup->getId(),
+                'account_type'  => 'group', 
             )
         ));
         
@@ -96,8 +96,8 @@ class Setup_Import_TineInitial
         $userRole = Tinebase_Acl_Roles::getInstance()->createRole($userRole);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($userRole->getId(), array(
             array(
-                'id'    => $userGroup->getId(),
-                'type'  => 'group', 
+                'account_id'    => $userGroup->getId(),
+                'account_type'  => 'group', 
             )
         ));
         
@@ -109,7 +109,7 @@ class Setup_Import_TineInitial
             if ( $application->name  !== 'Admin' ) {
 
                 /***** All applications except Admin *****/
-                
+            
                 // run right for user role
                 Tinebase_Acl_Roles::getInstance()->addSingleRight(
                     $userRole->getId(), 
@@ -126,7 +126,8 @@ class Setup_Import_TineInitial
                         $right
                     );
                 }                                
-            } else {
+
+                } else {
 
                 /***** Admin application *****/
 
