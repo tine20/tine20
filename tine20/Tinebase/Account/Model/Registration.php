@@ -47,10 +47,10 @@ class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
         'login_name'    => array('presence' => 'required'),
         'login_hash'    => array('presence' => 'required'),
         'email'         => array('presence' => 'required'),
-    	'date'		    => array('allowEmpty' => true),
-    	'expires_at'	=> array('allowEmpty' => true),
-    	'status'	    => array('allowEmpty' => true),
-    	'email_sent'    => array('allowEmpty' => true),
+        'date'		    => array('allowEmpty' => true),
+        'expires_at'	=> array('allowEmpty' => true),
+        'status'	    => array('allowEmpty' => true),
+        'email_sent'    => array('allowEmpty' => true),
     );
     
    /**

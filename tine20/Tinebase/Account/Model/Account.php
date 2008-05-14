@@ -65,13 +65,13 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        if(empty($_data['accountDisplayName'])) {
+        if (empty($_data['accountDisplayName'])) {
             $_data['accountDisplayName'] = !empty($_data['accountDisplayName']) ? 
                 $_data['accountLastName'] . ', ' . $_data['accountFirstName'] : 
                 $_data['accountLastName'];
         }
 
-        if(empty($_data['accountFullName'])) {
+        if (empty($_data['accountFullName'])) {
             $_data['accountFullName'] = !empty($_data['accountDisplayName']) ? 
                 $_data['accountFirstName'] . ' ' . $_data['accountLastName'] : 
                 $_data['accountLastName'];
@@ -256,8 +256,8 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     static public function convertAccountIdToInt($_accountId)
     {
-        if($_accountId instanceof Tinebase_Account_Model_Account) {
-            if(empty($_accountId->accountId)) {
+        if ($_accountId instanceof Tinebase_Account_Model_Account) {
+            if (empty($_accountId->accountId)) {
                 throw new Exception('no accountId set');
             }
             $accountId = (int) $_accountId->accountId;
@@ -265,7 +265,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
             $accountId = (int) $_accountId;
         }
         
-        if($accountId === 0) {
+        if ($accountId === 0) {
             throw new Exception('accountId can not be 0');
         }
         

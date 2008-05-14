@@ -314,10 +314,10 @@ class Tinebase_Account_Registration
      * @return	Tinebase_Account_Model_FullAccount
      * 
      */
-    public function activateAccount ($_login_hash)
+    public function activateAccount ($_loginHash)
     {
         // get registration by hash
-        $registration = $this->getRegistrationByHash($_login_hash);
+        $registration = $this->getRegistrationByHash($_loginHash);
         // set new status in DB (registration)
         $registration->status = 'activated';
         $this->updateRegistration($registration);
@@ -337,7 +337,7 @@ class Tinebase_Account_Registration
     public function generateCaptcha ()
     {
         // get security code (use password generator)
-        $security_code = $this->generatePassword(4);
+        $securityCode = $this->generatePassword(4);
         //Set the image width and height
         $width = 120;
         $height = 20;
@@ -348,7 +348,7 @@ class Tinebase_Account_Registration
         $black = ImageColorAllocate($image, 0, 0, 0);
         $grey = ImageColorAllocate($image, 204, 204, 204);
         ImageFill($image, 0, 0, $black);
-        ImageString($image, 4, 40, 4, $security_code, $white);
+        ImageString($image, 4, 40, 4, $securityCode, $white);
         ImageRectangle($image, 0, 0, $width - 1, $height - 1, $grey);
         imageline($image, 0, $height / 2, $width, $height / 2, $grey);
         imageline($image, $width / 2, 0, $width / 2, $height, $grey);
@@ -441,10 +441,10 @@ class Tinebase_Account_Registration
             $registration = new Tinebase_Account_Model_Registration();
             $registration->setFromArray($row);
         } catch (Exception $e) {
-            $validation_errors = $registration->getValidationErrors();
+            $validationErrors = $registration->getValidationErrors();
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
                 $e->getMessage() . "\n" . "Tinebase_Account_Model_Registration::validation_errors: \n" . 
-                print_r($validation_errors, true));
+                print_r($validationErrors, true));
             throw ($e);
         }
         return $registration;

@@ -24,7 +24,8 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * @param  array $options Options used in connecting, binding, etc.
      * don't use the constructor. use the singleton 
      */
-    private function __construct(array $_options) {
+    private function __construct(array $_options) 
+    {
         $this->_backend = new Tinebase_Ldap($_options);
         $this->_backend->bind();
     }
@@ -33,14 +34,16 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() {}
+    private function __clone() 
+    {
+    }
 
     /**
      * holdes the instance of the singleton
      *
      * @var Tinebase_Account_Ldap
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     /**
      * Enter description here...
@@ -49,7 +52,7 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      */
     protected $_backend = NULL;
     
-    protected $rowNameMapping = array(
+    protected $_rowNameMapping = array(
         'accountId'             => 'uidnumber',
         'accountDisplayName'    => 'displayname',
         'accountFullName'       => 'cn',
@@ -74,11 +77,11 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      */
     public static function getInstance(array $_options = array()) 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Account_Ldap($_options);
+        if (self::$_instance === NULL) {
+            self::$_instance = new Tinebase_Account_Ldap($_options);
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
     
     /**
@@ -92,30 +95,31 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
      * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
      */
-    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
+    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, 
+        $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
     {        
-        if(!empty($_filter)) {
+        if (!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
             $filter = "(&(objectclass=posixaccount)(|(uid=$searchString)(cn=$searchString)(sn=$searchString)(givenName=$searchString)))";
         } else {
             $filter = 'objectclass=posixaccount';
         }
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .' search filter: ' . $filter);
-        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, $filter, array_values($this->rowNameMapping));
+        $accounts = $this->_backend->fetchAll(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, $filter, array_values($this->_rowNameMapping));
         
         $result = new Tinebase_Record_RecordSet($_accountClass);
         
-        foreach($accounts as $account) {
+        foreach ($accounts as $account) {
             $accountArray = array(
                 'accountStatus' => 'enabled'
             );
             
-            foreach($account as $key => $value) {
-                if(is_int($key)) {
+            foreach ($account as $key => $value) {
+                if (is_int($key)) {
                     continue;
                 }
-                $keyMapping = array_search($key, $this->rowNameMapping);
-                if($keyMapping !== FALSE) {
+                $keyMapping = array_search($key, $this->_rowNameMapping);
+                if ($keyMapping !== FALSE) {
                     switch($keyMapping) {
                         case 'accountLastPasswordChange':
                         case 'accountExpires':
@@ -161,12 +165,12 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
             'accountStatus' => 'enabled'
         );
         
-        foreach($account as $key => $value) {
-            if(is_int($key)) {
+        foreach ($account as $key => $value) {
+            if (is_int($key)) {
                 continue;
             }
-            $keyMapping = array_search($key, $this->rowNameMapping);
-            if($keyMapping !== FALSE) {
+            $keyMapping = array_search($key, $this->_rowNameMapping);
+            if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'accountLastPasswordChange':
                     case 'accountExpires':
@@ -208,12 +212,12 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
             'accountStatus' => 'enabled'
         );
         
-        foreach($account as $key => $value) {
-            if(is_int($key)) {
+        foreach ($account as $key => $value) {
+            if (is_int($key)) {
                 continue;
             }
-            $keyMapping = array_search($key, $this->rowNameMapping);
-            if($keyMapping !== FALSE) {
+            $keyMapping = array_search($key, $this->_rowNameMapping);
+            if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'accountLastPasswordChange':
                     case 'accountExpires':
@@ -265,27 +269,24 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
         $select = $db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
                 array(
-                    'accountId'             => $this->rowNameMapping['accountId'],
-                    'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
-                    'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
-                    'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
-                    'accountStatus'         => $this->rowNameMapping['accountStatus'],
-                    'accountExpires'        => $this->rowNameMapping['accountExpires'],
-                    'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup']
-                )
-            )
-            ->join(
-                SQL_TABLE_PREFIX . 'addressbook',
+                    'accountId'             => $this->_rowNameMapping['accountId'],
+                    'accountLoginName'      => $this->_rowNameMapping['accountLoginName'],
+                    'accountLastLogin'      => $this->_rowNameMapping['accountLastLogin'],
+                    'accountLastLoginfrom'  => $this->_rowNameMapping['accountLastLoginfrom'],
+                    'accountLastPasswordChange' => $this->_rowNameMapping['accountLastPasswordChange'],
+                    'accountStatus'         => $this->_rowNameMapping['accountStatus'],
+                    'accountExpires'        => $this->_rowNameMapping['accountExpires'],
+                    'accountPrimaryGroup'   => $this->_rowNameMapping['accountPrimaryGroup']
+            ))
+            ->join(SQL_TABLE_PREFIX . 'addressbook',
                 SQL_TABLE_PREFIX . 'accounts.id = ' . SQL_TABLE_PREFIX . 'addressbook.account_id',
                 array(
-                    'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
-                    'accountFullName'       => $this->rowNameMapping['accountFullName'],
-                    'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
-                    'accountLastName'       => $this->rowNameMapping['accountLastName'],
-                    'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress']
-                )
-            );
+                    'accountDisplayName'    => $this->_rowNameMapping['accountDisplayName'],
+                    'accountFullName'       => $this->_rowNameMapping['accountFullName'],
+                    'accountFirstName'      => $this->_rowNameMapping['accountFirstName'],
+                    'accountLastName'       => $this->_rowNameMapping['accountLastName'],
+                    'accountEmailAddress'   => $this->_rowNameMapping['accountEmailAddress']
+            ));
                 
         return $select;
     }

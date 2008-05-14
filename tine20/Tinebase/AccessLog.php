@@ -21,14 +21,14 @@ class Tinebase_AccessLog
      *
      * @var Tinebase_AccessLog
      */
-    private static $instance = NULL;
+    private static $_instance = NULL;
     
     /**
      * the table object for the SQL_TABLE_PREFIX . applications table
      *
      * @var Tinebase_Db_Table
      */
-    protected $accessLogTable;
+    protected $_accessLogTable;
 
     /**
      * the constructor
@@ -36,7 +36,7 @@ class Tinebase_AccessLog
      */
     private function __construct()
     {
-        $this->accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
+        $this->_accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
     }
     
     /**
@@ -46,11 +46,11 @@ class Tinebase_AccessLog
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_AccessLog;
+        if (self::$_instance === NULL) {
+            self::$_instance = new Tinebase_AccessLog;
         }
         
-        return self::$instance;
+        return self::$_instance;
     }
     
     /**
@@ -71,11 +71,11 @@ class Tinebase_AccessLog
             'li'            => Zend_Date::now()->getIso(),
             'result'        => $_result
         );
-        if($_accountId !== NULL) {
+        if ($_accountId !== NULL) {
             $data['account_id'] = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         }
         
-        $this->accessLogTable->insert($data);
+        $this->_accessLogTable->insert($data);
     }
 
     /**
@@ -92,11 +92,11 @@ class Tinebase_AccessLog
         );
         
         $where = array(
-            $this->accessLogTable->getAdapter()->quoteInto('sessionid = ?', $_sessionId),
-            $this->accessLogTable->getAdapter()->quoteInto('ip = ?', $_ipAddress)
+            $this->_accessLogTable->getAdapter()->quoteInto('sessionid = ?', $_sessionId),
+            $this->_accessLogTable->getAdapter()->quoteInto('ip = ?', $_ipAddress)
         );
         
-        $this->accessLogTable->update($data, $where);
+        $this->_accessLogTable->update($data, $where);
     }
     
     /**
@@ -109,10 +109,10 @@ class Tinebase_AccessLog
     public function deleteEntries(array $_logIds)
     {
         $where  = array(
-            $this->accessLogTable->getAdapter()->quoteInto('id IN (?)', $_logIds, 'INTEGER')
+            $this->_accessLogTable->getAdapter()->quoteInto('id IN (?)', $_logIds, 'INTEGER')
         );
          
-        $result = $this->accessLogTable->delete($where);
+        $result = $this->_accessLogTable->delete($where);
 
         return $result;
     }
@@ -132,27 +132,27 @@ class Tinebase_AccessLog
      */
     public function getEntries($_filter = NULL, $_sort = 'li', $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_from = NULL, $_to = NULL)
     {
-        if($_from instanceof Zend_Date && $_to instanceof Zend_Date) {
+        if ($_from instanceof Zend_Date && $_to instanceof Zend_Date) {
             $where = array(
-                $this->accessLogTable->getAdapter()->quoteInto('li BETWEEN ? ', $_from->getIso()) .
-                $this->accessLogTable->getAdapter()->quoteInto('AND ?', $_to->getIso())
+                $this->_accessLogTable->getAdapter()->quoteInto('li BETWEEN ? ', $_from->getIso()) .
+                $this->_accessLogTable->getAdapter()->quoteInto('AND ?', $_to->getIso())
             );
         } elseif ($_from instanceof Zend_Date) {
             $where = array(
-                $this->accessLogTable->getAdapter()->quoteInto('li > ?', $_from->getIso())
+                $this->_accessLogTable->getAdapter()->quoteInto('li > ?', $_from->getIso())
             );
         }
         
-        if(!empty($_filter)) {
-            $where[] = $this->accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
+        if (!empty($_filter)) {
+            $where[] = $this->_accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
         }
         //error_log(print_r($where, true));
-        $rowSet = $this->accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
+        $rowSet = $this->_accessLogTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
         
         $arrayRowSet = $rowSet->toArray();
         
-        foreach($arrayRowSet as $rowId => $row) {
-            if($row['lo'] >= $row['li']) {
+        foreach ($arrayRowSet as $rowId => $row) {
+            if ($row['lo'] >= $row['li']) {
                 $row['lo'] = new Zend_Date($row['lo'], Zend_Date::ISO_8601);
             } else {
                 $row['lo'] = NULL;
@@ -178,13 +178,13 @@ class Tinebase_AccessLog
     public function getTotalCount(Zend_Date $_from, Zend_Date $_to, $_filter = NULL)
     {
         $where = array(
-            'li BETWEEN ' .$this->accessLogTable->getAdapter()->quote($_from->getIso()) . ' AND ' . $this->accessLogTable->getAdapter()->quote($_to->getIso())
+            'li BETWEEN ' .$this->_accessLogTable->getAdapter()->quote($_from->getIso()) . ' AND ' . $this->_accessLogTable->getAdapter()->quote($_to->getIso())
         );
-        if( $_filter !== NULL ) {
-            $where[] = $this->accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
+        if ( $_filter !== NULL ) {
+            $where[] = $this->_accessLogTable->getAdapter()->quoteInto('login_name LIKE ?', '%' . $_filter . '%');
         }
 
-        $count = $this->accessLogTable->getTotalCount($where);
+        $count = $this->_accessLogTable->getTotalCount($where);
 
         return $count;
     }
