@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-07 16:59+0100\n"
+"PO-Revision-Date: 2008-05-14 12:26+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,35 +15,35 @@ msgstr ""
 "X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
 
-#: Tinebase/Export/Pdf.php:344
+#: Tinebase/Export/Pdf.php:341
 msgid "Export Date"
 msgstr "Export Date"
 
-#: Tinebase/Export/Pdf.php:348
+#: Tinebase/Export/Pdf.php:345
 msgid "Created by"
 msgstr "Created by"
 
-#: Tinebase/Acl/Rights.php:327
+#: Tinebase/Acl/Rights.php:356
 msgid "admin"
 msgstr "admin"
 
-#: Tinebase/Acl/Rights.php:328
+#: Tinebase/Acl/Rights.php:357
 msgid "admin right description"
-msgstr "admin right description"
+msgstr "the admin right includes all other rights for this application"
 
-#: Tinebase/Acl/Rights.php:331
+#: Tinebase/Acl/Rights.php:360
 msgid "run"
 msgstr "run"
 
-#: Tinebase/Acl/Rights.php:332
+#: Tinebase/Acl/Rights.php:361
 msgid "run right description"
-msgstr "run right description"
+msgstr "the right to run this application"
 
-#: Tinebase/Acl/Rights.php:335
+#: Tinebase/Acl/Rights.php:364
 msgid "manage shared tags"
 msgstr "manage shared tags"
 
-#: Tinebase/Acl/Rights.php:336
+#: Tinebase/Acl/Rights.php:365
 msgid "manage shared tags right description"
-msgstr "manage shared tags right description"
+msgstr "create, edit and delete shared tags"
 
