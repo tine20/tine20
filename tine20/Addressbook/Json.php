@@ -401,6 +401,11 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
         
         //Zend_Registry::get('logger')->debug(print_r($tempFile,true));
-        return $tempFile ? file_get_contents($tempFile['path']) : NULL;
+        
+        if (! Tinebase_ImageHelper::isImageFile($tempFile['path'])) {
+            throw new Exception('given file is not an image');
+        }
+        
+        return file_get_contents($tempFile['path']);
     }
 }
