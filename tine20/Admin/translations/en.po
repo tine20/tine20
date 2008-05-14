@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-07 17:10+0100\n"
+"PO-Revision-Date: 2008-05-14 11:39+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,19 +15,67 @@ msgstr ""
 "X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Admin\n"
 
-#: Admin/Acl/Rights.php:80
+#: Admin/Acl/Rights.php:127
 msgid "manage roles"
 msgstr "manage roles"
 
-#: Admin/Acl/Rights.php:81
+#: Admin/Acl/Rights.php:128
 msgid "manage roles right description"
-msgstr "manage roles right description"
+msgstr "add and edit roles, add new members to roles, add application rights to roles"
 
-#: Admin/Acl/Rights.php:84
+#: Admin/Acl/Rights.php:131
 msgid "manage applications"
 msgstr "manage applications"
 
-#: Admin/Acl/Rights.php:85
+#: Admin/Acl/Rights.php:132
 msgid "manage applications right description"
-msgstr "manage applications right description"
+msgstr "enable and disable applications, edit application settings"
+
+#: Admin/Acl/Rights.php:135
+msgid "manage accounts"
+msgstr "manage accounts"
+
+#: Admin/Acl/Rights.php:136
+msgid "manage accounts right description"
+msgstr "add and edit users and groups, add group members, change user passwords"
+
+#: Admin/Acl/Rights.php:139
+msgid "manage access log"
+msgstr "manage access log"
+
+#: Admin/Acl/Rights.php:140
+msgid "manage access log right description"
+msgstr "delete access log entries"
+
+#: Admin/Acl/Rights.php:143
+msgid "view roles"
+msgstr "view roles"
+
+#: Admin/Acl/Rights.php:144
+msgid "view roles right description"
+msgstr "view roles list and details"
+
+#: Admin/Acl/Rights.php:147
+msgid "view applications"
+msgstr "view applications"
+
+#: Admin/Acl/Rights.php:148
+msgid "view applications right description"
+msgstr "view applications list and details"
+
+#: Admin/Acl/Rights.php:151
+msgid "view accounts"
+msgstr "view accounts"
+
+#: Admin/Acl/Rights.php:152
+msgid "view accounts right description"
+msgstr "view accounts list and details"
+
+#: Admin/Acl/Rights.php:155
+msgid "view access log"
+msgstr "view access log"
+
+#: Admin/Acl/Rights.php:156
+msgid "view access log right description"
+msgstr "view access log list"
 

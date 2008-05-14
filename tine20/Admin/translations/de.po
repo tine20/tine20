@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-07 17:09+0100\n"
+"PO-Revision-Date: 2008-05-14 11:33+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,19 +15,67 @@ msgstr ""
 "X-Poedit-Basepath: /home/philipp/workspace/tine20\n"
 "X-Poedit-SearchPath-0: Admin\n"
 
-#: Admin/Acl/Rights.php:80
+#: Admin/Acl/Rights.php:127
 msgid "manage roles"
 msgstr "Rollen bearbeiten"
 
-#: Admin/Acl/Rights.php:81
+#: Admin/Acl/Rights.php:128
 msgid "manage roles right description"
-msgstr "manage roles right description deutsch"
+msgstr "Benutzerkonten Rollen zuordnen, Rollen anlegen und bearbeiten, Rollen Applikations-Rechte zuweisen."
 
-#: Admin/Acl/Rights.php:84
+#: Admin/Acl/Rights.php:131
 msgid "manage applications"
 msgstr "Applikationen bearbeiten"
 
-#: Admin/Acl/Rights.php:85
+#: Admin/Acl/Rights.php:132
 msgid "manage applications right description"
-msgstr "manage applications right description deutsch"
+msgstr "Applikationen bearbeiten, aktivieren und deaktivieren."
+
+#: Admin/Acl/Rights.php:135
+msgid "manage accounts"
+msgstr "Benutzerkonten bearbeiten"
+
+#: Admin/Acl/Rights.php:136
+msgid "manage accounts right description"
+msgstr "Benutzer und Gruppen anlegen, Passwörter neu setzen, Benutzer zu Gruppen zuordnen."
+
+#: Admin/Acl/Rights.php:139
+msgid "manage access log"
+msgstr "Zugriffsprotokoll bearbeiten"
+
+#: Admin/Acl/Rights.php:140
+msgid "manage access log right description"
+msgstr "Dieses Recht erlaubt es, im Zugriffsprotokoll Einträge zu löschen."
+
+#: Admin/Acl/Rights.php:143
+msgid "view roles"
+msgstr "Rollen ansehen"
+
+#: Admin/Acl/Rights.php:144
+msgid "view roles right description"
+msgstr "Rollen ansehen"
+
+#: Admin/Acl/Rights.php:147
+msgid "view applications"
+msgstr "Applikationen ansehen"
+
+#: Admin/Acl/Rights.php:148
+msgid "view applications right description"
+msgstr "Applikationen ansehen"
+
+#: Admin/Acl/Rights.php:151
+msgid "view accounts"
+msgstr "Benutzerkonten ansehen"
+
+#: Admin/Acl/Rights.php:152
+msgid "view accounts right description"
+msgstr "Benutzerkonten ansehen"
+
+#: Admin/Acl/Rights.php:155
+msgid "view access log"
+msgstr "Zugriffsprotokoll ansehen"
+
+#: Admin/Acl/Rights.php:156
+msgid "view access log right description"
+msgstr "Zugriffsprotokoll ansehen"
 

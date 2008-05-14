@@ -118,8 +118,6 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
      */
     private function getTranslatedRightDescriptions()
     {
-        $descriptionsParent = parent::getTranslatedRightDescriptions();
-        
         $translate = Tinebase_Translation::getTranslation('Admin');
         
         $rightDescriptions = array(
@@ -157,7 +155,26 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
             ),
         );
         
-        return array_merge($descriptionsParent, $rightDescriptions);
+        return $rightDescriptions;
+    }
+
+    /**
+     * get right description
+     * 
+     * @param   string right
+     * @return  array with text + description
+     */
+    public function getRightDescription($_right)
+    {        
+        $result = parent::getRightDescription($_right);
+        
+        $rightDescriptions = self::getTranslatedRightDescriptions();
+        
+        if ( isset($rightDescriptions[$_right]) ) {
+            $result = $rightDescriptions[$_right];
+        }
+
+        return $result;
     }
     
 }
