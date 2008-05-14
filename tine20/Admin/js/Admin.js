@@ -13,32 +13,6 @@ Ext.namespace('Tine.Admin');
 Tine.Admin = function() {
 	
 	/**
-	 * check if user has right to view/manage this application/resource
-	 * 
-	 * @returns boolean
-	 */
-	var hasRight = function(_right, _resource)
-	{
-		//console.log ( Tine.Admin.rights );
-		
-		for ( var i=0; i < Tine.Admin.rights.length; i++ ) {
-			if ( Tine.Admin.rights[i] == 'admin' ) {
-				return true;
-			}
-			
-			if ( _right == 'view' && (Tine.Admin.rights[i] == 'view_' + _resource || Tine.Admin.rights[i] == 'manage_' + _resource ) ) {
-				return true;
-			}
-			
-			if ( _right == 'manage' && Tine.Admin.rights[i] == 'manage_' + _resource ) {
-				return true;
-			}
-		}
-
-		return false;
-	};
-    
-	/**
 	 * builds the admin applications tree
 	 */
     var _initialTree = [{
@@ -156,7 +130,7 @@ Tine.Admin = function() {
         	var node = new Ext.tree.AsyncTreeNode(_initialTree[i]);
         	
         	// check view right
-        	if ( _initialTree[i].viewRight && !hasRight('view', _initialTree[i].viewRight) ) {
+        	if ( _initialTree[i].viewRight && !Tine.Tinebase.hasRight('view', _initialTree[i].viewRight) ) {
                 node.disabled = true;
         	}
         	
@@ -258,6 +232,9 @@ Tine.Admin = function() {
     };
     
 }();
+
+/*********************************** TINE ADMIN ACCESS LOG  *******************************/
+/*********************************** TINE ADMIN ACCESS LOG  *******************************/
 
 Ext.namespace('Tine.Admin.AccessLog');
 Tine.Admin.AccessLog.Main = function() {
@@ -532,7 +509,7 @@ Tine.Admin.AccessLog.Main = function() {
 
             if(rowCount < 1) {
                 _action_delete.setDisabled(true);
-            } else {
+            } else if ( Tine.Tinebase.hasRight('manage', 'access_log') ) {
                 _action_delete.setDisabled(false);
             }
         });
@@ -828,26 +805,28 @@ Tine.Admin.Applications.Main = function() {
             var rowCount = _selectionModel.getCount();
             var selected = _selectionModel.getSelected();
 
-            if(rowCount < 1) {
-                _action_enable.setDisabled(true);
-                _action_disable.setDisabled(true);
-                _action_settings.setDisabled(true);
-                _action_permissions.setDisabled(true);
-            } else if (rowCount > 1){
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_settings.setDisabled(true);
-                _action_permissions.setDisabled(true);
-            } else if (selected.data.name == 'Tinebase') {
-                _action_enable.setDisabled(true);
-                _action_disable.setDisabled(true);
-                _action_settings.setDisabled(true);            	
-                _action_permissions.setDisabled(false);
-            } else {
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_settings.setDisabled(true);                
-                _action_permissions.setDisabled(false);
+            if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
+                if (rowCount < 1) {
+                    _action_enable.setDisabled(true);
+                    _action_disable.setDisabled(true);
+                    _action_settings.setDisabled(true);
+                    _action_permissions.setDisabled(true);
+                } else if (rowCount > 1) {
+                    _action_enable.setDisabled(false);
+                    _action_disable.setDisabled(false);
+                    _action_settings.setDisabled(true);
+                    _action_permissions.setDisabled(true);
+                } else if (selected.data.name == 'Tinebase') {
+                    _action_enable.setDisabled(true);
+                    _action_disable.setDisabled(true);
+                    _action_settings.setDisabled(true);            	
+                    _action_permissions.setDisabled(false);
+                } else {
+                    _action_enable.setDisabled(false);
+                    _action_disable.setDisabled(false);
+                    _action_settings.setDisabled(true);                
+                    _action_permissions.setDisabled(false);
+                }
             }
         });
                 
@@ -871,52 +850,22 @@ Tine.Admin.Applications.Main = function() {
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
 
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_settings.setDisabled(true);
-                _action_permissions.setDisabled(false);
+                if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
+                    _action_enable.setDisabled(false);
+                    _action_disable.setDisabled(false);
+                    _action_settings.setDisabled(true);
+                    _action_permissions.setDisabled(false);
+                }
             }
             //var record = _grid.getStore().getAt(rowIndex);
             ctxMenuGrid.showAt(_eventObject.getXY());
         }, this);
-        
-        grid_applications.on('rowclick', function(gridP, rowIndexP, eventP) {
-            var rowCount = gridP.getSelectionModel().getCount();
-            
-            if(rowCount < 1) {
-                _action_enable.setDisabled(true);
-                _action_disable.setDisabled(true);
-                _action_settings.setDisabled(true);
-                _action_permissions.setDisabled(true);
-            } else if(rowCount == 1) {
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_settings.setDisabled(true);
-                _action_permissions.setDisabled(false);
-            } else {
-                _action_enable.setDisabled(false);
-                _action_disable.setDisabled(false);
-                _action_settings.setDisabled(true);
-                _action_permissions.setDisabled(true);
-            } 
-        });
-        
-        
-        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-            _eventObject.stopEvent();
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
-
-/*                action_edit.setDisabled(false);
-                action_delete.setDisabled(false);*/
-            }
-            //var record = _grid.getStore().getAt(rowIndex);
-/*            ctxMenuListGrid.showAt(_eventObject.getXY()); */
-        });
-        
+               
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-            var record = _gridPar.getStore().getAt(_rowIndexPar);
-            Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 800, 350);
+        	if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
+                var record = _gridPar.getStore().getAt(_rowIndexPar);
+                Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 800, 350);
+        	}
         });
         
         return;
