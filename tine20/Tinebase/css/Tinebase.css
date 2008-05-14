@@ -62,6 +62,12 @@ html, body {
 .action_tag {
     background-image:url(../../images/oxygen/16x16/actions/rss-tag.png) !important;
 }
+.action_uploadImage {
+    background-image:url(../../images/oxygen/16x16/actions/insert-image.png) !important;
+}
+.action_cropImage {
+	background-image:url(../../images/oxygen/16x16/actions/select-rectangular.png) !important;
+}
 
 /* ----- renderer ------------------------------------------------------------*/
 .renderer {

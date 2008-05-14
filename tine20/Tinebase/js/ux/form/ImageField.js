@@ -25,11 +25,16 @@ Ext.namespace('Ext.ux.form');
  * </code></pre>
  */
 Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
+    /**
+     * @cfg {String}
+     */
+    defaultImage: 'images/empty_photo.jpg',
+    
     defaultAutoCreate : {tag:'input', type:'hidden'},
     
     initComponent: function() {
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
-        this.imageSrc = this.getValue();
+        this.imageSrc = this.defaultImage;
     },
     onRender: function(ct, position) {
         Ext.ux.form.ImageField.superclass.onRender.call(this, ct, position);
@@ -37,11 +42,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         // the container for the browe button
         this.buttonCt = Ext.DomHelper.insertFirst(ct, '<div>&nbsp;</div>', true);
         this.buttonCt.setSize(this.width, this.height);
+        this.buttonCt.on('contextmenu', this.onContextMenu, this);
         
         // the image container        
         this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, this.getImgTpl().apply(this), true);
         
-        var bb = new Ext.ux.form.BrowseButton({
+        this.bb = new Ext.ux.form.BrowseButton({
             buttonCt: this.buttonCt,
             renderTo: this.buttonCt,
             scope: this,
@@ -51,14 +57,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     },
     getValue: function() {
         var value = Ext.ux.form.ImageField.superclass.getValue.call(this);
-        if (!value) {
-            value = 'images/empty_photo.jpg';
-        }
         return value;
     },
     setValue: function(value) {
         Ext.ux.form.ImageField.superclass.setValue.call(this, value);
-        this.imageSrc = value;
+        this.imageSrc = value ? value : this.defaultImage;
         this.updateImage();
     },
     onFileSelect: function(bb) {
@@ -81,6 +84,54 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             
             this.updateImage();
         }, this);
+    },
+    /**
+     * executed on image contextmenu
+     * @private
+     */
+    onContextMenu: function(e, input) {
+        e.preventDefault();
+        
+        var ct = Ext.DomHelper.append(this.buttonCt, '<div>&nbsp;</div>', true);
+        
+        var upload = new Ext.menu.Item({
+            text: 'Change Image',
+            iconCls: 'action_uploadImage'
+        });
+        upload.on('render', function(){
+            var ct = upload.getEl();
+            var bb = new Ext.ux.form.BrowseButton({
+                buttonCt: ct,
+                renderTo: ct,
+                scope: this,
+                handler: function(bb) {
+                    this.ctxMenu.hide();
+                    this.onFileSelect(bb);
+                }
+                //debug: true
+            });
+        }, this);
+        
+        this.ctxMenu = new Ext.menu.Menu({
+            items: [
+            upload,
+            /*{
+                text: 'Edit Image',
+                iconCls: 'action_cropImage',
+                disabled: true
+            
+            },*/{
+                text: 'Delete Image',
+                iconCls: 'action_delete',
+                disabled: this.imageSrc == this.defaultImage,
+                scope: this,
+                handler: function() {
+                    this.setValue('');
+                }
+                
+            }]
+        });
+        this.ctxMenu.showAt(e.getXY());
     },
     getImgTpl: function() {
         if (!this.imgTpl) {
