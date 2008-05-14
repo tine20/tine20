@@ -1498,6 +1498,10 @@ Tine.Admin.Accounts.Main = function() {
 	    
 	    showMainGrid: function() 
 	    {
+	    	if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
+	    		this.actionAddAccount.setDisabled(false);
+	    	}
+	    	
             var ctxMenuGrid = new Ext.menu.Menu({
                 /*id:'AdminAccountContextMenu',*/ 
                 items: [
@@ -1542,27 +1546,29 @@ Tine.Admin.Accounts.Main = function() {
 	        rowSelectionModel.on('selectionchange', function(_selectionModel) {
 	            var rowCount = _selectionModel.getCount();
 	
-	            if(rowCount < 1) {
-	            	this.actionEditAccount.setDisabled(true);
-	            	this.actionDeleteAccount.setDisabled(true);
-	                this.actionEnable.setDisabled(true);
-	                this.actionDisable.setDisabled(true);
-	                this.actionResetPassword.setDisabled(true);
-	                //_action_settings.setDisabled(true);
-	            } else if (rowCount > 1){
-                    this.actionEditAccount.setDisabled(true);
-                    this.actionDeleteAccount.setDisabled(false);
-	                this.actionEnable.setDisabled(false);
-	                this.actionDisable.setDisabled(false);
-	                this.actionResetPassword.setDisabled(true);
-	                //_action_settings.setDisabled(true);
-	            } else {
-                    this.actionEditAccount.setDisabled(false);
-                    this.actionDeleteAccount.setDisabled(false);
-	                this.actionEnable.setDisabled(false);
-	                this.actionDisable.setDisabled(false);
-	                this.actionResetPassword.setDisabled(false);
-	                //_action_settings.setDisabled(false);              
+	            if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
+    	            if(rowCount < 1) {
+    	            	this.actionEditAccount.setDisabled(true);
+    	            	this.actionDeleteAccount.setDisabled(true);
+    	                this.actionEnable.setDisabled(true);
+    	                this.actionDisable.setDisabled(true);
+    	                this.actionResetPassword.setDisabled(true);
+    	                //_action_settings.setDisabled(true);
+    	            } else if (rowCount > 1){
+                        this.actionEditAccount.setDisabled(true);
+                        this.actionDeleteAccount.setDisabled(false);
+    	                this.actionEnable.setDisabled(false);
+    	                this.actionDisable.setDisabled(false);
+    	                this.actionResetPassword.setDisabled(true);
+    	                //_action_settings.setDisabled(true);
+    	            } else {
+                        this.actionEditAccount.setDisabled(false);
+                        this.actionDeleteAccount.setDisabled(false);
+    	                this.actionEnable.setDisabled(false);
+    	                this.actionDisable.setDisabled(false);
+    	                this.actionResetPassword.setDisabled(false);
+    	                //_action_settings.setDisabled(false);              
+    	            }
 	            }
 	        }, this);
 	                
@@ -1614,7 +1620,7 @@ Tine.Admin.Accounts.Main = function() {
 	    {
 	        this.actionAddAccount = new Ext.Action({
 	            text: 'add account',
-	            //disabled: true,
+	            disabled: true,
 	            handler: this.addButtonHandler,
 	            iconCls: 'action_addContact',
 	            scope: this

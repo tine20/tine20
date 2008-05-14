@@ -72,6 +72,7 @@ Tine.Admin.Groups.Main = {
     {
         this.actions.addGroup = new Ext.Action({
             text: 'add group',
+            disabled: true,
             handler: this.handlers.addGroup,
             iconCls: 'action_addGroup',
             scope: this
@@ -131,7 +132,11 @@ Tine.Admin.Groups.Main = {
 
     displayGroupsGrid: function() 
     {
-        // the datastore
+        if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
+            this.actions.addGroup.setDisabled(false);
+        }
+
+    	// the datastore
         var dataStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Admin.getGroups'
@@ -174,18 +179,20 @@ Tine.Admin.Groups.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.deleteGroup.setDisabled(true);
-                this.actions.editGroup.setDisabled(true);
-            } else if(rowCount > 1) {
-                // more than one row selected
-                this.actions.deleteGroup.setDisabled(false);
-                this.actions.editGroup.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.deleteGroup.setDisabled(false);
-                this.actions.editGroup.setDisabled(false);
+            if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
+                if(rowCount < 1) {
+                    // no row selected
+                    this.actions.deleteGroup.setDisabled(true);
+                    this.actions.editGroup.setDisabled(true);
+                } else if(rowCount > 1) {
+                    // more than one row selected
+                    this.actions.deleteGroup.setDisabled(false);
+                    this.actions.editGroup.setDisabled(true);
+                } else {
+                    // only one row selected
+                    this.actions.deleteGroup.setDisabled(false);
+                    this.actions.editGroup.setDisabled(false);
+                }
             }
         }, this);
         
@@ -228,12 +235,14 @@ Tine.Admin.Groups.Main = {
         }, this);
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-            var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-                Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + record.data.id,650, 600);
-            } catch(e) {
-                // alert(e);
-            }
+        	if ( Tine.Tinebase.hasRight('manage', 'accounts') ) {
+                var record = _gridPar.getStore().getAt(_rowIndexPar);
+                try {
+                    Tine.Tinebase.Common.openWindow('groupWindow', 'index.php?method=Admin.editGroup&groupId=' + record.data.id,650, 600);
+                } catch(e) {
+                    // alert(e);
+                }
+        	}
         }, this);
 
         // add the grid to the layout

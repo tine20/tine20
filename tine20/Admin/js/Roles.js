@@ -72,6 +72,7 @@ Tine.Admin.Roles.Main = {
     {
         this.actions.addRole = new Ext.Action({
             text: 'add role',
+            disabled: true,
             handler: this.handlers.addRole,
             iconCls: 'action_permissions',
             scope: this
@@ -131,6 +132,10 @@ Tine.Admin.Roles.Main = {
 
     displayRolesGrid: function() 
     {
+        if ( Tine.Tinebase.hasRight('manage', 'roles') ) {
+            this.actions.addRole.setDisabled(false);
+        }    	
+    	
         // the datastore
         var dataStore = new Ext.data.JsonStore({
             baseParams: {
@@ -174,18 +179,20 @@ Tine.Admin.Roles.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
-            if(rowCount < 1) {
-                // no row selected
-                this.actions.deleteRole.setDisabled(true);
-                this.actions.editRole.setDisabled(true);
-            } else if(rowCount > 1) {
-                // more than one row selected
-                this.actions.deleteRole.setDisabled(false);
-                this.actions.editRole.setDisabled(true);
-            } else {
-                // only one row selected
-                this.actions.deleteRole.setDisabled(false);
-                this.actions.editRole.setDisabled(false);
+            if ( Tine.Tinebase.hasRight('manage', 'roles') ) {
+                if(rowCount < 1) {
+                    // no row selected
+                    this.actions.deleteRole.setDisabled(true);
+                    this.actions.editRole.setDisabled(true);
+                } else if(rowCount > 1) {
+                    // more than one row selected
+                    this.actions.deleteRole.setDisabled(false);
+                    this.actions.editRole.setDisabled(true);
+                } else {
+                    // only one row selected
+                    this.actions.deleteRole.setDisabled(false);
+                    this.actions.editRole.setDisabled(false);
+                }
             }
         }, this);
         
@@ -228,12 +235,14 @@ Tine.Admin.Roles.Main = {
         }, this);
         
         gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-            var record = _gridPar.getStore().getAt(_rowIndexPar);
-            try {
-                Tine.Tinebase.Common.openWindow('roleWindow', 'index.php?method=Admin.editRole&roleId=' + record.data.id,650, 600);
-            } catch(e) {
-                // alert(e);
-            }
+        	if ( Tine.Tinebase.hasRight('manage', 'roles') ) {
+                var record = _gridPar.getStore().getAt(_rowIndexPar);
+                try {
+                    Tine.Tinebase.Common.openWindow('roleWindow', 'index.php?method=Admin.editRole&roleId=' + record.data.id,650, 600);
+                } catch(e) {
+                    // alert(e);
+                }
+        	}
         }, this);
 
         // add the grid to the layout
