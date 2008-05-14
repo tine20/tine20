@@ -135,7 +135,7 @@ class Tinebase_Acl_Roles
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
         if ( empty($roleMemberships) ) {
-            throw Exception('user has no role memberships');
+            throw new Exception('user has no role memberships');
         }
 
         $rightIdentifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right');
