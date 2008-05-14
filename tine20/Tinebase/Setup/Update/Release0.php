@@ -429,4 +429,73 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '0.3');
         
     }
+    
+    /**
+     * add temp_files table and update to version 0.4 of tinebase
+     */    
+    function update_3()
+    {
+        $tableDefinition = ('
+            <table>
+                <name>temp_files</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>session_id</name>
+                        <type>text</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>path</name>
+                        <type>text</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>type</name>
+                        <type>text</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>error</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>size</name>
+                        <type>integer</type>
+                        <unsigned>true</unsigned>
+                        <notnull>true</notnull>
+                    </field>
+                    
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>
+        ');
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+        
+        $this->setApplicationVersion('Tinebase', '0.4');
+    }
 }
