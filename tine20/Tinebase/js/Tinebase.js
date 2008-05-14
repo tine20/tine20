@@ -919,3 +919,46 @@ Ext.grid.RowExpander = function(config){
             }
         }
 });
+
+/**
+ * check if user has right to view/manage this application/resource
+ * 
+ * @param   string      right (view, admin, manage)
+ * @param   string      resource (for example roles, accounts, ...)
+ * @returns boolean 
+ */
+Tine.Tinebase.hasRight = function(_right, _resource)
+{
+    //console.log ( Tine.Admin.rights );
+    var result = false;
+    
+    for ( var i=0; i < Tine.Admin.rights.length; i++ ) {
+        if ( Tine.Admin.rights[i] == 'admin' ) {
+            result = true;
+            break;
+        }
+        
+        if ( _right == 'view' && (Tine.Admin.rights[i] == 'view_' + _resource || Tine.Admin.rights[i] == 'manage_' + _resource ) ) {
+            result = true;
+            break;
+        }
+        
+        if ( _right == 'manage' && Tine.Admin.rights[i] == 'manage_' + _resource ) {
+            result = true;
+            break;
+        }
+    }
+
+    /*
+    if ( result == true ) {    
+        console.log ("has right: ");
+    } else {
+    	console.log ("has not right: ");
+    }
+    console.log (_right);
+    */
+    
+    return result;
+};
+
+
