@@ -11,7 +11,36 @@
 Ext.namespace('Tine.Admin');
 
 Tine.Admin = function() {
+	
+	/**
+	 * check if user has right to view/manage this application/resource
+	 * 
+	 * @returns boolean
+	 */
+	var hasRight = function(_right, _resource)
+	{
+		//console.log ( Tine.Admin.rights );
+		
+		for ( var i=0; i < Tine.Admin.rights.length; i++ ) {
+			if ( Tine.Admin.rights[i] == 'admin' ) {
+				return true;
+			}
+			
+			if ( _right == 'view' && (Tine.Admin.rights[i] == 'view_' + _resource || Tine.Admin.rights[i] == 'manage_' + _resource ) ) {
+				return true;
+			}
+			
+			if ( _right == 'manage' && Tine.Admin.rights[i] == 'manage_' + _resource ) {
+				return true;
+			}
+		}
 
+		return false;
+	};
+    
+	/**
+	 * builds the admin applications tree
+	 */
     var _initialTree = [{
         text: 'Accounts',
         cls: 'treemain',
@@ -22,7 +51,8 @@ Tine.Admin = function() {
         children: [],
         leaf: null,
         expanded: true,
-        dataPanelType: 'accounts'
+        dataPanelType: 'accounts',
+        viewRight: 'accounts'
     },{
         text: 'Groups',
         cls: 'treemain',
@@ -33,7 +63,8 @@ Tine.Admin = function() {
         children: [],
         leaf: null,
         expanded: true,
-        dataPanelType: 'groups' 
+        dataPanelType: 'groups', 
+        viewRight: 'accounts'
     },{
         text: "Applications",
 		cls: "treemain",
@@ -44,7 +75,8 @@ Tine.Admin = function() {
 		children: [],
 		leaf: null,
 		expanded: true,
-		dataPanelType: "applications"
+		dataPanelType: "applications",
+		viewRight: 'apps'
 	},{
 		text :"Access Log",
 		cls :"treemain",
@@ -55,7 +87,8 @@ Tine.Admin = function() {
 		children :[],
 		leaf :null,
 		expanded :true,
-		dataPanelType :"accesslog"
+		dataPanelType :"accesslog",
+		viewRight: 'access_log'
 	},{
         text :"Shared Tags",
         cls :"treemain",
@@ -67,7 +100,7 @@ Tine.Admin = function() {
         children :[],
         leaf :null,
         expanded :true,
-        dataPanelType :"sharedtags"
+        dataPanelType :"sharedtags",
     },{
         text :"Roles",
         cls :"treemain",
@@ -78,7 +111,8 @@ Tine.Admin = function() {
         children :[],
         leaf :null,
         expanded :true,
-        dataPanelType :"roles"
+        dataPanelType :"roles",
+        viewRight: 'roles'
     }];
 
 	/**
@@ -118,10 +152,23 @@ Tine.Admin = function() {
         treePanel.setRootNode(treeRoot);
 
         for(var i=0; i<_initialTree.length; i++) {
-            treeRoot.appendChild(new Ext.tree.AsyncTreeNode(_initialTree[i]));
+        	
+        	var node = new Ext.tree.AsyncTreeNode(_initialTree[i]);
+        	
+        	// check view right
+        	if ( _initialTree[i].viewRight && !hasRight('view', _initialTree[i].viewRight) ) {
+                node.disabled = true;
+        	}
+        	
+            treeRoot.appendChild(node);
         }
         
         treePanel.on('click', function(_node, _event) {
+        	
+        	if ( _node.disabled ) {
+        		return false;
+        	}
+        	
         	var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         	switch(_node.attributes.dataPanelType) {
