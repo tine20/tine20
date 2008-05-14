@@ -134,12 +134,12 @@ class Tinebase_AccessLog
     {
         if ($_from instanceof Zend_Date && $_to instanceof Zend_Date) {
             $where = array(
-                $this->accessLogTable->getAdapter()->quoteInto($this->accessLogTable->getAdapter()->quoteIdentifier('li') . ' BETWEEN ? ', $_from->getIso()) .
-                $this->accessLogTable->getAdapter()->quoteInto('AND ?', $_to->getIso())
+                $this->_accessLogTable->getAdapter()->quoteInto($this->accessLogTable->getAdapter()->quoteIdentifier('li') . ' BETWEEN ? ', $_from->getIso()) .
+                $this->_accessLogTable->getAdapter()->quoteInto('AND ?', $_to->getIso())
             );
         } elseif ($_from instanceof Zend_Date) {
             $where = array(
-                $this->accessLogTable->getAdapter()->quoteInto($this->accessLogTable->getAdapter()->quoteIdentifier('li') . ' > ?', $_from->getIso())
+                $this->_accessLogTable->getAdapter()->quoteInto($this->accessLogTable->getAdapter()->quoteIdentifier('li') . ' > ?', $_from->getIso())
             );
         }
         
