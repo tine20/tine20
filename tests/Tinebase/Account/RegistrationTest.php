@@ -123,7 +123,8 @@ class Tinebase_Account_RegistrationTest extends PHPUnit_Framework_TestCase
         } catch (Zend_Config_Exception $e) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
         }
-    	if ( isset($this->_config->expires) && $this->_config->expires > 0) {
+
+        if ( isset($config->expires) && $config->expires > 0) {
     	   $this->assertNotEquals( NULL, $account->accountExpires, "account expires" );
     	} else {
     	   $this->assertEquals( NULL, $account->accountExpires, "account won't expire" );
