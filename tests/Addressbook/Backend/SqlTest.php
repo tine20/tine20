@@ -75,6 +75,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 120,
+            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
             'note'                  => 'Bla Bla Bla',
             'owner'                 => $container->id,
             'role'                  => 'Role',
@@ -214,6 +215,19 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($this->objects['initialContact']->id, $contact->id);
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+    }
+    
+    /**
+     * test if image is in contact
+     *
+     */
+    public function testImage()
+    {
+        $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['initialContact']);
+        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $contact->jpegphoto);
+        $this->assertFileEquals(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif', $tmpPath);
+        unset($tmpPath);
     }
     
     /**
