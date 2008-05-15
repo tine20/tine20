@@ -114,10 +114,8 @@ class Setup_Update_Abstract
     public function increaseTableVersion($_tableName)
     {
         $currentVersion = $this->getTableVersion($_tableName);
-        
-        list($major, $minor) = explode('.', $currentVersion);
-        
-        $version = $major . '.' . $minor++;
+
+        $version = ++$currentVersion;
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
