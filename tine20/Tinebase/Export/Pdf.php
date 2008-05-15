@@ -81,6 +81,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         if ( $_contentLineHeight !== NULL ) {
             $this->contentLineHeight = $_contentLineHeight;
         }
+        if ( $_contentBlockLineHeight !== NULL ) {
+            $this->contentBlockLineHeight = $_contentBlockLineHeight;
+        }
 	}
 		
     /**
