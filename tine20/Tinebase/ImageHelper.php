@@ -71,7 +71,7 @@ class Tinebase_ImageHelper
         $_image->width = $_width;
         $_image->height = $_height;
         $_image->blob = file_get_contents($tmpPath);
-        unset($tmpPath);
+        unlink($tmpPath);
         return;
     }
     /**
@@ -86,7 +86,7 @@ class Tinebase_ImageHelper
         file_put_contents($tmpPath, $_blob);
         
         $imgInfo = getimagesize($tmpPath);
-        unset($tmpPath);
+        unlink($tmpPath);
         if (!in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
             throw new Exception('gvien blob does not contain valid image data');
         }
