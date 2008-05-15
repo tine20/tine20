@@ -61,4 +61,28 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
             'blob' => $imgBlob
         ), true);
     }
+    
+    /**
+     * returns image extension from mime type
+     * 
+     * @return string extension
+     */
+    public function getImageExtension()    
+    {
+        $extension = '';
+        
+        switch ( $this->mime ) {
+            case 'image/png':
+                $extension = '.png';
+                break;
+            case 'image/jpeg':
+                $extension = '.jpg';
+                break;
+            case 'image/gif':
+                $extension = '.gif';
+                break;
+        }
+        
+        return $extension;
+    }
 } // end of Tinebase_Model_Image
