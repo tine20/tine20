@@ -502,13 +502,30 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      * rename timemachine_modificationlog to timemachine_modlog
      */    
     function update_4()
-    {
-        $this->validateTableVersion('timemachine_modificationlog', '1');
-        
-        $this->renameTable('timemachine_modificationlog', 'timemachine_modlog');
-
-        $this->increaseTableVersion('timemachine_modlog');
+    {        
+        try {
+            $this->validateTableVersion('timemachine_modificationlog', '1');
+            
+            $this->renameTable('timemachine_modificationlog', 'timemachine_modlog');
+    
+            $this->increaseTableVersion('timemachine_modlog');
+        } catch ( Exception $e ) {
+            echo "renaming table 'timemachine_modificationlog' failed\n";
+        }
         
         $this->setApplicationVersion('Tinebase', '0.5');
     }
+    
+    /**
+     * drop table application_rights
+     */    
+    function update_5()
+    {
+        //echo "drop table application_rights";
+        
+        $this->dropTable('application_rights');
+        
+        $this->setApplicationVersion('Tinebase', '0.6');
+    }
+    
 }

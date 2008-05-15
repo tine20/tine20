@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.5</version>
+    <version>0.6</version>
     <tables>
         <table>
             <name>applications</name>
@@ -562,83 +562,6 @@
                 </index>
             </declaration>
         </table>
-
-        <table>
-            <name>application_rights</name>
-            <version>2</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>application_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>right</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_type</name>
-                    <type>enum</type>
-                    <value>anyone</value>
-                    <value>user</value>
-                    <value>group</value>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_id</name>
-                    <type>integer</type>
-                </field>
-                
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>account_id-account_type-application_id-right</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>application_id</name>
-                    </field>                    
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                    <field>
-                        <name>account_type</name>
-                    </field>
-                    <field>
-                        <name>right</name>
-                    </field>
-                </index>
-                <index>
-                    <name>right</name>
-                    <field>
-                        <name>right</name>
-                    </field>
-                </index>
-                <index>
-                    <name>application_rights-application_id</name>
-                    <field>
-                        <name>application_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>applications</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-            </declaration>
-        </table>     
 
         <table>
             <name>record_persistentobserver</name>
