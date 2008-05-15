@@ -15,59 +15,72 @@ class Tinebase_ImageHelper
      * preserves ratio and cropes image on the oversize side
      */
     const RATIOMODE_PRESERVANDCROP = 0;
-    
     /**
      * scales given image to given size
      * 
-     * @param  string $_file
+     * @param  Tinebase_Model_Image $_image
      * @param  int    $_width desitination width
      * @param  int    $_height destination height
      * @param  int    $_ratiomode
-     * @return imagecreatetruecolor
+     * @return void
      */
-    public static function resize($_file, $_width, $_height, $_ratiomode)
+    public static function resize(Tinebase_Model_Image $_image, $_width, $_height, $_ratiomode)
     {
-        $imgInfo = getimagesize($_file);
-        switch ($imgInfo['mime']) {
+        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $_image->blob);
+        
+        switch ($_image['mime']) {
             case ('image/png'):
-                $src_image = imagecreatefrompng($_file);
+                $src_image = imagecreatefrompng($tmpPath);
+                $imgDumpFunction = 'imagepng';
                 break;
             case ('image/jpeg'):
-                $src_image = imagecreatefromjpeg($_file);
+                $src_image = imagecreatefromjpeg($tmpPath);
+                $imgDumpFunction = 'imagejpeg';
                 break;
             case ('image/gif'):
-                $src_image = imagecreatefromgif($_file);
+                $src_image = imagecreatefromgif($tmpPath);
+                $imgDumpFunction = 'imagegif';
                 break;
             default:
-                throw new Exception("unsupported image type: " . $imgInfo['mime']);
+                throw new Exception("unsupported image type: " . $_image['mime']);
                 break;
         }
         
         $dst_image = imagecreatetruecolor($_width, $_height);
         
-        $src_ratio = $imgInfo[0]/$imgInfo[1];
+        $src_ratio = $_image->width/$_image->height;
         $dst_ratio = $_width/$_height;
         switch ($_ratiomode) {
             case self::RATIOMODE_PRESERVANDCROP:
                 if($src_ratio - $dst_ratio >= 0) {
                     // crop width
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[1] * $dst_ratio, $imgInfo[1]);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $_image->height * $dst_ratio, $_image->height);
                     
                 } else {
                     // crop heights
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $imgInfo[0], $imgInfo[0] / $dst_ratio);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $_image->width, $_image->width / $dst_ratio);
                 }
                 break;
             default: 
                 throw new Exception('ratiomode not supported');
                 break;
         }
-        return $dst_image;
+        $imgDumpFunction($dst_image, $tmpPath);
+        
+        $_image->width = $_width;
+        $_image->height = $_height;
+        $_image->blob = file_get_contents($tmpPath);
+        unset($tmpPath);
+        return;
     }
     /**
+     * returns image metadata
      * 
+     * @param  blob  $_blob
+     * @return array
      */
-    public static function getImageInfoFromBlog($_blob)
+    public static function getImageInfoFromBlob($_blob)
     {
         $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
         file_put_contents($tmpPath, $_blob);
@@ -82,7 +95,8 @@ class Tinebase_ImageHelper
             'height'   => $imgInfo[1],
             'bits'     => $imgInfo['bits'],
             'channels' => $imgInfo['channels'],
-            'mime'     => $imgInfo['mime']
+            'mime'     => $imgInfo['mime'],
+            'blob'     => $_blob
         );
         
     }
