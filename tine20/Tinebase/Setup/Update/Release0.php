@@ -58,7 +58,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      */    
     public function update_1()
     {
-
         $this->validateTableVersion('application_rights', '1');
         
         $declaration = new Setup_Backend_Schema_Field();
@@ -497,5 +496,19 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
         
         $this->setApplicationVersion('Tinebase', '0.4');
+    }
+    
+    /**
+     * rename timemachine_modificationlog to timemachine_modlog
+     */    
+    function update_4()
+    {
+        $this->validateTableVersion('timemachine_modificationlog', '1');
+        
+        $this->renameTable('timemachine_modificationlog', 'timemachine_modlog');
+
+        $this->increaseTableVersion('timemachine_modlog');
+        
+        $this->setApplicationVersion('Tinebase', '0.5');
     }
 }
