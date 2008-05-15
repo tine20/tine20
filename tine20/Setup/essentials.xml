@@ -6,6 +6,7 @@
 	<extensions>	
 		<extension name="mysql" />
 		<extension name="json" />
+		<extension name="gd" />
 		<extension name="date" />
 		<extension name="PDO" />
 		<extension name="pdo_mysql" />
