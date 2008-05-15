@@ -151,7 +151,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         // photo
         if ( $_image !== NULL ) {
             //$xPos += 450;
-            $this->pages[$pageNumber]->drawImage( $_image, $xPos+450, $yPosImage, $xPos+500, $yPosImage + 75 );
+            $this->pages[$pageNumber]->drawImage( $_image, $xPos+430, $yPosImage-40, $xPos+510, $yPosImage + 80 );
         }
 
         // debug record
@@ -218,9 +218,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             
         
         return $pdfData;        
-    }	
-		
-
+    }			
 
     /**
      * create a table
