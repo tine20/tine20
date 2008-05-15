@@ -12,7 +12,19 @@
 class Addressbook_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     /**
-     * update function 1
+     * this function does nothing. It's from the dark ages without setup being functional
+     */    
+    public function update_1()
+    {
+        $this->validateTableVersion('addressbook', '1');        
+        
+        $this->setApplicationVersion('Addressbook', '0.2');
+    }
+    
+    /**
+     * updates what???
+     * 
+     * @todo add changed fields
      */    
     public function update_2()
     {
