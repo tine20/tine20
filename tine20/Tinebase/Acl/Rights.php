@@ -9,7 +9,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        remove the application right queries completely
+ * @todo        remove deprecated code?
  */
 
 /**
@@ -88,20 +88,19 @@ class Tinebase_Acl_Rights
     }
         
     /**
-     * returns list of applications the user is able to use
+     * returns list of applications the user is able to use, calls Tinebase_Acl_Roles::getApplications()
      *
      * this function takes group memberships into account. Applications the accounts is able to use
      * must have the 'run' right set and the application must be enabled
      * 
      * @param int $_accountId the numeric account id
      * @return array list of enabled applications for this account
-     * 
-     * @todo    remove old application rights query
      */
     public function getApplications($_accountId)
     {
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
-        
+
+        /*
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         $db = Zend_Registry::get('dbAdapter');
@@ -133,18 +132,19 @@ class Tinebase_Acl_Rights
                 $result->addRecord($application);
             }
         }
+        */
+        
+        $result = Tinebase_Acl_Roles::getInstance()->getApplications($accountId);
         
         return $result;
     }
 
     /**
-     * returns rights for given application and accountId
+     * returns rights for given application and accountId, calls Tinebase_Acl_Roles::getApplicationRights()
      *
      * @param string $_application the name of the application
      * @param int $_accountId the numeric account id
      * @return array list of rights
-     * 
-     * @todo    remove old application rights query
      */
     public function getRights($_application, $_accountId) 
     {
@@ -156,6 +156,7 @@ class Tinebase_Acl_Rights
 
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
+        /*
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);                        
 
         $db = Zend_Registry::get('dbAdapter');
@@ -191,19 +192,20 @@ class Tinebase_Acl_Rights
                 $result[] = $right;
             }
         }
+        */
+        
+        $result = Tinebase_Acl_Roles::getInstance()->getApplicationRights($application->getId(), $accountId);
         
         return $result;
     }
 
     /**
-     * check if the user has a given right for a given application
+     * check if the user has a given right for a given application, calls Tinebase_Acl_Roles::hasRight()
      *
      * @param string $_application the name of the application
      * @param int $_accountId the numeric id of a user account
      * @param int $_right the right to check for
      * @return bool
-     * 
-     * @todo    remove old application rights query
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
@@ -214,6 +216,7 @@ class Tinebase_Acl_Rights
             throw new Exception('user has no rights. the application is disabled.');
         }
         
+        /*
         // check application rights
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);        
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
@@ -238,6 +241,9 @@ class Tinebase_Acl_Rights
         if ( !$result ) {
             $result = Tinebase_Acl_Roles::getInstance()->hasRight($application->getId(), $_accountId, $_right);
         }
+        */
+        
+        $result = Tinebase_Acl_Roles::getInstance()->hasRight($application->getId(), $_accountId, $_right);
         
         return $result;
     }
@@ -246,9 +252,11 @@ class Tinebase_Acl_Rights
      * add right
      *
      * @param Tinebase_Acl_Model_Right $_right
+     * @deprecated no longer used because of new role management
      */
     public function addRight(Tinebase_Acl_Model_Right $_right) 
     {
+        /*
         if (!$_right->isValid()) {
             throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
         }
@@ -258,7 +266,7 @@ class Tinebase_Acl_Rights
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
                         
         $this->_rightsTable->insert($data);
-        
+        */
     }
     
     /**
@@ -266,9 +274,11 @@ class Tinebase_Acl_Rights
      *
      * @param   int $_applicationId  app id
      * @return  Tinebase_Record_RecordSet of Tinebase_Acl_Model_Right with account rights for the application
+     * @deprecated no longer used because of new role management
      */
     public function getApplicationPermissions($_applicationId)
     {
+        /*
         //  
         // $applicationId = Tinebase_Application::convertApplicationIdToInt($_applicationId);
                 
@@ -295,6 +305,7 @@ class Tinebase_Acl_Rights
         }
 
         return $result;
+        */
     }
     
     /**
@@ -302,11 +313,12 @@ class Tinebase_Acl_Rights
      *
      * @param   int $_applicationId  app id
      * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
-     * 
      * @return  int number of rights set
+     * @deprecated no longer used because of new role management
      */
     public function setApplicationPermissions($_applicationId, Tinebase_Record_RecordSet $_applicationRights)
     {
+        /*
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($_applicationRights, true));
         
         // delete all old rights for this application
@@ -321,6 +333,7 @@ class Tinebase_Acl_Rights
         }
         
         return $count;
+        */
     }
     
     /**

@@ -212,12 +212,11 @@ class Tinebase_Application
      *
      * @param   int $_applicationId  app id
      * @return  array with account rights for the application
-     * 
-     * @todo    return recordset with Tinebase_Acl_Right records here?
-     * @todo    translate 'Anyone'
+     * @deprecated no longer needed because of the new role management 
      */
     public function getApplicationPermissions($_applicationId)
     {
+        /*
         $applicationRights = Tinebase_Acl_Rights::getInstance()->getApplicationPermissions($_applicationId);
 
         $result = array();
@@ -266,6 +265,7 @@ class Tinebase_Application
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights record: ' . print_r($result, true));
         
         return $result;
+        */
     }
     
     /**
@@ -273,11 +273,12 @@ class Tinebase_Application
      *
      * @param   int $_applicationId  app id
      * @param   array $_applicationRights  application account rights
-     * 
      * @return  int number of rights set
+     * @deprecated no longer needed because of the new role management
      */
     public function setApplicationPermissions($_applicationId, $_applicationRights)
     {
+        /*
         $tineAclRights = Tinebase_Acl_Rights::getInstance();
         
         $tineRights = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
@@ -301,6 +302,7 @@ class Tinebase_Application
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($tineRights, true));
         
         return $tineAclRights->setApplicationPermissions($_applicationId, $tineRights);
+        */
     }
 
     /**

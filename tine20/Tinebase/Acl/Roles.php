@@ -165,7 +165,6 @@ class Tinebase_Acl_Roles
      * @param string $_applicationId application id
      * @param int $_accountId the numeric account id
      * @return array list of rights
-     * 
      * @todo    add right group by to statement if possible or remove duplicates in result array
      */
     public function getApplicationRights($_applicationId, $_accountId) 
@@ -191,7 +190,15 @@ class Tinebase_Acl_Roles
             return array();
         }
 
-        $result = explode(',', $row['account_rights']);
+        $rights = explode(',', $row['account_rights']);
+        
+        // remove duplicates
+        $result = array();
+        foreach ( $rights as $right ) {
+            if ( !in_array($right, $result) ) {
+                $result[] = $right;
+            }
+        }                
         
         return $result;
     }
