@@ -596,13 +596,16 @@ Tine.Admin.Applications.Main = function() {
     
     /**
      * onclick handler for permissions action
+     * removed, is replaced by role management
      */
+    /*
     var _permissionsButtonHandler = function(_button, _event) {
         var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
         var applicationId = selectedRows[0].id;
         
         Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + applicationId, 800, 350);
     };
+    */
 
     var _enableDisableButtonHandler = function(_button, _event) {
     	//console.log(_button);
@@ -661,12 +664,15 @@ Tine.Admin.Applications.Main = function() {
         iconCls: 'action_settings'
     });
 
+    // removed, is replaced by role management
+    /*
     var _action_permissions = new Ext.Action({
         text: 'permissions',
         disabled: true,
         handler: _permissionsButtonHandler,
         iconCls: 'action_permissions'
     });
+    */
     
 	var _createApplicationaDataStore = function()
     {
@@ -724,7 +730,7 @@ Tine.Admin.Applications.Main = function() {
                 _action_disable,
                 '-',
                 _action_settings,
-                _action_permissions,
+                //_action_permissions,
                 '->',
                 'Search:', ' ',
 /*                new Ext.ux.SelectBox({
@@ -774,8 +780,8 @@ Tine.Admin.Applications.Main = function() {
             items: [
                 _action_enable,
                 _action_disable,
-                _action_disable,
-                _action_permissions
+                _action_disable
+                //_action_permissions
             ]
         });
 
@@ -810,22 +816,22 @@ Tine.Admin.Applications.Main = function() {
                     _action_enable.setDisabled(true);
                     _action_disable.setDisabled(true);
                     _action_settings.setDisabled(true);
-                    _action_permissions.setDisabled(true);
+                    //_action_permissions.setDisabled(true);
                 } else if (rowCount > 1) {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);
-                    _action_permissions.setDisabled(true);
+                    //_action_permissions.setDisabled(true);
                 } else if (selected.data.name == 'Tinebase') {
                     _action_enable.setDisabled(true);
                     _action_disable.setDisabled(true);
                     _action_settings.setDisabled(true);            	
-                    _action_permissions.setDisabled(false);
+                    //_action_permissions.setDisabled(false);
                 } else {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);                
-                    _action_permissions.setDisabled(false);
+                    //_action_permissions.setDisabled(false);
                 }
             }
         });
@@ -854,19 +860,22 @@ Tine.Admin.Applications.Main = function() {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     _action_settings.setDisabled(true);
-                    _action_permissions.setDisabled(false);
+                    //_action_permissions.setDisabled(false);
                 }
             }
             //var record = _grid.getStore().getAt(rowIndex);
             ctxMenuGrid.showAt(_eventObject.getXY());
         }, this);
-               
+          
+        // removed, is replaced by role management
+        /*
         grid_applications.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
         	if ( Tine.Tinebase.hasRight('manage', 'apps') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
                 Tine.Tinebase.Common.openWindow('applicationPermissionsWindow', 'index.php?method=Admin.editApplicationPermissions&appId=' + record.data.id, 800, 350);
         	}
         });
+        */
         
         return;
     };   
@@ -904,7 +913,8 @@ Tine.Admin.Applications.Main = function() {
 }();
 
 /*********************************** EDIT PERMISSIONS DIALOG ********************************************/
-
+// no longer used, is replaced by role management
+// perhaps it should be removed later on
 Tine.Admin.Applications.EditPermissionsDialog = {
 
     /**
