@@ -1642,7 +1642,7 @@ Tine.Crm.LeadEditDialog = function() {
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
             var record = _grid.getStore().getAt(_rowIndex);
-            console.log ( record );
+            //console.log ( record );
             popupWindow = new Tine.Tasks.EditPopup({
             	id: record.data.id
             });
