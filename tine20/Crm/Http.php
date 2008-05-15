@@ -92,20 +92,21 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                     $_creator = $creator->toArray();
                     $_task['creator'] = $_creator['accountFullName'];
                     
-                    if($_task['last_modified_by'] != NULL) {
+                    if ($_task['last_modified_by'] != NULL) {
                         $modifier = Tinebase_Account::getInstance()->getAccountById($_task['last_modified_by']);
                         $_modifier = $modifier->toArray();
                         $_task['modifier'] = $_modifier['accountFullName'];         
                     }
                     
                     $stati = Tasks_Controller::getInstance()->getStati()->toArray();
-                    foreach($stati AS $status) {
-                        if($status['identifier'] == $task['status']) {
-                            $_task['status_realname'] = $status['status'];
+                    foreach ($stati as $status) {
+                        //if ($status['identifier'] == $task['status']) {
+                        if ($status['id'] == $task['status_id']) {
+                            //$_task['status_realname'] = $status['status'];
+                            $_task['status_realname'] = $status['status_name'];
                         }
                     }
-                                    
-                    
+
                     $leadData['tasks'][] = $_task;  
                     
                 } catch (Exception $e) {

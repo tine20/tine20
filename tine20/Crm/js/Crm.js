@@ -1641,9 +1641,10 @@ Tine.Crm.LeadEditDialog = function() {
         });               
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
-            var record = _grid.getStore().getAt(_rowIndex); 
+            var record = _grid.getStore().getAt(_rowIndex);
+            console.log ( record );
             popupWindow = new Tine.Tasks.EditPopup({
-                identifier: record.data.identifier
+            	id: record.data.id
             });
             
             popupWindow.on('update', function(task) {
