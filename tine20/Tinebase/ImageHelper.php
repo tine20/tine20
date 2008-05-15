@@ -9,6 +9,11 @@
  * @version     $Id$
  */
 
+/**
+ * Helper class for image operations
+ *
+ * @package     Tinebase
+ */
 class Tinebase_ImageHelper
 {
     /**
