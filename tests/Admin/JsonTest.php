@@ -8,6 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        remove deprecated application rights test? 
  */
 
 /**
@@ -402,10 +403,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to set applications permissions
-     *
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function testSaveApplicationPermissions()
-    {        
+    {
+        /*        
         $adminGroup = Tinebase_Group::getInstance()->getGroupByName('Administrators'); 
         $rights = Zend_Json::encode(array(
            array(
@@ -418,22 +420,23 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
            ) 
         ));
         
-        //echo $rights;
-                
         $json = new Admin_Json();
         
         $result = $json->saveApplicationPermissions($this->objects['application']->getId(), $rights);
         
         $this->assertTrue( $result["success"], "save permissions failed" );
         $this->assertEquals ( 2, substr($result["welcomeMessage"],0,1) );
+        */
     }
     
     /**
      * try to get applications permissions
      *
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function testGetApplicationPermissions()
     {
+        /*
         $json = new Admin_Json();
         
         $permissions = $json->getApplicationPermissions($this->objects['application']->getId());
@@ -451,7 +454,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         $this->assertTrue ( $adminPermissions['admin'], "admin group doesn't have the admin right" );
-        
+        */
     }
 
     /**
