@@ -39,12 +39,12 @@ class Setup_Update_Abstract
 	    $this->_db = Zend_Registry::get('dbAdapter');
 	}
 	
-	/*
+	/**
 	 * get version number of a given application 
 	 * version is stored in database table "applications"
 	 *
 	 * @param string application
-	 * @returns string version number major.minor release 
+	 * @return string version number major.minor release 
 	 */
 	public function getApplicationVersion($_application)
 	{
@@ -58,7 +58,7 @@ class Setup_Update_Abstract
 		return $version[0]['version'];
 	}
 
-	/*
+	/**
 	 * set version number of a given application 
 	 * version is stored in database table "applications"
 	 *
@@ -74,12 +74,12 @@ class Setup_Update_Abstract
 		$applicationsTable->update(array('version' => $_version), $where);
 	}
 	
-	/*
+	/**
 	 * get version number of a given table
 	 * version is stored in database table "applications_tables"
 	 *
 	 * @param Tinebase_Application application
-	 * @returns int version number 
+	 * @return int version number 
 	 */
 	public function getTableVersion($_tableName)
     {
@@ -95,12 +95,12 @@ class Setup_Update_Abstract
         return $result;
     }
 	
-	/*
+	/**
 	 * set version number of a given table
 	 * version is stored in database table "applications_tables"
 	 *
 	 * @param string tableName
-	 * @returns int version number 
+	 * @return int version number 
 	 */	 
     public function setTableVersion($_tableName, $_version)
     {
@@ -111,12 +111,12 @@ class Setup_Update_Abstract
         $result = $applicationsTables->update(array('version' => $_version), $where);
     }
     
-    /*
+    /**
      * set version number of a given table
      * version is stored in database table "applications_tables"
      *
      * @param string tableName
-     * @returns int version number 
+     * @return int version number 
      */  
     public function increaseTableVersion($_tableName)
     {
@@ -131,7 +131,7 @@ class Setup_Update_Abstract
         $result = $applicationsTables->update(array('version' => $version), $where);
     }
     
-    /*
+    /**
 	 * compares version numbers of given table and given number
 	 *
 	 * @param string $_tableName
@@ -145,7 +145,7 @@ class Setup_Update_Abstract
         }
     }
     
-    /*
+    /**
      * rename table in applications table
      *
      * @param string $_oldTableName
@@ -162,7 +162,7 @@ class Setup_Update_Abstract
         $result = $applicationsTables->update(array('name' => SQL_TABLE_PREFIX . $_newTableName), $where);
     }
     
-    /*
+    /**
      * drop table
      *
      * @param string $_tableName
