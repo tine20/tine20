@@ -114,7 +114,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.ctxMenu = new Ext.menu.Menu({
             items: [
             upload,
-            {
+            /*{
                 text: 'Edit Image',
                 iconCls: 'action_cropImage',
                 scope: this,
@@ -126,7 +126,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                     cropper.show();
                 }
             
-            },{
+            },*/{
                 text: 'Delete Image',
                 iconCls: 'action_delete',
                 disabled: this.imageSrc == this.defaultImage,
