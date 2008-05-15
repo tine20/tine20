@@ -361,7 +361,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     protected function getImageLink($contact)
     {
         if (!empty($contact->jpegphoto)) {
-            $link =  'index.php?method=Addressbook.getImage&id=' . $contact['id'] . '&width=90&height=90&$ratiomode=0';
+            $link =  'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contact['id'] . '&width=90&height=90&$ratiomode=0';
         } else {
             $link = 'images/empty_photo.jpg';
         }
@@ -379,7 +379,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
         //Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
         parse_str(parse_url($link, PHP_URL_QUERY), $params);
         $params['isNewImage'] = false;
-        if (isset($params['method']) && $params['method'] == 'Tinebase.getTempFileThumbnail') {
+        if (isset($params['application']) && $params['application'] == 'Tinebase') {
             $params['isNewImage'] = true;
         }
         //Zend_Registry::get('logger')->debug(print_r($params,true));

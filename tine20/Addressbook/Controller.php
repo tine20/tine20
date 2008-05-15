@@ -362,7 +362,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (empty($contact->jpegphoto)) {
             throw new Exception('Contact has no image');
         }
-        $imageInfo = Tinebase_ImageHelper::getImageInfoFromBlog($contact->jpegphoto);
+        $imageInfo = Tinebase_ImageHelper::getImageInfoFromBlob($contact->jpegphoto);
+        
         return new Tinebase_Model_Image($imageInfo + array(
             'id'           => $_identifier,
             'application'  => 'Addressbook',

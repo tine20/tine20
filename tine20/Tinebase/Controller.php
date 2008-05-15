@@ -389,4 +389,26 @@ class Tinebase_Controller
         $transport = new Zend_Mail_Transport_Smtp($mailConfig->smtpserver,  $mailConfig->toArray());
         Zend_Mail::setDefaultTransport($transport);
     }
+    
+    /**
+     * gets image info and data
+     * 
+     * @param  string $_application application which manages the image
+     * @param  string $_identifier identifier of image/record
+     * @param  string $_location optional additional identifier
+     * @return Tinebase_Model_Image
+     */
+    public function getImage($_application, $_identifier, $_location='')
+    {
+        $appController = $this->getApplicationInstance($_application);
+        if (!method_exists($appController, 'getImage')) {
+            throw new Exception("$_application has no getImage function");
+        }
+        $image = $appController->getImage($_identifier, $_location);
+        
+        if (!$image instanceof Tinebase_Model_Image) {
+            throw new Exception("$_application returned invalid image");
+        }
+        return $image;
+    }
 }

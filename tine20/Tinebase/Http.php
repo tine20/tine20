@@ -84,6 +84,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/form/ClearableComboBox.js',
             'Tinebase/js/ux/form/ClearableDateField.js',
             'Tinebase/js/ux/form/ImageField.js',
+            'Tinebase/js/ux/form/ImageCropper.js',
             'Tinebase/js/ux/form/BrowseButton.js',
             'Tinebase/js/ux/layout/HorizontalFitLayout.js',
             'Tinebase/js/DatepickerRange.js',
@@ -246,26 +247,36 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	}
 	
 	/**
-	 * downloads a tempFile
-	 * 
-	 * @todo move db stuff into seperate class
-	 * @param  string $id
-	 */
-	public function getTempFileThumbnail($id, $width, $height, $ratiomode)
+     * downloads an image/thumbnail at a given size
+     * 
+     * @todo move db stuff into seperate class
+     * @param  string $id
+     */
+	public function getImage($application, $id, $location, $width, $height, $ratiomode)
 	{
-	    $db = Zend_Registry::get('dbAdapter');
-	    $select = $db->select()
-	       ->from(SQL_TABLE_PREFIX . 'temp_files')
-	       ->where($db->quoteInto('id = ?', $id))
-	       ->where($db->quoteInto('session_id = ?', session_id()));
-        $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
-        
-        $image = Tinebase_ImageHelper::resize($tempFile['path'], $width, $height, $ratiomode);
-        
-        header('Content-Type: image/jpeg');
-        imagejpeg($image);
-        imagedestroy($image);
-        die();
+	    if ($application == 'Tinebase' && $location=='tempFile') {
+	        $db = Zend_Registry::get('dbAdapter');
+            $select = $db->select()
+               ->from(SQL_TABLE_PREFIX . 'temp_files')
+               ->where($db->quoteInto('id = ?', $id))
+               ->where($db->quoteInto('session_id = ?', session_id()));
+            $tempFile = $db->fetchRow($select, '', Zend_Db::FETCH_ASSOC);
+
+            $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile['path']));
+            $image = new Tinebase_Model_Image($imgInfo + array(
+                'application' => $application,
+                'id'          => $id,
+                'location'    => $location
+            ));
+    	} else {
+    	    $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
+    	}
+    	
+    	Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+    	
+    	header('Content-Type: '. $image->mime);
+    	die($image->blob);
+    	
 	}
 	
 	/**

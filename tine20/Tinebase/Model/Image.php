@@ -42,7 +42,23 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         'mime'        => array('allowEmpty' => true, 'InArray' => array('image/png', 'image/jpeg', 'image/gif')),
     
         // binary data
-        'data'       => array('allowEmpty' => true)
+        'blob'        => array('allowEmpty' => true)
     );
     
+    /**
+     * returns image from given path
+     * 
+     * @param  string $_path
+     * @return Tinebase_Model_Image
+     */
+    public static function getImageFromPath($_path)
+    {
+        if (!file_exists($_path)) {
+            throw new Exception('image file not found');
+        }
+        $imgBlob = file_get_contents($_path);
+        return new Tinebase_Model_Image(Tinebase_ImageHelper::getImageInfoFromBlob($imgBlob) + array(
+            'blob' => $imgBlob
+        ), true);
+    }
 } // end of Tinebase_Model_Image

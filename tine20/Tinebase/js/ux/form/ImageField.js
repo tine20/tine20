@@ -77,9 +77,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.buttonCt.mask('Loading', 'x-mask-loading');
         uploader.upload();
         uploader.on('uploadcomplete', function(uploader, record){
-            var method = Ext.util.Format.htmlEncode('Tinebase.getTempFileThumbnail');
-            this.imageSrc = 'index.php?method=' + method + '&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + this.height + '&ratiomode=0';
-            //console.log(this.imageSrc);
+            //var method = Ext.util.Format.htmlEncode('');
+            this.imageSrc = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + this.height + '&ratiomode=0';
             this.setValue(this.imageSrc);
             
             this.updateImage();
@@ -115,12 +114,19 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.ctxMenu = new Ext.menu.Menu({
             items: [
             upload,
-            /*{
+            {
                 text: 'Edit Image',
                 iconCls: 'action_cropImage',
-                disabled: true
+                scope: this,
+                //disabled: true
+                handler: function() {
+                    var cropper = new Ext.ux.form.ImageCropper({
+                        image: this.getValue()
+                    });
+                    cropper.show();
+                }
             
-            },*/{
+            },{
                 text: 'Delete Image',
                 iconCls: 'action_delete',
                 disabled: this.imageSrc == this.defaultImage,

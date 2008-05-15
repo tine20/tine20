@@ -43,7 +43,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
             $encodedContact['tags'] = $encodedContact['tags']->toArray();
             //Zend_Registry::get('logger')->debug(print_r($encodedContact,true));
             if (!empty($encodedContact['jpegphoto'])) {
-                $encodedContact['jpegphoto'] = 'index.php?method=Addressbook.getImage&id=' . $_contactId . '&width=90&height=90&ratiomode=0';
+                $encodedContact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $_contactId . '&width=90&height=90&ratiomode=0';
             }
             if (! empty($contact['adr_one_countryname'])) {
                 $encodedContact['adr_one_countrydisplayname'] = $locale->getCountryTranslation($contact['adr_one_countryname']);
@@ -73,29 +73,7 @@ class Addressbook_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
-    /**
-     * gets image of a contact identified by its id
-     * 
-     * @param  int $id
-     * @param  int width
-     * @param  int $height
-     */
-    public function getImage($id, $width, $height, $ratiomode)
-    {
-        $contact = Addressbook_Controller::getInstance()->getContact($id);
 
-        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
-        file_put_contents($tmpPath, $contact->jpegphoto);
-
-        $image = Tinebase_ImageHelper::resize($tmpPath, $width, $height, $ratiomode);
-        
-        header('Content-Type: image/jpeg');
-        imagejpeg($image);
-        imagedestroy($image);
-        
-        unlink($tmpPath);
-        die();
-    }
     /**
      * export contact
      * 
