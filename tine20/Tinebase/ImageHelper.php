@@ -65,6 +65,28 @@ class Tinebase_ImageHelper
         return $dst_image;
     }
     /**
+     * 
+     */
+    public static function getImageInfoFromBlog($_blob)
+    {
+        $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $_blob);
+        
+        $imgInfo = getimagesize($tmpPath);
+        unset($tmpPath);
+        if (!in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
+            throw new Exception('gvien blob does not contain valid image data');
+        }
+        return array(
+            'width'    => $imgInfo[0],
+            'height'   => $imgInfo[1],
+            'bits'     => $imgInfo['bits'],
+            'channels' => $imgInfo['channels'],
+            'mime'     => $imgInfo['mime']
+        );
+        
+    }
+    /**
      * checks wether given file is an image or not
      * 
      * @param  string $_file image file
@@ -76,18 +98,9 @@ class Tinebase_ImageHelper
             return false;
         }
         $imgInfo = getimagesize($_file);
-        if (!$imgInfo) {
-            return false;
+        if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
+            return true;
         }
-        switch ($imgInfo['mime']) {
-            case ('image/png'):
-            case ('image/jpeg'):
-            case ('image/gif'):
-                return true;
-                break;
-            default:
-                return false;
-                break;
-        }
+        return false;
     }
 }
