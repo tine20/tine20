@@ -24,7 +24,11 @@ class Setup_Update_Abstract
      * @var Setup_Backend_Mysql
      */
 	protected $_backend;
-
+    
+    /**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db;
 	
 	/** 
 	* the constructor
@@ -32,6 +36,7 @@ class Setup_Update_Abstract
 	public function __construct($_backend)
 	{
 	    $this->_backend = $_backend;
+	    $this->_db = Zend_Registry::get('dbAdapter');
 	}
 	
 	/*
@@ -43,9 +48,9 @@ class Setup_Update_Abstract
 	 */
 	public function getApplicationVersion($_application)
 	{
-		$select = Zend_Registry::get('dbAdapter')->select()
+		$select = $this->_db->select()
 				->from( SQL_TABLE_PREFIX . 'applications')
-				->where('name = ?', $_application);
+				->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
 
 		$stmt = $select->query();
 		$version = $stmt->fetchAll();
@@ -64,7 +69,7 @@ class Setup_Update_Abstract
 	{
 		$applicationsTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'applications'));
 		$where  = array(
-            $applicationsTable->getAdapter()->quoteInto('name = ?', $_application),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_application),
         );
 		$applicationsTable->update(array('version' => $_version), $where);
 	}
@@ -78,9 +83,9 @@ class Setup_Update_Abstract
 	 */
 	public function getTableVersion($_tableName)
     {
-        $select = Zend_Registry::get('dbAdapter')->select()
+        $select = $this->_db->select()
                 ->from( SQL_TABLE_PREFIX . 'application_tables')
-                ->where('name = ?', SQL_TABLE_PREFIX . $_tableName);
+                ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll();
@@ -99,7 +104,7 @@ class Setup_Update_Abstract
     {
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-            $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName),
         );
         $result = $applicationsTables->update(array('version' => $_version), $where);
     }
@@ -119,7 +124,7 @@ class Setup_Update_Abstract
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-            $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName),
         );
         $result = $applicationsTables->update(array('version' => $version), $where);
     }
@@ -134,7 +139,7 @@ class Setup_Update_Abstract
     {
         $currentVersion = $this->getTableVersion($_tableName);
         if($_version != $currentVersion) {
-            throw new Exception("wrong table version for $_tableName. expected $_version go $currentVersion");
+            throw new Exception("wrong table version for $_tableName. expected $_version got $currentVersion");
         }
     }
     
@@ -150,7 +155,7 @@ class Setup_Update_Abstract
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-            $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_oldTableName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_oldTableName),
         );
         $result = $applicationsTables->update(array('name' => SQL_TABLE_PREFIX . $_newTableName), $where);
     }
