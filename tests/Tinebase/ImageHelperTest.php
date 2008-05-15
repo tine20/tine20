@@ -48,8 +48,9 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->testImagePath = dirname(__FILE__) . '/ImageHelper/phpunit-logo.gif';
-        $this->testImageData = array(
+        $this->_testImagePath = dirname(__FILE__) . '/ImageHelper/phpunit-logo.gif';
+        $this->_testImage = Tinebase_Model_Image::getImageFromPath($this->_testImagePath);
+        $this->_testImageData = array(
             'width'    => 94,
             'height'   => 80,
             'bits'     => 8,
@@ -75,10 +76,10 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetImageInfoFromBlob()
     {
-        $imgBlob = file_get_contents($this->testImagePath);
-        $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlog($imgBlob);
-
-        $this->assertEquals($this->testImageData, $imgInfo);
+        $imgBlob = file_get_contents($this->_testImagePath);
+        $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob($imgBlob);
+        
+        $this->assertEquals($this->_testImageData['width'], $imgInfo['width']);
     }
     
     /**
@@ -89,7 +90,7 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
     {
         $rwongBlob = file_get_contents(__FILE__);
         $this->setExpectedException('Exception');
-        Tinebase_ImageHelper::getImageInfoFromBlog($rwongBlob);
+        Tinebase_ImageHelper::getImageInfoFromBlob($rwongBlob);
     }
     
     /**
@@ -97,26 +98,30 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testIsImageFile() {
-        $this->assertTrue(Tinebase_ImageHelper::isImageFile($this->testImagePath));
+        $this->assertTrue(Tinebase_ImageHelper::isImageFile($this->_testImagePath));
         $this->assertFalse(Tinebase_ImageHelper::isImageFile(__FILE__));
     }
     
     /**
-     * test preserve and crop resizeing
-     *
+     * test preserve and crop resizeing right hand side
+     * 
      */
-    public function testResizeRatioModePreserveAndCrop() {
+    public function testResizeRatioModePreserveAndCropRight() {
         // crop right
-        $gdImage = Tinebase_ImageHelper::resize($this->testImagePath, 50, 100, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
+        Tinebase_ImageHelper::resize($this->_testImage, 50, 100, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
         $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
-        imagegif($gdImage, $tmpPath);
+        file_put_contents($tmpPath, $this->_testImage->blob);
         $this->assertFileEquals(dirname(__FILE__) . '/ImageHelper/phpunit-logo-preserveandcrop-50-100.gif', $tmpPath);
         unset($tmpPath);
-        
-        // crop bottom
-        $gdImage = Tinebase_ImageHelper::resize($this->testImagePath, 100, 50, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
+    }
+    /**
+     * test preserve and crop resizeing bottom side
+     * 
+     */
+    public function testResizeRatioModePreserveAndCropBottom() {
+        Tinebase_ImageHelper::resize($this->_testImage, 100, 50, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
         $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
-        imagegif($gdImage, $tmpPath);
+        file_put_contents($tmpPath, $this->_testImage->blob);
         $this->assertFileEquals(dirname(__FILE__) . '/ImageHelper/phpunit-logo-preserveandcrop-100-50.gif', $tmpPath);
         unset($tmpPath);
     }
