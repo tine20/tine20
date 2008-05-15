@@ -75,6 +75,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
+            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../Tinebase/ImageHelper/phpunit-logo.gif'),
             'note'                  => 'Bla Bla Bla',
             'owner'                 => $container->id,
             'role'                  => 'Role',
@@ -118,6 +119,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'id'                    => 20,
+            'jpegphoto'             => '',
             'note'                  => 'Bla Bla Bla',
             'owner'                 => $container->id,
             'role'                  => 'Role',
@@ -183,6 +185,17 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test getImage function
+     *
+     */
+    public function testGetImage()
+    {
+        $image = Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
+        $this->assertType('Tinebase_Model_Image', $image);
+        $this->assertEquals($image->width, 94);
+    }
+    
+    /**
      * try to get count of contacts
      *
      */
@@ -231,11 +244,21 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testUpdateContact()
     {
         $contact = Addressbook_Controller::getInstance()->updateContact($this->objects['updatedContact']);
-        
+
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
         $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
     }
 
+    /**
+     * tests that exception gets thrown when contact has no image
+     *
+     */
+    public function testGetImageException()
+    {
+        $this->setExpectedException('Exception');
+        Addressbook_Controller::getInstance()->getImage($this->objects['initialContact']->id);
+    }
+    
     /**
      * try to delete a contact
      *
