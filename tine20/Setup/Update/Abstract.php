@@ -64,8 +64,8 @@ class Setup_Update_Abstract
 	{
 		$applicationsTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'applications'));
 		$where  = array(
-                    $applicationsTable->getAdapter()->quoteInto('name = ?', $_application),
-                );
+            $applicationsTable->getAdapter()->quoteInto('name = ?', $_application),
+        );
 		$applicationsTable->update(array('version' => $_version), $where);
 	}
 	
@@ -99,8 +99,8 @@ class Setup_Update_Abstract
     {
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-                    $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
-                );
+            $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
+        );
         $result = $applicationsTables->update(array('version' => $_version), $where);
     }
     
@@ -121,8 +121,8 @@ class Setup_Update_Abstract
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-                    $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
-                );
+            $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
+        );
         $result = $applicationsTables->update(array('version' => $version), $where);
     }
     
@@ -152,9 +152,9 @@ class Setup_Update_Abstract
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
-                    $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_oldTableName),
-                );
-        $result = $applicationsTables->update(array('name' => $_newTableName), $where);
+            $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_oldTableName),
+        );
+        $result = $applicationsTables->update(array('name' => SQL_TABLE_PREFIX . $_newTableName), $where);
     }
     
 }
