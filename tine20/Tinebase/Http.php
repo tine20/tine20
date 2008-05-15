@@ -217,7 +217,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	{
 	    $uploadedFile = $_FILES['file'];
 	    
-	    $path = tempnam('/tmp', 'tine_tempfile_');
+	    $path = tempnam(session_save_path(), 'tine_tempfile_');
 	    if (!$path) {
 	        throw new Exception('Can not upload file, tempnam could not return a valid filename!');
 	    }
