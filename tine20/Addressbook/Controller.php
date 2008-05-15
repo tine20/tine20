@@ -350,6 +350,25 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         return $contact;            
     }
     
+    /**
+     * returns contact image
+     * 
+     * @param  string $_identifier record identifier
+     * @param  string $_location not used, requierd by interface
+     */
+    public function getImage($_identifier, $_location='')
+    {
+        $contact = $this->getContact($_identifier);
+        if (empty($contact->jpegphoto)) {
+            throw new Exception('Contact has no image');
+        }
+        $imageInfo = Tinebase_ImageHelper::getImageInfoFromBlog($contact->jpegphoto);
+        return new Tinebase_Model_Image($imageInfo + array(
+            'id'           => $_identifier,
+            'application'  => 'Addressbook',
+            'data'         => $contact->jpegphoto
+        ));
+    }
     
     /**
      * update one contact
