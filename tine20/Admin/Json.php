@@ -261,10 +261,11 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      *
      * @param int   $appId
      * @return array with results array & totalcount (int)
-     * 
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function getApplicationPermissions($appId)
     {
+        /*
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
@@ -276,6 +277,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         $result['totalcount'] = count($permissions);
         
         return $result;
+        */
     }
     
     /**
@@ -283,11 +285,12 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      *
      * @param   int     $applicationId  app id
      * @param   string  $rights         json encoded array of application rights
-     * 
      * @return  array with success, message, group data and rights
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function saveApplicationPermissions($applicationId, $rights)
     {
+        /*
         $decodedRights = Zend_Json::decode($rights);
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($decodedRights, true));
@@ -300,8 +303,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         );
         
         return $result;
-        
+        */
     }    
+    
     /**
      * get list of access log entries
      *

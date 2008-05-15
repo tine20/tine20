@@ -125,10 +125,11 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
      * display edit application dialog
      *
      * @param   integer $appId    application id
-     * 
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function editApplicationPermissions($appId)
     {
+        /*
         $application = Admin_Controller::getInstance()->getApplication($appId);           
         $encodedApplication = Zend_Json::encode($application->toArray());
         
@@ -164,6 +165,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
+        */
     }
     
     /**

@@ -336,12 +336,15 @@ class Admin_Controller
      *
      * @param   int $_applicationId  app id
      * @return  array with account rights for the application
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function getApplicationPermissions($_applicationId)
     {
+        /*
         $permissions = Tinebase_Application::getInstance()->getApplicationPermissions($_applicationId);
         
         return $permissions;
+        */
     }
     
    /**
@@ -350,12 +353,15 @@ class Admin_Controller
      * @param int    $_applicationId    the application id for which the rights will be set
      * @param array  $_rights           array with rights. if empty, all rights will be removed for this application 
      * @return  int number of rights set
+     * @deprecated isn't used anymore, replaced by role management
      */
     public function setApplicationPermissions($_applicationId, array $_rights = array ())
     {   
+        /*
         $this->checkRight('MANAGE_APPS');        
                 
         return Tinebase_Application::getInstance()->setApplicationPermissions($_applicationId, $_rights);
+        */
     }  
         
     /**
