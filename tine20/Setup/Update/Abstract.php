@@ -104,7 +104,29 @@ class Setup_Update_Abstract
         $result = $applicationsTables->update(array('version' => $_version), $where);
     }
     
-	/*
+    /*
+     * set version number of a given table
+     * version is stored in database table "applications_tables"
+     *
+     * @params string tableName
+     * @returns int version number 
+     */  
+    public function increaseTableVersion($_tableName)
+    {
+        $currentVersion = $this->getTableVersion($_tableName);
+        
+        list($major, $minor) = explode('.', $currentVersion);
+        
+        $version = $major . '.' . $minor++;
+        
+        $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
+        $where  = array(
+                    $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_tableName),
+                );
+        $result = $applicationsTables->update(array('version' => $version), $where);
+    }
+    
+    /*
 	 * compares version numbers of given table and given number
 	 *
 	 * @params string tableName
@@ -117,4 +139,22 @@ class Setup_Update_Abstract
             throw new Exception("wrong table version for $_tableName. expected $_version go $currentVersion");
         }
     }
+    
+    /*
+     * rename table in applications table
+     *
+     * @params string tableName
+     * @returns int version number 
+     */  
+    public function renameTable($_oldTableName, $_newTableName)
+    {
+        $this->_backend->renameTable($_oldTableName, $_newTableName);   
+        
+        $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
+        $where  = array(
+                    $applicationsTables->getAdapter()->quoteInto('name = ?', SQL_TABLE_PREFIX . $_oldTableName),
+                );
+        $result = $applicationsTables->update(array('name' => $_newTableName), $where);
+    }
+    
 }
