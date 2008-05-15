@@ -355,6 +355,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      * 
      * @param  string $_identifier record identifier
      * @param  string $_location not used, requierd by interface
+     * @return Tinebase_Model_Image
      */
     public function getImage($_identifier, $_location='')
     {
