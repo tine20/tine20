@@ -70,7 +70,7 @@ class Tinebase_Acl_Rights
      * temporarly the constructor also creates the needed tables on demand and fills them with some initial values
      */
     private function __construct() {
-        $this->_rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
+        //$this->_rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
     }    
     
     /**
