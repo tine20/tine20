@@ -117,10 +117,20 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
             //'n_suffix' => 'Name Suffix',
              
         );
-
          
-        //@todo	include contact photo here
-        $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');		
+        try {
+            $tineImage = Addressbook_Controller::getInstance()->getImage($_contact->getId());
+            Tinebase_ImageHelper::resize($tineImage, 225, 300, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);            
+            $tmpPath = tempnam('/tmp', 'tine20_tmp_gd');
+            $tmpPath .= $tineImage->getImageExtension();
+            file_put_contents($tmpPath, $tineImage->blob);
+            $contactPhoto = Zend_Pdf_Image::imageWithPath($tmpPath);
+            //unlink($tmpPath);
+        } catch ( Exception $e ) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' image not found or no contact image set (filename: ' . $tmpPath . ')');
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
+            $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');
+        }
         
         // build title
         $title = $_contact['n_fn']; 
