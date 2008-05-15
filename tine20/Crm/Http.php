@@ -146,8 +146,6 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $_productSource =  $controller->getProducts('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
-        $view->jsIncludeFiles[] = self::_appendFileTime('Tasks/js/Tasks.js');
-        $view->cssIncludeFiles[] = self::_appendFileTime('Tasks/css/Tasks.css');       
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';
 
         $view->configData = array(
