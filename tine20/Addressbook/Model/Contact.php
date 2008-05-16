@@ -97,7 +97,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'owner'                 => array('Digits', array('GreaterThan', 0), 'presence'=>'required'),
+        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -174,12 +174,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             if (empty($_contactId->id)) {
                 throw new Exception('no contact id set');
             }
-            $id = (int) $_contactId->id;
+            $id = (string) $_contactId->id;
         } else {
-            $id = (int) $_contactId;
+            $id = (string) $_contactId;
         }
         
-        if ($id === 0) {
+        if ($id == '') {
             throw new Exception('contact id can not be 0');
         }
         
