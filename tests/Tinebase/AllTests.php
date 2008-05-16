@@ -37,6 +37,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ZendFilterTest');
         $suite->addTestSuite('Tinebase_ContainerTest');
         $suite->addTestSuite('Tinebase_ImageHelperTest');
+        $suite->addTestSuite('Tinebase_ConfigTest');
         
         $suite->addTest(Tinebase_Account_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
