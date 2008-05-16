@@ -33,20 +33,35 @@ class Setup_Import_TineInitial
      */    
     public function initialLoad()
     {
+        echo "Creating initial config settings ...<br>";
+        $configBackend = Tinebase_Config::getInstance();
+        $configUserGroupName = new Tinebase_Model_Config(array(
+            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            "name"              => "Default User Group",
+            "value"             => "Users",              
+        ));
+        $configBackend->setConfig($configUserGroupName);
+        $configAdminGroupName = new Tinebase_Model_Config(array(
+            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            "name"              => "Default Admin Group",
+            "value"             => "Administrators",              
+        ));
+        $configBackend->setConfig($configAdminGroupName);
+        
         echo "Creating initial user(tine20admin), groups and roles ...<br>";
         # or initialize the database ourself
         # add the admin group
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
 
         $adminGroup = new Tinebase_Group_Model_Group(array(
-            'name'          => 'Administrators',
+            'name'          => $configAdminGroupName->name,
             'description'   => 'Group of administrative accounts'
         ));
         $adminGroup = $groupsBackend->addGroup($adminGroup);
 
         # add the user group
         $userGroup = new Tinebase_Group_Model_Group(array(
-            'name'          => 'Users',
+            'name'          => $configUserGroupName->name,
             'description'   => 'Group of user accounts'
         ));
         $userGroup = $groupsBackend->addGroup($userGroup);
@@ -156,7 +171,7 @@ class Setup_Import_TineInitial
             Tinebase_Container::GRANT_DELETE,
             Tinebase_Container::GRANT_ADMIN
         ), TRUE);
-            
+        
         echo "TINE 2.0 now ready to use - try <a href=\"./index.php\">TINE 2.0 Login</a>";
     }
 }
