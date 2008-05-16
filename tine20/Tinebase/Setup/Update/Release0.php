@@ -355,9 +355,19 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         /************ create roles ***************/
         
+        try {
+            $tinebaseConfig = Tinebase_Config::getInstance()->getConfigForApplication('Tinebase');
+        } catch ( Exception $e ) {
+            // set default values
+            $tinebaseConfig = array(
+                'Default Admin Group'   => 'Administrators',
+                'Default User Group'    => 'Users',
+            );
+        }
+        
         // get admin and user groups
-        $adminGroup = Tinebase_Group::getInstance()->getGroupByName('Administrators');
-        $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $adminGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default Admin Group']);
+        $userGroup = Tinebase_Group::getInstance()->getGroupByName($tinebaseConfig['Default User Group']);
         
         # add roles and add the groups to the roles
         $adminRole = new Tinebase_Acl_Model_Role(array(
@@ -517,7 +527,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     }
     
     /**
-     * drop table application_rights
+     * drop table application_rights and update to version 0.6 of tinebase
      */    
     function update_5()
     {
@@ -528,4 +538,90 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '0.6');
     }
     
+    /**
+     * add config table and update to version 0.7 of tinebase
+     */    
+    function update_6()
+    {
+        $tableDefinition = ('
+            <table>
+                <name>config</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                        <default>\'\'</default>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                        <type>integer</type>
+                        <unsigned>true</unsigned>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>value</name>
+                        <type>text</type>
+                        <notnull>true</notnull>
+                    </field>                
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>application_id-name</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <field>
+                            <name>name</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>config::application_id--applications::id</name>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>applications</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>
+        ');
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+        
+        // add config settings for admin and user groups
+        $configBackend = Tinebase_Config::getInstance();
+        $configUserGroupName = new Tinebase_Model_Config(array(
+            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            "name"              => "Default User Group",
+            "value"             => "Users",              
+        ));
+        $configBackend->setConfig($configUserGroupName);
+        $configAdminGroupName = new Tinebase_Model_Config(array(
+            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            "name"              => "Default Admin Group",
+            "value"             => "Administrators",              
+        ));
+        $configBackend->setConfig($configAdminGroupName);
+        
+        $this->setApplicationVersion('Tinebase', '0.7');
+    }    
 }
