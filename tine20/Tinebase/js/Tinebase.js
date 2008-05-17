@@ -24,6 +24,15 @@ if (! ("console" in window) || !("firebug" in console)) {
     for (var i = 0; i <names.length; ++i) window.console[names[i]] = function() {};
 }
 
+/**
+ * config locales
+ */
+Locale.setlocale(Locale.LC_ALL, '');
+Locale.Gettext.textdomain('Tinebase');
+// shorthands
+_ = Locale.Gettext._;
+n_ = Locale.Gettext.n_;
+
 Ext.namespace('Tine.Tinebase');
 
 /**
@@ -209,10 +218,10 @@ Tine.Tinebase.MainScreen = function() {
                     id: 'Tinebase_System_PreferencesMenu'
                 }
             }, '->', {
-            	text: 'Logout',
+            	text: _('Logout'),
                 iconCls: 'action_logOut',
                 //cls:     'x-btn-icon',
-                tooltip: {text:'Logout from Tine 2.0'},
+                tooltip: {text: _('Logout from Tine 2.0')},
                 handler: _logoutButtonHandler
             }]
 
