@@ -64,6 +64,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         return array(
             // base framework fixes
             'Tinebase/js/ExtFixes.js',
+            // general helpers
+            'Tinebase/js/Sprintf.js',
+            // Locale support
+            'Tinebase/js/Locale.js',
+            'Tinebase/js/Locale/Gettext.js',
             // Tinebase
             'Tinebase/js/Tinebase.js',
             'Tinebase/js/Models.js',
