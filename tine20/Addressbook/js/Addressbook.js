@@ -20,7 +20,7 @@ Tine.Addressbook = {
         var treePanel =  new Tine.widgets.container.TreePanel({
             id: 'Addressbook_Tree',
             iconCls: 'AddressbookIconCls',
-            title: 'Contacts',
+            title: Locale.Gettext.dgettext('Addressbook', 'Addressbook'),
             itemName: 'contacts',
             folderName: 'addressbook',
             appName: 'Addressbook',
@@ -176,15 +176,18 @@ Tine.Addressbook.Main = {
 
     initComponent: function()
     {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Addressbook');
+    
         this.actions.addContact = new Ext.Action({
-            text: 'add contact',
+            text: this.translation._('add contact'),
             handler: this.handlers.addContact,
             iconCls: 'action_addContact',
             scope: this
         });
         
         this.actions.editContact = new Ext.Action({
-            text: 'edit contact',
+            text: this.translation._('edit contact'),
             disabled: true,
             handler: this.handlers.editContact,
             iconCls: 'action_edit',
@@ -192,7 +195,7 @@ Tine.Addressbook.Main = {
         });
         
         this.actions.deleteContact = new Ext.Action({
-            text: 'delete contact',
+            text: this.translation._('delete contact'),
             disabled: true,
             handler: this.handlers.deleteContact,
             iconCls: 'action_delete',
@@ -200,7 +203,7 @@ Tine.Addressbook.Main = {
         });
 
         this.actions.exportContact = new Ext.Action({
-            text: 'export as pdf',
+            text: this.translation._('export as pdf'),
             disabled: true,
             handler: this.handlers.exportContact,
             iconCls: 'action_exportAsPdf',
@@ -209,7 +212,7 @@ Tine.Addressbook.Main = {
 
         this.actions.callContact = new Ext.Action({
         	id: 'Addressbook_Contacts_CallContact',
-            text: 'call contact',
+            text: this.translation._('call contact'),
             disabled: true,
             handler: this.handlers.callContact,
             iconCls: 'DialerIconCls',
@@ -279,8 +282,8 @@ Tine.Addressbook.Main = {
                 this.actions.exportContact,
                 ( Tine.Dialer && Tine.Dialer.rights && Tine.Dialer.rights.indexOf('run') > -1 ) ? new Ext.Toolbar.MenuButton(this.actions.callContact) : '',
                 '->',
-                'Filter: ', tagFilter,
-                'Search: ', quickSearchField
+                this.translation._('Filter: '), tagFilter,
+                this.translation._('Search: '), quickSearchField
             ]
         });
 
@@ -313,48 +316,48 @@ Tine.Addressbook.Main = {
             pageSize: 50,
             store: dataStore,
             displayInfo: true,
-            displayMsg: 'Displaying contacts {0} - {1} of {2}',
-            emptyMsg: "No contacts to display"
+            displayMsg: this.translation._('Displaying contacts {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No contacts to display")
         }); 
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'tid', header: 'Type', dataIndex: 'tid', width: 30, renderer: this.renderer.contactTid },
-            { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family', hidden: true },
-            { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80, hidden: true },
-            { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
-            { resizable: true, id: 'n_fileas', header: 'Display name', dataIndex: 'n_fileas'},
-            { resizable: true, id: 'org_name', header: 'Organisation', dataIndex: 'org_name', width: 200 },
-            { resizable: true, id: 'org_unit', header: 'Unit', dataIndex: 'org_unit' , hidden: true },
-            { resizable: true, id: 'title', header: 'Title', dataIndex: 'title', hidden: true },
-            { resizable: true, id: 'role', header: 'Role', dataIndex: 'role', hidden: true },
-            { resizable: true, id: 'room', header: 'Room', dataIndex: 'room', hidden: true },
-            { resizable: true, id: 'adr_one_street', header: 'Street', dataIndex: 'adr_one_street', hidden: true },
-            { resizable: true, id: 'adr_one_locality', header: 'Locality', dataIndex: 'adr_one_locality', width: 150, hidden: false },
-            { resizable: true, id: 'adr_one_region', header: 'Region', dataIndex: 'adr_one_region', hidden: true },
-            { resizable: true, id: 'adr_one_postalcode', header: 'Postalcode', dataIndex: 'adr_one_postalcode', hidden: true },
-            { resizable: true, id: 'adr_one_countryname', header: 'Country', dataIndex: 'adr_one_countryname', hidden: true },
-            { resizable: true, id: 'adr_two_street', header: 'Street (private)', dataIndex: 'adr_two_street', hidden: true },
-            { resizable: true, id: 'adr_two_locality', header: 'Locality (private)', dataIndex: 'adr_two_locality', hidden: true },
-            { resizable: true, id: 'adr_two_region', header: 'Region (private)', dataIndex: 'adr_two_region', hidden: true },
-            { resizable: true, id: 'adr_two_postalcode', header: 'Postalcode (private)', dataIndex: 'adr_two_postalcode', hidden: true },
-            { resizable: true, id: 'adr_two_countryname', header: 'Country (private)', dataIndex: 'adr_two_countryname', hidden: true },
-            { resizable: true, id: 'email', header: 'eMail', dataIndex: 'email', width: 150},
-            { resizable: true, id: 'tel_work', header: 'Phone', dataIndex: 'tel_work', hidden: false },
-            { resizable: true, id: 'tel_cell', header: 'Cellphone', dataIndex: 'tel_cell', hidden: false },
-            { resizable: true, id: 'tel_fax', header: 'Fax', dataIndex: 'tel_fax', hidden: true },
-            { resizable: true, id: 'tel_car', header: 'Car phone', dataIndex: 'tel_car', hidden: true },
-            { resizable: true, id: 'tel_pager', header: 'Pager', dataIndex: 'tel_pager', hidden: true },
-            { resizable: true, id: 'tel_home', header: 'Phone (private)', dataIndex: 'tel_home', hidden: true },
-            { resizable: true, id: 'tel_fax_home', header: 'Fax (private)', dataIndex: 'tel_fax_home', hidden: true },
-            { resizable: true, id: 'tel_cell_private', header: 'Cellphone (private)', dataIndex: 'tel_cell_private', hidden: true },
-            { resizable: true, id: 'email_home', header: 'eMail (private)', dataIndex: 'email_home', hidden: true },
-            { resizable: true, id: 'url', header: 'URL', dataIndex: 'url', hidden: true },
-            { resizable: true, id: 'url_home', header: 'URL (private)', dataIndex: 'url_home', hidden: true },
-            { resizable: true, id: 'note', header: 'Note', dataIndex: 'note', hidden: true },
-            { resizable: true, id: 'tz', header: 'Timezone', dataIndex: 'tz', hidden: true },
-            { resizable: true, id: 'geo', header: 'Geo', dataIndex: 'geo', hidden: true },
-            { resizable: true, id: 'bday', header: 'Birthday', dataIndex: 'bday', hidden: true }
+            { resizable: true, id: 'tid', header: this.translation._('Type'), dataIndex: 'tid', width: 30, renderer: this.renderer.contactTid },
+            { resizable: true, id: 'n_family', header: this.translation._('Last Name'), dataIndex: 'n_family', hidden: true },
+            { resizable: true, id: 'n_given', header: this.translation._('First Name'), dataIndex: 'n_given', width: 80, hidden: true },
+            { resizable: true, id: 'n_fn', header: this.translation._('Full Name'), dataIndex: 'n_fn', hidden: true },
+            { resizable: true, id: 'n_fileas', header: this.translation._('Display Name'), dataIndex: 'n_fileas'},
+            { resizable: true, id: 'org_name', header: this.translation._('Company'), dataIndex: 'org_name', width: 200 },
+            { resizable: true, id: 'org_unit', header: this.translation._('Unit'), dataIndex: 'org_unit' , hidden: true },
+            { resizable: true, id: 'title', header: this.translation._('Job Title'), dataIndex: 'title', hidden: true },
+            { resizable: true, id: 'role', header: this.translation._('Job Role'), dataIndex: 'role', hidden: true },
+            { resizable: true, id: 'room', header: this.translation._('Room'), dataIndex: 'room', hidden: true },
+            { resizable: true, id: 'adr_one_street', header: this.translation._('Street'), dataIndex: 'adr_one_street', hidden: true },
+            { resizable: true, id: 'adr_one_locality', header: this.translation._('City'), dataIndex: 'adr_one_locality', width: 150, hidden: false },
+            { resizable: true, id: 'adr_one_region', header: this.translation._('Region'), dataIndex: 'adr_one_region', hidden: true },
+            { resizable: true, id: 'adr_one_postalcode', header: this.translation._('Postalcode'), dataIndex: 'adr_one_postalcode', hidden: true },
+            { resizable: true, id: 'adr_one_countryname', header: this.translation._('Country'), dataIndex: 'adr_one_countryname', hidden: true },
+            { resizable: true, id: 'adr_two_street', header: this.translation._('Street (private)'), dataIndex: 'adr_two_street', hidden: true },
+            { resizable: true, id: 'adr_two_locality', header: this.translation._('City (private)'), dataIndex: 'adr_two_locality', hidden: true },
+            { resizable: true, id: 'adr_two_region', header: this.translation._('Region (private)'), dataIndex: 'adr_two_region', hidden: true },
+            { resizable: true, id: 'adr_two_postalcode', header: this.translation._('Postalcode (private)'), dataIndex: 'adr_two_postalcode', hidden: true },
+            { resizable: true, id: 'adr_two_countryname', header: this.translation._('Country (private)'), dataIndex: 'adr_two_countryname', hidden: true },
+            { resizable: true, id: 'email', header: this.translation._('Email'), dataIndex: 'email', width: 150},
+            { resizable: true, id: 'tel_work', header: this.translation._('Phone'), dataIndex: 'tel_work', hidden: false },
+            { resizable: true, id: 'tel_cell', header: this.translation._('Mobile'), dataIndex: 'tel_cell', hidden: false },
+            { resizable: true, id: 'tel_fax', header: this.translation._('Fax'), dataIndex: 'tel_fax', hidden: true },
+            { resizable: true, id: 'tel_car', header: this.translation._('Car phone'), dataIndex: 'tel_car', hidden: true },
+            { resizable: true, id: 'tel_pager', header: this.translation._('Pager'), dataIndex: 'tel_pager', hidden: true },
+            { resizable: true, id: 'tel_home', header: this.translation._('Phone (private)'), dataIndex: 'tel_home', hidden: true },
+            { resizable: true, id: 'tel_fax_home', header: this.translation._('Fax (private)'), dataIndex: 'tel_fax_home', hidden: true },
+            { resizable: true, id: 'tel_cell_private', header: this.translation._('Mobile (private)'), dataIndex: 'tel_cell_private', hidden: true },
+            { resizable: true, id: 'email_home', header: this.translation._('Email (private)'), dataIndex: 'email_home', hidden: true },
+            { resizable: true, id: 'url', header: this.translation._('Web'), dataIndex: 'url', hidden: true },
+            { resizable: true, id: 'url_home', header: this.translation._('URL (private)'), dataIndex: 'url_home', hidden: true },
+            { resizable: true, id: 'note', header: this.translation._('Note'), dataIndex: 'note', hidden: true },
+            { resizable: true, id: 'tz', header: this.translation._('Timezone'), dataIndex: 'tz', hidden: true },
+            { resizable: true, id: 'geo', header: this.translation._('Geo'), dataIndex: 'geo', hidden: true },
+            { resizable: true, id: 'bday', header: this.translation._('Birthday'), dataIndex: 'bday', hidden: true }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable

@@ -5,7 +5,7 @@
  * @todo make country selection a widget
  */
 Tine.Addressbook.ContactEditDialog.getEditForm = function() {
-    var translation = new Locale.Gettext('de');
+    var translation = new Locale.Gettext();
     translation.textdomain('Addressbook');
     
     var uploadImage = function(bb) {
