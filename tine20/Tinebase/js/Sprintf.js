@@ -1,6 +1,6 @@
 /**
  * Simple implementation of sprinf analog to PHP function sprintf
- * @license     public domain
+ * @license     http://creativecommons.org/licenses/publicdomain Public Domain
  * @author      jan.moesen.nu
  * @version     $Id$
  * @todo        move to String.prototype? (nelius)

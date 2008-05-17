@@ -1,5 +1,5 @@
 /**
- * @license     public domain
+ * @license     http://creativecommons.org/licenses/publicdomain Public Domain
  * @author      Koji Horaguchi <horaguchi@horaguchi.net>
  * @version     $Id$
  */
