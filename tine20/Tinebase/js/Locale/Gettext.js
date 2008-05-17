@@ -57,9 +57,10 @@ Locale.Gettext.prototype.geturl = function(category, domain) {
 }
 Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
   var key = this._getkey(category, domain);
-  return reload || typeof this._msgs[key] == 'undefined'
-    ? this._msgs[key] = new Locale.Gettext.PO(this._url(this.geturl(category, domain)))
-    : this._msgs[key];
+  //console.log(key);
+  return reload || typeof Locale.Gettext.prototype._msgs[key] == 'undefined'
+    ? Locale.Gettext.prototype._msgs[key] = new Locale.Gettext.PO(this._url(this.geturl(category, domain)))
+    : Locale.Gettext.prototype._msgs[key];
 };
 
 Locale.Gettext.prototype._msgs = {};
