@@ -5,6 +5,9 @@
  * @todo make country selection a widget
  */
 Tine.Addressbook.ContactEditDialog.getEditForm = function() {
+    var translation = new Locale.Gettext('de');
+    translation.textdomain('Addressbook');
+    
     var uploadImage = function(bb) {
         //var inp = bb.detachInputFile();
         //console.log(bb);
@@ -30,11 +33,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 border: false,
                 items:
                     new Tine.widgets.container.selectionComboBox({
-                        fieldLabel:'Saved in',
+                        fieldLabel: translation._('Saved in'),
                         width: 150,
                         name: 'owner',
-                        itemName: 'Addressbook',
-                        appName: 'Addressbook'
+                        itemName: translation._('Addressbook'),
+                        appName: translation._('Addressbook')
                     })
                 }/*,{
                     hideLabels: true,
@@ -51,7 +54,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 labelWidth: 100,
                 items: {
                     xtype: 'combo',
-                    fieldLabel: 'Display Name',
+                    fieldLabel: translation._('Display Name'),
                     name: 'n_fn',
                     disabled: true,
                     anchor: '100% r'
@@ -66,36 +69,36 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             [
                 {
                     columnWidth: .4,
-                    fieldLabel:'Job Role', 
+                    fieldLabel: translation._('Job Role'), 
                     name:'role'
                 },
                 {
                     columnWidth: .4,
-                    fieldLabel:'Unit', 
+                    fieldLabel: translation._('Unit'), 
                     name:'org_unit'
                 },
                 {
                     columnWidth: .2,
-                    fieldLabel:'Room', 
+                    fieldLabel: translation._('Room'), 
                     name:'room'
                 }
             ],
             [
                 {
                     columnWidth: .4,
-                    fieldLabel:'Middle Name(s)', 
+                    fieldLabel: translation._('Middle Name'), 
                     name:'n_middle'
                 },
                 {
                     columnWidth: .4,
-                    fieldLabel:'Suffix', 
+                    fieldLabel: translation._('Suffix'), 
                     name:'n_suffix'
                 },
                 {
                     columnWidth: .2,
                     xtype: 'datefield',
                     format: 'd.m.Y',
-                    fieldLabel: 'Birthday',
+                    fieldLabel: translation._('Birthday'),
                     name: 'bday'
                 }
             ]
@@ -103,7 +106,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
     });
     
     var personalInformation = {
-        title: 'Personal Information',
+        title: translation._('Personal Information'),
         xtype: 'expanderfieldset',
         layout: 'hfit',
         collapsible: true,
@@ -119,18 +122,18 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                             [
                                 {
                                     columnWidth: .2,
-                                    fieldLabel:'Title', 
+                                    fieldLabel: translation._('Title'), 
                                     name:'n_prefix',
                                     id: 'n_prefix'
                                 },
                                 {
                                     columnWidth: .4,
-                                    fieldLabel:'First Name', 
+                                    fieldLabel: translation._('First Name'), 
                                     name:'n_given'
                                 },
                                 {
                                     columnWidth: .4,
-                                    fieldLabel:'Last Name', 
+                                    fieldLabel: translation._('Last Name'), 
                                     name:'n_family'
                                 }
                             ],
@@ -138,12 +141,12 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                                 {
                                     columnWidth: .6,
                                     xtype: 'mirrortextfield',
-                                    fieldLabel:'Company', 
+                                    fieldLabel: translation._('Company'), 
                                     name:'org_name'
                                 },
                                 {
                                     columnWidth: .4,
-                                    fieldLabel: 'Job Title',
+                                    fieldLabel: translation._('Job Title'),
                                     name: 'title'
                                 }
                             ]
@@ -178,54 +181,54 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         items: [
             [
                 {
-                    fieldLabel:'Phone', 
+                    fieldLabel: translation._('Phone'), 
                     labelIcon: 'images/oxygen/16x16/apps/kcall.png',
                     name:'tel_work'
                 },
                 {
-                    fieldLabel:'Mobile',
+                    fieldLabel: translation._('Mobile'),
                     labelIcon: 'images/oxygen/16x16/devices/phone.png',
                     name:'tel_cell'
                 },
                 {
-                    fieldLabel:'Fax', 
+                    fieldLabel: translation._('Fax'), 
                     labelIcon: 'images/oxygen/16x16/devices/printer.png',
                     name:'tel_fax'
                 }
             ],
             [
                 {
-                    fieldLabel:'Phone (private)',
+                    fieldLabel: translation._('Phone (private)'),
                     labelIcon: 'images/oxygen/16x16/apps/kcall.png',
                     name:'tel_home'
                 },
                 {
-                    fieldLabel:'Mobile (private)',
+                    fieldLabel: translation._('Mobile (private)'),
                     labelIcon: 'images/oxygen/16x16/devices/phone.png',
                     name:'tel_cell_private'
                 },
                 {
-                    fieldLabel:'Fax (private)', 
+                    fieldLabel: translation._('Fax (private)'), 
                     labelIcon: 'images/oxygen/16x16/devices/printer.png',
                     name:'tel_fax_home'
                 }
             ],
             [
                 {
-                    fieldLabel:'E-Mail', 
+                    fieldLabel: translation._('E-Mail'), 
                     labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                     name:'email',
                     vtype: 'email'
                 },
                 {
-                    fieldLabel:'E-Mail (private)', 
+                    fieldLabel: translation._('E-Mail (private)'), 
                     labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                     name:'email_home',
                     vtype: 'email'
                 },
                 {
                     xtype: 'mirrortextfield',
-                    fieldLabel:'Web',
+                    fieldLabel: translation._('Web'),
                     labelIcon: 'images/oxygen/16x16/actions/network.png',
                     name:'url',
                     vtype:'url'
@@ -235,7 +238,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
     };
     
     var contactInformation = {
-        title: 'Contact Information',
+        title: translation._('Contact Information'),
         xtype: 'fieldset',
         layout: 'hfit',
         //collapsible: true,
@@ -258,7 +261,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         items: [
             {
                 xtype: 'columnform',
-                title: 'Company Address',
+                title: translation._('Company Address'),
                 labelAlign: 'top',
                 formDefaults: {
                     xtype:'textfield',
@@ -274,32 +277,32 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                             name:'org_name'
                         },*/
                         {
-                            fieldLabel:'Street', 
+                            fieldLabel: translation._('Street'), 
                             name:'adr_one_street'
                         },
                         {
-                            fieldLabel:'Street 2', 
+                            fieldLabel: translation._('Street 2'), 
                             name:'adr_one_street2'
                         }
                     ],
                     [
                         {
-                            fieldLabel:'Postal Code', 
+                            fieldLabel: translation._('Postal Code'), 
                             name:'adr_one_postalcode'
                         },
                         {
-                            fieldLabel:'City',
+                            fieldLabel: translation._('City'),
                             name:'adr_one_locality'
                         },
                         {
-                            fieldLabel:'Region',
+                            fieldLabel: translation._('Region'),
                             name:'adr_one_region'
                         }
                     ],
                     [
                         {
                             xtype: 'widget-countrycombo',
-                            fieldLabel: 'Country',
+                            fieldLabel: translation._('Country'),
                             name: 'adr_one_countryname',
                         }
                     ]
@@ -307,7 +310,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
             },
             {
                 xtype: 'columnform',
-                title: 'Private Address',
+                title: translation._('Private Address'),
                 labelAlign: 'top',
                 formDefaults: {
                     xtype:'textfield',
@@ -319,39 +322,39 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                     [
 
                         {
-                            fieldLabel:'Street', 
+                            fieldLabel: translation._('Street'), 
                             name:'adr_two_street'
                         },
                         {
-                            fieldLabel:'Street 2', 
+                            fieldLabel: translation._('Street 2'), 
                             name:'adr_two_street2'
                         }
                     ],
                     [
                         {
-                            fieldLabel:'Postal Code', 
+                            fieldLabel: translation._('Postal Code'), 
                             name:'adr_two_postalcode'
                         },
                         {
-                            fieldLabel:'City',
+                            fieldLabel: translation._('City'),
                             name:'adr_two_locality'
                         },
                         {
-                            fieldLabel:'Region',
+                            fieldLabel: translation._('Region'),
                             name:'adr_two_region'
                         }
                     ],
                     [
                         {
                             xtype: 'widget-countrycombo',
-                            fieldLabel: 'Country',
+                            fieldLabel: translation._('Country'),
                             name: 'adr_two_countryname',
                         }
                     ]
                 ]
             },
             {
-                title: 'Custom Fields',
+                title: translation._('Custom Fields'),
                 html: '',
                 disabled: true
             }
@@ -359,7 +362,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
     };
 
     var contactTabPanel = {
-        title: 'Contact',
+        title: translation._('Contact'),
         autoScroll: true,
         layout: 'border',
         border: false,
@@ -403,7 +406,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                             labelSeparator: '',
                             xtype:'textarea',
                             name: 'note',
-                            fieldLabel: 'Notes',
+                            fieldLabel: translation._('Notes'),
                             grow: false,
                             preventScrollbars:false,
                             anchor:'100%',
@@ -427,7 +430,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         items:[
             contactTabPanel,
             {
-                title: 'Links [2]',
+                title: sprintf(translation.ngettext('Link', 'Links [%d]', 1), 1),
                 disabled: true
             },
             {
@@ -435,7 +438,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 disabled: true
             },
             {
-                title: 'History',
+                title: translation._('History'),
                 disabled: true
             }
         ]
