@@ -2,7 +2,7 @@
 /**
  * class to hold option data
  * 
- * @package     CRM
+ * @package     Crm
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
 /**
  * class to hold option data
  * 
- * @package     CRM
+ * @package     Crm
  */
 class Crm_Model_Leadtype extends Tinebase_Record_Abstract
 {

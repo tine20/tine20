@@ -2,7 +2,7 @@
 /**
  * new lead email text (plain)
  * 
- * @package     CRM
+ * @package     Crm
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      ?

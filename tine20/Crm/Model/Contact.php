@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     CRM
+ * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
 /**
  * class to hold contact data
  * 
- * @package     CRM
+ * @package     Crm
  * @todo		check if one contact class (in Addressbook) is enough
  */
 class Crm_Model_Contact extends Tinebase_Record_Abstract
