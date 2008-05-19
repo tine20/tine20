@@ -18,6 +18,12 @@
  */
 class Tinebase_Translation
 {
+    /**
+     * get zend translate for an application
+     * 
+     * @param  string $_applicationName
+     * @return Zend_Translate
+    */
     public static function getTranslation($_applicationName)
     {
         $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
@@ -39,7 +45,7 @@ class Tinebase_Translation
      * returns the available language java script from a given locale
      * 
      * @param  Zend_Locale|String $_locale
-     * $param  string             $_location required location on of {generic|tine|ext}
+     * @param  string             $_location required location on of {generic|tine|ext}
      * @return string             filepath relative to tine installation
      */
     public static function getJsTranslationFile($_locale, $_location='tine')
@@ -128,5 +134,42 @@ class Tinebase_Translation
         '), $po);
         $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
         return $po;
+    }
+
+    /**
+     * creates translation lists js files for locale with js object
+     *
+     * @param   string $_locale
+     * @return  string the file contents
+     */
+    public static function createJsTranslationLists($_locale)
+    {
+        $jsContent = "Locale.prototype.TranslationLists = {\n";
+    
+        $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question' );
+        
+        $zendLocale = new Zend_Locale($_locale);
+                
+        foreach ( $types as $type ) {
+            $list = $zendLocale->getTranslationList($type);
+            //print_r ( $list );
+    
+            if ( is_array($list) ) {
+                $jsContent .= "\n\t$type: {";
+                    
+                foreach ( $list as $key => $value ) {    
+                    $value = preg_replace("/\"/", '\"', $value);        
+                    $jsContent .= "\n\t\t'$key': \"$value\",";
+                }
+                // remove last comma
+                $jsContent = chop($jsContent, ",");
+                        
+                $jsContent .= "\n\t},";
+            }
+        }    
+        $jsContent = chop($jsContent, ",");
+        
+        $jsContent .= "\n};\n";
+        return $jsContent;
     }
 }

@@ -109,7 +109,7 @@ foreach ($translations as $locale => $domains) {
 $localelist = Zend_Locale::getLocaleList();
 
 foreach ($localelist as $locale => $something) {        
-    $js = getTranslationLists($locale);
+    $js = Tinebase_Translation::createJsTranslationLists($locale);
     file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js", $js);
     if ( $opts->v ) {
         echo "compressing file generic-$locale.js\n";
@@ -127,43 +127,6 @@ foreach ($localelist as $locale => $something) {
 function getJs($locale, $appName, $poObject)
 {
     return "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject);";
-}
-
-/**
- * creates translation list js files for locale with js object
- *
- * @param   string $_locale
- * @return  string the file contents
- */
-function getTranslationLists($_locale)
-{
-    $jsContent = "Locale.prototype.TranslationLists = {\n";
-
-    $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question' );
-    
-    $zendLocale = new Zend_Locale($_locale);
-            
-    foreach ( $types as $type ) {
-        $list = $zendLocale->getTranslationList($type);
-        //print_r ( $list );
-
-        if ( is_array($list) ) {
-            $jsContent .= "\n\t$type: {";
-                
-            foreach ( $list as $key => $value ) {    
-                $value = preg_replace("/\"/", '\"', $value);        
-                $jsContent .= "\n\t\t'$key': \"$value\",";
-            }
-            // remove last comma
-            $jsContent = chop($jsContent, ",");
-                    
-            $jsContent .= "\n\t},";
-        }
-    }    
-    $jsContent = chop($jsContent, ",");
-    
-    $jsContent .= "\n};\n";
-    return $jsContent;
 }
 
 ?>
