@@ -149,7 +149,7 @@ function po2jsObject($filePath)
  */
 function getTranslationLists($_locale)
 {
-    $jsContent = "Locale.TranslationLists['$_locale'] = {\n";
+    $jsContent = "Locale.prototype.TranslationLists['$_locale'] = {\n";
 
     //$types = array ( 'Date', 'Month', 'Day', 'Language', 'Symbols', 'Question' );    
     $types = array ( 'Date', 'Month', 'Day', 'Symbols', 'Question' );
