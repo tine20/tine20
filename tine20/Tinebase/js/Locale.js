@@ -35,6 +35,8 @@ Locale.EXPORT_TAGS = {
   ':all': Locale.EXPORT.concat(Locale.EXPORT_OK)
 };
 
+Locale.prototype.TranslationLists = {};
+
 Locale.LC_ALL =      'LC_ALL';
 Locale.LC_COLLATE =  'LC_COLLATE';
 Locale.LC_CTYPE =    'LC_CTYPE';
@@ -88,3 +90,21 @@ Locale.setlocale.LC_MESSAGES = 'C';
 Locale.setlocale.LC_MONETARY = 'C';
 Locale.setlocale.LC_NUMERIC =  'C';
 Locale.setlocale.LC_TIME =     'C';
+
+/**
+ * get translation data from generic locale object
+ * 
+ * @param   type (Date, Symbol, ...)
+ * @param   key  the key
+ * @return  translation data
+ */
+Locale.getTranslationData = function(type, key) {
+    
+    var value = '';
+ 
+    if ( Locale.prototype.TranslationLists[type][key] ) {
+        value = Locale.prototype.TranslationLists[type][key];
+    }
+    
+    return value;
+}
