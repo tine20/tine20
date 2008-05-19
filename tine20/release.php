@@ -18,8 +18,6 @@ $tine20path = dirname(__FILE__);
  */
 $yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
 
-
-
 $includeFiles = Tinebase_Http::getAllIncludeFiles();
 
 $cssDebug = fopen($tine20path . '/Tinebase/css/tine-all-debug.css', 'w+');
@@ -51,7 +49,7 @@ while (false !== ($appName = $d->read())) {
     $appPath = "$tine20path/$appName";
     if (is_dir($appPath) && $appName{0} != '.') {
         $translationPath = "$appPath/translations";
-        if(is_dir($translationPath)) {
+        if (is_dir($translationPath)) {
             $files = scandir($translationPath);
             foreach ($files as $file) {
                 $filePath = "$translationPath/$file";
@@ -75,6 +73,15 @@ foreach ($translations as $locale => $domains) {
     }
     file_put_contents("$tine20path/Tinebase/js/$locale-debug.js", $js);
     system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/$locale.js $tine20path/Tinebase/js/$locale-debug.js");
+}
+
+// dump one langfile for every locale
+$localelist = Zend_Locale::getLocaleList();
+
+foreach ($localelist as $locale => $something) {        
+    $js = getTranslationLists($locale);
+    file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale.js", $js);
+    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale.js");
 }
 
 /**
@@ -132,6 +139,43 @@ function po2jsObject($filePath)
     $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
     return $po;
     //$js = "Locale.Gettext.prototype._msgs['./de/LC_MESSAGES/Addressbook'] = new Locale.Gettext.PO($po);";
+}
+
+/**
+ * creates translation list js files for locale with js object
+ *
+ * @param   string $_locale
+ * @return  string the file contents
+ */
+function getTranslationLists($_locale)
+{
+    $jsContent = "Locale.TranslationLists['$_locale'] = {\n";
+
+    //$types = array ( 'Date', 'Month', 'Day', 'Language', 'Symbols', 'Question' );    
+    $types = array ( 'Date', 'Month', 'Day', 'Symbols', 'Question' );
+    
+    $zendLocale = new Zend_Locale($_locale);
+            
+    foreach ( $types as $type ) {
+        $list = $zendLocale->getTranslationList($type);
+        //print_r ( $list );
+
+        if ( is_array($list) ) {
+            $jsContent .= "\n\t$type: {";
+                
+            foreach ( $list as $key => $value ) {            
+                $jsContent .= "\n\t\t'$key': \"$value\",";
+            }
+            // remove last comma
+            $jsContent = chop($jsContent, ",");
+                    
+            $jsContent .= "\n\t},";
+        }
+    }    
+    $jsContent = chop($jsContent, ",");
+    
+    $jsContent .= "\n};\n";
+    return $jsContent;
 }
 
 ?>
