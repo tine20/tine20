@@ -51,35 +51,36 @@ Locale.Gettext.prototype.textdomain = function (domain) {
   this.domain = domain;
 };
 
-
-Locale.Gettext.prototype.geturl = function(category, domain) {
-    return this.dir + '/' + this.domain + '/translations/' + Locale.setlocale(category) +  '.' + this.suffix
-}
 Locale.Gettext.prototype.getmsg = function (domain, category, reload) {
   var key = this._getkey(category, domain);
-  //console.log(key);
   return reload || typeof Locale.Gettext.prototype._msgs[key] == 'undefined'
-    ? Locale.Gettext.prototype._msgs[key] = new Locale.Gettext.PO(this._url(this.geturl(category, domain)))
+    ? Locale.Gettext.prototype._msgs[key] = new Locale.Gettext.PO(this._url(category, domain))
     : Locale.Gettext.prototype._msgs[key];
 };
 
 Locale.Gettext.prototype._msgs = {};
 
 Locale.Gettext.prototype._getkey = function(category, domain) {
-    return this.dir + '/' + this.locale.setlocale(category) + '/' + category + '/' + domain; // expect category is str
+    return this.dir + '/' + category + '/' + domain; // expect category is str
 };
 
-Locale.Gettext.prototype._url = function (url) {
-  try {
+Locale.Gettext.prototype._url = function (category, domain) {
+/* try {
     var req = new XMLHttpRequest;
-    req.open('GET', url, false);
+    var params = {
+        method:      'Tinebase.getTranslations',
+        application: domain,
+        jsonKey:     Tine.Tinebase.Registry.get('jsonKey')
+    }
+    req.open('POST', 'index.php', false);
     req.send(null);
     if (req.status == 200 || req.status == 304 || req.status == 0 || req.status == null) {
       return req.responseText;
     }
   } catch (e) {
     return '';
-  }
+  }*/
+    return '';
 };
 
 Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
