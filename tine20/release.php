@@ -99,6 +99,9 @@ foreach ($translations as $locale => $domains) {
         $js = $js . $domain;
     }
     file_put_contents("$tine20path/Tinebase/js/Locale/data/$locale-debug.js", $js);
+    if ( $opts->v ) {
+        echo "compressing file $locale.js\n";
+    }
     system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
 }
 
@@ -108,6 +111,9 @@ $localelist = Zend_Locale::getLocaleList();
 foreach ($localelist as $locale => $something) {        
     $js = getTranslationLists($locale);
     file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js", $js);
+    if ( $opts->v ) {
+        echo "compressing file generic-$locale.js\n";
+    }
     system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/generic-$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js");
 }
 
@@ -133,7 +139,6 @@ function getTranslationLists($_locale)
 {
     $jsContent = "Locale.prototype.TranslationLists = {\n";
 
-    //$types = array ( 'Date', 'Month', 'Day', 'Language', 'Symbols', 'Question' );    
     $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question' );
     
     $zendLocale = new Zend_Locale($_locale);
@@ -145,7 +150,8 @@ function getTranslationLists($_locale)
         if ( is_array($list) ) {
             $jsContent .= "\n\t$type: {";
                 
-            foreach ( $list as $key => $value ) {            
+            foreach ( $list as $key => $value ) {    
+                $value = preg_replace("/\"/", '\"', $value);        
                 $jsContent .= "\n\t\t'$key': \"$value\",";
             }
             // remove last comma
