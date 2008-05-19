@@ -55,7 +55,7 @@ while (false !== ($appName = $d->read())) {
                 $filePath = "$translationPath/$file";
                 if (is_file($filePath) && substr($file , -3) == '.po') {
                     list($locale) = explode('.', $file);
-                    $poObject = po2jsObject($filePath);
+                    $poObject = Tinebase_Translation::po2jsObject($filePath);
                     $translations[$locale][] = getJs($locale, $appName, $poObject);
                 }
             }
@@ -71,8 +71,8 @@ foreach ($translations as $locale => $domains) {
     foreach ($domains as $domain) {
         $js = $js . $domain;
     }
-    file_put_contents("$tine20path/Tinebase/js/$locale-debug.js", $js);
-    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/$locale.js $tine20path/Tinebase/js/$locale-debug.js");
+    file_put_contents("$tine20path/Tinebase/js/Locale/data/$locale-debug.js", $js);
+    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
 }
 
 // dump one langfile for every locale
@@ -93,52 +93,7 @@ foreach ($localelist as $locale => $something) {
  */
 function getJs($locale, $appName, $poObject)
 {
-    return "Locale.Gettext.prototype._msgs['./$locale/LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject);";
-}
-
-/**
- * convertes po file to js object
- *
- * @param string $filePath
- * @return string
- */
-function po2jsObject($filePath)
-{
-    $po = file_get_contents($filePath);
-    
-    global $first, $plural;
-    $first = true; 
-    $plural = false;
-    
-    $po = preg_replace('/\r?\n/', "\n", $po);
-    $po = preg_replace('/#.*\n/', '', $po);
-    $po = preg_replace('/"(\s+)"/', '', $po);
-    $po = preg_replace('/msgid "(.*?)"\nmsgid_plural "(.*?)"/', 'msgid "$1, $2"', $po);
-    $po = preg_replace_callback('/msg(\S+) /', create_function('$matches','
-        global $first, $plural;
-        switch ($matches[1]) {
-            case "id":
-                if ($first) {
-                    $first = false;
-                    return "";
-                }
-                if ($plural) {
-                    $plural = false;
-                    return "]\n, ";
-                }
-                return ", ";
-            case "str":
-                return ": ";
-            case "str[0]":
-                $plural = true;
-                return ": [\n  ";
-            default:
-                return " ,";
-        }
-    '), $po);
-    $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
-    return $po;
-    //$js = "Locale.Gettext.prototype._msgs['./de/LC_MESSAGES/Addressbook'] = new Locale.Gettext.PO($po);";
+    return "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject);";
 }
 
 /**
