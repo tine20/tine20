@@ -65,22 +65,19 @@ Locale.Gettext.prototype._getkey = function(category, domain) {
 };
 
 Locale.Gettext.prototype._url = function (category, domain) {
-/* try {
+ try {
     var req = new XMLHttpRequest;
-    var params = {
-        method:      'Tinebase.getTranslations',
-        application: domain,
-        jsonKey:     Tine.Tinebase.Registry.get('jsonKey')
-    }
+
     req.open('POST', 'index.php', false);
-    req.send(null);
+    req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send('method=Tinebase.getTranslations&application=' + domain + '&jsonKey=' + Tine.Tinebase.Registry.get('jsonKey'));
     if (req.status == 200 || req.status == 304 || req.status == 0 || req.status == null) {
-      return req.responseText;
+      return Ext.util.JSON.decode(req.responseText);
     }
   } catch (e) {
     return '';
-  }*/
-    return '';
+  }
 };
 
 Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
