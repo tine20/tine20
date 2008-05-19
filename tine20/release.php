@@ -104,7 +104,7 @@ function getJs($locale, $appName, $poObject)
  */
 function getTranslationLists($_locale)
 {
-    $jsContent = "Locale.prototype.TranslationLists['$_locale'] = {\n";
+    $jsContent = "Locale.prototype.TranslationLists = {\n";
 
     //$types = array ( 'Date', 'Month', 'Day', 'Language', 'Symbols', 'Question' );    
     $types = array ( 'Date', 'Time', 'DateTime', 'Month', 'Day', 'Symbols', 'Question' );
