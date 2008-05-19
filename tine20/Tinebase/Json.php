@@ -53,6 +53,24 @@ class Tinebase_Json
         return $result;
     }
     
+    /**
+     * returns tine translations of given application / (domain)
+     * 
+     * @param  string $application
+     * @reutn  string
+     */
+    public function getTranslations($application)
+    {
+        $locale = (string)Zend_Registry::get('locale');
+        if (file_exists(dirname(__FILE__) . "/../$application/translations/$locale.po")) {
+            die(Tinebase_Translation::po2jsObject(dirname(__FILE__) . "/../$application/translations/$locale.po"));
+        }
+        $language = Zend_Registry::get('locale')->getLanguage();
+        if (file_exists(dirname(__FILE__) . "/../$application/translations/$language.po")) {
+            die(Tinebase_Translation::po2jsObject(dirname(__FILE__) . "/../$application/translations/$language.po"));
+        }
+    }
+    
     public function getAccounts($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
