@@ -126,13 +126,18 @@ class Tinebase_Controller
             //Json request from ExtJS
 
             // is it save to use the jsonKey from $_GET too???
+            // check jsonkey in HTTP request as well?
             // can we move this to the Zend_Json_Server???
+            // create jsonkey only on login
+            
             //Zend_Registry::get('logger')->debug('is json request. json key from registry: ' . Zend_Registry::get('jsonKey'));
             //Zend_Registry::get('logger')->debug('is json request. json key from POST: ' . $_POST['jsonKey']);
-            if ($_POST['jsonKey'] != Zend_Registry::get('jsonKey')) {
+            if ($_POST['jsonKey'] != Zend_Registry::get('jsonKey') && $_POST['method'] !== 'Tinebase.login') {
                 error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);                
                 throw new Exception('wrong JSON Key sent!!!');
 
+                //Zend_Registry::get('logger')->debug('POST: ' . print_r($_POST, true));
+                                
                 // goto login screen / show popup with login (but how?)
                 // try to handle the request after the (re-)login
                 // @todo make it work!
