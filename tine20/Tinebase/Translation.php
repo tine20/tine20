@@ -51,7 +51,7 @@ class Tinebase_Translation
         	   $suffix = '.js';
         	   break;
         	case 'tine':
-        	   $dir = 'Tinebase/js/';
+        	   $dir = 'Tinebase/js/Locale/data/';
                $prefix = '';
                $suffix = '.js';
                break;
