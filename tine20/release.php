@@ -14,6 +14,33 @@ Zend_Loader::registerAutoload();
 $tine20path = dirname(__FILE__);
 
 /**
+ * options
+ */
+try {
+    $opts = new Zend_Console_Getopt(
+    array(
+        'verbose|v'       => 'Output messages',
+        'clean|c'         => 'Cleanup all build files',
+        'translations|t'  => 'Build tranlations',
+        'js|j'            => 'Build Java Script',
+        'css|s'           => 'Build CSS Files',
+        'all|a'           => 'Build all (default)',
+        'help'            => 'Display this help Message',
+    ));
+    $opts->parse();
+} catch (Zend_Console_Getopt_Exception $e) {
+   echo $e->getUsageMessage();
+   exit;
+}
+
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s)) {
+    echo $opts->getUsageMessage();
+    exit;
+}
+
+
+
+/**
  * path to yui compressor
  */
 $yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
