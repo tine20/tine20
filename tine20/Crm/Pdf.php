@@ -17,22 +17,22 @@
   */
 class Crm_Pdf extends Tinebase_Export_Pdf
 {
-	
-	/**
+
+    /**
      * create lead pdf
      *
      * @param	Crm_Model_Lead $_lead lead data
      * 
      * @return	string	the contact pdf
      */
-	public function getLeadPdf ( Crm_Model_Lead $_lead )
-	{
+    public function getLeadPdf ( Crm_Model_Lead $_lead )
+    {
         $locale = Zend_Registry::get('locale');
         $translate = Tinebase_Translation::getTranslation('Crm');    
-	    
+
         /*********************** build data array ***************************/
         
-	    $record = $this->getRecord( $_lead, $locale, $translate );	    
+        $record = $this->getRecord($_lead, $locale, $translate);	    
 
         /******************* build title / subtitle / description ***********/
         
@@ -43,13 +43,13 @@ class Crm_Pdf extends Tinebase_Export_Pdf
 
         /*********************** add linked objects *************************/
 
-        $linkedObjects = $this->getLinkedObjects ( $_lead, $locale, $translate );        
+        $linkedObjects = $this->getLinkedObjects($_lead, $locale, $translate);        
         
         /***************************** generate pdf now! ********************/
                     
-        return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE );
+        return $this->generatePdf($record, $title, $subtitle, $description, $titleIcon, NULL, $linkedObjects, FALSE);
         
-	}
+    }
 
     /**
      * get record array
@@ -62,8 +62,7 @@ class Crm_Pdf extends Tinebase_Export_Pdf
      *  
      */
     protected function getRecord ( Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate )
-    {
-        	
+    {        
         $leadFields = array (
             array(  'label' => /* $_translate->_('Lead Data') */ "", 
                     'type' => 'separator' 
