@@ -46,6 +46,14 @@
         }
     ?>
     
+    <!-- Static Localisation -->
+    <?php  
+        $locale = Zend_Registry::get('locale');
+        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'ext')) . '"></script>' . "\n";
+        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'generic')) . '"></script>' . "\n";
+        echo '<script type="text/javascript" language="javascript" src="' . Tinebase_Application_Http_Abstract::_appendFileTime(Tinebase_Translation::getJsTranslationFile($locale, 'tine')) . '"></script>' . "\n";
+    ?>
+    
     
     <!-- Tine 2.0 dynamic initialisation -->
     <script type="text/javascript" language="javascript">
