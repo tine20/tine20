@@ -14,6 +14,11 @@ Zend_Loader::registerAutoload();
 $tine20path = dirname(__FILE__);
 
 /**
+ * path to yui compressor
+ */
+$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
+
+/**
  * options
  */
 try {
@@ -38,83 +43,114 @@ if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s)) 
     exit;
 }
 
-
-
 /**
- * path to yui compressor
+ * --clean 
  */
-$yuiCompressorPath = dirname(__FILE__) . '/../yuicompressor-2.3.4/build/yuicompressor-2.3.4.jar';
-
-$includeFiles = Tinebase_Http::getAllIncludeFiles();
-
-$cssDebug = fopen($tine20path . '/Tinebase/css/tine-all-debug.css', 'w+');
-foreach ($includeFiles['css'] as $file) {
-    list($filename) = explode('?', $file);
-    if (file_exists("$tine20path/$filename")) {
-        fwrite($cssDebug, file_get_contents("$tine20path/$filename") . "\n");
+if ($opts->clean) {
+    if ($opts->v) {
+        echo "Cleaning old build...\n";
     }
-}
-fclose($cssDebug);
-system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
-
-$jsDebug = fopen($tine20path . '/Tinebase/js/tine-all-debug.js', 'w+');
-foreach ($includeFiles['js'] as $file) {
-    list($filename) = explode('?', $file);
-    if (file_exists("$tine20path/$filename")) {
-        fwrite($jsDebug, file_get_contents("$tine20path/$filename") . "\n");
+    $files = array(
+        'Tinebase/js/tine-all-debug.js',
+        'Tinebase/js/tine-all.js',
+        'Tinebase/css/tine-all-debug.css',
+        'Tinebase/css/tine-all.css',
+    );
+    foreach ($files as $file) {
+        if (file_exists("$tine20path/$file")) {
+            if ($opts->v) echo "    removing file $tine20path/$file \n";
+            unlink("$tine20path/$file");
+        }
     }
-}
-fclose($jsDebug);
-system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
-
-
-$translations = array();
-
-// collect translations
-$d = dir($tine20path);
-while (false !== ($appName = $d->read())) {
-    $appPath = "$tine20path/$appName";
-    if (is_dir($appPath) && $appName{0} != '.') {
-        $translationPath = "$appPath/translations";
-        if (is_dir($translationPath)) {
-            $files = scandir($translationPath);
-            foreach ($files as $file) {
-                $filePath = "$translationPath/$file";
-                if (is_file($filePath) && substr($file , -3) == '.po') {
-                    list($locale) = explode('.', $file);
-                    $poObject = Tinebase_Translation::po2jsObject($filePath);
-                    $translations[$locale][] = getJs($locale, $appName, $poObject);
-                }
+    
+    $dataDir = "$tine20path/Tinebase/js/Locale/data";
+    if (is_dir($dataDir)) {
+        $datafiles = scandir($dataDir);
+        foreach ($datafiles as $file) {
+            if (is_file("$dataDir/$file")) {
+                if ($opts->v) echo "    removing file $dataDir/$file \n";
+                unlink("$dataDir/$file");
             }
         }
     }
-   
-}
-$d->close();
-
-// dump one langfile for each locale
-foreach ($translations as $locale => $domains) {
-    $js = '';
-    foreach ($domains as $domain) {
-        $js = $js . $domain;
-    }
-    file_put_contents("$tine20path/Tinebase/js/Locale/data/$locale-debug.js", $js);
-    if ( $opts->v ) {
-        echo "compressing file $locale.js\n";
-    }
-    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
 }
 
-// dump one langfile for every locale
-$localelist = Zend_Locale::getLocaleList();
 
-foreach ($localelist as $locale => $something) {        
-    $js = Tinebase_Translation::createJsTranslationLists($locale);
-    file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js", $js);
-    if ( $opts->v ) {
-        echo "compressing file generic-$locale.js\n";
+$includeFiles = Tinebase_Http::getAllIncludeFiles();
+
+if ($opts->a || $opts->s) {
+    $cssDebug = fopen($tine20path . '/Tinebase/css/tine-all-debug.css', 'w+');
+    foreach ($includeFiles['css'] as $file) {
+        list($filename) = explode('?', $file);
+        if (file_exists("$tine20path/$filename")) {
+            fwrite($cssDebug, file_get_contents("$tine20path/$filename") . "\n");
+        }
     }
-    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/generic-$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js");
+    fclose($cssDebug);
+    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
+}
+
+if ($opts->a || $opts->j) {
+    $jsDebug = fopen($tine20path . '/Tinebase/js/tine-all-debug.js', 'w+');
+    foreach ($includeFiles['js'] as $file) {
+        list($filename) = explode('?', $file);
+        if (file_exists("$tine20path/$filename")) {
+            fwrite($jsDebug, file_get_contents("$tine20path/$filename") . "\n");
+        }
+    }
+    fclose($jsDebug);
+    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+}
+
+if ($opts->a || $opts->t) {
+    $translations = array();
+    
+    // collect translations
+    $d = dir($tine20path);
+    while (false !== ($appName = $d->read())) {
+        $appPath = "$tine20path/$appName";
+        if (is_dir($appPath) && $appName{0} != '.') {
+            $translationPath = "$appPath/translations";
+            if (is_dir($translationPath)) {
+                $files = scandir($translationPath);
+                foreach ($files as $file) {
+                    $filePath = "$translationPath/$file";
+                    if (is_file($filePath) && substr($file , -3) == '.po') {
+                        list($locale) = explode('.', $file);
+                        $poObject = Tinebase_Translation::po2jsObject($filePath);
+                        $translations[$locale][] = getJs($locale, $appName, $poObject);
+                    }
+                }
+            }
+        }
+       
+    }
+    $d->close();
+    
+    // dump one langfile for each locale
+    foreach ($translations as $locale => $domains) {
+        $js = '';
+        foreach ($domains as $domain) {
+            $js = $js . $domain;
+        }
+        file_put_contents("$tine20path/Tinebase/js/Locale/data/$locale-debug.js", $js);
+        if ( $opts->v ) {
+            echo "compressing file $locale.js\n";
+        }
+        system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
+    }
+    
+    // dump one langfile for every locale
+    $localelist = Zend_Locale::getLocaleList();
+    
+    foreach ($localelist as $locale => $something) {        
+        $js = Tinebase_Translation::createJsTranslationLists($locale);
+        file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js", $js);
+        if ( $opts->v ) {
+            echo "compressing file generic-$locale.js\n";
+        }
+        system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/generic-$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js");
+    }
 }
 
 /**
