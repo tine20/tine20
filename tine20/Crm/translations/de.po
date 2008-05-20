@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-04-15 11:07+0100\n"
-"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2008-05-20 11:03+0100\n"
+"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -12,86 +12,101 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/pschuele/workspace/tine20\n"
+"X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Crm\n"
 
-#: Crm/Pdf.php:71
+#: Crm/Pdf.php:70
+#: Crm/js/Crm.js:211
+#: Crm/js/Crm.js:217
+#: Crm/js/Crm.js:389
+#: Crm/js/Crm.js:1129
 msgid "Leadstate"
 msgstr "Status"
 
-#: Crm/Pdf.php:74
+#: Crm/Pdf.php:73
+#: Crm/js/Crm.js:1157
 msgid "Leadtype"
 msgstr "Typ"
 
-#: Crm/Pdf.php:77
+#: Crm/Pdf.php:76
+#: Crm/js/Crm.js:1186
 msgid "Leadsource"
 msgstr "Quelle"
 
-#: Crm/Pdf.php:80
+#: Crm/Pdf.php:79
 #: Crm/Controller.php:871
+#: Crm/js/Crm.js:393
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Crm/Pdf.php:83
+#: Crm/Pdf.php:82
 #: Crm/Controller.php:872
+#: Crm/js/Crm.js:246
+#: Crm/js/Crm.js:251
+#: Crm/js/Crm.js:257
+#: Crm/js/Crm.js:392
+#: Crm/js/Crm.js:1207
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Crm/Pdf.php:86
+#: Crm/Pdf.php:85
 #: Crm/Controller.php:868
+#: Crm/js/Crm.js:1226
 msgid "Start"
 msgstr "Start"
 
-#: Crm/Pdf.php:89
+#: Crm/Pdf.php:88
 #: Crm/Controller.php:870
+#: Crm/js/Crm.js:1243
 msgid "End"
 msgstr "Ende"
 
-#: Crm/Pdf.php:92
+#: Crm/Pdf.php:91
 msgid "End Scheduled"
 msgstr "geplantes Ende"
 
-#: Crm/Pdf.php:167
+#: Crm/Pdf.php:166
 msgid "Contacts"
 msgstr "Kontakte"
 
-#: Crm/Pdf.php:194
+#: Crm/Pdf.php:193
+#: Crm/js/Crm.js:1492
 msgid "Address"
 msgstr "Anschrift"
 
-#: Crm/Pdf.php:201
+#: Crm/Pdf.php:200
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Crm/Pdf.php:202
+#: Crm/Pdf.php:201
 msgid "Email"
 msgstr "Email"
 
-#: Crm/Pdf.php:214
+#: Crm/Pdf.php:213
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: Crm/Pdf.php:230
+#: Crm/Pdf.php:233
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: Crm/Pdf.php:236
+#: Crm/Pdf.php:239
 msgid "Priority"
 msgstr "Priorität"
 
-#: Crm/Pdf.php:264
+#: Crm/Pdf.php:267
 msgid "low"
 msgstr "Niedrig"
 
-#: Crm/Pdf.php:265
+#: Crm/Pdf.php:268
 msgid "normal"
 msgstr "Normal"
 
-#: Crm/Pdf.php:266
+#: Crm/Pdf.php:269
 msgid "high"
 msgstr "Hoch"
 
-#: Crm/Pdf.php:267
+#: Crm/Pdf.php:270
 msgid "urgent"
 msgstr "Dringend"
 
@@ -126,4 +141,225 @@ msgstr "Hinweis aktualisiert"
 #: Crm/Controller.php:882
 msgid "Lead added"
 msgstr "Hinweis hinzugefügt"
+
+#: Crm/js/Crm.js:54
+msgid "Are you sure you want to delete this lead?"
+msgstr "Sind Sie sich sicher, das Sie diesen Lead löschen möchten?"
+
+#: Crm/js/Crm.js:70
+msgid "Deleting lead"
+msgstr "Lösche Lead"
+
+#: Crm/js/Crm.js:75
+msgid "Some error occured while trying to delete the lead."
+msgstr ""
+
+#: Crm/js/Crm.js:102
+msgid "Add lead"
+msgstr "Lead hinzufügen"
+
+#: Crm/js/Crm.js:103
+msgid "Add new lead"
+msgstr "Einen neuen Lead hinzufügen"
+
+#: Crm/js/Crm.js:113
+msgid "Edit lead"
+msgstr "Lead bearbeiten"
+
+#: Crm/js/Crm.js:114
+msgid "Edit selected lead"
+msgstr "Ausgewählten Lead bearbeiten"
+
+#: Crm/js/Crm.js:120
+msgid "Delete lead"
+msgstr "Lead löschen"
+
+#: Crm/js/Crm.js:121
+msgid "Delete selected leads"
+msgstr "Ausgewählte Leads löschen"
+
+#: Crm/js/Crm.js:127
+#: Crm/js/Crm.js:1580
+msgid "Export as PDF"
+msgstr "Als PDF exportieren"
+
+#: Crm/js/Crm.js:128
+msgid "Export selected lead as PDF"
+msgstr "Export selected Lead als PDF"
+
+#: Crm/js/Crm.js:135
+#: Crm/js/Crm.js:1562
+msgid "Add task"
+msgstr "Aufgabe hinzufügen"
+
+#: Crm/js/Crm.js:136
+msgid "Add task for selected lead"
+msgstr "Aufgabe zu ausgewählten Lead hinzufügen"
+
+#: Crm/js/Crm.js:196
+msgid "Enter searchfilter"
+msgstr "Suchfilter eingeben"
+
+#: Crm/js/Crm.js:225
+#, fuzzy
+msgid "leadstate"
+msgstr "Status"
+
+#: Crm/js/Crm.js:318
+msgid "Show details"
+msgstr "Details anzeigen"
+
+#: Crm/js/Crm.js:327
+msgid "Show closed leads"
+msgstr "Abgeschlossene Leads anzeigen"
+
+#: Crm/js/Crm.js:362
+msgid "Displaying leads {0} - {1} of {2}"
+msgstr "Zeige Lead {0} - {1} von {2}"
+
+#: Crm/js/Crm.js:363
+#: Crm/js/Crm.js:442
+msgid "No leads found."
+msgstr "Keine Leads gefunden."
+
+#: Crm/js/Crm.js:385
+#, fuzzy
+msgid "Lead id"
+msgstr "Hinweis hinzugefügt"
+
+#: Crm/js/Crm.js:386
+#, fuzzy
+msgid "Lead name"
+msgstr "Hinweis hinzugefügt"
+
+#: Crm/js/Crm.js:387
+#: Crm/js/Crm.js:1760
+msgid "Partner"
+msgstr "Partner"
+
+#: Crm/js/Crm.js:388
+#: Crm/js/Crm.js:1753
+msgid "Customer"
+msgstr "Kunden"
+
+#: Crm/js/Crm.js:1120
+msgid "Enter short name"
+msgstr "Kurzname eingeben"
+
+#: Crm/js/Crm.js:1235
+msgid "Estimated end"
+msgstr "Geplantes Ende"
+
+#: Crm/js/Crm.js:1330
+msgid "Product"
+msgstr "Produkt"
+
+#: Crm/js/Crm.js:1368
+msgid "Serialnumber"
+msgstr "Seriennummer"
+
+#: Crm/js/Crm.js:1375
+msgid "Price"
+msgstr "Preis"
+
+#: Crm/js/Crm.js:1435
+msgid "Add product"
+msgstr "Produkt hinzufügen"
+
+#: Crm/js/Crm.js:1455
+msgid "Delete product"
+msgstr "Produkt löschen"
+
+#: Crm/js/Crm.js:1483
+msgid "Name"
+msgstr "Name"
+
+#: Crm/js/Crm.js:1500
+#, fuzzy
+msgid "Contactdata"
+msgstr "Kontakte"
+
+#: Crm/js/Crm.js:1514
+msgid "Identifier"
+msgstr ""
+
+#: Crm/js/Crm.js:1521
+#, fuzzy
+msgid "Status"
+msgstr "Start"
+
+#: Crm/js/Crm.js:1528
+#, fuzzy
+msgid "Percent"
+msgstr "Dringend"
+
+#: Crm/js/Crm.js:1535
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#: Crm/js/Crm.js:1541
+#, fuzzy
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+#: Crm/js/Crm.js:1548
+msgid "Creator"
+msgstr ""
+
+#: Crm/js/Crm.js:1554
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Crm/js/Crm.js:1599
+msgid "Delete task"
+msgstr "Aufgabe löschen"
+
+#: Crm/js/Crm.js:1640
+#, fuzzy
+msgid "folder"
+msgstr "Ordner"
+
+#: Crm/js/Crm.js:1648
+msgid "Overview"
+msgstr "Übersicht"
+
+#: Crm/js/Crm.js:1656
+msgid "Last activities"
+msgstr "Letzte Aktivitäten"
+
+#: Crm/js/Crm.js:1685
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+#: Crm/js/Crm.js:1709
+msgid "Expected turnover"
+msgstr "Erwarteter Umsatz"
+
+#: Crm/js/Crm.js:1767
+msgid "Internal"
+msgstr ""
+
+#: Crm/js/Crm.js:1778
+msgid "Manage activities"
+msgstr "Aktivitäten verwalten"
+
+#: Crm/js/Crm.js:1791
+msgid "Manage products"
+msgstr "Produkte verwalten"
+
+#: Crm/js/Crm.js:1816
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: Crm/js/Crm.js:1816
+msgid "Saving lead"
+msgstr "Speichere Lead"
+
+#: Crm/js/Crm.js:1852
+msgid "Could not save lead."
+msgstr "Kann Lead nicht speichern."
+
+#: Crm/js/Crm.js:1856
+msgid "Please fix the errors noted."
+msgstr "Bitte die Fehler korrigieren."
 
