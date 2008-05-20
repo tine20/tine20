@@ -120,8 +120,8 @@ class Tinebase_Json
     /**
      * change password of user 
      *
-     * @param string $oldPw the old password
-     * @param string $newPw the new password
+     * @param string $oldPassword the old password
+     * @param string $newPassword the new password
      * @return array
      */
     public function changePassword($oldPassword, $newPassword)
