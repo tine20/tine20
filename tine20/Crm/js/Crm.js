@@ -99,8 +99,8 @@ Tine.Crm.Main = function(){
     
     var actions = {
         actionAdd: new Ext.Action({
-            text: translation._('Add lead'),
-            tooltip: translation._('Add new lead'),
+            text: 'Add lead',
+            tooltip: 'Add new lead',
             iconCls: 'actionAdd',
             handler: function(){
                 //  var tree = Ext.getCmp('venues-tree');
@@ -110,30 +110,30 @@ Tine.Crm.Main = function(){
             }
         }),
         actionEdit: new Ext.Action({
-            text: translation._('Edit lead'),
-            tooltip: translation._('Edit selected lead'),
+            text: 'Edit lead',
+            tooltip: 'Edit selected lead',
             disabled: true,
             handler: handler.handlerEdit,
             iconCls: 'actionEdit'
         }),
         actionDelete: new Ext.Action({
-            text: translation._('Delete lead'),
-            tooltip: translation._('Delete selected leads'),
+            text: 'Delete lead',
+            tooltip: 'Delete selected leads',
             disabled: true,
             handler: handler.handlerDelete,
             iconCls: 'actionDelete'
         }),
         actionExport: new Ext.Action({
-            text: translation._('Export as PDF'),
-            tooltip: translation._('Export selected lead as PDF'),
+            text: 'Export as PDF',
+            tooltip: 'Export selected lead as PDF',
             disabled: true,
             handler: handler.exportLead,
             iconCls: 'action_exportAsPdf',
             scope: this
         }),
         actionAddTask: new Ext.Action({
-            text: translation._('Add task'),
-            tooltip: translation._('Add task for selected lead'),
+            text: 'Add task',
+            tooltip: 'Add task for selected lead',
             handler: handler.handlerAddTask,
             iconCls: 'actionAddTask',
             disabled: true,
@@ -173,6 +173,15 @@ Tine.Crm.Main = function(){
 
     var _showCrmToolbar = function()
     {
+        for (var i in actions) {
+            if (!actions[i].isTranlated) {
+                actions[i].setText(translation._(actions[i].initialConfig.text));
+                // tooltip happliy gets created on first mouseover
+                actions[i].initialConfig.tooltip = translation._(actions[i].initialConfig.tooltip);
+                actions[i].isTranslated = true;
+            }
+        }
+        
         var storeProbability = new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
