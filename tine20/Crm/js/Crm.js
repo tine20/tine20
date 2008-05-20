@@ -1238,7 +1238,6 @@ Tine.Crm.LeadEditDialog = function() {
             fieldLabel: translation._('Start'), 
             allowBlank: false,
             id: 'start',             
-            format: 'd.m.Y',
             anchor: '95%'
         });
 
@@ -1246,7 +1245,6 @@ Tine.Crm.LeadEditDialog = function() {
         var date_scheduledEnd = new Ext.form.DateField({
             fieldLabel: translation._('Estimated end'), 
             id: 'end_scheduled',
-            format: 'd.m.Y',
             anchor: '95%'
         });
         
@@ -1254,7 +1252,6 @@ Tine.Crm.LeadEditDialog = function() {
             xtype:'datefield',
             fieldLabel: translation._('End'), 
             id: 'end',
-            format: 'd.m.Y',
             anchor: '95%'
         });
 
