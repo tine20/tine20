@@ -8,7 +8,10 @@
  * @version     $Id$
  *
  */
+ 
 Ext.namespace('Tine.Tasks');
+
+/*********************************** MAIN DIALOG ********************************************/
 
 /**
  * entry point, required by tinebase
@@ -121,7 +124,7 @@ Tine.Tasks.mainGrid = {
 		                    this.store.load({params: this.paging});
 		                },
 		                failure: function ( result, request) { 
-		                    Ext.MessageBox.alert('Failed', 'Could not delete task(s).'); 
+		                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not delete task(s).')); 
 		                }
 		            });
 				}
@@ -137,7 +140,7 @@ Tine.Tasks.mainGrid = {
 		
     	this.actions = {
             editInPopup: new Ext.Action({
-                text: 'edit task',
+                text: this.translation._('Edit task'),
     			disabled: true,
     			actionType: 'edit',
                 handler: this.handlers.editInPopup,
@@ -146,20 +149,20 @@ Tine.Tasks.mainGrid = {
             }),
             addInPopup: new Ext.Action({
     			actionType: 'add',
-                text: 'add task',
+                text: this.translation._('Add task'),
                 handler: this.handlers.editInPopup,
-                iconCls: 'TasksTreePanel',
+                iconCls: 'TasksIconCls',
                 scope: this
             }),
             deleteSingle: new Ext.Action({
-                text: 'delete task',
+                text: this.translation._('Delete task'),
                 handler: this.handlers.deleteTaks,
     			disabled: true,
                 iconCls: 'action_delete',
                 scope: this
             }),
     		deleteMultiple: new Ext.Action({
-                text: 'delete tasks',
+                text: this.translation._('Delete tasks'),
                 handler: this.handlers.deleteTaks,
     			disabled: true,
                 iconCls: 'action_delete',
@@ -242,7 +245,7 @@ Tine.Tasks.mainGrid = {
     						//store.load({params: this.paging});
     	                },
     	                failure: function ( result, request) { 
-    	                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+    	                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
     	                }
     				});
 				break;
@@ -305,7 +308,7 @@ Tine.Tasks.mainGrid = {
 		var quickSearchField = new Ext.ux.SearchField({
 			id: 'quickSearchField',
 			width: 200,
-			emptyText: 'enter searchfilter'
+			emptyText: this.translation._('Enter searchfilter')
 		});
 		quickSearchField.on('change', function(field){
 			if(this.filter.query != field.getValue()){
@@ -320,7 +323,7 @@ Tine.Tasks.mainGrid = {
 				this.store.load({params: this.paging});
 			},
 			scope: this,
-			text: 'show closed',
+			text: this.translation._('Show closed'),
 			iconCls: 'action_showArchived'
 		});
 		
@@ -370,7 +373,7 @@ Tine.Tasks.mainGrid = {
 				//'Organizer: ', ' ',	organizerFilter,
 				new Ext.Toolbar.Separator(),
 				'->',
-				'Search:', ' ', ' ', quickSearchField]
+				this.translation._('Search:'), ' ', ' ', quickSearchField]
 		});
 	   
 	    return toolbar;
@@ -382,8 +385,8 @@ Tine.Tasks.mainGrid = {
 	        pageSize: 50,
 	        store: this.store,
 	        displayInfo: true,
-	        displayMsg: 'Displaying tasks {0} - {1} of {2}',
-	        emptyMsg: "No tasks to display"
+	        displayMsg: this.translation._('Displaying tasks {0} - {1} of {2}'),
+	        emptyMsg: this.translation._("No tasks to display")
 	    });
 		
 		this.grid = new Ext.ux.grid.QuickaddGridPanel({
@@ -400,7 +403,7 @@ Tine.Tasks.mainGrid = {
             columns: [
 				{
 					id: 'status_id',
-					header: "Status",
+					header: this.translation._("Status"),
 					width: 45,
 					sortable: true,
 					dataIndex: 'status_id',
@@ -416,7 +419,7 @@ Tine.Tasks.mainGrid = {
 				},
 				{
 					id: 'percent',
-					header: "Percent",
+					header: this.translation._("Percent"),
 					width: 50,
 					sortable: true,
 					dataIndex: 'percent',
@@ -431,7 +434,7 @@ Tine.Tasks.mainGrid = {
 				},
 				{
 					id: 'summary',
-					header: "summary",
+					header: this.translation._("Summary"),
 					width: 400,
 					sortable: true,
 					dataIndex: 'summary',
@@ -439,12 +442,12 @@ Tine.Tasks.mainGrid = {
 					//	allowBlank: false
 					//}),
 					quickaddField: new Ext.form.TextField({
-                        emptyText: 'Add a task...'
+                        emptyText: this.translation._('Add a task...')
                     })
 				},
 				{
 					id: 'priority',
-					header: "Priority",
+					header: this.translation._("Priority"),
 					width: 45,
 					sortable: true,
 					dataIndex: 'priority',
@@ -460,17 +463,17 @@ Tine.Tasks.mainGrid = {
 				},
 				{
 					id: 'due',
-					header: "Due Date",
+					header: this.translation._("Due Date"),
 					width: 55,
 					sortable: true,
 					dataIndex: 'due',
 					renderer: Tine.Tinebase.Common.dateRenderer,
 					editor: new Ext.ux.form.ClearableDateField({
-                        format : 'd.m.Y'
+                        //format : 'd.m.Y'
                     }),
                     quickaddField: new Ext.ux.form.ClearableDateField({
                         //value: new Date(),
-                        format : "d.m.Y"
+                        //format : "d.m.Y"
                     })
 				}
 				//{header: "Completed", width: 200, sortable: true, dataIndex: 'completed'}
@@ -481,7 +484,7 @@ Tine.Tasks.mainGrid = {
                 autoFill: true,
 	            forceFit:true,
 	            ignoreAdd: true,
-	            emptyText: 'No Tasks to display'
+	            emptyText: this.translation._('No Tasks to display')
 	        })
         });
 		
@@ -544,7 +547,7 @@ Tine.Tasks.mainGrid = {
                     Ext.StoreMgr.get('TaskGridStore').load({params: this.paging});
                 },
                 failure: function ( result, request) { 
-                    Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+                    Ext.MessageBox.alert(this.translation._('Failed'), this.translation._('Could not save task.')); 
                 }
             });
             return true;
@@ -565,6 +568,7 @@ Tine.Tasks.mainGrid = {
     }    
 };
 
+/*********************************** EDIT DIALOG ********************************************/
 
 Tine.Tasks.EditDialog = function(task) {
 	

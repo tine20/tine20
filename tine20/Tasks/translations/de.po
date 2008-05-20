@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-20 17:18+0100\n"
+"PO-Revision-Date: 2008-05-20 17:49+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,86 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
-#: Tasks/js/Tasks.js:95
+#: Tasks/js/Tasks.js:98
 msgid "Do you really want to delete the selected task(s)"
 msgstr "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
+
+#: Tasks/js/Tasks.js:127
+#: Tasks/js/Tasks.js:248
+#: Tasks/js/Tasks.js:550
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: Tasks/js/Tasks.js:127
+msgid "Could not delete task(s)."
+msgstr "Konnte Aufgabe(n) nicht löschen."
+
+#: Tasks/js/Tasks.js:143
+msgid "Edit task"
+msgstr "Aufgabe bearbeiten"
+
+#: Tasks/js/Tasks.js:152
+msgid "Add task"
+msgstr "Aufgabe hinzufügen"
+
+#: Tasks/js/Tasks.js:158
+msgid "Delete task"
+msgstr "Aufgabe löschen"
+
+#: Tasks/js/Tasks.js:165
+msgid "Delete tasks"
+msgstr "Aufgaben löschen"
+
+#: Tasks/js/Tasks.js:248
+#: Tasks/js/Tasks.js:550
+msgid "Could not save task."
+msgstr "Konnte Aufgabe nicht löschen."
+
+#: Tasks/js/Tasks.js:311
+msgid "Enter searchfilter"
+msgstr "Suchfilter eingeben"
+
+#: Tasks/js/Tasks.js:326
+msgid "Show closed"
+msgstr "Geschlossene anzeigen"
+
+#: Tasks/js/Tasks.js:376
+msgid "Search:"
+msgstr "Suchen nach:"
+
+#: Tasks/js/Tasks.js:388
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Zeige Aufgaben {0} - {1} von {2}"
+
+#: Tasks/js/Tasks.js:389
+msgid "No tasks to display"
+msgstr "Keine Aufgaben vorhanden"
+
+#: Tasks/js/Tasks.js:406
+msgid "Status"
+msgstr "Status"
+
+#: Tasks/js/Tasks.js:422
+msgid "Percent"
+msgstr "Prozent"
+
+#: Tasks/js/Tasks.js:437
+msgid "Summary"
+msgstr "Beschreibung"
+
+#: Tasks/js/Tasks.js:445
+msgid "Add a task..."
+msgstr "Aufgabe hinzufügen..."
+
+#: Tasks/js/Tasks.js:450
+msgid "Priority"
+msgstr "Priorität"
+
+#: Tasks/js/Tasks.js:466
+msgid "Due Date"
+msgstr "Fällig am"
+
+#: Tasks/js/Tasks.js:487
+msgid "No Tasks to display"
+msgstr "Keine Aufgaben vorhanden"
 

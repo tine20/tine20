@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-20 17:23+0100\n"
+"PO-Revision-Date: 2008-05-20 17:50+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,86 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Tasks\n"
 
-#: Tasks/js/Tasks.js:95
+#: Tasks/js/Tasks.js:98
 msgid "Do you really want to delete the selected task(s)"
 msgstr "Do you really want to delete the selected task(s)"
+
+#: Tasks/js/Tasks.js:127
+#: Tasks/js/Tasks.js:248
+#: Tasks/js/Tasks.js:550
+msgid "Failed"
+msgstr "Failed"
+
+#: Tasks/js/Tasks.js:127
+msgid "Could not delete task(s)."
+msgstr "Could not delete task(s)."
+
+#: Tasks/js/Tasks.js:143
+msgid "Edit task"
+msgstr "Edit task"
+
+#: Tasks/js/Tasks.js:152
+msgid "Add task"
+msgstr "Add task"
+
+#: Tasks/js/Tasks.js:158
+msgid "Delete task"
+msgstr "Delete task"
+
+#: Tasks/js/Tasks.js:165
+msgid "Delete tasks"
+msgstr "Delete tasks"
+
+#: Tasks/js/Tasks.js:248
+#: Tasks/js/Tasks.js:550
+msgid "Could not save task."
+msgstr "Could not save task."
+
+#: Tasks/js/Tasks.js:311
+msgid "Enter searchfilter"
+msgstr "Enter searchfilter"
+
+#: Tasks/js/Tasks.js:326
+msgid "Show closed"
+msgstr "Show closed"
+
+#: Tasks/js/Tasks.js:376
+msgid "Search:"
+msgstr "Search:"
+
+#: Tasks/js/Tasks.js:388
+msgid "Displaying tasks {0} - {1} of {2}"
+msgstr "Displaying tasks {0} - {1} of {2}"
+
+#: Tasks/js/Tasks.js:389
+msgid "No tasks to display"
+msgstr "No tasks to display"
+
+#: Tasks/js/Tasks.js:406
+msgid "Status"
+msgstr "Status"
+
+#: Tasks/js/Tasks.js:422
+msgid "Percent"
+msgstr "Percent"
+
+#: Tasks/js/Tasks.js:437
+msgid "Summary"
+msgstr "Summary"
+
+#: Tasks/js/Tasks.js:445
+msgid "Add a task..."
+msgstr "Add a task..."
+
+#: Tasks/js/Tasks.js:450
+msgid "Priority"
+msgstr "Priority"
+
+#: Tasks/js/Tasks.js:466
+msgid "Due Date"
+msgstr "Due Date"
+
+#: Tasks/js/Tasks.js:487
+msgid "No Tasks to display"
+msgstr "No Tasks to display"
 
