@@ -326,16 +326,15 @@ Tine.Admin.AccessLog.Main = function() {
         ds_accessLog.on('beforeload', function(_dataSource) {
         	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
         	
-        	var from = Date.parseDate(
-        	   Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/Y'
-        	);
+        	var dateFormatShort = Locale.getTranslationData('Date', 'short');
+        	
+            //console.log(Ext.getCmp('adminApplications_dateFrom').getRawValue());
+            //console.log(dateFormatShort);
+        	
+        	var from = Date.parseDate(Ext.getCmp('adminApplications_dateFrom').getRawValue(), dateFormatShort);
             _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
 
-            var to = Date.parseDate(
-               Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/Y'
-            );
+            var to = Date.parseDate(Ext.getCmp('adminApplications_dateTo').getRawValue(), dateFormatShort);
             _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");
         });        
         
@@ -362,12 +361,14 @@ Tine.Admin.AccessLog.Main = function() {
             id:             'adminApplications_dateFrom',
             allowBlank:     false,
             validateOnBlur: false,
+            format:         Locale.getTranslationData('Date', 'short'),
             value:          oneWeekAgo
         });
         var dateTo = new Ext.form.DateField({
             id:             'adminApplications_dateTo',
             allowBlank:     false,
             validateOnBlur: false,
+            format:         Locale.getTranslationData('Date', 'short'),
             value:          currentDate
         });
         
@@ -409,12 +410,12 @@ Tine.Admin.AccessLog.Main = function() {
         dateFrom.on('valid', function(_dateField) {
             var from = Date.parseDate(
                Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/Y'
+               Locale.getTranslationData('Date', 'short')
             );
 
             var to = Date.parseDate(
                Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/Y'
+               Locale.getTranslationData('Date', 'short')
             );
             
             if(from.getTime() > to.getTime()) {
@@ -427,12 +428,12 @@ Tine.Admin.AccessLog.Main = function() {
         dateTo.on('valid', function(_dateField) {
             var from = Date.parseDate(
                Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               'm/d/Y'
+               Locale.getTranslationData('Date', 'short')
             );
 
             var to = Date.parseDate(
                Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               'm/d/Y'
+               Locale.getTranslationData('Date', 'short')
             );
             
             if(from.getTime() > to.getTime()) {
