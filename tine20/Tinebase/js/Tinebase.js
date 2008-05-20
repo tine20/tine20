@@ -193,8 +193,8 @@ Tine.Tinebase.MainScreen = function() {
                 	id: 'Tinebase_System_Menu',  	
 		            items: [{
 		                text: 'Change password',
-		                handler: _changePasswordHandler,
-		                disabled: true
+		                handler: _changePasswordHandler
+		                //disabled: true
 		            }, '-', {
 		                text: 'Logout',
 		                handler: _logoutButtonHandler,
@@ -410,6 +410,8 @@ Tine.Tinebase.MainScreen = function() {
             selectOnFocus: true                  
         });   
 
+        // @todo remove that? is it still in use??
+        /*
         var changePasswordToolbar = new Ext.Toolbar({
           	id: 'changePasswordToolbar',
 			split: false,
@@ -422,12 +424,21 @@ Tine.Tinebase.MainScreen = function() {
                     handler: function() {
                     if (changePasswordForm.getForm().isValid()) {
                         
+                    	var oldPassword = changePasswordForm.getForm().getValues().oldPw;
+                    	var newPassword = changePasswordForm.getForm().getValues().newPw;
+                    	
                         if (changePasswordForm.getForm().getValues().newPw == changePasswordForm.getForm().getValues().newPwSecondTime) {
-                            changePasswordForm.getForm().submit({
-                                waitTitle: 'Please wait!',
-                                waitMsg: 'changing password...',
+                        	console.log ( newPassword );
+                            //changePasswordForm.getForm().submit({
+                        	Ext.Ajax.request({
+                        		url: 'index.php',
+                                //waitTitle: 'Please wait!',
+                                //waitMsg: 'changing password...',
                                 params: {
-                                    jsonKey: Tine.Tinebase.jsonKey
+                                    //jsonKey: Tine.Tinebase.jsonKey
+                                    method: 'Tinebase.changePassword',
+                                    oldPassword: oldPassword,
+                                    newPassword: newPassword
                                 },
                                 success: function(form, action, o){
                                     Ext.getCmp('changePassword_window').hide(); 
@@ -435,8 +446,8 @@ Tine.Tinebase.MainScreen = function() {
                                         title: 'Success',
                                         msg: 'Your password has been changed.',
                                         buttons: Ext.MessageBox.OK,
-                                        icon: Ext.MessageBox.SUCCESS  /*,
-                                        fn: function() {} */
+                                        icon: Ext.MessageBox.SUCCESS
+                                        //fn: function() {} 
                                     });
                                 },
                                 failure: function(form, action){
@@ -444,8 +455,8 @@ Tine.Tinebase.MainScreen = function() {
                                         title: 'Failure',
                                         msg: 'Your old password is incorrect.',
                                         buttons: Ext.MessageBox.OK,
-                                        icon: Ext.MessageBox.ERROR  /*,
-                                        fn: function() {} */
+                                        icon: Ext.MessageBox.ERROR  
+                                        //fn: function() {} 
                                     });
                                 }
                             });
@@ -454,8 +465,8 @@ Tine.Tinebase.MainScreen = function() {
                                 title: 'Failure',
                                 msg: 'The new passwords mismatch, please correct them.',
                                 buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR  /*,
-                                fn: function() {} */
+                                icon: Ext.MessageBox.ERROR
+                                //fn: function() {}
                             });    
                         }
                     }
@@ -463,6 +474,7 @@ Tine.Tinebase.MainScreen = function() {
                 }
 			]
 		});
+		*/
 
         var changePasswordForm = new Ext.FormPanel({
 			baseParams: {method :'Tinebase.changePassword'},
@@ -482,13 +494,20 @@ Tine.Tinebase.MainScreen = function() {
 
         _savePassword = function() {
             if (changePasswordForm.getForm().isValid()) {
-     
-                if (changePasswordForm.getForm().getValues().newPassword == changePasswordForm.getForm().getValues().newPasswordSecondTime) {
-                    changePasswordForm.getForm().submit({
+
+                var oldPassword = changePasswordForm.getForm().getValues().oldPassword;
+                var newPassword = changePasswordForm.getForm().getValues().newPassword;
+                var newPasswordRepeat = changePasswordForm.getForm().getValues().newPasswordSecondTime;
+            	
+                if (newPassword == newPasswordRepeat) {
+                	Ext.Ajax.request({
+                        url: 'index.php',
                         waitTitle: 'Please wait!',
                         waitMsg: 'changing password...',
                         params: {
-                            jsonKey: Tine.Tinebase.jsonKey
+                            method: 'Tinebase.changePassword',
+                            oldPassword: oldPassword,
+                            newPassword: newPassword
                         },
                         success: function(form, action, o){
                             Ext.getCmp('changePassword_window').hide(); 
