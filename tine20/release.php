@@ -39,7 +39,7 @@ try {
    exit;
 }
 
-if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s)) {
+if ($opts->help || !($opts->a || $opts->c || $opts->t || $opts->j || $opts->s || $opts->z)) {
     echo $opts->getUsageMessage();
     exit;
 }
