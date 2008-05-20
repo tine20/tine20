@@ -62,7 +62,7 @@ class Tinebase_Translation
                $suffix = '.js';
                break;
         	case 'ext':
-        	    $dir = '../ExtJS/build/locale/';
+        	   $dir = 'ExtJS/build/locale/';
                $prefix = 'ext-lang-';
                $suffix = '-min.js';
                break;
@@ -73,7 +73,7 @@ class Tinebase_Translation
         
         $locale = (string)$_locale;
         $language = $_locale->getLanguage();
-                
+        
         if (! $_locale instanceof Zend_Locale) {
             $_locale = new Zend_Locale($_locale);
         }
@@ -84,6 +84,7 @@ class Tinebase_Translation
         }
         
         $file = $dir . $prefix . $language . $suffix;
+        
         if (file_exists(dirname(__FILE__) . "/../$file")) {
             return $file;
         }
