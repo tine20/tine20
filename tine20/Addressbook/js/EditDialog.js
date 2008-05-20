@@ -63,6 +63,11 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         ]
     };
     
+    //var birthdayFormat = 'd.m.Y';
+    //console.log (Locale.getTranslationData('Date', 'medium'));
+    // isn't used at the moment -> get format from extjs locale
+    //var birthdayFormat = Locale.getTranslationData('Date', 'medium');
+    
     var personalInformationExpandArea = new Ext.ux.form.ColumnFormPanel({
         //xtype: 'columnform',
         items:[
@@ -97,7 +102,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 {
                     columnWidth: .2,
                     xtype: 'datefield',
-                    format: 'd.m.Y',
+                    //format: birthdayFormat,
                     fieldLabel: translation._('Birthday'),
                     name: 'bday'
                 }
