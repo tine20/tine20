@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-20 11:03+0100\n"
+"PO-Revision-Date: 2008-05-20 13:42+0100\n"
 "Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -228,9 +228,8 @@ msgid "Lead id"
 msgstr "Hinweis hinzugefügt"
 
 #: Crm/js/Crm.js:386
-#, fuzzy
 msgid "Lead name"
-msgstr "Hinweis hinzugefügt"
+msgstr "Lead Name"
 
 #: Crm/js/Crm.js:387
 #: Crm/js/Crm.js:1760
