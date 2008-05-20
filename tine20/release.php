@@ -30,6 +30,7 @@ try {
         'js|j'            => 'Build Java Script',
         'css|s'           => 'Build CSS Files',
         'all|a'           => 'Build all (default)',
+        'zend|z'          => 'Build Zend Translation Lists',
         'help'            => 'Display this help Message',
     ));
     $opts->parse();
@@ -138,11 +139,13 @@ if ($opts->a || $opts->t) {
             echo "compressing file $locale.js\n";
         }
         system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
-    }
-    
+    }    
+}
+
+// build zend translation lists only on demand
+if ( $opts->z ) {
     // dump one langfile for every locale
     $localelist = Zend_Locale::getLocaleList();
-    
     foreach ($localelist as $locale => $something) {        
         $js = Tinebase_Translation::createJsTranslationLists($locale);
         file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js", $js);
