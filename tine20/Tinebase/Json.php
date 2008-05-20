@@ -61,6 +61,8 @@ class Tinebase_Json
      */
     public function getTranslations($application)
     {
+        header('Content-Type: text/html; charset=utf-8');
+        
         $locale = (string)Zend_Registry::get('locale');
         if (file_exists(dirname(__FILE__) . "/../$application/translations/$locale.po")) {
             die(Tinebase_Translation::po2jsObject(dirname(__FILE__) . "/../$application/translations/$locale.po"));
