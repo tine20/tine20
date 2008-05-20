@@ -27,6 +27,10 @@ Tine.Tasks.getPanel =  function() {
 
 // Tasks main screen
 Tine.Tasks.mainGrid = {
+    /**
+     * holds translation
+     */
+    translation: null,
 	/**
      * holds instance of application tree
      */
@@ -88,7 +92,7 @@ Tine.Tasks.mainGrid = {
             
         },
 		deleteTaks: function(_button, _event){
-			Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected task(s)', function(_button) {
+			Ext.MessageBox.confirm('Confirm', this.translation._('Do you really want to delete the selected task(s)'), function(_button) {
                 if(_button == 'yes') {
 				    var selectedRows = this.grid.getSelectionModel().getSelections();
 				    if (selectedRows.length < 1) {
@@ -127,6 +131,10 @@ Tine.Tasks.mainGrid = {
     
         
 	initComponent: function() {
+		
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Tasks');
+		
     	this.actions = {
             editInPopup: new Ext.Action({
                 text: 'edit task',

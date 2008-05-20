@@ -1,0 +1,21 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 Tasks\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2008-05-20 17:23+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED KINGDOM\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-SearchPath-0: Tasks\n"
+
+#: Tasks/js/Tasks.js:95
+msgid "Do you really want to delete the selected task(s)"
+msgstr "Do you really want to delete the selected task(s)"
+
