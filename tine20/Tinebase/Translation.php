@@ -156,9 +156,13 @@ class Tinebase_Translation
             //print_r ( $list );
     
             if ( is_array($list) ) {
-                $jsContent .= "\n\t$type: {";
+                $jsContent .= "\n\t$type: {";                
                     
                 foreach ( $list as $key => $value ) {    
+                    // convert ISO -> PHP for date formats
+                    if ( in_array($type, array('Date', 'Time', 'DateTime')) ) {
+                        $value = self::convertIsoToPhpFormat($value);
+                    }
                     $value = preg_replace("/\"/", '\"', $value);        
                     $jsContent .= "\n\t\t'$key': \"$value\",";
                 }
@@ -173,4 +177,66 @@ class Tinebase_Translation
         $jsContent .= "\n};\n";
         return $jsContent;
     }
+    
+    /**
+     * Converts a format string from ISO to PHP format
+     * reverse the functionality of Zend's convertPhpToIsoFormat()
+     * 
+     * @param  string  $format  Format string in PHP's date format
+     * @return string           Format string in ISO format
+     */
+    private function convertIsoToPhpFormat($format)
+    {        
+        $convert = array(
+                            'c' => '/yyyy-MM-ddTHH:mm:ssZZZZ/',
+                            '$1j$2' => '/([^d])d([^d])/', 
+                            't' => '/ddd/', 
+                            'd' => '/dd/', 
+                            'l' => '/EEEE/', 
+                            'D' => '/EEE/', 
+                            'S' => '/SS/',
+                            'w' => '/eee/', 
+                            'N' => '/e/', 
+                            'z' => '/D/', 
+                            'W' => '/w/', 
+                            '$1n$2' => '/([^M])M([^M])/', 
+                            'F' => '/MMMM/', 
+                            'M' => '/MMM/',
+                            'm' => '/MM/', 
+                            'L' => '/l/', 
+                            'o' => '/YYYY/', 
+                            'Y' => '/yyyy/', 
+                            'y' => '/yy/',
+                            'a' => '/a/', 
+                            'A' => '/a/', 
+                            'B' => '/B/', 
+                            'h' => '/hh/',
+                            'g' => '/h/', 
+                            '$1G$2' => '/([^H])H([^H])/', 
+                            'H' => '/HH/', 
+                            'i' => '/mm/', 
+                            's' => '/ss/', 
+                            'e' => '/zzzz/', 
+                            'I' => '/I/', 
+                            'P' => '/ZZZZ/', 
+                            'O' => '/Z/',
+                            'T' => '/z/', 
+                            'Z' => '/X/', 
+                            'r' => '/r/', 
+                            'U' => '/U/',
+        );
+        
+        //echo "pre:".$format."\n";
+        
+        $patterns = array_values($convert);
+        $replacements = array_keys($convert);
+        $format = preg_replace($patterns, $replacements, $format);
+        
+        //echo "post:".$format."\n";
+        //echo "---\n";
+        
+        return $format;
+    }
+
+    
 }
