@@ -282,11 +282,14 @@ Tine.Tasks.mainGrid = {
     },
 
 	getTree: function() {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Tasks');
+
         this.tree =  new Tine.widgets.container.TreePanel({
             id: 'TasksTreePanel',
             iconCls: 'TasksIconCls',
-            title: 'Tasks',
-            itemName: 'to do lists',
+            title: translation._('Tasks'),
+            itemName: translation._('to do lists'),
             folderName: 'to do list',
             appName: 'Tasks',
             border: false

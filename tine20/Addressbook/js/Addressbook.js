@@ -4,10 +4,13 @@ Tine.Addressbook = {
 
     getPanel: function()
     {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Addressbook');
+    	
         var accountBackend = Tine.Tinebase.Registry.get('accountBackend');
         if (accountBackend == 'Sql') {
             var internalContactsleaf = {
-                text: "Internal Contacts",
+                text: translation._("Internal Contacts"),
                 cls: "file",
                 containerType: 'internalContainer',
                 id: "internal",
@@ -20,8 +23,8 @@ Tine.Addressbook = {
         var treePanel =  new Tine.widgets.container.TreePanel({
             id: 'Addressbook_Tree',
             iconCls: 'AddressbookIconCls',
-            title: Locale.Gettext.dgettext('Addressbook', 'Addressbook'),
-            itemName: 'contacts',
+            title: translation._('Addressbook'),
+            itemName: translation._('contacts'),
             folderName: 'addressbook',
             appName: 'Addressbook',
             border: false,

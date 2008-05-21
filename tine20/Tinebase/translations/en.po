@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: 2008-05-17 17:27+0100\n"
-"PO-Revision-Date: 2008-05-17 17:27+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2008-05-21 17:04+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,6 +14,14 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
+
+#: Tinebase/Export/Pdf.php:342
+msgid "Export Date"
+msgstr "Export Date"
+
+#: Tinebase/Export/Pdf.php:346
+msgid "Created by"
+msgstr "Created by"
 
 #: Tinebase/Acl/Rights.php:369
 msgid "admin"
@@ -39,14 +47,6 @@ msgstr "manage shared tags"
 msgid "manage shared tags right description"
 msgstr "create, edit and delete shared tags"
 
-#: Tinebase/Export/Pdf.php:341
-msgid "Export Date"
-msgstr "Export Date"
-
-#: Tinebase/Export/Pdf.php:345
-msgid "Created by"
-msgstr "Created by"
-
 #: Tinebase/js/Tinebase.js:221
 msgid "Logout"
 msgstr "Logout"
@@ -54,4 +54,70 @@ msgstr "Logout"
 #: Tinebase/js/Tinebase.js:224
 msgid "Logout from Tine 2.0"
 msgstr "Logout from Tine 2.0"
+
+#: Tinebase/js/widgets/ContainerTree.js:106
+msgid "All"
+msgstr "All"
+
+#: Tinebase/js/widgets/ContainerTree.js:111
+msgid "My"
+msgstr "My"
+
+#: Tinebase/js/widgets/ContainerTree.js:118
+msgid "Shared"
+msgstr "Shared"
+
+#: Tinebase/js/widgets/ContainerTree.js:125
+msgid "Other Users"
+msgstr "Other Users"
+
+#: Tinebase/js/widgets/ContainerTree.js:203
+msgid "New"
+msgstr "New"
+
+#: Tinebase/js/widgets/ContainerTree.js:205
+#: Tinebase/js/widgets/ContainerTree.js:233
+#: Tinebase/js/widgets/ContainerTree.js:265
+msgid "Please wait"
+msgstr "Please wait"
+
+#: Tinebase/js/widgets/ContainerTree.js:205
+msgid "Creating"
+msgstr "Creating"
+
+#: Tinebase/js/widgets/ContainerTree.js:231
+msgid "Confirm"
+msgstr "Confirm"
+
+#: Tinebase/js/widgets/ContainerTree.js:231
+msgid "Do you really want to delete the"
+msgstr "Do you really want to delete the"
+
+#: Tinebase/js/widgets/ContainerTree.js:233
+msgid "Deleting"
+msgstr "Deleting"
+
+#: Tinebase/js/widgets/ContainerTree.js:260
+msgid "Please enter the new name of the"
+msgstr "Please enter the new name of the"
+
+#: Tinebase/js/widgets/ContainerTree.js:265
+msgid "Updateing"
+msgstr "Updateing"
+
+#: Tinebase/js/widgets/ContainerTree.js:304
+msgid "Add"
+msgstr "Add"
+
+#: Tinebase/js/widgets/ContainerTree.js:310
+msgid "Delete"
+msgstr "Delete"
+
+#: Tinebase/js/widgets/ContainerTree.js:316
+msgid "Rename"
+msgstr "Rename"
+
+#: Tinebase/js/widgets/ContainerTree.js:322
+msgid "Manage permissions"
+msgstr "Manage permissions"
 

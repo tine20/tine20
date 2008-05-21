@@ -64,6 +64,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	
 	// private
 	initComponent: function(){
+        var translation = new Locale.Gettext();
+        translation.textdomain('Tinebase');
+		
 		Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
 		this.addEvents(
             /**
@@ -100,26 +103,26 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	    });
 	    
 	    var initialTree = [{
-	        text: 'All ' + this.itemName,
+	        text: translation._('All') + ' ' + this.itemName,
 	        cls: "treemain",
 	        containerType: 'all',
 	        id: 'all',
 	        children: [{
-	            text: 'My ' + this.itemName,
+	            text: translation._('My') + ' ' + this.itemName,
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
 	            id: 'user',
 	            leaf: null,
 	            owner: Tine.Tinebase.Registry.get('currentAccount')
 	        }, {
-	            text: 'Shared ' + this.itemName,
+	            text: translation._('Shared') + ' ' + this.itemName,
 	            cls: 'file',
 	            containerType: Tine.Tinebase.container.TYPE_SHARED,
 	            children: null,
 	            leaf: null,
 				owner: null
 	        }, {
-	            text: 'Other Users ' + this.itemName,
+	            text: translation._('Other Users') + ' ' + this.itemName,
 	            cls: 'file',
 	            containerType: 'otherUsers',
 	            children: null,
@@ -192,11 +195,14 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	},
 	// private
 	initContextMenu: function() {
-		var handler = {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Tinebase');
+
+        var handler = {
 			addContainer: function() {
-				Ext.MessageBox.prompt('New ' + this.folderName, 'Please enter the name of the new ' + this.folderName + ':', function(_btn, _text) {
+				Ext.MessageBox.prompt(translation._('New') + ' ' + this.folderName, 'Please enter the name of the new ' + this.folderName + ':', function(_btn, _text) {
                     if( this.ctxNode && _btn == 'ok') {
-						Ext.MessageBox.wait('Please wait', 'Creating ' + this.folderName+ '...');
+						Ext.MessageBox.wait(translation._('Please wait'), translation._('Creating') + ' ' + this.folderName+ '...');
 						var parentNode = this.ctxNode;
 						
 						Ext.Ajax.request({
@@ -222,9 +228,9 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 			deleteContainer: function() {
 				if (this.ctxNode) {
 					var node = this.ctxNode;
-					Ext.MessageBox.confirm('Confirm','Do you really want to delete the ' + this.folderName + ': "' + node.text + '"?', function(_btn){
+					Ext.MessageBox.confirm(translation._('Confirm'),translation._('Do you really want to delete the') + ' ' + this.folderName + ': "' + node.text + '"?', function(_btn){
 						if ( _btn == 'yes') {
-							Ext.MessageBox.wait('Please wait', 'Deleting ' + this.folderName + ' "' + node.text + '"');
+							Ext.MessageBox.wait(translation._('Please wait'), translation._('Deleting') + ' ' + this.folderName + ' "' + node.text + '"');
 							
 							Ext.Ajax.request({
 								params: {
@@ -251,12 +257,12 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 					var node = this.ctxNode;
 					Ext.MessageBox.show({
 						title: 'Rename ' + this.folderName,
-						msg: 'Please enter the new name of the ' + this.folderName + ':',
+						msg: translation._('Please enter the new name of the') + ' ' + this.folderName + ':',
 						buttons: Ext.MessageBox.OKCANCEL,
 						value: node.text,
 						fn: function(_btn, _text){
 							if (_btn == 'ok') {
-								Ext.MessageBox.wait('Please wait', 'Updateing ' + this.folderName + ' "' + node.text + '"');
+								Ext.MessageBox.wait(translation._('Please wait'), translation._('Updateing') + ' ' + this.folderName + ' "' + node.text + '"');
 								
 								Ext.Ajax.request({
 									params: {
@@ -295,25 +301,25 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 		
 		var actions = {
 			addContainer: new Ext.Action({
-				text: 'add ' + this.folderName,
+				text: translation._('Add') + ' ' + this.folderName,
 				iconCls: 'action_add',
 				handler: handler.addContainer,
 				scope: this
 			}),
 			deleteContainer: new Ext.Action({
-				text: 'delete ' + this.folderName,
+				text: translation._('Delete') + ' ' + this.folderName,
 				iconCls: 'action_delete',
 				handler: handler.deleteContainer,
 				scope: this
 			}),
 			renameContainer: new Ext.Action({
-				text: 'rename ' + this.folderName,
+				text: translation._('Rename') + ' ' + this.folderName,
 				iconCls: 'action_rename',
 				handler: handler.renameContainer,
 				scope: this
 			}),
 			grantsContainer: new Ext.Action({
-				text: 'manage permissions',
+				text: translation._('Manage permissions'),
 				iconCls: 'action_managePermissions',
 				handler: handler.managePermissions,
                 scope: this
