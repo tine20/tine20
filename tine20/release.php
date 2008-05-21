@@ -64,13 +64,13 @@ if ($opts->clean) {
         }
     }
     
-    $dataDir = "$tine20path/Tinebase/js/Locale/data";
-    if (is_dir($dataDir)) {
-        $datafiles = scandir($dataDir);
-        foreach ($datafiles as $file) {
-            if (is_file("$dataDir/$file")) {
-                if ($opts->v) echo "    removing file $dataDir/$file \n";
-                unlink("$dataDir/$file");
+    $buildDir = "$tine20path/Tinebase/js/Locale/build";
+    if (is_dir($buildDir)) {
+        $buildfiles = scandir($buildDir);
+        foreach ($buildfiles as $file) {
+            if (is_file("$buildDir/$file")) {
+                if ($opts->v) echo "    removing file $buildDir/$file \n";
+                unlink("$buildDir/$file");
             }
         }
     }
@@ -134,11 +134,11 @@ if ($opts->a || $opts->t) {
         foreach ($domains as $domain) {
             $js = $js . $domain;
         }
-        file_put_contents("$tine20path/Tinebase/js/Locale/data/$locale-debug.js", $js);
+        file_put_contents("$tine20path/Tinebase/js/Locale/build/$locale-debug.js", $js);
         if ( $opts->v ) {
             echo "compressing file $locale.js\n";
         }
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/build/$locale.js $tine20path/Tinebase/js/Locale/build/$locale-debug.js");
     }    
 }
 
@@ -146,13 +146,14 @@ if ($opts->a || $opts->t) {
 if ( $opts->z ) {
     // dump one langfile for every locale
     $localelist = Zend_Locale::getLocaleList();
+    //$localelist = array ( "en_US" => 1 ); 
     foreach ($localelist as $locale => $something) {        
         $js = Tinebase_Translation::createJsTranslationLists($locale);
-        file_put_contents("$tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js", $js);
+        file_put_contents("$tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js", $js);
         if ( $opts->v ) {
             echo "compressing file generic-$locale.js\n";
         }
-        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/data/generic-$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js");
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/static/generic-$locale.js $tine20path/Tinebase/js/Locale/static/generic-$locale-debug.js");
     }
 }
 

@@ -52,12 +52,12 @@ class Tinebase_Translation
     {
         switch ($_location) {
         	case 'generic':
-        	   $dir = 'Tinebase/js/Locale/data/';
+        	   $dir = 'Tinebase/js/Locale/static/';
         	   $prefix = 'generic-';
         	   $suffix = '.js';
         	   break;
         	case 'tine':
-        	   $dir = 'Tinebase/js/Locale/data/';
+        	   $dir = 'Tinebase/js/Locale/build/';
                $prefix = '';
                $suffix = '.js';
                break;
