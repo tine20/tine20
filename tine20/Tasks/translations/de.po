@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-20 17:49+0100\n"
+"PO-Revision-Date: 2008-05-21 12:49+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,10 +22,13 @@ msgstr "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 #: Tasks/js/Tasks.js:127
 #: Tasks/js/Tasks.js:248
 #: Tasks/js/Tasks.js:550
+#: Tasks/js/Tasks.js:629
+#: Tasks/js/Tasks.js:654
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
 #: Tasks/js/Tasks.js:127
+#: Tasks/js/Tasks.js:654
 msgid "Could not delete task(s)."
 msgstr "Konnte Aufgabe(n) nicht löschen."
 
@@ -47,6 +50,7 @@ msgstr "Aufgaben löschen"
 
 #: Tasks/js/Tasks.js:248
 #: Tasks/js/Tasks.js:550
+#: Tasks/js/Tasks.js:629
 msgid "Could not save task."
 msgstr "Konnte Aufgabe nicht löschen."
 
@@ -71,6 +75,7 @@ msgid "No tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
 #: Tasks/js/Tasks.js:406
+#: Tasks/js/Tasks.js:706
 msgid "Status"
 msgstr "Status"
 
@@ -79,6 +84,7 @@ msgid "Percent"
 msgstr "Prozent"
 
 #: Tasks/js/Tasks.js:437
+#: Tasks/js/Tasks.js:678
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -87,6 +93,7 @@ msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
 #: Tasks/js/Tasks.js:450
+#: Tasks/js/Tasks.js:710
 msgid "Priority"
 msgstr "Priorität"
 
@@ -97,4 +104,57 @@ msgstr "Fällig am"
 #: Tasks/js/Tasks.js:487
 msgid "No Tasks to display"
 msgstr "Keine Aufgaben vorhanden"
+
+#: Tasks/js/Tasks.js:596
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: Tasks/js/Tasks.js:596
+#: Tasks/js/Tasks.js:642
+msgid "Saving Task"
+msgstr "Aufgabe speichern"
+
+#: Tasks/js/Tasks.js:633
+msgid "Errors"
+msgstr "Fehler"
+
+#: Tasks/js/Tasks.js:633
+msgid "Please fix the errors noted."
+msgstr "Bitte beheben Sie die angezeigten Fehler."
+
+#: Tasks/js/Tasks.js:640
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: Tasks/js/Tasks.js:640
+msgid "Do you really want to delete this task?"
+msgstr "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+
+#: Tasks/js/Tasks.js:642
+msgid "Please wait a moment..."
+msgstr "Einen Moment noch..."
+
+#: Tasks/js/Tasks.js:682
+msgid "Enter short name..."
+msgstr "Kurzbezeichnung eingeben..."
+
+#: Tasks/js/Tasks.js:685
+msgid "Notes"
+msgstr "Anmerkungen"
+
+#: Tasks/js/Tasks.js:687
+msgid "Enter description..."
+msgstr "Beschreibung eingeben..."
+
+#: Tasks/js/Tasks.js:701
+msgid "Percentage"
+msgstr "Prozent"
+
+#: Tasks/js/Tasks.js:714
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+#: Tasks/js/Tasks.js:719
+msgid "Folder"
+msgstr "Ordner"
 

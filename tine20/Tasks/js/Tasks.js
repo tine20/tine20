@@ -294,7 +294,7 @@ Tine.Tasks.mainGrid = {
         
         
         this.tree.on('click', function(node){
-        	// note: if node is clicked, it's not selected!
+        	// note: if node is clicked, it is not selected!
         	node.getOwnerTree().selectPath(node.getPath());
             this.store.load({params: this.paging});
         }, this);
@@ -572,6 +572,10 @@ Tine.Tasks.mainGrid = {
 
 Tine.Tasks.EditDialog = function(task) {
 	
+	// get translation object
+    translation = new Locale.Gettext();
+    translation.textdomain('Tasks');
+	
 	if (!arguments[0]) {
 		task = {};
 	}
@@ -589,7 +593,7 @@ Tine.Tasks.EditDialog = function(task) {
 			form.render();
 			
 			if(form.isValid()) {
-				Ext.MessageBox.wait('Please wait', 'Saving Task');
+				Ext.MessageBox.wait(translation._('Please wait'), translation._('Saving Task'));
 				
 				// merge changes from form into task record
 				// @todo here is a problem with the linking-form values, if "apply" is clicked, the linking params are lost 
@@ -622,20 +626,20 @@ Tine.Tasks.EditDialog = function(task) {
                         }
 		            },
 		            failure: function ( result, request) { 
-		                Ext.MessageBox.alert('Failed', 'Could not save task.'); 
+		                Ext.MessageBox.alert(translation._('Failed'), translation._('Could not save task.')); 
 		            } 
 				});
 	        } else {
-	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+	            Ext.MessageBox.alert(translation._('Errors'), translation._('Please fix the errors noted.'));
 	        }
 		},
 		saveAndClose:  function(_button, _event) {
 			handlers.applyChanges(_button, _event, true);
 		},
 		pre_delete: function(_button, _event) {
-			Ext.MessageBox.confirm('Confirm', 'Do you really want to delete this task?', function(_button) {
+			Ext.MessageBox.confirm(translation._('Confirm'), translation._('Do you really want to delete this task?'), function(_button) {
                 if(_button == 'yes') {
-			        Ext.MessageBox.wait('Please wait a moment...', 'Saving Task');
+			        Ext.MessageBox.wait(translation._('Please wait a moment...'), translation._('Saving Task'));
 	    			Ext.Ajax.request({
 	                    params: {
 	    					method: 'Tasks.deleteTask',
@@ -647,7 +651,7 @@ Tine.Tasks.EditDialog = function(task) {
 	    					window.setTimeout("window.close()", 1000);
 	                    },
 	                    failure: function ( result, request) { 
-	                        Ext.MessageBox.alert('Failed', 'Could not delete task(s).');
+	                        Ext.MessageBox.alert(translation._('Failed'), translation._('Could not delete task(s).'));
 	    					Ext.MessageBox.hide();
 	                    }
 	    			});
@@ -671,16 +675,16 @@ Tine.Tasks.EditDialog = function(task) {
                 xtype: 'textfield'
             },
 			items:[{
-				fieldLabel: 'summary',
+				fieldLabel: translation._('Summary'),
 				hideLabel: true,
 				xtype: 'textfield',
 				name: 'summary',
-				emptyText: 'enter short name...',
+				emptyText: translation._('Enter short name...'),
 				allowBlank: false
 			}, {
-				fieldLabel: 'notes',
+				fieldLabel: translation._('Notes'),
 				hideLabel: true,
-                emptyText: 'enter description...',
+                emptyText: translation._('Enter description...'),
 				name: 'description',
 				xtype: 'textarea',
 				height: 150
@@ -694,25 +698,25 @@ Tine.Tasks.EditDialog = function(task) {
             },
             items:[ 
                 new Ext.ux.PercentCombo({
-                    fieldLabel: 'Percentage',
+                    fieldLabel: translation._('Percentage'),
                     editable: false,
                     name: 'percent'
                 }), 
                 new Tine.Tasks.status.ComboBox({
-                    fieldLabel: 'Status',
+                    fieldLabel: translation._('Status'),
                     name: 'status_id'
                 }), 
                 new Tine.widgets.Priority.Combo({
-                    fieldLabel: 'Priority',
+                    fieldLabel: translation._('Priority'),
                     name: 'priority'
                 }), 
                 new Ext.ux.form.ClearableDateField({
-                    fieldLabel: 'Due date',
+                    fieldLabel: translation._('Due date'),
                     name: 'due',
                     format: "d.m.Y"
                 }), 
                 new Tine.widgets.container.selectionComboBox({
-                    fieldLabel: 'Folder',
+                    fieldLabel: translation._('Folder'),
                     name: 'container_id',
                     itemName: 'Tasks',
                     appName: 'Tasks'
