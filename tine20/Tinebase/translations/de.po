@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 CRM\n"
 "POT-Creation-Date: 2008-05-17 17:23+0100\n"
-"PO-Revision-Date: 2008-05-21 16:48+0100\n"
+"PO-Revision-Date: 2008-05-21 17:27+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -69,7 +69,7 @@ msgstr "Geteilte"
 
 #: Tinebase/js/widgets/ContainerTree.js:125
 msgid "Other Users"
-msgstr "Anderer Benutzer"
+msgstr "Andere Benutzer"
 
 #: Tinebase/js/widgets/ContainerTree.js:203
 msgid "New"

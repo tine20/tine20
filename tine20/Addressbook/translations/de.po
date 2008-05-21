@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-05-21 16:43+0100\n"
+"PO-Revision-Date: 2008-05-21 17:27+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -157,7 +157,7 @@ msgstr "Suche: "
 
 #: Addressbook/js/Addressbook.js:322
 msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Es werden die Kontakte {0} - {1} von {2} angezeigt"
+msgstr "Zeige Kontakt {0} - {1} von {2}"
 
 #: Addressbook/js/Addressbook.js:323
 msgid "No contacts to display"

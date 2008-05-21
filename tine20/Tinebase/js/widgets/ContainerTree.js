@@ -122,7 +122,7 @@ Ext.namespace('Tine.widgets', 'Tine.widgets.container');
 	            leaf: null,
 				owner: null
 	        }, {
-	            text: translation._('Other Users') + ' ' + this.itemName,
+	            text: translation._('Other Users'),
 	            cls: 'file',
 	            containerType: 'otherUsers',
 	            children: null,

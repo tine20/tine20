@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-21 16:53+0100\n"
+"PO-Revision-Date: 2008-05-21 17:27+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,7 @@ msgstr "Suchen nach:"
 
 #: Tasks/js/Tasks.js:388
 msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "Zeige Aufgaben {0} - {1} von {2}"
+msgstr "Zeige Aufgabe {0} - {1} von {2}"
 
 #: Tasks/js/Tasks.js:389
 msgid "No tasks to display"
