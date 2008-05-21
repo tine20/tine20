@@ -60,6 +60,8 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
             $imageParams = $this->parseImageLink($contactData['jpegphoto']);
             if ($imageParams['isNewImage']) {
                 $contactData['jpegphoto'] = $this->getImageData($imageParams);
+            } else {
+                unset($contactData['jpegphoto']);
             }
         }
         
@@ -376,7 +378,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
     protected function parseImageLink($link)
     {
         $params = array();
-        //Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
+        Zend_Registry::get('logger')->debug(parse_url($link, PHP_URL_QUERY));
         parse_str(parse_url($link, PHP_URL_QUERY), $params);
         $params['isNewImage'] = false;
         if (isset($params['application']) && $params['application'] == 'Tinebase') {
