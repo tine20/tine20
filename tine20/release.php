@@ -88,7 +88,7 @@ if ($opts->a || $opts->s) {
         }
     }
     fclose($cssDebug);
-    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
+    system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/css/tine-all.css $tine20path/Tinebase/css/tine-all-debug.css");
 }
 
 if ($opts->a || $opts->j) {
@@ -100,7 +100,7 @@ if ($opts->a || $opts->j) {
         }
     }
     fclose($jsDebug);
-    system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
+    system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/tine-all.js $tine20path/Tinebase/js/tine-all-debug.js");
 }
 
 if ($opts->a || $opts->t) {
@@ -138,7 +138,7 @@ if ($opts->a || $opts->t) {
         if ( $opts->v ) {
             echo "compressing file $locale.js\n";
         }
-        system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/data/$locale.js $tine20path/Tinebase/js/Locale/data/$locale-debug.js");
     }    
 }
 
@@ -152,7 +152,7 @@ if ( $opts->z ) {
         if ( $opts->v ) {
             echo "compressing file generic-$locale.js\n";
         }
-        system("java -jar $yuiCompressorPath -o $tine20path/Tinebase/js/Locale/data/generic-$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js");
+        system("java -jar $yuiCompressorPath --charset utf-8 -o $tine20path/Tinebase/js/Locale/data/generic-$locale.js $tine20path/Tinebase/js/Locale/data/generic-$locale-debug.js");
     }
 }
 
