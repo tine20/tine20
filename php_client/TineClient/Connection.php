@@ -20,6 +20,19 @@ class TineClient_Connection extends Zend_Http_Client
     protected $debugEnabled = false;
     
     /**
+     * Json key of the current session
+     *
+     * @var string
+     */
+    protected  $_jsonKey = NULL;
+    
+    /**
+     * Account data for the current session
+     *
+     * @var array
+     */
+    public $account = array();
+    /**
      * @see Zend_Http_Client
      */
     public function __construct($_uri, array $_config = array())
@@ -31,6 +44,19 @@ class TineClient_Connection extends Zend_Http_Client
         
         $this->setCookieJar();
         $this->setHeaders('X-Requested-With', 'XMLHttpRequest');
+    }
+    
+    /**
+     * Send the HTTP request and return an HTTP response object
+     *
+     * @param string $method
+     */
+    public function request($method)
+    {
+         $this->setParameterPost(array(
+            'jsonKey'    => $this->_jsonKey
+        ));
+        return parent::request($method);
     }
     
     public function login($_username, $_password)
@@ -57,6 +83,9 @@ class TineClient_Connection extends Zend_Http_Client
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
+        
+        $this->_jsonKey = $responseData['jsonKey'];
+        $this->account = $responseData['account'];
     }
     
     public function logout()
@@ -81,6 +110,9 @@ class TineClient_Connection extends Zend_Http_Client
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
+        
+        $this->_jsonKey = NULL;
+        $this->account = array();
     }
     
     public function setDebugEnabled($_status)
