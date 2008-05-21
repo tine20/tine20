@@ -12,8 +12,14 @@
 
 abstract class TineClient_Service_Abstract
 {
+	/**
+	 * @var TineClient_Connection
+	 */
     protected static $_defaultConnection = NULL;
     
+    /**
+	 * @var TineClient_Connection
+	 */
     protected $_connection = NULL;
     
     public function __construct($_connection = NULL)
