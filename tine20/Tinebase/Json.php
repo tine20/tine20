@@ -203,6 +203,7 @@ class Tinebase_Json
             $response = array(
 				'success'       => TRUE,
                 'account'       => Zend_Registry::get('currentAccount')->getPublicAccount()->toArray(),
+				'jsonKey'       => Zend_Registry::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
 			);
         } else {
