@@ -326,15 +326,15 @@ Tine.Admin.AccessLog.Main = function() {
         ds_accessLog.on('beforeload', function(_dataSource) {
         	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
         	
-        	var dateFormatShort = Locale.getTranslationData('Date', 'medium');
+        	//var dateFormatShort = Locale.getTranslationData('Date', 'medium');
         	
             //console.log(Ext.getCmp('adminApplications_dateFrom').getRawValue());
             //console.log(dateFormatShort);
         	
-        	var from = Date.parseDate(Ext.getCmp('adminApplications_dateFrom').getRawValue(), dateFormatShort);
+        	var from = Date.parseDate(Ext.getCmp('adminApplications_dateFrom').getRawValue(), Ext.getCmp('adminApplications_dateFrom').format);
             _dataSource.baseParams.from   = from.format("Y-m-d\\T00:00:00");
 
-            var to = Date.parseDate(Ext.getCmp('adminApplications_dateTo').getRawValue(), dateFormatShort);
+            var to = Date.parseDate(Ext.getCmp('adminApplications_dateTo').getRawValue(), Ext.getCmp('adminApplications_dateTo').format);
             _dataSource.baseParams.to     = to.format("Y-m-d\\T23:59:59");
         });        
         
