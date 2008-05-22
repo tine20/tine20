@@ -292,19 +292,23 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 * NOTE: As the HTML servers have no singletons, we need to create a unique
 	 * instance here. This might get relaxed wiht php 5.3 with static functions
 	 * 
+	 * @param  array apps to exclude
 	 * @return array 
 	 */
-	public static function getAllIncludeFiles()
+	public static function getAllIncludeFiles(array $_exclude=array())
 	{
 	    $tine20path = dirname(dirname(__FILE__));
 	    
 	    // Tinebase first
         $cssFiles = Tinebase_Http::getCssFilesToInclude();
         $jsFiles  = Tinebase_Http::getJsFilesToInclude();
-	    
+        
+        $_exclude[]  = '.';
+        $_exclude[]  = 'Tinebase';
+        	    
         $d = dir($tine20path);
 	    while (false !== ($appName = $d->read())) {
-            if (is_dir("$tine20path/$appName") && $appName{0} != '.' && $appName != 'Tinebase') {
+            if (is_dir("$tine20path/$appName") && !in_array($appName, $_exclude)) {
                 if (file_exists("$tine20path/$appName/Http.php")) {
                     $httpClass = $appName . "_Http";
                     $instance = new $httpClass();
