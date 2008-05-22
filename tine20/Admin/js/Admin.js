@@ -326,7 +326,7 @@ Tine.Admin.AccessLog.Main = function() {
         ds_accessLog.on('beforeload', function(_dataSource) {
         	_dataSource.baseParams.filter = Ext.getCmp('quickSearchField').getRawValue();
         	
-        	var dateFormatShort = Locale.getTranslationData('Date', 'short');
+        	var dateFormatShort = Locale.getTranslationData('Date', 'medium');
         	
             //console.log(Ext.getCmp('adminApplications_dateFrom').getRawValue());
             //console.log(dateFormatShort);
