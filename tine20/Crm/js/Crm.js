@@ -1619,7 +1619,7 @@ Tine.Crm.LeadEditDialog = function() {
             loadMask: true,
             autoExpandColumn: 'description',
             border: false,
-            height: 600, 
+            height: 600 
         });               
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {

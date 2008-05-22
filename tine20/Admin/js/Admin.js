@@ -74,7 +74,7 @@ Tine.Admin = function() {
         children :[],
         leaf :null,
         expanded :true,
-        dataPanelType :"sharedtags",
+        dataPanelType :"sharedtags"
     },{
         text :"Roles",
         cls :"treemain",

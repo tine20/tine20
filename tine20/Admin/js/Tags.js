@@ -320,7 +320,7 @@ Tine.Admin.Tags.EditDialog = {
                 Ext.Ajax.request({
                     params: {
                         method: 'Admin.saveTag', 
-                        tagData: Ext.util.JSON.encode(tag.data),
+                        tagData: Ext.util.JSON.encode(tag.data)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Admin.Tags) {

@@ -57,7 +57,7 @@ Ext.ux.form.MirrorTextField = Ext.extend(Ext.ux.form.IconTextField, {
         if(this.rendered){
             Ext.ux.form.MirrorTextFieldManager.unregister(this);
         }
-    },
+    }
 });
 Ext.reg('mirrortextfield', Ext.ux.form.MirrorTextField);
 

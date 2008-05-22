@@ -80,7 +80,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             scope: this,
             success: this.onUploadSuccess,
             params: {
-                method: 'Tinebase.uploadTempFile',
+                method: 'Tinebase.uploadTempFile'
             }
         });
         

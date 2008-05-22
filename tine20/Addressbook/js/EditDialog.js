@@ -243,7 +243,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         //collapsible: true,
         autoHeight:true,
         items: [
-            contactInformationBasePanel,
+            contactInformationBasePanel
             //contactInformationExpandArea
         ]
     };

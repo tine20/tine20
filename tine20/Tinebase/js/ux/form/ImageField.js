@@ -51,7 +51,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             buttonCt: this.buttonCt,
             renderTo: this.buttonCt,
             scope: this,
-            handler: this.onFileSelect,
+            handler: this.onFileSelect
             //debug: true
         });
     },

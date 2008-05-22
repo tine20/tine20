@@ -157,7 +157,7 @@ Tine.Dialer.Main = {
             { resizable: true, id: 'n_family', header: 'Family name', dataIndex: 'n_family' },
             { resizable: true, id: 'n_given', header: 'Given name', dataIndex: 'n_given', width: 80 },
             { resizable: true, id: 'n_fn', header: 'Full name', dataIndex: 'n_fn', hidden: true },
-            { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true },
+            { resizable: true, id: 'n_fileas', header: 'Name + Firm', dataIndex: 'n_fileas', hidden: true }
         ]);
         
         columnModel.defaultSortable = true; // by default columns are sortable

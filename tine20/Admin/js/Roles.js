@@ -405,7 +405,7 @@ Tine.Admin.Roles.EditDialog = {
                         method: 'Admin.saveRole', 
                         roleData: Ext.util.JSON.encode(Tine.Admin.Roles.EditDialog.roleRecord.data),
                         roleMembers: Ext.util.JSON.encode(roleMembers),
-                        roleRights: Ext.util.JSON.encode(roleRights),
+                        roleRights: Ext.util.JSON.encode(roleRights)
                     },
                     success: function(_result, _request) {
                      	if(window.opener.Tine.Admin.Roles) {

@@ -71,7 +71,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 method: 'Tinebase.getTags',
                 context: this.app,
                 owner: Tine.Tinebase.Registry.get('currentAccount').accountId,
-                findGlobalTags: this.findGlobalTags,
+                findGlobalTags: this.findGlobalTags
             }
         });
         
@@ -80,6 +80,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.bbar = [
             this.searchField, '->',
             new Ext.Button({
+            	// not yet implemented
+            	disabled: true,
                 text: 'List'
             })
         ];

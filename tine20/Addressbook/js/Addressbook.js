@@ -263,7 +263,7 @@ Tine.Addressbook.Main = {
         
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
-            width: 240,
+            width: 240
         }); 
         quickSearchField.on('change', onFilterChange, this);
         

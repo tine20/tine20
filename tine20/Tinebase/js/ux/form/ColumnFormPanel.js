@@ -74,7 +74,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
             var rowConfig = {
                 border: false,
                 layout: 'column',
-                items: [],
+                items: []
             };
             // each row consits n column objects 
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
