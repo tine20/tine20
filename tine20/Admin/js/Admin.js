@@ -361,14 +361,14 @@ Tine.Admin.AccessLog.Main = function() {
             id:             'adminApplications_dateFrom',
             allowBlank:     false,
             validateOnBlur: false,
-            format:         Locale.getTranslationData('Date', 'short'),
+            format:         Locale.getTranslationData('Date', 'medium'),
             value:          oneWeekAgo
         });
         var dateTo = new Ext.form.DateField({
             id:             'adminApplications_dateTo',
             allowBlank:     false,
             validateOnBlur: false,
-            format:         Locale.getTranslationData('Date', 'short'),
+            format:         Locale.getTranslationData('Date', 'medium'),
             value:          currentDate
         });
         
