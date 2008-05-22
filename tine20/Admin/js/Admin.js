@@ -410,12 +410,12 @@ Tine.Admin.AccessLog.Main = function() {
         dateFrom.on('valid', function(_dateField) {
             var from = Date.parseDate(
                Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               Locale.getTranslationData('Date', 'short')
+               Ext.getCmp('adminApplications_dateFrom').format
             );
 
             var to = Date.parseDate(
                Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               Locale.getTranslationData('Date', 'short')
+               Ext.getCmp('adminApplications_dateTo').format
             );
             
             if(from.getTime() > to.getTime()) {
@@ -428,12 +428,12 @@ Tine.Admin.AccessLog.Main = function() {
         dateTo.on('valid', function(_dateField) {
             var from = Date.parseDate(
                Ext.getCmp('adminApplications_dateFrom').getRawValue(),
-               Locale.getTranslationData('Date', 'short')
+               Ext.getCmp('adminApplications_dateFrom').format
             );
 
             var to = Date.parseDate(
                Ext.getCmp('adminApplications_dateTo').getRawValue(),
-               Locale.getTranslationData('Date', 'short')
+               Ext.getCmp('adminApplications_dateTo').format
             );
             
             if(from.getTime() > to.getTime()) {
