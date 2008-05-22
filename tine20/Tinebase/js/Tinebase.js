@@ -631,9 +631,7 @@ Tine.Tinebase.MainScreen = function() {
         
         northPanel.add(_toolbar);
         northPanel.doLayout();
-    };
-
-    
+    };    
     
     // public functions and variables
     return {

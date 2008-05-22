@@ -100,6 +100,7 @@ if ($opts->a || $opts->j) {
     foreach ($includeFiles['js'] as $file) {
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
+            fwrite($jsDebug, '// file: ' . "$tine20path/$filename" . "\n");
             fwrite($jsDebug, file_get_contents("$tine20path/$filename") . "\n");
         }
     }

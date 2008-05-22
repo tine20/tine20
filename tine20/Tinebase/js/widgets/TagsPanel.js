@@ -138,7 +138,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                 new Ext.Action({
                                     scope: this,
                                     disabled: selectedTags.length>1,
-                                    text: 'Rename',
+                                    text: 'Rename'
                                     //iconCls: 'action_edit',
                                     /*
                                     handler: function() {
@@ -149,17 +149,13 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                 }),
                                 new Ext.Action({
                                     text: 'Edit Description',
-                                    disabled: selectedTags.length>1,
-                                
+                                    disabled: selectedTags.length>1                                
                                 }),
-                                {
+                                new Ext.Action({     
                                     text: 'Change Color',
-                                    disabled: selectedTags.length>1,
-                                    menu: new Ext.menu.ColorMenu({
-                                        
-                                    })
-                                }
-                                    
+                                    disabled: selectedTags.length>1
+                                    //menu: new Ext.menu.ColorMenu({})                                        
+                                })                                    
                             ]
                         }
                     },
@@ -363,7 +359,7 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
      */
     setValue: function(value){
         this.recordTagsStore.loadData(value);
-    },
+    }
 
 });
 

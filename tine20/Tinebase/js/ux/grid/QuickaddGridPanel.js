@@ -61,7 +61,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // The customized header template
         this.getView().templates = {
             header: this.makeHeaderTemplate()
-        }
+        };
         
         // init handlers
         this.quickaddHandlers = {

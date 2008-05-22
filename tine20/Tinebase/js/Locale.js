@@ -107,4 +107,4 @@ Locale.getTranslationData = function(type, key) {
     }
     
     return value;
-}
+};

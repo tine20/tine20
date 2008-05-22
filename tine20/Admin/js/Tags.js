@@ -517,7 +517,7 @@ Tine.Admin.Tags.EditDialog = {
                             columnWidth: .5,
                             name: 'description',
                             fieldLabel: 'Description',
-                            anchor:'100%',
+                            anchor:'100%'
                         }/*, {
                             columnWidth: .2,
                             xtype: 'combo',

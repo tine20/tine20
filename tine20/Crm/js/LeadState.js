@@ -195,5 +195,5 @@ Tine.Crm.LeadState.EditStatesDialog = function() {
     });
     Dialog.add(leadstateGridPanel);
     Dialog.show();
-}
+};
 

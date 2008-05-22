@@ -302,7 +302,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             xtype: 'widget-countrycombo',
                             fieldLabel: translation._('Country'),
-                            name: 'adr_one_countryname',
+                            name: 'adr_one_countryname'
                         }
                     ]
                 ]
@@ -347,7 +347,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         {
                             xtype: 'widget-countrycombo',
                             fieldLabel: translation._('Country'),
-                            name: 'adr_two_countryname',
+                            name: 'adr_two_countryname'
                         }
                     ]
                 ]
@@ -395,7 +395,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         height: 230,
                         customHeight: 230,
                         border: false,
-                        style: 'border:1px solid #B5B8C8;',
+                        style: 'border:1px solid #B5B8C8;'
                     }),
                     {
                         xtype: 'panel',

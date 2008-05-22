@@ -52,4 +52,4 @@ sprintf = function() {
         str = leftpart + subst + rightPart;
     }
     return str;
-}
+};

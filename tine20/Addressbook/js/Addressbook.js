@@ -17,7 +17,7 @@ Tine.Addressbook = {
                 children: [],
                 leaf: false,
                 expanded: true
-            }
+            };
         }
         
         var treePanel =  new Tine.widgets.container.TreePanel({
