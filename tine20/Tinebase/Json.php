@@ -142,7 +142,14 @@ class Tinebase_Json
         return $response;        
     }    
     
-    public function getTags($context, $owner, $findGlobalTags)
+    /**
+     * gets tags for application / owners
+     * 
+     * @param   string  $context
+     * @param   int     $owner
+     * @return array 
+     */
+    public function getTags($context, $owner)
     {
         $filter = new Tinebase_Tags_Model_Filter(array(
             'name'        => '%',
