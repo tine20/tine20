@@ -77,7 +77,11 @@ if ($opts->clean) {
 }
 
 
-$includeFiles = Tinebase_Http::getAllIncludeFiles();
+$includeFiles = Tinebase_Http::getAllIncludeFiles(array(
+    'Asterisk',
+    'Felamimail',
+    'Calendar'
+));
 
 if ($opts->a || $opts->s) {
     $cssDebug = fopen($tine20path . '/Tinebase/css/tine-all-debug.css', 'w+');
