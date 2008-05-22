@@ -305,7 +305,7 @@ Tine.Admin.AccessLog.Main = function() {
             },
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'id',
+            storeId: 'adminApplications_accesslogStore',
             fields: [
                 {name: 'sessionid'},
                 {name: 'login_name'},
@@ -406,8 +406,10 @@ Tine.Admin.AccessLog.Main = function() {
         });
         
         Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
-
+        
         dateFrom.on('valid', function(_dateField) {
+            var oldFrom = Ext.StoreMgr.get('adminApplications_accesslogStore').baseParams.from;
+            
             var from = Date.parseDate(
                Ext.getCmp('adminApplications_dateFrom').getRawValue(),
                Ext.getCmp('adminApplications_dateFrom').format
@@ -421,11 +423,15 @@ Tine.Admin.AccessLog.Main = function() {
             if(from.getTime() > to.getTime()) {
             	Ext.getCmp('adminApplications_dateTo').setRawValue(Ext.getCmp('adminApplications_dateFrom').getRawValue());
             }
-
-            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+            
+            if (oldFrom != from.format("Y-m-d\\T00:00:00")) {
+                Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+            }
         });
         
         dateTo.on('valid', function(_dateField) {
+            var oldTo = Ext.StoreMgr.get('adminApplications_accesslogStore').baseParams.to;
+            
             var from = Date.parseDate(
                Ext.getCmp('adminApplications_dateFrom').getRawValue(),
                Ext.getCmp('adminApplications_dateFrom').format
@@ -439,8 +445,10 @@ Tine.Admin.AccessLog.Main = function() {
             if(from.getTime() > to.getTime()) {
                 Ext.getCmp('adminApplications_dateFrom').setRawValue(Ext.getCmp('adminApplications_dateTo').getRawValue());
             }
-
-            Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+            
+            if (oldTo != to.format("Y-m-d\\T23:59:59")) {
+                Ext.getCmp('gridAdminAccessLog').getStore().load({params:{start:0, limit:50}});
+            }
         });
     };
     
