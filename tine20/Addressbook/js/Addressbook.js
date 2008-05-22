@@ -676,7 +676,7 @@ Tine.Addressbook.ContactEditDialog = {
         });
         dialog.on('render', function(dialog){
             dialog.getForm().findField('n_prefix').focus(false, 250);
-        })
+        });
         
         var viewport = new Ext.Viewport({
             layout: 'border',

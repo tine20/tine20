@@ -207,7 +207,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.items = [
             this.dataView,
             this.formField
-        ]
+        ];
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
     /**
@@ -261,7 +261,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         }, this);
         
         this.searchField.on('select', function(searchField, selectedTag){
-            if(this.recordTagsStore.getById(selectedTag.id) == undefined) {
+            if(this.recordTagsStore.getById(selectedTag.id) === undefined) {
                 this.recordTagsStore.add(selectedTag);
             }
             searchField.emptyText = '';
