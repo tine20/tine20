@@ -51,7 +51,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                 }*/]
             },{
                 columnWidth: .5,
-                labelWidth: 100,
+                labelWidth: 150,
                 items: {
                     xtype: 'combo',
                     fieldLabel: translation._('Display Name'),
