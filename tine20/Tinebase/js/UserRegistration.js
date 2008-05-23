@@ -13,7 +13,7 @@ Ext.namespace('Tine', 'Tine.Tinebase');
 
 Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
     name: 'userRegistration',
-    title: 'Registration Wizzard',
+    title: 'Registration Wizard',
     //layout: 'card',
     //activeItem: 0,
     layout: 'fit',
@@ -30,10 +30,13 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
      */
     initComponent: function() {
         this.items = [this.getWizard()];
+
         Tine.Tinebase.UserRegistration.superclass.initComponent.call(this);
         
     },
-    
+    /**
+     * is that used?
+     */
     navHandler: function(button) {
         var direction = 1;
         if (button.id == 'move-prev') {
@@ -176,8 +179,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                     html: '<h1>Congratulations!</h1><p>Step 5 of 5 - Complete</p>'
                 }*/]
             });
-            
-            
+                        
             this.wizard.on({
                 'leave': {
                     fn: function(currentItem, nextItem, forward) {
@@ -227,6 +229,18 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                 'activate': {
                     fn: function(currentItem) {
                         //Ext.MessageBox.alert('Wizard', 'Entering ' + currentItem.id);
+                    	
+                    	if ( currentItem.id === 'card-1') {
+                    		// check if all fields are filled in
+                    		if (  !this.registrationData.accountFirstName || 
+                    		      !this.registrationData.accountLastName ||
+                                  !this.registrationData.accountEmailAddress ||
+                                  !this.registrationData.accountLoginName ) {
+                                Ext.MessageBox.alert('Wizard', 'Please fill in all registration Fields.');
+                                this.wizard.setCurrentStep(this.wizard.getCurrentStep()-1);
+                            }
+                        }
+                    	
                     },
                     scope: this
                 },
