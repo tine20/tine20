@@ -121,7 +121,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // remove accounts for group member tests
-        Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account']->accountId );        
+        try {
+            Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account']->accountId );
+        } catch ( Exception $e ) {
+            // do nothing
+        }
+                     
     }
     
     /**
@@ -184,8 +189,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testDeleteAccounts()
     {
         $json = new Admin_Json();
+        $encodedAccountIds = Zend_Json::encode(array($this->objects['account']->accountId));
         
-        $json->deleteAccounts( Zend_Json::encode(array($this->objects['account']->getId())) );
+        $json->deleteAccounts($encodedAccountIds);
         
         $this->setExpectedException ( 'Exception' );
         Tinebase_Account::getInstance()->getAccountById($this->objects['account']->getId);
