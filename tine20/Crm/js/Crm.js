@@ -1014,6 +1014,7 @@ Tine.Crm.Main = function(){
     };
 }(); // end of application
   
+/*************************************** LEAD EDIT DIALOG ****************************************/
 
 Ext.namespace('Tine.Crm.LeadEditDialog');
 Tine.Crm.LeadEditDialog = function() {
@@ -1573,9 +1574,10 @@ Tine.Crm.LeadEditDialog = function() {
         var  _add_task = new Ext.Action({
                 text: translation._('Add task'),
                 handler: function(){
+                	console.log(_leadData.data);
                 	popupWindow = new Tine.Tasks.EditPopup({
                         relatedApp: 'crm',
-                        relatedId: _leadData.data.lead_id
+                        relatedId: _leadData.data.id
                 	});
                 	
                 	popupWindow.on('update', function(task) {
@@ -1636,7 +1638,7 @@ Tine.Crm.LeadEditDialog = function() {
                 // this is major bullshit!
             	// it only works one time. The problem begind begins with the different record 
             	// definitions here and in tasks...
-                
+
             	// removed for the moment (ps)
             	/*
                 var record = st_activities.getById(task.data.identifier);
