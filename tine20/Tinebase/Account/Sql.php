@@ -499,11 +499,12 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
     public function deleteAccount($_accountId)
     {
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        $account = $this->getFullAccountById($accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
-        
+        $userRegistrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
         
         try {
             $this->_db->beginTransaction();
@@ -522,21 +523,30 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId),
             );
             $accountsTable->delete($where);
+
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $account->accountLoginName),
+            );
+            $userRegistrationsTable->delete($where);
             
             $this->_db->commit();
         } catch (Exception $e) {
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
             $this->_db->rollBack();
             throw($e);
         }
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' deleted account ' . $account->accountLoginName);
     }
     
-    /*
+    /**
      * delete accounts
      * 
      * @param array $_accountIds
-     * @todo    implement
      */
     public function deleteAccounts (array $_accountIds) {
-        
+        foreach ( $_accountIds as $accountId ) {
+            $this->deleteAccount($accountId);
+        }
     }
 }
