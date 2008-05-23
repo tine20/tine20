@@ -41,6 +41,11 @@ Ext.namespace('Tine.Tinebase');
 Tine.Tinebase.Registry = new Ext.util.MixedCollection(true);
 
 /**
+ * html encode all grid columns per defaut
+ */
+Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
+
+/**
  * Initialise Tine 2.0 ExtJs framework
  */
 Tine.Tinebase.initFramework = function() {
