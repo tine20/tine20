@@ -35,8 +35,10 @@ class Tinebase_Json_UserRegistration
 	{
 		$regDataArray = Zend_Json_Decoder::decode($regData);
 
-		// build username from firstname (first char) & lastname
-		$suggestedUsername = strtolower(substr($regDataArray['accountFirstName'],0,1).$regDataArray['accountLastName']);
+        // build username from firstname (first char) & lastname
+		$firstname = ( isset($regDataArray['accountFirstName']) ) ? substr($regDataArray['accountFirstName'], 0, 1) : '';
+        $lastname = ( isset($regDataArray['accountLastName']) ) ? $regDataArray['accountLastName'] : '';		
+		$suggestedUsername = $firstname.$lastname;
 		
 		return $suggestedUsername;
 	}

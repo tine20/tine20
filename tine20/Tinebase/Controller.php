@@ -132,7 +132,9 @@ class Tinebase_Controller
             
             //Zend_Registry::get('logger')->debug('is json request. json key from registry: ' . Zend_Registry::get('jsonKey'));
             //Zend_Registry::get('logger')->debug('is json request. json key from POST: ' . $_POST['jsonKey']);
-            if ($_POST['jsonKey'] != Zend_Registry::get('jsonKey') && $_POST['method'] !== 'Tinebase.login') {
+            if (    !($_POST['method'] === 'Tinebase.login' || preg_match('/Tinebase_UserRegistration/', $_POST['method'])) 
+                    && $_POST['jsonKey'] != Zend_Registry::get('jsonKey') ) { 
+                        
                 error_log('wrong JSON Key sent!!! expected: ' . Zend_Registry::get('jsonKey') . ' got: ' . $_POST['jsonKey'] . ' :: ' . $_REQUEST['method']);                
                 throw new Exception('wrong JSON Key sent!!!');
 
