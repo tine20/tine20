@@ -724,7 +724,7 @@ Tine.Tinebase.Common = function(){
      * @return {string} formated user display name
      */
     _usernameRenderer = function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store){
-        return _accountObject.accountDisplayName;
+        return Ext.util.Format.htmlEncode(_accountObject.accountDisplayName)
     };
 	
     /**
@@ -747,7 +747,7 @@ Tine.Tinebase.Common = function(){
             displayName = _record.data.account_name;
         }
         iconCls = type == 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
-        return '<div class="' + iconCls  + '">&#160;</div>' + displayName; 
+        return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName); 
     };
     
     /** 
