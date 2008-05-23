@@ -179,7 +179,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if($row === false) {
-            throw new Exception('account not found');
+            throw new Exception('account with id ' . $accountId . ' not found');
         }
 
         try {
@@ -536,7 +536,7 @@ class Tinebase_Account_Sql extends Tinebase_Account_Abstract
             throw($e);
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' deleted account ' . $account->accountLoginName);
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' deleted account ' . $account->accountLoginName);
     }
     
     /**
