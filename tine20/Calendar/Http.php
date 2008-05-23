@@ -34,7 +34,6 @@ class Calendar_Http extends Tinebase_Application_Http_Abstract
     public function getCssFilesToInclude()
     {
         return array(
-            'Crm/css/Eventscheduler.css',
             'Calendar/css/Calendar.css'
         );
     }
