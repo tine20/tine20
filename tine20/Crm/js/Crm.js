@@ -975,7 +975,7 @@ Tine.Crm.Main = function(){
         	shortContact: function(_data, _cell, _record, _rowIndex, _columnIndex, _store) {
         		if( Ext.isArray(_data) && _data.length > 0 ) {
         			var org = ( _data[0].org_name != null ) ? _data[0].org_name : '';
-                    return '<b>' + org + '</b><br />' + _data[0].n_fileas;
+                    return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(_data[0].n_fileas);
                 }
             },        	
             
@@ -998,12 +998,12 @@ Tine.Crm.Main = function(){
                         }
                         
                         contactDetails = contactDetails + '<table width="100%" height="100%" class="' + _style + '">'
-                                             + '<tr><td colspan="2">' + org_name + '</td></tr>'
-                                             + '<tr><td colspan="2"><b>' + n_fileas + '</b></td></tr>'
-                                             + '<tr><td colspan="2">' + adr_one_street + '</td></tr>'
-                                             + '<tr><td colspan="2">' + adr_one_postalcode + ' ' + adr_one_locality + '</td></tr>'
-                                             + '<tr><td width="50%">phone: </td><td width="50%">' + tel_work + '</td></tr>'
-                                             + '<tr><td width="50%">cellphone: </td><td width="50%">' + tel_cell + '</td></tr>'
+                                             + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(org_name) + '</td></tr>'
+                                             + '<tr><td colspan="2"><b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b></td></tr>'
+                                             + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_street) + '</td></tr>'
+                                             + '<tr><td colspan="2">' + Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + adr_one_locality + '</td></tr>'
+                                             + '<tr><td width="50%">phone: </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>'
+                                             + '<tr><td width="50%">cellphone: </td><td width="50%">' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>'
                                              + '</table> <br />';
                     }
                     
@@ -1265,8 +1265,8 @@ Tine.Crm.LeadEditDialog = function() {
             '<div class="activities-item-small">',
             '<div class="TasksMainGridStatus-{status_realname}" ext:qtip="{status_realname}"></div> {due}<br/>',
             '<i>{creator}</i><br />', 
-            '<b>{summary}</b><br />',
-            '{description}<br />',                     
+            '<b>{[this.encode(values.summary)]}</b><br />',
+            '{[this.encode(values.description)]}<br />',                     
             '</div></tpl>', {
                 setContactField: function(textValue){
                     alert(textValue);
@@ -1274,9 +1274,12 @@ Tine.Crm.LeadEditDialog = function() {
                         return '';
                     }
                     else {
-                        return textValue+'<br />';
+                        return Ext.util.Format.htmlEncode(textValue)+'<br />';
                     }
-                }                                                
+                },
+                encode: function(value) {
+                    return Ext.util.Format.htmlEncode(value);
+                }
         });    
     /*    
         var activities_limited = new Ext.Panel({
@@ -1366,11 +1369,11 @@ Tine.Crm.LeadEditDialog = function() {
                     
                     if (record) {
                         //return record.data.value;
-                    	return record.data.productsource;
+                    	return Ext.util.Format.htmlEncode(record.data.productsource);
                     }
                     else {
                         Ext.getCmp('leadDialog').doLayout();
-                        return data;
+                        return Ext.util.Format.htmlEncode(data);
                     }
                   }
                 } , { 
@@ -1493,23 +1496,23 @@ Tine.Crm.LeadEditDialog = function() {
                     function(val, meta, record) {
                         var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
                         
-                        var formated_return = '<b>' + record.data.n_fileas + '</b><br />' + org_name;
+                        var formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name);
                         
                         return formated_return;
                     }
                 },
                 {id:'contact_one', header: translation._("Address"), dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
                     var formated_return =  
-                        record.data.adr_one_street + '<br />' + 
-                        record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality;
+                        Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
+                        Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
                     
                         return formated_return;
                     }
                 },
                 {id:'tel_work', header: translation._("Contactdata"), dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
                     var formated_return = '<table>' + 
-                        '<tr><td>Phone: </td><td>' + record.data.tel_work + '</td></tr>' + 
-                        '<tr><td>Cellphone: </td><td>' + record.data.tel_cell + '</td></tr>' + 
+                        '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_work) + '</td></tr>' + 
+                        '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '</td></tr>' + 
                         '</table>';
                     
                         return formated_return;
@@ -2142,41 +2145,41 @@ Tine.Crm.LeadEditDialog.Elements = function() {
             {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
             {id:'n_fileas', header: 'Name / Address', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                 function(val, meta, record) {
-                    var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : '&nbsp;';
-                    var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
-                    var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : '&nbsp;';
-                    var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : '&nbsp;';
-                    var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : '&nbsp;';                                       
+                    var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : '';
+                    var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '';
+                    var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : '';
+                    var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : '';
+                    var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : '';                                      
                     
                     
-                    var formated_return = '<b>' + n_fileas + '</b><br />' + org_name + '<br  />' + 
-                        adr_one_street + '<br />' + 
-                        adr_one_postalcode + ' ' + adr_one_locality    ;                    
+                    var formated_return = '<b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name) + '<br  />' + 
+                        Ext.util.Format.htmlEncode(adr_one_street) + '<br />' + 
+                        Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(adr_one_locality)    ;                    
                     
                     return formated_return;
                 }
             },
             {id:'contact_one', header: "Phone", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
-                    var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? record.data.tel_work : '&nbsp;';
-                    var tel_fax            = Ext.isEmpty(record.data.tel_fax) === false ? record.data.tel_fax : '&nbsp;';
-                    var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? record.data.tel_cell : '&nbsp;'  ;                                      
+                    var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? record.data.tel_work : '';
+                    var tel_fax            = Ext.isEmpty(record.data.tel_fax) === false ? record.data.tel_fax : '';
+                    var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? record.data.tel_cell : ''  ;                                      
 
                 var formated_return = '<table>' + 
-                    '<tr><td>Phone: </td><td>' + tel_work + '</td></tr>' + 
-                    '<tr><td>Fax: </td><td>' + tel_fax + '</td></tr>' + 
-                    '<tr><td>Cellphone: </td><td>' + tel_cell + '</td></tr>' + 
+                    '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' + 
+                    '<tr><td>Fax: </td><td>' + Ext.util.Format.htmlEncode(tel_fax) + '</td></tr>' + 
+                    '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' + 
                     '</table>';
                 
                     return formated_return;
                 }
             },
             {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var email      = Ext.isEmpty(record.data.email) === false ? '<a href="mailto:'+record.data.email+'">'+record.data.email+'</a>' : '&nbsp;';
-                    var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '&nbsp;';                    
+                    var email      = Ext.isEmpty(record.data.email) === false ? '<a href="mailto:'+record.data.email+'">'+record.data.email+'</a>' : '';
+                    var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '';                   
 
                 var formated_return = '<table>' + 
-                    '<tr><td>Email: </td><td>' + email + '</td></tr>' + 
-                    '<tr><td>WWW: </td><td>' + contact_url + '</td></tr>' + 
+                    '<tr><td>Email: </td><td>' + Ext.util.Format.htmlEncode(email) + '</td></tr>' + 
+                    '<tr><td>WWW: </td><td>' + Ext.util.Format.htmlEncode(contact_url) + '</td></tr>' + 
                     '</table>';
                 
                     return formated_return;
@@ -2190,25 +2193,25 @@ Tine.Crm.LeadEditDialog.Elements = function() {
                     var formated_return = null;
                     
                     if(Ext.isEmpty(record.data.n_fileas) === false) {
-                        formated_return = '<b>' + record.data.n_fileas + '</b><br />';
+                        formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.n_fileas) + '</b><br />';
                     }
 
                     if(Ext.isEmpty(record.data.org_name) === false) {
                         if(formated_return === null) {
-                            formated_return = '<b>' + record.data.org_name + '</b><br />';
+                            formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.org_name) + '</b><br />';
                         } else {
-                            formated_return += record.data.org_name + '<br />';
+                            formated_return += Ext.util.Format.htmlEncode(record.data.org_name) + '<br />';
                         }
                     }
 
                     if(Ext.isEmpty(record.data.adr_one_street) === false) {
-                        formated_return += record.data.adr_one_street + '<br />';
+                        formated_return += Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />';
                     }
                     
                     if( (Ext.isEmpty(record.data.adr_one_postalcode) === false)  && (Ext.isEmpty(record.data.adr_one_locality) === false) ) {
-                        formated_return += record.data.adr_one_postalcode + ' ' + record.data.adr_one_locality + '<br />';
+                        formated_return += Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality) + '<br />';
                     } else if (Ext.isEmpty(record.data.adr_one_locality) === false) {
-                        formated_return += record.data.adr_one_locality + '<br />';
+                        formated_return += Ext.util.Format.htmlEncode(record.data.adr_one_locality) + '<br />';
                     }
                                         
                     return formated_return;
