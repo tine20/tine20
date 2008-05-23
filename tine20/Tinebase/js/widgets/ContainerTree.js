@@ -361,14 +361,14 @@ Tine.widgets.container.TreeLoader = Ext.extend(Ext.tree.TreeLoader, {
             attr = {
                 containerType: 'singleContainer',
                 container: attr,
-                text: attr.name,
+                text: Ext.util.Format.htmlEncode(attr.name),
                 cls: 'file',
                 leaf: true
             };
         } else if (attr.accountDisplayName) {
             attr = {
                 containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-                text: attr.accountDisplayName,
+                text: Ext.util.Format.htmlEncode(attr.accountDisplayName),
                 cls: 'folder',
                 leaf: false,
                 owner: attr
