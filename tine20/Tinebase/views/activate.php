@@ -20,6 +20,6 @@
 </head>
 <body>
 	<h1>Welcome to Tine 2.0</h1>
-	<p>You are now able to login <a href="http://<?= $this->loginUrl ?>">here</a> with your activated account (username <?php echo $this->username ?>).</p>
+	<p>You are now able to login <a href="http://<?php echo $this->loginUrl ?>">here</a> with your activated account (username <?php echo $this->username ?>).</p>
 </body>
 </html>
