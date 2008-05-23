@@ -90,11 +90,15 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             '<tpl for=".">',
                '<div class="x-widget-tag-tagitem" id="{id}">',
                     '<div class="x-widget-tag-tagitem-color" style="background-color: {color};">&#160;</div>', 
-                    '<div class="x-widget-tag-tagitem-text" ext:qtip="{name} <i>({type})</i><tpl if="description != null && description.length &gt; 1"><hr>{description}</tpl>" >', 
-                        '{name}',
+                    '<div class="x-widget-tag-tagitem-text" ext:qtip="{[this.encode(values.name)]} <i>({type})</i><tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >', 
+                        '&nbsp;{[this.encode(values.name)]}',
                     '</div>',
                 '</div>',
-            '</tpl>'
+            '</tpl>' ,{
+                encode: function(value) {
+                    return Ext.util.Format.htmlEncode(value);
+                }
+            }
         );
         
         this.dataView = new Ext.DataView({
