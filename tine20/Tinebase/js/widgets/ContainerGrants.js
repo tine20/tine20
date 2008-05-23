@@ -113,7 +113,7 @@ Tine.widgets.container.grantDialog = Ext.extend(Tine.widgets.AccountpickerAction
 	},
 	//private
     initComponent: function(){
-        this.title = 'Manage permissions for ' + this.folderName + ': "' + this.grantContainer.name + '"';
+        this.title = 'Manage permissions for ' + this.folderName + ': "' + Ext.util.Format.htmlEncode(this.grantContainer.name) + '"';
 		this.actions = {
 	        addAccount: new Ext.Action({
 	            text: 'add account',
