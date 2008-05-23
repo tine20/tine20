@@ -74,6 +74,10 @@
     height: 18px;
 }
 
+.ext-safari .x-small-editor .x-form-trigger {
+    height: 17px;
+}
+
 .x-tab-strip-top .x-tab-strip-active .x-tab-right span.x-tab-strip-text {
     padding-bottom: 3px;
 }
