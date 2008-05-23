@@ -36,8 +36,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                         fieldLabel: translation._('Saved in'),
                         width: 150,
                         name: 'owner',
-                        itemName: translation._('Addressbook'),
-                        appName: translation._('Addressbook')
+                        itemName: translation._('contacts'),
+                        appName: 'Addressbook'
                     })
                 }/*,{
                     hideLabels: true,
