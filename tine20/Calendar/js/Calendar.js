@@ -3,8 +3,8 @@ Ext.namespace('Tine.Calendar');
 Date.Const = {
     msMINUTE : 60*1000,
 	msHOUR   : 60*60*1000,
-	msDAY    : 24*60*60*1000,
-}
+	msDAY    : 24*60*60*1000
+};
 
 Tine.Calendar.today = function()
 {
@@ -47,10 +47,10 @@ Tine.Calendar.Request = function(){
 		    );
 			this.fireEvent('requestchange', this);
 		}
-    }
+    };
 	
 	Tine.Calendar.Request.superclass.constructor.call(this);
-}
+};
 Ext.extend(Tine.Calendar.Request, Ext.util.Observable);
 Tine.Calendar.Request = new Tine.Calendar.Request();
 
@@ -76,7 +76,7 @@ Tine.Calendar.getPanel = function() {
     });
     
     return calPanel;
-}
+};
 
 
 Tine.Calendar.MainScreen = function() {
@@ -107,13 +107,13 @@ Tine.Calendar.MainScreen = function() {
 	// internal states
 	var States = {
 		StoreLoaded: false,
-		GridSized:   false,
+		GridSized:   false
 	};
 	
 	// layout dimensions
 	var dims = {
         timeAxisWidth: 50,
-        timeSheetWidth: 0,
+        timeSheetWidth: 0
     };
 	
 	/**
@@ -145,6 +145,7 @@ Tine.Calendar.MainScreen = function() {
 			DisplayCalendarEvents(s);
 		});
 		
+		/*
 		with (Tine.Calendar.Request) {
 			store.load({
 				params: {
@@ -155,6 +156,7 @@ Tine.Calendar.MainScreen = function() {
 				}
 			});
 		}
+		*/
 	};
 	
 	/**
@@ -164,7 +166,7 @@ Tine.Calendar.MainScreen = function() {
 	{
 		States.GridSized = false;
         if (request.view != 'day') {
-			throw new Error(request.view + ' not implemeted yet!')
+			throw new Error(request.view + ' not implemeted yet!');
 		}
 		var nDays = request.viewMultiplier;
 		
@@ -192,7 +194,7 @@ Tine.Calendar.MainScreen = function() {
 					sortable: false,
 					fixed: true,
 					dataIndex: 'cdata'
-				})
+				});
 			}
 			return columns;
 		};
@@ -219,12 +221,13 @@ Tine.Calendar.MainScreen = function() {
 			var cm = TimeGrid.getColumnModel();
 			var cm2 = WholeDayGrid.getColumnModel();
 			var nc = cm.getColumnCount();
-			var cw = dims.timeSheetWidth = 
-			    (
-			        cmp.getSize().width - 
-				    dims.timeAxisWidth -
-				    TimeGrid.getView().scrollOffset
-				) / (nc - 1);
+			dims.timeSheetWidth = 
+                (
+                    cmp.getSize().width - 
+                    dims.timeAxisWidth -
+                    TimeGrid.getView().scrollOffset
+                ) / (nc - 1);
+			var cw = dims.timeSheetWidth;
 				
 			for (var i = 1; i < nc; i++) {
 				cm.setColumnWidth(i, cw);
@@ -469,7 +472,7 @@ Tine.Calendar.MainScreen = function() {
 			//return TimeGrid;
 			return dayViewLayout;
 		}
-	}
+	};
 }();
 
 /**
@@ -481,7 +484,7 @@ Tine.Calendar.ToolBar = function() {
 	// does't work for scopeing ishues!
 	var changeView = function(requestedView) {
 		Tine.Calendar.Request.changeView(requestedView);
-	}
+	};
 	
 	// we generate a new toolbar on each request as tinebase throws our
 	// toolbar away when changing apps
@@ -531,9 +534,9 @@ Tine.Calendar.ToolBar = function() {
                 handler: changeView,
                 enableToggle: true,
                 toggleGroup: 'Calendar_Toolbar_tgViews'
-			}],
+			}]
 		});
-	}
+	};
 	
 	return {
 		getToolBar: _generateToolBar
@@ -576,12 +579,12 @@ Ext.ux.ButtonLockedToggle = Ext.extend(Ext.Button,{
             };
         };
     }
-})
+});
 
 Ext.ux.tbButtonLockedToggle = Ext.extend(Ext.Toolbar.Button, Ext.ux.ButtonLockedToggle);
 
 Ext.ComponentMgr.registerType('btnlockedtoggle', Ext.ux.ButtonLockedToggle);
-Ext.ComponentMgr.registerType('tbbtnlockedtoggle', Ext.ux.tbButtonLockedToggle)
+Ext.ComponentMgr.registerType('tbbtnlockedtoggle', Ext.ux.tbButtonLockedToggle);
 
 
 
