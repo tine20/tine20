@@ -93,7 +93,7 @@ Tine.Login = {
                 },
                 success:function(form, action, o) {
                     Ext.MessageBox.wait('Login successful. Loading Tine 2.0...', 'Please wait!');
-                    window.location.reload();
+                    window.location = window.location;
                 },
                 failure:function(form, action) {
                     Ext.MessageBox.show({

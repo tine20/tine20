@@ -592,7 +592,7 @@ Tine.Tinebase.MainScreen = function() {
 					callback : function(options, bSuccess, response) {
 						// remove the event handler
 						// the reload() trigers the unload event
-						window.location.reload();
+						window.location = window.location;
 					}
 				});
 			}
