@@ -230,10 +230,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     onResize : function(w,h){
         Tine.widgets.tags.TagPanel.superclass.onResize.call(this, w, h);
         // maximize search field and let space for list button
-        this.searchField.setWidth(w-37);
-    },
-    onKeyDown: function(e){
-        console.log(e);
+        if (this.searchField.rendered && w) {
+            this.searchField.setWidth(w-37);
+        }
     },
     /**
      * @private
