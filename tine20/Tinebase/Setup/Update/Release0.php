@@ -646,10 +646,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         <length>128</length>
                         <notnull>true</notnull>
                     </field>
-                    <field>
-                        <name>registered</name>
-                        <type>datetime</type>
-                    </field>
                     <index>
                         <name>id</name>
                         <primary>true</primary>
