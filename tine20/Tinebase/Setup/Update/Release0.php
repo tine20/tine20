@@ -624,4 +624,53 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '0.7');
     }    
+    
+    /**
+     * add config table and update to version 0.8 of tinebase
+     */    
+    function update_7()
+    {
+        $tableDefinition = ('
+        <table>
+                <name>registration_invitations</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>integer</type>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>email</name>
+                        <type>text</type>
+                        <length>128</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>registered</name>
+                        <type>datetime</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>email</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>email</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>
+        ');
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        $this->setApplicationVersion('Tinebase', '0.8');
+    }
 }
