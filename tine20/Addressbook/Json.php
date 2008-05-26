@@ -107,7 +107,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  int    $sort
      * @param  string $dir
      * @param  int    $limit
-     * @praam  int    $start
+     * @param  int    $start
      * @param  string $tagFilter
      * @return array
      */
@@ -191,7 +191,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  int    $sort
      * @param  string $dir
      * @param  int    $limit
-     * @praam  int    $start
+     * @param  int    $start
      * @param  string $tagFilter
      * @return array
      */
@@ -232,7 +232,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  int    $sort
      * @param  string $dir
      * @param  int    $limit
-     * @praam  int    $start
+     * @param  int    $start
      * @param  string $tagFilter
      * @return array
      */
@@ -275,7 +275,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  int    $sort
      * @param  string $dir
      * @param  int    $limit
-     * @praam  int    $start
+     * @param  int    $start
      * @param  string $tagFilter
      * @return array
      */
@@ -318,7 +318,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
      * @param  int    $sort
      * @param  string $dir
      * @param  int    $limit
-     * @praam  int    $start
+     * @param  int    $start
      * @param  string $tagFilter
      * @return array
      */
