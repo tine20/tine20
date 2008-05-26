@@ -1,5 +1,5 @@
 <!-- ###PFEIL### begin -->
-<img src="./typo3conf/ext/user_kontakt2tine/pi1/img/pfeil.gif" alt="Pfeil" class="pfeil" />
+<img src="fileadmin/templates/images/pfeil.gif" alt="Pfeil" class="pfeil" width="6" height="10"/>
 <!-- ###PFEIL### end -->
 
 <!-- ###RESULTTEMPLATE### begin -->
@@ -69,10 +69,11 @@
 	<input type="hidden" name="BILDCODE" value="###BILDCODE###" />
 	<input type="hidden" name="L" value="###LANGUAGE###" />
 	
-<div class="content">###TITLE### ###TEXT###</div>
+<div class="content">###TITLE### ###TEXT###<br/><br/></div>
 	<table cellpadding="0" cellspacing="0">
 		<tr>
 			<td class="errors">
+				###ERRAUSWAHL###
 				###ERRVORNAME###
 				###ERRNACHNAME###
 				###ERRTELEFON###
@@ -85,7 +86,7 @@
 	</table>
 	<table cellpadding="0" cellspacing="0" class="formular">
 		<tr>
-			<td class="td1">###LABELAUSWAHL###*</td>
+			<td class="td1">###AUSWAHLPFEIL######LABELAUSWAHL###*</td>
 			<td>
 				<select name="AUSWAHL">
 					<option value="">###SELECT###</option>
@@ -98,11 +99,11 @@
 			<td><input type="text" name="FIRMA" value="###FIRMA###" /></td>
 		</tr>
 		<tr>
-			<td>###LABELVORNAME###:*</td>
+			<td>###VORNAMEPFEIL######LABELVORNAME###:*</td>
 			<td><input type="text" name="VORNAME" value="###VORNAME###" /></td>
 		</tr>
 		<tr>	
-			<td>###LABELNACHNAME###:*</td>
+			<td>###NACHNAMEPFEIL######LABELNACHNAME###:*</td>
 			<td><input type="text" name="NACHNAME" value="###NACHNAME###" /></td>
 		</tr>	
 		<tr>
@@ -110,7 +111,7 @@
 			<td><input type="text" name="TELEFON" value="###TELEFON###" /></td>
 		</tr>
 		<tr>
-			<td>###LABELEMAIL###:*</td>
+			<td>###EMAILPFEIL######LABELEMAIL###:*</td>
 			<td><input type="text" name="EMAIL" value="###EMAIL###" /></td>
 		</tr>		
 		<tr>
@@ -134,11 +135,11 @@
 			</td>
 		</tr>		
 		<tr>
-			<td valign="top">###LABELNACHRICHT###:*</td>
-			<td><textarea name="NACHRICHT" cols="5" rows="5">###NACHRICHT###</textarea></td>
+			<td valign="top">###AUSWAHLPFEIL######LABELNACHRICHT###:*</td>
+			<td><textarea name="NACHRICHT" cols="65" rows="5">###NACHRICHT###</textarea></td>
 		</tr>
 		<tr>
-			<td>###LABELCODEEINGABE###:*</td>
+			<td>###CODEEINGABEPFEIL######LABELCODEEINGABE###:*</td>
 			<td><input type="text" name="CODEEINGABE" id="small" /><img src="###BILDCODEURL###" alt="Code" id="code" /></td>		
 		</tr>					
 		<tr>	
@@ -146,7 +147,7 @@
 			<td><input type="submit" name="SUBMIT" value="###SENDENBUTTON###" class="button_A" /></td>
 		</tr>	
 		<tr>
-			<td colspan="2" class="abstand">###HINWEISPFLICHTFELDER###</td>
+			<td colspan="2" class="abstand"><br/>###HINWEISPFLICHTFELDER###</td>
 		</tr>		
 	</table>
 </form>

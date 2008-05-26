@@ -33,6 +33,8 @@ if (!defined ('TYPO3_MODE'))   die ('Access denied.');
 
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/config_inc.php' );
 
+require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/classes/class.tx_DynamicFlexFormFieldsK2T.php' );
+
 if (TYPO3_MODE=="BE")  $TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["user_kontakt2tine_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.user_kontakt2tine_pi1_wizicon.php';
 
 # Vor jeder Änderung eins $TCA Bereiches im Front End müssen wir es sicherheitshalber laden.
@@ -46,7 +48,7 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY]='pi_flexform';
 
 
 # Wir definieren die Datei, die unser Flexform Schema enthält
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '
 <T3DataStructure>
   <ROOT>
     <type>array</type>
@@ -117,6 +119,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  <config>
 				<type>input</type>
 				<size>50</size>
+				<default>http://demo.tine20.org</default>
 			  </config>
 		  </TCEforms>
         </tinehost>	
@@ -127,6 +130,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  <config>
 				<type>input</type>
 				<size>50</size>
+				<default>tine20demo</default>
 			  </config>
 		  </TCEforms>
         </tinehostlogin>		
@@ -137,10 +141,27 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  <config>
 				<type>input</type>
 				<size>50</size>
+				<default>demo</default>
 			  </config>
 		  </TCEforms>
         </tinehostpassword>	
-			
+		<addressbook>
+			<TCEforms>
+				<label>Addressbook</label>
+					<config>
+						<type>select</type>
+						<size>5</size>
+						<maxitems>99</maxitems>
+						<items>
+							<n0>
+								<n0></n0>
+								<n1></n1>
+							</n0>
+						</items>
+						<itemsProcFunc><![CDATA[tx_DynamicFlexFormFieldsK2T->getContainers]]></itemsProcFunc>
+					</config>
+			</TCEforms>
+		</addressbook>	
 		<danke>
 			<TCEforms>
 				<label>Danke-Seite</label>

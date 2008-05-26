@@ -11,12 +11,46 @@
 
 class Addressbook_Service extends TineClient_Service_Abstract
 {
+
+	public function getTags($_accountId) {
+		$client = $this->getConnection();
+        
+        $client->setParameterPost(array(
+            'method'    => 'Tinebase.getTags',
+			'jsonKey'	=> $client->jsonKey,
+            'context' 	=> 'Addressbook',
+			'owner'		=> $_accountId,
+			'findGlobalTags' => '',
+        ));        
+        $response = $client->request('POST');
+        
+        if($this->debugEnabled === true) {
+            var_dump( $client->getLastRequest());
+            var_dump( $response );
+        }
+
+        if(!$response->isSuccessful()) {
+            throw new Exception('getting contact failed');
+        }
+                
+        $responseData = Zend_Json::decode($response->getBody());
+        
+        if($this->debugEnabled === true) {
+            var_dump($responseData);
+        }
+        
+       
+        return $responseData;
+	
+	}
+
     public function getContact($_contactId)
     {
         $client = $this->getConnection();
         
         $client->setParameterPost(array(
             'method'    => 'Addressbook.getContact',
+			'jsonKey'	=> $client->jsonKey,
             'contactId' => $_contactId
         ));        
         $response = $client->request('POST');
@@ -46,21 +80,22 @@ class Addressbook_Service extends TineClient_Service_Abstract
         if(!$_contact->isValid()) {
             throw new Exception('contact is not valid');
         }
-        
+		
         $client = $this->getConnection();
-        
+		
         $client->setParameterPost(array(
-            'method'   => 'Addressbook.saveContact',
-            'contactData'  => Zend_Json::encode($_contact->toArray())
+	            'method'   => 'Addressbook.saveContact',
+				'jsonKey'	=> $client->jsonKey,
+                'contactData'  => Zend_Json::encode($_contact->toArray())
         ));        
         $response = $client->request('POST');
   		    
-        if($this->debugEnabled === true) {
+      if($this->debugEnabled === true) {
 			echo "<hr>";
             var_dump( $client->getLastRequest());
             var_dump( $response );
         	echo "<hr>";
-        }
+       }
         if(!$response->isSuccessful()) {
             throw new Exception('adding contact failed');
         }

@@ -110,13 +110,14 @@ class user_kontakt2tine extends tslib_pibase {
 		$danke 	= $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'danke');	
 		$text 	= $this->formatStr($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'text'));	
 		
-		if(strlen(t3lib_div::GPvar('L')) > 0)	
+		if(t3lib_div::GPvar('L') == 0)	
 		{
-			$sprache = '&L='.t3lib_div::GPvar('L');
+			//$sprache = '&L='.t3lib_div::GPvar('L');
+			$sprache = 'DE';
 		}
 		else	
 		{
-			$sprache = 'DE';
+			$sprache = 'EN';
 		}
 		
 		$danke	= 'index.php?id='.$danke;	
@@ -208,7 +209,6 @@ class user_kontakt2tine extends tslib_pibase {
 			else {
 				
 				// begin contact2tine: 
-				//	var_dump($_POST);
 				// first: add own classes to include path
 				
 				$path = array(
@@ -247,36 +247,75 @@ class user_kontakt2tine extends tslib_pibase {
 					var_dump($e);
 					exit;
 				}
+				
+				
+				
+				try {
+					$addressbook = new Addressbook_Service();
+				}
+				catch (Exception $e) 
+				{
+					echo "kein service";
+					var_dump($e);
+					exit;
+				}	
+				
+				//print_r( $addressbook->getTags($client->getAccountId()));
+				//exit;
+				
 				try 
 				{
+				
+				$pattern =  "/\w*\[(\d*)\]/";
+				$containerId = array();
+				preg_match_all($pattern, $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'addressbook'), $containerId );
+				
+				
 					// write addressbook entry
 					$contactData = array(
-										'owner'					=> $client->getAccountId(),
-										'company' 				=> $fFieldValues['FIRMA'], 
-										'n_family' 				=> $fFieldValues['NACHNAME'],
-										'n_given' 				=> $fFieldValues['VORNAME'],
-										'adr_one_locality'		=> $fFieldValues['ORT'],
-										'adr_one_street'		=> $fFieldValues['STRASSE'],
-										'adr_one_postalcode'	=> $fFieldValues['PLZ'],
-										'tel_work'				=> $fFieldValues['TELEFON'],
-										'email'					=> $fFieldValues['EMAIL'],
-										'adr_one_countryname'	=> $fFieldValues['COUNTRY'],
-										'note'					=> $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'
+										
+										'created_by'					=> $client->getAccountId(),
+										'owner'					=> $containerId[1][0],
+										'company' 				=> utf8_encode($fFieldValues['FIRMA']), 
+										'n_family' 				=> utf8_encode($fFieldValues['NACHNAME']),
+										'n_given' 				=> utf8_encode($fFieldValues['VORNAME']),
+										'adr_one_locality'		=> utf8_encode($fFieldValues['ORT']),
+										'adr_one_street'		=> utf8_encode($fFieldValues['STRASSE']),
+										'adr_one_postalcode'	=> utf8_encode($fFieldValues['PLZ']),
+										'tel_work'				=> utf8_encode($fFieldValues['TELEFON']),
+										'email'					=> utf8_encode($fFieldValues['EMAIL']),
+										'adr_one_countryname'	=> utf8_encode($fFieldValues['COUNTRY']),
+										'note'					=> utf8_encode($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'auswahl_'
 																	. $fFieldValues['AUSWAHL'] ) 
 																	. "\n" 
-																	. $fFieldValues['NACHRICHT']  
+																	. $fFieldValues['NACHRICHT']),
+										'n_fileas'				=> utf8_encode($fFieldValues['VORNAME'] . ' ' . $fFieldValues['NACHNAME']) ,
+										'n_fn'					=> utf8_encode($fFieldValues['VORNAME'] . ' ' . $fFieldValues['NACHNAME'] ) 
 										);
 
 					$contact = new Addressbook_Model_Contact($contactData);
-					$addressbook = new Addressbook_Service();
+				}
+				catch (Exception $e) 
+				{
+					echo "kein model";
+				var_dump($e);
+					exit;
+				}
+				//print_r($contactData);
+				
+
+				try{
 					$updatedContact = $addressbook->addContact($contact);
 	
 				}
 				catch (Exception $e) 
 				{
-					var_dump($e);
+					echo "kein add";
+					var_dump($updatedContact);
 					exit;
 				}
+				
+				
 				
 				try
 				{
@@ -368,7 +407,7 @@ class user_kontakt2tine extends tslib_pibase {
 			
 
 		//### Auswahl ###
-		if(strlen($fcont['AUSWAHL']) == 0) {
+		if($fcont['AUSWAHL'] == '') {
 			$errors['AUSWAHL'] = $this->pi_getLL('errauswahl',"");	
 		}
 		else { $errors['AUSWAHL'] = ""; }		

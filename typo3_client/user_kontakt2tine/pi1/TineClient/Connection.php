@@ -12,6 +12,7 @@
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/Client.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Json.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Http/CookieJar.php');
+
 class TineClient_Connection extends Zend_Http_Client
 {
     /**
@@ -21,6 +22,7 @@ class TineClient_Connection extends Zend_Http_Client
      */
     protected $debugEnabled = false;
     protected $_accountId = NULL;
+	public $jsonKey;
     
     /**
      * @see Zend_Http_Client
@@ -58,8 +60,9 @@ class TineClient_Connection extends Zend_Http_Client
         } 
         
         $responseData = Zend_Json::decode($response->getBody());
+		//print_r($responseData );
         $this->_setAccountId($responseData['account']['accountId']);
-        
+        $this->jsonKey = $responseData['jsonKey'];
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
@@ -105,4 +108,36 @@ class TineClient_Connection extends Zend_Http_Client
         return true;
     }
     
+	public function getContainer() {
+	    $this->setParameterPost(array(
+            'method'   => 'Tinebase_Container.getContainer',
+			'application' => 'Addressbook',
+			'containerType' => 'personal',
+			'owner'		=> $this->_accountId,
+			
+			'jsonKey'	=> $this->jsonKey
+        ));
+        
+        $response = $this->request('POST');
+        
+        if($this->debugEnabled === true) {
+            var_dump( $this->getLastRequest());
+            var_dump( $response );
+        }
+
+        if(!$response->isSuccessful()) {
+            throw new Exception('getContainer failed');
+        }
+
+        $responseData = Zend_Json::decode($response->getBody());
+        
+       if($this->debugEnabled === true) {
+            var_dump($responseData);
+       }
+		return $responseData;
+		return 34;
+		return $responseData[0]['id'];
+	
+	}
+	
 }

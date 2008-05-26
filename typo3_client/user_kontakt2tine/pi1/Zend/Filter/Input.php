@@ -23,7 +23,7 @@
 /**
  * @see Zend_Loader
  */
-require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
+//require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader.php');
 require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Loader/PluginLoader.php');
 /**
  * @see Zend_Filter

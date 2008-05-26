@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 /**
  * Language labels for plugin "user_kontakt2tine"
  *
@@ -34,7 +34,7 @@ $LOCAL_LANG = Array (
 		'errvorname' => 'Bitte geben Sie Ihren Vornamen an.',
 		'errnachname' => 'Bitte geben Sie Ihren Nachnamen an.',
 		'errtelefon' => '',
-		'errtelefon' => 'Bitte wählen Sie den Betreff Ihrer Anfrage aus.',
+		'errauswahl' => 'Bitte w&auml;hlen Sie den Betreff Ihrer Anfrage aus.',
 		'errfax' => '',
 		'errmobil' => '',
 		'erremail' => 'Bitte Sie eine g&uuml;ltige E-Mail-Adresse an.',
@@ -70,13 +70,13 @@ $LOCAL_LANG = Array (
 		'lastname' => 'Lastname',
 		'telephone' => 'Telephone',
 		'fax' => 'fax',
-		'mobile' => 'mobile phone',
+		'mobile' => 'Mobile phone',
 		'e-mail' => 'E-mail',
-		'address' => 'address',
-		'country' => 'country',
-		'zip' => 'zip',
-		'city' => 'city',
-		'code' => 'code',
+		'address' => 'Address',
+		'country' => 'Country',
+		'zip' => 'Zip',
+		'city' => 'City',
+		'code' => 'Code',
 		'codeinput' =>'Confirmation code',
 		'mobil' => 'Mobilphone',
 		'anrede' => 'Salutation',

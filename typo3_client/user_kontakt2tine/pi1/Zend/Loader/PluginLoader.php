@@ -298,8 +298,7 @@ class Zend_Loader_PluginLoader implements Zend_Loader_PluginLoader_Interface
 
         $registry = array_reverse($registry, true);
         foreach ($registry as $prefix => $paths) {
-			$paths[] =  PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/';
-            $paths = array_reverse($paths, true);
+			 $paths = array_reverse($paths, true);
 			
             foreach ($paths as $path) {
 

@@ -223,7 +223,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     );
                 }
 				
-				require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Tinebase/Record/Exception/Validation.php');
+				require_once( PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Tinebase/Record/Exception/Validation.php');
                 $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
                     echo $this->_validationErrors . $e;
                 throw $e;
