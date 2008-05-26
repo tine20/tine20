@@ -8,11 +8,6 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
     var translation = new Locale.Gettext();
     translation.textdomain('Addressbook');
     
-    var uploadImage = function(bb) {
-        //var inp = bb.detachInputFile();
-        //console.log(bb);
-    };
-    
     var savePath = {
         layout: 'column',
         autoHeight: true,
@@ -418,6 +413,7 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
     };
     
     var tabPanel = new Ext.TabPanel({
+        id: 'adbEditDialogTabPanel',
         xtype:'tabpanel',
         defaults: {
             frame: true
@@ -452,4 +448,4 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         tabPanel,
         savePath
     ];
-}
+};
