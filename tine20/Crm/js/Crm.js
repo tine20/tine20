@@ -1585,7 +1585,9 @@ Tine.Crm.LeadEditDialog = function() {
                 		//console.log (task);
                 		// @todo make that work for adding new task (only working the first time)
                 		
-                		var index = st_activities.getCount();                		
+                		var index = st_activities.getCount();
+                        // replace ext object id with our task id
+                        task.id = task.data.id;                		
                 		st_activities.insert(index, [task]);                		
                 		
                 	}, this);
