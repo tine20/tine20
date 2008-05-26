@@ -1574,13 +1574,17 @@ Tine.Crm.LeadEditDialog = function() {
         var  _add_task = new Ext.Action({
                 text: translation._('Add task'),
                 handler: function(){
-                	console.log(_leadData.data);
+                	//console.log(_leadData.data);
                 	popupWindow = new Tine.Tasks.EditPopup({
                         relatedApp: 'crm',
                         relatedId: _leadData.data.id
                 	});
                 	
                 	popupWindow.on('update', function(task) {
+                		
+                		//console.log (task);
+                		// @todo make that work for adding new task (only working the first time)
+                		
                 		var index = st_activities.getCount();                		
                 		st_activities.insert(index, [task]);                		
                 		
@@ -1629,24 +1633,19 @@ Tine.Crm.LeadEditDialog = function() {
 
         gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
             var record = _grid.getStore().getAt(_rowIndex);
-            //console.log ( record );
             popupWindow = new Tine.Tasks.EditPopup({
             	id: record.data.id
             });
-            
+                        
             popupWindow.on('update', function(task) {
-                // this is major bullshit!
-            	// it only works one time. The problem begind begins with the different record 
-            	// definitions here and in tasks...
-
-            	// removed for the moment (ps)
-            	/*
-                var record = st_activities.getById(task.data.identifier);
+                var record = st_activities.getById(task.data.id);
                 var index = st_activities.indexOf(record);
+                // replace ext object id with our task id
+                task.id = task.data.id;
                 st_activities.remove(record);
                 st_activities.insert(index, [task]);
                 st_activities.commitChanges();
-                */
+                
             }, this);
         });
         
@@ -2477,7 +2476,7 @@ Tine.Crm.LeadEditDialog.Stores = function() {
         
         getActivities: function (_tasks){     
             var store = new Ext.data.JsonStore({
-                id: 'identifier',
+                id: 'id',
                 fields: Tine.Tasks.Task
                 
                 // replaced by task record model from tasks
