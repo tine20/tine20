@@ -136,18 +136,27 @@ class Tinebase_Container
      *
      * @param Tinebase_Model_Container $_container the new container
      * @param Tinebase_Record_RecordSet $_grants the grants for the new folder 
+     * @param bool  $_ignoreAcl
+     * @param integer $_accountId
      * @return Tinebase_Model_Container the newly created container
      */
-    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
+    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE, $_accountId = NULL)
     {
         if(!$_container->isValid()) {
             throw new Exception('invalid container object supplied');
+        }
+        
+        if ( $_accountId !== NULL ) {
+            $accountId = $_accountId;
+        } else {
+            $accountId = Zend_Registry::get('currentAccount')->getId();
         }
         
         if($_ignoreAcl !== TRUE) {
             switch($_container->type) {
                 case self::TYPE_PERSONAL:
                     // is the user allowed to create personal container?
+                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'create container: ' . print_r($_container->toArray(), true));
                     break;
                     
                 case self::TYPE_SHARED:
@@ -195,7 +204,7 @@ class Tinebase_Container
                 // add read grants to any other user
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
-                        'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                        'accountId'     => $accountId,
                         'accountType'   => 'user',
                         'accountName'   => 'not used',
                         'readGrant'     => true,
@@ -215,7 +224,7 @@ class Tinebase_Container
                 // add all grants to creator only
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
                     array(
-                        'accountId'     => Zend_Registry::get('currentAccount')->getId(),
+                        'accountId'     => $accountId,
                         'accountType'   => 'user',
                         'accountName'   => 'not used',
                         'readGrant'     => true,
