@@ -78,7 +78,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         uploader.upload();
         uploader.on('uploadcomplete', function(uploader, record){
             //var method = Ext.util.Format.htmlEncode('');
-            this.imageSrc = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + this.height + '&ratiomode=0';
+            this.imageSrc = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + (this.height-2) + '&ratiomode=0';
             this.setValue(this.imageSrc);
             
             this.updateImage();
@@ -114,11 +114,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.ctxMenu = new Ext.menu.Menu({
             items: [
             upload,
-            /*{
+            {
                 text: 'Edit Image',
                 iconCls: 'action_cropImage',
                 scope: this,
-                //disabled: true
+                disabled: true,//this.imageSrc == this.defaultImage,
                 handler: function() {
                     var cropper = new Ext.ux.form.ImageCropper({
                         image: this.getValue()
@@ -126,7 +126,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                     cropper.show();
                 }
             
-            },*/{
+            },{
                 text: 'Delete Image',
                 iconCls: 'action_delete',
                 disabled: this.imageSrc == this.defaultImage,
@@ -144,7 +144,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             this.imgTpl = new Ext.XTemplate('<img ',
                 'src="{imageSrc}" ',
                 'width="{width}" ',
-                'height="{height}" ',
+                'height="{height -2}" ',
                 'style="border: 1px solid #B5B8C8;" ',
                 ' >'
             ).compile();
