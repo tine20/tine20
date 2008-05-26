@@ -223,8 +223,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     );
                 }
                 $e = new Tinebase_Record_Exception_Validation('some fields have invalid content');
-                Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" .
-                    print_r($this->_validationErrors,true). $e);
+                    print_r($this->_validationErrors,true);
+				
                 throw $e;
             }
         }

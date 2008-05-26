@@ -17,7 +17,7 @@
 				
 				<label index="what_to_display">Anzeige von</label> 
 				<label index="tx_user_kontakt2tine">Kontaktformular an Tine 2.0</label> 
-				
+				<label index="Addressbook">Ablageort</label> 
 				<label index="n_family">Nachname</label> 
 				<label index="n_given">Vorname</label> 	
 				<label index="org_name">Firma</label> 
@@ -28,6 +28,7 @@
 				<label index="email">E-Mail</label> 	
 				<label index="note">Notiz</label> 
 				<label index="adr_one_countryname">Land</label>
+				<label index="jpegphoto">Foto</label>
 								
 			</languageKey>
 				<languageKey index="en" type="array">

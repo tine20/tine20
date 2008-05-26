@@ -24,7 +24,10 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Validate/Abstract.php');
+//require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Validate/Abstract.php');
+
+//require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Digits.php');
+//require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Interface.php');
 
 
 /**

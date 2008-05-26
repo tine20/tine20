@@ -125,8 +125,9 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
             $messageKey = current($keys);
         }
         if (!isset($this->_messageTemplates[$messageKey])) {
-            require_once 'Zend/Validate/Exception.php';
-            throw new Zend_Validate_Exception("No message template exists for key '$messageKey'");
+
+        require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Validate/Exception.php');
+        throw new Zend_Validate_Exception("No message template exists for key '$messageKey'");
         }
         $this->_messageTemplates[$messageKey] = $messageString;
         return $this;
@@ -166,7 +167,8 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
         /**
          * @see Zend_Validate_Exception
          */
-        require_once 'Zend/Validate/Exception.php';
+        
+        require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Validate/Exception.php');
         throw new Zend_Validate_Exception("No property exists by the name '$property'");
     }
 
@@ -331,7 +333,7 @@ abstract class Zend_Validate_Abstract implements Zend_Validate_Interface
     public static function getDefaultTranslator()
     {
         if (null === self::$_defaultTranslator) {
-            require_once PATH_site . 'typo3conf/ext/user_kontakt2tine/pi1/Zend/Registry.php';
+            require_once PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Registry.php';
             if (Zend_Registry::isRegistered('Zend_Translate')) {
                 $translator = Zend_Registry::get('Zend_Translate');
                 if ($translator instanceof Zend_Translate_Adapter) {

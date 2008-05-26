@@ -14,13 +14,17 @@ class Addressbook_Service extends TineClient_Service_Abstract
 	public function getAllContacts()
 	{
 		$client = $this->getConnection();
+		
 		$client->setParameterPost(array(
 			'method'    => 'Addressbook.getAllContacts',
-			'filter' => '', 
-			'sort' => 'id', 
-			'dir' => 'ASC', 
-			'limit' => '',
-			'start' => ''
+			'jsonKey'	=> $client->jsonKey,
+			'query'		=> '',
+			'filter' 	=> '', 
+			'sort' 		=> 'id', 
+			'dir' 		=> 'ASC', 
+			'limit' 	=> '',
+			'start' 	=> '',
+			'tagFilter' => ''
 		 ));  
 		 
 		$response = $client->request('POST');
@@ -32,7 +36,7 @@ class Addressbook_Service extends TineClient_Service_Abstract
         }
 
         if(!$response->isSuccessful()) {
-            throw new Exception('getting contact failed');
+         throw new Exception('getting contact failed');
         }
                 
         $responseData = Zend_Json::decode($response->getBody());
@@ -53,7 +57,8 @@ class Addressbook_Service extends TineClient_Service_Abstract
         $client = $this->getConnection();
         $client->setParameterPost(array(
             'method'    => 'Addressbook.getContact',
-            'contactId' => $_contactId
+            'jsonKey'	=> $client->jsonKey,
+			'contactId' => $_contactId
         ));  
 		
         $response = $client->request('POST');
@@ -63,16 +68,38 @@ class Addressbook_Service extends TineClient_Service_Abstract
             var_dump( $response );
         }
         if(!$response->isSuccessful()) {
-            throw new Exception('getting contact failed');
+          //  throw new Exception('getting contact failed');
         }
         $responseData = Zend_Json::decode($response->getBody());
           
-        $responseData = Zend_Json::decode($response->getBody());
         
         $contact = $responseData['contact'];
         
         return $contact;
     }
+	
+	public function getImage($_id)
+	{
+		$client = $this->getConnection();
+		$client->setHeaders('X-Requested-With', '');
+		$client->setParameterGet(array(
+			'jsonKey'	=> $client->jsonKey,
+			'application'	=> 'Addressbook',
+			'height'		=>	'90',
+			'id'			=>	$_id,
+			'location'		=>  '',	
+			'method'		=>	'Tinebase.getImage',
+			'ratiomode'		=>	0,
+			'width'			=> 90 
+		 ));  
+		 
+		$response = $client->request('GET');
+//print_r($response );		
+		$responseData = Zend_Json::decode($response);
+
+	$client->setHeaders('X-Requested-With', 'XMLHttpRequest');
+		return($response->getBody());
+	} 
     
     public function addContact(Addressbook_Model_Contact $_contact)
     {
@@ -84,6 +111,7 @@ class Addressbook_Service extends TineClient_Service_Abstract
         
         $client->setParameterPost(array(
             'method'   => 'Addressbook.saveContact',
+			'jsonKey'	=> $client->jsonKey,
             'contactData'  => Zend_Json::encode($_contact->toArray())
         ));        
         $response = $client->request('POST');

@@ -94,7 +94,7 @@ class Zend_Uri_Http extends Zend_Uri
 
         // Validate the URI
         if (!$this->valid()) {
-	    require_once 'Zend/Uri/Exception.php';
+	    require_once PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Uri/Exception.php';
             throw new Zend_Uri_Exception('Invalid URI supplied');
         }
     }

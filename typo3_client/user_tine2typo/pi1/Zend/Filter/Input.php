@@ -23,7 +23,7 @@
 /**
  * @see Zend_Loader
  */
-require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Loader.php');
+//require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Loader.php');
 
 /**
  * @see Zend_Filter
@@ -33,7 +33,7 @@ require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter.php');
 /**
  * @see Zend_Validate
  */
-require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Validate.php');
+//require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Validate.php');
 
 /**
  * @category   Zend
@@ -229,7 +229,7 @@ class Zend_Filter_Input
                 $this->_loaders[$type] = $loader;
                 return $this;
             default:
-                require_once 'Zend/Filter/Exception.php';
+                require_once PATH_site . 'typo3conf/ext/user_tine2typo/Zend/Filter/Exception.php';
                 throw new Zend_Filter_Exception(sprintf('Invalid type "%s" provided to setPluginLoader()', $type));
         }
 
@@ -264,11 +264,11 @@ class Zend_Filter_Input
                     $pathSegment   = 'Zend/Validate/';
                     break;
                 default:
-                    require_once 'Zend/Filter/Exception.php';
+                    require_once PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Exception.php';
                     throw new Zend_Filter_Exception(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
             }
 
-            require_once 'Zend/Loader/PluginLoader.php';
+            require_once PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Loader/PluginLoader.php';
             $this->_loaders[$type] = new Zend_Loader_PluginLoader(
                 array($prefixSegment => $pathSegment)
             );

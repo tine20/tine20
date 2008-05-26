@@ -46,8 +46,7 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY]='pi_flexform';
 
 
 # Wir definieren die Datei, die unser Flexform Schema enthält
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
-<T3DataStructure>
+t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<T3DataStructure>
   <ROOT>
     <type>array</type>
       <el>  
@@ -120,6 +119,11 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
                     <numIndex index="0">LLL:EXT:user_tine2typo/locallang_db.xml:adr_one_countryname</numIndex>
                     <numIndex index="1">LLL:EXT:user_tine2typo/locallang_db.xml:adr_one_countryname</numIndex>
                   </numIndex>             
+				  
+                  <numIndex index="10" type="array">
+                    <numIndex index="0">LLL:EXT:user_tine2typo/locallang_db.xml:jpegphoto</numIndex>
+                    <numIndex index="1">LLL:EXT:user_tine2typo/locallang_db.xml:jpegphoto</numIndex>
+                  </numIndex>             
                 </items>          
                 <maxitems>100</maxitems>
                 <size>6</size>
@@ -152,7 +156,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  <config>
 				<type>input</type>
 				<size>50</size>
-				<default>http://localhost/tine/index.php</default>
+				<default>http://demo.tine20.org</default>
 			  </config>
 		  </TCEforms>
         </tinehost>	
@@ -163,7 +167,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  <config>
 				<type>input</type>
 				<size>50</size>
-				<default>tine20admin</default>
+				<default>tine20demo</default>
 			</config>
 		  </TCEforms>
         </tinehostlogin>		
@@ -174,7 +178,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY, '<?xml version="1.0" encoding="iso-88
 			  <config>
 				<type>input</type>
 				<size>50</size>
-				<default>lars</default>
+				<default>demo</default>
 			  </config>
 		  </TCEforms>
         </tinehostpassword>	

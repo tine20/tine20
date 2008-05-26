@@ -65,7 +65,7 @@ class tx_DynamicFlexFormFields extends tslib_pibase
      */
 	public function __construct()
 	{
-		$preUID = explode('tt_content',$GLOBALS[_SERVER][QUERY_STRING]);
+		$preUID = str_replace('%5D%5B', '', explode('tt_content',$GLOBALS[_SERVER][QUERY_STRING]));
 		$preUID2 = explode(',', $preUID[1]);
 		$this->UID = trim(str_replace('][', '', $preUID2[0])) * 1 ;
 	}
@@ -111,7 +111,7 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 			$config = $fetch['pi_flexform'];
 			
 			@mysql_close($mysql_conn);
-			}
+		}
 		
 		$xml = t3lib_div::xml2array($config);
 		return $xml;
@@ -162,7 +162,12 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 		{
 			// get all contacts of the user
 			$addressbook = new Addressbook_Service();
+			//echo "<hr>";
+			//var_dump($addressbook);
+			
 			$Contact = $addressbook->getAllContacts();
+	//		var_dump($Contact);
+	//		echo "<hr>";
 		}
 		catch (Exception $e) 
 		{
@@ -192,11 +197,14 @@ class tx_DynamicFlexFormFields extends tslib_pibase
 	
 	// unset first element 
 	unset($config['items'][0]);
-	
+	//print_r($config['items');
 	// login succeded, but no data available'
 	if (empty($config['items']))
 	{
 		$config['items'][0] = array( 'login succeded, but no data available', 'login succeded, but no data available');
+	}
+	if (empty($this->UID)){
+		$config['items'][0] = array( 'system unsufficent', 'system unsufficent');
 	}
 	return $config;
 	}

@@ -18,9 +18,9 @@
  
 require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Tinebase/Record/Abstract.php');
 require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Input.php');
-
-
- class Addressbook_Model_Contact extends Tinebase_Record_Abstract
+require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Digits.php');
+require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Interface.php');
+class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -49,9 +49,9 @@ require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Input.ph
         'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
         'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
         'email'                 => array('StringTrim', 'StringToLower'),
-        'email_home'    => array('StringTrim', 'StringToLower'),
-        'url'           => array('StringTrim', 'StringToLower'),
-        'url_home'      => array('StringTrim', 'StringToLower'),
+        'email_home'            => array('StringTrim', 'StringToLower'),
+        'url'                   => array('StringTrim', 'StringToLower'),
+        'url_home'              => array('StringTrim', 'StringToLower'),
     );
     
     /**
@@ -80,6 +80,7 @@ require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Input.ph
         'adr_two_street2'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'assistent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bday'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'calendar_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
  /*       'email'     => array(
             array(
                 'Regex', 
@@ -96,22 +97,26 @@ require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Input.ph
         ),*/
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'jpegphoto'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'freebusy_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'owner'                 => array('Digits', array('GreaterThan', 0)),
+        'owner'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true,'presence'=>'required'),
         'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'		        => array(),
-        'n_fileas'              => array(),
-        'n_fn'                  => array(),
+        'n_family'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'n_fileas'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'n_fn'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_prefix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_suffix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'pubkey'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -120,7 +125,9 @@ require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Input.ph
         'tel_fax_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**
@@ -143,20 +150,44 @@ require_once( PATH_site . 'typo3conf/ext/user_tine2typo/pi1/Zend/Filter/Input.ph
      */
     public function setFromArray(array $_data)
     {
-        if(empty($_data['n_fileas'])) {
+        if (empty($_data['n_fileas'])) {
             $_data['n_fileas'] = $_data['n_family'];
-            if(!empty($_data['n_given'])) {
+            if (!empty($_data['n_given'])) {
                 $_data['n_fileas'] .= ', ' . $_data['n_given'];
             }
         }
         
-        if(empty($_data['n_fn'])) {
+        if (empty($_data['n_fn'])) {
             $_data['n_fn'] = $_data['n_family'];
-            if(!empty($_data['n_given'])) {
+            if (!empty($_data['n_given'])) {
                 $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
             }
         }
         
         parent::setFromArray($_data);
+    }
+    
+    /**
+     * converts a int, string or Addressbook_Model_Contact to an contact id
+     *
+     * @param int|string|Addressbook_Model_Contact $_contactId the contact id to convert
+     * @return int
+     */
+    static public function convertContactIdToInt($_contactId)
+    {
+        if ($_contactId instanceof Addressbook_Model_Contact) {
+            if (empty($_contactId->id)) {
+                throw new Exception('no contact id set');
+            }
+            $id = (int) $_contactId->id;
+        } else {
+            $id = (int) $_contactId;
+        }
+        
+        if ($id === 0) {
+            throw new Exception('contact id can not be 0');
+        }
+        
+        return $id;
     }
 }

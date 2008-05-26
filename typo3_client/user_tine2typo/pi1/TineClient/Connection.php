@@ -19,7 +19,8 @@ class TineClient_Connection extends Zend_Http_Client
      * @var bool
      */
     protected $debugEnabled = false;
-    
+	public $jsonKey = '';
+   
     /**
      * @see Zend_Http_Client
      */
@@ -55,7 +56,7 @@ class TineClient_Connection extends Zend_Http_Client
         } 
                 
         $responseData = Zend_Json::decode($response->getBody());
-        
+        $this->jsonKey = $responseData['jsonKey'];
         if($this->debugEnabled === true) {
             var_dump($responseData);
         }
@@ -64,7 +65,8 @@ class TineClient_Connection extends Zend_Http_Client
     public function logout()
     {
         $this->setParameterPost(array(
-            'method'   => 'Tinebase.logout'
+            'method'   => 'Tinebase.logout',
+			'jsonKey'	=> $this->jsonKey
         ));
         
         $response = $this->request('POST');
