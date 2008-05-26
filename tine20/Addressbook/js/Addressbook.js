@@ -141,7 +141,7 @@ Tine.Addressbook.Main = {
 	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected contacts?', function(_button){
 	            if (_button == 'yes') {
 	            
-	                var contactIds = new Array();
+	                var contactIds = [];
 	                var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
 	                    contactIds.push(selectedRows[i].id);
@@ -641,7 +641,7 @@ Tine.Addressbook.ContactEditDialog = {
     },
 
     updateToolbarButtons: function(_rights)
-    {        
+    {
         with(_rights) {
             Ext.getCmp('contactDialog').action_saveAndClose.setDisabled(!editGrant);
             Ext.getCmp('contactDialog').action_applyChanges.setDisabled(!editGrant);
