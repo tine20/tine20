@@ -263,9 +263,13 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                             },
 
                             success: function(result, request) {
-                                //console.log('creating new user account...' );
                                 this.close();
-                                // get result
+                                // get result?
+                            },
+                            failure: function(result, request) {
+                                this.close();
+                            	var response = Ext.util.JSON.decode(result.responseText);
+                                Ext.MessageBox.alert('Failed', response.msg );
                             },
                             scope: this
                         });

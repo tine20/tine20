@@ -19,17 +19,31 @@
 class Tinebase_Account_Registration
 {
     /**
+     * @var Zend_Db_Adapter_Pdo_Mysql
+     */
+    protected $_db;
+        
+    /**
      * the registrations table
      *
      * @var Tinebase_Db_Table
      */
     protected $_registrationsTable;
+    
+    /**
+     * the invitations table
+     *
+     * @var Tinebase_Db_Table
+     */
+    protected $_invitationsTable;
+    
     /**
      * the config
      *
      * @var Zend_Config_Ini 
      */
     private $_config = NULL;
+    
     /**
      * the constructor
      *
@@ -44,17 +58,20 @@ class Tinebase_Account_Registration
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
                 ' no config for registration found! ' . $e->getMessage());
         }
-        // create table object
+        // create table objects and get db adapter
         $this->_registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
+        $this->_invitationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registration_invitations'));
+        $this->_db = Zend_Registry::get('dbAdapter');
     }
+    
     /**
      * don't clone. Use the singleton.
      *
      */
     private function __clone ()
-    {
-        
+    {        
     }
+    
     /**
      * holdes the instance of the singleton
      *
@@ -73,6 +90,7 @@ class Tinebase_Account_Registration
         }
         return self::$_instance;
     }
+    
     /**
      * checks if username is unique
      *
@@ -93,6 +111,28 @@ class Tinebase_Account_Registration
             return true;
         }
     }
+    
+    /**
+     * checks if email is in invitations table
+     *
+     * @param   string  $_email
+     * @return  bool    true if email is in invitations table
+     * @todo    add to tests
+     */
+    public function checkInvitation($_email)
+    {
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('email') . ' = ?', $_email);
+        if ($row = $this->_invitationsTable->fetchRow($where)) {
+            // remove from table
+            $this->_invitationsTable->delete($where);
+            $result = true;             
+        } else {
+            $result = false;            
+        }
+        
+        return $result;
+    }
+    
     /**
      * registers a new user
      *
@@ -105,11 +145,13 @@ class Tinebase_Account_Registration
     {
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
             ' call registerUser with regData: ' . print_r($regData, true));
+        
         // validate unique username
         //@todo 	move to frontend later on
         if (! $this->checkUniqueUsername($regData['accountLoginName'])) {
-            throw (new Exception('username already exists'));
+            throw (new Exception('Your chosen username already exists!'));
         }
+        
         // validate email address
         if (isset($this->_config->emailValidation) && $this->_config->emailValidation == 'zend') {
             // zend email validation isn't working on a 64bit os at the moment (v1.5.0)
@@ -124,9 +166,18 @@ class Tinebase_Account_Registration
                 $debugMessage .= ')';
                 //Zend_Registry::get('logger')->debug($debugMessage);
                 // throw exception
-                throw (new Exception('invalid registration email address: ' . $debugMessage));
+                throw (new Exception('Invalid registration email address: ' . $debugMessage));
             }
         }
+        
+        // check invitation
+        //@todo     move to frontend later on
+        if (isset($this->_config->invitationOnly) 
+            && $this->_config->invitationOnly == 1 
+            && !$this->checkInvitation($regData['accountEmailAddress'])) {
+            throw (new Exception('Invalid registration email address (not invited)!'));
+        }
+        
         // add more required fields to regData
         // get default values from config.ini if available
         $regData['accountStatus'] = (isset($this->_config->accountStatus)) ? 
@@ -176,6 +227,7 @@ class Tinebase_Account_Registration
         }
         return $result;
     }
+
     /**
      * create user hash, send registration mail and save registration in database
      *
@@ -237,6 +289,7 @@ class Tinebase_Account_Registration
         }
         return $result;
     }
+
     /**
      * send lost password mail
      *
@@ -284,6 +337,7 @@ class Tinebase_Account_Registration
         }
         return false;
     }
+
     /**
      * generate new random password [a-zA-z0-9]
      *
@@ -307,6 +361,7 @@ class Tinebase_Account_Registration
         }
         return $password;
     }
+    
     /**
      * activate user account
      *
@@ -327,6 +382,7 @@ class Tinebase_Account_Registration
         Tinebase_Account::getInstance()->setExpiryDate($account['accountId'], NULL);
         return $account;
     }
+
     /**
      * generate captcha
      *
@@ -354,9 +410,11 @@ class Tinebase_Account_Registration
         imageline($image, $width / 2, 0, $width / 2, $height, $grey);
         return $image;
     }
+
     /********************************************************************
      * SQL functions follow
      */
+    
     /**
      * add new registration
      *
@@ -381,6 +439,7 @@ class Tinebase_Account_Registration
         $this->_registrationsTable->insert($registrationData);
         return $this->getRegistrationByHash($_registration->login_hash);
     }
+    
     /**
      * update registration
      *
@@ -406,6 +465,7 @@ class Tinebase_Account_Registration
         $result = $this->_registrationsTable->update($registrationData, $where);
         return $this->getRegistrationByHash($_registration->login_hash);
     }
+
     /**
      * delete registration by username
      *
@@ -414,10 +474,11 @@ class Tinebase_Account_Registration
      */
     public function deleteRegistrationByLoginName ($_username)
     {
-        $where = Zend_Registry::get('dbAdapter')->quoteInto('login_name = ?', $_username);
+        $where = $this->_db->quoteInto('login_name = ?', $_username);
         $result = $this->_registrationsTable->delete($where);
         return $result;
     }
+
     /**
      * get registration by hash
      *
@@ -427,8 +488,7 @@ class Tinebase_Account_Registration
      */
     public function getRegistrationByHash ($_hash)
     {
-        $db = Zend_Registry::get('dbAdapter');
-        $select = $db->select()->from(SQL_TABLE_PREFIX . 'registrations')->where('login_hash = ?', $_hash);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'registrations')->where('login_hash = ?', $_hash);
         $stmt = $select->query();
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
