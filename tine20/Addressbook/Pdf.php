@@ -129,7 +129,8 @@ class Addressbook_Pdf extends Tinebase_Export_Pdf
         } catch ( Exception $e ) {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' image not found or no contact image set');
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
-            $contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');
+            //$contactPhoto = Zend_Pdf_Image::imageWithPath(dirname(dirname(__FILE__)).'/images/empty_photo.jpg');
+            $contactPhoto = NULL;
         }
         
         // build title
