@@ -376,7 +376,7 @@ class Setup_ExtCheck
                     $dbConfig = Zend_Registry::get('configFile')->database;
                     $link = mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
                     if (!$link) {
-                        throw new Exception('Could not connect: ' . mysql_error());
+                        die('Could not connect to mysql database: ' . mysql_error());
                     }                    
                     //echo "mysql version: " . mysql_get_server_info();
                     if (version_compare($value['attributes']['VERSION'], mysql_get_server_info(), '<')) {
