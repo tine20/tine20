@@ -47,6 +47,22 @@ if (strpos($output, "FAILURE")) {
     die("Unsufficent server system.");
 }
 
+// check php environment
+$requiredIniSettings = array(
+    'magic_quotes_sybase'  => 0,
+    'magic_quotes_gpc'     => 0,
+    'magic_quotes_runtime' => 0,
+);
+
+foreach ($requiredIniSettings as $variable => $newValue) {
+    $oldValue = ini_get($variable);
+    if ($oldValue != $newValue) {
+        if (ini_set($variable, $newValue) === false) {
+            die("Sorry, your environment is not supported. You need to set $variable from $oldValue to $newValue.");
+        }
+    }
+}
+
 /**
  * start setup
  */
