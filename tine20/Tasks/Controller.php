@@ -167,7 +167,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     }
     
     /**
-     * Upate an existing Task
+     * Update an existing Task
      * 
      * acl rights are managed, which is a bit complicated when a container change
      * happens. Also concurrency management is done in this contoller function
