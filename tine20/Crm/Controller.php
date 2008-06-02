@@ -438,6 +438,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function createPersonalFolder($_accountId)
     {
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Leads',
             'type'              => Tinebase_Container::TYPE_PERSONAL,
@@ -445,7 +447,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId() 
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
         $personalContainer->account_grants = Tinebase_Container::GRANT_ANY;
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
