@@ -271,6 +271,15 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         
         $contact = Addressbook_Controller::getInstance()->getContact($this->objects['initialContact']);
     }
+    
+    public function testCreatePersonalFolder()
+    {
+        $account = Zend_Registry::get('currentAccount');
+        $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account);
+        $this->assertEquals(1, count($folder));
+        $folder = Addressbook_Controller::getInstance()->createPersonalFolder($account->getId());
+        $this->assertEquals(1, count($folder));
+    }
 }		
 	
 
