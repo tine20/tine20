@@ -22,19 +22,6 @@ require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
 /**
- * validate environemnt
- */
-$check = new Setup_ExtCheck('Setup/essentials.xml');
-
-$output = $check->getOutput();
-echo $output;
-
-if (strpos($output, "FAILURE")) {
-    phpinfo();
-    die("Unsufficent server system.");
-}
-
-/**
  * load central configuration once and put it in the registry
  */
 try {
@@ -45,6 +32,19 @@ try {
     }
 } catch (Zend_Config_Exception $e) {
     die ('central configuration file ' . $_SERVER['DOCUMENT_ROOT'] . '/../config.ini not found');
+}
+
+/**
+ * validate environemnt
+ */
+$check = new Setup_ExtCheck('Setup/essentials.xml');
+
+$output = $check->getOutput();
+echo $output;
+
+if (strpos($output, "FAILURE")) {
+    phpinfo();
+    die("Unsufficent server system.");
 }
 
 /**

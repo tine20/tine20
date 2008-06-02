@@ -27,10 +27,9 @@ interface TableFactory
     public function createCell($content, $color = NULL);
 }
 
-/*
+/**
 * abstract output classes
 */
-
 abstract class Table
 {
     protected $header = NULL;
@@ -323,8 +322,11 @@ class Setup_ExtCheck
     public $values = array();
 
     public $output = '';
-    /*
-    * * read configuration
+    
+    /**
+    * read configuration
+    * 
+    * @param string $_file xml file with the config options 
     */
     private function _getConfiguration($_file)
     {
@@ -345,114 +347,104 @@ class Setup_ExtCheck
         return $values;
     }
 
+    /**
+     * checks the environment
+     *
+     * @return array with success/failure values for the given attributes
+     * 
+     * @todo    move mysql/database version check later 
+     *             -> after the user has given the credentials in the interactive setup
+     */
     private function _check()
     {
-        foreach ($this->values as $key => $value)
-        {
-            if ($value['tag'] == 'ENVIROMENT')
-            {
-                if ($value['attributes']['NAME'] == 'Zend')
-                {
-                    if (version_compare($value['attributes']['VERSION'], zend_version(), '<'))
-                    {
+        foreach ($this->values as $key => $value) {
+            if ($value['tag'] == 'ENVIROMENT') {
+                if ($value['attributes']['NAME'] == 'Zend') {
+                    if (version_compare($value['attributes']['VERSION'], zend_version(), '<')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
+                    } else {
+                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
-                    else
-                    {
+                } else if ($value['attributes']['NAME'] == 'PHP') {
+                    if (version_compare($value['attributes']['VERSION'], phpversion(), '<')) {
+                        $data[] = array($value['attributes']['NAME'], 'SUCCESS');
+                    } else {
+                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
+                    }
+                } else if ($value['attributes']['NAME'] == 'MySQL') {
+                    // get setup controller for database connection
+                    $dbConfig = Zend_Registry::get('configFile')->database;
+                    $link = mysql_connect($dbConfig->host, $dbConfig->username, $dbConfig->password);
+                    if (!$link) {
+                        throw new Exception('Could not connect: ' . mysql_error());
+                    }                    
+                    //echo "mysql version: " . mysql_get_server_info();
+                    if (version_compare($value['attributes']['VERSION'], mysql_get_server_info(), '<')) {
+                        $data[] = array($value['attributes']['NAME'], 'SUCCESS');
+                    } else {
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                     }
                 }
-                else if ($value['attributes']['NAME'] == 'PHP')
-                {
-                    if (version_compare($value['attributes']['VERSION'], phpversion(), '<'))
-                    {
-                        $data[] = array($value['attributes']['NAME'], 'SUCCESS');
-                    }
-                    else
-                    {
-                        $data[] = array($value['attributes']['NAME'], 'FAILURE');
-                    }
-                }
-            }
+            } else if ($value['tag'] == 'EXTENSION') {
 
-            else if ($value['tag'] == 'EXTENSION')
-            {
-                foreach ($value as $extensionArray)
-                {
-                    if (is_array($extensionArray))
-                    {
+                //print_r($this->loadedExtensions);
+                
+                foreach ($value as $extensionArray) {
+                    if (is_array($extensionArray)) {
                         $succeeded = false;
 
-                        if (in_array($extensionArray['NAME'], $this->loadedExtensions))
-                        {
+                        if (in_array($extensionArray['NAME'], $this->loadedExtensions)) {
+                            
                             $passed[] = true;
 
-                            if ($this->values[($key + 1)]['tag'] == 'INISET')
-                            {
+                            if ($this->values[($key + 1)]['tag'] == 'INISET') {
                                 $iniSettings = ini_get_all($extensionArray['NAME']);
-            //($iniSettings);
+                                //print_r($iniSettings);
                                 $i = 1;
-                                while($values[($key + $i)]['tag'] == 'INISET')
-                                {
-                                    switch($values[($key + $i)]['attributes']['OPERATOR'])
-                                    {
+                                while ($values[($key + $i)]['tag'] == 'INISET') {
+                                    switch ($values[($key + $i)]['attributes']['OPERATOR']) {
                                         case('<='):
-                                        {
-                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] <= $values[($key + $i)]['attributes']['VALUE'])
-                                            {
+                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] 
+                                                    <= $values[($key + $i)]['attributes']['VALUE']) {
                                                 $passed[] = false;
                                             }
                                             break;
-                                        }
                                         case('=='):
-                                        {
-                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] == $values[($key + $i)]['attributes']['VALUE'])
-                                            {
+                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] 
+                                                    == $values[($key + $i)]['attributes']['VALUE']) {
                                                 $passed[] = false;
                                             }
                                             break;
-                                        }
                                         case('>='):
-                                        {
-                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] >= $values[($key + $i)]['attributes']['VALUE'])
-                                            {
+                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] 
+                                                    >= $values[($key + $i)]['attributes']['VALUE']) {
                                                 $passed[] = false;
                                             }
                                             break;
-                                        }
                                         default:
-                                        {
                                             break;
-                                        }
                                     }
                                     $i++;
                                 }
-
-                            }
-                        if (!in_array(false, $passed))
-                            {
+                            } // end INISET
+                            
+                            if (!in_array(false, $passed)) {                             
                                 $succeeded = true;
-                            }
-                            else
-                            {
-                                $succeeded = false;
                             }
                             unset($passed);
                             unset($iniSettings);
                         }
 
-                        if ($succeeded)
-                        {
+                        if ($succeeded) {
                             $data[] = array($extensionArray['NAME'], 'SUCCESS');
-                        }
-                        else
-                        {
+                        } else {
                             $data[] = array($extensionArray['NAME'], 'FAILURE');
                         }
                     }
                 }
-            }
-        }
+            } // end EXTENSION
+        } // end foreach
+        
         return $data;
     }
 
