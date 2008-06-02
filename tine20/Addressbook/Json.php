@@ -72,16 +72,7 @@ class Addressbook_Json extends Tinebase_Application_Json_Abstract
 
         //Zend_Registry::get('logger')->debug(print_r($contactData,true));
         $contact = new Addressbook_Model_Contact();
-        try {
-            $contact->setFromArray($contactData);
-        } catch (Exception $e) {
-            // invalid data in some fields sent from client
-            $result = array('success'           => false,
-                            'errors'            => $contact->getValidationErrors(),
-                            'errorMessage'      => 'invalid data for some fields');
-
-            return $result;
-        }
+        $contact->setFromArray($contactData);
         
         if (empty($contact->id)) {
             $contact = Addressbook_Controller::getInstance()->addContact($contact);
