@@ -257,7 +257,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
             
             $oldTask = $this->getTask($_task->id);
             
-            $dbMods = array_diff_assoc($_task->toArray(), $oldTask->toArray());
+            $dbMods = array_diff_assoc($oldTask->toArray(), $_task->toArray());
             $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
             
             if (empty($dbMods)) {
@@ -266,25 +266,26 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                 return $_task;
             }
             
-            // concurrency management
+            // concurrency management            
             if(!empty($dbMods['last_modified_time'])) {
-                $logedMods = $modLog->getModifications('Tasks', $_task->id,
+                $loggedMods = $modLog->getModifications('Tasks', $_task->id,
                         'Tasks_Model_Task', Tasks_Backend_Factory::SQL, $_task->last_modified_time, $oldTask->last_modified_time);
-                $diffs = $modLog->computeDiff($logedMods);
-                        
+                $diffs = $modLog->computeDiff($loggedMods);
+
                 foreach ($diffs as $diff) {
                     $modified_attribute = $diff->modified_attribute;
                     if (!array_key_exists($modified_attribute, $dbMods)) {
-                        // useres updated to same value, nothing to do.
-                    } elseif ($diff->old_value == $_task->$modified_attribute) {
+                        // user updated to same value, nothing to do.
+                    }  elseif ( isset($_task->$modified_attribute) && $diff->old_value == $_task->$modified_attribute ) {
                         unset($dbMods[$modified_attribute]);
                         // merge diff into current contact, as it was not changed in current update request.
                         $_task->$modified_attribute = $diff->new_value;
-                    } else {
+                    }  else {
                         // non resolvable conflict!
                         throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
                     }
                 }
+
                 unset($dbMods['last_modified_time']);
             }
             
