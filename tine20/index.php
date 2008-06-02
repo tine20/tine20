@@ -17,9 +17,12 @@ require_once 'Zend/Loader.php';
 
 Zend_Loader::registerAutoload();
 
+// @todo remove that as well? -> is checked in setup.php
+/*
 if(Zend_Version::compareVersion('1.5.000') === 1) {
     die('Sorry, your version of the Zend Framework is to old. You have version ' . Zend_Version::VERSION . ' and require at least version 1.5.0.');
 }
+*/
 
 $tineBase = Tinebase_Controller::getInstance();
 
