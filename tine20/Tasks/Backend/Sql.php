@@ -276,7 +276,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
                     $modified_attribute = $diff->modified_attribute;
                     if (!array_key_exists($modified_attribute, $dbMods)) {
                         // user updated to same value, nothing to do.
-                    }  elseif ( isset($_task->$modified_attribute) && $diff->old_value == $_task->$modified_attribute ) {
+                    }  elseif ($diff->old_value == $_task->$modified_attribute ) {
                         unset($dbMods[$modified_attribute]);
                         // merge diff into current contact, as it was not changed in current update request.
                         $_task->$modified_attribute = $diff->new_value;
