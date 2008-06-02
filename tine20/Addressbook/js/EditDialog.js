@@ -128,7 +128,8 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
                                 {
                                     columnWidth: .4,
                                     fieldLabel: translation._('Last Name'), 
-                                    name:'n_family'
+                                    name:'n_family',
+                                    allowBlank: false
                                 }
                             ],
                             [
