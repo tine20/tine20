@@ -291,7 +291,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
      */
     public function createPersonalFolder($_accountId)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_account);
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Tasks',
