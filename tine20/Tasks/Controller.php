@@ -291,6 +291,8 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
      */
     public function createPersonalFolder($_accountId)
     {
+        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_account);
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Tasks',
             'type'              => Tinebase_Container::TYPE_PERSONAL,
@@ -298,7 +300,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId() 
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
         $personalContainer->account_grants = Tinebase_Container::GRANT_ANY;
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
