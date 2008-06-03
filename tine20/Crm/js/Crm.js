@@ -41,6 +41,8 @@ Tine.Crm.getPanel = function(){
     return tree;
 };
 
+/*************************************** CRM MAIN DIALOG *****************************************/
+
 Tine.Crm.Main = function(){
     var translation = new Locale.Gettext();
     translation.textdomain('Crm');
@@ -141,6 +143,9 @@ Tine.Crm.Main = function(){
         })
     };
     
+    /**
+     * _createDataStore function
+     */
     var _createDataStore = function()
     {
         var storeCrm = new Ext.data.JsonStore({
@@ -170,7 +175,9 @@ Tine.Crm.Main = function(){
         return storeCrm;
     };
 
-
+    /**
+     * _showCrmToolbar function
+     */
     var _showCrmToolbar = function()
     {
         for (var i in actions) {
@@ -282,7 +289,10 @@ Tine.Crm.Main = function(){
 		        }
 		    });         
 		});      
-                  
+		
+        /**
+         * handlerToggleDetails function
+         */          
         var handlerToggleDetails = function(toggle) {
         	//console.log(toggle.pressed);
             var gridView         = Ext.getCmp('gridCrm').getView();
@@ -312,6 +322,7 @@ Tine.Crm.Main = function(){
             }
         };
         
+        // toolbar
         var toolbar = new Ext.Toolbar({
             id: 'crmToolbar',
             split: false,
@@ -472,8 +483,10 @@ Tine.Crm.Main = function(){
        return;
     };
     
-
-   var _loadData = function(_node)
+    /**
+     * _loadData function
+     */
+    var _loadData = function(_node)
     {       
         var dataStore = Ext.getCmp('gridCrm').getStore();
         
@@ -606,7 +619,7 @@ Tine.Crm.Main = function(){
 	                    }                    
 	            ]);            
 	            
-	             var entry = Ext.data.Record.create([
+	            var entry = Ext.data.Record.create([
 	               {name: 'leadsource_id', type: 'int'},
 	               {name: 'leadsource', type: 'varchar'}
 	            ]);
@@ -1012,7 +1025,7 @@ Tine.Crm.Main = function(){
         	}
         }
     };
-}(); // end of application
+}(); // end of application (CRM MAIN DIALOG)
   
 /*************************************** LEAD EDIT DIALOG ****************************************/
 
@@ -1025,6 +1038,12 @@ Tine.Crm.LeadEditDialog = function() {
     var translation = new Locale.Gettext();
     translation.textdomain('Crm');
 
+    /**
+     * _getAdditionalData function
+     * collects additional data (start/end dates, linked contacts, ...)
+     * 
+     * @return Object additionalData
+     */
     var _getAdditionalData = function()
     {
         var additionalData = {};
@@ -1100,6 +1119,7 @@ Tine.Crm.LeadEditDialog = function() {
     /**
      * display the event edit dialog
      *
+     * @param Tine.Crm.Model.Lead _leadData
      */
     var _displayDialog = function(_leadData) 
     {	
@@ -1256,12 +1276,12 @@ Tine.Crm.LeadEditDialog = function() {
             anchor: '95%'
         });
 
-    activitiesGetStatusIcon = function(statusName) {   
-        return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
-    };
+        activitiesGetStatusIcon = function(statusName) {   
+            return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
+        };
         
 
-      var ActivitiesTpl = new Ext.XTemplate( 
+        var ActivitiesTpl = new Ext.XTemplate( 
         '<tpl for=".">',
             '<div class="activities-item-small">',
             '<div class="TasksMainGridStatus-{status_realname}" ext:qtip="{status_realname}"></div> {due}<br/>',
@@ -1489,7 +1509,7 @@ Tine.Crm.LeadEditDialog = function() {
      
         var store_contactSearch = Tine.Crm.LeadEditDialog.Stores.getContactsSearch();   
  
-
+        // contacts grid
         var cm_contacts = new Ext.grid.ColumnModel([
                 {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
         //      {id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },
@@ -1521,7 +1541,7 @@ Tine.Crm.LeadEditDialog = function() {
                 }                                    
         ]);
 
-         
+        // activities grid
         var cm_activities = new Ext.grid.ColumnModel([
                 {   id:'identifier', 
                     header: translation._("Identifier"), 
@@ -1571,6 +1591,7 @@ Tine.Crm.LeadEditDialog = function() {
                 }                                  
         ]);               
       
+        // actions
         var  _add_task = new Ext.Action({
                 text: translation._('Add task'),
                 handler: function(){
@@ -2045,13 +2066,15 @@ Tine.Crm.LeadEditDialog = function() {
         
     };
 
-        // public functions and variables
+    // public functions and variables
     return {
         displayDialog: function(_leadData) {
             _displayDialog(_leadData);
         }
     };
-}(); // end of application
+}(); // end of application CRM LEAD EDIT DIALOG
+
+/*************************************** LEAD EDIT DIALOG HANDLER ********************************/
 
 Tine.Crm.LeadEditDialog.Handler = function() {
     return { 
@@ -2118,6 +2141,8 @@ Tine.Crm.LeadEditDialog.Handler = function() {
         }
     };
 }();
+
+/*************************************** LEAD EDIT DIALOG ELEMENTS *******************************/
 
 Tine.Crm.LeadEditDialog.Elements = function() {
     // public functions and variables
@@ -2319,6 +2344,8 @@ Tine.Crm.LeadEditDialog.Elements = function() {
         }
     };
 }();
+
+/*************************************** LEAD EDIT DIALOG STORES *********************************/
 
 Tine.Crm.LeadEditDialog.Stores = function() {
     var _storeContactsInternal = null;
@@ -2542,7 +2569,8 @@ Tine.Crm.LeadEditDialog.Stores = function() {
     };
 }();
 
-// models
+/*************************************** LEAD EDIT DIALOG MODELS *********************************/
+
 Tine.Crm.Model = {};
 
 // lead
@@ -2575,6 +2603,7 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
   //  
   //  {name: 'leaddetail'}  
 ]);
+
 // work arround nasty ext date bug
 Tine.Crm.Model.Lead.FixDates = function(lead) {
     lead.data.start         = lead.data.start         ? Date.parseDate(lead.data.start, 'c')         : lead.data.start;
