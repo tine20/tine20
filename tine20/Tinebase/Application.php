@@ -335,7 +335,8 @@ class Tinebase_Application
         
         // call getAllApplicationRights for application (if it has specific rights)
         if ( file_exists ( $application->name."/Acl/Rights.php") ) {
-            $allRights = call_user_func(array($application->name . "_Acl_Rights", 'getAllApplicationRights'));
+            $appAclInstance = call_user_func(array($application->name . "_Acl_Rights", 'getInstance'));
+            $allRights = call_user_func(array($appAclInstance, 'getAllApplicationRights'));
             //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get all rights from ' . $application->name . 
             //    "_Acl_Rights ( " . $application->name."/Acl/Rights.php" ." )");
         } else {
