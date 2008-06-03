@@ -300,8 +300,9 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	    $tine20path = dirname(dirname(__FILE__));
 	    
 	    // Tinebase first
-        $cssFiles = Tinebase_Http::getCssFilesToInclude();
-        $jsFiles  = Tinebase_Http::getJsFilesToInclude();
+	    $tinebaseHttp = new Tinebase_Http();
+        $cssFiles = $tinebaseHttp->getCssFilesToInclude();
+        $jsFiles  = $tinebaseHttp->getJsFilesToInclude();
         
         $_exclude[]  = '.';
         $_exclude[]  = 'Tinebase';
