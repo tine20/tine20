@@ -1032,6 +1032,8 @@ Tine.Crm.Main = function(){
 
 Ext.namespace('Tine.Crm.LeadEditDialog');
 Tine.Crm.LeadEditDialog = function() {
+	
+	// @todo for what?
     // private variables
 	/*
     var dialog;
@@ -1184,10 +1186,23 @@ Tine.Crm.LeadEditDialog = function() {
     };
 
     /**
-     * __getOverviewPanel function
+     * _getLinksGrid
+     * get the grids for contacts/tasks/products/...
+     * 
+     * @param   string  type
+     * @return  Ext.grid
+     */
+    var _getLinksGrid = function(_type)
+    {
+    	
+    }
+    
+    /**
+     * _getOverviewPanel
      * collects additional data (start/end dates, linked contacts, ...)
      * 
-     * @return Object overview panel
+     * @param   Tine.Crm.Model.Lead lead data
+     * @return  Object overview panel
      */
     var _getOverviewPanel = function(_lead)
     {
@@ -1429,6 +1444,7 @@ Tine.Crm.LeadEditDialog = function() {
                     activeTab: 0,
                     height: 273,
                     items: [
+                    // @todo call _getLinksGrid('Contacts') function
                         new Ext.Panel({
                             title: translation._('Contacts'),
                         }),
@@ -1515,7 +1531,7 @@ Tine.Crm.LeadEditDialog = function() {
 
         /*********** OVERVIEW tab panel ************/
 
-        var tabPanelOverview = _getOverviewPanel();
+        var tabPanelOverview = _getOverviewPanel(lead);
         
         /*********** HISTORY tab panel ************/
 
