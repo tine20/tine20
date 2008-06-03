@@ -87,10 +87,14 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
      *
      * @return  array   all application rights
      */
-    public function getAllApplicationRights()
+    public function getAllApplicationRights($_applicationId = NULL)
     {
         // get application id
-        $appId = Tinebase_Application::getInstance()->getApplicationByName(self::APP_NAME)->getId();
+        if ( $_applicationId === NULL ) {
+            $appId = Tinebase_Application::getInstance()->getApplicationByName(self::APP_NAME)->getId();
+        } else {
+            $appId = $_applicationId;
+        }
         
         $allRights = parent::getAllApplicationRights($appId);
         
