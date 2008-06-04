@@ -33,6 +33,7 @@ class Admin_AllTests
         //$suite->addTest(AdminBackend_AllTests::suite());
         $suite->addTestSuite('Admin_ControllerTest');
         $suite->addTestSuite('Admin_JsonTest');
+        $suite->addTestSuite('Admin_Acl_RightsTest');
         return $suite;
     }
 }

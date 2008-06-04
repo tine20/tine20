@@ -3,33 +3,34 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
- * @subpackage  Acl
+ * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
+ * @todo        implement more tests!
  */
 
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Acl_RightsTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_ApplicationTest::main');
 }
 
 /**
- * Test class for Tinebase_Acl_Roles
+ * Test class for Tinebase_Group
  */
-class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
+class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
      */
     protected $objects = array();
-    
+
     /**
      * Runs the test methods of this class.
      *
@@ -38,7 +39,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Acl_RightsTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_ApplicationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -61,33 +62,26 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+	
     }
-
+    
     /**
-     * try to check getting application rights
-     *
-     */   
-    public function testGetAllApplicationRights()
+     * try to get all application rights
+     */
+    public function testGetAllRights()
     {
-        $rights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights('Tinebase');
+        $application = Tinebase_Application::getInstance()->getApplicationByName('Admin');
+        $rights = Tinebase_Application::getInstance()->getAllRights($application->getId());
         
         //print_r($rights);
         
         $this->assertGreaterThan(0, count($rights));
-    } 
-    
-    /**
-     * try to check getting application rights
-     *
-     */   
-    public function testGetRightDescription()
-    {
-        $text = Tinebase_Acl_Rights::getInstance()->getRightDescription(Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
-        
-        //print_r($text);
 
-        $this->assertNotEquals('', $text['text']);
-        $this->assertNotEquals('', $text['description']);
-        $this->assertNotEquals(Tinebase_Acl_Rights::MANAGE_SHARED_TAGS . ' right', $text['description']);
-    } 
-}
+        $application = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
+        $rights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+        
+        //print_r($rights);
+        
+        $this->assertGreaterThan(0, count($rights));
+    }
+}		

@@ -181,7 +181,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             Tinebase_Acl_Rights::RUN
         );
         
-        $this->assertTrue($result);
+        $this->assertTrue($result, 'has no run right');
         
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
             $this->objects['application']->name, 
@@ -189,7 +189,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             Tinebase_Acl_Rights::ADMIN
         );
 
-        $this->assertFalse($result);
+        $this->assertFalse($result, 'has admin right for application ' . $this->objects['application']->name);
     }    
 
     /**
@@ -198,7 +198,6 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteRole()
     {
-        
         // remove role members and rights first
         Tinebase_Acl_Roles::getInstance()->setRoleRights($this->objects['role']->getId(), array());
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());        
@@ -208,7 +207,6 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         
         Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
-        
     }    
     
 }		

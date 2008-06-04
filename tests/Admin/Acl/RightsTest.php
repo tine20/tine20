@@ -2,7 +2,7 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Tinebase
+ * @package     Admin
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -17,13 +17,13 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Acl_RightsTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Admin_Acl_RightsTest::main');
 }
 
 /**
  * Test class for Tinebase_Acl_Roles
  */
-class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
+class Admin_Acl_RightsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -38,7 +38,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Acl_RightsTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Admin_Acl_RightsTest');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -69,7 +69,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */   
     public function testGetAllApplicationRights()
     {
-        $rights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights('Tinebase');
+        $rights = Admin_Acl_Rights::getInstance()->getAllApplicationRights();
         
         //print_r($rights);
         
@@ -82,12 +82,12 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */   
     public function testGetRightDescription()
     {
-        $text = Tinebase_Acl_Rights::getInstance()->getRightDescription(Tinebase_Acl_Rights::MANAGE_SHARED_TAGS);
+        $text = Admin_Acl_Rights::getInstance()->getRightDescription(Admin_Acl_Rights::MANAGE_ROLES);
         
         //print_r($text);
 
         $this->assertNotEquals('', $text['text']);
         $this->assertNotEquals('', $text['description']);
-        $this->assertNotEquals(Tinebase_Acl_Rights::MANAGE_SHARED_TAGS . ' right', $text['description']);
+        $this->assertNotEquals(Admin_Acl_Rights::MANAGE_ROLES . ' right', $text['description']);
     } 
 }
