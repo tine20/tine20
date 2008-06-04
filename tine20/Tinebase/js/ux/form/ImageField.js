@@ -61,7 +61,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     },
     setValue: function(value) {
         Ext.ux.form.ImageField.superclass.setValue.call(this, value);
-        this.imageSrc = value ? value : this.defaultImage;
+        this.imageSrc = value ? Ext.ux.util.ImageURL.prototype.parseURL(value) : this.defaultImage;
         this.updateImage();
     },
     onFileSelect: function(bb) {
@@ -78,7 +78,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         uploader.upload();
         uploader.on('uploadcomplete', function(uploader, record){
             //var method = Ext.util.Format.htmlEncode('');
-            this.imageSrc = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id=' + record.get('tempFile').id + '&width=' + this.width + '&height=' + (this.height-2) + '&ratiomode=0';
+            this.imageSrc = new Ext.ux.util.ImageURL({
+                id: record.get('tempFile').id,
+                width: this.width,
+                height: this.height -2,
+                ratiomode: 0
+            });
             this.setValue(this.imageSrc);
             
             this.updateImage();
@@ -118,12 +123,26 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 text: 'Edit Image',
                 iconCls: 'action_cropImage',
                 scope: this,
-                disabled: true,//this.imageSrc == this.defaultImage,
+                disabled: true, //this.imageSrc == this.defaultImage,
                 handler: function() {
                     var cropper = new Ext.ux.form.ImageCropper({
-                        image: this.getValue()
+                        imageURL: this.imageSrc
                     });
-                    cropper.show();
+                    
+                    var dlg = new Tine.widgets.dialog.EditRecord({
+                        handlerScope: this,
+                        handlerCancle: this.close,
+                        items: cropper
+                    });
+                    
+                    var win = new Ext.Window({
+                        width: 320,
+                        height: 320,
+                        title: 'Crop Image',
+                        layout: 'fit',
+                        items: dlg
+                    })
+                    win.show();
                 }
             
             },{
@@ -162,3 +181,49 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }, this);
     }
 });
+
+Ext.namespace('Ext.ux.util');
+
+/**
+ * this class represents an image URL
+ */
+Ext.ux.util.ImageURL = function(config) {
+    Ext.apply(this, config, {
+        url: 'index.php',
+        method: 'Tinebase.getImage',
+        application: 'Tinebase',
+        location: 'tempFile'
+    }); 
+};
+/**
+ * generates an imageurl according to the class members
+ * 
+ * @return {String}
+ */
+Ext.ux.util.ImageURL.prototype.toString = function() {
+    return this.url + 
+        "?method=" + this.method + 
+        "&application=" + this.application + 
+        "&location=" + this.location + 
+        "&id=" + this.id + 
+        "&width=" + this.width + 
+        "&height=" + this.height + 
+        "&ratiomode=" + this.ratiomode;
+};
+/**
+ * parses an imageurl
+ * 
+ * @param  {String} url
+ * @return {Ext.ux.util.ImageURL}
+ */
+Ext.ux.util.ImageURL.prototype.parseURL = function(url) {
+    var url = url.toString();
+    var params = {};
+    var lparams = url.substr(url.indexOf('?')+1).split('&');
+    for (var i=0, j=lparams.length; i<j; i++) {
+        var param = lparams[i].split('=');
+        params[param[0]] = Ext.util.Format.htmlEncode(param[1]);
+    }
+    return new Ext.ux.util.ImageURL(params);
+};
+
