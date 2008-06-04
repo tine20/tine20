@@ -160,7 +160,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     public function testGetApplicationRights()
     {
         $result = Tinebase_Acl_Roles::getInstance()->getApplicationRights(
-            $this->objects['application']->getId(), 
+            $this->objects['application']->name, 
             $this->objects['user']->getId()
         );
 
@@ -176,7 +176,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     public function testHasRight()
     {
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
-            $this->objects['application']->getId(), 
+            $this->objects['application']->name, 
             $this->objects['user']->getId(), 
             Tinebase_Acl_Rights::RUN
         );
@@ -184,7 +184,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
-            $this->objects['application']->getId(), 
+            $this->objects['application']->name, 
             $this->objects['user']->getId(), 
             Tinebase_Acl_Rights::ADMIN
         );

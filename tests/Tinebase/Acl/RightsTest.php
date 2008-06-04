@@ -69,6 +69,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      * try to check if admin user has admin right for admin application
      *
      */
+    /*
     public function testHasRight()
     {
         $result = Tinebase_Acl_Rights::getInstance()->hasRight(
@@ -79,29 +80,52 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($result, 'admin user tine20admin has no admin right for Admin application');
                 
-    }    
+    } 
+    */   
     
     /**
      * try to check getting applications
      *
      */
+    /*
     public function testGetApplications()
     {
         $result = Tinebase_Acl_Rights::getInstance()->getApplications($this->objects['adminAccount']->getId());
 
         $this->assertGreaterThan(0, count($result->toArray()));
-    }    
+    } 
+    */   
     
     /**
      * try to check getting application rights
      *
      */
+    /*
     public function testGetRights()
     {
         $result = Tinebase_Acl_Rights::getInstance()->getRights('Admin', $this->objects['adminAccount']->getId());
 
         $this->assertGreaterThan(0, count($result));
-    }    
+    } 
+    */
+
+    /**
+     * try to check getting application rights
+     *
+     */   
+    public function testGetAllApplicationRights()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+    } 
+    
+    /**
+     * try to check getting application rights
+     *
+     */   
+    public function testGetRightDescription()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+    } 
 }		
 	
 

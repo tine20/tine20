@@ -27,6 +27,7 @@ class Tinebase_Account_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Account Tests');
         $suite->addTestSuite('Tinebase_Account_SqlTest');
         $suite->addTestSuite('Tinebase_Account_RegistrationTest');
+        $suite->addTestSuite('Tinebase_Account_ModelTest');
         return $suite;
     }
 }
