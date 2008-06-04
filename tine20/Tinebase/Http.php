@@ -77,6 +77,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'Tinebase/js/ux/ButtonLockedToggle.js',
             'Tinebase/js/ux/Percentage.js',
             'Tinebase/js/ux/PopupWindow.js',
+            'Tinebase/js/ux/PopupWindowManager.js',
             'Tinebase/js/ux/Wizard.js',
             'Tinebase/js/ux/SearchField.js',
             'Tinebase/js/ux/grid/CheckColumn.js',

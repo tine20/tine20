@@ -618,11 +618,11 @@ Tine.Tasks.EditDialog = function(task) {
 						Tine.Tasks.fixTask(task);
 						
 						// update form with this new data
-						form.loadRecord(task);                    
-						window.ParentEventProxy.fireEvent('update', task);
+						form.loadRecord(task);
+                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
 
 						if (closeWindow) {
-							window.ParentEventProxy.purgeListeners();
+                            opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
                             window.setTimeout("window.close()", 1000);
                         } else {
                         	Ext.MessageBox.hide();
@@ -649,8 +649,8 @@ Tine.Tasks.EditDialog = function(task) {
 	    					identifier: task.data.id
 	    				},
 	                    success: function(_result, _request) {
-	    					window.ParentEventProxy.fireEvent('update', task);
-	    					window.ParentEventProxy.purgeListeners();
+                            opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', task);
+                            opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
 	    					window.setTimeout("window.close()", 1000);
 	                    },
 	                    failure: function ( result, request) { 
@@ -763,7 +763,7 @@ Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    height: 300,
    initComponent: function(){
         this.url = 'index.php?method=Tasks.editTask&taskId=' + this.id + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId + '&containerId=' + this.containerId;
-        //this.onReadyFn = 'Tine.Tasks.EditDialog();';
+        this.onReadyFn = 'Tine.Tasks.EditDialog();';
         Tine.Tasks.EditPopup.superclass.initComponent.call(this);
    }
 });
