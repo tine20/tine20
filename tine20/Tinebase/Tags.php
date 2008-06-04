@@ -166,6 +166,11 @@ class Tinebase_Tags
                 ));
                 break;
             case Tinebase_Tags_Model_Tag::TYPE_SHARED:
+                // @todo move to controller later?
+                if ( !Tinebase_Acl_Rights::getInstance()
+                        ->hasRight('Tinebase', $currentAccountId, Tinebase_Acl_Rights::MANAGE_SHARED_TAGS) ) {
+                    throw new Exception('Your are not allowed to create this tag');
+                }
                 $_tag->owner = 0;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
                 break;

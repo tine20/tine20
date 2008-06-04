@@ -330,40 +330,7 @@ class Admin_Controller
         
         return $tineApplications->setApplicationState($_applicationIds, $_state);
     }
-    
-    /**
-     * get application account rights
-     *
-     * @param   int $_applicationId  app id
-     * @return  array with account rights for the application
-     * @deprecated isn't used anymore, replaced by role management
-     */
-    public function getApplicationPermissions($_applicationId)
-    {
-        /*
-        $permissions = Tinebase_Application::getInstance()->getApplicationPermissions($_applicationId);
-        
-        return $permissions;
-        */
-    }
-    
-   /**
-     * save application permissions
-     *
-     * @param int    $_applicationId    the application id for which the rights will be set
-     * @param array  $_rights           array with rights. if empty, all rights will be removed for this application 
-     * @return  int number of rights set
-     * @deprecated isn't used anymore, replaced by role management
-     */
-    public function setApplicationPermissions($_applicationId, array $_rights = array ())
-    {   
-        /*
-        $this->checkRight('MANAGE_APPS');        
-                
-        return Tinebase_Application::getInstance()->setApplicationPermissions($_applicationId, $_rights);
-        */
-    }  
-        
+            
     /**
      * get list of groups
      *
@@ -516,11 +483,6 @@ class Admin_Controller
      */
     public function AddTag(Tinebase_Tags_Model_FullTag $_tag)
     {
-        /*
-        if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', $this->_currentAccount->getId(), Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
-                throw new Exception('Your are not allowed to create a shared tag!');
-        }
-        */
         $this->checkRight('MANAGE_SHARED_TAGS');
         
         $_tag->type = Tinebase_Tags_Model_Tag::TYPE_SHARED;
@@ -541,11 +503,6 @@ class Admin_Controller
      */
     public function UpdateTag(Tinebase_Tags_Model_FullTag $_tag)
     {
-        /*
-        if (! Tinebase_Acl_Rights::getInstance()->hasRight('Tinebase', $this->_currentAccount->getId(), Tinebase_Acl_Rights::MANAGE_SHARED_TAGS)) {
-                throw new Exception('Your are not allowed to create a shared tag!');
-        }
-        */
         $this->checkRight('MANAGE_SHARED_TAGS');
         
         Tinebase_Tags::getInstance()->updateTag(new Tinebase_Tags_Model_Tag($_tag->toArray(), true));
@@ -627,14 +584,7 @@ class Admin_Controller
      */
     public function AddRole(Tinebase_Acl_Model_Role $_role, array $_roleMembers, array $_roleRights)
     {
-        if ( !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Admin_Acl_Rights::MANAGE_ROLES) && 
-             !Tinebase_Acl_Rights::getInstance()->hasRight('Admin', 
-                $this->_currentAccount->getId(), 
-                Tinebase_Acl_Rights::ADMIN) ) {
-            throw new Exception('You are not allowed to manage roles!');
-        }        
+        $this->checkRight('MANAGE_ROLES');
         
         $role = Tinebase_Acl_Roles::getInstance()->createRole($_role);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(), $_roleMembers);
@@ -710,9 +660,11 @@ class Admin_Controller
      * - MANAGE_* right includes VIEW_* right 
      * 
      * @param   string  $_right to check
+     * @todo    think about moving that to Tinebase_Acl or Tinebase_Application
      */    
     protected function checkRight( $_right ) {
         
+        // array with the rights that should be checked, ADMIN is in it per default
         $rightsToCheck = array ( Tinebase_Acl_Rights::ADMIN );
         
         if ( preg_match("/MANAGE_/", $_right) ) {
@@ -728,7 +680,7 @@ class Admin_Controller
         $hasRight = FALSE;
         
         foreach ( $rightsToCheck as $rightToCheck ) {
-            if ( Tinebase_Acl_Rights::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck) ) {
+            if ( Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $this->_currentAccount->getId(), $rightToCheck) ) {
                 $hasRight = TRUE;
                 break;    
             }

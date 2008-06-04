@@ -8,6 +8,9 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        write more tests for functions
+ * @todo        add phpdoc
  */
 
 /**
@@ -96,9 +99,9 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function hasRight($_application, $_right)
     {
-        $rights = Tinebase_Acl_Rights::getInstance();
+        $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $rights->hasRight($_application, $this->accountId, $_right);
+        $result = $roles->hasRight($_application, $this->accountId, $_right);
         
         return $result;
     }
@@ -111,9 +114,9 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function getRights($_application)
     {
-        $rights = Tinebase_Acl_Rights::getInstance();
+        $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $rights->getRights($_application, $this->accountId);
+        $result = $roles->getApplicationRights($_application, $this->accountId);
         
         return $result;
     }
@@ -137,7 +140,8 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      *
      * @param string $_ipAddress
      * @return void
-     */
+     * @todo write test for that
+    */
     public function setLoginTime($_ipAddress)
     {
         $backend = Tinebase_Account::getInstance();
@@ -152,6 +156,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      *
      * @param string $_password
      * @return void
+     * @todo write test for that
      */
     public function setPassword($_password)
     {
@@ -172,9 +177,9 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function getApplications()
     {
-        $rights = Tinebase_Acl_Rights::getInstance();
+        $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $rights->getApplications($this->accountId);
+        $result = $roles->getApplications($this->accountId);
         
         return $result;
     }
@@ -187,6 +192,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      * @param string $_application the application name
      * @param int $_right the required right
      * @return Tinebase_Record_RecordSet
+     * @todo write test for that
      */
     public function getContainerByACL($_application, $_right)
     {
@@ -204,6 +210,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      * 
      * @param string $_application the application name
      * @return Tinebase_Record_RecordSet
+     * @todo write test for that
      */
     public function getPersonalContainer($_application, $_owner, $_grant)
     {

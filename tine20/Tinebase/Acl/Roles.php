@@ -91,13 +91,18 @@ class Tinebase_Acl_Roles
     /**
      * check if one of the roles the user is in has a given right for a given application
      *
-     * @param int $_applicationId the application id
+     * @param string $_application the name of the application
      * @param int $_accountId the numeric id of a user account
      * @param int $_right the right to check for
      * @return bool
      */
-    public function hasRight($_applicationId, $_accountId, $_right) 
+    public function hasRight($_application, $_accountId, $_right) 
     {        
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        if ($application->status != 'enabled') {
+            throw new Exception('user has no rights. the application is disabled.');
+        }
+        
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
         if ( empty($roleMemberships) ) {
@@ -162,20 +167,26 @@ class Tinebase_Acl_Roles
     /**
      * returns rights for given application and accountId
      *
-     * @param string $_applicationId application id
+     * @param string $_application the name of the application
      * @param int $_accountId the numeric account id
      * @return array list of rights
      * @todo    add right group by to statement if possible or remove duplicates in result array
      */
-    public function getApplicationRights($_applicationId, $_accountId) 
+    public function getApplicationRights($_application, $_accountId) 
     {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        
+        if ($application->status != 'enabled') {
+            throw new Exception('user has no rights. the application is disabled.');
+        }
+        
         $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
         
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
                         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'role_rights', array('account_rights' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'role_rights.right)'))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.application_id') . ' = ?', $_applicationId))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.application_id') . ' = ?', $application->getId()))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             //->group(SQL_TABLE_PREFIX . 'role_rights.right');
