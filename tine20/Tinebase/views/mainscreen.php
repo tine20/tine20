@@ -22,8 +22,10 @@
     <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="ExtJS/resources/css/xtheme-gray.css" />
 	
+    <!-- <script type="text/javascript" src="ExtJS/adapter/yui/yui-utilities.js"></script> -->
+    <!-- <script type="text/javascript" src="ExtJS/adapter/yui/ext-yui-adapter.js"></script> -->
     <script type="text/javascript" src="ExtJS/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="ExtJS/ext-all-debug.js"></script>
+    <script type="text/javascript" src="ExtJS/ext-all.js"></script>
 
     <!-- Tine 2.0 static files -->
     <?php
