@@ -251,6 +251,7 @@ Tine.Tinebase.MainScreen = function() {
             var appPanel = Ext.getCmp('Addressbook_Tree');
             if (appPanel) {
                 appPanel.expand();
+                appPanel.fireEvent('click', appPanel.getSelectionModel().getSelectedNode());
             }
         });
 
