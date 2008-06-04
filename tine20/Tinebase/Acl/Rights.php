@@ -9,7 +9,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        remove deprecated code?
+ * @todo        move some functionality to Tinebase_Acl_Roles
+ * @todo        extend Tinebase_Application_Rights_Abstract and removed no longer needed code
  */
 
 /**
@@ -41,13 +42,6 @@ class Tinebase_Acl_Rights
     const MANAGE_SHARED_TAGS = 'manage_shared_tags';
     
     /**
-     * the Zend_Dd_Table object
-     *
-     * @var Tinebase_Db_Table
-     */
-    protected $_rightsTable;
-
-    /**
      * holdes the instance of the singleton
      *
      * @var Tinebase_Acl_Rights
@@ -70,7 +64,6 @@ class Tinebase_Acl_Rights
      * temporarly the constructor also creates the needed tables on demand and fills them with some initial values
      */
     private function __construct() {
-        //$this->_rightsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'application_rights'));
     }    
     
     /**
@@ -95,6 +88,7 @@ class Tinebase_Acl_Rights
      * 
      * @param int $_accountId the numeric account id
      * @return array list of enabled applications for this account
+     * @todo    move to Tinebase_Acl_Roles
      */
     public function getApplications($_accountId)
     {
@@ -145,6 +139,7 @@ class Tinebase_Acl_Rights
      * @param string $_application the name of the application
      * @param int $_accountId the numeric account id
      * @return array list of rights
+     * @todo    move to Tinebase_Acl_Roles
      */
     public function getRights($_application, $_accountId) 
     {
@@ -206,6 +201,7 @@ class Tinebase_Acl_Rights
      * @param int $_accountId the numeric id of a user account
      * @param int $_right the right to check for
      * @return bool
+     * @todo    move to Tinebase_Acl_Roles
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
@@ -247,95 +243,7 @@ class Tinebase_Acl_Rights
         
         return $result;
     }
-
-    /**
-     * add right
-     *
-     * @param Tinebase_Acl_Model_Right $_right
-     * @deprecated no longer used because of new role management
-     */
-    public function addRight(Tinebase_Acl_Model_Right $_right) 
-    {
-        /*
-        if (!$_right->isValid()) {
-            throw new Exception('invalid Tinebase_Acl_Model_Right object passed');
-        }
-                
-        $data = $_right->toArray();
-                
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-                        
-        $this->_rightsTable->insert($data);
-        */
-    }
-    
-    /**
-     * get application account rights
-     *
-     * @param   int $_applicationId  app id
-     * @return  Tinebase_Record_RecordSet of Tinebase_Acl_Model_Right with account rights for the application
-     * @deprecated no longer used because of new role management
-     */
-    public function getApplicationPermissions($_applicationId)
-    {
-        /*
-        //  
-        // $applicationId = Tinebase_Application::convertApplicationIdToInt($_applicationId);
-                
-        $select = $this->_rightsTable->select()
-            ->from(SQL_TABLE_PREFIX . 'application_rights', array( 
-                '*', 
-                'right' => 'GROUP_CONCAT(' . SQL_TABLE_PREFIX . 'application_rights.right)'
-            ))
-            ->where(SQL_TABLE_PREFIX . 'application_rights.application_id = ?', $_applicationId)
-            ->group(array(SQL_TABLE_PREFIX . 'application_rights.application_id', SQL_TABLE_PREFIX . 'application_rights.account_type', SQL_TABLE_PREFIX . 'application_rights.account_id'));
             
-        $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = new Tinebase_Record_RecordSet('Tinebase_Acl_Model_Right');
-
-        foreach ($rows as $row) {
-
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' rights row: ' . print_r($row, true));
-                        
-            $applicationRight = new Tinebase_Acl_Model_Right( $row );
-
-            $result->addRecord($applicationRight);
-        }
-
-        return $result;
-        */
-    }
-    
-    /**
-     * set application account rights
-     *
-     * @param   int $_applicationId  app id
-     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights
-     * @return  int number of rights set
-     * @deprecated no longer used because of new role management
-     */
-    public function setApplicationPermissions($_applicationId, Tinebase_Record_RecordSet $_applicationRights)
-    {
-        /*
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' set rights: ' . print_r($_applicationRights, true));
-        
-        // delete all old rights for this application
-        $where = $this->_rightsTable->getAdapter()->quoteInto($this->_rightsTable->getAdapter()->quoteIdentifier('application_id') . ' = ?', $_applicationId);
-        $this->_rightsTable->delete($where);        
-        
-        $count = 0;
-        foreach ( $_applicationRights as $right ) {
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' add right: ' . $right->right);
-            $this->addRight($right);
-            $count++;
-        }
-        
-        return $count;
-        */
-    }
-    
     /**
      * get all possible application rights
      *
