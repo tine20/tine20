@@ -83,6 +83,46 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
     const APP_NAME = 'Admin';
     
     /**
+     * holdes the instance of the singleton
+     *
+     * @var Admin_Acl_Rights
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * the clone function
+     *
+     * disabled. use the singleton
+     */
+    private function __clone() 
+    {
+        
+    }
+    
+    /**
+     * the constructor
+     *
+     */
+    private function __construct()
+    {
+        
+    }    
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Admin_Acl_Rights
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Admin_Acl_Rights;
+        }
+        
+        return self::$_instance;
+    }
+    
+    /**
      * get all possible application rights
      *
      * @return  array   all application rights
