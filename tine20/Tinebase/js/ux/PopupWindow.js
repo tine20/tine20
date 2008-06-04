@@ -42,11 +42,20 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
 	 * @cfg {Int} height of new window
 	 */
 	height: 500,
+    /**
+     * @property {Browser Window}
+     */
+    popup: null,
 	/**
 	 * @private
 	 */
 	initComponent: function(){
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
+        
+        // open popup window first to save time
+        this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
+        //this.injectFramework(this.popup);
+
         this.addEvents({
         	/**
              * @event update
@@ -61,34 +70,38 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
             "close" : true
         });
         
-        // open popup window
-        this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
-        //this.injectFramework(this.popup);
-        
-        // we need to store ourself in the popup, cause we loose scope by the native broweser event!
-        this.popup.ParentEventProxy = this;
+        // register popup
+        window.Ext.ux.PopupWindowMgr.register(this);
         
         /*
         if (this.popup.addEventListener) {
-            this.popup.addEventListener('load', this.setupPopupEvents, true);
+            this.popup.addEventListener('load', this.onLoad, true);
+            this.popup.addEventListener('unload', this.onClose, true);
         } else if (this.popup.attachEvent) {
-            this.popup.attachEvent('onload', this.setupPopupEvents);
+            this.popup.attachEvent('onload', this.onLoad);
+            this.popup.attachEvent('onunload', this.onClose);
         } else {
-            this.popup.onload = this.setupPopupEvents;
+            this.popup.onload = this.onLoad;
+            this.popup.onunload = this.onClose;
         }
         */
 	},
 	/**
 	 * @private
 	 * called after this.popups native onLoad
+     * note: 'this' references the popup, whereas window references the parent
 	 */
-	setupPopupEvents: function(){
-		// Attention, complicated stuff!
-		// 'this' references the popup, whereas window references the parent
+	onLoad: function() {
         this.Ext.onReady(function() {
         	//console.log(this);
         	//console.log(window);
         }, this);
+    },
+    /**
+     * @private
+     * note: 'this' references the popup, whereas window references the parent
+     */
+    onClose: function() {
     },
     /**
      * injects document with framework html (head)
@@ -99,7 +112,7 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         );
         
         var head = Ext.getDoc().dom.documentElement.firstChild.innerHTML;
-        head = head.replace(/Ext\.onReady[^<]*/m, 'Ext.onReady(function(){' + this.onReadyFn + '});');
+        head = head.replace(/Ext\.onReady[^<]*/m, 'Ext.onReady(function(){formData={"linking":{"link_app1":"","link_id1":"-1"}}; Tine.Tinebase.initFramework();' + this.onReadyFn + 'window.focus();});');
         
         var doc = popup.document;
         doc.open("text/html; charset=utf-8", "replace");
