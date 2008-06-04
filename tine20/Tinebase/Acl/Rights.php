@@ -22,20 +22,8 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Tinebase_Acl_Rights
+class Tinebase_Acl_Rights extends Tinebase_Application_Rights_Abstract
 {
-    /**
-     * the right to be an administrative account for an application
-     *
-     */
-    const ADMIN = 'admin';
-        
-    /**
-     * the right to run an application
-     *
-     */
-    const RUN = 'run';
-    
     /**
      * the right to manage shared tags
      */
@@ -83,18 +71,20 @@ class Tinebase_Acl_Rights
     /**
      * get all possible application rights
      *
-     * @param   Tinebase_Record_RecordSet $_applicationRights  app rights (empty/NULL -> Tinebase)
+     * @param   string  $_application application name
      * @return  array   all application rights
-     * 
      */
-    public function getAllApplicationRights($_applicationId = NULL)
-    {
-        // check if tinebase application
-        if ( $_applicationId === NULL ) {
-            $allRights = array ( self::MANAGE_SHARED_TAGS );
+    public function getAllApplicationRights($_application = NULL)
+    {        
+        $allRights = parent::getAllApplicationRights();
+                
+        if ( $_application === NULL || $_application === 'Tinebase' ) {
+            $addRights = array( self::MANAGE_SHARED_TAGS );
         } else {
-            $allRights = array ( self::RUN, self::ADMIN );
+            $addRights = array();
         }
+        
+        $allRights = array_merge($allRights, $addRights);
         
         return $allRights;
     }
@@ -107,16 +97,8 @@ class Tinebase_Acl_Rights
     private function getTranslatedRightDescriptions()
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
-        
-        $rightDescriptions = array(
-            self::ADMIN                 => array(
-                'text'          => $translate->_('admin'),
-                'description'   => $translate->_('admin right description'),
-            ),
-            self::RUN                   => array(
-                'text'          => $translate->_('run'),
-                'description'   => $translate->_('run right description'),
-            ),
+
+        $rightDescriptions = array(            
             self::MANAGE_SHARED_TAGS    => array(
                 'text'          => $translate->_('manage shared tags'),
                 'description'   => $translate->_('manage shared tags right description'),
@@ -134,10 +116,7 @@ class Tinebase_Acl_Rights
      */
     public function getRightDescription($_right)
     {        
-        $result = array(
-            'text'          => $_right,
-            'description'   => $_right . " right",
-        );
+        $result = parent::getRightDescription($_right);
         
         $rightDescriptions = self::getTranslatedRightDescriptions();
         
@@ -147,5 +126,4 @@ class Tinebase_Acl_Rights
 
         return $result;
     }
-    
 }

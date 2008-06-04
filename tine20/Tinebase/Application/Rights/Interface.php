@@ -26,13 +26,6 @@ interface Tinebase_Application_Rights_Interface
     public function getAllApplicationRights();
     
     /**
-     * get translated right descriptions
-     * 
-     * @return  array with translated descriptions for this applications rights
-     */
-    private function getTranslatedRightDescriptions();
-
-    /**
      * get right description
      * 
      * @param   string right

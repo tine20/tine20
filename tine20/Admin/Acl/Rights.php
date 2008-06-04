@@ -26,7 +26,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Admin_Acl_Rights extends Tinebase_Acl_Rights
+class Admin_Acl_Rights extends Tinebase_Application_Rights_Abstract
 {
    /**
      * the right to manage applications
@@ -77,12 +77,6 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
     const VIEW_ACCESS_LOG = 'view_access_log';
     
     /**
-     * application name
-     * @staticvar string
-     */
-    const APP_NAME = 'Admin';
-    
-    /**
      * holdes the instance of the singleton
      *
      * @var Admin_Acl_Rights
@@ -127,16 +121,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights
      *
      * @return  array   all application rights
      */
-    public function getAllApplicationRights($_applicationId = NULL)
+    public function getAllApplicationRights()
     {
-        // get application id
-        if ( $_applicationId === NULL ) {
-            $appId = Tinebase_Application::getInstance()->getApplicationByName(self::APP_NAME)->getId();
-        } else {
-            $appId = $_applicationId;
-        }
         
-        $allRights = parent::getAllApplicationRights($appId);
+        $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
             self::MANAGE_APPS, 

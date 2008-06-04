@@ -191,7 +191,7 @@ class Tinebase_Acl_Roles
             ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
             //->group(SQL_TABLE_PREFIX . 'role_rights.right');
             
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());            
             
         $stmt = $this->_db->query($select);
 
@@ -209,7 +209,9 @@ class Tinebase_Acl_Roles
             if ( !in_array($right, $result) ) {
                 $result[] = $right;
             }
-        }                
+        }    
+
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'rights: ' . print_r($result, true));      
         
         return $result;
     }

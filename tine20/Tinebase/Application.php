@@ -335,13 +335,11 @@ class Tinebase_Application
         
         // call getAllApplicationRights for application (if it has specific rights)
         $appAclClassName = $application->name . '_Acl_Rights';
-        if (class_exists($appAclClassName)) {
+        if ( @class_exists($appAclClassName) ) {
             $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
-            $allRights = call_user_func(array($appAclObj, 'getAllApplicationRights'));
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' get all rights from ' . $application->name . 
-            //    "_Acl_Rights ( " . $application->name."/Acl/Rights.php" ." )");
+            $allRights = $appAclObj->getAllApplicationRights();
         } else {
-            $allRights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights($_applicationId);   
+            $allRights = Tinebase_Acl_Rights::getInstance()->getAllApplicationRights($application->name);   
         }
         
         return $allRights;
@@ -359,8 +357,10 @@ class Tinebase_Application
         $application = Tinebase_Application::getInstance()->getApplicationById($_applicationId);
         
         // call getAllApplicationRights for application (if it has specific rights)
-        if ( file_exists ( $application->name."/Acl/Rights.php") ) {
-            $description = call_user_func(array($application->name . "_Acl_Rights", 'getRightDescription'), $_right);
+        $appAclClassName = $application->name . '_Acl_Rights';
+        if ( @class_exists($appAclClassName) ) {
+            $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
+            $description = $appAclObj->getRightDescription($_right);
         } else {
             $description = Tinebase_Acl_Rights::getInstance()->getRightDescription($_right);   
         }
