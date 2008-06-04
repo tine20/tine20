@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        implement some incomplete tests
  */
 
 /**
@@ -149,6 +151,11 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     	}
     }
 
+    /**
+     * test set array exception
+     *
+     * @todo    implement else branch?
+     */
     public function testSetFromArrayException() {
     	if (isset($this->expectSuccess['TestRecord']['testSetFromArrayException'])) {
 	    
@@ -162,16 +169,17 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
 		        }
 		      	  $this->fail('An expected exception has not been raised.');
     		 } 	  
-    	 } else {
+    	 } /*else {
     		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}	
+    	}	*/
     }
  
+    /**
+     * test set timezone
+     *
+     * @todo    implement
+     */
     public function testSetTimezone() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
     }
 	
     public function testSetTimezoneException() {
@@ -192,20 +200,21 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     	}	
     }
 
-	public function testGetValidationErrors() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+    /**
+     * test set timezone
+     *
+     * @todo    implement
+     */
+    public function testGetValidationErrors() {
 	}
 	
+    /**
+     * test GetValidationErrorsBypassFilters
+     *
+     * @todo    implement
+     */
 	public function testGetValidationErrorsBypassFilters() {
-		//if(isset($this->objects['TestRecordBypassFilters'])) {
-        
-		// Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+		//if(isset($this->objects['TestRecordBypassFilters'])) {        
 	}	
 		
 	public function testToArray() 	{
@@ -218,14 +227,18 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     	}		
 	}
 		
+    /**
+     * test is valid
+     *
+     * @todo    implement
+     */
 	public function testIsValid() {
 		//foreach ($this->objects as $record ) {
 		//	if (!$record->isValid()) {
 				//echo "Error in " . $record->getId() ;
 		//	}
 		//	$this->assertTrue($record->isValid());
-		//}
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		//}		
 	}
 	
 	public function test__set() {
