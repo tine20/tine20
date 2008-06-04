@@ -763,6 +763,7 @@ Tine.Tasks.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
    height: 300,
    initComponent: function(){
         this.url = 'index.php?method=Tasks.editTask&taskId=' + this.id + '&linkingApp='+ this.relatedApp + '&linkedId=' + this.relatedId + '&containerId=' + this.containerId;
+        //this.onReadyFn = 'Tine.Tasks.EditDialog();';
         Tine.Tasks.EditPopup.superclass.initComponent.call(this);
    }
 });

@@ -63,6 +63,7 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         
         // open popup window
         this.popup = Tine.Tinebase.Common.openWindow(this.name, this.url, this.width, this.height);
+        //this.injectFramework(this.popup);
         
         // we need to store ourself in the popup, cause we loose scope by the native broweser event!
         this.popup.ParentEventProxy = this;
@@ -88,6 +89,24 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         	//console.log(this);
         	//console.log(window);
         }, this);
+    },
+    /**
+     * injects document with framework html (head)
+     */
+    injectFramework: function(popup) {
+        var framework = new Ext.XTemplate('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n' ,
+            '<html><head>{head}</head><body></body></html>'
+        );
+        
+        var head = Ext.getDoc().dom.documentElement.firstChild.innerHTML;
+        head = head.replace(/Ext\.onReady[^<]*/m, 'Ext.onReady(function(){' + this.onReadyFn + '});');
+        
+        var doc = popup.document;
+        doc.open("text/html; charset=utf-8", "replace");
+        doc.write(framework.apply({
+            head:  head
+        }));
+        doc.close();
     }
 });
 
