@@ -468,7 +468,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->setLinkedPartner($lead, $_lead->partner);
         $this->setLinkedTasks($lead, $_lead->tasks);
         
-        $this->sendNotifications(true, $lead, $_lead->responsible);
+        // @todo add notifications later
+        //$this->sendNotifications(true, $lead, $_lead->responsible);
         
         return $this->getLead($lead->getId());
     }
