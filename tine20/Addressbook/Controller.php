@@ -294,7 +294,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function createPersonalFolder($_account)
     {
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_account);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_account);
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Contacts',
             'type'              => Tinebase_Container::TYPE_PERSONAL,

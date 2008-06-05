@@ -93,7 +93,7 @@ class Dialer_Backend_Asterisk
      */
     public function getPreferedExtension($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         
         $extensionsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'dialer_extensions'));
         

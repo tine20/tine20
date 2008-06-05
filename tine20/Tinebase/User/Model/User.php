@@ -261,7 +261,7 @@ class Tinebase_User_Model_User extends Tinebase_Record_Abstract
      * @param int|string|Tinebase_User_Model_User $_accountId the accountid to convert
      * @return int
      */
-    static public function convertAccountIdToInt($_accountId)
+    static public function convertUserIdToInt($_accountId)
     {
         if ($_accountId instanceof Tinebase_User_Model_User) {
             if (empty($_accountId->accountId)) {

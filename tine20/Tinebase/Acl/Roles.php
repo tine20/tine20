@@ -135,7 +135,7 @@ class Tinebase_Acl_Roles
      */
     public function getApplications($_accountId)
     {  
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
 
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
         
@@ -180,7 +180,7 @@ class Tinebase_Acl_Roles
             throw new Exception('user has no rights. the application is disabled.');
         }
         
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
                         
@@ -365,7 +365,7 @@ class Tinebase_Acl_Roles
      */
     public function getRoleMemberships($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);        
         
         $memberships = array();
