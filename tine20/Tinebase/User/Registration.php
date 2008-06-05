@@ -103,7 +103,7 @@ class Tinebase_User_Registration
         // if exists -> return false
         try {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
-                ' call getAccountByLoginName with username ' . $_username);
+                ' call getUserByLoginName with username ' . $_username);
             // get account with this username from db
             $account = Tinebase_User::getInstance()->getUserByLoginName($_username);
             return false;

@@ -100,7 +100,7 @@ Tine.widgets.account.PickerPanel = Ext.extend(Ext.TabPanel, {
             
             switch (accountType){
                 case 'user':
-                    this.requestParams.method = 'Tinebase.getAccounts';
+                    this.requestParams.method = 'Tinebase.getUsers';
                     this.requestParams.sort   = 'accountDisplayName';
                     Ext.Ajax.request({
                         params: this.requestParams,

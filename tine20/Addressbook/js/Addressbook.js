@@ -498,7 +498,7 @@ Tine.Addressbook.Main = {
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.containerType) {
             case 'internalContainer':
-                dataStore.baseParams.method = 'Addressbook.getAccounts';
+                dataStore.baseParams.method = 'Addressbook.getUsers';
                 break;
 
             case Tine.Tinebase.container.TYPE_SHARED:

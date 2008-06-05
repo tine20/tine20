@@ -2042,7 +2042,7 @@ Tine.Crm.LeadEditDialog = function() {
             var currentContactsTabId = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getId();
             //console.log(currentContactsTabId);
             if(currentContactsTabId == 'crm_gridAccount') {
-                var method = 'Addressbook.getAccounts';
+                var method = 'Addressbook.getUsers';
             } else {
                 var method = 'Addressbook.getAllContacts';
             }

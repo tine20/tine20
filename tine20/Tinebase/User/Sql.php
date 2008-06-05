@@ -112,7 +112,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if($_accountClass == 'Tinebase_User_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
-        //error_log("getAccounts:: " . $select->__toString());
+        //error_log("getUsers:: " . $select->__toString());
 
         $stmt = $select->query();
 
@@ -153,7 +153,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::getAccountByLoginName: ' . $e->getMessage() . "\n" .
+            Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::getUserByLoginName: ' . $e->getMessage() . "\n" .
                 "Tinebase_User_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);

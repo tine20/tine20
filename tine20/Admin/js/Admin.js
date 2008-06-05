@@ -1285,7 +1285,7 @@ Tine.Admin.Accounts.Main = function() {
          */
         var dataStore = new Ext.data.JsonStore({
             baseParams: {
-                method: 'Admin.getAccounts'
+                method: 'Admin.getUsers'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -1451,7 +1451,7 @@ Tine.Admin.Accounts.Main = function() {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Admin.deleteAccounts',
+	                        method: 'Admin.deleteUserss',
 	                        accountIds: Ext.util.JSON.encode(accountIds)
 	                    },
 	                    text: 'Deleting account(s)...',
@@ -1730,7 +1730,7 @@ Tine.Admin.Accounts.EditDialog = function() {
 	        Ext.Ajax.request({
 	            url: 'index.php',
 	            params: {
-	                method: 'Admin.deleteAccounts', 
+	                method: 'Admin.deleteUserss', 
 	                accountIds: accountIds
 	            },
 	            text: 'Deleting account...',
