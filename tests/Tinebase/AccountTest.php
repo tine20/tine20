@@ -301,7 +301,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_User_Model_User::convertAccountIdToInt (0);
+        Tinebase_User_Model_User::convertUserIdToInt(0);
   
     }
 
@@ -313,7 +313,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
     	
-        Tinebase_User_Model_User::convertAccountIdToInt ( $this->objects['noIdAccount'] );
+        Tinebase_User_Model_User::convertUserIdToInt( $this->objects['noIdAccount'] );
   
     }
 }		
