@@ -90,7 +90,7 @@ class Tinebase_User_Model_FullUser extends Tinebase_User_Model_User
      *
      * @return Tinebase_User_Model_User
      */
-    public function getPublicAccount()
+    public function getPublicUser()
     {
         $result = new Tinebase_User_Model_User($this->toArray(), true);
         
