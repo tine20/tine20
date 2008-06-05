@@ -209,7 +209,7 @@ class Tinebase_User_RegistrationTest extends PHPUnit_Framework_TestCase
      */
     public function testActivateAccount()
     {
-    	$result = Tinebase_User_Registration::getInstance()->activateAccount ( $this->objects['registration']->login_hash );
+    	$result = Tinebase_User_Registration::getInstance()->activateUser( $this->objects['registration']->login_hash );
 
     	// check account
     	$account = Tinebase_User::getInstance()->getFullUserByLoginName( $this->userData['accountLoginName'] );

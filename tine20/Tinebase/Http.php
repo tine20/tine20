@@ -185,11 +185,11 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 * @param 	string $id
 	 * 
 	 */
-	public function activateAccount ( $id ) 
+	public function activateUser( $id ) 
 	{
 				
 		// update registration table and get username / account values
-		$account = Tinebase_User_Registration::getInstance()->activateAccount ( $id );
+		$account = Tinebase_User_Registration::getInstance()->activateUser( $id );
 
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
 		

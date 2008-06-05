@@ -256,7 +256,7 @@ class Tinebase_User_Registration
         // if expires = 0 -> no activation link in email
         if (isset($this->_config->expires) && $this->_config->expires > 0 && isset($_SERVER['SERVER_NAME'])) {
             $view->mailActivationLink = 'http://' . $_SERVER['SERVER_NAME'] . 
-                $_SERVER['PHP_SELF'] . '?method=Tinebase.activateAccount&id=' . 
+                $_SERVER['PHP_SELF'] . '?method=Tinebase.activateUser&id=' . 
                 $hashedUsername;
             // deactivate registration
             $registration->status = 'waitingforactivation';
@@ -369,7 +369,7 @@ class Tinebase_User_Registration
      * @return	Tinebase_User_Model_FullUser
      * 
      */
-    public function activateAccount ($_loginHash)
+    public function activateUser($_loginHash)
     {
         // get registration by hash
         $registration = $this->getRegistrationByHash($_loginHash);
