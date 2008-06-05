@@ -6,6 +6,8 @@
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        rework functions
  */
 
 /**
@@ -373,10 +375,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             Crm_Controller::getInstance()->deleteProducts($savedLead->id);    
         }         
         
-        $result = $savedLead->toArray();
+        //$result = $savedLead->toArray();
+        //$result['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();        
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $savedLead->toArray()
+        );
         
-        $result['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();        
-
         return $result;  
     }      
 
