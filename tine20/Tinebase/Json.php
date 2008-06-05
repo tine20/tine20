@@ -209,7 +209,7 @@ class Tinebase_Json
         if (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === true) {
             $response = array(
 				'success'       => TRUE,
-                'account'       => Zend_Registry::get('currentAccount')->Tinebase_User()->toArray(),
+                'account'       => Zend_Registry::get('currentAccount')->getPublicUser()->toArray(),
 				'jsonKey'       => Zend_Registry::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
 			);
