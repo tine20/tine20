@@ -2,12 +2,15 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Tinebase
- * @subpackage  Account
+ * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        rework that
+ * @todo        remove deprecated test
+ * @todo        complete code coverage of controller
  */
 
 /**
@@ -93,6 +96,58 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'probability'   => 70,
             'end_scheduled' => NULL,
         )); 
+
+        $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'), 
+            'Addressbook', 
+            Zend_Registry::get('currentAccount'), 
+            Tinebase_Container::GRANT_EDIT
+        );
+        
+        $addressbookContainer = $addressbookPersonalContainer[0];
+        
+        $this->objects['user'] = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'email'                 => 'unittests@tine20.org',
+            'email_home'            => 'unittests@tine20.org',
+            'id'                    => 120,
+            'note'                  => 'Bla Bla Bla',
+            'owner'                 => $addressbookContainer->id,
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Kneschke',
+            'n_fileas'              => 'Kneschke, Lars',
+            'n_given'               => 'Lars',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+        )); 
     }
 
     /**
@@ -103,7 +158,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+        // remove contacts for link tests
+        try {
+            Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
+        } catch ( Exception $e ) {
+            // do nothing
+        }
+        
     }
     
     /**
@@ -218,16 +279,43 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         // link task
         //print_r($task->toArray());
-        Crm_Controller::getInstance()->setLinkedTasks($this->objects['initialLead']->getId(), array($task->getId()));
+        Crm_Controller::getInstance()->setLinksForApplication($this->objects['initialLead']->getId(), array($task->getId()), 'Tasks');
         
         // get linked tasks
-        $linkedTasks = Crm_Controller::getInstance()->getLinks($this->objects['initialLead']->getId(), 'tasks');
+        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($this->objects['initialLead']->getId(), 'Tasks');
         
         //print_r($linkedTasks);
         
         $this->assertGreaterThan(0, count($linkedTasks));
         $this->assertEquals($task->getId(), $linkedTasks[0]['recordId']);
         
+    }
+
+    /**
+     * try to set / get linked contacts
+     *
+     */
+    public function testLinkedContacts()
+    {
+        // create test contact
+        try {
+            $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['user']->getId());
+        } catch ( Exception $e ) {
+            $contact = Addressbook_Backend_Sql::getInstance()->addContact($this->objects['user']);
+        }
+        
+        // link contact
+        Crm_Controller::getInstance()->setLinksForApplication($this->objects['initialLead']->getId(), array($contact->getId()), 'Addressbook', 'account');
+        
+        // get linked contacts
+        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($this->objects['initialLead']->getId(), 'Addressbook');
+        
+        //print_r($linkedContacts);
+        
+        $this->assertGreaterThan(0, count($linkedContacts));
+        $this->assertEquals($contact->getId(), $linkedContacts[0]['recordId']);
+        
+        // delete contact
     }
     
     /**
@@ -305,8 +393,3 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
 }		
-	
-
-if (PHPUnit_MAIN_METHOD == 'Crm_ControllerTest::main') {
-    Crm_ControllerTest::main();
-}
