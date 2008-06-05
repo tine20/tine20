@@ -138,41 +138,63 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
     /*********************** links functions ************************/
     
-    // @todo check/rework those
+    // @todo    check/rework those
+    // @todo    add get/set ALL links functions (for performance/easy to use)?
     
     /**
-     * get lead links
+     * set lead links for an application
      *
-     * @param integer $_leadId
-     * @param string $_application
+     * @param int|Crm_Model_Lead $_leadId
+     * @param array $_linkIds
+     * @param string $_applicationName
+     * @param string $_remark
      * @return unknown
+     * 
+     * @todo    write test
+     * @todo    replace all other setLinksXXX functions with this one
      */
-    public function getLinks($_leadId, $_application = NULL)
+    public function setLinksForApplication($_leadId, $_linkIds, $_applicationName, $_remark = NULL)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
+        $applicationName = strtolower($_applicationName);
+        $remark = ( $_remark !== NULL ) ? $_remark : $applicationName;
         
-        $links = Tinebase_Links::getInstance()->getLinks('crm', $leadId, $_application);
-        
-        return $links;
-    }
-    
-    public function setLinks($_leadId, $_taskIds)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        if(is_array($_taskIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'tasks', $_taskIds, 'task');
+        if(is_array($_linkIds)) {
+            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, $applicationName, $_linkIds, $remark);
         } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'tasks');
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, $applicationName);
         }
         
         return $result;
     }    
                 
     /**
+     * get lead links for an application
+     *
+     * @param int|Crm_Model_Lead $_leadId
+     * @param string $_applicationName
+     * @return array with links
+     * 
+     * @todo    write test
+     * @todo    replace all other getLinksXXX functions with this one
+     */
+    public function getLinksForApplication($_leadId, $_applicationName)
+    {
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
+        $applicationName = strtolower($_applicationName);
+        
+        $result = Tinebase_Links::getInstance()->getLinks('crm', $leadId, $applicationName);
+                        
+        return $result;
+    }    
+    
+    /**
      * fetch ids of linked properties(contacts, tasks, notes)
      *
      * @param Crm_Model_Lead $_lead
      * @deprecated ?
+     * 
+     * @todo    replace with getLinksForApplication
      */
     protected function getLinkedProperties(Crm_Model_Lead &$_lead)
     {
@@ -412,16 +434,45 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         $lead = $this->_backend->addLead($_lead);
         
-        $this->setLinkedAccount($lead, $_lead->responsible);
-        $this->setLinkedCustomer($lead, $_lead->customer);
-        $this->setLinkedPartner($lead, $_lead->partner);
-        $this->setLinkedTasks($lead, $_lead->tasks);
-        
+        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'account');
+        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
+        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
+        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
+                
         $this->sendNotifications(false, $lead, $_lead->responsible);
         
         return $this->getLead($lead->getId());
     }     
         
+   /**
+     * update Lead
+     *
+     * @param Crm_Model_Lead $_lead the lead to update
+     * @return Crm_Model_Lead the updated lead
+     */ 
+    public function updateLead(Crm_Model_Lead $_lead)
+    {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
+        }
+
+        $lead = $this->_backend->updateLead($_lead);
+        
+        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'account');
+        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
+        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
+        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');                
+                
+        // @todo add notifications later
+        //$this->sendNotifications(true, $lead, $_lead->responsible);
+        
+        return $this->getLead($lead->getId());
+    }
+
     /**
      * delete a lead
      *
@@ -444,36 +495,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }
     }
     
-   /**
-     * update Lead
-     *
-     * @param Crm_Model_Lead $_lead the lead to update
-     * @return Crm_Model_Lead the updated lead
-     */ 
-    public function updateLead(Crm_Model_Lead $_lead)
-    {
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
-        }
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
-        }
-
-        $lead = $this->_backend->updateLead($_lead);
-        
-        // @todo use setLinks()
-        $this->setLinkedAccount($lead, $_lead->responsible);
-        $this->setLinkedCustomer($lead, $_lead->customer);
-        $this->setLinkedPartner($lead, $_lead->partner);
-        $this->setLinkedTasks($lead, $_lead->tasks);
-        
-        // @todo add notifications later
-        //$this->sendNotifications(true, $lead, $_lead->responsible);
-        
-        return $this->getLead($lead->getId());
-    }
-
     /*********** count leads **************/
 
     // @todo    check if all these get functions are needed -> perhaps we could generalise some of them
@@ -761,7 +782,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function createPersonalFolder($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Leads',
@@ -788,7 +809,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function deletePersonalFolder($_accountId)
     {
-        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         
         // delete personal folder here
     }
@@ -881,6 +902,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     }   
   
     // @deprecated use setLinks instead
+    /*
     public function setLinkedCustomer($_leadId, $_contactIds)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
@@ -916,6 +938,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         return $result;
     }
+    */
 
     /**
      * setLinkedTasks
@@ -925,6 +948,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @return unknown
      * @deprecated use setLinks instead
      */
+    /*
     public function setLinkedTasks($_leadId, $_taskIds)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
@@ -936,6 +960,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         return $result;
     }
+    */
     
     /**
      * returns an empty lead with some defaults set
@@ -962,6 +987,24 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         return $emptyLead;
     }
+    
+    /**
+     * get lead links
+     *
+     * @param integer $_leadId
+     * @param string $_application
+     * @return unknown
+     */
+    /*
+    public function getLinks($_leadId, $_application = NULL)
+    {
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
+        
+        $links = Tinebase_Links::getInstance()->getLinks('crm', $leadId, $_application);
+        
+        return $links;
+    }
+    */
     
     
 }
