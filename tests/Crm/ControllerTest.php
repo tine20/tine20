@@ -157,14 +157,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {
-        // remove contacts for link tests
-        try {
-            Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
-        } catch ( Exception $e ) {
-            // do nothing
-        }
-        
+    {        
     }
     
     /**
@@ -316,6 +309,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($contact->getId(), $linkedContacts[0]['recordId']);
         
         // delete contact
+        Addressbook_Controller::getInstance()->deleteContact($this->objects['user']->getId());
     }
     
     /**
