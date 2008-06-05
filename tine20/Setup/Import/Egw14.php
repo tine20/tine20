@@ -54,7 +54,7 @@ class Setup_Import_Egw14
     {
         // set import user current account
         echo "adding import user<br/>";
-        $account = Tinebase_User::getInstance()->getFullAccountByLoginName($_importAccountName);
+        $account = Tinebase_User::getInstance()->getFullUserByLoginName($_importAccountName);
         Zend_Registry::set('currentAccount', $account);
         
     }
@@ -102,7 +102,7 @@ class Setup_Import_Egw14
                 'accountEmailAddress'       => 'Emailaddress'
             ));
             
-            Tinebase_User_Sql::getInstance()->addAccount($tineAccount);
+            Tinebase_User_Sql::getInstance()->addUser($tineAccount);
         }
         
     }

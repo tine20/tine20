@@ -93,12 +93,12 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                     $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
                     $_task = $task->toArray();
 
-                    $creator = Tinebase_User::getInstance()->getAccountById($_task['created_by']);
+                    $creator = Tinebase_User::getInstance()->getUserById($_task['created_by']);
                     $_creator = $creator->toArray();
                     $_task['creator'] = $_creator['accountFullName'];
                     
                     if ($_task['last_modified_by'] != NULL) {
-                        $modifier = Tinebase_User::getInstance()->getAccountById($_task['last_modified_by']);
+                        $modifier = Tinebase_User::getInstance()->getUserById($_task['last_modified_by']);
                         $_modifier = $modifier->toArray();
                         $_task['modifier'] = $_modifier['accountFullName'];         
                     }

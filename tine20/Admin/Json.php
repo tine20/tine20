@@ -36,14 +36,14 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * @param int $_limit
      * @return array with results array & totalcount (int)
      */
-    public function getAccounts($filter, $sort, $dir, $start, $limit)
+    public function getUsers($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        $accounts = Admin_Controller::getInstance()->getFullAccounts($filter, $sort, $dir, $start, $limit);
+        $accounts = Admin_Controller::getInstance()->getFullUsers($filter, $sort, $dir, $start, $limit);
 
         /*foreach($accounts as $key => $account) {
             if ($account['last_login'] !== NULL) {
@@ -89,9 +89,9 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
         }
         
         if ($account->getId() == NULL) {
-            $account = Admin_Controller::getInstance()->addAccount($account, $password, $passwordRepeat);
+            $account = Admin_Controller::getInstance()->addUser($account, $password, $passwordRepeat);
         } else {
-            $account = Admin_Controller::getInstance()->updateAccount($account, $password, $passwordRepeat);
+            $account = Admin_Controller::getInstance()->updateUser($account, $password, $passwordRepeat);
         }
         
         $result = $account->toArray();
@@ -106,7 +106,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
      * @param   string $accountIds  json encoded array of account ids
      * @return  array with success flag
      */
-    public function deleteAccounts($accountIds)
+    public function deleteUsers($accountIds)
     {
         $result = array(
             'success' => TRUE
@@ -114,7 +114,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         $accountIds = Zend_Json::decode($accountIds);
 
-        Admin_Controller::getInstance()->deleteAccounts($accountIds);
+        Admin_Controller::getInstance()->deleteUsers($accountIds);
         
         return $result;
     }
@@ -403,7 +403,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         $result['results'] = array ();
         foreach ( $accountIds as $accountId ) {
-            $result['results'][] = Tinebase_User::getInstance()->getAccountById($accountId)->toArray();
+            $result['results'][] = Tinebase_User::getInstance()->getUserById($accountId)->toArray();
         }
                 
         $result['totalcount'] = count($result['results']);
@@ -754,7 +754,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             
             switch ($item[$prefix . 'type']) {
                 case 'user':
-                    $item[$prefix . 'name'] = Tinebase_User::getInstance()->getAccountById($item[$prefix . 'id'])->accountDisplayName;
+                    $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
                     break;
                 case 'group':
                     $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;

@@ -33,7 +33,7 @@ class Admin_Http extends Tinebase_Application_Http_Abstract
     public function editAccountDialog($accountId)
     {
         if (!empty($accountId)) {
-            $account = Tinebase_User::getInstance()->getFullAccountById($accountId);
+            $account = Tinebase_User::getInstance()->getFullUserById($accountId);
             $account->setTimezone(Zend_Registry::get('userTimeZone'));
             $arrayAccount = $account->toArray();
             

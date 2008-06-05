@@ -95,7 +95,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
      * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
      */
-    public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, 
+    public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, 
         $_limit = NULL, $_accountClass = 'Tinebase_User_Model_User')
     {        
         if (!empty($_filter)) {
@@ -150,7 +150,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      *
      * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
-    public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUserByLoginName($_loginName, $_accountClass = 'Tinebase_User_Model_User')
     {
         $loginName = Zend_Ldap::filterEscape($_loginName);
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $loginName);
@@ -196,7 +196,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param int $_accountId the account id
      * @return Tinebase_User_Model_User the account object
      */
-    public function getAccountById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
+    public function getUserById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
     {
         $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         
@@ -330,7 +330,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
      */
-    public function updateAccount(Tinebase_User_Model_FullUser $_account) 
+    public function updateUser(Tinebase_User_Model_FullUser $_account) 
     {
         throw new Exception('not yet implemented');
     }
@@ -341,7 +341,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
      */
-    public function addAccount(Tinebase_User_Model_FullUser $_account) 
+    public function addUser(Tinebase_User_Model_FullUser $_account) 
     {
         throw new Exception('not yet implemented');
     }
@@ -351,7 +351,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      *
      * @param int $_accountId
      */
-    public function deleteAccount($_accountId) 
+    public function deleteUser($_accountId) 
     {
         throw new Exception('not yet implemented');
     }
@@ -361,7 +361,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
      *
      * @param array $_accountIds
      */
-    public function deleteAccounts(array $_accountIds) 
+    public function deleteUsers(array $_accountIds) 
     {
         throw new Exception('not yet implemented');
     }

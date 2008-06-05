@@ -105,7 +105,7 @@ class Tinebase_User_Registration
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
                 ' call getAccountByLoginName with username ' . $_username);
             // get account with this username from db
-            $account = Tinebase_User::getInstance()->getAccountByLoginName($_username);
+            $account = Tinebase_User::getInstance()->getUserByLoginName($_username);
             return false;
         } catch (Exception $e) {
             return true;
@@ -203,7 +203,7 @@ class Tinebase_User_Registration
         }
         // get model & save user data (account & contact) via the User and Addressbook controllers
         $account = new Tinebase_User_Model_FullUser($regData);
-        Tinebase_User::getInstance()->addAccount($account);
+        Tinebase_User::getInstance()->addUser($account);
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
             ' saved user account ' . $regData['accountLoginName']);
         // generate password and save it
@@ -301,7 +301,7 @@ class Tinebase_User_Registration
     public function sendLostPasswordMail ($_username)
     {
         // get full account
-        $fullAccount = Tinebase_User::getInstance()->getFullAccountByLoginName($_username);
+        $fullAccount = Tinebase_User::getInstance()->getFullUserByLoginName($_username);
         // generate new password
         $newPassword = $this->generatePassword();
         // save new password in account
@@ -377,7 +377,7 @@ class Tinebase_User_Registration
         $registration->status = 'activated';
         $this->updateRegistration($registration);
         // get account by username
-        $account = Tinebase_User::getInstance()->getFullAccountByLoginName($registration['login_name']);
+        $account = Tinebase_User::getInstance()->getFullUserByLoginName($registration['login_name']);
         // set new expire_date in DB (account)
         Tinebase_User::getInstance()->setExpiryDate($account['accountId'], NULL);
         return $account;

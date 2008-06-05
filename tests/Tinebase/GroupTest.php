@@ -101,19 +101,19 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         
         // add accounts for group member tests
         try {
-        	Tinebase_User::getInstance()->getAccountById($this->objects['account1']->accountId) ;
+        	Tinebase_User::getInstance()->getUserById($this->objects['account1']->accountId) ;
         } catch ( Exception $e ) {
-	        Tinebase_User::getInstance()->addAccount (  $this->objects['account1'] );
+	        Tinebase_User::getInstance()->addUser(  $this->objects['account1'] );
         }
         try {
-        	Tinebase_User::getInstance()->getAccountById($this->objects['account2']->accountId) ;
+        	Tinebase_User::getInstance()->getUserById($this->objects['account2']->accountId) ;
         } catch ( Exception $e ) {
-	        Tinebase_User::getInstance()->addAccount (  $this->objects['account2'] );
+	        Tinebase_User::getInstance()->addUser(  $this->objects['account2'] );
         }
         try {
-        	Tinebase_User::getInstance()->getAccountById($this->objects['account3']->accountId) ;
+        	Tinebase_User::getInstance()->getUserById($this->objects['account3']->accountId) ;
         } catch ( Exception $e ) {
-	        Tinebase_User::getInstance()->addAccount (  $this->objects['account3'] );
+	        Tinebase_User::getInstance()->addUser(  $this->objects['account3'] );
         }
         
         return;
@@ -129,9 +129,9 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
 		// remove accounts for group member tests
-        Tinebase_User::getInstance()->deleteAccount (  $this->objects['account1']->accountId );
-        Tinebase_User::getInstance()->deleteAccount (  $this->objects['account2']->accountId );
-        Tinebase_User::getInstance()->deleteAccount (  $this->objects['account3']->accountId );
+        Tinebase_User::getInstance()->deleteUser(  $this->objects['account1']->accountId );
+        Tinebase_User::getInstance()->deleteUser(  $this->objects['account2']->accountId );
+        Tinebase_User::getInstance()->deleteUser(  $this->objects['account3']->accountId );
     }
     
     /**

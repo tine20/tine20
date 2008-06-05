@@ -89,7 +89,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testAddAccount()
     {
-        $account = Tinebase_User_Sql::getInstance()->addAccount($this->objects['initialAccount']);
+        $account = Tinebase_User_Sql::getInstance()->addUser($this->objects['initialAccount']);
         
         $this->assertEquals($this->objects['initialAccount']['accountId'], $account->accountId);
     }
@@ -100,7 +100,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccounts()
     {
-        $accounts = Tinebase_User_Sql::getInstance()->getAccounts('phpunit', 'accountStatus');
+        $accounts = Tinebase_User_Sql::getInstance()->getUsers('phpunit', 'accountStatus');
         
         $this->assertEquals(1, count($accounts));
     }
@@ -111,7 +111,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccountByLoginName()
     {
-        $account = Tinebase_User_Sql::getInstance()->getAccountByLoginName('tine20phpunit', 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User_Sql::getInstance()->getUserByLoginName('tine20phpunit', 'Tinebase_User_Model_FullUser');
         
         $this->assertEquals($this->objects['initialAccount']['accountLoginName'], $account->accountLoginName);
     }
@@ -123,7 +123,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateAccount()
     {
-        $account = Tinebase_User_Sql::getInstance()->updateAccount($this->objects['updatedAccount']);
+        $account = Tinebase_User_Sql::getInstance()->updateUser($this->objects['updatedAccount']);
         
         $this->assertEquals($this->objects['updatedAccount']['accountLoginName'], $account->accountLoginName);
         $this->assertEquals('disabled', $account->accountStatus);
@@ -137,7 +137,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_User_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'enabled');
         
-        $account = Tinebase_User_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User_Sql::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
         
         $this->assertEquals('enabled', $account->accountStatus);
     }
@@ -150,7 +150,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_User_Sql::getInstance()->setStatus($this->objects['initialAccount'], 'disabled');
 
-        $account = Tinebase_User_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User_Sql::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
         
         $this->assertEquals('disabled', $account->accountStatus);
     }
@@ -172,7 +172,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_User_Sql::getInstance()->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
         
-        $account = Tinebase_User_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User_Sql::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
         
         $this->assertType('Zend_Date', $account->accountExpires);
     }
@@ -185,7 +185,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_User_Sql::getInstance()->setExpiryDate($this->objects['initialAccount'], NULL);
         
-        $account = Tinebase_User_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User_Sql::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
         
         $this->assertEquals(NULL, $account->accountExpires);
     }
@@ -198,9 +198,9 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
 
-        Tinebase_User_Sql::getInstance()->deleteAccount($this->objects['initialAccount']);
+        Tinebase_User_Sql::getInstance()->deleteUser($this->objects['initialAccount']);
 
-        $account = Tinebase_User_Sql::getInstance()->getAccountById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
+        $account = Tinebase_User_Sql::getInstance()->getUserById($this->objects['initialAccount'], 'Tinebase_User_Model_FullUser');
     }
 }		
 	

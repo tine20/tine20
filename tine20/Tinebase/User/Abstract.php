@@ -29,7 +29,7 @@ abstract class Tinebase_User_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
      */
-    abstract public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL);
+    abstract public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL);
     
     /**
      * get list of accounts
@@ -41,9 +41,9 @@ abstract class Tinebase_User_Abstract
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_FullUser
      */
-    public function getFullAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getFullUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
-        return $this->getAccounts($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_User_Model_FullUser');
+        return $this->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_User_Model_FullUser');
     }
     
     /**
@@ -52,7 +52,7 @@ abstract class Tinebase_User_Abstract
      * @param   string      $_loginName
      * @return  Tinebase_User_Model_User full account
      */
-    abstract public function getAccountByLoginName($_loginName);
+    abstract public function getUserByLoginName($_loginName);
 
     /**
      * get full account by login name
@@ -60,9 +60,9 @@ abstract class Tinebase_User_Abstract
      * @param   string      $_loginName
      * @return  Tinebase_User_Model_FullUser full account
      */
-    public function getFullAccountByLoginName($_loginName)
+    public function getFullUserByLoginName($_loginName)
     {
-        return $this->getAccountByLoginName($_loginName, 'Tinebase_User_Model_FullUser');
+        return $this->getUserByLoginName($_loginName, 'Tinebase_User_Model_FullUser');
     }
     
     /**
@@ -71,7 +71,7 @@ abstract class Tinebase_User_Abstract
      * @param   int         $_accountId
      * @return  Tinebase_User_Model_User account
      */
-    abstract public function getAccountById($_accountId);
+    abstract public function getUserById($_accountId);
 
     /**
      * get full account by id
@@ -79,9 +79,9 @@ abstract class Tinebase_User_Abstract
      * @param   int         $_accountId
      * @return  Tinebase_User_Model_FullUser full account
      */
-    public function getFullAccountById($_accountId)
+    public function getFullUserById($_accountId)
     {
-        return $this->getAccountById($_accountId, 'Tinebase_User_Model_FullUser');
+        return $this->getUserById($_accountId, 'Tinebase_User_Model_FullUser');
     }
     
     /**
@@ -122,7 +122,7 @@ abstract class Tinebase_User_Abstract
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
      */
-    abstract public function updateAccount(Tinebase_User_Model_FullUser $_account);
+    abstract public function updateUser(Tinebase_User_Model_FullUser $_account);
 
     /**
      * adds a new account
@@ -130,19 +130,19 @@ abstract class Tinebase_User_Abstract
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
      */
-    abstract public function addAccount(Tinebase_User_Model_FullUser $_account);
+    abstract public function addUser(Tinebase_User_Model_FullUser $_account);
     
     /**
      * delete an account
      *
      * @param int $_accountId
      */
-    abstract public function deleteAccount($_accountId);
+    abstract public function deleteUser($_accountId);
 
     /**
      * delete multiple accounts
      *
      * @param array $_accountIds
      */
-    abstract public function deleteAccounts(array $_accountIds);
+    abstract public function deleteUsers(array $_accountIds);
 }

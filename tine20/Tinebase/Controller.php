@@ -317,7 +317,7 @@ class Tinebase_Controller
         if ($authResult->isValid()) {
             $accountsController = Tinebase_User::getInstance();
             try {
-                $account = $accountsController->getFullAccountByLoginName($authResult->getIdentity());
+                $account = $accountsController->getFullUserByLoginName($authResult->getIdentity());
             } catch (Exception $e) {
                 Zend_Session::destroy();
                 

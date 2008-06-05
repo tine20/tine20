@@ -72,13 +72,13 @@ class Admin_Controller
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
      */
-    public function getAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function getUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
         $backend = Tinebase_User::getInstance();
 
-        $result = $backend->getAccounts($_filter, $_sort, $_dir, $_start, $_limit);
+        $result = $backend->getUsers($_filter, $_sort, $_dir, $_start, $_limit);
         
         return $result;
     }
@@ -93,13 +93,13 @@ class Admin_Controller
      * @param int $_limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_FullUser
      */
-    public function getFullAccounts($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
+    public function getFullUsers($_filter, $_sort, $_dir, $_start = NULL, $_limit = NULL)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
         $backend = Tinebase_User::getInstance();
 
-        $result = $backend->getFullAccounts($_filter, $_sort, $_dir, $_start, $_limit);
+        $result = $backend->getFullUsers($_filter, $_sort, $_dir, $_start, $_limit);
         
         return $result;
     }
@@ -114,7 +114,7 @@ class Admin_Controller
     {        
         $this->checkRight('VIEW_ACCOUNTS');
         
-        return Tinebase_User::getInstance()->getAccountById($_accountId);
+        return Tinebase_User::getInstance()->getUserById($_accountId);
     }
     
 
@@ -163,11 +163,11 @@ class Admin_Controller
      * @param string $_passwordRepeat the new password again
      * @return Tinebase_User_Model_FullUser
      */
-    public function updateAccount(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function updateUser(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $account = Tinebase_User::getInstance()->updateAccount($_account);
+        $account = Tinebase_User::getInstance()->updateUser($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         // fire needed events
@@ -190,11 +190,11 @@ class Admin_Controller
      * @param string $_passwordRepeat the new password again
      * @return Tinebase_User_Model_FullUser
      */
-    public function addAccount(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function addUser(Tinebase_User_Model_FullUser $_account, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $account = Tinebase_User::getInstance()->addAccount($_account);
+        $account = Tinebase_User::getInstance()->addUser($_account);
         Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
         
         $event = new Admin_Event_AddAccount;
@@ -215,11 +215,11 @@ class Admin_Controller
      * @param   array $_accountIds  array of account ids
      * @return  array with success flag
      */
-    public function deleteAccounts(array $_accountIds)
+    public function deleteUsers(array $_accountIds)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        return Tinebase_User::getInstance()->deleteAccounts($_accountIds);
+        return Tinebase_User::getInstance()->deleteUsers($_accountIds);
     }
     
     /**

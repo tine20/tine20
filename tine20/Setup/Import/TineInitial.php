@@ -80,7 +80,7 @@ class Setup_Import_TineInitial
             'accountEmailAddress'   => NULL,
         ));
 
-        $accountsBackend->addAccount($account);
+        $accountsBackend->addUser($account);
 
         Zend_Registry::set('currentAccount', $account);
 

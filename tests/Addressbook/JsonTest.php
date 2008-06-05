@@ -242,7 +242,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Addressbook_Json();
         
-        $contacts = $json->getAccounts(NULL, 'id', 'ASC', 10, 0, NULL);
+        $contacts = $json->getUsers(NULL, 'id', 'ASC', 10, 0, NULL);
         
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }

@@ -74,7 +74,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
         if($_accountId instanceof Tinebase_User_Model_FullUser) {
             $memberuid = $_accountId->accountLoginName;
         } else {
-            $account = Tinebase_User::getInstance()->getFullAccountById($_accountId);
+            $account = Tinebase_User::getInstance()->getFullUserById($_accountId);
             $memberuid = $account->accountLoginName;
         }
         
@@ -125,7 +125,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             unset($groupMembers['memberuid']['count']);
             foreach($groupMembers['memberuid'] as $loginName) {
                 error_log('LARS:: ' . $loginName);
-                $account = Tinebase_User::getInstance()->getAccountByLoginName($loginName);
+                $account = Tinebase_User::getInstance()->getUserByLoginName($loginName);
                 $members[] = $account->getId();
             }
         }

@@ -73,14 +73,14 @@ class Tinebase_Json
         }
     }
     
-    public function getAccounts($filter, $sort, $dir, $start, $limit)
+    public function getUsers($filter, $sort, $dir, $start, $limit)
     {
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
         );
         
-        if($rows = Tinebase_User::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit)) {
+        if($rows = Tinebase_User::getInstance()->getUsers($filter, $sort, $dir, $start, $limit)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);

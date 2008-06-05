@@ -134,7 +134,7 @@ class Setup_Import_TineRev949
                 'accountEmailAddress'       => 'Emailaddress'
             ));
             
-            Tinebase_User_Sql::getInstance()->addAccount($tineAccount);
+            Tinebase_User_Sql::getInstance()->addUser($tineAccount);
             // and set password
             Tinebase_Auth::getInstance()->setPassword($account->account_lid, $account->account_pwd, $account->account_pwd, FALSE);
             
@@ -586,7 +586,7 @@ class Setup_Import_TineRev949
                     try {
                         // try to get user account
                         if ( $right->account_type === 'user' ) {
-                            $account = Tinebase_User::getInstance()->getAccountById( $right->account_id );
+                            $account = Tinebase_User::getInstance()->getUserById( $right->account_id );
                         }
                         
                         // try to add the right
