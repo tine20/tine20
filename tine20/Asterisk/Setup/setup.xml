@@ -8,14 +8,13 @@
             <name>snom_classes</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>0.1</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <length>20</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
-                    <autoincrement>true</autoincrement>
                 </field>
                 <field>
                     <name>description</name>
@@ -52,7 +51,6 @@
                 <index>
                     <name>id</name>
                     <primary>true</primary>
-                    <unique>true</unique>
                     <field>
                         <name>id</name>
                     </field>
@@ -74,6 +72,92 @@
                     <field>
                         <name>software_id</name>
                     </field>
+                </index>                  
+            </declaration>
+        </table>
+        
+        <table>
+            <name>snom_phones</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>macaddress</name>
+                    <type>text</type>
+                    <length>12</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>enum</type>
+                    <value>snom300</value>
+                    <value>snom320</value>
+                    <value>snom360</value>
+                    <value>snom370</value>
+                    <default>snom320</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>swversion</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>ipaddress</name>
+                    <type>text</type>
+                    <length>20</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>class_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>                
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>macaddress</name>
+                    <field>
+                        <name>macaddress</name>
+                    </field>
+                </index>
+                <index>
+                    <name>class_id</name>
+                    <field>
+                        <name>class_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>snom_phones::class_id--snom_classes::id</name>
+                    <foreign>true</foreign>
+                    <field>
+                        <name>class_id</name>
+                    </field>
+                    <reference>
+                        <table>snom_classes</table>
+                        <field>id</field>
+                    </reference>
                 </index>                  
             </declaration>
         </table>
