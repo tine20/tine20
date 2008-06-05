@@ -262,7 +262,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         return $result;
     }
     
-    protected function _getAccountSelectObject()
+    protected function _getUserSelectObject()
     {
         $db = Zend_Registry::get('dbAdapter');
         

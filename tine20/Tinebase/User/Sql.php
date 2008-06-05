@@ -91,7 +91,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_User_Model_User')
     {        
-        $select = $this->_getAccountSelectObject()
+        $select = $this->_getUserSelectObject()
             ->limit($_limit, $_start);
             
         if($_sort !== NULL) {
@@ -135,7 +135,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
 //        $db = Zend_Registry::get('dbAdapter');
         // quote into expects 2 params
-        $select = $this->_getAccountSelectObject()
+        $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.login_name') . ' = ?', $_loginName));
 
         $stmt = $select->query();
@@ -172,7 +172,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $accountId = Tinebase_User_Model_User::convertUserIdToInt($_accountId);
         #$db = Zend_Registry::get('dbAdapter');
-        $select = $this->_getAccountSelectObject()
+        $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.id') . ' = ?', $accountId));
 
         $stmt = $select->query();
@@ -207,7 +207,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $this->getUserById($_accountId, 'Tinebase_User_Model_FullUser');
     }
     
-    protected function _getAccountSelectObject()
+    protected function _getUserSelectObject()
     {
         $db = Zend_Registry::get('dbAdapter');
         
