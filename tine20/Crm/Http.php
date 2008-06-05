@@ -60,34 +60,24 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         
         if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
             $leadData = $lead->toArray();
-            
-            $contact_links = $controller->getLinks($_leadId, 'addressbook');
+
+            // add contact links
+            $contact_links = $controller->getLinksForApplication($_leadId, 'Addressbook');
             foreach($contact_links as $contact_link) {
                 try {
                     $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
                     $contactArray = $contact->toArray();
                     $contactArray['type'] = $contact_link['remark'];
                     $leadData['contacts'] = $contactArray;
-                    /*
-                    switch($contact_link['remark']) {
-                        case 'customer':
-                            $leadData['contactsCustomer'][] = $contact->toArray();
-                            break;
-                        case 'partner':
-                            $leadData['contactsPartner'][] = $contact->toArray();
-                            break;
-                        case 'account':
-                            $leadData['contactsInternal'][] = $contact->toArray();
-                            break;
-                    }
-                    */
                 } catch (Exception $e) {
                     // do nothing
+                    // catch only permission denied exception
                 }
             }
 
+            // add task links
             $leadData['tasks'] = array();
-            $task_links = $controller->getLinks($_leadId, 'tasks');
+            $task_links = $controller->getLinksForApplication($_leadId, 'Tasks');
             foreach($task_links as $task_link) {
                 try {
                     $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
