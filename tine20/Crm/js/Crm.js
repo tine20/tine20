@@ -1618,6 +1618,11 @@ Tine.Crm.LeadEditDialog = function() {
             })
         });
         
+        // disable for the moment
+        // @todo enable again
+        leadEdit.action_applyChanges.setDisabled(true);
+        leadEdit.action_saveAndClose.setDisabled(true);
+        
         // fix to have the tab panel in the right height accross browsers
         Ext.getCmp('editMainTabPanel').on('afterlayout', function(container){
             var height = Ext.getCmp('leadDialog').getInnerHeight();
