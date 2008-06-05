@@ -52,23 +52,57 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 	*/
     protected $leadStateTable;    
         
-    
-	/**
-	* the constructor
-	*
-	*/
-    public function __construct()
+   /**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db;
+
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct ()
     {
-        $this->leadTable      		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
-        $this->leadSourceTable   	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
-        $this->leadTypeTable     	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
-		$this->productSourceTable 	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
-        $this->leadStateTable    	= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
-        $this->productsTable   		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
-        $this->linksTable 			= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
+        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->leadTable            = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
+        $this->leadSourceTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
+        $this->leadTypeTable        = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+        $this->productSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
+        $this->leadStateTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
+        $this->productsTable        = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
+        $this->linksTable           = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone ()
+    {
         
     }
     
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Crm_Backend_Sql
+     */
+    private static $_instance = NULL;
+
+    /**
+     * the singleton pattern
+     *
+     * @return Crm_Backend_Sql
+     */
+    public static function getInstance ()
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Crm_Backend_Sql();
+        }
+        return self::$_instance;
+    }
+        
 	/**
 	 * get Leadsources
 	 * 

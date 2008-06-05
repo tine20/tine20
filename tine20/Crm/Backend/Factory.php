@@ -28,7 +28,7 @@ class Crm_Backend_Factory
      */
     const SQL = 'Sql';
     
-  /**
+    /**
      * factory function to return a selected contacts backend class
      *
      * @param string $type
@@ -38,10 +38,8 @@ class Crm_Backend_Factory
     {
         switch($type) {
             case self::SQL:
-                $className = 'Crm_Backend_' . ucfirst($type);
-                $instance = new $className();
-                break;
-                
+                $instance = Crm_Backend_Sql::getInstance();
+                break;                
             default:
                 throw new Exception('unknown type');
         }
