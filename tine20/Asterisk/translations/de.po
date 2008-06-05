@@ -1,0 +1,99 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 Asterisk\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-06-05 18:43+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n !=1;\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-SearchPath-0: Asterisk\n"
+
+#: Asterisk/js/Asterisk.js:271
+msgid "add phone"
+msgstr "Telefon hinzufügen"
+
+#: Asterisk/js/Asterisk.js:278
+msgid "edit phone"
+msgstr "Telefon editieren"
+
+#: Asterisk/js/Asterisk.js:286
+msgid "delete phone"
+msgstr "Telefon löschen"
+
+#: Asterisk/js/Asterisk.js:350
+msgid "Filter: "
+msgstr "Filter:"
+
+#: Asterisk/js/Asterisk.js:351
+msgid "Search: "
+msgstr "Suche:"
+
+#: Asterisk/js/Asterisk.js:384
+msgid "Displaying phones {0} - {1} of {2}"
+msgstr "Zeige Telefone {0} - {1} von {2}"
+
+#: Asterisk/js/Asterisk.js:385
+msgid "No phones to display"
+msgstr "Keine Telefone vorhanden"
+
+#: Asterisk/js/Asterisk.js:390
+msgid "Id"
+msgstr "Id"
+
+#: Asterisk/js/Asterisk.js:391
+msgid "MAC address"
+msgstr "MAC Adresse"
+
+#: Asterisk/js/Asterisk.js:392
+msgid "phone model"
+msgstr "Telefonmodell"
+
+#: Asterisk/js/Asterisk.js:393
+msgid "phone sw version"
+msgstr "Telefon SW Version"
+
+#: Asterisk/js/Asterisk.js:394
+msgid "phone IP address"
+msgstr "Telefon IP Adresse"
+
+#: Asterisk/js/Asterisk.js:395
+msgid "last modified"
+msgstr "zuletzt geändert"
+
+#: Asterisk/js/Asterisk.js:396
+msgid "class id"
+msgstr "class id"
+
+#: Asterisk/js/Asterisk.js:400
+msgid "description"
+msgstr "Beschreibung"
+
+#: Asterisk/js/Asterisk.js:614
+msgid "MAC Address"
+msgstr "MAC Adresse"
+
+#: Asterisk/js/Asterisk.js:621
+msgid "Phone Model"
+msgstr "Telefonmodell"
+
+#: Asterisk/js/Asterisk.js:641
+msgid "Phone SW Version"
+msgstr "Telefon SW Version"
+
+#: Asterisk/js/Asterisk.js:648
+msgid "Phone IP Address"
+msgstr "Telefon IP Adresse"
+
+#: Asterisk/js/Asterisk.js:657
+msgid "Description"
+msgstr "Beschreibung"
+
