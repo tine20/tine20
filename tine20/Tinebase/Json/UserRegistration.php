@@ -14,7 +14,7 @@
  * Json Container class
  * 
  * - handles the ajax requests and the json data
- * - calls the functions of class Tinebase_Account_Registration
+ * - calls the functions of class Tinebase_User_Registration
  * 
  * @package     Tinebase
  */
@@ -54,7 +54,7 @@ class Tinebase_Json_UserRegistration
 	{
 		$username = Zend_Json_Decoder::decode($username);
 		
-		return Tinebase_Account_Registration::getInstance()->checkUniqueUsername($username);
+		return Tinebase_User_Registration::getInstance()->checkUniqueUsername($username);
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Tinebase_Json_UserRegistration
 
 		$regData = Zend_Json_Decoder::decode($regData);
 		
-		return Tinebase_Account_Registration::getInstance()->registerUser($regData);
+		return Tinebase_User_Registration::getInstance()->registerUser($regData);
 	}	
 
 }

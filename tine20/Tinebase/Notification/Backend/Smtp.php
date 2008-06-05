@@ -44,13 +44,13 @@ class Tinebase_Notification_Backend_Smtp
     /**
      * send a notification as email
      *
-     * @param Tinebase_Account_Model_FullAccount $_updater
+     * @param Tinebase_User_Model_FullUser $_updater
      * @param Addressbook_Model_Contact $_recipient
      * @param string $_subject the subject
      * @param string $_messagePlain the message as plain text
      * @param string $_messageHtml the message as html
      */
-    public function send(Tinebase_Account_Model_FullAccount $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
+    public function send(Tinebase_User_Model_FullUser $_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL)
     {
         $mail = new Tinebase_Mail('UTF-8');
         

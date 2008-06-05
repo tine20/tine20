@@ -72,7 +72,7 @@ class Tinebase_AccessLog
             'result'        => $_result
         );
         if ($_accountId !== NULL) {
-            $data['account_id'] = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+            $data['account_id'] = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
         }
         
         $this->_accessLogTable->insert($data);

@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -11,12 +11,12 @@
  */
 
 /**
- * Account ldap backend
+ * User ldap backend
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  */
-class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
+class Tinebase_User_Ldap extends Tinebase_User_Abstract
 {
     /**
      * the constructor
@@ -41,7 +41,7 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
     /**
      * holdes the instance of the singleton
      *
-     * @var Tinebase_Account_Ldap
+     * @var Tinebase_User_Ldap
      */
     private static $_instance = NULL;
     
@@ -73,12 +73,12 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * the singleton pattern
      *
      * @param  array $options Options used in connecting, binding, etc.
-     * @return Tinebase_Account_Ldap
+     * @return Tinebase_User_Ldap
      */
     public static function getInstance(array $_options = array()) 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Account_Ldap($_options);
+            self::$_instance = new Tinebase_User_Ldap($_options);
         }
         
         return self::$_instance;
@@ -93,10 +93,10 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * @param int $_start
      * @param int $_limit
      * @param string $_accountClass the type of subclass for the Tinebase_Record_RecordSet to return
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Account_Model_Account
+     * @return Tinebase_Record_RecordSet with record class Tinebase_User_Model_User
      */
     public function getAccounts($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, 
-        $_limit = NULL, $_accountClass = 'Tinebase_Account_Model_Account')
+        $_limit = NULL, $_accountClass = 'Tinebase_User_Model_User')
     {        
         if (!empty($_filter)) {
             $searchString = "*" . Tinebase_Ldap::filterEscape($_filter) . "*";
@@ -146,11 +146,11 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * get account by login name
      *
      * @param string $_loginName the loginname of the account
-     * @return Tinebase_Account_Model_Account the account object
+     * @return Tinebase_User_Model_User the account object
      *
      * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
-    public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_Account_Model_Account')
+    public function getAccountByLoginName($_loginName, $_accountClass = 'Tinebase_User_Model_User')
     {
         $loginName = Zend_Ldap::filterEscape($_loginName);
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uid=' . $loginName);
@@ -194,11 +194,11 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      * get account by accountId
      *
      * @param int $_accountId the account id
-     * @return Tinebase_Account_Model_Account the account object
+     * @return Tinebase_User_Model_User the account object
      */
-    public function getAccountById($_accountId, $_accountClass = 'Tinebase_Account_Model_Account')
+    public function getAccountById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
         
         $account = $this->_backend->fetch(Zend_Registry::get('configFile')->accounts->get('ldap')->userDn, 'uidnumber=' . $accountId);
                 
@@ -246,7 +246,7 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
@@ -327,10 +327,10 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
     /**
      * updates an existing account
      *
-     * @param Tinebase_Account_Model_FullAccount $_account
-     * @return Tinebase_Account_Model_FullAccount
+     * @param Tinebase_User_Model_FullUser $_account
+     * @return Tinebase_User_Model_FullUser
      */
-    public function updateAccount(Tinebase_Account_Model_FullAccount $_account) 
+    public function updateAccount(Tinebase_User_Model_FullUser $_account) 
     {
         throw new Exception('not yet implemented');
     }
@@ -338,10 +338,10 @@ class Tinebase_Account_Ldap extends Tinebase_Account_Abstract
     /**
      * adds a new account
      *
-     * @param Tinebase_Account_Model_FullAccount $_account
-     * @return Tinebase_Account_Model_FullAccount
+     * @param Tinebase_User_Model_FullUser $_account
+     * @return Tinebase_User_Model_FullUser
      */
-    public function addAccount(Tinebase_Account_Model_FullAccount $_account) 
+    public function addAccount(Tinebase_User_Model_FullUser $_account) 
     {
         throw new Exception('not yet implemented');
     }

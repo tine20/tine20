@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Account
  */
-class Tinebase_Account
+class Tinebase_User
 {
     const SQL = 'Sql';
     
@@ -37,7 +37,7 @@ class Tinebase_Account
     /**
      * holdes the instance of the singleton
      *
-     * @var Tinebase_Account_Interface
+     * @var Tinebase_User_Interface
      */
     private static $_instance = NULL;
     
@@ -45,7 +45,7 @@ class Tinebase_Account
     /**
      * the singleton pattern
      *
-     * @return Tinebase_Account_Abstract
+     * @return Tinebase_User_Abstract
      */
     public static function getInstance() 
     {
@@ -63,7 +63,7 @@ class Tinebase_Account
      * return an instance of the current accounts backend
      *
      * @param string $_backendType name of the accounts backend
-     * @return Tinebase_Account_Abstract
+     * @return Tinebase_User_Abstract
      */
     public static function factory($_backendType) 
     {
@@ -73,11 +73,11 @@ class Tinebase_Account
                 unset($options['userDn']);
                 unset($options['groupsDn']);
                 
-                $result = Tinebase_Account_Ldap::getInstance($options);
+                $result = Tinebase_User_Ldap::getInstance($options);
                 break;
                 
             case self::SQL:
-                $result = Tinebase_Account_Sql::getInstance();
+                $result = Tinebase_User_Sql::getInstance();
                 break;
             
             default:

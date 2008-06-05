@@ -315,7 +315,7 @@ class Tinebase_Controller
         $authResult = Tinebase_Auth::getInstance()->authenticate($_username, $_password);
         
         if ($authResult->isValid()) {
-            $accountsController = Tinebase_Account::getInstance();
+            $accountsController = Tinebase_User::getInstance();
             try {
                 $account = $accountsController->getFullAccountByLoginName($authResult->getIdentity());
             } catch (Exception $e) {

@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -11,12 +11,12 @@
  * 
  */
 /**
- * Account Registration class (singleton pattern)
+ * User Registration class (singleton pattern)
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  */
-class Tinebase_Account_Registration
+class Tinebase_User_Registration
 {
     /**
      * @var Zend_Db_Adapter_Pdo_Mysql
@@ -75,18 +75,18 @@ class Tinebase_Account_Registration
     /**
      * holdes the instance of the singleton
      *
-     * @var Tinebase_Account_Sql
+     * @var Tinebase_User_Sql
      */
     private static $_instance = NULL;
     /**
      * the singleton pattern
      *
-     * @return Tinebase_Account_Registration
+     * @return Tinebase_User_Registration
      */
     public static function getInstance ()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Account_Registration();
+            self::$_instance = new Tinebase_User_Registration();
         }
         return self::$_instance;
     }
@@ -105,7 +105,7 @@ class Tinebase_Account_Registration
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
                 ' call getAccountByLoginName with username ' . $_username);
             // get account with this username from db
-            $account = Tinebase_Account::getInstance()->getAccountByLoginName($_username);
+            $account = Tinebase_User::getInstance()->getAccountByLoginName($_username);
             return false;
         } catch (Exception $e) {
             return true;
@@ -201,9 +201,9 @@ class Tinebase_Account_Registration
             Zend_Registry::get('logger')->debug("this account never expires.");
             $regData['accountExpires'] = NULL;
         }
-        // get model & save user data (account & contact) via the Account and Addressbook controllers
-        $account = new Tinebase_Account_Model_FullAccount($regData);
-        Tinebase_Account::getInstance()->addAccount($account);
+        // get model & save user data (account & contact) via the User and Addressbook controllers
+        $account = new Tinebase_User_Model_FullUser($regData);
+        Tinebase_User::getInstance()->addAccount($account);
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
             ' saved user account ' . $regData['accountLoginName']);
         // generate password and save it
@@ -213,7 +213,7 @@ class Tinebase_Account_Registration
         // create hash from username
         $regData['accountLoginNameHash'] = md5($regData['accountLoginName']);
         // save in registrations table 
-        $registration = new Tinebase_Account_Model_Registration(array(
+        $registration = new Tinebase_User_Model_Registration(array(
             "login_name" => $regData['accountLoginName'] , 
             "login_hash" => $regData['accountLoginNameHash'] , 
             "email" => $regData['accountEmailAddress'])
@@ -232,7 +232,7 @@ class Tinebase_Account_Registration
      * create user hash, send registration mail and save registration in database
      *
      * @param 	array $_regData
-     * @param 	Tinebase_Account_Model_Registration $_registration
+     * @param 	Tinebase_User_Model_Registration $_registration
      * @return 	bool
      *
      * @access	protected
@@ -301,7 +301,7 @@ class Tinebase_Account_Registration
     public function sendLostPasswordMail ($_username)
     {
         // get full account
-        $fullAccount = Tinebase_Account::getInstance()->getFullAccountByLoginName($_username);
+        $fullAccount = Tinebase_User::getInstance()->getFullAccountByLoginName($_username);
         // generate new password
         $newPassword = $this->generatePassword();
         // save new password in account
@@ -366,7 +366,7 @@ class Tinebase_Account_Registration
      * activate user account
      *
      * @param 	string $_login_hash
-     * @return	Tinebase_Account_Model_FullAccount
+     * @return	Tinebase_User_Model_FullUser
      * 
      */
     public function activateAccount ($_loginHash)
@@ -377,9 +377,9 @@ class Tinebase_Account_Registration
         $registration->status = 'activated';
         $this->updateRegistration($registration);
         // get account by username
-        $account = Tinebase_Account::getInstance()->getFullAccountByLoginName($registration['login_name']);
+        $account = Tinebase_User::getInstance()->getFullAccountByLoginName($registration['login_name']);
         // set new expire_date in DB (account)
-        Tinebase_Account::getInstance()->setExpiryDate($account['accountId'], NULL);
+        Tinebase_User::getInstance()->setExpiryDate($account['accountId'], NULL);
         return $account;
     }
 
@@ -418,8 +418,8 @@ class Tinebase_Account_Registration
     /**
      * add new registration
      *
-     * @param	Tinebase_Account_Model_Registration	$_registration
-     * @return 	Tinebase_Account_Model_Registration the new registration object
+     * @param	Tinebase_User_Model_Registration	$_registration
+     * @return 	Tinebase_User_Model_Registration the new registration object
      * 
      * @access	protected
      */
@@ -443,11 +443,11 @@ class Tinebase_Account_Registration
     /**
      * update registration
      *
-     * @param	Tinebase_Account_Model_Registration	$_registration
-     * @return 	Tinebase_Account_Model_Registration the updated registration object
+     * @param	Tinebase_User_Model_Registration	$_registration
+     * @return 	Tinebase_User_Model_Registration the updated registration object
      * 
      */
-    public function updateRegistration (Tinebase_Account_Model_Registration $_registration)
+    public function updateRegistration (Tinebase_User_Model_Registration $_registration)
     {
         if (! $_registration->isValid()) {
             throw (new Exception('invalid registration object'));
@@ -483,7 +483,7 @@ class Tinebase_Account_Registration
      * get registration by hash
      *
      * @param string $_hash the hash (md5 coded username) from the registration mail
-     * @return Tinebase_Account_Model_Registration the registration object
+     * @return Tinebase_User_Model_Registration the registration object
      *
      */
     public function getRegistrationByHash ($_hash)
@@ -496,14 +496,14 @@ class Tinebase_Account_Registration
             //Zend_Registry::get('logger')->debug(__CLASS__ . ":\n" . $e);
         }
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
-            "Tinebase_Account_Model_Registration::row values: \n" . print_r($row, true));
+            "Tinebase_User_Model_Registration::row values: \n" . print_r($row, true));
         try {
-            $registration = new Tinebase_Account_Model_Registration();
+            $registration = new Tinebase_User_Model_Registration();
             $registration->setFromArray($row);
         } catch (Exception $e) {
             $validationErrors = $registration->getValidationErrors();
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 
-                $e->getMessage() . "\n" . "Tinebase_Account_Model_Registration::validation_errors: \n" . 
+                $e->getMessage() . "\n" . "Tinebase_User_Model_Registration::validation_errors: \n" . 
                 print_r($validationErrors, true));
             throw ($e);
         }

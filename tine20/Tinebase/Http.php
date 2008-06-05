@@ -169,7 +169,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
             'timeZone'        => Zend_Registry::get('userTimeZone'),
             'locale'          => Zend_Registry::get('locale')->toString(),
             'currentAccount'  => Zend_Registry::get('currentAccount')->toArray(),
-            'accountBackend'  => Tinebase_Account::getConfiguredBackend()
+            'accountBackend'  => Tinebase_User::getConfiguredBackend()
         );
         
         
@@ -189,7 +189,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	{
 				
 		// update registration table and get username / account values
-		$account = Tinebase_Account_Registration::getInstance()->activateAccount ( $id );
+		$account = Tinebase_User_Registration::getInstance()->activateAccount ( $id );
 
 		Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
 		
@@ -212,7 +212,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	 */
 	public function showCaptcha () 
 	{	
-		$captcha = Tinebase_Account_Registration::getInstance()->generateCaptcha();
+		$captcha = Tinebase_User_Registration::getInstance()->generateCaptcha();
 		
         //Tell the browser what kind of file is come in
         header("Content-Type: image/jpeg");

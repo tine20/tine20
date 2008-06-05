@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -17,9 +17,9 @@
  * the usage of this datatype should be restricted to administrative tasks only
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  */
-class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
+class Tinebase_User_Model_FullUser extends Tinebase_User_Model_User
 {
     /**
      * list of zend inputfilter
@@ -88,11 +88,11 @@ class Tinebase_Account_Model_FullAccount extends Tinebase_Account_Model_Account
     /**
      * return the public informations of this account only
      *
-     * @return Tinebase_Account_Model_Account
+     * @return Tinebase_User_Model_User
      */
     public function getPublicAccount()
     {
-        $result = new Tinebase_Account_Model_Account($this->toArray(), true);
+        $result = new Tinebase_User_Model_User($this->toArray(), true);
         
         return $result;
     }

@@ -80,7 +80,7 @@ class Tinebase_Json
             'totalcount'  => 0
         );
         
-        if($rows = Tinebase_Account::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit)) {
+        if($rows = Tinebase_User::getInstance()->getAccounts($filter, $sort, $dir, $start, $limit)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
                 $result['totalcount'] = count($result['results']);

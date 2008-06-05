@@ -67,7 +67,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     /**
      * Holds instance of current account
      *
-     * @var Tinebase_Account_Model_Account
+     * @var Tinebase_User_Model_User
      */
     protected $_currentAccount;
     

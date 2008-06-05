@@ -14,9 +14,9 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Account_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_AllTests::main');
 }
-class Tinebase_Account_AllTests
+class Tinebase_User_AllTests
 {
     public static function main ()
     {
@@ -24,13 +24,13 @@ class Tinebase_Account_AllTests
     }
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Account Tests');
-        $suite->addTestSuite('Tinebase_Account_SqlTest');
-        $suite->addTestSuite('Tinebase_Account_RegistrationTest');
-        $suite->addTestSuite('Tinebase_Account_ModelTest');
+        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All User Tests');
+        $suite->addTestSuite('Tinebase_User_SqlTest');
+        $suite->addTestSuite('Tinebase_User_RegistrationTest');
+        $suite->addTestSuite('Tinebase_User_ModelTest');
         return $suite;
     }
 }
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Account_AllTests::main') {
-    Tinebase_Account_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'Tinebase_User_AllTests::main') {
+    Tinebase_User_AllTests::main();
 }

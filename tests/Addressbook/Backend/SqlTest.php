@@ -19,7 +19,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Tinebase_Account
+ * Test class for Tinebase_User
  */
 class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
 {

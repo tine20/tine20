@@ -60,7 +60,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'description'   => 'updated group'
         )); 
             	
-        $this->objects['account'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['account'] = new Tinebase_User_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
@@ -72,7 +72,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['accountUpdate'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['accountUpdate'] = new Tinebase_User_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunitup',
             'accountDisplayName'    => 'tine20phpunit',
@@ -103,9 +103,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         // add account for group / role member tests
         try {
-            Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId) ;
+            Tinebase_User::getInstance()->getAccountById($this->objects['account']->accountId) ;
         } catch ( Exception $e ) {
-            Tinebase_Account::getInstance()->addAccount (  $this->objects['account'] );
+            Tinebase_User::getInstance()->addAccount (  $this->objects['account'] );
         }
         
         return;
@@ -122,7 +122,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         // remove accounts for group member tests
         try {
-            Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account']->accountId );
+            Tinebase_User::getInstance()->deleteAccount (  $this->objects['account']->accountId );
         } catch ( Exception $e ) {
             // do nothing
         }
@@ -194,7 +194,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $json->deleteAccounts($encodedAccountIds);
         
         $this->setExpectedException ( 'Exception' );
-        Tinebase_Account::getInstance()->getAccountById($this->objects['account']->getId);
+        Tinebase_User::getInstance()->getAccountById($this->objects['account']->getId);
     }
 
     /**
@@ -207,7 +207,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $json->setAccountState(Zend_Json::encode(array($this->objects['account']->getId())), 'disabled');
         
-        $account = Tinebase_Account::getInstance()->getFullAccountById($this->objects['account']);
+        $account = Tinebase_User::getInstance()->getFullAccountById($this->objects['account']);
         
         $this->assertEquals('disabled', $account->accountStatus);    
     }
@@ -470,7 +470,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddRole()
     {
         // account to add as role member
-        $account = Tinebase_Account::getInstance()->getAccountById($this->objects['account']->accountId);
+        $account = Tinebase_User::getInstance()->getAccountById($this->objects['account']->accountId);
         
         $json = new Admin_Json();
         

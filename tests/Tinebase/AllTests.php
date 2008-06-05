@@ -32,7 +32,7 @@ class Tinebase_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
         $suite->addTestSuite('Tinebase_Record_RecordTest');
         $suite->addTestSuite('Tinebase_Record_RecordSetTest');
-        //$suite->addTestSuite('Tinebase_AccountTest');
+        //$suite->addTestSuite('Tinebase_UserTest');
         //$suite->addTestSuite('Tinebase_GroupTest');
         $suite->addTestSuite('Tinebase_ZendFilterTest');
         $suite->addTestSuite('Tinebase_ContainerTest');
@@ -40,7 +40,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ConfigTest');
         $suite->addTestSuite('Tinebase_ApplicationTest');
         
-        $suite->addTest(Tinebase_Account_AllTests::suite());
+        $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
         $suite->addTest(Tinebase_Timemachine_AllTests::suite());
         $suite->addTest(Tinebase_Json_AllTests::suite());

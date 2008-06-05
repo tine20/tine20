@@ -66,7 +66,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * save account
      *
-     * @param string $accountData JSON encoded Tinebase_Account_Model_FullAccount
+     * @param string $accountData JSON encoded Tinebase_User_Model_FullUser
      * @param string $password the new password
      * @param string $passwordRepeat the new password repeated
      * @return array with 
@@ -75,7 +75,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     {
         $decodedAccountData = Zend_Json::decode($accountData);
         
-        $account = new Tinebase_Account_Model_FullAccount();
+        $account = new Tinebase_User_Model_FullUser();
         
         try {
             $account->setFromArray($decodedAccountData);
@@ -146,13 +146,13 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     /**
      * reset password for given account
      *
-     * @param string $account JSON encoded Tinebase_Account_Model_FullAccount
+     * @param string $account JSON encoded Tinebase_User_Model_FullUser
      * @param string $password the new password
      * @return array
      */
     public function resetPassword($account, $password)
     {
-        $account = new Tinebase_Account_Model_FullAccount(Zend_Json::decode($account));
+        $account = new Tinebase_User_Model_FullUser(Zend_Json::decode($account));
         
         $controller = Admin_Controller::getInstance();
 
@@ -403,7 +403,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
 
         $result['results'] = array ();
         foreach ( $accountIds as $accountId ) {
-            $result['results'][] = Tinebase_Account::getInstance()->getAccountById($accountId)->toArray();
+            $result['results'][] = Tinebase_User::getInstance()->getAccountById($accountId)->toArray();
         }
                 
         $result['totalcount'] = count($result['results']);
@@ -754,7 +754,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
             
             switch ($item[$prefix . 'type']) {
                 case 'user':
-                    $item[$prefix . 'name'] = Tinebase_Account::getInstance()->getAccountById($item[$prefix . 'id'])->accountDisplayName;
+                    $item[$prefix . 'name'] = Tinebase_User::getInstance()->getAccountById($item[$prefix . 'id'])->accountDisplayName;
                     break;
                 case 'group':
                     $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;

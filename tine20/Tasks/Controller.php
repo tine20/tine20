@@ -52,7 +52,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * Holds instance of current account
      *
-     * @var Tinebase_Account_Model_Account
+     * @var Tinebase_User_Model_User
      */
     protected $_currentAccount;
     
@@ -98,7 +98,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
         $this->_checkContainerACL($_filter);
         
         $tasks =  $this->_backend->searchTasks($_filter, $_pagination);
-        //Tinebase_Account::getBackend()->getPublicAccountProperties();
+        //Tinebase_User::getBackend()->getPublicAccountProperties();
         //foreach ($tasks as $task) {
             //$taks->organizer = 
         //}
@@ -286,12 +286,12 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Account_Model_Account] $_account   the accountd object
+     * @param mixed[int|Tinebase_User_Model_User] $_account   the accountd object
      * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
-        $accountId = Tinebase_Account_Model_Account::convertAccountIdToInt($_accountId);
+        $accountId = Tinebase_User_Model_User::convertAccountIdToInt($_accountId);
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => 'Personal Tasks',

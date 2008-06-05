@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -19,13 +19,13 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Account_ModelTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_ModelTest::main');
 }
 
 /**
- * Test class for Tinebase_Account_Model_*
+ * Test class for Tinebase_User_Model_*
  */
-class Tinebase_Account_ModelTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -40,7 +40,7 @@ class Tinebase_Account_ModelTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Account_ModelTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_ModelTest');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 

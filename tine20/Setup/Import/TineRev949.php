@@ -118,7 +118,7 @@ class Setup_Import_TineRev949
         
         echo "Import Accounts from table " . $this->oldTablePrefix.'accounts' ." ... ";
         foreach($accounts as $account) {
-            $tineAccount = new Tinebase_Account_Model_FullAccount(array(
+            $tineAccount = new Tinebase_User_Model_FullUser(array(
                 'accountId'                 => $account->account_id,
                 'accountLoginName'          => $account->account_lid,
                 'accountLastLogin'          => $account->account_lastlogin > 0 ? new Zend_Date($account->account_lastlogin, Zend_Date::TIMESTAMP) : NULL,
@@ -134,7 +134,7 @@ class Setup_Import_TineRev949
                 'accountEmailAddress'       => 'Emailaddress'
             ));
             
-            Tinebase_Account_Sql::getInstance()->addAccount($tineAccount);
+            Tinebase_User_Sql::getInstance()->addAccount($tineAccount);
             // and set password
             Tinebase_Auth::getInstance()->setPassword($account->account_lid, $account->account_pwd, $account->account_pwd, FALSE);
             
@@ -586,7 +586,7 @@ class Setup_Import_TineRev949
                     try {
                         // try to get user account
                         if ( $right->account_type === 'user' ) {
-                            $account = Tinebase_Account::getInstance()->getAccountById( $right->account_id );
+                            $account = Tinebase_User::getInstance()->getAccountById( $right->account_id );
                         }
                         
                         // try to add the right

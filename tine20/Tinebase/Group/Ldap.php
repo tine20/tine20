@@ -66,15 +66,15 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
     /**
      * return all groups an account is member of
      *
-     * @param mixed $_accountId the account as integer or Tinebase_Account_Model_Account
+     * @param mixed $_accountId the account as integer or Tinebase_User_Model_User
      * @return array
      */
     public function getGroupMemberships($_accountId)
     {
-        if($_accountId instanceof Tinebase_Account_Model_FullAccount) {
+        if($_accountId instanceof Tinebase_User_Model_FullUser) {
             $memberuid = $_accountId->accountLoginName;
         } else {
-            $account = Tinebase_Account::getInstance()->getFullAccountById($_accountId);
+            $account = Tinebase_User::getInstance()->getFullAccountById($_accountId);
             $memberuid = $account->accountLoginName;
         }
         
@@ -125,7 +125,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Abstract
             unset($groupMembers['memberuid']['count']);
             foreach($groupMembers['memberuid'] as $loginName) {
                 error_log('LARS:: ' . $loginName);
-                $account = Tinebase_Account::getInstance()->getAccountByLoginName($loginName);
+                $account = Tinebase_User::getInstance()->getAccountByLoginName($loginName);
                 $members[] = $account->getId();
             }
         }

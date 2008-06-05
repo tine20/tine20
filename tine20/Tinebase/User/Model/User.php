@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -20,9 +20,9 @@
  * its primary usecase are user selection interfaces
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  */
-class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
+class Tinebase_User_Model_User extends Tinebase_Record_Abstract
 {
     /**
      * list of zend inputfilter
@@ -144,7 +144,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
     */
     public function setLoginTime($_ipAddress)
     {
-        $backend = Tinebase_Account::getInstance();
+        $backend = Tinebase_User::getInstance();
         
         $result = $backend->setLoginTime($this->accountId, $_ipAddress);
         
@@ -160,7 +160,7 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
      */
     public function setPassword($_password)
     {
-        $backend = Tinebase_Account::getInstance();
+        $backend = Tinebase_User::getInstance();
         
         $result = $backend->setPassword($this->accountId, $_password);
         
@@ -256,14 +256,14 @@ class Tinebase_Account_Model_Account extends Tinebase_Record_Abstract
     }
     
     /**
-     * converts a int, string or Tinebase_Account_Model_Account to an accountid
+     * converts a int, string or Tinebase_User_Model_User to an accountid
      *
-     * @param int|string|Tinebase_Account_Model_Account $_accountId the accountid to convert
+     * @param int|string|Tinebase_User_Model_User $_accountId the accountid to convert
      * @return int
      */
     static public function convertAccountIdToInt($_accountId)
     {
-        if ($_accountId instanceof Tinebase_Account_Model_Account) {
+        if ($_accountId instanceof Tinebase_User_Model_User) {
             if (empty($_accountId->accountId)) {
                 throw new Exception('no accountId set');
             }

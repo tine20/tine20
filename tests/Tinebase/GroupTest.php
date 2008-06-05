@@ -66,7 +66,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'description'   => 'noid group'
         )); 
 
-        $this->objects['account1'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['account1'] = new Tinebase_User_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit1',
             'accountStatus'         => 'enabled',
@@ -77,7 +77,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['account2'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['account2'] = new Tinebase_User_Model_FullUser(array(
             'accountId'             => 11,
             'accountLoginName'      => 'tine20phpunit2',
             'accountStatus'         => 'disabled',
@@ -88,7 +88,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@tine20.org'
         )); 
 
-        $this->objects['account3'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['account3'] = new Tinebase_User_Model_FullUser(array(
             'accountId'             => 12,
             'accountLoginName'      => 'tine20phpunit3',
             'accountStatus'         => 'disabled',
@@ -101,19 +101,19 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         
         // add accounts for group member tests
         try {
-        	Tinebase_Account::getInstance()->getAccountById($this->objects['account1']->accountId) ;
+        	Tinebase_User::getInstance()->getAccountById($this->objects['account1']->accountId) ;
         } catch ( Exception $e ) {
-	        Tinebase_Account::getInstance()->addAccount (  $this->objects['account1'] );
+	        Tinebase_User::getInstance()->addAccount (  $this->objects['account1'] );
         }
         try {
-        	Tinebase_Account::getInstance()->getAccountById($this->objects['account2']->accountId) ;
+        	Tinebase_User::getInstance()->getAccountById($this->objects['account2']->accountId) ;
         } catch ( Exception $e ) {
-	        Tinebase_Account::getInstance()->addAccount (  $this->objects['account2'] );
+	        Tinebase_User::getInstance()->addAccount (  $this->objects['account2'] );
         }
         try {
-        	Tinebase_Account::getInstance()->getAccountById($this->objects['account3']->accountId) ;
+        	Tinebase_User::getInstance()->getAccountById($this->objects['account3']->accountId) ;
         } catch ( Exception $e ) {
-	        Tinebase_Account::getInstance()->addAccount (  $this->objects['account3'] );
+	        Tinebase_User::getInstance()->addAccount (  $this->objects['account3'] );
         }
         
         return;
@@ -129,9 +129,9 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
 		// remove accounts for group member tests
-        Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account1']->accountId );
-        Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account2']->accountId );
-        Tinebase_Account::getInstance()->deleteAccount (  $this->objects['account3']->accountId );
+        Tinebase_User::getInstance()->deleteAccount (  $this->objects['account1']->accountId );
+        Tinebase_User::getInstance()->deleteAccount (  $this->objects['account2']->accountId );
+        Tinebase_User::getInstance()->deleteAccount (  $this->objects['account3']->accountId );
     }
     
     /**

@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -15,9 +15,9 @@
  * defines the datatype for simple registration object
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  */
-class Tinebase_Account_Model_Registration extends Tinebase_Record_Abstract
+class Tinebase_User_Model_Registration extends Tinebase_Record_Abstract
 {
     /**
      * list of zend inputfilter

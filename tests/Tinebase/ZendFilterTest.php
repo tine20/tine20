@@ -18,7 +18,7 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_AccountTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_UserTest::main');
 }
 
 /**
@@ -39,7 +39,7 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_AccountTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -114,6 +114,6 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Tinebase_AccountTest::main') {
-    Tinebase_AccountTest::main();
+if (PHPUnit_MAIN_METHOD == 'Tinebase_UserTest::main') {
+    Tinebase_UserTest::main();
 }

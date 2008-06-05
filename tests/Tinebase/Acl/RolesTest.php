@@ -52,7 +52,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
-        $this->objects['user'] = new Tinebase_Account_Model_FullAccount(array(
+        $this->objects['user'] = new Tinebase_User_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
@@ -71,9 +71,9 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
 
         // add account for group / role member tests
         try {
-            Tinebase_Account::getInstance()->getAccountById($this->objects['user']->accountId) ;
+            Tinebase_User::getInstance()->getAccountById($this->objects['user']->accountId) ;
         } catch ( Exception $e ) {
-            Tinebase_Account::getInstance()->addAccount (  $this->objects['user'] );
+            Tinebase_User::getInstance()->addAccount (  $this->objects['user'] );
         }
         
         return;        
@@ -88,7 +88,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // remove account
-        Tinebase_Account::getInstance()->deleteAccount (  $this->objects['user']->accountId );             
+        Tinebase_User::getInstance()->deleteAccount (  $this->objects['user']->accountId );             
     }
 
     /**

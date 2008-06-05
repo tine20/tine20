@@ -67,9 +67,9 @@ class Setup_Import_TineInitial
         $userGroup = $groupsBackend->addGroup($userGroup);
 
         # add the admin account
-        $accountsBackend = Tinebase_Account::factory(Tinebase_Account::SQL);
+        $accountsBackend = Tinebase_User::factory(Tinebase_User::SQL);
 
-        $account = new Tinebase_Account_Model_FullAccount(array(
+        $account = new Tinebase_User_Model_FullUser(array(
             'accountLoginName'      => 'tine20admin',
             'accountStatus'         => 'enabled',
             'accountPrimaryGroup'   => $userGroup->getId(),

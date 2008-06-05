@@ -255,7 +255,7 @@ class Tinebase_Application
                     break;
                 case 'user':
                     // get account name
-                    $account = Tinebase_Account::getInstance()->getAccountById($tineRight->account_id);
+                    $account = Tinebase_User::getInstance()->getAccountById($tineRight->account_id);
                     $displayName = $account->accountDisplayName;
                     break;
                 default:

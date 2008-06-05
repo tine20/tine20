@@ -56,7 +56,7 @@ abstract class Tinebase_Group_Abstract
     /**
      * return all groups an account is member of
      *
-     * @param mixed $_accountId the account as integer or Tinebase_Account_Model_Account
+     * @param mixed $_accountId the account as integer or Tinebase_User_Model_User
      * @return array
      */
     abstract public function getGroupMemberships($_accountId);
