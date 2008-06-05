@@ -67,14 +67,16 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                 try {
                     $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
                     $contactArray = $contact->toArray();
-                    $contactArray['type'] = $contact_link['remark'];
-                    $leadData['contacts'] = $contactArray;
+                    $contactArray['link_remark'] = $contact_link['remark'];
+                    $leadData['contacts'][] = $contactArray;                    
                 } catch (Exception $e) {
                     // do nothing
                     // catch only permission denied exception
                 }
             }
 
+            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData['contacts'], true));
+            
             // add task links
             $leadData['tasks'] = array();
             $task_links = $controller->getLinksForApplication($_leadId, 'Tasks');
