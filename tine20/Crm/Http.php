@@ -65,6 +65,10 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             foreach($contact_links as $contact_link) {
                 try {
                     $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
+                    $contactArray = $contact->toArray();
+                    $contactArray['type'] = $contact_link['remark'];
+                    $leadData['contacts'] = $contactArray;
+                    /*
                     switch($contact_link['remark']) {
                         case 'customer':
                             $leadData['contactsCustomer'][] = $contact->toArray();
@@ -76,6 +80,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                             $leadData['contactsInternal'][] = $contact->toArray();
                             break;
                     }
+                    */
                 } catch (Exception $e) {
                     // do nothing
                 }

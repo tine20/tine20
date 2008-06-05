@@ -1190,11 +1190,66 @@ Tine.Crm.LeadEditDialog = function() {
      * get the grids for contacts/tasks/products/...
      * 
      * @param   string  type
-     * @return  Ext.grid
+     * @param   string  grid title
+     * @return  grid object
      */
-    var _getLinksGrid = function(_type)
+    var _getLinksGrid = function(_type, _title)
     {
+    	// only for testing
+    	var grid = new Ext.Panel({
+            title: _title,
+        });
+        
+        if ( _type === 'Contacts' ) {
+            var columnModel = new Ext.grid.ColumnModel([
+                {header: 'id'}
+            ]);
+            //var gridStore = Tine.Crm.LeadEditDialog.Stores.getContacts();
+            var gridStore = new Ext.data.SimpleStore({
+                fields: ['id'],
+                data: [
+                    ['1'],
+                    ['2']
+                ]            
+            });
+            
+            
+            //console.log(gridStore);
+
+            var grid = {
+                xtype:'grid',
+                id: 'crm_grid' + _type,
+                title: _title,
+                cm: columnModel,
+                store: gridStore,
+                //autoExpandColumn: 'n_fileas'
+            };
+        }
     	
+        /*
+        ,{
+            xtype:'grid',
+            id: 'crm_gridTasks',
+            title: translation._('Tasks'),
+            cm: new Ext.grid.ColumnModel([
+                {header: 'id'}
+            ]),
+            store: new Ext.data.SimpleStore({})
+            //store: storeContactsPartner,
+            //autoExpandColumn: 'n_fileas'
+        }, {
+            xtype:'grid',
+            id: 'crm_gridProducts',
+            title: translation._('Products'),
+            cm: new Ext.grid.ColumnModel([
+                {header: 'id'}
+            ]),
+            store: new Ext.data.SimpleStore({})
+            //store: storeContactsInternal,
+        }
+        */
+    	
+        return grid;       
     }
     
     /**
@@ -1444,49 +1499,9 @@ Tine.Crm.LeadEditDialog = function() {
                     activeTab: 0,
                     height: 273,
                     items: [
-                    // @todo call _getLinksGrid('Contacts') function
-                        new Ext.Panel({
-                            title: translation._('Contacts'),
-                        }),
-                        new Ext.Panel({
-                            title: translation._('Tasks'),
-                        }),
-                        new Ext.Panel({
-                            title: translation._('Products'),
-                        })
-                        /*
-                        {
-                            xtype:'grid',
-                            id: 'crm_gridContacts',
-                            title: translation._('Contacts'),
-                            cm: new Ext.grid.ColumnModel([
-                                {header: 'id'}
-                            ]),
-                            cm: cm_contacts,
-                            store: storeContactsCustomer,
-                            autoExpandColumn: 'n_fileas'
-                        }, 
-                        ,{
-                            xtype:'grid',
-                            id: 'crm_gridTasks',
-                            title: translation._('Tasks'),
-                            cm: new Ext.grid.ColumnModel([
-                                {header: 'id'}
-                            ]),
-                            store: new Ext.data.SimpleStore({})
-                            //store: storeContactsPartner,
-                            //autoExpandColumn: 'n_fileas'
-                        }, {
-                            xtype:'grid',
-                            id: 'crm_gridProducts',
-                            title: translation._('Products'),
-                            cm: new Ext.grid.ColumnModel([
-                                {header: 'id'}
-                            ]),
-                            store: new Ext.data.SimpleStore({})
-                            //store: storeContactsInternal,
-                        }
-                        */
+                        _getLinksGrid('Contacts', translation._('Contacts')),
+                        _getLinksGrid('Tasks', translation._('Tasks')),
+                        _getLinksGrid('Products', translation._('Products'))
                     ]
                 }
                 ]
@@ -1583,7 +1598,10 @@ Tine.Crm.LeadEditDialog = function() {
             items: leadEdit
         });
 
+        Tine.Crm.LeadEditDialog.Stores.getContacts(lead.data.contacts);
         leadEdit.getForm().loadRecord(lead);
+        
+        console.log(Tine.Crm.LeadEditDialog.Stores.getContacts());
         
         // @todo    add activities/products stuff
         /*
@@ -2403,6 +2421,9 @@ Tine.Crm.LeadEditDialog.Elements = function() {
 /*************************************** LEAD EDIT DIALOG STORES *********************************/
 
 Tine.Crm.LeadEditDialog.Stores = function() {
+	
+	// private attributes
+    /*
     var _storeContactsInternal = null;
     
     var _storeContactsCustomer = null;
@@ -2410,9 +2431,13 @@ Tine.Crm.LeadEditDialog.Stores = function() {
     var _storeContactsPartner = null;
 
     var _storeContactsSearch = null;
-    
+    */
+	
+	var _storeContacts = null;
+	
     // public functions and variables
     return {
+    	// @todo replace this with contact model?
         contactFields: [
             {name: 'link_id'},              
             {name: 'link_remark'},                        
@@ -2435,9 +2460,103 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             {name: 'tel_work'},
             {name: 'tel_cell'},
             {name: 'tel_fax'},
-            {name: 'email'}
+            {name: 'email'},
+            {name: 'type'},
         ],
         
+        /**
+         * get linked contacts store
+         * 
+         * @param   array (?) contacts
+         * @return  Ext.data.JsonStore
+         * 
+         * @todo    make it work!
+         */
+        getContacts: function (_contacts){  
+                 
+            if(_storeContacts === null) {
+                _storeContacts = new Ext.data.JsonStore({
+                    id: 'id',
+                    fields: this.contactFields
+                    //fields: Tine.Addressbook.Model.Contact
+                });
+            }                
+                
+            if(_contacts) {
+                _storeContacts.loadData(_contacts);    
+            }
+            
+            return _storeContacts;            
+        },
+
+        /**
+         * get lead status store
+         * 
+         * @return  Ext.data.JsonStore
+         */
+        getLeadStatus: function (){
+            var store = new Ext.data.JsonStore({
+                data: formData.comboData.leadstates,
+                autoLoad: true,         
+                id: 'key',
+                fields: [
+                    {name: 'key', mapping: 'id'},
+                    {name: 'value', mapping: 'leadstate'},
+                    {name: 'probability', mapping: 'probability'},
+                    {name: 'endslead', mapping: 'endslead'}
+                ]
+            });
+            
+            return store;
+        },
+        
+        /**
+         * get lead type store
+         * 
+         * @return  Ext.data.JsonStore
+         */
+        getLeadType: function (){
+            var store = new Ext.data.JsonStore({
+                data: formData.comboData.leadtypes,
+                autoLoad: true,
+                id: 'key',
+                fields: [
+                    {name: 'key', mapping: 'id'},
+                    {name: 'value', mapping: 'leadtype'}
+    
+                ]
+            });     
+            
+            return store;
+        },
+
+        /**
+         * get probability store
+         * 
+         * @return  Ext.data.SimpleStore
+         */
+        getProbability: function (){
+            var store = new Ext.data.SimpleStore({
+                    fields: ['key','value'],
+                    data: [
+                            ['0','0%'],
+                            ['10','10%'],
+                            ['20','20%'],
+                            ['30','30%'],
+                            ['40','40%'],
+                            ['50','50%'],
+                            ['60','60%'],
+                            ['70','70%'],
+                            ['80','80%'],
+                            ['90','90%'],
+                            ['100','100%']
+                        ]
+            });
+            
+            return store;
+        }
+
+        /*
         getContactsCustomer: function (_contactsCustomer){  
                  
             if(_storeContactsCustomer === null) {
@@ -2511,22 +2630,6 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             return _storeContactsSearch;
         },
         
-        getLeadStatus: function (){
-            var store = new Ext.data.JsonStore({
-                data: formData.comboData.leadstates,
-                autoLoad: true,         
-                id: 'key',
-                fields: [
-                    {name: 'key', mapping: 'id'},
-                    {name: 'value', mapping: 'leadstate'},
-                    {name: 'probability', mapping: 'probability'},
-                    {name: 'endslead', mapping: 'endslead'}
-                ]
-            });
-            
-            return store;
-        },
-
         getProductsAvailable: function (){        
             var store = new Ext.data.JsonStore({
                 data: formData.comboData.productsource,
@@ -2540,21 +2643,6 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                 ]
             });
 
-            return store;
-        },
-
-        getLeadType: function (){
-            var store = new Ext.data.JsonStore({
-                data: formData.comboData.leadtypes,
-                autoLoad: true,
-                id: 'key',
-                fields: [
-                    {name: 'key', mapping: 'id'},
-                    {name: 'value', mapping: 'leadtype'}
-    
-                ]
-            });     
-            
             return store;
         },
         
@@ -2572,26 +2660,7 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             return store;
         },
         
-        getProbability: function (){
-            var store = new Ext.data.SimpleStore({
-                    fields: ['key','value'],
-                    data: [
-                            ['0','0%'],
-                            ['10','10%'],
-                            ['20','20%'],
-                            ['30','30%'],
-                            ['40','40%'],
-                            ['50','50%'],
-                            ['60','60%'],
-                            ['70','70%'],
-                            ['80','80%'],
-                            ['90','90%'],
-                            ['100','100%']
-                        ]
-            });
-            
-            return store;
-        }
+        */
     };
 }();
 
