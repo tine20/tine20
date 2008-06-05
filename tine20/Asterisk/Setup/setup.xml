@@ -27,7 +27,8 @@
                     <type>enum</type>
                     <value>snom300</value>
                     <value>snom320</value>
-                    <default>snom300</default>
+                    <value>snom360</value>
+                    <value>snom370</value>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -101,7 +102,6 @@
                     <value>snom320</value>
                     <value>snom360</value>
                     <value>snom370</value>
-                    <default>snom320</default>
                     <notnull>true</notnull>
                 </field>
                 <field>
