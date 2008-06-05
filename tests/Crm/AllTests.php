@@ -30,6 +30,7 @@ class Crm_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm All Tests');
         $suite->addTest(Crm_Backend_AllTests::suite());
         $suite->addTestSuite('Crm_ControllerTest');
+        $suite->addTestSuite('Crm_JsonTest');
         $suite->addTestSuite('Crm_PdfTest');
         return $suite;
     }
