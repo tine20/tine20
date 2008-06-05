@@ -95,7 +95,7 @@ class Crm_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = new Crm_Backend_Sql();
+        $this->backend = Crm_Backend_Sql::getInstance();
     }
 
     /**
