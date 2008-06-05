@@ -1202,6 +1202,7 @@ Tine.Crm.LeadEditDialog = function() {
         
         if ( _type === 'Contacts' ) {
         	// @todo   move that to renderer
+        	// @todo   add icon in remark column
             var columnModel = new Ext.grid.ColumnModel([
                 {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
                 {id:'n_fileas', header: translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
@@ -1213,7 +1214,7 @@ Tine.Crm.LeadEditDialog = function() {
                         return formated_return;
                     }
                 },
-                {id:'contact_one', header: translation._("Address"), dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
+                {id:'contact_one', header: translation._("Address"), dataIndex: 'adr_one_locality', width: 160, sortable: false, renderer: function(val, meta, record) {
                     var formated_return =  
                         Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
                         Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
@@ -1221,7 +1222,7 @@ Tine.Crm.LeadEditDialog = function() {
                         return formated_return;
                     }
                 },
-                {id:'tel_work', header: translation._("Contactdata"), dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
+                {id:'tel_work', header: translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
                     var formated_return = '<table>' + 
                         '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_work) + '</td></tr>' + 
                         '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '</td></tr>' + 
@@ -1229,7 +1230,8 @@ Tine.Crm.LeadEditDialog = function() {
                     
                         return formated_return;
                     }
-                }                                    
+                },    
+                {id:'link_remark', header: translation._("Type"), dataIndex: 'link_remark', width: 70, sortable: false}
             ]);
             var gridStore = Ext.StoreMgr.lookup('ContactsStore');
             
@@ -1560,7 +1562,13 @@ Tine.Crm.LeadEditDialog = function() {
  
         var _editHandler = function(_button, _event) {
             editWindow.show();
-        }; 
+        };  
+  
+        if (_leadData.data) {                    
+            var _lead_id = _leadData.data.id;
+        } else {
+            var _lead_id = 'NULL';
+        }
         */
 
         /*********** INIT STORES *******************/
@@ -1655,12 +1663,6 @@ Tine.Crm.LeadEditDialog = function() {
                 }
         });    
   
-       if (_leadData.data) {                    
-            var _lead_id = _leadData.data.id;
-       } else {
-            var _lead_id = 'NULL';
-       }
-  
         var st_choosenProducts = new Ext.data.JsonStore({
             data: _leadData.data.products,
             autoLoad: true,
@@ -1682,9 +1684,6 @@ Tine.Crm.LeadEditDialog = function() {
         });
 
         var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
-        
-        //console.log ( st_productsAvailable );
-        //console.log ( st_choosenProducts );
         
         var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
                 header: "id",
@@ -1834,47 +1833,9 @@ Tine.Crm.LeadEditDialog = function() {
             //var record = _grid.getStore().getAt(rowIndex);
             //_ctxMenuGrid.showAt(_eventObject.getXY());
         });
-
-        var storeContactsCustomer = Tine.Crm.LeadEditDialog.Stores.getContactsCustomer();
-             
-        var storeContactsPartner = Tine.Crm.LeadEditDialog.Stores.getContactsPartner();
-             
-        var storeContactsInternal = Tine.Crm.LeadEditDialog.Stores.getContactsInternal();     
-     
+    
         var store_contactSearch = Tine.Crm.LeadEditDialog.Stores.getContactsSearch();   
  
-        // contacts grid
-        var cm_contacts = new Ext.grid.ColumnModel([
-                {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
-        //      {id:'link_remark', header: "link_remark", dataIndex: 'link_remark', width: 50, sortable: true },
-                {id:'n_fileas', header: translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
-                    function(val, meta, record) {
-                        var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
-                        
-                        var formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name);
-                        
-                        return formated_return;
-                    }
-                },
-                {id:'contact_one', header: translation._("Address"), dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
-                    var formated_return =  
-                        Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
-                        Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
-                    
-                        return formated_return;
-                    }
-                },
-                {id:'tel_work', header: translation._("Contactdata"), dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var formated_return = '<table>' + 
-                        '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_work) + '</td></tr>' + 
-                        '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '</td></tr>' + 
-                        '</table>';
-                    
-                        return formated_return;
-                    }
-                }                                    
-        ]);
-
         // activities grid
         var cm_activities = new Ext.grid.ColumnModel([
                 {   id:'identifier', 
@@ -2048,17 +2009,11 @@ Tine.Crm.LeadEditDialog = function() {
         */
         
           
-        // @todo    add stores, search function, other stuff?
         /*
   //     Tine.Crm.LeadEditDialog.Handler.updateLeadRecord(_leadData);
   //     this.updateToolbarButtons();  
-        Tine.Crm.LeadEditDialog.Stores.getContactsCustomer(_leadData.data.contactsCustomer);
-        Tine.Crm.LeadEditDialog.Stores.getContactsPartner(_leadData.data.contactsPartner);
-        Tine.Crm.LeadEditDialog.Stores.getContactsInternal(_leadData.data.contactsInternal);       
         Tine.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
         
-        leadEdit.getForm().loadRecord(_leadData);
-                    
         var searchContacts = function(_field, _newValue, _oldValue) {
             var currentContactsTabId = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getId();
             //console.log(currentContactsTabId);
@@ -2505,7 +2460,9 @@ Tine.Crm.LeadEditDialog.Stores = function() {
                 
             if(_contacts) {
                 _storeContacts.loadData(_contacts);                    
+                _storeContacts.setDefaultSort('remark', 'asc');     
             }
+            
             
             return _storeContacts;            
         },
