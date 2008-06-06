@@ -29,6 +29,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
     {
         return array(
             'Crm/js/Crm.js',
+            'Crm/js/LeadEditDialog.js',
             'Crm/js/LeadState.js',
         );
     }
