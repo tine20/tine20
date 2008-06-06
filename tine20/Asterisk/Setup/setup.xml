@@ -93,7 +93,7 @@
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>class_id</name>
+                    <name>software_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
