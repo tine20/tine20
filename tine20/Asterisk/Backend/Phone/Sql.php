@@ -253,7 +253,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
     public function getSoftware($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
         if(!empty($_filter)) {
-            $_fields = "description,phonemodel,softwareimage";            
+            $_fields = "description,model,softwareimage";            
             $where = $this->_getSearchFilter($_filter, $_fields);
         }
         
@@ -261,7 +261,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
             ->from(array('config' => SQL_TABLE_PREFIX . 'snom_software'), array(
                 'id',
                 'description',
-                'phonemodel',
+                'model',
                 'softwareimage')
             );
 

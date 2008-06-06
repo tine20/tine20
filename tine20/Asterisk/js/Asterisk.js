@@ -1613,7 +1613,7 @@ Tine.Asterisk.Software.Main = {
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 20, hidden: true },
             { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 150 },
-            { resizable: true, id: 'phonemodel', header: this.translation._('Phone Model'), dataIndex: 'phonemodel', width: 150 },
+            { resizable: true, id: 'model', header: this.translation._('Phone Model'), dataIndex: 'model', width: 150 },
             { resizable: true, id: 'softwareimage', header: this.translation._('Software Image'), dataIndex: 'softwareimage', width: 200 }
         ]);
         
@@ -1846,7 +1846,7 @@ Tine.Asterisk.Software.EditDialog =  {
                 } , {
                     xtype: 'combo',
                     fieldLabel: 'Model',
-                    name: 'phonemodel',
+                    name: 'model',
                     mode: 'local',
                     displayField:'model',
                     valueField:'key',
@@ -1948,6 +1948,6 @@ Tine.Asterisk.Config.Config = Ext.data.Record.create([
 Tine.Asterisk.Software.Software = Ext.data.Record.create([
     {name: 'id'},
     {name: 'description'},
-    {name: 'phonemodel'},
+    {name: 'model'},
     {name: 'softwareimage'}
 ]);

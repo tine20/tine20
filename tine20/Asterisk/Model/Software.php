@@ -53,7 +53,7 @@ class Asterisk_Model_Software extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'						=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'phonemodel'		    	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'model'		    	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'softwareimage'		        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
