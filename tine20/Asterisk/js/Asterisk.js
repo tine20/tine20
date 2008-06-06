@@ -398,7 +398,7 @@ Tine.Asterisk.Phones.Main = {
             { resizable: true, id: 'swversion', header: this.translation._('phone sw version'), dataIndex: 'swversion', width: 80, hidden: true },
             { resizable: true, id: 'ipaddress', header: this.translation._('phone IP address'), dataIndex: 'ipaddress', width: 110 },
             { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
-            { resizable: true, id: 'class_id', header: this.translation._('class id'), dataIndex: 'class_id', width: 20, hidden: true },
+            { resizable: true, id: 'software_id', header: this.translation._('class id'), dataIndex: 'software_id', width: 20, hidden: true },
             {
                 resizable: true,
                 id: 'description',
@@ -1920,7 +1920,7 @@ Tine.Asterisk.Phones.Phone = Ext.data.Record.create([
     {name: 'swversion'},
     {name: 'ipaddress'},
     {name: 'last_modified_time'},
-    {name: 'class_id'},
+    {name: 'software_id'},
     {name: 'description'}
 ]);
 

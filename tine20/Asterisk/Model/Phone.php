@@ -57,7 +57,7 @@ class Asterisk_Model_Phone extends Tinebase_Record_Abstract
         'swversion'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ipaddress'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'class_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'software_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 

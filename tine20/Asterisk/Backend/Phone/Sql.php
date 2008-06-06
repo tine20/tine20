@@ -61,7 +61,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
                 'swversion',
                 'ipaddress',
                 'last_modified_time',
-                'class_id',
+                'software_id',
                 'description')
             );
 
