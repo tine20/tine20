@@ -322,11 +322,17 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      /**
 	 * save one lead
 	 *
-	 * if $_leadId is NULL the lead gets added, otherwise it gets updated
+	 * if $leadId is NULL the lead gets added, otherwise it gets updated
 	 *
+	 * @param  string  $lead           JSON encoded lead data
+	 * @param  string  $linkedContacts JSON encoded contact ids / type [account, customer, partner]
+	 * @param  string  $linkedTasks    JSON encoded tasks ids
+	 * @param  string  $products       JSON encoded products
 	 * @return array
+	 * 
+	 * @todo   add tasks and products again
 	 */	
-	public function saveLead($lead, $linkedAccount, $linkedCustomer, $linkedPartner, $linkedTasks, $products)
+	public function saveLead($lead, $linkedContacts, $linkedTasks, $products)
     {
         $leadData = new Crm_Model_Lead();
         try {
@@ -342,41 +348,43 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             return $result;
         }
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
-        $responsible = Zend_Json::decode($linkedAccount);
-        if(is_array($responsible)) {
-            $leadData->responsible = $responsible;
-        }
         
-        $customer = Zend_Json::decode($linkedCustomer);
-        if(is_array($customer)) {
-            $leadData->customer = $customer;
-        }
+        $linkedContacts = Zend_Json::decode($linkedContacts);
+
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($linkedContacts, true));
+
+        foreach ( $linkedContacts as $contact ) {
+            $tmpArray = $leadData->$contact['remark'];
+            $tmpArray[] = $contact['recordId'];
+            $leadData->$contact['remark'] = $tmpArray;            
+        }        
         
-        $partner = Zend_Json::decode($linkedPartner);
-        if(is_array($partner)) {
-            $leadData->partner = $partner;
-        }
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
         
+        /*
+        // tasks
         $tasks = Zend_Json::decode($linkedTasks);
         if(is_array($tasks)) {
             $leadData->tasks = $tasks;
         }
+
+        // products    
+        if(strlen($products) > 2) {     
+            $this->saveProducts($products, $savedLead->id);
+        } else {
+            Crm_Controller::getInstance()->deleteProducts($savedLead->id);    
+        } 
+        */
         
         if(empty($leadData->id)) {
             $savedLead = Crm_Controller::getInstance()->addLead($leadData);
         } else {
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
-        }
-        
-        // products    
-		if(strlen($products) > 2) {	    
-            $this->saveProducts($products, $savedLead->id);
-		} else {
-            Crm_Controller::getInstance()->deleteProducts($savedLead->id);    
-        }         
+        }        
         
         //$result = $savedLead->toArray();
         //$result['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();        
+
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
                         'updatedData'       => $savedLead->toArray()

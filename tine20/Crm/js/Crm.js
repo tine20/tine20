@@ -1046,26 +1046,21 @@ Tine.Crm.LeadEditDialog = {
             var leadForm = Ext.getCmp('leadDialog').getForm();
             
             if(leadForm.isValid()) {  
-                Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving lead') + '...');                
+                Ext.MessageBox.wait(Tine.Crm.LeadEditDialog.translation._('Please wait'), Tine.Crm.LeadEditDialog.translation._('Saving lead') + '...');                
                 leadForm.updateRecord(lead);
                 
-                // @todo add again ?
-                //var additionalData = _getAdditionalData();
+                // get linked stuff
+                var additionalData = Tine.Crm.LeadEditDialog._getAdditionalData();
                 
                 Ext.Ajax.request({
                     params: {
                         method: 'Crm.saveLead', 
                         lead: Ext.util.JSON.encode(lead.data),
-                        linkedCustomer: Ext.util.JSON.encode([]),
-                        linkedPartner:  Ext.util.JSON.encode([]),
-                        linkedAccount:  Ext.util.JSON.encode([]),
+                        linkedContacts: additionalData.linkedContacts,
                         linkedTasks:    Ext.util.JSON.encode([]),
                         products:       Ext.util.JSON.encode([])
-                        //@todo send links via json again
+                        // @todo send links via json again
                         /*
-                        linkedCustomer: additionalData.linkedCustomer,
-                        linkedPartner:  additionalData.linkedPartner,
-                        linkedAccount:  additionalData.linkedAccount,
                         linkedTasks:    additionalData.linkedTasks,
                         products:       additionalData.products
                         */
@@ -1079,9 +1074,11 @@ Tine.Crm.LeadEditDialog = {
                         }
                         
                         // fill form with returned lead
-                        lead = new Tine.Crm.Model.Lead(Ext.util.JSON.decode(_result.responseText));
+                        /*
+                        lead = new Tine.Crm.Model.Lead(Ext.util.JSON.decode(_result.updatedData));
                         Tine.Crm.Model.Lead.FixDates(lead);
                         leadForm.loadRecord(lead);
+                        */
                         
                         //dlg.action_delete.enable();
                         //_add_task.enable();
@@ -1090,11 +1087,11 @@ Tine.Crm.LeadEditDialog = {
                         Ext.MessageBox.hide();
                     },
                     failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', this.translation._('Could not save lead.')); 
+                        Ext.MessageBox.alert('Failed', Tine.Crm.LeadEditDialog.translation._('Could not save lead.')); 
                     } 
                 });
             } else {
-                Ext.MessageBox.alert('Errors', this.translation._('Please fix the errors noted.'));
+                Ext.MessageBox.alert('Errors', Tine.Crm.LeadEditDialog.translation._('Please fix the errors noted.'));
             }
         },
         saveAndClose: function(_button, _event) 
@@ -1102,7 +1099,70 @@ Tine.Crm.LeadEditDialog = {
             handlers.applyChanges(_button, _event, true);
         }
     },       
-         
+
+    /**
+     * _getAdditionalData
+     * collects additional data (start/end dates, linked contacts, ...)
+     * 
+     * @return  Object additionalData (json encoded)
+     * @todo    add other stores and stuff
+     */
+    _getAdditionalData: function()
+    {
+        var additionalData = {};          
+        
+        // collect data of assosicated contacts
+        var linksContacts = new Array();
+        var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+        
+        storeContacts.each(function(record) {
+            linksContacts.push({ 
+                recordId: record.id, 
+                remark: record.data.link_remark          
+            });
+        });
+
+        additionalData.linkedContacts = Ext.util.JSON.encode(linksContacts);
+        
+        /*
+        var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
+        additionalData.products = Tine.Tinebase.Common.getJSONdata(store_products);
+
+        // the start date (can not be empty)
+        var startDate = Ext.getCmp('start').getValue();
+        additionalData.start = startDate.format('c');
+
+        // the end date
+        var endDate = Ext.getCmp('end').getValue();
+        if(typeof endDate == 'object') {
+            additionalData.end = endDate.format('c');
+        } else {
+            additionalData.end = null;
+        }
+
+        // the estimated end
+        var endScheduledDate = Ext.getCmp('end_scheduled').getValue();
+        if(typeof endScheduledDate == 'object') {
+            additionalData.end_scheduled = endScheduledDate.format('c');
+        } else {
+            additionalData.end_scheduled = null;
+        }
+        
+        var linksTasks = new Array();
+        var taskGrid = Ext.getCmp('gridActivities');
+        var storeTasks = taskGrid.getStore();
+        
+        storeTasks.each(function(record) {
+            linksTasks.push(record.data.id);          
+        });
+        
+        additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
+        */
+        
+        return additionalData;
+        
+    },
+    
     /**
      * _getLinksGrid
      * get the grids for contacts/tasks/products/...
@@ -1231,15 +1291,6 @@ Tine.Crm.LeadEditDialog = {
             });
         };
  
-        var _editHandler = function(_button, _event) {
-            editWindow.show();
-        };  
-  
-        if (_leadData.data) {                    
-            var _lead_id = _leadData.data.id;
-        } else {
-            var _lead_id = 'NULL';
-        }
         */
 
         /*********** INIT STORES *******************/
@@ -1255,7 +1306,6 @@ Tine.Crm.LeadEditDialog = {
             //tbarItems: [_add_task, _export_lead],
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
-            //handlerDelete: Tine.Crm.LeadEditDialog.Handler.handlerDelete,
             labelAlign: 'top',
             items: Tine.Crm.LeadEditDialog.getEditForm([
                         this._getLinksGrid('Contacts', this.translation._('Contacts')),
@@ -1263,11 +1313,6 @@ Tine.Crm.LeadEditDialog = {
                         this._getLinksGrid('Products', this.translation._('Products'))
                     ])             
         });
-        
-        // disable for the moment
-        // @todo enable again
-        leadEdit.action_applyChanges.setDisabled(true);
-        leadEdit.action_saveAndClose.setDisabled(true);
         
         // fix to have the tab panel in the right height accross browsers
         Ext.getCmp('editMainTabPanel').on('afterlayout', function(container){
@@ -1312,8 +1357,8 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadstate'},
     {name: 'leadtype'},
     {name: 'leadsource'},
-    {name: 'partner'},
-    {name: 'customer'}
+  //  {name: 'partner'},
+  //  {name: 'customer'}
   //  {name: 'leadpartner_linkId'},
   //  {name: 'leadpartner_detail'},                
   //  {name: 'leadlinkId'},

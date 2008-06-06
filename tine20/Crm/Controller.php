@@ -155,10 +155,13 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $applicationName = strtolower($_applicationName);
         $remark = ( $_remark !== NULL ) ? $_remark : $applicationName;
         
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . 'set ' . $_applicationName . 
+        //    ' links for lead id ' . $leadId . ': ' . print_r($_linkIds, true));
+        
         if(is_array($_linkIds)) {
             $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, $applicationName, $_linkIds, $remark);
         } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, $applicationName);
+            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, $applicationName, $_remark);
         }
         
         return $result;
@@ -208,7 +211,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                         case 'partner':
                             $partner[] = $link['recordId'];
                             break;
-                        case 'account':
+                        case 'responsible':
                             $responsible[] = $link['recordId'];
                             break;
                     }
@@ -416,6 +419,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      *
      * @param Crm_Model_Lead $_lead the lead to add
      * @return Crm_Model_Lead the newly added lead
+     * 
+     * @todo add notifications later
      */ 
     public function addLead(Crm_Model_Lead $_lead)
     {
@@ -429,12 +434,12 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         $lead = $this->_backend->addLead($_lead);
         
-        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'account');
+        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
         $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
                 
-        $this->sendNotifications(false, $lead, $_lead->responsible);
+        //$this->sendNotifications(false, $lead, $_lead->responsible);
         
         return $this->getLead($lead->getId());
     }     
@@ -444,6 +449,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      *
      * @param Crm_Model_Lead $_lead the lead to update
      * @return Crm_Model_Lead the updated lead
+     * 
+     * @todo add notifications later
      */ 
     public function updateLead(Crm_Model_Lead $_lead)
     {
@@ -457,12 +464,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         $lead = $this->_backend->updateLead($_lead);
         
-        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'account');
+        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
         $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');                
                 
-        // @todo add notifications later
         //$this->sendNotifications(true, $lead, $_lead->responsible);
         
         return $this->getLead($lead->getId());
