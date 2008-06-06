@@ -84,7 +84,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        /*
         $this->objects['updatedLead'] = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
@@ -98,7 +97,59 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'probability'   => 70,
             'end_scheduled' => NULL,
         ));
-        */ 
+
+        $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'), 
+            'Addressbook', 
+            Zend_Registry::get('currentAccount'), 
+            Tinebase_Container::GRANT_EDIT
+        );
+        
+        $addressbookContainer = $addressbookPersonalContainer[0];
+        
+        $this->objects['contact'] = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'email'                 => 'unittests@tine20.org',
+            'email_home'            => 'unittests@tine20.org',
+            'id'                    => 120,
+            'note'                  => 'Bla Bla Bla',
+            'owner'                 => $addressbookContainer->id,
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Kneschke',
+            'n_fileas'              => 'Kneschke, Lars',
+            'n_given'               => 'Lars',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+        )); 
+        
     }
 
     /**
@@ -112,7 +163,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     }    
     
     /**
-     * try to add a lead
+     * try to add a lead and link a contact
      *
      */
     public function testAddLead()
@@ -120,13 +171,64 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $json = new Crm_Json();
         
         $encodedData = Zend_Json::encode( $this->objects['initialLead']->toArray() );
+
+        // create test contact
+        try {
+            $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['contact']->getId());
+        } catch ( Exception $e ) {
+            $contact = Addressbook_Backend_Sql::getInstance()->addContact($this->objects['contact']);
+        }
+        $contactLinks = array(array( 
+            'recordId'  => $contact->getId(),
+            'remark'    => 'responsible'
+        ));
+        
+        $result = $json->saveLead($encodedData, Zend_Json::encode($contactLinks), Zend_Json::encode(array()), Zend_Json::encode(array()));
+        
+        //print_r($result['updatedData']);
+        
+        $this->assertTrue($result['success']); 
+        $this->assertEquals($this->objects['initialLead']->description, $result['updatedData']['description']);
+
+        // get linked contacts
+        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($result['updatedData']['id'], 'Addressbook');
+        
+        //print_r($linkedContacts);
+        
+        $this->assertGreaterThan(0, count($linkedContacts));
+        $this->assertEquals($contact->getId(), $linkedContacts[0]['recordId']);        
+    }
+
+    /**
+     * try to update a lead and remove linked contact 
+     *
+     */
+    public function testUpdateLead()
+    {   
+        $json = new Crm_Json();
+        $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
+        $initialLead = $leads[0];
+        
+        $updatedLead = $this->objects['updatedLead'];
+        $updatedLead->id = $initialLead->getId();
+        $encodedData = Zend_Json::encode( $updatedLead->toArray() );
         
         $result = $json->saveLead($encodedData, Zend_Json::encode(array()), Zend_Json::encode(array()), Zend_Json::encode(array()), Zend_Json::encode(array()), Zend_Json::encode(array()));
         
         //print_r($result['updatedData']);
         
         $this->assertTrue($result['success']); 
-        $this->assertEquals($this->objects['initialLead']->description, $result['updatedData']['description']);
+        $this->assertEquals($this->objects['updatedLead']->description, $result['updatedData']['description']);
+
+        // get linked contacts
+        
+        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($initialLead->getId(), 'Addressbook');
+        
+        // check if contact is no longer linked
+        $this->assertEquals(0, count($linkedContacts));
+        
+        // delete contact
+        Addressbook_Controller::getInstance()->deleteContact($this->objects['contact']->getId());
     }
 
     /**
@@ -134,7 +236,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testDeleteLead()
-    {
+    {        
         $json = new Crm_Json();
         $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
         
@@ -149,7 +251,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $json->deleteLeads($encodedLeadIds);
                 
         $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
-        $this->assertEquals(0, count($leads));
+        $this->assertEquals(0, count($leads));     
     }    
 }		
 	
