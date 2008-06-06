@@ -138,9 +138,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
     /*********************** links functions ************************/
     
-    // @todo    check/rework those
-    // @todo    add get/set ALL links functions (for performance/easy to use)?
-    
     /**
      * set lead links for an application
      *
@@ -150,8 +147,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param string $_remark
      * @return unknown
      * 
-     * @todo    write test
-     * @todo    replace all other setLinksXXX functions with this one
+     * @todo    add set ALL links functions (for performance/easy to use)?
      */
     public function setLinksForApplication($_leadId, $_linkIds, $_applicationName, $_remark = NULL)
     {
@@ -175,8 +171,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param string $_applicationName
      * @return array with links
      * 
-     * @todo    write test
-     * @todo    replace all other getLinksXXX functions with this one
+     * @todo    add get ALL links functions (for performance/easy to use)?
      */
     public function getLinksForApplication($_leadId, $_applicationName)
     {
@@ -194,7 +189,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param Crm_Model_Lead $_lead
      * @deprecated ?
      * 
-     * @todo    replace with getLinksForApplication
+     * @todo    replace with getLinksForApplication ?
      */
     protected function getLinkedProperties(Crm_Model_Lead &$_lead)
     {
@@ -900,68 +895,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         return $result;
     }   
-  
-    // @deprecated use setLinks instead
-    /*
-    public function setLinkedCustomer($_leadId, $_contactIds)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        if(is_array($_contactIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'addressbook', $_contactIds, 'customer');
-        } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'addressbook', 'customer');
-        }
-        
-        return $result;
-    }
-
-    public function setLinkedPartner($_leadId, $_contactIds)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        if(is_array($_contactIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'addressbook', $_contactIds, 'partner');
-        } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'addressbook', 'partner');
-        }
-        
-        return $result;
-    }
-
-    public function setLinkedAccount($_leadId, $_contactIds)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        if(is_array($_contactIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'addressbook', $_contactIds, 'account');
-        } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'addressbook', 'account');
-        }
-        
-        return $result;
-    }
-    */
-
-    /**
-     * setLinkedTasks
-     *
-     * @param unknown_type $_leadId
-     * @param unknown_type $_taskIds
-     * @return unknown
-     * @deprecated use setLinks instead
-     */
-    /*
-    public function setLinkedTasks($_leadId, $_taskIds)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-        if(is_array($_taskIds)) {
-            $result = Tinebase_Links::getInstance()->setLinks('crm', $leadId, 'tasks', $_taskIds, 'task');
-        } else {
-            $result = Tinebase_Links::getInstance()->deleteLinks('crm', $leadId, 'tasks');
-        }
-        
-        return $result;
-    }
-    */
-    
+      
     /**
      * returns an empty lead with some defaults set
      *
@@ -987,24 +921,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         
         return $emptyLead;
     }
-    
-    /**
-     * get lead links
-     *
-     * @param integer $_leadId
-     * @param string $_application
-     * @return unknown
-     */
-    /*
-    public function getLinks($_leadId, $_application = NULL)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
         
-        $links = Tinebase_Links::getInstance()->getLinks('crm', $leadId, $_application);
-        
-        return $links;
-    }
-    */
-    
     
 }
