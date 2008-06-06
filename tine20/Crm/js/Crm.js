@@ -1049,7 +1049,7 @@ Tine.Crm.LeadEditDialog = {
                 Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving lead') + '...');                
                 leadForm.updateRecord(lead);
                 
-                // @todo add again
+                // @todo add again ?
                 //var additionalData = _getAdditionalData();
                 
                 Ext.Ajax.request({
@@ -1112,6 +1112,7 @@ Tine.Crm.LeadEditDialog = {
      * @return  grid object
      * 
      * @todo    add activities/products grids
+     * @todo    move to LeadEditDialog.js ?
      */
     _getLinksGrid: function(_type, _title)
     {
@@ -1167,6 +1168,26 @@ Tine.Crm.LeadEditDialog = {
     	
         return grid;       
     },
+    
+    /**
+     * get linked contacts store and put it into store manager
+     * 
+     * @param   array _contacts
+     */
+    loadContactsStore: function(_contacts)
+    {
+        var storeContacts = new Ext.data.JsonStore({
+            id: 'id',
+            fields: Tine.Crm.Model.ContactLink
+        });
+            
+        if(_contacts) {
+            storeContacts.loadData(_contacts);                    
+            storeContacts.setDefaultSort('remark', 'asc');     
+        }
+        
+        Ext.StoreMgr.add('ContactsStore', storeContacts);
+    },
         
     /**
      * initComponent
@@ -1175,7 +1196,7 @@ Tine.Crm.LeadEditDialog = {
     initComponent: function()
     {
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Addressbook');
+        this.translation.textdomain('Crm');
         
         // @todo add actions here?
     },
@@ -1223,8 +1244,9 @@ Tine.Crm.LeadEditDialog = {
 
         /*********** INIT STORES *******************/
         
-        var contactsStore = Tine.Crm.LeadEditDialog.Stores.getContacts(lead.data.contacts);
-        Ext.StoreMgr.add('ContactsStore', contactsStore);
+        this.loadContactsStore(lead.data.contacts);        
+        
+        // @todo add other stores
                 
         /*********** the EDIT dialog ************/
         
@@ -1264,210 +1286,6 @@ Tine.Crm.LeadEditDialog = {
     } // end of function display()
 }; // end of application CRM LEAD EDIT DIALOG
 
-/*************************************** LEAD EDIT DIALOG HANDLER ********************************/
-
-/*
-Tine.Crm.LeadEditDialog.Handler = function() {
-    return { 
-        removeContact: function(_button, _event) 
-        {
-            //console.log('remove contact');           
-            var currentContactsTab = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab();
-            
-            var selectedRows = currentContactsTab.getSelectionModel().getSelections();
-            var currentContactsStore = currentContactsTab.getStore();
-
-            for (var i = 0; i < selectedRows.length; ++i) {
-                currentContactsStore.remove(selectedRows[i]);
-            }
-    
-            //Ext.getCmp('Addressbook_Grants_SaveButton').enable();
-            //Ext.getCmp('Addressbook_Grants_ApplyButton').enable();
-        },
-
-        addContact: function(_button, _event) 
-        {
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 850, 600);
-        },    
-        
-        addContactToList: function(_button, _event) 
-        {
-            var selectedRows = Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().getSelections();
-            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
-
-            for (var i = 0; i < selectedRows.length; ++i) {
-                if(currentContactsStore.getById(selectedRows[i].id) === undefined) {
-                    //console.log('record ' + record.id + 'not found');
-                    currentContactsStore.addSorted(selectedRows[i], selectedRows[i].id);
-                }
-            }
-            
-            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
-            
-            selectionModel.selectRow(currentContactsStore.indexOfId(selectedRows[0].id));
-        },  
-              
-        handlerDelete: function() 
-        {
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this lead?', function(_button) {
-                if(_button == 'yes') {      
-                    var leadIds;// = Ext.util.JSON.encode([formData.values.id]);
-                    
-                    Ext.Ajax.request({
-                        params: {
-                            method: 'Crm.deleteLeads',
-                            _leadIds: leadIds
-                        },
-                        text: 'Deleting lead...',
-                        success: function(_result, _request){
-                            window.opener.Tine.Crm.reload();
-                            window.setTimeout("window.close()", 400);
-                        },
-                        failure: function(result, request){
-                            Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the lead.');
-                        }
-                    });
-                } 
-            });
-        }
-    };
-}();
-*/
-
-/*************************************** LEAD EDIT DIALOG STORES *********************************/
-
-// @todo move that to contact edit dialog
-
-Tine.Crm.LeadEditDialog.Stores = function() {
-	
-	// private attributes
-	var _storeContacts = null;
-	
-    // public functions and variables
-    return {
-    	// @todo replace this with contact model?
-        contactFields: [
-            {name: 'link_id'},              
-            {name: 'link_remark'},                        
-            {name: 'id'},
-            {name: 'owner'},
-            {name: 'n_family'},
-            {name: 'n_given'},
-            {name: 'n_middle'},
-            {name: 'n_prefix'},
-            {name: 'n_suffix'},
-            {name: 'n_fn'},
-            {name: 'n_fileas'},
-            {name: 'org_name'},
-            {name: 'org_unit'},
-            {name: 'adr_one_street'},
-            {name: 'adr_one_locality'},
-            {name: 'adr_one_region'},
-            {name: 'adr_one_postalcode'},
-            {name: 'adr_one_countryname'},
-            {name: 'tel_work'},
-            {name: 'tel_cell'},
-            {name: 'tel_fax'},
-            {name: 'email'},
-            //{name: 'type'},
-        ],
-        
-        /**
-         * get linked contacts store
-         * 
-         * @param   array (?) contacts
-         * @return  Ext.data.JsonStore
-         * 
-         * @todo    make it work!
-         */
-        getContacts: function (_contacts){  
-                 
-            if (_storeContacts === null) {
-                _storeContacts = new Ext.data.JsonStore({
-                    id: 'id',
-                    fields: this.contactFields
-                    //fields: Tine.Addressbook.Model.Contact
-                });
-            }                
-                
-            if(_contacts) {
-                _storeContacts.loadData(_contacts);                    
-                _storeContacts.setDefaultSort('remark', 'asc');     
-            }
-            
-            
-            return _storeContacts;            
-        },
-
-        /**
-         * get lead status store
-         * 
-         * @return  Ext.data.JsonStore
-         */
-        getLeadStatus: function (){
-            var store = new Ext.data.JsonStore({
-                data: formData.comboData.leadstates,
-                autoLoad: true,         
-                id: 'key',
-                fields: [
-                    {name: 'key', mapping: 'id'},
-                    {name: 'value', mapping: 'leadstate'},
-                    {name: 'probability', mapping: 'probability'},
-                    {name: 'endslead', mapping: 'endslead'}
-                ]
-            });
-            
-            return store;
-        },
-        
-        /**
-         * get lead type store
-         * 
-         * @return  Ext.data.JsonStore
-         */
-        getLeadType: function (){
-            var store = new Ext.data.JsonStore({
-                data: formData.comboData.leadtypes,
-                autoLoad: true,
-                id: 'key',
-                fields: [
-                    {name: 'key', mapping: 'id'},
-                    {name: 'value', mapping: 'leadtype'}
-    
-                ]
-            });     
-            
-            return store;
-        },
-
-        /**
-         * get probability store
-         * 
-         * @return  Ext.data.SimpleStore
-         */
-        getProbability: function (){
-            var store = new Ext.data.SimpleStore({
-                    fields: ['key','value'],
-                    data: [
-                            ['0','0%'],
-                            ['10','10%'],
-                            ['20','20%'],
-                            ['30','30%'],
-                            ['40','40%'],
-                            ['50','50%'],
-                            ['60','60%'],
-                            ['70','70%'],
-                            ['80','80%'],
-                            ['90','90%'],
-                            ['100','100%']
-                        ]
-            });
-            
-            return store;
-        }
-    };
-}();
-
 /*************************************** CRM MODELS *********************************/
 
 Ext.namespace('Tine.Crm.Model');
@@ -1501,6 +1319,33 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
   //  {name: 'leadlinkId'},
   //  {name: 'leaddetail'}  
 ]);
+
+// contact link
+Tine.Crm.Model.ContactLink = Ext.data.Record.create([
+    {name: 'link_id'},              
+    {name: 'link_remark'},                        
+    {name: 'id'},
+    {name: 'owner'},
+    {name: 'n_family'},
+    {name: 'n_given'},
+    {name: 'n_middle'},
+    {name: 'n_prefix'},
+    {name: 'n_suffix'},
+    {name: 'n_fn'},
+    {name: 'n_fileas'},
+    {name: 'org_name'},
+    {name: 'org_unit'},
+    {name: 'adr_one_street'},
+    {name: 'adr_one_locality'},
+    {name: 'adr_one_region'},
+    {name: 'adr_one_postalcode'},
+    {name: 'adr_one_countryname'},
+    {name: 'tel_work'},
+    {name: 'tel_cell'},
+    {name: 'tel_fax'},
+    {name: 'email'},
+]);
+
 
 // work arround nasty ext date bug
 // @todo is that still needed?

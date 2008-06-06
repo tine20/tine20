@@ -12,6 +12,59 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
 	var translation = new Locale.Gettext();
     translation.textdomain('Crm');
 
+    /*********** OVERVIEW form static stores ************/
+    
+    var storeLeadStates = new Ext.data.JsonStore({
+        data: formData.comboData.leadstates,
+        autoLoad: true,         
+        id: 'key',
+        fields: [
+            {name: 'key', mapping: 'id'},
+            {name: 'value', mapping: 'leadstate'},
+            {name: 'probability', mapping: 'probability'},
+            {name: 'endslead', mapping: 'endslead'}
+        ]
+    });
+    
+    var storeLeadSource = new Ext.data.JsonStore({
+        data: formData.comboData.leadsources,
+        autoLoad: true,
+        id: 'key',
+        fields: [
+            {name: 'key', mapping: 'id'},
+            {name: 'value', mapping: 'leadsource'}
+
+        ]
+    });     
+
+    var storeLeadTypes = new Ext.data.JsonStore({
+        data: formData.comboData.leadtypes,
+        autoLoad: true,
+        id: 'key',
+        fields: [
+            {name: 'key', mapping: 'id'},
+            {name: 'value', mapping: 'leadtype'}
+
+        ]
+    });     
+    
+    var storeProbability = new Ext.data.SimpleStore({
+            fields: ['key','value'],
+            data: [
+                    ['0','0%'],
+                    ['10','10%'],
+                    ['20','20%'],
+                    ['30','30%'],
+                    ['40','40%'],
+                    ['50','50%'],
+                    ['60','60%'],
+                    ['70','70%'],
+                    ['80','80%'],
+                    ['90','90%'],
+                    ['100','100%']
+                ]
+    });
+       
     /*********** OVERVIEW form fields ************/
 
     var txtfld_leadName = new Ext.form.TextField({
@@ -26,20 +79,20 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         //selectOnFocus:true            
         }); 
  
-        var combo_leadstatus = new Ext.form.ComboBox({
-                fieldLabel: translation._('Leadstate'), 
-            id:'leadstatus',
-            name:'leadstate_id',
-            store: Tine.Crm.LeadEditDialog.Stores.getLeadStatus(),
-            displayField:'value',
-            valueField:'key',
-            mode: 'local',
-            triggerAction: 'all',
-            editable: false,
-            allowBlank: false,
-            listWidth: '25%',
-            forceSelection: true,
-            anchor:'95%'    
+    var combo_leadstatus = new Ext.form.ComboBox({
+        fieldLabel: translation._('Leadstate'), 
+        id:'leadstatus',
+        name:'leadstate_id',
+        store: storeLeadStates,
+        displayField:'value',
+        valueField:'key',
+        mode: 'local',
+        triggerAction: 'all',
+        editable: false,
+        allowBlank: false,
+        listWidth: '25%',
+        forceSelection: true,
+        anchor:'95%'    
     });
     
     combo_leadstatus.on('select', function(combo, record, index) {
@@ -58,7 +111,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         fieldLabel: translation._('Leadtype'), 
         id:'leadtype',
         name:'leadtype_id',
-        store: Tine.Crm.LeadEditDialog.Stores.getLeadType(),
+        store: storeLeadTypes,
         mode: 'local',
         displayField:'value',
         valueField:'key',
@@ -71,22 +124,11 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         anchor:'95%'    
     });
 
-    var st_leadsource = new Ext.data.JsonStore({
-        data: formData.comboData.leadsources,
-        autoLoad: true,
-        id: 'key',
-        fields: [
-            {name: 'key', mapping: 'id'},
-            {name: 'value', mapping: 'leadsource'}
-
-        ]
-    });     
-
     var combo_leadsource = new Ext.form.ComboBox({
             fieldLabel: translation._('Leadsource'), 
             id:'leadsource',
             name:'leadsource_id',
-            store: st_leadsource,
+            store: storeLeadSource,
             displayField:'value',
             valueField:'key',
             typeAhead: true,
@@ -103,7 +145,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         fieldLabel: translation._('Probability'), 
         id: 'combo_probability',
         name:'probability',
-        store: Tine.Crm.LeadEditDialog.Stores.getProbability(),
+        store: storeProbability,
         displayField:'value',
         valueField:'key',
         typeAhead: true,
