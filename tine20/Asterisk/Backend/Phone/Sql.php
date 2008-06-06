@@ -15,14 +15,14 @@
  *
  * @package  Asterisk
  */
-class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
+class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 {
     /**
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;    
 	/**
-	* Instance of Asterisk_Backend_Sql_Phones
+	* Instance of Asterisk_Backend_Phone_Sql_Phones
 	*
 	* @var Asterisk_Backend_Sql_Phones
 	*/
@@ -166,6 +166,142 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
         $result = new Asterisk_Model_Phone($row);
         return $result;
 	}    
+    
+    
+    
+	/**
+	 * get Config
+	 * 
+     * @param string $_sort
+     * @param string $_dir
+	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Config
+	 */
+    public function getConfig($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
+    {	
+        if(!empty($_filter)) {
+            $_fields = "firmware_interval,firmware_status,update_policy,setting_server,admin_mode,ntp_server,http_user,description";            
+            $where = $this->_getSearchFilter($_filter, $_fields);
+        }
+        
+        
+        $select = $this->_db->select()
+            ->from(array('config' => SQL_TABLE_PREFIX . 'snom_config'), array(
+                'firmware_interval',
+                'firmware_status',
+                'update_policy',
+                'setting_server',
+                'admin_mode',
+                'admin_mode_password',
+                'ntp_server',
+                'webserver_type',
+                'https_port',
+                'http_user',
+                'http_pass',
+                'id',
+                'description',
+                'filter_registrar',
+                'callpickup_dialoginfo',
+                'pickup_indication')
+            );
+
+        $select->order($_sort.' '.$_dir);
+
+         foreach($where as $whereStatement) {
+              $select->where($whereStatement);
+         }               
+       //echo  $select->__toString();
+       
+        $stmt = $this->_db->query($select);
+
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Config', $rows);
+		
+        return $result;
+	}
+    
+	/**
+	 * get Config by id
+	 * 
+     * @param string $_id
+	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Config
+	 */
+    public function getConfigById($_configId)
+    {	
+        $configId = Asterisk_Model_Config::convertConfigIdToInt($_configId);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_config')->where($this->_db->quoteInto('id = ?', $configId));
+        $row = $this->_db->fetchRow($select);
+        if (! $row) {
+            throw new UnderflowException('config not found');
+        }
+#       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Config', $row);
+        $result = new Asterisk_Model_Config($row);
+        return $result;
+	}    
+    
+    
+    
+    
+    
+	/**
+	 * get Software
+	 * 
+     * @param string $_sort
+     * @param string $_dir
+	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+	 */
+    public function getSoftware($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
+    {	
+        if(!empty($_filter)) {
+            $_fields = "description,phonemodel,softwareimage";            
+            $where = $this->_getSearchFilter($_filter, $_fields);
+        }
+        
+        $select = $this->_db->select()
+            ->from(array('config' => SQL_TABLE_PREFIX . 'snom_software'), array(
+                'id',
+                'description',
+                'phonemodel',
+                'softwareimage')
+            );
+
+        $select->order($_sort.' '.$_dir);
+
+         foreach($where as $whereStatement) {
+              $select->where($whereStatement);
+         }               
+       //echo  $select->__toString();
+       
+        $stmt = $this->_db->query($select);
+
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Software', $rows);
+		
+        return $result;
+	}    
+    
+	/**
+	 * get Software by id
+	 * 
+     * @param string $_id
+	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+	 */
+    public function getSoftwareById($_softwareId)
+    {	
+        $softwareId = Asterisk_Model_Software::convertSoftwareIdToInt($_softwareId);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_software')->where($this->_db->quoteInto('id = ?', $softwareId));
+        $row = $this->_db->fetchRow($select);
+        if (! $row) {
+            throw new UnderflowException('software not found');
+        }
+#       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Software', $row);
+        $result = new Asterisk_Model_Software($row);
+        return $result;
+	}      
+    
+    
+    
     
     
    /**

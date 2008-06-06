@@ -111,10 +111,8 @@ class Asterisk_Json extends Tinebase_Application_Json_Abstract
         $phone->setFromArray($phoneData);
         
         if (empty($phone->id)) {
-error_log('JSON :: savePhone :: ADD');            
             $phone = Asterisk_Controller::getInstance()->addPhone($phone);
         } else {
-error_log('JSON :: savePhone :: UPDATE');                        
             $phone = Asterisk_Controller::getInstance()->updatePhone($phone);
         }
         $phone = $this->getPhoneById($phone->getId());
@@ -127,5 +125,91 @@ error_log('JSON :: savePhone :: UPDATE');
         return $result;
          
     }     
+        
+        
+    /**
+     * get snom config
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getConfig($sort, $dir, $query)
+    {     
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Asterisk_Controller::getInstance()->getConfig($sort, $dir, $query)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }        
+    
+   /**
+     * get one config identified by configId
+     *
+     * @param int $configId
+     * @return array
+     */
+    public function getConfigById($configId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $config = Asterisk_Controller::getInstance()->getConfigById($configId);
+        
+        $result = $config->toArray();        
+        return $result;
+    }      
+    
+        
+        
+        
+        
+    /**
+     * get snom software
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getSoftware($sort, $dir, $query)
+    {     
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Asterisk_Controller::getInstance()->getSoftware($sort, $dir, $query)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }        
+    
+    
+   /**
+     * get one software identified by softwareId
+     *
+     * @param int $softwareId
+     * @return array
+     */
+    public function getSoftwareById($softwareId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $software = Asterisk_Controller::getInstance()->getSoftwareById($softwareId);
+        
+        $result = $software->toArray();        
+        return $result;
+    }         
         
 }

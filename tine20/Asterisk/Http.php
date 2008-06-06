@@ -76,5 +76,98 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
+    
+
+    /**
+     * create edit config dialog
+     *
+     * @param int $configId
+     * @todo catch permission denied exceptions only
+     * 
+     */
+    public function editConfig($configId=NULL)
+    {
+        if (!empty($configId)) {
+            $configs = Asterisk_Controller::getInstance();
+            $config = $configs->getConfigById($configId);
+            $arrayConfig = $config->toArray();
+        } else {
+
+        }
+
+        // encode the config array
+        $encodedConfig = Zend_Json::encode($arrayConfig);                   
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Asterisk.Config.EditDialog.display(' . $encodedConfig .');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit config data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }    
+    
+    
+    /**
+     * create edit software dialog
+     *
+     * @param int $softwareId
+     * @todo catch permission denied exceptions only
+     * 
+     */
+    public function editSoftware($softwareId=NULL)
+    {
+        if (!empty($softwareId)) {
+            $softwares = Asterisk_Controller::getInstance();
+            $software = $softwares->getSoftwareById($softwareId);
+            $arraySoftware = $software->toArray();
+        } else {
+
+        }
+
+        // encode the software array
+        $encodedSoftware = Zend_Json::encode($arraySoftware);                   
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Asterisk.Software.EditDialog.display(' . $encodedSoftware .');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit software data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }    
+    
      
 }

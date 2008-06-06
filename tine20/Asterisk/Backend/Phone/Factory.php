@@ -19,7 +19,7 @@
  * 
  * @package  Asterisk Management
  */
-class Asterisk_Backend_Factory
+class Asterisk_Backend_Phone_Factory
 {
     /**
      * constant for Sql contacts backend class
@@ -37,7 +37,7 @@ class Asterisk_Backend_Factory
     {
         switch($type) {
             case self::SQL:
-                $className = 'Asterisk_Backend_' . ucfirst($type);
+                $className = 'Asterisk_Backend_Phone_' . ucfirst($type);
                 $instance = new $className();
                 break;
                 

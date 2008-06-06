@@ -32,7 +32,7 @@ class Asterisk_Controller
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Asterisk_Backend_Factory::factory(Asterisk_Backend_Factory::SQL);
+        $this->_backend = Asterisk_Backend_Phone_Factory::factory(Asterisk_Backend_Phone_Factory::SQL);
     }
     
     /**
@@ -137,7 +137,6 @@ class Asterisk_Controller
     }    
     
 
-
     /**
      * get snom_phones
      *
@@ -152,4 +151,61 @@ class Asterisk_Controller
         return $result;    
     }
 
+
+    /**
+     * get snom_config
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Config
+     */
+    public function getConfig($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {        
+        $result = $this->_backend->getConfig($_sort, $_dir, $_query);
+
+        return $result;    
+    }
+    
+    /**
+     * get snom_config by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Config
+     */
+    public function getConfigById($_id)
+    {
+        $result = $this->_backend->getConfigById($_id);
+
+        return $result;    
+    }    
+    
+    
+    
+    /**
+     * get snom_software
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+     */
+    public function getSoftware($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {        
+        $result = $this->_backend->getSoftware($_sort, $_dir, $_query);
+
+        return $result;    
+    }  
+    
+    /**
+     * get snom_software by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+     */
+    public function getSoftwareById($_id)
+    {
+        $result = $this->_backend->getSoftwareById($_id);
+
+        return $result;    
+    }    
+      
 }

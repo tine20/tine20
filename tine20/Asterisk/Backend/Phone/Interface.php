@@ -16,6 +16,6 @@
  * 
  * @package   Asterisk Management
  */
-interface Asterisk_Backend_Interface
+interface Asterisk_Backend_Phone_Interface
 {
 }
