@@ -144,7 +144,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         $_productSource =  $controller->getProducts('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
 
-        $view->jsExecute = 'Tine.Crm.LeadEditDialog.displayDialog(' . Zend_Json::encode($leadData) . ' );';
+        $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
