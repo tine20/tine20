@@ -353,11 +353,25 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($linkedContacts, true));
 
+        $responsible = array();
+        $customer = array();
+        $partner = array();
         foreach ( $linkedContacts as $contact ) {
-            $tmpArray = $leadData->$contact['remark'];
-            $tmpArray[] = $contact['recordId'];
-            $leadData->$contact['remark'] = $tmpArray;            
+            switch ( $contact['remark'] ) {
+                case 'responsible':
+                    $responsible[] = $contact['recordId'];
+                    break;
+                case 'customer':
+                    $customer[] = $contact['recordId'];
+                    break;
+                case 'partner':
+                    $partner[] = $contact['recordId'];
+                    break;
+            }
         }        
+        $leadData->responsible = $responsible;
+        $leadData->customer = $customer;
+        $leadData->partner = $partner;
         
         //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
         
