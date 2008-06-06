@@ -391,10 +391,10 @@ Tine.Asterisk.Phones.Main = {
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('Id'), dataIndex: 'id', width: 30, hidden: true },
             { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 60 },
-            { resizable: true, id: 'phonemodel', header: this.translation._('phone model'), dataIndex: 'phonemodel', width: 100, hidden: true },
-            { resizable: true, id: 'phoneswversion', header: this.translation._('phone sw version'), dataIndex: 'phoneswversion', width: 80, hidden: true },
-            { resizable: true, id: 'phoneipaddress', header: this.translation._('phone IP address'), dataIndex: 'phoneipaddress', width: 110 },
-            { resizable: true, id: 'lastmodify', header: this.translation._('last modified'), dataIndex: 'lastmodify', width: 100, hidden: true },
+            { resizable: true, id: 'model', header: this.translation._('phone model'), dataIndex: 'model', width: 100, hidden: true },
+            { resizable: true, id: 'swversion', header: this.translation._('phone sw version'), dataIndex: 'swversion', width: 80, hidden: true },
+            { resizable: true, id: 'ipaddress', header: this.translation._('phone IP address'), dataIndex: 'ipaddress', width: 110 },
+            { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
             { resizable: true, id: 'class_id', header: this.translation._('class id'), dataIndex: 'class_id', width: 20, hidden: true },
             {
                 resizable: true,
@@ -539,8 +539,8 @@ Tine.Asterisk.Phones.EditDialog =  {
     	
     	updatePhoneRecord: function(_phoneData)
     	{
-            if(_phoneData.lastmodify && _phoneData.lastmodify !== null) {
-                _phoneData.lastmodify = Date.parseDate(_phoneData.lastmodify, 'c');
+            if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
+                _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
             }
             this.phoneRecord = new Tine.Asterisk.Phones.Phone(_phoneData);
     	},
@@ -621,7 +621,7 @@ Tine.Asterisk.Phones.EditDialog =  {
                 }, {
                     xtype: 'combo',
                     fieldLabel: 'Phone Model',
-                    name: 'phonemodel',
+                    name: 'model',
                     mode: 'local',
                     displayField:'model',
                     valueField:'key',
@@ -641,14 +641,14 @@ Tine.Asterisk.Phones.EditDialog =  {
                 }, {
                     xtype: 'textfield',
                     fieldLabel: 'Phone SW Version',
-                    name: 'phoneswversion',
+                    name: 'swversion',
                     maxLength: 40,
                     anchor:'100%',                    
                     allowBlank: false
                 }, {
                     xtype: 'textfield',
                     fieldLabel: 'Phone IP Address',
-                    name: 'phoneipaddress',
+                    name: 'ipaddress',
                     maxLength: 20,
                     anchor:'100%',  
                     readOnly: true
@@ -704,10 +704,10 @@ Tine.Asterisk.Phones.EditDialog =  {
 Tine.Asterisk.Phones.Phone = Ext.data.Record.create([
     {name: 'id'},
     {name: 'macaddress'},
-    {name: 'phonemodel'},
-    {name: 'phoneswversion'},
-    {name: 'phoneipaddress'},
-    {name: 'lastmodify'},
+    {name: 'model'},
+    {name: 'swversion'},
+    {name: 'ipaddress'},
+    {name: 'last_modified_time'},
     {name: 'class_id'},
     {name: 'description'}
 ]);

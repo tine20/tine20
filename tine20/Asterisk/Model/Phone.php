@@ -51,14 +51,14 @@ class Asterisk_Model_Phone extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id' 				    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'macaddress'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-		'phonemodel'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-		'phoneswversion'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-		'phoneipaddress'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lastmodify'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'class_id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'            => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'id' 			        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'macaddress'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'swversion'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'ipaddress'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'class_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**

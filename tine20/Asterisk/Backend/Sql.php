@@ -35,7 +35,7 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
     public function __construct()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->phoneTable      		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'asterisk_snom_phones'));
+        $this->phoneTable      		= new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'snom_phones'));
     }
     
 	/**
@@ -48,19 +48,19 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
     public function getPhones($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
         if(!empty($_filter)) {
-            $_fields = "macaddress,phonemodel,phoneipaddress,description";            
+            $_fields = "macaddress,model,ipaddress,description";            
             $where = $this->_getSearchFilter($_filter, $_fields);
         }
         
         
         $select = $this->_db->select()
-            ->from(array('asterisk' => SQL_TABLE_PREFIX . 'asterisk_snom_phones'), array(
+            ->from(array('asterisk' => SQL_TABLE_PREFIX . 'snom_phones'), array(
                 'id',
                 'macaddress',
-                'phonemodel',
-                'phoneswversion',
-                'phoneipaddress',
-                'lastmodify',
+                'model',
+                'swversion',
+                'ipaddress',
+                'last_modified_time',
                 'class_id',
                 'description')
             );
@@ -98,8 +98,8 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
             unset($phoneData['id']);
         }
 
-        $this->_db->insert(SQL_TABLE_PREFIX . 'asterisk_snom_phones', $phoneData);
-        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'asterisk_snom_phones', 'id');
+        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones', $phoneData);
+        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_phones', 'id');
         // if we insert a phone without an id, we need to get back one
         if (empty($_phoneData->id) && $id == 0) {
             throw new Exception("returned phone id is 0");
@@ -128,7 +128,7 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
         unset($phoneData['id']);
 
         $where = array($this->_db->quoteInto('id = ?', $phoneId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'asterisk_snom_phones', $phoneData, $where);
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
         return $this->getPhoneById($phoneId);
     }    
     
@@ -143,7 +143,7 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
     {
         $phoneId = Asterisk_Model_Phone::convertPhoneIdToInt($_phoneId);
         $where = array($this->_db->quoteInto('id = ?', $phoneId) , $this->_db->quoteInto('id = ?', $phoneId));
-        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'asterisk_snom_phones', $where);
+        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones', $where);
         return $result;
     }    
     
@@ -157,7 +157,7 @@ class Asterisk_Backend_Sql implements Asterisk_Backend_Interface
     public function getPhoneById($_phoneId)
     {	
         $phoneId = Asterisk_Model_Phone::convertPhoneIdToInt($_phoneId);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'asterisk_snom_phones')->where($this->_db->quoteInto('id = ?', $phoneId));
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phones')->where($this->_db->quoteInto('id = ?', $phoneId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('phone not found');
