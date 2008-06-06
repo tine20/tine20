@@ -44,6 +44,8 @@ Tine.Crm.getPanel = function(){
 
 /*************************************** CRM MAIN DIALOG *****************************************/
 
+// @todo remove closure
+
 Tine.Crm.Main = function(){
     var translation = new Locale.Gettext();
     translation.textdomain('Crm');
@@ -1030,20 +1032,12 @@ Tine.Crm.Main = function(){
   
 /*************************************** LEAD EDIT DIALOG ****************************************/
 
-Ext.namespace('Tine.Crm.LeadEditDialog');
-Tine.Crm.LeadEditDialog = function() {
+Tine.Crm.LeadEditDialog = {
 	
-	// @todo for what?
-    // private variables
-	/*
-    var dialog;
-    var leadedit;
-    */
-
-    var translation = new Locale.Gettext();
-    translation.textdomain('Crm');
-
-    var handlers = {        
+    /**
+     * event handlers
+     */
+    handlers: {        
         applyChanges: function(_button, _event) 
         {
             //var grid_products          = Ext.getCmp('grid_choosenProducts');
@@ -1052,7 +1046,7 @@ Tine.Crm.LeadEditDialog = function() {
             var leadForm = Ext.getCmp('leadDialog').getForm();
             
             if(leadForm.isValid()) {  
-                Ext.MessageBox.wait(translation._('Please wait'), translation._('Saving lead') + '...');                
+                Ext.MessageBox.wait(this.translation._('Please wait'), this.translation._('Saving lead') + '...');                
                 leadForm.updateRecord(lead);
                 
                 // @todo add again
@@ -1095,27 +1089,30 @@ Tine.Crm.LeadEditDialog = function() {
                         Ext.MessageBox.hide();
                     },
                     failure: function ( result, request) { 
-                        Ext.MessageBox.alert('Failed', translation._('Could not save lead.')); 
+                        Ext.MessageBox.alert('Failed', this.translation._('Could not save lead.')); 
                     } 
                 });
             } else {
-                Ext.MessageBox.alert('Errors', translation._('Please fix the errors noted.'));
+                Ext.MessageBox.alert('Errors', this.translation._('Please fix the errors noted.'));
             }
         },
         saveAndClose: function(_button, _event) 
         {     
             handlers.applyChanges(_button, _event, true);
         }
-    };        
+    },       
          
     /**
      * _getAdditionalData function
      * collects additional data (start/end dates, linked contacts, ...)
      * 
      * @return Object additionalData
+     * 
+     * @todo    check if that is needed
      */
-    var _getAdditionalData = function()
+    _getAdditionalData: function()
     {
+    	/*
         var additionalData = {};
     
         var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
@@ -1183,7 +1180,8 @@ Tine.Crm.LeadEditDialog = function() {
         additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
         
         return additionalData;
-    };
+        */
+    },
 
     /**
      * _getLinksGrid
@@ -1193,7 +1191,7 @@ Tine.Crm.LeadEditDialog = function() {
      * @param   string  grid title
      * @return  grid object
      */
-    var _getLinksGrid = function(_type, _title)
+    _getLinksGrid: function(_type, _title)
     {
     	// only for testing
     	var grid = new Ext.Panel({
@@ -1201,11 +1199,11 @@ Tine.Crm.LeadEditDialog = function() {
         });
         
         if ( _type === 'Contacts' ) {
-        	// @todo   move that to renderer
+        	// @todo   move that to renderer/addressbook
         	// @todo   add icon in remark column
             var columnModel = new Ext.grid.ColumnModel([
                 {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
-                {id:'n_fileas', header: translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
+                {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                     function(val, meta, record) {
                         var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
                         
@@ -1214,7 +1212,7 @@ Tine.Crm.LeadEditDialog = function() {
                         return formated_return;
                     }
                 },
-                {id:'contact_one', header: translation._("Address"), dataIndex: 'adr_one_locality', width: 160, sortable: false, renderer: function(val, meta, record) {
+                {id:'contact_one', header: this.translation._("Address"), dataIndex: 'adr_one_locality', width: 160, sortable: false, renderer: function(val, meta, record) {
                     var formated_return =  
                         Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />' + 
                         Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality);
@@ -1222,7 +1220,7 @@ Tine.Crm.LeadEditDialog = function() {
                         return formated_return;
                     }
                 },
-                {id:'tel_work', header: translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
+                {id:'tel_work', header: this.translation._("Contactdata"), dataIndex: 'tel_work', width: 160, sortable: false, renderer: function(val, meta, record) {
                     var formated_return = '<table>' + 
                         '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_work) + '</td></tr>' + 
                         '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(record.data.tel_cell) + '</td></tr>' + 
@@ -1231,7 +1229,7 @@ Tine.Crm.LeadEditDialog = function() {
                         return formated_return;
                     }
                 },    
-                {id:'link_remark', header: translation._("Type"), dataIndex: 'link_remark', width: 70, sortable: false}
+                {id:'link_remark', header: this.translation._("Type"), dataIndex: 'link_remark', width: 70, sortable: false}
             ]);
             var gridStore = Ext.StoreMgr.lookup('ContactsStore');
             
@@ -1247,40 +1245,19 @@ Tine.Crm.LeadEditDialog = function() {
             };
         }
     	
-        /*
-        ,{
-            xtype:'grid',
-            id: 'crm_gridTasks',
-            title: translation._('Tasks'),
-            cm: new Ext.grid.ColumnModel([
-                {header: 'id'}
-            ]),
-            store: new Ext.data.SimpleStore({})
-            //store: storeContactsPartner,
-            //autoExpandColumn: 'n_fileas'
-        }, {
-            xtype:'grid',
-            id: 'crm_gridProducts',
-            title: translation._('Products'),
-            cm: new Ext.grid.ColumnModel([
-                {header: 'id'}
-            ]),
-            store: new Ext.data.SimpleStore({})
-            //store: storeContactsInternal,
-        }
-        */
-    	
         return grid;       
-    }
+    },
     
     /**
      * _getOverviewPanel
      * collects additional data (start/end dates, linked contacts, ...)
      * 
-     * @param   Tine.Crm.Model.Lead lead data
+     * @param   array _tabpanels (contacts/activities/products)
      * @return  Object overview panel
+     * 
+     * @todo    move to extra file
      */
-    var _getOverviewPanel = function(_lead)
+    _getOverviewPanel: function(_tabpanels)
     {
     	
         /*********** OVERVIEW form fields ************/
@@ -1289,7 +1266,7 @@ Tine.Crm.LeadEditDialog = function() {
             hideLabel: true,
             id: 'lead_name',
             //fieldLabel:'Projektname', 
-            emptyText: translation._('Enter short name'),
+            emptyText: this.translation._('Enter short name'),
             name:'lead_name',
             allowBlank: false,
             selectOnFocus: true,
@@ -1298,7 +1275,7 @@ Tine.Crm.LeadEditDialog = function() {
         }); 
  
         var combo_leadstatus = new Ext.form.ComboBox({
-                fieldLabel: translation._('Leadstate'), 
+                fieldLabel: this.translation._('Leadstate'), 
                 id:'leadstatus',
                 name:'leadstate_id',
                 store: Tine.Crm.LeadEditDialog.Stores.getLeadStatus(),
@@ -1326,7 +1303,7 @@ Tine.Crm.LeadEditDialog = function() {
         });
         
         var combo_leadtyp = new Ext.form.ComboBox({
-            fieldLabel: translation._('Leadtype'), 
+            fieldLabel: this.translation._('Leadtype'), 
             id:'leadtype',
             name:'leadtype_id',
             store: Tine.Crm.LeadEditDialog.Stores.getLeadType(),
@@ -1354,7 +1331,7 @@ Tine.Crm.LeadEditDialog = function() {
         });     
 
         var combo_leadsource = new Ext.form.ComboBox({
-                fieldLabel: translation._('Leadsource'), 
+                fieldLabel: this.translation._('Leadsource'), 
                 id:'leadsource',
                 name:'leadsource_id',
                 store: st_leadsource,
@@ -1371,7 +1348,7 @@ Tine.Crm.LeadEditDialog = function() {
         });
 
         var combo_probability =  new Ext.form.ComboBox({
-            fieldLabel: translation._('Probability'), 
+            fieldLabel: this.translation._('Probability'), 
             id: 'combo_probability',
             name:'probability',
             store: Tine.Crm.LeadEditDialog.Stores.getProbability(),
@@ -1390,7 +1367,7 @@ Tine.Crm.LeadEditDialog = function() {
         combo_probability.setValue('0');
              
         var date_start = new Ext.form.DateField({
-            fieldLabel: translation._('Start'), 
+            fieldLabel: this.translation._('Start'), 
             allowBlank: false,
             id: 'start',             
             anchor: '95%'
@@ -1398,20 +1375,20 @@ Tine.Crm.LeadEditDialog = function() {
 
         
         var date_scheduledEnd = new Ext.form.DateField({
-            fieldLabel: translation._('Estimated end'), 
+            fieldLabel: this.translation._('Estimated end'), 
             id: 'end_scheduled',
             anchor: '95%'
         });
         
         var date_end = new Ext.form.DateField({
             xtype:'datefield',
-            fieldLabel: translation._('End'), 
+            fieldLabel: this.translation._('End'), 
             id: 'end',
             anchor: '95%'
         });
 
         var folderTrigger = new Tine.widgets.container.selectionComboBox({
-            fieldLabel: translation._('folder'),
+            fieldLabel: this.translation._('folder'),
             name: 'container',
             itemName: 'Leads',
             appName: 'crm',
@@ -1421,7 +1398,7 @@ Tine.Crm.LeadEditDialog = function() {
         /*********** OVERVIEW tab panel ************/
 
         var tabPanelOverview = {
-            title: translation._('Overview'),
+            title: this.translation._('Overview'),
             layout:'border',
             layoutOnTabChange:true,
             defaults: {
@@ -1434,11 +1411,11 @@ Tine.Crm.LeadEditDialog = function() {
                 width: 300,
                 items: [
                     new Ext.Panel({
-                        title: translation._('Tags'),
+                        title: this.translation._('Tags'),
                         height: 200
                     }),
                     new Ext.Panel({
-                        title: translation._('History'),
+                        title: this.translation._('History'),
                         height: 200
                     })
                     /*
@@ -1467,7 +1444,7 @@ Tine.Crm.LeadEditDialog = function() {
                     name: 'description',
                     height: 120,
                     anchor: '100%',
-                    emptyText: translation._('Enter description')
+                    emptyText: this.translation._('Enter description')
                 }, {
                     layout:'column',
                     height: 140,
@@ -1491,7 +1468,7 @@ Tine.Crm.LeadEditDialog = function() {
                             items: [
                             {
                                 xtype:'numberfield',
-                                fieldLabel: translation._('Expected turnover'), 
+                                fieldLabel: this.translation._('Expected turnover'), 
                                 name: 'turnover',
                                 selectOnFocus: true,
                                 anchor: '95%'
@@ -1519,11 +1496,7 @@ Tine.Crm.LeadEditDialog = function() {
                     //title: 'contacts panel',
                     activeTab: 0,
                     height: 273,
-                    items: [
-                        _getLinksGrid('Contacts', translation._('Contacts')),
-                        _getLinksGrid('Tasks', translation._('Tasks')),
-                        _getLinksGrid('Products', translation._('Products'))
-                    ]
+                    items: _tabpanels,
                 }
                 ]
             }]
@@ -1531,14 +1504,29 @@ Tine.Crm.LeadEditDialog = function() {
         
         // return the panel
         return tabPanelOverview;       
-    }    
+    },    
+    
+    /**
+     * initComponent
+     * sets the translation object and actions
+     */
+    initComponent: function()
+    {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Addressbook');
+        
+        // @todo add actions here?
+    },
     
     /**
      * display the event edit dialog
      *
+     * @param   array   _lead
      */
-    var _displayDialog = function(_lead) 
+    display: function(_lead) 
     {	
+    	this.initComponent();
+    	
         // put lead data into model
         lead = new Tine.Crm.Model.Lead(_lead);
         Tine.Crm.Model.Lead.FixDates(lead);  
@@ -1578,13 +1566,17 @@ Tine.Crm.LeadEditDialog = function() {
         
         /*********** OVERVIEW tab panel ************/
 
-        var tabPanelOverview = _getOverviewPanel(lead);
+        var tabPanelOverview = this._getOverviewPanel([
+                        this._getLinksGrid('Contacts', this.translation._('Contacts')),
+                        this._getLinksGrid('Tasks', this.translation._('Tasks')),
+                        this._getLinksGrid('Products', this.translation._('Products'))
+                    ]);
         
         /*********** HISTORY tab panel ************/
 
         // @todo    add implemented histoy tab panel
         var tabPanelHistory = {
-            title: translation._('History'),
+            title: this.translation._('History'),
             disabled: true,
             layout:'border',
             layoutOnTabChange:true,
@@ -1599,8 +1591,8 @@ Tine.Crm.LeadEditDialog = function() {
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
             //tbarItems: [_add_task, _export_lead],
-            handlerApplyChanges: handlers.applyChanges,
-            handlerSaveAndClose: handlers.saveAndClose,
+            handlerApplyChanges: this.handlers.applyChanges,
+            handlerSaveAndClose: this.handlers.saveAndClose,
             //handlerDelete: Tine.Crm.LeadEditDialog.Handler.handlerDelete,
             labelAlign: 'top',
             items: new Ext.TabPanel({
@@ -1637,499 +1629,12 @@ Tine.Crm.LeadEditDialog = function() {
 
         leadEdit.getForm().loadRecord(lead);
                 
-        // @todo    add activities/products stuff
-        /*
-        
-        var st_activities = Tine.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);        
-
-        activitiesGetStatusIcon = function(statusName) {   
-            return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
-        };        
-
-        var ActivitiesTpl = new Ext.XTemplate( 
-        '<tpl for=".">',
-            '<div class="activities-item-small">',
-            '<div class="TasksMainGridStatus-{status_realname}" ext:qtip="{status_realname}"></div> {due}<br/>',
-            '<i>{creator}</i><br />', 
-            '<b>{[this.encode(values.summary)]}</b><br />',
-            '{[this.encode(values.description)]}<br />',                     
-            '</div></tpl>', {
-                setContactField: function(textValue){
-                    alert(textValue);
-                    if ((textValue === null) || (textValue.length === 0)) {
-                        return '';
-                    }
-                    else {
-                        return Ext.util.Format.htmlEncode(textValue)+'<br />';
-                    }
-                },
-                encode: function(value) {
-                    return Ext.util.Format.htmlEncode(value);
-                }
-        });    
-  
-        var st_choosenProducts = new Ext.data.JsonStore({
-            data: _leadData.data.products,
-            autoLoad: true,
-            id: 'id',
-            fields: [
-                {name: 'id'},
-                {name: 'product_id'},
-                {name: 'product_desc'},
-                {name: 'product_price'}
-            ]
-        });
-
-        st_choosenProducts.on('update', function(store, record, index) {
-            if(record.data.product_id && !arguments[1].modified.product_price) {          
-                var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable();
-                var preset_price = st_productsAvailable.getById(record.data.product_id);
-                record.data.product_price = preset_price.data.price;
-            }
-        });
-
-        var st_productsAvailable = Tine.Crm.LeadEditDialog.Stores.getProductsAvailable(); 
-        
-        var cm_choosenProducts = new Ext.grid.ColumnModel([{ 
-                header: "id",
-                dataIndex: 'id',
-                width: 1,
-                hidden: true,
-                sortable: false,
-                fixed: true
-                } , {
-                header: translation._("Product"),
-                id: 'cm_product',
-                dataIndex: 'product_id',
-                width: 300,
-                editor: new Ext.form.ComboBox({
-                    name: 'product_combo',
-                    id: 'product_combo',
-                    //hiddenName: 'productsource_id',
-                    //hiddenName: 'product_id',
-                    hiddenName: 'id',
-                    store: st_productsAvailable, 
-                    //displayField:'value',                     
-                    displayField:'productsource',
-                    //valueField: 'productsource_id',
-                    valueField: 'id',
-                    allowBlank: false, 
-                    typeAhead: true,
-                    editable: true,
-                    selectOnFocus:true,
-                    forceSelection: true, 
-                    triggerAction: "all", 
-                    mode: 'local', 
-                    lazyRender:true,
-                    listClass: 'x-combo-list-small'
-                    }),
-                renderer: function(data){
-                    record = st_productsAvailable.getById(data);
-                    
-                    if (record) {
-                        //return record.data.value;
-                    	return Ext.util.Format.htmlEncode(record.data.productsource);
-                    }
-                    else {
-                        Ext.getCmp('leadDialog').doLayout();
-                        return Ext.util.Format.htmlEncode(data);
-                    }
-                  }
-                } , { 
-                header: translation._("Serialnumber"),
-                dataIndex: 'product_desc',
-                width: 300,
-                editor: new Ext.form.TextField({
-                    allowBlank: false
-                    })
-                } , {
-                header: translation._("Price"),
-                dataIndex: 'product_price',
-                width: 150,
-                align: 'right',
-                editor: new Ext.form.NumberField({
-                    allowBlank: false,
-                    allowNegative: false,
-                    decimalSeparator: ','
-                    }),  
-                renderer: Ext.util.Format.euMoney
-                }
-        ]);
-       
-        var product_combo = Ext.getCmp('product_combo');
-        product_combo.on('change', function(field, productsource) {
-            //console.log ( field );
-            //console.log ( productsource );
-        });
-        
-        var handler_remove_product = function(_button, _event)
-        {
-            var productGrid = Ext.getCmp('grid_choosenProducts');
-            var productStore = productGrid.getStore();
-            
-            var selectedRows = productGrid.getSelectionModel().getSelections();
-            for (var i = 0; i < selectedRows.length; ++i) {
-                productStore.remove(selectedRows[i]);
-            }       
-        }; 
-
-        var handler_remove_task = function(_button, _event)
-        {
-            var taskGrid = Ext.getCmp('gridActivities');
-            var taskStore = taskGrid.getStore();
-            
-            var selectedRows = taskGrid.getSelectionModel().getSelections();
-            for (var i = 0; i < selectedRows.length; ++i) {
-                taskStore.remove(selectedRows[i]);
-            }       
-        };
-        
-        var product = Ext.data.Record.create([
-           {name: 'id', type: 'int'},
-           {name: 'lead_id', type: 'int'},
-           {name: 'product_id', type: 'int'},
-           {name: 'product_desc', type: 'string'},
-           {name: 'product_price', type: 'float'}
-        ]);
-        
-        var grid_choosenProducts = new Ext.grid.EditorGridPanel({
-            store: st_choosenProducts,
-            id: 'grid_choosenProducts',
-            cm: cm_choosenProducts,
-            mode: 'local',
-            sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
-            anchor: '100% 100%',
-            autoExpandColumn:'cm_product',
-            frame: false,
-            clicksToEdit:1,
-            tbar: [{
-                text: translation._('Add product'),
-                iconCls: 'actionAdd',
-                handler : function(){
-                    var p = new product({
-                        id: 'NULL',
-                        lead_id: _lead_id,
-                        product_id: '',                       
-                        product_desc:'',
-                        product_price: ''
-                    });
-                    grid_choosenProducts.stopEditing();
-                    st_choosenProducts.insert(0, p);
-                    grid_choosenProducts.startEditing(0, 0);
-                    grid_choosenProducts.fireEvent('cellclick',this, 0, 1);
-                    
-                    // @todo expand combobox
-                    //var combo = Ext.getCmp('product_combo');
-                    //combo.expand();
-                }
-            } , {
-                text: translation._('Delete product'),
-                iconCls: 'actionDelete',
-                handler : handler_remove_product 
-            }]  
-        });
-
-
-        grid_choosenProducts.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-            _eventObject.stopEvent();
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
-            }
-            //var record = _grid.getStore().getAt(rowIndex);
-            //_ctxMenuGrid.showAt(_eventObject.getXY());
-        });
-    
-        var store_contactSearch = Tine.Crm.LeadEditDialog.Stores.getContactsSearch();   
- 
-        // activities grid
-        var cm_activities = new Ext.grid.ColumnModel([
-                {   id:'identifier', 
-                    header: translation._("Identifier"), 
-                    dataIndex: 'identifier', 
-                    width: 5, 
-                    sortable: true, 
-                    hidden: true 
-                }, {
-                    id: 'status',
-                    header: translation._("Status"),
-                    width: 40,
-                    sortable: true,
-                    dataIndex: 'status_realname',
-                    renderer: activitiesGetStatusIcon
-                }, {
-                    id: 'percent',
-                    header: translation._("Percent"),
-                    width: 50,
-                    sortable: true,
-                    dataIndex: 'percent'//,
-                    //renderer: Tine.widgets.Percent.renderer,
-                }, {
-                    id: 'summary',
-                    header: translation._("Summary"),
-                    width: 200,
-                    sortable: true,
-                    dataIndex: 'summary'
-                }, {
-                    id: 'due',
-                    header: translation._("Due date"),
-                    width: 80,
-                    sortable: true,
-                    dataIndex: 'due',
-                    renderer: Tine.Tinebase.Common.dateRenderer
-                }, {
-                    id: 'creator',
-                    header: translation._("Creator"),
-                    width: 130,
-                    sortable: true,
-                    dataIndex: 'creator'
-                }, {
-                    id: 'description',
-                    header: translation._("Description"),
-                    width: 240,
-                    sortable: false,
-                    dataIndex: 'description'
-                }                                  
-        ]);               
-      
-        // actions
-        var  _add_task = new Ext.Action({
-                text: translation._('Add task'),
-                handler: function(){
-                	//console.log(_leadData.data);
-                	popupWindow = new Tine.Tasks.EditPopup({
-                        relatedApp: 'crm',
-                        relatedId: _leadData.data.id
-                	});
-                	
-                	popupWindow.on('update', function(task) {
-                		
-                		//console.log (task);
-                		// @todo make that work for adding new task (only working the first time)
-                		
-                		var index = st_activities.getCount();
-                        // replace ext object id with our task id
-                        task.id = task.data.id;                		
-                		st_activities.insert(index, [task]);                		
-                		
-                	}, this);
-                },
-                iconCls: 'actionAddTask',
-                disabled: true
-        });         
-
-        var  _export_lead = new Ext.Action({
-                text: translation._('Export as PDF'),
-                handler: function(){
-                	var leadId = _leadData.data.id;
-                    Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + leadId, 768, 1024);                	
-                },
-                iconCls: 'action_exportAsPdf',
-                disabled: true
-        });         
-        
-       if(_leadData.data.id > 0) {
-           _add_task.enable();
-           _export_lead.enable();
-       }
-      
-        var gridActivities = new Ext.grid.GridPanel({
-            id: 'gridActivities',
-            store: st_activities,
-            cm: cm_activities,
-            tbar: [_add_task , {
-                text: translation._('Delete task'),
-                iconCls: 'actionDelete',
-                handler : handler_remove_task 
-            }],
-            stripeRows: true,  
-            viewConfig: {
-                        forceFit:true
-                    },  
-            autoSizeColumns: true,
-            sm: new Ext.grid.RowSelectionModel({multiSelect:true}),
-            enableColLock:false,
-            loadMask: true,
-            autoExpandColumn: 'description',
-            border: false,
-            height: 600 
-        });               
-
-        gridActivities.on('rowdblclick', function(_grid, _rowIndex, _object) {
-            var record = _grid.getStore().getAt(_rowIndex);
-            popupWindow = new Tine.Tasks.EditPopup({
-            	id: record.data.id
-            });
-                        
-            popupWindow.on('update', function(task) {
-                var record = st_activities.getById(task.data.id);
-                var index = st_activities.indexOf(record);
-                // replace ext object id with our task id
-                task.id = task.data.id;
-                st_activities.remove(record);
-                st_activities.insert(index, [task]);
-                st_activities.commitChanges();
-                
-            }, this);
-        });
-        
-        var folderTrigger = new Tine.widgets.container.selectionComboBox({
-            fieldLabel: translation._('folder'),
-            name: 'container',
-            itemName: 'Leads',
-            appName: 'crm',
-            anchor:'95%'
-        });
-     
-
-        var tabPanelActivities = {
-            title: translation._('Manage activities'),
-            layout:'form',
-            disabled: false,
-            layoutOnTabChange:true,            
-            deferredRender:false,
-            anchor:'100% 100%',
-            border:false,
-            items:[
-                gridActivities                  
-            ]
-        };
-        
-        var tabPanelProducts = {
-            title: translation._('Manage products'),
-            layout:'form',
-            layoutOnTabChange:true,            
-            deferredRender:false,
-            anchor:'100% 100%',
-            border:false,
-            items:[//{  
-                //xtype:'fieldset',
-                //title:'selected products',
-                //anchor:'100% 100%',
-                //items: [
-                    grid_choosenProducts
-                //]
-            //}
-            ]
-        };
-        */
-        
-          
-        /*
-  //     Tine.Crm.LeadEditDialog.Handler.updateLeadRecord(_leadData);
-  //     this.updateToolbarButtons();  
-        Tine.Crm.LeadEditDialog.Stores.getActivities(_leadData.data.tasks);
-        
-        var searchContacts = function(_field, _newValue, _oldValue) {
-            var currentContactsTabId = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getId();
-            //console.log(currentContactsTabId);
-            if(currentContactsTabId == 'crm_gridAccount') {
-                var method = 'Addressbook.getUsers';
-            } else {
-                var method = 'Addressbook.getAllContacts';
-            }
-            
-            if(_newValue === '') {
-                //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().removeAll();
-                Tine.Crm.LeadEditDialog.Stores.getContactsSearch().removeAll();
-            } else {
-                //Ext.getCmp('crm_editLead_SearchContactsGrid').getStore().load({
-                Tine.Crm.LeadEditDialog.Stores.getContactsSearch().load({
-                    params: {
-                        start: 0,
-                        limit: 50,
-                        query: _newValue,
-                        method: method
-                    }
-                });
-            }
-        };
-
-        Ext.getCmp('crm_gridCostumer').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-            var record = _grid.getStore().getAt(_rowIndex);
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
-        });
-        
-        Ext.getCmp('crm_gridPartner').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-            var record = _grid.getStore().getAt(_rowIndex);
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
-        });
-        
-        Ext.getCmp('crm_gridAccount').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-            var record = _grid.getStore().getAt(_rowIndex);
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.id, 850, 600);
-        });                
-         
-        Ext.getCmp('crm_editLead_SearchContactsField').on('change', searchContacts);
-            
-        Ext.getCmp('crm_editLead_SearchContactsGrid').on('rowdblclick', function(_grid, _rowIndex, _eventObject){
-            var record = _grid.getStore().getAt(_rowIndex);
-            var currentContactsStore = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getStore();
-            
-            if(currentContactsStore.getById(record.id) === undefined) {
-                //console.log('record ' + record.id + 'not found');
-                currentContactsStore.addSorted(record, record.id);
-            }
-            
-            var selectionModel = Ext.getCmp('crm_editLead_ListContactsTabPanel').getActiveTab().getSelectionModel();
-            
-            selectionModel.selectRow(currentContactsStore.indexOfId(record.id));
-        });
-
-        var setRemoveContactButtonState = function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                Tine.Crm.LeadEditDialog.Elements.actionRemoveContact.setDisabled(true);
-            } else {
-                // at least one row selected
-                Tine.Crm.LeadEditDialog.Elements.actionRemoveContact.setDisabled(false);
-            }
-        }; 
-        
-        var activateContactsSearch = function(_panel) {
-            setRemoveContactButtonState(_panel.getSelectionModel());
-            searchContacts(
-               Ext.getCmp('crm_editLead_SearchContactsField'), 
-                Ext.getCmp('crm_editLead_SearchContactsField').getValue(),
-                Ext.getCmp('crm_editLead_SearchContactsField').getValue()
-            );
-        };
-        
-        Ext.getCmp('crm_gridCostumer').getSelectionModel().on('selectionchange', setRemoveContactButtonState);
-        Ext.getCmp('crm_gridPartner').getSelectionModel().on('selectionchange', setRemoveContactButtonState);
-        Ext.getCmp('crm_gridAccount').getSelectionModel().on('selectionchange', setRemoveContactButtonState);
-
-        Ext.getCmp('crm_gridCostumer').on('activate', activateContactsSearch);
-        Ext.getCmp('crm_gridPartner').on('activate', activateContactsSearch);
-        Ext.getCmp('crm_gridAccount').on('activate', activateContactsSearch);
-        
-        var setAddContactButtonState = function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
-
-            if(rowCount < 1) {
-                // no row selected
-                Tine.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(true);
-            } else {
-                // at least one row selected
-                Tine.Crm.LeadEditDialog.Elements.actionAddContactToList.setDisabled(false);
-            }
-        }; 
-        
-        Ext.getCmp('crm_editLead_SearchContactsGrid').getSelectionModel().on('selectionchange', setAddContactButtonState);
-        */
-    }; // end of function _displayDialog()
-
-    // public functions and variables
-    return {
-        displayDialog: function(lead) {
-            _displayDialog(lead);
-        }
-    };
-}(); // end of application CRM LEAD EDIT DIALOG
+    } // end of function display()
+}; // end of application CRM LEAD EDIT DIALOG
 
 /*************************************** LEAD EDIT DIALOG HANDLER ********************************/
 
+/*
 Tine.Crm.LeadEditDialog.Handler = function() {
     return { 
         removeContact: function(_button, _event) 
@@ -2195,225 +1700,15 @@ Tine.Crm.LeadEditDialog.Handler = function() {
         }
     };
 }();
-
-/*************************************** LEAD EDIT DIALOG ELEMENTS *******************************/
-/*
-Tine.Crm.LeadEditDialog.Elements = function() {
-    // public functions and variables
-    return {
-       actionRemoveContact: new Ext.Action({
-            text: 'remove contact from list',
-            disabled: true,
-            handler: Tine.Crm.LeadEditDialog.Handler.removeContact,
-            iconCls: 'actionDelete'
-        }),
-        
-        actionAddContact: new Ext.Action({
-            text: 'create new contact',
-            handler: Tine.Crm.LeadEditDialog.Handler.addContact,
-            iconCls: 'actionAdd'
-        }),
-
-        actionAddContactToList: new Ext.Action({
-            text: 'add contact to list',
-            disabled: true,
-            handler: function(_button, _event) {
-                Tine.Crm.LeadEditDialog.Handler.addContactToList(Ext.getCmp('crm_editLead_SearchContactsGrid'));
-            },
-            iconCls: 'actionAdd'
-        }),        
-        
-        columnModelDisplayContacts: new Ext.grid.ColumnModel([
-            {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
-            {id:'n_fileas', header: 'Name / Address', dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
-                function(val, meta, record) {
-                    var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : '';
-                    var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '';
-                    var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : '';
-                    var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : '';
-                    var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : '';                                      
-                    
-                    
-                    var formated_return = '<b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name) + '<br  />' + 
-                        Ext.util.Format.htmlEncode(adr_one_street) + '<br />' + 
-                        Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(adr_one_locality)    ;                    
-                    
-                    return formated_return;
-                }
-            },
-            {id:'contact_one', header: "Phone", dataIndex: 'adr_one_locality', width: 170, sortable: false, renderer: function(val, meta, record) {
-                    var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? record.data.tel_work : '';
-                    var tel_fax            = Ext.isEmpty(record.data.tel_fax) === false ? record.data.tel_fax : '';
-                    var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? record.data.tel_cell : ''  ;                                      
-
-                var formated_return = '<table>' + 
-                    '<tr><td>Phone: </td><td>' + Ext.util.Format.htmlEncode(tel_work) + '</td></tr>' + 
-                    '<tr><td>Fax: </td><td>' + Ext.util.Format.htmlEncode(tel_fax) + '</td></tr>' + 
-                    '<tr><td>Cellphone: </td><td>' + Ext.util.Format.htmlEncode(tel_cell) + '</td></tr>' + 
-                    '</table>';
-                
-                    return formated_return;
-                }
-            },
-            {id:'tel_work', header: "Internet", dataIndex: 'tel_work', width: 200, sortable: false, renderer: function(val, meta, record) {
-                    var email      = Ext.isEmpty(record.data.email) === false ? '<a href="mailto:'+record.data.email+'">'+record.data.email+'</a>' : '';
-                    var contact_url        = Ext.isEmpty(record.data.contact_url) === false ? record.data.contact_url : '';                   
-
-                var formated_return = '<table>' + 
-                    '<tr><td>Email: </td><td>' + Ext.util.Format.htmlEncode(email) + '</td></tr>' + 
-                    '<tr><td>WWW: </td><td>' + Ext.util.Format.htmlEncode(contact_url) + '</td></tr>' + 
-                    '</table>';
-                
-                    return formated_return;
-                }
-            }                                    
-        ]),
-        
-        columnModelSearchContacts: new Ext.grid.ColumnModel([
-            {id:'n_fileas', header: 'Name', dataIndex: 'n_fileas', sortable: true, renderer: 
-                function(val, meta, record) {
-                    var formated_return = null;
-                    
-                    if(Ext.isEmpty(record.data.n_fileas) === false) {
-                        formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.n_fileas) + '</b><br />';
-                    }
-
-                    if(Ext.isEmpty(record.data.org_name) === false) {
-                        if(formated_return === null) {
-                            formated_return = '<b>' + Ext.util.Format.htmlEncode(record.data.org_name) + '</b><br />';
-                        } else {
-                            formated_return += Ext.util.Format.htmlEncode(record.data.org_name) + '<br />';
-                        }
-                    }
-
-                    if(Ext.isEmpty(record.data.adr_one_street) === false) {
-                        formated_return += Ext.util.Format.htmlEncode(record.data.adr_one_street) + '<br />';
-                    }
-                    
-                    if( (Ext.isEmpty(record.data.adr_one_postalcode) === false)  && (Ext.isEmpty(record.data.adr_one_locality) === false) ) {
-                        formated_return += Ext.util.Format.htmlEncode(record.data.adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(record.data.adr_one_locality) + '<br />';
-                    } else if (Ext.isEmpty(record.data.adr_one_locality) === false) {
-                        formated_return += Ext.util.Format.htmlEncode(record.data.adr_one_locality) + '<br />';
-                    }
-                                        
-                    return formated_return;
-                }
-            }
-        ]),
-        
-        getTabPanelManageContacts: function() {
-            // why does this not work????
-            var quickSearchField = new Ext.ux.SearchField({
-            //var quickSearchField = new Ext.form.TriggerField({
-            //var quickSearchField = new Ext.form.TwinTriggerField({
-                id: 'crm_editLead_SearchContactsField',
-                width: 250,
-                //autoWidth: true,
-                emptyText: 'enter searchfilter'
-            });
-            quickSearchField.on('resize', function(){
-                quickSearchField.wrap.setWidth(280);
-            });
-            
-
-            var contactToolbar = new Ext.Toolbar({
-                items: [
-                    quickSearchField
-                ]
-            });
-
-            var tabPanel = {
-                title:'manage contacts',
-                layout:'border',
-                //tbar: contactToolbar,
-                //layoutOnTabChange:true,  
-                defaults: {
-                    //anchor: '100% 100%',
-                    border:false
-                    //frame:false
-                    //deferredRender:false,                
-                },         
-                items:[{
-                    region: 'west',
-                    xtype: 'tabpanel',
-                    width: 300,
-                    split: true,
-                    activeTab: 0,
-                    tbar: [
-                        Tine.Crm.LeadEditDialog.Elements.actionAddContactToList
-                    ],
-                    items: [
-                        {
-                            xtype:'grid',
-                            id: 'crm_editLead_SearchContactsGrid',
-                            title:'Search',
-                            cm: this.columnModelSearchContacts,
-                            store: Tine.Crm.LeadEditDialog.Stores.getContactsSearch(),
-                            autoExpandColumn: 'n_fileas',
-                            tbar: contactToolbar
-                        }, {
-                           title: 'Browse',
-                           html: 'Browse',
-                           disabled: true
-                        }
-                        //searchPanel
-                   ]
-                }, {
-                    region: 'center',
-                    xtype: 'tabpanel',
-                    id: 'crm_editLead_ListContactsTabPanel',
-                    title:'contacts panel',
-                    activeTab: 0,
-                    tbar: [
-                        Tine.Crm.LeadEditDialog.Elements.actionAddContact,                
-                        Tine.Crm.LeadEditDialog.Elements.actionRemoveContact
-                    ],                
-                    items: [
-                        {
-                            xtype:'grid',
-                            id: 'crm_gridCostumer',
-                            title:'Customer',
-                            cm: this.columnModelDisplayContacts,
-                            store: Tine.Crm.LeadEditDialog.Stores.getContactsCustomer(),
-                            autoExpandColumn: 'n_fileas'
-                        },{
-                            xtype:'grid',
-                            id: 'crm_gridPartner',
-                            title:'Partner',
-                            cm: this.columnModelDisplayContacts,
-                            store: Tine.Crm.LeadEditDialog.Stores.getContactsPartner(),
-                            autoExpandColumn: 'n_fileas'
-                        }, {
-                            xtype:'grid',
-                            id: 'crm_gridAccount',
-                            title:'Internal',
-                            cm: this.columnModelDisplayContacts,
-                            store: Tine.Crm.LeadEditDialog.Stores.getContactsInternal(),
-                            autoExpandColumn: 'n_fileas'
-                        }
-                    ]
-                }]         
-            };
-            return tabPanel;
-        }
-    };
-}();
 */
+
 /*************************************** LEAD EDIT DIALOG STORES *********************************/
+
+// @todo move that to contact edit dialog
 
 Tine.Crm.LeadEditDialog.Stores = function() {
 	
 	// private attributes
-    /*
-    var _storeContactsInternal = null;
-    
-    var _storeContactsCustomer = null;
-    
-    var _storeContactsPartner = null;
-
-    var _storeContactsSearch = null;
-    */
-	
 	var _storeContacts = null;
 	
     // public functions and variables
@@ -2538,118 +1833,12 @@ Tine.Crm.LeadEditDialog.Stores = function() {
             
             return store;
         }
-
-        /*
-        getContactsCustomer: function (_contactsCustomer){  
-                 
-            if(_storeContactsCustomer === null) {
-                _storeContactsCustomer = new Ext.data.JsonStore({
-                    id: 'id',
-                    fields: this.contactFields
-                });
-            }                
-                
-            if(_contactsCustomer) {
-                _storeContactsCustomer.loadData(_contactsCustomer);    
-            }
-            
-            return _storeContactsCustomer;            
-        },
-        
-        getContactsPartner: function (_contactsPartner){
-  
-            if(_storeContactsPartner === null) {
-                _storeContactsPartner = new Ext.data.JsonStore({
-                    id: 'id',
-                    fields: this.contactFields
-                });
-            }
-             
-            if(_contactsPartner) {                
-                _storeContactsPartner.loadData(_contactsPartner);
-            }
-                         
-            return _storeContactsPartner;
-        },
-        
-        getContactsInternal: function (_contactsInternal){
-
-            if(_storeContactsInternal === null) {
-                _storeContactsInternal = new Ext.data.JsonStore({
-                    id: 'id',
-                    fields: this.contactFields
-                });
-            }    
-                
-            if(_contactsInternal) {
-                _storeContactsInternal.loadData(_contactsInternal);
-            }                 
-            
-            return _storeContactsInternal;
-        },
-
-        getContactsSearch: function (){
-            if(_storeContactsSearch === null) {
-                _storeContactsSearch = new Ext.data.JsonStore({
-                    baseParams: {
-                        method: 'Addressbook.getAllContacts',
-                        start: 0,
-                        sort: 'n_fileas',
-                        dir: 'asc',
-                        limit: 0,
-                        tagFilter: 0
-                    },
-                    root: 'results',
-                    totalProperty: 'totalcount',
-                    id: 'id',
-                    fields: this.contactFields,
-                    // turn on remote sorting
-                    remoteSort: true
-                });
-                
-                _storeContactsSearch.setDefaultSort('n_fileas', 'asc');
-            }
-            
-            return _storeContactsSearch;
-        },
-        
-        getProductsAvailable: function (){        
-            var store = new Ext.data.JsonStore({
-                data: formData.comboData.productsource,
-                autoLoad: true,
-                id: 'id',
-                fields: [
-                    {name: 'id'},
-                    //{name: 'value', mapping: 'productsource'},
-                    {name: 'productsource'},
-                    {name: 'price'}
-                ]
-            });
-
-            return store;
-        },
-        
-        getActivities: function (_tasks){     
-            var store = new Ext.data.JsonStore({
-                id: 'id',
-                fields: Tine.Tasks.Task
-                
-            });
-
-            if(_tasks) {                
-                store.loadData(_tasks);
-            }
-        
-            return store;
-        },
-        
-        */
     };
 }();
 
-/*************************************** LEAD EDIT DIALOG MODEL *********************************/
+/*************************************** CRM MODELS *********************************/
 
-Tine.Crm.Model = {};
+Ext.namespace('Tine.Crm.Model');
 
 // lead
 Tine.Crm.Model.Lead = Ext.data.Record.create([
@@ -2678,11 +1867,11 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
   //  {name: 'leadpartner_linkId'},
   //  {name: 'leadpartner_detail'},                
   //  {name: 'leadlinkId'},
-  //  
   //  {name: 'leaddetail'}  
 ]);
 
 // work arround nasty ext date bug
+// @todo is that still needed?
 Tine.Crm.Model.Lead.FixDates = function(lead) {
     lead.data.start         = lead.data.start         ? Date.parseDate(lead.data.start, 'c')         : lead.data.start;
     lead.data.end           = lead.data.end           ? Date.parseDate(lead.data.end, 'c')           : lead.data.end;
