@@ -1870,8 +1870,7 @@ Tine.Asterisk.Software.EditDialog =  {
                     fieldLabel: 'Software Version',
                     name: 'softwareimage',
                     maxLength: 128,
-                    anchor:'100%',                    
-                    readOnly: true
+                    anchor:'100%'
             }]
         }],
         
