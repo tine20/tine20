@@ -590,6 +590,7 @@ Tine.Crm.Main = {
         }
         */
         
+    	// @todo make generic, is used in lead edit dialog as well
         var storeProbability = new Ext.data.SimpleStore({
                 fields: ['key','value'],
                 data: [
@@ -1091,12 +1092,15 @@ Tine.Crm.LeadEditDialog = {
     /**
      * event handlers
      */
-    handlers: {        
-        applyChanges: function(_button, _event) 
+    handlers: {   
+    	
+    	/**
+    	 * apply changes
+    	 */
+        applyChanges: function(_button, _event, _closeWindow) 
         {
             //var grid_products          = Ext.getCmp('grid_choosenProducts');
 
-            var closeWindow = arguments[2] ? arguments[2] : false;
             var leadForm = Ext.getCmp('leadDialog').getForm();
             
             if(leadForm.isValid()) {  
@@ -1123,7 +1127,7 @@ Tine.Crm.LeadEditDialog = {
                         if(window.opener.Tine.Crm) {
                             window.opener.Tine.Crm.Main.reload();
                         } 
-                        if (closeWindow) {
+                        if (_closeWindow === true) {
                             window.setTimeout("window.close()", 400);
                         }
                         
@@ -1142,15 +1146,22 @@ Tine.Crm.LeadEditDialog = {
                     },
                     failure: function ( result, request) { 
                         Ext.MessageBox.alert('Failed', Tine.Crm.LeadEditDialog.translation._('Could not save lead.')); 
-                    } 
+                    },
+                    scope: this
                 });
             } else {
                 Ext.MessageBox.alert('Errors', Tine.Crm.LeadEditDialog.translation._('Please fix the errors noted.'));
             }
         },
+        
+        /**
+         * save and close
+         */
         saveAndClose: function(_button, _event) 
         {     
-            handlers.applyChanges(_button, _event, true);
+        	// @todo why is that not working?
+            //this.handlers.applyChanges(_button, _event, true);
+        	Tine.Crm.LeadEditDialog.handlers.applyChanges(_button, _event, true);
         }
     },       
 
