@@ -1108,7 +1108,7 @@ Tine.Crm.LeadEditDialog = {
                 leadForm.updateRecord(lead);
                 
                 // get linked stuff
-                var additionalData = Tine.Crm.LeadEditDialog._getAdditionalData();
+                var additionalData = Tine.Crm.LeadEditDialog.getAdditionalData();
                 
                 Ext.Ajax.request({
                     params: {
@@ -1166,13 +1166,13 @@ Tine.Crm.LeadEditDialog = {
     },       
 
     /**
-     * _getAdditionalData
+     * getAdditionalData
      * collects additional data (start/end dates, linked contacts, ...)
      * 
      * @return  Object additionalData (json encoded)
      * @todo    add other stores and stuff
      */
-    _getAdditionalData: function()
+    getAdditionalData: function()
     {
         var additionalData = {};          
         
@@ -1229,7 +1229,21 @@ Tine.Crm.LeadEditDialog = {
     },
     
     /**
-     * _getLinksGrid
+     * get task status icon
+     * @todo    use all stati store (see: Tasks/js/Status.js)
+     */    
+    getTaskStatusIcon: function(status_icon) {   
+    	
+    	//console.log(statusIcon);
+    	var status_realname = 'xxx'; 
+    	
+        //return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
+    	//return '<img class="TasksMainGridStatus" src="' + status_icon + '" ext:qtip="' + status_realname + '">';
+    	return '<img class="TasksMainGridStatus" src="' + status_icon + '">';
+    },
+    
+    /**
+     * getLinksGrid
      * get the grids for contacts/tasks/products/...
      * 
      * @param   string  type
@@ -1239,13 +1253,9 @@ Tine.Crm.LeadEditDialog = {
      * @todo    add activities/products grids
      * @todo    move to LeadEditDialog.js ?
      */
-    _getLinksGrid: function(_type, _title)
+    getLinksGrid: function(_type, _title)
     {
-    	// only for testing
-    	var grid = new Ext.Panel({
-            title: _title,
-        });
-        
+    	// set the column model
         if ( _type === 'Contacts' ) {
         	// @todo   move that to renderer/addressbook
         	// @todo   add icon in remark column
@@ -1279,18 +1289,91 @@ Tine.Crm.LeadEditDialog = {
                 },    
                 {id:'link_remark', header: this.translation._("Type"), dataIndex: 'link_remark', width: 70, sortable: false}
             ]);
-            var gridStore = Ext.StoreMgr.lookup('ContactsStore');
             
-            var grid = {
-                xtype:'grid',
-                id: 'crm_grid' + _type,
-                title: _title,
-                cm: columnModel,
-                store: gridStore,
-                autoExpandColumn: 'n_fileas'
-            };
+            var autoExpand = 'n_fileas';
+
+        } else if ( _type === 'Tasks' ) {
+
+            // tasks grid
+            var columnModel = new Ext.grid.ColumnModel([
+                {   id:'id', 
+                    header: this.translation._("Identifier"), 
+                    dataIndex: 'id', 
+                    width: 5, 
+                    sortable: true, 
+                    hidden: true 
+                }, {
+                    id: 'status_id',
+                    header: this.translation._("Status"),
+                    width: 45,
+                    sortable: true,
+                    dataIndex: 'status_icon',
+                    //dataIndex: 'status_realname',
+                    renderer: this.getTaskStatusIcon
+                }, {
+                    id: 'percent',
+                    header: this.translation._("Percent"),
+                    width: 50,
+                    sortable: true,
+                    dataIndex: 'percent',
+                    renderer: Ext.ux.PercentRenderer
+                }, {
+                    id: 'summary',
+                    header: this.translation._("Summary"),
+                    width: 200,
+                    sortable: true,
+                    dataIndex: 'summary'
+                }, {
+                    id: 'due',
+                    header: this.translation._("Due date"),
+                    width: 80,
+                    sortable: true,
+                    dataIndex: 'due',
+                    // @todo fix date
+                    hidden: true,
+                    renderer: Tine.Tinebase.Common.dateRenderer
+                }, {
+                    id: 'creator',
+                    header: this.translation._("Creator"),
+                    width: 130,
+                    sortable: true,
+                    dataIndex: 'creator'
+                }, {
+                    id: 'description',
+                    header: this.translation._("Description"),
+                    width: 240,
+                    sortable: false,
+                    dataIndex: 'description',
+                    hidden: true
+                }                               
+            ]);                       	
+        	
+            var autoExpand = 'summary';
+
+        } else if ( _type === 'Products' ) {
+            var columnModel = new Ext.grid.ColumnModel([
+                {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true }
+            ]);
+            
+            var autoExpand = '';
+
         }
-    	
+
+        // get store and create grid
+        var gridStore = Ext.StoreMgr.lookup(_type + 'Store');        
+        var grid = {
+            xtype:'grid',
+            id: 'crm_grid' + _type,
+            title: _title,
+            cm: columnModel,
+            store: gridStore,
+            autoExpandColumn: autoExpand
+        };
+        
+        if ( _type === 'Products' ) {
+        	grid.disabled = true;
+        }
+        
         return grid;       
     },
     
@@ -1313,7 +1396,50 @@ Tine.Crm.LeadEditDialog = {
         
         Ext.StoreMgr.add('ContactsStore', storeContacts);
     },
+
+    /**
+     * get linked tasks store and put it into store manager
+     * 
+     * @param   array _tasks
+     */
+    loadTasksStore: function(_tasks)
+    {
+        var storeTasks = new Ext.data.JsonStore({
+            id: 'id',
+            fields: Tine.Crm.Model.TaskLink
+        });
+            
+        if(_tasks) {
+            storeTasks.loadData(_tasks);                    
+            //storeTasks.setDefaultSort('remark', 'asc');     
+        }
         
+        console.log(storeTasks);
+        
+        Ext.StoreMgr.add('TasksStore', storeTasks);
+    },
+
+    /**
+     * get linked products store and put it into store manager
+     * 
+     * @param   array _products
+     * @todo    implement + use
+     */
+    loadProductsStore: function(_products)
+    {
+        var storeProducts = new Ext.data.JsonStore({
+            id: 'id',
+            fields: Tine.Crm.Model.ProductLink
+        });
+            
+        if(_products) {
+            storeProducts.loadData(_products);                    
+            //storeProducts.setDefaultSort('remark', 'asc');     
+        }
+        
+        Ext.StoreMgr.add('ProductsStore', storeProducts);
+    },
+    
     /**
      * initComponent
      * sets the translation object and actions
@@ -1340,6 +1466,7 @@ Tine.Crm.LeadEditDialog = {
         Tine.Crm.Model.Lead.FixDates(lead);  
         
         //console.log(lead);
+        console.log(lead.data.tasks);
     	
     	// @todo use that?
     	/*
@@ -1361,8 +1488,8 @@ Tine.Crm.LeadEditDialog = {
         /*********** INIT STORES *******************/
         
         this.loadContactsStore(lead.data.contacts);        
-        
-        // @todo add other stores
+        this.loadTasksStore(lead.data.tasks);
+        this.loadProductsStore(lead.data.products);
                 
         /*********** the EDIT dialog ************/
         
@@ -1373,9 +1500,9 @@ Tine.Crm.LeadEditDialog = {
             handlerSaveAndClose: this.handlers.saveAndClose,
             labelAlign: 'top',
             items: Tine.Crm.LeadEditDialog.getEditForm([
-                        this._getLinksGrid('Contacts', this.translation._('Contacts')),
-                        this._getLinksGrid('Tasks', this.translation._('Tasks')),
-                        this._getLinksGrid('Products', this.translation._('Products'))
+                        this.getLinksGrid('Contacts', this.translation._('Contacts')),
+                        this.getLinksGrid('Tasks', this.translation._('Tasks')),
+                        this.getLinksGrid('Products', this.translation._('Products'))
                     ])             
         });
         
@@ -1454,6 +1581,27 @@ Tine.Crm.Model.ContactLink = Ext.data.Record.create([
     {name: 'tel_cell'},
     {name: 'tel_fax'},
     {name: 'email'},
+]);
+
+// task link
+Tine.Crm.Model.TaskLink = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'status_id'},
+    {name: 'status_realname'},
+    {name: 'status_icon'},
+    {name: 'percent'},
+    {name: 'summary'},
+    {name: 'due'},
+    {name: 'creator'},
+    {name: 'description'}
+]);
+
+// product link
+Tine.Crm.Model.ProductLink = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'product_id'},
+    {name: 'product_desc'},
+    {name: 'product_price'}
 ]);
 
 

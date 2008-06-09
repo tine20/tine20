@@ -63,6 +63,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             $leadData = $lead->toArray();
 
             // add contact links
+            $leadData['contacts'] = array();
             $contact_links = $controller->getLinksForApplication($_leadId, 'Addressbook');
             foreach($contact_links as $contact_link) {
                 try {
@@ -80,44 +81,44 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             
             // add task links
             $leadData['tasks'] = array();
-            $task_links = $controller->getLinksForApplication($_leadId, 'Tasks');
-            foreach($task_links as $task_link) {
+            $taskLinks = $controller->getLinksForApplication($_leadId, 'Tasks');
+            // @todo    move that to controller?
+            foreach ( $taskLinks as $taskLink ) {
                 try {
-                    $task = Tasks_Controller::getInstance()->getTask($task_link['recordId']);            
-                    $_task = $task->toArray();
+                    $task = Tasks_Controller::getInstance()->getTask($taskLink['recordId']);            
+                    $taskArray = $task->toArray();
 
-                    $creator = Tinebase_User::getInstance()->getUserById($_task['created_by']);
-                    $_creator = $creator->toArray();
-                    $_task['creator'] = $_creator['accountFullName'];
+                    $creator = Tinebase_User::getInstance()->getUserById($task->created_by);
+                    $taskArray['creator'] = $creator->accountFullName;
                     
-                    if ($_task['last_modified_by'] != NULL) {
-                        $modifier = Tinebase_User::getInstance()->getUserById($_task['last_modified_by']);
-                        $_modifier = $modifier->toArray();
-                        $_task['modifier'] = $_modifier['accountFullName'];         
+                    if ($task->last_modified_by != NULL) {
+                        $modifier = Tinebase_User::getInstance()->getUserById($task->last_modified_by);
+                        $taskArray['modifier'] = $modifier->accountFullName;         
                     }
-                    
+
+                    // @todo write function for that: getStatusById()
                     $stati = Tasks_Controller::getInstance()->getStati()->toArray();
                     foreach ($stati as $status) {
-                        //if ($status['identifier'] == $task['status']) {
-                        if ($status['id'] == $task['status_id']) {
-                            //$_task['status_realname'] = $status['status'];
-                            $_task['status_realname'] = $status['status_name'];
+                        if ($status['id'] == $taskArray['status_id']) {
+                            $taskArray['status_realname'] = $status['status_name'];
+                            $taskArray['status_icon'] = $status['status_icon'];
                         }
                     }
 
-                    $leadData['tasks'][] = $_task;  
+                    $leadData['tasks'][] = $taskArray;  
                     
                 } catch (Exception $e) {
                     // do nothing
+                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
                 }
             }
             
-            $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
-            $leadData['container'] = $folder->toArray();
+            // @todo is that needed?
+            //$folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
+            //$leadData['container'] = $folder->toArray();
             
             $products = $controller->getProductsByLeadId($_leadId);
             $leadData['products'] = $products->toArray();
-
             
         } else {
             $leadData = $controller->getEmptyLead()->toArray();
