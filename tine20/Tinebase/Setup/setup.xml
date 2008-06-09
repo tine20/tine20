@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>0.8</version>
+    <version>0.9</version>
     <tables>
         <table>
             <name>applications</name>
@@ -704,30 +704,37 @@
         
         <table>
             <name>record_relations</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>own_application</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>own_identifier</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>related_application</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>related_identifier</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field> 
                 <field>
                     <name>related_role</name>

@@ -669,4 +669,125 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '0.8');
     }
+    
+    /**
+     * switch ids to alnum. As the table was not used, we don't need to update
+     * its contents
+     */
+    function update_8()
+    {
+        $this->validateTableVersion('record_relations', '1');
+        $this->_backend->dropTable('record_relations');
+        
+        $tableDefinition = ('
+            <table>
+                <name>record_relations</name>
+                <version>2</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>own_application</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>own_identifier</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>related_application</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>related_identifier</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field> 
+                    <field>
+                        <name>related_role</name>
+                        <type>text</type>
+                        <length>64</length>
+                        <notnull>false</notnull>
+                    </field>                  
+                    <field>
+                        <name>created_by</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>creation_time</name>
+                        <type>datetime</type>
+                        <notnull>true</notnull>
+                    </field> 
+                    <field>
+                        <name>last_modified_by</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>last_modified_time</name>
+                        <type>datetime</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>is_deleted</name>
+                        <type>boolean</type>
+                        <notnull>true</notnull>
+                        <default>false</default>
+                    </field>
+                    <field>
+                        <name>deleted_by</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>            
+                    <field>
+                        <name>deleted_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>own_application_id-own_id-related-role_id</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>own_application</name>
+                        </field>
+                        <field>
+                            <name>own_identifier</name>
+                        </field>
+                        <field>
+                            <name>related_role</name>
+                        </field>
+                        <field>
+                            <name>related_application</name>
+                        </field>
+                        <field>
+                            <name>related_identifier</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>
+        ');
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        $this->setApplicationVersion('Tinebase', '0.9');
+    }
 }
