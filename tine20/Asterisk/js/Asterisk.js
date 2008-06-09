@@ -1887,6 +1887,7 @@ Tine.Asterisk.Software.EditDialog =  {
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'asterisk_editSoftwareForm',
+		        layout: 'fit',
 		        //title: 'the title',
 		        labelWidth: 120,
                 labelAlign: 'top',
