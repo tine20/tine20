@@ -35,8 +35,9 @@ Ext.extend(Ext.ux.form.ImageCropper, Ext.Component, {
     height: 320,
     
     initComponent: function() {
-        this.imageURL.width = 320;
+        this.imageURL.width = 290;
         this.imageURL.height = 240;
+        this.imageURL.ratiomode = 1;
 
         Ext.ux.form.ImageCropper.superclass.initComponent.call(this);
     },
@@ -51,12 +52,13 @@ Ext.extend(Ext.ux.form.ImageCropper, Ext.Component, {
         
         // yui cropper is very fast. 
         // cause of the window usage the yui crop mask does not work, so we use the mask obove
+        /*
         var Dom = YAHOO.util.Dom, 
         Event = YAHOO.util.Event; 
     
         var crop = new YAHOO.widget.ImageCropper('yui_img');
+        */
         
-        /*
          // Ext only implementation is very slow!
          // the bad news is that the resizeable dosn't fire events while resizeing 
          // and that the dd onDrag looses scope
@@ -77,24 +79,24 @@ Ext.extend(Ext.ux.form.ImageCropper, Ext.Component, {
             draggable:true,
             dynamic:true,
         });
+        this.resizeable.dd.fgImageEl = this.fgImageEl;
+        this.resizeable.dd.bgImageEl = this.bgImageEl;
         
-        this.resizeable.dd.onDrag = function(e) {
-            var fgEl = Ext.get(e.getTarget());
-            var bgEl = fgEl.up('div').up('div').down('img');
-            var dx = bgEl.getX() - fgEl.getX();
-            var dy = bgEl.getY() - fgEl.getY();
-            fgEl.setStyle('background-position', dx + 'px ' + dy + 'px');
-        }
+        this.resizeable.dd.onDrag = this.syncImageEls
         
         // fix opacity, which might be broken by the inherited window properties
         var rhs = this.resizeable.getEl().query('div.x-resizable-handle');
         for (var i=0, j=rhs.length; i<j; i++) {
             Ext.get(rhs[i]).setOpacity(1);
         }
-        
-        var dx = bgEl.getX() - fgEl.getX();
-        var dy = bgEl.getY() - fgEl.getY();
-        fgEl.setStyle('background-position', dx + 'px ' + dy + 'px');
-        */
+        this.syncImageEls();
+    },
+    /**
+     * sync fg image with bg image
+     */
+    syncImageEls: function() {
+        var dx = this.bgImageEl.getX() - this.fgImageEl.getX();
+        var dy = this.bgImageEl.getY() - this.fgImageEl.getY();
+        this.fgImageEl.setStyle('background-position', dx + 'px ' + dy + 'px');
     }
 });
