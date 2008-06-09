@@ -63,6 +63,36 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     }
     
     /**
+     * returns image from imageURL
+     * 
+     * @param  string imageURL
+     * @return Tinebase_Model_Image
+     */
+    public static function getImageFromImageURL($_imageURL)
+    {
+        $params = self::parseImageURL($_imageURL);
+        $image = Tinebase_Controller::getInstance()->getImage($params['application'], $params['id'], $params['location']);
+        return $image;
+    }
+    
+    /**
+     * parses an imageURL
+     * 
+     * @param  string imageURL
+     * @return array array of image params
+     */
+    public static function parseImageURL($_imageURL)
+    {
+        $params = array();
+        parse_str(parse_url($_imageURL, PHP_URL_QUERY), $params);
+        if (!empty($params['application']) && !empty($params['id'])) {
+            return $params;
+        } else {
+            throw new Exception("$_imageURL is not a valid imageURL");
+        }
+    }
+    
+    /**
      * returns image extension from mime type
      * 
      * @return string extension
