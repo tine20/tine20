@@ -97,7 +97,8 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      * tests if isImageFile is working
      *
      */
-    public function testIsImageFile() {
+    public function testIsImageFile()
+    {
         $this->assertTrue(Tinebase_ImageHelper::isImageFile($this->_testImagePath));
         $this->assertFalse(Tinebase_ImageHelper::isImageFile(__FILE__));
     }
@@ -106,7 +107,8 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      * test preserve and crop resizeing right hand side
      * 
      */
-    public function testResizeRatioModePreserveAndCropRight() {
+    public function testResizeRatioModePreserveAndCropRight()
+    {
         // crop right
         Tinebase_ImageHelper::resize($this->_testImage, 50, 100, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
         $this->assertEquals(50, $this->_testImage->width);
@@ -120,7 +122,8 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      * test preserve and crop resizeing bottom side
      * 
      */
-    public function testResizeRatioModePreserveAndCropBottom() {
+    public function testResizeRatioModePreserveAndCropBottom()
+    {
         Tinebase_ImageHelper::resize($this->_testImage, 100, 50, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
         $this->assertEquals(50, $this->_testImage->height);
         // only works on my system^tm
@@ -129,4 +132,29 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
         //$this->assertFileEquals(dirname(__FILE__) . '/ImageHelper/phpunit-logo-preserveandcrop-100-50.gif', $tmpPath);
         //unlink($tmpPath);
     }
+    /**
+     * test preserve no fill fit width
+     */
+    public function testResizeRatioModePreservNoFillWidth()
+    {
+        $testImageRatio = $this->_testImageData['width'] / $this->_testImageData['height'];
+        $dstWidth = 100;
+        Tinebase_ImageHelper::resize($this->_testImage, $dstWidth, $dstWidth*100, Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
+        $this->assertEquals($dstWidth, $this->_testImage->width);
+        $this->assertEquals(floor($dstWidth / $testImageRatio), $this->_testImage->height);
+        
+    }
+    /**
+     * test preserve no fill fit height
+     */
+    public function testResizeRatioModePreservNoFillHeight()
+    {
+        $testImageRatio = $this->_testImageData['width'] / $this->_testImageData['height'];
+        $dstHeight = 100;
+        Tinebase_ImageHelper::resize($this->_testImage, $dstHeight*100, $dstHeight, Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
+        $this->assertEquals($dstHeight, $this->_testImage->height);
+        $this->assertEquals(floor($dstHeight * $testImageRatio), $this->_testImage->width);
+        
+    }
+    
 }
