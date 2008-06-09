@@ -553,7 +553,6 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         <type>text</type>
                         <length>40</length>
                         <notnull>true</notnull>
-                        <default>\'\'</default>
                     </field>
                     <field>
                         <name>application_id</name>
@@ -637,8 +636,9 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                 <declaration>
                     <field>
                         <name>id</name>
-                        <type>integer</type>
-                        <autoincrement>true</autoincrement>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
                     </field>
                     <field>
                         <name>email</name>
