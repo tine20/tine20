@@ -11,9 +11,9 @@
  */
 
 /**
- * defines the datatype for a full user account
+ * defines the datatype for a full users
  * 
- * this datatype contains all information about an account
+ * this datatype contains all information about an user
  * the usage of this datatype should be restricted to administrative tasks only
  * 
  * @package     Tinebase
@@ -86,7 +86,7 @@ class Tinebase_User_Model_FullUser extends Tinebase_User_Model_User
     }
     
     /**
-     * return the public informations of this account only
+     * return the public informations of this user only
      *
      * @return Tinebase_User_Model_User
      */
@@ -98,7 +98,7 @@ class Tinebase_User_Model_FullUser extends Tinebase_User_Model_User
     }
     
     /**
-     * returns account login name
+     * returns user login name
      *
      * @return string
      */

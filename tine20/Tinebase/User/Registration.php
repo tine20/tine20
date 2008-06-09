@@ -104,7 +104,7 @@ class Tinebase_User_Registration
         try {
             Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
                 ' call getUserByLoginName with username ' . $_username);
-            // get account with this username from db
+            // get user with this username from db
             $account = Tinebase_User::getInstance()->getUserByLoginName($_username);
             return false;
         } catch (Exception $e) {
@@ -205,7 +205,7 @@ class Tinebase_User_Registration
         $account = new Tinebase_User_Model_FullUser($regData);
         Tinebase_User::getInstance()->addUser($account);
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ .
-            ' saved user account ' . $regData['accountLoginName']);
+            ' saved user ' . $regData['accountLoginName']);
         // generate password and save it
         $regData['password'] = $this->generatePassword();
         Tinebase_Auth::getInstance()->setPassword($regData['accountLoginName'], 
@@ -300,19 +300,19 @@ class Tinebase_User_Registration
      */
     public function sendLostPasswordMail ($_username)
     {
-        // get full account
+        // get full user
         $fullAccount = Tinebase_User::getInstance()->getFullUserByLoginName($_username);
         // generate new password
         $newPassword = $this->generatePassword();
-        // save new password in account
+        // save new password in user
         Tinebase_Auth::getInstance()->setPassword($_username, $newPassword, $newPassword);
         // send lost password mail		
         $mail = new Tinebase_Mail('UTF-8');
         $mail->setSubject("New password for Tine 2.0");
-        // get name from account
+        // get name from user
         //$recipientName = $fullAccount->accountFirstName." ".$fullAccount->accountLastName;
         $recipientName = $fullAccount->accountFullName;
-        // get email from account
+        // get email from user
         $recipientEmail = $fullAccount->accountEmailAddress;
         // get plain and html message from views
         //-- translate text and insert correct link
@@ -363,7 +363,7 @@ class Tinebase_User_Registration
     }
     
     /**
-     * activate user account
+     * activate user
      *
      * @param 	string $_login_hash
      * @return	Tinebase_User_Model_FullUser
@@ -376,9 +376,9 @@ class Tinebase_User_Registration
         // set new status in DB (registration)
         $registration->status = 'activated';
         $this->updateRegistration($registration);
-        // get account by username
+        // get user by username
         $account = Tinebase_User::getInstance()->getFullUserByLoginName($registration['login_name']);
-        // set new expire_date in DB (account)
+        // set new expire_date in DB (user)
         Tinebase_User::getInstance()->setExpiryDate($account['accountId'], NULL);
         return $account;
     }
@@ -435,7 +435,7 @@ class Tinebase_User_Registration
             "date"       => Zend_Date::now()->getIso(),
             "status"     => "justregistered"
         );
-        // add new account
+        // add new user
         $this->_registrationsTable->insert($registrationData);
         return $this->getRegistrationByHash($_registration->login_hash);
     }

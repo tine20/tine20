@@ -85,7 +85,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * get list of accounts
+     * get list of users
      *
      * @param string $_filter
      * @param string $_sort
@@ -143,10 +143,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * get account by login name
+     * get user by login name
      *
-     * @param string $_loginName the loginname of the account
-     * @return Tinebase_User_Model_User the account object
+     * @param string $_loginName the loginname of the user
+     * @return Tinebase_User_Model_User the user object
      *
      * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
@@ -158,7 +158,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
 /*        if ( $row === false ) {
-             throw new Exception('account not found');
+             throw new Exception('user not found');
         } */        
 
         $accountArray = array(
@@ -191,10 +191,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * get account by accountId
+     * get user by userId
      *
      * @param int $_accountId the account id
-     * @return Tinebase_User_Model_User the account object
+     * @return Tinebase_User_Model_User the user object
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
     {
@@ -205,7 +205,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
         // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
         // because of the wrong type that is not catched by the block below)
 /*        if ( $row === false ) {
-             throw new Exception('account not found');
+             throw new Exception('user not found');
         } */        
 
         $accountArray = array(
@@ -238,7 +238,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * update the lastlogin time of account
+     * update the lastlogin time of user
      *
      * @param int $_accountId
      * @param string $_ipAddress
@@ -292,7 +292,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * update account status
+     * update user status
      *
      * @param   int         $_accountId
      * @param   string      $_status
@@ -314,7 +314,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
 
     /**
-     * blocks/unblocks the account (calls backend class with the same name)
+     * blocks/unblocks the user (calls backend class with the same name)
      *
      * @param   int $_accountId
      * @param   Zend_Date   $_blockedUntilDate
@@ -325,7 +325,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
         
     /**
-     * updates an existing account
+     * updates an existing user
      *
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
@@ -336,7 +336,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
 
     /**
-     * adds a new account
+     * adds a new user
      *
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
@@ -347,7 +347,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
     
     /**
-     * delete an account
+     * delete an user
      *
      * @param int $_accountId
      */
@@ -357,7 +357,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Abstract
     }
 
     /**
-     * delete multiple accounts
+     * delete multiple users
      *
      * @param array $_accountIds
      */

@@ -11,7 +11,7 @@
  */
 
 /**
- * sql implementation of the SQL accounts interface
+ * sql implementation of the SQL users interface
  * 
  * @package     Tinebase
  * @subpackage  User
@@ -79,7 +79,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * get list of accounts
+     * get list of users
      *
      * @param string $_filter
      * @param string $_sort
@@ -108,7 +108,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
-        // return only active accounts, when searching for simple accounts
+        // return only active users, when searching for simple users
         if($_accountClass == 'Tinebase_User_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
@@ -124,10 +124,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * get account by login name
+     * get user by login name
      *
-     * @param string $_loginName the loginname of the account
-     * @return Tinebase_User_Model_User the account object
+     * @param string $_loginName the loginname of the user
+     * @return Tinebase_User_Model_User the user object
      *
      * @throws Tinebase_Record_Exception_NotDefined when row is empty
      */
@@ -145,7 +145,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
            // throw exception if data is empty (if the row is no array, the setFromArray function throws a fatal error 
            // because of the wrong type that is not catched by the block below)
         if ( $row === false ) {
-             throw new Exception('account not found');
+             throw new Exception('user not found');
         }        
 
         try {
@@ -163,10 +163,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * get account by accountId
+     * get user by userId
      *
-     * @param int $_accountId the account id
-     * @return Tinebase_User_Model_User the account object
+     * @param int $_accountId the user id
+     * @return Tinebase_User_Model_User the user object
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_User_Model_User')
     {
@@ -179,7 +179,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if($row === false) {
-            throw new Exception('account with id ' . $accountId . ' not found');
+            throw new Exception('user with id ' . $accountId . ' not found');
         }
 
         try {
@@ -187,7 +187,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $account->setFromArray($row);
         } catch (Exception $e) {
             $validation_errors = $account->getValidationErrors();
-            Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::_getAccountFromSQL: ' . $e->getMessage() . "\n" .
+            Zend_Registry::get('logger')->debug( 'Tinebase_User_Sql::_getUserFromSQL: ' . $e->getMessage() . "\n" .
                 "Tinebase_User_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
             throw ($e);
@@ -197,10 +197,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * get full account by id
+     * get full user by id
      *
      * @param   int         $_accountId
-     * @return  Tinebase_User_Model_FullUser full account
+     * @return  Tinebase_User_Model_FullUser full user
      */
     public function getFullUserById($_accountId)
     {
@@ -241,7 +241,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * set the status of the account
+     * set the status of the user
      *
      * @param int $_accountId
      * @param unknown_type $_status
@@ -331,7 +331,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $result;
     }    
     /**
-     * update the lastlogin time of account
+     * update the lastlogin time of user
      *
      * @param int $_accountId
      * @param string $_ipAddress
@@ -356,9 +356,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * updates an account
+     * updates an user
      * 
-     * this function updates an account 
+     * this function updates an user 
      *
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
@@ -366,7 +366,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function updateUser(Tinebase_User_Model_FullUser $_account)
     {
         if(!$_account->isValid()) {
-            throw(new Exception('invalid account object'));
+            throw(new Exception('invalid user object'));
         }
 
         $accountId = Tinebase_User_Model_User::convertUserIdToInt($_account);
@@ -416,9 +416,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * add an account
+     * add an user
      * 
-     * this function adds an account 
+     * this function adds an user 
      *
      * @param Tinebase_User_Model_FullUser $_account
      * @todo fix $contactData['owner'] = 1;
@@ -427,7 +427,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function addUser(Tinebase_User_Model_FullUser $_account)
     {
         if(!$_account->isValid()) {
-            throw(new Exception('invalid account object'));
+            throw(new Exception('invalid user object'));
         }
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
@@ -457,17 +457,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
             
-            // add new account
+            // add new user
             $accountId = $accountsTable->insert($accountData);
             if ($accountId === NULL) {
                 $accountId = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'accounts', 0,26) . '_seq');
             }
-            // if we insert an account without an accountId, we need to get back one
+            // if we insert an user without an userId, we need to get back one
             if(empty($_account->accountId) && $accountId == 0) {
                 throw new Exception("returned accountId is 0");
             }
             
-            // if the account had no accountId set, set the id now
+            // if the user had no userId set, set the id now
             if(empty($_account->accountId)) {
                 $_account->accountId = $accountId;
             }
@@ -492,7 +492,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * delete a account
+     * delete a user
      *
      * @param int $_accountId
      */
@@ -536,11 +536,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' deleted account ' . $account->accountLoginName);
+        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' deleted user ' . $account->accountLoginName);
     }
     
     /**
-     * delete accounts
+     * delete users
      * 
      * @param array $_accountIds
      */

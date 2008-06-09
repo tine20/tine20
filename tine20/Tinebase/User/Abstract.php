@@ -11,7 +11,7 @@
  */
 
 /**
- * abstract class for all account backends
+ * abstract class for all user backends
  *
  * @package     Tinebase
  * @subpackage  User
@@ -20,7 +20,7 @@
 abstract class Tinebase_User_Abstract
 {
     /**
-     * get list of accounts with NO internal informations
+     * get list of users with NO internal informations
      *
      * @param string $_filter
      * @param string $_sort
@@ -32,7 +32,7 @@ abstract class Tinebase_User_Abstract
     abstract public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL);
     
     /**
-     * get list of accounts
+     * get list of users
      *
      * @param string $_filter
      * @param string $_sort
@@ -47,18 +47,18 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
-     * get account by login name
+     * get user by login name
      *
      * @param   string      $_loginName
-     * @return  Tinebase_User_Model_User full account
+     * @return  Tinebase_User_Model_User full user
      */
     abstract public function getUserByLoginName($_loginName);
 
     /**
-     * get full account by login name
+     * get full user by login name
      *
      * @param   string      $_loginName
-     * @return  Tinebase_User_Model_FullUser full account
+     * @return  Tinebase_User_Model_FullUser full user
      */
     public function getFullUserByLoginName($_loginName)
     {
@@ -66,18 +66,18 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
-     * get account by id
+     * get user by id
      *
      * @param   int         $_accountId
-     * @return  Tinebase_User_Model_User account
+     * @return  Tinebase_User_Model_User user
      */
     abstract public function getUserById($_accountId);
 
     /**
-     * get full account by id
+     * get full user by id
      *
      * @param   int         $_accountId
-     * @return  Tinebase_User_Model_FullUser full account
+     * @return  Tinebase_User_Model_FullUser full user
      */
     public function getFullUserById($_accountId)
     {
@@ -85,7 +85,7 @@ abstract class Tinebase_User_Abstract
     }
     
     /**
-     * update account status
+     * update user status
      *
      * @param   int         $_accountId
      * @param   string      $_status
@@ -101,7 +101,7 @@ abstract class Tinebase_User_Abstract
     abstract public function setExpiryDate($_accountId, $_expiryDate);
 
     /**
-     * blocks/unblocks the account (calls backend class with the same name)
+     * blocks/unblocks the user (calls backend class with the same name)
      *
      * @param   int $_accountId
      * @param   Zend_Date   $_blockedUntilDate
@@ -109,7 +109,7 @@ abstract class Tinebase_User_Abstract
     abstract public function setBlockedDate($_accountId, $_blockedUntilDate);
     
     /**
-     * set login time for account (with ip address)
+     * set login time for user (with ip address)
      *
      * @param int $_accountId
      * @param string $_ipAddress
@@ -117,7 +117,7 @@ abstract class Tinebase_User_Abstract
     abstract public function setLoginTime($_accountId, $_ipAddress);
     
     /**
-     * updates an existing account
+     * updates an existing user
      *
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
@@ -125,7 +125,7 @@ abstract class Tinebase_User_Abstract
     abstract public function updateUser(Tinebase_User_Model_FullUser $_account);
 
     /**
-     * adds a new account
+     * adds a new user
      *
      * @param Tinebase_User_Model_FullUser $_account
      * @return Tinebase_User_Model_FullUser
@@ -133,14 +133,14 @@ abstract class Tinebase_User_Abstract
     abstract public function addUser(Tinebase_User_Model_FullUser $_account);
     
     /**
-     * delete an account
+     * delete an user
      *
      * @param int $_accountId
      */
     abstract public function deleteUser($_accountId);
 
     /**
-     * delete multiple accounts
+     * delete multiple users
      *
      * @param array $_accountIds
      */

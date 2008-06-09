@@ -14,9 +14,9 @@
  */
 
 /**
- * defines the datatype for simple account object
+ * defines the datatype for simple user object
  * 
- * this account object contains only public informations
+ * this user object contains only public informations
  * its primary usecase are user selection interfaces
  * 
  * @package     Tinebase
@@ -170,10 +170,10 @@ class Tinebase_User_Model_User extends Tinebase_Record_Abstract
     /**
      * returns list of applications the current user is able to use
      *
-     * this function takes group memberships into account. Applications the accounts is able to use
+     * this function takes group memberships into user. Applications the user is able to use
      * must have the 'run' right set 
      * 
-     * @return array list of enabled applications for this account
+     * @return array list of enabled applications for this user
      */
     public function getApplications()
     {

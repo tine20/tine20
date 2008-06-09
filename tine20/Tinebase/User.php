@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -11,10 +11,10 @@
  */
 
 /**
- * Account Class
+ * User Class
  *
  * @package     Tinebase
- * @subpackage  Account
+ * @subpackage  User
  */
 class Tinebase_User
 {
@@ -60,9 +60,9 @@ class Tinebase_User
     }
         
     /**
-     * return an instance of the current accounts backend
+     * return an instance of the current rs backend
      *
-     * @param string $_backendType name of the accounts backend
+     * @param string $_backendType name of the rs backend
      * @return Tinebase_User_Abstract
      */
     public static function factory($_backendType) 
@@ -81,14 +81,14 @@ class Tinebase_User
                 break;
             
             default:
-                throw new Exception("accounts backend type $_backendType not implemented");
+                throw new Exception("rs backend type $_backendType not implemented");
         }
         
         return $result;
     }
     
     /**
-     * returns the configured accounts backend
+     * returns the configured rs backend
      * 
      * @return string
      */
