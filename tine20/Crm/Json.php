@@ -330,7 +330,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 	 * @param  string  $products       JSON encoded products
 	 * @return array
 	 * 
-	 * @todo   add tasks and products again
+	 * @todo   add products again
 	 */	
 	public function saveLead($lead, $linkedContacts, $linkedTasks, $products)
     {
@@ -347,12 +347,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             
             return $result;
         }
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
-        
+
+        // add linked contacts
         $linkedContacts = Zend_Json::decode($linkedContacts);
-
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($linkedContacts, true));
-
         $responsible = array();
         $customer = array();
         $partner = array();
@@ -373,16 +370,15 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $leadData->customer = $customer;
         $leadData->partner = $partner;
         
-        //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData->toArray(), true));
-        
-        /*
-        // tasks
+        // add linked tasks
         $tasks = Zend_Json::decode($linkedTasks);
         if(is_array($tasks)) {
             $leadData->tasks = $tasks;
         }
 
-        // products    
+        /*
+        
+        // add linked products    
         if(strlen($products) > 2) {     
             $this->saveProducts($products, $savedLead->id);
         } else {

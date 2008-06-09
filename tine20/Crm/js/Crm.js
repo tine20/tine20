@@ -1115,7 +1115,7 @@ Tine.Crm.LeadEditDialog = {
                         method: 'Crm.saveLead', 
                         lead: Ext.util.JSON.encode(lead.data),
                         linkedContacts: additionalData.linkedContacts,
-                        linkedTasks:    Ext.util.JSON.encode([]),
+                        linkedTasks:    additionalData.linkedTasks,
                         products:       Ext.util.JSON.encode([])
                         // @todo send links via json again
                         /*
@@ -1189,6 +1189,15 @@ Tine.Crm.LeadEditDialog = {
 
         additionalData.linkedContacts = Ext.util.JSON.encode(linksContacts);
         
+        var linksTasks = new Array();
+        var storeTasks = Ext.StoreMgr.lookup('TasksStore');
+        
+        storeTasks.each(function(record) {
+            linksTasks.push(record.data.id);          
+        });
+        
+        additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
+
         /*
         var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
         additionalData.products = Tine.Tinebase.Common.getJSONdata(store_products);
@@ -1213,15 +1222,6 @@ Tine.Crm.LeadEditDialog = {
             additionalData.end_scheduled = null;
         }
         
-        var linksTasks = new Array();
-        var taskGrid = Ext.getCmp('gridActivities');
-        var storeTasks = taskGrid.getStore();
-        
-        storeTasks.each(function(record) {
-            linksTasks.push(record.data.id);          
-        });
-        
-        additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
         */
         
         return additionalData;
