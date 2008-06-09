@@ -93,30 +93,45 @@ class Asterisk_Controller
         return $phone;
     }
     
-    
+   
     /**
-     * delete one or multiple phones
+     * Deletes an existing phone
      *
-     * @param mixed $_phoneId
-     * @throws Exception 
+     * @param string $_identifier
+     * @return void
      */
-    public function deletePhone($_phoneId)
+    public function deletePhone($_identifier)
     {
-        if (is_array($_phoneId) or $_phoneId instanceof Tinebase_Record_RecordSet) {
-            foreach ($_phoneId as $phoneId) {
-                $this->deletePhone($phoneId);
-            }
-        } else {
-#            $phone = $this->_backend->getPhoneById($_phoneId);
-#            if (Zend_Registry::get('currentAccount')->hasGrant($phone->owner, Tinebase_Container::GRANT_DELETE)) {
-                $this->_backend->deletePhone($_phoneId);
-#            } else {
-#                throw new Exception('delete access to contact denied');
-#            }
+        $Phone = $this->getPhoneById($_identifier);
+        
+        if (!$this->_currentAccount->hasGrant($Phone->container_id, Tinebase_Container::GRANT_DELETE)) {
+            throw new Exception('Not allowed!');
         }
-    }    
-    
-    
+        $this->_backend->deletePhone($_identifier);
+    }
+
+    /**
+     * Deletes a set of phones.
+     * 
+     * If one of the phones could not be deleted, no phone is deleted
+     * 
+     * @throws Exception
+     * @param array array of phone identifiers
+     * @return void
+     */
+    public function deletePhones($_identifiers)
+    {
+        foreach ($_identifiers as $identifier) {
+            $Phone = $this->getPhoneById($identifier);
+            if (!$this->_currentAccount->hasGrant($Pask->container_id, Tinebase_Container::GRANT_DELETE)) {
+                throw new Exception('Not allowed!');
+            }
+        }
+        
+        $this->_backend->deletePhones($_identifiers);
+    }
+
+
     /**
      * update one phone
      *

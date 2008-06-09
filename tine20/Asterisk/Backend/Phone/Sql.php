@@ -93,11 +93,14 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         if (! $_phoneData->isValid()) {
             throw new Exception('invalid phone');
         }
-        $phoneData = $_phoneData->toArray();
-        if (empty($_phoneData->id)) {
-            unset($phoneData['id']);
+        
+        if ( empty($_phoneData->id) ) {
+        	$newId = $_phoneData->generateUID();
+        	$_phoneData->setId($newId);
         }
-
+        
+        $phoneData = $_phoneData->toArray();
+        
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones', $phoneData);
         $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_phones', 'id');
         // if we insert a phone without an id, we need to get back one
@@ -146,6 +149,32 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones', $where);
         return $result;
     }    
+    
+    
+    /**
+     * Deletes a set of phones.
+     * 
+     * If one of the phones could not be deleted, no phone is deleted
+     * 
+     * @throws Exception
+     * @param array array of strings (phone ids)
+     * @return void
+     */
+    public function deletePhones($_ids)
+    {
+        try {
+            $this->_db->beginTransaction();
+            foreach ($_ids as $id) {
+                $this->deletePhone($id);
+            }
+            $this->_db->commit();
+            
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            throw $e;
+        }
+    }    
+    
     
     
 	/**

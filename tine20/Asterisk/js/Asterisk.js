@@ -379,7 +379,7 @@ Tine.Asterisk.Phones.Main = {
             _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
         }, this);   
         
-        //Ext.StoreMgr.add('PhonesStore', dataStore);
+        Ext.StoreMgr.add('PhonesStore', dataStore);
         
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
@@ -548,11 +548,72 @@ Tine.Asterisk.Phones.Main = {
     }
 };
 
+Tine.Asterisk.Phones.Data = {
+    
+    
+    loadConfigData: function() {
+
+        var configDataStore = new Ext.data.JsonStore({
+        	baseParams: {
+                method: 'Asterisk.getConfig',
+                sort: 'description',
+                dir: 'ASC',
+                query: ''
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: [
+                {name: 'id'},
+                {name: 'description'}
+            ],
+            
+            // turn on remote sorting
+            remoteSort: true
+        });
+
+        configDataStore.setDefaultSort('description', 'asc');
+               
+        return configDataStore;
+    },
+    
+    
+    loadSoftwareData: function() {
+
+        var softwareDataStore = new Ext.data.JsonStore({
+        	baseParams: {
+                method: 'Asterisk.getSoftware',
+                sort: 'description',
+                dir: 'ASC',
+                query: ''
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: [
+                {name: 'id'},
+                {name: 'model'},
+                {name: 'description'}
+            ],
+            
+            // turn on remote sorting
+            remoteSort: true
+        });
+
+        softwareDataStore.setDefaultSort('description', 'asc');
+
+        Ext.StoreMgr.add('swData', softwareDataStore);               
+         
+        return softwareDataStore;
+    }    
+};
+    
 
 Tine.Asterisk.Phones.EditDialog =  {
 
     	phoneRecord: null,
-    	
+        
+        
     	updatePhoneRecord: function(_phoneData)
     	{
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
@@ -561,6 +622,7 @@ Tine.Asterisk.Phones.EditDialog =  {
             this.phoneRecord = new Tine.Asterisk.Phones.Phone(_phoneData);
     	},
     	
+        
     	deletePhone: function(_button, _event)
     	{
 	        var phoneIds = Ext.util.JSON.encode([this.phoneRecord.get('id')]);
@@ -620,8 +682,9 @@ Tine.Asterisk.Phones.EditDialog =  {
         {
         	this.applyChanges(_button, _event, true);
         },
-        
-        editPhoneDialog: [{
+                  
+                  
+        editPhoneDialog:  [{
             layout:'form',
             //frame: true,
             border:false,
@@ -650,41 +713,43 @@ Tine.Asterisk.Phones.EditDialog =  {
                             maxLength: 12,
                             anchor:'98%',
                             allowBlank: false
-                        }, {
-                            xtype: 'combo',
-                            fieldLabel: 'Model',
-                            name: 'model',
-                            mode: 'local',
-                            displayField:'model',
-                            valueField:'key',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','model'],
-                                    data: [
-                                        ['snom300','Snom 300'],
-                                        ['snom320','Snom 320'],
-                                        ['snom360','Snom 360'],
-                                        ['snom370','Snom 370']                                        
-                                    ]
-                                }
-                            )
-                        } , {
+                        }, 
+                            new Ext.form.ComboBox({
+                                fieldLabel: 'Model',
+                                id: 'modelCombo',
+                                name: 'model',
+                                mode: 'local',
+                                displayField:'model',
+                                valueField:'key',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                allowBlank: false,
+                                editable: false,
+                                store: new Ext.data.SimpleStore(
+                                    {
+                                        fields: ['key','model'],
+                                        data: [
+                                            ['snom300','Snom 300'],
+                                            ['snom320','Snom 320'],
+                                            ['snom360','Snom 360'],
+                                            ['snom370','Snom 370']                                        
+                                        ]
+                                    }
+                                )
+                            }) ,
+                        {
                             xtype: 'combo',
                             fieldLabel: 'Config',
                             name: 'config',
-//                            mode: 'local',
-                            displayField:'id',
-                            valueField:'description',
+                            mode: 'remote',
+                            displayField:'description',
+                            valueField:'id',
                             anchor:'98%',                    
                             triggerAction: 'all',
-                            allowBlank: false,
                             editable: false,
-                        //    store: data.config
-                        }]
+                            forceSelection: true,
+                            store: Tine.Asterisk.Phones.Data.loadConfigData()
+                        } ]
                     } , {
                     columnWidth: .5,
                     layout: 'form',
@@ -696,7 +761,20 @@ Tine.Asterisk.Phones.EditDialog =  {
                         maxLength: 40,
                         anchor:'100%',                    
                         readOnly: true
-                    }, {
+                    }, 
+                        new Ext.form.ComboBox({
+                            fieldLabel: 'load new SW Version',
+                            name: 'newswversion',
+                            id: 'newSWCombo',
+                            mode: 'remote',
+                            displayField:'description',
+                            valueField:'id',
+                            anchor:'100%',                    
+                            triggerAction: 'all',
+                            editable: false,
+                            forceSelection: true
+                        }) , 
+                    {
                         xtype: 'textfield',
                         fieldLabel: 'current IP Address',
                         name: 'ipaddress',
@@ -708,6 +786,8 @@ Tine.Asterisk.Phones.EditDialog =  {
             }]
         }],
         
+
+        
         updateToolbarButtons: function()
         {
             if(this.phoneRecord.get('id') > 0) {
@@ -716,7 +796,7 @@ Tine.Asterisk.Phones.EditDialog =  {
         },
         
         display: function(_phoneData) 
-        {       	
+        {       
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'asterisk_editPhoneForm',
@@ -730,6 +810,22 @@ Tine.Asterisk.Phones.EditDialog =  {
 		        items: this.editPhoneDialog
 		    });
 
+            Ext.getCmp('newSWCombo').disable();
+            Ext.getCmp('newSWCombo').on('focus', function(_field) {
+                var _newValue = Ext.getCmp('modelCombo').getValue();
+                if(!Ext.StoreMgr.get('swData')) {
+                     Tine.Asterisk.Phones.Data.loadSoftwareData();
+                }
+                Ext.StoreMgr.get('swData').filter('model',_newValue);
+           }); 
+    
+            Ext.getCmp('modelCombo').on('change', function(_box, _newValue, _oldValue) {
+               if(_newValue) {
+
+                   Ext.getCmp('newSWCombo').enable();
+               }  
+           }); 
+
             var viewport = new Ext.Viewport({
                 layout: 'border',
                 frame: true,
@@ -738,9 +834,11 @@ Tine.Asterisk.Phones.EditDialog =  {
             });
 	        
 	        //if (!arguments[0]) var task = {};
+                    
             this.updatePhoneRecord(_phoneData);
             this.updateToolbarButtons();           
 	        dialog.getForm().loadRecord(this.phoneRecord);
+           
         }
    
 };
@@ -1925,7 +2023,8 @@ Tine.Asterisk.Phones.Phone = Ext.data.Record.create([
 ]);
 
 
-Tine.Asterisk.Config.Config = Ext.data.Record.create([
+
+Tine.Asterisk.Phones.Config = Ext.data.Record.create([
     {name: 'firmware_interval'},
     {name: 'firmware_status'},
     {name: 'update_policy'},
@@ -1944,6 +2043,25 @@ Tine.Asterisk.Config.Config = Ext.data.Record.create([
     {name: 'pickup_indication'}
 ]);
 
+
+Tine.Asterisk.Config.Config = Ext.data.Record.create([
+    {name: 'firmware_interval'},
+    {name: 'firmware_status'},
+    {name: 'update_policy'},
+    {name: 'setting_server'},
+    {name: 'admin_mode'},
+    {name: 'admin_mode_password'},
+    {name: 'ntp_server'},
+    {name: 'webserver_type'},
+    {name: 'https_port'},
+    {name: 'http_user'},
+    {name: 'http_pass'},
+    {name: 'id'},
+    {name: 'description'},
+    {name: 'filter_registrar'},
+    {name: 'callpickup_dialoginfo'},
+    {name: 'pickup_indication'}
+]);
 
 Tine.Asterisk.Software.Software = Ext.data.Record.create([
     {name: 'id'},
