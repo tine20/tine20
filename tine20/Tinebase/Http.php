@@ -294,6 +294,24 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
 	}
 	
 	/**
+	 * crops a image identified by an imgageURL and returns a new tempFileImage
+	 * 
+	 * @param  string $imageurl imageURL of the image to be croped
+	 * @param  int    $left     left position of crop window
+	 * @param  int    $top      top  position of crop window
+	 * @param  int    $widht    widht  of crop window
+	 * @param  int    $height   heidht of crop window
+	 * @return string imageURL of new temp image
+	 * 
+	 */
+	public function cropImage($imageurl, $left, $top, $widht, $height)
+	{
+	    $image = Tinebase_Model_Image::getImageFromImageURL($imageurl);
+	    Tinebase_ImageHelper::crop($image, $left, $top, $widht, $height);
+	    
+	}
+	
+	/**
 	 * returns an array with all css and js files which needs to be included
 	 * all over Tine 2.0
 	 * 
