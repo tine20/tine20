@@ -21,6 +21,11 @@ class Tinebase_ImageHelper
      */
     const RATIOMODE_PRESERVANDCROP = 0;
     /**
+     * preserves ratio and does not crop image. Resuling image dimension is less
+     * than requested on one dimension as this dim is not filled  
+     */
+    const RATIOMODE_PRESERVNOFILL = 1;
+    /**
      * scales given image to given size
      * 
      * @param  Tinebase_Model_Image $_image
@@ -51,21 +56,36 @@ class Tinebase_ImageHelper
                 throw new Exception("unsupported image type: " . $_image['mime']);
                 break;
         }
-        
-        $dst_image = imagecreatetruecolor($_width, $_height);
-        
         $src_ratio = $_image->width/$_image->height;
         $dst_ratio = $_width/$_height;
         switch ($_ratiomode) {
             case self::RATIOMODE_PRESERVANDCROP:
+                $dst_width = $_width;
+                $dst_height = $_height;
                 if($src_ratio - $dst_ratio >= 0) {
                     // crop width
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $_image->height * $dst_ratio, $_image->height);
-                    
+                    $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $_image->height * $dst_ratio, $_image->height);
                 } else {
                     // crop heights
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $_width, $_height, $_image->width, $_image->width / $dst_ratio);
+                    $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $_image->width, $_image->width / $dst_ratio);
                 }
+                break;
+            case self::RATIOMODE_PRESERVNOFILL:
+                if($src_ratio - $dst_ratio >= 0) {
+                    // fit width
+                    $dst_height = floor($_width / $src_ratio);
+                    $dst_width = $_width;
+                } else {
+                    // fit height
+                    $dst_height = $_height;
+                    $dst_width = floor($_height * $src_ratio);
+                }
+                // recalculate dst_ratio
+                $dst_ratio = $dst_width/$dst_height;
+                $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $_image->width, $_image->height);
                 break;
             default: 
                 throw new Exception('ratiomode not supported');
@@ -73,8 +93,8 @@ class Tinebase_ImageHelper
         }
         $imgDumpFunction($dst_image, $tmpPath);
         
-        $_image->width = $_width;
-        $_image->height = $_height;
+        $_image->width = $dst_width;
+        $_image->height = $dst_height;
         $_image->blob = file_get_contents($tmpPath);
         unlink($tmpPath);
         return;
