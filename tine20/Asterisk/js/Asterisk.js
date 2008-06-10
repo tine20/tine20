@@ -685,102 +685,110 @@ Tine.Asterisk.Phones.EditDialog =  {
                   
                   
         editPhoneDialog:  [{
-            layout:'form',
-            //frame: true,
-            border:false,
-            width: 440,
-            height: 280,
-            items: [{
-                    labelSeparator: '',
-                    xtype:'textarea',
-                    name: 'description',
-                    fieldLabel: 'Description',
-                    grow: false,
-                    preventScrollbars:false,
-                    anchor:'100%',
-                    height: 60
-                } , {
-                    layout:'column',
-                    border:false,
-                    items: [{
+            layout:'fit',
+            border: false,
+            autoHeight: true,
+            anchor: '100% 100%',
+            items:[{
+                layout:'form',
+                //frame: true,
+                border:false,
+                anchor: '100% 100%',
+                items: [{
+                        labelSeparator: '',
+                        xtype:'textarea',
+                        name: 'description',
+                        fieldLabel: 'Description',
+                        grow: false,
+                        preventScrollbars:false,
+                        anchor:'100%',
+                        height: 40
+                    } , {
+                        layout:'column',
+                        border:false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{
+                                xtype: 'textfield',
+                                fieldLabel: 'MAC Address',
+                                name: 'macaddress',
+                                maxLength: 12,
+                                anchor:'98%',
+                                allowBlank: false
+                            }, 
+                                new Ext.form.ComboBox({
+                                    fieldLabel: 'Model',
+                                    id: 'modelCombo',
+                                    name: 'model',
+                                    mode: 'local',
+                                    displayField:'model',
+                                    valueField:'key',
+                                    anchor:'98%',                    
+                                    triggerAction: 'all',
+                                    allowBlank: false,
+                                    editable: false,
+                                    store: new Ext.data.SimpleStore(
+                                        {
+                                            fields: ['key','model'],
+                                            data: [
+                                                ['snom300','Snom 300'],
+                                                ['snom320','Snom 320'],
+                                                ['snom360','Snom 360'],
+                                                ['snom370','Snom 370']                                        
+                                            ]
+                                        }
+                                    )
+                                }) ,
+                            {
+                                xtype: 'combo',
+                                fieldLabel: 'Config',
+                                name: 'config',
+                                mode: 'remote',
+                                displayField:'description',
+                                valueField:'id',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store: Tine.Asterisk.Phones.Data.loadConfigData()
+                            } ]
+                        } , {
                         columnWidth: .5,
                         layout: 'form',
                         border: false,
+                        anchor: '100%',
                         items:[{
                             xtype: 'textfield',
-                            fieldLabel: 'MAC Address',
-                            name: 'macaddress',
-                            maxLength: 12,
-                            anchor:'98%',
-                            allowBlank: false
+                            fieldLabel: 'current Software Version',
+                            name: 'swversion',
+                            maxLength: 40,
+                            anchor:'100%',                    
+                            readOnly: true
                         }, 
                             new Ext.form.ComboBox({
-                                fieldLabel: 'Model',
-                                id: 'modelCombo',
-                                name: 'model',
-                                mode: 'local',
-                                displayField:'model',
-                                valueField:'key',
-                                anchor:'98%',                    
+                                fieldLabel: 'load new SW Version',
+                                name: 'newswversion',
+                                id: 'newSWCombo',
+                                mode: 'remote',
+                                displayField:'description',
+                                valueField:'id',
+                                anchor:'100%',                    
                                 triggerAction: 'all',
-                                allowBlank: false,
                                 editable: false,
-                                store: new Ext.data.SimpleStore(
-                                    {
-                                        fields: ['key','model'],
-                                        data: [
-                                            ['snom300','Snom 300'],
-                                            ['snom320','Snom 320'],
-                                            ['snom360','Snom 360'],
-                                            ['snom370','Snom 370']                                        
-                                        ]
-                                    }
-                                )
-                            }) ,
+                                forceSelection: true
+                            }) , 
                         {
-                            xtype: 'combo',
-                            fieldLabel: 'Config',
-                            name: 'config',
-                            mode: 'remote',
-                            displayField:'description',
-                            valueField:'id',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            editable: false,
-                            forceSelection: true,
-                            store: Tine.Asterisk.Phones.Data.loadConfigData()
-                        } ]
-                    } , {
-                    columnWidth: .5,
-                    layout: 'form',
-                    border: false,
-                    items:[{
-                        xtype: 'textfield',
-                        fieldLabel: 'current Software Version',
-                        name: 'swversion',
-                        maxLength: 40,
-                        anchor:'100%',                    
-                        readOnly: true
-                    }, 
-                        new Ext.form.ComboBox({
-                            fieldLabel: 'load new SW Version',
-                            name: 'newswversion',
-                            id: 'newSWCombo',
-                            mode: 'remote',
-                            displayField:'description',
-                            valueField:'id',
-                            anchor:'100%',                    
-                            triggerAction: 'all',
-                            editable: false,
-                            forceSelection: true
-                        }) , 
-                    {
-                        xtype: 'textfield',
-                        fieldLabel: 'current IP Address',
-                        name: 'ipaddress',
-                        maxLength: 20,
-                        anchor:'100%',  
-                        readOnly: true
+                            xtype: 'textfield',
+                            fieldLabel: 'current IP Address',
+                            name: 'ipaddress',
+                            maxLength: 20,
+                            anchor:'100%',  
+                            readOnly: true
+                        }]
                     }]
                 }]
             }]
@@ -797,6 +805,11 @@ Tine.Asterisk.Phones.EditDialog =  {
         
         display: function(_phoneData) 
         {       
+        
+            if (!arguments[0]) {
+                var _phoneData = {};
+            }
+        
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'asterisk_editPhoneForm',
@@ -1268,102 +1281,181 @@ Tine.Asterisk.Config.EditDialog =  {
         },
         
         editConfigDialog: [{
-            layout:'form',
-            //frame: true,
-            border:false,
-            width: 490,
-            height: 410,
-            items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Firmware Status Address',
-                    name: 'firmware_status',
-                    maxLength: 255,
-                    anchor:'100%',
-                    allowBlank: false
-                } , {
-                    xtype: 'textfield',
-                    fieldLabel: 'Server Settings Address',
-                    name: 'setting_server',
-                    maxLength: 255,
-                    anchor:'100%',
-                    allowBlank: false
-                } , {
-                    xtype: 'textfield',
-                    fieldLabel: 'NTP Server Address',
-                    name: 'ntp_server',
-                    maxLength: 255,
-                    anchor:'100%',
-                    allowBlank: false
-                } , {
-                    labelSeparator: '',
-                    xtype:'textarea',
-                    name: 'description',
-                    fieldLabel: 'Description',
-                    grow: false,
-                    preventScrollbars:false,
-                    anchor:'100%',
-                    height: 30
-                } , {
-                    layout:'column',
-                    border:false,
-                    items: [{
+            layout:'fit',
+            border: false,
+            autoHeight: true,
+            anchor: '100% 100%',
+            items:[{            
+                layout:'form',
+                //frame: true,
+                border:false,
+                anchor: '100%',
+                items: [{
+                        xtype: 'textfield',
+                        fieldLabel: 'Firmware Status Address',
+                        name: 'firmware_status',
+                        maxLength: 255,
+                        anchor:'100%',
+                        allowBlank: false
+                    } , {
+                        xtype: 'textfield',
+                        fieldLabel: 'Server Settings Address',
+                        name: 'setting_server',
+                        maxLength: 255,
+                        anchor:'100%',
+                        allowBlank: false
+                    } , {
+                        xtype: 'textfield',
+                        fieldLabel: 'NTP Server Address',
+                        name: 'ntp_server',
+                        maxLength: 255,
+                        anchor:'100%',
+                        allowBlank: false
+                    } , {
+                        labelSeparator: '',
+                        xtype:'textarea',
+                        name: 'description',
+                        fieldLabel: 'Description',
+                        grow: false,
+                        preventScrollbars:false,
+                        anchor:'100%',
+                        height: 30
+                    } , {
+                        layout:'column',
+                        border:false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{
+                                xtype: 'combo',
+                                fieldLabel: 'Update Policy',
+                                name: 'update_policy',
+                                mode: 'local',
+                                displayField:'policy',
+                                valueField:'key',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                allowBlank: false,
+                                editable: false,
+                                store: new Ext.data.SimpleStore(
+                                    {
+                                        fields: ['key','policy'],
+                                        data: [
+                                                ['auto_update', 'auto update'], 
+                                                ['ask_for_update', 'ask for update'],  
+                                                ['never_update_firm', 'never update firm'],  
+                                                ['never_update_boot', 'never update boot'],  
+                                                ['settings_only', 'settings only'],  
+                                                ['never_update', 'never update']
+                                        ]
+                                    }
+                                )
+                            } , {
+                                xtype: 'combo',
+                                fieldLabel: 'Webserver Type',
+                                name: 'webserver_type',
+                                mode: 'local',
+                                displayField:'wwwtype',
+                                valueField:'key',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                allowBlank: false,
+                                editable: false,
+                                store: new Ext.data.SimpleStore(
+                                    {
+                                        fields: ['key','wwwtype'],
+                                        data: [
+                                                ['https', 'https'],
+                                                ['http', 'http'],
+                                                ['http_https', 'http https'],
+                                                ['off', 'off']
+                                        ]
+                                    }
+                                )
+                            } , {
+                                xtype: 'combo',
+                                fieldLabel: 'Filter Registrar',
+                                name: 'filter_registrar',
+                                mode: 'local',
+                                displayField:'bool',
+                                valueField:'key',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                allowBlank: false,
+                                editable: false,
+                                store: new Ext.data.SimpleStore(
+                                    {
+                                        fields: ['key','bool'],
+                                        data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                        ]
+                                    }
+                                )
+                            } , {
+                                xtype: 'combo',
+                                fieldLabel: 'Call Pickup Dialog Info',
+                                name: 'callpickup_dialoginfo',
+                                mode: 'local',
+                                displayField:'bool',
+                                valueField:'key',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                allowBlank: false,
+                                editable: false,
+                                store: new Ext.data.SimpleStore(
+                                    {
+                                        fields: ['key','bool'],
+                                        data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                        ]
+                                    }
+                                )
+                            } , {
+                                xtype: 'combo',
+                                fieldLabel: 'Pickup Indication',
+                                name: 'pickup_indication',
+                                mode: 'local',
+                                displayField:'bool',
+                                valueField:'key',
+                                anchor:'98%',                    
+                                triggerAction: 'all',
+                                allowBlank: false,
+                                editable: false,
+                                store: new Ext.data.SimpleStore(
+                                    {
+                                        fields: ['key','bool'],
+                                        data: [
+                                                ['on', 'on'],
+                                                ['off', 'off']
+                                        ]
+                                    }
+                                )
+                            }]
+                        } , {
                         columnWidth: .5,
                         layout: 'form',
                         border: false,
+                        anchor: '100%',
                         items:[{
+                                xtype: 'textfield',
+                                fieldLabel: 'Firmware Interval',
+                                name: 'firmware_interval',
+                                maxLength: 11,
+                                anchor:'100%',
+                                allowBlank: false
+                            },{
                             xtype: 'combo',
-                            fieldLabel: 'Update Policy',
-                            name: 'update_policy',
-                            mode: 'local',
-                            displayField:'policy',
-                            valueField:'key',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','policy'],
-                                    data: [
-                                            ['auto_update', 'auto update'], 
-                                            ['ask_for_update', 'ask for update'],  
-                                            ['never_update_firm', 'never update firm'],  
-                                            ['never_update_boot', 'never update boot'],  
-                                            ['settings_only', 'settings only'],  
-                                            ['never_update', 'never update']
-                                    ]
-                                }
-                            )
-                        } , {
-                            xtype: 'combo',
-                            fieldLabel: 'Webserver Type',
-                            name: 'webserver_type',
-                            mode: 'local',
-                            displayField:'wwwtype',
-                            valueField:'key',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','wwwtype'],
-                                    data: [
-                                            ['https', 'https'],
-                                            ['http', 'http'],
-                                            ['http_https', 'http https'],
-                                            ['off', 'off']
-                                    ]
-                                }
-                            )
-                        } , {
-                            xtype: 'combo',
-                            fieldLabel: 'Filter Registrar',
-                            name: 'filter_registrar',
+                            fieldLabel: 'Admin Mode',
+                            name: 'admin_mode',
                             mode: 'local',
                             displayField:'bool',
                             valueField:'key',
-                            anchor:'98%',                    
+                            anchor:'100%',                    
                             triggerAction: 'all',
                             allowBlank: false,
                             editable: false,
@@ -1371,103 +1463,32 @@ Tine.Asterisk.Config.EditDialog =  {
                                 {
                                     fields: ['key','bool'],
                                     data: [
-                                            ['on', 'on'],
-                                            ['off', 'off']
+                                            ['true', 'true'],
+                                            ['false', 'false']
                                     ]
                                 }
-                            )
-                        } , {
-                            xtype: 'combo',
-                            fieldLabel: 'Call Pickup Dialog Info',
-                            name: 'callpickup_dialoginfo',
-                            mode: 'local',
-                            displayField:'bool',
-                            valueField:'key',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','bool'],
-                                    data: [
-                                            ['on', 'on'],
-                                            ['off', 'off']
-                                    ]
-                                }
-                            )
-                        } , {
-                            xtype: 'combo',
-                            fieldLabel: 'Pickup Indication',
-                            name: 'pickup_indication',
-                            mode: 'local',
-                            displayField:'bool',
-                            valueField:'key',
-                            anchor:'98%',                    
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: new Ext.data.SimpleStore(
-                                {
-                                    fields: ['key','bool'],
-                                    data: [
-                                            ['on', 'on'],
-                                            ['off', 'off']
-                                    ]
-                                }
-                            )
-                        }]
-                    } , {
-                    columnWidth: .5,
-                    layout: 'form',
-                    border: false,
-                    items:[{
-                            xtype: 'textfield',
-                            fieldLabel: 'Firmware Interval',
-                            name: 'firmware_interval',
-                            maxLength: 11,
-                            anchor:'100%',
-                            allowBlank: false
+                              )
                         },{
-                        xtype: 'combo',
-                        fieldLabel: 'Admin Mode',
-                        name: 'admin_mode',
-                        mode: 'local',
-                        displayField:'bool',
-                        valueField:'key',
-                        anchor:'100%',                    
-                        triggerAction: 'all',
-                        allowBlank: false,
-                        editable: false,
-                        store: new Ext.data.SimpleStore(
-                            {
-                                fields: ['key','bool'],
-                                data: [
-                                        ['true', 'true'],
-                                        ['false', 'false']
-                                ]
-                            }
-                          )
-                    },{
-                        xtype: 'textfield',
-                        fieldLabel: 'Admin Mode Password',
-                        name: 'admin_mode_password',
-                        inputType: 'password',
-                        maxLength: 20,
-                        anchor:'100%'
-                    },{
-                        xtype: 'textfield',
-                        fieldLabel: 'HTTP User',
-                        name: 'http_user',
-                        maxLength: 20,
-                        anchor:'100%'
-                    },{
-                        xtype: 'textfield',
-                        fieldLabel: 'HTTP Password',
-                        name: 'http_pass',
-                        inputType: 'password',
-                        maxLength: 20,
-                        anchor:'100%'
+                            xtype: 'textfield',
+                            fieldLabel: 'Admin Mode Password',
+                            name: 'admin_mode_password',
+                            inputType: 'password',
+                            maxLength: 20,
+                            anchor:'100%'
+                        },{
+                            xtype: 'textfield',
+                            fieldLabel: 'HTTP User',
+                            name: 'http_user',
+                            maxLength: 20,
+                            anchor:'100%'
+                        },{
+                            xtype: 'textfield',
+                            fieldLabel: 'HTTP Password',
+                            name: 'http_pass',
+                            inputType: 'password',
+                            maxLength: 20,
+                            anchor:'100%'
+                        }]
                     }]
                 }]
             }]
@@ -1482,6 +1503,10 @@ Tine.Asterisk.Config.EditDialog =  {
         
         display: function(_configData) 
         {       	
+            if (!arguments[0]) {
+                var _configData = {};
+            }        
+        
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'asterisk_editConfigForm',
