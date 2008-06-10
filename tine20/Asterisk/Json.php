@@ -234,7 +234,7 @@ class Asterisk_Json extends Tinebase_Application_Json_Abstract
         $software = new Asterisk_Model_Software();
         $software->setFromArray($softwareData);
         
-        if (empty($software->getId())) {
+        if ( empty($software->id) ) {
             $software = Asterisk_Controller::getInstance()->addSoftware($software);
         } else {
             $software = Asterisk_Controller::getInstance()->updateSoftware($software);
