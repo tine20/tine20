@@ -697,7 +697,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         <notnull>true</notnull>
                     </field>
                     <field>
-                        <name>own_identifier</name>
+                        <name>own_id</name>
                         <type>text</type>
                         <length>40</length>
                         <notnull>true</notnull>
@@ -709,7 +709,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         <notnull>true</notnull>
                     </field>
                     <field>
-                        <name>related_identifier</name>
+                        <name>related_id</name>
                         <type>text</type>
                         <length>40</length>
                         <notnull>true</notnull>
@@ -769,7 +769,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                             <name>own_application</name>
                         </field>
                         <field>
-                            <name>own_identifier</name>
+                            <name>own_id</name>
                         </field>
                         <field>
                             <name>related_role</name>
@@ -778,7 +778,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                             <name>related_application</name>
                         </field>
                         <field>
-                            <name>related_identifier</name>
+                            <name>related_id</name>
                         </field>
                     </index>
                 </declaration>

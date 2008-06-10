@@ -719,7 +719,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>own_identifier</name>
+                    <name>own_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -731,7 +731,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>related_identifier</name>
+                    <name>related_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -791,7 +791,7 @@
                         <name>own_application</name>
                     </field>
                     <field>
-                        <name>own_identifier</name>
+                        <name>own_id</name>
                     </field>
                     <field>
                         <name>related_role</name>
@@ -800,7 +800,7 @@
                         <name>related_application</name>
                     </field>
                     <field>
-                        <name>related_identifier</name>
+                        <name>related_id</name>
                     </field>
                 </index>
             </declaration>
