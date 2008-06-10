@@ -343,11 +343,11 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         if (! $_softwareData->isValid()) {
             throw new Exception('invalid software');
         }
-        
-        if ( empty($_softwareData->getId()) ) {
-            $newId = $_softwareData->generateUID();
-            $_softwareData->setId($newId);
-        }
+
+        //if ( empty($_softwareData->getId()) ) {
+        //    $newId = $_softwareData->generateUID();
+            $_softwareData->setId(Tinebase_Record_Abstract::generateUID());
+        //}
         
         $softwareData = $_softwareData->toArray();
         
