@@ -4,7 +4,6 @@
  * separate layout from logic
  * 
  * @todo    add more components/panels
- * @todo    add tags
  * @todo    add history
  */
 Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
@@ -204,9 +203,11 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             autoScroll: true,
             width: 300,
             items: [
-                new Ext.Panel({
-                    title: translation._('Tags'),
-                    height: 200
+                new Tine.widgets.tags.TagPanel({
+                    height: 230,
+                    customHeight: 230,
+                    border: false,
+                    style: 'border:1px solid #B5B8C8;'
                 }),
                 new Ext.Panel({
                     title: translation._('History'),

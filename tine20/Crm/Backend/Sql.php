@@ -719,11 +719,14 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_lead);        
 
         $leadData = $_lead->toArray();
+        
+        // don't save the following fields
         unset($leadData['id']);
         unset($leadData['responsible']);
         unset($leadData['customer']);
         unset($leadData['partner']);
         unset($leadData['tasks']);
+        unset($leadData['tags']);
         
         $where  = array(
             $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),

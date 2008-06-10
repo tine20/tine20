@@ -410,6 +410,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }
 
         $this->getLinkedProperties($lead);
+        
+        Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
                 
         return $lead;
     }
@@ -438,6 +440,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
         $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
+        
+        if (!empty($_lead->tags)) {
+            $lead->tags = $_lead->tags;
+            Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
+        }        
                 
         //$this->sendNotifications(false, $lead, $_lead->responsible);
         
@@ -468,7 +475,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
         $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
         $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');                
-                
+
+        if (isset($_lead->tags)) {
+            Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
+        }
+        
         //$this->sendNotifications(true, $lead, $_lead->responsible);
         
         return $this->getLead($lead->getId());

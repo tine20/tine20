@@ -334,9 +334,16 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 	 */	
 	public function saveLead($lead, $linkedContacts, $linkedTasks, $products)
     {
+        $decodedLead = Zend_Json::decode($lead);        
+        if (isset($decodedLead['tags'])) {
+            $decodedLead['tags'] = Zend_Json::decode($decodedLead['tags']);
+        }      
+        
+        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedLead, true));
+        
         $leadData = new Crm_Model_Lead();
         try {
-            $leadData->setFromArray(Zend_Json::decode($lead));
+            $leadData->setFromArray($decodedLead);
         } catch (Exception $e) {
             // invalid data in some fields sent from client
             $result = array(
@@ -347,7 +354,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             
             return $result;
         }
-
+        
         // add linked contacts
         $linkedContacts = Zend_Json::decode($linkedContacts);
         $responsible = array();
@@ -392,12 +399,12 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
         }        
         
-        //$result = $savedLead->toArray();
-        //$result['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();        
+        $resultData = $savedLead->toArray();
+        $resultData['container'] = Tinebase_Container::getInstance()->getContainerById($savedLead->container)->toArray();        
 
         $result = array('success'           => true,
                         'welcomeMessage'    => 'Entry updated',
-                        'updatedData'       => $savedLead->toArray()
+                        'updatedData'       => $resultData
         );
         
         return $result;  

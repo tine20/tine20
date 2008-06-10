@@ -1513,6 +1513,7 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'leadstate'},
     {name: 'leadtype'},
     {name: 'leadsource'},
+    {name: 'tags'}
   //  {name: 'partner'},
   //  {name: 'customer'}
   //  {name: 'leadpartner_linkId'},
@@ -1544,7 +1545,7 @@ Tine.Crm.Model.ContactLink = Ext.data.Record.create([
     {name: 'tel_work'},
     {name: 'tel_cell'},
     {name: 'tel_fax'},
-    {name: 'email'},
+    {name: 'email'}
 ]);
 
 // task link

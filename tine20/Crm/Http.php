@@ -113,12 +113,16 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
                 }
             }
             
-            // @todo is that needed?
-            //$folder = Tinebase_Container::getInstance()->getContainerById($lead->container);
-            //$leadData['container'] = $folder->toArray();
+            // add container
+            $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);            
+            $leadData['container'] = $folder->toArray();
             
+            // add products
             $products = $controller->getProductsByLeadId($_leadId);
             $leadData['products'] = $products->toArray();
+            
+            // add tags
+             $leadData['tags'] = $leadData['tags']->toArray();            
             
         } else {
             $leadData = $controller->getEmptyLead()->toArray();
