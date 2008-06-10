@@ -47,6 +47,8 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 */
     public function getPhones($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
+        $where = array();
+        
         if(!empty($_filter)) {
             $_fields = "macaddress,model,ipaddress,description";            
             $where = $this->_getSearchFilter($_filter, $_fields);
@@ -67,10 +69,10 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 
         $select->order($_sort.' '.$_dir);
 
-         foreach($where as $whereStatement) {
-              $select->where($whereStatement);
-         }               
-       //echo  $select->__toString();
+        foreach($where as $whereStatement) {
+            $select->where($whereStatement);
+        }               
+        //echo  $select->__toString();
        
         $stmt = $this->_db->query($select);
 
@@ -281,6 +283,8 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 */
     public function getSoftware($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
+        $where = array();
+        
         if(!empty($_filter)) {
             $_fields = "description,model,softwareimage";            
             $where = $this->_getSearchFilter($_filter, $_fields);
