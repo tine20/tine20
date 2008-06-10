@@ -577,19 +577,7 @@ Tine.Crm.Main = {
      * showCrmToolbar function
      */
     showCrmToolbar: function()
-    {
-    	// @todo remove that?
-    	/*
-        for (var i in this.actions) {
-            if (!this.actions[i].isTranlated) {
-                this.actions[i].setText(translation._(this.actions[i].initialConfig.text));
-                // tooltip happliy gets created on first mouseover
-                this.actions[i].initialConfig.tooltip = translation._(this.actions[i].initialConfig.tooltip);
-                this.actions[i].isTranslated = true;
-            }
-        }
-        */
-        
+    {        
     	// @todo make generic, is used in lead edit dialog as well
         var storeProbability = new Ext.data.SimpleStore({
                 fields: ['key','value'],
@@ -1116,12 +1104,8 @@ Tine.Crm.LeadEditDialog = {
                         lead: Ext.util.JSON.encode(lead.data),
                         linkedContacts: additionalData.linkedContacts,
                         linkedTasks:    additionalData.linkedTasks,
-                        products:       Ext.util.JSON.encode([])
                         // @todo send links via json again
-                        /*
-                        linkedTasks:    additionalData.linkedTasks,
-                        products:       additionalData.products
-                        */
+                        products:       Ext.util.JSON.encode([])
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Crm) {
@@ -1159,8 +1143,6 @@ Tine.Crm.LeadEditDialog = {
          */
         saveAndClose: function(_button, _event) 
         {     
-        	// @todo why is that not working?
-            //this.handlers.applyChanges(_button, _event, true);
         	Tine.Crm.LeadEditDialog.handlers.applyChanges(_button, _event, true);
         }
     },       
@@ -1250,7 +1232,7 @@ Tine.Crm.LeadEditDialog = {
      * @param   string  grid title
      * @return  grid object
      * 
-     * @todo    add activities/products grids
+     * @todo    add products grid
      * @todo    move to LeadEditDialog.js ?
      */
     getLinksGrid: function(_type, _title)
@@ -1466,25 +1448,7 @@ Tine.Crm.LeadEditDialog = {
         Tine.Crm.Model.Lead.FixDates(lead);  
         
         //console.log(lead);
-        console.log(lead.data.tasks);
     	
-    	// @todo use that?
-    	/*
-        Ext.QuickTips.init();
-
-        // turn on validation errors beside the field globally
-        Ext.form.Field.prototype.msgTarget = 'side';
-
-        var disableButtons = true;
-
-        var _setParameter = function(_dataSource) {
-            _dataSource.baseParams.method = 'Crm.getEvents';
-            _dataSource.baseParams.options = Ext.encode({
-            });
-        };
- 
-        */
-
         /*********** INIT STORES *******************/
         
         this.loadContactsStore(lead.data.contacts);        
