@@ -1933,43 +1933,43 @@ Tine.Asterisk.Software.EditDialog =  {
             width: 440,
             height: 280,
             items: [{
-                    labelSeparator: '',
-                    xtype:'textarea',
-                    name: 'description',
-                    fieldLabel: 'Description',
-                    grow: false,
-                    preventScrollbars:false,
-                    anchor:'100%',
-                    height: 60
-                } , {
-                    xtype: 'combo',
-                    fieldLabel: 'Model',
-                    name: 'model',
-                    mode: 'local',
-                    displayField:'model',
-                    valueField:'key',
-                    anchor:'100%',                    
-                    triggerAction: 'all',
-                    allowBlank: false,
-                    editable: false,
-                    forceSelection: true,
-                    store: new Ext.data.SimpleStore(
-                        {
-                            fields: ['key','model'],
-                            data: [
-                                ['snom300','Snom 300'],
-                                ['snom320','Snom 320'],
-                                ['snom360','Snom 360'],
-                                ['snom370','Snom 370']                                        
-                            ]
-                        }
-                    )
-                } , {
-                    xtype: 'textfield',
-                    fieldLabel: 'Software Version',
-                    name: 'softwareimage',
-                    maxLength: 128,
-                    anchor:'100%'
+	            xtype: 'combo',
+	            fieldLabel: 'Model',
+	            name: 'model',
+	            mode: 'local',
+	            displayField:'model',
+	            valueField:'key',
+	            anchor:'100%',                    
+	            triggerAction: 'all',
+	            allowBlank: false,
+	            editable: false,
+	            forceSelection: true,
+	            store: new Ext.data.SimpleStore(
+	                {
+	                    fields: ['key','model'],
+	                    data: [
+	                        ['snom300','Snom 300'],
+	                        ['snom320','Snom 320'],
+	                        ['snom360','Snom 360'],
+	                        ['snom370','Snom 370']                                        
+	                    ]
+	                }
+	            )
+            } , {
+                xtype: 'textfield',
+                fieldLabel: 'Software Version',
+                name: 'softwareimage',
+                maxLength: 128,
+                anchor:'100%'
+            }, {
+                //labelSeparator: '',
+                xtype:'textarea',
+                name: 'description',
+                fieldLabel: 'Description',
+                grow: false,
+                preventScrollbars:false,
+                anchor:'100%',
+                height: 60
             }]
         }],
         
