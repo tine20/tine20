@@ -1952,6 +1952,7 @@ Tine.Asterisk.Software.EditDialog =  {
                     triggerAction: 'all',
                     allowBlank: false,
                     editable: false,
+                    forceSelection: true,
                     store: new Ext.data.SimpleStore(
                         {
                             fields: ['key','model'],
@@ -1982,7 +1983,7 @@ Tine.Asterisk.Software.EditDialog =  {
         display: function(_softwareData) 
         {       	
             if (!arguments[0]) {
-                var _softwareData = {};
+                var _softwareData = {model:'snom320'};
             }
 
             // Ext.FormPanel
