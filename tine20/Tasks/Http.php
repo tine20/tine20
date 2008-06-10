@@ -35,9 +35,9 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
 
     
     /**
-     * Returns initial data which is send to the app at createon time.
+     * Returns initial data which is send to the app at creation time.
      *
-     * When the mainScreen is created, Tinebase_Http_Controler queries this function
+     * When the mainScreen is created, Tinebase_Http_Controller queries this function
      * to get the initial datas for this app. This pattern prevents that any app needs
      * to make an server-request for its initial datas.
      * 
@@ -45,7 +45,7 @@ class Tasks_Http extends Tinebase_Application_Http_Abstract
      * 
      * The returned data have to be an array with the variable names as keys and
      * the datas as values. The datas will be JSON encoded later. Note that the
-     * varialbe names get prefixed with Tine.<applicationname>
+     * variable names get prefixed with Tine.<applicationname>
      * 
      * @return mixed array 'variable name' => 'data'
      */
