@@ -1981,6 +1981,10 @@ Tine.Asterisk.Software.EditDialog =  {
         
         display: function(_softwareData) 
         {       	
+            if (!arguments[0]) {
+                var _softwareData = {};
+            }
+
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
 		        id : 'asterisk_editSoftwareForm',
@@ -2002,10 +2006,9 @@ Tine.Asterisk.Software.EditDialog =  {
                 items: dialog
             });
 	        
-	        //if (!arguments[0]) var task = {};
             this.updateSoftwareRecord(_softwareData);
             this.updateToolbarButtons();           
-	        dialog.getForm().loadRecord(this.softwareRecord);
+            dialog.getForm().loadRecord(this.softwareRecord);
         }
    
 };
