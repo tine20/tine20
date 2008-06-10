@@ -906,7 +906,7 @@ Tine.Asterisk.Config.Main = {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Asterisk.deleteConfig',
+	                        method: 'Asterisk.deleteConfigs',
 	                        _configIds: configIds
 	                    },
 	                    text: 'Deleting config...',
@@ -1354,27 +1354,51 @@ Tine.Asterisk.Config.EditDialog =  {
                                     }
                                 )
                             } , {
-                                xtype: 'combo',
-                                fieldLabel: 'Webserver Type',
-                                name: 'webserver_type',
-                                mode: 'local',
-                                displayField:'wwwtype',
-                                valueField:'key',
-                                anchor:'98%',                    
-                                triggerAction: 'all',
-                                allowBlank: false,
-                                editable: false,
-                                store: new Ext.data.SimpleStore(
-                                    {
-                                        fields: ['key','wwwtype'],
-                                        data: [
-                                                ['https', 'https'],
-                                                ['http', 'http'],
-                                                ['http_https', 'http https'],
-                                                ['off', 'off']
-                                        ]
-                                    }
-                                )
+                                layout:'column',
+                                border:false,
+                                anchor: '100%',
+                                items: [{
+                                    columnWidth: .6,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items:[{                                
+                                        xtype: 'combo',
+                                        fieldLabel: 'Webserver Type',
+                                        name: 'webserver_type',
+                                        mode: 'local',
+                                        displayField:'wwwtype',
+                                        valueField:'key',
+                                        anchor:'98%',                    
+                                        triggerAction: 'all',
+                                        allowBlank: false,
+                                        editable: false,
+                                        store: new Ext.data.SimpleStore(
+                                            {
+                                                fields: ['key','wwwtype'],
+                                                data: [
+                                                        ['https', 'https'],
+                                                        ['http', 'http'],
+                                                        ['http_https', 'http https'],
+                                                        ['off', 'off']
+                                                ]
+                                            }
+                                        )
+                                    }]
+                                } , {
+                                    columnWidth: .4,
+                                    layout: 'form',
+                                    border: false,
+                                    anchor: '100%',
+                                    items:[{                                    
+                                        xtype: 'textfield',
+                                        fieldLabel: 'HTTPS Port',
+                                        name: 'https_port',
+                                        maxLength: 11,
+                                        anchor:'98%',
+                                        allowBlank: true
+                                    }]
+                                }]
                             } , {
                                 xtype: 'combo',
                                 fieldLabel: 'Filter Registrar',
@@ -1587,7 +1611,7 @@ Tine.Asterisk.Software.Main = {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Asterisk.deleteSoftware',
+	                        method: 'Asterisk.deleteSoftwares',
 	                        _softwareIds: softwareIds
 	                    },
 	                    text: 'Deleting software...',

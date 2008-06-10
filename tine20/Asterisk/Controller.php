@@ -93,23 +93,6 @@ class Asterisk_Controller
         return $phone;
     }
     
-   
-    /**
-     * Deletes an existing phone
-     *
-     * @param string $_identifier
-     * @return void
-     */
-    public function deletePhone($_identifier)
-    {
-        $Phone = $this->getPhoneById($_identifier);
-        
-        if (!$this->_currentAccount->hasGrant($Phone->container_id, Tinebase_Container::GRANT_DELETE)) {
-            throw new Exception('Not allowed!');
-        }
-        $this->_backend->deletePhone($_identifier);
-    }
-
     /**
      * Deletes a set of phones.
      * 
@@ -121,14 +104,36 @@ class Asterisk_Controller
      */
     public function deletePhones($_identifiers)
     {
-        foreach ($_identifiers as $identifier) {
+      /*  foreach ($_identifiers as $identifier) {
             $Phone = $this->getPhoneById($identifier);
-            if (!$this->_currentAccount->hasGrant($Pask->container_id, Tinebase_Container::GRANT_DELETE)) {
+            if (!$this->_currentAccount->hasGrant($Phone->container_id, Tinebase_Container::GRANT_DELETE)) {
                 throw new Exception('Not allowed!');
             }
         }
-        
+       */ 
         $this->_backend->deletePhones($_identifiers);
+    }
+
+
+    /**
+     * Deletes a set of configs.
+     * 
+     * If one of the configs could not be deleted, no config is deleted
+     * 
+     * @throws Exception
+     * @param array array of config identifiers
+     * @return void
+     */
+    public function deleteConfigs($_identifiers)
+    {
+      /*  foreach ($_identifiers as $identifier) {
+            $Config = $this->getConfigById($identifier);
+            if (!$this->_currentAccount->hasGrant($Config->container_id, Tinebase_Container::GRANT_DELETE)) {
+                throw new Exception('Not allowed!');
+            }
+        }
+       */ 
+        $this->_backend->deleteConfigs($_identifiers);
     }
 
 
@@ -194,7 +199,43 @@ class Asterisk_Controller
         return $result;    
     }    
     
+    /**
+     * add one config
+     *
+     * @param Asterisk_Model_Config $_config
+     * @return  Asterisk_Model_Config
+     */
+    public function addConfig(Asterisk_Model_Config $_config)
+    {        
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_config->owner, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to config in container ' . $_config->owner . ' denied');
+        }
+        */
+        $config = $this->_backend->addConfig($_config);
+      
+        return $config;
+    }    
     
+    /**
+     * update one config
+     *
+     * @param Asterisk_Model_Config $_config
+     * @return  Asterisk_Model_Config
+     */
+    public function updateConfig(Asterisk_Model_Config $_config)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_config->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to config in container ' . $_config->owner . ' denied');
+        }
+        */
+       
+        $config = $this->_backend->updateConfig($_config);
+        
+        return $config;
+    }
+        
     
     /**
      * get snom_software
@@ -260,5 +301,26 @@ class Asterisk_Controller
         return $software;
     }    
     
+    
+    /**
+     * Deletes a set of softwareversion entriews.
+     * 
+     * If one of the software entries could not be deleted, no software is deleted
+     * 
+     * @throws Exception
+     * @param array array of software identifiers
+     * @return void
+     */
+    public function deleteSoftwares($_identifiers)
+    {
+/*        foreach ($_identifiers as $identifier) {
+            $Software = $this->getSoftwareById($identifier);
+            if (!$this->_currentAccount->hasGrant($Software->container_id, Tinebase_Container::GRANT_DELETE)) {
+                throw new Exception('Not allowed!');
+            }
+        }
+       */ 
+        $this->_backend->deleteSoftwares($_identifiers);
+    }    
     
 }

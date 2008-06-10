@@ -271,6 +271,100 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	}    
     
     
+   
+     /**
+     * add a config
+     *
+     * @param Asterisk_Model_Config $_configData the config data
+     * @return Asterisk_Model_Config
+     */
+    public function addConfig (Asterisk_Model_Config $_configData)
+    {
+        if (! $_configData->isValid()) {
+            throw new Exception('invalid config');
+        }
+        
+        if ( empty($_configData->id) ) {
+        	$newId = $_configData->generateUID();
+        	$_configData->setId($newId);
+        }
+        
+        $configData = $_configData->toArray();
+        
+        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_config', $configData);
+        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_config', 'id');
+        // if we insert a config without an id, we need to get back one
+        if (empty($_configData->id) && $id == 0) {
+            throw new Exception("returned config id is 0");
+        }
+        // if the config had no configId set, set the id now
+        if (empty($_configData->id)) {
+            $_configData->id = $id;
+        }
+        return $this->getConfigById($_configData->id);
+    }
+    
+    
+    /**
+     * update an existing config
+     *
+     * @param Asterisk_Model_Config $_configData the configdata
+     * @return Asterisk_Model_Config
+     */
+    public function updateConfig (Asterisk_Model_Config $_configData)
+    {
+        if (! $_configData->isValid()) {
+            throw new Exception('invalid config');
+        }
+        $configId = Asterisk_Model_Config::convertConfigIdToInt($_configData);
+        $configData = $_configData->toArray();
+        unset($configData['id']);
+
+        $where = array($this->_db->quoteInto('id = ?', $configId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_config', $configData, $where);
+        return $this->getConfigById($configId);
+    }    
+     
+    
+    
+    /**
+     * delete config identified by config id
+     *
+     * @param int $_configId config id
+     * @return int the number of row deleted
+     */
+    public function deleteConfig ($_configId)
+    {
+        $configId = Asterisk_Model_Config::convertConfigIdToInt($_configId);
+        $where = array($this->_db->quoteInto('id = ?', $configId) , $this->_db->quoteInto('id = ?', $configId));
+        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_config', $where);
+        return $result;
+    }    
+    
+    
+    /**
+     * Deletes a set of configs.
+     * 
+     * If one of the configs could not be deleted, no config is deleted
+     * 
+     * @throws Exception
+     * @param array array of strings (config ids)
+     * @return void
+     */
+    public function deleteConfigs($_ids)
+    {
+        try {
+            $this->_db->beginTransaction();
+            foreach ($_ids as $id) {
+                $this->deleteConfig($id);
+            }
+            $this->_db->commit();
+            
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            throw $e;
+        }
+    } 
     
     
     
@@ -381,6 +475,45 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         return $this->getSoftwareById($softwareId);
     }    
     
+
+    /**
+     * delete software identified by software id
+     *
+     * @param int $_softwareId software id
+     * @return int the number of row deleted
+     */
+    public function deleteSoftware ($_softwareId)
+    {
+        $softwareId = Asterisk_Model_Software::convertSoftwareIdToInt($_softwareId);
+        $where = array($this->_db->quoteInto('id = ?', $softwareId) , $this->_db->quoteInto('id = ?', $softwareId));
+        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_software', $where);
+        return $result;
+    }    
+    
+    
+    /**
+     * Deletes a set of software entries ids.
+     * 
+     * If one of the software entries could not be deleted, no software is deleted
+     * 
+     * @throws Exception
+     * @param array array of strings (software ids)
+     * @return void
+     */
+    public function deleteSoftwares($_ids)
+    {
+        try {
+            $this->_db->beginTransaction();
+            foreach ($_ids as $id) {
+                $this->deleteSoftware($id);
+            }
+            $this->_db->commit();
+            
+        } catch (Exception $e) {
+            $this->_db->rollBack();
+            throw $e;
+        }
+    }
     
     
     

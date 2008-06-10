@@ -82,7 +82,7 @@ class Asterisk_Json extends Tinebase_Application_Json_Abstract
         
         $phoneIds = Zend_Json::decode($_phoneIds);
         
-        Asterisk_Controller::getInstance()->deletePhone($phoneIds);
+        Asterisk_Controller::getInstance()->deletePhones($phoneIds);
 
         return $result;
     }    
@@ -166,9 +166,66 @@ class Asterisk_Json extends Tinebase_Application_Json_Abstract
         $result = $config->toArray();        
         return $result;
     }      
+
+
+    
+    /**
+     * save one config
+     *
+     * if $configData['id'] is empty the config gets added, otherwise it gets updated
+     *
+     * @param string $configData a JSON encoded array of config properties
+     * @return array
+     */
+    public function saveConfig($configData)
+    {
+        $configData = Zend_Json::decode($configData);
+        Zend_Registry::get('logger')->debug(print_r($configData,true));
+        
+        // unset if empty
+        if (empty($configData['id'])) {
+            unset($configData['id']);
+        }
+
+        $config = new Asterisk_Model_Config();
+        $config->setFromArray($configData);
+        
+        if (empty($config->id)) {
+            $config = Asterisk_Controller::getInstance()->addConfig($config);
+        } else {
+            $config = Asterisk_Controller::getInstance()->updateConfig($config);
+        }
+        $config = $this->getConfigById($config->getId());
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $config
+        ); //$config->toArray());
+        
+        
+        return $result;
+         
+    }     
+     
     
         
+    /**
+     * delete multiple configs
+     *
+     * @param array $_configIDs list of configId's to delete
+     * @return array
+     */
+    public function deleteConfigs($_configIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
         
+        $configIds = Zend_Json::decode($_configIds);
+        
+        Asterisk_Controller::getInstance()->deleteConfigs($configIds);
+
+        return $result;
+    }        
         
         
     /**
@@ -249,6 +306,26 @@ class Asterisk_Json extends Tinebase_Application_Json_Abstract
         return $result;
          
     }     
+      
+      
+    /**
+     * delete multiple softwareversion entries
+     *
+     * @param array $_softwareIDs list of softwareId's to delete
+     * @return array
+     */
+    public function deleteSoftwares($_softwareIds)
+    {
+        $result = array(
+            'success'   => TRUE
+        );
+        
+        $softwareIds = Zend_Json::decode($_softwareIds);
+        
+        Asterisk_Controller::getInstance()->deleteSoftwares($softwareIds);
+
+        return $result;
+    }       
         
     
 }
