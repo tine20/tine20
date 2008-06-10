@@ -355,7 +355,29 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 
         return $this->getSoftwareById($_softwareData->getId());
     }
-	
+    
+    /**
+     * update an existing software
+     *
+     * @param Asterisk_Model_Software $_softwareData the softwaredata
+     * @return Asterisk_Model_Phone
+     */
+    public function updateSoftware (Asterisk_Model_Software $_softwareData)
+    {
+        if (! $_softwareData->isValid()) {
+            throw new Exception('invalid software');
+        }
+        $softwareId = $_softwareData->getId();
+        $softwareData = $_softwareData->toArray();
+        unset($softwareData['id']);
+
+        $where = array($this->_db->quoteInto('id = ?', $softwareId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_software', $softwareData, $where);
+        
+        return $this->getSoftwareById($softwareId);
+    }    
+    
+    
     
     
     

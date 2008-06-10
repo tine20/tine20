@@ -229,7 +229,7 @@ class Asterisk_Controller
      * @param Asterisk_Model_Software $_software
      * @return  Asterisk_Model_Software
      */
-    public function addSoftware(Asterisk_Model_Software  $_software)
+    public function addSoftware(Asterisk_Model_Software $_software)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
@@ -240,5 +240,25 @@ class Asterisk_Controller
       
         return $software;
     }
+    
+    /**
+     * update existing software
+     *
+     * @param Asterisk_Model_Software $_software
+     * @return  Asterisk_Model_Software
+     */
+    public function updateSoftware(Asterisk_Model_Software $_software)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+       
+        $software = $this->_backend->updateSoftware($_software);
+        
+        return $software;
+    }    
+    
     
 }
