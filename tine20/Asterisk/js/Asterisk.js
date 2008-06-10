@@ -578,14 +578,14 @@ Tine.Asterisk.Phones.Data = {
     },
     
     
-    loadSoftwareData: function() {
+    loadSoftwareData: function(_query) {
 
         var softwareDataStore = new Ext.data.JsonStore({
         	baseParams: {
                 method: 'Asterisk.getSoftware',
                 sort: 'description',
                 dir: 'ASC',
-                query: ''
+                query: _query
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -602,7 +602,7 @@ Tine.Asterisk.Phones.Data = {
 
         softwareDataStore.setDefaultSort('description', 'asc');
 
-        Ext.StoreMgr.add('swData', softwareDataStore);               
+//        Ext.StoreMgr.add('swData', softwareDataStore);               
          
         return softwareDataStore;
     }    
@@ -729,6 +729,11 @@ Tine.Asterisk.Phones.EditDialog =  {
                                     valueField:'key',
                                     anchor:'98%',                    
                                     triggerAction: 'all',
+                                    listeners: {
+                                        change: function() {
+                                            Ext.getCmp('newSWCombo').reset();
+                                        }                                                   
+                                    },
                                     allowBlank: false,
                                     editable: false,
                                     store: new Ext.data.SimpleStore(
@@ -779,7 +784,17 @@ Tine.Asterisk.Phones.EditDialog =  {
                                 anchor:'100%',                    
                                 triggerAction: 'all',
                                 editable: false,
-                                forceSelection: true
+                                forceSelection: true,
+                                store: Tine.Asterisk.Phones.Data.loadSoftwareData(),
+                                listeners: {
+                                    expand: function() {
+                                        var _newValue = Ext.getCmp('modelCombo').getValue();
+                                        if (!Ext.isEmpty(_newValue)) {
+                                            this.store.baseParams.query = _newValue;
+                                            this.store.reload();
+                                        }
+                                    }
+                                }
                             }) , 
                         {
                             xtype: 'textfield',
@@ -822,22 +837,6 @@ Tine.Asterisk.Phones.EditDialog =  {
                 handlerDelete: this.deletePhone,
 		        items: this.editPhoneDialog
 		    });
-
-            Ext.getCmp('newSWCombo').disable();
-            Ext.getCmp('newSWCombo').on('focus', function(_field) {
-                var _newValue = Ext.getCmp('modelCombo').getValue();
-                if(!Ext.StoreMgr.get('swData')) {
-                     Tine.Asterisk.Phones.Data.loadSoftwareData();
-                }
-                Ext.StoreMgr.get('swData').filter('model',_newValue);
-           }); 
-    
-            Ext.getCmp('modelCombo').on('change', function(_box, _newValue, _oldValue) {
-               if(_newValue) {
-
-                   Ext.getCmp('newSWCombo').enable();
-               }  
-           }); 
 
             var viewport = new Ext.Viewport({
                 layout: 'border',
