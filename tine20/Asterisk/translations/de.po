@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Asterisk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-06 17:58+0100\n"
+"POT-Creation-Date: 2008-06-10 11:04+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -30,14 +30,14 @@ msgid "delete phone"
 msgstr "Telefon löschen"
 
 #: Asterisk/js/Asterisk.js:355
-#: Asterisk/js/Asterisk.js:905
-#: Asterisk/js/Asterisk.js:1574
+#: Asterisk/js/Asterisk.js:1003
+#: Asterisk/js/Asterisk.js:1672
 msgid "Filter: "
 msgstr "Filter:"
 
 #: Asterisk/js/Asterisk.js:356
-#: Asterisk/js/Asterisk.js:906
-#: Asterisk/js/Asterisk.js:1575
+#: Asterisk/js/Asterisk.js:1004
+#: Asterisk/js/Asterisk.js:1673
 msgid "Search: "
 msgstr "Suche:"
 
@@ -81,120 +81,115 @@ msgstr "class id"
 msgid "description"
 msgstr "Beschreibung"
 
-#: Asterisk/js/Asterisk.js:829
-#, fuzzy
+#: Asterisk/js/Asterisk.js:927
 msgid "add config"
-msgstr "Telefon hinzufügen"
+msgstr "Config hinzufügen"
 
-#: Asterisk/js/Asterisk.js:836
-#, fuzzy
+#: Asterisk/js/Asterisk.js:934
 msgid "edit config"
-msgstr "Telefon editieren"
+msgstr "Config editieren"
 
-#: Asterisk/js/Asterisk.js:844
-#, fuzzy
+#: Asterisk/js/Asterisk.js:942
 msgid "delete config"
-msgstr "Telefon löschen"
+msgstr "Config löschen"
 
-#: Asterisk/js/Asterisk.js:939
+#: Asterisk/js/Asterisk.js:1037
 #, fuzzy
 msgid "Displaying config {0} - {1} of {2}"
 msgstr "Zeige Telefone {0} - {1} von {2}"
 
-#: Asterisk/js/Asterisk.js:940
+#: Asterisk/js/Asterisk.js:1038
 #, fuzzy
 msgid "No config to display"
 msgstr "Keine Telefone vorhanden"
 
-#: Asterisk/js/Asterisk.js:945
+#: Asterisk/js/Asterisk.js:1043
 msgid "FW Interval"
 msgstr "Firmware Intervall"
 
-#: Asterisk/js/Asterisk.js:946
+#: Asterisk/js/Asterisk.js:1044
 msgid "FW Status"
 msgstr "Firmware Status"
 
-#: Asterisk/js/Asterisk.js:947
+#: Asterisk/js/Asterisk.js:1045
 msgid "Update Policy"
 msgstr "Update Grundsatz"
 
-#: Asterisk/js/Asterisk.js:948
+#: Asterisk/js/Asterisk.js:1046
 msgid "Server Setting"
 msgstr "Server Einstellung"
 
-#: Asterisk/js/Asterisk.js:949
+#: Asterisk/js/Asterisk.js:1047
 msgid "Admin Mode"
 msgstr "Admin Mode"
 
-#: Asterisk/js/Asterisk.js:950
+#: Asterisk/js/Asterisk.js:1048
 msgid "NTP Server"
 msgstr "NTP Server"
 
-#: Asterisk/js/Asterisk.js:951
+#: Asterisk/js/Asterisk.js:1049
 msgid "Webserver Type"
 msgstr "Webserver Typ"
 
-#: Asterisk/js/Asterisk.js:952
+#: Asterisk/js/Asterisk.js:1050
 msgid "HTTPS Port"
 msgstr "HTTPS Port"
 
-#: Asterisk/js/Asterisk.js:953
+#: Asterisk/js/Asterisk.js:1051
 msgid "HTTP User"
 msgstr "HTTP Benutzer"
 
-#: Asterisk/js/Asterisk.js:954
-#: Asterisk/js/Asterisk.js:1614
+#: Asterisk/js/Asterisk.js:1052
+#: Asterisk/js/Asterisk.js:1712
 msgid "id"
 msgstr "id"
 
-#: Asterisk/js/Asterisk.js:955
-#: Asterisk/js/Asterisk.js:1615
+#: Asterisk/js/Asterisk.js:1053
+#: Asterisk/js/Asterisk.js:1715
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Asterisk/js/Asterisk.js:956
+#: Asterisk/js/Asterisk.js:1054
 msgid "Filter Registrar"
 msgstr "Filter Registrar"
 
-#: Asterisk/js/Asterisk.js:957
+#: Asterisk/js/Asterisk.js:1055
 msgid "CP Dialoginfo"
 msgstr "CP Dialoginfo"
 
-#: Asterisk/js/Asterisk.js:958
+#: Asterisk/js/Asterisk.js:1056
 msgid "Pickup Indic."
 msgstr "Pickup Indic."
 
-#: Asterisk/js/Asterisk.js:1498
+#: Asterisk/js/Asterisk.js:1596
 msgid "add software"
 msgstr "Software hinzufügen"
 
-#: Asterisk/js/Asterisk.js:1505
-#, fuzzy
+#: Asterisk/js/Asterisk.js:1603
 msgid "edit software"
-msgstr "Telefon editieren"
+msgstr "Software editieren"
 
-#: Asterisk/js/Asterisk.js:1513
-#, fuzzy
+#: Asterisk/js/Asterisk.js:1611
 msgid "delete software"
-msgstr "Telefon löschen"
+msgstr "Software löschen"
 
-#: Asterisk/js/Asterisk.js:1608
+#: Asterisk/js/Asterisk.js:1706
 #, fuzzy
 msgid "Displaying software {0} - {1} of {2}"
 msgstr "Zeige Telefone {0} - {1} von {2}"
 
-#: Asterisk/js/Asterisk.js:1609
+#: Asterisk/js/Asterisk.js:1707
 #, fuzzy
 msgid "No software to display"
 msgstr "Keine Telefone vorhanden"
 
-#: Asterisk/js/Asterisk.js:1616
+#: Asterisk/js/Asterisk.js:1713
+msgid "Software Image"
+msgstr "Datei"
+
+#: Asterisk/js/Asterisk.js:1714
 msgid "Phone Model"
 msgstr "Telefonmodell"
-
-#: Asterisk/js/Asterisk.js:1617
-msgid "Software Image"
-msgstr "Software Bild"
 
 #~ msgid "MAC Address"
 #~ msgstr "MAC Adresse"

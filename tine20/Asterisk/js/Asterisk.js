@@ -1041,13 +1041,13 @@ Tine.Asterisk.Config.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'firmware_interval', header: this.translation._('FW Interval'), dataIndex: 'firmware_interval', width: 10, hidden: true },
-            { resizable: true, id: 'firmware_status', header: this.translation._('FW Status'), dataIndex: 'firmware_status', width: 100 },
+            { resizable: true, id: 'firmware_status', header: this.translation._('FW Status'), dataIndex: 'firmware_status', width: 100, hidden: true  },
             { resizable: true, id: 'update_policy', header: this.translation._('Update Policy'), dataIndex: 'update_policy', width: 30, hidden: true },
-            { resizable: true, id: 'setting_server', header: this.translation._('Server Setting'), dataIndex: 'setting_server', width: 100 },
+            { resizable: true, id: 'setting_server', header: this.translation._('Server Setting'), dataIndex: 'setting_server', width: 100, hidden: true  },
             { resizable: true, id: 'admin_mode', header: this.translation._('Admin Mode'), dataIndex: 'admin_mode', width: 10, hidden: true },
-            { resizable: true, id: 'ntp_server', header: this.translation._('NTP Server'), dataIndex: 'ntp_server', width: 50 },
+            { resizable: true, id: 'ntp_server', header: this.translation._('NTP Server'), dataIndex: 'ntp_server', width: 50, hidden: true  },
             { resizable: true, id: 'webserver_type', header: this.translation._('Webserver Type'), dataIndex: 'webserver_type', width: 30, hidden: true },
-            { resizable: true, id: 'https_port', header: this.translation._('HTTPS Port'), dataIndex: 'https_port', width: 10 },
+            { resizable: true, id: 'https_port', header: this.translation._('HTTPS Port'), dataIndex: 'https_port', width: 10, hidden: true  },
             { resizable: true, id: 'http_user', header: this.translation._('HTTP User'), dataIndex: 'http_user', width: 15, hidden: true },
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 10, hidden: true },
             { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 70 },
@@ -1426,7 +1426,7 @@ Tine.Asterisk.Config.EditDialog =  {
                             fieldLabel: 'Firmware Interval',
                             name: 'firmware_interval',
                             maxLength: 11,
-                            anchor:'98%',
+                            anchor:'100%',
                             allowBlank: false
                         },{
                         xtype: 'combo',
@@ -1435,7 +1435,7 @@ Tine.Asterisk.Config.EditDialog =  {
                         mode: 'local',
                         displayField:'bool',
                         valueField:'key',
-                        anchor:'98%',                    
+                        anchor:'100%',                    
                         triggerAction: 'all',
                         allowBlank: false,
                         editable: false,
@@ -1710,11 +1710,11 @@ Tine.Asterisk.Software.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 20, hidden: true },
-            { resizable: true, id: 'softwareimage', header: this.translation._('Software Image'), dataIndex: 'softwareimage', width: 200 },
-            { resizable: true, id: 'model', header: this.translation._('Phone Model'), dataIndex: 'model', width: 150 },
-            { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 150 }
-        ]);
-        
+            { resizable: true, id: 'softwareimage', header: this.translation._('Software Image'), dataIndex: 'softwareimage', width: 80 },
+            { resizable: true, id: 'model', header: this.translation._('Phone Model'), dataIndex: 'model', width: 40 },
+            { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 250 }
+        ]);                        
+                
         columnModel.defaultSortable = true; // by default columns are sortable
         
         // the rowselection model
