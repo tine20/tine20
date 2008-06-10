@@ -1,5 +1,6 @@
 /**
  * Tine 2.0
+ * lead state edit dialog and model
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -11,6 +12,9 @@
 
 Ext.namespace('Tine.Crm', 'Tine.Crm.LeadState');
 
+/**
+ * lead state model
+ */
 Tine.Crm.LeadState.Model = Ext.data.Record.create([
     {name: 'id'},
     {name: 'leadstate'},
@@ -18,28 +22,60 @@ Tine.Crm.LeadState.Model = Ext.data.Record.create([
     {name: 'endslead', type: 'boolean'}
 ]);
 
+/**
+ * get lead state store
+ * 
+ * @todo    check if that should be reloaded from time to time
+ */
 Tine.Crm.LeadState.getStore = function() {
-	
 	var store = Ext.StoreMgr.get('CrmLeadstateStore');
 	if (!store) {
-		store = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getLeadstates',
-                sort: 'leadstate',
-                dir: 'ASC'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Crm.LeadState.Model,
-            remoteSort: false
-        });
-        //store.load();
+		if ( Tine.Crm.LeadStates ) {
+            //console.log('Tine.Crm.LeadState.getStore: initialData')
+            store = new Ext.data.JsonStore({
+                data: Tine.Crm.LeadStates,
+                autoLoad: true,         
+                id: 'id',
+                fields: Tine.Crm.LeadState.Model
+            });            
+		} else {
+			//console.log('Tine.Crm.LeadState.getStore: json')
+    		store = new Ext.data.JsonStore({
+                baseParams: {
+                    method: 'Crm.getLeadstates',
+                    sort: 'leadstate',
+                    dir: 'ASC'
+                },
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'id',
+                fields: Tine.Crm.LeadState.Model,
+                remoteSort: false
+            });
+            store.load();
+		}		
+		//console.log(store);
         Ext.StoreMgr.add('CrmLeadstateStore', store);
 	}
 	return store;
 };
 
+/**
+ * lead state renderer
+ * 
+ * @param   int _leadstateId
+ * @return  string leadstate
+ */
+Tine.Crm.LeadState.Renderer = function(_leadstateId) {
+	leadstateStore = Tine.Crm.LeadState.getStore();		
+	record = leadstateStore.getById(_leadstateId);
+	
+	return record.data.leadstate;
+}
+
+/**
+ * lead states edit dialog
+ */
 Tine.Crm.LeadState.EditStatesDialog = function() {
     var isXlead = new Ext.ux.grid.CheckColumn({
         header: "X Lead?",
@@ -47,6 +83,7 @@ Tine.Crm.LeadState.EditStatesDialog = function() {
         width: 50
     });
     
+    // @todo replace percentage combo with Ext.ux.PercentCombo
     var columnModelLeadstate = new Ext.grid.ColumnModel([
         { 
             id:'leadstate_id', 

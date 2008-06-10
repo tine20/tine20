@@ -31,6 +31,9 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             'Crm/js/Crm.js',
             'Crm/js/LeadEditDialog.js',
             'Crm/js/LeadState.js',
+            'Crm/js/LeadSource.js',
+            'Crm/js/LeadType.js',
+            'Crm/js/Product.js',
         );
     }
     
@@ -59,6 +62,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         
         $controller = Crm_Controller::getInstance();
         
+        // @todo getLead() from Crm_Json
         if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
             $leadData = $lead->toArray();
 
@@ -125,6 +129,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
              $leadData['tags'] = $leadData['tags']->toArray();            
             
         } else {
+            // @todo set default values in js and remove getEmptyXXX functions
             $leadData = $controller->getEmptyLead()->toArray();
             $leadData['products'] = array();                
             $leadData['contacts'] = array();   
@@ -138,6 +143,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             
         }
 
+        // add lead types/states/sources and products to initialData
+        /*
         $_leadTypes = $controller->getLeadtypes('leadtype','ASC');
         $view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
         
@@ -149,7 +156,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
 
         $_productSource =  $controller->getProducts('productsource','ASC');
         $view->formData['comboData']['productsource'] = $_productSource->toArray();
-
+        */
+        
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
         $view->configData = array(
@@ -193,4 +201,37 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
 			
 		}
 	}    
+
+    /**
+     * Returns initial data which is send to the app at creation time.
+     *
+     * When the mainScreen is created, Tinebase_Http_Controller queries this function
+     * to get the initial datas for this app. This pattern prevents that any app needs
+     * to make an server-request for its initial datas.
+     * 
+     * Initial datas are just javascript varialbes declared in the mainScreen html code.
+     * 
+     * The returned data have to be an array with the variable names as keys and
+     * the datas as values. The datas will be JSON encoded later. Note that the
+     * variable names get prefixed with Tine.<applicationname>
+     * 
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getInitialMainScreenData()
+    {        
+        $controller = Crm_Controller::getInstance();
+        $initialData = array(
+            'LeadTypes' => $controller->getLeadtypes('leadtype','ASC'),
+            'LeadStates' => $controller->getLeadStates('leadstate','ASC'),
+            'LeadSources' => $controller->getLeadSources('leadsource','ASC'),
+            'Products' => $controller->getProducts('productsource','ASC'),
+        );
+        
+        foreach ($initialData as &$data) {
+            $data->setTimezone(Zend_Registry::get('userTimeZone'));
+            $data = $data->toArray();
+        }
+        return $initialData;    
+    }
+	
 }

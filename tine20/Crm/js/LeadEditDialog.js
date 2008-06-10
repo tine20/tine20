@@ -12,12 +12,14 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
     translation.textdomain('Crm');
 
     /*********** OVERVIEW form static stores ************/
-    
+    // @todo    get stores via Tine.Crm.XXX.getStore
+    /*
     var storeLeadStates = new Ext.data.JsonStore({
         data: formData.comboData.leadstates,
         autoLoad: true,         
         id: 'key',
-        fields: [
+        fields: //Tine.Crm.LeadState.Model 
+        [
             {name: 'key', mapping: 'id'},
             {name: 'value', mapping: 'leadstate'},
             {name: 'probability', mapping: 'probability'},
@@ -45,8 +47,10 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             {name: 'value', mapping: 'leadtype'}
 
         ]
-    });     
+    });
+    */     
     
+    // @todo make generic, this is used multiple times
     var storeProbability = new Ext.data.SimpleStore({
             fields: ['key','value'],
             data: [
@@ -82,9 +86,11 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         fieldLabel: translation._('Leadstate'), 
         id:'leadstatus',
         name:'leadstate_id',
-        store: storeLeadStates,
-        displayField:'value',
-        valueField:'key',
+        store: Tine.Crm.LeadState.getStore(),
+        //displayField:'value',
+        //valueField:'key',
+        displayField:'leadstate',
+        valueField:'id',
         mode: 'local',
         triggerAction: 'all',
         editable: false,
@@ -110,10 +116,12 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         fieldLabel: translation._('Leadtype'), 
         id:'leadtype',
         name:'leadtype_id',
-        store: storeLeadTypes,
+        store: Tine.Crm.LeadType.getStore(),
         mode: 'local',
-        displayField:'value',
-        valueField:'key',
+        //displayField:'value',
+        //valueField:'key',
+        displayField:'leadtype',
+        valueField:'id',
         typeAhead: true,
         triggerAction: 'all',
         listWidth: '25%',                
@@ -127,9 +135,11 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             fieldLabel: translation._('Leadsource'), 
             id:'leadsource',
             name:'leadsource_id',
-            store: storeLeadSource,
-            displayField:'value',
-            valueField:'key',
+            store: Tine.Crm.LeadSource.getStore(),
+            //displayField:'value',
+            //valueField:'key',
+            displayField:'leadsource',
+            valueField:'id',
             typeAhead: true,
             listWidth: '25%',                
             mode: 'local',
