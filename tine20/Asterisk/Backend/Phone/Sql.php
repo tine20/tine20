@@ -318,8 +318,11 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 */
     public function getSoftwareById($_softwareId)
     {	
-        $softwareId = Asterisk_Model_Software::convertSoftwareIdToInt($_softwareId);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_software')->where($this->_db->quoteInto('id = ?', $softwareId));
+        //$softwareId = Asterisk_Model_Software::convertSoftwareIdToInt($_softwareId);
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_software')
+            ->where($this->_db->quoteInto('id = ?', $_softwareId));
+            
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('software not found');
@@ -329,7 +332,30 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         return $result;
 	}      
     
-    
+     /**
+     * add new software
+     *
+     * @param Asterisk_Model_Software $_softwareData the softwaredata
+     * @return Asterisk_Model_Software
+     */
+    public function addSoftware (Asterisk_Model_Software  $_softwareData)
+    {
+        if (! $_softwareData->isValid()) {
+            throw new Exception('invalid software');
+        }
+        
+        if ( empty($_softwareData->getId()) ) {
+            $newId = $_softwareData->generateUID();
+            $_softwareData->setId($newId);
+        }
+        
+        $softwareData = $_softwareData->toArray();
+        
+        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_software', $softwareData);
+
+        return $this->getSoftwareById($_softwareData->getId());
+    }
+	
     
     
     

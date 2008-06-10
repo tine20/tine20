@@ -211,5 +211,44 @@ class Asterisk_Json extends Tinebase_Application_Json_Abstract
         $result = $software->toArray();        
         return $result;
     }         
+
+    /**
+     * add/update software
+     *
+     * if $softwareData['id'] is empty the software gets added, otherwise it gets updated
+     *
+     * @param string $phoneData a JSON encoded array of software properties
+     * @return array
+     */
+    public function saveSoftware($softwareData)
+    {
+        $softwareData = Zend_Json::decode($softwareData);
+        Zend_Registry::get('logger')->debug(print_r($softwareData,true));
         
+        // unset if empty
+        if (empty($softwareData['id'])) {
+            unset($softwareData['id']);
+        }
+
+        //Zend_Registry::get('logger')->debug(print_r($phoneData,true));
+        $software = new Asterisk_Model_Software();
+        $software->setFromArray($softwareData);
+        
+        if (empty($software->getId())) {
+            $software = Asterisk_Controller::getInstance()->addSoftware($software);
+        } else {
+            $software = Asterisk_Controller::getInstance()->updateSoftware($software);
+        }
+        //$software = $this->getSoftware($software->getId());
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $software->toArray()
+        ); //$phone->toArray());
+        
+        
+        return $result;
+         
+    }     
+        
+    
 }
