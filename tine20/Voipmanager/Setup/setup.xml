@@ -210,27 +210,6 @@
                     <length>255</length>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>filter_registrar</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>callpickup_dialoginfo</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>pickup_indication</name>
-                    <type>enum</type>
-                    <value>on</value>
-                    <value>off</value>
-                    <notnull>true</notnull>
-                </field>               
                 <index>
                     <name>id</name>
                     <primary>true</primary>
