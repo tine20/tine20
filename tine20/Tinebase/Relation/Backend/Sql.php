@@ -12,13 +12,13 @@
 
 
 /**
- * class Tinebase_Record_Relation
+ * class Tinebase_Relation_Backend_Sql
  * 
- * Tinebase_Record_Relation enables records to define cross application relations to other records.
+ * Tinebase_Relation_Backend_Sql enables records to define cross application relations to other records.
  * It acts as a gneralised storage backend for the records relation property of these records.
  * 
  * Relations between records have a certain degree (PARENT, CHILD and SIBLING). This degrees are defined
- * in Tinebase_Model_Relation. Moreover Relations are of a type which is defined by the application defining 
+ * in Tinebase_Relation_Model_Relation. Moreover Relations are of a type which is defined by the application defining 
  * the relation. In case of users manually created relations this type is 'MANUAL'. This manually created
  * relatiions can also hold a free-form remark.
  * 
@@ -28,7 +28,7 @@
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Record_Relation
+class Tinebase_Relation_Backend_Sql
 {
 
 	/**
@@ -40,7 +40,7 @@ class Tinebase_Record_Relation
 	
 	/* holdes the instance of the singleton
      *
-     * @var Tinebase_Record_Relation
+     * @var Tinebase_Relation_Backend_Sql
      */
     private static $instance = NULL;
     
@@ -61,12 +61,12 @@ class Tinebase_Record_Relation
     /**
      * the singleton pattern
      *
-     * @return Tinebase_Record_Relation
+     * @return Tinebase_Relation_Backend_Sql
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Record_Relation();
+            self::$instance = new Tinebase_Relation_Backend_Sql();
         }
         
         return self::$instance;
@@ -75,8 +75,8 @@ class Tinebase_Record_Relation
     /**
      * adds a new relation
      * 
-     * @param  Tinebase_Model_Relation $_relation 
-     * @return Tinebase_Model_Relation the new relation
+     * @param  Tinebase_Relation_Model_Relation $_relation 
+     * @return Tinebase_Relation_Model_Relation the new relation
      */
     public function addRelation( $_relation ) {
     	if ($_relation->getId()) {
@@ -105,7 +105,7 @@ class Tinebase_Record_Relation
     /**
      * breaks a relation
      * 
-     * @param Tinebase_Model_Relation $_relation 
+     * @param Tinebase_Relation_Model_Relation $_relation 
      * @return void 
      */
     public function breakRelation( $_id ) {
@@ -156,7 +156,7 @@ class Tinebase_Record_Relation
      * 
      * @param Tinebase_Record_Interface $_record 
      * @param string $_role filter by role
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
+     * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
      */
     public function getAllRelations( $_record, $_degree = NULL, $_type = NULL  ) {
         if (!$_record->getApplication() || !$_record->getId()) {
@@ -175,9 +175,9 @@ class Tinebase_Record_Relation
             $where[] = $this->_db->getAdapter()->quoteInto('type = ?', $_type);
         }
         
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation');
         foreach ($this->_db->fetchAll($where) as $relation) {
-        	$relations->addRecord(new Tinebase_Model_Relation($relation->toArray(), true));
+        	$relations->addRecord(new Tinebase_Relation_Model_Relation($relation->toArray(), true));
         }
    		return $relations; 
     } // end of member function getAllRelations
@@ -187,7 +187,7 @@ class Tinebase_Record_Relation
      *
      * @param int $_id
      * @param bool $_returnDeleted
-     * @return Tinebase_Record_Relation
+     * @return Tinebase_Relation_Backend_Sql
      */
     public function getRelation($_id, $_ownModel, $_ownBackend, $_ownId, $_returnBroken = false)
     {
@@ -203,7 +203,7 @@ class Tinebase_Record_Relation
     	$relationRow = $this->_db->fetchRow($where);
     	
     	if($relationRow) {
-    		return new Tinebase_Model_Relation($relationRow->toArray(), true);
+    		return new Tinebase_Relation_Model_Relation($relationRow->toArray(), true);
     	} else {
     		throw new Tinebase_Record_Exception_NotDefined("No relation found.");
     	}
@@ -226,14 +226,14 @@ class Tinebase_Record_Relation
         $data['related_backend'] = $_data['own_backend'];
         $data['related_id']      = $_data['own_id'];
         switch ($_data['own_degree']) {
-            case Tinebase_Model_Relation::DEGREE_PARENT:
-                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_CHILD;
+            case Tinebase_Relation_Model_Relation::DEGREE_PARENT:
+                $data['own_degree'] = Tinebase_Relation_Model_Relation::DEGREE_CHILD;
                 break;
-            case Tinebase_Model_Relation::DEGREE_CHILD:
-                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_PARENT;
+            case Tinebase_Relation_Model_Relation::DEGREE_CHILD:
+                $data['own_degree'] = Tinebase_Relation_Model_Relation::DEGREE_PARENT;
                 break;
         }
         return $data;
     }
-} // end of Tinebase_Record_Relation
+} // end of Tinebase_Relation_Backend_Sql
 ?>
