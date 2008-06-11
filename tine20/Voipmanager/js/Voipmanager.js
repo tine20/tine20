@@ -1022,7 +1022,7 @@ Tine.Voipmanager.Location.Main = {
          */
         addLocation: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&LocationId=', 500, 450);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&LocationId=', 500, 550);
         },
 
         /**
@@ -1033,7 +1033,7 @@ Tine.Voipmanager.Location.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getSelections();
             var locationId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + locationId, 500, 450);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + locationId, 500, 550);
         },
         
         /**
