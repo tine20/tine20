@@ -52,9 +52,10 @@ class Voipmanager_Model_Template extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'						=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'model'                     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'config_id'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'keylayout_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'setting_id'                => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'software_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );

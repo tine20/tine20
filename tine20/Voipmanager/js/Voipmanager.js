@@ -510,11 +510,10 @@ Tine.Voipmanager.Phones.Main = {
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('Id'), dataIndex: 'id', width: 30, hidden: true },
             { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 60 },
-            { resizable: true, id: 'model', header: this.translation._('phone model'), dataIndex: 'model', width: 100, hidden: true },
-            { resizable: true, id: 'swversion', header: this.translation._('phone sw version'), dataIndex: 'swversion', width: 80, hidden: true },
+            { resizable: true, id: 'location', header: this.translation._('Location'), dataIndex: 'location',width: 40 },
+            { resizable: true, id: 'template', header: this.translation._('Template'), dataIndex: 'template',width: 40 },            
             { resizable: true, id: 'ipaddress', header: this.translation._('phone IP address'), dataIndex: 'ipaddress', width: 110 },
             { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
-            { resizable: true, id: 'software_id', header: this.translation._('class id'), dataIndex: 'software_id', width: 20, hidden: true },
             {
                 resizable: true,
                 id: 'description',
@@ -668,7 +667,28 @@ Tine.Voipmanager.Phones.Main = {
     }
 };
 
-Tine.Voipmanager.Phones.Data = {
+Tine.Voipmanager.Data = {
+    
+    
+    loadTemplateData: function(_data) {
+
+
+        var templateDataStore = new Ext.data.JsonStore({
+            data: _data,
+            autoLoad: true,
+            id: 'id',
+            fields: [
+                {name: 'template_id', mapping: 'id'},
+                {name: 'name'}
+            ]
+        });
+
+        templateDataStore.setDefaultSort('name', 'asc');
+
+
+
+        Ext.StoreMgr.add('templateStore', templateDataStore);               
+    },    
     
     
     loadLocationData: function() {
@@ -725,7 +745,65 @@ Tine.Voipmanager.Phones.Data = {
 //        Ext.StoreMgr.add('swData', softwareDataStore);               
          
         return softwareDataStore;
-    }    
+    },
+    
+    loadKeylayoutData: function(_query) {
+
+        var keylayoutDataStore = new Ext.data.JsonStore({
+        	baseParams: {
+                method: 'Voipmanager.getKeylayout',
+                sort: 'description',
+                dir: 'ASC',
+                query: _query
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: [
+                {name: 'id'},
+                {name: 'model'},
+                {name: 'description'}
+            ],
+            
+            // turn on remote sorting
+            remoteSort: true
+        });
+
+        keylayoutDataStore.setDefaultSort('description', 'asc');
+
+//        Ext.StoreMgr.add('swData', keylayoutDataStore);               
+         
+        return keylayoutDataStore;
+    },
+    
+    loadSettingsData: function(_query) {
+
+        var settingsDataStore = new Ext.data.JsonStore({
+        	baseParams: {
+                method: 'Voipmanager.getSettings',
+                sort: 'description',
+                dir: 'ASC',
+                query: _query
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: [
+                {name: 'id'},
+                {name: 'model'},
+                {name: 'description'}
+            ],
+            
+            // turn on remote sorting
+            remoteSort: true
+        });
+
+        settingsDataStore.setDefaultSort('description', 'asc');
+
+//        Ext.StoreMgr.add('swData', settingsDataStore);               
+         
+        return settingsDataStore;
+    }            
 };
     
 
@@ -736,6 +814,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
         
     	updatePhoneRecord: function(_phoneData)
     	{
+                       
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
                 _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
             }
@@ -824,108 +903,47 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         anchor:'100%',
                         height: 40
                     } , {
-                        layout:'column',
-                        border:false,
-                        anchor: '100%',
-                        items: [{
-                            columnWidth: .5,
-                            layout: 'form',
-                            border: false,
-                            anchor: '100%',
-                            items:[{
-                                xtype: 'textfield',
-                                fieldLabel: 'MAC Address',
-                                name: 'macaddress',
-                                maxLength: 12,
-                                anchor:'98%',
-                                allowBlank: false
-                            }, 
-                                new Ext.form.ComboBox({
-                                    fieldLabel: 'Model',
-                                    id: 'modelCombo',
-                                    name: 'model',
-                                    mode: 'local',
-                                    displayField:'model',
-                                    valueField:'key',
-                                    anchor:'98%',                    
-                                    triggerAction: 'all',
-                                    listeners: {
-                                        change: function() {
-                                            Ext.getCmp('newSWCombo').reset();
-                                        }                                                   
-                                    },
-                                    allowBlank: false,
-                                    editable: false,
-                                    store: new Ext.data.SimpleStore(
-                                        {
-                                            fields: ['key','model'],
-                                            data: [
-                                                ['snom300','Snom 300'],
-                                                ['snom320','Snom 320'],
-                                                ['snom360','Snom 360'],
-                                                ['snom370','Snom 370']                                        
-                                            ]
-                                        }
-                                    )
-                                }) ,
-                            {
-                                xtype: 'combo',
-                                fieldLabel: 'Location',
-                                name: 'location',
-                                mode: 'remote',
-                                displayField:'description',
-                                valueField:'id',
-                                anchor:'98%',                    
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                store: Tine.Voipmanager.Phones.Data.loadLocationData()
-                            } ]
-                        } , {
-                        columnWidth: .5,
-                        layout: 'form',
-                        border: false,
-                        anchor: '100%',
-                        items:[{
-                            xtype: 'textfield',
-                            fieldLabel: 'current Software Version',
-                            name: 'swversion',
-                            maxLength: 40,
-                            anchor:'100%',                    
-                            readOnly: true
-                        }, 
-                            new Ext.form.ComboBox({
-                                fieldLabel: 'load new SW Version',
-                                name: 'newswversion',
-                                id: 'newSWCombo',
-                                mode: 'remote',
-                                displayField:'description',
-                                valueField:'id',
-                                anchor:'100%',                    
-                                triggerAction: 'all',
-                                editable: false,
-                                forceSelection: true,
-                                store: Tine.Voipmanager.Phones.Data.loadSoftwareData(),
-                                listeners: {
-                                    expand: function() {
-                                        var _newValue = Ext.getCmp('modelCombo').getValue();
-                                        if (!Ext.isEmpty(_newValue)) {
-                                            this.store.baseParams.query = _newValue;
-                                            this.store.reload();
-                                        }
-                                    }
-                                }
-                            }) , 
-                        {
-                            xtype: 'textfield',
-                            fieldLabel: 'current IP Address',
-                            name: 'ipaddress',
-                            maxLength: 20,
-                            anchor:'100%',  
-                            readOnly: true
-                        }]
+                        xtype: 'textfield',
+                        fieldLabel: 'MAC Address',
+                        name: 'macaddress',
+                        maxLength: 12,
+                        anchor:'100%',
+                        allowBlank: false
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Template',
+                        name: 'template_id',
+                        hiddenName: 'template_id',
+                        id: 'template_id',
+                        mode: 'local',
+                        displayField:'name',
+                        valueField:'template_id',
+                        anchor:'100%',                    
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: Ext.StoreMgr.get('templateStore')
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Location',
+                        name: 'location_id',
+                        id: 'location_id',
+                        mode: 'remote',
+                        displayField:'description',
+                        valueField:'id',
+                        anchor:'100%',                    
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: Tine.Voipmanager.Data.loadLocationData()
+                    } , {
+                        xtype: 'textfield',
+                        fieldLabel: 'current IP Address',
+                        name: 'ipaddress',
+                        maxLength: 20,
+                        anchor:'100%',  
+                        readOnly: true
                     }]
-                }]
             }]
         }],
         
@@ -943,6 +961,13 @@ Tine.Voipmanager.Phones.EditDialog =  {
             if (!arguments[0]) {
                 var _phoneData = {};
             }
+            
+            Tine.Voipmanager.Data.loadTemplateData(formData.templateData);
+        
+    //        console.log(Ext.StoreMgr.get('templateStore'));       
+        
+
+        
         
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
@@ -954,7 +979,13 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deletePhone,
-		        items: this.editPhoneDialog
+		        items: [{
+                    layout:'fit',
+                    border: false,
+                    autoHeight: true,
+                    anchor: '100% 100%',
+                    items: this.editPhoneDialog
+                }]
 		    });
 
             var viewport = new Ext.Viewport({
@@ -2197,7 +2228,7 @@ Tine.Voipmanager.Templates.Main = {
 	     */
 	    addTemplate: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=', 500, 450);
+	        Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=', 450, 350);
 	    },
 
         /**
@@ -2208,7 +2239,7 @@ Tine.Voipmanager.Templates.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Template_Grid').getSelectionModel().getSelections();
             var templateId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + templateId, 500, 450);
+            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + templateId, 450, 350);
         },
         
 	    /**
@@ -2369,9 +2400,10 @@ Tine.Voipmanager.Templates.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 10, hidden: true },
+            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 80 },
             { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 70 },
             { resizable: true, id: 'model', header: this.translation._('Model'), dataIndex: 'model', width: 10, hidden: true },
-            { resizable: true, id: 'config_id', header: this.translation._('Config Id'), dataIndex: 'config_id', width: 10, hidden: true },
+            { resizable: true, id: 'keylayout_id', header: this.translation._('Keylayout Id'), dataIndex: 'keylayout_id', width: 10, hidden: true },
             { resizable: true, id: 'setting_id', header: this.translation._('Settings Id'), dataIndex: 'setting_id', width: 10, hidden: true },
             { resizable: true, id: 'software_id', header: this.translation._('Software Id'), dataIndex: 'software_id', width: 10, hidden: true }
         ]);
@@ -2441,7 +2473,7 @@ Tine.Voipmanager.Templates.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + record.data.id, 500, 450);
+                Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + record.data.id, 450, 350);
             } catch(e) {
                 // alert(e);
             }
@@ -2521,6 +2553,233 @@ Tine.Voipmanager.Templates.Main = {
 };
 
 
+Tine.Voipmanager.Templates.EditDialog =  {
+
+    	templateRecord: null,
+    	
+    	updateTemplateRecord: function(_templateData)
+    	{
+            this.templateRecord = new Tine.Voipmanager.Templates.Template(_templateData);
+    	},
+    	
+    	deleteTemplate: function(_button, _event)
+    	{
+	        var templateIds = Ext.util.JSON.encode([this.templateRecord.get('id')]);
+	            
+	        Ext.Ajax.request({
+	            url: 'index.php',
+	            params: {
+	                method: 'Voipmanager.deleteTemplate', 
+	                phoneIds: templateIds
+	            },
+	            text: 'Deleting template...',
+	            success: function(_result, _request) {
+	                window.opener.Tine.Voipmanager.Templates.Main.reload();
+	                window.close();
+	            },
+	            failure: function ( result, request) { 
+	                Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the template.'); 
+	            } 
+	        });    		
+    	},
+    	
+        applyChanges: function(_button, _event, _closeWindow) 
+        {
+        	var form = Ext.getCmp('voipmanager_editTemplateForm').getForm();
+
+        	if(form.isValid()) {
+        		form.updateRecord(this.templateRecord);
+	    
+	            Ext.Ajax.request({
+	                params: {
+	                    method: 'Voipmanager.saveTemplate', 
+	                    templateData: Ext.util.JSON.encode(this.templateRecord.data)
+	                },
+	                success: function(_result, _request) {
+	                	if(window.opener.Tine.Voipmanager.Templates) {
+                            window.opener.Tine.Voipmanager.Templates.Main.reload();
+	                	}
+                        if(_closeWindow === true) {
+                            window.close();
+                        } else {
+		                	this.updateTemplateRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+		                	this.updateToolbarButtons();
+		                	form.loadRecord(this.templateRecord);
+                        }
+	                },
+	                failure: function ( result, request) { 
+	                    Ext.MessageBox.alert('Failed', 'Could not save template.'); 
+	                },
+	                scope: this 
+	            });
+	        } else {
+	            Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+	        }
+    	},
+
+        saveChanges: function(_button, _event) 
+        {
+        	this.applyChanges(_button, _event, true);
+        },
+        
+        editTemplateDialog: [{
+            layout:'form',
+            //frame: true,
+            border:false,
+            width: 440,
+            height: 280,
+            items: [{
+                xtype: 'textfield',
+                fieldLabel: 'Name',
+                name: 'name',
+                maxLength: 80,
+                anchor:'100%',
+                allowBlank: false
+            } , {
+                xtype:'textarea',
+                name: 'description',
+                fieldLabel: 'Description',
+                grow: false,
+                preventScrollbars:false,
+                anchor:'100%',
+                height: 40
+            } ,   
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Model',
+                    id: 'modelCombo',
+                    name: 'model',
+                    mode: 'local',
+                    displayField:'model',
+                    valueField:'key',
+                    anchor:'100%',                    
+                    triggerAction: 'all',
+                    listeners: {
+                        change: function() {
+                            Ext.getCmp('newSWCombo').reset();
+                        }                                                   
+                    },
+                    allowBlank: false,
+                    editable: false,
+                    store: new Ext.data.SimpleStore(
+                        {
+                            fields: ['key','model'],
+                            data: [
+                                ['snom300','Snom 300'],
+                                ['snom320','Snom 320'],
+                                ['snom360','Snom 360'],
+                                ['snom370','Snom 370']                                        
+                            ]
+                        }
+                    )
+                }) ,
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Software Version',
+                    name: 'software_id',
+                    id: 'software_id',
+                    mode: 'remote',
+                    displayField:'description',
+                    valueField:'id',
+                    anchor:'100%',                    
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: Tine.Voipmanager.Data.loadSoftwareData(),
+                    listeners: {
+                        expand: function() {
+                            var _newValue = Ext.getCmp('modelCombo').getValue();
+                            if (!Ext.isEmpty(_newValue)) {
+                                this.store.baseParams.query = _newValue;
+                                this.store.reload();
+                            }
+                        }
+                    }
+                }),
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Keylayout',
+                    name: 'keylayout_id',
+                    id: 'keylayout_id',
+                    mode: 'remote',
+                    displayField:'description',
+                    valueField:'id',
+                    anchor:'100%',                    
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: Tine.Voipmanager.Data.loadKeylayoutData(),
+                    listeners: {
+                        expand: function() {
+                            var _newValue = Ext.getCmp('modelCombo').getValue();
+                            if (!Ext.isEmpty(_newValue)) {
+                                this.store.baseParams.query = _newValue;
+                                this.store.reload();
+                            }
+                        }
+                    }
+                }),
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Settings',
+                    name: 'setting_id',
+                    id: 'setting_id',
+                    mode: 'remote',
+                    displayField:'description',
+                    valueField:'id',
+                    anchor:'100%',                    
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: Tine.Voipmanager.Data.loadSettingsData(),
+                    listeners: {
+                        expand: function() {
+                            var _newValue = Ext.getCmp('modelCombo').getValue();
+                            if (!Ext.isEmpty(_newValue)) {
+                                this.store.baseParams.query = _newValue;
+                                this.store.reload();
+                            }
+                        }
+                    }
+                })                                  
+            ]
+       }],
+        
+        updateToolbarButtons: function()
+        {
+            if(this.templateRecord.get('id') > 0) {
+                Ext.getCmp('voipmanager_editTemplateForm').action_delete.enable();
+            }
+        },
+        
+        display: function(_templateData) 
+        {       	
+            if (!arguments[0]) {
+                var _templateData = {model:'snom320'};
+            }
+
+            // Ext.FormPanel
+		    var dialog = new Tine.widgets.dialog.EditRecord({
+		        id : 'voipmanager_editTemplateForm',
+		        layout: 'fit',
+		        //title: 'the title',
+		        labelWidth: 120,
+                labelAlign: 'top',
+                handlerScope: this,
+                handlerApplyChanges: this.applyChanges,
+                handlerSaveAndClose: this.saveChanges,
+                handlerDelete: this.deleteTemplate,
+		        items: this.editTemplateDialog
+		    });
+
+            var viewport = new Ext.Viewport({
+                layout: 'border',
+                frame: true,
+                //height: 300,
+                items: dialog
+            });
+	        
+            this.updateTemplateRecord(_templateData);
+            this.updateToolbarButtons();           
+            dialog.getForm().loadRecord(this.templateRecord);
+        }   
+};
 
 
 
@@ -2528,12 +2787,13 @@ Tine.Voipmanager.Templates.Main = {
 Tine.Voipmanager.Phones.Phone = Ext.data.Record.create([
     {name: 'id'},
     {name: 'macaddress'},
-    {name: 'model'},
-    {name: 'swversion'},
+    {name: 'location_id'},
+    {name: 'template_id'},
     {name: 'ipaddress'},
     {name: 'last_modified_time'},
-    {name: 'software_id'},
-    {name: 'description'}
+    {name: 'description'},
+    {name: 'location'},
+    {name: 'template'}
 ]);
 
 
@@ -2580,9 +2840,10 @@ Tine.Voipmanager.Location.Location = Ext.data.Record.create([
 
 Tine.Voipmanager.Templates.Template = Ext.data.Record.create([
     {name: 'id'},
+    {name: 'name'},
     {name: 'model'},
     {name: 'description'},
-    {name: 'config_id'},
+    {name: 'keylayout_id'},
     {name: 'setting_id'},
     {name: 'software_id'}
 ]);

@@ -44,6 +44,13 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         if (!empty($phoneId)) {
             $phones = Voipmanager_Controller::getInstance();
             $phone = $phones->getPhoneById($phoneId);
+            
+            $templateData = $phones->getTemplates();
+            $templateData = Zend_Json::encode($templateData->toArray());
+            
+            $locationData = $phones->getLocation();
+            $locationData = Zend_Json::encode($locationData->toArray());
+            
             $arrayPhone = $phone->toArray();
         } else {
 
@@ -57,7 +64,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array();        
+        $view->formData = array('locationData' => $locationData, 'templateData' => $templateData);        
         $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedPhone .');';
 
         $view->configData = array(
@@ -168,6 +175,50 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }    
-    
+
+    /**
+     * create edit template dialog
+     *
+     * @param int $templateId
+     * @todo catch permission denied exceptions only
+     * 
+     */
+    public function editTemplate($templateId=NULL)
+    {
+        if (!empty($templateId)) {
+            $templates = Voipmanager_Controller::getInstance();
+            $template = $templates->getTemplateById($templateId);
+            $arrayTemplate = $template->toArray();
+        } else {
+
+        }
+
+        // encode the template array
+        $encodedTemplate = Zend_Json::encode($arrayTemplate);                   
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Voipmanager.Templates.EditDialog.display(' . $encodedTemplate .');';
+
+        $view->configData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit template data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }        
      
 }

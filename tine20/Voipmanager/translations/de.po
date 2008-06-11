@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-10 17:56+0100\n"
+"POT-Creation-Date: 2008-06-11 15:46+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -15,224 +15,228 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
-"X-Poedit-SearchPath-0: Asterisk\n"
+"X-Poedit-SearchPath-0: Voipmanager\n"
 
-#: Asterisk/js/Asterisk.js:296
+#: Voipmanager/js/Voipmanager.js:392
 msgid "add phone"
 msgstr "Telefon hinzufügen"
 
-#: Asterisk/js/Asterisk.js:303
+#: Voipmanager/js/Voipmanager.js:399
 msgid "edit phone"
 msgstr "Telefon editieren"
 
-#: Asterisk/js/Asterisk.js:311
+#: Voipmanager/js/Voipmanager.js:407
 msgid "delete phone"
 msgstr "Telefon löschen"
 
-#: Asterisk/js/Asterisk.js:375
-#: Asterisk/js/Asterisk.js:1037
-#: Asterisk/js/Asterisk.js:1746
-#: Asterisk/js/Asterisk.js:2243
+#: Voipmanager/js/Voipmanager.js:471
+#: Voipmanager/js/Voipmanager.js:1182
+#: Voipmanager/js/Voipmanager.js:1891
+#: Voipmanager/js/Voipmanager.js:2388
 msgid "Filter: "
 msgstr "Filter:"
 
-#: Asterisk/js/Asterisk.js:376
-#: Asterisk/js/Asterisk.js:1038
-#: Asterisk/js/Asterisk.js:1747
-#: Asterisk/js/Asterisk.js:2244
+#: Voipmanager/js/Voipmanager.js:472
+#: Voipmanager/js/Voipmanager.js:1183
+#: Voipmanager/js/Voipmanager.js:1892
+#: Voipmanager/js/Voipmanager.js:2389
 msgid "Search: "
 msgstr "Suche:"
 
-#: Asterisk/js/Asterisk.js:409
+#: Voipmanager/js/Voipmanager.js:505
 msgid "Displaying phones {0} - {1} of {2}"
 msgstr "Zeige Telefone {0} - {1} von {2}"
 
-#: Asterisk/js/Asterisk.js:410
+#: Voipmanager/js/Voipmanager.js:506
 msgid "No phones to display"
 msgstr "Keine Telefone vorhanden"
 
-#: Asterisk/js/Asterisk.js:415
+#: Voipmanager/js/Voipmanager.js:511
 msgid "Id"
 msgstr "Id"
 
-#: Asterisk/js/Asterisk.js:416
+#: Voipmanager/js/Voipmanager.js:512
 msgid "MAC address"
 msgstr "MAC Adresse"
 
-#: Asterisk/js/Asterisk.js:417
-msgid "phone model"
-msgstr "Telefonmodell"
+#: Voipmanager/js/Voipmanager.js:513
+msgid "Location"
+msgstr "Standort"
 
-#: Asterisk/js/Asterisk.js:418
-msgid "phone sw version"
-msgstr "Telefon SW Version"
+#: Voipmanager/js/Voipmanager.js:514
+msgid "Template"
+msgstr "Template"
 
-#: Asterisk/js/Asterisk.js:419
+#: Voipmanager/js/Voipmanager.js:515
 msgid "phone IP address"
 msgstr "Telefon IP Adresse"
 
-#: Asterisk/js/Asterisk.js:420
+#: Voipmanager/js/Voipmanager.js:516
 msgid "last modified"
 msgstr "zuletzt geändert"
 
-#: Asterisk/js/Asterisk.js:421
-msgid "class id"
-msgstr "class id"
-
-#: Asterisk/js/Asterisk.js:425
+#: Voipmanager/js/Voipmanager.js:520
 msgid "description"
 msgstr "Beschreibung"
 
-#: Asterisk/js/Asterisk.js:961
-msgid "add config"
-msgstr "Config hinzufügen"
+#: Voipmanager/js/Voipmanager.js:1106
+msgid "add location"
+msgstr "Standort hinzufügen"
 
-#: Asterisk/js/Asterisk.js:968
-msgid "edit config"
-msgstr "Config editieren"
+#: Voipmanager/js/Voipmanager.js:1113
+msgid "edit location"
+msgstr "Standort editieren"
 
-#: Asterisk/js/Asterisk.js:976
-msgid "delete config"
-msgstr "Config löschen"
+#: Voipmanager/js/Voipmanager.js:1121
+msgid "delete location"
+msgstr "Standort löschen"
 
-#: Asterisk/js/Asterisk.js:1071
-msgid "Displaying config {0} - {1} of {2}"
-msgstr "Zeige Config {0} - {1} von {2}"
+#: Voipmanager/js/Voipmanager.js:1216
+msgid "Displaying location {0} - {1} of {2}"
+msgstr "Zeige Standort {0} - {1} von {2}"
 
-#: Asterisk/js/Asterisk.js:1072
-#, fuzzy
-msgid "No config to display"
-msgstr "Keine Telefone vorhanden"
+#: Voipmanager/js/Voipmanager.js:1217
+msgid "No location to display"
+msgstr "Kein Standort vorhanden"
 
-#: Asterisk/js/Asterisk.js:1077
+#: Voipmanager/js/Voipmanager.js:1222
 msgid "FW Interval"
 msgstr "Firmware Intervall"
 
-#: Asterisk/js/Asterisk.js:1078
+#: Voipmanager/js/Voipmanager.js:1223
 msgid "FW Status"
 msgstr "Firmware Status"
 
-#: Asterisk/js/Asterisk.js:1079
+#: Voipmanager/js/Voipmanager.js:1224
 msgid "Update Policy"
 msgstr "Update Grundsatz"
 
-#: Asterisk/js/Asterisk.js:1080
+#: Voipmanager/js/Voipmanager.js:1225
 msgid "Server Setting"
 msgstr "Server Einstellung"
 
-#: Asterisk/js/Asterisk.js:1081
+#: Voipmanager/js/Voipmanager.js:1226
 msgid "Admin Mode"
 msgstr "Admin Mode"
 
-#: Asterisk/js/Asterisk.js:1082
+#: Voipmanager/js/Voipmanager.js:1227
 msgid "NTP Server"
 msgstr "NTP Server"
 
-#: Asterisk/js/Asterisk.js:1083
+#: Voipmanager/js/Voipmanager.js:1228
 msgid "Webserver Type"
 msgstr "Webserver Typ"
 
-#: Asterisk/js/Asterisk.js:1084
+#: Voipmanager/js/Voipmanager.js:1229
 msgid "HTTPS Port"
 msgstr "HTTPS Port"
 
-#: Asterisk/js/Asterisk.js:1085
+#: Voipmanager/js/Voipmanager.js:1230
 msgid "HTTP User"
 msgstr "HTTP Benutzer"
 
-#: Asterisk/js/Asterisk.js:1086
-#: Asterisk/js/Asterisk.js:1786
-#: Asterisk/js/Asterisk.js:2283
+#: Voipmanager/js/Voipmanager.js:1231
+#: Voipmanager/js/Voipmanager.js:1931
+#: Voipmanager/js/Voipmanager.js:2428
 msgid "id"
 msgstr "id"
 
-#: Asterisk/js/Asterisk.js:1087
-#: Asterisk/js/Asterisk.js:1789
-#: Asterisk/js/Asterisk.js:2284
+#: Voipmanager/js/Voipmanager.js:1232
+#: Voipmanager/js/Voipmanager.js:1934
+#: Voipmanager/js/Voipmanager.js:2430
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Asterisk/js/Asterisk.js:1088
+#: Voipmanager/js/Voipmanager.js:1233
 msgid "Filter Registrar"
 msgstr "Filter Registrar"
 
-#: Asterisk/js/Asterisk.js:1089
+#: Voipmanager/js/Voipmanager.js:1234
 msgid "CP Dialoginfo"
 msgstr "CP Dialoginfo"
 
-#: Asterisk/js/Asterisk.js:1090
+#: Voipmanager/js/Voipmanager.js:1235
 msgid "Pickup Indic."
 msgstr "Pickup Indic."
 
-#: Asterisk/js/Asterisk.js:1670
+#: Voipmanager/js/Voipmanager.js:1815
 msgid "add software"
 msgstr "Software hinzufügen"
 
-#: Asterisk/js/Asterisk.js:1677
+#: Voipmanager/js/Voipmanager.js:1822
 msgid "edit software"
 msgstr "Software editieren"
 
-#: Asterisk/js/Asterisk.js:1685
+#: Voipmanager/js/Voipmanager.js:1830
 msgid "delete software"
 msgstr "Software löschen"
 
-#: Asterisk/js/Asterisk.js:1780
+#: Voipmanager/js/Voipmanager.js:1925
 msgid "Displaying software {0} - {1} of {2}"
 msgstr "Zeige Software {0} - {1} von {2}"
 
-#: Asterisk/js/Asterisk.js:1781
-#, fuzzy
+#: Voipmanager/js/Voipmanager.js:1926
 msgid "No software to display"
-msgstr "Keine Telefone vorhanden"
+msgstr "Keine Software vorhanden"
 
-#: Asterisk/js/Asterisk.js:1787
+#: Voipmanager/js/Voipmanager.js:1932
 msgid "Software Image"
 msgstr "Datei"
 
-#: Asterisk/js/Asterisk.js:1788
+#: Voipmanager/js/Voipmanager.js:1933
 msgid "Phone Model"
 msgstr "Telefonmodell"
 
-#: Asterisk/js/Asterisk.js:2167
-msgid "add class"
-msgstr ""
+#: Voipmanager/js/Voipmanager.js:2312
+msgid "add template"
+msgstr "Template hinzufügen"
 
-#: Asterisk/js/Asterisk.js:2174
-msgid "edit class"
-msgstr ""
+#: Voipmanager/js/Voipmanager.js:2319
+msgid "edit template"
+msgstr "Template editieren"
 
-#: Asterisk/js/Asterisk.js:2182
-#, fuzzy
-msgid "delete class"
-msgstr "Config löschen"
+#: Voipmanager/js/Voipmanager.js:2327
+msgid "delete template"
+msgstr "Template löschen"
 
-#: Asterisk/js/Asterisk.js:2277
-msgid "Displaying class {0} - {1} of {2}"
-msgstr "Zeige Standorte {0} - {1} von {2}"
+#: Voipmanager/js/Voipmanager.js:2422
+msgid "Displaying template {0} - {1} of {2}"
+msgstr "Zeige Template {0} - {1} von {2}"
 
-#: Asterisk/js/Asterisk.js:2278
-#, fuzzy
-msgid "No class to display"
-msgstr "Keine Telefone vorhanden"
+#: Voipmanager/js/Voipmanager.js:2423
+msgid "No template to display"
+msgstr "Kein Template vorhanden"
 
-#: Asterisk/js/Asterisk.js:2285
-#, fuzzy
+#: Voipmanager/js/Voipmanager.js:2429
+msgid "name"
+msgstr "Name"
+
+#: Voipmanager/js/Voipmanager.js:2431
 msgid "Model"
 msgstr "Telefonmodell"
 
-#: Asterisk/js/Asterisk.js:2286
-msgid "Config Id"
-msgstr ""
+#: Voipmanager/js/Voipmanager.js:2432
+msgid "Keylayout Id"
+msgstr "Tastaturlayout Id"
 
-#: Asterisk/js/Asterisk.js:2287
+#: Voipmanager/js/Voipmanager.js:2433
 msgid "Settings Id"
-msgstr ""
+msgstr "Einstellungen Id"
 
-#: Asterisk/js/Asterisk.js:2288
-#, fuzzy
+#: Voipmanager/js/Voipmanager.js:2434
 msgid "Software Id"
-msgstr "Datei"
+msgstr "Software Id"
 
+#~ msgid "phone model"
+#~ msgstr "Telefonmodell"
+#~ msgid "phone sw version"
+#~ msgstr "Telefon SW Version"
+#~ msgid "class id"
+#~ msgstr "class id"
+
+#, fuzzy
+#~ msgid "delete class"
+#~ msgstr "Config löschen"
 #~ msgid "MAC Address"
 #~ msgstr "MAC Adresse"
 #~ msgid "Phone SW Version"

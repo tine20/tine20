@@ -50,7 +50,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         $where = array();
         
         if(!empty($_filter)) {
-            $_fields = "macaddress,model,ipaddress,description";            
+            $_fields = "voipmanager.macaddress,voipmanager.ipaddress,voipmanager.description,location.description,templates.name";            
             $where = $this->_getSearchFilter($_filter, $_fields);
         }
         
@@ -59,20 +59,26 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
             ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_phones'), array(
                 'id',
                 'macaddress',
-                'model',
-                'swversion',
+                'location_id',
+                'template_id',
                 'ipaddress',
                 'last_modified_time',
-                'software_id',
                 'description')
             );
+            
+        $select->join(array('location' => SQL_TABLE_PREFIX . 'snom_location'),
+				'voipmanager.location_id = location.id', array( 'location' => 'description') );            
+
+        $select->join(array('templates' => SQL_TABLE_PREFIX . 'snom_templates'),
+				'voipmanager.template_id = templates.id', array( 'template' => 'name') );            
+
 
         $select->order($_sort.' '.$_dir);
 
         foreach($where as $whereStatement) {
             $select->where($whereStatement);
         }               
-        //echo  $select->__toString();
+ //        error_log($select->__toString());
        
         $stmt = $this->_db->query($select);
 
@@ -539,9 +545,10 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         $select = $this->_db->select()
             ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_templates'), array(
                 'id',
+                'name',
                 'description',
                 'model',
-                'config_id',
+                'keylayout_id',
                 'setting_id',
                 'software_id')
             );
