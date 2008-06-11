@@ -123,8 +123,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         }
         
         if ( empty($_phoneData->id) ) {
-        	$newId = $_phoneData->generateUID();
-        	$_phoneData->setId($newId);
+        	$_phoneData->setId(Tinebase_Record_Abstract::generateUID());
         }
         
         $phoneData = $_phoneData->toArray();
@@ -294,8 +293,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         }
         
         if ( empty($_locationData->id) ) {
-        	$newId = $_locationData->generateUID();
-        	$_locationData->setId($newId);
+        	$_locationData->setId(Tinebase_Record_Abstract::generateUID());
         }
         
         $locationData = $_locationData->toArray();
@@ -451,10 +449,9 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
             throw new Exception('invalid software');
         }
 
-        //if ( empty($_softwareData->getId()) ) {
-        //    $newId = $_softwareData->generateUID();
+        if ( empty($_softwareData->id) ) {
             $_softwareData->setId(Tinebase_Record_Abstract::generateUID());
-        //}
+        }
         
         $softwareData = $_softwareData->toArray();
         
