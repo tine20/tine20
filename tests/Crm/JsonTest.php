@@ -219,6 +219,25 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to get a lead
+     *
+     */
+    public function testGetLead()    
+    {
+        $json = new Crm_Json();
+        
+        $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
+        $initialLead = $leads[0];
+        
+        $lead = $json->getLead($initialLead->getId());
+        
+        //print_r($lead);
+        
+        $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
+        $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);        
+    }
+    
+    /**
      * try to update a lead and remove linked contact 
      *
      */
