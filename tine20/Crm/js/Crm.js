@@ -585,10 +585,10 @@ Tine.Crm.Main = {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
         menu.removeAll();
         menu.add(
-            {text: 'leadstate', handler: Tine.Crm.LeadState.EditStatesDialog},
-            {text: 'leadsource', handler: Tine.Crm.Main.handlers.editLeadSource},
-            {text: 'leadtype', handler: Tine.Crm.Main.handlers.editLeadType},
-            {text: 'product', handler: Tine.Crm.Main.handlers.editProductSource}
+            {text: 'leadstate', handler: Tine.Crm.LeadState.EditDialog},
+            {text: 'leadsource', handler: Tine.Crm.LeadType.EditDialog},
+            {text: 'leadtype', handler: Tine.Crm.LeadSource.EditDialog},
+            {text: 'product', handler: Tine.Crm.Product.EditDialog}
         );
 
     	var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
@@ -609,9 +609,9 @@ Tine.Crm.Main = {
      */
     reload: function() 
     {
-                if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
-                    setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
-                }
+        if(Ext.ComponentMgr.all.containsKey('gridCrm')) {
+            setTimeout ("Ext.getCmp('gridCrm').getStore().reload()", 200);
+        }
     },
     
     /**

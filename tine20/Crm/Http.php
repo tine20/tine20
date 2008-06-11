@@ -144,19 +144,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
         }
 
         // add lead types/states/sources and products to initialData
-        /*
-        $_leadTypes = $controller->getLeadtypes('leadtype','ASC');
-        $view->formData['comboData']['leadtypes'] = $_leadTypes->toArray();
-        
-        $_leadStates =  $controller->getLeadStates('leadstate','ASC');
-        $view->formData['comboData']['leadstates'] = $_leadStates->toArray();
-        
-        $_leadSources =  $controller->getLeadSources('leadsource','ASC');
-        $view->formData['comboData']['leadsources'] = $_leadSources->toArray();
-
-        $_productSource =  $controller->getProducts('productsource','ASC');
-        $view->formData['comboData']['productsource'] = $_productSource->toArray();
-        */
+        $view->initialData = array();
+        $view->initialData['Crm'] = $this->getInitialMainScreenData();
         
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 

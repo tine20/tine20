@@ -12,43 +12,6 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
     translation.textdomain('Crm');
 
     /*********** OVERVIEW form static stores ************/
-    // @todo    get stores via Tine.Crm.XXX.getStore
-    /*
-    var storeLeadStates = new Ext.data.JsonStore({
-        data: formData.comboData.leadstates,
-        autoLoad: true,         
-        id: 'key',
-        fields: //Tine.Crm.LeadState.Model 
-        [
-            {name: 'key', mapping: 'id'},
-            {name: 'value', mapping: 'leadstate'},
-            {name: 'probability', mapping: 'probability'},
-            {name: 'endslead', mapping: 'endslead'}
-        ]
-    });
-    
-    var storeLeadSource = new Ext.data.JsonStore({
-        data: formData.comboData.leadsources,
-        autoLoad: true,
-        id: 'key',
-        fields: [
-            {name: 'key', mapping: 'id'},
-            {name: 'value', mapping: 'leadsource'}
-
-        ]
-    });     
-
-    var storeLeadTypes = new Ext.data.JsonStore({
-        data: formData.comboData.leadtypes,
-        autoLoad: true,
-        id: 'key',
-        fields: [
-            {name: 'key', mapping: 'id'},
-            {name: 'value', mapping: 'leadtype'}
-
-        ]
-    });
-    */     
     
     // @todo make generic, this is used multiple times
     var storeProbability = new Ext.data.SimpleStore({
@@ -87,8 +50,6 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         id:'leadstatus',
         name:'leadstate_id',
         store: Tine.Crm.LeadState.getStore(),
-        //displayField:'value',
-        //valueField:'key',
         displayField:'leadstate',
         valueField:'id',
         mode: 'local',
@@ -97,7 +58,8 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         allowBlank: false,
         listWidth: '25%',
         forceSelection: true,
-        anchor:'95%'    
+        anchor:'95%',
+        lazyInit: false
     });
     
     combo_leadstatus.on('select', function(combo, record, index) {
@@ -118,8 +80,6 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         name:'leadtype_id',
         store: Tine.Crm.LeadType.getStore(),
         mode: 'local',
-        //displayField:'value',
-        //valueField:'key',
         displayField:'leadtype',
         valueField:'id',
         typeAhead: true,
@@ -136,8 +96,6 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             id:'leadsource',
             name:'leadsource_id',
             store: Tine.Crm.LeadSource.getStore(),
-            //displayField:'value',
-            //valueField:'key',
             displayField:'leadsource',
             valueField:'id',
             typeAhead: true,

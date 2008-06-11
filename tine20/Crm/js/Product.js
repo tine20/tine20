@@ -40,7 +40,7 @@ Tine.Crm.Product.getStore = function() {
 	return store;
 };
 
-Tine.Crm.Product.EditStatesDialog = function() {
+Tine.Crm.Product.EditDialog = function() {
     var Dialog = new Ext.Window({
         title: 'Products',
         id: 'productWindow',

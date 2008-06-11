@@ -50,7 +50,8 @@ Tine.Crm.LeadState.getStore = function() {
                 totalProperty: 'totalcount',
                 id: 'id',
                 fields: Tine.Crm.LeadState.Model,
-                remoteSort: false
+                remoteSort: false,
+                autoLoad: true
             });
             store.load();
 		}		
@@ -76,7 +77,7 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
 /**
  * lead states edit dialog
  */
-Tine.Crm.LeadState.EditStatesDialog = function() {
+Tine.Crm.LeadState.EditDialog = function() {
     var isXlead = new Ext.ux.grid.CheckColumn({
         header: "X Lead?",
         dataIndex: 'endslead',

@@ -17,7 +17,7 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.LeadType');
  */
 Tine.Crm.LeadType.Model = Ext.data.Record.create([
    {name: 'id', type: 'int'},
-   {name: 'leadtype', type: 'varchar'}
+   {name: 'leadtype'}
 ]);
 
 /**
@@ -56,7 +56,7 @@ Tine.Crm.LeadType.getStore = function() {
 	return store;
 };
 
-Tine.Crm.LeadType.EditStatesDialog = function() {
+Tine.Crm.LeadType.EditDialog = function() {
     var Dialog = new Ext.Window({
         title: 'Leadtypes',
         id: 'leadtypeWindow',

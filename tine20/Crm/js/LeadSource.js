@@ -17,7 +17,7 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.LeadSource');
  */
 Tine.Crm.LeadSource.Model = Ext.data.Record.create([
    {name: 'id', type: 'int'},
-   {name: 'leadsource', type: 'varchar'}
+   {name: 'leadsource'}
 ]);
 
 /**
@@ -56,7 +56,7 @@ Tine.Crm.LeadSource.getStore = function() {
 	return store;
 };
 
-Tine.Crm.LeadSource.EditStatesDialog = function() {
+Tine.Crm.LeadSource.EditDialog = function() {
     var Dialog = new Ext.Window({
         title: 'Leadsources',
         id: 'leadsourceWindow',
