@@ -704,7 +704,7 @@
         
         <table>
             <name>record_relations</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -713,7 +713,13 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>own_application</name>
+                    <name>own_model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>own_backend</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -725,7 +731,21 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>related_application</name>
+                    <name>own_degree</name>
+                    <type>enum</type>
+                    <value>parent</value>
+                    <value>child</value>
+                    <value>sibling</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>related_model</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>related_backend</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -735,13 +755,21 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                </field> 
+                </field>
                 <field>
-                    <name>related_role</name>
+                    <name>type</name>
                     <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
-                </field>                  
+                    <length>40</length>
+                    <default>''</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>remark</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <default>''</default>
+                    <notnull>true</notnull>
+                </field>
                 <field>
                     <name>created_by</name>
                     <type>integer</type>
@@ -778,26 +806,38 @@
                     <type>datetime</type>
                 </field>
                 <index>
-                    <name>id</name>
+                    <name>id-own_model-own_backend-own_id</name>
                     <primary>true</primary>
                     <field>
                         <name>id</name>
                     </field>
+                    <field>
+                        <name>own_model</name>
+                    </field>
+                    <field>
+                        <name>own_backend</name>
+                    </field>
+                    <field>
+                        <name>own_id</name>
+                    </field>
                 </index>
                 <index>
-                    <name>own_application_id-own_id-related-role_id</name>
+                    <name>unique-fields</name>
                     <unique>true</unique>
                     <field>
-                        <name>own_application</name>
+                        <name>own_model</name>
+                    </field>
+                    <field>
+                        <name>own_backend</name>
                     </field>
                     <field>
                         <name>own_id</name>
                     </field>
                     <field>
-                        <name>related_role</name>
+                        <name>related_model</name>
                     </field>
                     <field>
-                        <name>related_application</name>
+                        <name>related_backend</name>
                     </field>
                     <field>
                         <name>related_id</name>

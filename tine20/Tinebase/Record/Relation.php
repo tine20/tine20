@@ -17,16 +17,14 @@
  * Tinebase_Record_Relation enables records to define cross application relations to other records.
  * It acts as a gneralised storage backend for the records relation property of these records.
  * 
- * Relations between records have a certain role. The standart roles are PARENT, CHILD and SIBLING.
- * However, this class is not limited to theese roles, as they could be given as free from string.
+ * Relations between records have a certain degree (PARENT, CHILD and SIBLING). This degrees are defined
+ * in Tinebase_Model_Relation. Moreover Relations are of a type which is defined by the application defining 
+ * the relation. In case of users manually created relations this type is 'MANUAL'. This manually created
+ * relatiions can also hold a free-form remark.
  * 
  * NOTE: Relations are viewed as time dependend properties of records. As such, relations could
  * be broken, but never become deleted.
  * 
- * @todo rethink: should be handle relations simmular to tags and give them basic acl's?
- * So users could relate records as they like, w.o spamming in global relations scope. With this, 
- * apps would define their real (for all) relations for a global scope to have them visible for anyone.
- *
  * @package     Tinebase
  * @subpackage  Record
  */
@@ -77,7 +75,7 @@ class Tinebase_Record_Relation
     /**
      * adds a new relation
      * 
-     * @param Tinebase_Model_Relation $_relation 
+     * @param  Tinebase_Model_Relation $_relation 
      * @return Tinebase_Model_Relation the new relation
      */
     public function addRelation( $_relation ) {
@@ -93,17 +91,14 @@ class Tinebase_Record_Relation
     	if ($_relation->isValid()) {
     		$data = $_relation->toArray();
     		unset($data['related_record']);
-    		
-    		// resolve apps
-    		$application = Tinebase_Application::getInstance();
-    		$data['own_application'] = $application->getApplicationByName($_relation->own_application)->id;
-    		$data['related_application']   = $application->getApplicationByName($_relation->related_application)->id;
-            
+
     		$this->_db->insert($data);
-    		return $this->getRelationById($id);
+    		$this->_db->insert($this->_swapRoles($data));
+    		
+    		return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
     		
     	} else {
-    		throw new Tinebase_Record_Exception_Validation('some fields have invalid content');
+    		throw new Tinebase_Record_Exception_Validation('relation contains invalid data: ' . print_r($_relation->getValidationErrors(), true) );
     	}
     } // end of member function addRelation
 
@@ -113,38 +108,40 @@ class Tinebase_Record_Relation
      * @param Tinebase_Model_Relation $_relation 
      * @return void 
      */
-    public function breakRelation( $_relation ) {
-        if ($_relation->getId() && $_relation->isValid()) {
-        	$where = array(
-        	    'id = ' . $this->_db->getAdapter()->quote($_relation->getId())
-        	);
-        	
-        	$this->_db->update(array(
-        	    'is_deleted'   => true,
-        	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
-        	    'deleted_time' => Zend_Date::now()->getIso()
-        	), $where);
-        }
+    public function breakRelation( $_id ) {
+    	$where = array(
+    	    'id = ' . $this->_db->getAdapter()->quote($_id)
+    	);
+    	
+    	$this->_db->update(array(
+    	    'is_deleted'   => true,
+    	    'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
+    	    'deleted_time' => Zend_Date::now()->getIso()
+    	), $where);
     } // end of member function breakRelation
 
     /**
      * breaks all relations, optionally only of given role
      * 
-     * @param Tinebase_Record_Interface $_record
-     * @param string $_role only breaks relations of given role
+     * @param  Tinebase_Record_Interface $_record
+     * @param  string $_degree only breaks relations of given degree
+     * @param  string $_type only breaks relations of given type
      * @return void
      */
-    public function breakAllRelations( $_record, $_role = NULL ) {
+    public function breakAllRelations( $_record, $_degree = NULL, $_type = NULL ) {
         if (!$_record->getApplication() || !$_record->getId()) {
             throw new Tinebase_Record_Exception_DefinitionFailure();
         }
         
         $where = array(
-            'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->id,
-            'own_id          = ' . $this->_db->getAdapter()->quote($_record->getId())
+            'own_model   = ' . $this->_db->getAdapter()->quote(get_class($_record)),
+            'own_id      = ' . $this->_db->getAdapter()->quote($_record->getId())
         );
-        if ($_role) {
-        	$where['related_role'] = $_role;
+        if ($_degree) {
+            $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
+        }
+        if ($_type) {
+            $where[] = $this->_db->getAdapter()->quoteInto('type = ?', $_type);
         }
         
         $this->_db->update(array(
@@ -161,18 +158,21 @@ class Tinebase_Record_Relation
      * @param string $_role filter by role
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getAllRelations( $_record, $_role = NULL ) {
+    public function getAllRelations( $_record, $_degree = NULL, $_type = NULL  ) {
         if (!$_record->getApplication() || !$_record->getId()) {
             throw new Tinebase_Record_Exception_DefinitionFailure();
         }
         
     	$where = array(
-    	    'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->id,
-            'own_id          = ' . $this->_db->getAdapter()->quote($_record->getId()),
+    	    'own_model   = ' . $this->_db->getAdapter()->quote(get_class($_record)),
+            'own_id      = ' . $this->_db->getAdapter()->quote($_record->getId()),
     	    'is_deleted      = FALSE'
     	);
-    	if ($_role) {
-            $where[] = $this->_db->getAdapter()->quoteInto('related_role = ?', $_role);
+    	if ($_degree) {
+            $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
+        }
+        if ($_type) {
+            $where[] = $this->_db->getAdapter()->quoteInto('type = ?', $_type);
         }
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
@@ -189,12 +189,15 @@ class Tinebase_Record_Relation
      * @param bool $_returnDeleted
      * @return Tinebase_Record_Relation
      */
-    public function getRelationById($_id, $_returnDeleted = false)
+    public function getRelation($_id, $_ownModel, $_ownBackend, $_ownId, $_returnBroken = false)
     {
         $where = array(
-            $this->_db->getAdapter()->quoteInto('id = ?', $_id)
+            $this->_db->getAdapter()->quoteInto('id = ?', $_id),
+            $this->_db->getAdapter()->quoteInto('own_model = ?', $_ownModel),
+            $this->_db->getAdapter()->quoteInto('own_backend = ?', $_ownBackend),
+            $this->_db->getAdapter()->quoteInto('own_id = ?', $_ownId),
         );
-        if ($_returnDeleted !== true) {
+        if ($_returnBroken !== true) {
             $where[] = 'is_deleted = FALSE';
         }
     	$relationRow = $this->_db->fetchRow($where);
@@ -202,10 +205,35 @@ class Tinebase_Record_Relation
     	if($relationRow) {
     		return new Tinebase_Model_Relation($relationRow->toArray(), true);
     	} else {
-    		throw new Tinebase_Record_Exception_NotDefined("No relation with idenditier: '$_id' found.");
+    		throw new Tinebase_Record_Exception_NotDefined("No relation found.");
     	}
     	
     } // end of member function getRelationById
     
+    /**
+     * swaps roles own/related
+     * 
+     * @param  array data of a relation
+     * @return array data with swaped roles
+     */
+    protected function _swapRoles($_data)
+    {
+        $data = $_data;
+        $data['own_model']       = $_data['related_model'];
+        $data['own_backend']     = $_data['related_backend'];
+        $data['own_id']          = $_data['related_id'];
+        $data['related_model']   = $_data['own_model'];
+        $data['related_backend'] = $_data['own_backend'];
+        $data['related_id']      = $_data['own_id'];
+        switch ($_data['own_degree']) {
+            case Tinebase_Model_Relation::DEGREE_PARENT:
+                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_CHILD;
+                break;
+            case Tinebase_Model_Relation::DEGREE_CHILD:
+                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_PARENT;
+                break;
+        }
+        return $data;
+    }
 } // end of Tinebase_Record_Relation
 ?>
