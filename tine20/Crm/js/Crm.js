@@ -585,6 +585,7 @@ Tine.Crm.Main = {
         var menu = Ext.menu.MenuMgr.get('Tinebase_System_AdminMenu');
         menu.removeAll();
         menu.add(
+            // @todo    replace with standard popup windows
             {text: 'leadstate', handler: Tine.Crm.LeadState.EditDialog},
             {text: 'leadsource', handler: Tine.Crm.LeadType.EditDialog},
             {text: 'leadtype', handler: Tine.Crm.LeadSource.EditDialog},

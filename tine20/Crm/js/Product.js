@@ -18,26 +18,37 @@ Tine.Crm.Product.Model = Ext.data.Record.create([
     {name: 'price'}
 ]);
 
+/**
+ * get product store
+ * if available, load data from Tine.Crm.Products
+ *
+ * @return Ext.data.JsonStore with products
+ */
 Tine.Crm.Product.getStore = function() {
-	
-	var store = Ext.StoreMgr.get('CrmProductStore');
-	if (!store) {
-		store = new Ext.data.JsonStore({
+    var store = Ext.StoreMgr.get('CrmProductStore');
+    if (!store) {
+        // create store
+        store = new Ext.data.JsonStore({
+            fields: Tine.Crm.Product.Model,
             baseParams: {
                 method: 'Crm.getProducts',
-                sort: 'Product',
+                sort: 'productsource',
                 dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Crm.Product.Model,
             remoteSort: false
         });
-        //store.load();
+        
+        // check if initital data available
+        if ( Tine.Crm.Products ) {
+            store.loadData(Tine.Crm.Products);
+        }
+        
         Ext.StoreMgr.add('CrmProductStore', store);
-	}
-	return store;
+    }
+    return store;
 };
 
 Tine.Crm.Product.EditDialog = function() {
@@ -54,23 +65,7 @@ Tine.Crm.Product.EditDialog = function() {
         bodyStyle:'padding:5px;',
         buttonAlign:'center'
     }); 
-    
-    var storeProductsource = new Ext.data.JsonStore({
-        baseParams: {
-            method: 'Crm.getProductsource',
-            sort: 'productsource',
-            dir: 'ASC'
-        },
-        root: 'results',
-        totalProperty: 'totalcount',
-        id: 'id',
-        fields: Tine.Crm.Product.Model,
-        // turn on remote sorting
-        remoteSort: false
-    });
-    
-    storeProductsource.load();
-    
+        
     var columnModelProductsource = new Ext.grid.ColumnModel([
             { id:'id', 
               header: "id", 
@@ -100,30 +95,22 @@ Tine.Crm.Product.EditDialog = function() {
               renderer: Ext.util.Format.euMoney                    
             }
     ]);            
-    
-     var entry = Ext.data.Record.create([
-       {name: 'id', type: 'int'},
-       {name: 'productsource', type: 'varchar'},
-       {name: 'price', type: 'number'}
-    ]);
-    
+        
     var handlerProductsourceAdd = function(){
-        var p = new entry({
-            //productsource_id: 'NULL',
+        var p = new Tine.Crm.Product.Model({
             'id': 'NULL',
             productsource: '',
-            //productsource_price: '0,00'
             price: '0,00'
         });
         productsourceGridPanel.stopEditing();
-        storeProductsource.insert(0, p);
+        Tine.Crm.Product.getStore().insert(0, p);
         productsourceGridPanel.startEditing(0, 0);
         productsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
     };
                 
     var handlerProductsourceDelete = function(){
         var productsourceGrid  = Ext.getCmp('editProductsourceGrid');
-        var productsourceStore = productsourceGrid.getStore();
+        var productsourceStore = Tine.Crm.Product.getStore();
         
         var selectedRows = productsourceGrid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
@@ -133,13 +120,12 @@ Tine.Crm.Product.EditDialog = function() {
                 
   
     var handlerProductsourceSaveClose = function(){
-        var productsourceStore = Ext.getCmp('editProductsourceGrid').getStore();
-        
+        var productsourceStore = Tine.Crm.Product.getStore();        
         var productsourceJson = Tine.Tinebase.Common.getJSONdata(productsourceStore); 
 
          Ext.Ajax.request({
                     params: {
-                        method: 'Crm.saveProductsource',
+                        method: 'Crm.saveProducts',
                         optionsData: productsourceJson
                     },
                     text: 'Saving productsource...',
@@ -154,7 +140,7 @@ Tine.Crm.Product.EditDialog = function() {
     };          
     
     var productsourceGridPanel = new Ext.grid.EditorGridPanel({
-        store: storeProductsource,
+        store: Tine.Crm.Product.getStore(),
         id: 'editProductsourceGrid',
         cm: columnModelProductsource,
         autoExpandColumn:'productsource',

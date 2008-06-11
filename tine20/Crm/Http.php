@@ -207,7 +207,8 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
      * @return mixed array 'variable name' => 'data'
      */
     public function getInitialMainScreenData()
-    {        
+    {   
+        /*     
         $controller = Crm_Controller::getInstance();
         $initialData = array(
             'LeadTypes' => $controller->getLeadtypes('leadtype','ASC'),
@@ -215,11 +216,22 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
             'LeadSources' => $controller->getLeadSources('leadsource','ASC'),
             'Products' => $controller->getProducts('productsource','ASC'),
         );
+        */
+
+        $json = new Crm_Json();
+        $initialData = array(
+            'LeadTypes' => $json->getLeadtypes('leadtype','ASC'),
+            'LeadStates' => $json->getLeadStates('leadstate','ASC'),
+            'LeadSources' => $json->getLeadSources('leadsource','ASC'),
+            'Products' => $json->getProducts('productsource','ASC'),
+        );
         
+        /*
         foreach ($initialData as &$data) {
             $data->setTimezone(Zend_Registry::get('userTimeZone'));
             $data = $data->toArray();
         }
+        */
         return $initialData;    
     }
 	

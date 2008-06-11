@@ -22,38 +22,35 @@ Tine.Crm.LeadSource.Model = Ext.data.Record.create([
 
 /**
  * get lead source store
+ * if available, load data from LeadSources
  * 
- * @return  Ext.data.Store
- * @todo    check if that should be reloaded from time to time
+ * @return Ext.data.JsonStore with lead sources
  */
 Tine.Crm.LeadSource.getStore = function() {
-	var store = Ext.StoreMgr.get('CrmLeadSourceStore');
-	if (!store) {
+    
+    var store = Ext.StoreMgr.get('CrmLeadSourceStore');
+    if (!store) {
+
+        store = new Ext.data.JsonStore({
+            fields: Tine.Crm.LeadSource.Model,
+            baseParams: {
+                method: 'Crm.getLeadsources',
+                sort: 'LeadSource',
+                dir: 'ASC'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
         if ( Tine.Crm.LeadSources ) {
-            store = new Ext.data.JsonStore({
-                data: Tine.Crm.LeadSources,
-                autoLoad: true,         
-                id: 'id',
-                fields: Tine.Crm.LeadSource.Model
-            });            
-        } else {
-    		store = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadsources',
-                    sort: 'LeadSource',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: Tine.Crm.LeadSource.Model,
-                remoteSort: false
-            });
-            store.load();
+            store.loadData(Tine.Crm.LeadSources);
         }
+            
         Ext.StoreMgr.add('CrmLeadSourceStore', store);
-	}
-	return store;
+    }
+    return store;
 };
 
 Tine.Crm.LeadSource.EditDialog = function() {
@@ -70,10 +67,6 @@ Tine.Crm.LeadSource.EditDialog = function() {
         bodyStyle:'padding:5px;',
         buttonAlign:'center'
     }); 
-    
-    var storeLeadsource = Tine.Crm.LeadSource.getStore();
-    
-    storeLeadsource.load();
     
     var columnModelLeadsource = new Ext.grid.ColumnModel([
             { id:'id', 
@@ -92,22 +85,20 @@ Tine.Crm.LeadSource.EditDialog = function() {
             }                    
     ]);            
     
-    var entry = Tine.Crm.LeadSource.Model;
-    
     var handlerLeadsourceAdd = function(){
-        var p = new entry({
-            leadsource_id: 'NULL',
+        var p = new Tine.Crm.LeadSource.Model({
+            id: 'NULL',
             leadsource: ''
         });
         leadsourceGridPanel.stopEditing();
-        storeLeadsource.insert(0, p);
+        Tine.Crm.LeadSource.getStore().insert(0, p);
         leadsourceGridPanel.startEditing(0, 0);
         leadsourceGridPanel.fireEvent('celldblclick',this, 0, 1);                
     };
                 
     var handlerLeadsourceDelete = function(){
         var leadsourceGrid  = Ext.getCmp('editLeadsourceGrid');
-        var leadsourceStore = leadsourceGrid.getStore();
+        var leadsourceStore = Tine.Crm.LeadSource.getStore();
         
         var selectedRows = leadsourceGrid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
@@ -116,8 +107,7 @@ Tine.Crm.LeadSource.EditDialog = function() {
     };                                        
   
     var handlerLeadsourceSaveClose = function(){
-        var leadsourceStore = Ext.getCmp('editLeadsourceGrid').getStore();
-        
+        var leadsourceStore = Tine.Crm.LeadSource.getStore();        
         var leadsourceJson = Tine.Tinebase.Common.getJSONdata(leadsourceStore); 
 
         Ext.Ajax.request({
@@ -137,7 +127,7 @@ Tine.Crm.LeadSource.EditDialog = function() {
     };          
     
     var leadsourceGridPanel = new Ext.grid.EditorGridPanel({
-        store: storeLeadsource,
+        store: Tine.Crm.LeadSource.getStore(),
         id: 'editLeadsourceGrid',
         cm: columnModelLeadsource,
         autoExpandColumn:'leadsource',
@@ -159,9 +149,8 @@ Tine.Crm.LeadSource.EditDialog = function() {
             text: 'save',
             iconCls: 'actionSaveAndClose',
             handler : handlerLeadsourceSaveClose 
-            }]  
-    });
-            
+        }]  
+    });            
                 
     Dialog.add(leadsourceGridPanel);
     Dialog.show();                          

@@ -201,7 +201,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @return array
      */
-	public function getProductsource($sort, $dir)
+	public function getProducts($sort, $dir)
 	{
         $result = array(
             'results'     => array(),
@@ -217,14 +217,14 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 	}    
   
     /**
-	 * save productsources
+	 * save products
 	 *
 	 * if $_Id is -1 the options element gets added, otherwise it gets updated
 	 * this function handles insert and updates as well as deleting vanished items
 	 *
 	 * @return array
 	 */	
-	public function saveProductsource($optionsData)
+	public function saveProducts($optionsData)
     {
         $productSource = Zend_Json::decode($optionsData);
          
@@ -256,7 +256,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param int $_id lead id
      * @return array
      */
-    public function getProductsById($_id)
+    public function getLeadProducts($_id)
     {
         $result = array(
             'results'     => array(),
@@ -272,14 +272,13 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     } 
     
     /**
-	 * save products
+	 * save lead products
 	 *
-	 * 
-	 * 
-	 *
+	 * @param  string  json encoded array
+	 * @param  int     lead id
 	 * @return array
 	 */
-    public function saveProducts($products, $id) 
+    public function saveLeadProducts($products, $id) 
     {	
         $_products = Zend_Json::decode($products);
         $_productsData = array();

@@ -24,38 +24,32 @@ Tine.Crm.LeadState.Model = Ext.data.Record.create([
 
 /**
  * get lead state store
- * 
- * @todo    check if that should be reloaded from time to time
+ * if available, load data from Tine.Crm.LeadStates
+ *
+ * @return Ext.data.JsonStore with lead states
  */
 Tine.Crm.LeadState.getStore = function() {
 	var store = Ext.StoreMgr.get('CrmLeadstateStore');
 	if (!store) {
-		if ( Tine.Crm.LeadStates ) {
-            //console.log('Tine.Crm.LeadState.getStore: initialData')
-            store = new Ext.data.JsonStore({
-                data: Tine.Crm.LeadStates,
-                autoLoad: true,         
-                id: 'id',
-                fields: Tine.Crm.LeadState.Model
-            });            
-		} else {
-			//console.log('Tine.Crm.LeadState.getStore: json')
-    		store = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadstates',
-                    sort: 'leadstate',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: Tine.Crm.LeadState.Model,
-                remoteSort: false,
-                autoLoad: true
-            });
-            store.load();
-		}		
-		//console.log(store);
+		// create store
+		store = new Ext.data.JsonStore({
+            fields: Tine.Crm.LeadState.Model,
+            baseParams: {
+                method: 'Crm.getLeadstates',
+                sort: 'leadstate',
+                dir: 'ASC'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
+        // check if initital data available
+        if ( Tine.Crm.LeadStates ) {
+            store.loadData(Tine.Crm.LeadStates);
+        }
+        
         Ext.StoreMgr.add('CrmLeadstateStore', store);
 	}
 	return store;
@@ -110,37 +104,9 @@ Tine.Crm.LeadState.EditDialog = function() {
             hideable: false, 
             sortable: false, 
             renderer: Ext.util.Format.percentage,
-            editor: new Ext.form.ComboBox({
+            editor: new Ext.ux.PercentCombo({
                 name: 'probability',
-                id: 'probability',
-                hiddenName: 'probability',
-                store:  new Ext.data.SimpleStore({
-                    fields: ['key','value'],
-                    data: [
-                            [null,'none'],
-                            ['0','0 %'],
-                            ['10','10 %'],
-                            ['20','20 %'],
-                            ['30','30 %'],
-                            ['40','40 %'],
-                            ['50','50 %'],
-                            ['60','60 %'],
-                            ['70','70 %'],
-                            ['80','80 %'],
-                            ['90','90 %'],
-                            ['100','100 %']
-                        ]
-                }), 
-                displayField:'value', 
-                valueField: 'key',
-                allowBlank: true, 
-                editable: false,
-                selectOnFocus:true,
-                forceSelection: true, 
-                triggerAction: "all", 
-                mode: 'local', 
-                lazyRender:true,
-                listClass: 'x-combo-list-small'
+                id: 'probability'
             }) 
         }, 
         isXlead
@@ -161,7 +127,7 @@ Tine.Crm.LeadState.EditDialog = function() {
                 
     var handlerLeadstateDelete = function(){
         var leadstateGrid  = Ext.getCmp('editLeadstateGrid');
-        var leadstateStore = leadstateGrid.getStore();
+        var leadstateStore = Tine.Crm.LeadState.getStore();
         
         var selectedRows = leadstateGrid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
@@ -171,7 +137,7 @@ Tine.Crm.LeadState.EditDialog = function() {
                 
   
    var handlerLeadstateSaveClose = function(){
-        var leadstateStore = Ext.getCmp('editLeadstateGrid').getStore();
+        var leadstateStore = Tine.Crm.LeadState.getStore();
         var leadstateJson = Tine.Tinebase.Common.getJSONdata(leadstateStore); 
 
          Ext.Ajax.request({
@@ -181,9 +147,9 @@ Tine.Crm.LeadState.EditDialog = function() {
             },
             text: 'Saving leadstates...',
             success: function(_result, _request){
-                leadstateStore.reload();
+                leadstateStore.reload();                
                 leadstateStore.rejectChanges();
-                Ext.getCmp('filterLeadstate').store.reload();
+                //Ext.getCmp('filterLeadstate').store.reload();
             },
             failure: function(form, action) {
                 //  Ext.MessageBox.alert("Error",action.result.errorMessage);

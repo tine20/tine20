@@ -22,35 +22,32 @@ Tine.Crm.LeadType.Model = Ext.data.Record.create([
 
 /**
  * get lead type store
+ * if available, load data from LeadTypes
  * 
- * @todo    check if that should be reloaded from time to time
+ * @return Ext.data.JsonStore with lead types
  */
 Tine.Crm.LeadType.getStore = function() {
 	
 	var store = Ext.StoreMgr.get('CrmLeadTypeStore');
 	if (!store) {
+
+		store = new Ext.data.JsonStore({
+            fields: Tine.Crm.LeadType.Model,
+            baseParams: {
+                method: 'Crm.getLeadtypes',
+                sort: 'LeadType',
+                dir: 'ASC'
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            remoteSort: false
+        });
+        
         if ( Tine.Crm.LeadTypes ) {
-            store = new Ext.data.JsonStore({
-                data: Tine.Crm.LeadTypes,
-                autoLoad: true,         
-                id: 'id',
-                fields: Tine.Crm.LeadType.Model
-            });            
-        } else {
-    		store = new Ext.data.JsonStore({
-                baseParams: {
-                    method: 'Crm.getLeadtypes',
-                    sort: 'LeadType',
-                    dir: 'ASC'
-                },
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: Tine.Crm.LeadType.Model,
-                remoteSort: false
-            });
-            store.load();
+        	store.loadData(Tine.Crm.LeadTypes);
         }
+        	
         Ext.StoreMgr.add('CrmLeadTypeStore', store);
 	}
 	return store;
@@ -70,23 +67,7 @@ Tine.Crm.LeadType.EditDialog = function() {
         bodyStyle:'padding:5px;',
         buttonAlign:'center'
     }); 
-    
-    var storeLeadtype = new Ext.data.JsonStore({
-        baseParams: {
-            method: 'Crm.getLeadtypes',
-            sort: 'leadtype',
-            dir: 'ASC'
-        },
-        root: 'results',
-        totalProperty: 'totalcount',
-        id: 'leadtype_id',
-        fields: Tine.Crm.LeadType.Model,
-        // turn on remote sorting
-        remoteSort: false
-    });
-    
-    storeLeadtype.load();
-    
+        
     var columnModelLeadtype = new Ext.grid.ColumnModel([
             { id:'id', 
               header: "id", 
@@ -104,25 +85,20 @@ Tine.Crm.LeadType.EditDialog = function() {
             }                    
     ]);            
     
-    var entry = Ext.data.Record.create([
-       {name: 'id', type: 'int'},
-       {name: 'leadtype', type: 'varchar'}
-    ]);
-    
     var handlerLeadtypeAdd = function(){
-        var p = new entry({
-            leadtype_id: 'NULL',
+        var p = new Tine.Crm.LeadType.Model({
+            id: 'NULL',
             leadtype: ''
         });
         leadtypeGridPanel.stopEditing();
-        storeLeadtype.insert(0, p);
+        Tine.Crm.LeadType.getStore().insert(0, p);
         leadtypeGridPanel.startEditing(0, 0);
         leadtypeGridPanel.fireEvent('celldblclick',this, 0, 1);                
     };
                 
     var handlerLeadtypeDelete = function(){
         var leadtypeGrid  = Ext.getCmp('editLeadtypeGrid');
-        var leadtypeStore = leadtypeGrid.getStore();
+        var leadtypeStore = Tine.Crm.LeadType.getStore();
         
         var selectedRows = leadtypeGrid.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
@@ -131,8 +107,7 @@ Tine.Crm.LeadType.EditDialog = function() {
     };                        
                   
     var handlerLeadtypeSaveClose = function(){
-        var leadtypeStore = Ext.getCmp('editLeadtypeGrid').getStore();
-        
+        var leadtypeStore =Tine.Crm.LeadType.getStore();        
         var leadtypeJson = Tine.Tinebase.Common.getJSONdata(leadtypeStore); 
     
         Ext.Ajax.request({
@@ -142,8 +117,8 @@ Tine.Crm.LeadType.EditDialog = function() {
             },
             text: 'Saving leadtypes...',
             success: function(_result, _request) {
-                    leadtypeStore.reload();
-                    leadtypeStore.rejectChanges();
+                leadtypeStore.reload();
+                leadtypeStore.rejectChanges();
             },
             failure: function(form, action) {
                 //  Ext.MessageBox.alert("Error",action.result.errorMessage);
@@ -152,7 +127,7 @@ Tine.Crm.LeadType.EditDialog = function() {
     };          
     
     var leadtypeGridPanel = new Ext.grid.EditorGridPanel({
-        store: storeLeadtype,
+        store: Tine.Crm.LeadType.getStore(),
         id: 'editLeadtypeGrid',
         cm: columnModelLeadtype,
         autoExpandColumn:'leadtype',
