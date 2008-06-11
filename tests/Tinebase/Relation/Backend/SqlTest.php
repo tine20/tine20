@@ -114,7 +114,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'record_relations'));
+        $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'relations'));
 
         foreach ($this->relations as $relation) {
              $db->delete(array(
