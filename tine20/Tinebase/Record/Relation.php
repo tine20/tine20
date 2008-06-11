@@ -53,10 +53,9 @@ class Tinebase_Record_Relation
     private function __construct()
     {
     	// temporary on the fly creation of table
-    	Tinebase_Setup_SetupSqlTables::createRelationTable();
     	$this->_db = new Tinebase_Db_Table(array(
     	    'name' => SQL_TABLE_PREFIX . 'record_relations',
-    	    'primary' => 'identifier'
+    	    'primary' => 'id'
     	));
     	
     }
@@ -86,19 +85,22 @@ class Tinebase_Record_Relation
     		throw new Tinebase_Record_Exception_NotAllowed('Could not add existing relation');
     	}
     	
+    	$id = $_relation->generateUID();
+    	$_relation->setId($id);
     	$_relation->created_by = Zend_Registry::get('currentAccount')->getId();
     	$_relation->creation_time = Zend_Date::now();
     	
     	if ($_relation->isValid()) {
     		$data = $_relation->toArray();
+    		unset($data['related_record']);
     		
     		// resolve apps
     		$application = Tinebase_Application::getInstance();
     		$data['own_application'] = $application->getApplicationByName($_relation->own_application)->id;
     		$data['related_application']   = $application->getApplicationByName($_relation->related_application)->id;
             
-    		$identifier = $this->_db->insert($data);
-    		return $this->getRelationById($identifier);
+    		$this->_db->insert($data);
+    		return $this->getRelationById($id);
     		
     	} else {
     		throw new Tinebase_Record_Exception_Validation('some fields have invalid content');
@@ -114,7 +116,7 @@ class Tinebase_Record_Relation
     public function breakRelation( $_relation ) {
         if ($_relation->getId() && $_relation->isValid()) {
         	$where = array(
-        	    'identifier = ' . $_relation->getId()
+        	    'id = ' . $this->_db->getAdapter()->quote($_relation->getId())
         	);
         	
         	$this->_db->update(array(
@@ -139,7 +141,7 @@ class Tinebase_Record_Relation
         
         $where = array(
             'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->id,
-            'own_identifier  = ' . $_record->getId()
+            'own_id          = ' . $this->_db->getAdapter()->quote($_record->getId())
         );
         if ($_role) {
         	$where['related_role'] = $_role;
@@ -166,11 +168,11 @@ class Tinebase_Record_Relation
         
     	$where = array(
     	    'own_application = ' . Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->id,
-            'own_identifier  =' . $_record->getId(),
+            'own_id          = ' . $this->_db->getAdapter()->quote($_record->getId()),
     	    'is_deleted      = FALSE'
     	);
     	if ($_role) {
-            $where['related_role'] = $_role;
+            $where[] = $this->_db->getAdapter()->quoteInto('related_role = ?', $_role);
         }
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
@@ -181,21 +183,26 @@ class Tinebase_Record_Relation
     } // end of member function getAllRelations
     
     /**
-     * returns a relation spechified by a given identifier
+     * returns a relation spechified by a given id
      *
-     * @param int $_identifier
+     * @param int $_id
      * @param bool $_returnDeleted
      * @return Tinebase_Record_Relation
      */
-    public function getRelationById($_identifier, $_returnDeleted = false)
+    public function getRelationById($_id, $_returnDeleted = false)
     {
-    	$where = "identifier = $_identifier" . ( $_returnDeleted ? '' : ' AND is_deleted = FALSE' );
+        $where = array(
+            $this->_db->getAdapter()->quoteInto('id = ?', $_id)
+        );
+        if ($_returnDeleted !== true) {
+            $where[] = 'is_deleted = FALSE';
+        }
     	$relationRow = $this->_db->fetchRow($where);
     	
     	if($relationRow) {
     		return new Tinebase_Model_Relation($relationRow->toArray(), true);
     	} else {
-    		throw new Tinebase_Record_Exception_NotDefined("No relation with idenditier: '$_identifier' found.");
+    		throw new Tinebase_Record_Exception_NotDefined("No relation with idenditier: '$_id' found.");
     	}
     	
     } // end of member function getRelationById
