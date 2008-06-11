@@ -299,15 +299,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         $locationData = $_locationData->toArray();
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_location', $locationData);
-        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_location', 'id');
-        // if we insert a location without an id, we need to get back one
-        if (empty($_locationData->id) && $id == 0) {
-            throw new Exception("returned location id is 0");
-        }
-        // if the location had no locationId set, set the id now
-        if (empty($_locationData->id)) {
-            $_locationData->id = $id;
-        }
+
         return $this->getLocationById($_locationData->id);
     }
     
