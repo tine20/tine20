@@ -41,25 +41,25 @@ class Tinebase_Record_RelationTest extends PHPUnit_Framework_TestCase
      */
     private $relationData = array(
         array(
-	        'own_application'        => 'tasks',
-	        'own_identifier'         => 3,
+	        'own_application'        => 'Tasks',
+	        'own_id'                 => 3,
 	        'related_role'           => 'CHILD',
-	        'related_application'    => 'crm',
-	        'related_identifier'     => 2
+	        'related_application'    => 'Crm',
+	        'related_id'             => 2
         ),
         array(
-            'own_application'        => 'tasks',
-            'own_identifier'         => 3,
+            'own_application'        => 'Tasks',
+            'own_id'                 => 3,
             'related_role'           => 'PARENT',
-            'related_application'    => 'addressbook',
-            'related_identifier'     => 1
+            'related_application'    => 'Addressbook',
+            'related_id'             => 1
         ),
         array(
-            'own_application'        => 'crm',
-            'own_identifier'         => 2,
+            'own_application'        => 'Crm',
+            'own_id'                 => 2,
             'related_role'           => 'PARTNER',
-            'related_application'    => 'addressbook',
-            'related_identifier'     => 1
+            'related_application'    => 'Addressbook',
+            'related_id'             => 1
         )
     );
     
@@ -108,7 +108,7 @@ class Tinebase_Record_RelationTest extends PHPUnit_Framework_TestCase
 
         foreach ($this->relations as $relation) {
              $db->delete(array(
-                 'identifier' => $relation->getId()
+                 'id' => $db->getAdapter()->quote($relation->getId())
             ));
         }
     }
@@ -127,10 +127,10 @@ class Tinebase_Record_RelationTest extends PHPUnit_Framework_TestCase
         $application = Tinebase_Application::getInstance();
         
         foreach ($this->relations as $num => $relation) {
-            $this->assertEquals($application->getApplicationById($relation->own_application)->app_name, $this->relationData[$num]['own_application']);
-            $this->assertEquals($application->getApplicationById($relation->related_application)->app_name, $this->relationData[$num]['related_application']);
-            $this->assertEquals($relation->own_identifier, $this->relationData[$num]['own_identifier']);
-            $this->assertEquals($relation->related_identifier, $this->relationData[$num]['related_identifier']);
+            $this->assertEquals($application->getApplicationById($relation->own_application)->name, $this->relationData[$num]['own_application']);
+            $this->assertEquals($application->getApplicationById($relation->related_application)->name, $this->relationData[$num]['related_application']);
+            $this->assertEquals($relation->own_id, $this->relationData[$num]['own_id']);
+            $this->assertEquals($relation->related_id, $this->relationData[$num]['related_id']);
             $this->assertEquals($relation->related_role, $this->relationData[$num]['related_role']);
         }
     }
@@ -159,7 +159,7 @@ class Tinebase_Record_RelationTest extends PHPUnit_Framework_TestCase
         
         // test getAllRelations, $this->relations[0] should not be in resultSet
         $record = new Tasks_Model_Task(array(
-            'identifier' => $this->relations[0]->own_identifier
+            'id' => $this->relations[0]->own_id
         ),true);
         $relations = $this->object->getAllRelations($record);
         // test that the other relations still exists
@@ -174,7 +174,7 @@ class Tinebase_Record_RelationTest extends PHPUnit_Framework_TestCase
      */
     public function testBreakAllRelations() {
         $record = new Tasks_Model_Task(array(
-            'identifier' => $this->relations[0]->own_identifier
+            'id' => $this->relations[0]->own_id
         ),true);
         
         $this->object->breakAllRelations($record);
