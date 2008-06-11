@@ -8,12 +8,12 @@
  *
  */
  
-Ext.namespace('Tine.Asterisk');
+Ext.namespace('Tine.Voipmanager');
 
-Tine.Asterisk = function() {
+Tine.Voipmanager = function() {
 	
 	/**
-	 * builds the asterisk applications tree
+	 * builds the voipmanager applications tree
 	 */
     var _initialTree = [{
         text: 'Phones',
@@ -90,19 +90,19 @@ Tine.Asterisk = function() {
 	}];
 
 	/**
-     * creates the asterisk menu tree
+     * creates the voipmanager menu tree
      *
      */
-    var _getAsteriskTree = function() 
+    var _getVoipmanagerTree = function() 
     {
         var translation = new Locale.Gettext();
-        translation.textdomain('Asterisk');        
+        translation.textdomain('Voipmanager');        
         
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:'index.php',
             baseParams: {
                 jsonKey: Tine.Tinebase.Registry.get('jsonKey'),
-                method: 'Asterisk.getSubTree',
+                method: 'Voipmanager.getSubTree',
                 location: 'mainTree'
             }
         });
@@ -111,9 +111,9 @@ Tine.Asterisk = function() {
         }, this);
     
         var treePanel = new Ext.tree.TreePanel({
-            title: 'Asterisk',
-            id: 'asterisk-tree',
-            iconCls: 'AsteriskIconCls',
+            title: 'Voipmanager',
+            id: 'voipmanager-tree',
+            iconCls: 'VoipmanagerIconCls',
             loader: treeLoader,
             rootVisible: false,
             border: false
@@ -150,34 +150,34 @@ Tine.Asterisk = function() {
 
         	switch(_node.attributes.dataPanelType) {
                 case 'phones':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAsteriskPhones') {
-                        Ext.getCmp('gridAsteriskPhones').getStore().load({params:{start:0, limit:50}});
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerPhones') {
+                        Ext.getCmp('gridVoipmanagerPhones').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Asterisk.Phones.Main.show(_node);
+                        Tine.Voipmanager.Phones.Main.show(_node);
                     }
                     break;                    
                     
                 case 'config':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAsteriskConfig') {
-                        Ext.getCmp('gridAsteriskConfig').getStore().load({params:{start:0, limit:50}});
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerConfig') {
+                        Ext.getCmp('gridVoipmanagerConfig').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Asterisk.Config.Main.show(_node);
+                        Tine.Voipmanager.Config.Main.show(_node);
                     }
                     break;                                        
                     
                 case 'classes':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAsteriskClasses') {
-                        Ext.getCmp('gridAsteriskClasses').getStore().load({params:{start:0, limit:50}});
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerClasses') {
+                        Ext.getCmp('gridVoipmanagerClasses').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Asterisk.Classes.Main.show(_node);
+                        Tine.Voipmanager.Classes.Main.show(_node);
                     }
                     break;                     
                     
                 case 'software':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarAsteriskSoftware') {
-                        Ext.getCmp('gridAsteriskSoftware').getStore().load({params:{start:0, limit:50}});
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerSoftware') {
+                        Ext.getCmp('gridVoipmanagerSoftware').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Asterisk.Software.Main.show(_node);
+                        Tine.Voipmanager.Software.Main.show(_node);
                     }
                     break;                      
             }
@@ -208,15 +208,15 @@ Tine.Asterisk = function() {
     
     // public functions and variables
     return {
-        getPanel: _getAsteriskTree
+        getPanel: _getVoipmanagerTree
     };
     
 }();
 
 
-Ext.namespace('Tine.Asterisk.Phones');
+Ext.namespace('Tine.Voipmanager.Phones');
 
-Tine.Asterisk.Phones.Main = {
+Tine.Voipmanager.Phones.Main = {
        
 	actions: {
 	    addPhone: null,
@@ -230,7 +230,7 @@ Tine.Asterisk.Phones.Main = {
 	     */
 	    addPhone: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Asterisk.editPhone&phoneId=', 450, 300);
+	        Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=', 450, 300);
 	    },
 
         /**
@@ -238,10 +238,10 @@ Tine.Asterisk.Phones.Main = {
          */
         editPhone: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Asterisk_Phones_Grid').getSelectionModel().getSelections();
+            var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
             var phoneId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Asterisk.editPhone&phoneId=' + phoneId, 450, 300);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + phoneId, 450, 300);
         },
         
 	    /**
@@ -252,7 +252,7 @@ Tine.Asterisk.Phones.Main = {
 	            if (_button == 'yes') {
 	            
 	                var phoneIds = [];
-	                var selectedRows = Ext.getCmp('Asterisk_Phones_Grid').getSelectionModel().getSelections();
+	                var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
 	                    phoneIds.push(selectedRows[i].id);
 	                }
@@ -262,12 +262,12 @@ Tine.Asterisk.Phones.Main = {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Asterisk.deletePhones',
+	                        method: 'Voipmanager.deletePhones',
 	                        _phoneIds: phoneIds
 	                    },
 	                    text: 'Deleting phone(s)...',
 	                    success: function(_result, _request){
-	                        Ext.getCmp('Asterisk_Phones_Grid').getStore().reload();
+	                        Ext.getCmp('Voipmanager_Phones_Grid').getStore().reload();
 	                    },
 	                    failure: function(result, request){
 	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the phone.');
@@ -290,7 +290,7 @@ Tine.Asterisk.Phones.Main = {
     initComponent: function()
     {
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Asterisk');
+        this.translation.textdomain('Voipmanager');
     
         this.actions.addPhone = new Ext.Action({
             text: this.translation._('add phone'),
@@ -326,14 +326,14 @@ Tine.Asterisk.Phones.Main = {
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('AddressbookTreePanel');
-        //if(Tine.Asterisk.rights.indexOf('admin') > -1) {
+        //if(Tine.Voipmanager.rights.indexOf('admin') > -1) {
         //    adminButton.setDisabled(false);
         //} else {
             adminButton.setDisabled(true);
         //}
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('AsteriskTreePanel');
+        preferencesButton.setIconClass('VoipmanagerTreePanel');
         preferencesButton.setDisabled(true);
     },
 	
@@ -342,7 +342,7 @@ Tine.Asterisk.Phones.Main = {
         var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
-                Ext.getCmp('Asterisk_Phones_Grid').getStore().load({
+                Ext.getCmp('Voipmanager_Phones_Grid').getStore().load({
                     params: {
                         start: 0,
                         limit: 50
@@ -358,13 +358,13 @@ Tine.Asterisk.Phones.Main = {
         quickSearchField.on('change', onFilterChange, this);
         
         var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Asterisk',
+            app: 'Voipmanager',
             blurOnSelect: true
         });
         tagFilter.on('change', onFilterChange, this);
         
         var phoneToolbar = new Ext.Toolbar({
-            id: 'Asterisk_Phones_Toolbar',
+            id: 'Voipmanager_Phones_Toolbar',
             split: false,
             height: 26,
             items: [
@@ -387,7 +387,7 @@ Tine.Asterisk.Phones.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Asterisk.Phones.Phone,
+            fields: Tine.Voipmanager.Phones.Phone,
             // turn on remote sorting
             remoteSort: true
         });
@@ -453,7 +453,7 @@ Tine.Asterisk.Phones.Main = {
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Asterisk_Phones_Grid',
+            id: 'Voipmanager_Phones_Grid',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -493,14 +493,14 @@ Tine.Asterisk.Phones.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Asterisk.editPhone&phoneId=' + record.data.id, 450, 300);
+                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + record.data.id, 450, 300);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Asterisk_Phones_Grid').getSelectionModel().getCount() > 0){
+             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getCount() > 0){
                  this.handlers.deletePhone();
              }
         }, this);
@@ -514,32 +514,32 @@ Tine.Asterisk.Phones.Main = {
      */
     loadData: function(_node)
     {
-        var dataStore = Ext.getCmp('Asterisk_Phones_Grid').getStore();
+        var dataStore = Ext.getCmp('Voipmanager_Phones_Grid').getStore();
         
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.dataPanelType) {
             case 'phones':
-                dataStore.baseParams.method = 'Asterisk.getPhones';
+                dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
             case 'config':
-                dataStore.baseParams.method = 'Asterisk.getConfig';
+                dataStore.baseParams.method = 'Voipmanager.getConfig';
                 break;                
                 
             case 'classes':
-                dataStore.baseParams.method = 'Asterisk.getClasses';
+                dataStore.baseParams.method = 'Voipmanager.getClasses';
                 break;                 
                 
             case 'lines':
-                dataStore.baseParams.method = 'Asterisk.getLines';
+                dataStore.baseParams.method = 'Voipmanager.getLines';
                 break;                
                 
             case 'settings':
-                dataStore.baseParams.method = 'Asterisk.getSettings';
+                dataStore.baseParams.method = 'Voipmanager.getSettings';
                 break;                
                 
             case 'software':
-                dataStore.baseParams.method = 'Asterisk.getSoftware';
+                dataStore.baseParams.method = 'Voipmanager.getSoftware';
                 break;                                                                
         }
         
@@ -555,7 +555,7 @@ Tine.Asterisk.Phones.Main = {
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Asterisk_Phones_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Phones_Toolbar') {
             this.initComponent();
             this.displayPhonesToolbar();
             this.displayPhonesGrid();
@@ -566,20 +566,20 @@ Tine.Asterisk.Phones.Main = {
     
     reload: function() 
     {
-        if(Ext.ComponentMgr.all.containsKey('Asterisk_Phones_Grid')) {
-            setTimeout ("Ext.getCmp('Asterisk_Phones_Grid').getStore().reload()", 200);
+        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Phones_Grid')) {
+            setTimeout ("Ext.getCmp('Voipmanager_Phones_Grid').getStore().reload()", 200);
         }
     }
 };
 
-Tine.Asterisk.Phones.Data = {
+Tine.Voipmanager.Phones.Data = {
     
     
     loadConfigData: function() {
 
         var configDataStore = new Ext.data.JsonStore({
         	baseParams: {
-                method: 'Asterisk.getConfig',
+                method: 'Voipmanager.getConfig',
                 sort: 'description',
                 dir: 'ASC',
                 query: ''
@@ -606,7 +606,7 @@ Tine.Asterisk.Phones.Data = {
 
         var softwareDataStore = new Ext.data.JsonStore({
         	baseParams: {
-                method: 'Asterisk.getSoftware',
+                method: 'Voipmanager.getSoftware',
                 sort: 'description',
                 dir: 'ASC',
                 query: _query
@@ -633,7 +633,7 @@ Tine.Asterisk.Phones.Data = {
 };
     
 
-Tine.Asterisk.Phones.EditDialog =  {
+Tine.Voipmanager.Phones.EditDialog =  {
 
     	phoneRecord: null,
         
@@ -643,7 +643,7 @@ Tine.Asterisk.Phones.EditDialog =  {
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
                 _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
             }
-            this.phoneRecord = new Tine.Asterisk.Phones.Phone(_phoneData);
+            this.phoneRecord = new Tine.Voipmanager.Phones.Phone(_phoneData);
     	},
     	
         
@@ -654,12 +654,12 @@ Tine.Asterisk.Phones.EditDialog =  {
 	        Ext.Ajax.request({
 	            url: 'index.php',
 	            params: {
-	                method: 'Asterisk.deletePhones', 
+	                method: 'Voipmanager.deletePhones', 
 	                phoneIds: phoneIds
 	            },
 	            text: 'Deleting phone...',
 	            success: function(_result, _request) {
-	                window.opener.Tine.Asterisk.Phones.Main.reload();
+	                window.opener.Tine.Voipmanager.Phones.Main.reload();
 	                window.close();
 	            },
 	            failure: function ( result, request) { 
@@ -670,19 +670,19 @@ Tine.Asterisk.Phones.EditDialog =  {
     	
         applyChanges: function(_button, _event, _closeWindow) 
         {
-        	var form = Ext.getCmp('asterisk_editPhoneForm').getForm();
+        	var form = Ext.getCmp('voipmanager_editPhoneForm').getForm();
 
         	if(form.isValid()) {
         		form.updateRecord(this.phoneRecord);
 	    
 	            Ext.Ajax.request({
 	                params: {
-	                    method: 'Asterisk.savePhone', 
+	                    method: 'Voipmanager.savePhone', 
 	                    phoneData: Ext.util.JSON.encode(this.phoneRecord.data)
 	                },
 	                success: function(_result, _request) {
-	                	if(window.opener.Tine.Asterisk.Phones) {
-                            window.opener.Tine.Asterisk.Phones.Main.reload();
+	                	if(window.opener.Tine.Voipmanager.Phones) {
+                            window.opener.Tine.Voipmanager.Phones.Main.reload();
 	                	}
                         if(_closeWindow === true) {
                             window.close();
@@ -783,7 +783,7 @@ Tine.Asterisk.Phones.EditDialog =  {
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
-                                store: Tine.Asterisk.Phones.Data.loadConfigData()
+                                store: Tine.Voipmanager.Phones.Data.loadConfigData()
                             } ]
                         } , {
                         columnWidth: .5,
@@ -809,7 +809,7 @@ Tine.Asterisk.Phones.EditDialog =  {
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
-                                store: Tine.Asterisk.Phones.Data.loadSoftwareData(),
+                                store: Tine.Voipmanager.Phones.Data.loadSoftwareData(),
                                 listeners: {
                                     expand: function() {
                                         var _newValue = Ext.getCmp('modelCombo').getValue();
@@ -838,7 +838,7 @@ Tine.Asterisk.Phones.EditDialog =  {
         updateToolbarButtons: function()
         {
             if(this.phoneRecord.get('id') > 0) {
-                Ext.getCmp('asterisk_editPhoneForm').action_delete.enable();
+                Ext.getCmp('voipmanager_editPhoneForm').action_delete.enable();
             }
         },
         
@@ -850,7 +850,7 @@ Tine.Asterisk.Phones.EditDialog =  {
         
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
-		        id : 'asterisk_editPhoneForm',
+		        id : 'voipmanager_editPhoneForm',
 		        //title: 'the title',
 		        labelWidth: 120,
                 labelAlign: 'top',
@@ -879,9 +879,9 @@ Tine.Asterisk.Phones.EditDialog =  {
 
 
 
-Ext.namespace('Tine.Asterisk.Location');
+Ext.namespace('Tine.Voipmanager.Location');
 
-Tine.Asterisk.Location.Main = {
+Tine.Voipmanager.Location.Main = {
        
 	actions: {
 	    addLocation: null,
@@ -895,7 +895,7 @@ Tine.Asterisk.Location.Main = {
 	     */
 	    addLocation: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Asterisk.editLocation&LocationId=', 500, 450);
+	        Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&LocationId=', 500, 450);
 	    },
 
         /**
@@ -903,10 +903,10 @@ Tine.Asterisk.Location.Main = {
          */
         editLocation: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Asterisk_Location_Grid').getSelectionModel().getSelections();
+            var selectedRows = Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getSelections();
             var locationId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Asterisk.editLocation&locationId=' + locationId, 500, 450);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + locationId, 500, 450);
         },
         
 	    /**
@@ -917,7 +917,7 @@ Tine.Asterisk.Location.Main = {
 	            if (_button == 'yes') {
 	            
 	                var locationIds = [];
-	                var selectedRows = Ext.getCmp('Asterisk_Location_Grid').getSelectionModel().getSelections();
+	                var selectedRows = Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
 	                    locationIds.push(selectedRows[i].id);
 	                }
@@ -927,12 +927,12 @@ Tine.Asterisk.Location.Main = {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Asterisk.deleteLocations',
+	                        method: 'Voipmanager.deleteLocations',
 	                        _locationIds: locationIds
 	                    },
 	                    text: 'Deleting location...',
 	                    success: function(_result, _request){
-	                        Ext.getCmp('Asterisk_Location_Grid').getStore().reload();
+	                        Ext.getCmp('Voipmanager_Location_Grid').getStore().reload();
 	                    },
 	                    failure: function(result, request){
 	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the location.');
@@ -947,7 +947,7 @@ Tine.Asterisk.Location.Main = {
     initComponent: function()
     {
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Asterisk');
+        this.translation.textdomain('Voipmanager');
     
         this.actions.addLocation = new Ext.Action({
             text: this.translation._('add location'),
@@ -980,14 +980,14 @@ Tine.Asterisk.Location.Main = {
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('AddressbookTreePanel');
-        //if(Tine.Asterisk.rights.indexOf('admin') > -1) {
+        //if(Tine.Voipmanager.rights.indexOf('admin') > -1) {
         //    adminButton.setDisabled(false);
         //} else {
             adminButton.setDisabled(true);
         //}
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('AsteriskTreePanel');
+        preferencesButton.setIconClass('VoipmanagerTreePanel');
         preferencesButton.setDisabled(true);
     },
 	
@@ -996,7 +996,7 @@ Tine.Asterisk.Location.Main = {
         var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
-                Ext.getCmp('Asterisk_Location_Grid').getStore().load({
+                Ext.getCmp('Voipmanager_Location_Grid').getStore().load({
                     params: {
                         start: 0,
                         limit: 50
@@ -1012,13 +1012,13 @@ Tine.Asterisk.Location.Main = {
         quickSearchField.on('change', onFilterChange, this);
         
         var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Asterisk',
+            app: 'Voipmanager',
             blurOnSelect: true
         });
         tagFilter.on('change', onFilterChange, this);
         
         var locationToolbar = new Ext.Toolbar({
-            id: 'Asterisk_Location_Toolbar',
+            id: 'Voipmanager_Location_Toolbar',
             split: false,
             height: 26,
             items: [
@@ -1041,7 +1041,7 @@ Tine.Asterisk.Location.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Asterisk.Location.Location,
+            fields: Tine.Voipmanager.Location.Location,
             // turn on remote sorting
             remoteSort: true
         });
@@ -1107,7 +1107,7 @@ Tine.Asterisk.Location.Main = {
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Asterisk_Location_Grid',
+            id: 'Voipmanager_Location_Grid',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -1147,14 +1147,14 @@ Tine.Asterisk.Location.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Asterisk.editLocation&locationId=' + record.data.id, 500, 450);
+                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + record.data.id, 500, 450);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Asterisk_Location_Grid').getSelectionModel().getCount() > 0){
+             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getCount() > 0){
                  this.handlers.deleteLocation();
              }
         }, this);
@@ -1168,32 +1168,32 @@ Tine.Asterisk.Location.Main = {
      */
     loadData: function(_node)
     {
-        var dataStore = Ext.getCmp('Asterisk_Location_Grid').getStore();
+        var dataStore = Ext.getCmp('Voipmanager_Location_Grid').getStore();
         
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.dataPanelType) {
             case 'phones':
-                dataStore.baseParams.method = 'Asterisk.getPhones';
+                dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
             case 'config':
-                dataStore.baseParams.method = 'Asterisk.getConfig';
+                dataStore.baseParams.method = 'Voipmanager.getConfig';
                 break;                
 
             case 'classes':
-                dataStore.baseParams.method = 'Asterisk.getClasses';
+                dataStore.baseParams.method = 'Voipmanager.getClasses';
                 break;  
                 
             case 'lines':
-                dataStore.baseParams.method = 'Asterisk.getLines';
+                dataStore.baseParams.method = 'Voipmanager.getLines';
                 break;                
                 
             case 'settings':
-                dataStore.baseParams.method = 'Asterisk.getSettings';
+                dataStore.baseParams.method = 'Voipmanager.getSettings';
                 break;                
                 
             case 'software':
-                dataStore.baseParams.method = 'Asterisk.getSoftware';
+                dataStore.baseParams.method = 'Voipmanager.getSoftware';
                 break;                                                                
         }
         
@@ -1209,7 +1209,7 @@ Tine.Asterisk.Location.Main = {
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Asterisk_Location_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Location_Toolbar') {
             this.initComponent();
             this.displayLocationToolbar();
             this.displayLocationGrid();
@@ -1220,21 +1220,21 @@ Tine.Asterisk.Location.Main = {
     
     reload: function() 
     {
-        if(Ext.ComponentMgr.all.containsKey('Asterisk_Location_Grid')) {
-            setTimeout ("Ext.getCmp('Asterisk_Location_Grid').getStore().reload()", 200);
+        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Location_Grid')) {
+            setTimeout ("Ext.getCmp('Voipmanager_Location_Grid').getStore().reload()", 200);
         }
     }
 };
 
 
 
-Tine.Asterisk.Location.EditDialog =  {
+Tine.Voipmanager.Location.EditDialog =  {
 
     	locationRecord: null,
     	
     	updateLocationRecord: function(_locationData)
     	{
-            this.locationRecord = new Tine.Asterisk.Location.Location(_locationData);
+            this.locationRecord = new Tine.Voipmanager.Location.Location(_locationData);
     	},
     	
     	deleteLocation: function(_button, _event)
@@ -1244,12 +1244,12 @@ Tine.Asterisk.Location.EditDialog =  {
 	        Ext.Ajax.request({
 	            url: 'index.php',
 	            params: {
-	                method: 'Asterisk.deleteLocation', 
+	                method: 'Voipmanager.deleteLocation', 
 	                locationIds: locationIds
 	            },
 	            text: 'Deleting location...',
 	            success: function(_result, _request) {
-	                window.opener.Tine.Asterisk.Location.Main.reload();
+	                window.opener.Tine.Voipmanager.Location.Main.reload();
 	                window.close();
 	            },
 	            failure: function ( result, request) { 
@@ -1260,19 +1260,19 @@ Tine.Asterisk.Location.EditDialog =  {
     	
         applyChanges: function(_button, _event, _closeWindow) 
         {
-        	var form = Ext.getCmp('asterisk_editLocationForm').getForm();
+        	var form = Ext.getCmp('voipmanager_editLocationForm').getForm();
 
         	if(form.isValid()) {
         		form.updateRecord(this.locationRecord);
 	    
 	            Ext.Ajax.request({
 	                params: {
-	                    method: 'Asterisk.saveLocation', 
+	                    method: 'Voipmanager.saveLocation', 
 	                    locationData: Ext.util.JSON.encode(this.locationRecord.data)
 	                },
 	                success: function(_result, _request) {
-	                	if(window.opener.Tine.Asterisk.Location) {
-                            window.opener.Tine.Asterisk.Location.Main.reload();
+	                	if(window.opener.Tine.Voipmanager.Location) {
+                            window.opener.Tine.Voipmanager.Location.Main.reload();
 	                	}
                         if(_closeWindow === true) {
                             window.close();
@@ -1538,7 +1538,7 @@ Tine.Asterisk.Location.EditDialog =  {
         updateToolbarButtons: function()
         {
             if(this.locationRecord.get('id') > 0) {
-                Ext.getCmp('asterisk_editLocationForm').action_delete.enable();
+                Ext.getCmp('voipmanager_editLocationForm').action_delete.enable();
             }
         },
         
@@ -1550,7 +1550,7 @@ Tine.Asterisk.Location.EditDialog =  {
         
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
-		        id : 'asterisk_editLocationForm',
+		        id : 'voipmanager_editLocationForm',
 		        //title: 'the title',
 		        labelWidth: 120,
                 labelAlign: 'top',
@@ -1580,9 +1580,9 @@ Tine.Asterisk.Location.EditDialog =  {
 
 
 
-Ext.namespace('Tine.Asterisk.Software');
+Ext.namespace('Tine.Voipmanager.Software');
 
-Tine.Asterisk.Software.Main = {
+Tine.Voipmanager.Software.Main = {
        
 	actions: {
 	    addSoftware: null,
@@ -1596,7 +1596,7 @@ Tine.Asterisk.Software.Main = {
 	     */
 	    addSoftware: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Asterisk.editSoftware&softwareId=', 450, 300);
+	        Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSoftware&softwareId=', 450, 300);
 	    },
 
         /**
@@ -1604,10 +1604,10 @@ Tine.Asterisk.Software.Main = {
          */
         editSoftware: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Asterisk_Software_Grid').getSelectionModel().getSelections();
+            var selectedRows = Ext.getCmp('Voipmanager_Software_Grid').getSelectionModel().getSelections();
             var softwareId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Asterisk.editSoftware&softwareId=' + softwareId, 450, 300);
+            Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSoftware&softwareId=' + softwareId, 450, 300);
         },
         
 	    /**
@@ -1618,7 +1618,7 @@ Tine.Asterisk.Software.Main = {
 	            if (_button == 'yes') {
 	            
 	                var softwareIds = [];
-	                var selectedRows = Ext.getCmp('Asterisk_Software_Grid').getSelectionModel().getSelections();
+	                var selectedRows = Ext.getCmp('Voipmanager_Software_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
 	                    softwareIds.push(selectedRows[i].id);
 	                }
@@ -1628,12 +1628,12 @@ Tine.Asterisk.Software.Main = {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Asterisk.deleteSoftwares',
+	                        method: 'Voipmanager.deleteSoftwares',
 	                        _softwareIds: softwareIds
 	                    },
 	                    text: 'Deleting software...',
 	                    success: function(_result, _request){
-	                        Ext.getCmp('Asterisk_Software_Grid').getStore().reload();
+	                        Ext.getCmp('Voipmanager_Software_Grid').getStore().reload();
 	                    },
 	                    failure: function(result, request){
 	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the software.');
@@ -1656,7 +1656,7 @@ Tine.Asterisk.Software.Main = {
     initComponent: function()
     {
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Asterisk');
+        this.translation.textdomain('Voipmanager');
     
         this.actions.addSoftware = new Ext.Action({
             text: this.translation._('add software'),
@@ -1689,14 +1689,14 @@ Tine.Asterisk.Software.Main = {
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('AddressbookTreePanel');
-        //if(Tine.Asterisk.rights.indexOf('admin') > -1) {
+        //if(Tine.Voipmanager.rights.indexOf('admin') > -1) {
         //    adminButton.setDisabled(false);
         //} else {
             adminButton.setDisabled(true);
         //}
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('AsteriskTreePanel');
+        preferencesButton.setIconClass('VoipmanagerTreePanel');
         preferencesButton.setDisabled(true);
     },
 	
@@ -1705,7 +1705,7 @@ Tine.Asterisk.Software.Main = {
         var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
-                Ext.getCmp('Asterisk_Software_Grid').getStore().load({
+                Ext.getCmp('Voipmanager_Software_Grid').getStore().load({
                     params: {
                         start: 0,
                         limit: 50
@@ -1721,13 +1721,13 @@ Tine.Asterisk.Software.Main = {
         quickSearchField.on('change', onFilterChange, this);
         
         var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Asterisk',
+            app: 'Voipmanager',
             blurOnSelect: true
         });
         tagFilter.on('change', onFilterChange, this);
         
         var softwareToolbar = new Ext.Toolbar({
-            id: 'Asterisk_Software_Toolbar',
+            id: 'Voipmanager_Software_Toolbar',
             split: false,
             height: 26,
             items: [
@@ -1750,7 +1750,7 @@ Tine.Asterisk.Software.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Asterisk.Software.Software,
+            fields: Tine.Voipmanager.Software.Software,
             // turn on remote sorting
             remoteSort: true
         });
@@ -1806,7 +1806,7 @@ Tine.Asterisk.Software.Main = {
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Asterisk_Software_Grid',
+            id: 'Voipmanager_Software_Grid',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -1846,14 +1846,14 @@ Tine.Asterisk.Software.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Asterisk.editSoftware&softwareId=' + record.data.id, 450, 300);
+                Tine.Tinebase.Common.openWindow('softwareWindow', 'index.php?method=Voipmanager.editSoftware&softwareId=' + record.data.id, 450, 300);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Asterisk_Software_Grid').getSelectionModel().getCount() > 0){
+             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Software_Grid').getSelectionModel().getCount() > 0){
                  this.handlers.deleteSoftware();
              }
         }, this);
@@ -1867,32 +1867,32 @@ Tine.Asterisk.Software.Main = {
      */
     loadData: function(_node)
     {
-        var dataStore = Ext.getCmp('Asterisk_Software_Grid').getStore();
+        var dataStore = Ext.getCmp('Voipmanager_Software_Grid').getStore();
         
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.dataPanelType) {
             case 'phones':
-                dataStore.baseParams.method = 'Asterisk.getPhones';
+                dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
             case 'config':
-                dataStore.baseParams.method = 'Asterisk.getConfig';
+                dataStore.baseParams.method = 'Voipmanager.getConfig';
                 break;                
 
             case 'classes':
-                dataStore.baseParams.method = 'Asterisk.getClasses';
+                dataStore.baseParams.method = 'Voipmanager.getClasses';
                 break;  
                 
             case 'lines':
-                dataStore.baseParams.method = 'Asterisk.getLines';
+                dataStore.baseParams.method = 'Voipmanager.getLines';
                 break;                
                 
             case 'settings':
-                dataStore.baseParams.method = 'Asterisk.getSettings';
+                dataStore.baseParams.method = 'Voipmanager.getSettings';
                 break;                
                 
             case 'software':
-                dataStore.baseParams.method = 'Asterisk.getSoftware';
+                dataStore.baseParams.method = 'Voipmanager.getSoftware';
                 break;                                                                
         }
         
@@ -1908,7 +1908,7 @@ Tine.Asterisk.Software.Main = {
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Asterisk_Software_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Software_Toolbar') {
             this.initComponent();
             this.displaySoftwareToolbar();
             this.displaySoftwareGrid();
@@ -1919,21 +1919,21 @@ Tine.Asterisk.Software.Main = {
     
     reload: function() 
     {
-        if(Ext.ComponentMgr.all.containsKey('Asterisk_Software_Grid')) {
-            setTimeout ("Ext.getCmp('Asterisk_Software_Grid').getStore().reload()", 200);
+        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Software_Grid')) {
+            setTimeout ("Ext.getCmp('Voipmanager_Software_Grid').getStore().reload()", 200);
         }
     }
 };
 
 
 
-Tine.Asterisk.Software.EditDialog =  {
+Tine.Voipmanager.Software.EditDialog =  {
 
     	softwareRecord: null,
     	
     	updateSoftwareRecord: function(_softwareData)
     	{
-            this.softwareRecord = new Tine.Asterisk.Software.Software(_softwareData);
+            this.softwareRecord = new Tine.Voipmanager.Software.Software(_softwareData);
     	},
     	
     	deleteSoftware: function(_button, _event)
@@ -1943,12 +1943,12 @@ Tine.Asterisk.Software.EditDialog =  {
 	        Ext.Ajax.request({
 	            url: 'index.php',
 	            params: {
-	                method: 'Asterisk.deleteSoftware', 
+	                method: 'Voipmanager.deleteSoftware', 
 	                phoneIds: softwareIds
 	            },
 	            text: 'Deleting software...',
 	            success: function(_result, _request) {
-	                window.opener.Tine.Asterisk.Software.Main.reload();
+	                window.opener.Tine.Voipmanager.Software.Main.reload();
 	                window.close();
 	            },
 	            failure: function ( result, request) { 
@@ -1959,19 +1959,19 @@ Tine.Asterisk.Software.EditDialog =  {
     	
         applyChanges: function(_button, _event, _closeWindow) 
         {
-        	var form = Ext.getCmp('asterisk_editSoftwareForm').getForm();
+        	var form = Ext.getCmp('voipmanager_editSoftwareForm').getForm();
 
         	if(form.isValid()) {
         		form.updateRecord(this.softwareRecord);
 	    
 	            Ext.Ajax.request({
 	                params: {
-	                    method: 'Asterisk.saveSoftware', 
+	                    method: 'Voipmanager.saveSoftware', 
 	                    softwareData: Ext.util.JSON.encode(this.softwareRecord.data)
 	                },
 	                success: function(_result, _request) {
-	                	if(window.opener.Tine.Asterisk.Software) {
-                            window.opener.Tine.Asterisk.Software.Main.reload();
+	                	if(window.opener.Tine.Voipmanager.Software) {
+                            window.opener.Tine.Voipmanager.Software.Main.reload();
 	                	}
                         if(_closeWindow === true) {
                             window.close();
@@ -2046,7 +2046,7 @@ Tine.Asterisk.Software.EditDialog =  {
         updateToolbarButtons: function()
         {
             if(this.softwareRecord.get('id') > 0) {
-                Ext.getCmp('asterisk_editSoftwareForm').action_delete.enable();
+                Ext.getCmp('voipmanager_editSoftwareForm').action_delete.enable();
             }
         },
         
@@ -2058,7 +2058,7 @@ Tine.Asterisk.Software.EditDialog =  {
 
             // Ext.FormPanel
 		    var dialog = new Tine.widgets.dialog.EditRecord({
-		        id : 'asterisk_editSoftwareForm',
+		        id : 'voipmanager_editSoftwareForm',
 		        layout: 'fit',
 		        //title: 'the title',
 		        labelWidth: 120,
@@ -2085,9 +2085,9 @@ Tine.Asterisk.Software.EditDialog =  {
 
 
 
-Ext.namespace('Tine.Asterisk.Classes');
+Ext.namespace('Tine.Voipmanager.Classes');
 
-Tine.Asterisk.Classes.Main = {
+Tine.Voipmanager.Classes.Main = {
        
 	actions: {
 	    addClass: null,
@@ -2101,7 +2101,7 @@ Tine.Asterisk.Classes.Main = {
 	     */
 	    addClass: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Asterisk.editClass&classId=', 500, 450);
+	        Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Voipmanager.editClass&classId=', 500, 450);
 	    },
 
         /**
@@ -2109,10 +2109,10 @@ Tine.Asterisk.Classes.Main = {
          */
         editClass: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Asterisk_Class_Grid').getSelectionModel().getSelections();
+            var selectedRows = Ext.getCmp('Voipmanager_Class_Grid').getSelectionModel().getSelections();
             var classId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Asterisk.editClass&classId=' + classId, 500, 450);
+            Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Voipmanager.editClass&classId=' + classId, 500, 450);
         },
         
 	    /**
@@ -2123,7 +2123,7 @@ Tine.Asterisk.Classes.Main = {
 	            if (_button == 'yes') {
 	            
 	                var classIds = [];
-	                var selectedRows = Ext.getCmp('Asterisk_Class_Grid').getSelectionModel().getSelections();
+	                var selectedRows = Ext.getCmp('Voipmanager_Class_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
 	                    classIds.push(selectedRows[i].id);
 	                }
@@ -2133,12 +2133,12 @@ Tine.Asterisk.Classes.Main = {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Asterisk.deleteClasses',
+	                        method: 'Voipmanager.deleteClasses',
 	                        _classIds: classIds
 	                    },
 	                    text: 'Deleting class...',
 	                    success: function(_result, _request){
-	                        Ext.getCmp('Asterisk_Class_Grid').getStore().reload();
+	                        Ext.getCmp('Voipmanager_Class_Grid').getStore().reload();
 	                    },
 	                    failure: function(result, request){
 	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the class.');
@@ -2153,7 +2153,7 @@ Tine.Asterisk.Classes.Main = {
     initComponent: function()
     {
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Asterisk');
+        this.translation.textdomain('Voipmanager');
     
         this.actions.addClass = new Ext.Action({
             text: this.translation._('add class'),
@@ -2186,14 +2186,14 @@ Tine.Asterisk.Classes.Main = {
 
         var adminButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_AdminButton');
         adminButton.setIconClass('AddressbookTreePanel');
-        //if(Tine.Asterisk.rights.indexOf('admin') > -1) {
+        //if(Tine.Voipmanager.rights.indexOf('admin') > -1) {
         //    adminButton.setDisabled(false);
         //} else {
             adminButton.setDisabled(true);
         //}
 
         var preferencesButton = Ext.getCmp('tineMenu').items.get('Tinebase_System_PreferencesButton');
-        preferencesButton.setIconClass('AsteriskTreePanel');
+        preferencesButton.setIconClass('VoipmanagerTreePanel');
         preferencesButton.setDisabled(true);
     },
 	
@@ -2202,7 +2202,7 @@ Tine.Asterisk.Classes.Main = {
         var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
-                Ext.getCmp('Asterisk_Class_Grid').getStore().load({
+                Ext.getCmp('Voipmanager_Class_Grid').getStore().load({
                     params: {
                         start: 0,
                         limit: 50
@@ -2218,13 +2218,13 @@ Tine.Asterisk.Classes.Main = {
         quickSearchField.on('change', onFilterChange, this);
         
         var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Asterisk',
+            app: 'Voipmanager',
             blurOnSelect: true
         });
         tagFilter.on('change', onFilterChange, this);
         
         var classToolbar = new Ext.Toolbar({
-            id: 'Asterisk_Class_Toolbar',
+            id: 'Voipmanager_Class_Toolbar',
             split: false,
             height: 26,
             items: [
@@ -2247,7 +2247,7 @@ Tine.Asterisk.Classes.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Asterisk.Classes.Class,
+            fields: Tine.Voipmanager.Classes.Class,
             // turn on remote sorting
             remoteSort: true
         });
@@ -2305,7 +2305,7 @@ Tine.Asterisk.Classes.Main = {
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Asterisk_Class_Grid',
+            id: 'Voipmanager_Class_Grid',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -2345,14 +2345,14 @@ Tine.Asterisk.Classes.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Asterisk.editClass&classId=' + record.data.id, 500, 450);
+                Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Voipmanager.editClass&classId=' + record.data.id, 500, 450);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Asterisk_Class_Grid').getSelectionModel().getCount() > 0){
+             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Class_Grid').getSelectionModel().getCount() > 0){
                  this.handlers.deleteClass();
              }
         }, this);
@@ -2366,32 +2366,32 @@ Tine.Asterisk.Classes.Main = {
      */
     loadData: function(_node)
     {
-        var dataStore = Ext.getCmp('Asterisk_Class_Grid').getStore();
+        var dataStore = Ext.getCmp('Voipmanager_Class_Grid').getStore();
         
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.dataPanelType) {
             case 'phones':
-                dataStore.baseParams.method = 'Asterisk.getPhones';
+                dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
             case 'config':
-                dataStore.baseParams.method = 'Asterisk.getConfig';
+                dataStore.baseParams.method = 'Voipmanager.getConfig';
                 break;                
 
             case 'classes':
-                dataStore.baseParams.method = 'Asterisk.getClasses';
+                dataStore.baseParams.method = 'Voipmanager.getClasses';
                 break;  
                 
             case 'lines':
-                dataStore.baseParams.method = 'Asterisk.getLines';
+                dataStore.baseParams.method = 'Voipmanager.getLines';
                 break;                
                 
             case 'settings':
-                dataStore.baseParams.method = 'Asterisk.getSettings';
+                dataStore.baseParams.method = 'Voipmanager.getSettings';
                 break;                
                 
             case 'software':
-                dataStore.baseParams.method = 'Asterisk.getSoftware';
+                dataStore.baseParams.method = 'Voipmanager.getSoftware';
                 break;                                                                
         }
         
@@ -2407,7 +2407,7 @@ Tine.Asterisk.Classes.Main = {
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Asterisk_Class_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Class_Toolbar') {
             this.initComponent();
             this.displayClassToolbar();
             this.displayClassGrid();
@@ -2418,8 +2418,8 @@ Tine.Asterisk.Classes.Main = {
     
     reload: function() 
     {
-        if(Ext.ComponentMgr.all.containsKey('Asterisk_Class_Grid')) {
-            setTimeout ("Ext.getCmp('Asterisk_Class_Grid').getStore().reload()", 200);
+        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Class_Grid')) {
+            setTimeout ("Ext.getCmp('Voipmanager_Class_Grid').getStore().reload()", 200);
         }
     }
 };
@@ -2429,7 +2429,7 @@ Tine.Asterisk.Classes.Main = {
 
 
 
-Tine.Asterisk.Phones.Phone = Ext.data.Record.create([
+Tine.Voipmanager.Phones.Phone = Ext.data.Record.create([
     {name: 'id'},
     {name: 'macaddress'},
     {name: 'model'},
@@ -2442,7 +2442,7 @@ Tine.Asterisk.Phones.Phone = Ext.data.Record.create([
 
 
 
-Tine.Asterisk.Phones.Config = Ext.data.Record.create([
+Tine.Voipmanager.Phones.Config = Ext.data.Record.create([
     {name: 'firmware_interval'},
     {name: 'firmware_status'},
     {name: 'update_policy'},
@@ -2462,7 +2462,7 @@ Tine.Asterisk.Phones.Config = Ext.data.Record.create([
 ]);
 
 
-Tine.Asterisk.Location.Location = Ext.data.Record.create([
+Tine.Voipmanager.Location.Location = Ext.data.Record.create([
     {name: 'firmware_interval'},
     {name: 'firmware_status'},
     {name: 'update_policy'},
@@ -2482,7 +2482,7 @@ Tine.Asterisk.Location.Location = Ext.data.Record.create([
 ]);
 
 
-Tine.Asterisk.Classes.Class = Ext.data.Record.create([
+Tine.Voipmanager.Classes.Class = Ext.data.Record.create([
     {name: 'id'},
     {name: 'model'},
     {name: 'description'},
@@ -2492,7 +2492,7 @@ Tine.Asterisk.Classes.Class = Ext.data.Record.create([
 ]);
 
 
-Tine.Asterisk.Software.Software = Ext.data.Record.create([
+Tine.Voipmanager.Software.Software = Ext.data.Record.create([
     {name: 'id'},
     {name: 'description'},
     {name: 'model'},

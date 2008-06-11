@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,13 +12,13 @@
 /**
  * backend class for Tinebase_Http_Server
  *
- * This class handles all Http requests for the Asterisk Management application
+ * This class handles all Http requests for the Voipmanager Management application
  *
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  */
-class Asterisk_Http extends Tinebase_Application_Http_Abstract
+class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 {
-    protected $_appname = 'Asterisk';
+    protected $_appname = 'Voipmanager';
     
     /**
      * Returns all JS files which must be included for this app
@@ -28,7 +28,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Asterisk/js/Asterisk.js'
+            'Voipmanager/js/Voipmanager.js'
         );
     }
     
@@ -42,7 +42,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
     public function editPhone($phoneId=NULL)
     {
         if (!empty($phoneId)) {
-            $phones = Asterisk_Controller::getInstance();
+            $phones = Voipmanager_Controller::getInstance();
             $phone = $phones->getPhoneById($phoneId);
             $arrayPhone = $phone->toArray();
         } else {
@@ -58,7 +58,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Asterisk.Phones.EditDialog.display(' . $encodedPhone .');';
+        $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedPhone .');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -88,7 +88,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
     public function editConfig($configId=NULL)
     {
         if (!empty($configId)) {
-            $configs = Asterisk_Controller::getInstance();
+            $configs = Voipmanager_Controller::getInstance();
             $config = $configs->getConfigById($configId);
             $arrayConfig = $config->toArray();
         } else {
@@ -104,7 +104,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Asterisk.Config.EditDialog.display(' . $encodedConfig .');';
+        $view->jsExecute = 'Tine.Voipmanager.Config.EditDialog.display(' . $encodedConfig .');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
@@ -134,7 +134,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
     public function editSoftware($softwareId=NULL)
     {
         if (!empty($softwareId)) {
-            $softwares = Asterisk_Controller::getInstance();
+            $softwares = Voipmanager_Controller::getInstance();
             $software = $softwares->getSoftwareById($softwareId);
             $arraySoftware = $software->toArray();
         } else {
@@ -150,7 +150,7 @@ class Asterisk_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Asterisk.Software.EditDialog.display(' . $encodedSoftware .');';
+        $view->jsExecute = 'Tine.Voipmanager.Software.EditDialog.display(' . $encodedSoftware .');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

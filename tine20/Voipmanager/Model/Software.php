@@ -2,7 +2,7 @@
 /**
  * class to hold software data
  * 
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,9 +13,9 @@
 /**
  * class to hold software data
  * 
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  */
-class Asterisk_Model_Software extends Tinebase_Record_Abstract
+class Voipmanager_Model_Software extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -30,7 +30,7 @@ class Asterisk_Model_Software extends Tinebase_Record_Abstract
      *
      * @var string
      */
-    protected $_application = 'Asterisk';
+    protected $_application = 'Voipmanager';
     
     /**
      * list of zend inputfilter
@@ -58,14 +58,14 @@ class Asterisk_Model_Software extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Asterisk_Model_Software to an software id
+     * converts a int, string or Voipmanager_Model_Software to an software id
      *
-     * @param int|string|Asterisk_Model_Software $_softwareId the software id to convert
+     * @param int|string|Voipmanager_Model_Software $_softwareId the software id to convert
      * @return int
      */
     static public function convertSoftwareIdToInt($_softwareId)
     {
-        if ($_softwareId instanceof Asterisk_Model_Software) {
+        if ($_softwareId instanceof Voipmanager_Model_Software) {
             if (empty($_softwareId->id)) {
                 throw new Exception('no software id set');
             }

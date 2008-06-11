@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,18 +13,18 @@
 /**
  * 
  *
- * @package  Asterisk
+ * @package  Voipmanager
  */
-class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
+class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interface
 {
     /**
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;    
 	/**
-	* Instance of Asterisk_Backend_Phone_Sql_Phones
+	* Instance of Voipmanager_Backend_Phone_Sql_Phones
 	*
-	* @var Asterisk_Backend_Sql_Phones
+	* @var Voipmanager_Backend_Sql_Phones
 	*/
     protected $phoneTable;
     
@@ -43,7 +43,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Phone
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
 	 */
     public function getPhones($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
@@ -56,7 +56,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         
         
         $select = $this->_db->select()
-            ->from(array('asterisk' => SQL_TABLE_PREFIX . 'snom_phones'), array(
+            ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_phones'), array(
                 'id',
                 'macaddress',
                 'model',
@@ -78,7 +78,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Phone', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Phone', $rows);
 		
         return $result;
 	}
@@ -88,18 +88,18 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * get Phone by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Phone
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
 	 */
     public function getPhoneById($_phoneId)
     {	
-        $phoneId = Asterisk_Model_Phone::convertPhoneIdToInt($_phoneId);
+        $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($_phoneId);
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phones')->where($this->_db->quoteInto('id = ?', $phoneId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('phone not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Phone', $row);
-        $result = new Asterisk_Model_Phone($row);
+#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Phone', $row);
+        $result = new Voipmanager_Model_Phone($row);
         return $result;
 	}     
     
@@ -107,10 +107,10 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
      /**
      * add a phone
      *
-     * @param Asterisk_Model_Phone $_phoneData the phonedata
-     * @return Asterisk_Model_Phone
+     * @param Voipmanager_Model_Phone $_phoneData the phonedata
+     * @return Voipmanager_Model_Phone
      */
-    public function addPhone (Asterisk_Model_Phone $_phoneData)
+    public function addPhone (Voipmanager_Model_Phone $_phoneData)
     {
         if (! $_phoneData->isValid()) {
             throw new Exception('invalid phone');
@@ -140,15 +140,15 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
     /**
      * update an existing phone
      *
-     * @param Asterisk_Model_Phone $_phoneData the phonedata
-     * @return Asterisk_Model_Phone
+     * @param Voipmanager_Model_Phone $_phoneData the phonedata
+     * @return Voipmanager_Model_Phone
      */
-    public function updatePhone (Asterisk_Model_Phone $_phoneData)
+    public function updatePhone (Voipmanager_Model_Phone $_phoneData)
     {
         if (! $_phoneData->isValid()) {
             throw new Exception('invalid phone');
         }
-        $phoneId = Asterisk_Model_Phone::convertPhoneIdToInt($_phoneData);
+        $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($_phoneData);
         $phoneData = $_phoneData->toArray();
         unset($phoneData['id']);
 
@@ -166,7 +166,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
      */
     public function deletePhone ($_phoneId)
     {
-        $phoneId = Asterisk_Model_Phone::convertPhoneIdToInt($_phoneId);
+        $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($_phoneId);
         $where = array($this->_db->quoteInto('id = ?', $phoneId) , $this->_db->quoteInto('id = ?', $phoneId));
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_phones', $where);
         return $result;
@@ -208,7 +208,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Config
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Config
 	 */
     public function getConfig($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
@@ -249,7 +249,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Config', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Config', $rows);
 		
         return $result;
 	}
@@ -258,18 +258,18 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * get Config by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Config
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Config
 	 */
     public function getConfigById($_configId)
     {	
-        $configId = Asterisk_Model_Config::convertConfigIdToInt($_configId);
+        $configId = Voipmanager_Model_Config::convertConfigIdToInt($_configId);
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_config')->where($this->_db->quoteInto('id = ?', $configId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('config not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Config', $row);
-        $result = new Asterisk_Model_Config($row);
+#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Config', $row);
+        $result = new Voipmanager_Model_Config($row);
         return $result;
 	}    
     
@@ -278,10 +278,10 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
      /**
      * add a config
      *
-     * @param Asterisk_Model_Config $_configData the config data
-     * @return Asterisk_Model_Config
+     * @param Voipmanager_Model_Config $_configData the config data
+     * @return Voipmanager_Model_Config
      */
-    public function addConfig (Asterisk_Model_Config $_configData)
+    public function addConfig (Voipmanager_Model_Config $_configData)
     {
         if (! $_configData->isValid()) {
             throw new Exception('invalid config');
@@ -311,15 +311,15 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
     /**
      * update an existing config
      *
-     * @param Asterisk_Model_Config $_configData the configdata
-     * @return Asterisk_Model_Config
+     * @param Voipmanager_Model_Config $_configData the configdata
+     * @return Voipmanager_Model_Config
      */
-    public function updateConfig (Asterisk_Model_Config $_configData)
+    public function updateConfig (Voipmanager_Model_Config $_configData)
     {
         if (! $_configData->isValid()) {
             throw new Exception('invalid config');
         }
-        $configId = Asterisk_Model_Config::convertConfigIdToInt($_configData);
+        $configId = Voipmanager_Model_Config::convertConfigIdToInt($_configData);
         $configData = $_configData->toArray();
         unset($configData['id']);
 
@@ -338,7 +338,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
      */
     public function deleteConfig ($_configId)
     {
-        $configId = Asterisk_Model_Config::convertConfigIdToInt($_configId);
+        $configId = Voipmanager_Model_Config::convertConfigIdToInt($_configId);
         $where = array($this->_db->quoteInto('id = ?', $configId) , $this->_db->quoteInto('id = ?', $configId));
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_config', $where);
         return $result;
@@ -376,7 +376,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
 	 */
     public function getSoftware($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
@@ -406,7 +406,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Software', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Software', $rows);
 		
         return $result;
 	}    
@@ -415,11 +415,11 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * get Software by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
 	 */
     public function getSoftwareById($_softwareId)
     {	
-        //$softwareId = Asterisk_Model_Software::convertSoftwareIdToInt($_softwareId);
+        //$softwareId = Voipmanager_Model_Software::convertSoftwareIdToInt($_softwareId);
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'snom_software')
             ->where($this->_db->quoteInto('id = ?', $_softwareId));
@@ -428,18 +428,18 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         if (! $row) {
             throw new UnderflowException('software not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Software', $row);
-        $result = new Asterisk_Model_Software($row);
+#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Software', $row);
+        $result = new Voipmanager_Model_Software($row);
         return $result;
 	}      
     
      /**
      * add new software
      *
-     * @param Asterisk_Model_Software $_softwareData the softwaredata
-     * @return Asterisk_Model_Software
+     * @param Voipmanager_Model_Software $_softwareData the softwaredata
+     * @return Voipmanager_Model_Software
      */
-    public function addSoftware (Asterisk_Model_Software  $_softwareData)
+    public function addSoftware (Voipmanager_Model_Software  $_softwareData)
     {
         if (! $_softwareData->isValid()) {
             throw new Exception('invalid software');
@@ -460,10 +460,10 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
     /**
      * update an existing software
      *
-     * @param Asterisk_Model_Software $_softwareData the softwaredata
-     * @return Asterisk_Model_Phone
+     * @param Voipmanager_Model_Software $_softwareData the softwaredata
+     * @return Voipmanager_Model_Phone
      */
-    public function updateSoftware (Asterisk_Model_Software $_softwareData)
+    public function updateSoftware (Voipmanager_Model_Software $_softwareData)
     {
         if (! $_softwareData->isValid()) {
             throw new Exception('invalid software');
@@ -487,7 +487,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
      */
     public function deleteSoftware ($_softwareId)
     {
-        $softwareId = Asterisk_Model_Software::convertSoftwareIdToInt($_softwareId);
+        $softwareId = Voipmanager_Model_Software::convertSoftwareIdToInt($_softwareId);
         $where = array($this->_db->quoteInto('id = ?', $softwareId) , $this->_db->quoteInto('id = ?', $softwareId));
         $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_software', $where);
         return $result;
@@ -524,7 +524,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Class
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
 	 */
     public function getClasses($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
@@ -537,7 +537,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
         
         
         $select = $this->_db->select()
-            ->from(array('asterisk' => SQL_TABLE_PREFIX . 'snom_classes'), array(
+            ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_classes'), array(
                 'id',
                 'description',
                 'model',
@@ -557,7 +557,7 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Class', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Class', $rows);
 		
         return $result;
 	}
@@ -567,18 +567,18 @@ class Asterisk_Backend_Phone_Sql implements Asterisk_Backend_Phone_Interface
 	 * get Class by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Class
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
 	 */
     public function getClassById($_classId)
     {	
-        $classId = Asterisk_Model_Class::convertClassIdToInt($_classId);
+        $classId = Voipmanager_Model_Class::convertClassIdToInt($_classId);
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_classes')->where($this->_db->quoteInto('id = ?', $classId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('class not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Asterisk_Model_Class', $row);
-        $result = new Asterisk_Model_Class($row);
+#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Class', $row);
+        $result = new Voipmanager_Model_Class($row);
         return $result;
 	}   
   

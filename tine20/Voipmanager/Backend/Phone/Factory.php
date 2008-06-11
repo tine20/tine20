@@ -1,8 +1,8 @@
 <?php
 /**
- * backend factory class for Asterisk Management
+ * backend factory class for Voipmanager Management
  * 
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,16 +10,16 @@
  */
 
 /**
- * backend factory class for  Asterisk Management
+ * backend factory class for  Voipmanager Management
  * 
- * an instance of the Asterisk backendclass should be created using this class
+ * an instance of the Voipmanager backendclass should be created using this class
  * 
  * 
- * currently implemented backend classes: Asterisk_Backend::Sql
+ * currently implemented backend classes: Voipmanager_Backend::Sql
  * 
- * @package  Asterisk Management
+ * @package  Voipmanager Management
  */
-class Asterisk_Backend_Phone_Factory
+class Voipmanager_Backend_Phone_Factory
 {
     /**
      * constant for Sql contacts backend class
@@ -37,7 +37,7 @@ class Asterisk_Backend_Phone_Factory
     {
         switch($type) {
             case self::SQL:
-                $className = 'Asterisk_Backend_Phone_' . ucfirst($type);
+                $className = 'Voipmanager_Backend_Phone_' . ucfirst($type);
                 $instance = new $className();
                 break;
                 

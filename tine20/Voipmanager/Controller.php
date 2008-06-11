@@ -1,10 +1,10 @@
 <?php
 /**
- * controller for Asterisk Management application
+ * controller for Voipmanager Management application
  * 
- * the main logic of the Asterisk Management application
+ * the main logic of the Voipmanager Management application
  *
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,16 +13,16 @@
  */
 
 /**
- * controller class for Asterisk Management application
+ * controller class for Voipmanager Management application
  * 
- * @package     Asterisk Management
+ * @package     Voipmanager Management
  */
-class Asterisk_Controller
+class Voipmanager_Controller
 {
     /**
-     * Asterisk backend class
+     * Voipmanager backend class
      *
-     * @var Asterisk_Backend_Sql
+     * @var Voipmanager_Backend_Sql
      */
     protected $_backend;
     
@@ -32,7 +32,7 @@ class Asterisk_Controller
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Asterisk_Backend_Phone_Factory::factory(Asterisk_Backend_Phone_Factory::SQL);
+        $this->_backend = Voipmanager_Backend_Phone_Factory::factory(Voipmanager_Backend_Phone_Factory::SQL);
     }
     
     /**
@@ -44,19 +44,19 @@ class Asterisk_Controller
     /**
      * holdes the instance of the singleton
      *
-     * @var Asterisk_Controller
+     * @var Voipmanager_Controller
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Asterisk_Controller
+     * @return Voipmanager_Controller
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Asterisk_Controller;
+            self::$_instance = new Voipmanager_Controller;
         }
         
         return self::$_instance;
@@ -66,7 +66,7 @@ class Asterisk_Controller
      * get snom_phone by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Phone
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
      */
     public function getPhoneById($_id)
     {
@@ -80,7 +80,7 @@ class Asterisk_Controller
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Phone
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
      */
     public function getPhones($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
@@ -94,10 +94,10 @@ class Asterisk_Controller
     /**
      * add one phone
      *
-     * @param Asterisk_Model_Phone $_phone
-     * @return  Asterisk_Model_Phone
+     * @param Voipmanager_Model_Phone $_phone
+     * @return  Voipmanager_Model_Phone
      */
-    public function addPhone(Asterisk_Model_Phone $_phone)
+    public function addPhone(Voipmanager_Model_Phone $_phone)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
@@ -156,10 +156,10 @@ class Asterisk_Controller
     /**
      * update one phone
      *
-     * @param Asterisk_Model_Phone $_phone
-     * @return  Asterisk_Model_Phone
+     * @param Voipmanager_Model_Phone $_phone
+     * @return  Voipmanager_Model_Phone
      */
-    public function updatePhone(Asterisk_Model_Phone $_phone)
+    public function updatePhone(Voipmanager_Model_Phone $_phone)
     {
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
@@ -180,7 +180,7 @@ class Asterisk_Controller
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Location
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
      */
     public function getLocation($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {        
@@ -193,7 +193,7 @@ class Asterisk_Controller
      * get snom_location by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Location
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
      */
     public function getLocationById($_id)
     {
@@ -205,10 +205,10 @@ class Asterisk_Controller
     /**
      * add one location
      *
-     * @param Asterisk_Model_Location $_location
-     * @return  Asterisk_Model_Location
+     * @param Voipmanager_Model_Location $_location
+     * @return  Voipmanager_Model_Location
      */
-    public function addLocation(Asterisk_Model_Location $_location)
+    public function addLocation(Voipmanager_Model_Location $_location)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_ADD)) {
@@ -223,10 +223,10 @@ class Asterisk_Controller
     /**
      * update one location
      *
-     * @param Asterisk_Model_Location $_location
-     * @return  Asterisk_Model_Location
+     * @param Voipmanager_Model_Location $_location
+     * @return  Voipmanager_Model_Location
      */
-    public function updateLocation(Asterisk_Model_Location $_location)
+    public function updateLocation(Voipmanager_Model_Location $_location)
     {
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_location->owner, Tinebase_Container::GRANT_EDIT)) {
@@ -245,7 +245,7 @@ class Asterisk_Controller
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
      */
     public function getSoftware($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {        
@@ -258,7 +258,7 @@ class Asterisk_Controller
      * get snom_software by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Software
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Software
      */
     public function getSoftwareById($_id)
     {
@@ -270,10 +270,10 @@ class Asterisk_Controller
     /**
      * add new software
      *
-     * @param Asterisk_Model_Software $_software
-     * @return  Asterisk_Model_Software
+     * @param Voipmanager_Model_Software $_software
+     * @return  Voipmanager_Model_Software
      */
-    public function addSoftware(Asterisk_Model_Software $_software)
+    public function addSoftware(Voipmanager_Model_Software $_software)
     {        
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
@@ -288,10 +288,10 @@ class Asterisk_Controller
     /**
      * update existing software
      *
-     * @param Asterisk_Model_Software $_software
-     * @return  Asterisk_Model_Software
+     * @param Voipmanager_Model_Software $_software
+     * @return  Voipmanager_Model_Software
      */
-    public function updateSoftware(Asterisk_Model_Software $_software)
+    public function updateSoftware(Voipmanager_Model_Software $_software)
     {
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
@@ -331,7 +331,7 @@ class Asterisk_Controller
      * get snom_class by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Class
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
      */
     public function getClassById($_id)
     {
@@ -345,7 +345,7 @@ class Asterisk_Controller
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Asterisk_Model_Class
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
      */
     public function getClasses($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
