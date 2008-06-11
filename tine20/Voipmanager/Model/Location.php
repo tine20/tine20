@@ -51,6 +51,9 @@ class Voipmanager_Model_Location extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
+        'id'                        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'description'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firmware_interval'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firmware_status'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'update_policy'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -61,12 +64,7 @@ class Voipmanager_Model_Location extends Tinebase_Record_Abstract
         'webserver_type'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'https_port'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'http_user'					=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'http_pass'					=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'id'						=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'filter_registrar'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'callpickup_dialoginfo'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pickup_indication'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'http_pass'					=> array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**

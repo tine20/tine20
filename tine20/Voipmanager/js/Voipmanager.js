@@ -2780,6 +2780,9 @@ Tine.Voipmanager.Phones.Location = Ext.data.Record.create([
 
 
 Tine.Voipmanager.Location.Location = Ext.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'},
     {name: 'firmware_interval'},
     {name: 'firmware_status'},
     {name: 'update_policy'},
@@ -2790,18 +2793,12 @@ Tine.Voipmanager.Location.Location = Ext.data.Record.create([
     {name: 'webserver_type'},
     {name: 'https_port'},
     {name: 'http_user'},
-    {name: 'http_pass'},
-    {name: 'id'},
-    {name: 'description'},
-    {name: 'filter_registrar'},
-    {name: 'callpickup_dialoginfo'},
-    {name: 'pickup_indication'}
+    {name: 'http_pass'}
 ]);
 
 
 Tine.Voipmanager.Templates.Template = Ext.data.Record.create([
     {name: 'id'},
-    {name: 'name'},
     {name: 'model'},
     {name: 'description'},
     {name: 'keylayout_id'},
