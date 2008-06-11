@@ -1438,7 +1438,7 @@ Tine.Voipmanager.Location.EditDialog =  {
                         xtype: 'textfield',
                         fieldLabel: 'Name',
                         name: 'name',
-                        maxLength: 255,
+                        maxLength: 80,
                         anchor:'100%',
                         allowBlank: false
                     } , {

@@ -194,10 +194,16 @@
                 </field>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <length>20</length>
-                    <notnull>true</notnull>    
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>                
                 <field>
                     <name>description</name>
                     <type>text</type>
