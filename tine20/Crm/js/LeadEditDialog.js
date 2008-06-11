@@ -11,26 +11,6 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
 	var translation = new Locale.Gettext();
     translation.textdomain('Crm');
 
-    /*********** OVERVIEW form static stores ************/
-    
-    // @todo make generic, this is used multiple times
-    var storeProbability = new Ext.data.SimpleStore({
-            fields: ['key','value'],
-            data: [
-                    ['0','0%'],
-                    ['10','10%'],
-                    ['20','20%'],
-                    ['30','30%'],
-                    ['40','40%'],
-                    ['50','50%'],
-                    ['60','60%'],
-                    ['70','70%'],
-                    ['80','80%'],
-                    ['90','90%'],
-                    ['100','100%']
-                ]
-    });
-       
     /*********** OVERVIEW form fields ************/
 
     var txtfld_leadName = new Ext.form.TextField({
@@ -108,32 +88,20 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
             anchor:'95%'    
     });
 
-    var combo_probability =  new Ext.form.ComboBox({
+    var combo_probability = new Ext.ux.PercentCombo({
         fieldLabel: translation._('Probability'), 
         id: 'combo_probability',
-        name:'probability',
-        store: storeProbability,
-        displayField:'value',
-        valueField:'key',
-        typeAhead: true,
-        mode: 'local',
+        anchor:'95%',            
         listWidth: '25%',            
-        triggerAction: 'all',
-        emptyText:'',
-        selectOnFocus:true,
-        editable: false,
-        renderer: Ext.util.Format.percentage,
-        anchor:'95%'            
+        name:'probability'
     });
-    combo_probability.setValue('0');
-         
+
     var date_start = new Ext.form.DateField({
         fieldLabel: translation._('Start'), 
         allowBlank: false,
         id: 'start',             
         anchor: '95%'
     });
-
     
     var date_scheduledEnd = new Ext.form.DateField({
         fieldLabel: translation._('Estimated end'), 

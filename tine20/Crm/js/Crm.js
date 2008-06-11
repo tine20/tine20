@@ -162,25 +162,7 @@ Tine.Crm.Main = {
      * showCrmToolbar function
      */
     showCrmToolbar: function()
-    {        
-    	// @todo make generic, is used in lead edit dialog as well
-        var storeProbability = new Ext.data.SimpleStore({
-                fields: ['key','value'],
-                data: [
-                        ['0','0 %'],
-                        ['10','10 %'],
-                        ['20','20 %'],
-                        ['30','30 %'],
-                        ['40','40 %'],
-                        ['50','50 %'],
-                        ['60','60 %'],
-                        ['70','70 %'],
-                        ['80','80 %'],
-                        ['90','90 %'],
-                        ['100','100 %']
-                    ]
-        });
-        
+    {                
         var quickSearchField = new Ext.ux.SearchField({
             id: 'quickSearchField',
             width: 200,
@@ -233,25 +215,16 @@ Tine.Crm.Main = {
             });
         });
       
-        // @todo use Ext.ux.PercentCombo here
-        var filterComboProbability = new Ext.ux.form.ClearableComboBox({
+        var filterComboProbability = new Ext.ux.PercentCombo({
             fieldLabel: this.translation._('Probability'), 
+            blankText: this.translation._('Probability') + '...',            
+            emptyText: this.translation._('Probability') + '...',
             id: 'filterProbability',
             name:'probability',
             hideLabel: true,            
-            store: storeProbability,
-            blankText: this.translation._('Probability') + '...',            
-            displayField:'value',
-            valueField:'key',
-            typeAhead: true,
-            mode: 'local',
-            triggerAction: 'all',
-            emptyText: this.translation._('Probability') + '...',
-            selectOnFocus:true,
-            editable: false,
-            renderer: Ext.util.Format.percentage,
-            width:90    
+            width:90            	
         });
+                
 		filterComboProbability.on('select', function(combo, record, index) {
             var _probability = '';       
 		    if (record.data) {
