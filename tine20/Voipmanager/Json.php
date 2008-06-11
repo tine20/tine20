@@ -370,6 +370,42 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         $result = $template->toArray();        
         return $result;
-    }         
+    }
+             
+    /**
+     * add/update template
+     *
+     * if $templateData['id'] is empty the template gets added, otherwise it gets updated
+     *
+     * @param string $templateData a JSON encoded array of template properties
+     * @return array
+     */
+    public function saveTemplate($templateData)
+    {
+        $templateData = Zend_Json::decode($templateData);
+        
+        // unset if empty
+        if (empty($templateData['id'])) {
+            unset($templateData['id']);
+        }
+
+        $template = new Voipmanager_Model_Template();
+        $template->setFromArray($templateData);
+        
+        if ( empty($template->id) ) {
+            $template = Voipmanager_Controller::getInstance()->addTemplate($template);
+        } else {
+            $template = Voipmanager_Controller::getInstance()->updateTemplate($template);
+        }
+
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $template->toArray()
+        );
+        
+        
+        return $result;
+         
+    }     
     
 }

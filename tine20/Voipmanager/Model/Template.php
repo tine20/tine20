@@ -55,8 +55,8 @@ class Voipmanager_Model_Template extends Tinebase_Record_Abstract
         'name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'description'				=> array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'model'                     => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'keylayout_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'setting_id'                => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'keylayout_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'setting_id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'software_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );
 

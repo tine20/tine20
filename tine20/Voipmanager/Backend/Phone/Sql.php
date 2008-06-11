@@ -427,7 +427,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         return $result;
 	}      
     
-     /**
+    /**
      * add new software
      *
      * @param Voipmanager_Model_Software $_softwareData the softwaredata
@@ -574,10 +574,52 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
 #       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Template', $row);
         $result = new Voipmanager_Model_Template($row);
         return $result;
-	}   
-  
-  
+	}
+	   
+    /**
+     * add new template
+     *
+     * @param Voipmanager_Model_Template $_templateData the template data
+     * @return Voipmanager_Model_Template
+     */
+    public function addTemplate (Voipmanager_Model_Template $_template)
+    {
+        if (! $_template->isValid()) {
+            throw new Exception('invalid template');
+        }
+
+        if ( empty($_template->id) ) {
+            $_template->setId(Tinebase_Record_Abstract::generateUID());
+        }
+        
+        $template = $_template->toArray();
+        
+        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_templates', $template);
+
+        return $this->getTemplateById($_template->getId());
+    }
     
+    /**
+     * update an existing template
+     *
+     * @param Voipmanager_Model_Template $_template the template data
+     * @return Voipmanager_Model_Template
+     */
+    public function updateTemplate (Voipmanager_Model_Template $_template)
+    {
+        if (! $_template->isValid()) {
+            throw new Exception('invalid template');
+        }
+        $templateId = $_template->getId();
+        $templateData = $_template->toArray();
+        unset($templateData['id']);
+
+        $where = array($this->_db->quoteInto('id = ?', $templateId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_templates', $templateData, $where);
+        
+        return $this->getTemplateById($templateId);
+    }    
+	
     
     
    /**

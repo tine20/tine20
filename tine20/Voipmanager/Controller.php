@@ -354,6 +354,40 @@ class Voipmanager_Controller
         return $result;    
     }
     
+    /**
+     * add new template
+     *
+     * @param Voipmanager_Model_Template $_template
+     * @return  Voipmanager_Model_Template
+     */
+    public function addTemplate(Voipmanager_Model_Template $_template)
+    {        
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $template = $this->_backend->addTemplate($_template);
+      
+        return $template;
+    }
     
-    
+    /**
+     * update existing template
+     *
+     * @param Voipmanager_Model_Template $_template
+     * @return  Voipmanager_Model_Template
+     */
+    public function updateTemplate(Voipmanager_Model_Template $_template)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+       
+        $template = $this->_backend->updateTemplate($_template);
+        
+        return $template;
+    }    
 }
