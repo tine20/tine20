@@ -894,7 +894,13 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 border:false,
                 anchor: '100% 100%',
                 items: [{
-                        labelSeparator: '',
+                        xtype: 'textfield',
+                        fieldLabel: 'MAC Address',
+                        name: 'macaddress',
+                        maxLength: 12,
+                        anchor:'100%',
+                        allowBlank: false
+                    } , {
                         xtype:'textarea',
                         name: 'description',
                         fieldLabel: 'Description',
@@ -903,13 +909,6 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         anchor:'100%',
                         height: 40
                     } , {
-                        xtype: 'textfield',
-                        fieldLabel: 'MAC Address',
-                        name: 'macaddress',
-                        maxLength: 12,
-                        anchor:'100%',
-                        allowBlank: false
-                    }, {
                         xtype: 'combo',
                         fieldLabel: 'Template',
                         name: 'template_id',
