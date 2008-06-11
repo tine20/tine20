@@ -237,10 +237,8 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
                 'http_user',
                 'http_pass',
                 'id',
-                'description',
-                'filter_registrar',
-                'callpickup_dialoginfo',
-                'pickup_indication')
+                'name',
+                'description')
             );
 
         $select->order($_sort.' '.$_dir);
