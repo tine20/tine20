@@ -657,8 +657,9 @@ Tine.Crm.LeadEditDialog = {
                 leadForm.updateRecord(lead);
                 
                 // get linked stuff
+                // @todo add links to lead record, no use for additional data any more
                 var additionalData = Tine.Crm.LeadEditDialog.getAdditionalData();
-                
+
                 Ext.Ajax.request({
                     params: {
                         method: 'Crm.saveLead', 
@@ -714,6 +715,7 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @return  Object additionalData (json encoded)
      * @todo    add other stores and stuff
+     * @todo    add data directly to lead record
      */
     getAdditionalData: function()
     {
@@ -769,20 +771,6 @@ Tine.Crm.LeadEditDialog = {
         
         return additionalData;
         
-    },
-    
-    /**
-     * get task status icon
-     * @todo    use all stati store (see: Tasks/js/Status.js)
-     */    
-    getTaskStatusIcon: function(status_icon) {   
-    	
-    	//console.log(statusIcon);
-    	var status_realname = 'xxx'; 
-    	
-        //return '<div class="TasksMainGridStatus-' + statusName + '" ext:qtip="' + statusName + '"></div>';
-    	//return '<img class="TasksMainGridStatus" src="' + status_icon + '" ext:qtip="' + status_realname + '">';
-    	return '<img class="TasksMainGridStatus" src="' + status_icon + '">';
     },
     
     /**
@@ -850,13 +838,12 @@ Tine.Crm.LeadEditDialog = {
                     header: this.translation._("Status"),
                     width: 45,
                     sortable: true,
-                    dataIndex: 'status_icon',
-                    //dataIndex: 'status_realname',
-                    renderer: this.getTaskStatusIcon
+                    dataIndex: 'status_id',
+                    renderer: Tine.Tasks.status.getStatusIcon
                 }, {
                     id: 'percent',
                     header: this.translation._("Percent"),
-                    width: 50,
+                    width: 60,
                     sortable: true,
                     dataIndex: 'percent',
                     renderer: Ext.ux.PercentRenderer
@@ -867,21 +854,24 @@ Tine.Crm.LeadEditDialog = {
                     sortable: true,
                     dataIndex: 'summary'
                 }, {
+                    // @todo fix date & add again
                     id: 'due',
                     header: this.translation._("Due date"),
                     width: 80,
                     sortable: true,
                     dataIndex: 'due',
-                    // @todo fix date
                     hidden: true,
                     renderer: Tine.Tinebase.Common.dateRenderer
                 }, {
+                    // @todo add again ?
                     id: 'creator',
                     header: this.translation._("Creator"),
                     width: 130,
                     sortable: true,
+                    hidden: true,
                     dataIndex: 'creator'
                 }, {
+                    // @todo add again ?
                     id: 'description',
                     header: this.translation._("Description"),
                     width: 240,
@@ -949,7 +939,8 @@ Tine.Crm.LeadEditDialog = {
     {
         var storeTasks = new Ext.data.JsonStore({
             id: 'id',
-            fields: Tine.Crm.Model.TaskLink
+            fields: Tine.Tasks.Task
+                //Tine.Crm.Model.TaskLink
         });
             
         if(_tasks) {
@@ -1009,6 +1000,7 @@ Tine.Crm.LeadEditDialog = {
         Tine.Crm.Model.Lead.FixDates(lead);  
         
         //console.log(lead);
+        //console.log(lead.data.tasks);
     	
         /*********** INIT STORES *******************/
         
@@ -1058,7 +1050,6 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'lead_name',     type: 'string'},
     {name: 'leadstate_id',  type: 'int'},
     {name: 'leadtype_id',   type: 'int'},
-//    {name: 'leadstate',     type: 'int'},
     {name: 'leadsource_id', type: 'int'},
     {name: 'container',     type: 'int'},
     {name: 'modifier',      type: 'int'},
@@ -1075,18 +1066,10 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'tasks'},
     {name: 'products'},
     {name: 'tags'}
-//    {name: 'leadstate'},
-//    {name: 'leadtype'},
-//    {name: 'leadsource'},
-  //  {name: 'partner'},
-  //  {name: 'customer'}
-  //  {name: 'leadpartner_linkId'},
-  //  {name: 'leadpartner_detail'},                
-  //  {name: 'leadlinkId'},
-  //  {name: 'leaddetail'}  
 ]);
 
 // contact link
+// @todo replace by addressbook model
 Tine.Crm.Model.ContactLink = Ext.data.Record.create([
     {name: 'link_id'},              
     {name: 'link_remark'},                        
@@ -1113,6 +1096,7 @@ Tine.Crm.Model.ContactLink = Ext.data.Record.create([
 ]);
 
 // task link
+// @todo replace by task model
 Tine.Crm.Model.TaskLink = Ext.data.Record.create([
     {name: 'id'},
     {name: 'status_id'},
@@ -1126,6 +1110,7 @@ Tine.Crm.Model.TaskLink = Ext.data.Record.create([
 ]);
 
 // product link
+// @todo replace by product model
 Tine.Crm.Model.ProductLink = Ext.data.Record.create([
     {name: 'id'},
     {name: 'product_id'},

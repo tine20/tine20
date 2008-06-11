@@ -57,95 +57,16 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();
+
+        // get lead data
+        $crmJson = new Crm_Json;                       
+        $leadData = $crmJson->getLead($_leadId);
         
-        $crmJson = new Crm_Json;        
-        
-        $controller = Crm_Controller::getInstance();
-        
-        // @todo getLead() from Crm_Json
-        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
-            $leadData = $lead->toArray();
-
-            // add contact links
-            $leadData['contacts'] = array();
-            $contact_links = $controller->getLinksForApplication($_leadId, 'Addressbook');
-            foreach($contact_links as $contact_link) {
-                try {
-                    $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
-                    $contactArray = $contact->toArray();
-                    $contactArray['link_remark'] = $contact_link['remark'];
-                    $leadData['contacts'][] = $contactArray;                    
-                } catch (Exception $e) {
-                    // do nothing
-                    // catch only permission denied exception
-                }
-            }
-
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData['contacts'], true));
-            
-            // add task links
-            $leadData['tasks'] = array();
-            $taskLinks = $controller->getLinksForApplication($_leadId, 'Tasks');
-            // @todo    move that to controller?
-            foreach ( $taskLinks as $taskLink ) {
-                try {
-                    $task = Tasks_Controller::getInstance()->getTask($taskLink['recordId']);            
-                    $taskArray = $task->toArray();
-
-                    $creator = Tinebase_User::getInstance()->getUserById($task->created_by);
-                    $taskArray['creator'] = $creator->accountFullName;
-                    
-                    if ($task->last_modified_by != NULL) {
-                        $modifier = Tinebase_User::getInstance()->getUserById($task->last_modified_by);
-                        $taskArray['modifier'] = $modifier->accountFullName;         
-                    }
-
-                    // @todo write function for that: getStatusById()
-                    $stati = Tasks_Controller::getInstance()->getStati()->toArray();
-                    foreach ($stati as $status) {
-                        if ($status['id'] == $taskArray['status_id']) {
-                            $taskArray['status_realname'] = $status['status_name'];
-                            $taskArray['status_icon'] = $status['status_icon'];
-                        }
-                    }
-
-                    $leadData['tasks'][] = $taskArray;  
-                    
-                } catch (Exception $e) {
-                    // do nothing
-                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
-                }
-            }
-            
-            // add container
-            $folder = Tinebase_Container::getInstance()->getContainerById($lead->container);            
-            $leadData['container'] = $folder->toArray();
-            
-            // add products
-            $products = $controller->getProductsByLeadId($_leadId);
-            $leadData['products'] = $products->toArray();
-            
-            // add tags
-             $leadData['tags'] = $leadData['tags']->toArray();            
-            
-        } else {
-            // @todo set default values in js and remove getEmptyXXX functions
-            $leadData = $controller->getEmptyLead()->toArray();
-            $leadData['products'] = array();                
-            $leadData['contacts'] = array();   
-            $leadData['tasks'] = array();                                   
-            
-            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', $currentAccount, Tinebase_Container::GRANT_READ);
-            foreach($personalFolders as $folder) {
-                $leadData['container']     = $folder->toArray();
-                break;
-            }
-            
-        }
-
         // add lead types/states/sources and products to initialData
         $view->initialData = array();
         $view->initialData['Crm'] = $this->getInitialMainScreenData();
+        $tasksHttp = new Tasks_Http();
+        $view->initialData['Tasks'] = $tasksHttp->getInitialMainScreenData();
         
         $view->jsExecute = 'Tine.Crm.LeadEditDialog.display(' . Zend_Json::encode($leadData) . ' );';
 
@@ -205,19 +126,10 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
      * variable names get prefixed with Tine.<applicationname>
      * 
      * @return mixed array 'variable name' => 'data'
+     * @todo    is the setTimezone needed?
      */
     public function getInitialMainScreenData()
     {   
-        /*     
-        $controller = Crm_Controller::getInstance();
-        $initialData = array(
-            'LeadTypes' => $controller->getLeadtypes('leadtype','ASC'),
-            'LeadStates' => $controller->getLeadStates('leadstate','ASC'),
-            'LeadSources' => $controller->getLeadSources('leadsource','ASC'),
-            'Products' => $controller->getProducts('productsource','ASC'),
-        );
-        */
-
         $json = new Crm_Json();
         $initialData = array(
             'LeadTypes' => $json->getLeadtypes('leadtype','ASC'),
