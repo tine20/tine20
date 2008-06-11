@@ -16,78 +16,174 @@ Tine.Voipmanager = function() {
 	 * builds the voipmanager applications tree
 	 */
     var _initialTree = [{
-        text: 'Phones',
+        text: 'Asterisk',
         cls: 'treemain',
         allowDrag: false,
         allowDrop: true,
-        id: 'phones',
+        id: 'asterisk',
         icon: false,
-        children: [],
+        children: [{
+    		text :"Lines",
+    		cls :"treemain",
+    		allowDrag :false,
+    		allowDrop :true,
+    		id :"lines",
+    		icon :false,
+    		children :[],
+    		leaf :true,
+    		expanded :true,
+    		dataPanelType :"lines",
+    		viewRight: 'lines'
+    	},{
+    		text :"Dialplan",
+    		cls :"treemain",
+    		allowDrag :false,
+    		allowDrop :true,
+    		id :"dialplan",
+    		icon :false,
+    		children :[],
+    		leaf :true,
+    		expanded :true,
+    		dataPanelType :"dialplan",
+    		viewRight:'dialplan'
+    	},{
+    		text :"Context",
+    		cls :"treemain",
+    		allowDrag :false,
+    		allowDrop :true,
+    		id :"context",
+    		icon :false,
+    		children :[],
+    		leaf :true,
+    		expanded :true,
+    		dataPanelType :"context",
+    		viewRight:'context'
+    	},{
+    		text :"Voicemail",
+    		cls :"treemain",
+    		allowDrag :false,
+    		allowDrop :true,
+    		id :"voicemail",
+    		icon :false,
+    		children :[],
+    		leaf :true,
+    		expanded :true,
+    		dataPanelType :"voicemail",
+    		viewRight:'voicemail'
+    	},{
+    		text :"Meetme",
+    		cls :"treemain",
+    		allowDrag :false,
+    		allowDrop :true,
+    		id :"meetme",
+    		icon :false,
+    		children :[],
+    		leaf :true,
+    		expanded :true,
+    		dataPanelType :"meetme",
+    		viewRight:'meetme'
+    	},{
+    		text :"Queues",
+    		cls :"treemain",
+    		allowDrag :false,
+    		allowDrop :true,
+    		id :"queues",
+    		icon :false,
+    		children :[],
+    		leaf :true,
+    		expanded :true,
+    		dataPanelType :"queues",
+    		viewRight:'queues'
+    	}],
         leaf: null,
         expanded: true,
-        dataPanelType: 'phones',
-        viewRight: 'phones'
+        dataPanelType: 'asterisk',
+        viewRight: 'asterisk'
     },{
-        text: "Config",
-		cls: "treemain",
-		allowDrag: false,
-		allowDrop: true,
-		id: "config",
-		icon: false,
-		children: [],
-		leaf: null,
-		expanded: true,
-		dataPanelType: "config",
-		viewRight: 'config'
-	},{
-        text: "Classes",
-		cls: "treemain",
-		allowDrag: false,
-		allowDrop: true,
-		id: "classes",
-		icon: false,
-		children: [],
-		leaf: null,
-		expanded: true,
-		dataPanelType: "classes",
-		viewRight: 'classes'
-	},{
-		text :"Lines",
-		cls :"treemain",
-		allowDrag :false,
-		allowDrop :true,
-		id :"lines",
-		icon :false,
-		children :[],
-		leaf :null,
-		expanded :true,
-		dataPanelType :"lines",
-		viewRight: 'lines'
-	},{
-		text :"Settings",
-		cls :"treemain",
-		allowDrag :false,
-		allowDrop :true,
-		id :"settings",
-		icon :false,
-		children :[],
-		leaf :null,
-		expanded :true,
-		dataPanelType :"settings",
-		viewRight:'settings'
-	},{
-		text :"Software",
-		cls :"treemain",
-		allowDrag :false,
-		allowDrop :true,
-		id :"software",
-		icon :false,
-		children :[],
-		leaf :null,
-		expanded :true,
-		dataPanelType :"software",
-		viewRight: 'software'
-	}];
+        text: 'Snom',
+        cls: 'treemain',
+        allowDrag: false,
+        allowDrop: true,
+        id: 'snom',
+        icon: false,
+        children: [{
+            text: 'Phones',
+            cls: 'treemain',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'phones',
+            icon: false,
+            children: [],
+            leaf: true,
+            expanded: true,
+            dataPanelType: 'phones',
+            viewRight: 'phones'
+        },{
+            text: "Location",
+    		cls: "treemain",
+    		allowDrag: false,
+    		allowDrop: true,
+    		id: "location",
+    		icon: false,
+    		children: [],
+    		leaf: true,
+    		expanded: true,
+    		dataPanelType: "location",
+    		viewRight: 'location'
+    	},{
+            text: "Templates",
+    		cls: "treemain",
+    		allowDrag: false,
+    		allowDrop: true,
+    		id: "templates",
+    		icon: false,
+    		children: [{
+        		text :"Software",
+        		cls :"treemain",
+        		allowDrag :false,
+        		allowDrop :true,
+        		id :"software",
+        		icon :false,
+        		children :[],
+        		leaf :true,
+        		expanded :true,
+        		dataPanelType :"software",
+        		viewRight: 'software'
+            },{
+        		text :"Keylayout",
+        		cls :"treemain",
+        		allowDrag :false,
+        		allowDrop :true,
+        		id :"keylayout",
+        		icon :false,
+        		children :[],
+        		leaf :true,
+        		expanded :true,
+        		dataPanelType :"keylayout",
+        		viewRight: 'keylayout'
+            },{
+        		text :"Settings",
+        		cls :"treemain",
+        		allowDrag :false,
+        		allowDrop :true,
+        		id :"settings",
+        		icon :false,
+        		children :[],
+        		leaf :true,
+        		expanded :true,
+        		dataPanelType :"settings",
+        		viewRight: 'settings'
+            }],
+    		leaf: null,
+    		expanded: false,
+    		dataPanelType: "templates",
+    		viewRight: 'templates'
+    	}],
+        leaf: null,
+        expanded: true,
+        dataPanelType: 'snom',
+        viewRight: 'snom'
+    }];
 
 	/**
      * creates the voipmanager menu tree
@@ -157,19 +253,19 @@ Tine.Voipmanager = function() {
                     }
                     break;                    
                     
-                case 'config':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerConfig') {
-                        Ext.getCmp('gridVoipmanagerConfig').getStore().load({params:{start:0, limit:50}});
+                case 'location':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerLocation') {
+                        Ext.getCmp('gridVoipmanagerLocation').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Config.Main.show(_node);
+                        Tine.Voipmanager.Location.Main.show(_node);
                     }
                     break;                                        
                     
-                case 'classes':
-                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerClasses') {
-                        Ext.getCmp('gridVoipmanagerClasses').getStore().load({params:{start:0, limit:50}});
+                case 'templates':
+                    if(currentToolbar !== false && currentToolbar.id == 'toolbarVoipmanagerTemplates') {
+                        Ext.getCmp('gridVoipmanagerTemplates').getStore().load({params:{start:0, limit:50}});
                     } else {
-                        Tine.Voipmanager.Classes.Main.show(_node);
+                        Tine.Voipmanager.Templates.Main.show(_node);
                     }
                     break;                     
                     
@@ -186,7 +282,7 @@ Tine.Voipmanager = function() {
         treePanel.on('beforeexpand', function(_panel) {
             if(_panel.getSelectionModel().getSelectedNode() === null) {
                 _panel.expandPath('/root');
-                _panel.selectPath('/root/phones');
+                _panel.selectPath('/root/snom/phones');
             }
             _panel.fireEvent('click', _panel.getSelectionModel().getSelectedNode());
         }, this);
@@ -522,12 +618,12 @@ Tine.Voipmanager.Phones.Main = {
                 dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
-            case 'config':
-                dataStore.baseParams.method = 'Voipmanager.getConfig';
+            case 'location':
+                dataStore.baseParams.method = 'Voipmanager.getLocation';
                 break;                
                 
-            case 'classes':
-                dataStore.baseParams.method = 'Voipmanager.getClasses';
+            case 'templates':
+                dataStore.baseParams.method = 'Voipmanager.getTemplates';
                 break;                 
                 
             case 'lines':
@@ -575,11 +671,11 @@ Tine.Voipmanager.Phones.Main = {
 Tine.Voipmanager.Phones.Data = {
     
     
-    loadConfigData: function() {
+    loadLocationData: function() {
 
-        var configDataStore = new Ext.data.JsonStore({
+        var locationDataStore = new Ext.data.JsonStore({
         	baseParams: {
-                method: 'Voipmanager.getConfig',
+                method: 'Voipmanager.getLocation',
                 sort: 'description',
                 dir: 'ASC',
                 query: ''
@@ -596,9 +692,9 @@ Tine.Voipmanager.Phones.Data = {
             remoteSort: true
         });
 
-        configDataStore.setDefaultSort('description', 'asc');
+        locationDataStore.setDefaultSort('description', 'asc');
                
-        return configDataStore;
+        return locationDataStore;
     },
     
     
@@ -774,8 +870,8 @@ Tine.Voipmanager.Phones.EditDialog =  {
                                 }) ,
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Config',
-                                name: 'config',
+                                fieldLabel: 'Location',
+                                name: 'location',
                                 mode: 'remote',
                                 displayField:'description',
                                 valueField:'id',
@@ -783,7 +879,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                                 triggerAction: 'all',
                                 editable: false,
                                 forceSelection: true,
-                                store: Tine.Voipmanager.Phones.Data.loadConfigData()
+                                store: Tine.Voipmanager.Phones.Data.loadLocationData()
                             } ]
                         } , {
                         columnWidth: .5,
@@ -1132,7 +1228,7 @@ Tine.Voipmanager.Location.Main = {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
             var contextMenu = new Ext.menu.Menu({
-		        id:'ctxMenuConfig', 
+		        id:'ctxMenuLocation', 
 		        items: [
 		            this.actions.editLocation,
 		            this.actions.deleteLocation,
@@ -1176,12 +1272,12 @@ Tine.Voipmanager.Location.Main = {
                 dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
-            case 'config':
-                dataStore.baseParams.method = 'Voipmanager.getConfig';
+            case 'location':
+                dataStore.baseParams.method = 'Voipmanager.getLocation';
                 break;                
 
-            case 'classes':
-                dataStore.baseParams.method = 'Voipmanager.getClasses';
+            case 'templates':
+                dataStore.baseParams.method = 'Voipmanager.getTemplates';
                 break;  
                 
             case 'lines':
@@ -1875,12 +1971,12 @@ Tine.Voipmanager.Software.Main = {
                 dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
-            case 'config':
-                dataStore.baseParams.method = 'Voipmanager.getConfig';
+            case 'location':
+                dataStore.baseParams.method = 'Voipmanager.getLocation';
                 break;                
 
-            case 'classes':
-                dataStore.baseParams.method = 'Voipmanager.getClasses';
+            case 'templates':
+                dataStore.baseParams.method = 'Voipmanager.getTemplates';
                 break;  
                 
             case 'lines':
@@ -2085,63 +2181,63 @@ Tine.Voipmanager.Software.EditDialog =  {
 
 
 
-Ext.namespace('Tine.Voipmanager.Classes');
+Ext.namespace('Tine.Voipmanager.Templates');
 
-Tine.Voipmanager.Classes.Main = {
+Tine.Voipmanager.Templates.Main = {
        
 	actions: {
-	    addClass: null,
-	    editClass: null,
-	    deleteClass: null
+	    addTemplate: null,
+	    editTemplate: null,
+	    deleteTemplate: null
 	},
 	
 	handlers: {
 	    /**
-	     * onclick handler for addClass
+	     * onclick handler for addTemplate
 	     */
-	    addClass: function(_button, _event) 
+	    addTemplate: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Voipmanager.editClass&classId=', 500, 450);
+	        Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=', 500, 450);
 	    },
 
         /**
-         * onclick handler for editClass
+         * onclick handler for editTemplate
          */
-        editClass: function(_button, _event) 
+        editTemplate: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('Voipmanager_Class_Grid').getSelectionModel().getSelections();
-            var classId = selectedRows[0].id;
+            var selectedRows = Ext.getCmp('Voipmanager_Template_Grid').getSelectionModel().getSelections();
+            var templateId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Voipmanager.editClass&classId=' + classId, 500, 450);
+            Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + templateId, 500, 450);
         },
         
 	    /**
-	     * onclick handler for deleteClass
+	     * onclick handler for deleteTemplate
 	     */
-	    deleteClass: function(_button, _event) {
-	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected class?', function(_button){
+	    deleteTemplate: function(_button, _event) {
+	        Ext.MessageBox.confirm('Confirm', 'Do you really want to delete the selected template?', function(_button){
 	            if (_button == 'yes') {
 	            
-	                var classIds = [];
-	                var selectedRows = Ext.getCmp('Voipmanager_Class_Grid').getSelectionModel().getSelections();
+	                var templateIds = [];
+	                var selectedRows = Ext.getCmp('Voipmanager_Template_Grid').getSelectionModel().getSelections();
 	                for (var i = 0; i < selectedRows.length; ++i) {
-	                    classIds.push(selectedRows[i].id);
+	                    templateIds.push(selectedRows[i].id);
 	                }
 	                
-	                classIds = Ext.util.JSON.encode(classIds);
+	                templateIds = Ext.util.JSON.encode(templateIds);
 	                
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Voipmanager.deleteClasses',
-	                        _classIds: classIds
+	                        method: 'Voipmanager.deleteTemplates',
+	                        _templateIds: templateIds
 	                    },
-	                    text: 'Deleting class...',
+	                    text: 'Deleting template...',
 	                    success: function(_result, _request){
-	                        Ext.getCmp('Voipmanager_Class_Grid').getStore().reload();
+	                        Ext.getCmp('Voipmanager_Template_Grid').getStore().reload();
 	                    },
 	                    failure: function(result, request){
-	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the class.');
+	                        Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the template.');
 	                    }
 	                });
 	            }
@@ -2155,25 +2251,25 @@ Tine.Voipmanager.Classes.Main = {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Voipmanager');
     
-        this.actions.addClass = new Ext.Action({
-            text: this.translation._('add class'),
-            handler: this.handlers.addClass,
-            iconCls: 'action_addClass',
+        this.actions.addTemplate = new Ext.Action({
+            text: this.translation._('add template'),
+            handler: this.handlers.addTemplate,
+            iconCls: 'action_addTemplate',
             scope: this
         });
         
-        this.actions.editClass = new Ext.Action({
-            text: this.translation._('edit class'),
+        this.actions.editTemplate = new Ext.Action({
+            text: this.translation._('edit template'),
             disabled: true,
-            handler: this.handlers.editClass,
+            handler: this.handlers.editTemplate,
             iconCls: 'action_edit',
             scope: this
         });
         
-        this.actions.deleteClass = new Ext.Action({
-            text: this.translation._('delete class'),
+        this.actions.deleteTemplate = new Ext.Action({
+            text: this.translation._('delete template'),
             disabled: true,
-            handler: this.handlers.deleteClass,
+            handler: this.handlers.deleteTemplate,
             iconCls: 'action_delete',
             scope: this
         });
@@ -2197,12 +2293,12 @@ Tine.Voipmanager.Classes.Main = {
         preferencesButton.setDisabled(true);
     },
 	
-    displayClassToolbar: function()
+    displayTemplateToolbar: function()
     {
         var onFilterChange = function(_field, _newValue, _oldValue){
             // only refresh data on new query strings
             if (_newValue != _oldValue) {
-                Ext.getCmp('Voipmanager_Class_Grid').getStore().load({
+                Ext.getCmp('Voipmanager_Template_Grid').getStore().load({
                     params: {
                         start: 0,
                         limit: 50
@@ -2223,31 +2319,31 @@ Tine.Voipmanager.Classes.Main = {
         });
         tagFilter.on('change', onFilterChange, this);
         
-        var classToolbar = new Ext.Toolbar({
-            id: 'Voipmanager_Class_Toolbar',
+        var templateToolbar = new Ext.Toolbar({
+            id: 'Voipmanager_Template_Toolbar',
             split: false,
             height: 26,
             items: [
-                this.actions.addClass, 
-                this.actions.editClass,
-                this.actions.deleteClass,
+                this.actions.addTemplate, 
+                this.actions.editTemplate,
+                this.actions.deleteTemplate,
                 '->',
                 this.translation._('Filter: '), tagFilter,
                 this.translation._('Search: '), quickSearchField
             ]
         });
 
-        Tine.Tinebase.MainScreen.setActiveToolbar(classToolbar);
+        Tine.Tinebase.MainScreen.setActiveToolbar(templateToolbar);
     },
 
-    displayClassGrid: function() 
+    displayTemplateGrid: function() 
     {
     	// the datastore
         var dataStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Classes.Class,
+            fields: Tine.Voipmanager.Templates.Template,
             // turn on remote sorting
             remoteSort: true
         });
@@ -2259,15 +2355,15 @@ Tine.Voipmanager.Classes.Main = {
             _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
         }, this);   
         
-        //Ext.StoreMgr.add('ClassStore', dataStore);
+        //Ext.StoreMgr.add('TemplateStore', dataStore);
         
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
             pageSize: 50,
             store: dataStore,
             displayInfo: true,
-            displayMsg: this.translation._('Displaying class {0} - {1} of {2}'),
-            emptyMsg: this.translation._("No class to display")
+            displayMsg: this.translation._('Displaying template {0} - {1} of {2}'),
+            emptyMsg: this.translation._("No template to display")
         }); 
         
         // the columnmodel
@@ -2290,22 +2386,22 @@ Tine.Voipmanager.Classes.Main = {
 
             if(rowCount < 1) {
                 // no row selected
-                this.actions.deleteClass.setDisabled(true);
-                this.actions.editClass.setDisabled(true);
+                this.actions.deleteTemplate.setDisabled(true);
+                this.actions.editTemplate.setDisabled(true);
             } else if(rowCount > 1) {
                 // more than one row selected
-                this.actions.deleteClass.setDisabled(false);
-                this.actions.editClass.setDisabled(true);
+                this.actions.deleteTemplate.setDisabled(false);
+                this.actions.editTemplate.setDisabled(true);
             } else {
                 // only one row selected
-                this.actions.deleteClass.setDisabled(false);
-                this.actions.editClass.setDisabled(false);
+                this.actions.deleteTemplate.setDisabled(false);
+                this.actions.editTemplate.setDisabled(false);
             }
         }, this);
         
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Voipmanager_Class_Grid',
+            id: 'Voipmanager_Template_Grid',
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -2319,7 +2415,7 @@ Tine.Voipmanager.Classes.Main = {
                 autoFill: true,
                 forceFit:true,
                 ignoreAdd: true,
-                emptyText: 'No class to display'
+                emptyText: 'No template to display'
             })            
             
         });
@@ -2330,12 +2426,12 @@ Tine.Voipmanager.Classes.Main = {
                 _grid.getSelectionModel().selectRow(_rowIndex);
             }
             var contextMenu = new Ext.menu.Menu({
-		        id:'ctxMenuClass', 
+		        id:'ctxMenuTemplate', 
 		        items: [
-		            this.actions.editClass,
-		            this.actions.deleteClass,
+		            this.actions.editTemplate,
+		            this.actions.deleteTemplate,
 		            '-',
-		            this.actions.addClass 
+		            this.actions.addTemplate 
 		        ]
 		    });
             contextMenu.showAt(_eventObject.getXY());
@@ -2345,15 +2441,15 @@ Tine.Voipmanager.Classes.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('classWindow', 'index.php?method=Voipmanager.editClass&classId=' + record.data.id, 500, 450);
+                Tine.Tinebase.Common.openWindow('templateWindow', 'index.php?method=Voipmanager.editTemplate&templateId=' + record.data.id, 500, 450);
             } catch(e) {
                 // alert(e);
             }
         }, this);
 
         gridPanel.on('keydown', function(e){
-             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Class_Grid').getSelectionModel().getCount() > 0){
-                 this.handlers.deleteClass();
+             if(e.getKey() == e.DELETE && Ext.getCmp('Voipmanager_Template_Grid').getSelectionModel().getCount() > 0){
+                 this.handlers.deleteTemplate();
              }
         }, this);
 
@@ -2366,7 +2462,7 @@ Tine.Voipmanager.Classes.Main = {
      */
     loadData: function(_node)
     {
-        var dataStore = Ext.getCmp('Voipmanager_Class_Grid').getStore();
+        var dataStore = Ext.getCmp('Voipmanager_Template_Grid').getStore();
         
         // we set them directly, because this properties also need to be set when paging
         switch(_node.attributes.dataPanelType) {
@@ -2374,12 +2470,12 @@ Tine.Voipmanager.Classes.Main = {
                 dataStore.baseParams.method = 'Voipmanager.getPhones';
                 break;
                 
-            case 'config':
-                dataStore.baseParams.method = 'Voipmanager.getConfig';
+            case 'location':
+                dataStore.baseParams.method = 'Voipmanager.getLocation';
                 break;                
 
-            case 'classes':
-                dataStore.baseParams.method = 'Voipmanager.getClasses';
+            case 'templates':
+                dataStore.baseParams.method = 'Voipmanager.getTemplates';
                 break;  
                 
             case 'lines':
@@ -2407,10 +2503,10 @@ Tine.Voipmanager.Classes.Main = {
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Class_Toolbar') {
+        if(currentToolbar === false || currentToolbar.id != 'Voipmanager_Template_Toolbar') {
             this.initComponent();
-            this.displayClassToolbar();
-            this.displayClassGrid();
+            this.displayTemplateToolbar();
+            this.displayTemplateGrid();
             this.updateMainToolbar();
         }
         this.loadData(_node);
@@ -2418,8 +2514,8 @@ Tine.Voipmanager.Classes.Main = {
     
     reload: function() 
     {
-        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Class_Grid')) {
-            setTimeout ("Ext.getCmp('Voipmanager_Class_Grid').getStore().reload()", 200);
+        if(Ext.ComponentMgr.all.containsKey('Voipmanager_Template_Grid')) {
+            setTimeout ("Ext.getCmp('Voipmanager_Template_Grid').getStore().reload()", 200);
         }
     }
 };
@@ -2442,7 +2538,7 @@ Tine.Voipmanager.Phones.Phone = Ext.data.Record.create([
 
 
 
-Tine.Voipmanager.Phones.Config = Ext.data.Record.create([
+Tine.Voipmanager.Phones.Location = Ext.data.Record.create([
     {name: 'firmware_interval'},
     {name: 'firmware_status'},
     {name: 'update_policy'},
@@ -2482,7 +2578,7 @@ Tine.Voipmanager.Location.Location = Ext.data.Record.create([
 ]);
 
 
-Tine.Voipmanager.Classes.Class = Ext.data.Record.create([
+Tine.Voipmanager.Templates.Template = Ext.data.Record.create([
     {name: 'id'},
     {name: 'model'},
     {name: 'description'},

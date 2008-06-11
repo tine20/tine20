@@ -137,7 +137,7 @@
         </table>
         
         <table>
-            <name>snom_config</name>
+            <name>snom_location</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>1</version>
@@ -261,7 +261,7 @@
         </table>        
         
         <table>
-            <name>snom_classes</name>
+            <name>snom_templates</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
             <version>1</version>

@@ -204,13 +204,13 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
     
     
 	/**
-	 * get Config
+	 * get Location
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Config
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
 	 */
-    public function getConfig($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
+    public function getLocation($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
         if(!empty($_filter)) {
             $_fields = "firmware_interval,firmware_status,update_policy,setting_server,admin_mode,ntp_server,http_user,description";            
@@ -219,7 +219,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         
         
         $select = $this->_db->select()
-            ->from(array('config' => SQL_TABLE_PREFIX . 'snom_config'), array(
+            ->from(array('location' => SQL_TABLE_PREFIX . 'snom_location'), array(
                 'firmware_interval',
                 'firmware_status',
                 'update_policy',
@@ -249,117 +249,117 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Config', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Location', $rows);
 		
         return $result;
 	}
     
 	/**
-	 * get Config by id
+	 * get Location by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Config
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Location
 	 */
-    public function getConfigById($_configId)
+    public function getLocationById($_locationId)
     {	
-        $configId = Voipmanager_Model_Config::convertConfigIdToInt($_configId);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_config')->where($this->_db->quoteInto('id = ?', $configId));
+        $locationId = Voipmanager_Model_Location::convertLocationIdToInt($_locationId);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_location')->where($this->_db->quoteInto('id = ?', $locationId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('config not found');
+            throw new UnderflowException('location not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Config', $row);
-        $result = new Voipmanager_Model_Config($row);
+#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Location', $row);
+        $result = new Voipmanager_Model_Location($row);
         return $result;
 	}    
     
     
    
      /**
-     * add a config
+     * add a location
      *
-     * @param Voipmanager_Model_Config $_configData the config data
-     * @return Voipmanager_Model_Config
+     * @param Voipmanager_Model_Location $_locationData the location data
+     * @return Voipmanager_Model_Location
      */
-    public function addConfig (Voipmanager_Model_Config $_configData)
+    public function addLocation (Voipmanager_Model_Location $_locationData)
     {
-        if (! $_configData->isValid()) {
-            throw new Exception('invalid config');
+        if (! $_locationData->isValid()) {
+            throw new Exception('invalid location');
         }
         
-        if ( empty($_configData->id) ) {
-        	$newId = $_configData->generateUID();
-        	$_configData->setId($newId);
+        if ( empty($_locationData->id) ) {
+        	$newId = $_locationData->generateUID();
+        	$_locationData->setId($newId);
         }
         
-        $configData = $_configData->toArray();
+        $locationData = $_locationData->toArray();
         
-        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_config', $configData);
-        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_config', 'id');
-        // if we insert a config without an id, we need to get back one
-        if (empty($_configData->id) && $id == 0) {
-            throw new Exception("returned config id is 0");
+        $this->_db->insert(SQL_TABLE_PREFIX . 'snom_location', $locationData);
+        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_location', 'id');
+        // if we insert a location without an id, we need to get back one
+        if (empty($_locationData->id) && $id == 0) {
+            throw new Exception("returned location id is 0");
         }
-        // if the config had no configId set, set the id now
-        if (empty($_configData->id)) {
-            $_configData->id = $id;
+        // if the location had no locationId set, set the id now
+        if (empty($_locationData->id)) {
+            $_locationData->id = $id;
         }
-        return $this->getConfigById($_configData->id);
+        return $this->getLocationById($_locationData->id);
     }
     
     
     /**
-     * update an existing config
+     * update an existing location
      *
-     * @param Voipmanager_Model_Config $_configData the configdata
-     * @return Voipmanager_Model_Config
+     * @param Voipmanager_Model_Location $_locationData the locationdata
+     * @return Voipmanager_Model_Location
      */
-    public function updateConfig (Voipmanager_Model_Config $_configData)
+    public function updateLocation (Voipmanager_Model_Location $_locationData)
     {
-        if (! $_configData->isValid()) {
-            throw new Exception('invalid config');
+        if (! $_locationData->isValid()) {
+            throw new Exception('invalid location');
         }
-        $configId = Voipmanager_Model_Config::convertConfigIdToInt($_configData);
-        $configData = $_configData->toArray();
-        unset($configData['id']);
+        $locationId = Voipmanager_Model_Location::convertLocationIdToInt($_locationData);
+        $locationData = $_locationData->toArray();
+        unset($locationData['id']);
 
-        $where = array($this->_db->quoteInto('id = ?', $configId));
-        $this->_db->update(SQL_TABLE_PREFIX . 'snom_config', $configData, $where);
-        return $this->getConfigById($configId);
+        $where = array($this->_db->quoteInto('id = ?', $locationId));
+        $this->_db->update(SQL_TABLE_PREFIX . 'snom_location', $locationData, $where);
+        return $this->getLocationById($locationId);
     }    
      
     
     
     /**
-     * delete config identified by config id
+     * delete location identified by location id
      *
-     * @param int $_configId config id
+     * @param int $_locationId location id
      * @return int the number of row deleted
      */
-    public function deleteConfig ($_configId)
+    public function deleteLocation ($_locationId)
     {
-        $configId = Voipmanager_Model_Config::convertConfigIdToInt($_configId);
-        $where = array($this->_db->quoteInto('id = ?', $configId) , $this->_db->quoteInto('id = ?', $configId));
-        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_config', $where);
+        $locationId = Voipmanager_Model_Location::convertLocationIdToInt($_locationId);
+        $where = array($this->_db->quoteInto('id = ?', $locationId) , $this->_db->quoteInto('id = ?', $locationId));
+        $result = $this->_db->delete(SQL_TABLE_PREFIX . 'snom_location', $where);
         return $result;
     }    
     
     
     /**
-     * Deletes a set of configs.
+     * Deletes a set of locations.
      * 
-     * If one of the configs could not be deleted, no config is deleted
+     * If one of the locations could not be deleted, no location is deleted
      * 
      * @throws Exception
-     * @param array array of strings (config ids)
+     * @param array array of strings (location ids)
      * @return void
      */
-    public function deleteConfigs($_ids)
+    public function deleteLocations($_ids)
     {
         try {
             $this->_db->beginTransaction();
             foreach ($_ids as $id) {
-                $this->deleteConfig($id);
+                $this->deleteLocation($id);
             }
             $this->_db->commit();
             
@@ -388,7 +388,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         }
         
         $select = $this->_db->select()
-            ->from(array('config' => SQL_TABLE_PREFIX . 'snom_software'), array(
+            ->from(array('location' => SQL_TABLE_PREFIX . 'snom_software'), array(
                 'id',
                 'description',
                 'model',
@@ -520,13 +520,13 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
     
   
 	/**
-	 * get Classes
+	 * get Templates
 	 * 
      * @param string $_sort
      * @param string $_dir
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
 	 */
-    public function getClasses($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
+    public function getTemplates($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
         $where = array();
         
@@ -537,7 +537,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
         
         
         $select = $this->_db->select()
-            ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_classes'), array(
+            ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_templates'), array(
                 'id',
                 'description',
                 'model',
@@ -557,28 +557,28 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Class', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Template', $rows);
 		
         return $result;
 	}
     
     
 	/**
-	 * get Class by id
+	 * get Template by id
 	 * 
      * @param string $_id
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
 	 */
-    public function getClassById($_classId)
+    public function getTemplateById($_templateId)
     {	
-        $classId = Voipmanager_Model_Class::convertClassIdToInt($_classId);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_classes')->where($this->_db->quoteInto('id = ?', $classId));
+        $templateId = Voipmanager_Model_Template::convertTemplateIdToInt($_templateId);
+        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_templates')->where($this->_db->quoteInto('id = ?', $templateId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('class not found');
+            throw new UnderflowException('template not found');
         }
-#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Class', $row);
-        $result = new Voipmanager_Model_Class($row);
+#       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Template', $row);
+        $result = new Voipmanager_Model_Template($row);
         return $result;
 	}   
   

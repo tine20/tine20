@@ -1,6 +1,6 @@
 <?php
 /**
- * class to hold classes data
+ * class to hold templates data
  * 
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -11,11 +11,11 @@
  */
 
 /**
- * class to hold classes data
+ * class to hold templates data
  * 
  * @package     Voipmanager Management
  */
-class Voipmanager_Model_Class extends Tinebase_Record_Abstract
+class Voipmanager_Model_Template extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -60,24 +60,24 @@ class Voipmanager_Model_Class extends Tinebase_Record_Abstract
     );
 
     /**
-     * converts a int, string or Voipmanager_Model_Class to an class id
+     * converts a int, string or Voipmanager_Model_Template to an template id
      *
-     * @param int|string|Voipmanager_Model_Class $_classId the class id to convert
+     * @param int|string|Voipmanager_Model_Template $_templateId the template id to convert
      * @return int
      */
-    static public function convertClassIdToInt($_classId)
+    static public function convertTemplateIdToInt($_templateId)
     {
-        if ($_classId instanceof Voipmanager_Model_Class) {
-            if (empty($_classId->id)) {
-                throw new Exception('no class id set');
+        if ($_templateId instanceof Voipmanager_Model_Template) {
+            if (empty($_templateId->id)) {
+                throw new Exception('no template id set');
             }
-            $id = (string) $_classId->id;
+            $id = (string) $_templateId->id;
         } else {
-            $id = (string) $_classId;
+            $id = (string) $_templateId;
         }
         
         if ($id == '') {
-            throw new Exception('class id can not be 0');
+            throw new Exception('template id can not be 0');
         }
         
         return $id;

@@ -328,28 +328,28 @@ class Voipmanager_Controller
     
     
     /**
-     * get snom_class by id
+     * get snom_template by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
      */
-    public function getClassById($_id)
+    public function getTemplateById($_id)
     {
-        $result = $this->_backend->getClassById($_id);
+        $result = $this->_backend->getTemplateById($_id);
 
         return $result;    
     }
 
     /**
-     * get snom_classes
+     * get snom_templates
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Class
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Template
      */
-    public function getClasses($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function getTemplates($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $result = $this->_backend->getClasses($_sort, $_dir, $_query);
+        $result = $this->_backend->getTemplates($_sort, $_dir, $_query);
 
         return $result;    
     }

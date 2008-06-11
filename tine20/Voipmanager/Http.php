@@ -79,24 +79,24 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     
 
     /**
-     * create edit config dialog
+     * create edit location dialog
      *
-     * @param int $configId
+     * @param int $locationId
      * @todo catch permission denied exceptions only
      * 
      */
-    public function editConfig($configId=NULL)
+    public function editLocation($locationId=NULL)
     {
-        if (!empty($configId)) {
-            $configs = Voipmanager_Controller::getInstance();
-            $config = $configs->getConfigById($configId);
-            $arrayConfig = $config->toArray();
+        if (!empty($locationId)) {
+            $locations = Voipmanager_Controller::getInstance();
+            $location = $locations->getLocationById($locationId);
+            $arrayLocation = $location->toArray();
         } else {
 
         }
 
-        // encode the config array
-        $encodedConfig = Zend_Json::encode($arrayConfig);                   
+        // encode the location array
+        $encodedLocation = Zend_Json::encode($arrayLocation);                   
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 
@@ -104,14 +104,14 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Config.EditDialog.display(' . $encodedConfig .');';
+        $view->jsExecute = 'Tine.Voipmanager.Location.EditDialog.display(' . $encodedLocation .');';
 
-        $view->configData = array(
+        $view->locationData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
             'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
         );
         
-        $view->title="edit config data";
+        $view->title="edit location data";
 
         $view->isPopup = true;
         

@@ -331,13 +331,13 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         
         
     /**
-     * get snom classes
+     * get snom templates
      *
      * @param string $sort
      * @param string $dir
      * @return array
      */
-    public function getClasses($sort, $dir, $query)
+    public function getTemplates($sort, $dir, $query)
     {     
   
         $result = array(
@@ -345,7 +345,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getClasses($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->getTemplates($sort, $dir, $query)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
@@ -355,20 +355,20 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
     
     
    /**
-     * get one class identified by classId
+     * get one template identified by templateId
      *
-     * @param int $classId
+     * @param int $templateId
      * @return array
      */
-    public function getClassById($classId)
+    public function getTemplateById($templateId)
     {
         $result = array(
             'success'   => true
         );
 
-        $class = Voipmanager_Controller::getInstance()->getClassById($classId);
+        $template = Voipmanager_Controller::getInstance()->getTemplateById($templateId);
         
-        $result = $class->toArray();        
+        $result = $template->toArray();        
         return $result;
     }         
     
