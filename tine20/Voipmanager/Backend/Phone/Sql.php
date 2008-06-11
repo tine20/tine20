@@ -113,52 +113,45 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
      /**
      * add a phone
      *
-     * @param Voipmanager_Model_Phone $_phoneData the phonedata
+     * @param Voipmanager_Model_Phone $_phone the phonedata
      * @return Voipmanager_Model_Phone
      */
-    public function addPhone (Voipmanager_Model_Phone $_phoneData)
+    public function addPhone (Voipmanager_Model_Phone $_phone)
     {
-        if (! $_phoneData->isValid()) {
+        if (! $_phone->isValid()) {
             throw new Exception('invalid phone');
         }
         
-        if ( empty($_phoneData->id) ) {
-        	$_phoneData->setId(Tinebase_Record_Abstract::generateUID());
+        if ( empty($_phone->id) ) {
+        	$_phone->setId(Tinebase_Record_Abstract::generateUID());
         }
         
-        $phoneData = $_phoneData->toArray();
+        $phoneData = $_phone->toArray();
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones', $phoneData);
-        $id = $this->_db->lastInsertId(SQL_TABLE_PREFIX . 'snom_phones', 'id');
-        // if we insert a phone without an id, we need to get back one
-        if (empty($_phoneData->id) && $id == 0) {
-            throw new Exception("returned phone id is 0");
-        }
-        // if the phone had no phoneId set, set the id now
-        if (empty($_phoneData->id)) {
-            $_phoneData->id = $id;
-        }
-        return $this->getPhoneById($_phoneData->id);
+
+        return $this->getPhoneById($_phone->id);
     }
     
     
     /**
      * update an existing phone
      *
-     * @param Voipmanager_Model_Phone $_phoneData the phonedata
+     * @param Voipmanager_Model_Phone $_phone the phonedata
      * @return Voipmanager_Model_Phone
      */
-    public function updatePhone (Voipmanager_Model_Phone $_phoneData)
+    public function updatePhone (Voipmanager_Model_Phone $_phone)
     {
-        if (! $_phoneData->isValid()) {
+        if (! $_phone->isValid()) {
             throw new Exception('invalid phone');
         }
-        $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($_phoneData);
-        $phoneData = $_phoneData->toArray();
+        $phoneId = $_phone->getId();
+        $phoneData = $_phone->toArray();
         unset($phoneData['id']);
 
         $where = array($this->_db->quoteInto('id = ?', $phoneId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);
+        
         return $this->getPhoneById($phoneId);
     }    
     
@@ -281,44 +274,45 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
      /**
      * add a location
      *
-     * @param Voipmanager_Model_Location $_locationData the location data
+     * @param Voipmanager_Model_Location $_location the location data
      * @return Voipmanager_Model_Location
      */
-    public function addLocation (Voipmanager_Model_Location $_locationData)
+    public function addLocation (Voipmanager_Model_Location $_location)
     {
-        if (! $_locationData->isValid()) {
+        if (! $_location->isValid()) {
             throw new Exception('invalid location');
         }
         
-        if ( empty($_locationData->id) ) {
-        	$_locationData->setId(Tinebase_Record_Abstract::generateUID());
+        if ( empty($_location->id) ) {
+        	$_location->setId(Tinebase_Record_Abstract::generateUID());
         }
         
-        $locationData = $_locationData->toArray();
+        $locationData = $_location->toArray();
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_location', $locationData);
 
-        return $this->getLocationById($_locationData->id);
+        return $this->getLocationById($_location->id);
     }
     
     
     /**
      * update an existing location
      *
-     * @param Voipmanager_Model_Location $_locationData the locationdata
+     * @param Voipmanager_Model_Location $_location the locationdata
      * @return Voipmanager_Model_Location
      */
-    public function updateLocation (Voipmanager_Model_Location $_locationData)
+    public function updateLocation (Voipmanager_Model_Location $_location)
     {
-        if (! $_locationData->isValid()) {
+        if (! $_location->isValid()) {
             throw new Exception('invalid location');
         }
-        $locationId = Voipmanager_Model_Location::convertLocationIdToInt($_locationData);
-        $locationData = $_locationData->toArray();
+        $locationId = $_location->getId();
+        $locationData = $_location->toArray();
         unset($locationData['id']);
 
         $where = array($this->_db->quoteInto('id = ?', $locationId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_location', $locationData, $where);
+        
         return $this->getLocationById($locationId);
     }    
      
@@ -430,39 +424,39 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
     /**
      * add new software
      *
-     * @param Voipmanager_Model_Software $_softwareData the softwaredata
+     * @param Voipmanager_Model_Software $_software the softwaredata
      * @return Voipmanager_Model_Software
      */
-    public function addSoftware (Voipmanager_Model_Software  $_softwareData)
+    public function addSoftware (Voipmanager_Model_Software  $_software)
     {
-        if (! $_softwareData->isValid()) {
+        if (! $_software->isValid()) {
             throw new Exception('invalid software');
         }
 
-        if ( empty($_softwareData->id) ) {
-            $_softwareData->setId(Tinebase_Record_Abstract::generateUID());
+        if ( empty($_software->id) ) {
+            $_software->setId(Tinebase_Record_Abstract::generateUID());
         }
         
-        $softwareData = $_softwareData->toArray();
+        $softwareData = $_software->toArray();
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_software', $softwareData);
 
-        return $this->getSoftwareById($_softwareData->getId());
+        return $this->getSoftwareById($_software->getId());
     }
     
     /**
      * update an existing software
      *
-     * @param Voipmanager_Model_Software $_softwareData the softwaredata
-     * @return Voipmanager_Model_Phone
+     * @param Voipmanager_Model_Software $_software the softwaredata
+     * @return Voipmanager_Model_Software
      */
-    public function updateSoftware (Voipmanager_Model_Software $_softwareData)
+    public function updateSoftware (Voipmanager_Model_Software $_software)
     {
-        if (! $_softwareData->isValid()) {
+        if (! $_software->isValid()) {
             throw new Exception('invalid software');
         }
-        $softwareId = $_softwareData->getId();
-        $softwareData = $_softwareData->toArray();
+        $softwareId = $_software->getId();
+        $softwareData = $_software->toArray();
         unset($softwareData['id']);
 
         $where = array($this->_db->quoteInto('id = ?', $softwareId));
@@ -579,7 +573,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
     /**
      * add new template
      *
-     * @param Voipmanager_Model_Template $_templateData the template data
+     * @param Voipmanager_Model_Template $_template the template data
      * @return Voipmanager_Model_Template
      */
     public function addTemplate (Voipmanager_Model_Template $_template)
