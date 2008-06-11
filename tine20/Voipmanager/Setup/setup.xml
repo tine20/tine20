@@ -228,8 +228,8 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <length>20</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -255,20 +255,20 @@
                 </field>
                 <field>
                     <name>keylayout_id</name>
-                    <type>integer</type>
-                    <length>20</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>setting_id</name>
-                    <type>integer</type>
-                    <length>20</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>software_id</name>
-                    <type>integer</type>
-                    <length>20</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>              
                 <index>
