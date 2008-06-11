@@ -483,7 +483,7 @@ Tine.Voipmanager.Phones.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Phones.Phone,
+            fields: Tine.Voipmanager.Model.Phone,
             // turn on remote sorting
             remoteSort: true
         });
@@ -818,7 +818,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
                 _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
             }
-            this.phoneRecord = new Tine.Voipmanager.Phones.Phone(_phoneData);
+            this.phoneRecord = new Tine.Voipmanager.Model.Phone(_phoneData);
         },
         
         
@@ -1168,7 +1168,7 @@ Tine.Voipmanager.Location.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Location.Location,
+            fields: Tine.Voipmanager.Model.Location,
             // turn on remote sorting
             remoteSort: true
         });
@@ -1361,7 +1361,7 @@ Tine.Voipmanager.Location.EditDialog =  {
         
         updateLocationRecord: function(_locationData)
         {
-            this.locationRecord = new Tine.Voipmanager.Location.Location(_locationData);
+            this.locationRecord = new Tine.Voipmanager.Model.Location(_locationData);
         },
         
         deleteLocation: function(_button, _event)
@@ -1838,7 +1838,7 @@ Tine.Voipmanager.Software.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Software.Software,
+            fields: Tine.Voipmanager.Model.Software,
             // turn on remote sorting
             remoteSort: true
         });
@@ -2021,7 +2021,7 @@ Tine.Voipmanager.Software.EditDialog =  {
         
         updateSoftwareRecord: function(_softwareData)
         {
-            this.softwareRecord = new Tine.Voipmanager.Software.Software(_softwareData);
+            this.softwareRecord = new Tine.Voipmanager.Model.Software(_softwareData);
         },
         
         deleteSoftware: function(_button, _event)
@@ -2335,7 +2335,7 @@ Tine.Voipmanager.Templates.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Voipmanager.Templates.Template,
+            fields: Tine.Voipmanager.Model.Template,
             // turn on remote sorting
             remoteSort: true
         });
@@ -2520,7 +2520,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
         
         updateTemplateRecord: function(_templateData)
         {
-            this.templateRecord = new Tine.Voipmanager.Templates.Template(_templateData);
+            this.templateRecord = new Tine.Voipmanager.Model.Template(_templateData);
         },
         
         deleteTemplate: function(_button, _event)
@@ -2741,75 +2741,3 @@ Tine.Voipmanager.Templates.EditDialog =  {
             dialog.getForm().loadRecord(this.templateRecord);
         }   
 };
-
-
-
-
-Tine.Voipmanager.Phones.Phone = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'macaddress'},
-    {name: 'location_id'},
-    {name: 'template_id'},
-    {name: 'ipaddress'},
-    {name: 'last_modified_time'},
-    {name: 'description'},
-    {name: 'location'},
-    {name: 'template'}
-]);
-
-
-
-Tine.Voipmanager.Phones.Location = Ext.data.Record.create([
-    {name: 'firmware_interval'},
-    {name: 'firmware_status'},
-    {name: 'update_policy'},
-    {name: 'setting_server'},
-    {name: 'admin_mode'},
-    {name: 'admin_mode_password'},
-    {name: 'ntp_server'},
-    {name: 'webserver_type'},
-    {name: 'https_port'},
-    {name: 'http_user'},
-    {name: 'http_pass'},
-    {name: 'id'},
-    {name: 'description'},
-    {name: 'filter_registrar'},
-    {name: 'callpickup_dialoginfo'},
-    {name: 'pickup_indication'}
-]);
-
-
-Tine.Voipmanager.Location.Location = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'description'},
-    {name: 'firmware_interval'},
-    {name: 'firmware_status'},
-    {name: 'update_policy'},
-    {name: 'setting_server'},
-    {name: 'admin_mode'},
-    {name: 'admin_mode_password'},
-    {name: 'ntp_server'},
-    {name: 'webserver_type'},
-    {name: 'https_port'},
-    {name: 'http_user'},
-    {name: 'http_pass'}
-]);
-
-
-Tine.Voipmanager.Templates.Template = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'model'},
-    {name: 'description'},
-    {name: 'keylayout_id'},
-    {name: 'setting_id'},
-    {name: 'software_id'}
-]);
-
-
-Tine.Voipmanager.Software.Software = Ext.data.Record.create([
-    {name: 'id'},
-    {name: 'description'},
-    {name: 'model'},
-    {name: 'softwareimage'}
-]);

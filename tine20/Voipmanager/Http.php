@@ -28,7 +28,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function getJsFilesToInclude()
     {
         return array(
-            'Voipmanager/js/Voipmanager.js'
+            'Voipmanager/js/Voipmanager.js',
+            'Voipmanager/js/Model.js',
         );
     }
     
