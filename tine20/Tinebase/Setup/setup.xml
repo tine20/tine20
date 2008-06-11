@@ -703,7 +703,7 @@
         </table>
         
         <table>
-            <name>record_relations</name>
+            <name>relations</name>
             <version>3</version>
             <declaration>
                 <field>

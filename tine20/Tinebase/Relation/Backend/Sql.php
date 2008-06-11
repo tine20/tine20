@@ -52,7 +52,7 @@ class Tinebase_Relation_Backend_Sql
     {
     	// temporary on the fly creation of table
     	$this->_db = new Tinebase_Db_Table(array(
-    	    'name' => SQL_TABLE_PREFIX . 'record_relations',
+    	    'name' => SQL_TABLE_PREFIX . 'relations',
     	    'primary' => 'id'
     	));
     	
