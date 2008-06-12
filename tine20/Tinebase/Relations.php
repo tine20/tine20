@@ -19,6 +19,37 @@
 class Tinebase_Relations
 {
     /**
+     * @var Tinebase_Relation_Backend_Sql
+     */
+    protected $_backend;
+    /**
+     * holdes the instance of the singleton
+     *
+     * @var Tinebase_Relations
+     */
+    private static $instance = NULL;
+    
+    /**
+     * the constructor
+     *
+     */
+    private function __construct()
+    {
+        $this->_backend = new Tinebase_Relation_Backend_Sql;
+    }
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_Relations
+     */
+    public static function getInstance() 
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Tinebase_Relations();
+        }
+        return self::$instance;
+    }
+    /**
      * set all relations of a given record
      * 
      * NOTE: given relation data is expected to be an array atm.
@@ -32,8 +63,31 @@ class Tinebase_Relations
      */
     public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreAcl=false)
     {
-        // check for toCreate / toDelete
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation', $_relationData, true);
+        // own id sanitising
+        $relations->own_model   = $_model;
+        $relations->own_backend = $_backend;
+        $relations->own_id      = $_id;
         
+        // create new records to relate to
+        $this->_createNewAppRecords($relations);
+        
+        // compute relations to add/delete 
+        $relationsIds = $relations->getArrayOfIds();
+        $currentIds   = $this->getRelations($_model, $_backend, $_id, $_ignoreAcl)->getArrayOfIds();
+        $toAdd = $relations->getIdLessIndexes();
+        $toDel = array_diff($currentIds, $relationsIds);
+        
+        if (!$relations->isValid()) {
+            throw new Exception('relations not valid' . print_r($relations->getValidationErrors(),true));
+        }
+        
+        foreach ($toAdd as $idx) {
+        	$this->_backend->addRelation($relations[$idx]);
+        }
+        foreach ($toDel as $relationId) {
+            $this->_backend->breakRelation($relationId);
+        }
     }
     /**
      * get all relations of a given record
@@ -46,6 +100,38 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
-        
+        $relations = $this->_backend->getAllRelations($_model, $_backend, $_id);
+        return $relations;
     }
+    /**
+     * creates application records which do not exist
+     * 
+     * @param  Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
+     * @return void
+     */
+    protected function _createNewAppRecords($_relations)
+    {
+        foreach ($_relations as $relation) {
+            if(empty($relation->related_id)) {
+                switch ($relation->related_model) {
+                    case 'Addressbook_Model_Contact':
+                        $json = new Addressbook_Json();
+                        $result = $json->saveContact(Zend_Json::encode($relation->related_record));
+                        $relation->related_backend = Addressbook_Backend_Factory::SQL;
+                        $relation->related_id = $result['updatedData']['id'];
+                        break;
+                    case 'Tasks_Model_Task':
+                        $json = new Tasks_Json();
+                        $task = $json->saveTask(Zend_Json::encode($relation->related_record));
+                        $relation->related_backend = Tasks_Backend_Factory::SQL;
+                        $relation->related_id = $task['id'];
+                        break;
+                    default:
+                        throw new Exception('related model not supportet');
+                        break;
+                }
+            }
+        }
+    }
+        
 }
