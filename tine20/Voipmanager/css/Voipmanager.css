@@ -14,6 +14,10 @@
     background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
 }
 
+.action_add {
+    background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
+}
+
 .action_addGroup {
     background-image:url(../../images/oxygen/16x16/actions/add-users.png) !important;
 }

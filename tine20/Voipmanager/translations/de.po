@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 Voipmanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-11 18:06+0100\n"
+"POT-Creation-Date: 2008-06-12 11:01+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Thomas Wadewitz <t.wadewitz@metaways.de>\n"
 "Language-Team: \n"
@@ -17,6 +17,60 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Voipmanager\n"
 
+#: Voipmanager/js/Software.js:90
+msgid "add software"
+msgstr "Software hinzufügen"
+
+#: Voipmanager/js/Software.js:97
+msgid "edit software"
+msgstr "Software editieren"
+
+#: Voipmanager/js/Software.js:105
+msgid "delete software"
+msgstr "Software löschen"
+
+#: Voipmanager/js/Software.js:166
+#: Voipmanager/js/Voipmanager.js:471
+#: Voipmanager/js/Voipmanager.js:1155
+#: Voipmanager/js/Voipmanager.js:1814
+msgid "Filter: "
+msgstr "Filter:"
+
+#: Voipmanager/js/Software.js:167
+#: Voipmanager/js/Voipmanager.js:472
+#: Voipmanager/js/Voipmanager.js:1156
+#: Voipmanager/js/Voipmanager.js:1815
+msgid "Search: "
+msgstr "Suche:"
+
+#: Voipmanager/js/Software.js:200
+msgid "Displaying software {0} - {1} of {2}"
+msgstr "Zeige Software {0} - {1} von {2}"
+
+#: Voipmanager/js/Software.js:201
+msgid "No software to display"
+msgstr "Keine Software vorhanden"
+
+#: Voipmanager/js/Software.js:206
+#: Voipmanager/js/Voipmanager.js:1204
+#: Voipmanager/js/Voipmanager.js:1854
+msgid "id"
+msgstr "id"
+
+#: Voipmanager/js/Software.js:207
+msgid "Software Image"
+msgstr "Name"
+
+#: Voipmanager/js/Software.js:208
+msgid "Phone Model"
+msgstr "Telefonmodell"
+
+#: Voipmanager/js/Software.js:209
+#: Voipmanager/js/Voipmanager.js:1205
+#: Voipmanager/js/Voipmanager.js:1856
+msgid "Description"
+msgstr "Beschreibung"
+
 #: Voipmanager/js/Voipmanager.js:392
 msgid "add phone"
 msgstr "Telefon hinzufügen"
@@ -28,20 +82,6 @@ msgstr "Telefon editieren"
 #: Voipmanager/js/Voipmanager.js:407
 msgid "delete phone"
 msgstr "Telefon löschen"
-
-#: Voipmanager/js/Voipmanager.js:471
-#: Voipmanager/js/Voipmanager.js:1145
-#: Voipmanager/js/Voipmanager.js:1854
-#: Voipmanager/js/Voipmanager.js:2351
-msgid "Filter: "
-msgstr "Filter:"
-
-#: Voipmanager/js/Voipmanager.js:472
-#: Voipmanager/js/Voipmanager.js:1146
-#: Voipmanager/js/Voipmanager.js:1855
-#: Voipmanager/js/Voipmanager.js:2352
-msgid "Search: "
-msgstr "Suche:"
 
 #: Voipmanager/js/Voipmanager.js:505
 msgid "Displaying phones {0} - {1} of {2}"
@@ -79,151 +119,111 @@ msgstr "zuletzt geändert"
 msgid "description"
 msgstr "Beschreibung"
 
-#: Voipmanager/js/Voipmanager.js:1069
+#: Voipmanager/js/Voipmanager.js:1079
 msgid "add location"
 msgstr "Standort hinzufügen"
 
-#: Voipmanager/js/Voipmanager.js:1076
+#: Voipmanager/js/Voipmanager.js:1086
 msgid "edit location"
 msgstr "Standort editieren"
 
-#: Voipmanager/js/Voipmanager.js:1084
+#: Voipmanager/js/Voipmanager.js:1094
 msgid "delete location"
 msgstr "Standort löschen"
 
-#: Voipmanager/js/Voipmanager.js:1179
+#: Voipmanager/js/Voipmanager.js:1189
 msgid "Displaying location {0} - {1} of {2}"
 msgstr "Zeige Standort {0} - {1} von {2}"
 
-#: Voipmanager/js/Voipmanager.js:1180
+#: Voipmanager/js/Voipmanager.js:1190
 msgid "No location to display"
 msgstr "Kein Standort vorhanden"
 
-#: Voipmanager/js/Voipmanager.js:1185
+#: Voipmanager/js/Voipmanager.js:1195
 msgid "FW Interval"
 msgstr "Firmware Intervall"
 
-#: Voipmanager/js/Voipmanager.js:1186
+#: Voipmanager/js/Voipmanager.js:1196
 msgid "FW Status"
 msgstr "Firmware Status"
 
-#: Voipmanager/js/Voipmanager.js:1187
+#: Voipmanager/js/Voipmanager.js:1197
 msgid "Update Policy"
 msgstr "Update Grundsatz"
 
-#: Voipmanager/js/Voipmanager.js:1188
+#: Voipmanager/js/Voipmanager.js:1198
 msgid "Server Setting"
 msgstr "Server Einstellung"
 
-#: Voipmanager/js/Voipmanager.js:1189
+#: Voipmanager/js/Voipmanager.js:1199
 msgid "Admin Mode"
 msgstr "Admin Mode"
 
-#: Voipmanager/js/Voipmanager.js:1190
+#: Voipmanager/js/Voipmanager.js:1200
 msgid "NTP Server"
 msgstr "NTP Server"
 
-#: Voipmanager/js/Voipmanager.js:1191
+#: Voipmanager/js/Voipmanager.js:1201
 msgid "Webserver Type"
 msgstr "Webserver Typ"
 
-#: Voipmanager/js/Voipmanager.js:1192
+#: Voipmanager/js/Voipmanager.js:1202
 msgid "HTTPS Port"
 msgstr "HTTPS Port"
 
-#: Voipmanager/js/Voipmanager.js:1193
+#: Voipmanager/js/Voipmanager.js:1203
 msgid "HTTP User"
 msgstr "HTTP Benutzer"
 
-#: Voipmanager/js/Voipmanager.js:1194
-#: Voipmanager/js/Voipmanager.js:1894
-#: Voipmanager/js/Voipmanager.js:2391
-msgid "id"
-msgstr "id"
-
-#: Voipmanager/js/Voipmanager.js:1195
-#: Voipmanager/js/Voipmanager.js:1897
-#: Voipmanager/js/Voipmanager.js:2393
-msgid "Description"
-msgstr "Beschreibung"
-
-#: Voipmanager/js/Voipmanager.js:1196
+#: Voipmanager/js/Voipmanager.js:1206
 msgid "Filter Registrar"
 msgstr "Filter Registrar"
 
-#: Voipmanager/js/Voipmanager.js:1197
+#: Voipmanager/js/Voipmanager.js:1207
 msgid "CP Dialoginfo"
 msgstr "CP Dialoginfo"
 
-#: Voipmanager/js/Voipmanager.js:1198
+#: Voipmanager/js/Voipmanager.js:1208
 msgid "Pickup Indic."
 msgstr "Pickup Indic."
 
-#: Voipmanager/js/Voipmanager.js:1778
-msgid "add software"
-msgstr "Software hinzufügen"
-
-#: Voipmanager/js/Voipmanager.js:1785
-msgid "edit software"
-msgstr "Software editieren"
-
-#: Voipmanager/js/Voipmanager.js:1793
-msgid "delete software"
-msgstr "Software löschen"
-
-#: Voipmanager/js/Voipmanager.js:1888
-msgid "Displaying software {0} - {1} of {2}"
-msgstr "Zeige Software {0} - {1} von {2}"
-
-#: Voipmanager/js/Voipmanager.js:1889
-msgid "No software to display"
-msgstr "Keine Software vorhanden"
-
-#: Voipmanager/js/Voipmanager.js:1895
-msgid "Software Image"
-msgstr "Datei"
-
-#: Voipmanager/js/Voipmanager.js:1896
-msgid "Phone Model"
-msgstr "Telefonmodell"
-
-#: Voipmanager/js/Voipmanager.js:2275
+#: Voipmanager/js/Voipmanager.js:1738
 msgid "add template"
 msgstr "Template hinzufügen"
 
-#: Voipmanager/js/Voipmanager.js:2282
+#: Voipmanager/js/Voipmanager.js:1745
 msgid "edit template"
 msgstr "Template editieren"
 
-#: Voipmanager/js/Voipmanager.js:2290
+#: Voipmanager/js/Voipmanager.js:1753
 msgid "delete template"
 msgstr "Template löschen"
 
-#: Voipmanager/js/Voipmanager.js:2385
+#: Voipmanager/js/Voipmanager.js:1848
 msgid "Displaying template {0} - {1} of {2}"
 msgstr "Zeige Template {0} - {1} von {2}"
 
-#: Voipmanager/js/Voipmanager.js:2386
+#: Voipmanager/js/Voipmanager.js:1849
 msgid "No template to display"
 msgstr "Kein Template vorhanden"
 
-#: Voipmanager/js/Voipmanager.js:2392
+#: Voipmanager/js/Voipmanager.js:1855
 msgid "name"
 msgstr "Name"
 
-#: Voipmanager/js/Voipmanager.js:2394
+#: Voipmanager/js/Voipmanager.js:1857
 msgid "Model"
 msgstr "Telefonmodell"
 
-#: Voipmanager/js/Voipmanager.js:2395
+#: Voipmanager/js/Voipmanager.js:1858
 msgid "Keylayout Id"
 msgstr "Tastaturlayout Id"
 
-#: Voipmanager/js/Voipmanager.js:2396
+#: Voipmanager/js/Voipmanager.js:1859
 msgid "Settings Id"
 msgstr "Einstellungen Id"
 
-#: Voipmanager/js/Voipmanager.js:2397
+#: Voipmanager/js/Voipmanager.js:1860
 msgid "Software Id"
 msgstr "Software Id"
 

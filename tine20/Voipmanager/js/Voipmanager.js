@@ -131,51 +131,51 @@ Tine.Voipmanager = function() {
             dataPanelType: "location",
             viewRight: 'location'
         },{
+            text :"Software",
+            cls :"treemain",
+            allowDrag :false,
+            allowDrop :true,
+            id :"software",
+            icon :false,
+            children :[],
+            leaf :null,
+            expanded :true,
+            dataPanelType :"software",
+            viewRight: 'software'
+        },{
+            text :"Keylayout",
+            cls :"treemain",
+            allowDrag :false,
+            allowDrop :true,
+            id :"keylayout",
+            icon :false,
+            children :[],
+            leaf :null,
+            expanded :true,
+            dataPanelType :"keylayout",
+            viewRight: 'keylayout'
+        },{
+            text :"Settings",
+            cls :"treemain",
+            allowDrag :false,
+            allowDrop :true,
+            id :"settings",
+            icon :false,
+            children :[],
+            leaf :null,
+            expanded :true,
+            dataPanelType :"settings",
+            viewRight: 'settings'
+        },{
             text: "Templates",
             cls: "treemain",
             allowDrag: false,
             allowDrop: true,
             id: "templates",
             icon: false,
-            children: [{
-                text :"Software",
-                cls :"treemain",
-                allowDrag :false,
-                allowDrop :true,
-                id :"software",
-                icon :false,
-                children :[],
-                leaf :true,
-                expanded :true,
-                dataPanelType :"software",
-                viewRight: 'software'
-            },{
-                text :"Keylayout",
-                cls :"treemain",
-                allowDrag :false,
-                allowDrop :true,
-                id :"keylayout",
-                icon :false,
-                children :[],
-                leaf :true,
-                expanded :true,
-                dataPanelType :"keylayout",
-                viewRight: 'keylayout'
-            },{
-                text :"Settings",
-                cls :"treemain",
-                allowDrag :false,
-                allowDrop :true,
-                id :"settings",
-                icon :false,
-                children :[],
-                leaf :true,
-                expanded :true,
-                dataPanelType :"settings",
-                viewRight: 'settings'
-            }],
+            children: [],
             leaf: null,
-            expanded: false,
+            expanded: true,
             dataPanelType: "templates",
             viewRight: 'templates'
         }],
@@ -391,7 +391,7 @@ Tine.Voipmanager.Phones.Main = {
         this.actions.addPhone = new Ext.Action({
             text: this.translation._('add phone'),
             handler: this.handlers.addPhone,
-            iconCls: 'action_addPhone',
+            iconCls: 'action_add',
             scope: this
         });
         
@@ -1078,7 +1078,7 @@ Tine.Voipmanager.Location.Main = {
         this.actions.addLocation = new Ext.Action({
             text: this.translation._('add location'),
             handler: this.handlers.addLocation,
-            iconCls: 'action_addLocation',
+            iconCls: 'action_add',
             scope: this
         });
         
@@ -1202,7 +1202,14 @@ Tine.Voipmanager.Location.Main = {
             { resizable: true, id: 'https_port', header: this.translation._('HTTPS Port'), dataIndex: 'https_port', width: 10, hidden: true  },
             { resizable: true, id: 'http_user', header: this.translation._('HTTP User'), dataIndex: 'http_user', width: 15, hidden: true },
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 10, hidden: true },
-            { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 70 },
+            {
+                resizable: true,
+                id: 'name',
+                header: this.translation._('Name'),
+                dataIndex: 'name',
+                width: 80
+            }, 
+            { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 350 },
             { resizable: true, id: 'filter_registrar', header: this.translation._('Filter Registrar'), dataIndex: 'filter_registrar', width: 10, hidden: true },
             { resizable: true, id: 'callpickup_dialoginfo', header: this.translation._('CP Dialoginfo'), dataIndex: 'callpickup_dialoginfo', width: 10, hidden: true },
             { resizable: true, id: 'pickup_indication', header: this.translation._('Pickup Indic.'), dataIndex: 'pickup_indication', width: 10, hidden: true }
@@ -1360,6 +1367,15 @@ Tine.Voipmanager.Location.EditDialog =  {
         
         updateLocationRecord: function(_locationData)
         {
+            console.log(_locationData.admin_mode);
+            
+            if(_locationData.admin_mode == 'true') {
+                Ext.getCmp('admin_mode_switch').expand();
+            }  
+            if(_locationData.admin_mode == 'false') {
+                Ext.getCmp('admin_mode_switch').collapse();
+            }
+            
             this.locationRecord = new Tine.Voipmanager.Model.Location(_locationData);
         },
         
@@ -1387,7 +1403,7 @@ Tine.Voipmanager.Location.EditDialog =  {
         applyChanges: function(_button, _event, _closeWindow) 
         {
             var form = Ext.getCmp('voipmanager_editLocationForm').getForm();
-
+console.log(this.locationRecord);
             if(form.isValid()) {
                 form.updateRecord(this.locationRecord);
         
@@ -1518,11 +1534,24 @@ Tine.Voipmanager.Location.EditDialog =  {
                     } , {
                         xtype:'fieldset',
                         checkboxToggle:true,
-                        collapsible: false,
+                        checkboxName: 'admin_mode',
+                        id: 'admin_mode_switch',
+                        listeners: {
+                            expand: function() {
+                                Ext.getCmp('admin_mode').setValue(true);
+                            },
+                            collapse: function() {
+                                Ext.getCmp('admin_mode').setValue(false);
+                            }
+                        },
                         title: 'Enable admin mode',
                         autoHeight:true,
                         defaults: {anchor:'100%'},
                         items :[{
+                            xtype: 'hidden',
+                            name: 'admin_mode',
+                            id: 'admin_mode'
+                        },{
                             xtype: 'numberfield',
                             fieldLabel: 'Admin Mode Password',
                             name: 'admin_mode_password',
@@ -1533,9 +1562,15 @@ Tine.Voipmanager.Location.EditDialog =  {
                     }, {
                         xtype:'fieldset',
                         checkboxToggle:true,
-                        collapsible: false,
+                        checkboxName: 'enableWebserver',                        
                         title: 'Enable webserver',
                         autoHeight:true,
+                        id: 'enable_webserver_switch',
+                        listeners: {
+                            collapse: function() {
+                                Ext.getCmp('webserverEnabled').setValue('off');
+                            }
+                        },                        
                         defaults: {anchor:'100%'},
                         items :[{
                         layout:'column',
@@ -1547,6 +1582,10 @@ Tine.Voipmanager.Location.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items:[{
+                                xtype: 'hidden',
+                                name: 'webserverEnabled',
+                                id: 'webserverEnabled'
+                            },{
                                 xtype: 'combo',
                                 fieldLabel: 'Webserver Type',
                                 name: 'webserver_type',
@@ -1737,7 +1776,7 @@ Tine.Voipmanager.Templates.Main = {
         this.actions.addTemplate = new Ext.Action({
             text: this.translation._('add template'),
             handler: this.handlers.addTemplate,
-            iconCls: 'action_addTemplate',
+            iconCls: 'action_add',
             scope: this
         });
         
@@ -1852,8 +1891,8 @@ Tine.Voipmanager.Templates.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 10, hidden: true },
-            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 80 },
-            { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 70 },
+            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 40 },
+            { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 350 },
             { resizable: true, id: 'model', header: this.translation._('Model'), dataIndex: 'model', width: 10, hidden: true },
             { resizable: true, id: 'keylayout_id', header: this.translation._('Keylayout Id'), dataIndex: 'keylayout_id', width: 10, hidden: true },
             { resizable: true, id: 'setting_id', header: this.translation._('Settings Id'), dataIndex: 'setting_id', width: 10, hidden: true },

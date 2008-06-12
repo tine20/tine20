@@ -67,7 +67,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
             );
             
         $select->join(array('location' => SQL_TABLE_PREFIX . 'snom_location'),
-				'voipmanager.location_id = location.id', array( 'location' => 'description') );            
+				'voipmanager.location_id = location.id', array( 'location' => 'name') );            
 
         $select->join(array('templates' => SQL_TABLE_PREFIX . 'snom_templates'),
 				'voipmanager.template_id = templates.id', array( 'template' => 'name') );            

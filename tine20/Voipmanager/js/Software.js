@@ -89,7 +89,7 @@ Tine.Voipmanager.Software.Main = {
         this.actions.addSoftware = new Ext.Action({
             text: this.translation._('add software'),
             handler: this.handlers.addSoftware,
-            iconCls: 'action_addSoftware',
+            iconCls: 'action_add',
             scope: this
         });
         
