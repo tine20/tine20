@@ -37,41 +37,17 @@ class Tinebase_Relation_Backend_Sql
 	 * @var Tinebase_Db_Table
 	 */
 	protected $_db;
-	
-	/* holdes the instance of the singleton
-     *
-     * @var Tinebase_Relation_Backend_Sql
-     */
-    private static $instance = NULL;
-    
-    /**
-     * the constructor
-     *
-     */
-    private function __construct()
+	/**
+	 * constructor
+	 */
+    public function __construct()
     {
     	// temporary on the fly creation of table
     	$this->_db = new Tinebase_Db_Table(array(
     	    'name' => SQL_TABLE_PREFIX . 'relations',
     	    'primary' => 'id'
     	));
-    	
     }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Relation_Backend_Sql
-     */
-    public static function getInstance() 
-    {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Relation_Backend_Sql();
-        }
-        
-        return self::$instance;
-    }
-    
     /**
      * adds a new relation
      * 
@@ -101,7 +77,6 @@ class Tinebase_Relation_Backend_Sql
     		throw new Tinebase_Record_Exception_Validation('relation contains invalid data: ' . print_r($_relation->getValidationErrors(), true) );
     	}
     } // end of member function addRelation
-
     /**
      * breaks a relation
      * 
@@ -119,7 +94,6 @@ class Tinebase_Relation_Backend_Sql
     	    'deleted_time' => Zend_Date::now()->getIso()
     	), $where);
     } // end of member function breakRelation
-
     /**
      * breaks all relations, optionally only of given role
      * 
@@ -149,7 +123,6 @@ class Tinebase_Relation_Backend_Sql
             'deleted_time' => Zend_Date::now()->getIso()
         ), $where);
     } // end of member function breakAllRelations
-
     /**
      * returns all relations of a given record and optionally only of given role
      * 
@@ -179,7 +152,6 @@ class Tinebase_Relation_Backend_Sql
         }
    		return $relations; 
     } // end of member function getAllRelations
-    
     /**
      * returns a relation spechified by a given id
      *
@@ -207,7 +179,6 @@ class Tinebase_Relation_Backend_Sql
     	}
     	
     } // end of member function getRelationById
-    
     /**
      * swaps roles own/related
      * 
