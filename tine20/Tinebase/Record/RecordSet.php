@@ -35,6 +35,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     protected $_listOfRecords = array();
     
     /**
+     * holds mapping id -> offset in $_listOfRecords
+     * @var array
+     */
+    protected $_idMap = array();
+    
+    /**
      * Holds validation errors
      * @var array
      */
@@ -72,9 +78,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         $this->_listOfRecords[] = $_record;
+        end($this->_listOfRecords);
+        $index = key($this->_listOfRecords);
+        
+        $recordId = $_record->getId();
+        if ($recordId) {
+            $this->_idMap[$recordId] = $index;
+        }
 		
-		end($this->_listOfRecords);
-        return key($this->_listOfRecords);
+        return $index;
     }
     
     /**
@@ -118,15 +130,22 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns record identified by its id
+     * 
+     * @param  string $_id id of record
+     * @return int|bool    index of record or false if not in set
+     */
+    public function getIndexById($_id)
+    {
+        return array_key_exists($_id, $this->_idMap) ? $this->_listOfRecords[$this->_idMap[$_id]] : false;
+    }
+    
+    /**
      * returns array of ids
      */
     public function getArrayOfIds()
     {
-        $ids = array();
-        foreach ($this->_listOfRecords as $record) {
-            array_push($ids, $record->getId());
-        }
-        return $ids;
+        return array_keys($this->_idMap);
     }
     
     /**
