@@ -92,7 +92,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
      * @param  $task
      * @return array created/updated task
      */
-    public function saveTask($task, $linkingApp, $linkedId)
+    public function saveTask($task)
     {
         $inTask = $this->_json2task($task);
         //Zend_Registry::get('logger')->debug(print_r($inTask->toArray(),true));
@@ -100,11 +100,6 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         $outTask = strlen($inTask->getId()) > 10 ? 
             $this->_controller->updateTask($inTask): 
             $this->_controller->createTask($inTask);
-            
-        // temporary linking stuff
-        if( !empty($linkingApp) && is_numeric($linkedId) ) {
-            Tinebase_Links::getInstance()->setLinks($linkingApp, $linkedId, $this->_appname, $outTask->getId(), 'activity');
-        }
 
         return $this->_task2json($outTask);
     }
