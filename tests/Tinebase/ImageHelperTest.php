@@ -19,7 +19,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Tinebase_ImageHelper
  */
 class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
 {
