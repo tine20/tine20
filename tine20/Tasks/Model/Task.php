@@ -43,7 +43,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'deleted_by'           => array('allowEmpty' => true         ),
         // task only fields
         'id'                   => array('allowEmpty' => true, 'Alnum'),
-        'percent'              => array('allowEmpty' => true         ),
+        'percent'              => array('presence' => 'required', 'default' => '00'),
         'completed'            => array('allowEmpty' => true         ),
         'due'                  => array('allowEmpty' => true         ),
         // ical common fields
@@ -52,8 +52,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'geo'                  => array('allowEmpty' => true         ),
         'location'             => array('allowEmpty' => true         ),
         'organizer'            => array('allowEmpty' => true, 'Int' ),
-        'priority'             => array('allowEmpty' => true         ),
-        'status_id'            => array('allowEmpty' => true         ),
+        'priority'             => array('presence' => 'required', 'default' => 1),
+        'status_id'            => array('presence' => 'required', 'default' => 3, 'allowEmpty' => false),
         'summary'              => array('presence' => 'required'     ),
         'url'                  => array('allowEmpty' => true         ),
         // ical common fields with multiple appearance
