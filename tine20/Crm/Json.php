@@ -413,32 +413,23 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
     {
         $result = $_lead->toArray();
 
-        // add contacts
-        $result['responsible'] = array();
-        foreach($_lead->responsible as $contactId) {
-            try {
-                $result['responsible'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
-            } catch (Exception $e) {
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
-                // ignore, permission denied or contact not found
-            }
-        }
-        $result['customer'] = array();
-        foreach($_lead->customer as $contactId) {
-            try {
-                $result['customer'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
-            } catch (Exception $e) {
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
-                // ignore, permission denied or contact not found
-            }
-        }
-        $result['partner'] = array();
-        foreach($_lead->partner as $contactId) {
-            try {
-                $result['partner'][] = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
-            } catch (Exception $e) {
-                Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
-                // ignore, permission denied or contact not found
+        // add contact links
+        $types = array(
+            'responsible',
+            'customer',
+            'partner'
+        );
+        foreach ( $types as $type ) {
+            $result[$type] = array();
+            foreach($_lead->$type as $contactId) {
+                try {
+                    $contact = Addressbook_Controller::getInstance()->getContact($contactId)->toArray();
+                    $contact['link_remark'] = $type;
+                    $result[$type][] = $contact;
+                } catch (Exception $e) {
+                    Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' skipped contact: ' . $contactId);
+                    // ignore, permission denied or contact not found
+                }
             }
         }
 

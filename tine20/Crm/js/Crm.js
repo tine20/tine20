@@ -774,6 +774,36 @@ Tine.Crm.LeadEditDialog = {
     },
     
     /**
+     * contact type renderer
+     * 
+     * @param   string type
+     * @return  contact type icon
+     * 
+     * @todo    get icons from php backend
+     */
+    contactTypeRenderer: function(type)
+    {
+    	var icon = '';
+    	
+    	switch ( type ) {
+    		case 'responsible':
+                icon = '<img src="images/oxygen/16x16/apps/preferences-desktop-user.png" ext:qtip="' + 
+    		        Tine.Crm.LeadEditDialog.translation._('Responsible') + '">';
+                break;
+            case 'customer':
+                icon = '<img src="images/oxygen/16x16/apps/system-users.png" ext:qtip="' + 
+                    Tine.Crm.LeadEditDialog.translation._('Customer') + '">';
+                break;
+            case 'partner':
+                icon = '<img src="images/oxygen/16x16/actions/view-process-own.png" ext:qtip="' + 
+                    Tine.Crm.LeadEditDialog.translation._('Partner') + '">';
+                break;
+    	}
+    	
+    	return icon;
+    },
+    
+    /**
      * getLinksGrid
      * get the grids for contacts/tasks/products/...
      * 
@@ -818,7 +848,14 @@ Tine.Crm.LeadEditDialog = {
                         return formated_return;
                     }
                 },    
-                {id:'link_remark', header: this.translation._("Type"), dataIndex: 'link_remark', width: 70, sortable: false}
+                {
+                    id:'link_remark', 
+                    header: this.translation._("Type"), 
+                    dataIndex: 'link_remark', 
+                    width: 50, 
+                    sortable: false,
+                    renderer: this.contactTypeRenderer
+                }
             ]);
             
             var autoExpand = 'n_fileas';
@@ -915,17 +952,26 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @param   array _contacts
      */
-    loadContactsStore: function(_contacts)
+    loadContactsStore: function(_responsible, _customer, _partner)
     {
         var storeContacts = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.Crm.Model.ContactLink
         });
             
-        if(_contacts) {
-            storeContacts.loadData(_contacts);                    
-            storeContacts.setDefaultSort('remark', 'asc');     
+        if(_responsible) {
+            storeContacts.loadData(_responsible, true);                    
         }
+
+        if(_customer) {
+            storeContacts.loadData(_customer, true);                    
+        }
+        
+        if(_partner) {
+            storeContacts.loadData(_partner, true);                    
+        }
+
+        storeContacts.setDefaultSort('link_remark', 'asc');     
         
         Ext.StoreMgr.add('ContactsStore', storeContacts);
     },
@@ -1001,10 +1047,11 @@ Tine.Crm.LeadEditDialog = {
         
         //console.log(lead);
         //console.log(lead.data.tasks);
+        //console.log(lead.data.responsible);
     	
         /*********** INIT STORES *******************/
         
-        this.loadContactsStore(lead.data.contacts);        
+        this.loadContactsStore(lead.data.responsible, lead.data.customer, lead.data.partner);        
         this.loadTasksStore(lead.data.tasks);
         this.loadProductsStore(lead.data.products);
                 
@@ -1062,14 +1109,15 @@ Tine.Crm.Model.Lead = Ext.data.Record.create([
     {name: 'end_scheduled', type: 'date', dateFormat: 'c'},
     {name: 'lastread'},
     {name: 'lastreader'},
-    {name: 'contacts'},
+    {name: 'responsible'},
+    {name: 'customer'},
+    {name: 'partner'},
     {name: 'tasks'},
     {name: 'products'},
     {name: 'tags'}
 ]);
 
 // contact link
-// @todo replace by addressbook model
 Tine.Crm.Model.ContactLink = Ext.data.Record.create([
     {name: 'link_id'},              
     {name: 'link_remark'},                        
@@ -1096,7 +1144,7 @@ Tine.Crm.Model.ContactLink = Ext.data.Record.create([
 ]);
 
 // task link
-// @todo replace by task model
+// @todo replace by task model ?
 Tine.Crm.Model.TaskLink = Ext.data.Record.create([
     {name: 'id'},
     {name: 'status_id'},
@@ -1110,7 +1158,7 @@ Tine.Crm.Model.TaskLink = Ext.data.Record.create([
 ]);
 
 // product link
-// @todo replace by product model
+// @todo replace by product model ?
 Tine.Crm.Model.ProductLink = Ext.data.Record.create([
     {name: 'id'},
     {name: 'product_id'},
