@@ -92,6 +92,27 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     		$this->assertEquals($value, $pvalue, "$field shoud be $value but is $pvalue");
     	}
     }
+    public function testCreateMinimalTask()
+    {
+        $task = new Tasks_Model_Task(array(
+            'summary'       => 'minimal task by phpunit',
+            'container_id'  => 5,
+        ));
+        $persitantTask = $this->_backend->createTask($task);
+        
+        $pagination = new Tasks_Model_Pagination();
+        $filter = new Tasks_Model_Filter();
+        $filter->query     = $task->summary;
+        $filter->container = array($task->container_id);
+
+        $tasks = $this->_backend->searchTasks($filter, $pagination);
+        $this->assertEquals(1, count($tasks));
+        
+        $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks'));
+        $db->delete($db->getAdapter()->quoteInto('id = ?', $persitantTask->getId() ));
+        Tinebase_Timemachine_ModificationLogTest::purgeLogs($persitantTask->getId());
+        
+    }
     /**
      * Note: delete sets is_deleted and does not delete records 
      * from table!
