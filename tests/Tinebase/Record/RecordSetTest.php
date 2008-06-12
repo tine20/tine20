@@ -102,8 +102,8 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     public function testIsValid ()
     {
         $record = new Tinebase_Record_DummyRecord(array('id' => 'shouldBeInt'), true);
-        $record->bypassFilters = false;
         $this->object->addRecord($record);
+        $record->bypassFilters = false;
         $this->assertFalse($this->object->isValid());
     }
     /**
