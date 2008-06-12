@@ -147,13 +147,7 @@ Tine.Voipmanager.Software.Main = {
             width: 240
         }); 
         quickSearchField.on('change', onFilterChange, this);
-        
-        var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Voipmanager',
-            blurOnSelect: true
-        });
-        tagFilter.on('change', onFilterChange, this);
-        
+                
         var softwareToolbar = new Ext.Toolbar({
             id: 'Voipmanager_Software_Toolbar',
             split: false,
@@ -163,7 +157,6 @@ Tine.Voipmanager.Software.Main = {
                 this.actions.editSoftware,
                 this.actions.deleteSoftware,
                 '->',
-                this.translation._('Filter: '), tagFilter,
                 this.translation._('Search: '), quickSearchField
             ]
         });

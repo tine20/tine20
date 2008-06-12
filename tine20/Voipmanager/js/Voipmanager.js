@@ -326,7 +326,7 @@ Tine.Voipmanager.Phones.Main = {
          */
         addPhone: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=', 450, 300);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=', 500, 350);
         },
 
         /**
@@ -337,7 +337,7 @@ Tine.Voipmanager.Phones.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
             var phoneId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + phoneId, 450, 300);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + phoneId, 500, 350);
         },
         
         /**
@@ -452,13 +452,7 @@ Tine.Voipmanager.Phones.Main = {
             width: 240
         }); 
         quickSearchField.on('change', onFilterChange, this);
-        
-        var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Voipmanager',
-            blurOnSelect: true
-        });
-        tagFilter.on('change', onFilterChange, this);
-        
+     
         var phoneToolbar = new Ext.Toolbar({
             id: 'Voipmanager_Phones_Toolbar',
             split: false,
@@ -468,7 +462,6 @@ Tine.Voipmanager.Phones.Main = {
                 this.actions.editPhone,
                 this.actions.deletePhone,
                 '->',
-                this.translation._('Filter: '), tagFilter,
                 this.translation._('Search: '), quickSearchField
             ]
         });
@@ -492,7 +485,6 @@ Tine.Voipmanager.Phones.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
-            _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
         }, this);   
         
         Ext.StoreMgr.add('PhonesStore', dataStore);
@@ -588,7 +580,7 @@ Tine.Voipmanager.Phones.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + record.data.id, 450, 300);
+                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + record.data.id, 500, 350);
             } catch(e) {
                 // alert(e);
             }
@@ -670,33 +662,13 @@ Tine.Voipmanager.Phones.Main = {
 Tine.Voipmanager.Data = {
     
     
-    loadTemplateData: function(_data) {
+    loadTemplateData: function() {
 
 
         var templateDataStore = new Ext.data.JsonStore({
-            data: _data,
-            autoLoad: true,
-            id: 'id',
-            fields: [
-                {name: 'template_id', mapping: 'id'},
-                {name: 'name'}
-            ]
-        });
-
-        templateDataStore.setDefaultSort('name', 'asc');
-
-
-
-        Ext.StoreMgr.add('templateStore', templateDataStore);               
-    },    
-    
-    
-    loadLocationData: function() {
-
-        var locationDataStore = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Voipmanager.getLocation',
-                sort: 'description',
+          baseParams: {
+                method: 'Voipmanager.getTemplates',
+                sort: 'name',
                 dir: 'ASC',
                 query: ''
             },
@@ -705,14 +677,42 @@ Tine.Voipmanager.Data = {
             id: 'id',
             fields: [
                 {name: 'id'},
-                {name: 'description'}
+                {name: 'name'}
             ],
             
             // turn on remote sorting
             remoteSort: true
         });
 
-        locationDataStore.setDefaultSort('description', 'asc');
+        templateDataStore.setDefaultSort('name', 'asc');
+
+//        Ext.StoreMgr.add('templateStore', templateDataStore);               
+        return templateDataStore;
+    },    
+    
+    
+    loadLocationData: function() {
+
+        var locationDataStore = new Ext.data.JsonStore({
+            baseParams: {
+                method: 'Voipmanager.getLocation',
+                sort: 'name',
+                dir: 'ASC',
+                query: ''
+            },
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: [
+                {name: 'id'},
+                {name: 'name'}
+            ],
+            
+            // turn on remote sorting
+            remoteSort: true
+        });
+
+        locationDataStore.setDefaultSort('name', 'asc');
                
         return locationDataStore;
     },
@@ -811,7 +811,6 @@ Tine.Voipmanager.Phones.EditDialog =  {
 
         phoneRecord: null,
         
-        
         updatePhoneRecord: function(_phoneData)
         {
                        
@@ -885,64 +884,134 @@ Tine.Voipmanager.Phones.EditDialog =  {
                   
         editPhoneDialog:  [{
             layout:'fit',
-            border: false,
-            autoHeight: true,
+            //frame: true,
+            border:false,
             anchor: '100% 100%',
-            items:[{
-                layout:'form',
-                //frame: true,
+            items: [{
+                layout:'column',
                 border:false,
-                anchor: '100% 100%',
+                anchor: '100%',
                 items: [{
+                    columnWidth: .5,
+                    layout: 'form',
+                    border: false,
+                    anchor: '100%',
+                    items:[{
                         xtype: 'textfield',
                         fieldLabel: 'MAC Address',
                         name: 'macaddress',
                         maxLength: 12,
-                        anchor:'100%',
+                        anchor:'98%',
                         allowBlank: false
-                    } , {
-                        xtype:'textarea',
-                        name: 'description',
-                        fieldLabel: 'Description',
-                        grow: false,
-                        preventScrollbars:false,
-                        anchor:'100%',
-                        height: 40
                     } , {
                         xtype: 'combo',
                         fieldLabel: 'Template',
                         name: 'template_id',
-                        hiddenName: 'template_id',
                         id: 'template_id',
-                        mode: 'local',
+                        mode: 'remote',
                         displayField:'name',
-                        valueField:'template_id',
-                        anchor:'100%',                    
+                        valueField:'id',
+                        anchor:'98%',                    
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
-                        store: Ext.StoreMgr.get('templateStore')
+                        store: Tine.Voipmanager.Data.loadTemplateData()
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Location',
                         name: 'location_id',
                         id: 'location_id',
                         mode: 'remote',
-                        displayField:'description',
+                        displayField:'name',
                         valueField:'id',
-                        anchor:'100%',                    
+                        anchor:'98%',                    
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
                         store: Tine.Voipmanager.Data.loadLocationData()
-                    } , {
-                        xtype: 'textfield',
-                        fieldLabel: 'current IP Address',
-                        name: 'ipaddress',
-                        maxLength: 20,
-                        anchor:'100%',  
-                        readOnly: true
                     }]
+                }, {
+                    columnWidth: .5,
+                    layout: 'form',
+                    border: false,
+                    anchor: '100%',
+                    autoHeight: true,
+                    items:[{
+                        xtype:'textarea',
+                        name: 'description',
+                        fieldLabel: 'Description',
+                        grow: false,
+                        preventScrollbars:false,
+                        anchor:'100%',
+                        height: 105
+                    }]
+                }]
+            },{
+                layout:'form',
+                border:false,
+                anchor: '100%',
+                items: [{                
+                    xtype:'fieldset',
+                    checkboxToggle:false,
+                    id: 'infos',
+                    title: 'Infos',
+                    autoHeight:true,
+                    anchor: '100%',
+                    defaults: {anchor:'100%'},
+                    items :[{
+                        layout:'column',
+                        border:false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{
+                                xtype: 'textfield',
+                                fieldLabel: 'Current IP Address',
+                                name: 'ip_address',
+                                maxLength: 20,
+                                anchor:'98%',
+                                readOnly: true                        
+                            },{
+                                xtype: 'textfield',
+                                fieldLabel: 'Current Software Version',
+                                name: 'software_version',
+                                maxLength: 20,
+                                anchor:'98%',
+                                readOnly: true                        
+                            },{
+                                xtype: 'textfield',
+                                fieldLabel: 'Current Phone Model',
+                                name: 'phone_model',
+                                maxLength: 20,
+                                anchor:'98%',
+                                readOnly: true   
+                            }]
+                        },{         
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{                                    
+                                xtype: 'textfield',
+                                fieldLabel: 'Settings Loaded at',
+                                name: 'settings_loadingtime',
+                                maxLength: 20,
+                                anchor:'100%',
+                                readOnly: true                        
+                            },{
+                                xtype: 'textfield',
+                                fieldLabel: 'Firmware last checked at',
+                                name: 'firmware_update_time',
+                                maxLength: 20,
+                                anchor:'100%',
+                                readOnly: true                        
+                            }]
+                        }]
+                    }]
+                }]
             }]
         }],
         
@@ -961,7 +1030,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 var _phoneData = {};
             }
             
-            Tine.Voipmanager.Data.loadTemplateData(formData.templateData);
+   //         Tine.Voipmanager.Data.loadTemplateData(formData.templateData);
         
     //        console.log(Ext.StoreMgr.get('templateStore'));       
         
@@ -994,7 +1063,6 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 items: dialog
             });
             
-            //if (!arguments[0]) var task = {};
                     
             this.updatePhoneRecord(_phoneData);
             this.updateToolbarButtons();           
@@ -1021,7 +1089,7 @@ Tine.Voipmanager.Location.Main = {
          */
         addLocation: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&LocationId=', 500, 550);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&LocationId=', 550, 600);
         },
 
         /**
@@ -1032,7 +1100,7 @@ Tine.Voipmanager.Location.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Location_Grid').getSelectionModel().getSelections();
             var locationId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + locationId, 500, 550);
+            Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + locationId, 550, 600);
         },
         
         /**
@@ -1137,12 +1205,6 @@ Tine.Voipmanager.Location.Main = {
         }); 
         quickSearchField.on('change', onFilterChange, this);
         
-        var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Voipmanager',
-            blurOnSelect: true
-        });
-        tagFilter.on('change', onFilterChange, this);
-        
         var locationToolbar = new Ext.Toolbar({
             id: 'Voipmanager_Location_Toolbar',
             split: false,
@@ -1152,7 +1214,6 @@ Tine.Voipmanager.Location.Main = {
                 this.actions.editLocation,
                 this.actions.deleteLocation,
                 '->',
-                this.translation._('Filter: '), tagFilter,
                 this.translation._('Search: '), quickSearchField
             ]
         });
@@ -1176,7 +1237,6 @@ Tine.Voipmanager.Location.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
-            _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
         }, this);   
         
         //Ext.StoreMgr.add('LocationStore', dataStore);
@@ -1280,7 +1340,7 @@ Tine.Voipmanager.Location.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + record.data.id, 500, 450);
+                Tine.Tinebase.Common.openWindow('locationWindow', 'index.php?method=Voipmanager.editLocation&locationId=' + record.data.id, 550, 600);
             } catch(e) {
                 // alert(e);
             }
@@ -1366,15 +1426,25 @@ Tine.Voipmanager.Location.EditDialog =  {
         locationRecord: null,
         
         updateLocationRecord: function(_locationData)
-        {
-            console.log(_locationData.admin_mode);
-            
+        {            
             if(_locationData.admin_mode == 'true') {
                 Ext.getCmp('admin_mode_switch').expand();
             }  
             if(_locationData.admin_mode == 'false') {
                 Ext.getCmp('admin_mode_switch').collapse();
             }
+
+            if(_locationData.webserver_type == 'off') {
+                Ext.getCmp('enable_webserver_switch').collapse();
+            }  
+
+            if (_locationData.webserver_type == 'http') {
+                Ext.getCmp('https_port').disable();
+            }         
+
+            if (_locationData.webserver_type == 'https') {
+                Ext.getCmp('http_port').disable();
+            }         
             
             this.locationRecord = new Tine.Voipmanager.Model.Location(_locationData);
         },
@@ -1531,7 +1601,46 @@ console.log(this.locationRecord);
                         maxLength: 255,
                         anchor:'100%',
                         allowBlank: false
-                    } , {
+                    },{
+                        xtype:'fieldset',
+                        checkboxToggle:false,
+                        checkboxName: 'ntpSetting',
+                        id: 'ntp_setting',
+                        title: 'NTP Server',
+                        autoHeight:true,
+                        anchor: '100%',
+                        defaults: {anchor:'100%'},
+                        items :[{
+                            layout:'column',
+                            border:false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items:[{
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Timezone',
+                                    name: 'timezone',
+                                    maxLength: 20,
+                                    anchor:'98%'
+                               }]
+                           }, {
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items:[{
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'NTP Refresh',
+                                    name: 'ntp_refresh',
+                                    maxLength: 20,
+                                    anchor:'100%'
+                                }]
+                            }]
+                       }]
+                    },{
                         xtype:'fieldset',
                         checkboxToggle:true,
                         checkboxName: 'admin_mode',
@@ -1546,6 +1655,7 @@ console.log(this.locationRecord);
                         },
                         title: 'Enable admin mode',
                         autoHeight:true,
+                        anchor:'100%',
                         defaults: {anchor:'100%'},
                         items :[{
                             xtype: 'hidden',
@@ -1568,7 +1678,12 @@ console.log(this.locationRecord);
                         id: 'enable_webserver_switch',
                         listeners: {
                             collapse: function() {
-                                Ext.getCmp('webserverEnabled').setValue('off');
+                                Ext.getCmp('webserver_type').setValue('off');
+                            },
+                            expand: function() {
+                                if(Ext.getCmp('webserver_type').getValue() == 'off') {
+                                    Ext.getCmp('webserver_type').setValue('http_https');
+                                }
                             }
                         },                        
                         defaults: {anchor:'100%'},
@@ -1582,16 +1697,29 @@ console.log(this.locationRecord);
                             border: false,
                             anchor: '100%',
                             items:[{
-                                xtype: 'hidden',
-                                name: 'webserverEnabled',
-                                id: 'webserverEnabled'
-                            },{
                                 xtype: 'combo',
                                 fieldLabel: 'Webserver Type',
                                 name: 'webserver_type',
+                                id: 'webserver_type',
                                 mode: 'local',
                                 displayField:'wwwtype',
                                 valueField:'key',
+                                listeners: {
+                                    change: function(_field, _newValue, _oldValue) {                                    
+                                        if (_newValue == 'https') {
+                                            Ext.getCmp('http_port').disable();
+                                            Ext.getCmp('https_port').enable();                                            
+                                        }
+                                        if (_newValue == 'http') {
+                                            Ext.getCmp('http_port').enable();
+                                            Ext.getCmp('https_port').disable();                                            
+                                        }  
+                                        if (_newValue == 'http_https') {
+                                            Ext.getCmp('http_port').enable();
+                                            Ext.getCmp('https_port').enable();                                            
+                                        }                                          
+                                    }
+                                },
                                 anchor:'98%',                    
                                 triggerAction: 'all',
                                 allowBlank: false,
@@ -1629,6 +1757,7 @@ console.log(this.locationRecord);
                                         xtype: 'textfield',
                                         fieldLabel: 'HTTP Port',
                                         name: 'http_port',
+                                        id: 'http_port',
                                         maxLength: 6,
                                         anchor:'98%',
                                         allowBlank: true
@@ -1642,6 +1771,7 @@ console.log(this.locationRecord);
                                         xtype: 'textfield',
                                         fieldLabel: 'HTTPS Port',
                                         name: 'https_port',
+                                        id: 'https_port',
                                         maxLength: 6,
                                         anchor:'98%',
                                         allowBlank: true
@@ -1651,7 +1781,7 @@ console.log(this.locationRecord);
                                 xtype: 'textfield',
                                 fieldLabel: 'HTTP Password',
                                 name: 'http_pass',
-                                inputType: 'password',
+                                inputType: 'textfield',
                                 maxLength: 20,
                                 anchor:'98%'
                             }]
@@ -1835,12 +1965,6 @@ Tine.Voipmanager.Templates.Main = {
         }); 
         quickSearchField.on('change', onFilterChange, this);
         
-        var tagFilter = new Tine.widgets.tags.TagCombo({
-            app: 'Voipmanager',
-            blurOnSelect: true
-        });
-        tagFilter.on('change', onFilterChange, this);
-        
         var templateToolbar = new Ext.Toolbar({
             id: 'Voipmanager_Template_Toolbar',
             split: false,
@@ -1850,7 +1974,6 @@ Tine.Voipmanager.Templates.Main = {
                 this.actions.editTemplate,
                 this.actions.deleteTemplate,
                 '->',
-                this.translation._('Filter: '), tagFilter,
                 this.translation._('Search: '), quickSearchField
             ]
         });
@@ -1874,7 +1997,6 @@ Tine.Voipmanager.Templates.Main = {
 
         dataStore.on('beforeload', function(_dataStore) {
             _dataStore.baseParams.query = Ext.getCmp('quickSearchField').getRawValue();
-            _dataStore.baseParams.tagFilter = Ext.getCmp('TagCombo').getValue();
         }, this);   
         
         //Ext.StoreMgr.add('TemplateStore', dataStore);
