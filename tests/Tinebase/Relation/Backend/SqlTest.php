@@ -100,7 +100,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = Tinebase_Relation_Backend_Sql::getInstance();
+        $this->object = new Tinebase_Relation_Backend_Sql();
         foreach ($this->relationData as $num => $relation) {
         	$this->relations[$num] = $this->object->addRelation(new Tinebase_Relation_Model_Relation($relation, true));
         }
@@ -126,7 +126,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     /**
      * testGetInstance().
      */
-    public function testGetInstance()
+    public function testInstance()
     {
         $this->assertTrue($this->object instanceof Tinebase_Relation_Backend_Sql );
     }
