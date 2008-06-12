@@ -41,6 +41,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     protected $_idMap = array();
     
     /**
+     * holds offsets of idless (new) records in $_listOfRecords
+     * @var array
+     */
+    protected $_idLess = array();
+    
+    /**
      * Holds validation errors
      * @var array
      */
@@ -84,6 +90,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $recordId = $_record->getId();
         if ($recordId) {
             $this->_idMap[$recordId] = $index;
+        } else {
+            $this->_idLess[] = $index;
         }
 		
         return $index;
@@ -146,6 +154,16 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function getArrayOfIds()
     {
         return array_keys($this->_idMap);
+    }
+    
+    /**
+     * returns array with idless (new) records in this set
+     * 
+     * @return array
+     */
+    public function getIdLessIndexes()
+    {
+        return $this->_idLess;
     }
     
     /**
