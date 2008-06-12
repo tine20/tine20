@@ -123,19 +123,18 @@ class Tinebase_Relation_Backend_Sql
     /**
      * breaks all relations, optionally only of given role
      * 
-     * @param  Tinebase_Record_Interface $_record
-     * @param  string $_degree only breaks relations of given degree
-     * @param  string $_type only breaks relations of given type
+     * @param  string $_model    own model to break all relations for
+     * @param  string $_backend  own backend to break all relations for
+     * @param  string $_id       own id to break all relations for
+     * @param  string $_degree   only breaks relations of given degree
+     * @param  string $_type     only breaks relations of given type
      * @return void
      */
-    public function breakAllRelations( $_record, $_degree = NULL, $_type = NULL ) {
-        if (!$_record->getApplication() || !$_record->getId()) {
-            throw new Tinebase_Record_Exception_DefinitionFailure();
-        }
-        
+    public function breakAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL ) {
         $where = array(
-            'own_model   = ' . $this->_db->getAdapter()->quote(get_class($_record)),
-            'own_id      = ' . $this->_db->getAdapter()->quote($_record->getId())
+            'own_model   = ' . $this->_db->getAdapter()->quote($_model),
+            'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
+            'own_id      = ' . $this->_db->getAdapter()->quote($_id)
         );
         if ($_degree) {
             $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
@@ -154,18 +153,17 @@ class Tinebase_Relation_Backend_Sql
     /**
      * returns all relations of a given record and optionally only of given role
      * 
-     * @param Tinebase_Record_Interface $_record 
+     * @param  string $_model    own model to get all relations for
+     * @param  string $_backend  own backend to get all relations for
+     * @param  string $_id       own id to get all relations for 
      * @param string $_role filter by role
      * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
      */
-    public function getAllRelations( $_record, $_degree = NULL, $_type = NULL  ) {
-        if (!$_record->getApplication() || !$_record->getId()) {
-            throw new Tinebase_Record_Exception_DefinitionFailure();
-        }
-        
+    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL  ) {
     	$where = array(
-    	    'own_model   = ' . $this->_db->getAdapter()->quote(get_class($_record)),
-            'own_id      = ' . $this->_db->getAdapter()->quote($_record->getId()),
+    	    'own_model   = ' . $this->_db->getAdapter()->quote($_model),
+    	    'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
+            'own_id      = ' . $this->_db->getAdapter()->quote($_id),
     	    'is_deleted      = FALSE'
     	);
     	if ($_degree) {
