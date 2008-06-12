@@ -92,7 +92,20 @@
                     <length>20</length>
                 </field>
                 <field>
+                    <name>current_software</name>
+                    <type>text</type>
+                    <length>50</length>
+                </field>
+                <field>
                     <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>settings_loaded_at</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>firmware_checked_at</name>
                     <type>datetime</type>
                 </field>
                 <index>
