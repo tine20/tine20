@@ -22,12 +22,47 @@
  */
 class Crm_Backend_Factory
 {
+	/**
+	 * object instance
+	 *
+	 * @var Crm_Backend_Factory
+	 */
+	private static $_instance = NULL;
+	
+	
     /**
      * constant for Sql contacts backend class
      *
      */
     const SQL = 'Sql';
     
+    const LEADS = 'Leads';
+    
+    const PRODUCTS = 'Products';
+    
+    const TYPES = 'Types';
+    
+    const SOURCES = 'Sources';
+    
+    const LEADS_PRODUCTS = 'LeadsProducts';
+    
+    
+    /**
+     * Constructor
+     * 
+     * Declared as protected to prevent instantiating from outside.
+     */
+    protected function __construct() {}
+    
+    public static function getInstance() {
+        if (self::$_instance == NULL) {
+            self::$_instance = new Crm_Backend_Factory();
+        }
+        
+        return self::$_instance;
+    }
+    
+
     /**
      * factory function to return a selected contacts backend class
      *
@@ -39,7 +74,33 @@ class Crm_Backend_Factory
         switch($type) {
             case self::SQL:
                 $instance = Crm_Backend_Sql::getInstance();
-                break;                
+                break;
+                           
+            case self::LEADS:
+            	throw new Exception('Not implemented, yet.');
+                $instance = Crm_Backend_Leads::getInstance();
+                break;
+                           
+            case self::PRODUCTS:
+                throw new Exception('Not implemented, yet.');
+            	$instance = Crm_Backend_Products::getInstance();
+                break;
+                           
+            case self::TYPES:
+                throw new Exception('Not implemented, yet.');
+            	$instance = Crm_Backend_Types::getInstance();
+                break;
+                           
+            case self::SOURCES:
+                throw new Exception('Not implemented, yet.');
+            	$instance = Crm_Backend_Sources::getInstance();
+                break;
+                
+            case self::LEADS_PRODUCTS:
+                throw new Exception('Not implemented, yet.');
+            	$instance = Crm_Backend_LeadsProducts::getInstance();
+                break;
+                
             default:
                 throw new Exception('unknown type');
         }
