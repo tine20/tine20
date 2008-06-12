@@ -657,17 +657,12 @@ Tine.Crm.LeadEditDialog = {
                 leadForm.updateRecord(lead);
                 
                 // get linked stuff
-                // @todo add links to lead record, no use for additional data any more
-                var additionalData = Tine.Crm.LeadEditDialog.getAdditionalData();
+                lead = Tine.Crm.LeadEditDialog.getAdditionalData(lead);
 
                 Ext.Ajax.request({
                     params: {
                         method: 'Crm.saveLead', 
                         lead: Ext.util.JSON.encode(lead.data),
-                        linkedContacts: additionalData.linkedContacts,
-                        linkedTasks:    additionalData.linkedTasks,
-                        // @todo send links via json again
-                        products:       Ext.util.JSON.encode([])
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Crm) {
@@ -713,27 +708,49 @@ Tine.Crm.LeadEditDialog = {
      * getAdditionalData
      * collects additional data (start/end dates, linked contacts, ...)
      * 
-     * @return  Object additionalData (json encoded)
+     * @param   Tine.Crm.Model.Lead lead
+     * @return  Tine.Crm.Model.Lead lead
      * @todo    add other stores and stuff
-     * @todo    add data directly to lead record
      */
-    getAdditionalData: function()
+    getAdditionalData: function(lead)
     {
-        var additionalData = {};          
-        
         // collect data of assosicated contacts
-        var linksContacts = new Array();
+        var linksResponsible = new Array();
+        var linksCustomer = new Array();
+        var linksPartner = new Array();
+
         var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
         
-        storeContacts.each(function(record) {
-            linksContacts.push({ 
-                recordId: record.id, 
-                remark: record.data.link_remark          
-            });
+        storeContacts.each(function(record) {        	
+        	var link = {};
+        	
+        	if ( record.id !== null ) {
+        		link = record.id; 
+        	} else {
+        		// add complete data array for new records 
+        		link = record.data;
+        	}
+        	
+        	//console.log(record.data);
+        	
+        	switch ( record.data.link_remark ) {
+                case 'responsible':
+                    linksResponsible.push(link);
+                    break;
+                case 'customer':
+                    linksCustomer.push(link);
+                    break;
+                case 'partner':
+                    linksPartner.push(link);
+                    break;
+        	}                            
         });
-
-        additionalData.linkedContacts = Ext.util.JSON.encode(linksContacts);
         
+        lead.data.responsible = linksResponsible;
+        lead.data.customer = linksCustomer;
+        lead.data.partner = linksPartner;
+        
+        // add tasks
         var linksTasks = new Array();
         var storeTasks = Ext.StoreMgr.lookup('TasksStore');
         
@@ -741,8 +758,10 @@ Tine.Crm.LeadEditDialog = {
             linksTasks.push(record.data.id);          
         });
         
-        additionalData.linkedTasks = Ext.util.JSON.encode(linksTasks);        
+        lead.data.tasks = linksTasks;        
 
+        return lead;
+        
         /*
         var store_products      = Ext.getCmp('grid_choosenProducts').getStore();       
         additionalData.products = Tine.Tinebase.Common.getJSONdata(store_products);
@@ -768,9 +787,7 @@ Tine.Crm.LeadEditDialog = {
         }
         
         */
-        
-        return additionalData;
-        
+                
     },
     
     /**

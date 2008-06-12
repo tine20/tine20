@@ -119,7 +119,7 @@ class Crm_Http extends Tinebase_Application_Http_Abstract
      * to get the initial datas for this app. This pattern prevents that any app needs
      * to make an server-request for its initial datas.
      * 
-     * Initial datas are just javascript varialbes declared in the mainScreen html code.
+     * Initial data objects are just javascript variables declared in the mainScreen html code.
      * 
      * The returned data have to be an array with the variable names as keys and
      * the datas as values. The datas will be JSON encoded later. Note that the
