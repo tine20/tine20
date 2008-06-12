@@ -419,7 +419,7 @@ class Setup_Import_TineRev949
                 'where'     => array(),
             ),
             array (
-                'name' => 'metacrm_product',
+                'name' => 'metacrm_leads_products',
                 'fields'    => array ( 
                     'lead_id' => 'id', 
                     'lead_lead_id' => 'lead_id',
@@ -432,7 +432,7 @@ class Setup_Import_TineRev949
                 'where'     => array( 'lead_product_id > 0' ),
             ),
             array (
-                'name' => 'metacrm_productsource',
+                'name' => 'metacrm_products',
                 'fields'    => array ( 
                     'lead_productsource_id' => 'id', 
                     'lead_productsource' => 'productsource',
@@ -499,10 +499,10 @@ class Setup_Import_TineRev949
                     case 'metacrm_leadtype':                        
                         $crmBackend->saveLeadtypes($records);
                         break;
-                    case 'metacrm_product':
+                    case 'metacrm_leads_products':
                         $crmBackend->saveProducts($records);
                         break;
-                    case 'metacrm_productsource':
+                    case 'metacrm_products':
                         $crmBackend->saveProductsource($records);
                         break;                        
                 }

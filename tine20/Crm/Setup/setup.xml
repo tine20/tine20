@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <order>20</order>
     <tables>
         <table>
@@ -197,7 +197,7 @@
             </declaration>
         </table>
         <table>
-            <name>metacrm_productsource</name>
+            <name>metacrm_products</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -258,7 +258,7 @@
             </declaration>
         </table>                
         <table>
-            <name>metacrm_product</name>
+            <name>metacrm_leads_products</name>
             <version>1</version>
             <declaration>
                 <field>

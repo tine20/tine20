@@ -68,9 +68,9 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $this->leadTable            = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
         $this->leadSourceTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
         $this->leadTypeTable        = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
-        $this->productSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_productsource'));
+        $this->productSourceTable   = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_products'));
         $this->leadStateTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
-        $this->productsTable        = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_product'));
+        $this->productsTable        = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leads_products'));
         $this->linksTable           = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'links'));
     }
     
@@ -682,7 +682,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
             $where = array(
                 $db->quoteInto('lead_id = ?', $leadId)
             );          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', $where);            
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', $where);            
 
             $where = array(
                 $db->quoteInto('link_app1 = ?', 'crm'),
@@ -766,10 +766,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_productsource');
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_products');
 
             foreach($_optionData as $_product) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_productsource', $_product->toArray());                
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_products', $_product->toArray());                
             }
 
             $db->commit();
@@ -841,7 +841,7 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db = Zend_Registry::get('dbAdapter');      
         
         try {          
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = ' . $id);      
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', 'lead_id = ' . $id);      
         } catch (Exception $e) {
             error_log($e->getMessage());
         }      
@@ -875,10 +875,10 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         $db->beginTransaction();
         
         try {
-            $db->delete(SQL_TABLE_PREFIX . 'metacrm_product', 'lead_id = '.$lead_id);
+            $db->delete(SQL_TABLE_PREFIX . 'metacrm_leads_products', 'lead_id = '.$lead_id);
 
             foreach($_daten as $_data) {
-                $db->insert(SQL_TABLE_PREFIX . 'metacrm_product', $_data);                
+                $db->insert(SQL_TABLE_PREFIX . 'metacrm_leads_products', $_data);                
             }
 
             $db->commit();
