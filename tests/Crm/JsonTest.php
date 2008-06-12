@@ -179,18 +179,12 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Crm_Json();
         
-        $encodedData = Zend_Json::encode( $this->objects['initialLead']->toArray() );
-
         // create test contact
         try {
             $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['contact']->getId());
         } catch ( Exception $e ) {
             $contact = Addressbook_Backend_Sql::getInstance()->addContact($this->objects['contact']);
         }
-        $contactLinks = array(array( 
-            'recordId'  => $contact->getId(),
-            'remark'    => 'responsible'
-        ));
 
         // create test task
         $tasksBackend = new Tasks_Backend_Sql();        
@@ -199,23 +193,28 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         } catch ( Exception $e ) {
             $task = $tasksBackend->createTask($this->objects['task']);
         }
-        $taskLinks = array($task->getId());
+
+        $leadData = $this->objects['initialLead']->toArray();
+        $leadData['responsible'] = array($contact->getId());
+        $leadData['tasks'] = array($task->getId());
+
+        $encodedData = Zend_Json::encode($leadData);
         
-        $result = $json->saveLead($encodedData, Zend_Json::encode($contactLinks), Zend_Json::encode($taskLinks), Zend_Json::encode(array()));
+        $result = $json->saveLead($encodedData);
+
+        //print_r ( $result );
         
         $this->assertTrue($result['success']); 
         $this->assertEquals($this->objects['initialLead']->description, $result['updatedData']['description']);
         $leadId = $result['updatedData']['id'];
 
         // check linked contacts
-        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($leadId, 'Addressbook');        
-        $this->assertGreaterThan(0, count($linkedContacts));
-        $this->assertEquals($contact->getId(), $linkedContacts[0]['recordId']);        
+        $this->assertGreaterThan(0, count($result['updatedData']['responsible']));
+        $this->assertEquals($contact->getId(), $result['updatedData']['responsible'][0]);        
 
         // check linked tasks
-        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($leadId, 'Tasks');        
-        $this->assertGreaterThan(0, count($linkedTasks));
-        $this->assertEquals($task->getId(), $linkedTasks[0]['recordId']);        
+        $this->assertGreaterThan(0, count($result['updatedData']['tasks']));
+        $this->assertEquals($task->getId(), $result['updatedData']['tasks'][0]);
     }
 
     /**
@@ -240,6 +239,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to update a lead and remove linked contact 
      *
+     * @todo add new task here
      */
     public function testUpdateLead()
     {   
@@ -251,7 +251,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $updatedLead->id = $initialLead->getId();
         $encodedData = Zend_Json::encode( $updatedLead->toArray() );
         
-        $result = $json->saveLead($encodedData, Zend_Json::encode(array()), Zend_Json::encode(array()), Zend_Json::encode(array()), Zend_Json::encode(array()), Zend_Json::encode(array()));
+        $result = $json->saveLead($encodedData);
         
         //print_r($result['updatedData']);
         
@@ -266,10 +266,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
 
         // check if task is no longer linked        
         $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($initialLead->getId(), 'Tasks');        
-        $this->assertEquals(0, count($linkedTasks));        
-        // delete task
-        //$tasksBackend = new Tasks_Backend_Sql();    
-        //$tasksBackend->deleteTask($this->objects['task']->getId());
+        $this->assertEquals(0, count($linkedTasks));
     }
 
     /**
