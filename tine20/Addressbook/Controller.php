@@ -318,6 +318,11 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function addContact(Addressbook_Model_Contact $_contact)
     {
+        if(empty($_contact->owner)) {
+            $currentAccount = Zend_Registry::get('currentAccount');
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, 'Addressbook', $currentAccount, Tinebase_Container::GRANT_ADD);
+            $_contact->owner = $containers[0]->getId();
+        }
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
