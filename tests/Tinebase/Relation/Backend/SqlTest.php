@@ -182,11 +182,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $rel = $this->relations[0];
         $this->object->breakRelation($rel->getId());
         
-        // test getAllRelations, $this->relations[0] should not be in resultSet
-        $record = new $this->relations[0]['own_model'](array(), true);
-        $record->setId( $this->relations[0]->own_id );
-        
-        $relations = $this->object->getAllRelations($record);
+        $relations = $this->object->getAllRelations($rel->own_model, $rel->own_backend, $rel->own_id);
         // test that the other relations still exists
         $this->assertGreaterThan(0, count($relations));
         foreach ($relations as $relation) {
@@ -198,11 +194,10 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
      * testBreakAllRelations().
      */
     public function testBreakAllRelations() {
-        $record = new $this->relations[0]['own_model'](array(), true);
-        $record->setId( $this->relations[0]->own_id );
+        $rel = $this->relations[0];
         
-        $this->object->breakAllRelations($record);
-        $relations = $this->object->getAllRelations($record);
+        $this->object->breakAllRelations($rel->own_model, $rel->own_backend, $rel->own_id);
+        $relations = $this->object->getAllRelations($rel->own_model, $rel->own_backend, $rel->own_id);
         $this->assertEquals(0, count($relations));
         
         // test that the other relations still exists
