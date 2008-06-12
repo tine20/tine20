@@ -157,7 +157,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     public function createTask(Tasks_Model_Task $_task)
     {
         Zend_Registry::get('logger')->debug('Tasks_Controller->createTask');
-    	if ((int)$_task->container_id < 0) {
+    	if (empty($_task->container_id) || (int)$_task->container_id < 0) {
     		$_task->container_id = $this->getDefaultContainer()->getId();
     	}
         if (! $this->_currentAccount->hasGrant($_task->container_id, Tinebase_Container::GRANT_ADD)) {
