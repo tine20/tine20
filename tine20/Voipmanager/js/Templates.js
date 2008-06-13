@@ -476,7 +476,8 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     store: Tine.Voipmanager.Data.loadSoftwareData(),
                     listeners: {
                         storeLoaded: function() {
-                            this.setValue(this.value);                   
+                            this.setValue(this.value);   
+                            this.fireEvent('newModelSelected', Ext.getCmp('model').getValue());                
                         },
                         newModelSelected: function(_model) {
 				            this.reset();
@@ -571,7 +572,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
         display: function(_templateData) 
         {           
             if (!arguments[0]) {
-                var _templateData = {model:'snom320'};
+                var _templateData = {model:'snom320'};                
             }
 
             // Ext.FormPanel
@@ -598,33 +599,34 @@ Tine.Voipmanager.Templates.EditDialog =  {
             this.updateTemplateRecord(_templateData);
             this.updateToolbarButtons();     
             dialog.getForm().loadRecord(this.templateRecord);
-                              
+                
             Ext.getCmp('software_id').store.load({
                 params: {
                     query: ''
                 },
-                callback: function() {
+                callback: function(){
                     Ext.getCmp('software_id').fireEvent('storeLoaded');
                 }
             });
-           /* 
-            Ext.getCmp('keylayout_id').store.load({
-                params: {
-                    query: ''
-                },
-                callback: function() {
-                    Ext.getCmp('software_id').fireEvent('storeLoaded');
-                }
-            });
-            
-            Ext.getCmp('setting_id').store.load({
-                params: {
-                    query: ''
-                },
-                callback: function() {
-                    Ext.getCmp('software_id').fireEvent('storeLoaded');
-                }
-            });                        
-         */         
+                  /*
+             Ext.getCmp('keylayout_id').store.load({
+             params: {
+             query: ''
+             },
+             callback: function() {
+             Ext.getCmp('software_id').fireEvent('storeLoaded');
+             }
+             });
+             
+             Ext.getCmp('setting_id').store.load({
+             params: {
+             query: ''
+             },
+             callback: function() {
+             Ext.getCmp('software_id').fireEvent('storeLoaded');
+             }
+             });
+     */
+               
         }   
 };
