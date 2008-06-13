@@ -408,4 +408,86 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
          
     }     
     
+    
+    
+    /**
+     * get asterisk lines
+     *
+     * @param string $sort
+     * @param string $dir
+     * @return array
+     */
+    public function getLines($sort, $dir, $query)
+    {     
+  
+        $result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        if($rows = Voipmanager_Controller::getInstance()->getLines($sort, $dir, $query)) {
+            $result['results']      = $rows->toArray();
+            $result['totalcount']   = count($result['results']);
+        }
+
+        return $result;    
+    }
+    
+    
+   /**
+     * get one asterisk line identified by lineId
+     *
+     * @param int $lineId
+     * @return array
+     */
+    public function getLineById($lineId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $line = Voipmanager_Controller::getInstance()->getLineById($lineId);
+        
+        $result = $line->toArray();        
+        return $result;
+    }
+             
+    /**
+     * add/update asterisk line
+     *
+     * if $lineData['id'] is empty the line gets added, otherwise it gets updated
+     *
+     * @param string $lineData a JSON encoded array of line properties
+     * @return array
+     */
+    public function saveLine($lineData)
+    {
+        $lineData = Zend_Json::decode($lineData);
+        
+        // unset if empty
+        if (empty($lineData['id'])) {
+            unset($lineData['id']);
+        }
+
+        $line = new Voipmanager_Model_Line();
+        $line->setFromArray($lineData);
+        
+        if ( empty($line->id) ) {
+            $line = Voipmanager_Controller::getInstance()->addLine($line);
+        } else {
+            $line = Voipmanager_Controller::getInstance()->updateLine($line);
+        }
+
+        $result = array('success'           => true,
+                        'welcomeMessage'    => 'Entry updated',
+                        'updatedData'       => $line->toArray()
+        );
+        
+        
+        return $result;
+         
+    }     
+    
+    
+    
 }

@@ -31,7 +31,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Voipmanager.js',
             'Voipmanager/js/Model.js',
             'Voipmanager/js/Software.js',
-            'Voipmanager/js/Templates.js'
+            'Voipmanager/js/Templates.js',
+            'Voipmanager/js/Location.js'
         );
     }
     

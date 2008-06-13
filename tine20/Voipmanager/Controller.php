@@ -389,5 +389,72 @@ class Voipmanager_Controller
         $template = $this->_backend->updateTemplate($_template);
         
         return $template;
-    }    
+    }   
+    
+    
+    /**
+     * get snom_line by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Line
+     */
+    public function getLineById($_id)
+    {
+        $result = $this->_backend->getLineById($_id);
+
+        return $result;    
+    }
+
+    /**
+     * get snom_lines
+     *
+     * @param string $_sort
+     * @param string $_dir
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Line
+     */
+    public function getLines($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    {
+        $result = $this->_backend->getLines($_sort, $_dir, $_query);
+
+        return $result;    
+    }
+    
+    /**
+     * add new line
+     *
+     * @param Voipmanager_Model_Line $_line
+     * @return  Voipmanager_Model_Line
+     */
+    public function addLine(Voipmanager_Model_Line $_line)
+    {        
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+        $line = $this->_backend->addLine($_line);
+      
+        return $line;
+    }
+    
+    /**
+     * update existing line
+     *
+     * @param Voipmanager_Model_Line $_line
+     * @return  Voipmanager_Model_Line
+     */
+    public function updateLine(Voipmanager_Model_Line $_line)
+    {
+        /*
+        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
+        }
+        */
+       
+        $line = $this->_backend->updateLine($_line);
+        
+        return $line;
+    }       
+    
+     
 }
