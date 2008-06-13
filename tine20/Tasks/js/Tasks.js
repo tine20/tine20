@@ -94,7 +94,7 @@ Tine.Tasks.mainGrid = {
             //var popup = Tine.Tinebase.Common.openWindow('TasksEditWindow', 'index.php?method=Tasks.editTask&taskId='+taskId+'&linkingApp=&linkedId=', 700, 300);
             
         },
-		deleteTaks: function(_button, _event){
+		deleteTasks: function(_button, _event){
 			Ext.MessageBox.confirm('Confirm', this.translation._('Do you really want to delete the selected task(s)'), function(_button) {
                 if(_button == 'yes') {
 				    var selectedRows = this.grid.getSelectionModel().getSelections();
@@ -156,14 +156,14 @@ Tine.Tasks.mainGrid = {
             }),
             deleteSingle: new Ext.Action({
                 text: this.translation._('Delete task'),
-                handler: this.handlers.deleteTaks,
+                handler: this.handlers.deleteTasks,
     			disabled: true,
                 iconCls: 'action_delete',
                 scope: this
             }),
     		deleteMultiple: new Ext.Action({
                 text: this.translation._('Delete tasks'),
-                handler: this.handlers.deleteTaks,
+                handler: this.handlers.deleteTasks,
     			disabled: true,
                 iconCls: 'action_delete',
                 scope: this
@@ -529,7 +529,7 @@ Tine.Tasks.mainGrid = {
 		
 		this.grid.on('keydown', function(e){
 	         if(e.getKey() == e.DELETE && !this.grid.editing){
-	             this.handlers.deleteTaks.call(this);
+	             this.handlers.deleteTasks.call(this);
 	         }
 	    }, this);
         		
