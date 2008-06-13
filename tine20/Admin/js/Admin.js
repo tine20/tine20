@@ -1451,7 +1451,7 @@ Tine.Admin.Accounts.Main = function() {
 	                Ext.Ajax.request({
 	                    url: 'index.php',
 	                    params: {
-	                        method: 'Admin.deleteUserss',
+	                        method: 'Admin.deleteUsers',
 	                        accountIds: Ext.util.JSON.encode(accountIds)
 	                    },
 	                    text: 'Deleting account(s)...',
@@ -1730,7 +1730,7 @@ Tine.Admin.Accounts.EditDialog = function() {
 	        Ext.Ajax.request({
 	            url: 'index.php',
 	            params: {
-	                method: 'Admin.deleteUserss', 
+	                method: 'Admin.deleteUsers', 
 	                accountIds: accountIds
 	            },
 	            text: 'Deleting account...',
