@@ -760,14 +760,12 @@
                     <name>type</name>
                     <type>text</type>
                     <length>40</length>
-                    <default>''</default>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>remark</name>
                     <type>text</type>
                     <length>256</length>
-                    <default>''</default>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1263,7 +1261,6 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                    <default>''</default>
                 </field>
                 <index>
                     <name>tag_id-application_id-record_id-record_backend_id</name>
