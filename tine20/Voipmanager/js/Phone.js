@@ -199,10 +199,10 @@ Tine.Voipmanager.Phones.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('Id'), dataIndex: 'id', width: 30, hidden: true },
-            { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 60 },
-            { resizable: true, id: 'location', header: this.translation._('Location'), dataIndex: 'location',width: 40 },
-            { resizable: true, id: 'template', header: this.translation._('Template'), dataIndex: 'template',width: 40 },            
-            { resizable: true, id: 'ipaddress', header: this.translation._('phone IP address'), dataIndex: 'ipaddress', width: 110 },
+            { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 50 },
+            { resizable: true, id: 'location', header: this.translation._('Location'), dataIndex: 'location',width: 70 },
+            { resizable: true, id: 'template', header: this.translation._('Template'), dataIndex: 'template',width: 50 },            
+            { resizable: true, id: 'ipaddress', header: this.translation._('phone IP address'), dataIndex: 'ipaddress', width: 50 },
             { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
             {
                 resizable: true,
