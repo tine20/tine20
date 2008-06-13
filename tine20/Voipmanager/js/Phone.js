@@ -357,3 +357,288 @@ Tine.Voipmanager.Phones.Main = {
     }
 };
 
+Tine.Voipmanager.Phones.EditDialog =  {
+
+        phoneRecord: null,
+        
+        updatePhoneRecord: function(_phoneData)
+        {
+                       
+            if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
+                _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
+            }
+            this.phoneRecord = new Tine.Voipmanager.Model.Phone(_phoneData);
+        },
+        
+        
+        deletePhone: function(_button, _event)
+        {
+            var phoneIds = Ext.util.JSON.encode([this.phoneRecord.get('id')]);
+                
+            Ext.Ajax.request({
+                url: 'index.php',
+                params: {
+                    method: 'Voipmanager.deletePhones', 
+                    phoneIds: phoneIds
+                },
+                text: 'Deleting phone...',
+                success: function(_result, _request) {
+                    window.opener.Tine.Voipmanager.Phones.Main.reload();
+                    window.close();
+                },
+                failure: function ( result, request) { 
+                    Ext.MessageBox.alert('Failed', 'Some error occured while trying to delete the phone.'); 
+                } 
+            });         
+        },
+        
+        applyChanges: function(_button, _event, _closeWindow) 
+        {
+            var form = Ext.getCmp('voipmanager_editPhoneForm').getForm();
+
+            if(form.isValid()) {
+                form.updateRecord(this.phoneRecord);
+        
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Voipmanager.savePhone', 
+                        phoneData: Ext.util.JSON.encode(this.phoneRecord.data)
+                    },
+                    success: function(_result, _request) {
+                        if(window.opener.Tine.Voipmanager.Phones) {
+                            window.opener.Tine.Voipmanager.Phones.Main.reload();
+                        }
+                        if(_closeWindow === true) {
+                            window.close();
+                        } else {
+                            this.updatePhoneRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                            this.updateToolbarButtons();
+                            form.loadRecord(this.phoneRecord);
+                        }
+                    },
+                    failure: function ( result, request) { 
+                        Ext.MessageBox.alert('Failed', 'Could not save phone.'); 
+                    },
+                    scope: this 
+                });
+            } else {
+                Ext.MessageBox.alert('Errors', 'Please fix the errors noted.');
+            }
+        },
+
+        saveChanges: function(_button, _event) 
+        {
+            this.applyChanges(_button, _event, true);
+        },
+                  
+                  
+        editPhoneDialog:  [{
+            layout:'fit',
+            //frame: true,
+            border:false,
+            anchor: '100% 100%',
+            items: [{
+                layout:'column',
+                border:false,
+                anchor: '100%',
+                items: [{
+                    columnWidth: .5,
+                    layout: 'form',
+                    border: false,
+                    anchor: '100%',
+                    items:[{
+                        xtype: 'textfield',
+                        fieldLabel: 'MAC Address',
+                        name: 'macaddress',
+                        maxLength: 12,
+                        anchor:'98%',
+                        allowBlank: false
+                    } , {
+                        xtype: 'combo',
+                        fieldLabel: 'Template',
+                        name: 'template_id',
+                        id: 'template_id',
+                        mode: 'remote',
+                        displayField:'name',
+                        valueField:'id',
+                        anchor:'98%',                    
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: Tine.Voipmanager.Data.loadTemplateData(),
+                        listeners: {
+                            storeLoaded: function(){
+                                this.setValue(this.value);
+                            }
+                        }                        
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Location',
+                        name: 'location_id',
+                        id: 'location_id',
+                        mode: 'remote',
+                        displayField:'name',
+                        valueField:'id',
+                        anchor:'98%',                    
+                        triggerAction: 'all',
+                        editable: false,
+                        forceSelection: true,
+                        store: Tine.Voipmanager.Data.loadLocationData(),
+                        listeners: {
+                            storeLoaded: function(){
+                                this.setValue(this.value);
+                            }
+                        }                        
+                    }]
+                }, {
+                    columnWidth: .5,
+                    layout: 'form',
+                    border: false,
+                    anchor: '100%',
+                    autoHeight: true,
+                    items:[{
+                        xtype:'textarea',
+                        name: 'description',
+                        fieldLabel: 'Description',
+                        grow: false,
+                        preventScrollbars:false,
+                        anchor:'100%',
+                        height: 105
+                    }]
+                }]
+            },{
+                layout:'form',
+                border:false,
+                anchor: '100%',
+                items: [{                
+                    xtype:'fieldset',
+                    checkboxToggle:false,
+                    id: 'infos',
+                    title: 'Infos',
+                    autoHeight:true,
+                    anchor: '100%',
+                    defaults: {anchor:'100%'},
+                    items :[{
+                        layout:'column',
+                        border:false,
+                        anchor: '100%',
+                        items: [{
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{
+                                xtype: 'textfield',
+                                fieldLabel: 'Current IP Address',
+                                name: 'ip_address',
+                                maxLength: 20,
+                                anchor:'98%',
+                                readOnly: true                        
+                            },{
+                                xtype: 'textfield',
+                                fieldLabel: 'Current Software Version',
+                                name: 'software_version',
+                                maxLength: 20,
+                                anchor:'98%',
+                                readOnly: true                        
+                            },{
+                                xtype: 'textfield',
+                                fieldLabel: 'Current Phone Model',
+                                name: 'phone_model',
+                                maxLength: 20,
+                                anchor:'98%',
+                                readOnly: true   
+                            }]
+                        },{         
+                            columnWidth: .5,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:[{                                    
+                                xtype: 'textfield',
+                                fieldLabel: 'Settings Loaded at',
+                                name: 'settings_loadingtime',
+                                maxLength: 20,
+                                anchor:'100%',
+                                readOnly: true                        
+                            },{
+                                xtype: 'textfield',
+                                fieldLabel: 'Firmware last checked at',
+                                name: 'firmware_update_time',
+                                maxLength: 20,
+                                anchor:'100%',
+                                readOnly: true                        
+                            }]
+                        }]
+                    }]
+                }]
+            }]
+        }],
+        
+
+        
+        updateToolbarButtons: function()
+        {
+            if(this.phoneRecord.get('id') > 0) {
+                Ext.getCmp('voipmanager_editPhoneForm').action_delete.enable();
+            }
+        },
+        
+        display: function(_phoneData) 
+        {
+            if (!arguments[0]) {
+                var _phoneData = {};
+            }
+
+            // Ext.FormPanel
+            var dialog = new Tine.widgets.dialog.EditRecord({
+                id : 'voipmanager_editPhoneForm',
+                //title: 'the title',
+                labelWidth: 120,
+                labelAlign: 'top',
+                handlerScope: this,
+                handlerApplyChanges: this.applyChanges,
+                handlerSaveAndClose: this.saveChanges,
+                handlerDelete: this.deletePhone,
+                items: [{
+                    layout:'fit',
+                    border: false,
+                    autoHeight: true,
+                    anchor: '100% 100%',
+                    items: this.editPhoneDialog
+                }]
+            });
+
+            var viewport = new Ext.Viewport({
+                layout: 'border',
+                frame: true,
+                //height: 300,
+                items: dialog
+            });
+            
+                    
+            this.updatePhoneRecord(_phoneData);
+            this.updateToolbarButtons();           
+            dialog.getForm().loadRecord(this.phoneRecord);
+            
+            Ext.getCmp('template_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function(){
+                    Ext.getCmp('template_id').fireEvent('storeLoaded');
+                }
+            });
+
+            Ext.getCmp('location_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function(){
+                    Ext.getCmp('location_id').fireEvent('storeLoaded');
+                }
+            });           
+        } 
+};
+
+
