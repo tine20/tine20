@@ -920,17 +920,17 @@ Tine.Crm.LeadEditDialog = {
     	
     	switch ( type ) {
     		case 'responsible':
-                icon = '<img src="images/oxygen/16x16/apps/preferences-desktop-user.png" ext:qtip="' + 
-    		        Tine.Crm.LeadEditDialog.translation._('Responsible') + '">';
-                break;
+    		    icon = '<img class="x-menu-item-icon contactIconResponsible" src="ExtJS/resources/images/default/s.gif" ext:qtip="' +
+                    Tine.Crm.LeadEditDialog.translation._('Responsible') + '"/>';
+    		    break;
             case 'customer':
-                icon = '<img src="images/oxygen/16x16/apps/system-users.png" ext:qtip="' + 
-                    Tine.Crm.LeadEditDialog.translation._('Customer') + '">';
+                icon = '<img class="x-menu-item-icon contactIconCustomer" src="ExtJS/resources/images/default/s.gif" ext:qtip="' +
+                    Tine.Crm.LeadEditDialog.translation._('Responsible') + '"/>';
                 break;
             case 'partner':
-                icon = '<img src="images/oxygen/16x16/actions/view-process-own.png" ext:qtip="' + 
-                    Tine.Crm.LeadEditDialog.translation._('Partner') + '">';
-                break;
+                icon = '<img class="x-menu-item-icon contactIconPartner" src="ExtJS/resources/images/default/s.gif" ext:qtip="' +
+                    Tine.Crm.LeadEditDialog.translation._('Responsible') + '"/>';
+                 break;
     	}
     	
     	return icon;
