@@ -105,23 +105,18 @@ class Tinebase_Relation_Backend_Sql
      * @return void
      */
     public function breakAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL ) {
-        $where = array(
-            'own_model   = ' . $this->_db->getAdapter()->quote($_model),
-            'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
-            'own_id      = ' . $this->_db->getAdapter()->quote($_id)
-        );
-        if ($_degree) {
-            $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
-        }
-        if ($_type) {
-            $where[] = $this->_db->getAdapter()->quoteInto('type = ?', $_type);
-        }
+        $relationIds = $this->getAllRelations($_model, $_backend, $_id, $_degree, $_type)->getArrayOfIds();
+        if (!empty($relationIds)) {
+            $where = array(
+                $this->_db->getAdapter()->quoteInto('id IN (?)', $relationIds)
+            );
         
-        $this->_db->update(array(
-            'is_deleted'   => true,
-            'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
-            'deleted_time' => Zend_Date::now()->getIso()
-        ), $where);
+            $this->_db->update(array(
+                'is_deleted'   => true,
+                'deleted_by'   => Zend_Registry::get('currentAccount')->getId(),
+                'deleted_time' => Zend_Date::now()->getIso()
+            ), $where);
+        }
     } // end of member function breakAllRelations
     /**
      * returns all relations of a given record and optionally only of given role
@@ -129,15 +124,16 @@ class Tinebase_Relation_Backend_Sql
      * @param  string $_model    own model to get all relations for
      * @param  string $_backend  own backend to get all relations for
      * @param  string $_id       own id to get all relations for 
-     * @param string $_role filter by role
+     * @param  string $_degree   only breaks relations of given degree
+     * @param  string $_type     only breaks relations of given type
      * @return Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
      */
-    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL  ) {
+    public function getAllRelations( $_model, $_backend, $_id, $_degree = NULL, $_type = NULL, $_returnBroken = false  ) {
     	$where = array(
     	    'own_model   = ' . $this->_db->getAdapter()->quote($_model),
     	    'own_backend = ' . $this->_db->getAdapter()->quote($_backend),
             'own_id      = ' . $this->_db->getAdapter()->quote($_id),
-    	    'is_deleted      = FALSE'
+    	    'is_deleted  ='  . $this->_db->getAdapter()->quote((bool)$_returnBroken)
     	);
     	if ($_degree) {
             $where[] = $this->_db->getAdapter()->quoteInto('own_degree = ?', $_degree);
@@ -153,11 +149,14 @@ class Tinebase_Relation_Backend_Sql
    		return $relations; 
     } // end of member function getAllRelations
     /**
-     * returns a relation spechified by a given id
+     * returns on side of a relation
      *
-     * @param int $_id
-     * @param bool $_returnDeleted
-     * @return Tinebase_Relation_Backend_Sql
+     * @param  string $_id
+     * @param  string $_ownModel 
+     * @param  string $_ownBackend
+     * @param  string $_ownId
+     * @param  bool   $_returnBroken
+     * @return Tinebase_Relation_Model_Relation
      */
     public function getRelation($_id, $_ownModel, $_ownBackend, $_ownId, $_returnBroken = false)
     {
@@ -179,6 +178,25 @@ class Tinebase_Relation_Backend_Sql
     	}
     	
     } // end of member function getRelationById
+    /**
+     * purges(removes from table) all relations
+     * 
+     * @param  string $_ownModel 
+     * @param  string $_ownBackend
+     * @param  string $_ownId
+     * @return void
+     */
+    public function purgeAllRelations($_ownModel, $_ownBackend, $_ownId)
+    {
+        $relationIds = $this->getAllRelations($_ownModel, $_ownBackend, $_ownId, NULL, NULL, true)->getArrayOfIds();
+        if (!empty($relationIds)) {
+            $where = array(
+                $this->_db->getAdapter()->quoteInto('id IN (?)', $relationIds)
+            );
+        
+            $this->_db->delete($where);
+        }
+    }
     /**
      * swaps roles own/related
      * 
