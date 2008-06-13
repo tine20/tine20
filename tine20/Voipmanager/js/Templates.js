@@ -475,6 +475,9 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSoftwareData(),
                     listeners: {
+                        storeLoaded: function() {
+                            this.setValue(this.value);                   
+                        },
                         newModelSelected: function(_model) {
 				            this.reset();
 				            this.store.load({
@@ -504,6 +507,9 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadKeylayoutData(),
                     listeners: {
+                        storeLoaded: function() {
+                            this.setValue(this.value);                   
+                        },                        
                         newModelSelected: function(_model) {
 				            this.reset();
 				            this.store.load({
@@ -533,6 +539,9 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSettingsData(),
                     listeners: {
+                        storeLoaded: function() {
+                            this.setValue(this.value);                   
+                        },                        
                         newModelSelected: function(_model) {
 				            this.reset();
 				            this.store.load({
@@ -559,7 +568,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
             }
         },
         
-        display: function(_templateData, _softwareVersions) 
+        display: function(_templateData) 
         {           
             if (!arguments[0]) {
                 var _templateData = {model:'snom320'};
@@ -587,8 +596,35 @@ Tine.Voipmanager.Templates.EditDialog =  {
             });
             
             this.updateTemplateRecord(_templateData);
-            this.updateToolbarButtons();           
-            Ext.getCmp('software_id').store.loadData({results:_softwareVersions});
+            this.updateToolbarButtons();     
             dialog.getForm().loadRecord(this.templateRecord);
+                              
+            Ext.getCmp('software_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function() {
+                    Ext.getCmp('software_id').fireEvent('storeLoaded');
+                }
+            });
+           /* 
+            Ext.getCmp('keylayout_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function() {
+                    Ext.getCmp('software_id').fireEvent('storeLoaded');
+                }
+            });
+            
+            Ext.getCmp('setting_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function() {
+                    Ext.getCmp('software_id').fireEvent('storeLoaded');
+                }
+            });                        
+         */         
         }   
 };

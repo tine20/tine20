@@ -747,9 +747,7 @@ Tine.Voipmanager.Data = {
             remoteSort: true
         });
 
-        softwareDataStore.setDefaultSort('description', 'asc');
-
-        //Ext.StoreMgr.add('swData', softwareDataStore);               
+        softwareDataStore.setDefaultSort('description', 'asc');            
          
         return softwareDataStore;
     },
