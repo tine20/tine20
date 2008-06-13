@@ -187,19 +187,19 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
      */
     public function editTemplate($templateId=NULL)
     {
-        if (!empty($templateId)) {
-            $templates = Voipmanager_Controller::getInstance();
-            $template = $templates->getTemplateById($templateId);
-            $arrayTemplate = $template->toArray();
-        } else {
+        $controller = Voipmanager_Controller::getInstance();
 
+        if (!empty($templateId)) {
+            $template = $controller->getTemplateById($templateId);
+        } else {
+            $template = new Voipmanager_Model_Template(array(
+                'model' => 'snom320'
+            ), true);
         }
 
         // encode the template array
-        $encodedTemplate = Zend_Json::encode($arrayTemplate);                   
+        $encodedTemplate = Zend_Json::encode($template->toArray());                   
         
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
@@ -208,7 +208,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
-            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray(),
+            'softwareVersions' => $controller->getSoftware('id', 'ASC', $template->model)->toArray() 
         );
         
         $view->title="edit template data";
