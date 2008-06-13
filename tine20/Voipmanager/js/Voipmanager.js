@@ -746,14 +746,13 @@ Tine.Voipmanager.Data = {
         return softwareDataStore;
     },
     
-    loadKeylayoutData: function(_query) {
+    loadKeylayoutData: function() {
 
         var keylayoutDataStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Voipmanager.getKeylayout',
                 sort: 'description',
-                dir: 'ASC',
-                query: _query
+                dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -781,8 +780,7 @@ Tine.Voipmanager.Data = {
             baseParams: {
                 method: 'Voipmanager.getSettings',
                 sort: 'description',
-                dir: 'ASC',
-                query: _query
+                dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',

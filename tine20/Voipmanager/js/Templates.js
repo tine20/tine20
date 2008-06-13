@@ -444,6 +444,8 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     listeners: {
                         select: function() {
                             Ext.getCmp('software_id').fireEvent('newModelSelected', this.getValue());
+                            //Ext.getCmp('keylayout_id').fireEvent('newModelSelected', this.getValue());
+                            //Ext.getCmp('setting_id').fireEvent('newModelSelected', this.getValue());
                         }                                                   
                     },
                     allowBlank: false,
@@ -473,27 +475,14 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSoftwareData(),
                     listeners: {
-                        newModelSelected: function(_model) {
-                            this.reset();
-                            this.store.load({
-                                params:{
-                                    query : _model
-                                },
-                                callback: function() {
-                                    if(this.store.getAt(0)) {
-                                        this.setValue(this.store.getAt(0).id);
-                                    }
-                                },
-                                scope: this
-                            });
-                        }
+                        newModelSelected: updateComboBox
                     }
                 }),
                 new Ext.form.ComboBox({
                     fieldLabel: 'Keylayout',
                     name: 'keylayout_id',
                     id: 'keylayout_id',
-                    mode: 'remote',
+                    mode: 'local',
                     displayField:'description',
                     valueField:'id',
                     anchor:'100%',                    
@@ -502,20 +491,14 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadKeylayoutData(),
                     listeners: {
-                        expand: function() {
-                            var _newValue = Ext.getCmp('model').getValue();
-                            if (!Ext.isEmpty(_newValue)) {
-                                this.store.baseParams.query = _newValue;
-                                this.store.reload();
-                            }
-                        }
+                        newModelSelected: updateComboBox
                     }
                 }),
                 new Ext.form.ComboBox({
                     fieldLabel: 'Settings',
                     name: 'setting_id',
                     id: 'setting_id',
-                    mode: 'remote',
+                    mode: 'local',
                     displayField:'description',
                     valueField:'id',
                     anchor:'100%',                    
@@ -524,17 +507,26 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSettingsData(),
                     listeners: {
-                        expand: function() {
-                            var _newValue = Ext.getCmp('model').getValue();
-                            if (!Ext.isEmpty(_newValue)) {
-                                this.store.baseParams.query = _newValue;
-                                this.store.reload();
-                            }
-                        }
+                        newModelSelected: updateComboBox
                     }
                 })                                  
             ]
-       }],
+        }],
+        
+        updateComboBox: function(_model) {
+            this.reset();
+            this.store.load({
+                params:{
+                    query : _model
+                },
+                callback: function() {
+                    if(this.store.getAt(0)) {
+                        this.setValue(this.store.getAt(0).id);
+                    }
+                },
+                scope: this
+            });
+        },
         
         updateToolbarButtons: function()
         {
