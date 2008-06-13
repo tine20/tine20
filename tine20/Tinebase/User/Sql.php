@@ -504,6 +504,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+        $roleMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
         $userRegistrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
         
         try {
@@ -518,6 +519,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
             );
             $groupMembersTable->delete($where);
+
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', 'user'),
+                );
+            $roleMembersTable->delete($where);
             
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId),
