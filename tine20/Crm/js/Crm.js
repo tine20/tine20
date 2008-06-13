@@ -723,25 +723,63 @@ Tine.Crm.LeadEditDialog = {
         },
         
         /**
-         * onclick handler for addBtn
+         * onclick handler for addContact
          * 
-         * @todo send contact type to contact edit dialog
          * @todo get new contact data and reload contacts grid
          */
         addContact: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 800, 600);
+            var contactPopup = new Tine.Addressbook.EditPopup({});        	
+            
+            // update event handler
+            contactPopup.on('update', function(contact) {
+                // set id and link properties
+                contact.id = contact.data.id;
+                contact.data.link_id = null;
+                switch ( _button.contactType ) {
+                	case 'responsible':
+                	   contact.data.link_remark = 'responsible';
+                	   break;
+                    case 'customer':
+                       contact.data.link_remark = 'customer';
+                       break;
+                    case 'partner':
+                       contact.data.link_remark = 'partner';
+                       break;
+                }
+                
+                // add contact to store
+                var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+                storeContacts.add(contact);                              
+
+            }, this);
         },
             
         /**
-         * onclick handler for editBtn
+         * onclick handler for editContact
          */
         editContact: function(_button, _event) 
         {
             var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
-            var contactId = selectedRows[0].id;
+            var selectedContact = selectedRows[0];
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 800, 600);
+            var contactPopup = new Tine.Addressbook.EditPopup({
+                contactId: selectedContact.id
+            });          
+            
+            // update event handler
+            contactPopup.on('update', function(contact) {                
+                // set link properties
+                contact.id = contact.data.id;
+                contact.data.link_id = selectedContact.data.link_id;
+                contact.data.link_remark = selectedContact.data.link_remark;
+                
+                // add contact to store (remove the old one first)
+                var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
+                storeContacts.remove(selectedContact);
+                storeContacts.add(contact);                                
+            }, this);
+            
         },
 
         /**
@@ -766,6 +804,7 @@ Tine.Crm.LeadEditDialog = {
          */
         addTask: function(_button, _event) 
         {
+        	/*
             var taskId = -1;
             if (_button.actionType == 'edit') {
                 var selectedRows = this.grid.getSelectionModel().getSelections();
@@ -784,12 +823,13 @@ Tine.Crm.LeadEditDialog = {
             popupWindow.on('update', function(task) {
                 this.store.load({params: this.paging});
             }, this);
+            */
         },
             
         /**
          * onclick handler for editBtn
          * 
-         * @todo use addTask handler?
+         * @todo make it work
          */
         editTask: function(_button, _event) 
         {
@@ -916,22 +956,22 @@ Tine.Crm.LeadEditDialog = {
      */
     contactTypeRenderer: function(type)
     {
-    	var icon = '';
-    	
     	switch ( type ) {
     		case 'responsible':
-    		    icon = '<img class="x-menu-item-icon contactIconResponsible" src="ExtJS/resources/images/default/s.gif" ext:qtip="' +
-                    Tine.Crm.LeadEditDialog.translation._('Responsible') + '"/>';
+    		    var iconClass = 'contactIconResponsible';
+    		    var qTip = Tine.Crm.LeadEditDialog.translation._('Responsible');
     		    break;
             case 'customer':
-                icon = '<img class="x-menu-item-icon contactIconCustomer" src="ExtJS/resources/images/default/s.gif" ext:qtip="' +
-                    Tine.Crm.LeadEditDialog.translation._('Responsible') + '"/>';
+                var iconClass = 'contactIconCustomer';
+                var qTip = Tine.Crm.LeadEditDialog.translation._('Customer');
                 break;
             case 'partner':
-                icon = '<img class="x-menu-item-icon contactIconPartner" src="ExtJS/resources/images/default/s.gif" ext:qtip="' +
-                    Tine.Crm.LeadEditDialog.translation._('Responsible') + '"/>';
-                 break;
+                var iconClass = 'contactIconPartner';
+                var qTip = Tine.Crm.LeadEditDialog.translation._('Partner');
+                break;
     	}
+    	
+    	var icon = '<img class="x-menu-item-icon ' + iconClass + '" src="ExtJS/resources/images/default/s.gif" ext:qtip="' + qTip + '"/>'
     	
     	return icon;
     },
@@ -1286,6 +1326,7 @@ Tine.Crm.LeadEditDialog = {
         // @todo add icon classes for adding contact types
         // @todo add param "type" to addContact handler function
         this.actions.addResponsible = new Ext.Action({
+        	contactType: 'responsible',
             text: this.translation._('Add responsible'),
             tooltip: this.translation._('Add new responsible contact'),
             iconCls: 'contactIconResponsible',
@@ -1294,6 +1335,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.addCustomer = new Ext.Action({
+            contactType: 'customer',
             text: this.translation._('Add customer'),
             tooltip: this.translation._('Add new customer contact'),
             iconCls: 'contactIconCustomer',
@@ -1302,6 +1344,7 @@ Tine.Crm.LeadEditDialog = {
         });
         
         this.actions.addPartner = new Ext.Action({
+            contactType: 'partner',
             text: this.translation._('Add partner'),
             tooltip: this.translation._('Add new partner contact'),
             iconCls: 'contactIconPartner',
