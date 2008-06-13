@@ -484,7 +484,7 @@
                 <field>
                     <name>account_id</name>
                     <type>integer</type>
-                    <default>'0'</default>
+                    <default>0</default>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -939,7 +939,6 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                    <default>''</default>
                 </field>
                 <field>
                     <name>application_id</name>
@@ -1032,7 +1031,6 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                    <default>''</default>
                 </field>
                 <field>
                     <name>type</name>
@@ -1141,7 +1139,7 @@
                     <name>account_id</name>
                     <type>integer</type>
                     <notnull>true</notnull>
-                    <default>'0'</default>
+                    <default>0</default>
                 </field>
                 <field>
                     <name>account_right</name>
