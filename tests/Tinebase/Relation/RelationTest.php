@@ -13,16 +13,16 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_RelationTest::main();
+    Tinebase_Relation_RelationTest::main();
 }
 
 /**
  * Test class for Tinebase_Relations
  */
-class Tinebase_RelationTest extends PHPUnit_Framework_TestCase
+class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var    Tinebase_Relation
@@ -101,7 +101,7 @@ class Tinebase_RelationTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_RelationTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Relation_RelationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
