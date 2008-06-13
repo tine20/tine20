@@ -101,7 +101,7 @@ class Admin_Json extends Tinebase_Application_Json_Abstract
     }
     
     /**
-     * delete accounts
+     * delete users
      *
      * @param   string $accountIds  json encoded array of account ids
      * @return  array with success flag
