@@ -574,12 +574,25 @@ Tine.Addressbook.ContactEditDialog = {
                     	if(window.opener.Tine.Addressbook) {
                             window.opener.Tine.Addressbook.Main.reload();
                     	}
+                    	
+                    	// update record
+                    	Tine.Addressbook.ContactEditDialog.updateContactRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
+                    	form.loadRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
+                    	
+                        // notify opener and return contact data 
+                    	// @todo use popup manager from addressbook grid as well
+                    	if ( opener.Ext.ux.PopupWindowMgr.get(window) ) {
+                            opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', Tine.Addressbook.ContactEditDialog.contactRecord);                    		
+                    	}
+                    	
                         if(_closeWindow === true) {
+                        	// hack for the moment -> see @todo above 
+                            if ( opener.Ext.ux.PopupWindowMgr.get(window) ) {
+                            	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
+                            }
                             window.close();
                         } else {
-                            this.updateContactRecord(Ext.util.JSON.decode(_result.responseText).updatedData);
                             //this.updateToolbarButtons(formData.config.addressbookRights);
-                            form.loadRecord(this.contactRecord);
                             Ext.MessageBox.hide();
                         }
                     },

@@ -450,3 +450,22 @@ Tine.Addressbook.ContactEditDialog.getEditForm = function() {
         savePath
     ];
 };
+
+/**
+ * Addressbook Edit Popup
+ * 
+ * @todo use that in Addressbook.js
+ */
+Tine.Addressbook.EditPopup = Ext.extend(Ext.ux.PopupWindow, {
+   contactId: '',
+   //containerId: -1,
+	
+   name: 'AddressbookEditWindow',
+   width: 800,
+   height: 600,
+   initComponent: function(){
+       //this.url = 'index.php?method=Addressbook.editContact&_contactId=' + this.id + '&containerId=' + this.containerId;
+   	   this.url = 'index.php?method=Addressbook.editContact&_contactId=' + this.contactId;
+       Tine.Addressbook.EditPopup.superclass.initComponent.call(this);
+   }
+});
