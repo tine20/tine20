@@ -179,7 +179,7 @@
                     <name>tid</name>
                     <type>text</type>
                     <length>1</length>
-                    <default>'n'</default>
+                    <default>n</default>
                 </field>
                 <field>
                     <name>title</name>
