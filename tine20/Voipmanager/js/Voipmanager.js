@@ -1044,7 +1044,12 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
-                        store: Tine.Voipmanager.Data.loadTemplateData()
+                        store: Tine.Voipmanager.Data.loadTemplateData(),
+                        listeners: {
+                            storeLoaded: function(){
+                                this.setValue(this.value);
+                            }
+                        }                        
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Location',
@@ -1057,7 +1062,12 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         triggerAction: 'all',
                         editable: false,
                         forceSelection: true,
-                        store: Tine.Voipmanager.Data.loadLocationData()
+                        store: Tine.Voipmanager.Data.loadLocationData(),
+                        listeners: {
+                            storeLoaded: function(){
+                                this.setValue(this.value);
+                            }
+                        }                        
                     }]
                 }, {
                     columnWidth: .5,
@@ -1158,14 +1168,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             if (!arguments[0]) {
                 var _phoneData = {};
             }
-            
-   //         Tine.Voipmanager.Data.loadTemplateData(formData.templateData);
-        
-    //        console.log(Ext.StoreMgr.get('templateStore'));       
-        
 
-        
-        
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
                 id : 'voipmanager_editPhoneForm',
@@ -1196,7 +1199,24 @@ Tine.Voipmanager.Phones.EditDialog =  {
             this.updatePhoneRecord(_phoneData);
             this.updateToolbarButtons();           
             dialog.getForm().loadRecord(this.phoneRecord);
-           
+            
+            Ext.getCmp('template_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function(){
+                    Ext.getCmp('template_id').fireEvent('storeLoaded');
+                }
+            });
+
+            Ext.getCmp('location_id').store.load({
+                params: {
+                    query: ''
+                },
+                callback: function(){
+                    Ext.getCmp('location_id').fireEvent('storeLoaded');
+                }
+            });           
         } 
 };
 
