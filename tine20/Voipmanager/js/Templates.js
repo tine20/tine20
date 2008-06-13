@@ -475,7 +475,20 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSoftwareData(),
                     listeners: {
-                        newModelSelected: updateComboBox
+                        newModelSelected: function(_model) {
+				            this.reset();
+				            this.store.load({
+				                params:{
+				                    query : _model
+				                },
+				                callback: function() {
+				                    if(this.store.getAt(0)) {
+				                        this.setValue(this.store.getAt(0).id);
+				                    }
+				                },
+				                scope: this
+				            });
+				        }
                     }
                 }),
                 new Ext.form.ComboBox({
@@ -491,7 +504,20 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadKeylayoutData(),
                     listeners: {
-                        newModelSelected: updateComboBox
+                        newModelSelected: function(_model) {
+				            this.reset();
+				            this.store.load({
+				                params:{
+				                    query : _model
+				                },
+				                callback: function() {
+				                    if(this.store.getAt(0)) {
+				                        this.setValue(this.store.getAt(0).id);
+				                    }
+				                },
+				                scope: this
+				            });
+				        }
                     }
                 }),
                 new Ext.form.ComboBox({
@@ -507,26 +533,24 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSettingsData(),
                     listeners: {
-                        newModelSelected: updateComboBox
+                        newModelSelected: function(_model) {
+				            this.reset();
+				            this.store.load({
+				                params:{
+				                    query : _model
+				                },
+				                callback: function() {
+				                    if(this.store.getAt(0)) {
+				                        this.setValue(this.store.getAt(0).id);
+				                    }
+				                },
+				                scope: this
+				            });
+				        }
                     }
                 })                                  
             ]
         }],
-        
-        updateComboBox: function(_model) {
-            this.reset();
-            this.store.load({
-                params:{
-                    query : _model
-                },
-                callback: function() {
-                    if(this.store.getAt(0)) {
-                        this.setValue(this.store.getAt(0).id);
-                    }
-                },
-                scope: this
-            });
-        },
         
         updateToolbarButtons: function()
         {
