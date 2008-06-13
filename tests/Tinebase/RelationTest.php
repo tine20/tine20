@@ -141,29 +141,33 @@ class Tinebase_RelationTest extends PHPUnit_Framework_TestCase
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $this->_relationData);
     }
     
-    public function ttestGetRelations()
+    public function testGetRelations()
     {
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         
         $this->assertTrue($relations instanceof Tinebase_Record_RecordSet, 'relations are not a RecordSet');
+        $this->assertEquals(3, count($relations));
+        
         foreach ($relations as $relation) {
             // check each relation got an id
             $this->assertEquals(40, strlen($relation->getId()));
-            // check own_id's are set
-            $this->assertEquals('Crm_Model_Lead', $relation->own_model);
-            $this->assertTrue(strlen($relation->own_backend) > 2);
-            $this->assertEquals($this->_record->getId(), $relation->own_id);
-        }
-        foreach ($relations as $relation) {
             // check related record got set/created
             $this->assertTrue(strlen($relation->related_backend) > 2);
             $this->assertFalse(empty($relation->related_id));
-            // check related item is an instance of the model
-            //$this->assertTrue($relation->relation_data instanceof $relation->related_model);
-            //$this->assertFalse(empty($relation->relation_data->getId()));
-            
         }
     }
+
+    public function testBreakRelations()
+    {
+        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], array());
+        $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $this->assertEquals(0, count($relations));
+    }
     
+    public function testCleanUp()
+    {
+        $backend = new Tinebase_Relation_Backend_Sql();
+        $backend->purgeAllRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+    }
 }
 
