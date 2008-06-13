@@ -1702,16 +1702,16 @@ console.log(this.locationRecord);
                                 displayField:'wwwtype',
                                 valueField:'key',
                                 listeners: {
-                                    change: function(_field, _newValue, _oldValue) {                                    
-                                        if (_newValue == 'https') {
+                                    select: function(_field, _newValue, _oldValue) {   
+                                        if (_newValue.data.key == 'https') {
                                             Ext.getCmp('http_port').disable();
                                             Ext.getCmp('https_port').enable();                                            
                                         }
-                                        if (_newValue == 'http') {
+                                        if (_newValue.data.key == 'http') {
                                             Ext.getCmp('http_port').enable();
                                             Ext.getCmp('https_port').disable();                                            
                                         }  
-                                        if (_newValue == 'http_https') {
+                                        if (_newValue.data.key == 'http_https') {
                                             Ext.getCmp('http_port').enable();
                                             Ext.getCmp('https_port').enable();                                            
                                         }                                          
