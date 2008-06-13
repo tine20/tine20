@@ -131,17 +131,17 @@ Tine.Voipmanager = function() {
             dataPanelType: "location",
             viewRight: 'location'
         },{
-            text :"Software",
-            cls :"treemain",
-            allowDrag :false,
-            allowDrop :true,
-            id :"software",
-            icon :false,
-            children :[],
-            leaf :null,
-            expanded :true,
-            dataPanelType :"software",
-            viewRight: 'software'
+            text: "Templates",
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            id: "templates",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "templates",
+            viewRight: 'templates'
         },{
             text :"Keylayout",
             cls :"treemain",
@@ -167,17 +167,17 @@ Tine.Voipmanager = function() {
             dataPanelType :"settings",
             viewRight: 'settings'
         },{
-            text: "Templates",
-            cls: "treemain",
-            allowDrag: false,
-            allowDrop: true,
-            id: "templates",
-            icon: false,
-            children: [],
-            leaf: null,
-            expanded: true,
-            dataPanelType: "templates",
-            viewRight: 'templates'
+            text :"Software",
+            cls :"treemain",
+            allowDrag :false,
+            allowDrop :true,
+            id :"software",
+            icon :false,
+            children :[],
+            leaf :null,
+            expanded :true,
+            dataPanelType :"software",
+            viewRight: 'software'
         }],
         leaf: null,
         expanded: true,
