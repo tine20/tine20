@@ -127,28 +127,16 @@
     margin-right: 10px;
 }
 
-.contactType_lead {
-    background-color: #f4edf5;
+.contactIconResponsible {
+    background-image:url(../../images/oxygen/16x16/apps/preferences-desktop-user.png) !important;
 }
 
-.contactType_partner {
-    background-color: #edf5ee;
+.contactIconCustomer {
+    background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
 }
 
-.contactType_internal {
-    background-color: #f5f5ed;
-}
-
-.contactType_lead_icon {
-    background-image:url(contact_lead.png) !important;
-}
-
-.contactType_partner_icon {
-    background-image:url(contact_partner.png) !important;
-}
-
-.contactType_internal_icon {
-    background-image:url(contact_internal.png) !important;
+.contactIconPartner {
+    background-image:url(../../images/oxygen/16x16/actions/view-process-own.png) !important;
 }
 
 .productSummary {

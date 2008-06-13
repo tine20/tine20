@@ -1130,6 +1130,75 @@ Tine.Crm.LeadEditDialog = {
     },
     
     /**
+     * set context menu for link grid
+     * 
+     * @param   string _type (Contacts|Tasks|Products)
+     * 
+     * @todo add products context menu
+     */
+    setLinksContextMenu: function(_type)
+    {
+        switch ( _type ) {
+            case 'Contacts':
+                // @todo add second level for different contact types?
+                var rowItems = [
+                    this.actions.editContact,
+                    this.actions.unlinkContact,
+                    '-',
+                    this.actions.addResponsible,
+                    this.actions.addCustomer,
+                    this.actions.addPartner
+                ];
+                var gridItems = [
+                    this.actions.addResponsible,
+                    this.actions.addCustomer,
+                    this.actions.addPartner
+                ];
+                break;
+                
+            case 'Tasks':
+                var rowItems = [
+                    this.actions.editTask,
+                    this.actions.unlinkTask,
+                    '-',
+                    this.actions.addTask
+                ];
+                var gridItems = [
+                    this.actions.addTask
+                ];
+                break;
+        }
+        
+        var grid = Ext.getCmp('crmGrid' + _type);
+        grid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+            _eventObject.stopEvent();
+
+            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
+                _grid.getSelectionModel().selectRow(_rowIndex);
+            }
+            
+            var ctxMenuGrid = new Ext.menu.Menu({
+                id:'ctxMenuGridRow' + _type, 
+                items: rowItems
+            });
+
+            ctxMenuGrid.showAt(_eventObject.getXY());
+        }, this);
+        
+        grid.on('contextmenu', function(_eventObject) {
+            _eventObject.stopEvent();
+            
+            var ctxMenuGrid = new Ext.menu.Menu({
+                id:'ctxMenuGrid' + _type, 
+                items: gridItems
+            });
+
+            ctxMenuGrid.showAt(_eventObject.getXY());
+        }, this);
+        
+    },
+    
+    /**
      * get linked contacts store and put it into store manager
      * 
      * @param   array _contacts
@@ -1200,74 +1269,7 @@ Tine.Crm.LeadEditDialog = {
         }
         
         Ext.StoreMgr.add('ProductsStore', storeProducts);
-    },
-    
-    /**
-     * set context menu for link grid
-     */
-    setContextMenu: function(_type)
-    {
-    	switch ( _type ) {
-    		case 'Contacts':
-                var rowItems = [
-                    this.actions.editContact,
-                    this.actions.unlinkContact,
-                    '-',
-                    this.actions.addResponsible,
-                    this.actions.addCustomer,
-                    this.actions.addPartner
-                ];
-                var gridItems = [
-                    this.actions.addResponsible,
-                    this.actions.addCustomer,
-                    this.actions.addPartner
-                ];
-                break;
-                
-            case 'Tasks':
-                var rowItems = [
-                    this.actions.editTask,
-                    this.actions.unlinkTask,
-                    '-',
-                    this.actions.addTask
-                ];
-                var gridItems = [
-                    this.actions.addTask
-                ];
-                break;
-    	}
-    	
-        // @todo products context menu
-        var contactsGrid = Ext.getCmp('crmGrid' + _type);
-        contactsGrid.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-            _eventObject.stopEvent();
-
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
-            }
-            
-            // @todo add second level for different contact types?
-            var ctxMenuGrid = new Ext.menu.Menu({
-                id:'ctxMenuGridRow' + _type, 
-                items: rowItems
-            });
-
-            ctxMenuGrid.showAt(_eventObject.getXY());
-        }, this);
-        
-        contactsGrid.on('contextmenu', function(_eventObject) {
-            _eventObject.stopEvent();
-            
-            // @todo add second level for different contact types?
-            var ctxMenuGrid = new Ext.menu.Menu({
-                id:'ctxMenuGrid' + _type, 
-                items: gridItems
-            });
-
-            ctxMenuGrid.showAt(_eventObject.getXY());
-        }, this);
-    	
-    },
+    },    
     
     /**
      * initComponent
@@ -1286,27 +1288,27 @@ Tine.Crm.LeadEditDialog = {
         this.actions.addResponsible = new Ext.Action({
             text: this.translation._('Add responsible'),
             tooltip: this.translation._('Add new responsible contact'),
-            iconCls: 'actionAdd',
-            disabled: true,
+            iconCls: 'contactIconResponsible',
+            //disabled: true,
+            handler: this.handlers.addContact
+        });
+        
+        this.actions.addCustomer = new Ext.Action({
+            text: this.translation._('Add customer'),
+            tooltip: this.translation._('Add new customer contact'),
+            iconCls: 'contactIconCustomer',
+            //disabled: true,
             handler: this.handlers.addContact
         });
         
         this.actions.addPartner = new Ext.Action({
             text: this.translation._('Add partner'),
             tooltip: this.translation._('Add new partner contact'),
-            iconCls: 'actionAdd',
-            disabled: true,
+            iconCls: 'contactIconPartner',
+            //disabled: true,
             handler: this.handlers.addContact
         });
 
-        this.actions.addCustomer = new Ext.Action({
-            text: this.translation._('Add customer'),
-            tooltip: this.translation._('Add new customer contact'),
-            iconCls: 'actionAdd',
-            disabled: true,
-            handler: this.handlers.addContact
-        });
-        
         this.actions.editContact = new Ext.Action({
             text: this.translation._('Edit contact'),
             tooltip: this.translation._('Edit selected contact'),
@@ -1393,9 +1395,9 @@ Tine.Crm.LeadEditDialog = {
         });
 
         // add context menu events
-        this.setContextMenu('Contacts');
-        this.setContextMenu('Tasks');
-        //this.setContextMenu('Products');
+        this.setLinksContextMenu('Contacts');
+        this.setLinksContextMenu('Tasks');
+        //this.setLinksContextMenu('Products');
 
         // fix to have the tab panel in the right height accross browsers
         Ext.getCmp('editMainTabPanel').on('afterlayout', function(container) {
