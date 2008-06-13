@@ -499,21 +499,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
         $this->assertEquals($role->getId(), $roleId);
-    }
 
-    /**
-     * try to get role members
-     *
-     */
-    public function testGetRoleMembers()        
-    {
-        $json = new Admin_Json();
-        
-        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
-        $result = $json->getRoleMembers($role->getId());
-        
+        // check role members
+        $result = $json->getRoleMembers($role->getId());        
         $this->assertGreaterThan(0, $result['totalcount']);
-        
     }
 
     /**
