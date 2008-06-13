@@ -315,7 +315,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id = ?', $contactId));
         $row = $this->_db->fetchRow($select);
         if (! $row) {
-            throw new UnderflowException('contact not found');
+            throw new UnderflowException('contact with id ' . $_contactId . ' not found');
         }
         $result = new Addressbook_Model_Contact($row);
         return $result;
