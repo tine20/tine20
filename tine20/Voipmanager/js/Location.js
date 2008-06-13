@@ -554,13 +554,21 @@ console.log(this.locationRecord);
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items:[{
-                                    xtype: 'textfield',
+                                items:[
+                                    new Ext.form.ComboBox({
                                     fieldLabel: 'Timezone',
+                                    id: 'timezone',
                                     name: 'timezone',
-                                    maxLength: 20,
-                                    anchor:'98%'
-                               }]
+                                    mode: 'local',
+                                    displayField:'timezone',
+                                    valueField:'key',
+                                    anchor:'98%',                    
+                                    triggerAction: 'all',
+                                    allowBlank: false,
+                                    editable: false,
+                                    store: Tine.Voipmanager.Data.loadTimezoneData()
+                                })
+                              ]
                            }, {
                                 columnWidth: .5,
                                 layout: 'form',
