@@ -434,7 +434,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
             } ,   
                 new Ext.form.ComboBox({
                     fieldLabel: 'Model',
-                    id: 'modelCombo',
+                    id: 'model',
                     name: 'model',
                     mode: 'local',
                     displayField:'model',
@@ -442,8 +442,8 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     anchor:'100%',                    
                     triggerAction: 'all',
                     listeners: {
-                        change: function() {
-                            Ext.getCmp('newSWCombo').reset();
+                        select: function() {
+                            Ext.getCmp('software_id').fireEvent('newModelSelected', this.getValue());
                         }                                                   
                     },
                     allowBlank: false,
@@ -464,7 +464,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     fieldLabel: 'Software Version',
                     name: 'software_id',
                     id: 'software_id',
-                    mode: 'remote',
+                    mode: 'local',
                     displayField:'description',
                     valueField:'id',
                     anchor:'100%',                    
@@ -473,12 +473,19 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     forceSelection: true,
                     store: Tine.Voipmanager.Data.loadSoftwareData(),
                     listeners: {
-                        expand: function() {
-                            var _newValue = Ext.getCmp('modelCombo').getValue();
-                            if (!Ext.isEmpty(_newValue)) {
-                                this.store.baseParams.query = _newValue;
-                                this.store.reload();
-                            }
+                        newModelSelected: function(_model) {
+                            this.reset();
+                            this.store.load({
+                                params:{
+                                    query : _model
+                                },
+                                callback: function() {
+                                    if(this.store.getAt(0)) {
+                                        this.setValue(this.store.getAt(0).id);
+                                    }
+                                },
+                                scope: this
+                            });
                         }
                     }
                 }),
@@ -496,7 +503,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     store: Tine.Voipmanager.Data.loadKeylayoutData(),
                     listeners: {
                         expand: function() {
-                            var _newValue = Ext.getCmp('modelCombo').getValue();
+                            var _newValue = Ext.getCmp('model').getValue();
                             if (!Ext.isEmpty(_newValue)) {
                                 this.store.baseParams.query = _newValue;
                                 this.store.reload();
@@ -518,7 +525,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     store: Tine.Voipmanager.Data.loadSettingsData(),
                     listeners: {
                         expand: function() {
-                            var _newValue = Ext.getCmp('modelCombo').getValue();
+                            var _newValue = Ext.getCmp('model').getValue();
                             if (!Ext.isEmpty(_newValue)) {
                                 this.store.baseParams.query = _newValue;
                                 this.store.reload();
@@ -536,7 +543,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
             }
         },
         
-        display: function(_templateData) 
+        display: function(_templateData, _softwareVersions) 
         {           
             if (!arguments[0]) {
                 var _templateData = {model:'snom320'};
@@ -565,6 +572,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
             
             this.updateTemplateRecord(_templateData);
             this.updateToolbarButtons();           
+            Ext.getCmp('software_id').store.loadData({results:_softwareVersions});
             dialog.getForm().loadRecord(this.templateRecord);
         }   
 };

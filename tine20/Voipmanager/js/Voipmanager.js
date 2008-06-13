@@ -718,14 +718,13 @@ Tine.Voipmanager.Data = {
     },
     
     
-    loadSoftwareData: function(_query) {
+    loadSoftwareData: function() {
 
         var softwareDataStore = new Ext.data.JsonStore({
             baseParams: {
                 method: 'Voipmanager.getSoftware',
                 sort: 'description',
-                dir: 'ASC',
-                query: _query
+                dir: 'ASC'
             },
             root: 'results',
             totalProperty: 'totalcount',
@@ -742,7 +741,7 @@ Tine.Voipmanager.Data = {
 
         softwareDataStore.setDefaultSort('description', 'asc');
 
-//        Ext.StoreMgr.add('swData', softwareDataStore);               
+        //Ext.StoreMgr.add('swData', softwareDataStore);               
          
         return softwareDataStore;
     },
