@@ -586,14 +586,22 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             }
 
             if (isset($_field->default)) {
-                $buffer[] = "default " . $_field->default ;
+                if($_field->default != 'NULL') {
+                    $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
+                } else {
+                    $buffer[] = "default NULL" ;
+                }
             }    
         } else {
         
             if (isset($_field->default)) {
-                $buffer[] = "default " . $_field->default ;
-            }
-            
+                if($_field->default != 'NULL') {
+                    $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
+                } else {
+                    $buffer[] = "default NULL" ;
+                }
+            }    
+                        
             if (isset($_field->notnull) && $_field->notnull == 'true') {
                 $buffer[] = 'NOT NULL';
             }

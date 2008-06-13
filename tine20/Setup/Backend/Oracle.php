@@ -613,7 +613,11 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                 }
 
                 if (isset($_field->default)) {
-                    $additional = " default " . $_field->default . " ";
+                    if($_field->default != 'NULL') {
+                        $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
+                    } else {
+                        $buffer[] = "default NULL" ;
+                    }
                 }    
                 
                 $buffer[] = 'VARCHAR2(' . $length . ')' . $additional . ', CONSTRAINT "cons_' . substr($this->_table, 0, 10) . "_" . substr($_field->name, 0, 9) . '_enum" CHECK ("'. $_field->name . "\" IN ('" . implode("','", $values) . "'))";
@@ -650,9 +654,13 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             }
 
             if (isset($_field->default)) {
-                $buffer[] = "default " . $_field->default ;
+                if($_field->default != 'NULL') {
+                    $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
+                } else {
+                    $buffer[] = "default NULL" ;
+                }
             }    
-
+            
         }
         if (isset($_field->autoincrement)) {
             $this->_autoincrementId = $_field->name;
