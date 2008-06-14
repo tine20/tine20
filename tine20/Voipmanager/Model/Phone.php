@@ -53,13 +53,15 @@ class Voipmanager_Model_Phone extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id' 			        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'macaddress'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'location_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'location_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'ipaddress'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'location'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'template'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'current_software'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'current_model'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'settings_loaded_at'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'firmware_checked_at'   => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
 
     /**
