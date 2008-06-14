@@ -97,6 +97,14 @@
                     <length>50</length>
                 </field>
                 <field>
+                    <name>current_model</name>
+                    <type>enum</type>
+                    <value>snom300</value>
+                    <value>snom320</value>
+                    <value>snom360</value>
+                    <value>snom370</value>
+                </field>
+                <field>
                     <name>last_modified_time</name>
                     <type>datetime</type>
                 </field>
@@ -363,7 +371,7 @@
                     <value>inband</value>
                     <value>info</value>
                     <value>rfc2833</value>
-                    <default>'rfc2833'</default>
+                    <default>rfc2833</default>
                 </field>
                 <field>
                     <name>fromuser</name>
