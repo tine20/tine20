@@ -178,7 +178,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $leadData['contacts'] = array();   
             $leadData['tasks'] = array();                                   
             
-            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', $currentAccount, Tinebase_Container::GRANT_READ);
+            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
             foreach($personalFolders as $folder) {
                 $leadData['container']     = $folder->toArray();
                 break;
