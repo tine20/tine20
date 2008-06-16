@@ -677,7 +677,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     function update_8()
     {
         //$this->validateTableVersion('record_relations', '1');
-        $this->_backend->dropTable('record_relations');
+        //$this->_backend->dropTable('record_relations');
         
         $tableDefinition = ('
         <table>
