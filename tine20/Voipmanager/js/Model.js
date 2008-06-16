@@ -13,13 +13,15 @@ Ext.namespace('Tine.Voipmanager.Model');
 Tine.Voipmanager.Model.Phone = Ext.data.Record.create([
     {name: 'id'},
     {name: 'macaddress'},
+    {name: 'description'},
     {name: 'location_id'},
     {name: 'template_id'},
     {name: 'ipaddress'},
     {name: 'last_modified_time'},
-    {name: 'description'},
-    {name: 'location'},
-    {name: 'template'}
+    {name: 'current_software'},
+    {name: 'current_model'},
+    {name: 'settings_loaded_at'},
+    {name: 'firmware_checked_at'}
 ]);
 
 
