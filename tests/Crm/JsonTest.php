@@ -197,7 +197,8 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $leadData = $this->objects['initialLead']->toArray();
         $leadData['responsible'] = array($contact->getId());
         $leadData['tasks'] = array($task->getId());
-
+        $leadData['tags'] = Zend_Json::encode(array());
+        
         $encodedData = Zend_Json::encode($leadData);
         
         $result = $json->saveLead($encodedData);
