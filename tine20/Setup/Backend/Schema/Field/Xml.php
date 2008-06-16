@@ -24,64 +24,50 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
      */
     protected function _setField($_declaration)
     {
-        $this->name = (string) $_declaration->name;
-        $this->length = (int) $_declaration->length;
-        $this->type = (string) $_declaration->type;
-        $this->notnull = (string) $_declaration->notnull;
-        $this->comment = (string) $_declaration->comment;
-        
-        
-        if (!empty ($_declaration->unsigned)) {
-            $this->unsigned = (string) $_declaration->unsigned;
-        } else if ($this->type == 'integer') {
-            $this->unsigned = 'true';
-            if ($this->notnull != 'true') {
-                $this->default = 'NULL';
-            }
-            
-            
+        $this->name = $_declaration->name;
+        $this->type = $_declaration->type;
+
+        if(!empty($_declaration->comment)) {
+            $this->comment = $_declaration->comment;
         }
 
-        if (!empty ($_declaration->default) || $_declaration->default == '0') {
-            $this->default = (string) $_declaration->default;
-        }        
-
-        
-      
-
-        if (empty($_declaration->length) && $this->type == 'integer') {
-            $this->length = 11;
+        if(isset($_declaration->length)) {
+            $this->length = (int) $_declaration->length;
+        } else {
+            $this->length = NULL;
         }
-        
+
+        if(isset($_declaration->notnull)) {
+            $this->notnull = (strtolower($_declaration->notnull) == 'true') ? true : false;
+        } else {
+            $this->notnull = false;
+        }
+
         switch ($this->type) {
-            case('text'):
-                $this->type = 'varchar';
-                if ($this->length == 0) {
+            case 'text':
+                if ($this->length === NULL) {
                     $this->type = 'text';
-                    $this->length = 65535;
-                }
-                
-                if ($this->default == NULL && $this->type == 'varchar') {
-                //    $this->default = '';
+                } else {
+                    $this->type = 'varchar';
                 }
                 break;
             
-            case('tinyint'):
+            case 'tinyint':
                 $this->type = 'integer';
                 $this->length = 4;
                 break;
             
-            case ('clob'):
+            case 'clob':
                 $this->type = 'text';
                 $this->length = 65535;
                 break;
             
-            case ('blob'):
+            case 'blob':
                 $this->type = 'longblob';
                 $this->length = 4294967295;
                 break;
             
-            case ('enum'):
+            case 'enum':
                 if (isset($_declaration->value[0])) {
                     $i = 0;
                     $array = array();
@@ -93,38 +79,28 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 }
                 break;
 
-            case ('datetime'):
-               $this->type = 'datetime';
-               if (empty($this->default) && !($this->notnull)) {
-                    $this->default = 'NULL';
-                }
+            case 'datetime':
+                $this->type = 'datetime';
                 break;
     
-            case ('double'):
+            case 'double':
                 $this->type = 'double';
-                if (empty($this->default)) {
-                    $this->default = 'NULL';
-                }
                 break;
             
-            case ('float'):
+            case 'float':
                 $this->type = 'float';
-                if (empty($this->default)) {
-                    $this->default = 'NULL';
-                }
                 break;
             
-            case ('boolean'):
+            case 'boolean':
                 $this->type =  'integer';
                 $this->length = 4;
-                if ($this->default == 'false') {
-                    $this->default = "'0'";
-                } else {
-                    $this->default = "'1'";
-                }
                 break;
             
-            case ('decimal'):
+            case 'integer':
+                $this->type =  'integer';
+                break;
+            
+/*            case ('decimal'):
                 $this->type =  "decimal";
                 $this->value = (string) $_declaration->value ;
                 if (empty($this->default)) {
@@ -132,28 +108,122 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 }
               
                 break;
-        
+*/      
             default :
-                $this->type = 'integer';
-                
+                throw new Exception('unsupported type ' . print_r($_declaration, true));
+                break;
+        }
+
+        /**
+         * set default values
+         */        
+        switch ($this->type) {
+            case 'text':
+            case 'clob':
+            case 'blob':
+            case 'enum':
+                if(isset($_declaration->default)) {
+                    if(strtolower($_declaration->default) == 'null') {
+                        $this->default = NULL;
+                    } else {
+                        $this->default = (string) $_declaration->default;
+                    }
+                }
+                break;
+            
+            case 'tinyint':
+            case 'integer':
+                if ($_declaration->autoincrement) {
+                    $this->notnull = true;
+                    $this->autoincrement = true;
+                } else {
+                    if(isset($_declaration->default)) {
+                        if(strtolower($_declaration->default) == 'null') {
+                            $this->default = NULL;
+                        } else {
+                            $this->default = (int) $_declaration->default;
+                        }
+                    }
+                    if(isset($_declaration->unsigned)) {
+                        $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
+                    } else {
+                        $this->unsigned = false;
+                    }
+                }
+                break;
+            
+            case 'datetime':
+                $this->type = 'datetime';
+                if(isset($_declaration->default)) {
+                    $this->default = NULL;
+                }
+                break;
+    
+            case 'double':
+                if(isset($_declaration->default)) {
+                    if(strtolower($_declaration->default) == 'null') {
+                        $this->default = NULL;
+                    } else {
+                        $this->default = (double) $_declaration->default;
+                    }
+                }
+                if(isset($_declaration->unsigned)) {
+                    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
+                } else {
+                    $this->unsigned = false;
+                }
+
+                break;
+            
+            case 'float':
+                if(isset($_declaration->default)) {
+                    if(strtolower($_declaration->default) == 'null') {
+                        $this->default = NULL;
+                    } else {
+                        $this->default = (float) $_declaration->default;
+                    }
+                }
+                if(isset($_declaration->unsigned)) {
+                    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
+                } else {
+                    $this->unsigned = false;
+                }
+
+                break;
+            
+            case 'boolean':
+                if(isset($_declaration->default)) {
+                    if(strtolower($_declaration->default) == 'false') {
+                        $this->default = 0;
+                    } else {
+                        $this->default = 1;
+                    }
+                }
+                $this->unsigned = true;
+                break;
+            
         }
         
-        if (!isset ($this->notnull) || $this->notnull == 'false') {
-            $this->notnull = 'false';
-            $this->default = 'NULL';
-        
+        /**
+         * set signed / unsigned
+         */        
+        switch ($this->type) {
+            case 'tinyint':
+            case 'integer':
+            case 'double':
+            case 'float':
+                if(isset($_declaration->unsigned)) {
+                    $this->unsigned = (strtolower($_declaration->unsigned) == 'true') ? true : false;
+                } else {
+                    $this->unsigned = true;
+                }
+
+                break;
+            
         }
-        if ($_declaration->autoincrement) {
-            $this->notnull = 'true';
-            $this->length = 11;
-            $this->autoincrement = 'true';
-            $this->unsigned = 'true';
-            unset($this->default);
-        }
-        
         
         $this->mul = 'false';
         $this->primary = 'false';
-        $this->unique = 'false';
+        $this->unique = 'false';        
     }
 }
