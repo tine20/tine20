@@ -421,7 +421,7 @@ Tine.Crm.Main = {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
-                actions.actionDelete.setDisabled(false);
+                this.actions.actionDelete.setDisabled(false);
             }
             ctxMenuGrid.showAt(_eventObject.getXY());
         });
@@ -652,6 +652,7 @@ Tine.Crm.LeadEditDialog = {
         unlinkContact: null,
         addTask: null,		
         editTask: null,
+        linkTask: null,
         unlinkTask: null,
         addProduct: null,      
         editProduct: null,
@@ -690,8 +691,6 @@ Tine.Crm.LeadEditDialog = {
                             window.setTimeout("window.close()", 400);
                         }
                         
-                        console.log (_result);
-                        
                         // fill form with returned lead
                         lead = new Tine.Crm.Model.Lead(Ext.util.JSON.decode(_result.responseText).updatedData);
                         Tine.Crm.Model.Lead.FixDates(lead);
@@ -724,11 +723,13 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for addContact
          * 
-         * @todo get new contact data and reload contacts grid
+         * @todo add container for tasks popup
          */
         addContact: function(_button, _event) 
         {
-            var contactPopup = new Tine.Addressbook.EditPopup({});        	
+            var contactPopup = new Tine.Addressbook.EditPopup({
+                //containerId:
+            });        	
             
             // update event handler
             contactPopup.on('update', function(contact) {
@@ -777,14 +778,13 @@ Tine.Crm.LeadEditDialog = {
                 var storeContacts = Ext.StoreMgr.lookup('ContactsStore');
                 storeContacts.remove(selectedContact);
                 storeContacts.add(contact);                                
-            }, this);
-            
+            }, this);            
         },
 
         /**
          * linkContact
          * 
-         * link an existing contact, open 'object' picker
+         * link an existing contact, open 'object' picker dialog
          * @todo implement
          */
         linkContact: function(_button, _event)
@@ -807,48 +807,74 @@ Tine.Crm.LeadEditDialog = {
         },
 
         /**
-         * onclick handler for addBtn
-         * 
-         * @todo rework function
-         * @todo get new task data and reload contacts grid
+         * onclick handler for add task
+         *
+         * @todo add container for tasks popup
          */
         addTask: function(_button, _event) 
         {
-        	/*
-            var taskId = -1;
-            if (_button.actionType == 'edit') {
-                var selectedRows = this.grid.getSelectionModel().getSelections();
-                var task = selectedRows[0];
-                taskId = task.data.id;
-            } else {
-                var nodeAttributes = Ext.getCmp('TasksTreePanel').getSelectionModel().getSelectedNode().attributes || {};
-            }
-            var popupWindow = new Tine.Tasks.EditPopup({
-                id: taskId,
-                containerId: (nodeAttributes && nodeAttributes.container) ? nodeAttributes.container.id : -1
+            var taskPopup = new Tine.Tasks.EditPopup({
+            	id: -1
+            	//containerId:
                 //relatedApp: 'tasks',
                 //relatedId: 
-            });
+            });          
             
-            popupWindow.on('update', function(task) {
-                this.store.load({params: this.paging});
+            // update event handler
+            taskPopup.on('update', function(task) {
+
+                console.log (task);
+            	
+            	// set id and link properties
+                task.id = task.data.id;
+                task.data.link_id = null;
+                
+                // add contact to store
+                var storeTasks = Ext.StoreMgr.lookup('TasksStore');
+                storeTasks.add(task);                              
+
             }, this);
-            */
         },
             
         /**
          * onclick handler for editBtn
          * 
-         * @todo make it work
          */
         editTask: function(_button, _event) 
         {
-        	/*
-            var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
-            var contactId = selectedRows[0].id;
+            var selectedRows = Ext.getCmp('crmGridTasks').getSelectionModel().getSelections();
+            var selectedTask = selectedRows[0];
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 800, 600);
-            */
+            var taskPopup = new Tine.Tasks.EditPopup({
+                id: selectedTask.id
+            });          
+            
+            // update event handler
+            taskPopup.on('update', function(task) {           
+            	
+            	console.log (task);
+            	
+                // set link properties
+                task.id = task.data.id;
+                //task.data.link_id = selectedTask.data.link_id;
+                
+                // add task to store (remove the old one first)
+                var storeContacts = Ext.StoreMgr.lookup('TasksStore');
+                storeContacts.remove(selectedTask);
+                storeContacts.add(task);                                
+
+            }, this);
+        },
+
+        /**
+         * linkTask
+         * 
+         * link an existing task, open 'object' picker dialog
+         * @todo implement
+         */
+        linkTask: function(_button, _event)
+        {
+            
         },
 
         /**
@@ -1192,6 +1218,7 @@ Tine.Crm.LeadEditDialog = {
             case 'Contacts':
                 var addNewItems = {
                     text: this.translation._('Add new contact'),
+                    iconCls: 'actionAdd',
                     menu: {
                         items: [
                             this.actions.addResponsible,
@@ -1221,10 +1248,12 @@ Tine.Crm.LeadEditDialog = {
                     this.actions.editTask,
                     this.actions.unlinkTask,
                     '-',
+                    this.actions.linkTask,
                     this.actions.addTask
                 ];
                 // items for all grid context menu
                 var gridItems = [
+                    this.actions.linkTask,
                     this.actions.addTask
                 ];
                 break;
@@ -1400,12 +1429,11 @@ Tine.Crm.LeadEditDialog = {
         });
 
         // tasks
-        // @todo add the right icons
         this.actions.addTask = new Ext.Action({
             text: this.translation._('Add task'),
             tooltip: this.translation._('Add new task'),
             iconCls: 'actionAdd',
-            disabled: true,
+            //disabled: true,
             handler: this.handlers.addTask
         });
         
@@ -1417,6 +1445,15 @@ Tine.Crm.LeadEditDialog = {
             handler: this.handlers.editTask
         });
         
+        this.actions.linkTask = new Ext.Action({
+            text: this.translation._('Link task'),
+            tooltip: this.translation._('Link existing task with lead'),
+            disabled: true,
+            iconCls: 'actionAddTask',
+            scope: this,
+            handler: this.handlers.linkTask
+        });
+
         this.actions.unlinkTask = new Ext.Action({
             text: this.translation._('Unlink tasks'),
             tooltip: this.translation._('Unlink selected tasks'),
