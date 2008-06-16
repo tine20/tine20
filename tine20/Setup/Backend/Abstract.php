@@ -18,14 +18,6 @@
  */
 abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 {
-    /*
-    * execute insert statement for default values (records);
-    * handles some special fields, which can't contain static values
-    * 
-    * @param SimpleXMLElement $_record
-    */
-    abstract public function execInsertStatement(SimpleXMLElement $_record);
-
     /**
      * checks if application is installed at all
      *
