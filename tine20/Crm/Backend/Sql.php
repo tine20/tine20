@@ -560,10 +560,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
         if(empty($_lead->id)) {
             unset($leadData['id']);
         }
-        unset($leadData['responsible']);
-        unset($leadData['customer']);
-        unset($leadData['partner']);
-        unset($leadData['tasks']);
+        
+        // unset fields that should not be written into the db
+        $unsetFields = array('responsible', 'customer', 'partner', 'tasks', 'tags');
+        foreach ( $unsetFields as $field ) {
+            unset($leadData[$field]);
+        }
         
         $id = $this->leadTable->insert($leadData);
 
@@ -720,14 +722,12 @@ class Crm_Backend_Sql implements Crm_Backend_Interface
 
         $leadData = $_lead->toArray();
         
-        // don't save the following fields
-        unset($leadData['id']);
-        unset($leadData['responsible']);
-        unset($leadData['customer']);
-        unset($leadData['partner']);
-        unset($leadData['tasks']);
-        unset($leadData['tags']);
-        
+       // unset fields that should not be written into the db
+        $unsetFields = array('id', 'responsible', 'customer', 'partner', 'tasks', 'tags');
+        foreach ( $unsetFields as $field ) {
+            unset($leadData[$field]);
+        }
+                
         $where  = array(
             $this->leadTable->getAdapter()->quoteInto('id = ?', $leadId),
         );

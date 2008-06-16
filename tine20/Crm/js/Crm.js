@@ -667,8 +667,6 @@ Tine.Crm.LeadEditDialog = {
     	 */
         applyChanges: function(_button, _event, _closeWindow) 
         {
-            //var grid_products          = Ext.getCmp('grid_choosenProducts');
-
             var leadForm = Ext.getCmp('leadDialog').getForm();
             
             if(leadForm.isValid()) {  
@@ -691,12 +689,12 @@ Tine.Crm.LeadEditDialog = {
                             window.setTimeout("window.close()", 400);
                         }
                         
+                        console.log (_result);
+                        
                         // fill form with returned lead
-                        /*
-                        lead = new Tine.Crm.Model.Lead(Ext.util.JSON.decode(_result.updatedData));
+                        lead = new Tine.Crm.Model.Lead(Ext.util.JSON.decode(_result.responseText).updatedData);
                         Tine.Crm.Model.Lead.FixDates(lead);
                         leadForm.loadRecord(lead);
-                        */
                         
                         //dlg.action_delete.enable();
                         //_add_task.enable();
