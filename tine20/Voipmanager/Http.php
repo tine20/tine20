@@ -33,7 +33,8 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             'Voipmanager/js/Software.js',
             'Voipmanager/js/Templates.js',
             'Voipmanager/js/Phone.js',
-            'Voipmanager/js/Location.js'
+            'Voipmanager/js/Location.js',
+            'Voipmanager/js/Line.js'
         );
     }
     
@@ -89,6 +90,51 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
+    
+    
+    /**
+     * create edit asterisk line dialog
+     *
+     * @param int $lineId
+     * 
+     */
+    public function editLine($lineId=NULL)
+    {
+        if (!empty($lineId)) {
+            $lines = Voipmanager_Controller::getInstance();
+            $line  = $lines->getLineById($lineId);
+            $arrayLine = $line->toArray();
+        } else {
+
+        }
+
+        // encode the asterisk line array
+        $encodedLine = Zend_Json::encode($arrayLine);                   
+        
+        $currentAccount = Zend_Registry::get('currentAccount');
+                
+        $view = new Zend_View();
+         
+        $view->setScriptPath('Tinebase/views');
+        $view->formData = array();        
+        $view->jsExecute = 'Tine.Voipmanager.Lines.EditDialog.display(' . $encodedLine .');';
+
+        $view->locationData = array(
+            'timeZone' => Zend_Registry::get('userTimeZone'),
+            'currentAccount' => Zend_Registry::get('currentAccount')->toArray()
+        );
+        
+        $view->title="edit line data";
+
+        $view->isPopup = true;
+        
+        $includeFiles = Tinebase_Http::getAllIncludeFiles();
+        $view->jsIncludeFiles  = $includeFiles['js'];
+        $view->cssIncludeFiles = $includeFiles['css'];
+        
+        header('Content-Type: text/html; charset=utf-8');
+        echo $view->render('mainscreen.php');
+    }       
     
 
     /**

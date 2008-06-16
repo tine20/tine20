@@ -105,7 +105,6 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
             $select->join(array('capab' => SQL_TABLE_PREFIX . 'snom_phonemodel_capabilities'), 'temp.model = capab.model', array('lines' => lines));
             $select->where($this->_db->quoteInto('phone.id = ?', $phoneId));
 
-error_log($select);
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('phone not found');

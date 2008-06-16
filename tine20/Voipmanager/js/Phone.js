@@ -784,25 +784,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             this.updatePhoneRecord(_phoneData);
             this.updateToolbarButtons();           
             dialog.getForm().loadRecord(this.phoneRecord);
-            /*
-            Ext.getCmp('template_id').store.load({
-                params: {
-                    query: ''
-                },
-                callback: function(){
-                    Ext.getCmp('template_id').fireEvent('storeLoaded');
-                }
-            });
 
-            Ext.getCmp('location_id').store.load({
-                params: {
-                    query: ''
-                },
-                callback: function(){
-                    Ext.getCmp('location_id').fireEvent('storeLoaded');
-                }
-            });           
-            */
         } 
 };
 
