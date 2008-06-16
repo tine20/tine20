@@ -563,7 +563,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                             items:[{                                    
                                 xtype: 'datefield',
                                 fieldLabel: 'Settings Loaded at',
-                                name: 'settings_loadingtime',
+                                name: 'settings_loaded_at',
                                 anchor:'100%',
 		                        emptyText: 'never',
 		                        hideTrigger: true,
@@ -571,7 +571,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                             },{
                                 xtype: 'datefield',
                                 fieldLabel: 'Firmware last checked at',
-                                name: 'firmware_update_time',
+                                name: 'firmware_checked_at',
                                 anchor:'100%',
                                 emptyText: 'never',
                                 hideTrigger: true,
