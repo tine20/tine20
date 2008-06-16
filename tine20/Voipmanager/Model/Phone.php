@@ -63,7 +63,18 @@ class Voipmanager_Model_Phone extends Tinebase_Record_Abstract
         'settings_loaded_at'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firmware_checked_at'   => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
-
+    
+    /**
+     * name of fields containing datetime or or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'last_modified_time',
+        'settings_loaded_at',
+        'firmware_checked_at'
+    );
+    
     /**
      * converts a int, string or Voipmanager_Model_Phone to an phone id
      *

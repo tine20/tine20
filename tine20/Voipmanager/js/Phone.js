@@ -367,6 +367,12 @@ Tine.Voipmanager.Phones.EditDialog =  {
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
                 _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
             }
+            if(_phoneData.settings_loaded_at && _phoneData.settings_loaded_at !== null) {
+                _phoneData.settings_loaded_at = Date.parseDate(_phoneData.settings_loaded_at, 'c');
+            }
+            if(_phoneData.firmware_checked_at && _phoneData.firmware_checked_at !== null) {
+                _phoneData.firmware_checked_at = Date.parseDate(_phoneData.firmware_checked_at, 'c');
+            }
             this.phoneRecord = new Tine.Voipmanager.Model.Phone(_phoneData);
         },
         
@@ -530,21 +536,21 @@ Tine.Voipmanager.Phones.EditDialog =  {
                             items:[{
                                 xtype: 'textfield',
                                 fieldLabel: 'Current IP Address',
-                                name: 'ip_address',
+                                name: 'ipaddress',
                                 maxLength: 20,
                                 anchor:'98%',
                                 readOnly: true                        
                             },{
                                 xtype: 'textfield',
                                 fieldLabel: 'Current Software Version',
-                                name: 'software_version',
+                                name: 'current_software',
                                 maxLength: 20,
                                 anchor:'98%',
                                 readOnly: true                        
                             },{
                                 xtype: 'textfield',
                                 fieldLabel: 'Current Phone Model',
-                                name: 'phone_model',
+                                name: 'current_model',
                                 maxLength: 20,
                                 anchor:'98%',
                                 readOnly: true   
