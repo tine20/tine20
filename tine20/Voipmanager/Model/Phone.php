@@ -61,7 +61,8 @@ class Voipmanager_Model_Phone extends Tinebase_Record_Abstract
         'current_software'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'current_model'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'settings_loaded_at'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'firmware_checked_at'   => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'firmware_checked_at'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lines'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );
     
     /**

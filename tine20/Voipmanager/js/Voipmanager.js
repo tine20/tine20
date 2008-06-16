@@ -446,10 +446,14 @@ Tine.Voipmanager.Data = {
     },  
   
     
-    loadTemplateData: function() {
-
+   
+    loadTemplateData: function(_data) {
 
         var templateDataStore = new Ext.data.JsonStore({
+/*            autoLoad: true,
+            fields: ['id','name'],
+            data: _data
+*/
           baseParams: {
                 method: 'Voipmanager.getTemplates',
                 sort: 'name',
@@ -465,7 +469,7 @@ Tine.Voipmanager.Data = {
             ],
             
             // turn on remote sorting
-            remoteSort: true
+            remoteSort: true  
         });
 
         templateDataStore.setDefaultSort('name', 'asc');

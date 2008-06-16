@@ -99,7 +99,13 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
     public function getPhoneById($_phoneId)
     {	
         $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($_phoneId);
-        $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'snom_phones')->where($this->_db->quoteInto('id = ?', $phoneId));
+        $select = $this->_db->select();
+            $select->from(array('phone' => SQL_TABLE_PREFIX . 'snom_phones'));
+            $select->join(array('temp' => SQL_TABLE_PREFIX . 'snom_templates'), 'phone.template_id = temp.id', array());
+            $select->join(array('capab' => SQL_TABLE_PREFIX . 'snom_phonemodel_capabilities'), 'temp.model = capab.model', array('lines' => lines));
+            $select->where($this->_db->quoteInto('phone.id = ?', $phoneId));
+
+error_log($select);
         $row = $this->_db->fetchRow($select);
         if (! $row) {
             throw new UnderflowException('phone not found');

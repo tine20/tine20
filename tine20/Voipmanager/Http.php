@@ -51,10 +51,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
             $phone = $phones->getPhoneById($phoneId);
             
             $templateData = $phones->getTemplates();
-            $templateData = Zend_Json::encode($templateData->toArray());
-            
             $locationData = $phones->getLocation();
-            $locationData = Zend_Json::encode($locationData->toArray());
+            
+            $linesData = $phones->getLines('name');
             
             $arrayPhone = $phone->toArray();
         } else {
@@ -69,7 +68,9 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array('locationData' => $locationData, 'templateData' => $templateData);        
+        $view->formData = array('locationData' => $locationData->toArray(), 
+                                'templateData' => $templateData->toArray(),
+                                'linesData' => $linesData->toArray());        
         $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedPhone .');';
 
         $view->configData = array(

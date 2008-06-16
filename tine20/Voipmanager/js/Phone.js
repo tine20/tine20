@@ -24,7 +24,7 @@ Tine.Voipmanager.Phones.Main = {
          */
         addPhone: function(_button, _event) 
         {
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=', 500, 350);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=', 600, 450);
         },
 
         /**
@@ -35,7 +35,7 @@ Tine.Voipmanager.Phones.Main = {
             var selectedRows = Ext.getCmp('Voipmanager_Phones_Grid').getSelectionModel().getSelections();
             var phoneId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + phoneId, 500, 350);
+            Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + phoneId, 600, 450);
         },
         
         /**
@@ -278,7 +278,7 @@ Tine.Voipmanager.Phones.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + record.data.id, 500, 350);
+                Tine.Tinebase.Common.openWindow('phonesWindow', 'index.php?method=Voipmanager.editPhone&phoneId=' + record.data.id, 600, 450);
             } catch(e) {
                 // alert(e);
             }
@@ -357,13 +357,15 @@ Tine.Voipmanager.Phones.Main = {
     }
 };
 
+
 Tine.Voipmanager.Phones.EditDialog =  {
 
         phoneRecord: null,
         
+        _templateData: null,
+        
         updatePhoneRecord: function(_phoneData)
-        {
-                       
+        {                     
             if(_phoneData.last_modified_time && _phoneData.last_modified_time !== null) {
                 _phoneData.last_modified_time = Date.parseDate(_phoneData.last_modified_time, 'c');
             }
@@ -436,154 +438,297 @@ Tine.Voipmanager.Phones.EditDialog =  {
         {
             this.applyChanges(_button, _event, true);
         },
-                  
-                  
-        editPhoneDialog:  [{
-            layout:'fit',
-            //frame: true,
-            border:false,
-            anchor: '100% 100%',
-            items: [{
-                layout:'column',
-                border:false,
-                anchor: '100%',
+                
+                
+        editPhoneLinesDialog: function(_lines, _data) {
+            
+            var linesText = new Array();
+            var linesSIPCombo = new Array();
+            var linesIdleText = new Array();
+            var linesActive = new Array();
+            
+            
+            for(i=0; i<_lines; i++) {
+                
+                t = i + 1;    
+                _hide = true;
+                
+                if (t == 1) {
+                    _hide = false;
+                }
+                
+                
+                linesText[i] = new Ext.form.TextField({
+                            fieldLabel: 'Line',
+                            name: 'line' + t,
+                            maxLength: 3,
+                            anchor:'98%',
+                            readOnly: true,
+                            hideLabel: _hide,
+                            value: t
+                        });
+                
+
+                linesSIPCombo[i] = new Ext.form.ComboBox({
+                            fieldLabel: 'SIPCombo ',
+                            name: 'sipCombo' + t,
+                            mode: 'local',
+                            displayField:'name',
+                            valueField:'id',
+                            anchor:'98%',        
+                            hideLabel: _hide,            
+                            triggerAction: 'all',
+                            editable: false,
+                            forceSelection: true,
+                            store: new Ext.data.JsonStore({
+                                autoLoad: true,
+                                id: 'id',
+                                fields: ['id','name'],
+                                data: _data.linesData
+                            })
+                        });
+
+                linesIdleText[i] = new Ext.form.TextField({
+                            fieldLabel: 'IdleText ',
+                            name: 'idleText' + t,
+                            maxLength: 60,
+                            hideLabel: _hide,                            
+                            anchor:'98%'
+                        });
+
+                linesActive[i] = new Ext.form.Checkbox({
+                            fieldLabel: 'Active ',
+                            name: 'active' + t,
+                            inputValue: 'true',
+                            hideLabel: _hide,                            
+                            anchor:'98%'
+                        });
+                            
+                
+            }
+            
+            
+            var _phoneLinesDialog = {
+                title: 'Lines',
+                id: 'phoneLines',
+                layout: 'border',
+                anchor: '100% 100%',
+                layoutOnTabChange: true,
+                defaults: {
+                    border: true,
+                    frame: true
+                },
                 items: [{
-                    columnWidth: .5,
-                    layout: 'form',
-                    border: false,
-                    anchor: '100%',
-                    items:[{
-                        xtype: 'textfield',
-                        fieldLabel: 'MAC Address',
-                        name: 'macaddress',
-                        maxLength: 12,
-                        anchor:'98%',
-                        allowBlank: false
-                    } , {
-                        xtype: 'combo',
-                        fieldLabel: 'Template',
-                        name: 'template_id',
-                        id: 'template_id',
-                        mode: 'remote',
-                        displayField:'name',
-                        valueField:'id',
-                        anchor:'98%',                    
-                        triggerAction: 'all',
-                        editable: false,
-                        forceSelection: true,
-                        store: Tine.Voipmanager.Data.loadTemplateData(),
-                        listeners: {
-                            storeLoaded: function(){
-                                this.setValue(this.value);
-                            }
-                        }                        
-                    }, {
-                        xtype: 'combo',
-                        fieldLabel: 'Location',
-                        name: 'location_id',
-                        id: 'location_id',
-                        mode: 'remote',
-                        displayField:'name',
-                        valueField:'id',
-                        anchor:'98%',                    
-                        triggerAction: 'all',
-                        editable: false,
-                        forceSelection: true,
-                        store: Tine.Voipmanager.Data.loadLocationData(),
-                        listeners: {
-                            storeLoaded: function(){
-                                this.setValue(this.value);
-                            }
-                        }                        
-                    }]
-                }, {
-                    columnWidth: .5,
-                    layout: 'form',
-                    border: false,
-                    anchor: '100%',
+                    region: 'center',
+                    autoScroll: true,
                     autoHeight: true,
-                    items:[{
-                        xtype:'textarea',
-                        name: 'description',
-                        fieldLabel: 'Description',
-                        grow: false,
-                        preventScrollbars:false,
-                        anchor:'100%',
-                        height: 105
-                    }]
-                }]
-            },{
-                layout:'form',
-                border:false,
-                anchor: '100%',
-                items: [{                
-                    xtype:'fieldset',
-                    checkboxToggle:false,
-                    id: 'infos',
-                    title: 'Infos',
-                    autoHeight:true,
-                    anchor: '100%',
-                    defaults: {anchor:'100%'},
-                    items :[{
+                    items: [{
                         layout:'column',
                         border:false,
                         anchor: '100%',
+                        autoHeight: true,                        
                         items: [{
-                            columnWidth: .5,
+                            columnWidth: .1,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items:[{
-                                xtype: 'textfield',
-                                fieldLabel: 'Current IP Address',
-                                name: 'ipaddress',
-                                maxLength: 20,
-                                anchor:'98%',
-                                readOnly: true                        
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Current Software Version',
-                                name: 'current_software',
-                                maxLength: 20,
-                                anchor:'98%',
-                                readOnly: true                        
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Current Phone Model',
-                                name: 'current_model',
-                                maxLength: 20,
-                                anchor:'98%',
-                                readOnly: true   
-                            }]
-                        },{         
-                            columnWidth: .5,
+                            items:
+                                linesText
+                            
+                        },{
+                            columnWidth: .4,
                             layout: 'form',
                             border: false,
                             anchor: '100%',
-                            items:[{                                    
-                                xtype: 'datefield',
-                                fieldLabel: 'Settings Loaded at',
-                                name: 'settings_loaded_at',
-                                anchor:'100%',
-		                        emptyText: 'never',
-		                        hideTrigger: true,
-		                        readOnly: true
-                            },{
-                                xtype: 'datefield',
-                                fieldLabel: 'Firmware last checked at',
-                                name: 'firmware_checked_at',
-                                anchor:'100%',
-                                emptyText: 'never',
-                                hideTrigger: true,
-                                readOnly: true
+                            items:
+                                linesSIPCombo
+                                                        
+                        },{
+                            columnWidth: .4,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:
+                                linesIdleText
+                                                       
+                        },{
+                            columnWidth: .1,
+                            layout: 'form',
+                            border: false,
+                            anchor: '100%',
+                            items:
+                                linesActive
+                                                        
+                        }]
+                    }]
+                }]
+            };
+            
+            return _phoneLinesDialog;
+        },                
+                 
+                  
+        editPhoneDialog: function(_data) {
+      
+        var _phoneDialog = {
+            title: 'Maindata',
+            layout:'border',
+            anchor: '100% 100%',
+            layoutOnTabChange:true,
+            defaults: {
+                border: true,
+                frame: true            
+            },
+            items: [{
+                region: 'center',
+                autoScroll: true,
+                autoHeight: true,
+                items: [{
+                    layout:'column',
+                    border:false,
+                    anchor: '100%',
+                    height: 130,                        
+                    items: [{
+                        columnWidth: .5,
+                        layout: 'form',
+                        border: false,
+                        anchor: '100%',
+                        items:[{
+                            xtype: 'textfield',
+                            fieldLabel: 'MAC Address',
+                            name: 'macaddress',
+                            maxLength: 12,
+                            anchor:'98%',
+                            allowBlank: false
+                        } , {
+                            xtype: 'combo',
+                            fieldLabel: 'Template',
+                            name: 'template_id',
+                            id: 'template_id',
+                            mode: 'local',
+                            displayField:'name',
+                            valueField:'id',
+                            anchor:'98%',                    
+                            triggerAction: 'all',
+                            editable: false,
+                            forceSelection: true,
+                            store: new Ext.data.JsonStore({
+                                autoLoad: true,
+                                id: 'id',
+                                fields: ['id','name'],
+                                data: _data.templateData
+                            })
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: 'Location',
+                            name: 'location_id',
+                            id: 'location_id',
+                            mode: 'local',
+                            displayField:'name',
+                            valueField:'id',
+                            anchor:'98%',                    
+                            triggerAction: 'all',
+                            editable: false,
+                            forceSelection: true,
+                            store: new Ext.data.JsonStore({
+                                autoLoad: true,
+                                id: 'id',
+                                fields: ['id','name'],
+                                data: _data.locationData
+                            })
+                        }]
+                    }, {
+                        columnWidth: .5,
+                        layout: 'form',
+                        border: false,
+                        anchor: '98%',
+                        autoHeight: true,
+                        items:[{
+                            xtype:'textarea',
+                            name: 'description',
+                            fieldLabel: 'Description',
+                            grow: false,
+                            preventScrollbars:false,
+                            anchor:'100%',
+                            height: 105
+                        }]
+                    }]
+                },{
+                    layout:'form',
+                    border:false,
+                    anchor: '100%',
+                    items: [{                
+                        xtype:'fieldset',
+                        checkboxToggle:false,
+                        id: 'infos',
+                        title: 'Infos',
+                        autoHeight:true,
+                        anchor: '100%',
+                        defaults: {anchor:'100%'},
+                        items :[{
+                            layout:'column',
+                            border:false,
+                            anchor: '100%',
+                            items: [{
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items:[{
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Current IP Address',
+                                    name: 'ipaddress',
+                                    maxLength: 20,
+                                    anchor:'98%',
+                                    readOnly: true                        
+                                },{
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Current Software Version',
+                                    name: 'current_software',
+                                    maxLength: 20,
+                                    anchor:'98%',
+                                    readOnly: true                        
+                                },{
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Current Phone Model',
+                                    name: 'current_model',
+                                    maxLength: 20,
+                                    anchor:'98%',
+                                    readOnly: true   
+                                }]
+                            },{         
+                                columnWidth: .5,
+                                layout: 'form',
+                                border: false,
+                                anchor: '100%',
+                                items:[{                                    
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Settings Loaded at',
+                                    name: 'settings_loaded_at',
+                                    anchor:'100%',
+    		                        emptyText: 'never',
+    		                        hideTrigger: true,
+    		                        readOnly: true
+                                },{
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Firmware last checked at',
+                                    name: 'firmware_checked_at',
+                                    anchor:'100%',
+                                    emptyText: 'never',
+                                    hideTrigger: true,
+                                    readOnly: true
+                                }]
                             }]
                         }]
                     }]
                 }]
+                
             }]
-        }],
+        };
         
-
+        
+        return _phoneDialog;
+        },
         
         updateToolbarButtons: function()
         {
@@ -613,7 +758,18 @@ Tine.Voipmanager.Phones.EditDialog =  {
                     border: false,
                     autoHeight: true,
                     anchor: '100% 100%',
-                    items: this.editPhoneDialog
+                    items: new Ext.TabPanel({
+                        plain:true,
+                        activeTab: 0,
+                        id: 'editPhoneTabPanel',
+                        layoutOnTabChange:true,  
+                        items:[
+                            this.editPhoneDialog(formData),
+                            this.editPhoneLinesDialog(_phoneData.lines, formData)                  
+                        ]
+                    })
+                   
+                                        
                 }]
             });
 
@@ -628,7 +784,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             this.updatePhoneRecord(_phoneData);
             this.updateToolbarButtons();           
             dialog.getForm().loadRecord(this.phoneRecord);
-            
+            /*
             Ext.getCmp('template_id').store.load({
                 params: {
                     query: ''
@@ -646,6 +802,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
                     Ext.getCmp('location_id').fireEvent('storeLoaded');
                 }
             });           
+            */
         } 
 };
 
