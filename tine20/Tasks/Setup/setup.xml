@@ -70,6 +70,7 @@
             <declaration>
                 <field>
                     <name>id</name>
+                    <type>integer</type>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>

@@ -1309,6 +1309,7 @@
             <declaration>
                 <field>
                     <name>id</name>
+                    <type>integer</type>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -1363,6 +1364,7 @@
             <declaration>
                <field>
                     <name>id</name>
+                    <type>integer</type>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
@@ -1437,6 +1439,7 @@
             <declaration>
                 <field>
                     <name>id</name>
+                    <type>integer</type>
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
