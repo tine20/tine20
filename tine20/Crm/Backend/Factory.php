@@ -9,14 +9,13 @@
  * @version     $Id$ *
  */
 
+
 /**
  * backend factory class for the Crm
  * 
  * an instance of the Crm backendclass should be created using this class
  * 
  * $contacts = Crm_Backend::factory(Crm_Backend::$type);
- * 
- * currently implemented backend classes: Crm_Backend::Sql
  * 
  * @package     Crm
  */
@@ -38,13 +37,15 @@ class Crm_Backend_Factory
     
     const LEADS = 'Leads';
     
-    const PRODUCTS = 'Products';
+    const LEAD_PRODUCTS = 'LeadProducts';
     
-    const TYPES = 'Types';
+    const LEAD_TYPES = 'LeadTypes';
     
-    const SOURCES = 'Sources';
+    const LEAD_SOURCES = 'LeadSources';
     
     const LEADS_PRODUCTS = 'LeadsProducts';
+    
+    const LEAD_STATES = 'LeadStates';
     
     
     /**
@@ -55,7 +56,7 @@ class Crm_Backend_Factory
     protected function __construct() {}
     
     public static function getInstance() {
-        if (self::$_instance == NULL) {
+        if (self::$_instance === NULL) {
             self::$_instance = new Crm_Backend_Factory();
         }
         
@@ -81,19 +82,19 @@ class Crm_Backend_Factory
                 $instance = Crm_Backend_Leads::getInstance();
                 break;
                            
-            case self::PRODUCTS:
+            case self::LEAD_PRODUCTS:
                 throw new Exception('Not implemented, yet.');
-            	$instance = Crm_Backend_Products::getInstance();
+            	$instance = Crm_Backend_LeadProducts::getInstance();
                 break;
                            
-            case self::TYPES:
+            case self::LEAD_TYPES:
                 throw new Exception('Not implemented, yet.');
-            	$instance = Crm_Backend_Types::getInstance();
+            	$instance = Crm_Backend_LeadTypes::getInstance();
                 break;
                            
-            case self::SOURCES:
+            case self::LEAD_SOURCES:
                 throw new Exception('Not implemented, yet.');
-            	$instance = Crm_Backend_Sources::getInstance();
+            	$instance = Crm_Backend_LeadSources::getInstance();
                 break;
                 
             case self::LEADS_PRODUCTS:
@@ -101,6 +102,11 @@ class Crm_Backend_Factory
             	$instance = Crm_Backend_LeadsProducts::getInstance();
                 break;
                 
+            case self::LEAD_STATES:
+                throw new Exception('Not implemented, yet.');
+                $instance = Crm_Backend_LeadStates::getInstance();
+                break;
+            
             default:
                 throw new Exception('unknown type');
         }
