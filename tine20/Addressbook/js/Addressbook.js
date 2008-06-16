@@ -1,5 +1,7 @@
 Ext.namespace('Tine.Addressbook');
 
+/**************************** panel ****************************************/
+
 Tine.Addressbook = {
 
     getPanel: function()
@@ -43,6 +45,8 @@ Tine.Addressbook = {
     }
 };
 
+/**************************** main dialog **********************************/
+
 Tine.Addressbook.Main = {
 	actions: {
 	    addContact: null,
@@ -58,8 +62,14 @@ Tine.Addressbook.Main = {
 	     */
 	    addContact: function(_button, _event) 
 	    {
-	        Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 800, 600);
-	    },
+	    	
+	        //Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=', 800, 600);
+
+            var popupWindow = new Tine.Addressbook.EditPopup({
+                //contactId:
+                //containerId:
+            });
+        },
 
         /**
          * onclick handler for editBtn
@@ -69,7 +79,12 @@ Tine.Addressbook.Main = {
             var selectedRows = Ext.getCmp('Addressbook_Contacts_Grid').getSelectionModel().getSelections();
             var contactId = selectedRows[0].id;
             
-            Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 800, 600);
+            //Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + contactId, 800, 600);
+            
+            var popupWindow = new Tine.Addressbook.EditPopup({
+                contactId: contactId
+                //containerId:
+            });            
         },
 
         /**
@@ -472,7 +487,13 @@ Tine.Addressbook.Main = {
             var record = _gridPar.getStore().getAt(_rowIndexPar);
             //console.log('id: ' + record.data.id);
             try {
-                Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 800, 600);
+            	
+                //Tine.Tinebase.Common.openWindow('contactWindow', 'index.php?method=Addressbook.editContact&_contactId=' + record.data.id, 800, 600);
+                var popupWindow = new Tine.Addressbook.EditPopup({
+                    contactId: record.data.id
+                    //containerId:
+                });            
+            
             } catch(e) {
                 // alert(e);
             }
@@ -554,6 +575,8 @@ Tine.Addressbook.Main = {
     }
 };
 
+/**************************** edit dialog **********************************/
+
 Tine.Addressbook.ContactEditDialog = {
 	handlers: {
 	    applyChanges: function(_button, _event, _closeWindow) 
@@ -580,16 +603,10 @@ Tine.Addressbook.ContactEditDialog = {
                     	form.loadRecord(Tine.Addressbook.ContactEditDialog.contactRecord);
                     	
                         // notify opener and return contact data 
-                    	// @todo use popup manager from addressbook grid as well
-                    	if ( opener.Ext.ux.PopupWindowMgr.get(window) ) {
-                            opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', Tine.Addressbook.ContactEditDialog.contactRecord);                    		
-                    	}
+                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('update', Tine.Addressbook.ContactEditDialog.contactRecord);                    		
                     	
                         if(_closeWindow === true) {
-                        	// hack for the moment -> see @todo above 
-                            if ( opener.Ext.ux.PopupWindowMgr.get(window) ) {
-                            	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
-                            }
+                          	opener.Ext.ux.PopupWindowMgr.get(window).purgeListeners();
                             window.close();
                         } else {
                             //this.updateToolbarButtons(formData.config.addressbookRights);
@@ -715,6 +732,8 @@ Tine.Addressbook.ContactEditDialog = {
     }
     
 };
+
+/**************************** models ***************************************/
 
 Ext.namespace('Tine.Addressbook.Model');
 
