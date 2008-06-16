@@ -138,6 +138,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
     /*********************** links functions ************************/
     
+    // @todo rework link functions / use new relation class
+    
     /**
      * set lead links for an application
      *
@@ -896,29 +898,13 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     /******************* old or deprecated functions ******************/
     
     // @todo    remove no longer needed functions
-    
-    /**
-     * save Contacts
-     *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     * @deprecated is that used?
-     */ 
-    public function saveContacts(array $_contacts, $_id)
-    {        
-        $result = $this->_backend->saveContacts($_contacts, $_id);
-        
-        return $result;
-    }   
-      
+          
     /**
      * returns an empty lead with some defaults set
      *
      * @return Crm_Model_Lead
      * @deprecated ?
-     * @todo    move functionality to getLead()
+     * @todo    move functionality to getLead() or javascript?
      */
     public function getEmptyLead()
     {

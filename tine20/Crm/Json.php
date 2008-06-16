@@ -117,59 +117,6 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
             
             $leadData = $this->convertLeadToArray($lead, FALSE);
-
-            /*
-            // add contact links
-            $leadData['contacts'] = array();
-            $contact_links = $controller->getLinksForApplication($_leadId, 'Addressbook');
-            foreach($contact_links as $contact_link) {
-                try {
-                    $contact = Addressbook_Controller::getInstance()->getContact($contact_link['recordId']);
-                    $contactArray = $contact->toArray();
-                    $contactArray['link_remark'] = $contact_link['remark'];
-                    $leadData['contacts'][] = $contactArray;                    
-                } catch (Exception $e) {
-                    // do nothing
-                    // catch only permission denied exception
-                }
-            }
-
-            //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($leadData['contacts'], true));
-            
-            // add task links
-            $leadData['tasks'] = array();
-            $taskLinks = $controller->getLinksForApplication($_leadId, 'Tasks');
-            // @todo    move that to controller?
-            foreach ( $taskLinks as $taskLink ) {
-                try {
-                    $task = Tasks_Controller::getInstance()->getTask($taskLink['recordId']);            
-                    $taskArray = $task->toArray();
-
-                    $creator = Tinebase_User::getInstance()->getUserById($task->created_by);
-                    $taskArray['creator'] = $creator->accountFullName;
-                    
-                    if ($task->last_modified_by != NULL) {
-                        $modifier = Tinebase_User::getInstance()->getUserById($task->last_modified_by);
-                        $taskArray['modifier'] = $modifier->accountFullName;         
-                    }
-
-                    // @todo write function for that: getStatusById()
-                    $stati = Tasks_Controller::getInstance()->getStati()->toArray();
-                    foreach ($stati as $status) {
-                        if ($status['id'] == $taskArray['status_id']) {
-                            $taskArray['status_realname'] = $status['status_name'];
-                            $taskArray['status_icon'] = $status['status_icon'];
-                        }
-                    }
-
-                    $leadData['tasks'][] = $taskArray;  
-                    
-                } catch (Exception $e) {
-                    // do nothing
-                    //Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
-                }
-            }
-            */
                         
         } else {
             // @todo set default values in js and remove getEmptyXXX functions
