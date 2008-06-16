@@ -114,6 +114,8 @@ Tine.Crm.Main = {
         
         /**
          * add task handler
+         * 
+         * @todo    save the link via json request here?
          */
         handlerAddTask: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
@@ -380,7 +382,8 @@ Tine.Crm.Main = {
                this.actions.editLead.setDisabled(false);
                this.actions.deleteLead.setDisabled(false);               
                this.actions.exportLead.setDisabled(false);
-               this.actions.addTask.setDisabled(false);
+               // @todo reactivate
+               //this.actions.addTask.setDisabled(false);
             }    
             if(rowCount > 1) {                
                this.actions.editLead.setDisabled(true);
@@ -640,8 +643,6 @@ Tine.Crm.LeadEditDialog = {
 	
 	/**
 	 * define actions
-	 * 
-	 * @todo add product actions
 	 */
 	actions: {
         addResponsible: null,
@@ -656,7 +657,8 @@ Tine.Crm.LeadEditDialog = {
         unlinkTask: null,
         addProduct: null,      
         editProduct: null,
-        unlinkProduct: null
+        unlinkProduct: null,
+        exportLead: null
 	},
 	
     /**
@@ -815,15 +817,15 @@ Tine.Crm.LeadEditDialog = {
         {
             var taskPopup = new Tine.Tasks.EditPopup({
             	id: -1
+                //relatedApp: 'crm'
             	//containerId:
-                //relatedApp: 'tasks',
                 //relatedId: 
             });          
             
             // update event handler
             taskPopup.on('update', function(task) {
 
-                console.log (task);
+                //console.log (task);
             	
             	// set id and link properties
                 task.id = task.data.id;
@@ -852,7 +854,7 @@ Tine.Crm.LeadEditDialog = {
             // update event handler
             taskPopup.on('update', function(task) {           
             	
-            	console.log (task);
+            	//console.log (task);
             	
                 // set link properties
                 task.id = task.data.id;
@@ -891,9 +893,16 @@ Tine.Crm.LeadEditDialog = {
             for (var i = 0; i < selectedRows.length; ++i) {
                 store.remove(selectedRows[i]);
             }           
-        }
+        },
 
         // @todo add more handlers (for products, etc.)
+
+        /**
+         * onclick handler for exportBtn
+         */
+        exportLead: function(_button, _event) {            
+            Tine.Tinebase.Common.openWindow('exportWindow', 'index.php?method=Crm.exportLead&_format=pdf&_leadId=' + _button.leadId, 768, 1024);
+        },
     },       
 
     /**
@@ -1364,8 +1373,10 @@ Tine.Crm.LeadEditDialog = {
     /**
      * initComponent
      * sets the translation object and actions
+     * 
+     * @param   Tine.Crm.Model.Lead lead lead data
      */
-    initComponent: function()
+    initComponent: function(lead)
     {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Crm');
@@ -1373,8 +1384,6 @@ Tine.Crm.LeadEditDialog = {
         /****** actions *******/
         
         // contacts
-        // @todo add icon classes for adding contact types
-        // @todo add param "type" to addContact handler function
         this.actions.addResponsible = new Ext.Action({
         	contactType: 'responsible',
             text: this.translation._('Add responsible'),
@@ -1463,7 +1472,25 @@ Tine.Crm.LeadEditDialog = {
             handler: this.handlers.unlinkTask
         });
 
+        // products
         //@todo add product actions
+        this.actions.addProduct = new Ext.Action({
+            text: this.translation._('Add product'),
+            tooltip: this.translation._('Add new product'),
+            iconCls: 'actionAdd',
+            disabled: true,
+            handler: this.handlers.addProduct
+        });
+
+        // other
+        this.actions.exportLead = new Ext.Action({
+            text: this.translation._('Export as PDF'),
+            tooltip: this.translation._('Export as PDF'),
+            iconCls: 'action_exportAsPdf',
+            scope: this,
+            handler: this.handlers.exportLead,
+            leadId: lead.data.id
+        });
     },
     
     /**
@@ -1473,11 +1500,11 @@ Tine.Crm.LeadEditDialog = {
      */
     display: function(_lead) 
     {	
-    	this.initComponent();
-    	
         // put lead data into model
         lead = new Tine.Crm.Model.Lead(_lead);
         Tine.Crm.Model.Lead.FixDates(lead);  
+        
+        this.initComponent(lead);
         
         //console.log(lead);
         //console.log(lead.data.tasks);
@@ -1493,7 +1520,24 @@ Tine.Crm.LeadEditDialog = {
         
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
-            //tbarItems: [_add_task, _export_lead],
+            tbarItems: [
+                //@todo add link actions as well? 
+                {
+                    text: this.translation._('Add new contact'),
+                    iconCls: 'actionAdd',
+                    menu: {
+                        items: [
+                            this.actions.addResponsible,
+                            this.actions.addCustomer,
+                            this.actions.addPartner
+                        ]
+                    }
+                }, 
+                this.actions.addTask,                
+                this.actions.addProduct,
+                '-',
+                this.actions.exportLead
+            ],
             handlerApplyChanges: this.handlers.applyChanges,
             handlerSaveAndClose: this.handlers.saveAndClose,
             labelAlign: 'top',
