@@ -303,12 +303,6 @@ class Setup_Controller
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
     {
-        #try {
-        #    $this->checkUpdate($_application);
-        #} catch (Exception $e) {
-        #    echo $e->getMessage();
-        #}
-        
         $setupXml = $this->getSetupXml($_application->name);
         
         switch(version_compare($_application->version, $setupXml->version)) {
@@ -316,7 +310,6 @@ class Setup_Controller
                 echo "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")<br>";
 
                 list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
-                //list($toMajorVersion, $toMinorVersion) = explode('.', $_updateTo);
         
                 $minor = $fromMinorVersion;
                
@@ -335,12 +328,6 @@ class Setup_Controller
                         $minor++;
                     } while(array_search('update_' . $minor, $classMethods) !== false);
                 }
-
-                #try {
-                #    $this->checkUpdate($_application);
-                #} catch (Exception $e) {
-                #    echo $e->getMessage();
-                #}
                 
                 echo "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong><br>";
                 
