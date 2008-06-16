@@ -221,9 +221,5 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 break;
             
         }
-        
-        $this->mul = 'false';
-        $this->primary = 'false';
-        $this->unique = 'false';        
     }
 }
