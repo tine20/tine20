@@ -22,22 +22,18 @@
                 <field>
                     <name>leadstate_id</name>
                     <type>integer</type>
-                    <default>0</default>
                 </field>
                 <field>
                     <name>leadtype_id</name>
                     <type>integer</type>
-                    <default>0</default>
                 </field>
                 <field>
                     <name>leadsource_id</name>
                     <type>integer</type>
-                    <default>0</default>
                 </field>
                 <field>
                     <name>container</name>
                     <type>integer</type>
-                    <default>0</default>
                 </field>
                 <field>
                     <name>description</name>
