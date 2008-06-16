@@ -43,7 +43,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'deleted_by'           => array('allowEmpty' => true         ),
         // task only fields
         'id'                   => array('allowEmpty' => true, 'Alnum'),
-        'percent'              => array('presence' => 'required', 'default' => '00'),
+        //'percent'              => array('presence' => 'required', 'default' => '00'),
+        'percent'              => array('allowEmpty' => true, 'default' => 0),
         'completed'            => array('allowEmpty' => true         ),
         'due'                  => array('allowEmpty' => true         ),
         // ical common fields
