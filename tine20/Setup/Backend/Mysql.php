@@ -31,8 +31,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
     {
-		
-		$statement = $this->getCreateStatement($_table);
+        $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
         echo "<pre>$statement</pre><hr>";
 
@@ -522,12 +521,16 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $buffer[] = '  `' . $_field->name . '`';
 
         switch ($_field->type) {
-            case('varchar'): 
-                $buffer[] = 'varchar(' . $_field->length . ')';
+            case 'varchar': 
+                if ($_field->length !== NULL) {
+                    $buffer[] = 'varchar(' . $_field->length . ')';
+                } else {
+                    $buffer[] = 'varchar(255)';
+                }
                 break;
             
             case ('integer'):
-                if (isset($_field->length)) {
+                if ($_field->length !== NULL) {
                     if ($_field->length > 19) {
                         $buffer[] = 'bigint(' . $_field->length . ')';
                     } else if ($_field->length < 5){
@@ -575,50 +578,32 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 $buffer[] = $_field->type;
         }
 
-        if (isset($_field->unsigned)) {
+        if (isset($_field->unsigned) && $_field->unsigned === true) {
             $buffer[] = 'unsigned';
         }
 
-        // range  (int) default - null --- (string) null-default
-        if ($_field->type == 'varchar' || $_field->type == 'text' || $_field->type == 'integer') {
-            if (isset($_field->notnull) && $_field->notnull == 'true') {
-                $buffer[] = 'NOT NULL';
-            }
-
-            if (isset($_field->default)) {
-                if($_field->default != 'NULL') {
-                    $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
-                } else {
-                    $buffer[] = "default NULL" ;
-                }
-            }    
-        } else {
-        
-            if (isset($_field->default)) {
-                if($_field->default != 'NULL') {
-                    $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
-                } else {
-                    $buffer[] = "default NULL" ;
-                }
-            }    
-                        
-            if (isset($_field->notnull) && $_field->notnull == 'true') {
-                $buffer[] = 'NOT NULL';
-            }
-
+        if ($_field->notnull === true) {
+            $buffer[] = 'NOT NULL';
         }
-        
 
-        if (isset($_field->autoincrement)) {
+        if (isset($_field->default)) {
+            if($_field->default === NULL) {
+                $buffer[] = "default NULL" ;
+            } else {
+                $buffer[] = Zend_Registry::get('dbAdapter')->quoteInto("default ?", $_field->default) ;
+            }
+        }    
+
+        if (isset($_field->autoincrement) && $_field->autoincrement === true) {
             $buffer[] = 'auto_increment';
         }
         
         if (isset($_field->comment)) {
-            if ($_field->comment) {
-                $buffer[] = "COMMENT '" .  $_field->comment . "'";
-            }
+            $buffer[] = "COMMENT '" .  $_field->comment . "'";
         }
+
         $definition = implode(' ', $buffer);
+
         return $definition;
     }
 
