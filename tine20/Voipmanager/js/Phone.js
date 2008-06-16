@@ -561,19 +561,21 @@ Tine.Voipmanager.Phones.EditDialog =  {
                             border: false,
                             anchor: '100%',
                             items:[{                                    
-                                xtype: 'textfield',
+                                xtype: 'datefield',
                                 fieldLabel: 'Settings Loaded at',
                                 name: 'settings_loadingtime',
-                                maxLength: 20,
                                 anchor:'100%',
-                                readOnly: true                        
+		                        emptyText: 'never',
+		                        hideTrigger: true,
+		                        readOnly: true
                             },{
-                                xtype: 'textfield',
+                                xtype: 'datefield',
                                 fieldLabel: 'Firmware last checked at',
                                 name: 'firmware_update_time',
-                                maxLength: 20,
                                 anchor:'100%',
-                                readOnly: true                        
+                                emptyText: 'never',
+                                hideTrigger: true,
+                                readOnly: true
                             }]
                         }]
                     }]
