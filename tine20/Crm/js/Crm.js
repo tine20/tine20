@@ -648,6 +648,7 @@ Tine.Crm.LeadEditDialog = {
         addCustomer: null,
         addPartner: null,
         editContact: null,
+        linkContact: null,
         unlinkContact: null,
         addTask: null,		
         editTask: null,
@@ -781,6 +782,17 @@ Tine.Crm.LeadEditDialog = {
         },
 
         /**
+         * linkContact
+         * 
+         * link an existing contact, open 'object' picker
+         * @todo implement
+         */
+        linkContact: function(_button, _event)
+        {
+        	
+        },
+
+    	/**
          * unlinkContact
          * 
          * remove selected contacts from store
@@ -1178,29 +1190,40 @@ Tine.Crm.LeadEditDialog = {
     {
         switch ( _type ) {
             case 'Contacts':
-                // @todo add second level for different contact types?
+                var addNewItems = {
+                    text: this.translation._('Add new contact'),
+                    menu: {
+                        items: [
+                            this.actions.addResponsible,
+                            this.actions.addCustomer,
+                            this.actions.addPartner
+                        ]
+                    }
+                }; 
+                // items for row context menu
                 var rowItems = [
                     this.actions.editContact,
                     this.actions.unlinkContact,
                     '-',
-                    this.actions.addResponsible,
-                    this.actions.addCustomer,
-                    this.actions.addPartner
+                    this.actions.linkContact,
+                    addNewItems
                 ];
+                // items for all grid context menu
                 var gridItems = [
-                    this.actions.addResponsible,
-                    this.actions.addCustomer,
-                    this.actions.addPartner
+                    this.actions.linkContact,
+                    addNewItems
                 ];
                 break;
                 
             case 'Tasks':
+                // items for row context menu
                 var rowItems = [
                     this.actions.editTask,
                     this.actions.unlinkTask,
                     '-',
                     this.actions.addTask
                 ];
+                // items for all grid context menu
                 var gridItems = [
                     this.actions.addTask
                 ];
@@ -1356,6 +1379,15 @@ Tine.Crm.LeadEditDialog = {
             disabled: true,
             iconCls: 'actionEdit',
             handler: this.handlers.editContact
+        });
+
+        this.actions.linkContact = new Ext.Action({
+            text: this.translation._('Link contact'),
+            tooltip: this.translation._('Link existing contact with lead'),
+            disabled: true,
+            iconCls: 'contactIconPartner',
+            scope: this,
+            handler: this.handlers.unlinkContact
         });
         
         this.actions.unlinkContact = new Ext.Action({
