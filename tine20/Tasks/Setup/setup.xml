@@ -184,8 +184,7 @@
                 </field>        
                 <field>
                     <name>percent</name>
-                    <type>decimal</type>
-                     <value>3,0</value>
+                    <type>tinyint</type>
                 </field>    
                 <field>
                     <name>completed</name>

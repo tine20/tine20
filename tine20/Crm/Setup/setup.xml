@@ -49,8 +49,7 @@
                 </field>
                 <field>
                     <name>probability</name>
-                    <type>decimal</type>
-                    <value>3,0</value>
+                    <type>tinyint</type>
                 </field>
                 <field>
                     <name>modifier</name>
@@ -174,8 +173,7 @@
                 </field>
                 <field>
                     <name>probability</name>
-                    <type>decimal</type>
-                    <value>3,0</value>
+                    <type>tinyint</type>
                 </field>
                 <field>
                     <name>endslead</name>
@@ -214,8 +212,7 @@
                 </field>
                 <field>
                     <name>price</name>
-                    <type>decimal</type>
-                    <value>12,2</value>
+                    <type>float</type>
                     <notnull>false</notnull>
                 </field>
                 <index>
@@ -285,8 +282,7 @@
                 </field>
                 <field>
                     <name>product_price</name>
-                    <type>decimal</type>
-                    <value>12,2</value>
+                    <type>float</type>
                     <unsigned>true</unsigned>
                     <notnull>false</notnull>
                 </field>
