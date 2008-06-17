@@ -239,9 +239,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testLinkedTasks()
-    {
-        $tasksBackend = new Tasks_Backend_Sql();
-        
+    {        
         // create test task
         $task = new Tasks_Model_Task(array(
             // tine record fields
@@ -254,9 +252,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'summary'              => 'our fist test task',        
         ));
         try {
-            $task = $tasksBackend->get($task->getId());
+            $task = Tasks_Controller::getInstance()->getTask($task->getId());
         } catch ( Exception $e ) {
-            $task = $tasksBackend->create($task);
+            $task = Tasks_Controller::getInstance()->createTask($task);
         }
         
         // link task
