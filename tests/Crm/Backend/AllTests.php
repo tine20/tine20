@@ -31,7 +31,7 @@ class Crm_Backend_AllTests
         // $suite->addTestSuite('Crm_Backend_SqlTest');
         $suite->addTestSuite('Crm_Backend_LeadsTest');
         $suite->addTestSuite('Crm_Backend_LeadSourcesTest');
-        $suite->addTestSuite('Crm_Backend_LeadsProductsTest');
+        $suite->addTestSuite('Crm_Backend_ProductsTest');
         $suite->addTestSuite('Crm_Backend_LeadStatesTest');
         $suite->addTestSuite('Crm_Backend_LeadTypesTest');
         return $suite;

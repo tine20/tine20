@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo rewrite test for Crm_Backend_Products
  */
 
 /**
@@ -19,9 +21,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Crm_Backend_LeadsProducts
+ * Test class for Crm_Backend_Products
  */
-class Crm_Backend_LeadsProductsTest extends PHPUnit_Framework_TestCase
+class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -40,7 +42,7 @@ class Crm_Backend_LeadsProductsTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm LeadsProducts Backend Tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Products Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -95,7 +97,7 @@ class Crm_Backend_LeadsProductsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = Crm_Backend_LeadsProducts::getInstance();
+        $this->backend = Crm_Backend_ProductsTest::getInstance();
     }
 
     /**
@@ -108,19 +110,9 @@ class Crm_Backend_LeadsProductsTest extends PHPUnit_Framework_TestCase
 	   #Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
     }
     
-    /**
-     * try to get products associated with one lead
-     *
-     */
-    public function testGetProductsByLeadId()
-    {
-        $products = $this->backend->getProductsByLeadId($this->objects['initialLead']);
-        
-        $this->assertType('Tinebase_Record_RecordSet', $products);
-    }
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadsProductsTest::main') {
-    Crm_Backend_LeadsProductsTest::main();
+if (PHPUnit_MAIN_METHOD == 'Crm_Backend_ProductsTest::main') {
+    Crm_Backend_ProductsTest::main();
 }
