@@ -191,7 +191,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         try {
             $task = $tasksBackend->get($this->objects['task']->getId());
         } catch ( Exception $e ) {
-            $task = $tasksBackend->createTask($this->objects['task']);
+            $task = $tasksBackend->create($this->objects['task']);
         }
 
         $leadData = $this->objects['initialLead']->toArray();

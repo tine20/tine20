@@ -642,6 +642,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     
     /*************** products functions *****************/
 
+    // @todo check/rework those
+    
     /**
      * get products available
      *

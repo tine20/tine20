@@ -235,17 +235,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get products associated with one lead
-     *
-     */
-    public function testGetProductsByLeadId()
-    {
-        $products = Crm_Controller::getInstance()->getProductsByLeadId($this->objects['initialLead']);
-        
-        $this->assertType('Tinebase_Record_RecordSet', $products);
-    }
-
-    /**
      * try to set / get linked tasks
      *
      */
@@ -267,7 +256,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         try {
             $task = $tasksBackend->get($task->getId());
         } catch ( Exception $e ) {
-            $task = $tasksBackend->createTask($task);
+            $task = $tasksBackend->create($task);
         }
         
         // link task

@@ -135,28 +135,4 @@ class Crm_Backend_Products implements Crm_Backend_Interface
 
         return $result;
     }   
-
-    /**
-     * get products by lead id
-     *
-     * @param int $_leadId the leadId
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
-     * 
-     * @deprecated use new relation model
-     */
-    public function getProductsByLeadId($_leadId)
-    {
-        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
-
-        $where  = array(
-            $this->_table->getAdapter()->quoteInto('lead_id = ?', $leadId)
-        );
-
-        $rows = $this->_table->fetchAll($where);
-        
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
-   
-        return $result;
-    }      
-    
 }
