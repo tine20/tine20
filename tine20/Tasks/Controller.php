@@ -202,16 +202,22 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
     /**
      * Deletes an re more existing Task
      *
-     * @param string $_identifier
+     * @param string|array $_identifier
      * @return void
      */
     public function deleteTask($_identifier)
     {
-        $Task = $this->getTask($_identifier);
-        
-        if (!$this->_currentAccount->hasGrant($Task->container_id, Tinebase_Container::GRANT_DELETE)) {
-            throw new Exception('Not allowed!');
+        $tasks = $this->_backend->getMultiple((array)$_identifier);
+        if (count((array)$_identifier) != count($tasks)) {
+            throw new Exception('Error, only ' . count($tasks) . ' of ' . count((array)$_identifier) . ' tasks exist');
         }
+        
+        foreach ($tasks as $task) {
+            if (!$this->_currentAccount->hasGrant($task->container_id, Tinebase_Container::GRANT_DELETE)) {
+                throw new Exception('You are only allowed to delete task "' . $task->getId() . '"');
+            }
+        }
+        
         $this->_backend->delete($_identifier);
     }
 

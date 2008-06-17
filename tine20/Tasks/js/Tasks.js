@@ -107,8 +107,8 @@ Tine.Tasks.mainGrid = {
 							identifiers.push(selectedRows[i].data.id);
 						} 
 						var params = {
-		                    method: 'Tasks.deleteTasks', 
-		                    identifiers: Ext.util.JSON.encode(identifiers)
+		                    method: 'Tasks.deleteTask', 
+		                    identifier: Ext.util.JSON.encode(identifiers)
 		                };
 					} else {
 						var params = {

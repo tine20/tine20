@@ -75,6 +75,4 @@ interface Tasks_Backend_Interface
      * @return void
      */
     public function delete($_identifier);
-
-    
 }
