@@ -234,6 +234,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * try to get all leads
      *
+     * @todo replace getAllLeads with searchLeads()
      */
     public function testGetAllLeads()
     {

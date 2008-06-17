@@ -131,6 +131,22 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->objects['initialLead']->description, $lead->description);
     }
+
+    /**
+     * try to get initial lead with search function
+     *
+     */
+    public function testGetInitialLead()
+    {
+        $filter = new Crm_Model_LeadFilter();
+        $filter->container = array($this->testContainer->id);
+        $filter->query = 'PHPUnit';
+        $filter->showClosed = true;
+        $pagination = new Crm_Model_LeadPagination();
+        $leads = $this->backend->search($filter, $pagination);
+        
+        $this->assertEquals(1, count($leads));
+    }
     
     /**
      * try to update a lead
@@ -145,12 +161,16 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to get multiple leads
+     * try to get initial lead with search function
      *
      */
-    public function testGetLeads()
+    public function testGetUpdatedLead()
     {
-        $leads = $this->backend->getLeads(array($this->testContainer->id), 'PHPUnit');
+        $filter = new Crm_Model_LeadFilter();
+        $filter->container = array($this->testContainer->id);
+        $filter->query = 'PHPUnit';
+        $pagination = new Crm_Model_LeadPagination();
+        $leads = $this->backend->search($filter, $pagination);
         
         $this->assertEquals(1, count($leads));
     }
