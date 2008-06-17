@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add search/count functions and replace old deprecated functions
+ * @todo        rename functions (add, update, delete)
  */
 
 
@@ -68,25 +70,38 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         }
         return self::$_instance;
     }
-    
+
+    /********** get / search ***********/
+
     /**
-    * get LeadContacts
-    *
-    * @return unknown
-    */  
-    public function getLeadContacts(Tinebase_Record_Recordset $_leads)
-    {    
-        $leads = $_leads->toArray();
+     * get lead
+     *
+     * @param int|Crm_Model_Lead $_id
+     * @return Crm_Model_Lead
+     */
+    public function get($_id)
+    {
+        $id = Crm_Model_Lead::convertLeadIdToInt($_id);
+
+        $select = $this->_getLeadSelectObject()
+            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
+
+      // echo $select->__toString();
+       
+        $stmt = $select->query();
+
+        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         
-        foreach($leads AS $lead)
-        {
-            $_id = $lead['id'];
-            $_contact = $this->getContactsById($_id);
-            $leadContacts[$_id] = $_contact;
+        if(empty($row)) {
+            throw new UnderflowException('lead not found');
         }
-    
-        return $leadContacts;
+        
+        $lead = new Crm_Model_Lead($row);
+
+        return $lead;
     }
+    
+    // @todo remove deprecated functions
     
     /**
      * create search filter
@@ -96,6 +111,8 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return array
+     * 
+     * @deprecated ?
      */
     protected function _getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
@@ -123,7 +140,22 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         return $where;
     }
     
-    //handle for FOLDER->LEADS functions
+    /**
+     * _getLeadsFromTable
+     *
+     * @param array $_where
+     * @param unknown_type $_filter
+     * @param unknown_type $_sort
+     * @param unknown_type $_dir
+     * @param unknown_type $_limit
+     * @param unknown_type $_start
+     * @param unknown_type $_leadstate
+     * @param unknown_type $_probability
+     * @param unknown_type $_getClosedLeads
+     * @return unknown
+     * 
+     * @deprecated ?
+     */
     protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
         $where = array_merge($_where, $this->_getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads));
@@ -153,6 +185,8 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      *
      * @todo do we need this join here
      * @return Zend_Db_Select
+     * 
+     * @deprecated ?
      */
     protected function _getLeadSelectObject()
     {
@@ -181,6 +215,15 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         return $selectObject;
     }
 
+    /**
+     * add quick search filter
+     *
+     * @param unknown_type $_where
+     * @param unknown_type $_filter
+     * @return unknown
+     * 
+     * @deprecated 
+     */
     protected function _addQuickSearchFilter($_where, $_filter)
     {
         if(!empty($_filter)) {
@@ -193,12 +236,75 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         
         return $_where;
     }
+
+    /**
+     * get list of leads from all shared folders the current user has access to
+     *
+     * @param array $_container container to read the contacts from
+     * @param string $_filter string to search for in leads
+     * @param unknown_type $_sort fieldname to sort by
+     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
+     * @param unknown_type $_limit how many leads to display
+     * @param unknown_type $_start how many leads to skip
+     * @param int $_leadstate
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     * 
+     * @deprecated
+     */
+    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        if(count($_container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }        
+
+        $where = array(
+            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
+        );
+        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
+         
+        return $result;
+    }
+    
+    /**
+     * get total count of leads matching filter
+     *
+     * @param array $_container
+     * @param string $_filter
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return int total number of matching leads
+     * 
+     * @deprecated
+     */
+    public function getCountOfLeads(array $_container, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        if(count($_container) === 0) {
+            throw new Exception('$_container can not be empty');
+        }        
+        
+        $where = array(
+            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
+        );
+                
+        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadState, $_probability, $_getClosedLeads));
+        
+        $result = $this->_table->getTotalCount($where);
+
+        return $result;
+    }
+    
+    /****************** add / update / delete *************/
     
     /**
     * add a lead
     *
     * @param Crm_Lead $_leadData the leaddata
     * @return Crm_Model_Lead
+    * 
+    * @todo rename function
     */
     public function addLead(Crm_Model_Lead $_lead)
     {
@@ -230,96 +336,15 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         }
         
         return $this->get($_lead->id);
-    }
-    
-    /**
-     * get lead
-     *
-     * @param int|Crm_Model_Lead $_id
-     * @return Crm_Model_Lead
-     */
-    public function get($_id)
-    {
-        $id = Crm_Model_Lead::convertLeadIdToInt($_id);
-
-        $select = $this->_getLeadSelectObject()
-            ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
-
-      // echo $select->__toString();
-       
-        $stmt = $select->query();
-
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        if(empty($row)) {
-            throw new UnderflowException('lead not found');
-        }
-        
-        $lead = new Crm_Model_Lead($row);
-
-        return $lead;
-    }
-
-    /**
-     * get list of leads from all shared folders the current user has access to
-     *
-     * @param array $_container container to read the contacts from
-     * @param string $_filter string to search for in leads
-     * @param unknown_type $_sort fieldname to sort by
-     * @param unknown_type $_dir sort ascending or descending (ASC | DESC)
-     * @param unknown_type $_limit how many leads to display
-     * @param unknown_type $_start how many leads to skip
-     * @param int $_leadstate
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
-     */
-    public function getLeads(array $_container, $_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        if(count($_container) === 0) {
-            throw new Exception('$_container can not be empty');
-        }        
-
-        $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
-        );
-        $result = $this->_getLeadsFromTable($where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
-         
-        return $result;
-    }
-    
-    /**
-     * get total count of leads matching filter
-     *
-     * @param array $_container
-     * @param string $_filter
-     * @param int $_leadState
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return int total number of matching leads
-     */
-    public function getCountOfLeads(array $_container, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        if(count($_container) === 0) {
-            throw new Exception('$_container can not be empty');
-        }        
-        
-        $where = array(
-            Zend_Registry::get('dbAdapter')->quoteInto('container IN (?)', $_container)
-        );
-                
-        $where = array_merge($where, $this->_getSearchFilter($_filter, $_leadState, $_probability, $_getClosedLeads));
-        
-        $result = $this->_table->getTotalCount($where);
-
-        return $result;
-    }
+    }    
     
     /**
      * delete lead
      *
      * @param int|Crm_Model_Lead $_leads lead ids
      * @return void
+     * 
+     * @todo    rename
      */
     public function deleteLead($_leadId)
     {
@@ -360,6 +385,8 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      *
      * @param Crm_Lead $_leadData the leaddata
      * @return Crm_Model_Lead
+     * 
+     * @todo    rename
      */
     public function updateLead(Crm_Model_Lead $_lead)
     {
