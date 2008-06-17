@@ -149,6 +149,23 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
     }
     
     /**
+     * Returns a set of tasks identified by their id's
+     * 
+     * @param  array $_ids array of string
+     * @return Tinebase_RecordSet of Tasks_Model_Task
+     */
+    public function getMultipleTasks($_uids)
+    {
+        $tasks = $this->_backend->getMultiple($_uids);
+        foreach ($tasks as $task) {
+            if (! $this->_currentAccount->hasGrant($task->container_id, Tinebase_Container::GRANT_READ)) {
+                $index = $tasks->getIndexOfId($task->getId());
+                unset($tasks[$index]);
+            } 
+        }
+    }
+    
+    /**
      * Create a new Task
      *
      * @param Tasks_Model_Task $_task
