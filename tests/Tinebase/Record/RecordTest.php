@@ -55,7 +55,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     {
 		// initial object
 	    $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true) ; 
-	 	$this->objects['TestRecord']->setFromArray(array('test_id'=>'2', 'test_2'=>NULL, ), NULL);
+	 	$this->objects['TestRecord']->setFromArray(array('id'=>'2', 'test_2'=>NULL, ), NULL);
 		
 		// date management
 		$date = Zend_Date::now();
@@ -63,7 +63,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
 		$this->objects['TestRecord']->date_multiple = array( $date ) ;
 		
 		// bypass filters
-		$this->objects['TestRecordBypassFilters'] = new Tinebase_Record_DummyRecord(array('test_id'=>'7', 'test_2'=>'STRING'), true) ;
+		$this->objects['TestRecordBypassFilters'] = new Tinebase_Record_DummyRecord(array('id'=>'7', 'test_2'=>'STRING'), true) ;
 	
 		$this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
 		$this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
@@ -78,7 +78,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
 		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
 		
     	$dummy = array(
-					'test_id'=>2, 
+					'id'=>2, 
 					'test_2'=>'',
 					'date_single' => $date->getIso(), 
 					'date_multiple'=> array($date->getIso()));
@@ -89,7 +89,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
   	  	
   	  	$this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
   	  	
-  	  	$this->expectSuccess['TestRecord']['test__isset'][] = array('test_id');
+  	  	$this->expectSuccess['TestRecord']['test__isset'][] = array('id');
   	  	
   	  	$this->expectFailure['TestRecord']['test__isset'][] = array('string');
   	  	
