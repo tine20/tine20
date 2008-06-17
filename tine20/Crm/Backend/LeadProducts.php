@@ -63,7 +63,7 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
     public static function getInstance ()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Backend_Products();
+            self::$_instance = new Crm_Backend_LeadProducts();
         }
         return self::$_instance;
     }

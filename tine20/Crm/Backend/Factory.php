@@ -78,32 +78,26 @@ class Crm_Backend_Factory
                 break;
                            
             case self::LEADS:
-            	throw new Exception('Not implemented, yet.');
                 $instance = Crm_Backend_Leads::getInstance();
                 break;
                            
             case self::LEAD_PRODUCTS:
-                throw new Exception('Not implemented, yet.');
             	$instance = Crm_Backend_LeadProducts::getInstance();
                 break;
                            
             case self::LEAD_TYPES:
-                throw new Exception('Not implemented, yet.');
             	$instance = Crm_Backend_LeadTypes::getInstance();
                 break;
                            
             case self::LEAD_SOURCES:
-                throw new Exception('Not implemented, yet.');
             	$instance = Crm_Backend_LeadSources::getInstance();
                 break;
                 
             case self::LEADS_PRODUCTS:
-                throw new Exception('Not implemented, yet.');
             	$instance = Crm_Backend_LeadsProducts::getInstance();
                 break;
                 
             case self::LEAD_STATES:
-                throw new Exception('Not implemented, yet.');
                 $instance = Crm_Backend_LeadStates::getInstance();
                 break;
             

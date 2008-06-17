@@ -38,7 +38,7 @@ class Crm_Backend_LeadTypes implements Crm_Backend_Interface
     private function __construct ()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->leadType = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+        $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
     }
     
     /**
@@ -65,7 +65,7 @@ class Crm_Backend_LeadTypes implements Crm_Backend_Interface
     public static function getInstance ()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Backend_Types();
+            self::$_instance = new Crm_Backend_LeadTypes();
         }
         return self::$_instance;
     }
@@ -79,7 +79,7 @@ class Crm_Backend_LeadTypes implements Crm_Backend_Interface
      */
     public function getLeadTypes($_sort = 'id', $_dir = 'ASC')
     {   
-        $rows = $this->leadTypeTable->fetchAll(NULL, $_sort, $_dir);
+        $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
         
         $result = new Tinebase_Record_RecordSet('Crm_Model_Leadtype', $rows->toArray());
         
@@ -133,10 +133,10 @@ class Crm_Backend_LeadTypes implements Crm_Backend_Interface
             throw new InvalidArgumentException('$_Id must be integer');
         }
             $where  = array(
-                $this->leadTypeTable->getAdapter()->quoteInto('leadtype_id = ?', $Id),
+                $this->_table->getAdapter()->quoteInto('leadtype_id = ?', $Id),
             );
              
-            $result = $this->leadTypeTable->delete($where);
+            $result = $this->_table->delete($where);
 
         return $result;
     }    
@@ -153,7 +153,7 @@ class Crm_Backend_LeadTypes implements Crm_Backend_Interface
         if($typeId != $_typeId) {
             throw new InvalidArgumentException('$_typeId must be integer');
         }
-        $rowSet = $this->leadTypeTable->find($typeId);
+        $rowSet = $this->_table->find($typeId);
         
         if(count($rowSet) == 0) {
             throw new Exception('lead type not found');

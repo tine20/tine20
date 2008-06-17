@@ -34,7 +34,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::SQL);
     }
     
     /**
@@ -77,8 +76,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getProducts($_sort = 'id', $_dir = 'ASC')
     {
-        $result = $this->_backend->getProducts($_sort, $_dir);
-
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
+        $result = $backend->getProducts($_sort, $_dir);
+        
         return $result;    
     }     
 
@@ -90,8 +90,9 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getProductsByLeadId($_leadId)
     {
-        $result = $this->_backend->getProductsByLeadId($_leadId);
-
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS_PRODUCTS);
+    	$result = $backend->getProductsByLeadId($_leadId);
+        
         return $result;    
     }     
 
@@ -105,7 +106,10 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function saveProductSource(Tinebase_Record_Recordset $_productSource)
     {
-        $result = $this->_backend->saveProductsource($_productSource);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
+    	$result = $backend->saveProducts($_productSource);
+    	
+    	return $result;
     } 
     
     /**
@@ -116,7 +120,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function deleteProducts($_id)
     {
-        $result = $this->_backend->deleteProducts($_id);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
+    	$result = $backend->deleteProducts($_id);
 
         return $result;    
     }     
@@ -131,7 +136,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function saveProducts(Tinebase_Record_Recordset $_productData)
     {
-        $result = $this->_backend->saveProducts($_productData);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
+    	$result = $backend->saveProducts($_productData);
         
         return $result;
     }   
@@ -255,7 +261,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
         
         foreach($result as &$lead) {
             $this->getLinkedProperties($lead);
@@ -290,7 +297,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
         
         foreach($result as &$lead) {
             $this->getLinkedProperties($lead);
@@ -323,7 +331,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
         
         foreach($result as &$lead) {
             $this->getLinkedProperties($lead);
@@ -353,7 +362,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         $containerIds = array($containerId);
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
         
         foreach($result as &$lead) {
             $this->getLinkedProperties($lead);
@@ -388,7 +398,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
         
         foreach($result as &$lead) {
             $this->getLinkedProperties($lead);
@@ -405,7 +416,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLead($_leadId)
     {
-        $lead = $this->_backend->getLead($_leadId);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+    	$lead = $backend->getLead($_leadId);
         
         if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
             throw new Exception('read permission to lead denied');
@@ -436,7 +448,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
         
-        $lead = $this->_backend->addLead($_lead);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $lead = $backend->addLead($_lead);
         
         $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
@@ -471,7 +484,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
 
-        $lead = $this->_backend->updateLead($_lead);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $lead = $backend->updateLead($_lead);
         
         $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
@@ -500,9 +514,11 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
                 $this->deleteLead($leadId);
             }
         } else {
-            $lead = $this->_backend->getLead($_leadId);
+        	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+            $lead = $backend->getLead($_leadId);
+            
             if(Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
-                $this->_backend->deleteLead($_leadId);
+                $backend->deleteLead($_leadId);
             } else {
                 throw new Exception('delete access to lead denied');
             }
@@ -530,7 +546,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
 
         $containerIds = array($containerId);
                 
-        $result = $this->_backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }        
@@ -557,7 +574,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }
@@ -584,7 +602,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }
@@ -607,7 +626,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }
@@ -630,7 +650,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $containerIds[] = $container->id;
         }
         
-        $result = $this->_backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
 
         return $result;
     }
@@ -648,7 +669,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLeadSources($_sort = 'id', $_dir = 'ASC')
     {
-        $result = $this->_backend->getLeadSources($_sort, $_dir);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
+    	$result = $backend->getLeadSources($_sort, $_dir);
 
         return $result;    
     }
@@ -663,7 +685,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function saveLeadsources(Tinebase_Record_Recordset $_leadSources)
     {
-        $result = $this->_backend->saveLeadsources($_leadSources);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
+        $result = $backend->saveLeadsources($_leadSources);
         
         return $result;
     }  
@@ -677,7 +700,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLeadTypes($_sort = 'id', $_dir = 'ASC')
     {
-        $result = $this->_backend->getLeadtypes($_sort, $_dir);
+    	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
+        $result = $backend->getLeadtypes($_sort, $_dir);
 
         return $result;    
     }    
@@ -690,7 +714,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLeadType($_typeId)
     {
-        $result = $this->_backend->getLeadType($_typeId);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
+        $result = $backend->getLeadType($_typeId);
 
         return $result;    
     }
@@ -705,7 +730,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function saveLeadtypes(Tinebase_Record_Recordset $_leadTypes)
     {
-        $result = $this->_backend->saveLeadtypes($_leadTypes);
+    	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
+        $result = $backend->saveLeadtypes($_leadTypes);
         
         return $result;
     }      
@@ -719,7 +745,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLeadStates($_sort = 'id', $_dir = 'ASC')
     {
-        $result = $this->_backend->getLeadStates($_sort, $_dir);
+    	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
+        $result = $backend->getLeadStates($_sort, $_dir);
 
         return $result;    
     }
@@ -732,7 +759,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLeadState($_id)
     {
-        $result = $this->_backend->getLeadState($_id);
+    	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
+        $result = $backend->getLeadState($_id);
 
         return $result;    
     }
@@ -747,7 +775,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */ 
     public function saveLeadstates(Tinebase_Record_Recordset $_leadStates)
     {
-        $result = $this->_backend->saveLeadstates($_leadStates);
+    	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
+        $result = $backend->saveLeadstates($_leadStates);
         
         return $result;
     } 
@@ -760,7 +789,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     public function getLeadSource($_sourceId)
     {
-        $result = $this->_backend->getLeadSource($_sourceId);
+    	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
+        $result = $backend->getLeadSource($_sourceId);
 
         return $result;    
     }
