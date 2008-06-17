@@ -12,7 +12,6 @@
  *
  * @todo        rework functions
  * @todo        add rights
- * @todo        use protected attributes for the different backends and set the in constructor
  */
 
 /**
@@ -643,8 +642,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     
     /*************** products functions *****************/
 
-    // @todo check/rework those
-    
     /**
      * get products available
      *
@@ -662,23 +659,6 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         */
         
         $result = array();
-        
-        return $result;    
-    }     
-
-    /**
-     * get products associated with one lead
-     *
-     * @param int $_leadId lead id
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
-     * 
-     * @deprecated
-     * @todo remove that
-     */
-    public function getProductsByLeadId($_leadId)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
-        $result = $backend->getProductsByLeadId($_leadId);
         
         return $result;    
     }     
