@@ -1,9 +1,9 @@
 <?php
 /**
- * class to hold product data
+ * class to hold option data
  * 
  * @package     Crm
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
@@ -11,7 +11,7 @@
  */
 
 /**
- * class to hold product data
+ * class to hold option data
  * 
  * @package     Crm
  */
@@ -51,11 +51,9 @@ class Crm_Model_Product extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id' 				    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-		'product_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-		'product_desc'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-		'product_price'         => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'productsource'   => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'price'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required')        
     );
 
 }
