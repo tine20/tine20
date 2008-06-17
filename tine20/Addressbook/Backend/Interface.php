@@ -1,64 +1,77 @@
 <?php
 /**
- * interface for contacs class
+ * Tine 2.0
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
+
 /**
- * interface for contacs class
+ * Interface for Addressbook Backends
  * 
- * @package     Addressbook
+ * @package Addressbook
  */
 interface Addressbook_Backend_Interface
 {
+    
     /**
-     * delete contact identified by contact id
+     * Search for records matching given filter
      *
-     * @param int $_contacts contact ids
-     * @return int the number of rows deleted
+     * @param  Addressbook_Model_Filter  $_filter
+     * @param  Tinebase_Model_Pagination $_pagination
+     * @return Tinebase_Record_RecordSet
      */
-    public function deleteContact ($_contactId);
+    public function search(Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination);
+    
     /**
-     * get list of contacts from given addressbooks
-     *
-     * @param  Tinebase_Record_RecordSet $_container  container id's to read the contacts from
-     * @param  Addressbook_Model_Filter  $_filter     string to search for in contacts
-     * @param  Tinebase_Model_Pagination $_pagination 
-     * @return Tinebase_Record_RecordSet subtype Addressbook_Model_Contact
+     * Gets total count of search with $_filter
+     * 
+     * @param Addressbook_Model_Filter $_filter
+     * @return int
      */
-    public function getContacts (Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination);
+    public function searchCount(Addressbook_Model_Filter $_filter);
+    
     /**
-     * get total count of contacts from given addressbooks
+     * Return a single record
      *
-     * @param  Tinebase_Record_RecordSet $_container container id's to read the contacts from
-     * @param  Addressbook_Model_Filter  $_filter the search filter
-     * @return int                       count of all other users contacts
-     */
-    public function getCountOfContacts (Tinebase_Record_RecordSet $_container, Addressbook_Model_Filter $_filter);
-    /**
-     * fetch one contact identified by contactid
-     *
-     * @param int $_contactId
-     * @return Addressbook_Model_Contact 
-     */
-    public function getContact ($_contactId);
-    /**
-     * add a contact
-     *
-     * @param Addressbook_Model_Contact $_contactData the contactdata
+     * @param string $_id
      * @return Addressbook_Model_Contact
      */
-    public function addContact (Addressbook_Model_Contact $_contactData);
+    public function get($_id);
+    
     /**
-     * update a contact
+     * Returns a set of contacts identified by their id's
+     * 
+     * @param  array $_ids array of string
+     * @return Tinebase_RecordSet of Addressbook_Model_Contact
+     */
+    public function getMultiple(array $_ids);
+    
+    /**
+     * Create a new persistent contact
      *
-     * @param Addressbook_Model_Contact $_contactData the contactdata
+     * @param  Addressbook_Model_Contact $_contactv
      * @return Addressbook_Model_Contact
      */
-    public function updateContact (Addressbook_Model_Contact $_contactData);
+    public function create(Addressbook_Model_Contact $_contact);
+    
+    /**
+     * Upates an existing persistent contact
+     *
+     * @param  Addressbook_Model_Contact $_contact
+     * @return Addressbook_Model_Contact
+     */
+    public function update(Addressbook_Model_Contact $_contact);
+    
+    /**
+     * Deletes one or more existing persistent contact(s)
+     *
+     * @param string|array $_identifier
+     * @return void
+     */
+    public function delete($_identifier);
 }

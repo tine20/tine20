@@ -72,8 +72,8 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function getAllContacts(Addressbook_Model_Filter $_filter, Tinebase_Model_Pagination $_pagination) 
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
-        
-        $result = $this->_backend->getContacts($readableContainer, $_filter, $_pagination);
+        $_filter->container = $readableContainer;
+        $result = $this->_backend->search($_filter, $_pagination);
 
         return $result;
     }
@@ -87,8 +87,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     public function getCountOfAllContacts(Addressbook_Model_Filter $_filter)
     {
         $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('Addressbook', Tinebase_Container::GRANT_READ);
+        $_filter->container = $readableContainer;
         
-        $result = $this->_backend->getCountOfContacts($readableContainer, $_filter);
+        $result = $this->_backend->searchCount($_filter);
 
         return $result;
     }
@@ -108,8 +109,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (count($readableContainer) === 0) {
             return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         }
+        $_filter->container = $readableContainer;
         
-        $result = $this->_backend->getContacts($readableContainer, $_filter, $_pagination);
+        $result = $this->_backend->search($_filter, $_pagination);
 
         return $result;
     }
@@ -128,8 +130,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (count($readableContainer) === 0) {
             return 0;
         }
-
-        $result = $this->_backend->getCountOfContacts($readableContainer, $_filter);
+        
+        $_filter->container = $readableContainer;
+        $result = $this->_backend->searchCount($_filter);
 
         return $result;
     }
@@ -148,8 +151,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (count($readableContainer) === 0) {
             return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         }
-                        
-        $result = $this->_backend->getContacts($readableContainer, $_filter, $_pagination);
+        
+        $_filter->container = $readableContainer;
+        $result = $this->_backend->search($_filter, $_pagination);
 
         return $result;
     }
@@ -167,8 +171,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (count($readableContainer) === 0) {
             return 0;
         }
-                
-        $result = $this->_backend->getCountOfContacts($readableContainer, $_filter);
+        
+        $_filter->container = $readableContainer;
+        $result = $this->_backend->searchCount($_filter);
 
         return $result;
     }
@@ -187,8 +192,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (count($readableContainer) === 0) {
             return new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         }
-                        
-        $result = $this->_backend->getContacts($readableContainer, $_filter, $_pagination);
+
+        $_filter->container = $readableContainer;
+        $result = $this->_backend->search($_filter, $_pagination);
 
         return $result;
     }
@@ -206,8 +212,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (count($readableContainer) === 0) {
             return 0;
         }
-                
-        $result = $this->_backend->getCountOfContacts($readableContainer, $_filter);
+        
+        $_filter->container = $readableContainer;
+        $result = $this->_backend->searchCounnt($_filter);
 
         return $result;
     }
@@ -227,9 +234,10 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         if (!Zend_Registry::get('currentAccount')->hasGrant($container->getId(), Tinebase_Container::GRANT_READ)) {
             throw new Exception('read access denied to addressbook');
         }
+
         $containerIds = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($container), true);
-        
-        $result = $this->_backend->getContacts($containerIds, $_filter, $_pagination);
+        $_filter->container = $containerIds;
+        $result = $this->_backend->search($_filter, $_pagination);
 
         return $result;
     }
@@ -250,8 +258,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
         }
 
         $containerIds = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($container), true);
-                
-        $result = $this->_backend->getCountOfContacts($containerIds, $_filter);
+        $_filter->container = $containerIds;
+        
+        $result = $this->_backend->searchCount($_filter);
 
         return $result;
     }        
@@ -327,7 +336,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
         
-        $contact = $this->_backend->addContact($_contact);
+        $contact = $this->_backend->create($_contact);
         
         if (!empty($_contact->tags)) {
             $contact->tags = $_contact->tags;
@@ -345,7 +354,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
      */
     public function getContact($_contactId)
     {
-        $contact = $this->_backend->getContact($_contactId);
+        $contact = $this->_backend->get($_contactId);
         // only get tags the user has view right for
         Tinebase_Tags::getInstance()->getTagsOfRecord($contact);
 
@@ -399,7 +408,7 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
             Tinebase_Tags::getInstance()->setTagsOfRecord($_contact);
         }
 
-        $contact = $this->_backend->updateContact($_contact);
+        $contact = $this->_backend->update($_contact);
         
         return $contact;
     }
@@ -417,9 +426,9 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
                 $this->deleteContact($contactId);
             }
         } else {
-            $contact = $this->_backend->getContact($_contactId);
+            $contact = $this->_backend->get($_contactId);
             if (Zend_Registry::get('currentAccount')->hasGrant($contact->owner, Tinebase_Container::GRANT_DELETE)) {
-                $this->_backend->deleteContact($_contactId);
+                $this->_backend->delete($_contactId);
             } else {
                 throw new Exception('delete access to contact denied');
             }
