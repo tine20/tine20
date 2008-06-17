@@ -40,14 +40,18 @@ class Crm_Model_LeadPagination extends Tinebase_Record_Abstract
         'limit'                => array('allowEmpty' => true,  'Int'   ),
         'sort'                 => array('allowEmpty' => true,          ),
         'dir'                  => array('allowEmpty' => true,  'Alpha' ),
+    /*
         'start'                => array('allowEmpty' => true           ),
         'end'                  => array('allowEmpty' => true           ),
-        'end_scheduled'        => array('allowEmpty' => true           ),    
+        'end_scheduled'        => array('allowEmpty' => true           ),
+    */    
     );
     
+    /*
     protected $_datetimeFields = array(
         'start',
         'end',
         'end_scheduled',
-    );    
+    );
+    */    
 }
