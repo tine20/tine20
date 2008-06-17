@@ -8,9 +8,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        rework that
- * @todo        remove deprecated test
- * @todo        complete code coverage of controller
+ * @todo        complete code coverage of controller by adding more tests
  */
 
 /**
@@ -232,15 +230,21 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to get all leads
+     * try to get all leads and compare counts
      *
-     * @todo replace getAllLeads with searchLeads()
      */
     public function testGetAllLeads()
     {
-        $leads = Crm_Controller::getInstance()->getAllLeads('PHPUnit');
-        
+        $filter = new Crm_Model_LeadFilter();
+        $filter->container = array($this->testContainer->id);
+        $filter->query = 'PHPUnit';
+        $filter->showClosed = true;
+        $pagination = new Crm_Model_LeadPagination();
+        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
+        $count = Crm_Controller::getInstance()->searchLeadsCount($filter);
+                
         $this->assertEquals(1, count($leads));
+        $this->assertEquals($count, count($leads));
         $this->assertType('Tinebase_Record_RecordSet', $leads);
     }
     
@@ -250,7 +254,12 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSharedLeads()
     {
-        $leads = Crm_Controller::getInstance()->getSharedLeads('PHPUnit');
+        $filter = new Crm_Model_LeadFilter();
+        $filter->containerType = 'shared';
+        $filter->query = 'PHPUnit';
+        $filter->showClosed = true;
+        $pagination = new Crm_Model_LeadPagination();
+        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
         
         $this->assertEquals(0, count($leads));
         $this->assertType('Tinebase_Record_RecordSet', $leads);
@@ -259,6 +268,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * try to set / get linked tasks
      *
+     * @todo use relations here
      */
     public function testLinkedTasks()
     {        
@@ -285,6 +295,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * try to set / get linked contacts
      *
+     * @todo use relations here
      */
     public function testLinkedContacts()
     {

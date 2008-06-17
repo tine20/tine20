@@ -142,8 +142,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
         $filter->container = array($this->testContainer->id);
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
-        $pagination = new Crm_Model_LeadPagination();
-        $leads = $this->backend->search($filter, $pagination);
+        $leads = $this->backend->search($filter);
         
         $this->assertEquals(1, count($leads));
     }
