@@ -27,6 +27,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
      * @var Tinebase_Record_RecordSet
      */
     protected $object;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -47,7 +48,10 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     protected function setUp ()
     {
         $this->object = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
-        $this->object->addRecord(new Tinebase_Record_DummyRecord(array(), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('string' => 'idLess1'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('string' => 'idLess2'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => 1, 'string' => 'idFull1'), true));
+        $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => 2, 'string' => 'idFull2'), true));
     }
     /**
      * Tears down the fixture.
@@ -75,12 +79,21 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     /**
      * test addidtion of a record
      */
-    public function testAddRecord ()
+    public function testAddRecords ()
     {
-        $record = new Tinebase_Record_DummyRecord(array(), true);
-        $index = $this->object->addRecord($record);
-        $this->assertEquals($record, $this->object[$index]);
+        $this->assertEquals(4, count($this->object));
     }
+    
+    public function testAddIdLessRecords()
+    {
+        $this->assertEquals(array(0, 1), $this->object->getIdLessIndexes());
+    }
+    
+    public function testAddIdFullRecords()
+    {
+        $this->assertEquals(array(1, 2), $this->object->getArrayOfIds());
+    }
+    
     /**
      * test if exception is thrown when adding record of wrong type
      *
@@ -185,24 +198,56 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($record, $this->object[$index]);
     }
     /**
-     * testOffsetSet().
+     * testExistingOffsetSet().
      */
-    public function testOffsetSet ()
+    public function testExistingOffsetSet()
     {
         $count = count($this->object);
-        $record = new Tinebase_Record_DummyRecord(array(), true);
-        $this->object[$count] = $record;
-        $this->assertEquals($count+1, count($this->object));
+        $this->object[0] = new Tinebase_Record_DummyRecord(array('id' => 3, 'string' => 'idFull3'), true); 
+        $this->object[2] = new Tinebase_Record_DummyRecord(array('string' => 'idLess3'), true); 
+        
+        $this->assertEquals($count, count($this->object), 'To many records in recordSet');
+        $this->assertEquals(array(1, 2), $this->object->getIdLessIndexes(), 'wrong idLess indexes');
+        $this->assertEquals(array(2, 3), $this->object->getArrayOfIds(), 'wrong idFull indexes');
     }
+    
+    public function testNewOffsetSet()
+    {
+        $count = count($this->object);
+        $this->object[] = new Tinebase_Record_DummyRecord(array('string' => 'idLess3'), true); 
+        $this->assertEquals($count+1, count($this->object), 'To many records in recordSet');
+    }
+    
+    public function testNonExistantOffsetSet()
+    {
+        $this->setExpectedException('Tinebase_Record_Exception_NotAllowed');
+        $this->object[99] = new Tinebase_Record_DummyRecord(array('string' => 'error'), true);
+    }
+    
+    public function testNonRecordOffsetSet()
+    {
+        $this->setExpectedException('Tinebase_Record_Exception_NotAllowed');
+        $this->object[] = array();
+    }
+    
+    public function testGetIndexById()
+    {
+        $idx = $this->object->getIndexById(1);
+        $this->assertEquals(2, $idx);
+    }
+    
     /**
      * testOffsetUnset().
      */
-    public function testOffsetUnset ()
+    public function testOffsetUnset()
     {
-        $count = count($this->object);
-        unset($this->object[$count-1]);
-        $this->assertEquals($count-1, count($this->object));
+        unset($this->object[1]);
+        unset($this->object[3]);
+        $this->assertEquals(2, count($this->object));
+        $this->assertEquals(array(0), $this->object->getIdLessIndexes(), 'wrong idLess indexes');
+        $this->assertEquals(array(1), $this->object->getArrayOfIds(), 'wrong idFull indexes');
     }
+    
 }
 // Call Tinebase_Record_RecordSetTest::main() if this source file is executed directly.
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Record_RecordSetTest::main') {
