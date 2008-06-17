@@ -119,7 +119,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
     /**
      * Removes containers where current user has no access to.
      * 
-     * @param Tasks_Model_PaginationFilter $_filter
+     * @param Tasks_Model_Filter $_filter
      * @return void
      */
     protected function _checkContainerACL($_filter)
