@@ -68,7 +68,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	        'summary'              => 'our fist test task',
 	        'url'                  => 'http://www.testtask.com',
         ),true, false);
-        $this->_persistantTestTask1 = $this->_backend->createTask($this->_testTask1);
+        $this->_persistantTestTask1 = $this->_backend->create($this->_testTask1);
 	}
 	/**
 	 * remove stuff from db
@@ -98,14 +98,14 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
             'summary'       => 'minimal task by phpunit',
             'container_id'  => 5,
         ));
-        $persitantTask = $this->_backend->createTask($task);
+        $persitantTask = $this->_backend->create($task);
         
         $pagination = new Tasks_Model_Pagination();
         $filter = new Tasks_Model_Filter();
         $filter->query     = $task->summary;
         $filter->container = array($task->container_id);
 
-        $tasks = $this->_backend->searchTasks($filter, $pagination);
+        $tasks = $this->_backend->search($filter, $pagination);
         $this->assertEquals(1, count($tasks));
         
         $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks'));
@@ -120,12 +120,12 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     public function testSearchDeletedTask()
     {
     	$testId = $this->_persistantTestTask1->getId();
-        $this->_backend->deleteTask($testId);
+        $this->_backend->delete($testId);
         $filter = new Tasks_Model_Filter();
         $filter->query = 'our fist test task';
         $filter->container = array($this->_persistantTestTask1->container_id);
         $pagination = new Tasks_Model_Pagination();
-        $tasks = $this->_backend->searchTasks($filter, $pagination);
+        $tasks = $this->_backend->search($filter, $pagination);
         foreach ($tasks as $task) {
         	$this->assertNotEquals($testId, $task->getId());
         }
@@ -137,9 +137,9 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     public function testGetDeletedTask()
     {
         $testId = $this->_persistantTestTask1->getId();
-        $this->_backend->deleteTask($testId);
+        $this->_backend->delete($testId);
         try {
-        	$task = $this->_backend->getTask($testId);
+        	$task = $this->_backend->get($testId);
         	// this point should not be reached!
         	if($task->is_deleted) {
         		$this->fail('Entry getable although it\'s maked as deleted!');
@@ -159,7 +159,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     	$task = clone $this->_persistantTestTask1;
     	$task->summary = 'Update of test task 1';
     	$task->due->addWeek(1);
-    	$utask = $this->_backend->updateTask($task);
+    	$utask = $this->_backend->update($task);
     	//$this->assertEquals($task, $utask);
     	foreach ($task as $field => $value) {
     		switch ($field) {
@@ -182,17 +182,17 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         sleep(1);
         $task = clone $this->_persistantTestTask1;
         $task->summary = 'First Update of test task 1';
-        $utask = $this->_backend->updateTask($task);
+        $utask = $this->_backend->update($task);
         
         sleep(1);
         $utask->summary = 'Second Update of test task 1';
-        $this->_backend->updateTask($utask);
+        $this->_backend->update($utask);
         
         sleep(1);
         $conflictTask = clone $utask;
         $conflictTask->summary = 'Non resolvable conflict';
         try {
-            $this->_backend->updateTask($conflictTask);
+            $this->_backend->update($conflictTask);
         	$this->fail('Not detected concurrency conflict');
         } catch (Exception $e) {
         	$this->assertType('Tinebase_Timemachine_Exception_ConcurrencyConflict', $e);
@@ -202,14 +202,14 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         //create a unique search criteria
         $this->_persistantTestTask1->summary = $this->_persistantTestTask1->getId();
-        $this->_backend->updateTask($this->_persistantTestTask1);
+        $this->_backend->update($this->_persistantTestTask1);
         
         $pagination = new Tasks_Model_Pagination();
         
         $filter = new Tasks_Model_Filter();
         $filter->query = $this->_persistantTestTask1->getId();
         $filter->container = array($this->_persistantTestTask1->container_id);
-        $tasks = $this->_backend->searchTasks($filter, $pagination);
+        $tasks = $this->_backend->search($filter, $pagination);
         
         $this->assertEquals(1, count($tasks));
     }
