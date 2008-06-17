@@ -291,45 +291,7 @@
                 </index>                  
             </declaration>
         </table>
-        <table>
-            <name>tasks_tag</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>task_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>            
-                <field>
-                    <name>tag_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>task_id-tag_id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>task_id</name>
-                    </field>
-                    <field>
-                        <name>tag_id</name>
-                    </field>
-                </index>
-               <index>
-                    <name>task_tag::task_id--tasks::id</name>
-                    <foreign>true</foreign>
-                    <field>
-                        <name>task_id</name>
-                    </field>
-                    <reference>
-                        <table>tasks</table>
-                        <field>id</field>
-                        <ondelete>CASCADE</ondelete>
-                    </reference>
-                </index>   
-            </declaration>
-        </table>
+        
         <table>
             <name>tasks_contact</name>
             <version>1</version>
@@ -368,7 +330,8 @@
                     </reference>
                 </index>   
             </declaration>
-        </table>        
+        </table>
+            
     </tables>
     <defaultRecords>
         <record>
