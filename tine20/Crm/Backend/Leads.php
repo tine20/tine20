@@ -84,7 +84,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
     {
         $id = Crm_Model_Lead::convertLeadIdToInt($_id);
 
-        $select = $this->_getLeadSelectObject()
+        $select = $this->_getSelect()
             ->where(Zend_Registry::get('dbAdapter')->quoteInto('lead.id = ?', $id));
 
       // echo $select->__toString();
@@ -265,7 +265,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
 
         $db = Zend_Registry::get('dbAdapter');
 
-        $select = $this->_getLeadSelectObject()
+        $select = $this->_getSelect()
             ->order($_sort.' '.$_dir)
             ->limit($_limit, $_start);
 
