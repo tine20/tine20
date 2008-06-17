@@ -138,14 +138,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
-     * returns record identified by its id
+     * returns index of record identified by its id
      * 
      * @param  string $_id id of record
      * @return int|bool    index of record or false if not in set
      */
     public function getIndexById($_id)
     {
-        return array_key_exists($_id, $this->_idMap) ? $this->_listOfRecords[$this->_idMap[$_id]] : false;
+        return array_key_exists($_id, $this->_idMap) ? $this->_idMap[$_id] : false;
     }
     
     /**
@@ -163,7 +163,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getIdLessIndexes()
     {
-        return $this->_idLess;
+        return array_values($this->_idLess);
     }
     
     /**
@@ -243,10 +243,27 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             throw new Tinebase_Record_Exception_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
         }
         
-        if (empty($_offset)) {
+        if (!is_int($_offset)) {
         	$this->addRecord($_value);
         } else {
+            if (!array_key_exists($_offset, $this->_listOfRecords)) {
+                throw new Tinebase_Record_Exception_NotAllowed('adding a record is only allowd via the addRecord method');
+            }
         	$this->_listOfRecords[$_offset] = $_value;
+        	$id = $_value->getId();
+        	if ($id) {
+        	    if(! array_key_exists($id, $this->_idMap)) {
+        	        $this->_idMap[$id] = $_offset;
+        	        $idLessIdx = array_search($_offset, $this->_idLess);
+                    unset($this->_idLess[$idLessIdx]);
+        	    }
+        	} else {
+        	    if (array_search($_offset, $this->_idLess) === false) {
+        	        $this->_idLess[] = $_offset;
+        	        $idMapIdx = array_search($_offset, $this->_idMap);
+        	        unset($this->_idMap[$idMapIdx]);
+        	    }
+        	}
         }
     }
     
@@ -255,6 +272,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function offsetUnset($_offset)
     {
+        $id = $this->_listOfRecords[$_offset]->getId();
+        if ($id) {
+            unset($this->_idMap[$id]);
+        } else {
+            $idLessIdx = array_search($_offset, $this->_idLess);
+            unset($this->_idLess[$idLessIdx]);
+        }
+        
         unset($this->_listOfRecords[$_offset]);
     }
 
