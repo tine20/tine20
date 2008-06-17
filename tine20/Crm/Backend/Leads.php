@@ -112,13 +112,17 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * @todo    abstract filter2sql
      * @todo    add more filters?
      */
-    public function search(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination)
+    public function search(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination = NULL)
     {
         $set = new Tinebase_Record_RecordSet('Crm_Model_Lead');
         
         // empty means, that e.g. no shared containers exist
         if (empty($_filter->container)) {
             return $set;
+        }
+        
+        if ($_pagination === NULL) {
+            $_pagination = new Crm_Model_LeadPagination();
         }
         
         // build query
@@ -162,13 +166,12 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tasks_Model_Filter $_filter
+     * @param Crm_Model_LeadFilter $_filter
      * @return int
      */
-    public function searchCount(Tasks_Model_Filter $_filter)
+    public function searchCount(Crm_Model_LeadFilter $_filter)
     {
-        $pagination = new Tasks_Model_Pagination();
-        return count($this->search($_filter, $pagination));
+        return count($this->search($_filter));
     }
     
     /**
