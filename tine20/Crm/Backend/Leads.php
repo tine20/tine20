@@ -229,7 +229,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
             $_lead->id = $id;
         }
         
-        return $this->getLead($_lead->id);
+        return $this->get($_lead->id);
     }
     
     /**
@@ -238,7 +238,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * @param int|Crm_Model_Lead $_id
      * @return Crm_Model_Lead
      */
-    public function getLead($_id)
+    public function get($_id)
     {
         $id = Crm_Model_Lead::convertLeadIdToInt($_id);
 
@@ -383,6 +383,6 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         
         $updatedRows = $this->_table->update($leadData, $where);
                 
-        return $this->getLead($leadId);
+        return $this->get($leadId);
     }
 }

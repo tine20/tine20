@@ -134,6 +134,32 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
 
         return $leadData;
     }
+        
+    /**
+     * Search for leads matching given arguments
+     *
+     * @param array $filter
+     * @return array
+     */
+    public function searchLeads($filter)
+    {
+        $paginationFilter = Zend_Json::decode($filter);
+        $filter = new Crm_Model_LeadFilter($paginationFilter);
+        $pagination = new Crm_Model_LeadPagination($paginationFilter);
+        
+        //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
+        
+        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
+        $leads->setTimezone($this->_userTimezone);
+        $leads->convertDates = true;
+        
+        return array(
+            'results' => $leads->toArray(),
+            'totalcount' => Crm_Controller::getInstance()->_controller->getTotalCount($filter)
+        );
+    }
+    
+    // @todo remove following deprecated getXXX functions    
     
     /**
      * get leads by owner
@@ -149,7 +175,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param unknown_type $getClosedLeads
      * @return unknown
      * 
-     * @todo    add phpdoc
+     * @deprecated
      */
     public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
@@ -190,7 +216,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param unknown_type $getClosedLeads
      * @return unknown
      * 
-     * @todo    add phpdoc
+     * @deprecated
      */
     public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
     {
@@ -222,6 +248,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @param int $limit
      * @return array
+     * 
+     * @deprecated
      */
     public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
@@ -253,6 +281,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param string $dir
      * @param int $limit
      * @return array
+     * 
+     * @deprecated
      */
     public function getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
@@ -286,6 +316,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param int $limit
      * @param string $options json encoded array of additional options
      * @return array
+     * 
+     * @deprecated
      */
     public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
     {
@@ -316,6 +348,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @param Crm_Model_Lead    $_lead              lead record
      * @param boolean           $_getOnlyContacts   resolve only contact links
      * @return array
+     * 
+     * @todo use relations
+     * @todo add products again
      */
     protected function convertLeadToArray(Crm_Model_Lead $_lead, $_getOnlyContacts = TRUE) 
     {
@@ -358,8 +393,9 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
             $result['container'] = $folder->toArray();
                 
             // add products
-            $products = Crm_Controller::getInstance()->getProductsByLeadId($_lead->getId());
-            $result['products'] = $products->toArray();
+            //$products = Crm_Controller::getInstance()->getProductsByLeadId($_lead->getId());
+            //$result['products'] = $products->toArray();
+            $result['products'] = array();
                 
             // add tags
             $result['tags'] = $_lead['tags']->toArray();                    

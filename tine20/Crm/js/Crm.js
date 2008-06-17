@@ -53,6 +53,9 @@ Tine.Crm = {
 
 Tine.Crm.Main = {
 
+	/**
+	 * main screen actions
+	 */
     actions: {
         addLead: null,
         editLead: null,
@@ -60,6 +63,28 @@ Tine.Crm.Main = {
         exportLead: null,
         addTask: null
     },
+    
+    /**
+     * holds paging information
+     * @todo implement
+     */
+    paging: {
+        start: 0,
+        limit: 50,
+        sort: 'due',
+        dir: 'ASC'
+    },
+    /**
+     * holds current filters
+     * @todo implement
+     */
+    filter: {
+        containerType: 'personal',
+        query: '',
+        due: false,
+        container: false,
+        tag: false
+    },    
 
 	handlers: {
 		/**

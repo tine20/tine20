@@ -37,13 +37,11 @@ class Crm_Backend_Factory
     
     const LEADS = 'Leads';
     
-    const LEAD_PRODUCTS = 'LeadProducts';
+    const PRODUCTS = 'Products';
     
     const LEAD_TYPES = 'LeadTypes';
     
     const LEAD_SOURCES = 'LeadSources';
-    
-    const LEADS_PRODUCTS = 'LeadsProducts';
     
     const LEAD_STATES = 'LeadStates';
     
@@ -81,8 +79,8 @@ class Crm_Backend_Factory
                 $instance = Crm_Backend_Leads::getInstance();
                 break;
                            
-            case self::LEAD_PRODUCTS:
-            	$instance = Crm_Backend_LeadProducts::getInstance();
+            case self::PRODUCTS:
+            	$instance = Crm_Backend_Products::getInstance();
                 break;
                            
             case self::LEAD_TYPES:
@@ -91,10 +89,6 @@ class Crm_Backend_Factory
                            
             case self::LEAD_SOURCES:
             	$instance = Crm_Backend_LeadSources::getInstance();
-                break;
-                
-            case self::LEADS_PRODUCTS:
-            	$instance = Crm_Backend_LeadsProducts::getInstance();
                 break;
                 
             case self::LEAD_STATES:

@@ -15,7 +15,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadProducts implements Crm_Backend_Interface
+class Crm_Backend_Products implements Crm_Backend_Interface
 {
 	/**
 	* Instance of Crm_Backend_Products
@@ -63,7 +63,7 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
     public static function getInstance ()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Backend_LeadProducts();
+            self::$_instance = new Crm_Backend_Products();
         }
         return self::$_instance;
     }
@@ -79,7 +79,7 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
     {   
         $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
         
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Products', $rows->toArray());
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
         
         return $result;
     }   
@@ -134,5 +134,29 @@ class Crm_Backend_LeadProducts implements Crm_Backend_Interface
         $result = $this->_table->delete($where);
 
         return $result;
-    }    
+    }   
+
+    /**
+     * get products by lead id
+     *
+     * @param int $_leadId the leadId
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
+     * 
+     * @deprecated use new relation model
+     */
+    public function getProductsByLeadId($_leadId)
+    {
+        $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
+
+        $where  = array(
+            $this->_table->getAdapter()->quoteInto('lead_id = ?', $leadId)
+        );
+
+        $rows = $this->_table->fetchAll($where);
+        
+        $result = new Tinebase_Record_RecordSet('Crm_Model_Product', $rows->toArray());
+   
+        return $result;
+    }      
+    
 }

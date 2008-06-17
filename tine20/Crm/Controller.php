@@ -12,6 +12,7 @@
  *
  * @todo        rework functions
  * @todo        add rights
+ * @todo        use protected attributes for the different backends and set the in constructor
  */
 
 /**
@@ -21,13 +22,6 @@
  */
 class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
 {
-    /**
-     * CRM backend class
-     *
-     * @var Crm_Backend_Sql
-     */
-    protected $_backend;
-    
     /**
      * the constructor
      *
@@ -61,86 +55,498 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         }
         
         return self::$_instance;
+    }    
+    
+    /*********** get / search / count leads **************/
+    
+    /**
+     * get lead identified by leadId
+     *
+     * @param int $_leadId
+     * @return Crm_Model_Lead
+     */
+    public function getLead($_leadId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $lead = $backend->get($_leadId);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read permission to lead denied');
+        }
+
+        $this->getLinkedProperties($lead);
+        
+        Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
+                
+        return $lead;
     }
     
-    /*************** products functions *****************/
-
-    // @todo check/rework those
+    /**
+     * Search for leads matching given filter
+     *
+     * @param Crm_Model_LeadFilter $_filter
+     * @param Crm_Model_LeadPagination $_pagination
+     * @return Tinebase_Record_RecordSet
+     */
+    public function searchLeads(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination)
+    {
+        $this->_checkContainerACL($_filter);
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);        
+        $leads = $backend->search($_filter, $_pagination);
+        return $leads;
+    }
     
     /**
-     * get products available
+     * Gets total count of search with $_filter
+     * 
+     * @param Crm_Model_LeadFilter $_filter
+     * @return int
+     */
+    public function searchLeadsCount(Crm_Model_LeadFilter $_filter) 
+    {
+        $this->_checkContainerACL($_filter);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $count = $backend->searchCount($_filter);
+        
+        return $count;
+    }
+    
+    /**
+     * Removes containers where current user has no access to.
+     * 
+     * @param Crm_Model_LeadFilter $_filter
+     * @return void
+     */
+    protected function _checkContainerACL($_filter)
+    {
+        foreach ($_filter->container as $containerId) {
+            if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
+                $container[] = $containerId;
+            }
+        }
+        $_filter->container = $container;
+    }    
+
+    // @todo    remove deprecated functions
+        
+    /**
+     * get all leads, filtered by different criteria
      *
+     * @param string $_filter
      * @param string $_sort
      * @param string $_dir
-     * @return array
+     * @param int $_limit
+     * @param int $_start
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     * 
+     * @deprecated
      */
-    public function getProducts($_sort = 'id', $_dir = 'ASC')
+    public function getAllLeads($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-        $result = $backend->getProducts($_sort, $_dir);
+        $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
         
-        return $result;    
-    }     
-
-    /**
-     * get products associated with one lead
-     *
-     * @param int $_leadId lead id
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
-     */
-    public function getProductsByLeadId($_leadId)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS_PRODUCTS);
-    	$result = $backend->getProductsByLeadId($_leadId);
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
         
-        return $result;    
-    }     
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
+        
+        foreach($result as &$lead) {
+            $this->getLinkedProperties($lead);
+        }
 
-    /**
-     * save Productsource
-     *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     */ 
-    public function saveProductSource(Tinebase_Record_Recordset $_productSource)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-    	$result = $backend->saveProducts($_productSource);
-    	
-    	return $result;
-    } 
+        return $result;
+    }
     
     /**
-     * delete products (belonging to one lead)
+     * get all shared leads, filtered by different criteria
      *
-     * @param string $_id
-     * @return array
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     * 
+     * @deprecated
      */
-    public function deleteProducts($_id)
+    public function getSharedLeads($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
     {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-    	$result = $backend->deleteProducts($_id);
-
-        return $result;    
-    }     
-
-    /**
-     * save Products
-     *
-     * if $_Id is -1 the options element gets added, otherwise it gets updated
-     * this function handles insert and updates as well as deleting vanished items
-     *
-     * @return array
-     */ 
-    public function saveProducts(Tinebase_Record_Recordset $_productData)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_PRODUCTS);
-    	$result = $backend->saveProducts($_productData);
+        $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
+        
+        foreach($result as &$lead) {
+            $this->getLinkedProperties($lead);
+        }
         
         return $result;
-    }   
+    }
+    
+    /**
+     * get list of all contacts of one account
+     *
+     * @param int $_owner account id of the account to get the folders from
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset
+     * 
+     * @deprecated
+     */
+    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads) 
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('crm', $_owner, Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        
+        foreach($result as &$lead) {
+            $this->getLinkedProperties($lead);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get list of all contacts of one account
+     *
+     * @param int $_owner account id of the account to get the folders from
+     * @param string $filter
+     * @param int $start
+     * @param int $sort
+     * @param string $dir
+     * @param int $limit
+     * @return Zend_Db_Table_Rowset
+     * 
+     * @deprecated
+     */
+    public function getLeadsByFolder($_containerId, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads) 
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access denied to leads');
+        }
+
+        $containerIds = array($containerId);
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        
+        foreach($result as &$lead) {
+            $this->getLinkedProperties($lead);
+        }
+        
+        return $result;        
+    }
+    
+    /**
+     * get all other people leads, filtered by different criteria
+     *
+     * @param string $_filter
+     * @param string $_sort
+     * @param string $_dir
+     * @param int $_limit
+     * @param int $_start
+     * @param int $_state
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
+     * 
+     * @deprecated
+     */
+    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
+                
+        if(count($readableContainer) === 0) {
+            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
+        
+        foreach($result as &$lead) {
+            $this->getLinkedProperties($lead);
+        }
+        
+        return $result;
+    }
+    
+    /*********** count leads **************/
+
+    // @todo    remove deprecated functions
+    
+    /**
+     * get total count of contacts for given addressbook
+     *
+     * @param int $_containerId container id to get the contacts from
+     * @param string $_filter
+     * @return int total number of matching leads
+     * 
+     * @deprecated 
+     */
+    public function getCountByFolder($_containerId, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
+            throw new Exception('read access denied to leads');
+        }
+
+        $containerIds = array($containerId);
+                
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+
+        return $result;
+    }        
+
+    /**
+     * get total count of all leads matching filter
+     *
+     * @param string $_filter
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return int total number of matching leads
+     * 
+     * @deprecated
+     */
+    public function getCountByOwner($_owner, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', $_owner, Tinebase_Container::GRANT_READ);
+                
+        if(count($readableContainer) === 0) {
+            return 0;
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+
+        return $result;
+    }
+    
+    /**
+     * get total count of all leads matching filter
+     *
+     * @param string $_filter
+     * @param int $_leadState
+     * @param int $_probability
+     * @param bool $_getClosedLeads
+     * @return int total number of matching leads
+     * 
+     * @deprecated
+     */
+    public function getCountOfAllLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return 0;
+        }
+        
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+
+        return $result;
+    }
+
+    /**
+     * get total count of leads from shared folders
+     *
+     * @return int count of shared leads
+     * 
+     * @deprecated
+     */
+    public function getCountOfSharedLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('Crm', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return 0;
+        }
+                
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+
+        return $result;
+    }
+
+    /**
+     * get total count of leads from other users
+     *
+     * @return int count of shared leads
+     * 
+     * @deprecated
+     */
+    public function getCountOfOtherPeopleLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    {
+        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('Crm', Tinebase_Container::GRANT_READ);
+        
+        if(count($readableContainer) === 0) {
+            return 0;
+        }
+                
+        $containerIds = array();
+        foreach($readableContainer as $container) {
+            $containerIds[] = $container->id;
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
+
+        return $result;
+    }
+    
+        
+    /*************** add / update / delete lead *****************/    
+    
+    /**
+     * add Lead
+     *
+     * @param Crm_Model_Lead $_lead the lead to add
+     * @return Crm_Model_Lead the newly added lead
+     * 
+     * @todo add notifications later
+     */ 
+    public function addLead(Crm_Model_Lead $_lead)
+    {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
+            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
+        }
+        
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $lead = $backend->addLead($_lead);
+        
+        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
+        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
+        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
+        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
+        
+        if (!empty($_lead->tags)) {
+            $lead->tags = $_lead->tags;
+            Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
+        }        
+                
+        //$this->sendNotifications(false, $lead, $_lead->responsible);
+        
+        return $this->getLead($lead->getId());
+    }     
+        
+   /**
+     * update Lead
+     *
+     * @param Crm_Model_Lead $_lead the lead to update
+     * @return Crm_Model_Lead the updated lead
+     * 
+     * @todo add notifications later
+     */ 
+    public function updateLead(Crm_Model_Lead $_lead)
+    {
+        if(!$_lead->isValid()) {
+            throw new Exception('lead object is not valid');
+        }
+        
+        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
+            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
+        }
+
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $lead = $backend->updateLead($_lead);
+        
+        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
+        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
+        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
+        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');                
+
+        if (isset($_lead->tags)) {
+            Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
+        }
+        
+        //$this->sendNotifications(true, $lead, $_lead->responsible);
+        
+        return $this->getLead($lead->getId());
+    }
+
+    /**
+     * delete a lead
+     *
+     * @param int|array|Tinebase_Record_RecordSet|Crm_Model_Lead $_leadId
+     * @return void
+     */
+    public function deleteLead($_leadId)
+    {
+        if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
+            foreach($_leadId as $leadId) {
+                $this->deleteLead($leadId);
+            }
+        } else {
+            $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);            
+            $lead = $backend->get($_leadId);
+            
+            if(Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
+                $backend->deleteLead($_leadId);
+            } else {
+                throw new Exception('delete access to lead denied');
+            }
+        }
+    }
 
     /*********************** links functions ************************/
     
@@ -235,426 +641,93 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
         $_lead->tasks = $tasks;
     }
     
-    /*********** get / set lead **************/
+    /*************** products functions *****************/
+
+    // @todo check/rework those
     
-    // @todo    check if all these get functions are needed -> perhaps we could generalise some of them
-        
     /**
-     * get all leads, filtered by different criteria
+     * get products available
      *
-     * @param string $_filter
      * @param string $_sort
      * @param string $_dir
-     * @param int $_limit
-     * @param int $_start
-     * @param int $_leadState
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
-     */
-    public function getAllLeads($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
-        
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
-        
-        foreach($result as &$lead) {
-            $this->getLinkedProperties($lead);
-        }
-
-        return $result;
-    }
-    
-    /**
-     * get all shared leads, filtered by different criteria
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_limit
-     * @param int $_start
-     * @param int $_leadState
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
-     */
-    public function getSharedLeads($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_limit = NULL, $_start = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('crm', Tinebase_Container::GRANT_READ);
-        
-        if(count($readableContainer) === 0) {
-            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
-        }
-        
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_leadState, $_probability, $_getClosedLeads);
-        
-        foreach($result as &$lead) {
-            $this->getLinkedProperties($lead);
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * get list of all contacts of one account
-     *
-     * @param int $_owner account id of the account to get the folders from
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @return Zend_Db_Table_Rowset
-     */
-    public function getLeadsByOwner($_owner, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads) 
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('crm', $_owner, Tinebase_Container::GRANT_READ);
-        
-        if(count($readableContainer) === 0) {
-            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
-        }
-        
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
-        
-        foreach($result as &$lead) {
-            $this->getLinkedProperties($lead);
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * get list of all contacts of one account
-     *
-     * @param int $_owner account id of the account to get the folders from
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @return Zend_Db_Table_Rowset
-     */
-    public function getLeadsByFolder($_containerId, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads) 
-    {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access denied to leads');
-        }
-
-        $containerIds = array($containerId);
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
-        
-        foreach($result as &$lead) {
-            $this->getLinkedProperties($lead);
-        }
-        
-        return $result;        
-    }
-    
-    /**
-     * get all other people leads, filtered by different criteria
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_limit
-     * @param int $_start
-     * @param int $_state
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return Tinebase_Record_RecordSet subclass Crm_Model_Lead
-     */
-    public function getOtherPeopleLeads($_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads)
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('crm', Tinebase_Container::GRANT_READ);
-                
-        if(count($readableContainer) === 0) {
-            return new Tinebase_Record_RecordSet('Crm_Model_Lead');
-        }
-        
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getLeads($containerIds, $_filter, $_sort, $_dir, $_limit, $_start, $_state, $_probability, $_getClosedLeads);
-        
-        foreach($result as &$lead) {
-            $this->getLinkedProperties($lead);
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * get lead identified by leadId
-     *
-     * @param int $_leadId
-     * @return Crm_Model_Lead
-     */
-    public function getLead($_leadId)
-    {
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-    	$lead = $backend->getLead($_leadId);
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read permission to lead denied');
-        }
-
-        $this->getLinkedProperties($lead);
-        
-        Tinebase_Tags::getInstance()->getTagsOfRecord($lead);
-                
-        return $lead;
-    }
-
-   /**
-     * add Lead
-     *
-     * @param Crm_Model_Lead $_lead the lead to add
-     * @return Crm_Model_Lead the newly added lead
+     * @return array
      * 
-     * @todo add notifications later
-     */ 
-    public function addLead(Crm_Model_Lead $_lead)
+     * @todo fix that
+     */
+    public function getProducts($_sort = 'id', $_dir = 'ASC')
     {
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
-        }
+        /*
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $result = $backend->getProducts($_sort, $_dir);
+        */
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
-        }
+        $result = array();
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $backend->addLead($_lead);
-        
-        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
-        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
-        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
-        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');
-        
-        if (!empty($_lead->tags)) {
-            $lead->tags = $_lead->tags;
-            Tinebase_Tags::getInstance()->setTagsOfRecord($lead);
-        }        
-                
-        //$this->sendNotifications(false, $lead, $_lead->responsible);
-        
-        return $this->getLead($lead->getId());
+        return $result;    
     }     
-        
-   /**
-     * update Lead
+
+    /**
+     * get products associated with one lead
      *
-     * @param Crm_Model_Lead $_lead the lead to update
-     * @return Crm_Model_Lead the updated lead
+     * @param int $_leadId lead id
+     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
      * 
-     * @todo add notifications later
+     * @deprecated
+     * @todo remove that
+     */
+    public function getProductsByLeadId($_leadId)
+    {
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $result = $backend->getProductsByLeadId($_leadId);
+        
+        return $result;    
+    }     
+
+    /**
+     * save Productsource
+     *
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
+     *
+     * @return array
      */ 
-    public function updateLead(Crm_Model_Lead $_lead)
+    public function saveProductSource(Tinebase_Record_Recordset $_productSource)
     {
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
-        }
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $result = $backend->saveProducts($_productSource);
         
-        if(!Zend_Registry::get('currentAccount')->hasGrant($_lead->container, Tinebase_Container::GRANT_EDIT)) {
-            throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
-        }
-
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $backend->updateLead($_lead);
-        
-        $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
-        $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');
-        $this->setLinksForApplication($lead, $_lead->partner, 'Addressbook', 'partner');
-        $this->setLinksForApplication($lead, $_lead->tasks, 'Tasks');                
-
-        if (isset($_lead->tags)) {
-            Tinebase_Tags::getInstance()->setTagsOfRecord($_lead);
-        }
-        
-        //$this->sendNotifications(true, $lead, $_lead->responsible);
-        
-        return $this->getLead($lead->getId());
-    }
-
-    /**
-     * delete a lead
-     *
-     * @param int|array|Tinebase_Record_RecordSet|Crm_Model_Lead $_leadId
-     * @return void
-     */
-    public function deleteLead($_leadId)
-    {
-        if(is_array($_leadId) or $_leadId instanceof Tinebase_Record_RecordSet) {
-            foreach($_leadId as $leadId) {
-                $this->deleteLead($leadId);
-            }
-        } else {
-        	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-            $lead = $backend->getLead($_leadId);
-            
-            if(Zend_Registry::get('currentAccount')->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
-                $backend->deleteLead($_leadId);
-            } else {
-                throw new Exception('delete access to lead denied');
-            }
-        }
-    }
-    
-    /*********** count leads **************/
-
-    // @todo    check if all these get functions are needed -> perhaps we could generalise some of them
+        return $result;
+    } 
     
     /**
-     * get total count of contacts for given addressbook
+     * delete products (belonging to one lead)
      *
-     * @param int $_containerId container id to get the contacts from
-     * @param string $_filter
-     * @return int total number of matching leads
+     * @param string $_id
+     * @return array
      */
-    public function getCountByFolder($_containerId, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+    public function deleteProducts($_id)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        
-        if(!Zend_Registry::get('currentAccount')->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
-            throw new Exception('read access denied to leads');
-        }
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $result = $backend->deleteProducts($_id);
 
-        $containerIds = array($containerId);
-                
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
-
-        return $result;
-    }        
+        return $result;    
+    }     
 
     /**
-     * get total count of all leads matching filter
+     * save Products
      *
-     * @param string $_filter
-     * @param int $_leadState
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return int total number of matching leads
-     */
-    public function getCountByOwner($_owner, $_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', $_owner, Tinebase_Container::GRANT_READ);
-                
-        if(count($readableContainer) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
-
-        return $result;
-    }
-    
-    /**
-     * get total count of all leads matching filter
+     * if $_Id is -1 the options element gets added, otherwise it gets updated
+     * this function handles insert and updates as well as deleting vanished items
      *
-     * @param string $_filter
-     * @param int $_leadState
-     * @param int $_probability
-     * @param bool $_getClosedLeads
-     * @return int total number of matching leads
-     */
-    public function getCountOfAllLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
+     * @return array
+     */ 
+    public function saveProducts(Tinebase_Record_Recordset $_productData)
     {
-        $readableContainer = Zend_Registry::get('currentAccount')->getContainerByACL('crm', Tinebase_Container::GRANT_READ);
+        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::PRODUCTS);
+        $result = $backend->saveProducts($_productData);
         
-        if(count($readableContainer) === 0) {
-            return 0;
-        }
-        
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
-
         return $result;
-    }
-
-    /**
-     * get total count of leads from shared folders
-     *
-     * @return int count of shared leads
-     */
-    public function getCountOfSharedLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getSharedContainer('Crm', Tinebase_Container::GRANT_READ);
-        
-        if(count($readableContainer) === 0) {
-            return 0;
-        }
-                
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
-
-        return $result;
-    }
-
-    /**
-     * get total count of leads from other users
-     *
-     * @return int count of shared leads
-     */
-    public function getCountOfOtherPeopleLeads($_filter = NULL, $_leadState = NULL, $_probability = NULL, $_getClosedLeads = FALSE)
-    {
-        $readableContainer = Zend_Registry::get('currentAccount')->getOtherUsersContainer('Crm', Tinebase_Container::GRANT_READ);
-        
-        if(count($readableContainer) === 0) {
-            return 0;
-        }
-                
-        $containerIds = array();
-        foreach($readableContainer as $container) {
-            $containerIds[] = $container->id;
-        }
-        
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $result = $backend->getCountOfLeads($containerIds, $_filter, $_leadState, $_probability, $_getClosedLeads);
-
-        return $result;
-    }
+    }   
     
     /*********** handling of lead sources/types/states **************/
     
