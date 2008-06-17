@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add more fields?
+ * @todo        do we need the datetime fields here?
  */
 
 /**
@@ -38,12 +40,14 @@ class Crm_Model_LeadPagination extends Tinebase_Record_Abstract
         'limit'                => array('allowEmpty' => true,  'Int'   ),
         'sort'                 => array('allowEmpty' => true,          ),
         'dir'                  => array('allowEmpty' => true,  'Alpha' ),
+        'start'                => array('allowEmpty' => true           ),
+        'end'                  => array('allowEmpty' => true           ),
+        'end_scheduled'        => array('allowEmpty' => true           ),    
     );
     
-    /*
     protected $_datetimeFields = array(
-        'due',
-    );
-    */
-    
+        'start',
+        'end',
+        'end_scheduled',
+    );    
 }

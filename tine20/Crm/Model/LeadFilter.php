@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
+ * @todo        add more filters (tags, start, end, ...)?
  */
 
 /**
@@ -35,21 +36,26 @@ class Crm_Model_LeadFilter extends Tinebase_Record_Abstract
         'id'                   => array('allowEmpty' => true,  'Int'   ),
 
         'containerType'        => array('allowEmpty' => true           ),
-        'owner'                => array('allowEmpty' => true           ),
-        'container'            => array('allowEmpty' => true           ),
-        
+        'container'            => array('allowEmpty' => true           ),        
         'query'                => array('allowEmpty' => true           ),
-        'percent'              => array('allowEmpty' => true           ),
-        'status'               => array('allowEmpty' => true           ),
+        'probability'          => array('allowEmpty' => true,  'Int'   ),
+        'leadstate'            => array('allowEmpty' => true           ),
         'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false)),
-        //'due'                  => array('allowEmpty' => true           ),
-        'tag'                  => array('allowEmpty' => true           ),
+        //'owner'                => array('allowEmpty' => true           ),
+        //'start'                => array('allowEmpty' => true           ),
+        //'end'                  => array('allowEmpty' => true           ),
+        //'end_scheduled'        => array('allowEmpty' => true           ),
+        //'tag'                  => array('allowEmpty' => true           ),
         
     );
     
+    /*
     protected $_datetimeFields = array(
-        'due',
+        'start',
+        'end',
+        'end_scheduled',
     );
+    */
     
     /**
      * gets record related properties

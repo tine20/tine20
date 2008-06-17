@@ -9,7 +9,8 @@
  * @version     $Id$
  *
  * @todo        add search/count functions and replace old deprecated functions
- * @todo        rename functions (add, update, delete)
+ * @todo        rename functions (update, delete)
+ * @todo        rename container to container_id in leads table
  */
 
 
@@ -101,6 +102,108 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         return $lead;
     }
     
+    /**
+     * Search for leads matching given filter
+     *
+     * @param Crm_Model_LeadFilter $_filter
+     * @param Crm_Model_LeadPagination $_pagination
+     * @return Tinebase_Record_RecordSet of Crm_Model_Lead records
+     * 
+     * @todo    abstract filter2sql
+     * @todo    add more filters?
+     */
+    public function search(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination)
+    {
+        $set = new Tinebase_Record_RecordSet('Crm_Model_Lead');
+        
+        // empty means, that e.g. no shared containers exist
+        if (empty($_filter->container)) {
+            return $set;
+        }
+        
+        // build query
+        $select = $this->_getSelect()
+            ->where($this->_db->quoteInto('lead.container IN (?)', $_filter->container));
+                        
+        if (!empty($_pagination->limit)) {
+            $select->limit($_pagination->limit, $_pagination->start);
+        }
+        if (!empty($_pagination->sort)) {
+            $select->order($_pagination->sort . ' ' . $_pagination->dir);
+        }
+        if (!empty($_filter->query)) {
+            $select->where($this->_db->quoteInto('(lead.lead_name LIKE ? OR lead.description LIKE ?)', '%' . $_filter->query . '%'));
+        }
+        if (!empty($_filter->leadstate)) {
+            $select->where($this->_db->quoteInto('lead.leadstate_id = ?', $_filter->leadstate));
+        }
+        if (!empty($_filter->probability)) {
+            $select->where($this->_db->quoteInto('lead.probability >= ?', (int)$_filter->probability));
+        }
+        if (isset($_filter->showClosed) && $_filter->showClosed){
+            // nothing to filter
+        } else {
+            $select->where('end IS NULL');
+        }
+        
+        $stmt = $this->_db->query($select);
+        
+        // get records
+        $leads = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach ($leads as $leadArray) {
+            $lead = new Crm_Model_Lead($leadArray, true, true);
+            $set->addRecord($lead);
+            //error_log(print_r($Task->toArray(),true));
+        }
+        
+        return $set;
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tasks_Model_Filter $_filter
+     * @return int
+     */
+    public function searchCount(Tasks_Model_Filter $_filter)
+    {
+        $pagination = new Tasks_Model_Pagination();
+        return count($this->search($_filter, $pagination));
+    }
+    
+    /**
+     * get the basic select object to fetch leads from the database 
+     *
+     * @return Zend_Db_Select
+     * 
+     * @todo add tags or other joins?
+     */
+    protected function _getSelect()
+    {
+        $select = $this->_db->select()
+            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
+                'id',
+                'lead_name',
+                'leadstate_id',
+                'leadtype_id',
+                'leadsource_id',
+                'container',
+                'start',
+                'description',
+                'end',
+                'turnover',
+                'probability',
+                'end_scheduled')
+            );
+            //->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.id = tag.task_id', array())
+            //->join(array('leadstate' => SQL_TABLE_PREFIX . 'metacrm_leadstate'),
+            //    'lead.leadstate_id = leadstate.id', array( 'leadstate') );        
+            
+            //echo $selectObject->__toString();     
+                
+        return $select;
+    }
+
     // @todo remove deprecated functions
     
     /**
@@ -111,6 +214,8 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return array
+     * 
+     * @deprecated
      */
     protected function _getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
@@ -152,7 +257,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * @param unknown_type $_getClosedLeads
      * @return unknown
      * 
-     * @deprecated ?
+     * @deprecated
      */
     protected function _getLeadsFromTable(array $_where, $_filter, $_sort, $_dir, $_limit, $_start, $_leadstate, $_probability, $_getClosedLeads)
     {
@@ -178,41 +283,6 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         return $leads;
     }   
     
-    /**
-     * get the basic select object to fetch leads from the database 
-     *
-     * @todo do we need this join here
-     * @return Zend_Db_Select
-     * 
-     * @deprecated ?
-     */
-    protected function _getLeadSelectObject()
-    {
-        $db = Zend_Registry::get('dbAdapter');
-        $selectObject = $db->select()
-            ->from(array('lead' => SQL_TABLE_PREFIX . 'metacrm_lead'), array(
-                'id',
-                'lead_name',
-                'leadstate_id',
-                'leadtype_id',
-                'leadsource_id',
-                'container',
-                'start',
-                'description',
-                'end',
-                'turnover',
-                'probability',
-                'end_scheduled')
-            )
-            ->join(array('leadstate' => SQL_TABLE_PREFIX . 'metacrm_leadstate'),
-                'lead.leadstate_id = leadstate.id', array( 'leadstate') );        
-                // 'lead.id = leadstate.id');
-                
-            //echo $selectObject->__toString();     
-                
-        return $selectObject;
-    }
-
     /**
      * add quick search filter
      *
