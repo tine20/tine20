@@ -8,8 +8,6 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo        remove tasks_tag table 
  */
 
 /**
@@ -47,7 +45,6 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     protected $_tableNames = array(
         'tasks'     => 'tasks',
         'contact'   => 'tasks_contact',
-        'tag'       => 'tasks_tag',
         'status'    => 'tasks_status',
     );
     
@@ -223,12 +220,10 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         return $this->_db->select()
             ->from(array('tasks' => $this->_tableNames['tasks']), array('tasks.*', 
                 'contact' => 'GROUP_CONCAT(DISTINCT contact.contact_id)',
-                'tag'     => 'GROUP_CONCAT(DISTINCT tag.tag_id)',
                 'is_due'  => 'LENGTH(tasks.due)',
                 //'is_open' => 'status.status_is_open',
             ))
             ->joinLeft(array('contact' => $this->_tableNames['contact']), 'tasks.id = contact.task_id', array())
-            ->joinLeft(array('tag'     => $this->_tableNames['tag']), 'tasks.id = tag.task_id', array())
             ->joinLeft(array('status'  => $this->_tableNames['status']), 'tasks.status_id = status.id', array())
             ->where('tasks.is_deleted = FALSE')
             ->group('tasks.id');
@@ -421,7 +416,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
     protected function deleteDependentRows($_parentTaskId)
     {
         $deletedRows = 0;
-        foreach (array('contact', 'tag') as $table) {
+        foreach (array('contact') as $table) {
             $TableObject = $this->getTableInstance($table);
             $deletedRows += $TableObject->delete(
                 $this->_db->quoteInto('task_id = ?', $_parentTaskId)
@@ -437,7 +432,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
      */
     protected function insertDependentRows($_taskParts)
     {
-        foreach (array('contact', 'tag') as $table) {
+        foreach (array('contact') as $table) {
             if (!empty($_taskParts[$table])) {
                 $items = explode(',', $_taskParts[$table]);
                 $TableObject = $this->getTableInstance($table);
@@ -464,7 +459,7 @@ class Tasks_Backend_Sql implements Tasks_Backend_Interface
         $TableDescr = $this->getTableInstance('tasks')->info();
         $taskparts['tasks'] = array_intersect_key($taskArray, array_flip($TableDescr['cols']));
         
-        foreach (array('contact', 'tag') as $table) {
+        foreach (array('contact') as $table) {
             if (!empty($taskArray[$table])) {
                 $taksparts[$table] = $taskArray[$table];
             }
