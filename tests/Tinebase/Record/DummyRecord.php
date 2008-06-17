@@ -18,7 +18,7 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
     );
 	
 	
-	protected  $_identifier = 'test_id';
+	protected  $_identifier = 'id';
 	
 	protected  $_isValidated = true;
 	
