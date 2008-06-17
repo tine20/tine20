@@ -26,7 +26,7 @@ interface Tasks_Backend_Interface
      * @param Tasks_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function searchTasks(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination);
+    public function search(Tasks_Model_Filter $_filter, Tasks_Model_Pagination $_pagination);
     
     /**
      * Gets total count of search with $_filter
@@ -34,7 +34,7 @@ interface Tasks_Backend_Interface
      * @param Tasks_Model_Filter $_filter
      * @return int
      */
-    public function getTotalCount(Tasks_Model_Filter $_filter);
+    public function searchCount(Tasks_Model_Filter $_filter);
     
     /**
      * Return a single Task
@@ -42,7 +42,15 @@ interface Tasks_Backend_Interface
      * @param string $_id
      * @return Tasks_Model_Task task
      */
-    public function getTask($_id);
+    public function get($_id);
+    
+    /**
+     * Returns a set of tasks identified by their id's
+     * 
+     * @param  array $_ids array of string
+     * @return Tinebase_RecordSet of Tasks_Model_Task
+     */
+    public function getMultiple(array $_ids);
     
     /**
      * Create a new Task
@@ -50,7 +58,7 @@ interface Tasks_Backend_Interface
      * @param Tasks_Model_Task $_task
      * @return Tasks_Model_Task
      */
-    public function createTask(Tasks_Model_Task $_task);
+    public function create(Tasks_Model_Task $_task);
     
     /**
      * Upate an existing Task
@@ -58,7 +66,7 @@ interface Tasks_Backend_Interface
      * @param Tasks_Model_Task $_task
      * @return Tasks_Model_Task
      */
-    public function updateTask(Tasks_Model_Task $_task);
+    public function update(Tasks_Model_Task $_task);
     
     /**
      * Deletes an existing Task
@@ -66,17 +74,7 @@ interface Tasks_Backend_Interface
      * @param string $_identifier
      * @return void
      */
-    public function deleteTask($_identifier);
-    
-    /**
-     * Deletes a set of tasks.
-     * 
-     * If one of the tasks could not be deleted, no taks is deleted
-     * 
-     * @throws Exception
-     * @param array array of task identifiers
-     * @return void
-     */
-    public function deleteTasks($_identifiers);
+    public function delete($_identifier);
+
     
 }

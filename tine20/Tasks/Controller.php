@@ -18,7 +18,7 @@
  * 
  * @package Tasks
  */
-class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Backend_Interface,Tinebase_Events_Interface
+class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_Events_Interface
 {
     
     /**
@@ -97,7 +97,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
     {
         $this->_checkContainerACL($_filter);
         
-        $tasks =  $this->_backend->searchTasks($_filter, $_pagination);
+        $tasks =  $this->_backend->search($_filter, $_pagination);
         //Tinebase_User::getBackend()->getPublicAccountProperties();
         //foreach ($tasks as $task) {
             //$taks->organizer = 
@@ -111,9 +111,9 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
      * @param Tasks_Model_Filter $_filter
      * @return int
      */
-    public function getTotalCount(Tasks_Model_Filter $_filter) {
+    public function searchTasksCount(Tasks_Model_Filter $_filter) {
         $this->_checkContainerACL($_filter);
-        return $this->_backend->getTotalCount($_filter);
+        return $this->_backend->searchCount($_filter);
     }
     
     /**
@@ -140,7 +140,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
      */
     public function getTask($_uid)
     {
-        $Task = $this->_backend->getTask($_uid);
+        $Task = $this->_backend->get($_uid);
         if (! $this->_currentAccount->hasGrant($Task->container_id, Tinebase_Container::GRANT_READ)) {
             throw new Exception('Not allowed!');
         }
@@ -163,7 +163,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
         if (! $this->_currentAccount->hasGrant($_task->container_id, Tinebase_Container::GRANT_ADD)) {
             throw new Exception('Not allowed!');
         }
-        return $this->_backend->createTask($_task);
+        return $this->_backend->create($_task);
     }
     
     /**
@@ -195,12 +195,12 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
             throw new Exception('Not allowed!');
         }
         
-        $Task = $this->_backend->updateTask($_task);
+        $Task = $this->_backend->update($_task);
         return $Task;
     }
     
     /**
-     * Deletes an existing Task
+     * Deletes an re more existing Task
      *
      * @param string $_identifier
      * @return void
@@ -212,30 +212,9 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tasks_Back
         if (!$this->_currentAccount->hasGrant($Task->container_id, Tinebase_Container::GRANT_DELETE)) {
             throw new Exception('Not allowed!');
         }
-        $this->_backend->deleteTask($_identifier);
+        $this->_backend->delete($_identifier);
     }
 
-    /**
-     * Deletes a set of tasks.
-     * 
-     * If one of the tasks could not be deleted, no taks is deleted
-     * 
-     * @throws Exception
-     * @param array array of task identifiers
-     * @return void
-     */
-    public function deleteTasks($_identifiers)
-    {
-        foreach ($_identifiers as $identifier) {
-            $Task = $this->getTask($identifier);
-            if (!$this->_currentAccount->hasGrant($Task->container_id, Tinebase_Container::GRANT_DELETE)) {
-                throw new Exception('Not allowed!');
-            }
-        }
-        
-        $this->_backend->deleteTasks($_identifiers);
-    }
-    
     /**
      * temporaray function to get a default container]
      * 

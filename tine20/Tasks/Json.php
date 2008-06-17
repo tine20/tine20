@@ -55,7 +55,7 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
         
         return array(
             'results' => $tasks->toArray(),
-            'totalcount' => $this->_controller->getTotalCount($filter)
+            'totalcount' => $this->_controller->searchTasksCount($filter)
         );
     }
     
@@ -143,21 +143,6 @@ class Tasks_Json extends Tinebase_Application_Json_Abstract
     public function deleteTask($identifier)
     {
         $this->_controller->deleteTask((int)$identifier);
-        return 'success';
-    }
-    
-    /**
-     * Deletes a set of tasks.
-     * 
-     * If one of the tasks could not be deleted, no taks is deleted
-     * 
-     * @throws Exception
-     * @param array array of task identifiers
-     * @return string
-     */
-    public function deleteTasks($identifiers)
-    {
-        $this->_controller->deleteTasks(Zend_Json::decode($identifiers));
         return 'success';
     }
     
