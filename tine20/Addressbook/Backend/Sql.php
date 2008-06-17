@@ -321,13 +321,24 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
         return $result;
     }
     /**
-     * Returns a set of records identified by their id's
+     * Returns a set of contacts identified by their id's
      * 
-     * @param  array $_ids array of string
-     * @return Tinebase_RecordSet of Tinebase_Record_Interface
+     * @param  array $_ids array of int
+     * @return Tinebase_RecordSet of Addressbook_Model_Contact
      */
-    public function getMultiple(array $_ids)
+    public function getMultiple(array $_contactIds)
     {
+        $contacts = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         
+        if (!empty($_contactIds)) {
+            $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'addressbook')->where($this->_db->quoteInto('id IN (?)', $_contactIds));
+            $stmt = $this->_db->query($select);
+            $contactsArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            
+            foreach ($contactsArray as $contact) {
+                $contacts->addRecord(new Addressbook_Model_Contact($contact));
+            }
+        }
+        return $contacts;
     }
 }

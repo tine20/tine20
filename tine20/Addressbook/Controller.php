@@ -366,6 +366,23 @@ class Addressbook_Controller extends Tinebase_Container_Abstract implements Tine
     }
     
     /**
+     * Returns a set of contacts identified by their id's
+     * 
+     * @param  array $_ids array of string
+     * @return Tinebase_RecordSet of Addressbook_Model_Contact
+     */
+    public function getMultipleContacts($_contactIds)
+    {
+        $contacts = $this->_backend->getMultiple($_contactIds);
+        foreach ($contacts as $contact) {
+            if (! $this->_currentAccount->hasGrant($contact->owner, Tinebase_Container::GRANT_READ)) {
+                $index = $contacts->getIndexOfId($contact->getId());
+                unset($contacts[$index]);
+            } 
+        }
+    }
+    
+    /**
      * returns contact image
      * 
      * @param  string $_identifier record identifier
