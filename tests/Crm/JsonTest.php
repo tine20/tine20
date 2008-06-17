@@ -189,7 +189,7 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         // create test task
         $tasksBackend = new Tasks_Backend_Sql();        
         try {
-            $task = $tasksBackend->getTask($this->objects['task']->getId());
+            $task = $tasksBackend->get($this->objects['task']->getId());
         } catch ( Exception $e ) {
             $task = $tasksBackend->createTask($this->objects['task']);
         }
@@ -219,14 +219,20 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to get a lead
+     * try to get a lead (test searchLeads as well)
      *
+     * @todo use new searchLeads function here
      */
     public function testGetLead()    
     {
         $json = new Crm_Json();
         
         $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
+        /*
+        $filter = array();
+        $result = $json->searchLeads($filter);
+        $leads = $result['results'];
+        */
         $initialLead = $leads[0];
         
         $lead = $json->getLead($initialLead->getId());

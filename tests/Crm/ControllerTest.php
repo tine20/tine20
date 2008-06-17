@@ -265,7 +265,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'summary'              => 'our fist test task',        
         ));
         try {
-            $task = $tasksBackend->getTask($task->getId());
+            $task = $tasksBackend->get($task->getId());
         } catch ( Exception $e ) {
             $task = $tasksBackend->createTask($task);
         }

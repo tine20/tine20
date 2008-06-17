@@ -126,7 +126,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLead()
     {
-        $lead = $this->backend->getLead($this->objects['initialLead']);
+        $lead = $this->backend->get($this->objects['initialLead']);
         
         $this->assertEquals($this->objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->objects['initialLead']->description, $lead->description);
@@ -176,7 +176,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('UnderflowException');
         
-        $this->backend->getLead($this->objects['initialLead']);
+        $this->backend->get($this->objects['initialLead']);
     }
 }		
 	
