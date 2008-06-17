@@ -133,5 +133,44 @@ class Tinebase_Relations
             }
         }
     }
+    
+    /**
+     * resolved app records and filles the related_record property with the coresponding record
+     * 
+     * NOTE: With this, READ ACL is implicitly checked as non readable records woun't get retuned!
+     * 
+     * @param  Tinebase_Record_RecordSet of Tinebase_Relation_Model_Relation
+     * @return void
+     */
+    protected function resolveAppRecords($_relations)
+    {
+        // seperate relations by model
+        $modelMap = array();
+        foreach ($_relations as $relation) {
+            if (!array_key_exists($relation->related_model, $modelMap)) {
+                $modelMap[$relation->related_model] = new Tinebase_Record_RecordSet('Tinebase_Relation_Model_Relation');
+            }
+            $modelMap[$relation->related_model]->addRecord($relation);
+        }
+        
+        // fill related_record
+        foreach ($modelMap as $modelName => $relations) {
+            list($appName, $i, $modelName) = explode('_', $modelName);
+            $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName);
+            $getMultipleMethod = 'getMultiple' . $modelName . 's';
+            $records = $appController->$getMultipleMethod($relations->getArrayOfIds());
+            
+            foreach ($relations as $relation) {
+                $index = $records->getIndexById($relation->related_id);
+                if ($index) {
+                    $relation->related_record = $records[$index];
+                } else {
+                    // delete relation from set, as READ ACL is abviously not granted
+                    $index = $_relations->getIndexById($relation->related_id);
+                    unset($index);
+                }
+            }
+        }
+    }
         
 }
