@@ -60,7 +60,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         }        
         
         if(empty($leadData->id)) {
-            $savedLead = Crm_Controller::getInstance()->addLead($leadData);
+            $savedLead = Crm_Controller::getInstance()->createLead($leadData);
         } else {
             $savedLead = Crm_Controller::getInstance()->updateLead($leadData);
         } 

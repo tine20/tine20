@@ -97,7 +97,7 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = Crm_Backend_ProductsTest::getInstance();
+        $this->backend = Crm_Backend_Products::getInstance();
     }
 
     /**
@@ -110,6 +110,30 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
 	   #Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
     }
     
+    /**
+     * try to get all products
+     *
+     */
+    public function testGetProducts()
+    {
+        $products = $this->backend->getProducts();
+        
+        #$this->assertTrue(count($types) >= 3);
+    }
+    
+    /**
+     * try to get one product
+     *
+     */
+    public function testGetProduct()
+    {
+        $products = $this->backend->getProducts();
+        
+        #$product = $this->backend->getProduct($products[0]->id);
+        
+        #$this->assertType('Crm_Model_Product', $product);
+        #$this->assertTrue($product->isValid());
+    }
 }		
 	
 

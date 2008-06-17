@@ -141,7 +141,7 @@ class Crm_PdfTest extends PHPUnit_Framework_TestCase
         ));
         
         try {
-            $lead = Crm_Controller::getInstance()->addLead($this->objects['leadWithLink']);
+            $lead = Crm_Controller::getInstance()->createLead($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // already there
         }

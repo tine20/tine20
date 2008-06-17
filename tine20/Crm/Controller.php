@@ -460,7 +460,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * 
      * @todo add notifications later
      */ 
-    public function addLead(Crm_Model_Lead $_lead)
+    public function createLead(Crm_Model_Lead $_lead)
     {
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');
@@ -470,8 +470,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             throw new Exception('add access to leads in container ' . $_lead->container . ' denied');
         }
         
-        $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
-        $lead = $backend->addLead($_lead);
+        $leadBackend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);
+        $lead = $leadBackend->create($_lead);
         
         $this->setLinksForApplication($lead, $_lead->responsible, 'Addressbook', 'responsible');
         $this->setLinksForApplication($lead, $_lead->customer, 'Addressbook', 'customer');

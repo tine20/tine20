@@ -475,7 +475,7 @@ class Setup_Import_TineRev949
                     
                     $lead = new Crm_Model_Lead ( $values );
                     try {
-                        $crmBackend->addLead($lead);
+                        $crmBackend->create($lead);
                     } catch ( UnderflowException $e ) {
                         //echo "error: " . $e->getMessage() . "<br/>";
                     }

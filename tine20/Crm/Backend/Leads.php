@@ -111,8 +111,6 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * @param int $_probability
      * @param bool $_getClosedLeads
      * @return array
-     * 
-     * @deprecated ?
      */
     protected function _getSearchFilter($_filter, $_leadstate, $_probability, $_getClosedLeads)
     {
@@ -304,9 +302,8 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
     * @param Crm_Lead $_leadData the leaddata
     * @return Crm_Model_Lead
     * 
-    * @todo rename function
     */
-    public function addLead(Crm_Model_Lead $_lead)
+    public function create(Crm_Model_Lead $_lead)
     {
         if(!$_lead->isValid()) {
             throw new Exception('lead object is not valid');

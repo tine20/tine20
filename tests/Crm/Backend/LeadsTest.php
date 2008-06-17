@@ -114,7 +114,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
      */
     public function testAddLead()
     {
-        $lead = $this->backend->addLead($this->objects['initialLead']);
+        $lead = $this->backend->create($this->objects['initialLead']);
         
         $this->assertEquals($this->objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->objects['initialLead']->description, $lead->description);

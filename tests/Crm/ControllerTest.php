@@ -166,7 +166,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testAddLead()
     {
-        $lead = Crm_Controller::getInstance()->addLead($this->objects['initialLead']);
+        $lead = Crm_Controller::getInstance()->createLead($this->objects['initialLead']);
         
         $this->assertEquals($this->objects['initialLead']->id, $lead->id);
         $this->assertEquals($this->objects['initialLead']->description, $lead->description);
@@ -253,7 +253,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         try {
             $task = Tasks_Controller::getInstance()->getTask($task->getId());
-        } catch ( Exception $e ) {
+        } catch (Exception $e) {
             $task = Tasks_Controller::getInstance()->createTask($task);
         }
         
@@ -279,9 +279,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     {
         // create test contact
         try {
-            $contact = Addressbook_Backend_Sql::getInstance()->getContact($this->objects['user']->getId());
+            $contact = Addressbook_Controller::getInstance()->getContact($this->objects['user']->getId());
         } catch ( Exception $e ) {
-            $contact = Addressbook_Backend_Sql::getInstance()->addContact($this->objects['user']);
+            $contact = Addressbook_Controller::getInstance()->addContact($this->objects['user']);
         }
         
         // link contact
