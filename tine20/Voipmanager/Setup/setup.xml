@@ -388,7 +388,7 @@
                     <type>enum</type>
                     <value>yes</value>
                     <value>no</value>
-                    <default>'yes'</default>
+                    <default>yes</default>
                 </field>
                 <field>
                     <name>context</name>
@@ -408,7 +408,7 @@
                     <value>inband</value>
                     <value>info</value>
                     <value>rfc2833</value>
-                    <default>'rfc2833'</default>
+                    <default>rfc2833</default>
                 </field>
                 <field>
                     <name>fromuser</name>
@@ -432,7 +432,7 @@
                     <name>host</name>
                     <type>text</type>
                     <length>31</length>
-                    <default>'dynamic'</default>
+                    <default>dynamic</default>
                 </field>
                 <field>
                     <name>insecure</name>
@@ -442,7 +442,7 @@
                     <value>no</value>
                     <value>invite</value>
                     <value>port</value>
-                    <default>'no'</default>
+                    <default>no</default>
                 </field>
                 <field>
                     <name>language</name>
@@ -467,7 +467,7 @@
                     <type>enum</type>
                     <value>yes</value>
                     <value>no</value>
-                    <default>'no'</default>
+                    <default>no</default>
                 </field>
                 <field>
                     <name>deny</name>
@@ -504,7 +504,7 @@
                     <type>enum</type>
                     <value>yes</value>
                     <value>no</value>
-                    <default>'no'</default>
+                    <default>no</default>
                 </field>
                 <field>
                     <name>restrictcid</name>
@@ -536,7 +536,7 @@
                     <value>friend</value>
                     <value>user</value>
                     <value>peer</value>
-                    <default>'friend'</default>
+                    <default>friend</default>
                 </field>
                 <field>
                     <name>username</name>
@@ -585,7 +585,7 @@
                     <type>enum</type>
                     <value>yes</value>
                     <value>no</value>
-                    <default>'yes'</default>
+                    <default>yes</default>
                 </field>
                 <field>
                     <name>setvar</name>
@@ -598,14 +598,14 @@
                     <type>enum</type>
                     <value>yes</value>
                     <value>no</value>
-                    <default>'yes'</default>
+                    <default>yes</default>
                 </field>
                 <field>
                     <name>useclientcode</name>
                     <type>enum</type>
                     <value>yes</value>
                     <value>no</value>
-                    <default>'yes'</default>
+                    <default>yes</default>
                 </field>
                 <field>
                     <name>authuser</name>
