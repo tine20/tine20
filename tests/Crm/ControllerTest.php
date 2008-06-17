@@ -148,6 +148,27 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
         )); 
+
+        $tasksPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'), 
+            'Tasks', 
+            Zend_Registry::get('currentAccount'), 
+            Tinebase_Container::GRANT_EDIT
+        );
+        
+        $tasksContainer = $tasksPersonalContainer[0];
+        
+        // create test task
+        $this->objects['task'] = new Tasks_Model_Task(array(
+            // tine record fields
+            'id'                   => '90a75021e353685aa9a06e67a7c0b558d0acae32',
+            'container_id'         => $tasksContainer->id,
+            'created_by'           => Zend_Registry::get('currentAccount')->getId(),
+            'creation_time'        => Zend_Date::now(),
+            'percent'              => 70,
+            'due'                  => Zend_Date::now()->addMonth(1),
+            'summary'              => 'phpunit: crm test task',        
+        ));
     }
 
     /**
@@ -240,21 +261,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testLinkedTasks()
     {        
-        // create test task
-        $task = new Tasks_Model_Task(array(
-            // tine record fields
-            'id'                   => '90a75021e353685aa9a06e67a7c0b558d0acae32',
-            'container_id'         => 5,
-            'created_by'           => 6,
-            'creation_time'        => Zend_Date::now(),
-            'percent'              => 70,
-            'due'                  => Zend_Date::now()->addMonth(1),
-            'summary'              => 'our fist test task',        
-        ));
         try {
-            $task = Tasks_Controller::getInstance()->getTask($task->getId());
+            $task = Tasks_Controller::getInstance()->getTask($this->objects['task']->id);
         } catch (Exception $e) {
-            $task = Tasks_Controller::getInstance()->createTask($task);
+            $task = Tasks_Controller::getInstance()->createTask($this->objects['task']);
         }
         
         // link task
