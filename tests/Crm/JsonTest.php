@@ -170,6 +170,17 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
             'due'                  => Zend_Date::now()->addMonth(1),
             'summary'              => 'phpunit: crm test task',        
         ));
+        
+        // define filter
+        $this->objects['filter'] = array(
+            'start' => 0,
+            'limit' => 50,
+            'sort' => 'lead_name',
+            'dir' => 'ASC',
+            'containerType' => 'all',
+            'query' => $this->objects['initialLead']->lead_name     
+        );
+        
     }
 
     /**
@@ -237,20 +248,15 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     {
         $json = new Crm_Json();
         
-        $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
-        /*
-        $filter = array();
-        $result = $json->searchLeads($filter);
+        $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));
         $leads = $result['results'];
-        */
         $initialLead = $leads[0];
         
-        $lead = $json->getLead($initialLead->getId());
-        
-        //print_r($lead);
+        $lead = $json->getLead($initialLead['id']);
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
-        $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);        
+        $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);
+                
     }
     
     /**
@@ -261,12 +267,13 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testUpdateLead()
     {   
         $json = new Crm_Json();
-        $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
-        $initialLead = $leads[0];
+
+        $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));        
+        $initialLead = $result['results'][0];
         
         $updatedLead = $this->objects['updatedLead'];
-        $updatedLead->id = $initialLead->getId();
-        $encodedData = Zend_Json::encode( $updatedLead->toArray() );
+        $updatedLead->id = $initialLead['id'];
+        $encodedData = Zend_Json::encode($updatedLead->toArray());
         
         $result = $json->saveLead($encodedData);
         
@@ -276,13 +283,13 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['updatedLead']->description, $result['updatedData']['description']);
 
         // check if contact is no longer linked        
-        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($initialLead->getId(), 'Addressbook');        
+        $linkedContacts = Crm_Controller::getInstance()->getLinksForApplication($initialLead['id'], 'Addressbook');        
         $this->assertEquals(0, count($linkedContacts));        
         // delete contact
         Addressbook_Controller::getInstance()->deleteContact($this->objects['contact']->getId());
 
         // check if task is no longer linked        
-        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($initialLead->getId(), 'Tasks');        
+        $linkedTasks = Crm_Controller::getInstance()->getLinksForApplication($initialLead['id'], 'Tasks');        
         $this->assertEquals(0, count($linkedTasks));
     }
 
@@ -293,20 +300,22 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     public function testDeleteLead()
     {        
         $json = new Crm_Json();
-        $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
-        
-        //print_r($leads);
+        $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));        
+
         $deleteIds = array();
-        foreach ( $leads as $lead ) {
-            $deleteIds[] = $lead->getId();    
+        
+        foreach ($result['results'] as $lead) {
+            $deleteIds[] = $lead['id'];
         }
+        
+        //print_r($deleteIds);
         
         $encodedLeadIds = Zend_Json::encode($deleteIds);
         
         $json->deleteLeads($encodedLeadIds);
                 
-        $leads = Crm_Controller::getInstance()->getAllLeads($this->objects['initialLead']->lead_name);
-        $this->assertEquals(0, count($leads));     
+        $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));
+        $this->assertEquals(0, $result['totalcount']);     
     }    
 }		
 	
