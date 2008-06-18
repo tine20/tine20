@@ -188,7 +188,7 @@ Tine.Voipmanager.Templates.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 10, hidden: true },
-            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 40 },
+            { resizable: true, id: 'name', header: this.translation._('name'), dataIndex: 'name', width: 100 },
             { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 350 },
             { resizable: true, id: 'model', header: this.translation._('Model'), dataIndex: 'model', width: 10, hidden: true },
             { resizable: true, id: 'keylayout_id', header: this.translation._('Keylayout Id'), dataIndex: 'keylayout_id', width: 10, hidden: true },

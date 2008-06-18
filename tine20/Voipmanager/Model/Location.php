@@ -61,8 +61,9 @@ class Voipmanager_Model_Location extends Tinebase_Record_Abstract
         'admin_mode'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'admin_mode_password'		=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ntp_server'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'webserver_type'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'https_port'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'webserver_type'			=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'http'),
+        'http_port'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 80),
+        'https_port'				=> array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 443),
         'http_user'					=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'http_pass'					=> array(Zend_Filter_Input::ALLOW_EMPTY => true)
     );

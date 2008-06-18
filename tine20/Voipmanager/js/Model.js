@@ -39,6 +39,7 @@ Tine.Voipmanager.Model.Location = Ext.data.Record.create([
     {name: 'admin_mode_password'},
     {name: 'ntp_server'},
     {name: 'webserver_type'},
+    {name: 'http_port'},
     {name: 'https_port'},
     {name: 'http_user'},
     {name: 'http_pass'}

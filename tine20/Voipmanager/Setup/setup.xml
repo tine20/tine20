@@ -233,9 +233,13 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>http_port</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>https_port</name>
                     <type>integer</type>
-                    <length>11</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

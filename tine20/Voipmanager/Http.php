@@ -147,18 +147,18 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editLocation($locationId=NULL)
     {
         if (!empty($locationId)) {
-            $locations = Voipmanager_Controller::getInstance();
-            $location = $locations->getLocationById($locationId);
-            $arrayLocation = $location->toArray();
+            $location = Voipmanager_Controller::getInstance()->getLocationById($locationId);
         } else {
-
+            $location = new Voipmanager_Model_Location(array(
+                'webserver_type'    => 'http',
+                'http_port'         => 80,
+                'https_port'        => 443
+            ));
         }
-
-        // encode the location array
-        $encodedLocation = Zend_Json::encode($arrayLocation);                   
         
-        $currentAccount = Zend_Registry::get('currentAccount');
-                
+        // encode the location array
+        $encodedLocation = Zend_Json::encode($location->toArray());                   
+        
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
