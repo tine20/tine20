@@ -324,7 +324,7 @@ class Addressbook_Backend_Sql implements Addressbook_Backend_Interface
      * Returns a set of contacts identified by their id's
      * 
      * @param  array $_ids array of int
-     * @return Tinebase_RecordSet of Addressbook_Model_Contact
+     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
      */
     public function getMultiple(array $_contactIds)
     {
