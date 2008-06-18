@@ -31,9 +31,8 @@ Tine.Crm = {
             appName: 'Crm',
             border: false
         });
-    
-        
-        tree.on('click', function(node){
+            
+        tree.on('click', function(node){        	
             Tine.Crm.Main.show(node);
         }, this);
             
@@ -63,32 +62,39 @@ Tine.Crm.Main = {
         exportLead: null,
         addTask: null
     },
+
+    /**
+     * holds underlaying store
+     */
+    store: null,
     
     /**
      * holds paging information
-     * @todo implement
      */
     paging: {
         start: 0,
         limit: 50,
-        sort: 'due',
+        sort: 'lead_name',
         dir: 'ASC'
     },
+    
     /**
      * holds current filters
-     * @todo implement
+     * @todo add more ?
      */
     filter: {
         containerType: 'personal',
         query: '',
-        due: false,
         container: false,
-        tag: false
+        tag: false,
+        probability: 0,
+        leadstate: false
     },    
 
 	handlers: {
 		/**
 		 * edit lead
+		 * @todo use Tine.Crm.EditPopup here
 		 */
         handlerEdit: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
@@ -151,39 +157,7 @@ Tine.Crm.Main = {
             });
         },
         
-    },
-        
-    /**
-     * createDataStore function
-     */
-    createDataStore: function()
-    {
-        var storeCrm = new Ext.data.JsonStore({
-            baseParams: {
-                method: 'Crm.getLeadsByOwner',
-                owner: 'all'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Crm.Model.Lead,
-            // turn on remote sorting
-            remoteSort: true
-        });
-        
-        storeCrm.setDefaultSort('lead_name', 'asc');
-
-        storeCrm.on('beforeload', function(_dataSource) {
-            _dataSource.baseParams.filter           = Ext.getCmp('quickSearchField').getRawValue();
-            _dataSource.baseParams.leadstate        = Ext.getCmp('filterLeadstate').getValue();
-            _dataSource.baseParams.probability      = Ext.getCmp('filterProbability').getValue();
-            _dataSource.baseParams.getClosedLeads   = Ext.getCmp('crmShowClosedLeadsButton').pressed;
-        });        
-        
-        //storeCrm.load({params:{start:0, limit:50}});
-        
-        return storeCrm;
-    },
+    },        
 
     /**
      * showCrmToolbar function
@@ -195,52 +169,35 @@ Tine.Crm.Main = {
             width: 200,
             emptyText: this.translation._('Enter searchfilter')
         });
-        quickSearchField.on('change', function(){
-            Ext.getCmp('gridCrm').getStore().load({
-                params: {
-                    start: 0,
-                    limit: 50
-                    //state: Ext.getCmp('filterLeadstate').getValue(),
-                    //probability: Ext.getCmp('filterProbability').getValue()                   
-                }
-            });
-        });
+        
+        quickSearchField.on('change', function(field){
+            if(this.filter.query != field.getValue()){
+                this.store.load({params: this.paging});
+            }
+        }, this);
 
             
        var filterComboLeadstate = new Ext.ux.form.ClearableComboBox({
             fieldLabel: this.translation._('Leadstate'), 
+            blankText: this.translation._('Leadstate') + '...',
+            emptyText: this.translation._('leadstate') + '...',
             id:'filterLeadstate',
-           //id:'id',
             name:'leadstate',
             hideLabel: true,
             width: 180,   
-            blankText: this.translation._('Leadstate') + '...',
-            hiddenName: 'leadstate_id',
             store: Tine.Crm.LeadState.getStore(),
+            hiddenName: 'leadstate_id',
+            valueField: 'id',
             displayField: 'leadstate',
-            valueField: 'leadstate_id',
             typeAhead: true,
-            mode: 'remote',
             triggerAction: 'all',
-            emptyText: this.translation._('leadstate') + '...',
             selectOnFocus:true,
             editable: false 
-       });          
-       filterComboLeadstate.on('select', function(combo, record, index) {
-            var _leadState = '';
-            if (record.data) {
-                _leadstate = record.data.leadstate_id;
-            }
-           
-            Ext.getCmp('gridCrm').getStore().load({
-                params: {                
-	                start: 0,
-	                limit: 50,
-					leadstate: _leadstate,
-					probability: Ext.getCmp('filterProbability').getValue()
-                }
-            });
-        });
+        }); 
+       
+        filterComboLeadstate.on('select', function() {
+       	    this.store.load({params: this.paging});
+        }, this);
       
         var filterComboProbability = new Ext.ux.PercentCombo({
             fieldLabel: this.translation._('Probability'), 
@@ -252,19 +209,9 @@ Tine.Crm.Main = {
             width:90            	
         });
                 
-		filterComboProbability.on('select', function(combo, record, index) {
-            var _probability = '';       
-		    if (record.data) {
-		       _probability = record.data.key;
-		    }           
-		   
-		    Ext.getCmp('gridCrm').getStore().load({
-			    params: {                    
-			        start: 0,
-			        limit: 50
-		        }
-		    });         
-		});      
+		filterComboProbability.on('select', function() {
+			this.store.load({params: this.paging});
+		}, this);      
 		
         /**
          * handlerToggleDetails function
@@ -349,11 +296,11 @@ Tine.Crm.Main = {
      */
     showGrid: function() 
     { 
-        var dataStore = this.createDataStore();
+        //var dataStore = this.createDataStore();
         
         var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
             pageSize: 50,
-            store: dataStore,
+            store: this.store,
             displayInfo: true,
             displayMsg: this.translation._('Displaying leads {0} - {1} of {2}'),
             emptyMsg: this.translation._('No leads found.')
@@ -420,7 +367,7 @@ Tine.Crm.Main = {
         
         var gridPanel = new Ext.grid.GridPanel({
             id: 'gridCrm',
-            store: dataStore,
+            store: this.store,
             cm: columnModel,
             tbar: pagingToolbar, 
             stripeRows: true,  
@@ -460,59 +407,18 @@ Tine.Crm.Main = {
         });
        
        return;
-    },
-    
-    /**
-     * loadData function
-     */
-    loadData: function(_node)
-    {       
-        var dataStore = Ext.getCmp('gridCrm').getStore();
-        
-        // we set them directly, because this properties also need to be set when paging
-        switch(_node.attributes.containerType) {
-            case 'shared':
-                dataStore.baseParams.method = 'Crm.getSharedLeads';
-                break;
-                  
-            case 'otherUsers':
-                dataStore.baseParams.method = 'Crm.getOtherPeopleLeads';
-                break;
-
-            case 'all':
-                dataStore.baseParams.method = 'Crm.getAllLeads';
-                break;
-
-            case 'personal':
-                dataStore.baseParams.method = 'Crm.getLeadsByOwner';
-                dataStore.baseParams.owner  = _node.attributes.owner.accountId;
-                break;
-
-            case 'singleContainer':
-                dataStore.baseParams.method        = 'Crm.getLeadsByFolder';
-                dataStore.baseParams.folderId = _node.attributes.container.id;
-                break;
-        }
-        
-        dataStore.load({
-            params:{
-                start:0, 
-                limit:50
-                //state: Ext.getCmp('filterLeadstate').getValue(),
-                //probability: Ext.getCmp('filterProbability').getValue()                                                                               
-            }
-        });
     },    
       
     /**
      * initComponent
-     * set translation and actions
      */
     initComponent: function()
     {
+    	// set translation
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Crm');
     
+        // set actions
         this.actions.addLead = new Ext.Action({
             text: this.translation._('Add lead'),
             tooltip: this.translation._('Add new lead'),
@@ -560,22 +466,86 @@ Tine.Crm.Main = {
             disabled: true,
             scope: this
         });
-    },
         
+        // init grid store
+        this.initStore();
+    },
+
+    /**
+     * init the leads json grid store
+     */
+    initStore: function(){
+        this.store = new Ext.data.JsonStore({
+            idProperty: 'id',
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Crm.Model.Lead,
+            remoteSort: true,
+            baseParams: {
+                method: 'Crm.searchLeads'
+            },
+            sortInfo: {
+                field: 'lead_name',
+                dir: 'ASC'
+            }
+        });
+        
+        // register store
+        Ext.StoreMgr.add('LeadsGridStore', this.store);
+        
+        // prepare filter
+        this.store.on('beforeload', function(store, options){
+            //console.log(options);
+            
+            // for some reasons, paging toolbar eats sort and dir
+            if (store.getSortState()) {
+                this.filter.sort = store.getSortState().field;
+                this.filter.dir = store.getSortState().direction;
+            } else {
+                this.filter.sort = this.store.sort;
+                this.filter.dir = this.store.dir;
+            }
+            this.filter.start = options.params.start;
+            this.filter.limit = options.params.limit;
+            
+            // container
+            var nodeAttributes = Ext.getCmp('crmTree').getSelectionModel().getSelectedNode().attributes || {};
+            console.log(nodeAttributes);
+            this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
+            this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
+            this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
+
+            // toolbar
+            this.filter.showClosed = Ext.getCmp('crmShowClosedLeadsButton') ? Ext.getCmp('crmShowClosedLeadsButton').pressed : false;
+            this.filter.probability = Ext.getCmp('filterProbability') ? Ext.getCmp('filterProbability').getValue() : '';
+            this.filter.query = Ext.getCmp('quickSearchField') ? Ext.getCmp('quickSearchField').getValue() : '';
+            this.filter.leadstate = Ext.getCmp('filterLeadstate') ? Ext.getCmp('filterLeadstate').getValue() : '';
+
+            options.params.filter = Ext.util.JSON.encode(this.filter);
+        }, this);
+                
+        this.store.load({
+            params: this.paging
+        });
+    },
+    
     /**
      * show
      */
     show: function(_node) 
-    {
-    	
+    {    	
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
         if (currentToolbar === false || currentToolbar.id != 'crmToolbar') {
             this.initComponent();
             this.showCrmToolbar();
             this.showGrid();
             this.updateMainToolbar();
+        } else {
+            // note: if node is clicked, it is not selected!
+            _node.getOwnerTree().selectPath(_node.getPath());
+        	this.store.load({params: this.paging});
         }
-        this.loadData(_node);
+        
     },    
         
     /**
@@ -1021,8 +991,6 @@ Tine.Crm.LeadEditDialog = {
      * 
      * @param   string type
      * @return  contact type icon
-     * 
-     * @todo    get icons from php backend / or move it to css class
      */
     contactTypeRenderer: function(type)
     {
@@ -1198,8 +1166,6 @@ Tine.Crm.LeadEditDialog = {
                         this.actions.unlinkTask.setDisabled(false);
                     }
                 }, this);
-            	
-            	// @todo add selection model event handler
             	
                 var autoExpand = 'summary';
                 break;

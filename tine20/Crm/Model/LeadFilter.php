@@ -41,7 +41,7 @@ class Crm_Model_LeadFilter extends Tinebase_Record_Abstract
         'probability'          => array('allowEmpty' => true,  'Int'   ),
         'leadstate'            => array('allowEmpty' => true           ),
         'showClosed'           => array('allowEmpty' => true, 'InArray' => array(true,false)),
-        //'owner'                => array('allowEmpty' => true           ),
+        'owner'                => array('allowEmpty' => true           ),
         //'start'                => array('allowEmpty' => true           ),
         //'end'                  => array('allowEmpty' => true           ),
         //'end_scheduled'        => array('allowEmpty' => true           ),
