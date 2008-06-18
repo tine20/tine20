@@ -539,38 +539,24 @@ console.log(this.locationRecord);
                         anchor: '100%',
                         defaults: {anchor:'100%'},
                         items :[{
-	                        xtype: 'textfield',
-	                        fieldLabel: 'NTP Server Address',
-	                        name: 'ntp_server',
-	                        maxLength: 255,
-	                        anchor:'100%',
-	                        allowBlank: false
-	                    },{
                             layout:'column',
                             border:false,
                             anchor: '100%',
                             items: [{
-                                columnWidth: .5,
+                                columnWidth: .7,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
-                                items:[
-                                    new Ext.form.ComboBox({
-                                    fieldLabel: 'Timezone',
-                                    id: 'timezone',
-                                    name: 'timezone',
-                                    mode: 'local',
-                                    displayField:'timezone',
-                                    valueField:'key',
-                                    anchor:'98%',                    
-                                    triggerAction: 'all',
-                                    allowBlank: false,
-                                    editable: false,
-                                    store: Tine.Voipmanager.Data.loadTimezoneData()
-                                })
-                              ]
-                           }, {
-                                columnWidth: .5,
+                                items:[{
+                                    xtype: 'textfield',
+                                    fieldLabel: 'NTP Server Address',
+                                    name: 'ntp_server',
+                                    maxLength: 255,
+                                    anchor:'98%',
+                                    allowBlank: false
+                                }]
+                            }, {
+                                columnWidth: .3,
                                 layout: 'form',
                                 border: false,
                                 anchor: '100%',
@@ -582,8 +568,20 @@ console.log(this.locationRecord);
                                     anchor:'100%'
                                 }]
                             }]
-                       }]
-                    },{
+                        }, new Ext.form.ComboBox({
+                            fieldLabel: 'Timezone',
+                            id: 'timezone',
+                            name: 'timezone',
+                            mode: 'local',
+                            displayField:'timezone',
+                            valueField:'key',
+                            anchor:'98%',                    
+                            triggerAction: 'all',
+                            allowBlank: false,
+                            editable: false,
+                            store: Tine.Voipmanager.Data.loadTimezoneData()
+                        })]
+                    }, {
                         xtype:'fieldset',
                         checkboxToggle:true,
                         checkboxName: 'admin_mode',
@@ -716,7 +714,7 @@ console.log(this.locationRecord);
                                         name: 'https_port',
                                         id: 'https_port',
                                         maxLength: 6,
-                                        anchor:'98%',
+                                        anchor:'100%',
                                         allowBlank: true
                                     }]
                                 }]
@@ -726,7 +724,7 @@ console.log(this.locationRecord);
                                 name: 'http_pass',
                                 inputType: 'textfield',
                                 maxLength: 20,
-                                anchor:'98%'
+                                anchor:'100%'
                             }]
                         }]
                     }]
