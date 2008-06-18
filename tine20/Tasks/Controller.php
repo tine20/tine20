@@ -163,6 +163,7 @@ class Tasks_Controller extends Tinebase_Container_Abstract implements Tinebase_E
                 unset($tasks[$index]);
             } 
         }
+        return $tasks;
     }
     
     /**
