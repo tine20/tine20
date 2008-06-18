@@ -97,7 +97,7 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = Crm_Backend_Products::getInstance();
+        $this->backend = new Crm_Backend_Products();
     }
 
     /**

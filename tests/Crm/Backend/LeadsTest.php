@@ -94,7 +94,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = Crm_Backend_Leads::getInstance();
+        $this->backend = new Crm_Backend_Leads();
     }
 
     /**

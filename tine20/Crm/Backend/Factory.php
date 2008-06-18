@@ -28,6 +28,11 @@ class Crm_Backend_Factory
 	 */
 	private static $_instance = NULL;
 	
+    /**
+     * backend object instances
+     */
+	private static $_backends = array();
+	
 	
     /**
      * constant for Sql contacts backend class
@@ -45,54 +50,55 @@ class Crm_Backend_Factory
     
     const LEAD_STATES = 'LeadStates';
     
-    
-    /**
-     * Constructor
-     * 
-     * Declared as protected to prevent instantiating from outside.
-     */
-    protected function __construct() {}
-    
-    public static function getInstance() {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Backend_Factory();
-        }
-        
-        return self::$_instance;
-    }
-    
-
     /**
      * factory function to return a selected contacts backend class
      *
      * @param string $type
      * @return object
      */
-    static public function factory($type)
+    static public function factory($_type)
     {
-        switch($type) {
+        switch($_type) {
             case self::SQL:
-                $instance = Crm_Backend_Sql::getInstance();
+            	if (!isset(self::$_backends[$_type])) {
+            		self::$_backends[$_type] = new Crm_Backend_Sql();
+            	}
+            	$instance = self::$_backends[$_type];
                 break;
                            
             case self::LEADS:
-                $instance = Crm_Backend_Leads::getInstance();
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Crm_Backend_Leads();
+                }
+                $instance = self::$_backends[$_type];
                 break;
                            
             case self::PRODUCTS:
-            	$instance = Crm_Backend_Products::getInstance();
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Crm_Backend_Products();
+                }
+                $instance = self::$_backends[$_type];
                 break;
                            
             case self::LEAD_TYPES:
-            	$instance = Crm_Backend_LeadTypes::getInstance();
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Crm_Backend_LeadTypes();
+                }
+                $instance = self::$_backends[$_type];
                 break;
                            
             case self::LEAD_SOURCES:
-            	$instance = Crm_Backend_LeadSources::getInstance();
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Crm_Backend_LeadSources();
+                }
+                $instance = self::$_backends[$_type];
                 break;
                 
             case self::LEAD_STATES:
-                $instance = Crm_Backend_LeadStates::getInstance();
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Crm_Backend_LeadStates();
+                }
+                $instance = self::$_backends[$_type];
                 break;
             
             default:
@@ -101,5 +107,4 @@ class Crm_Backend_Factory
 
         return $instance;
     }
-    
 }    

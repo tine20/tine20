@@ -32,43 +32,13 @@ class Crm_Backend_LeadStates implements Crm_Backend_Interface
 
     /**
      * the constructor
-     *
-     * don't use the constructor. use the singleton 
      */
-    private function __construct ()
+    public function __construct ()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadstate'));
     }
     
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone ()
-    {
-    }
-    
-    /**
-     * holdes the instance of the singleton
-     *
-     * @var Crm_Backend_LeadStates
-     */
-    private static $_instance = NULL;
-
-    /**
-     * the singleton pattern
-     *
-     * @return Crm_Backend_LeadStates
-     */
-    public static function getInstance ()
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Backend_LeadStates();
-        }
-        return self::$_instance;
-    }
-
     /**
      * get leadstates
      * 
