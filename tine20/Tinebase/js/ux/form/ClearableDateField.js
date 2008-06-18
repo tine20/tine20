@@ -75,5 +75,5 @@ Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
     onTrigger2Click : function() {
         this.onTriggerClick();
     }
-
 });
+Ext.reg('extuxclearabledatefield', Ext.ux.form.ClearableDateField);
