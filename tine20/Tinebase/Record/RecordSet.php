@@ -181,6 +181,21 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns an array with the properties of all records in this set
+     * 
+     * @param  string $_name property
+     * @return array index => property
+     */
+    public function __get($_name)
+    {
+        $propertiesArray = array();
+        foreach ($this->_listOfRecords as $index => $record) {
+            $propertiesArray[$index] = $record->$_name;
+        }
+        return $propertiesArray;
+    }
+    
+    /**
      * executes given function in all records
      *
      * @param string $_fname
