@@ -440,15 +440,14 @@ Tine.Voipmanager.Phones.EditDialog =  {
         },
                 
                 
-        editPhoneLinesDialog: function(_lines, _data) {
+        editPhoneLinesDialog: function(_maxLines, _lines) {
             
             var linesText = new Array();
             var linesSIPCombo = new Array();
             var linesIdleText = new Array();
             var linesActive = new Array();
             
-            
-            for(i=0; i<_lines; i++) {
+            for(i=0; i<_maxLines; i++) {
                 
                 t = i + 1;    
                 _hide = true;
@@ -457,56 +456,51 @@ Tine.Voipmanager.Phones.EditDialog =  {
                     _hide = false;
                 }
                 
-                
                 linesText[i] = new Ext.form.TextField({
-                            fieldLabel: 'Line',
-                            name: 'line' + t,
-                            maxLength: 3,
-                            anchor:'98%',
-                            readOnly: true,
-                            hideLabel: _hide,
-                            value: t
-                        });
+                    fieldLabel: 'Line',
+                    name: 'line' + t,
+                    maxLength: 3,
+                    anchor:'98%',
+                    readOnly: true,
+                    hideLabel: _hide,
+                    value: t
+                });
                 
-
                 linesSIPCombo[i] = new Ext.form.ComboBox({
-                            fieldLabel: 'SIPCombo ',
-                            name: 'sipCombo' + t,
-                            mode: 'local',
-                            displayField:'name',
-                            valueField:'id',
-                            anchor:'98%',        
-                            hideLabel: _hide,            
-                            triggerAction: 'all',
-                            editable: false,
-                            forceSelection: true,
-                            store: new Ext.data.JsonStore({
-                                autoLoad: true,
-                                id: 'id',
-                                fields: ['id','name'],
-                                data: _data.linesData
-                            })
-                        });
+                    fieldLabel: 'SIPCombo ',
+                    name: 'sipCombo' + t,
+                    mode: 'local',
+                    displayField:'name',
+                    valueField:'id',
+                    anchor:'98%',        
+                    hideLabel: _hide,            
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: new Ext.data.JsonStore({
+                        autoLoad: true,
+                        id: 'id',
+                        fields: ['id','name'],
+                        data: _lines
+                    })
+                });
 
                 linesIdleText[i] = new Ext.form.TextField({
-                            fieldLabel: 'IdleText ',
-                            name: 'idleText' + t,
-                            maxLength: 60,
-                            hideLabel: _hide,                            
-                            anchor:'98%'
-                        });
+                    fieldLabel: 'IdleText ',
+                    name: 'idleText' + t,
+                    maxLength: 60,
+                    hideLabel: _hide,                            
+                    anchor:'98%'
+                });
 
                 linesActive[i] = new Ext.form.Checkbox({
-                            fieldLabel: 'Active ',
-                            name: 'active' + t,
-                            inputValue: 'true',
-                            hideLabel: _hide,                            
-                            anchor:'98%'
-                        });
-                            
-                
+                    fieldLabel: 'Active ',
+                    name: 'active' + t,
+                    inputValue: 'true',
+                    hideLabel: _hide,                            
+                    anchor:'98%'
+                });   
             }
-            
             
             var _phoneLinesDialog = {
                 title: 'Lines',
@@ -568,13 +562,11 @@ Tine.Voipmanager.Phones.EditDialog =  {
         },                
                  
                   
-        editPhoneDialog: function(_data) {
-      
-        var _phoneDialog = {
-            title: 'Maindata',
+        editPhoneDialog: {
+            title: 'Phone',
             layout:'border',
             anchor: '100% 100%',
-            layoutOnTabChange:true,
+            layoutOnTabChange: true,
             defaults: {
                 border: true,
                 frame: true            
@@ -613,10 +605,9 @@ Tine.Voipmanager.Phones.EditDialog =  {
                             editable: false,
                             forceSelection: true,
                             store: new Ext.data.JsonStore({
-                                autoLoad: true,
+                                storeId: 'Voipmanger_EditPhone_Templates',
                                 id: 'id',
-                                fields: ['id','name'],
-                                data: _data.templateData
+                                fields: ['id','name']
                             })
                         }, {
                             xtype: 'combo',
@@ -631,10 +622,9 @@ Tine.Voipmanager.Phones.EditDialog =  {
                             editable: false,
                             forceSelection: true,
                             store: new Ext.data.JsonStore({
-                                autoLoad: true,
+                            	storeId: 'Voipmanger_EditPhone_Locations',
                                 id: 'id',
-                                fields: ['id','name'],
-                                data: _data.locationData
+                                fields: ['id','name']
                             })
                         }]
                     }, {
@@ -724,10 +714,6 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 }]
                 
             }]
-        };
-        
-        
-        return _phoneDialog;
         },
         
         updateToolbarButtons: function()
@@ -737,11 +723,10 @@ Tine.Voipmanager.Phones.EditDialog =  {
             }
         },
         
-        display: function(_phoneData) 
+        display: function(_phoneData, _lines, _templates, _locations) 
         {
-            if (!arguments[0]) {
-                var _phoneData = {};
-            }
+            Ext.StoreMgr.lookup('Voipmanger_EditPhone_Templates').loadData(_templates);
+            Ext.StoreMgr.lookup('Voipmanger_EditPhone_Locations').loadData(_locations);
 
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
@@ -764,8 +749,8 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         id: 'editPhoneTabPanel',
                         layoutOnTabChange:true,  
                         items:[
-                            this.editPhoneDialog(formData),
-                            this.editPhoneLinesDialog(_phoneData.lines, formData)                  
+                            this.editPhoneDialog,
+                            this.editPhoneLinesDialog(2, _lines)                  
                         ]
                     })
                    
@@ -779,12 +764,10 @@ Tine.Voipmanager.Phones.EditDialog =  {
                 //height: 300,
                 items: dialog
             });
-            
-                    
+               
             this.updatePhoneRecord(_phoneData);
             this.updateToolbarButtons();           
             dialog.getForm().loadRecord(this.phoneRecord);
-
         } 
 };
 

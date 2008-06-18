@@ -48,29 +48,31 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editPhone($phoneId=NULL)
     {
         $controller = Voipmanager_Controller::getInstance();
-        $templateData = $controller->getTemplates();
-        $locationData = $controller->getLocation();
         
         if (!empty($phoneId)) {
             $phone = $controller->getPhoneById($phoneId);
             $lines = $controller->getLines('name');
+
+            // encode the phone array
+            $encodedPhone = Zend_Json::encode($phone->toArray());
+            $encodedLines = Zend_Json::encode($lines->toArray());              
         } else {
-            $phone = new Voipmanager_Model_Phone();
-            $lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Line');
+            //$phone = new Voipmanager_Model_Phone();
+            //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Line');
+            
+            $encodedPhone = '{}';
+            $encodedLines = '{}';
         }
 
-        // encode the phone array
-        $encodedPhone = Zend_Json::encode($phone->toArray());                   
+        $encodedTemplates = Zend_Json::encode($controller->getTemplates()->toArray());
+        $encodedLocations = Zend_Json::encode($controller->getLocation()->toArray());
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->formData = array('locationData' => $locationData->toArray(), 
-                                'templateData' => $templateData->toArray(),
-                                'linesData' => $lines->toArray());        
-        $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedPhone .');';
+        $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedPhone . ', ' . $encodedLines . ', ' . $encodedTemplates . ', ' . $encodedLocations . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),
