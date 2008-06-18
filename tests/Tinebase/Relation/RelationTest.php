@@ -146,7 +146,9 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         
         $this->assertTrue($relations instanceof Tinebase_Record_RecordSet, 'relations are not a RecordSet');
-        $this->assertEquals(3, count($relations));
+        // NOTE: one of the related tasks in our testdata is not persistent, so we only get 2 relations back, 
+        // as this missing task looks like a 'ACL not sufficient' task
+        $this->assertEquals(3-1, count($relations));
         
         foreach ($relations as $relation) {
             // check each relation got an id
