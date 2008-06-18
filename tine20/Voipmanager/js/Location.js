@@ -530,13 +530,6 @@ console.log(this.locationRecord);
                            }]
                        }]
                     } , {
-                        xtype: 'textfield',
-                        fieldLabel: 'NTP Server Address',
-                        name: 'ntp_server',
-                        maxLength: 255,
-                        anchor:'100%',
-                        allowBlank: false
-                    },{
                         xtype:'fieldset',
                         checkboxToggle:false,
                         checkboxName: 'ntpSetting',
@@ -546,6 +539,13 @@ console.log(this.locationRecord);
                         anchor: '100%',
                         defaults: {anchor:'100%'},
                         items :[{
+	                        xtype: 'textfield',
+	                        fieldLabel: 'NTP Server Address',
+	                        name: 'ntp_server',
+	                        maxLength: 255,
+	                        anchor:'100%',
+	                        allowBlank: false
+	                    },{
                             layout:'column',
                             border:false,
                             anchor: '100%',
