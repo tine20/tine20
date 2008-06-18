@@ -19,6 +19,19 @@
 class Tinebase_Http extends Tinebase_Application_Http_Abstract
 {
     /**
+     * checes if a user is loged in. If not we redirect to login
+     */
+    protected function checkLogin()
+    {
+        try {
+            Zend_Registry::get('currentAccount');
+        } catch (Exception $e) {
+            header("Location: .");
+            exit;
+        }
+    }
+    
+    /**
      * displays the login dialog
      *
      */
@@ -135,22 +148,16 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
     
 	/**
 	 * renders the tine main screen 
-	 *
-	 * 
 	 */
     public function mainScreen()
     {
+        $this->checkLogin();
         $userApplications = Zend_Registry::get('currentAccount')->getApplications();
 
         $view = new Zend_View();
-
         $view->setScriptPath('Tinebase/views');
 
-        //$view->jsIncludeFiles = array('extjs/build/locale/ext-lang-de-min.js');
-        $view->jsIncludeFiles = $this->getJsFilesToInclude();
-        $view->cssIncludeFiles = $this->getCssFilesToInclude();
         $view->initialData = array();
-        
         foreach($userApplications as $application) {
             $httpAppName = ucfirst((string) $application) . '_Http';
             if(class_exists($httpAppName)) {
@@ -174,11 +181,22 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         
         
         $view->title="Tine 2.0";
-
+        
+        // temporary tweak to fill generalised popup
+        if ($_GET['isPopup']) {
+            $view->isPopup = true;
+            $view->jsExecute = "
+                new Ext.Viewport({
+                    layout: opener.Ext.ux.PopupWindowMgr.get(window).layout,
+                    items:  opener.Ext.ux.PopupWindowMgr.get(window).items
+                });
+            ";
+        }
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('mainscreen.php');
     }
-
+    
 	/**
 	 * activate user account
 	 *
