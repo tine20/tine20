@@ -54,6 +54,7 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	}
         
 });
+Ext.reg('tasksstatuscombo', Tine.Tasks.status.ComboBox);
 
 Tine.Tasks.status.getStore = function() {
 	if (!store) {
