@@ -101,15 +101,15 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
     public function editLine($lineId=NULL)
     {
         if (!empty($lineId)) {
-            $lines = Voipmanager_Controller::getInstance();
-            $line  = $lines->getLineById($lineId);
-            $arrayLine = $line->toArray();
+            $line = Voipmanager_Controller::getInstance()->getLineById($lineId);
         } else {
-
+            $line = new Voipmanager_Model_Line(array(
+                'type'  => 'user'
+            )); 
         }
 
         // encode the asterisk line array
-        $encodedLine = Zend_Json::encode($arrayLine);                   
+        $encodedLine = Zend_Json::encode($line->toArray());                   
         
         $currentAccount = Zend_Registry::get('currentAccount');
                 

@@ -132,43 +132,6 @@
             </declaration>
         </table>
         
-       <table>
-            <name>snom_phonemodel_capabilities</name>
-            <engine>InnoDB</engine>
-            <charset>utf8</charset>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <length>10</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>model</name>
-                    <type>enum</type>
-                    <value>snom300</value>
-                    <value>snom320</value>
-                    <value>snom360</value>
-                    <value>snom370</value>
-                </field>
-                <field>
-                    <name>lines</name>
-                    <type>integer</type>
-                    <length>3</length>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>        
-            </declaration>
-        </table>        
-        
-        
         <table>
             <name>snom_location</name>
             <engine>InnoDB</engine>
@@ -351,9 +314,7 @@
                     </field>
                 </index>
             </declaration>
-        </table>        
-        
-        
+        </table>
         
         <table>
             <name>asterisk_lines</name>
@@ -363,8 +324,8 @@
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <length>11</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

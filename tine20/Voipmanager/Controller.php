@@ -168,8 +168,7 @@ class Voipmanager_Controller
             throw new Exception('edit access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
-       
-        $phone = $this->_backend->updatePhone($_phone);
+        $phone = $this->_snomPhoneBackend->update($_phone);
         
         return $phone;
     }    

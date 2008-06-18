@@ -25,8 +25,8 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <length>11</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
