@@ -27,12 +27,20 @@ class Voipmanager_Controller
     protected $_backend;
     
     /**
+     * the snom phone sql backend
+     *
+     * @var Voipmanager_Backend_Snom_Phone
+     */
+    protected $_snomPhoneBackend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
         $this->_backend = Voipmanager_Backend_Phone_Factory::factory(Voipmanager_Backend_Phone_Factory::SQL);
+        $this->_snomPhoneBackend = new Voipmanager_Backend_Snom_Phone();
     }
     
     /**
@@ -70,7 +78,7 @@ class Voipmanager_Controller
      */
     public function getPhoneById($_id)
     {
-        $result = $this->_backend->getPhoneById($_id);
+        $result = $this->_snomPhoneBackend->get($_id);
 
         return $result;    
     }
@@ -84,12 +92,18 @@ class Voipmanager_Controller
      */
     public function getPhones($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $result = $this->_backend->getPhones($_sort, $_dir, $_query);
+        $filter = new Voipmanager_Model_PhoneFilter(array(
+            'query' => $_query
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'sort'  => $_sort,
+            'dir'   => $_dir
+        ));
 
+        $result = $this->_snomPhoneBackend->search($filter, $pagination);
+        
         return $result;    
     }
-
-
 
     /**
      * add one phone
@@ -99,12 +113,7 @@ class Voipmanager_Controller
      */
     public function addPhone(Voipmanager_Model_Phone $_phone)
     {        
-        /*
-        if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_ADD)) {
-            throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
-        }
-        */
-        $phone = $this->_backend->addPhone($_phone);
+        $phone = $this->_snomPhoneBackend->create($_phone);
       
         return $phone;
     }
@@ -120,14 +129,7 @@ class Voipmanager_Controller
      */
     public function deletePhones($_identifiers)
     {
-      /*  foreach ($_identifiers as $identifier) {
-            $Phone = $this->getPhoneById($identifier);
-            if (!$this->_currentAccount->hasGrant($Phone->container_id, Tinebase_Container::GRANT_DELETE)) {
-                throw new Exception('Not allowed!');
-            }
-        }
-       */ 
-        $this->_backend->deletePhones($_identifiers);
+        $this->_snomPhoneBackend->delete($_identifiers);
     }
 
 
