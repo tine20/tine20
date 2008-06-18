@@ -80,7 +80,6 @@ Tine.Crm.Main = {
     
     /**
      * holds current filters
-     * @todo add more ?
      */
     filter: {
         containerType: 'personal',
@@ -354,7 +353,7 @@ Tine.Crm.Main = {
                this.actions.editLead.setDisabled(false);
                this.actions.deleteLead.setDisabled(false);               
                this.actions.exportLead.setDisabled(false);
-               // @todo reactivate
+               // @todo reactivate?
                //this.actions.addTask.setDisabled(false);
             }    
             if(rowCount > 1) {                
@@ -495,7 +494,6 @@ Tine.Crm.Main = {
         
         // prepare filter
         this.store.on('beforeload', function(store, options){
-            //console.log(options);
             
             // for some reasons, paging toolbar eats sort and dir
             if (store.getSortState()) {
@@ -510,7 +508,6 @@ Tine.Crm.Main = {
             
             // container
             var nodeAttributes = Ext.getCmp('crmTree').getSelectionModel().getSelectedNode().attributes || {};
-            console.log(nodeAttributes);
             this.filter.containerType = nodeAttributes.containerType ? nodeAttributes.containerType : 'all';
             this.filter.container = nodeAttributes.container ? nodeAttributes.container.id : null;
             this.filter.owner = nodeAttributes.owner ? nodeAttributes.owner.accountId : null;
@@ -720,7 +717,7 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for addContact
          * 
-         * @todo add container for tasks popup
+         * @todo add container for tasks popup ?
          */
         addContact: function(_button, _event) 
         {
@@ -806,7 +803,7 @@ Tine.Crm.LeadEditDialog = {
         /**
          * onclick handler for add task
          *
-         * @todo add container for tasks popup
+         * @todo add container for tasks popup ?
          */
         addTask: function(_button, _event) 
         {
