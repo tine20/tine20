@@ -130,6 +130,8 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      */
     protected function _checkContainerACL($_filter)
     {
+    	$container = array();
+    	
         foreach ($_filter->container as $containerId) {
             if ($this->_currentAccount->hasGrant($containerId, Tinebase_Container::GRANT_READ)) {
                 $container[] = $containerId;
@@ -551,7 +553,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
             $lead = $backend->get($_leadId);
             
             if($this->_currentAccount->hasGrant($lead->container, Tinebase_Container::GRANT_DELETE)) {
-                $backend->deleteLead($_leadId);
+                $backend->delete($_leadId);
             } else {
                 throw new Exception('delete access to lead denied');
             }
