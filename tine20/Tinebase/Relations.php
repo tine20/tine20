@@ -101,6 +101,7 @@ class Tinebase_Relations
     public function getRelations($_model, $_backend, $_id, $_ignoreAcl=false)
     {
         $relations = $this->_backend->getAllRelations($_model, $_backend, $_id);
+        $this->resolveAppRecords($relations);
         return $relations;
     }
     /**
@@ -158,16 +159,16 @@ class Tinebase_Relations
             list($appName, $i, $modelName) = explode('_', $modelName);
             $appController = Tinebase_Controller::getInstance()->getApplicationInstance($appName);
             $getMultipleMethod = 'getMultiple' . $modelName . 's';
-            $records = $appController->$getMultipleMethod($relations->getArrayOfIds());
+            $records = $appController->$getMultipleMethod($relations->related_id);
             
             foreach ($relations as $relation) {
-                $index = $records->getIndexById($relation->related_id);
-                if ($index) {
-                    $relation->related_record = $records[$index];
+                $recordIndex    = $records->getIndexById($relation->related_id);
+                $relationIndex  = $_relations->getIndexById($relation->getId());
+                if ($recordIndex !== false) {
+                    $_relations[$relationIndex]->related_record = $records[$recordIndex];
                 } else {
                     // delete relation from set, as READ ACL is abviously not granted
-                    $index = $_relations->getIndexById($relation->related_id);
-                    unset($index);
+                    unset($_relations[$relationIndex]);
                 }
             }
         }
