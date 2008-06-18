@@ -9,7 +9,7 @@
  * @version     $Id$
  *
  * @todo        add search/count functions and replace old deprecated functions
- * @todo        rename functions (update, delete)
+ * @todo        rename functions (update)
  * @todo        rename container to container_id in leads table
  */
 
@@ -416,7 +416,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
      * 
      * @todo    rename
      */
-    public function deleteLead($_leadId)
+    public function delete($_leadId)
     {
         $leadId = Crm_Model_Lead::convertLeadIdToInt($_leadId);
 
