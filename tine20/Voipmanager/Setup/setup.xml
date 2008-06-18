@@ -279,6 +279,16 @@
                         <name>id</name>
                     </field>
                 </index>
+                <field>
+                    <name>timezone</name>
+                    <type>text</type>
+                    <notnull>24</notnull>
+                </field>
+                <field>
+                    <name>ntp_refresh</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
             </declaration>
         </table>        
         
