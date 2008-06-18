@@ -96,7 +96,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $filter = new Crm_Model_LeadFilter($paginationFilter);
         $pagination = new Crm_Model_LeadPagination($paginationFilter);
         
-        Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
+        //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
         $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
         $leads->setTimezone($this->_userTimezone);
