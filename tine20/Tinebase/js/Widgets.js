@@ -123,7 +123,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     }
 });
 
-
+Ext.reg('tineeditrecord', Tine.widgets.dialog.EditRecord);
 
 Ext.namespace('Tine.widgets.Priority');
 Tine.widgets.Priority.store = new Ext.data.SimpleStore({
@@ -179,6 +179,8 @@ Tine.widgets.Priority.Combo = Ext.extend(Ext.form.ComboBox, {
         }
     }
 });
+
+Ext.reg('tineprioritycombo', Tine.widgets.Priority.Combo);
 
 Tine.widgets.Priority.renderer = function(priority) {
 	var s = Tine.widgets.Priority.store;
