@@ -51,8 +51,8 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     	this.container = container;
     	this.setRawValue(container.name);
     }
-    
 });
+Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
 
 /**
  * This widget shows a modal container selection dialog

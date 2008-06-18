@@ -72,6 +72,7 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
         }
     }
 });
+Ext.reg('extuxpercentcombo', Ext.ux.PercentCombo);
 
 /**
  * Renders a percentage value to a percentage bar
