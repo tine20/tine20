@@ -25,7 +25,31 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      * @var string
      */
     protected $_appname = 'Crm';
+    
+    /**
+     * user timezone
+     *
+     * @var unknown_type
+     */
+    protected $_userTimezone;
 
+    /**
+     * server timezone
+     *
+     * @var unknown_type
+     */
+    protected $_serverTimezone;
+
+    /**
+     * constructor
+     *
+     */
+    public function __construct()
+    {
+        $this->_userTimezone = Zend_Registry::get('userTimeZone');
+        $this->_serverTimezone = date_default_timezone_get();
+    }
+    
     /*************************** save/delete leads ****************************/
     
     /**
@@ -154,8 +178,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $leads->convertDates = true;
         
         return array(
-            'results' => $leads->toArray(),
-            'totalcount' => Crm_Controller::getInstance()->_controller->getTotalCount($filter)
+            'results'       => $leads->toArray(),
+            'totalcount'    => Crm_Controller::getInstance()->searchLeadsCount($filter)
         );
     }
     
