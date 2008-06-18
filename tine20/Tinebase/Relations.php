@@ -53,6 +53,7 @@ class Tinebase_Relations
      * set all relations of a given record
      * 
      * NOTE: given relation data is expected to be an array atm.
+     * @todo check read ACL for new relations to existing records.
      * 
      * @param  string $_model        own model to get relations for
      * @param  string $_backend      own backend to get relations for
@@ -91,6 +92,8 @@ class Tinebase_Relations
     }
     /**
      * get all relations of a given record
+     * 
+     * @todo support $_ignoreACL? we would need to implement this in app controllers
      * 
      * @param  string $_model     own model to get relations for
      * @param  string $_backend   own backend to get relations for
