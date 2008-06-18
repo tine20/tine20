@@ -57,6 +57,12 @@ Ext.ux.PopupWindow = Ext.extend(Ext.Component, {
         //this.injectFramework(this.popup);
 
         this.addEvents({
+            /**
+             * @event render
+             * @desc  Fires after the viewport in the popup window is rendered
+             * @param {window} 
+             */
+            "render" : true,
         	/**
              * @event update
              * @desc  Fired when a record in the window got updated
