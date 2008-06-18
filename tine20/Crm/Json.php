@@ -50,17 +50,75 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         $this->_serverTimezone = date_default_timezone_get();
     }
     
+    /*************************** get leads ****************************/
+
+    /**
+     * get single lead
+     * fetches a lead and adds resolves linked objects
+     *
+     * @param int $_leadId
+     * @return array with lead data
+     */
+    public function getLead($_leadId)
+    {
+        $controller = Crm_Controller::getInstance();
+
+        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
+            
+            $leadData = $this->convertLeadToArray($lead, FALSE);
+                        
+        } else {
+            // @todo set default values in js and remove getEmptyXXX functions
+            $leadData = $controller->getEmptyLead()->toArray();
+            $leadData['products'] = array();                
+            $leadData['contacts'] = array();   
+            $leadData['tasks'] = array();                                   
+            
+            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
+            foreach($personalFolders as $folder) {
+                $leadData['container']     = $folder->toArray();
+                break;
+            }            
+        }    
+
+        return $leadData;
+    }
+        
+    /**
+     * Search for leads matching given arguments
+     *
+     * @param array $filter
+     * @return array
+     */
+    public function searchLeads($filter)
+    {
+        $paginationFilter = Zend_Json::decode($filter);
+        $filter = new Crm_Model_LeadFilter($paginationFilter);
+        $pagination = new Crm_Model_LeadPagination($paginationFilter);
+        
+        Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
+        
+        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
+        $leads->setTimezone($this->_userTimezone);
+        $leads->convertDates = true;
+        
+        return array(
+            'results'       => $leads->toArray(),
+            'totalcount'    => Crm_Controller::getInstance()->searchLeadsCount($filter)
+        );
+    }
+    
     /*************************** save/delete leads ****************************/
     
     /**
-	 * save one lead
-	 *
-	 * if $leadId is NULL the lead gets added, otherwise it gets updated
-	 *
-	 * @param  string  $lead           JSON encoded lead data
-	 * @return array
-	 */	
-	public function saveLead($lead)
+     * save one lead
+     *
+     * if $leadId is NULL the lead gets added, otherwise it gets updated
+     *
+     * @param  string  $lead           JSON encoded lead data
+     * @return array
+     */ 
+    public function saveLead($lead)
     {
         $decodedLead = Zend_Json::decode($lead);        
         if (isset($decodedLead['tags'])) {
@@ -124,246 +182,7 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         return $result;
         
     }
-
-    /*************************** get leads ****************************/
-
-    /**
-     * get single lead
-     * fetches a lead and adds resolves linked objects
-     *
-     * @param int $_leadId
-     * @return array with lead data
-     */
-    public function getLead($_leadId)
-    {
-        $controller = Crm_Controller::getInstance();
-
-        if($_leadId !== NULL && $lead = $controller->getLead($_leadId)) {
-            
-            $leadData = $this->convertLeadToArray($lead, FALSE);
-                        
-        } else {
-            // @todo set default values in js and remove getEmptyXXX functions
-            $leadData = $controller->getEmptyLead()->toArray();
-            $leadData['products'] = array();                
-            $leadData['contacts'] = array();   
-            $leadData['tasks'] = array();                                   
-            
-            $personalFolders = Zend_Registry::get('currentAccount')->getPersonalContainer('Crm', Zend_Registry::get('currentAccount'), Tinebase_Container::GRANT_READ);
-            foreach($personalFolders as $folder) {
-                $leadData['container']     = $folder->toArray();
-                break;
-            }            
-        }    
-
-        return $leadData;
-    }
-        
-    /**
-     * Search for leads matching given arguments
-     *
-     * @param array $filter
-     * @return array
-     */
-    public function searchLeads($filter)
-    {
-        $paginationFilter = Zend_Json::decode($filter);
-        $filter = new Crm_Model_LeadFilter($paginationFilter);
-        $pagination = new Crm_Model_LeadPagination($paginationFilter);
-        
-        //Zend_Registry::get('logger')->debug(print_r($pagination->toArray(),true));
-        
-        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
-        $leads->setTimezone($this->_userTimezone);
-        $leads->convertDates = true;
-        
-        return array(
-            'results'       => $leads->toArray(),
-            'totalcount'    => Crm_Controller::getInstance()->searchLeadsCount($filter)
-        );
-    }
     
-    // @todo remove following deprecated getXXX functions    
-    
-    /**
-     * get leads by owner
-     *
-     * @param unknown_type $filter
-     * @param unknown_type $owner
-     * @param unknown_type $start
-     * @param unknown_type $sort
-     * @param unknown_type $dir
-     * @param unknown_type $limit
-     * @param unknown_type $leadstate
-     * @param unknown_type $probability
-     * @param unknown_type $getClosedLeads
-     * @return unknown
-     * 
-     * @deprecated
-     */
-    public function getLeadsByOwner($filter, $owner, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-
-        if(empty($filter)) {
-            $filter = NULL;
-        }
-        
-        if($rows = Crm_Controller::getInstance()->getLeadsByOwner($owner, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            foreach($rows as &$lead) {
-                $result['results'][] = $this->convertLeadToArray($lead);
-            }
-            if($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountByOwner($owner, $filter, $leadstate, $probability, $getClosedLeads);
-            }
-        }
-
-        return $result;
-    }
-        
-    /**
-     * get leads by folder
-     *
-     * @param unknown_type $folderId
-     * @param unknown_type $filter
-     * @param unknown_type $start
-     * @param unknown_type $sort
-     * @param unknown_type $dir
-     * @param unknown_type $limit
-     * @param unknown_type $leadstate
-     * @param unknown_type $probability
-     * @param unknown_type $getClosedLeads
-     * @return unknown
-     * 
-     * @deprecated
-     */
-    public function getLeadsByFolder($folderId, $filter, $start, $sort, $dir, $limit, $leadstate, $probability, $getClosedLeads)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-                
-        if($rows = Crm_Controller::getInstance()->getLeadsByFolder($folderId, $filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            foreach($rows as &$lead) {
-                $result['results'][] = $this->convertLeadToArray($lead);
-            }
-            if($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountByFolder($folderId, $filter);
-            }
-        }
-
-        return $result;
-    }    
- 
-    /**
-     * search trough all other people leads
-     *
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @return array
-     * 
-     * @deprecated
-     */
-    public function getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller::getInstance()->getOtherPeopleLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            foreach($rows as &$lead) {
-                $result['results'][] = $this->convertLeadToArray($lead);
-            }
-            if($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfOtherPeopleLeads($filter, $leadstate, $probability, $getClosedLeads);
-            }
-        }
-
-        return $result;                
-    }
-        
-    /**
-     * search trough all leads
-     *
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @return array
-     * 
-     * @deprecated
-     */
-    public function getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller::getInstance()->getAllLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            foreach($rows as &$lead) {
-                $result['results'][] = $this->convertLeadToArray($lead);
-            }
-            
-            if($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfAllLeads($filter, $leadstate, $probability, $getClosedLeads);
-            }
-        }
-
-        return $result;                
-    }
-     
-    /**
-     * search trough all shared leads
-     *
-     * @param string $filter
-     * @param int $start
-     * @param int $sort
-     * @param string $dir
-     * @param int $limit
-     * @param string $options json encoded array of additional options
-     * @return array
-     * 
-     * @deprecated
-     */
-    public function getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)
-    {
-        $result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        if($rows = Crm_Controller::getInstance()->getSharedLeads($filter, $sort, $dir, $limit, $start, $leadstate, $probability, $getClosedLeads)) {
-            foreach($rows as &$lead) {
-                $result['results'][] = $this->convertLeadToArray($lead);
-            }
-            if($start == 0 && count($result['results']) < $limit) {
-                $result['totalcount'] = count($result['results']);
-            } else {
-                $result['totalcount'] = Crm_Controller::getInstance()->getCountOfSharedLeads($filter, $leadstate, $probability, $getClosedLeads);
-            }
-        }
-
-        return $result;                
-    }              
-
     /****************************************** helper functions ***********************************/
     
     /**
