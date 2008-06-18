@@ -183,12 +183,17 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         $view->title="Tine 2.0";
         
         // temporary tweak to fill generalised popup
+        // todo: move js code to ext.ux.popupwindow!
         if ($_GET['isPopup']) {
             $view->isPopup = true;
             $view->jsExecute = "
-                new Ext.Viewport({
+                var viewport = new Ext.Viewport({
                     layout: opener.Ext.ux.PopupWindowMgr.get(window).layout,
-                    items:  opener.Ext.ux.PopupWindowMgr.get(window).items
+                    items:  opener.Ext.ux.PopupWindowMgr.get(window).items,
+                    onRender: function(viewport){
+                        //window.setTimeout(function() {opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('render', window);}, 3000);
+                        opener.Ext.ux.PopupWindowMgr.get(window).fireEvent('render', window);
+                    }
                 });
             ";
         }
