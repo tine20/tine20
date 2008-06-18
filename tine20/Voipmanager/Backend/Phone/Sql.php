@@ -215,36 +215,21 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
 	 */
     public function getLocation($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
+        $where = array();
         if(!empty($_filter)) {
             $_fields = "firmware_interval,firmware_status,update_policy,setting_server,admin_mode,ntp_server,http_user,description";            
             $where = $this->_getSearchFilter($_filter, $_fields);
         }
         
-        
         $select = $this->_db->select()
-            ->from(array('location' => SQL_TABLE_PREFIX . 'snom_location'), array(
-                'firmware_interval',
-                'firmware_status',
-                'update_policy',
-                'setting_server',
-                'admin_mode',
-                'admin_mode_password',
-                'ntp_server',
-                'webserver_type',
-                'https_port',
-                'http_user',
-                'http_pass',
-                'id',
-                'name',
-                'description')
-            );
+            ->from(array('location' => SQL_TABLE_PREFIX . 'snom_location'));
 
         $select->order($_sort.' '.$_dir);
 
-         foreach($where as $whereStatement) {
-              $select->where($whereStatement);
-         }               
-       //echo  $select->__toString();
+        foreach($where as $whereStatement) {
+            $select->where($whereStatement);
+        }               
+        //echo  $select->__toString();
        
         $stmt = $this->_db->query($select);
 
