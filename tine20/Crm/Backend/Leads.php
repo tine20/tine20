@@ -19,7 +19,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_Leads implements Crm_Backend_Interface
+class Crm_Backend_Leads extends Tinebase_Abstract_SqlTableBackend
 {
     /**
     * Instance of Crm_Backend_Leads
@@ -28,18 +28,15 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
     */
     protected $_table;
    
-   /**
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
-    
     /**
      * the constructor
      */
     public function __construct ()
     {
         $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_lead'));
+        $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_lead';
+        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
+        $this->_modelName = 'Crm_Model_Lead';
     }
     
     /********** get / search ***********/
@@ -337,46 +334,7 @@ class Crm_Backend_Leads implements Crm_Backend_Interface
         return $result;
     }
     
-    /****************** add / update / delete *************/
-    
-    /**
-    * add a lead
-    *
-    * @param Crm_Lead $_leadData the leaddata
-    * @return Crm_Model_Lead
-    * 
-    */
-    public function create(Crm_Model_Lead $_lead)
-    {
-        if(!$_lead->isValid()) {
-            throw new Exception('lead object is not valid');
-        }
-
-        $leadData = $_lead->toArray();
-        if(empty($_lead->id)) {
-            unset($leadData['id']);
-        }
-        
-        // unset fields that should not be written into the db
-        $unsetFields = array('responsible', 'customer', 'partner', 'tasks', 'tags');
-        foreach ( $unsetFields as $field ) {
-            unset($leadData[$field]);
-        }
-        
-        $id = $this->_table->insert($leadData);
-
-        // if we insert a contact without an id, we need to get back one
-        if(empty($_lead->id) && $id == 0) {
-            throw new Exception("returned lead id is 0");
-        }
-        
-        // if the account had no accountId set, set the id now
-        if(empty($_lead->id)) {
-            $_lead->id = $id;
-        }
-        
-        return $this->get($_lead->id);
-    }    
+    /****************** update / delete *************/
     
     /**
      * delete lead

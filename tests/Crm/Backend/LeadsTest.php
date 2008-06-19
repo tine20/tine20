@@ -191,7 +191,7 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {
-        $this->backend->delete($this->objects['initialLead']);
+        $this->backend->delete($this->objects['initialLead']->getId());
         
         $this->setExpectedException('UnderflowException');
         
