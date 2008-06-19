@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadSources
+class Crm_Backend_LeadSources extends Tinebase_Abstract_SqlTableBackend
 {
     /**
     * Instance of Crm_Backend_LeadSources
@@ -35,7 +35,9 @@ class Crm_Backend_LeadSources
      */
     public function __construct ()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_leadsource';
+        $this->_modelName = 'Crm_Model_Leadsource';
+    	$this->_db = Zend_Registry::get('dbAdapter');
         $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadsource'));
     }
     
@@ -83,70 +85,4 @@ class Crm_Backend_LeadSources
 
         return $_leadSources;
     }
-    
-    /**
-     * delete option identified by id and table
-     *
-     * @param int $_Id option id
-     * @return int the number of rows deleted
-     */
-    public function deleteLeadsourceById($_Id)
-    {
-        $Id = (int)$_Id;
-        if($Id != $_Id) {
-            throw new InvalidArgumentException('$_Id must be integer');
-        }
-        
-        $where  = array(
-            $this->_table->getAdapter()->quoteInto('leadsource_id = ?', $Id),
-        );
-             
-        $result = $this->_table->delete($where);
-
-        return $result;
-    }
-    
-    /**
-    * get leadsource identified by id
-    *
-    * @return Crm_Model_Leadsource
-    */
-    public function getLeadSource($_sourceId)
-    {   
-        $sourceId = (int)$_sourceId;
-        if($sourceId != $_sourceId) {
-            throw new InvalidArgumentException('$_sourceId must be integer');
-        }
-        $rowSet = $this->_table->find($sourceId);
-        
-        if(count($rowSet) == 0) {
-            // something bad happend
-        }
-        
-        $result = new Crm_Model_Leadsource($rowSet->current()->toArray());
-   
-        return $result;
-    }
-    
-    /**
-     * delete option identified by id and table
-     *
-     * @param int $_Id option id
-     * @param $_table which option section
-     * @return int the number of rows deleted
-     */
-    public function deleteProductsourceById($_Id)
-    {
-        $Id = (int)$_Id;
-        if($Id != $_Id) {
-            throw new InvalidArgumentException('$_Id must be integer');
-        }      
-            $where  = array(
-                $this->linksTable->getAdapter()->quoteInto('leadsource_id = ?', $Id),
-            );
-             
-            $result = $this->_table->delete($where);
-
-        return $result;
-    }    
 }

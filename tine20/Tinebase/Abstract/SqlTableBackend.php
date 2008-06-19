@@ -104,17 +104,34 @@ abstract class Tinebase_Abstract_SqlTableBackend
             $this->_table->getAdapter()->quoteInto($this->_identifier . ' = ?', $id),
         );
         
-        $this->_table->update($recordArray, $where);
+        $this->_db->update($this->_tableName, $recordArray, $where);
                 
         return $this->get($id);
     }
     
     /**
-     * Gets entries
+     * Gets one entry (by id)
      *
      * @param integer $_id
      */
-    abstract public function get($_id);
+    public function get($_id) {
+        $id = (int) $_id;
+        
+        if($id != $_id) {
+            throw new InvalidArgumentException('$_id must be integer');
+        }
+        
+        $select = $this->_db->select();
+        $select->from($this->_tableName)
+            ->where($this->_identifier . ' = ?', $_id);
+            
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        
+        $result = new Crm_Model_Leadsource($queryResult);
+        
+        return $result;
+    }
     
     /**
      * Get multiple entries

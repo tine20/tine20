@@ -126,6 +126,7 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadState()
     {
+    	// TODO: Does this test make sense? It doesn't test Crm_Backend_LeadTypes::getLeadState()
         $states = $this->backend->getLeadStates();
         
         $state = $this->backend->getLeadState($states[0]->id);

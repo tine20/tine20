@@ -7,6 +7,9 @@
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
+ * 
+ * @todo Write test for lead source deletion.
+ * @todo Write test for saving a lead source.
  */
 
 /**
@@ -108,6 +111,18 @@ class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
 	   #Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
     }
 
+    /**
+     * try to get one lead source
+     *
+     */
+    public function testGetLeadSource()
+    {
+        $source = $this->backend->get(1);
+        
+        $this->assertType('Crm_Model_Leadsource', $source);
+        $this->assertTrue($source->isValid());
+    }
+    
     /**
      * try to get the lead sources
      *
