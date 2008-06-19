@@ -711,7 +711,7 @@ Tine.Crm.LeadEditDialog = {
         },
         
         /**
-         * unlink action handler
+         * unlink action handler for linked objects
          * 
          * remove selected objects from store
          * needs _button.gridId and _button.storeName
@@ -791,7 +791,9 @@ Tine.Crm.LeadEditDialog = {
          */
         linkContact: function(_button, _event)
         {
+        	console.log('link');     
         	
+        	Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContactsSearch'));
         },
 
         /**
@@ -1002,7 +1004,10 @@ Tine.Crm.LeadEditDialog = {
      */
     getLinksGrid: function(_type, _title)
     {
-    	// set the column model
+    	// store name
+    	var storeName = _type + 'Store';
+    	
+    	// set the column / row selection model
     	switch ( _type ) {
     		
             case 'Contacts':
@@ -1067,6 +1072,32 @@ Tine.Crm.LeadEditDialog = {
                 
                 break;
             
+            case 'ContactsSearch':
+            
+                // @todo add cm, selection model event handler and context menu
+            
+                var columnModel = new Ext.grid.ColumnModel([
+                    {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
+                    {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 120, sortable: true},
+                    {id:'org_name', header: this.translation._('Organisation'), dataIndex: 'org_name', width: 120, sortable: true},
+                    {
+                        id:'link_remark', 
+                        header: this.translation._("Type"), 
+                        dataIndex: 'link_remark', 
+                        width: 50, 
+                        sortable: false,
+                        renderer: this.contactTypeRenderer
+                    }
+                ]);
+                
+                var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+                
+                var autoExpand = 'n_fileas';
+                
+                storeName = 'ContactsStore';
+                
+                break;
+
             case 'Tasks':
 
                 // tasks grid
@@ -1161,21 +1192,41 @@ Tine.Crm.LeadEditDialog = {
         } // end switch
 
         // get store and create grid
-        var gridStore = Ext.StoreMgr.lookup(_type + 'Store');        
-        var grid = {
-            xtype:'grid',
-            id: 'crmGrid' + _type,
-            title: _title,
-            cm: columnModel,
-            store: gridStore,
-            selModel: rowSelectionModel,
-            autoExpandColumn: autoExpand
-        };        
+        var gridStore = Ext.StoreMgr.lookup(storeName);      
+        
+        if ( _type === 'ContactsSearch' ) {
+            var grid = new Tine.widgets.GridPicker({
+            	id: 'crmGrid' + _type,
+                gridStore: gridStore,
+                columnModel: columnModel
+            });
+        	
+        	/*
+            var grid = {
+                xtype:'grid',
+                id: 'crmGrid' + _type,
+                title: _title,
+                cm: columnModel,
+                store: gridStore,
+                selModel: rowSelectionModel,
+                autoExpandColumn: autoExpand
+            };
+            */        
+        } else {
+            var grid = {
+                xtype:'grid',
+                id: 'crmGrid' + _type,
+                title: _title,
+                cm: columnModel,
+                store: gridStore,
+                selModel: rowSelectionModel,
+                autoExpandColumn: autoExpand
+            };                	
+        }
         	
         if ( _type === 'Products' ) {
        	    grid.disabled = true;
         }
-        
         
         return grid;       
     },
@@ -1501,7 +1552,8 @@ Tine.Crm.LeadEditDialog = {
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
             tbarItems: [
-                //@todo add link actions as well? 
+                //@todo move that to bottom of link grids
+                /*
                 {
                     text: this.translation._('Add new contact'),
                     iconCls: 'actionAdd',
@@ -1515,7 +1567,7 @@ Tine.Crm.LeadEditDialog = {
                 }, 
                 this.actions.addTask,                
                 this.actions.addProduct,
-                '-',
+                '-', */
                 this.actions.exportLead
             ],
             handlerApplyChanges: this.handlers.applyChanges,
@@ -1524,7 +1576,8 @@ Tine.Crm.LeadEditDialog = {
             items: Tine.Crm.LeadEditDialog.getEditForm([
                         this.getLinksGrid('Contacts', this.translation._('Contacts')),
                         this.getLinksGrid('Tasks', this.translation._('Tasks')),
-                        this.getLinksGrid('Products', this.translation._('Products'))
+                        this.getLinksGrid('Products', this.translation._('Products')),
+                        this.getLinksGrid('ContactsSearch', this.translation._('ContactsSearch'))
                     ])             
         });
 
@@ -1544,6 +1597,9 @@ Tine.Crm.LeadEditDialog = {
             id: 'editViewport',
             items: leadEdit
         });
+
+        // hide contacts search tab item
+        Ext.getCmp('linkPanel').hideTabStripItem(Ext.getCmp('crmGridContactsSearch')); 
 
         leadEdit.getForm().loadRecord(lead);
                 

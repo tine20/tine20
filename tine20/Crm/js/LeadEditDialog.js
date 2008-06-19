@@ -260,6 +260,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         ]
     });
     
+    // @todo add savePath (container) to the bottom and remove it from form in the middle
     return [
         tabPanel
         //savePath
