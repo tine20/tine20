@@ -15,7 +15,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_Products implements Crm_Backend_Interface
+class Crm_Backend_Products
 {
 	/**
 	* Instance of Crm_Backend_Products

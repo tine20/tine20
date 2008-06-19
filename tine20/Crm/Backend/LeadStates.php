@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadStates implements Crm_Backend_Interface
+class Crm_Backend_LeadStates
 {
     /**
     * Instance of Crm_Backend_LeadStates

@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadTypes implements Crm_Backend_Interface
+class Crm_Backend_LeadTypes
 {
     /**
     * Instance of Crm_Backend_Types

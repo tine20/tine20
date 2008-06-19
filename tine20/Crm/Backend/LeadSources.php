@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadSources implements Crm_Backend_Interface
+class Crm_Backend_LeadSources
 {
     /**
     * Instance of Crm_Backend_LeadSources
