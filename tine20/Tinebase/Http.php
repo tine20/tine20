@@ -185,7 +185,7 @@ class Tinebase_Http extends Tinebase_Application_Http_Abstract
         
         // temporary tweak to fill generalised popup
         // todo: move js code to ext.ux.popupwindow!
-        if ($_GET['isPopup']) {
+        if (isset($_GET['isPopup']) && $_GET['isPopup']) {
             $view->isPopup = true;
             $view->jsExecute = "
                 var viewport = new Ext.Viewport({
