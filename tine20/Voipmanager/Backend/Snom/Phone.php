@@ -33,16 +33,16 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * search phones
 	 * 
-     * @param Voipmanager_Model_PhoneFilter $_filter
+     * @param Voipmanager_Model_SnomPhoneFilter $_filter
      * @param Tinebase_Model_Pagination $_pagination
-	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
+	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
 	 */
-    public function search(Voipmanager_Model_PhoneFilter $_filter, Tinebase_Model_Pagination $_pagination)
+    public function search(Voipmanager_Model_SnomPhoneFilter $_filter, Tinebase_Model_Pagination $_pagination)
     {	
         $where = array();
         
         $select = $this->_db->select()
-            ->from(array('voipmanager' => SQL_TABLE_PREFIX . 'snom_phones'));
+            ->from(SQL_TABLE_PREFIX . 'snom_phones');
             
         $_pagination->appendPagination($select);
 
@@ -55,7 +55,7 @@ class Voipmanager_Backend_Snom_Phone
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_Phone', $rows);
+       	$result = new Tinebase_Record_RecordSet('Voipmanager_Model_SnomPhone', $rows);
 		
         return $result;
 	}
@@ -63,23 +63,23 @@ class Voipmanager_Backend_Snom_Phone
 	/**
 	 * get one phone identified by id
 	 * 
-     * @param string|Voipmanager_Model_Phone $_id
-	 * @return Voipmanager_Model_Phone the phone
+     * @param string|Voipmanager_Model_SnomPhone $_id
+	 * @return Voipmanager_Model_SnomPhone the phone
 	 */
     public function get($_id)
     {	
-        $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($_id);
+        $phoneId = Voipmanager_Model_SnomPhone::convertPhoneIdToInt($_id);
         
         $select = $this->_db->select()
-            ->from(array('phone' => SQL_TABLE_PREFIX . 'snom_phones'))
-            ->where($this->_db->quoteInto('phone.id = ?', $phoneId));
+            ->from(SQL_TABLE_PREFIX . 'snom_phones')
+            ->where($this->_db->quoteInto('id = ?', $phoneId));
 
         $row = $this->_db->fetchRow($select);
         if (!$row) {
             throw new UnderflowException('phone not found');
         }
 
-        $result = new Voipmanager_Model_Phone($row);
+        $result = new Voipmanager_Model_SnomPhone($row);
         
         return $result;
 	}     
@@ -87,10 +87,10 @@ class Voipmanager_Backend_Snom_Phone
     /**
      * insert new phone into database
      *
-     * @param Voipmanager_Model_Phone $_phone the phonedata
-     * @return Voipmanager_Model_Phone
+     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
+     * @return Voipmanager_Model_SnomPhone
      */
-    public function create(Voipmanager_Model_Phone $_phone)
+    public function create(Voipmanager_Model_SnomPhone $_phone)
     {
         if (!$_phone->isValid()) {
             throw new Exception('invalid phone');
@@ -111,10 +111,10 @@ class Voipmanager_Backend_Snom_Phone
     /**
      * update an existing phone
      *
-     * @param Voipmanager_Model_Phone $_phone the phonedata
-     * @return Voipmanager_Model_Phone
+     * @param Voipmanager_Model_SnomPhone $_phone the phonedata
+     * @return Voipmanager_Model_SnomPhone
      */
-    public function update(Voipmanager_Model_Phone $_phone)
+    public function update(Voipmanager_Model_SnomPhone $_phone)
     {
         if (! $_phone->isValid()) {
             throw new Exception('invalid phone');
@@ -138,7 +138,7 @@ class Voipmanager_Backend_Snom_Phone
     public function delete($_id)
     {
         foreach ((array)$_id as $id) {
-            $phoneId = Voipmanager_Model_Phone::convertPhoneIdToInt($id);
+            $phoneId = Voipmanager_Model_SnomPhone::convertPhoneIdToInt($id);
             $where[] = $this->_db->quoteInto('id = ?', $phoneId);
         }
 

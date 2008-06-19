@@ -50,14 +50,14 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $controller = Voipmanager_Controller::getInstance();
         
         if (!empty($phoneId)) {
-            $phone = $controller->getPhoneById($phoneId);
+            $phone = $controller->getSnomPhone($phoneId);
             $lines = $controller->getLines('name');
 
             // encode the phone array
             $encodedPhone = Zend_Json::encode($phone->toArray());
             $encodedLines = Zend_Json::encode($lines->toArray());              
         } else {
-            //$phone = new Voipmanager_Model_Phone();
+            //$phone = new Voipmanager_Model_SnomPhone();
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Line');
             
             $encodedPhone = '{}';

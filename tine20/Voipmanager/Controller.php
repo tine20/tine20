@@ -34,6 +34,13 @@ class Voipmanager_Controller
     protected $_snomPhoneBackend;
     
     /**
+     * the snom phone lines sql backend
+     *
+     * @var Voipmanager_Backend_Snom_Line
+     */
+    protected $_snomLineBackend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -41,6 +48,7 @@ class Voipmanager_Controller
     private function __construct() {
         $this->_backend = Voipmanager_Backend_Phone_Factory::factory(Voipmanager_Backend_Phone_Factory::SQL);
         $this->_snomPhoneBackend = new Voipmanager_Backend_Snom_Phone();
+        $this->_snomLineBackend = new Voipmanager_Backend_Snom_Line();
     }
     
     /**
@@ -74,13 +82,18 @@ class Voipmanager_Controller
      * get snom_phone by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
      */
-    public function getPhoneById($_id)
+    public function getSnomPhone($_id)
     {
-        $result = $this->_snomPhoneBackend->get($_id);
+        $phone = $this->_snomPhoneBackend->get($_id);
+        
+        $filter = new Voipmanager_Model_SnomLineFilter(array(
+            'snomphone_id'  => $phone->id
+        ));
+        $phone->lines = $this->_snomLineBackend->search($filter);
 
-        return $result;    
+        return $phone;    
     }
 
     /**
@@ -88,11 +101,11 @@ class Voipmanager_Controller
      *
      * @param string $_sort
      * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Phone
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SnomPhone
      */
     public function getPhones($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $filter = new Voipmanager_Model_PhoneFilter(array(
+        $filter = new Voipmanager_Model_SnomPhoneFilter(array(
             'query' => $_query
         ));
         $pagination = new Tinebase_Model_Pagination(array(
@@ -108,10 +121,10 @@ class Voipmanager_Controller
     /**
      * add one phone
      *
-     * @param Voipmanager_Model_Phone $_phone
-     * @return  Voipmanager_Model_Phone
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return  Voipmanager_Model_SnomPhone
      */
-    public function addPhone(Voipmanager_Model_Phone $_phone)
+    public function addSnomPhone(Voipmanager_Model_SnomPhone $_phone)
     {        
         $phone = $this->_snomPhoneBackend->create($_phone);
       
@@ -158,10 +171,10 @@ class Voipmanager_Controller
     /**
      * update one phone
      *
-     * @param Voipmanager_Model_Phone $_phone
-     * @return  Voipmanager_Model_Phone
+     * @param Voipmanager_Model_SnomPhone $_phone
+     * @return  Voipmanager_Model_SnomPhone
      */
-    public function updatePhone(Voipmanager_Model_Phone $_phone)
+    public function updateSnomPhone(Voipmanager_Model_SnomPhone $_phone)
     {
         /*
         if (!Zend_Registry::get('currentAccount')->hasGrant($_contact->owner, Tinebase_Container::GRANT_EDIT)) {

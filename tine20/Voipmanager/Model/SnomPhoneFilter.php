@@ -14,7 +14,7 @@
  * Phone Filter Class
  * @package Voipmanager
  */
-class Voipmanager_Model_PhoneFilter extends Tinebase_Record_Abstract
+class Voipmanager_Model_SnomPhoneFilter extends Tinebase_Record_Abstract
 {
 	/**
      * key in $_validators/$_properties array for the filed which 
