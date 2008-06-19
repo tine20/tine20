@@ -81,3 +81,15 @@ Tine.Tinebase.Model.Tag = Ext.data.Record.create([
     {name: 'rights'     },
     {name: 'contexts'   }
 ]);
+
+
+/**
+ * Model of a PickerRecord
+ * 
+ * @constructor {Ext.data.Record}
+ */
+Tine.Tinebase.PickerRecord = Ext.data.Record.create([
+    {name: 'id'}, 
+    {name: 'name'}, 
+    {name: 'data'}
+]);
