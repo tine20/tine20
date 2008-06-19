@@ -648,7 +648,7 @@ Tine.Crm.LeadEditDialog = {
         linkTask: null,
         unlinkTask: null,
         addProduct: null,      
-        editProduct: null,
+        //editProduct: null,
         unlinkProduct: null,
         exportLead: null
 	},
@@ -690,10 +690,6 @@ Tine.Crm.LeadEditDialog = {
                         Tine.Crm.Model.Lead.FixDates(lead);
                         leadForm.loadRecord(lead);
                         
-                        //dlg.action_delete.enable();
-                        //_add_task.enable();
-                        //_export_lead.enable();
-                        
                         Ext.MessageBox.hide();
                     },
                     failure: function ( result, request) { 
@@ -715,14 +711,26 @@ Tine.Crm.LeadEditDialog = {
         },
         
         /**
-         * onclick handler for addContact
+         * unlink action handler
          * 
-         * @todo add container for tasks popup ?
+         * remove selected objects from store
+         * needs _button.gridId and _button.storeName
+         */
+        unlink: function(_button, _event)
+        {        	        	                	
+            var selectedRows = Ext.getCmp(_button.gridId).getSelectionModel().getSelections();
+            var store = Ext.StoreMgr.lookup(_button.storeName);
+            for (var i = 0; i < selectedRows.length; ++i) {
+                store.remove(selectedRows[i]);
+            }           
+        },
+
+        /**
+         * onclick handler for addContact
          */
         addContact: function(_button, _event) 
         {
             var contactPopup = new Tine.Addressbook.EditPopup({
-                //containerId:
             });        	
             
             // update event handler
@@ -786,24 +794,10 @@ Tine.Crm.LeadEditDialog = {
         	
         },
 
-    	/**
-         * unlinkContact
-         * 
-         * remove selected contacts from store
-         */
-        unlinkContact: function(_button, _event)
-        {
-            var selectedRows = Ext.getCmp('crmGridContacts').getSelectionModel().getSelections();
-            var contactsStore = Ext.StoreMgr.lookup('ContactsStore');
-            for (var i = 0; i < selectedRows.length; ++i) {
-                contactsStore.remove(selectedRows[i]);
-            }        	
-        },
-
         /**
          * onclick handler for add task
-         *
-         * @todo add container for tasks popup ?
+         * 
+         * @todo    add task via inline editing (chooseable?)
          */
         addTask: function(_button, _event) 
         {
@@ -816,9 +810,6 @@ Tine.Crm.LeadEditDialog = {
             
             // update event handler
             taskPopup.on('update', function(task) {
-
-                //console.log (task);
-            	
             	// set id and link properties
                 task.id = task.data.id;
                 task.data.link_id = null;
@@ -826,7 +817,6 @@ Tine.Crm.LeadEditDialog = {
                 // add contact to store
                 var storeTasks = Ext.StoreMgr.lookup('TasksStore');
                 storeTasks.add(task);                              
-
             }, this);
         },
             
@@ -845,9 +835,6 @@ Tine.Crm.LeadEditDialog = {
             
             // update event handler
             taskPopup.on('update', function(task) {           
-            	
-            	//console.log (task);
-            	
                 // set link properties
                 task.id = task.data.id;
                 //task.data.link_id = selectedTask.data.link_id;
@@ -856,7 +843,6 @@ Tine.Crm.LeadEditDialog = {
                 var storeContacts = Ext.StoreMgr.lookup('TasksStore');
                 storeContacts.remove(selectedTask);
                 storeContacts.add(task);                                
-
             }, this);
         },
 
@@ -872,23 +858,15 @@ Tine.Crm.LeadEditDialog = {
         },
 
         /**
-         * unlinkTask
+         * onclick handler for add product
          * 
-         * remove selected tasks from store
-         * 
-         * @todo generalise unlink handler for contacts/tasks/products ?
+         * @todo    add product via inline editing
          */
-        unlinkTask: function(_button, _event)
+        addProduct: function(_button, _event) 
         {
-            var selectedRows = Ext.getCmp('crmGridTasks').getSelectionModel().getSelections();
-            var store = Ext.StoreMgr.lookup('TasksStore');
-            for (var i = 0; i < selectedRows.length; ++i) {
-                store.remove(selectedRows[i]);
-            }           
+
         },
-
-        // @todo add more handlers (for products, etc.)
-
+            
         /**
          * onclick handler for exportBtn
          */
@@ -1410,10 +1388,10 @@ Tine.Crm.LeadEditDialog = {
         this.actions.linkContact = new Ext.Action({
             text: this.translation._('Link contact'),
             tooltip: this.translation._('Link existing contact with lead'),
-            disabled: true,
+            //disabled: true,
             iconCls: 'contactIconPartner',
             scope: this,
-            handler: this.handlers.unlinkContact
+            handler: this.handlers.linkContact
         });
         
         this.actions.unlinkContact = new Ext.Action({
@@ -1422,7 +1400,9 @@ Tine.Crm.LeadEditDialog = {
             disabled: true,
             iconCls: 'actionDelete',
             scope: this,
-            handler: this.handlers.unlinkContact
+            gridId: 'crmGridContacts',
+            storeName: 'ContactsStore',            
+            handler: this.handlers.unlink
         });
 
         // tasks
@@ -1457,17 +1437,29 @@ Tine.Crm.LeadEditDialog = {
             disabled: true,
             iconCls: 'actionDelete',
             scope: this,
-            handler: this.handlers.unlinkTask
+            gridId: 'crmGridTasks',
+            storeName: 'TasksStore',            
+            handler: this.handlers.unlink
         });
 
         // products
-        //@todo add product actions
         this.actions.addProduct = new Ext.Action({
             text: this.translation._('Add product'),
-            tooltip: this.translation._('Add new product'),
+            tooltip: this.translation._('Add product'),
             iconCls: 'actionAdd',
             disabled: true,
             handler: this.handlers.addProduct
+        });
+
+        this.actions.unlinkProduct = new Ext.Action({
+            text: this.translation._('Unlink products'),
+            tooltip: this.translation._('Unlink selected products'),
+            disabled: true,
+            iconCls: 'actionDelete',
+            scope: this,
+            gridId: 'crmGridProducts',
+            storeName: 'ProductsStore',            
+            handler: this.handlers.unlink
         });
 
         // other
