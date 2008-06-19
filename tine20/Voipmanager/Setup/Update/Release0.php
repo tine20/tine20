@@ -12,7 +12,7 @@
 class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     /**
-     * add the lines table
+     * add the asterisk_lines table
      */    
     public function update_1()
     {
@@ -315,5 +315,89 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->createTable($table);        
 
         $this->setApplicationVersion('Voipmanager', '0.2');
+    }    
+
+    /**
+     * add the snom_lines table
+     */    
+    public function update_2()
+    {
+        $tableDefinition = "  
+        <table>
+            <name>snom_lines</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>snomphone_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>asteriskline_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>linenumber</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>lineactive</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>idletext</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>                
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>snom_lines_snomphone_id</name>
+                    <field>
+                        <name>snomphone_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>snom_phones</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>   
+                <index>
+                    <name>snom_lines_asteriskline_id</name>
+                    <field>
+                        <name>asteriskline_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>asterisk_lines</table>
+                        <field>id</field>
+                    </reference>
+                </index>   
+            </declaration>
+        </table>";
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $this->_backend->createTable($table);        
+
+        $this->setApplicationVersion('Voipmanager', '0.3');
     }    
 }

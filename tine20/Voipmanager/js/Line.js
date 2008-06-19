@@ -459,6 +459,22 @@ Tine.Voipmanager.Lines.EditDialog =  {
         items: [
             [
                 {
+                    xtype: 'textfield',
+                    fieldLabel: 'Name',
+                    name: 'name',
+                    maxLength: 80,
+                    anchor: '98%',
+                    allowBlank: false
+                }, 
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Context',
+                    name: 'context',
+                    maxLength: 80,
+                    anchor: '98%',
+                    allowBlank: false
+                },
+                {
                     xtype: 'combo',
                     fieldLabel: 'Type',
                     name: 'type',
@@ -475,27 +491,9 @@ Tine.Voipmanager.Lines.EditDialog =  {
                         fields: ['key', 'value'],
                         data: [['friend', 'friend'], ['user', 'user'], ['peer', 'peer']]
                     })
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Context',
-                    name: 'context',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                },
-                {
-                	xtype: 'hidden'
                 }
             ],
             [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Name',
-                    name: 'name',
-                    maxLength: 80,
-                    anchor: '98%',
-                    allowBlank: false
-                },
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Secret',
@@ -511,14 +509,30 @@ Tine.Voipmanager.Lines.EditDialog =  {
                     maxLength: 80,
                     anchor: '100%',
                     allowBlank: true
-                }
-            ],
-            [
+                },
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Mailbox',
                     name: 'mailbox',
                     maxLength: 50,
+                    anchor: '98%',
+                    allowBlank: true
+                }
+            ],
+            [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Callgroup',
+                    name: 'callgroup',
+                    maxLength: 10,
+                    anchor: '98%',
+                    allowBlank: true
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Pickup group',
+                    name: 'pickupgroup',
+                    maxLength: 10,
                     anchor: '98%',
                     allowBlank: true
                 },
@@ -529,7 +543,9 @@ Tine.Voipmanager.Lines.EditDialog =  {
                     maxLength: 20,
                     anchor: '98%',
                     allowBlank: true
-                },
+                }
+            ],
+            [
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Language',
@@ -537,6 +553,42 @@ Tine.Voipmanager.Lines.EditDialog =  {
                     maxLength: 2,
                     anchor: '98%',
                     allowBlank: true
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'NAT',
+                    name: 'nat',
+                    mode: 'local',
+                    displayField: 'value',
+                    valueField: 'key',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: new Ext.data.SimpleStore({
+                        autoLoad: true,
+                        id: 'key',
+                        fields: ['key', 'value'],
+                        data: [['yes', 'yes'], ['no', 'no']]
+                    })
+                },
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Qualify',
+                    name: 'qualify',
+                    mode: 'local',
+                    displayField: 'value',
+                    valueField: 'key',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    store: new Ext.data.SimpleStore({
+                        autoLoad: true,
+                        id: 'key',
+                        fields: ['key', 'value'],
+                        data: [['yes', 'yes'], ['no', 'no']]
+                    })
                 }
             ]]
     },     
