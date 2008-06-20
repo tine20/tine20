@@ -458,7 +458,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function getLeadType($_typeId)
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_TYPES);
-        $result = $backend->getLeadType($_typeId);
+        $result = $backend->get($_typeId);
 
         return $result;    
     }
@@ -489,7 +489,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function getLeadStates($_sort = 'id', $_dir = 'ASC')
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
-        $result = $backend->getLeadStates($_sort, $_dir);
+        $result = $backend->getAll($_sort, $_dir);
 
         return $result;    
     }

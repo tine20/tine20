@@ -42,22 +42,6 @@ class Crm_Backend_LeadStates extends Tinebase_Abstract_SqlTableBackend
     }
     
     /**
-     * get leadstates
-     * 
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadstate
-     */
-    public function getLeadStates($_sort = 'id', $_dir = 'ASC')
-    {   
-        $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
-        
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Leadstate', $rows->toArray());
-        
-        return $result;
-    }   
-    
-    /**
     * add or updates an option
     *
     * @param Crm_Leadstate $_optionData the optiondata

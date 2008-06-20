@@ -115,7 +115,7 @@ class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadStates()
     {
-        $states = $this->backend->getLeadStates();
+        $states = $this->backend->getAll();
         
         $this->assertTrue(count($states) >= 6);
     }
@@ -126,7 +126,7 @@ class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadState()
     {
-        $states = $this->backend->getLeadStates();
+        $states = $this->backend->getAll();
         
         $state = $this->backend->get($states[0]->id);
         
