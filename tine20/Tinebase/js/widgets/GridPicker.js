@@ -166,7 +166,7 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
         if (recordIndex === -1) {
             var newRecord = {};
             newRecord = record.data.data;
-            newRecord.link_remark = 'responsible';
+            newRecord.link_remark = 'customer';
             
             var newData = [newRecord];
         	            
