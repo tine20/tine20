@@ -24,19 +24,28 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Fixtures
+     * 
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
     
-    protected $testContainer;
+    /**
+     * Testcontainer
+     *
+     * @var unknown_type
+     */
+    protected $_testContainer;
     
-    protected $backend;
+    /**
+     * Backend
+     *
+     * @var Crm_Backend_LeadStates
+     */
+    protected $_backend;
 
     /**
      * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
      */
     public static function main()
     {
@@ -46,9 +55,8 @@ class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
 
     /**
      * Sets up the fixture.
+     * 
      * This method is called before a test is executed.
-     *
-     * @access protected
      */
     protected function setUp()
     {
@@ -60,49 +68,26 @@ class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $this->testContainer = $personalContainer[0];
+            $this->_testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description',
-            'end'           => Zend_Date::now(),
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+        $this->_objects['initialLeadState'] = new Crm_Model_Leadstate(array(
+            'id' => 1000,
+            'leadstate' => 'Just a unit test lead state',
+            'probability' => 10,
+            'endslead' => 0,
+            'translate' => 0
         )); 
         
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description updated',
-            'end'           => NULL,
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-        )); 
-        
-        $this->backend = new Crm_Backend_LeadStates();
+        $this->_backend = new Crm_Backend_LeadStates();
     }
 
     /**
      * Tears down the fixture
+     * 
      * This method is called after a test is executed.
-     *
-     * @access protected
      */
     protected function tearDown()
     {
@@ -110,31 +95,50 @@ class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to add a lead state
+     */
+    public function testAddLeadState()
+    {
+        $leadState = $this->_backend->create($this->_objects['initialLeadState']);
+        
+        $this->assertEquals($this->_objects['initialLeadState']->id, $leadState->id);
+    }
+    
+    /**
      * try to get all lead states
-     *
      */
     public function testGetLeadStates()
     {
-        $states = $this->backend->getAll();
+        $states = $this->_backend->getAll();
         
         $this->assertTrue(count($states) >= 6);
     }
     
     /**
      * try to get one lead state
-     *
      */
     public function testGetLeadState()
     {
-        $states = $this->backend->getAll();
-        
-        $state = $this->backend->get($states[0]->id);
+        $states = $this->_backend->getAll();
+        $state = $this->_backend->get($states[0]->id);
         
         $this->assertType('Crm_Model_Leadstate', $state);
         $this->assertTrue($state->isValid());
     }
+    
+    /**
+     * try to delete a lead state
+     */
+    public function testDeleteLeadState()
+    {
+        $id = $this->_objects['initialLeadState']->getId();
+        
+        $this->_backend->delete($id);
+        $this->setExpectedException('UnderflowException');
+        $this->_backend->get($id);
+    }
 }
-	
+
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadStatesTest::main') {
     Crm_Backend_LeadStatesTest::main();

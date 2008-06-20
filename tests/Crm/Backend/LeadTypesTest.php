@@ -40,7 +40,7 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
     /**
      * Backend
      *
-     * @var Crm_Backend_Products
+     * @var Crm_Backend_LeadTypes
      */
     protected $_backend;
 
