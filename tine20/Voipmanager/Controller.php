@@ -426,9 +426,9 @@ class Voipmanager_Controller
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Line
      */
-    public function getLines($_sort = 'id', $_dir = 'ASC', $_query = NULL)
+    public function getAsteriskLines($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $result = $this->_backend->getLines($_sort, $_dir, $_query);
+        $result = $this->_backend->getAsteriskLines($_sort, $_dir, $_query);
 
         return $result;    
     }

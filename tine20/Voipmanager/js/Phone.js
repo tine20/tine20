@@ -723,7 +723,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
             }
         },
         
-        display: function(_phoneData, _lines, _templates, _locations) 
+        display: function(_phoneData, _snomLines, _lines, _templates, _locations) 
         {
             Ext.StoreMgr.lookup('Voipmanger_EditPhone_Templates').loadData(_templates);
             Ext.StoreMgr.lookup('Voipmanger_EditPhone_Locations').loadData(_locations);

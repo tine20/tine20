@@ -50,18 +50,22 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $controller = Voipmanager_Controller::getInstance();
         
         if (!empty($phoneId)) {
-            $phone = $controller->getSnomPhone($phoneId);
-            $lines = $controller->getLines('name');
+            $snomPhone = $controller->getSnomPhone($phoneId);
+            $snomLines = $snomPhone->lines;
+            unset($phone->lines);
+            $asteriskLines = $controller->getAsteriskLines('name');
 
             // encode the phone array
-            $encodedPhone = Zend_Json::encode($phone->toArray());
-            $encodedLines = Zend_Json::encode($lines->toArray());              
+            $encodedSnomPhone = Zend_Json::encode($snomPhone->toArray());
+            $encodedSnomLines = Zend_Json::encode($snomLines->toArray());
+            $encodedAsteriskLines = Zend_Json::encode($asteriskLines->toArray());              
         } else {
             //$phone = new Voipmanager_Model_SnomPhone();
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Line');
             
-            $encodedPhone = '{}';
-            $encodedLines = '{}';
+            $encodedSnomPhone = '{}';
+            $encodedSnomLines = '[]';
+            $encodedAsteriskLines = '{}';
         }
 
         $encodedTemplates = Zend_Json::encode($controller->getTemplates()->toArray());
@@ -72,7 +76,7 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
-        $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedPhone . ', ' . $encodedLines . ', ' . $encodedTemplates . ', ' . $encodedLocations . ');';
+        $view->jsExecute = 'Tine.Voipmanager.Phones.EditDialog.display(' . $encodedSnomPhone . ', ' . $encodedSnomLines . ', ' . $encodedAsteriskLines . ', ' . $encodedTemplates . ', ' . $encodedLocations . ');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

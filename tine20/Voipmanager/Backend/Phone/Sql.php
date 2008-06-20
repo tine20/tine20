@@ -436,7 +436,7 @@ class Voipmanager_Backend_Phone_Sql implements Voipmanager_Backend_Phone_Interfa
      * @param string $_dir
 	 * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_Line
 	 */
-    public function getLines($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
+    public function getAsteriskLines($_sort = 'id', $_dir = 'ASC', $_filter = NULL)
     {	
         $where = array();
         

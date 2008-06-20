@@ -425,7 +425,7 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Voipmanager_Controller::getInstance()->getLines($sort, $dir, $query)) {
+        if($rows = Voipmanager_Controller::getInstance()->getAsteriskLines($sort, $dir, $query)) {
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
         }
