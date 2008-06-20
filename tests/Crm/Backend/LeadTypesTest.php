@@ -115,7 +115,7 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadTypes()
     {
-        $types = $this->backend->getLeadTypes();
+        $types = $this->backend->getAll();
         
         $this->assertTrue(count($types) >= 3);
     }
@@ -126,7 +126,7 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadType()
     {
-        $types = $this->backend->getLeadTypes();
+        $types = $this->backend->getAll();
         
         $type = $this->backend->get($types[0]->id);
         

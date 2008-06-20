@@ -48,7 +48,7 @@ class Crm_Backend_LeadTypes extends Tinebase_Abstract_SqlTableBackend
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadtype
      */
-    public function getLeadTypes($_sort = 'id', $_dir = 'ASC')
+    public function getAll($_sort = 'id', $_dir = 'ASC')
     {   
         $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
         
