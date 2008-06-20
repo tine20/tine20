@@ -149,7 +149,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
     	return $resultRecordSet;
     }
     
-     /**
+    /**
       * Deletes entries
       * 
       * @param string|array $_id Ids
@@ -164,5 +164,30 @@ abstract class Tinebase_Abstract_SqlTableBackend
 	        
 	        $this->_db->delete($this->_tableName, $where);
     	}
+    }
+    
+    /**
+     * Gets all entries
+     *
+     * @param string $_orderBy Order result by
+     * @param string $_orderDirection Order direction - allowed are ASC and DESC
+     * @throws InvalidArgumentException
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC') {
+        if(in_array($_orderDirection, array('ASC', 'DESC')) === FALSE) {
+            throw new InvalidArgumentException('$_orderDirection is invalid');
+        }
+        
+        $select = $this->_db->select();
+        $select->from($this->_tableName)
+            ->order($_orderBy . ' ' . $_orderDirection);
+            
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        
+        $result = new Tinebase_Record_RecordSet($this->_modelName, $queryResult);
+        
+        return $result;
     }
 }
