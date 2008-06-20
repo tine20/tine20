@@ -24,19 +24,28 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Fixtures
+     * 
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
     
-    protected $testContainer;
+    /**
+     * Testcontainer
+     *
+     * @var unknown_type
+     */
+    protected $_testContainer;
     
-    protected $backend;
+    /**
+     * Backend
+     *
+     * @var Crm_Backend_Products
+     */
+    protected $_backend;
 
     /**
      * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
      */
     public static function main()
     {
@@ -47,8 +56,6 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
-     *
-     * @access protected
      */
     protected function setUp()
     {
@@ -60,49 +67,24 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $this->testContainer = $personalContainer[0];
+            $this->_testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description',
-            'end'           => Zend_Date::now(),
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+        $this->_objects['initialLeadType'] = new Crm_Model_Leadtype(array(
+            'id' => 1000,
+            'leadtype' => 'Just a unit test type',
+            '0'
         )); 
         
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description updated',
-            'end'           => NULL,
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-        )); 
-        
-        $this->backend = new Crm_Backend_LeadTypes();
+        $this->_backend = new Crm_Backend_LeadTypes();
     }
 
     /**
      * Tears down the fixture
+     * 
      * This method is called after a test is executed.
-     *
-     * @access protected
      */
     protected function tearDown()
     {
@@ -110,31 +92,50 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to add a lead type
+     */
+    public function testAddLeadType()
+    {
+        $leadType = $this->_backend->create($this->_objects['initialLeadType']);
+        
+        $this->assertEquals($this->_objects['initialLeadType']->id, $leadType->id);
+    }
+    
+    /**
      * try to get all lead types
-     *
      */
     public function testGetLeadTypes()
     {
-        $types = $this->backend->getAll();
+        $types = $this->_backend->getAll();
         
         $this->assertTrue(count($types) >= 3);
     }
     
     /**
      * try to get one lead type
-     *
      */
     public function testGetLeadType()
     {
-        $types = $this->backend->getAll();
-        
-        $type = $this->backend->get($types[0]->id);
+        $types = $this->_backend->getAll();
+        $type = $this->_backend->get($types[0]->id);
         
         $this->assertType('Crm_Model_Leadtype', $type);
         $this->assertTrue($type->isValid());
     }
-}		
-	
+    
+    /**
+     * try to delete a lead type
+     */
+    public function testDeleteLeadType()
+    {
+        $id = $this->_objects['initialLeadType']->getId();
+        
+        $this->_backend->delete($id);
+        $this->setExpectedException('UnderflowException');
+        $this->_backend->get($id);
+    }
+}
+
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadTypesTest::main') {
     Crm_Backend_LeadTypesTest::main();

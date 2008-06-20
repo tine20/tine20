@@ -57,9 +57,8 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
 
     /**
      * Sets up the fixture.
+     * 
      * This method is called before a test is executed.
-     *
-     * @access protected
      */
     protected function setUp()
     {
