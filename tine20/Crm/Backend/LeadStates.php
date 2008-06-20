@@ -58,29 +58,6 @@ class Crm_Backend_LeadStates extends Tinebase_Abstract_SqlTableBackend
     }   
     
     /**
-     * get state identified by id
-     *
-     * @param int $_leadStateId
-     * @return Crm_Model_Leadstate
-     */
-    public function getLeadState($_leadStateId)
-    {   
-        $stateId = (int)$_leadStateId;
-        if($stateId != $_leadStateId) {
-            throw new InvalidArgumentException('$_leadStateId must be integer');
-        }
-        $rowSet = $this->_table->find($stateId);
-        
-        if(count($rowSet) === 0) {
-            throw new Exception('lead state not found');
-        }
-        
-        $result = new Crm_Model_Leadstate($rowSet->current()->toArray());
-   
-        return $result;
-    }
-    
-    /**
     * add or updates an option
     *
     * @param Crm_Leadstate $_optionData the optiondata
