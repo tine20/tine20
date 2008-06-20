@@ -128,7 +128,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         
-        $result = new Crm_Model_Leadsource($queryResult);
+        $result = new $this->_modelName($queryResult);
         
         return $result;
     }
