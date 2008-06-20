@@ -102,6 +102,11 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
             this.action_removeRecord.setDisabled(selectionModel.getCount() < 1);
         }, this);
         
+        // add bbarItems
+        // @todo use each() here?
+        var gridBbarItems = [ this.action_removeRecord ];
+        gridBbarItems.push(this.bbarItems);
+                
         /* grid panel */
         this.gridPanel = new Ext.grid.EditorGridPanel({
             title: this.recordListTitle,
@@ -113,9 +118,7 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
             loadMask: true,
             plugins: this.configColumns,
             autoExpandColumn: this.autoExpand,
-            bbar: [this.action_removeRecord],
-            //bbar: this.bbarItems,
-            //height: 200,
+            bbar: gridBbarItems,
             border: false
         });
         

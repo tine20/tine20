@@ -794,6 +794,17 @@ Tine.Crm.LeadEditDialog = {
         	Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContactsSearch'));
         },
 
+        
+        /**
+         * showContactList
+         * 
+         * jump back to contact list tab
+         */
+        showContactList: function(_button, _event)
+        {
+            Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContacts'));
+        },
+
         /**
          * onclick handler for add task
          * 
@@ -1114,17 +1125,7 @@ Tine.Crm.LeadEditDialog = {
                 storeName = 'ContactsStore';
                 
                 var bbarItems = [
-                	{
-                        text: this.translation._('Add new contact'),
-                        iconCls: 'actionAdd',
-                        menu: {
-                            items: [
-                                this.actions.addResponsible,
-                                this.actions.addCustomer,
-                                this.actions.addPartner
-                            ]
-                        }
-                    }
+                    this.actions.showContactList
                 ];
 
                 
@@ -1490,6 +1491,15 @@ Tine.Crm.LeadEditDialog = {
             gridId: 'crmGridContacts',
             storeName: 'ContactsStore',            
             handler: this.handlers.unlink
+        });
+        
+        this.actions.showContactList = new Ext.Action({
+            text: this.translation._('Show contact list'),
+            tooltip: this.translation._('Show contact list'),
+            disabled: false,
+            iconCls: 'contactIconCustomer',
+            scope: this,
+            handler: this.handlers.showContactList
         });
 
         // tasks
