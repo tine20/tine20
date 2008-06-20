@@ -95,7 +95,7 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = new Crm_Backend_LeadStates();
+        $this->backend = new Crm_Backend_LeadTypes();
     }
 
     /**
@@ -110,33 +110,32 @@ class Crm_backend_LeadTypesTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get all lead states
+     * try to get all lead types
      *
      */
-    public function testGetLeadStates()
+    public function testGetLeadTypes()
     {
-        $states = $this->backend->getLeadStates();
+        $types = $this->backend->getLeadTypes();
         
-        $this->assertTrue(count($states) >= 6);
+        $this->assertTrue(count($types) >= 3);
     }
     
     /**
-     * try to get one lead state
+     * try to get one lead type
      *
      */
-    public function testGetLeadState()
+    public function testGetLeadType()
     {
-    	// TODO: Does this test make sense? It doesn't test Crm_Backend_LeadTypes::getLeadState()
-        $states = $this->backend->getLeadStates();
+        $types = $this->backend->getLeadTypes();
         
-        $state = $this->backend->getLeadState($states[0]->id);
+        $type = $this->backend->get($types[0]->id);
         
-        $this->assertType('Crm_Model_Leadstate', $state);
-        $this->assertTrue($state->isValid());
+        $this->assertType('Crm_Model_Leadtype', $type);
+        $this->assertTrue($type->isValid());
     }
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadStatesTest::main') {
-    Crm_Backend_LeadStatesTest::main();
+if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadTypesTest::main') {
+    Crm_Backend_LeadTypesTest::main();
 }

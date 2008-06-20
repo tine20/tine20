@@ -128,7 +128,7 @@ class Crm_Backend_LeadStatesTest extends PHPUnit_Framework_TestCase
     {
         $states = $this->backend->getLeadStates();
         
-        $state = $this->backend->getLeadState($states[0]->id);
+        $state = $this->backend->get($states[0]->id);
         
         $this->assertType('Crm_Model_Leadstate', $state);
         $this->assertTrue($state->isValid());

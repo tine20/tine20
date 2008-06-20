@@ -16,7 +16,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_LeadTypes
+class Crm_Backend_LeadTypes extends Tinebase_Abstract_SqlTableBackend
 {
     /**
     * Instance of Crm_Backend_Types
@@ -35,8 +35,10 @@ class Crm_Backend_LeadTypes
      */
     public function __construct ()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
-        $this->_table = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_leadtype'));
+        $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_leadtype';
+        $this->_modelName = 'Crm_Model_Leadtype';
+    	$this->_db = Zend_Registry::get('dbAdapter');
+        $this->_table = new Tinebase_Db_Table(array('name' => $this->_tableName));
     }
     
     /**
@@ -88,28 +90,6 @@ class Crm_Backend_LeadTypes
         return $_optionData;
     }
 
-    /**
-     * delete option identified by id and table
-     *
-     * @param int $_Id option id
-     * @param $_table which option section
-     * @return int the number of rows deleted
-     */
-    public function deleteLeadtypeById($_Id)
-    {
-        $Id = (int)$_Id;
-        if($Id != $_Id) {
-            throw new InvalidArgumentException('$_Id must be integer');
-        }
-            $where  = array(
-                $this->_table->getAdapter()->quoteInto('leadtype_id = ?', $Id),
-            );
-             
-            $result = $this->_table->delete($where);
-
-        return $result;
-    }    
-        
     /**
     * get leadtype identified by id
     *

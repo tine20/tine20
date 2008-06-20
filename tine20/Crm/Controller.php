@@ -503,7 +503,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function getLeadState($_id)
     {
     	$backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_STATES);
-        $result = $backend->getLeadState($_id);
+        $result = $backend->get($_id);
 
         return $result;    
     }
