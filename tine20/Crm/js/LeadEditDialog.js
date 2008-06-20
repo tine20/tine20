@@ -226,7 +226,7 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
                 id: 'linkPanel',
                 //title: 'contacts panel',
                 activeTab: 0,
-                height: 273,
+                height: 350,
                 items: _linkTabpanels,
             }
             ]

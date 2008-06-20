@@ -97,7 +97,7 @@ Tine.Crm.Main = {
 		 */
         handlerEdit: function(){
             var _rowIndex = Ext.getCmp('gridCrm').getSelectionModel().getSelections();
-            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 900, 700);
+            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId=' + _rowIndex[0].id, 1024, 768);
         },
         
         /**
@@ -402,7 +402,8 @@ Tine.Crm.Main = {
         
         gridPanel.on('rowdblclick', function(_gridPanel, _rowIndexPar, ePar) {
             var record = _gridPanel.getStore().getAt(_rowIndexPar);
-            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 900, 700);            
+            // @todo use generic popup
+            Tine.Tinebase.Common.openWindow('leadWindow', 'index.php?method=Crm.editLead&_leadId='+record.data.id, 1024, 768);            
         });
        
        return;
@@ -426,7 +427,7 @@ Tine.Crm.Main = {
                 //  var tree = Ext.getCmp('venues-tree');
                 //  var curSelNode = tree.getSelectionModel().getSelectedNode();
                 //  var RootNode   = tree.getRootNode();
-                Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 900, 700);
+                Tine.Tinebase.Common.openWindow('CrmLeadWindow', 'index.php?method=Crm.editLead&_leadId=0&_eventId=NULL', 1024, 768);
             }
         });
         
@@ -1070,6 +1071,21 @@ Tine.Crm.LeadEditDialog = {
                     }
                 }, this);
                 
+                var bbarItems = [
+                    this.actions.linkContact,
+                    {
+                        text: this.translation._('Add new contact'),
+                        iconCls: 'actionAdd',
+                        menu: {
+                            items: [
+                                this.actions.addResponsible,
+                                this.actions.addCustomer,
+                                this.actions.addPartner
+                            ]
+                        }
+                    }
+                ]; 
+                
                 break;
             
             case 'ContactsSearch':
@@ -1174,6 +1190,11 @@ Tine.Crm.LeadEditDialog = {
                 }, this);
             	
                 var autoExpand = 'summary';
+                
+                var bbarItems = [
+                    this.actions.addTask
+                ]; 
+                
                 break;
 
             case 'Products':
@@ -1187,7 +1208,11 @@ Tine.Crm.LeadEditDialog = {
                 var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
                 
                 var autoExpand = '';
-                break;
+
+                var bbarItems = [
+                    this.actions.addProduct
+                ]; 
+                break;                
 
         } // end switch
 
@@ -1220,7 +1245,8 @@ Tine.Crm.LeadEditDialog = {
                 cm: columnModel,
                 store: gridStore,
                 selModel: rowSelectionModel,
-                autoExpandColumn: autoExpand
+                autoExpandColumn: autoExpand,
+                bbar: bbarItems
             };                	
         }
         	
@@ -1437,7 +1463,7 @@ Tine.Crm.LeadEditDialog = {
         });
 
         this.actions.linkContact = new Ext.Action({
-            text: this.translation._('Link contact'),
+            text: this.translation._('Link existing contact'),
             tooltip: this.translation._('Link existing contact with lead'),
             //disabled: true,
             iconCls: 'contactIconPartner',
@@ -1552,22 +1578,6 @@ Tine.Crm.LeadEditDialog = {
         var leadEdit = new Tine.widgets.dialog.EditRecord({
             id : 'leadDialog',
             tbarItems: [
-                //@todo move that to bottom of link grids
-                /*
-                {
-                    text: this.translation._('Add new contact'),
-                    iconCls: 'actionAdd',
-                    menu: {
-                        items: [
-                            this.actions.addResponsible,
-                            this.actions.addCustomer,
-                            this.actions.addPartner
-                        ]
-                    }
-                }, 
-                this.actions.addTask,                
-                this.actions.addProduct,
-                '-', */
                 this.actions.exportLead
             ],
             handlerApplyChanges: this.handlers.applyChanges,
