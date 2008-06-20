@@ -788,12 +788,9 @@ Tine.Crm.LeadEditDialog = {
          * linkContact
          * 
          * link an existing contact, open 'object' picker dialog
-         * @todo implement
          */
         linkContact: function(_button, _event)
         {
-        	console.log('link');     
-        	
         	Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContactsSearch'));
         },
 
@@ -1011,7 +1008,9 @@ Tine.Crm.LeadEditDialog = {
     	// set the column / row selection model
     	switch ( _type ) {
     		
-            case 'Contacts':
+            /******************* contacts tabpanel ********************/                
+
+    		case 'Contacts':
 
                 // @todo   move that to renderer/addressbook ?
                 var columnModel = new Ext.grid.ColumnModel([
@@ -1088,6 +1087,8 @@ Tine.Crm.LeadEditDialog = {
                 
                 break;
             
+            /******************* contacts search tabpanel ********************/                
+                
             case 'ContactsSearch':
             
                 // @todo add cm, selection model event handler and context menu
@@ -1112,7 +1113,24 @@ Tine.Crm.LeadEditDialog = {
                 
                 storeName = 'ContactsStore';
                 
+                var bbarItems = [
+                	{
+                        text: this.translation._('Add new contact'),
+                        iconCls: 'actionAdd',
+                        menu: {
+                            items: [
+                                this.actions.addResponsible,
+                                this.actions.addCustomer,
+                                this.actions.addPartner
+                            ]
+                        }
+                    }
+                ];
+
+                
                 break;
+
+            /******************* tasks tabpanel ********************/                
 
             case 'Tasks':
 
@@ -1197,6 +1215,8 @@ Tine.Crm.LeadEditDialog = {
                 
                 break;
 
+            /******************* products tabpanel ********************/                
+                
             case 'Products':
             
                 // @todo add products cm, selection model event handler and context menu
@@ -1223,20 +1243,10 @@ Tine.Crm.LeadEditDialog = {
             var grid = new Tine.widgets.GridPicker({
             	id: 'crmGrid' + _type,
                 gridStore: gridStore,
-                columnModel: columnModel
+                columnModel: columnModel,
+                bbarItems: bbarItems
             });
         	
-        	/*
-            var grid = {
-                xtype:'grid',
-                id: 'crmGrid' + _type,
-                title: _title,
-                cm: columnModel,
-                store: gridStore,
-                selModel: rowSelectionModel,
-                autoExpandColumn: autoExpand
-            };
-            */        
         } else {
             var grid = {
                 xtype:'grid',

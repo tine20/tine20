@@ -11,6 +11,7 @@
  * @todo generalise for more different object types
  * @todo add remove again
  * @todo add default column model?
+ * @todo add translations
  */
  
 Ext.namespace('Tine.widgets');
@@ -28,9 +29,14 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
     pickerType: 'contact',
     
     /**
-     * @cfg{String} pickerTypeDefault 'contact'
+     * @cfg{String} pickerTypeDefault - default: 'contact'
      */
     pickerTypeDefault: 'contact',    
+
+    /**
+     * @cfg{String} autoExpand columnn - default: 'n_fileas'
+     */
+    autoExpand: 'n_fileas',    
     
     /**
      * @cfg {String} title for the record list
@@ -45,8 +51,13 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Ext.grid.ColumnModel} columnModel
      */
-    columnModel: null,
+    columnModel: null,    
     
+    /**
+     * @cfg {array} bbarItems
+     */
+    bbarItems: [],
+
     /**
      * @cfg {Array} Array of column's config objects where the config options are in
      */
@@ -62,15 +73,13 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
-    	/*
         this.action_removeRecord = new Ext.Action({
-            text: 'remove account',
+            text: 'remove record',
             disabled: true,
             scope: this,
             handler: this.removeRecord,
             iconCls: 'action_deleteContact'
         });
-        */
     	
         this.gridStore.sort(this.recordPrefix + 'name', 'asc');
                 
@@ -89,12 +98,9 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
             multiSelect:true
         });
         
-        // @todo add again ?
-        /*
         rowSelectionModel.on('selectionchange', function(selectionModel) {
             this.action_removeRecord.setDisabled(selectionModel.getCount() < 1);
         }, this);
-        */
         
         /* grid panel */
         this.gridPanel = new Ext.grid.EditorGridPanel({
@@ -106,15 +112,17 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
             enableColLock:false,
             loadMask: true,
             plugins: this.configColumns,
-            //autoExpandColumn: this.recordPrefix + 'name',
-            //bbar: [this.action_removeRecord],
+            autoExpandColumn: this.autoExpand,
+            bbar: [this.action_removeRecord],
+            //bbar: this.bbarItems,
+            //height: 200,
             border: false
         });
         
         this.items = this.getGridLayout();
         
         Tine.widgets.GridPicker.superclass.initComponent.call(this);
-        
+        /*
         this.on('afterlayout', function(container){
             var height = container.ownerCt.getSize().height;
             this.setHeight(height);
@@ -122,6 +130,7 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
                 item.setHeight(height);
             });
         },this);
+        */
     },
     
     /**
@@ -150,26 +159,14 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      * @todo make it work
      */
     addRecord: function(record) {
-    	//console.log('add');
         var recordIndex = this.getRecordIndex(record);
-        if (recordIndex === false) {
+        if (recordIndex === -1) {
             var newRecord = {};
-            /*
-            newRecord[this.recordPrefix + 'name'] = record.data.name;
-            newRecord[this.recordPrefix + 'type'] = record.data.type;
-            newRecord[this.recordPrefix + 'id'] = record.data.id;
-            */
             newRecord = record.data.data;
             newRecord.link_remark = 'responsible';
             
-            /*
-            var newData = {};
-            newData[this.gridStore.root] = [newRecord];
-            newData[this.gridStore.totalProperty] = 1;
-            */
             var newData = [newRecord];
         	            
-            //console.log(newRecord);
         	//console.log(newData);
         	
         	this.gridStore.loadData(newData, true);
@@ -183,12 +180,10 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      * removes currently in this.configGridPanel selected rows
      */    
     removeRecord: function() {
-    	/*
-        var selectedRows = this.configGridPanel.getSelectionModel().getSelections();
+        var selectedRows = this.gridPanel.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
-            this.configStore.remove(selectedRows[i]);
+            this.gridStore.remove(selectedRows[i]);
         }
-        */
     },
     
     /**
@@ -198,7 +193,9 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      * @todo    activate again
      */
     getRecordIndex: function(record) {
-    	return false;
+
+    	return id ? this.gridStore.indexOfId(record.data.id) : false;
+    	
     	/*
         var id = false;
         this.configStore.each(function(item){
@@ -250,7 +247,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
      * @cfg {bool}
      * enable bottom toolbar
      */
-    enableBbar: false,
+    enableBbar: true,
     
     /**
      * @cfg {Ext.Toolbar}
@@ -275,6 +272,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
     border: true,
     split: true,
     width: 300,
+    height: 300,
     collapsible: false,
     
     //private
@@ -297,14 +295,14 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
         this.actions = {
             addRecord: new Ext.Action({
                 text: 'add record',
-                disabled: true,
+                disabled: false,
                 scope: this,
                 handler: function(){
                     var record = this.searchPanel.getSelectionModel().getSelected();
                     this.fireEvent('recorddblclick', record);
-                }
+                },
                 // @todo add the right icon
-                //iconCls: 'action_addContact'
+                iconCls: 'action_addContact'
             })
         };
 
@@ -392,6 +390,8 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
                 items: [this.actions.addRecord]
             });
         }
+        
+        //console.log(this.bbar);
 
         this.searchPanel = new Ext.grid.GridPanel({
             title: 'Search',
@@ -406,7 +406,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
             loadMask: true,
             autoExpandColumn: 'name',
             tbar: this.Toolbar,
-            bbar: this.Toolbar2,
+            //bbar: this.bbar,
             border: false
         });
         
@@ -423,11 +423,13 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
              }
         }, this);
         
+        /*
         this.searchPanel.getSelectionModel().on('selectionchange', function(sm){
             var record = sm.getSelected();
             this.actions.addRecord.setDisabled(!record);
             this.fireEvent('recordselectionchange', record);
         }, this);
+        */
         
         this.items = [this.searchPanel, {
            title: 'Browse',
@@ -436,9 +438,10 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
         }];
         
         Tine.widgets.PickerPanel.superclass.initComponent.call(this);
-        
+        /*
         this.on('resize', function(){
             this.quickSearchField.setWidth(this.getSize().width - 3);
         }, this);
+        */
     }
 });
