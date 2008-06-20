@@ -112,6 +112,7 @@ abstract class Tinebase_Abstract_SqlTableBackend
     /**
      * Gets one entry (by id)
      *
+     * @throws InvalidArgumentException|UnderflowException
      * @param integer $_id
      */
     public function get($_id) {
@@ -128,6 +129,9 @@ abstract class Tinebase_Abstract_SqlTableBackend
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         
+        if (!$queryResult) {
+            throw new UnderflowException('Entry with id ' . $id . ' not found');
+        }        
         $result = new $this->_modelName($queryResult);
         
         return $result;
