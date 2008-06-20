@@ -67,6 +67,16 @@ Tine.Voipmanager.Model.Software = Ext.data.Record.create([
 ]);
 
 
+Tine.Voipmanager.Model.SnomLine = Ext.data.Record.create([
+    {name: 'asteriskline_id'},
+    {name: 'id'},
+    {name: 'idletext'},
+    {name: 'lineactive'},
+    {name: 'linenumber'},
+    {name: 'snomphone_id'}
+]);
+
+
 Tine.Voipmanager.Model.Line = Ext.data.Record.create([
     {name: 'id'},
     {name: 'name'},
