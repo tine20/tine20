@@ -26,19 +26,28 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Fixtures
+     * 
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
     
-    protected $testContainer;
+    /**
+     * Testcontainer
+     *
+     * @var unknown_type
+     */
+    protected $_testContainer;
     
-    protected $backend;
+    /**
+     * Backend
+     *
+     * @var Crm_Backend_Products
+     */
+    protected $_backend;
 
     /**
      * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
      */
     public static function main()
     {
@@ -62,42 +71,18 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $this->testContainer = $personalContainer[0];
+            $this->_testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description',
-            'end'           => Zend_Date::now(),
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
-        )); 
+        $this->_objects['initialProduct'] = new Crm_Model_Product(array(
+            'id' => 1000,
+            'productsource' => 'Just to test',
+            'price' => '47.11'
+        ));
         
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
-            'lead_name'     => 'PHPUnit',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
-            'start'         => Zend_Date::now(),
-            'description'   => 'Description updated',
-            'end'           => NULL,
-            'turnover'      => '200000',
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-        )); 
-        
-        $this->backend = new Crm_Backend_Products();
+        $this->_backend = new Crm_Backend_Products();
     }
 
     /**
@@ -111,30 +96,50 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to add a product
+     */
+    public function testAddProduct()
+    {
+        $product = $this->_backend->create($this->_objects['initialProduct']);
+        
+        $this->assertEquals($this->_objects['initialProduct']->id, $product->id);
+    }
+    
+    /**
      * try to get all products
-     *
      */
     public function testGetProducts()
     {
-        $products = $this->backend->getAll();
+        $products = $this->_backend->getAll();
         
-        #$this->assertTrue(count($types) >= 3);
+        $this->assertTrue(count($products) >= 1);
     }
     
     /**
      * try to get one product
-     *
      */
     public function testGetProduct()
     {
-        $products = $this->backend->getAll();
+        $products = $this->_backend->getAll();
         
-        #$product = $this->backend->getProduct($products[0]->id);
+        $product = $this->_backend->get($products[0]->id);
         
-        #$this->assertType('Crm_Model_Product', $product);
-        #$this->assertTrue($product->isValid());
+        $this->assertType('Crm_Model_Product', $product);
+        $this->assertTrue($product->isValid());
     }
-}		
+    
+    /**
+     * try to delete a product
+     */
+    public function testDeleteProduct()
+    {
+    	$id = $this->_objects['initialProduct']->getId();
+    	
+        $this->_backend->delete($id);
+        $this->setExpectedException('UnderflowException');
+        $this->_backend->get($id);
+    }
+}
 	
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Backend_ProductsTest::main') {
