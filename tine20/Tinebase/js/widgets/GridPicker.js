@@ -272,7 +272,7 @@ Tine.widgets.PickerPanel = Ext.extend(Ext.TabPanel, {
     
     activeTab: 0,
     defaults:{autoScroll:true},
-    border: false,
+    border: true,
     split: true,
     width: 300,
     collapsible: false,
