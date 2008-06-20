@@ -9,8 +9,6 @@
  * includes the contact search and picker panel and a small contacts grid
  * 
  * @todo generalise for more different object types
- * @todo add remove again
- * @todo add default column model?
  * @todo add translations
  */
  
@@ -159,7 +157,6 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      * add given record to this.configStore
      * 
      * @param {Tine.model.record}
-     * @todo make it work
      */
     addRecord: function(record) {
         var recordIndex = this.getRecordIndex(record);
@@ -193,7 +190,6 @@ Tine.widgets.GridPicker = Ext.extend(Ext.Panel, {
      * returns index of given record in this.configStore
      * 
      * @param {Ext.data.Record}
-     * @todo    activate again
      */
     getRecordIndex: function(record) {
 
