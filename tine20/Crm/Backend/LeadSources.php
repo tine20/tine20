@@ -42,22 +42,6 @@ class Crm_Backend_LeadSources extends Tinebase_Abstract_SqlTableBackend
     }
     
     /**
-     * get Leadsources
-     * 
-     * @param string $_sort
-     * @param string $_dir
-     * @return Tinebase_Record_RecordSet of subtype Crm_Model_Leadsource
-     */
-    public function getLeadSources($_sort = 'id', $_dir = 'ASC')
-    {   
-        $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
-        
-        $result = new Tinebase_Record_RecordSet('Crm_Model_Leadsource', $rows->toArray());
-        
-        return $result;
-    }
-
-    /**
     * add or updates an option
     *
     * @param Tinebase_Record_Recordset $_leadSources list of lead sources

@@ -413,7 +413,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
     public function getLeadSources($_sort = 'id', $_dir = 'ASC')
     {
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEAD_SOURCES);
-    	$result = $backend->getLeadSources($_sort, $_dir);
+    	$result = $backend->getAll($_sort, $_dir);
 
         return $result;    
     }

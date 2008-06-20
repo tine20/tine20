@@ -129,7 +129,7 @@ class Crm_Backend_LeadSourcesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLeadSources()
     {
-        $sources = $this->backend->getLeadSources();
+        $sources = $this->backend->getAll();
         
         $this->assertTrue(count($sources) >= 4);
     }
