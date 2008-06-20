@@ -96,14 +96,23 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      *
      * @param Crm_Model_LeadFilter $_filter
      * @param Crm_Model_LeadPagination $_pagination
+     * @param bool $_getRelations
+     * 
      * @return Tinebase_Record_RecordSet
      */
-    public function searchLeads(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination)
+    public function searchLeads(Crm_Model_LeadFilter $_filter, Crm_Model_LeadPagination $_pagination, $_getRelations = FALSE)
     {
         $this->_checkContainerACL($_filter);
         
         $backend = Crm_Backend_Factory::factory(Crm_Backend_Factory::LEADS);        
         $leads = $backend->search($_filter, $_pagination);
+        
+        if ( $_getRelations ) {
+            foreach ($leads as $lead) {
+                $this->getLinkedProperties($lead);
+            }
+        }
+        
         return $leads;
     }
     
@@ -295,7 +304,7 @@ class Crm_Controller extends Tinebase_Container_Abstract implements Tinebase_Eve
      * @param Crm_Model_Lead $_lead
      * @deprecated ?
      * 
-     * @todo    replace with getLinksForApplication ?
+     * @todo    replace with getLinksForApplication / new relations handling
      */
     protected function getLinkedProperties(Crm_Model_Lead &$_lead)
     {

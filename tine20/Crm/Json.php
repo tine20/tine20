@@ -89,6 +89,8 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
      *
      * @param array $filter
      * @return array
+     * 
+     * @todo    resolve links/relations every time?
      */
     public function searchLeads($filter)
     {
@@ -98,12 +100,17 @@ class Crm_Json extends Tinebase_Application_Json_Abstract
         
         //Zend_Registry::get('logger')->debug(print_r($paginationFilter,true));
         
-        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination);
+        $leads = Crm_Controller::getInstance()->searchLeads($filter, $pagination, TRUE);
         $leads->setTimezone($this->_userTimezone);
         $leads->convertDates = true;
         
+        $result = array();
+        foreach ($leads as $lead) {
+            $result[] = $this->convertLeadToArray($lead);
+        }
+        
         return array(
-            'results'       => $leads->toArray(),
+            'results'       => $result,
             'totalcount'    => Crm_Controller::getInstance()->searchLeadsCount($filter)
         );
     }
