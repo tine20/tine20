@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        implement json tests
  */
 
 /**
@@ -242,7 +241,6 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * try to get a lead (test searchLeads as well)
      *
-     * @todo use new searchLeads function here
      */
     public function testGetLead()    
     {
@@ -255,8 +253,26 @@ class Crm_JsonTest extends PHPUnit_Framework_TestCase
         $lead = $json->getLead($initialLead['id']);
         
         $this->assertEquals($lead['description'], $this->objects['initialLead']->description);        
-        $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);
-                
+        $this->assertEquals($lead['responsible'][0]['assistent'], $this->objects['contact']->assistent);                
+    }
+
+    /**
+     * try to get all leads
+     *
+     */
+    public function testGetLeads()    
+    {
+        $json = new Crm_Json();
+        
+        $result = $json->searchLeads(Zend_Json::encode($this->objects['filter']));
+        $leads = $result['results'];
+        $initialLead = $leads[0];
+
+        //print_r($initialLead);
+        
+        $this->assertEquals($initialLead['description'], $this->objects['initialLead']->description);        
+        $this->assertEquals($initialLead['responsible'][0]['assistent'], $this->objects['contact']->assistent);
+        $this->assertEquals($initialLead['tasks'][0], $this->objects['task']->getId());        
     }
     
     /**
