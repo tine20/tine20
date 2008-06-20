@@ -794,7 +794,9 @@ Tine.Crm.LeadEditDialog = {
          */
         linkContact: function(_button, _event)
         {
+        	
         	Ext.getCmp('linkPanel').activate(Ext.getCmp('crmGridContactsSearch'));
+        	Ext.getCmp('linkPanel').unhideTabStripItem(Ext.getCmp('crmGridContactsSearch'));
         },
 
         
@@ -1110,7 +1112,7 @@ Tine.Crm.LeadEditDialog = {
                 storeName = 'ContactsStore';
                 
                 var bbarItems = [
-                    this.actions.showContactList
+                    //this.actions.showContactList
                 ];
 
                 
@@ -1228,9 +1230,11 @@ Tine.Crm.LeadEditDialog = {
         if ( _type === 'ContactsSearch' ) {
             var grid = new Tine.widgets.GridPicker({
             	id: 'crmGrid' + _type,
+            	title: _title,
                 gridStore: gridStore,
                 columnModel: columnModel,
-                bbarItems: bbarItems
+                bbarItems: bbarItems,
+                closable: true
             });
         	
         } else if ( _type === 'Contacts' ) {
@@ -1472,8 +1476,8 @@ Tine.Crm.LeadEditDialog = {
         });
 
         this.actions.linkContact = new Ext.Action({
-            text: this.translation._('Link existing contact'),
-            tooltip: this.translation._('Link existing contact with lead'),
+            text: this.translation._('Add existing contact'),
+            tooltip: this.translation._('Add existing contact to lead'),
             //disabled: true,
             iconCls: 'contactIconPartner',
             scope: this,
@@ -1605,7 +1609,7 @@ Tine.Crm.LeadEditDialog = {
                         this.getLinksGrid('Contacts', this.translation._('Contacts')),
                         this.getLinksGrid('Tasks', this.translation._('Tasks')),
                         this.getLinksGrid('Products', this.translation._('Products')),
-                        this.getLinksGrid('ContactsSearch', this.translation._('ContactsSearch'))
+                        this.getLinksGrid('ContactsSearch', this.translation._('Search Contacts'))
                     ])             
         });
 
