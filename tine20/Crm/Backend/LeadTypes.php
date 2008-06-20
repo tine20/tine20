@@ -89,27 +89,4 @@ class Crm_Backend_LeadTypes extends Tinebase_Abstract_SqlTableBackend
 
         return $_optionData;
     }
-
-    /**
-    * get leadtype identified by id
-    *
-    * @param int $_typeId
-    * @return Crm_Model_Leadtype
-    */
-    public function getLeadType($_typeId)
-    {   
-        $typeId = (int)$_typeId;
-        if($typeId != $_typeId) {
-            throw new InvalidArgumentException('$_typeId must be integer');
-        }
-        $rowSet = $this->_table->find($typeId);
-        
-        if(count($rowSet) == 0) {
-            throw new Exception('lead type not found');
-        }
-        
-        $result = new Crm_Model_Leadtype($rowSet->current()->toArray());
-   
-        return $result;
-    }
 }
