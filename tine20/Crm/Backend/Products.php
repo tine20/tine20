@@ -15,7 +15,7 @@
  *
  * @package     Crm
  */
-class Crm_Backend_Products
+class Crm_Backend_Products extends Tinebase_Abstract_SqlTableBackend
 {
 	/**
 	* Instance of Crm_Backend_Products
@@ -34,7 +34,9 @@ class Crm_Backend_Products
      */
     public function __construct ()
     {
-        $this->_db = Zend_Registry::get('dbAdapter');
+        $this->_tableName = SQL_TABLE_PREFIX . 'metacrm_products';
+        $this->_modelName = 'Crm_Model_Product';
+    	$this->_db = Zend_Registry::get('dbAdapter');
         $this->_table  = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'metacrm_products'));
     }
     
@@ -45,7 +47,7 @@ class Crm_Backend_Products
      * @param string $_dir
      * @return Tinebase_Record_RecordSet of subtype Crm_Model_Product
      */
-    public function getProducts($_sort = 'id', $_dir = 'ASC')
+    public function _getAll($_sort = 'id', $_dir = 'ASC')
     {   
         $rows = $this->_table->fetchAll(NULL, $_sort, $_dir);
         
@@ -82,27 +84,4 @@ class Crm_Backend_Products
 
         return $_optionData;
     }
-    
-    /**
-     * delete option identified by id and table
-     *
-     * @param int $_Id option id
-     * @param $_table which option section
-     * @return int the number of rows deleted
-     */
-    public function deleteProductById($_id)
-    {
-        $id = (int)$_id;
-        if ($id != $_id) {
-            throw new InvalidArgumentException('$_id must be integer');
-        }
-        
-        $where  = array(
-            $this->linksTable->getAdapter()->quoteInto('leadsource_id = ?', $id),
-        );
-        
-        $result = $this->_table->delete($where);
-
-        return $result;
-    }   
 }

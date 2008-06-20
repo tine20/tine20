@@ -116,7 +116,7 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProducts()
     {
-        $products = $this->backend->getProducts();
+        $products = $this->backend->getAll();
         
         #$this->assertTrue(count($types) >= 3);
     }
@@ -127,7 +127,7 @@ class Crm_Backend_ProductsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProduct()
     {
-        $products = $this->backend->getProducts();
+        $products = $this->backend->getAll();
         
         #$product = $this->backend->getProduct($products[0]->id);
         
