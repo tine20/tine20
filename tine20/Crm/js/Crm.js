@@ -691,6 +691,9 @@ Tine.Crm.LeadEditDialog = {
                         Tine.Crm.Model.Lead.FixDates(lead);
                         leadForm.loadRecord(lead);
                         
+                        // update stores
+                        Ext.StoreMgr.lookup('ContactsStore').commitChanges();
+                                                
                         Ext.MessageBox.hide();
                     },
                     failure: function ( result, request) { 
@@ -971,35 +974,7 @@ Tine.Crm.LeadEditDialog = {
         */
                 
     },
-    
-    /**
-     * contact type renderer
-     * 
-     * @param   string type
-     * @return  contact type icon
-     */
-    contactTypeRenderer: function(type)
-    {
-    	switch ( type ) {
-    		case 'responsible':
-    		    var iconClass = 'contactIconResponsible';
-    		    var qTip = Tine.Crm.LeadEditDialog.translation._('Responsible');
-    		    break;
-            case 'customer':
-                var iconClass = 'contactIconCustomer';
-                var qTip = Tine.Crm.LeadEditDialog.translation._('Customer');
-                break;
-            case 'partner':
-                var iconClass = 'contactIconPartner';
-                var qTip = Tine.Crm.LeadEditDialog.translation._('Partner');
-                break;
-    	}
-    	
-    	var icon = '<img class="x-menu-item-icon ' + iconClass + '" src="ExtJS/resources/images/default/s.gif" ext:qtip="' + qTip + '"/>'
-    	
-    	return icon;
-    },
-    
+        
     /**
      * getLinksGrid
      * get the grids for contacts/tasks/products/...
@@ -1026,6 +1001,19 @@ Tine.Crm.LeadEditDialog = {
                 // @todo   move that to renderer/addressbook ?
                 var columnModel = new Ext.grid.ColumnModel([
                     {id:'id', header: "id", dataIndex: 'id', width: 25, sortable: true, hidden: true },
+                    {
+                        id:'link_remark', 
+                        header: this.translation._("Type"), 
+                        dataIndex: 'link_remark', 
+                        width: 75, 
+                        sortable: true,
+                        renderer: Tine.Crm.contactType.Renderer,
+                        editor: new Tine.Crm.contactType.ComboBox({
+                            autoExpand: true,
+                            blurOnSelect: true,
+                            listClass: 'x-combo-list-small'
+                        })
+                    },
                     {id:'n_fileas', header: this.translation._('Name'), dataIndex: 'n_fileas', width: 100, sortable: true, renderer: 
                         function(val, meta, record) {
                             var org_name = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : '&nbsp;';
@@ -1051,15 +1039,7 @@ Tine.Crm.LeadEditDialog = {
                         
                             return formated_return;
                         }
-                    },    
-                    {
-                        id:'link_remark', 
-                        header: this.translation._("Type"), 
-                        dataIndex: 'link_remark', 
-                        width: 50, 
-                        sortable: false,
-                        renderer: this.contactTypeRenderer
-                    }
+                    }    
                 ]);
                 
                 var autoExpand = 'n_fileas';                        
@@ -1112,9 +1092,14 @@ Tine.Crm.LeadEditDialog = {
                         id:'link_remark', 
                         header: this.translation._("Type"), 
                         dataIndex: 'link_remark', 
-                        width: 50, 
+                        width: 75, 
                         sortable: false,
-                        renderer: this.contactTypeRenderer
+                        renderer: Tine.Crm.contactType.Renderer,
+                        editor: new Tine.Crm.contactType.ComboBox({
+                            autoExpand: true,
+                            blurOnSelect: true,
+                            listClass: 'x-combo-list-small'
+                        })
                     }
                 ]);
                 
@@ -1248,7 +1233,20 @@ Tine.Crm.LeadEditDialog = {
                 bbarItems: bbarItems
             });
         	
+        } else if ( _type === 'Contacts' ) {
+            var grid = new Ext.grid.EditorGridPanel({
+                id: 'crmGrid' + _type,
+                title: _title,
+                cm: columnModel,
+                store: gridStore,
+                selModel: rowSelectionModel,
+                autoExpandColumn: autoExpand,
+                bbar: bbarItems,
+                clicksToEdit: 'auto'
+            });            
+            
         } else {
+        	// @todo make the other gris quickadd/editor grids as well
             var grid = {
                 xtype:'grid',
                 id: 'crmGrid' + _type,

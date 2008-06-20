@@ -266,3 +266,88 @@ Tine.Crm.LeadEditDialog.getEditForm = function(_linkTabpanels) {
         //savePath
     ];
 };
+
+Ext.namespace('Tine.Crm', 'Tine.Crm.contactType');
+
+/**
+ * contact type select combo box
+ * 
+ */
+Tine.Crm.contactType.ComboBox = Ext.extend(Ext.form.ComboBox, {
+    /**
+     * @cfg {bool} autoExpand Autoexpand comboBox on focus.
+     */
+    autoExpand: false,
+    /**
+     * @cfg {bool} blurOnSelect blurs combobox when item gets selected
+     */
+    blurOnSelect: false,
+    
+    displayField: 'link_remark',
+    valueField: 'link_remark',
+    mode: 'local',
+    triggerAction: 'all',
+    //emptyText: 'percent ...',
+    lazyInit: false,
+    
+    //private
+    initComponent: function(){
+        Tine.Crm.contactType.ComboBox.superclass.initComponent.call(this);
+        // allways set a default
+        if(!this.value) {
+            this.value = 'responsible';
+        }
+            
+        this.store = new Ext.data.SimpleStore({
+            fields: ['link_remark'],
+            data: [
+                    ['responsible'],
+                    ['customer'],
+                    ['partner']
+                ]
+        });
+        
+        if (this.autoExpand) {
+            this.on('focus', function(){
+                this.lazyInit = false;
+                this.selectByValue(this.getValue());
+                this.expand();
+            });
+        }
+        
+        if (this.blurOnSelect){
+            this.on('select', function(){
+                this.fireEvent('blur', this);
+            }, this);
+        }
+    }
+});
+Ext.reg('leadcontacttypecombo', Tine.Crm.contactType.ComboBox);
+
+/**
+ * contact type renderer
+ * 
+ * @param   string type
+ * @return  contact type icon
+ */
+Tine.Crm.contactType.Renderer = function(type)
+{
+    switch ( type ) {
+        case 'responsible':
+            var iconClass = 'contactIconResponsible';
+            var qTip = Tine.Crm.LeadEditDialog.translation._('Responsible');
+            break;
+        case 'customer':
+            var iconClass = 'contactIconCustomer';
+            var qTip = Tine.Crm.LeadEditDialog.translation._('Customer');
+            break;
+        case 'partner':
+            var iconClass = 'contactIconPartner';
+            var qTip = Tine.Crm.LeadEditDialog.translation._('Partner');
+            break;
+    }
+    
+    var icon = '<img class="x-menu-item-icon ' + iconClass + '" src="ExtJS/resources/images/default/s.gif" ext:qtip="' + qTip + '"/>'
+    
+    return icon;
+};
