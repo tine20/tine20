@@ -101,6 +101,7 @@ class Voipmanager_Backend_Snom_Phone
         }
         
         $phoneData = $_phone->toArray();
+        unset($phoneData['lines']);
         
         $this->_db->insert(SQL_TABLE_PREFIX . 'snom_phones', $phoneData);
 
@@ -122,6 +123,7 @@ class Voipmanager_Backend_Snom_Phone
         $phoneId = $_phone->getId();
         $phoneData = $_phone->toArray();
         unset($phoneData['id']);
+        unset($phoneData['lines']);
 
         $where = array($this->_db->quoteInto('id = ?', $phoneId));
         $this->_db->update(SQL_TABLE_PREFIX . 'snom_phones', $phoneData, $where);

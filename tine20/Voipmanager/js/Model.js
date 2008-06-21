@@ -21,8 +21,7 @@ Tine.Voipmanager.Model.Phone = Ext.data.Record.create([
     {name: 'current_software'},
     {name: 'current_model'},
     {name: 'settings_loaded_at'},
-    {name: 'firmware_checked_at'},
-    {name: 'lines'}
+    {name: 'firmware_checked_at'}
 ]);
 
 

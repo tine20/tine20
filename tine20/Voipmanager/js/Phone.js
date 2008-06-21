@@ -406,11 +406,20 @@ Tine.Voipmanager.Phones.EditDialog =  {
 
             if(form.isValid()) {
                 form.updateRecord(this.phoneRecord);
-        
+                
+                var linesStore = Ext.StoreMgr.lookup('Voipmanger_EditPhone_SnomLines');
+                var lines = [];
+                linesStore.each(function(record) {
+                	if(record.data.asteriskline_id != '') {
+                        lines.push(record.data);          
+                	}
+                });
+                
                 Ext.Ajax.request({
                     params: {
-                        method: 'Voipmanager.savePhone', 
-                        phoneData: Ext.util.JSON.encode(this.phoneRecord.data)
+                        method: 'Voipmanager.saveSnomPhone', 
+                        phoneData: Ext.util.JSON.encode(this.phoneRecord.data),
+                        lineData: Ext.util.JSON.encode(lines)
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Voipmanager.Phones) {
@@ -477,8 +486,7 @@ Tine.Voipmanager.Phones.EditDialog =  {
 			        p.css += ' x-grid3-check-col-td'; 
 			        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 			    }
-			};			
-			
+			};
 			
 	        var checkColumn = new Ext.grid.CheckColumn({
 		       header: 'lineactive',
@@ -495,13 +503,21 @@ Tine.Voipmanager.Phones.EditDialog =  {
 			
 			var snomLinesDS = new Ext.data.JsonStore({
 				autoLoad: true,
+				storeId: 'Voipmanger_EditPhone_SnomLines',
                 id: 'id',
                 fields: ['asteriskline_id','id','idletext','lineactive','linenumber','snomphone_id'],
                 data: _snomLines
 			});
 	
-			while (snomLinesDS.getCount() < 10) {
-				_snomRecord = new Tine.Voipmanager.Model.SnomLine({'asteriskline_id':'','id':'','idletext':'','lineactive':0,'linenumber':'','snomphone_id':''});			
+			while (snomLinesDS.getCount() < _maxLines) {
+				_snomRecord = new Tine.Voipmanager.Model.SnomLine({
+					'asteriskline_id':'',
+					'id':'',
+					'idletext':'',
+					'lineactive':0,
+					'linenumber':snomLinesDS.getCount()+1,
+					'snomphone_id':''
+				});			
 				snomLinesDS.add(_snomRecord);
 			}
 			
@@ -514,18 +530,18 @@ Tine.Voipmanager.Phones.EditDialog =  {
 			}			
 			
 			var combo = new Ext.form.ComboBox({
-		                typeAhead: true,
-		                triggerAction: 'all',
-		                lazyRender:true,
-					    mode: 'local',
-						displayField:'name',
-						valueField:'id',
-						anchor:'98%',                    
-						triggerAction: 'all',
-						allowBlank: false,
-						editable: false,
-						store: linesDS
-		            });	
+                typeAhead: true,
+                triggerAction: 'all',
+                lazyRender:true,
+			    mode: 'local',
+				displayField:'name',
+				valueField:'id',
+				anchor:'98%',                    
+				triggerAction: 'all',
+				allowBlank: false,
+				editable: false,
+				store: linesDS
+            });	
 			
 	        var columnModel = new Ext.grid.ColumnModel([
 	            { resizable: true, id: 'id', header: 'line', dataIndex: 'id', width: 20, hidden: true },
@@ -553,24 +569,25 @@ Tine.Voipmanager.Phones.EditDialog =  {
 	            checkColumn
 	        ]); 
 			
-			var gridPanel = new Ext.grid.EditorGridPanel({
-            id: 'Voipmanager_Software_Grid',
-            store: snomLinesDS,
-            cm: columnModel,
-            autoSizeColumns: false,
-	        plugins:checkColumn,
-	        clicksToEdit:1,
-            enableColLock:false,
-            loadMask: true,
-            autoExpandColumn: 'idleText',
-            border: false,
-            view: new Ext.grid.GridView({
-                autoFill: true,
-                forceFit:true,
-                ignoreAdd: true,
-                emptyText: 'No software to display'
-            })            
-      	  });
+            var gridPanel = new Ext.grid.EditorGridPanel({
+            	region: 'center',
+				id: 'Voipmanager_Software_Grid',
+				store: snomLinesDS,
+				cm: columnModel,
+				autoSizeColumns: false,
+				plugins:checkColumn,
+				clicksToEdit:1,
+				enableColLock:false,
+				loadMask: true,
+				autoExpandColumn: 'idleText',
+				border: false,
+				view: new Ext.grid.GridView({
+				    autoFill: true,
+				    forceFit:true,
+				    ignoreAdd: true,
+				    emptyText: 'No software to display'
+				})            
+            });
             
             var _phoneLinesDialog = {
                 title: 'Lines',
@@ -753,7 +770,6 @@ Tine.Voipmanager.Phones.EditDialog =  {
         
         display: function(_phoneData, _snomLines, _lines, _templates, _locations) 
         {
-
             Ext.StoreMgr.lookup('Voipmanger_EditPhone_Templates').loadData(_templates);
             Ext.StoreMgr.lookup('Voipmanger_EditPhone_Locations').loadData(_locations);
 

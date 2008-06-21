@@ -127,8 +127,12 @@ class Voipmanager_Controller
     public function addSnomPhone(Voipmanager_Model_SnomPhone $_phone)
     {        
         $phone = $this->_snomPhoneBackend->create($_phone);
+        foreach($_phone->lines as $line) {
+            $line->snomphone_id = $phone->getId();
+            $addedLine = $this->_snomLineBackend->create($line);
+        }
       
-        return $phone;
+        return $this->getSnomPhone($phone);
     }
     
     /**
@@ -183,7 +187,15 @@ class Voipmanager_Controller
         */
         $phone = $this->_snomPhoneBackend->update($_phone);
         
-        return $phone;
+        $this->_snomLineBackend->deletePhoneLines($phone->getId());
+        
+        foreach($_phone->lines as $line) {
+            $line->snomphone_id = $phone->getId();
+            error_log(print_r($line->toArray(), true));
+            $addedLine = $this->_snomLineBackend->create($line);
+        }
+      
+        return $this->getSnomPhone($phone);
     }    
     
 

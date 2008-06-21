@@ -153,4 +153,18 @@ class Voipmanager_Backend_Snom_Line
             throw $e;
         }
     }    
+
+    /**
+     * delete lines(s) identified by phone id
+     *
+     * @param string|Voipmanager_Model_SnomPhone $_id
+     * @return void
+     */
+    public function deletePhoneLines($_id)
+    {
+        $phoneId = Voipmanager_Model_SnomPhone::convertPhoneIdToInt($_id);
+        $where[] = $this->_db->quoteInto('snomphone_id = ?', $phoneId);
+
+        $this->_db->delete(SQL_TABLE_PREFIX . 'snom_lines', $where);
+    }    
 }
