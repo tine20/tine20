@@ -34,6 +34,7 @@ Tine.Voipmanager.Model.Location = Ext.data.Record.create([
     {name: 'firmware_status'},
     {name: 'update_policy'},
     {name: 'setting_server'},
+    {name: 'base_download_url'},
     {name: 'admin_mode'},
     {name: 'admin_mode_password'},
     {name: 'ntp_server'},

@@ -168,6 +168,12 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>base_download_url</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
                     <name>admin_mode</name>
                     <type>enum</type>
                     <value>false</value>

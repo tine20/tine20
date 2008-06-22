@@ -471,6 +471,7 @@ console.log(this.locationRecord);
                         height: 30
                     } , {
                         xtype: 'textfield',
+                        vtype: 'url',
                         fieldLabel: 'Settings URL',
                         name: 'setting_server',
                         maxLength: 255,
@@ -478,8 +479,17 @@ console.log(this.locationRecord);
                         allowBlank: false
                     } , {
                         xtype: 'textfield',
+                        vtype: 'url',
                         fieldLabel: 'Firmware URL',
                         name: 'firmware_status',
+                        maxLength: 255,
+                        anchor:'100%',
+                        allowBlank: false
+                    } , {
+                        xtype: 'textfield',
+                        vtype: 'url',
+                        fieldLabel: 'Base Download URL',
+                        name: 'base_download_url',
                         maxLength: 255,
                         anchor:'100%',
                         allowBlank: false
