@@ -482,5 +482,18 @@ class Voipmanager_Controller
         return $line;
     }       
     
-     
+    /**
+     * get xml configurationfile for snom phones
+     *
+     * @param string $_macAddress the mac address of the phone
+     * @return string the xml formated configuration file
+     */
+    public function getSnomConfig($_macAddress)
+    {
+        $xmlBackend = new Voipmanager_Backend_Snom_Xml();
+        
+        $xml = $xmlBackend->getConfig($_macAddress);
+        
+        return $xml;
+    }
 }
