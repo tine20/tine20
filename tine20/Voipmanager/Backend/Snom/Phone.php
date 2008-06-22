@@ -27,7 +27,7 @@ class Voipmanager_Backend_Snom_Phone
 	 */
     public function __construct()
     {
-        $this->_db      = Zend_Registry::get('dbAdapter');
+        $this->_db      = Zend_Db_Table_Abstract::getDefaultAdapter();
     }
     
 	/**
@@ -82,8 +82,30 @@ class Voipmanager_Backend_Snom_Phone
         $result = new Voipmanager_Model_SnomPhone($row);
         
         return $result;
-	}     
-    
+	}
+	     
+    /**
+     * get one phone identified by id
+     * 
+     * @param string $_macAddress the macaddress of the phone
+     * @return Voipmanager_Model_SnomPhone the phone
+     */
+    public function getByMacAddress($_macAddress)
+    {   
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'snom_phones')
+            ->where($this->_db->quoteInto('macaddress = ?', $_macAddress));
+
+        $row = $this->_db->fetchRow($select);
+        if (!$row) {
+            throw new UnderflowException('phone not found');
+        }
+
+        $result = new Voipmanager_Model_SnomPhone($row);
+        
+        return $result;
+    }     
+	
     /**
      * insert new phone into database
      *
