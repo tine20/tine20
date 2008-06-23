@@ -24,19 +24,28 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Fixtures
+     * 
      * @var array test objects
      */
-    protected $objects = array();
+	protected $_objects = array();
     
-    protected $testContainer;
+    /**
+     * Testcontainer
+     *
+     * @var unknown_type
+     */
+	protected $_testContainer;
     
-    protected $backend;
+    /**
+     * Backend
+     *
+     * @var Crm_Backend_Leads
+     */
+	protected $_backend;
 
     /**
      * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
      */
     public static function main()
     {
@@ -46,8 +55,8 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
 
     /**
      * Sets up the fixture.
+     * 
      * This method is called before a test is executed.
-     *
      */
     protected function setUp()
     {
@@ -59,18 +68,18 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
         );
         
         if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+            $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
-            $this->testContainer = $personalContainer[0];
+            $this->_testContainer = $personalContainer[0];
         }
         
-        $this->objects['initialLead'] = new Crm_Model_Lead(array(
+        $this->_objects['initialLead'] = new Crm_Model_Lead(array(
             'id'            => 120,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
+            'container'     => $this->_testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description',
             'end'           => Zend_Date::now(),
@@ -79,13 +88,13 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => Zend_Date::now(),
         )); 
         
-        $this->objects['updatedLead'] = new Crm_Model_Lead(array(
+        $this->_objects['updatedLead'] = new Crm_Model_Lead(array(
             'id'            => 120,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container'     => $this->testContainer->id,
+            'container'     => $this->_testContainer->id,
             'start'         => Zend_Date::now(),
             'description'   => 'Description updated',
             'end'           => NULL,
@@ -94,14 +103,13 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         )); 
         
-        $this->backend = new Crm_Backend_Leads();
+        $this->_backend = new Crm_Backend_Leads();
     }
 
     /**
      * Tears down the fixture
+     * 
      * This method is called after a test is executed.
-     *
-     * @access protected
      */
     protected function tearDown()
     {
@@ -110,92 +118,85 @@ class Crm_Backend_LeadsTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to add a lead
-     *
      */
     public function testAddLead()
     {
-        $lead = $this->backend->create($this->objects['initialLead']);
+        $lead = $this->_backend->create($this->_objects['initialLead']);
         
-        $this->assertEquals($this->objects['initialLead']->id, $lead->id);
-        $this->assertEquals($this->objects['initialLead']->description, $lead->description);
+        $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
+        $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
     }
 
     /**
      * try to get a lead
-     *
      */
     public function testGetLead()
     {
-        $lead = $this->backend->get($this->objects['initialLead']);
+        $lead = $this->_backend->get($this->_objects['initialLead']);
         
-        $this->assertEquals($this->objects['initialLead']->id, $lead->id);
-        $this->assertEquals($this->objects['initialLead']->description, $lead->description);
+        $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
+        $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
     }
 
     /**
      * try to get initial lead with search function
-     *
      */
     public function testGetInitialLead()
     {
         $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->testContainer->id);
+        $filter->container = array($this->_testContainer->id);
         $filter->query = 'PHPUnit';
         $filter->showClosed = true;
-        $leads = $this->backend->search($filter);
+        $leads = $this->_backend->search($filter);
         
         $this->assertEquals(1, count($leads));
     }
     
     /**
      * try to update a lead
-     *
      */
     public function testUpdateLead()
     {
-        $lead = $this->backend->updateLead($this->objects['updatedLead']);
+        $lead = $this->_backend->updateLead($this->_objects['updatedLead']);
         
-        $this->assertEquals($this->objects['updatedLead']->id, $lead->id);
-        $this->assertEquals($this->objects['updatedLead']->description, $lead->description);
+        $this->assertEquals($this->_objects['updatedLead']->id, $lead->id);
+        $this->assertEquals($this->_objects['updatedLead']->description, $lead->description);
     }
 
     /**
      * try to get initial lead with search function
-     *
      */
     public function testGetUpdatedLead()
     {
         $filter = new Crm_Model_LeadFilter();
-        $filter->container = array($this->testContainer->id);
+        $filter->container = array($this->_testContainer->id);
         $filter->query = 'PHPUnit';
         $pagination = new Crm_Model_LeadPagination();
-        $leads = $this->backend->search($filter, $pagination);
+        $leads = $this->_backend->search($filter, $pagination);
         
         $this->assertEquals(1, count($leads));
     }
     
     /**
      * try to get count of leads
-     *
      */
     public function testGetCountOfLeads()
     {
-        $count = $this->backend->getCountOfLeads(array($this->testContainer->id), 'PHPUnit');
+        $count = $this->_backend->getCountOfLeads(array($this->_testContainer->id), 'PHPUnit');
         
         $this->assertEquals(1, $count);
     }
     
     /**
      * try to delete a contact
-     *
      */
     public function testDeleteLead()
     {
-        $this->backend->delete($this->objects['initialLead']->getId());
-        
+    	$id = $this->_objects['initialLead']->getId();
+    	
+        $this->_backend->delete($id);
         $this->setExpectedException('UnderflowException');
-        
-        $this->backend->get($this->objects['initialLead']);
+        $this->_backend->get($id);
     }
 }		
 	
