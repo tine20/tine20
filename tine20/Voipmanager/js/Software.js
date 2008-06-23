@@ -197,8 +197,6 @@ Tine.Voipmanager.Software.Main = {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('id'), dataIndex: 'id', width: 20, hidden: true },
-            { resizable: true, id: 'softwareimage', header: this.translation._('Software Image'), dataIndex: 'softwareimage', width: 80 },
-            { resizable: true, id: 'model', header: this.translation._('Phone Model'), dataIndex: 'model', width: 40 },
             { resizable: true, id: 'description', header: this.translation._('Description'), dataIndex: 'description', width: 250 }
         ]);                        
                 
@@ -354,6 +352,8 @@ Tine.Voipmanager.Software.EditDialog =  {
         
         updateSoftwareRecord: function(_softwareData)
         {
+            
+console.log(_softwareData);            
             this.softwareRecord = new Tine.Voipmanager.Model.Software(_softwareData);
         },
         
@@ -382,13 +382,28 @@ Tine.Voipmanager.Software.EditDialog =  {
         {
             var form = Ext.getCmp('voipmanager_editSoftwareForm').getForm();
 
+            var _softwareImageData = new Array;
+            var _siData;
+            var softwareImageData = new Array();
+
+            this._phoneModels.each(function(_rec) {               
+                _softwareImageData = [_rec.data.id,Ext.getCmp('softwareimage' + _rec.data.id).getValue()];
+                
+                _siData = new Tine.Voipmanager.Model.Software(_softwareImageData);
+    console.log(_siData.data);                            
+//                softwareImageData = softwareImageData + ',' + Ext.util.JSON.encode(_siData.data);
+  //              console.log(softwareImageData);
+            });
+
+
             if(form.isValid()) {
                 form.updateRecord(this.softwareRecord);
         
                 Ext.Ajax.request({
                     params: {
                         method: 'Voipmanager.saveSoftware', 
-                        softwareData: Ext.util.JSON.encode(this.softwareRecord.data)
+                        softwareData: Ext.util.JSON.encode(this.softwareRecord.data),
+                        softwareImageData: Ext.util.JSON.encode()
                     },
                     success: function(_result, _request) {
                         if(window.opener.Tine.Voipmanager.Software) {
@@ -417,52 +432,85 @@ Tine.Voipmanager.Software.EditDialog =  {
             this.applyChanges(_button, _event, true);
         },
         
-        editSoftwareDialog: [{
-            layout:'form',
-            //frame: true,
-            border:false,
-            width: 440,
-            height: 280,
-            items: [{
-                xtype: 'combo',
-                fieldLabel: 'Model',
-                name: 'model',
-                mode: 'local',
-                displayField:'model',
-                valueField:'key',
-                anchor:'100%',                    
-                triggerAction: 'all',
-                allowBlank: false,
-                editable: false,
-                forceSelection: true,
-                store: new Ext.data.SimpleStore(
-                    {
-                        fields: ['key','model'],
-                        data: [
-                            ['snom300','Snom 300'],
-                            ['snom320','Snom 320'],
-                            ['snom360','Snom 360'],
-                            ['snom370','Snom 370']                                        
-                        ]
-                    }
-                )
-            } , {
-                xtype: 'textfield',
-                fieldLabel: 'Software Version',
-                name: 'softwareimage',
-                maxLength: 128,
-                anchor:'100%'
-            }, {
-                //labelSeparator: '',
-                xtype:'textarea',
-                name: 'description',
-                fieldLabel: 'Description',
-                grow: false,
-                preventScrollbars:false,
-                anchor:'100%',
-                height: 60
-            }]
-        }],
+        editSoftwareDialog: function(_phoneModels) {
+            
+            var t = 0;
+            
+            var softwareModel = new Array();
+            var softwareVersion = new Array();
+            
+            
+            _phoneModels.each(function(_rec) {
+
+                _hide = true;
+                if (t == 0) {
+                    _hide = false;
+                }
+                
+                softwareModel[t] = new Ext.form.TextField({
+                    fieldLabel: 'Phone Model',
+                    name: _rec.data.id,
+                    anchor:'98%',
+                    readOnly: true,
+                    hideLabel: _hide,
+                    value: _rec.data.model
+                });      
+                
+                softwareVersion[t] = new Ext.form.TextField({
+                    fieldLabel: 'Software Version',
+                    name: 'softwareimage' + _rec.data.id,
+                    id: 'softwareimage' + _rec.data.id,
+                    anchor:'100%',
+                    maxLength: 128,                    
+                    hideLabel: _hide
+                });      
+
+                
+                t = t + 1;    
+            });
+            
+           
+            
+            var editSoftwareForm = [{
+                layout:'form',
+                //frame: true,
+                border:false,
+                width: 440,
+                height: 280,
+                items: [{
+                    //labelSeparator: '',
+                    xtype:'textarea',
+                    name: 'description',
+                    fieldLabel: 'Description',
+                    grow: false,
+                    preventScrollbars:false,
+                    anchor:'100%',
+                    height: 60
+                }, {
+                    layout: 'column',
+                    border: false,
+                    anchor: '100%',
+                    height: 130,
+                    items: [{
+                        columnWidth: .2,
+                        layout: 'form',
+                        border: false,
+                        anchor: '100%',
+                        items: softwareModel
+                    }, {
+                        columnWidth: .8,
+                        layout: 'form',
+                        border: false,
+                        anchor: '100%',
+                        items: softwareVersion
+                    }]
+                }]
+            }];
+        
+        
+        return editSoftwareForm;
+        
+        },
         
         updateToolbarButtons: function()
         {
@@ -477,6 +525,8 @@ Tine.Voipmanager.Software.EditDialog =  {
                 var _softwareData = {model:'snom320'};
             }
 
+            this._phoneModels = Tine.Voipmanager.Data.loadPhoneModelData();
+
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
                 id : 'voipmanager_editSoftwareForm',
@@ -488,7 +538,7 @@ Tine.Voipmanager.Software.EditDialog =  {
                 handlerApplyChanges: this.applyChanges,
                 handlerSaveAndClose: this.saveChanges,
                 handlerDelete: this.deleteSoftware,
-                items: this.editSoftwareDialog
+                items: this.editSoftwareDialog(this._phoneModels)
             });
 
             var viewport = new Ext.Viewport({

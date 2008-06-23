@@ -8,7 +8,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:  $
+ * @version     $Id$
  *
  */
 
@@ -168,7 +168,7 @@ class Voipmanager_Controller
             }
         }
        */ 
-        $this->_backend->deleteLocations($_identifiers);
+        $this->_snomPhoneBackend->deleteLocations($_identifiers);
     }
 
 
@@ -210,7 +210,7 @@ class Voipmanager_Controller
      */
     public function getLocation($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {        
-        $result = $this->_backend->getLocation($_sort, $_dir, $_query);
+        $result = $this->_snomPhoneBackend->getLocation($_sort, $_dir, $_query);
 
         return $result;    
     }
@@ -223,7 +223,7 @@ class Voipmanager_Controller
      */
     public function getLocationById($_id)
     {
-        $result = $this->_backend->getLocationById($_id);
+        $result = $this->_snomPhoneBackend->getLocationById($_id);
 
         return $result;    
     }    
@@ -241,7 +241,7 @@ class Voipmanager_Controller
             throw new Exception('add access to location in container ' . $_location->owner . ' denied');
         }
         */
-        $location = $this->_backend->addLocation($_location);
+        $location = $this->_snomPhoneBackend->addLocation($_location);
       
         return $location;
     }    
@@ -260,7 +260,7 @@ class Voipmanager_Controller
         }
         */
        
-        $location = $this->_backend->updateLocation($_location);
+        $location = $this->_snomPhoneBackend->updateLocation($_location);
         
         return $location;
     }
@@ -275,7 +275,7 @@ class Voipmanager_Controller
      */
     public function getSoftware($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {        
-        $result = $this->_backend->getSoftware($_sort, $_dir, $_query);
+        $result = $this->_snomPhoneBackend->getSoftware($_sort, $_dir, $_query);
 
         return $result;    
     }  
@@ -288,10 +288,23 @@ class Voipmanager_Controller
      */
     public function getSoftwareById($_id)
     {
-        $result = $this->_backend->getSoftwareById($_id);
+        $result = $this->_snomPhoneBackend->getSoftwareById($_id);
 
         return $result;    
     }    
+
+    /**
+     * get snom_softwareImage by id
+     *
+     * @param string $_id
+     * @return Tinebase_Record_RecordSet of subtype Voipmanager_Model_SoftwareImage
+     */
+    public function getSoftwareImageById($_id)
+    {
+        $result = $this->_snomPhoneBackend->getSoftwareImageById($_id);
+
+        return $result;    
+    }  
 
     /**
      * add new software
@@ -306,7 +319,7 @@ class Voipmanager_Controller
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
-        $software = $this->_backend->addSoftware($_software);
+        $software = $this->_snomPhoneBackend->addSoftware($_software);
       
         return $software;
     }
@@ -325,7 +338,7 @@ class Voipmanager_Controller
         }
         */
        
-        $software = $this->_backend->updateSoftware($_software);
+        $software = $this->_snomPhoneBackend->updateSoftware($_software);
         
         return $software;
     }    
@@ -349,7 +362,7 @@ class Voipmanager_Controller
             }
         }
        */ 
-        $this->_backend->deleteSoftwares($_identifiers);
+        $this->_snomPhoneBackend->deleteSoftwares($_identifiers);
     }    
     
     
@@ -361,7 +374,7 @@ class Voipmanager_Controller
      */
     public function getTemplateById($_id)
     {
-        $result = $this->_backend->getTemplateById($_id);
+        $result = $this->_snomPhoneBackend->getTemplateById($_id);
 
         return $result;    
     }
@@ -375,7 +388,7 @@ class Voipmanager_Controller
      */
     public function getTemplates($_sort = 'id', $_dir = 'ASC', $_query = NULL)
     {
-        $result = $this->_backend->getTemplates($_sort, $_dir, $_query);
+        $result = $this->_snomPhoneBackend->getTemplates($_sort, $_dir, $_query);
 
         return $result;    
     }
@@ -393,7 +406,7 @@ class Voipmanager_Controller
             throw new Exception('add access to contacts in container ' . $_contact->owner . ' denied');
         }
         */
-        $template = $this->_backend->addTemplate($_template);
+        $template = $this->_snomPhoneBackend->addTemplate($_template);
       
         return $template;
     }
@@ -412,7 +425,7 @@ class Voipmanager_Controller
         }
         */
        
-        $template = $this->_backend->updateTemplate($_template);
+        $template = $this->_snomPhoneBackend->updateTemplate($_template);
         
         return $template;
     }   

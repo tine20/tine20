@@ -200,8 +200,22 @@ Tine.Voipmanager.Phones.Main = {
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'id', header: this.translation._('Id'), dataIndex: 'id', width: 30, hidden: true },
             { resizable: true, id: 'macaddress', header: this.translation._('MAC address'), dataIndex: 'macaddress',width: 50 },
-            { resizable: true, id: 'location', header: this.translation._('Location'), dataIndex: 'location',width: 70 },
-            { resizable: true, id: 'template', header: this.translation._('Template'), dataIndex: 'template',width: 50 },            
+            {
+                resizable: true,
+                id: 'location',
+                header: this.translation._('Location'),
+                dataIndex: 'location',
+                width: 70,
+                sortable: false
+            },
+            {
+                resizable: true,
+                id: 'template',
+                header: this.translation._('Template'),
+                dataIndex: 'template',
+                width: 50,
+                sortable: false                
+            },            
             { resizable: true, id: 'ipaddress', header: this.translation._('phone IP address'), dataIndex: 'ipaddress', width: 50 },
             { resizable: true, id: 'last_modified_time', header: this.translation._('last modified'), dataIndex: 'last_modified_time', width: 100, hidden: true },
             {
@@ -678,14 +692,28 @@ Tine.Voipmanager.Phones.EditDialog =  {
                         border: false,
                         anchor: '98%',
                         autoHeight: true,
-                        items:[{
+                        items:[
+                            new Ext.form.ComboBox({
+                                fieldLabel: 'Phone Model',
+                                name: 'current_model',
+                                id: 'current_model',
+                                mode: 'local',
+                                displayField:'model',
+                                valueField:'id',
+                                anchor:'100%',                    
+                                triggerAction: 'all',
+                                editable: false,
+                                forceSelection: true,
+                                store:  Tine.Voipmanager.Data.loadPhoneModelData()
+                            })
+                        ,{
                             xtype:'textarea',
                             name: 'description',
                             fieldLabel: 'Description',
                             grow: false,
                             preventScrollbars:false,
                             anchor:'100%',
-                            height: 105
+                            height: 85
                         }]
                     }]
                 },{
@@ -723,13 +751,6 @@ Tine.Voipmanager.Phones.EditDialog =  {
                                     maxLength: 20,
                                     anchor:'98%',
                                     readOnly: true                        
-                                },{
-                                    xtype: 'textfield',
-                                    fieldLabel: 'Current Phone Model',
-                                    name: 'current_model',
-                                    maxLength: 20,
-                                    anchor:'98%',
-                                    readOnly: true   
                                 }]
                             },{         
                                 columnWidth: .5,

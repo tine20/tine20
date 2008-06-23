@@ -431,37 +431,7 @@ Tine.Voipmanager.Templates.EditDialog =  {
                 preventScrollbars:false,
                 anchor:'100%',
                 height: 40
-            } ,   
-                new Ext.form.ComboBox({
-                    fieldLabel: 'Model',
-                    id: 'model',
-                    name: 'model',
-                    mode: 'local',
-                    displayField:'model',
-                    valueField:'key',
-                    anchor:'100%',                    
-                    triggerAction: 'all',
-                    listeners: {
-                        select: function() {
-                            Ext.getCmp('software_id').fireEvent('newModelSelected', this.getValue());
-                            //Ext.getCmp('keylayout_id').fireEvent('newModelSelected', this.getValue());
-                            //Ext.getCmp('setting_id').fireEvent('newModelSelected', this.getValue());
-                        }                                                   
-                    },
-                    allowBlank: false,
-                    editable: false,
-                    store: new Ext.data.SimpleStore(
-                        {
-                            fields: ['key','model'],
-                            data: [
-                                ['snom300','Snom 300'],
-                                ['snom320','Snom 320'],
-                                ['snom360','Snom 360'],
-                                ['snom370','Snom 370']                                        
-                            ]
-                        }
-                    )
-                }) ,
+            } ,
                 new Ext.form.ComboBox({
                     fieldLabel: 'Software Version',
                     name: 'software_id',
@@ -473,27 +443,11 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
-                    store: Tine.Voipmanager.Data.loadSoftwareData(),
-                    listeners: {
-                        storeLoaded: function() {
-                            this.setValue(this.value);   
-                            this.fireEvent('newModelSelected', Ext.getCmp('model').getValue());                
-                        },
-                        newModelSelected: function(_model) {
-				            this.reset();
-				            this.store.load({
-				                params:{
-				                    query : _model
-				                },
-				                callback: function() {
-				                    if(this.store.getAt(0)) {
-				                        this.setValue(this.store.getAt(0).id);
-				                    }
-				                },
-				                scope: this
-				            });
-				        }
-                    }
+                    store: new Ext.data.JsonStore({
+                    	storeId: 'Voipmanger_EditTemplate_Software',
+                        id: 'id',
+                        fields: ['id','model','description']
+                    })                    
                 }),
                 new Ext.form.ComboBox({
                     fieldLabel: 'Keylayout',
@@ -506,26 +460,11 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
-                    store: Tine.Voipmanager.Data.loadKeylayoutData(),
-                    listeners: {
-                        storeLoaded: function() {
-                            this.setValue(this.value);                   
-                        },                        
-                        newModelSelected: function(_model) {
-				            this.reset();
-				            this.store.load({
-				                params:{
-				                    query : _model
-				                },
-				                callback: function() {
-				                    if(this.store.getAt(0)) {
-				                        this.setValue(this.store.getAt(0).id);
-				                    }
-				                },
-				                scope: this
-				            });
-				        }
-                    }
+                    store: new Ext.data.JsonStore({
+                    	storeId: 'Voipmanger_EditTemplate_Keylayout',
+                        id: 'id',
+                        fields: ['id','model','description']
+                    })                    
                 }),
                 new Ext.form.ComboBox({
                     fieldLabel: 'Settings',
@@ -538,26 +477,11 @@ Tine.Voipmanager.Templates.EditDialog =  {
                     triggerAction: 'all',
                     editable: false,
                     forceSelection: true,
-                    store: Tine.Voipmanager.Data.loadSettingsData(),
-                    listeners: {
-                        storeLoaded: function() {
-                            this.setValue(this.value);                   
-                        },                        
-                        newModelSelected: function(_model) {
-				            this.reset();
-				            this.store.load({
-				                params:{
-				                    query : _model
-				                },
-				                callback: function() {
-				                    if(this.store.getAt(0)) {
-				                        this.setValue(this.store.getAt(0).id);
-				                    }
-				                },
-				                scope: this
-				            });
-				        }
-                    }
+                    store: new Ext.data.JsonStore({
+                    	storeId: 'Voipmanger_EditTemplate_Settings',
+                        id: 'id',
+                        fields: ['id','model','description']
+                    })                    
                 })                                  
             ]
         }],
@@ -569,11 +493,15 @@ Tine.Voipmanager.Templates.EditDialog =  {
             }
         },
         
-        display: function(_templateData) 
+        display: function(_templateData, _software, _keylayout, _settings) 
         {           
             if (!arguments[0]) {
                 var _templateData = {model:'snom320'};                
             }
+            
+            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Software').loadData(_software);
+            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Keylayout').loadData(_keylayout);            
+            Ext.StoreMgr.lookup('Voipmanger_EditTemplate_Settings').loadData(_settings);            
 
             // Ext.FormPanel
             var dialog = new Tine.widgets.dialog.EditRecord({
@@ -599,34 +527,6 @@ Tine.Voipmanager.Templates.EditDialog =  {
             this.updateTemplateRecord(_templateData);
             this.updateToolbarButtons();     
             dialog.getForm().loadRecord(this.templateRecord);
-                
-            Ext.getCmp('software_id').store.load({
-                params: {
-                    query: ''
-                },
-                callback: function(){
-                    Ext.getCmp('software_id').fireEvent('storeLoaded');
-                }
-            });
-                  /*
-             Ext.getCmp('keylayout_id').store.load({
-             params: {
-             query: ''
-             },
-             callback: function() {
-             Ext.getCmp('software_id').fireEvent('storeLoaded');
-             }
-             });
-             
-             Ext.getCmp('setting_id').store.load({
-             params: {
-             query: ''
-             },
-             callback: function() {
-             Ext.getCmp('software_id').fireEvent('storeLoaded');
-             }
-             });
-     */
                
         }   
 };

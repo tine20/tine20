@@ -252,13 +252,27 @@ class Voipmanager_Http extends Tinebase_Application_Http_Abstract
         }
 
         // encode the template array
-        $encodedTemplate = Zend_Json::encode($template->toArray());                   
+        $encodedTemplate = Zend_Json::encode($template->toArray());                 
+        
+        
+        
+        // software data
+        $software = $controller->getSoftware();
+        $encodedSoftware = Zend_Json::encode($software->toArray());
+        
+        // keylayout data
+  //      $keylayout = $controller->getKeylayout();
+        $encodedKeylayout = Zend_Json::encode('[]');
+        
+        // settings data
+//        $settings = $controller->getSettings();
+        $encodedSettings = Zend_Json::encode('[]');
         
         $view = new Zend_View();
          
         $view->setScriptPath('Tinebase/views');
         $view->formData = array();        
-        $view->jsExecute = 'Tine.Voipmanager.Templates.EditDialog.display(' . $encodedTemplate .');';
+        $view->jsExecute = 'Tine.Voipmanager.Templates.EditDialog.display(' . $encodedTemplate .','.$encodedSoftware.','.$encodedKeylayout.','.$encodedSettings.');';
 
         $view->configData = array(
             'timeZone' => Zend_Registry::get('userTimeZone'),

@@ -41,7 +41,29 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         );
         
         if($rows = Voipmanager_Controller::getInstance()->getPhones($sort, $dir, $query)) {
-            $result['results']      = $rows->toArray();
+        
+            $_rows = $rows->toArray();
+
+            $i = 0; 
+                  
+            foreach($_rows AS $_row)
+            {
+                if($location_row = Voipmanager_Controller::getInstance()->getLocationById($_row['location_id']))
+                {
+                    $_location = $location_row->toArray();
+                    $_rows[$i]['location'] = $_location['name'];
+                }
+                
+                if($template_row = Voipmanager_Controller::getInstance()->getTemplateById($_row['template_id']))
+                {
+                    $_template = $template_row->toArray();                                        
+                    $_rows[$i]['template'] = $_template['name'];
+                }                
+                
+                $i = $i + 1;
+            }         
+        
+            $result['results']      = $_rows;
             $result['totalcount']   = count($result['results']);
         }
 
@@ -245,9 +267,27 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         );
         
         if($rows = Voipmanager_Controller::getInstance()->getSoftware($sort, $dir, $query)) {
-            $result['results']      = $rows->toArray();
+            
+            $_rows = $rows->toArray();
+
+            $i = 0; 
+                  
+            foreach($_rows AS $_row)
+            {
+                if($si_rows = Voipmanager_Controller::getInstance()->getSoftwareImageById($_row['id']))
+                {
+                    $_rows[$i]['softwareImages'] = $si_rows->toArray();
+                }
+                
+                $i = $i + 1;
+            } 
+            
+
+            
+            $result['results']      = $_rows;
             $result['totalcount']   = count($result['results']);
         }
+
 
         return $result;    
     }        
@@ -270,6 +310,25 @@ class Voipmanager_Json extends Tinebase_Application_Json_Abstract
         $result = $software->toArray();        
         return $result;
     }         
+
+
+   /**
+     * get softwareImages identified by softwareImageId
+     *
+     * @param int $softwareImageId
+     * @return array
+     */
+    public function getSoftwareImagesById($softwareImageId)
+    {
+        $result = array(
+            'success'   => true
+        );
+
+        $softwareImage = Voipmanager_Controller::getInstance()->getSoftwareImageById($softwareImageId);
+        
+        $result = $softwareImage->toArray();        
+        return $result;
+    } 
 
     /**
      * add/update software

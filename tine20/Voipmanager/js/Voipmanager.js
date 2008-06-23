@@ -319,6 +319,29 @@ Tine.Voipmanager = function() {
 
 Tine.Voipmanager.Data = {
   
+  
+   loadPhoneModelData: function(_model) {
+
+        var phoneModelDataStore = new Ext.data.SimpleStore({
+            autoLoad: true,
+            id: 'model',
+            fields: ['id', 'model','lines'],
+            data: [
+                ['snom300','Snom 300','4'],
+                ['snom320','Snom 320','12'],
+                ['snom360','Snom 360','12'],
+                ['snom370','Snom 370','12']
+            ]   
+        });
+
+        if (_model) {
+            var _idx = phoneModelDataStore.find('model', _model);
+            return phoneModelDataStore.getAt(_idx);
+        }
+        
+        return phoneModelDataStore;
+    },    
+  
     loadTimezoneData: function() {
 
 
@@ -447,13 +470,9 @@ Tine.Voipmanager.Data = {
   
     
    
-    loadTemplateData: function(_data) {
+    loadTemplateData: function() {
 
         var templateDataStore = new Ext.data.JsonStore({
-/*            autoLoad: true,
-            fields: ['id','name'],
-            data: _data
-*/
           baseParams: {
                 method: 'Voipmanager.getTemplates',
                 sort: 'name',

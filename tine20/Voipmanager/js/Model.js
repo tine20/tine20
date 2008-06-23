@@ -21,7 +21,9 @@ Tine.Voipmanager.Model.Phone = Ext.data.Record.create([
     {name: 'current_software'},
     {name: 'current_model'},
     {name: 'settings_loaded_at'},
-    {name: 'firmware_checked_at'}
+    {name: 'firmware_checked_at'},
+    {name: 'location'},
+    {name: 'template'}
 ]);
 
 
@@ -61,11 +63,13 @@ Tine.Voipmanager.Model.Template = Ext.data.Record.create([
 
 Tine.Voipmanager.Model.Software = Ext.data.Record.create([
     {name: 'id'},
-    {name: 'description'},
+    {name: 'description'}
+]);
+
+Tine.Voipmanager.Model.SoftwareImage = Ext.data.Record.create([
     {name: 'model'},
     {name: 'softwareimage'}
 ]);
-
 
 Tine.Voipmanager.Model.SnomLine = Ext.data.Record.create([
     {name: 'asteriskline_id'},
