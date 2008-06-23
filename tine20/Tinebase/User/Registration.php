@@ -55,7 +55,7 @@ class Tinebase_User_Registration
         if(isset(Zend_Registry::get('configFile')->registration)) {
             $this->_config = Zend_Registry::get('configFile')->registration;
         } else {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ' . $e->getMessage());
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
         }
         // create table objects and get db adapter
         $this->_registrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));

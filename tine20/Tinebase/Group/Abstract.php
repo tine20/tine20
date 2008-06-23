@@ -151,7 +151,7 @@ abstract class Tinebase_Group_Abstract
             $config = Zend_Registry::get('configFile')->registration;
             $defaultGroupName = ( isset($config->accountPrimaryGroup) ) ? $config->accountPrimaryGroup : 'Users' ;
         } else {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! '. $e->getMessage());
+            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' no config for registration found! ');
         }
         
         $result = $this->getGroupByName($defaultGroupName);
